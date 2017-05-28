@@ -1,0 +1,10 @@
+{
+  "name": "jovo",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.8.1",
+    "express": "^4.9.0",
+    "request": "^2.81.0",
+    "socket.io": "^2.0.1"
+  }
+}
