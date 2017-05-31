@@ -1,51 +1,62 @@
 'use strict';
 
+var express = require('express')
+    , bodyParser = require('body-parser');
 
-// initialize express server for webhook functionality
-let express = require('express')
-let bodyParser = require('body-parser');
-let server = express();
+var server = express();
+
 server.use(bodyParser.json());
 
 
 const Jovo = require('./Jovo').Jovo;
+const app = new Jovo({test : "test"});
 
-const app = new Jovo();
+//var app = require('./jovo');
+var http = require( "http" ).createServer( server );
+var io = require( "socket.io" )( http );
+http.listen(8080, "127.0.0.1");
 
 
-server.listen(3000, function () {
-    console.log('Example server listening on port 3000!')
-})
-
-// listen for post requests
 server.post('/webhook/voice', function (req, res) {
 
     app.initWebhook(req, res, handlers);
     app.setSlotMap(slotMap);
-    // app.setIntentMap(intentMap);
     app.logRequest();
+    // app.setIntentMap(intentMap);
+    // app.setSocketIO(io);
     app.execute();
+    //
 
+})
+server.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
 });
 
 
+io.on('connection', function(socket){
+    console.log('a user connected');
+});
+
+server.listen(3000, function () {
+  console.log('Example server listening on port 3000!')
+})
 
 
-let slotMap = {
+var slotMap = {
     'given-name' : 'name'
 };
 
-let intentMap = {
+var intentMap = {
     'NameIntent' : 'HelpIntent'
-};
+}
 
 
-let handlers = {
+var handlers = {
 
     "LAUNCH" : function() {
         // app.toState("onboarding").ask("Hey! What is your name?", "Your name please?");
         // app.ask("hey","ho");
-        app.tell("hey");//.withCard("title","subtitle","content");
+        app.tell("hey");
 
     },
 
@@ -73,9 +84,10 @@ let handlers = {
 
     "NameIntent" : function() {
         // app.setAttribute("name", app.getSlotValue("name"));
-        app.tell("Hey").withCard("title", "subtitle","content");
-        // console.log(app.getSlotValue("name"));
+        // app.ask("Hey");
+        console.log(app.getSlotValue("name"));
 
+        app.tell('I already told you I  <emphasis level="strong">really like</emphasis>         that person.');
         // app.tell('<amazon:effect name="whispered">hi '+app.getSlotValue('name')+'. I am watching you.</amazon:effect>.');
         // app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
 
@@ -92,6 +104,7 @@ let handlers = {
 
 
     "state" : {
+
         "HelpIntent" : function() {
             app.tell("test");
         }
@@ -129,5 +142,7 @@ let handlers = {
         },
 
     },
+
+
 
 };

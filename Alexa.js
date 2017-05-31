@@ -134,7 +134,17 @@ const Alexa  = class  {
         };
     }
 
-    sayNothingEndSession () {
+    withCard (responseObj, title, subtitle, content) {
+        responseObj.response.card = {
+            type : "Simple",
+            title : title,
+            subtitle : subtitle,
+            content : content
+        }
+        return responseObj;
+    }
+
+    emptyResponse () {
         return {
             version : "1.0",
             sessionAttributes : this.sessionAttributes,

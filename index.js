@@ -2,18 +2,30 @@
  * Created by Alex on 22-May-17.
  */
 
-var jovo = require('./jovo');
+const Jovo = require('./Jovo').Jovo;
+
+const app = new Jovo();
 
 exports.handler = function (event, context, callback) {
-    jovo.initLambda(event, callback, handlers);
+    app.initLambda(event, callback, handlers);
+    app.execute();
 };
 
 
-var handlers1 = {
-    "HelloWorldIntent" : function () {
-        jovo.tell(jovo.getSlotValue("name") + " is a fool");
-        this.stateA();
+let handlers = {
+
+    "LAUNCH" : function() {
+       app.tell("How is it going?");
     },
+
+
+    "HelloWorldIntent" : function () {
+        app.tell("Hey");
+    },
+
+    "NameIntent" : function () {
+        app.tell("Hey man was geht?");
+    }
 };
 
 

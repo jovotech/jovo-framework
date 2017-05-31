@@ -7,6 +7,10 @@
 const Alexa = require('./Alexa').Alexa;
 const GoogleHome = require('./GoogleHome').GoogleHome;
 
+const TYPE_WEBHOOK = "webhook";
+const TYPE_LAMBDA = "lambda";
+const TYPE_GCLOUD = "gcloud";
+
 const LAUNCH_REQUEST = "LaunchRequest";
 const INTENT_REQUEST = "IntentRequest";
 const SESSION_ENDED_REQUEST = "SessionEndedRequest";
@@ -15,15 +19,16 @@ const HANDLER_LAUNCH = "LAUNCH";
 const HANDLER_END = "END";
 
 const STANDARD_INTENT_MAP = {
-    "AMAZON.StopIntent" : HANDLER_END
-}
+    "AMAZON.StopIntent" : HANDLER_END,
+    "AMAZON.HelpIntent" : "HelpIntent"
+};
 
 
+const SoftAccountLinking = require('./SoftAccountLinking').SoftAccountLinking;
 
 const Jovo = class {
 
-    constructor(options) {
-        this.test = options;
+    constructor() {
     }
 
     /**
@@ -36,17 +41,45 @@ const Jovo = class {
 
     initWebhook(request, response, handlers) {
 
-        this.type = "webhook";
+        this.type = TYPE_WEBHOOK;
         this.response = response;
         this.request = request.body;
         this.handlers = handlers;
 
         this.init_();
+
     }
 
+    initLambda(request, response, handlers) {
+        this.type = TYPE_LAMBDA;
+        this.response = response;
+        this.request = request;
+        this.handlers = handlers;
+
+        this.init_();
+    }
+
+    initGcloud(request, response, handlers) {
+        //TODO: init gcloud
+    }
+
+    useSoftAccountLinking(jovoToken, skillId) {
+
+    }
+
+    /**
+     * Maps platform specific slot names to custom slot names
+     *
+     * @param slotMap
+     */
     setSlotMap(slotMap) {
         this.slotMap = slotMap;
     }
+
+    /**
+     *  Maps platform specific intent names to custom intent names
+     * @param intentMap
+     */
 
     setIntentMap(intentMap) {
         this.intentMap = intentMap;
@@ -67,7 +100,7 @@ const Jovo = class {
         }
         this.requestType = this.platform.getRequestType();
         this.standardIntentMap = STANDARD_INTENT_MAP;
-
+        this.responseObj = this.getPlatform().emptyResponse();
 
     }
 
@@ -78,21 +111,24 @@ const Jovo = class {
 
     execute () {
 
+        // Call "LAUNCH"
+
         if(this.requestType === LAUNCH_REQUEST) {
             this.handlers[HANDLER_LAUNCH].call();
         }
 
         if(this.requestType === INTENT_REQUEST) {
 
-            // slots only make sense if request is an intentrequest
-            var platformSlots = this.platform.getSlots();
-            var slotsFromRequest = Object.keys(platformSlots);
+            // slots only make sense if request is an intent request
+            let platformSlots = this.platform.getSlots();
+            let slotsFromRequest = Object.keys(platformSlots);
 
             this.slots = {};
 
             // map slots with different slot names
-            for (var i = 0; i < slotsFromRequest.length; i++) {
-                var key = slotsFromRequest[i];
+            //TODO: refactor me, plz
+            for (let i = 0; i < slotsFromRequest.length; i++) {
+                let key = slotsFromRequest[i];
                 if(typeof(this.slotMap) === "undefined" || typeof(this.slotMap[key]) === "undefined") {
                     this.slots[key] = platformSlots[key];
                 } else {
@@ -101,29 +137,29 @@ const Jovo = class {
 
             }
 
-
-
+            // handle states, if state was set before
             if(this.getState()) {
                 if(typeof(this.handlers[this.getState()]) === "undefined") {
                     console.log("Error: State '" + this.getState() + "' has not been defined in the handler.");
-                    return; // TODO: session ended response?
                 }
 
                 if(typeof(this.handlers[this.getState()][this.getIntentName()]) === "undefined") {
                     // intent not in state defined, try global
 
                     if(typeof(this.handlers[this.getIntentName()]) === "undefined") {
-                        console.log("Error: The intent has not been defined in the handler");
-                        return; // TODO: session ended response?
+                        console.log("Error: The intent global " + this.getIntentName() + " has not been defined in the  handler");
+                    } else {
+                        // handle global intent
+                        this.handlers[this.getIntentName()].call();
                     }
-                    // handle global intent
-                    this.handlers[this.getIntentName()].call();
 
                 }
 
                 // handle STATE + Intent
                 this.handlers[this.getState()][this.getIntentName()].call();
             } else {
+
+                // TODO: try/catch or typeof !== undefined?
                 try {
                     this.handlers[this.getIntentName()].call();
                 } catch (e) {
@@ -135,19 +171,26 @@ const Jovo = class {
 
         }
 
+        // handle end request types
         if(this.requestType === SESSION_ENDED_REQUEST) {
+            // call specific "END" in state
             if(this.getState() !== null && typeof(handler[this.getState()][HANDLER_END]) !== "undefined") {
                 this.handlers[this.getState()][HANDLER_END].call();
-            } else {
+            } else { // call global "END"
                 this.handlers[HANDLER_END].call();
             }
         }
 
 
-        // close session when nothing has been sent
-        this.sayNothingEndSession();
+        this.respond_(this.responseObj);
 
     }
+
+    /**
+     * Jump to state scoped or global intent
+     * @param intent
+     * @param state
+     */
 
     goTo(intent, state) {
         if(typeof(state) === "undefined") {
@@ -159,14 +202,31 @@ const Jovo = class {
 
     }
 
+    /**
+     * Returns UserID
+     * @returns {*}
+     */
 
     getUserId() {
         return this.getPlatform().getUserId();
     }
 
+    /**
+     * Returns End of reason. Use in "END"
+     *
+     * e.g. StopIntent or EXCEEDED_REPROMPTS
+     * @returns {*}
+     */
     getEndReason() {
         return this.getPlatform().getEndReason();
     }
+
+
+    /**
+     * Returns intent name after custom and standard intent mapping
+     *
+     * @returns {*}
+     */
 
     getIntentName () {
 
@@ -186,6 +246,8 @@ const Jovo = class {
 
         return platformIntentName;
     }
+
+
 
     getSlots () {
         return this.slots;
@@ -215,35 +277,47 @@ const Jovo = class {
         return this.getSlot(name);
     }
 
-    tell (speech) {
-        speech = speech.replace(/<speak>/g,'').replace(/<\/speak>/g,'');
-        speech = "<speak>"+speech+"</speak>";
+    /**
+     * Responds with the given text and ends session
+     * Transforms plaintext to SSML
+     * @param speech
+     */
 
-        let responseObj = this.getPlatform().tell(speech);
-        this.respond_(responseObj);
+    tell (speech) {
+        this.responseObj = this.getPlatform().tell(toSSML(speech));
+        return this;
     }
+
+    /**
+     * Plays audio file
+     * @param audio_url
+     * @param fallbackText (only works with google home)
+     */
 
     play (audio_url, fallbackText) {
-        let responseObj = this.getPlatform().play(audio_url, fallbackText);
-        this.respond_(responseObj);
+        this.responseObj = this.getPlatform().play(audio_url, fallbackText);
+        return this;
     }
 
-    ask (speech, rempromptSpeech) {
-        speech = speech.replace(/<speak>/g,'').replace(/<\/speak>/g,'');
-        speech = "<speak>"+speech+"</speak>";
+    /**
+     * Says speech and waits for answer from user. Reprompt when user input fails.
+     * Keeps session open.
+     * @param speech
+     * @param repromptSpeech
+     */
 
-        rempromptSpeech = rempromptSpeech.replace(/<speak>/g,'').replace(/<\/speak>/g,'');
-        rempromptSpeech = "<speak>"+rempromptSpeech+"</speak>";
+    ask (speech, repromptSpeech) {
 
-        let responseObj = this.getPlatform().ask(speech, rempromptSpeech);
-        this.respond_(responseObj);
-    }
-
-
-    sayNothingEndSession() {
-        if(!this.response.finished) {
-            this.respond_(this.getPlatform().sayNothingEndSession());
+        if(typeof(repromptSpeech) === "undefined") {
+            repromptSpeech = speech;
         }
+
+        this.responseObj = this.getPlatform().ask(toSSML(speech), toSSML(repromptSpeech));
+        return this;
+    }
+
+    withCard (title, subtitle, content) {
+        this.responseObj = this.getPlatform().withCard(this.responseObj, title, subtitle, content);
     }
 
     toState (state) {
@@ -268,10 +342,10 @@ const Jovo = class {
     }
 
     respond_ (responseObj) {
-        if(this.type === "lambda") {
-            this.response(null, responseObj);
-        } else if (this.type === "webhook") {
-            this.response.json(responseObj);
+        if(this.type === TYPE_LAMBDA) {
+            this.response(null, this.responseObj);
+        } else if (this.type === TYPE_WEBHOOK) {
+            this.response.json(this.responseObj);
         }
     }
 
@@ -279,3 +353,11 @@ const Jovo = class {
 
 
 module.exports.Jovo = Jovo;
+
+
+function toSSML(text) {
+    text = text.replace(/<speak>/g,'').replace(/<\/speak>/g,'');
+    text = "<speak>"+text+"</speak>";
+
+    return text;
+}

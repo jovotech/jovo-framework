@@ -15,7 +15,7 @@ const SoftAccountLinking = class {
     }
 
     activate(pin, user_skill_id, callback) {
-        var data = {
+        let data = {
             skill_id : this.skillId,
             user_skill_id : user_skill_id,
             pin : pin

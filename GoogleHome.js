@@ -63,7 +63,8 @@ const GoogleHome = class {
     tell  (speech) {
 
         let responseObj = {
-            speech : speech
+            speech : speech,
+            displayText : "blabla"
         };
         if(typeof(this.contextOut) !== "undefined") {
             responseObj.contextOut = this.contextOut;
@@ -99,7 +100,7 @@ const GoogleHome = class {
         return responseObj;
     }
 
-    sayNothingEndSession () {
+    emptyResponse () {
         return {
             speech : "<speak></speak>",
         };
