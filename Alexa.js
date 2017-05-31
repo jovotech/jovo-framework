@@ -134,7 +134,7 @@ const Alexa  = class  {
         };
     }
 
-    withCard (responseObj, title, subtitle, content) {
+    addSimpleCard (responseObj, title, subtitle, content) {
         responseObj.response.card = {
             type : "Simple",
             title : title,
@@ -152,6 +152,10 @@ const Alexa  = class  {
                 shouldEndSession : true
             }
         };
+    }
+
+    getType () {
+        return "Alexa";
     }
 
 

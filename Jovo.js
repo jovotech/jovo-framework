@@ -11,6 +11,9 @@ const TYPE_WEBHOOK = "webhook";
 const TYPE_LAMBDA = "lambda";
 const TYPE_GCLOUD = "gcloud";
 
+const PLATFORM_ALEXA = "Alexa";
+const PLATFORM_GOOGLE_HOME = "GoogleHome";
+
 const LAUNCH_REQUEST = "LaunchRequest";
 const INTENT_REQUEST = "IntentRequest";
 const SESSION_ENDED_REQUEST = "SessionEndedRequest";
@@ -319,6 +322,22 @@ const Jovo = class {
     withCard (title, subtitle, content) {
         this.responseObj = this.getPlatform().withCard(this.responseObj, title, subtitle, content);
     }
+
+    addAlexaCard (title, subtitle, content) {
+        if(this.getPlatform().getType() === PLATFORM_ALEXA) {
+            this.responseObj = this.getPlatform().addSimpleCard(this.responseObj, title, subtitle, content);
+        }
+        return this;
+    }
+
+    addGoogleAssistantBasicCard() {
+        if(this.getPlatform().getType() === PLATFORM_GOOGLE_HOME) {
+            this.responseObj = this.getPlatform().addBasicCard();
+        }
+        console.log(this.responseObj);
+        return this;
+    }
+
 
     toState (state) {
         this.setState(state);
