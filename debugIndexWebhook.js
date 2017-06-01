@@ -43,10 +43,20 @@ let intentMap = {
 let handlers = {
 
     "LAUNCH" : function() {
+
+        app.goTo("TestPlay","tests");
+        // app.goTo("TestTellSlot","tests", app.getSlotValue("name"));
+
         // app.toState("onboarding").ask("Hey! What is your name?", "Your name please?");
         // app.ask("hey","ho");
         // app.tell("hey").addGoogleAssistantBasicCard();//.withCard("title","subtitle","content");
-        app.tell("hey123");
+        // app.tell("hey123").addAssistantBasicCard("title", "formattedText");
+
+        // app.tell("hey ho").addAssistantBasicCard("title", "formattedText");
+        //     app.ask("What's your name?", "Your name please.");
+
+        // app.response = "bla";
+        // app.goTo("HelloWorldIntent");
     },
 
 
@@ -59,7 +69,8 @@ let handlers = {
     },
 
     "HelloWorldIntent" : function() {
-      app.tell("hey hey");
+      // app.tell("hey hey").addAssistantBasicCard("title", "formattedText");
+        app.tell("hey " + app.response);
     },
 
     "PinActivate" : function() {
@@ -75,12 +86,31 @@ let handlers = {
 
 
     "NameIntent" : function() {
+
+        // app.goTo("TestTell","tests");
+        // app.goTo("TestTellSlot","tests", app.getSlotValue("name"));
+
+
+
+
+        // app.ask("Hey " + app.getSlotValue("name"), "bla");
+
+
         // app.setAttribute("name", app.getSlotValue("name"));
-        app.tell("Hey").withCard("title", "subtitle","content");
+        // app.tell("Hey").addAssistantBasicCard("title", "formattedText");//.addCard("title", "subtitle","content");
         // console.log(app.getSlotValue("name"));
+        // app.tell("hey ho")
+        //     .addSimpleCard("Hey " + app.getSlotValue("name"),
+        //                     "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+        //
+        //
+        // app.tell("hey ho").addAlexaSimpleCard("title","subtitle", "content","content");
+        //
+        // app.tell("hey ho").addImageCard("Hey " + app.getSlotValue("name"), "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+        //     "https://developers.google.com/actions/images/badges/XPM_BADGING_GoogleAssistant_VER.png");
 
         // app.tell('<amazon:effect name="whispered">hi '+app.getSlotValue('name')+'. I am watching you.</amazon:effect>.');
-        // app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
+        app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
 
         // app.send("Kommt das an? Bin zu faul in die Logs zu schauen.", function(body) {
         //    console.log(body);
@@ -123,13 +153,21 @@ let handlers = {
         }
     },
 
-    "start_game" : {
+    "tests" : {
 
-        "StartGame" : function () {
-            app.tell("BLA");
-
-
+        "TestTell" : function () {
+            app.tell("test tell");
         },
+
+        "TestTellSlot" : function (arg) {
+            app.tell("test tell slot " + arg);
+        },
+
+        'TestPlay' : function () {
+            app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
+        }
+
+
 
     },
 

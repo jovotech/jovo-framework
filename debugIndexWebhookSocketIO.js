@@ -9,6 +9,7 @@ server.use(bodyParser.json());
 
 
 const Jovo = require('./Jovo').Jovo;
+const AccountLinking = require("./Jovo").AccountLinking;
 const app = new Jovo({test : "test"});
 
 //var app = require('./jovo');

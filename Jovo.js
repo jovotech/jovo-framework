@@ -39,7 +39,6 @@ const Jovo = class {
      * @param request
      * @param response
      * @param handlers
-     * @param slotMap
      */
 
     initWebhook(request, response, handlers) {
@@ -71,12 +70,12 @@ const Jovo = class {
     }
 
     /**
-     * Maps platform specific slot names to custom slot names
+     * Maps platform specific input names to custom input names
      *
-     * @param slotMap
+     * @param inputMap
      */
-    setSlotMap(slotMap) {
-        this.slotMap = slotMap;
+    setInputMap(inputMap) {
+        this.inputMap = inputMap;
     }
 
     /**
@@ -103,7 +102,6 @@ const Jovo = class {
         }
         this.requestType = this.platform.getRequestType();
         this.standardIntentMap = STANDARD_INTENT_MAP;
-        this.responseObj = this.getPlatform().emptyResponse();
 
     }
 
@@ -122,20 +120,20 @@ const Jovo = class {
 
         if(this.requestType === INTENT_REQUEST) {
 
-            // slots only make sense if request is an intent request
-            let platformSlots = this.platform.getSlots();
-            let slotsFromRequest = Object.keys(platformSlots);
+            // inputs only make sense if request is an intent request
+            let platformInputs = this.platform.getInputs();
+            let inputsFromRequest = Object.keys(platformInput);
 
-            this.slots = {};
+            this.inputs = {};
 
-            // map slots with different slot names
+            // map inputs with different input names
             //TODO: refactor me, plz
-            for (let i = 0; i < slotsFromRequest.length; i++) {
-                let key = slotsFromRequest[i];
-                if(typeof(this.slotMap) === "undefined" || typeof(this.slotMap[key]) === "undefined") {
-                    this.slots[key] = platformSlots[key];
+            for (let i = 0; i < inputsFromRequest.length; i++) {
+                let key = inputsFromRequest[i];
+                if(typeof(this.inputMap) === "undefined" || typeof(this.inputMap[key]) === "undefined") {
+                    this.inputs[key] = platformInputs[key];
                 } else {
-                    this.slots[this.slotMap[key]] = platformSlots[key];
+                    this.inputs[this.inputMap[key]] = platformInputs[key];
                 }
 
             }
@@ -184,8 +182,8 @@ const Jovo = class {
             }
         }
 
-
-        this.respond_(this.responseObj);
+        console.log(JSON.stringify(this.getPlatform().getResponseObject()));
+        this.respond_(this.getPlatform().getResponseObject());
 
     }
 
@@ -195,15 +193,22 @@ const Jovo = class {
      * @param state
      */
 
-    goTo(intent, state) {
-        if(typeof(state) === "undefined") {
-            this.handlers[intent].call();
+    goTo(intent, state, arg) {
+        if(!state) {
+            this.handlers[intent].call(this, arg);
         } else {
-            this.handlers[state][intent].call();
+            this.handlers[state][intent].call(this, arg);
         }
 
 
     }
+
+
+    /**************************************************************************
+     *
+     *      Jovo/Platform wrapper
+     *
+     *****************************/
 
     /**
      * Returns UserID
@@ -212,16 +217,6 @@ const Jovo = class {
 
     getUserId() {
         return this.getPlatform().getUserId();
-    }
-
-    /**
-     * Returns End of reason. Use in "END"
-     *
-     * e.g. StopIntent or EXCEEDED_REPROMPTS
-     * @returns {*}
-     */
-    getEndReason() {
-        return this.getPlatform().getEndReason();
     }
 
 
@@ -251,34 +246,111 @@ const Jovo = class {
     }
 
 
-
-    getSlots () {
-        return this.slots;
+    /**
+     * Returns End of reason. Use in "END"
+     *
+     * e.g. StopIntent or EXCEEDED_REPROMPTS
+     * @returns {*}
+     */
+    getEndReason() {
+        return this.getPlatform().getEndReason();
     }
+
+
+    /**
+     * Returns inputs
+     *
+     * {
+     *   inputname1 : value1,
+     *   inputname2 : value2
+     * }
+     *
+     * @returns {{}|*}
+     */
+
+    getInputs () {
+        return this.inputs;
+    }
+
+    /**
+     * Get input object by name
+     * @param name
+     * @returns {*}
+     */
+
+
+    getInput (name) {
+        return this.inputs[name];
+    }
+
+
+    /**
+     * Returns type of platform
+     * @returns {string}
+     */
+
+    getType () {
+        return this.getPlatform().getType();
+    }
+
+
+    /**
+     * Returns state value stored in the request session
+     *
+     * @returns {*}
+     */
 
     getState () {
         return this.getPlatform().getState();
     }
 
+
+    /**
+     * Stores state in response object session
+     *
+     * @param state
+     */
+
+
     setState (state) {
         this.getPlatform().setState(state);
     }
 
-    getAttribute (name) {
-        return this.getPlatform().getAttribute(name);
-    }
+    /**
+     * Sets session attribute
+     * @param name
+     * @param value
+     */
 
-    setAttribute (name, value) {
+    setSessionAttribute (name, value) {
         this.platform.setAttribute(name, value)
     }
 
-    getSlot (name) {
-        return this.slots[name];
+
+    /**
+     * Sets local variable
+     * @param name
+     * @param value
+     */
+
+    setVar (name, value) {
+        if(!this.variables) {
+            this.variables = {};
+        }
+
+        this.variables[name] = value;
     }
 
-    getSlotValue (name) {
-        return this.getSlot(name);
+
+    /**
+     * Gets local variable by name
+     * @param name
+     * @returns {*}
+     */
+    getVar (name) {
+        return this.variables[name];
     }
+
 
     /**
      * Responds with the given text and ends session
@@ -323,6 +395,30 @@ const Jovo = class {
         this.responseObj = this.getPlatform().withCard(this.responseObj, title, subtitle, content);
     }
 
+
+    addSimpleCard(title, content) {
+        this.responseObj = this.getPlatform().addSimpleCard(this.responseObj, title, content);
+    }
+
+    addImageCard(title, content, image_url) {
+        this.responseObj = this.getPlatform().addImageCard(this.responseObj, title, content, image_url);
+    }
+
+
+    setAlexaResponse(responseObj) {
+        if(this.getPlatform().getType() === PLATFORM_ALEXA) {
+            this.responseObj = responseObj;
+        }
+        return this;
+    }
+
+    setGoogleHomeResponse(responseObj) {
+        if(this.getPlatform().getType() === PLATFORM_GOOGLE_HOME) {
+            this.responseObj = responseObj;
+        }
+        return this;
+    }
+
     addAlexaCard (title, subtitle, content) {
         if(this.getPlatform().getType() === PLATFORM_ALEXA) {
             this.responseObj = this.getPlatform().addSimpleCard(this.responseObj, title, subtitle, content);
@@ -330,9 +426,9 @@ const Jovo = class {
         return this;
     }
 
-    addGoogleAssistantBasicCard() {
+    addAssistantBasicCard(title, formattedText) {
         if(this.getPlatform().getType() === PLATFORM_GOOGLE_HOME) {
-            this.responseObj = this.getPlatform().addBasicCard();
+            this.responseObj = this.getPlatform().addBasicCard(title, formattedText,  this.responseObj);
         }
         console.log(this.responseObj);
         return this;
@@ -359,6 +455,11 @@ const Jovo = class {
     logRequest() {
         console.log(this.request);
     }
+
+    setResponseJson(responseObj) {
+        this.responseObj = responseObj;
+    }
+
 
     respond_ (responseObj) {
         if(this.type === TYPE_LAMBDA) {
