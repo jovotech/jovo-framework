@@ -19,7 +19,7 @@ $ git clone git@github.com:jovotech/jovo-framework-nodejs.git
 Or use node package manager to install the dependencies ([jovo-framework](https://www.npmjs.com/package/jovo-framework "Jovo NPM Package")):
 
 ```
-$ npm install --save jovo-framework
+$ npm install jovo-framework --save
 ```
 
 
