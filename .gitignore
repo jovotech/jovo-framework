@@ -48,3 +48,5 @@ Temporary Items
 
 ngrok.bat
 .idea
+debug
+node_modules
