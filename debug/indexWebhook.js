@@ -2,26 +2,21 @@
 
 
 // initialize express server for webhook functionality
-let express = require('express')
-let bodyParser = require('body-parser');
-let server = express();
-server.use(bodyParser.json());
 
 
-const Jovo = require('./Jovo').Jovo;
+const app = require("../index").App;
+const webhook = require("../index").Webhook;
 
-const app = new Jovo();
 
-
-server.listen(3000, function () {
+webhook.listen(3000, function () {
     console.log('Example server listening on port 3000!')
-})
+});
+
 
 // listen for post requests
-server.post('/webhook/voice', function (req, res) {
-
+webhook.post('/webhook/voice', function (req, res) {
     app.initWebhook(req, res, handlers);
-    app.setSlotMap(slotMap);
+    app.setInputMap({"given-name" : "name"});
     // app.setIntentMap(intentMap);
     app.logRequest();
     app.execute();
@@ -29,22 +24,28 @@ server.post('/webhook/voice', function (req, res) {
 });
 
 
-
-
-let slotMap = {
-    'given-name' : 'name'
-};
-
-let intentMap = {
-    'NameIntent' : 'HelpIntent'
-};
-
-
 let handlers = {
 
     "LAUNCH" : function() {
+        app.tell("with card").withSimpleCard("title","content");
 
-        app.goTo("TestPlay","tests");
+        // let standardCard = app.alexa().getCardBuilder()
+        //     .createStandardCard("Pizza is love", "Pizza is life", "https://www.swetlow.de/pizzaSmall.jpg", "https://www.swetlow.de/pizzaLarge.jpg" ).build();
+
+        // console.log(standardCard);
+        //
+        // app.tell("with image card").withImageCard("Pizza is love", "Pizza is life", "https://www.swetlow.de/pizzaSmall.jpg");
+
+
+
+        // app.ask("What's your name?","Name?")
+        //     .addSessionAttribute("foo","bar")
+        //     .addSessionAttribute("hello","world");
+            // .addSessionAttribute("foo","bar")
+            // .addSessionAttribute("hello","world");
+
+
+        // app.goTo("TestTellInput","tests");
         // app.goTo("TestTellSlot","tests", app.getSlotValue("name"));
 
         // app.toState("onboarding").ask("Hey! What is your name?", "Your name please?");
@@ -64,34 +65,51 @@ let handlers = {
         // clean up
         console.log(app.getEndReason());
 
-        app.tell("bye");
+        // app.tell("bye");
 
     },
 
     "HelloWorldIntent" : function() {
-      // app.tell("hey hey").addAssistantBasicCard("title", "formattedText");
-        app.tell("hey " + app.response);
+        // app.tell("hey hey").addAssistantBasicCard("title", "formattedText");
+        app.ask("What's your name?","Name?")
+            .addSessionAttribute("foo","bar")
+            .addSessionAttribute("hello","world");
+
     },
 
     "PinActivate" : function() {
-       app.linking(function(body) {
+        app.linking(function(body) {
             app.tell("Linked!");
-       });
-    },
-
-    "HelpIntent" : function() {
-        app.tell("Help Intent");
-
+        });
     },
 
 
     "NameIntent" : function() {
 
+        app.tell("with card").withSimpleCard("title","content");
+        // app.tell("with image card").withImageCard("Pizza is love", "Pizza is life", "https://www.swetlow.de/pizzaSmall.jpg");
+        //
+
+
+
+        // console.log(app.alexa().getCardBuilder().createStandardCard("title", "content", "smallimage","largeimage"));
+
         // app.goTo("TestTell","tests");
-        // app.goTo("TestTellSlot","tests", app.getSlotValue("name"));
+        // console.log(app.getSessionAttributes());
+
+        // app.tell("with card").withSimpleCard("title","subtitle","content");
+
+        // app.goTo("TestTellInput","tests", app.getInput("name"));
 
 
+        // let speech = app.speechBuilder()
+        //     .addText("hey")
+        //     .addBreak("500ms")
+        //     .addAudio("https://www.swetlow.de/meinruf_nitdeiner2.mp3")
+        //     .addText("yoyoyo")
+        //     .build();
 
+        // app.tell("hey " + app.getSessionAttribute("foo"));
 
         // app.ask("Hey " + app.getSlotValue("name"), "bla");
 
@@ -110,7 +128,7 @@ let handlers = {
         //     "https://developers.google.com/actions/images/badges/XPM_BADGING_GoogleAssistant_VER.png");
 
         // app.tell('<amazon:effect name="whispered">hi '+app.getSlotValue('name')+'. I am watching you.</amazon:effect>.');
-        app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
+        // app.play("https://www.swetlow.de/meinruf_nitdeiner2.mp3","Something bla");
 
         // app.send("Kommt das an? Bin zu faul in die Logs zu schauen.", function(body) {
         //    console.log(body);
@@ -135,7 +153,7 @@ let handlers = {
             app.setAttribute("name", app.getSlotValue("name"));
             app.toState("onboarding").ask("Hey " + app.getAttribute('name') + ". How old are you?", "I didn't get your age. Please repeat");
             app.getSocketIO().emit('event', { name: app.getSlotValue("name") });
-            },
+        },
 
         "AgeIntent" : function() {
             app.setAttribute("age", app.getSlotValue("age"));
@@ -159,7 +177,7 @@ let handlers = {
             app.tell("test tell");
         },
 
-        "TestTellSlot" : function (arg) {
+        "TestTellInput" : function (arg) {
             app.tell("test tell slot " + arg);
         },
 
