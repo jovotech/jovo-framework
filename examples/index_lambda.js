@@ -5,8 +5,7 @@
 // Danger Zone: Editing might break your app.
 //=================================================================================
 
-const Jovo = require('jovo-framework');
-const app = Jovo.App;
+const app = require('jovo-framework').Jovo;
 
 exports.handler = function (event, context, callback) {
     app.init(event, callback, handlers);
