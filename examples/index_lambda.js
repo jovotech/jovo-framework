@@ -9,7 +9,7 @@ const Jovo = require('jovo-framework');
 const app = Jovo.App;
 
 exports.handler = function (event, context, callback) {
-    app.initLambda(event, callback, handlers);
+    app.init(event, callback, handlers);
     app.execute();
 };
 

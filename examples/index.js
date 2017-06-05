@@ -15,7 +15,7 @@ webhook.listen(3000, function () {
 })
 
 webhook.post('/webhook', function (req, res) {
-    app.initWebhook(req, res, handlers);
+    app.init(req, res, handlers);
     app.execute();
 });
 
