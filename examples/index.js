@@ -6,7 +6,7 @@
 //=================================================================================
 
 const app = require('jovo-framework').Jovo;
-const webhook = Jovo.Webhook;
+const webhook = require('jovo-framework').Webhook;
 
 // Listen for post requests
 webhook.listen(3000, function () {
