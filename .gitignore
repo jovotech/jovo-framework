@@ -46,7 +46,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-ngrok.bat
 .idea
 debug
 node_modules
+npm-debug.log
+out

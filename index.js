@@ -11,4 +11,4 @@ let server = express();
 server.use(bodyParser.json());
 
 module.exports.Webhook = server;
-module.exports.App = new Jovo();
+module.exports.Jovo = new Jovo();
