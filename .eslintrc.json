@@ -1,0 +1,14 @@
+{
+  "extends": "google",
+  "rules": {
+    // Additional, per-project rules...
+    "linebreak-style": 0,
+    "max-len" : [
+      "error",
+      {"ignoreStrings" : true }
+    ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  }
+}
