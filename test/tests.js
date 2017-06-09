@@ -12,8 +12,8 @@ describe('Jovo Class - Alexa Webhook tests', function() {
     let request = JSON.parse(webhookAlexaIntentRequestRequestJSON);
     let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 
-    describe('init method', function() {
-        app.init(request, response, {
+    describe('handleRequest method', function() {
+        app.handleRequest(request, response, {
             'HelloWorld': function() {
             },
         });
@@ -27,7 +27,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
         it('should return alexa as platform type', function() {
             assert(
-                app.getPlatform().getType() === Jovo.PLATFORM_ALEXA,
+                app.getPlatform().getType() === Jovo.PLATFORM_ALEXA_SKILL,
                 'Wrong platform type');
         });
 
@@ -89,11 +89,25 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 Error,
                 'IntentHandler inside of a state should be a function'
             );
+
+
+            assert.throws(
+                function() {
+                    let handlers = {
+                        'state': {
+                            'intent': {},
+                        },
+                    };
+                    Jovo.Jovo.validateHandlers(handlers);
+                },
+                Error,
+                'IntentHandler inside of a state should be a function'
+            );
         });
     });
 
     describe('getIntentName', function() {
-        app.init(request, response, {
+        app.handleRequest(request, response, {
             'HelloWorldIntent': function() {
             },
         });

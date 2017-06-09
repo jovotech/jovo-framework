@@ -3,7 +3,7 @@
  */
 
 const Jovo = require('./lib/jovo').Jovo;
-
+const FilePersistence = require('./lib/filePersistence').FilePersistence;
 
 let express = require('express');
 let bodyParser = require('body-parser');
@@ -12,3 +12,4 @@ server.use(bodyParser.json());
 
 module.exports.Webhook = server;
 module.exports.Jovo = new Jovo();
+module.exports.FilePersistence = FilePersistence;
