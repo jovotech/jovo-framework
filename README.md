@@ -10,7 +10,7 @@ In this guide, you will learn how to create a "Hello World" voice app for both A
 
 ### Step 1: Download Sample App
 
-Clone this repository to your coding environment:
+Clone the [sample app repository](https://github.com/jovotech/jovo-sample-voice-app-nodejs) to your coding environment:
 
 ```
 $ git clone https://github.com/jovotech/jovo-sample-voice-app-nodejs.git
