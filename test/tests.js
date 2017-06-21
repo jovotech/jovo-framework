@@ -42,7 +42,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
             it('should return INTENT_REQUEST as request type', function() {
                 assert(
-                    app.getPlatform().getRequestType() === Jovo.INTENT_REQUEST,
+                    app.getPlatform().getRequestType() === Jovo.REQUEST_TYPE_ENUM.INTENT,
                     'Wrong request type');
             });
         });
@@ -73,7 +73,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
             it('should return INTENT_REQUEST as request type', function() {
                 assert(
-                    app.getPlatform().getRequestType() === Jovo.INTENT_REQUEST,
+                    app.getPlatform().getRequestType() === Jovo.REQUEST_TYPE_ENUM.INTENT,
                     'Wrong request type');
             });
         });
@@ -305,10 +305,10 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>Hey John Doe</speak>',
                         'tell with slots');
                     assert(
-                        responseObj.data.google.expected_user_response === false, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === false, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hey John Doe</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hey John Doe</speak>', // eslint-disable-line
                         'tell with slots');
                     done();
                 });
@@ -339,16 +339,16 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>Hello World</speak>',
                         'tell');
                     assert(
-                        responseObj.data.google.expected_user_response === false, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === false, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
                         'tell with slots');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.title === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.title === 'Foo', // eslint-disable-line
                         'foo card title');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
                         'bar card content');
                     done();
                 });
@@ -379,22 +379,22 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>Hello World</speak>',
                         'tell');
                     assert(
-                        responseObj.data.google.expected_user_response === false, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === false, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
                         'tell with slots');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.title === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.title === 'Foo', // eslint-disable-line
                         'foo card title');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
                         'bar card content');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.image.url === 'https://any.url.com/image.jpg', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.image.url === 'https://any.url.com/image.jpg', // eslint-disable-line
                         'image url');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.image.accessibilityText === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.image.accessibilityText === 'Foo', // eslint-disable-line
                         'accessibilityText');
 
                     done();
@@ -553,10 +553,10 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>What is your name?</speak>',
                         'tell');
                     assert(
-                        responseObj.data.google.expected_user_response === true, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === true, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
                         'tell');
                     assert(
                         responseObj.data.google.noInputPrompts[0].ssml === '<speak>Your name please</speak>', // eslint-disable-line
@@ -590,19 +590,19 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>What is your name?</speak>',
                         'tell');
                     assert(
-                        responseObj.data.google.expected_user_response === true, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === true, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
                         'tell');
                     assert(
                         responseObj.data.google.noInputPrompts[0].ssml === '<speak>Your name please</speak>', // eslint-disable-line
                         'no input prompts');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.title === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.title === 'Foo', // eslint-disable-line
                         'foo card title');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
                         'bar card content');
                     done();
                 });
@@ -634,25 +634,25 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         responseObj.speech === '<speak>What is your name?</speak>',
                         'tell');
                     assert(
-                        responseObj.data.google.expected_user_response === true, // eslint-disable-line
+                        responseObj.data.google.expectUserResponse === true, // eslint-disable-line
                         'expected user response false');
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>What is your name?</speak>', // eslint-disable-line
                         'tell');
                     assert(
                         responseObj.data.google.noInputPrompts[0].ssml === '<speak>Your name please</speak>', // eslint-disable-line
                         'no input prompts');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.title === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.title === 'Foo', // eslint-disable-line
                         'foo card title');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.formattedText === 'Bar', // eslint-disable-line
                         'bar card content');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.image.url === 'https://any.url.com/image.jpg', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.image.url === 'https://any.url.com/image.jpg', // eslint-disable-line
                         'image url');
                     assert(
-                        responseObj.data.google.rich_response.items[1].basicCard.image.accessibilityText === 'Foo', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[1].basicCard.image.accessibilityText === 'Foo', // eslint-disable-line
                         'accessibilityText');
                     done();
                 });
@@ -713,7 +713,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak><audio src="https://any.url.com/file.mp3">FallbackText</audio></speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak><audio src="https://any.url.com/file.mp3">FallbackText</audio></speak>', // eslint-disable-line
                         'tell');
                     done();
                 });
@@ -859,7 +859,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                     let responseObj = app.getPlatform().getResponseObject();
 
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
                         'tell');
 
                     let found = false;
@@ -907,7 +907,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
                         'tell');
                     done();
                 });
@@ -1061,7 +1061,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
                         'tell');
                     let found = false;
                     for (let i = 0; i < responseObj.contextOut.length; i++) {
@@ -1097,7 +1097,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello John Doe</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello John Doe</speak>', // eslint-disable-line
                         'tell');
                     done();
                 });
@@ -1166,7 +1166,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.rich_response.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
                         'tell');
                     done();
                 });
