@@ -28,21 +28,23 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 },
             });
 
-            it('should return TYPE_WEBHOOK as type', function() {
+            it('should return TYPE_ENUM.WEBHOOK as type', function() {
                 assert(
-                    app.determineType() === Jovo.TYPE_WEBHOOK,
+                    app.determineType() === Jovo.TYPE_ENUM.WEBHOOK,
                     'Wrong request type');
             });
 
             it('should return alexa as platform type', function() {
                 assert(
-                    app.getPlatform().getType() === Jovo.PLATFORM_ALEXA_SKILL,
+                    app.getPlatform().getType() ===
+                    Jovo.PLATFORM_ENUM.ALEXA_SKILL,
                     'Wrong platform type');
             });
 
             it('should return INTENT_REQUEST as request type', function() {
                 assert(
-                    app.getPlatform().getRequestType() === Jovo.REQUEST_TYPE_ENUM.INTENT,
+                    app.getPlatform().getRequestType() ===
+                    Jovo.REQUEST_TYPE_ENUM.INTENT,
                     'Wrong request type');
             });
         });
@@ -59,15 +61,15 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 },
             });
 
-            it('should return TYPE_WEBHOOK as type', function() {
+            it('should return TYPE_ENUM.WEBHOOK as type', function() {
                 assert(
-                    app.determineType() === Jovo.TYPE_WEBHOOK,
+                    app.determineType() === Jovo.TYPE_ENUM.WEBHOOK,
                     'Wrong request type');
             });
 
             it('should return google action as platform type', function() {
                 assert(
-                    app.getPlatform().getType() === Jovo.PLATFORM_GOOGLE_ACTION,
+                    app.getPlatform().getType() === Jovo.PLATFORM_ENUM.GOOGLE_ACTION,
                     'Wrong platform type');
             });
 
