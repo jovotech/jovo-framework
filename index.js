@@ -4,6 +4,7 @@
 
 const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
+const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const http = require('http');
 let express = require('express');
 let bodyParser = require('body-parser');
@@ -26,6 +27,7 @@ server.listen = function listen() {
 
     http.get(options, function(response) {
         let str = '';
+        // response.setTimeout(50);
 
         response.on('data', function(chunk) {
             str += chunk;
@@ -37,7 +39,10 @@ server.listen = function listen() {
                 console.log('This is your webhook url: ' + result.tunnels[0].public_url+'/webhook');
             }
         });
+    }).setTimeout(50).on('error', function(err) {
+
     });
+
 
     let server = http.createServer(this);
     return server.listen.apply(server, arguments); // eslint-disable-line
@@ -47,4 +52,5 @@ server.listen = function listen() {
 module.exports.Webhook = server;
 module.exports.Jovo = new Jovo();
 module.exports.FilePersistence = FilePersistence;
+module.exports.DynamoDb = DynamoDb;
 
