@@ -28,12 +28,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 },
             });
 
-            it('should return TYPE_ENUM.WEBHOOK as type', function() {
-                assert(
-                    app.determineType() === Jovo.TYPE_ENUM.WEBHOOK,
-                    'Wrong request type');
-            });
-
             it('should return alexa as platform type', function() {
                 assert(
                     app.getPlatform().getType() ===
@@ -61,11 +55,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 },
             });
 
-            it('should return TYPE_ENUM.WEBHOOK as type', function() {
-                assert(
-                    app.determineType() === Jovo.TYPE_ENUM.WEBHOOK,
-                    'Wrong request type');
-            });
 
             it('should return google action as platform type', function() {
                 assert(

@@ -36,7 +36,7 @@ server.listen = function listen() {
         response.on('end', function() {
             let result = JSON.parse(str);
             if (result.tunnels.length > 0) {
-                console.log('This is your webhook url: ' + result.tunnels[0].public_url+'/webhook');
+                console.log('This is your webhook url: ' + result.tunnels[1].public_url+'/webhook');
             }
         });
     }).setTimeout(50).on('error', function(err) {
