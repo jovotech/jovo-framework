@@ -35,8 +35,18 @@ server.listen = function listen() {
 
         response.on('end', function() {
             let result = JSON.parse(str);
+
+            let httpTunnelIndex = 0;
+            // find https tunnel
+            for (let i = 0; i < result.tunnels.length; i++) {
+                let tunnel = result.tunnels[i];
+                if (tunnel.proto === 'https' && tunnel.config.addr === 'localhost:3000') {
+                    httpTunnelIndex = i;
+                }
+            }
+
             if (result.tunnels.length > 0) {
-                console.log('This is your webhook url: ' + result.tunnels[1].public_url+'/webhook');
+                console.log('This is your webhook url: ' + result.tunnels[httpTunnelIndex].public_url+'/webhook');
             }
         });
     }).setTimeout(50).on('error', function(err) {
