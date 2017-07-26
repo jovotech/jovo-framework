@@ -3,15 +3,15 @@
 <p align="center">The development framework for cross-platform voice apps</p>
 
 <p align="center">
-<a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> ·
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> ·
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a>· <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> · <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
+<a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> -
+<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
+<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
 <br/>
 
 ## Table of Contents
 
 * [Getting Started](#getting-started)
-* 
+* [Development Roadmap](#development-roadmap)
 
 
 ## Getting Started
@@ -203,8 +203,9 @@ We still consider this a beta-version of the Jovo framework: We give it our all 
 
 What we're currently working on:
 * Alexa Audioplayer Skills
-* Adding DynamoDB and other databases as a persistence layer
-* Adding analytics integrations
+* Dialog Mode
+* Adding more DB integrations
+* Adding more visual output options
 
 
 ## We need your help
