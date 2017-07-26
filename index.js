@@ -1,6 +1,3 @@
-/**
- * Created by Alex on 02-Jun-17.
- */
 
 const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
@@ -27,7 +24,6 @@ server.listen = function listen() {
 
     http.get(options, function(response) {
         let str = '';
-        // response.setTimeout(50);
 
         response.on('data', function(chunk) {
             str += chunk;
@@ -36,17 +32,12 @@ server.listen = function listen() {
         response.on('end', function() {
             let result = JSON.parse(str);
 
-            let httpTunnelIndex = 0;
             // find https tunnel
             for (let i = 0; i < result.tunnels.length; i++) {
                 let tunnel = result.tunnels[i];
                 if (tunnel.proto === 'https' && tunnel.config.addr === 'localhost:3000') {
-                    httpTunnelIndex = i;
+                    console.log('This is your webhook url: ' + result.tunnels[i].public_url+'/webhook');
                 }
-            }
-
-            if (result.tunnels.length > 0) {
-                console.log('This is your webhook url: ' + result.tunnels[httpTunnelIndex].public_url+'/webhook');
             }
         });
     }).setTimeout(50).on('error', function(err) {
