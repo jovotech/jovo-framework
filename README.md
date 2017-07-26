@@ -1,8 +1,18 @@
-# Jovo Framework
+[![Jovo Framework](https://www.jovo.tech/img/logo-blue.png)](https://www.jovo.tech)
 
-[Jovo](https://www.jovo.tech "Jovo's website") is a framework for voice developers to create cross-platform apps. We currently support Amazon Alexa Skills and Actions for Google Home.
+<p align="center">The development framework for cross-platform voice apps</p>
 
-You can find an early version of the documentation [here](https://docs.google.com/document/d/1SN_M-kS76Yz6B5pfMFrlYtM-ly2l10aZce3ULrZJztw/edit?usp=sharing "Jovo Docs").
+<p align="center">
+<a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> ·
+<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> ·
+<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a>· <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> · <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
+<br/>
+
+## Table of Contents
+
+* [Getting Started](#getting-started)
+* 
+
 
 ## Getting Started
 
