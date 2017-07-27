@@ -8,3 +8,9 @@ node_js:
   - "6"
   - "5"
   - "4"
+notifications:
+  email:
+    recipients:
+      - team@jovo.tech
+    on_success: never
+    on_failure: always
