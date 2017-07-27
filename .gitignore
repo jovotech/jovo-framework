@@ -52,3 +52,4 @@ node_modules
 npm-debug.log
 out
 db
+jsdoc.json

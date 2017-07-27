@@ -36,6 +36,11 @@ class RequestBuilderAlexaSkill {
         return this;
     }
 
+    setState(stateName) {
+        this.addSessionAttribute('STATE', stateName);
+        return this;
+    }
+
     setSessionAttributes(attributes) {
         if (this.type !== INTENT_REQUEST) {
             throw Error('Name can only be set for IntentRequests');

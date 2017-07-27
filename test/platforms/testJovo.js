@@ -104,3 +104,386 @@ describe('setInputMap', function() {
         app.execute();
     });
 });
+describe('getIntentName', function() {
+
+    it('should return NameIntent', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.getIntentName() === 'NameIntent',
+                    'Wrong intent');
+            },
+        });
+        app.execute();
+    });
+
+    it('should return mapped intent (standard)', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('AMAZON.StopIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.getIntentName() === 'END',
+                    'Standard intent mapping failed');
+            },
+        });
+        app.execute();
+    });
+});
+describe('getHandlerPath', function() {
+
+    it('should return "LAUNCH" path', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .launchRequest()
+            .build();
+
+        app.handleRequest(request, response, {
+            'LAUNCH': function() {
+                assert(
+                    app.getHandlerPath() === 'LAUNCH',
+                    'Correct path to LAUNCH');
+            },
+        });
+        app.execute();
+    });
+
+    it('should return path to intent', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                assert(
+                    app.getHandlerPath() === 'HelloWorldIntent',
+                    'Correct path to HelloWorldIntent');
+            },
+        });
+        app.execute();
+    });
+
+    it('should return path to intent in state', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setState('Onboarding')
+            .setIntentName('HelloWorldIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'Onboarding': {
+                'HelloWorldIntent': function() {
+                    assert(
+                        app.getHandlerPath() === 'Onboarding:HelloWorldIntent',
+                        'Correct path to HelloWorldIntent (AlexaSkill)');
+                },
+            },
+        }).execute();
+
+        let requestGoogleAction = (new RequestBuilderGoogleAction())
+            .intentRequest()
+            .setState('Onboarding')
+            .setIntentName('HelloWorldIntent')
+            .build();
+
+        app.handleRequest(requestGoogleAction, response, {
+            'Onboarding': {
+                'HelloWorldIntent': function() {
+                    assert(
+                        app.getHandlerPath() === 'Onboarding:HelloWorldIntent',
+                        'Correct path to HelloWorldIntent (GoogleAction)');
+                },
+            },
+        }).execute();
+    });
+});
+describe('followUpState', function() {
+    describe('AlexaSkill', function() {
+        it('should set the session attribute STATE with the given state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let responseObj = app.getPlatform().getResponseObject();
+                assert(
+                    responseObj.response.outputSpeech.ssml === '<speak>Hello World!</speak>',
+                    '<speak>Hello World!</speak> returned');
+                assert(
+                    responseObj.sessionAttributes.STATE === 'TestState',
+                    'Session attribute STATE is set');
+                done();
+            });
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelloWorldIntent')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelloWorldIntent': function() {
+                    assert.throws(
+                        function() {
+                            app.followUpState('TestStateABC').tell('Hello World!');
+                        },
+                        Error,
+                        'State TestStateABC could not be found in your handler'
+                    );
+                    app.followUpState('TestState').tell('Hello World!');
+                },
+                'TestState': {
+                    'OtherIntent': function(arg) {
+                        // do nothing
+                    },
+                },
+            });
+            app.execute();
+        });
+
+        it('should go to an intent inside the follow up state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let responseObj = app.getPlatform().getResponseObject();
+                assert(
+                    responseObj.response.outputSpeech.ssml === '<speak>Hello World</speak>',
+                    '<speak>Hello World</speak> returned');
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('YesIntent')
+                .addSessionAttribute('STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'YesIntent': function() {
+                    // should not go here
+                },
+                'TestState': {
+                    'YesIntent': function() {
+                        app.tell('Hello World');
+                    },
+                },
+            });
+            app.execute();
+        });
+    });
+    describe('GoogleAction', function() {
+        it('should set the session attribute state with the given state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let responseObj = app.getPlatform().getResponseObject();
+
+                assert(
+                    responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World!</speak>', // eslint-disable-line
+                    'tell');
+
+                let found = false;
+                for (let i = 0; i < responseObj.contextOut.length; i++) {
+                    if (responseObj.contextOut[i].name === 'session' &&
+                        responseObj.contextOut[i].parameters['STATE'] === 'TestState') {
+                        found = true;
+                    }
+                }
+                assert(found, 'State found');
+
+                done();
+            });
+
+            let request = (new RequestBuilderGoogleAction())
+                .intentRequest()
+                .setIntentName('HelloWorldIntent')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelloWorldIntent': function() {
+                    assert.throws(
+                        function() {
+                            app.followUpState('TestStateABC').tell('Hello World!');
+                        },
+                        Error,
+                        'State TestStateABC could not be found in your handler'
+                    );
+                    app.followUpState('TestState').tell('Hello World!');
+                },
+                'TestState': {
+                    'OtherIntent': function(arg) {
+                        // do nothing
+                    },
+                },
+            });
+            app.execute();
+        });
+
+        it('should go to an intent inside the follow up state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let responseObj = app.getPlatform().getResponseObject();
+                assert(
+                    responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello World</speak>', // eslint-disable-line
+                    'tell');
+                done();
+            });
+
+
+            let request = (new RequestBuilderGoogleAction())
+                .intentRequest()
+                .setIntentName('YesIntent')
+                .addContextParameter('session', 'STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'YesIntent': function() {
+                    // should not go here
+                },
+                'TestState': {
+                    'YesIntent': function() {
+                        app.tell('Hello World');
+                    },
+                },
+            });
+            app.execute();
+        });
+    });
+});
+
+describe('toIntent', function() { // TODO works for all platforms?
+    it('should skip the intent from the request and call the intent in the arguments', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let responseObj = app.getPlatform().getResponseObject();
+            assert(
+                responseObj.response.outputSpeech.ssml === '<speak>Hello John Doe</speak>',
+                '<speak>Hello John Doe</speak> returned');
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                assert.throws(
+                    function() {
+                        app.toIntent('OtherIntents', 'John Doe');
+                    },
+                    Error,
+                    'OtherIntents could not be found in your handler'
+                );
+
+                app.toIntent('OtherIntent', 'John Doe');
+            },
+            'OtherIntent': function(arg) {
+                app.tell('Hello ' + arg);
+            },
+        });
+        app.execute();
+    });
+});
+
+describe('toStateIntent', function() { // TODO works for all platforms?
+    it('should skip the intent from the request and call the state-intent in the arguments', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let responseObj = app.getPlatform().getResponseObject();
+            assert(
+                responseObj.response.outputSpeech.ssml === '<speak>Hello John Doe</speak>',
+                '<speak>Hello John Doe</speak> returned');
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                assert.throws(
+                    function() {
+                        app.toStateIntent('TestStateABC', 'OtherIntents', 'John Doe');
+                    },
+                    Error,
+                    'State TestStateABC could not be found in your handler'
+                );
+
+                assert.throws(
+                    function() {
+                        app.toStateIntent('TestState', 'OtherIntents', 'John Doe');
+                    },
+                    Error,
+                    'TestState-OtherIntents could not be found in your handler'
+                );
+                app.toStateIntent('TestState', 'OtherIntent', 'John Doe');
+            },
+            'TestState': {
+                'OtherIntent': function(arg) {
+                    app.tell('Hello ' + arg);
+                },
+            },
+        });
+        app.execute();
+    });
+});
+
+describe('getSortedArgumentsInput', function() {
+    it('should match the slots to arguments', function() {
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .addSlot('name', 'John')
+            .addSlot('age', 45)
+            .addSlot('location', 'New York')
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function(age, name, location) {
+                assert(
+                    age === 45 &&
+                    name === 'John' &&
+                    location === 'New York',
+                    'Correct arguments matching');
+            },
+        }).execute();
+    });
+});

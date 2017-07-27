@@ -38,6 +38,11 @@ class RequestBuilderGoogleAction {
         return this;
     }
 
+    setState(stateName) {
+        this.addContextParameter('session', 'STATE', stateName);
+        return this;
+    }
+
     setIntentName(name) {
         if (this.type !== INTENT_REQUEST) {
             throw Error('Name can only be set for IntentRequests');
