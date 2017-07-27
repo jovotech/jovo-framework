@@ -6,8 +6,10 @@
 <a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> -
 <a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
 <a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
+<br/>
 
 <p align="center">
+<a href="https://travis-ci.org/jovotech/jovo-framework-nodejs"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg" alt="npm version" height="18"></a>
 <a href="https://badge.fury.io/js/jovo-framework"><img src="https://badge.fury.io/js/jovo-framework.svg" alt="npm version" height="18"></a>
 </p>
 
