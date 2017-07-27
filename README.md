@@ -7,6 +7,9 @@
 <a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
 <a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
 <br/>
+[![npm version](https://badge.fury.io/js/jovo-framework.svg)](https://badge.fury.io/js/jovo-framework)
+
+<br/>
 
 ## Table of Contents
 
