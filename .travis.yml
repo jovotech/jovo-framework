@@ -18,5 +18,4 @@ notifications:
     on_failure: always
 
 script:
-  - "istanbul cover mocha --reporter lcovonly -- -R spec"
   - "codecov"
