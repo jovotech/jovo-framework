@@ -1,10 +1,9 @@
 language: node_js
 install:
-  - "npm install mocha -g"
+  - "npm install mocha"
   - "npm install sinon"
   - "npm install chai"
   - "npm install -g codecov"
-  - "npm install -g istanbul"
 node_js:
   - "7"
   - "6"
@@ -18,4 +17,5 @@ notifications:
     on_failure: always
 
 script:
+  - "istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec"
   - "codecov"
