@@ -6,6 +6,11 @@
 <a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> -
 <a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
 <a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
+
+<p align="center">
+<a href="https://badge.fury.io/js/jovo-framework"><img src="https://badge.fury.io/js/jovo-framework.svg" alt="npm version" height="18"></a>
+</p>
+
 <br/>
 
 ## Table of Contents
@@ -211,5 +216,3 @@ What we're currently working on:
 ## We need your help
 
 Jovo is a free, open source framework for voice developers. We're improving it every day and appreciate any feedback. How to support us? Just go ahead and build something cool with the framework and let us know at feedback@jovo.tech. Thanks!
-
-
