@@ -1,3 +1,4 @@
+'use strict';
 
 const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;

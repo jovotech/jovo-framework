@@ -1,3 +1,4 @@
+'use strict';
 let assert = require('chai').assert;
 
 let Jovo = require('../../lib/jovo');
