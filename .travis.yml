@@ -4,6 +4,7 @@ install:
   - "npm install sinon"
   - "npm install chai"
   - "npm install -g codecov"
+  - "npm install -g istanbul"
 node_js:
   - "7"
   - "6"
