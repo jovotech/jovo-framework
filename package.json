@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha test --recursive",
     "test-unit": "NODE_ENV=test mocha '/**/*.spec.js'"
   },
   "repository": {
