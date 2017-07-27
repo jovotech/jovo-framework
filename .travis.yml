@@ -1,4 +1,6 @@
 language: node_js
+install:
+  - "npm install mocha"
 node_js:
   - "iojs"
   - "7"
