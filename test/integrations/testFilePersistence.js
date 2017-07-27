@@ -1,3 +1,4 @@
+'use strict';
 let assert = require('chai').assert;
 const FilePersistence = require('../../lib/integrations/db/filePersistence').FilePersistence;
 

@@ -1,5 +1,3 @@
-'use strict';
-let assert = require('chai').assert;
 
 describe('Db Class', function() {
     describe('constructor', function() {
