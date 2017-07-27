@@ -3,8 +3,7 @@ install:
   - "npm install mocha"
   - "npm install sinon"
   - "npm install chai"
-  - "npm install -g istanbul"
-  - "npm install -g codecov"
+
 node_js:
   - "7"
   - "6"
@@ -17,6 +16,3 @@ notifications:
     on_success: never
     on_failure: always
 
-script:
-  - "istanbul cover ./node_modules/mocha/bin/_mocha test --reporter lcovonly -- -R spec"
-  - "codecov"
