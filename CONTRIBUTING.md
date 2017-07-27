@@ -1,5 +1,9 @@
 # Contributing to the Jovo Framework
 
+<p align="center">
+	<a href="https://gitmoji.carloscuesta.me"><img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji"></a>
+</p>
+
 Thanks a lot for considering to contribute to Jovo ❤️🔊
 
 Jovo is an open source framework that makes it easier for developers to build cross-platform voice apps. 
