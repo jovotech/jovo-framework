@@ -9,13 +9,16 @@
 <br/>
 
 <p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework-nodejs"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg" alt="npm version" height="18"></a>
-<a href="https://badge.fury.io/js/jovo-framework"><img src="https://badge.fury.io/js/jovo-framework.svg" alt="npm version" height="18"></a>
+<a href="https://travis-ci.org/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg"></a>
+<a href="https://www.npmjs.com/package/jovo-framework"><img src="https://img.shields.io/npm/v/jovo-framework.svg"></a>
+<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 </p>
 
 <br/>
 
 ## Table of Contents
+
+[![Join the chat at https://gitter.im/jovotech/jovo-framework-nodejs](https://badges.gitter.im/jovotech/jovo-framework-nodejs.svg)](https://gitter.im/jovotech/jovo-framework-nodejs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * [Getting Started](#getting-started)
 * [Development Roadmap](#development-roadmap)
