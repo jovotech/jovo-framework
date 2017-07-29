@@ -30,6 +30,57 @@ describe('enableResponseLogging()', function() {
     });
 });
 
+describe('isRequestAllowed()', function() {
+    it('should return true if no application ids were set', function() {
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setApplicationId('xyz')
+            .build();
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+
+            },
+        });
+
+        assert.ok(app.isRequestAllowed());
+    });
+
+    it('should return true if correct applications were set', function() {
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setApplicationId('xyz')
+            .build();
+        app.setAllowedApplicationIds(['abc', 'xyz']);
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+
+            },
+        });
+        assert.ok(app.isRequestAllowed());
+    });
+
+    it('should return false if incorrect applications were set', function() {
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setApplicationId('xyz')
+            .build();
+        app.setAllowedApplicationIds(['abc', 'def']);
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+
+            },
+        });
+
+        assert(app.isRequestAllowed() === false);
+    });
+});
+
 describe('setIntentMap', function() {
 
     it('should return undefined intentMap', function() {
@@ -70,10 +121,6 @@ describe('setIntentMap', function() {
 });
 
 describe('setInputMap', function() {
-    it('should return undefined inputMap', function() {
-        let app = new Jovo.Jovo();
-        assert(typeof app.inputMap === 'undefined', 'inputMap is not set');
-    });
 
     it('should return defined inputMap', function() {
         let app = new Jovo.Jovo();
@@ -415,10 +462,100 @@ describe('toIntent', function() { // TODO works for all platforms?
         });
         app.execute();
     });
+
+    it('should skip the intent from the request and call the intent in the arguments + input arguments', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let responseObj = app.getPlatform().getResponseObject();
+            assert(
+                responseObj.response.outputSpeech.ssml === '<speak>Hello John. You are 45 years old.</speak>',
+                '<speak>Hello John. You are 45 years old.</speak> returned');
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .addSlot('name', 'John')
+            .addSlot('age', 45)
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function(name, age) {
+                assert.throws(
+                    function() {
+                        app.toIntent('OtherIntents', name, age);
+                    },
+                    Error,
+                    'OtherIntents could not be found in your handler'
+                );
+
+                app.toIntent('OtherIntent', name, age, 'arg2');
+            },
+            'OtherIntent': function(name, age) {
+                app.tell('Hello ' + name + '. You are '+ age +' years old.');
+            },
+        });
+        app.execute();
+    });
+
 });
 
 describe('toStateIntent', function() { // TODO works for all platforms?
     it('should skip the intent from the request and call the state-intent in the arguments', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let responseObj = app.getPlatform().getResponseObject();
+            assert(
+                responseObj.response.outputSpeech.ssml === '<speak>Hello John. You are 45 years old.</speak>',
+                '<speak>Hello John. You are 45 years old.</speak> returned');
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .addSlot('name', 'John')
+            .addSlot('age', 45)
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function(name, age) {
+                assert.throws(
+                    function() {
+                        app.toStateIntent('TestStateABC', 'OtherIntents', 'John Doe');
+                    },
+                    Error,
+                    'State TestStateABC could not be found in your handler'
+                );
+
+                assert.throws(
+                    function() {
+                        app.toStateIntent('TestState', 'OtherIntents', 'John Doe');
+                    },
+                    Error,
+                    'TestState-OtherIntents could not be found in your handler'
+                );
+                app.toStateIntent('TestState', 'OtherIntent', name, age);
+            },
+            'TestState': {
+                'OtherIntent': function(name, age) {
+                    app.tell('Hello ' + name + '. You are '+ age +' years old.');
+                },
+            },
+        });
+        app.execute();
+    });
+
+    it('should skip the intent from the request and call the state-intent in the arguments + input arguments', function(done) {
         this.timeout(1000);
 
         let app = new Jovo.Jovo();
@@ -464,6 +601,7 @@ describe('toStateIntent', function() { // TODO works for all platforms?
         });
         app.execute();
     });
+
 });
 
 describe('getSortedArgumentsInput', function() {

@@ -116,7 +116,7 @@ describe('FilePersistence Class', function() {
             let fp = new FilePersistence('testdb2');
             fp.setMainKey('testID');
             fp.load('testKey', function(err, data) {
-                assert(err.code === 'MAINKEYNOTFOUND', 'Main key not found');
+                assert(err.code === FilePersistence.ERR_MAIN_KEY_NOT_FOUND, 'Main key not found');
                 fs.unlinkSync(filename);
                 done();
             });
@@ -127,7 +127,7 @@ describe('FilePersistence Class', function() {
             let fp = new FilePersistence('testdb3');
             fp.setMainKey('testID');
             fp.load('testKey', function(err, data) {
-                assert(err.code === 'DATAKEYNOTFOUND', 'Data key not found');
+                assert(err.code === FilePersistence.ERR_DATA_KEY_NOT_FOUND, 'Data key not found');
                 fs.unlinkSync(filename);
                 done();
             });
@@ -161,7 +161,7 @@ describe('FilePersistence Class', function() {
             let fp = new FilePersistence('testdb7');
             fp.setMainKey('testID2');
             fp.deleteUser( function(err, deleted) {
-                assert(err.code === 'MAINKEYNOTFOUND', 'Main key not found');
+                assert(err.code === FilePersistence.ERR_MAIN_KEY_NOT_FOUND, 'Main key not found');
                 fs.unlinkSync(filename);
                 done();
             });
@@ -196,7 +196,7 @@ describe('FilePersistence Class', function() {
             let fp = new FilePersistence('testdb11');
             fp.setMainKey('testID2');
             fp.deleteData('foo', function(err, deleted) {
-                assert(err.code === 'MAINKEYNOTFOUND', 'Main key not found');
+                assert(err.code === FilePersistence.ERR_MAIN_KEY_NOT_FOUND, 'Main key not found');
                 fs.unlinkSync(filename);
                 done();
             });
@@ -207,7 +207,7 @@ describe('FilePersistence Class', function() {
             let fp = new FilePersistence('testdb12');
             fp.setMainKey('testID');
             fp.deleteData('foofoofoo', function(err, deleted) {
-                assert(err.code === 'DATAKEYNOTFOUND', 'key found');
+                assert(err.code === FilePersistence.ERR_DATA_KEY_NOT_FOUND, 'key found');
                 fs.unlinkSync(filename);
                 done();
             });
