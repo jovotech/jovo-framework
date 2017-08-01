@@ -19,9 +19,12 @@ class RequestBuilderAlexaSkill {
         return this;
     }
 
-    intentRequest() {
+    intentRequest(intentName) {
         this.type = INTENT_REQUEST;
         this.req = JSON.parse(webhookAlexaIntentRequestRequestJSON);
+        if (intentName) {
+            this.setIntentName(intentName);
+        }
         return this;
     }
 
@@ -31,13 +34,80 @@ class RequestBuilderAlexaSkill {
         return this;
     }
 
-    setApplicationId(applicationId) {
-        this.session().application.applicationId = applicationId;
-        return this;
-    }
 
     setState(stateName) {
         this.addSessionAttribute('STATE', stateName);
+        return this;
+    }
+
+    setDialogState(dialogState) {
+        this.request().dialogState = dialogState;
+        return this;
+    }
+
+    addSlot(name, value) {
+        if (this.type !== INTENT_REQUEST) {
+            throw Error('Name can only be set for IntentRequests');
+        }
+        let slotObj = {
+            name: name,
+            value: value,
+        };
+
+        if (!this.request().intent.slots) {
+            this.request().intent.slots = {};
+        }
+        this.request().intent.slots[name] = slotObj;
+        return this;
+    }
+
+    build() {
+        return this.req;
+    }
+
+    buildSimple() {
+        return this.req.body;
+    }
+
+
+    body() {
+        return this.req.body;
+    }
+
+    request() {
+        return this.req.body.request;
+    }
+
+
+    setTimestamp(timestamp) {
+        this.request().timestamp = timestamp;
+        return this;
+    }
+
+    setLocale(locale) {
+        this.request().locale = locale;
+        return this;
+    }
+
+    setRequestId(requestId) {
+        this.request().requestId = requestId;
+    }
+
+    setIntentName(name) {
+        if (this.type !== INTENT_REQUEST) {
+            throw Error('Name can only be set for IntentRequests');
+        }
+        this.request().intent.name = name;
+        return this;
+    }
+
+
+    session() {
+        return this.req.body.session;
+    }
+
+    setApplicationId(applicationId) {
+        this.session().application.applicationId = applicationId;
         return this;
     }
 
@@ -62,56 +132,9 @@ class RequestBuilderAlexaSkill {
         return this;
     }
 
-    setTimestamp(timestamp) {
-        this.request().timestamp = timestamp;
-        return this;
-    }
-
-    setLocale(locale) {
-        this.request().locale = locale;
-        return this;
-    }
-
-    setIntentName(name) {
-        if (this.type !== INTENT_REQUEST) {
-            throw Error('Name can only be set for IntentRequests');
-        }
-        this.request().intent.name = name;
-        return this;
-    }
-
-    addSlot(name, value) {
-        if (this.type !== INTENT_REQUEST) {
-            throw Error('Name can only be set for IntentRequests');
-        }
-        let slotObj = {
-            name: name,
-            value: value,
-        };
-
-        if (!this.request().intent.slots) {
-            this.request().intent.slots = {};
-        }
-        this.request().intent.slots[name] = slotObj;
-        return this;
-    }
-
-    build() {
-        return this.req;
-    }
 
 
-    body() {
-        return this.req.body;
-    }
 
-    request() {
-        return this.req.body.request;
-    }
-
-    session() {
-        return this.req.body.session;
-    }
 
     context() {
         return this.req.body.session;
