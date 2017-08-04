@@ -25,6 +25,11 @@
 
 ## Getting Started
 
+```
+$ npm install -g jovo-cli
+```
+
+
 In this guide, you will learn how to create a "Hello World" voice app for both Amazon Alexa and Google Assistant.
 
 ### Step 1: Download Sample App
