@@ -79,8 +79,6 @@ Find a quickstart guide and comprehensive tutorials here:
 * [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
 * [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 
-![alt text](https://www.jovo.tech/blog/wp-content/uploads/2017/07/alexa-skill-tutorial-og-image.jpg "")
-
 
 
 ## Development Roadmap
