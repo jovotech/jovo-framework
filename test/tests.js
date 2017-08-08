@@ -741,7 +741,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.response.outputSpeech.ssml === '<speak>Hello John Doe</speak>',
+                        responseObj.response.outputSpeech.ssml === '<speak>Hello undefined</speak>',
                         '<speak>Hello John Doe</speak> returned');
                     done();
                 });
@@ -755,15 +755,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.handleRequest(request, response, {
                     'AnotherIntent': function() {
-                        assert.throws(
-                            function() {
-                                app.tell('Hello ' + app.getSessionAttribute('firstname'));
-                            },
-                            Error,
-                            'Session attribute firstname not found'
-                        );
-
-                        app.tell('Hello ' + app.getSessionAttribute('name'));
+                        app.tell('Hello ' + app.getSessionAttribute('firstname'));
                     },
                 });
                 app.execute();
@@ -815,7 +807,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let responseObj = app.getPlatform().getResponseObject();
                     assert(
-                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello John Doe</speak>', // eslint-disable-line
+                        responseObj.data.google.richResponse.items[0].simpleResponse.ssml === '<speak>Hello undefined</speak>', // eslint-disable-line
                         'tell');
                     done();
                 });
@@ -829,15 +821,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.handleRequest(request, response, {
                     'AnotherIntent': function() {
-                        assert.throws(
-                            function() {
-                                app.tell('Hello ' + app.getSessionAttribute('firstname'));
-                            },
-                            Error,
-                            'Session attribute firstname not found'
-                        );
-
-                        app.tell('Hello ' + app.getSessionAttribute('name'));
+                        app.tell('Hello ' + app.getSessionAttribute('firstname'));
                     },
                 });
                 app.execute();
