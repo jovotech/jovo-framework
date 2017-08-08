@@ -51,5 +51,5 @@ debug
 node_modules
 npm-debug.log
 out
-db
+./db
 jsdoc.json
