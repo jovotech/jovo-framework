@@ -3,6 +3,7 @@ install:
   - "npm install mocha"
   - "npm install sinon"
   - "npm install chai"
+  - "npm install chai-as-promised"
 
 node_js:
   - "7"
