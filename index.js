@@ -3,6 +3,7 @@
 const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
 const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
+const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
 const http = require('http');
 let express = require('express');
 let bodyParser = require('body-parser');
@@ -49,6 +50,29 @@ server.listen = function listen() {
     let server = http.createServer(this);
     return server.listen.apply(server, arguments); // eslint-disable-line
 };
+
+// Helper for fast debugging
+// simple intent and launch requests can be tested
+// TODO: work in progress
+if (process.argv.length > 2) {
+    // using parameters
+    try {
+        let program = require('commander');
+        program
+            .option('-i, --intent [intentName]', 'intent name')
+            .option('-l, --launch', 'launch')
+            .parse(process.argv);
+        let webhookTest = new WebhookTest();
+        if (program.intent) {
+            webhookTest.testIntent(program.intent).then((response) => { });
+        }
+        if (program.launch) {
+            webhookTest.testLaunch().then((response) => { });
+        }
+    } catch (err) {
+        console.log('\nPlease install commander: npm install commander\n');
+    }
+}
 
 
 module.exports.Webhook = server;
