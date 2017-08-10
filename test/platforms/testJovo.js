@@ -157,6 +157,7 @@ describe('setInputMap', function() {
         app.execute();
     });
 });
+
 describe('getIntentName', function() {
     it('should return NameIntent', function() {
         let app = new Jovo.Jovo();
@@ -194,6 +195,7 @@ describe('getIntentName', function() {
         app.execute();
     });
 });
+
 describe('getHandlerPath', function() {
     it('should return "LAUNCH" path', function() {
         let app = new Jovo.Jovo();
@@ -243,8 +245,8 @@ describe('getHandlerPath', function() {
             'Onboarding': {
                 'HelloWorldIntent': function() {
                     assert(
-                        app.getHandlerPath() === 'Onboarding:HelloWorldIntent',
-                        'Correct path to HelloWorldIntent (AlexaSkill)');
+                        app.getHandlerPath() === 'Onboarding: HelloWorldIntent',
+                        `Correct path to HelloWorldIntent (AlexaSkill): ${app.getHandlerPath()}`);
                 },
             },
         }).execute();
@@ -258,8 +260,8 @@ describe('getHandlerPath', function() {
             'Onboarding': {
                 'HelloWorldIntent': function() {
                     assert(
-                        app.getHandlerPath() === 'Onboarding:HelloWorldIntent',
-                        'Correct path to HelloWorldIntent (GoogleAction)');
+                        app.getHandlerPath() === 'Onboarding: HelloWorldIntent',
+                        `Correct path to HelloWorldIntent (GoogleAction): ${app.getHandlerPath()}`);
                 },
             },
         }).execute();
@@ -632,6 +634,117 @@ describe('toIntent', function() { // TODO works for all platforms?
         app.execute();
     });
 });
+
+describe('t', function () {
+    let languageResources = {
+        'en-US': {
+            translation: {
+                WELCOME: 'Welcome',
+            },
+        },
+        'de-DE': {
+            translation: {
+                WELCOME: 'Willkommen',
+            },
+        },
+    };
+
+    it('should return translation for WELCOME', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .setLocale('en-US')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.t('WELCOME') === 'Welcome',
+                    'Wrong locale');
+            },
+        });
+
+        app.setLanguageResources(languageResources);
+        app.execute();
+    });
+
+    it('should return translation for WELCOME path in de-DE', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .setLocale('de-DE')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.t('WELCOME') === 'Willkommen',
+                    'Wrong locale');
+            },
+        });
+
+        app.setLanguageResources(languageResources);
+        app.execute();
+    });
+
+    it('should return Error when trying to get translations and language resource object has not been set', function() {
+        let app = new Jovo.Jovo();
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .setLocale('en-US')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert.throws(
+                    function() {
+                        app.t('WELCOME');
+                    },
+                    Error,
+                    'Language resources have not been set for translation.'
+                );
+            },
+        });
+
+        app.execute();
+    });
+
+    it('should return Error when trying to set an invalid language resource object', function() {
+        let app = new Jovo.Jovo();
+
+        assert.throws(
+            function() {
+                app.setLanguageResources();
+            },
+            Error,
+            'Invalid language resource.'
+        );
+
+        assert.throws(
+            function() {
+                const invalidLanguageResources = undefined;
+                app.setLanguageResources(invalidLanguageResources);
+            },
+            Error,
+            'Invalid language resource.'
+        );
+
+        assert.throws(
+            function() {
+                const invalidLanguageResources = {};
+                app.setLanguageResources(invalidLanguageResources);
+            },
+            Error,
+            'Invalid language resource.'
+        );
+    });
+})
 
 describe('toStateIntent', function() { // TODO works for all platforms?
     it('should skip the intent from the request and call the state-intent in the arguments', function(done) {
