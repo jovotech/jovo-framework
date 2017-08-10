@@ -564,7 +564,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.on('respond', function(app) {
                     let response = app.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello John Doe'));
+                    assert.ok(response.isTell('Hello undefined'));
                     done();
                 });
 
@@ -577,15 +577,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.handleRequest(request, response, {
                     'AnotherIntent': function() {
-                        assert.throws(
-                            function() {
-                                app.tell('Hello ' + app.getSessionAttribute('firstname'));
-                            },
-                            Error,
-                            'Session attribute firstname not found'
-                        );
-
-                        app.tell('Hello ' + app.getSessionAttribute('name'));
+                        app.tell('Hello ' + app.getSessionAttribute('firstname'));
                     },
                 });
                 app.execute();
@@ -627,8 +619,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.on('respond', function(app) {
                     let response = app.getPlatform().getResponse();
-                    assert.ok(response.hasContextOutParameter('session', 'name', 'John Doe'));
-                    assert.ok(response.isTell('Hello John Doe'));
+                    assert.ok(response.isTell('Hello undefined'));
 
                     done();
                 });
@@ -642,15 +633,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
 
                 app.handleRequest(request, response, {
                     'AnotherIntent': function() {
-                        assert.throws(
-                            function() {
-                                app.tell('Hello ' + app.getSessionAttribute('firstname'));
-                            },
-                            Error,
-                            'Session attribute firstname not found'
-                        );
-
-                        app.tell('Hello ' + app.getSessionAttribute('name'));
+                        app.tell('Hello ' + app.getSessionAttribute('firstname'));
                     },
                 });
                 app.execute();
