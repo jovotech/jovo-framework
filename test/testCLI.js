@@ -29,7 +29,7 @@ before(function() {
 
 describe('new <project>', function() {
     it('should create a project', function(done) {
-        this.timeout(35000);
+        this.timeout(55000);
         exec('jovo new '+folder,
             (error, stdout, stderr) => {
                 if (error) {
@@ -42,7 +42,7 @@ describe('new <project>', function() {
     });
 
     it('should start the webhook without errors', function(done) {
-        this.timeout(15000);
+        this.timeout(25000);
         let child = spawn('node', ['index.js'], {
             cwd: folder,
             detached: true,
