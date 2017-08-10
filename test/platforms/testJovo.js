@@ -338,6 +338,143 @@ describe('followUpState', function() {
             });
             app.execute();
         });
+
+        it('should go to a global intent when in a state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let response = app.getPlatform().getResponse();
+                assert.ok(response.isTell('Help'));
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelpIntent')
+                .addSessionAttribute('STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelpIntent': function() {
+                    app.tell('Help');
+                },
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        app.tell('Hello World');
+                    },
+                },
+            });
+            app.execute();
+        });
+
+        it('should go to unhandled intent in a state', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let response = app.getPlatform().getResponse();
+                assert.ok(response.isTell('Unhandled'));
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelpIntent')
+                .addSessionAttribute('STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelloWorld': function() {
+                    app.tell('Help');
+                },
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        app.tell('Hello World');
+                    },
+                    'Unhandled': function() {
+                        app.tell('Unhandled');
+                    },
+                },
+            });
+            app.execute();
+        });
+
+        it('should go to unhandled intent globally', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let response = app.getPlatform().getResponse();
+                assert.ok(response.isTell('Global-Unhandled'));
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelpIntent')
+                .addSessionAttribute('STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelloWorld': function() {
+                    app.tell('Help');
+                },
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        app.tell('Hello World');
+                    },
+                },
+                'Unhandled': function() {
+                    app.tell('Global-Unhandled');
+                },
+            });
+            app.execute();
+        });
+
+        it('should go to unhandled state intent (with a global unhandled intent)', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let response = app.getPlatform().getResponse();
+                assert.ok(response.isTell('State-Unhandled'));
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelpIntent')
+                .addSessionAttribute('STATE', 'TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'HelloWorld': function() {
+                    app.tell('Help');
+                },
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        app.tell('Hello World');
+                    },
+                    'Unhandled': function() {
+                        app.tell('State-Unhandled');
+                    },
+                },
+                'Unhandled': function() {
+                    app.tell('Global-Unhandled');
+                },
+            });
+            app.execute();
+        });
+
     });
     describe('GoogleAction', function() {
         it('should set the session attribute state with the given state', function(done) {
