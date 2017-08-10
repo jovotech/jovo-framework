@@ -640,11 +640,13 @@ describe('t', function () {
         'en-US': {
             translation: {
                 WELCOME: 'Welcome',
+                WELCOME_WITH_PARAMETER: 'Welcome %s',
             },
         },
         'de-DE': {
             translation: {
                 WELCOME: 'Willkommen',
+                WELCOME_WITH_PARAMETER: 'Willkommen %s',
             },
         },
     };
@@ -662,6 +664,10 @@ describe('t', function () {
             'NameIntent': function() {
                 assert(
                     app.t('WELCOME') === 'Welcome',
+                    'Wrong locale');
+
+                assert(
+                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Welcome Jovo',
                     'Wrong locale');
             },
         });
@@ -683,6 +689,10 @@ describe('t', function () {
             'NameIntent': function() {
                 assert(
                     app.t('WELCOME') === 'Willkommen',
+                    'Wrong locale');
+
+                assert(
+                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Willkommen Jovo',
                     'Wrong locale');
             },
         });
