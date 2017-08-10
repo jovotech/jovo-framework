@@ -89,7 +89,6 @@ describe('isRequestAllowed()', function() {
 });
 
 describe('setIntentMap', function() {
-
     it('should return undefined intentMap', function() {
         let app = new Jovo.Jovo();
         assert(typeof app.intentMap === 'undefined', 'intentMap is not set');
@@ -128,7 +127,6 @@ describe('setIntentMap', function() {
 });
 
 describe('setInputMap', function() {
-
     it('should return defined inputMap', function() {
         let app = new Jovo.Jovo();
         app.setInputMap({
@@ -160,7 +158,6 @@ describe('setInputMap', function() {
     });
 });
 describe('getIntentName', function() {
-
     it('should return NameIntent', function() {
         let app = new Jovo.Jovo();
 
@@ -198,7 +195,6 @@ describe('getIntentName', function() {
     });
 });
 describe('getHandlerPath', function() {
-
     it('should return "LAUNCH" path', function() {
         let app = new Jovo.Jovo();
 
@@ -635,7 +631,6 @@ describe('toIntent', function() { // TODO works for all platforms?
         });
         app.execute();
     });
-
 });
 
 describe('toStateIntent', function() { // TODO works for all platforms?
@@ -730,7 +725,6 @@ describe('toStateIntent', function() { // TODO works for all platforms?
         });
         app.execute();
     });
-
 });
 
 describe('getSortedArgumentsInput', function() {
