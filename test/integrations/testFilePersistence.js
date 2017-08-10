@@ -101,15 +101,6 @@ describe('FilePersistence Class', function() {
     });
 
     describe('load', function() {
-        it('should throw an error when trying to read data from a non existing file', function(done) {
-            let fp = new FilePersistence('testdbABC');
-            fp.setMainKey('testID');
-            fp.load('testKey', function(err, data) {
-                assert(err.code === 'ENOENT', 'File exists');
-                assert(data === null, 'data object is not null');
-                done();
-            });
-        });
         it('should load a file without main key', function(done) {
             let filename = './db/testdb2.json';
             fs.writeFileSync(filename, '{}');
