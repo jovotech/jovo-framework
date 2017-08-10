@@ -4,6 +4,7 @@ const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
 const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
+const RequestBuilderAlexaSkill = require('./lib/platforms/alexa/requestBuilderAlexaSkill').RequestBuilderAlexaSkill;
 const http = require('http');
 let express = require('express');
 let bodyParser = require('body-parser');
@@ -58,18 +59,42 @@ if (process.argv.length > 2) {
     // using parameters
     try {
         let program = require('commander');
+        let parameters = [];
         program
             .option('-i, --intent [intentName]', 'intent name')
             .option('-l, --launch', 'launch')
+            .option('-s, --state [state]', 'state')
+            .option('-p, --parameter [value]', 'A repeatable value', function(val) {
+                parameters.push(val);
+            }, [])
             .parse(process.argv);
         let webhookTest = new WebhookTest();
+
         if (program.intent) {
-            webhookTest.testIntent(program.intent).then((response) => { });
+            let intent = (new RequestBuilderAlexaSkill())
+                        .intentRequest(program.intent);
+            if (program.state) {
+                intent.addSessionAttribute('STATE', program.state);
+            }
+            if (parameters.length > 0) {
+                for (let i = 0; i < parameters.length; i++) {
+                    let parameter = parameters[i].split('=');
+                    if (parameter.length !== 2) {
+                        console.log('Invalid parameter: '+ parameters[i]);
+                    } else {
+                        intent.addSlot(parameter[0], parameter[1]);
+                    }
+                }
+            }
+            webhookTest
+                .testIntent(intent.buildSimple())
+                .then((response) => { });
         }
         if (program.launch) {
             webhookTest.testLaunch().then((response) => { });
         }
     } catch (err) {
+        console.log(err);
         console.log('\nPlease install commander: npm install commander\n');
     }
 }
