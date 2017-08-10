@@ -13,7 +13,6 @@ response.json = function(json) {};
 
 
 describe('Jovo Class - Alexa Webhook tests', function() {
-
     describe('handleRequest method', function() {
         describe('AlexaSkill', function() {
             let app = new Jovo.Jovo();
@@ -138,7 +137,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
             );
         });
     });
-
 
 
     describe('tell', function() {
@@ -605,7 +603,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                     .build();
                 app.handleRequest(request, response, {
                     'HelloWorldIntent': function() {
-                        app.addSessionAttribute('age', 40)
+                        app.addSessionAttribute('age', 40);
                         app.addSessionAttribute('name', 'John Doe').tell('Hello World!');
                     },
                 });
@@ -639,7 +637,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.execute();
             });
         });
-
     });
 
 

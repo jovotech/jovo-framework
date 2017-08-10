@@ -6,7 +6,8 @@
     "max-len" : [
       "error",
       {"ignoreStrings" : true }
-    ]
+    ],
+    "no-invalid-this": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6
