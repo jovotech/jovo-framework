@@ -5,6 +5,7 @@ install:
   - "npm install sinon"
   - "npm install chai"
   - "npm install chai-as-promised"
+  - "npm install jovo-cli -g"
 
 node_js:
   - "7"
