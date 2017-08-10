@@ -41,7 +41,7 @@ describe('new <project>', function() {
             });
     });
 
-    it('should start the webhook without errors', function(done) {
+    it.skip('should start the webhook without errors', function(done) {
         this.timeout(25000);
         let child = spawn('node', ['index.js'], {
             cwd: folder,
