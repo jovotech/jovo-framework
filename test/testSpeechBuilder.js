@@ -87,4 +87,16 @@ describe('SpeechBuilder Class', function() {
             assert(speech.build() === 'Hey<break time="300ms"/> What is your name?<audio src="https://any.url.com/file.mp3"/>', 'concatenated string');
         });
     });
+
+    describe('add on condition ', function() {
+        it('should return a output based on condition', function() {
+            let speech = (new Jovo.SpeechBuilder(Jovo.PLATFORM_ENUM.ALEXA_SKILL))
+                .addText('Hey')
+                .addBreak('300ms', false)
+                .addText('What is your name?', false)
+                .addText('Your name?', true)
+                .addAudio('https://any.url.com/file.mp3');
+            assert.ok(speech.build() === 'Hey Your name?<audio src="https://any.url.com/file.mp3"/>');
+        });
+    });
 });
