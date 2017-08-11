@@ -5,7 +5,7 @@
     "linebreak-style": 0,
     "max-len" : [
       "error",
-      {"ignoreStrings" : true }
+      { "code": 100, "ignoreStrings" : true }
     ],
     "no-invalid-this": "off"
   },
