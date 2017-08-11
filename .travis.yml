@@ -1,5 +1,7 @@
 language: node_js
 install:
+  - "npm install i18next"
+  - "npm install i18next-sprintf-postprocessor"
   - "npm install lodash"
   - "npm install mocha"
   - "npm install sinon"

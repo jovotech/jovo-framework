@@ -6,6 +6,8 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "i18next": "^8.4.3",
+    "i18next-sprintf-postprocessor": "^0.2.2",
     "lodash": "^4.17.4",
     "request": "^2.81.0"
   },
@@ -13,6 +15,8 @@
     "test": "test"
   },
   "scripts": {
+    "eslint": "eslint index.js lib/ test/",
+    "eslint-fix": "eslint --fix index.js lib/ test/",
     "test": "mocha test --recursive",
     "test-unit": "NODE_ENV=test mocha '/**/*.spec.js'"
   },

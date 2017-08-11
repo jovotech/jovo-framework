@@ -49,6 +49,7 @@ Temporary Items
 .idea
 ./debug
 node_modules
+testproject
 npm-debug.log
 out
 ./db
