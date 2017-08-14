@@ -7,7 +7,8 @@
       "error",
       { "code": 100, "ignoreStrings" : true }
     ],
-    "no-invalid-this": "off"
+    "no-invalid-this": "off",
+    "require-jsdoc": "warn"
   },
   "parserOptions": {
     "ecmaVersion": 6

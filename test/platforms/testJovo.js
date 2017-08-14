@@ -2,7 +2,6 @@
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
 let assert = chai.assert;
-let expect = chai.expect;
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -472,8 +471,8 @@ describe('followUpState', function() {
             });
             app.execute();
         });
-
     });
+
     describe('GoogleAction', function() {
         it('should set the session attribute state with the given state', function(done) {
             this.timeout(1000);
@@ -635,7 +634,7 @@ describe('toIntent', function() { // TODO works for all platforms?
     });
 });
 
-describe('t', function () {
+describe('t', function() {
     let languageResources = {
         'en-US': {
             translation: {
@@ -754,7 +753,7 @@ describe('t', function () {
             'Invalid language resource.'
         );
     });
-})
+});
 
 describe('toStateIntent', function() { // TODO works for all platforms?
     it('should skip the intent from the request and call the state-intent in the arguments', function(done) {

@@ -220,6 +220,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                             .tell('Hello World');
                     },
                 });
+
+                app.handleRequest(request, response, {
+                    'HelloWorldIntent': function() {
+                        const imageObject = {
+                            smallImageUrl: 'https://any.url.com/image.jpg',
+                            largeImageUrl: 'https://any.url.com/image.jpg',
+                        };
+
+                        app.showImageCard('Foo', 'Bar', imageObject)
+                            .tell('Hello World');
+                    },
+                });
                 app.execute();
             });
         });
@@ -298,6 +310,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.handleRequest(request, response, {
                     'HelloWorldIntent': function() {
                         app.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
+                            .tell('Hello World');
+                    },
+                });
+
+                app.handleRequest(request, response, {
+                    'HelloWorldIntent': function() {
+                        const imageObject = {
+                            smallImageUrl: 'https://any.url.com/image.jpg',
+                            largeImageUrl: 'https://any.url.com/image.jpg',
+                        };
+
+                        app.showImageCard('Foo', 'Bar', imageObject)
                             .tell('Hello World');
                     },
                 });
@@ -386,6 +410,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                             .ask('What is your name?', 'Your name please');
                     },
                 });
+
+                app.handleRequest(request, response, {
+                    'HelloWorldIntent': function() {
+                        const imageObject = {
+                            smallImageUrl: 'https://any.url.com/image.jpg',
+                            largeImageUrl: 'https://any.url.com/image.jpg',
+                        };
+
+                        app.showImageCard('Foo', 'Bar', imageObject)
+                            .ask('What is your name?', 'Your name please');
+                    },
+                });
                 app.execute();
             });
         });
@@ -461,6 +497,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.handleRequest(request, response, {
                     'HelloWorldIntent': function() {
                         app.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
+                            .ask('What is your name?', 'Your name please');
+                    },
+                });
+
+                app.handleRequest(request, response, {
+                    'HelloWorldIntent': function() {
+                        const imageObject = {
+                            smallImageUrl: 'https://any.url.com/image.jpg',
+                            largeImageUrl: 'https://any.url.com/image.jpg',
+                        };
+
+                        app.showImageCard('Foo', 'Bar', imageObject)
                             .ask('What is your name?', 'Your name please');
                     },
                 });
