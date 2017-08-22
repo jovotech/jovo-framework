@@ -84,7 +84,7 @@ describe('SpeechBuilder Class', function() {
                 .addBreak('300ms')
                 .addText('What is your name?')
                 .addAudio('https://any.url.com/file.mp3');
-            assert(speech.build() === 'Hey<break time="300ms"/> What is your name?<audio src="https://any.url.com/file.mp3"/>', 'concatenated string');
+            assert(speech.build() === 'Hey <break time="300ms"/> What is your name? <audio src="https://any.url.com/file.mp3"/>', 'concatenated string');
         });
     });
 
@@ -96,7 +96,7 @@ describe('SpeechBuilder Class', function() {
                 .addText('What is your name?', false)
                 .addText('Your name?', true)
                 .addAudio('https://any.url.com/file.mp3');
-            assert.ok(speech.build() === 'Hey Your name?<audio src="https://any.url.com/file.mp3"/>');
+            assert.ok(speech.build() === 'Hey Your name? <audio src="https://any.url.com/file.mp3"/>');
         });
     });
 
