@@ -64,6 +64,7 @@ if (process.argv.length > 2) {
             .option('-i, --intent [intentName]', 'intent name')
             .option('-l, --launch', 'launch')
             .option('-s, --state [state]', 'state')
+            .option('-l, --locale [locale]', 'locale')
             .option('-p, --parameter [value]', 'A repeatable value', function(val) {
                 parameters.push(val);
             }, [])
@@ -75,6 +76,9 @@ if (process.argv.length > 2) {
                         .intentRequest(program.intent);
             if (program.state) {
                 intent.addSessionAttribute('STATE', program.state);
+            }
+            if (program.locale) {
+                intent.setLocale(program.locale);
             }
             if (parameters.length > 0) {
                 for (let i = 0; i < parameters.length; i++) {

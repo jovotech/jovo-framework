@@ -471,6 +471,34 @@ describe('followUpState', function() {
             });
             app.execute();
         });
+        it('should reset state and jump to intent in the global handler', function(done) {
+            this.timeout(1000);
+
+            let app = new Jovo.Jovo();
+
+            app.on('respond', function(app) {
+                let response = app.getPlatform().getResponse();
+                assert.ok(response.isTell('Hello World'));
+                assert.ok(!response.hasState(null));
+                done();
+            });
+
+
+            let request = (new RequestBuilderAlexaSkill())
+                .intentRequest()
+                .setIntentName('HelloWorldIntent')
+                .setState('TestState')
+                .build();
+
+            app.handleRequest(request, response, {
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        app.followUpState(null).tell('Hello World');
+                    },
+                },
+            });
+            app.execute();
+        });
     });
 
     describe('GoogleAction', function() {
@@ -628,6 +656,68 @@ describe('toIntent', function() { // TODO works for all platforms?
             },
             'OtherIntent': function(name, age) {
                 app.tell('Hello ' + name + '. You are '+ age +' years old.');
+            },
+        });
+        app.execute();
+    });
+
+    it('should jump to intent inside the state handler', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Hello World'));
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setState('TestState')
+            .build();
+
+        app.handleRequest(request, response, {
+            'TestState': {
+                'HelloWorldIntent': function() {
+                    app.toIntent('OtherIntent');
+                },
+                'OtherIntent': function() {
+                    app.tell('Hello World');
+                },
+            },
+        });
+        app.execute();
+    });
+
+    it('should jump to intent in the global handler', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Hello World'));
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setState('TestState')
+            .build();
+
+        app.handleRequest(request, response, {
+            'TestState': {
+                'HelloWorldIntent': function() {
+                    app.toIntent('OtherIntent');
+                },
+            },
+            'OtherIntent': function() {
+                app.tell('Hello World');
             },
         });
         app.execute();
@@ -843,6 +933,36 @@ describe('toStateIntent', function() { // TODO works for all platforms?
                 'OtherIntent': function(arg) {
                     app.tell('Hello ' + arg);
                 },
+            },
+        });
+        app.execute();
+    });
+    it('should jump to intent in the global handler', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Hello World'));
+            done();
+        });
+
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('HelloWorldIntent')
+            .setState('TestState')
+            .build();
+
+        app.handleRequest(request, response, {
+            'TestState': {
+                'HelloWorldIntent': function() {
+                    app.toStateIntent(null, 'OtherIntent');
+                },
+            },
+            'OtherIntent': function() {
+                app.tell('Hello World');
             },
         });
         app.execute();
