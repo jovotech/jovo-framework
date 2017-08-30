@@ -6,13 +6,19 @@ const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
 const RequestBuilderAlexaSkill = require('./lib/platforms/alexa/requestBuilderAlexaSkill').RequestBuilderAlexaSkill;
 const http = require('http');
-let express = require('express');
-let bodyParser = require('body-parser');
+const express = require('express');
+const verifier = require('alexa-verifier-middleware');
+const bodyParser = require('body-parser');
 
 
 let server = express();
 server.use(bodyParser.json());
 
+const verifiedServer = express();
+const alexaRouter = express.Router(); // eslint-disable-line
+verifiedServer.use(alexaRouter);
+alexaRouter.use(verifier);
+alexaRouter.use(bodyParser.json());
 
 // check for running ngrok tunnel
 server.listen = function listen() {
@@ -95,7 +101,9 @@ if (process.argv.length > 2) {
                 .then((response) => { });
         }
         if (program.launch) {
-            webhookTest.testLaunch().then((response) => { });
+            webhookTest.testLaunch().then((response) => {}).catch((error) => {
+                console.log('error on launch');
+            });
         }
     } catch (err) {
         console.log(err);
@@ -105,6 +113,7 @@ if (process.argv.length > 2) {
 
 
 module.exports.Webhook = server;
+module.exports.WebhookVerified = verifiedServer;
 module.exports.Jovo = new Jovo();
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
