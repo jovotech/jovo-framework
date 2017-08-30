@@ -26,6 +26,10 @@ describe('Tests for AlexaResponse Class', function() {
 
     });
 
+    describe.skip('addAccountLinkingCard()', function() {
+
+    });
+
     describe.skip('dialogDirective()', function() {
 
     });
