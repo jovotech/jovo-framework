@@ -219,6 +219,7 @@ describe('Tests for AlexaResponse Class', function() {
         });
     });
 
+
     describe('addAskForListPermissionCard(types)', function() {
         it('should return a valid tell response with a AskForListPermission card (write permission) ', () => {
             let response = new AlexaResponse();
