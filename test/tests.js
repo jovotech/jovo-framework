@@ -175,7 +175,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let response = app.getPlatform().getResponse();
                     assert.ok(response.isTell('Hello World'));
-                    assert.ok(response.hasSimpleCard('Foo', 'Bar'));
+                    assert.ok(response.hasSimpleCard('Foo', null, 'Bar'));
 
                     done();
                 });
@@ -364,7 +364,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 app.on('respond', function(app) {
                     let response = app.getPlatform().getResponse();
                     assert.ok(response.isAsk('What is your name?', 'Your name please'));
-                    assert.ok(response.hasSimpleCard('Foo', 'Bar'));
+                    assert.ok(response.hasSimpleCard('Foo', null, 'Bar'));
 
                     done();
                 });
