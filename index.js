@@ -102,7 +102,6 @@ if (process.argv.length > 2) {
         }
         if (program.launch) {
             webhookTest.testLaunch().then((response) => {}).catch((error) => {
-                console.log('error on launch');
             });
         }
     } catch (err) {
