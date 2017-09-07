@@ -742,6 +742,7 @@ describe('t', function() {
 
     it('should return translation for WELCOME', function() {
         let app = new Jovo.Jovo();
+        app.enableUserSave(false);
 
         let request = (new RequestBuilderAlexaSkill())
             .intentRequest()
@@ -753,11 +754,11 @@ describe('t', function() {
             'NameIntent': function() {
                 assert(
                     app.t('WELCOME') === 'Welcome',
-                    'Wrong locale');
+                    'Wrong locale3');
 
                 assert(
                     app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Welcome Jovo',
-                    'Wrong locale');
+                    'Wrong locale4');
             },
         });
 
@@ -778,11 +779,11 @@ describe('t', function() {
             'NameIntent': function() {
                 assert(
                     app.t('WELCOME') === 'Willkommen',
-                    'Wrong locale');
+                    'Wrong locale1');
 
                 assert(
                     app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Willkommen Jovo',
-                    'Wrong locale');
+                    'Wrong locale2');
             },
         });
 
