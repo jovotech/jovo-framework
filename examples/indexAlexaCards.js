@@ -1,45 +1,50 @@
 'use strict';
 
-const webhook = require('../index').Webhook;
+// =================================================================================
+// App Configuration: Create Webhook + Enable Logging
+// =================================================================================
 
+const webhook = require('../index').Webhook;
+const app = require('../index').Jovo;
+
+// Enable Logging for Quick Testing
+app.enableRequestLogging();
+app.enableResponseLogging();
+
+// Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const app = require('../index').Jovo;
-app.enableRequestLogging();
-app.enableResponseLogging();
-
-// listen for post requests
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
     app.execute();
 });
 
 
-/**
- * Alexa specific cards
- */
+// =================================================================================
+// App Logic: Displays Alexa-specific cards
+// =================================================================================
 
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched');
+        app.tell('App launched.');
     },
     'SimpleCardIntent': function() {
         app.alexaSkill().showSimpleCard('Title', 'Content');
-        app.tell('This is a simple card');
+        app.tell('This is a simple card.');
     },
     'StandardCardIntent': function() {
         app.alexaSkill().showStandardCard('Title', 'Content', {
             smallImageUrl: 'https://via.placeholder.com/720x480',
             largeImageUrl: 'https://via.placeholder.com/1200x800',
         });
-        app.tell('This is a standard card with an image');
+        app.tell('This is a standard card with an image.');
     },
     'AccountLinkingCardIntent': function() {
         app.alexaSkill().showAccountLinkingCard();
-        app.tell('This is a card with an account linking CTA');
+        app.tell('This is a card with an account linking call to action.');
     },
     'AskForCountryAndPostalCodeCardIntent': function() {
         app.alexaSkill().showAskForCountryAndPostalCodeCard();

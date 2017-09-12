@@ -1,12 +1,13 @@
 'use strict';
 
+// =================================================================================
+// App Configuration: Create Webhook + Enable Logging + Language Resources Object
+// =================================================================================
+
 const webhook = require('../index').Webhook;
-
-webhook.listen(3000, function() {
-    console.log('Example server listening on port 3000!');
-});
-
 const app = require('../index').Jovo;
+
+// Enable Logging for Quick Testing
 app.enableRequestLogging();
 app.enableResponseLogging();
 
@@ -25,13 +26,20 @@ let languageResources = {
     },
 };
 
-// listen for post requests
+// Listen for post requests
+webhook.listen(3000, function() {
+    console.log('Example server listening on port 3000!');
+});
+
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
-    app.setLanguageResources(languageResources);
     app.execute();
 });
 
+
+// =================================================================================
+// App Logic: 
+// =================================================================================
 
 let handlers = {
 
