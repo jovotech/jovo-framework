@@ -31,6 +31,7 @@ let handlers = {
     'LAUNCH': function() {
         app.tell('App launched');
     },
+
     'HelloWorldIntent': function() {
         let speech = app.speechBuilder();
 

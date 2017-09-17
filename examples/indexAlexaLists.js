@@ -34,6 +34,7 @@ let handlers = {
        // app.toIntent('AddItemToToDoListIntent');
        app.toIntent('UpdateToDoListItemIntent');
     },
+
     'GetShoppingListIntent': function() {
         // Active or completed
         app.user().getShoppingList('active')
@@ -52,6 +53,7 @@ let handlers = {
                 }
             });
     },
+
     'GetTodoListIntent': function() {
         // Active or completed
         app.user().getToDoList('active')
@@ -66,6 +68,7 @@ let handlers = {
                 console.log(error);
             });
     },
+
     'UpdateToDoListItemIntent': function() {
         app.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
             .then((data) => {
@@ -84,6 +87,7 @@ let handlers = {
                 }
         });
     },
+
     'AddItemToToDoListIntent': function() {
         app.user().addToTodoList('Sleep')
             .then((data) => {

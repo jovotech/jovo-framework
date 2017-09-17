@@ -32,6 +32,7 @@ let handlers = {
        // app.toIntent('GetFullAddressIntent');
        app.toIntent('GetCountryPostalCodeIntent');
     },
+
     'GetFullAddressIntent': function() {
         app.user().getAddress()
             .then((data) => {
@@ -45,6 +46,7 @@ let handlers = {
             }
         });
     },
+
     'GetCountryPostalCodeIntent': function() {
         app.user().getCountryAndPostalCode()
             .then((data) => {

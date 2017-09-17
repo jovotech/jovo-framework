@@ -33,9 +33,11 @@ let handlers = {
             .followUpState('OnboardingState')
             .ask('Say hi', 'Say hello');
     },
+
     'HelloIntent': function() {
         app.tell('Welcome back!');
     },
+
     'OnboardingState': {
         'HelloIntent': function() {
             app.tell('Hey');

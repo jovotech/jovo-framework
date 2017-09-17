@@ -31,10 +31,12 @@ let handlers = {
     'LAUNCH': function() {
         app.tell('App launched');
     },
+
     'HelloWorldIntent': function() {
         app.addSessionAttribute('name', 'John Doe');
         app.tell('Hello World');
     },
+
     'SessionIntent': function() {
         app.tell('Hello ' + app.getSessionAttribute('name'));
     },

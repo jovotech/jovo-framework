@@ -191,9 +191,11 @@ let handlers = {
 
         app.tell('Look at your Echo Show');
     },
+
     'HelloWorld': function() {
         app.tell('Hello World');
     },
+
     'ON_ELEMENT_SELECTED': {
         'token': function() {
             app.toIntent('HelloWorld');

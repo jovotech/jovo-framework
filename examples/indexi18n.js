@@ -46,6 +46,7 @@ let handlers = {
     'LAUNCH': function() {
         app.tell(app.t('WELCOME'));
     },
+
     'HelloWorldIntent': function() {
         app.tell(app.t('WELCOME_WITH_PARAMETER', 'John Doe'));
     },
