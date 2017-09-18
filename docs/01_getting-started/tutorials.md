@@ -1,8 +1,11 @@
-# [Getting Started](../) > Tutorials
+# [Getting Started](./) > Tutorials
+
+> Other pages in this category: [Getting Started](./), [Voice App Basics](./voice-app-basics.md).
 
 Comprehensive tutorials on how to build an Alexa Skill and Google Action.
 
 * [Beginner Tutorials](#beginner-tutorials)
+* [Voice App Courses](#voice-app-courses)
 * [Suggest a Tutorial](#suggest-a-tutorial)
 
 
@@ -17,6 +20,10 @@ Getting started with new platforms like Amazon Alexa and Google Assistant can so
 [alexa-tutorial]: https://www.jovo.tech/img/docs/alexa-skill-tutorial-og-image.jpg "Hello World on Alexa"
 [google-action-tutorial]: https://www.jovo.tech/img/docs/google-action-tutorial-og-image.jpg "Hello World on Google Assistant"
 
+## Voice App Courses
+Find our series of voice app development courses here:
+* [Project 1: Hello World!](https://www.jovo.tech/blog/project-1-hello-world/)
+* Project 2: Adventure Game (coming soon)
 
 ## Suggest a Tutorial
 

@@ -1,5 +1,7 @@
 # Getting Started
 
+> Other pages in this category: [Tutorials](tutorials.md), [Voice App Basics](voice-app-basics.md).
+
 * [Installation](#installation)
   * [Technical Requirements](#technical-requirements)
   * [Jovo CLI](#jovo-cli)
@@ -22,7 +24,7 @@ Here are some tutorials to install Node.js and NPM: [Mac](http://blog.teamtreeho
 
 ### Jovo CLI
 
-The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [Building a Voice App](./docs/building-a-voice-app).
+The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [02. Building a Voice App](../02_building-a-voice-app).
 
 The open source GitHub repository can be found here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli) (pull requests encouraged!)
 

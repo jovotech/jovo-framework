@@ -1,4 +1,6 @@
-# [Building a Voice App](../) > Output
+# [Building a Voice App](./) > Output
+
+> Other pages in this category: [Handling Intents and States](intents-stated.md), [User Input and Data](input.md).
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
@@ -10,9 +12,12 @@ In this section, you will learn how to use Jovo to craft a response to your user
 * [Advanced Output](#advanced-output)
   * [SSML](#ssml)
   * [speechBuilder](#speechbuilder)
+  * [i18n](#i18n)
   * [Raw JSON Responses](#raw-json-responses)
 * [Visual Output](#visual-output)
   * [Cards](#cards)
+  * [Alexa Specific Visual Output](#alexa-specific-visual-output)
+  * [Google Assistant Specific Visual Output](#google-assistant-specific-visual-output)
 * [No Speech Output](#no-speech-output)
 
 ## Introduction to Output Types
@@ -152,6 +157,47 @@ addText(text, 0.3)
 ```
 
 
+### i18n
+
+Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to support multilanguage voice apps.
+
+To get started, create an object called `languageResources` in your `index.js` file, like this:
+
+```
+let languageResources = {
+    'en-US': {
+        translation: {
+            WELCOME: 'Welcome',
+            WELCOME_WITH_PARAMETER: 'Welcome %s',
+        },
+    },
+    'de-DE': {
+        translation: {
+            WELCOME: 'Willkommen',
+            WELCOME_WITH_PARAMETER: 'Willkommen %s',
+        },
+    },
+};
+```
+
+In your app logic, you can then use `app.t('key')` to access the right string. It is also possible to use parameters with `app.t('key', 'parameter)`.
+
+Here is some example code:
+
+```
+let handlers = {
+
+    'LAUNCH': function() {
+        app.tell(app.t('WELCOME'));
+    },
+
+    'HelloWorldIntent': function() {
+        app.tell(app.t('WELCOME_WITH_PARAMETER', 'John Doe'));
+    },
+};
+```
+
+
 ### Raw JSON Responses
 If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `alexaSkill().setResponseObject` and `googleAction().setResponseObject`.
 
@@ -251,10 +297,19 @@ Important: Image files must be accessible by the public and support CORS (cross-
 
 You can find a troubleshooting guide by Amazon [here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/providing-home-cards-for-the-amazon-alexa-app#common-issues-when-including-images-in-standard-cards).
 
+### Alexa Specific Visual Output
+
+You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [03. Platform Specifics > Amazon Alexa](../03_platform-specifics#amazon-alexa).
+
+
+### Google Assistant Specific Visual Output
+
+You can find out more about Google Assistant specific cards and suggestion chips here: [03. Platform Specifics > Google Assistant](../03_platform-specifics#google-assistant).
+
 
 ## No Speech Output
 
-Sometimes, you might want to end a session without speech output. You can use the endSession method for this case:
+Sometimes, you might want to end a session without speech output. You can use the `endSession method for this case:
 
 ```
 app.endSession();

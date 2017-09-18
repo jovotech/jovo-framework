@@ -86,10 +86,8 @@ Find a quickstart guide and comprehensive tutorials here:
 We still consider this a beta-version of the Jovo framework: We give it our all to make it as complete as possible (and it supports most of the Alexa and Google Assistant functions), but there are certain features that are currently in development.
 
 What we're currently working on:
-* Alexa Audioplayer Skills
-* Dialog Mode
 * Adding more DB integrations
-* Adding more visual output options
+* Extending the User class
 
 
 ## We need your help

@@ -1,4 +1,6 @@
-# [Building a Voice App](../) > User Input & Data
+# [Building a Voice App](./) > User Input and Data
+
+> Other pages in this category: [Handling Intents and States](intents-stated.md), [Creating Output](output.md).
 
 In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
 
@@ -62,6 +64,8 @@ let handlers = {
 
         // Get input for a single slot or entity
         let value = app.getInput(inputName);
+
+        // Do something
     }
 
     // Other Intents and States
@@ -70,7 +74,7 @@ let handlers = {
 
 ### inputMap
 
-Similar to `[intentMap](../intents-states.md/#intentmap)`, there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](../#jovo-app-structure) of your voice app:
+Similar to [`intentMap`](../intents-states.md/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](./#jovo-app-structure) of your voice app:
 
 ```
 // Create above webhook.post (webhook) or exports.handler (Lambda)
@@ -91,16 +95,52 @@ let inputMap = {
 
 ## User Object
 
-There is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
+Besides conversational parameters, there is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
 
-For retrieving and storing this type of information, the Jovo `User Class`can be used.
+For retrieving and storing this type of information, the Jovo `User Class`can be used to create more contextual and adaptive experiences based on user specific data. You can find the class here: [user.js](https://github.com/jovotech/jovo-framework-nodejs/blob/master/lib/user.js).
 
+The user object can be accessed like this:
+
+```
+let user = app.user();
+```
+
+### User Data
+
+With our [database integrations](../04_integrations#databases), you can store user specific data easily.
+
+Just specify a key and a value, and you're good to go: 
+
+```
+app.user().data.key = value;
+
+// Example
+app.user().data.score = 300;
+```
+
+
+### Metadata
+
+The user object metadata is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence db.json, or DynamoDB if you enable it):
+
+* createdAt: When the user first used your app
+* lastUsedAt: When was the last time your user interacted with your app
+* sessionsCount: How often did your user engage with your app
+
+```
+let userCreatedAt = app.user().metaData.createdAt; 
+let userlastUsedAt = app.user().metaData.lastUsedAt; 
+let userSessionsCount = app.user().metaData.sessionsCount;
+```
 
 ### User ID
 
 Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
 
 ```
+app.user().getId();
+
+// Alternatively, you can also use this
 app.getUserId();
 ```
 
@@ -227,15 +267,15 @@ The result looks like this:
 
 ## Persisting Data
 
-> Learn more about Sessions here: [Handling Intents and States/Introduction to User Sessions](./intents-states.md/#introduction-to-user-sessions)
+> Learn more about Sessions here: [Handling Intents and States/Introduction to User Sessions](./intents-states.md#introduction-to-user-sessions)
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [Handling Intents and States/Session Attributes](./intents-states.md/#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [Handling Intents and States/Session Attributes](./intents-states.md#session-attributes).
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations/Databases](../integrations/#databases).
+For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations/Databases](../04_integrations#databases).
 

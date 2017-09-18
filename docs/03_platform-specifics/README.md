@@ -1,5 +1,7 @@
 # Platform Specifics
 
+> Other pages in this category: [Amazon Alexa](amazon-alexa.md), [Google Assistant](google-assistant.md).
+
 Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
 
 * [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)
@@ -24,6 +26,13 @@ As Amazon Alexa and Google Assistant both have platform specific features, you c
 let alexa = app.alexaSkill();
 ```
 
+You can find the following Alexa specific features on the page [03. Platform Specifics > Amazon Alexa](amazon-alexa.md):
+
+* Alexa Audioplayer Skills
+* Dialog Mode
+* Render Templates for Echo Show
+* Shopping and To Do Lists
+
 
 ## Google Assistant
 
@@ -32,3 +41,8 @@ let alexa = app.alexaSkill();
 ```
 let google = app.googleAction();
 ```
+
+You can find the following Google Assistant specific features on the page [03. Platform Specifics > Google Assistant](google-assistant.md):
+
+* Google Assistant Cards
+* Suggestion Chips

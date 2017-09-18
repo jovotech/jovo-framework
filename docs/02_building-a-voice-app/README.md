@@ -1,13 +1,29 @@
 # Building a Voice App
 
-In this section, you will learn more about the essentials of building an app with the Jovo Framework. For more basic information, see [Getting Started](../getting-started) and [Voice App Basics](../voice-app-basics).
+> Other pages in this category: [Handling Intents and States](intents-stated.md), [User Input and Data](input.md), [Creating Output](output.md).
+
+In this section, you will learn more about the essentials of building an app with the Jovo Framework. For more basic information, see [Getting Started](../01_getting-started) and [Voice App Basics](../01_getting-started/voice-app-basics.md).
+
+* [Jovo App Structure](#jovo-app-structure)
+* [App Configuration](#app-configuration)
+  * [Server Configuration](#server-configuration)
+  * [Webhook](#webhook)
+  * [AWS Lambda](#aws-lambda)
+  * [How to Add Configurations](#how-to-add-configurations)
+* [App Logic](#app-logic)
+  * [Intents and States](#intents-and-states)
+  * [User Input](#user-input)
+  * [Output](#output)
+* [Command Line Tools](#command-line-tools)
+  * [Create a New Project](#create-a-new-project)
+
 
 ## Jovo App Structure
 A Jovo voice app ([`index.js`](https://github.com/jovotech/jovo-sample-voice-app-nodejs/blob/master/index.js)) is divided into two main building blocks: [Configuration](#app-configuration) and [Logic](#app-logic):
 
 ![Jovo App Structure](https://www.jovo.tech/img/docs/jovo-architecture.jpg)
 
-The upper part is used for [server configuration](#server-configuration), adding [integrations](../integrations) like analytics or databases, or global variables that are used throughout your app.
+The upper part is used for [server configuration](#server-configuration), adding [integrations](../04_integrations) like analytics or databases, or global variables that are used throughout your app.
 
 The below part (the `handlers` variable) is where you're routing through your app and managing how you're responding to your users.
 
@@ -55,7 +71,7 @@ You can either run your server locally, or deploy to a webhosting service.
 
 #### Developing locally with ngrok
 
-Do the following steps when you’re ready to test your prototype. To run the server, use the node command in your command line. Make sure that, with every file update, you terminate it with `ctrl+c and run it again:
+Do the following steps when you’re ready to test your prototype. To run the server, use the node command in your command line. Make sure that, with every file update, you terminate it with `ctrl+c` and run it again:
 
 ```
 $ node index.js
@@ -78,12 +94,25 @@ It should display something similar to this:
 
 ![ngrok window](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-url.jpg)
 
-Now use the `https://xyz.ngrok.io` address provided by ngrok, add `/webhook and paste it as webhook link to the respective developer platform consoles.
+Now use the `https://xyz.ngrok.io` address provided by ngrok, add `/webhook` and paste it as webhook link to the respective developer platform consoles.
 
 Find the following sections in our beginner tutorials to learn how to do so:
 
 * [Amazon Alexa: Add Webhook as HTTPS Endpoint](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#app-configuration)
 * [Google Assistant: Add Webhook as API.AI Fulfillment](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#endpoint)
+
+#### Using the Alexa Verifier Middleware
+
+When you finally want to upload your code and host it somewhere else than on AWS Lambda, you need to make sure to switch one line of the configuration:
+
+```
+// Use this
+const webhook = require('../index').WebhookVerified;
+
+// Instead of this
+const webhook = require('../index').Webhook;
+```
+
 
 ### AWS Lambda
 
@@ -110,22 +139,22 @@ While for Alexa, the process of hosting a Skill on Lambda is straightforward, fo
 
 ### How to Add Configurations
 
-As described above, configurations will mostly be added outside the `webhook.post`/`exports.handler functions (will be loaded when the server/function is started). Sometimes, they can also be added between the `handleRequest` and `execute` method calls (will be loaded every new request).
+As described above, configurations will mostly be added outside the `webhook.post`/`exports.handler` functions (will be loaded when the server/function is started). Sometimes, they can also be added between the `handleRequest` and `execute` method calls (will be loaded every new request).
 
 * Mapping
-  * intentMap
-  * inputMap
+  * [intentMap](intents-states.md#intentmap)
+  * [inputMap](input.md#inputmap)
 * Logging
-  * Log Requests
-  * Log Responses
+  * [Log Requests](input.md#log-requests)
+  * [Log Responses](input.md#log-responses)
 * Database Integrations
-  * Database Configurations
-  * FilePersistence
-  * DynamoDB
+  * [Database Configurations](../04_integrations#databases)
+  * [FilePersistence](../04_integrations#filepersistence)
+  * [DynamoDB](../04_integrations#dynamodb)
 * Analytics Integrations
-  * Analytics Configurations
-  * Add VoiceLabs Analytics
-  * Add Dashbot Analytics
+  * [Analytics Configurations](../04_integrations#analytics)
+  * [Add VoiceLabs Analytics](../04_integrations#voicelabs)
+  * [Add Dashbot Analytics](../04_integrations#dashbot)
 
 ## App Logic
 
@@ -165,7 +194,7 @@ You can learn more about how to craft speech, audio, and visual responses in the
 
 ## Command Line Tools
 
-You can use the Jovo Command Line Tools ([see GitHub repository](https://github.com/jovotech/jovo-cli)) to create new Jovo projects. See [Installation](../getting-started/#installation) for getting started.
+You can use the Jovo Command Line Tools ([see GitHub repository](https://github.com/jovotech/jovo-cli)) to create new Jovo projects. See [Installation](../getting-started#installation) for getting started.
 
 ### Create a New Project
 

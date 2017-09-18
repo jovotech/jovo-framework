@@ -1,4 +1,6 @@
-# [Building a Voice App](../) > Intents & States
+# [Building a Voice App](./) > Intents & States
+
+> Other pages in this category: [User Input and Data](input.md), [Creating Output](output.md).
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
@@ -16,7 +18,7 @@ In this section, you will learn more about how to use intents and states to rout
 
 To build engaging voice apps, it's important to understand the concept of user sessions on voice platforms.
 
-A `session is an uninterrupted interaction between a user and your application. It consists of at least one `request, but can consist of multiple sequential inputs and outputs. The length of a session is dependent of the following factors:
+A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request`, but can consist of multiple sequential inputs and outputs. The length of a session is dependent of the following factors:
 
 * The response includes `shouldEndSession`, which is true for `tell` and `endSession` method calls
 * A user doesn't respond to an ask prompt and the session times out
@@ -87,7 +89,7 @@ Usually, you would need to map the requests from Alexa and Google (as they have 
 
 ### 'END' intent
 
-A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn’t respond. Jovo uses the standard intent `'END' to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
+A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn’t respond. Jovo uses the standard intent `'END'` to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
 
 If you want to end the session without saying anything, use the following:
 
@@ -371,4 +373,4 @@ let value = app.getSessionAttribute(key);
 let score = app.getSessionAttribute('score');
 ```
 
-Have a look at our [User Object](./input.md/#user-object) to learn more about how to persist data across sessions.
+Have a look at our [User Object](./input.md#user-object) to learn more about how to persist data across sessions.

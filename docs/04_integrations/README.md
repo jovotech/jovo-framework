@@ -24,7 +24,7 @@ This is an abstraction layer for persisting data across sessions. By default, th
 
 This will save data with your user's user ID as a mainKey, and a key and a value specified by you. This makes use of a callback function that's called after a successful (or unsuccessful, for error handling) call of the method.
 
-````
+```
 save(key, value, callback)
 ​
 app.db().save(key, value, function(err) {
@@ -123,7 +123,7 @@ webhook.post('/webhook', function(req, res) {
 
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
-'''
+```
 // VoiceLabs integration
 app.addVoiceLabsAlexa(key);
 app.addVoiceLabsGoogleAction(key);
@@ -153,15 +153,15 @@ app.analytics().enable();
 
 #### Skip Intents
 
-´´´
+```
 app.analytics().skipIntents(intents);
-´´´
+```
 
 #### Skip Users
 
-´´´
+```
 app.analytics().skipUsers(userIds);
-´´´
+```
 
 ### VoiceLabs
 
