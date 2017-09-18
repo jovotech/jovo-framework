@@ -1,4 +1,4 @@
-# [Getting Started](../) > Voice App Basics
+# [Getting Started](./) > Voice App Basics
 
 This section provides an overview of how voice applications work, and the differences between voice platforms. Currently, Jovo supports [Amazon Alexa](#amazon-alexa) and [Google Assistant](#google-assistant).
 
@@ -51,7 +51,7 @@ The Jovo framework currently supports Skiils for Amazon Alexa and Actions for Go
 
 ### Amazon Alexa
 
-See also: Beginner Tutorial: [Build an Alexa Skill in Node.js with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/).
+> See also: Beginner Tutorial: [Build an Alexa Skill in Node.js with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/).
 
 On the Amazon Echo product suite or other devices that support Amazon Alexa, users can access so-called Skills by asking the device something like this:
 
@@ -70,7 +70,7 @@ Another helpful guide for setting up a first Alexa skill [can be found here](htt
 
 ### Google Assistant
 
-See also: Beginner Tutorial: [Build an Google Action in Node.js with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/).
+> See also: Beginner Tutorial: [Build an Google Action in Node.js with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/).
 
 ![Google Home, Google Assistant, and Google Actions](https://www.jovo.tech/img/docs/voice-app-basics/google-home-google-assistant.png)
 
@@ -84,7 +84,7 @@ On Google Home, users converse with the Google Assistant. Apps for the Assistant
 'OK Google, tell Pizza Temple to find me a restaurant.'
 ```
 
-ere is the official Google resource: [Invocation and Discovery](https://developers.google.com/actions/discovery/).
+Here is the official Google resource: [Invocation and Discovery](https://developers.google.com/actions/discovery/).
 
 To build a voice app for Google Assistant and Google Home, you need to create a project on the [Actions on Google Console](https://console.actions.google.com/). For interpreting the natural language of your users' speech input, you can use different kinds of integrations. Most developers use [API.AI](https://api.ai/) for the language model.
 
