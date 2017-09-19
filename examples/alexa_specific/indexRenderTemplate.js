@@ -1,14 +1,23 @@
 'use strict';
 
-const webhook = require('../index').Webhook;
+const webhook = require('../../index').Webhook;
 
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const app = require('../index').Jovo;
-app.enableRequestLogging();
-app.enableResponseLogging();
+const BodyTemplate1 = require('./../../lib/platforms/alexa/alexaSkill').AlexaSkill.BodyTemplate1;
+
+const app = require('../../index').Jovo;
+
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+    intentMap: {
+        'BlaIntent': 'HelloWorld',
+    },
+});
+
 
 // listen for post requests
 webhook.post('/webhook', function(req, res) {
@@ -16,13 +25,15 @@ webhook.post('/webhook', function(req, res) {
     app.execute();
 });
 
+// app.onElementSelected(function (err, data) {
+//
+// });
 
 let handlers = {
 
     'LAUNCH': function() {
-        // app.tell('App launched');
 
-        let bodyTemplate1 = app.alexaSkill().templateBuilder('BodyTemplate1');
+        let bodyTemplate1 = new BodyTemplate1();
         bodyTemplate1
             .setToken('token')
             .setTitle('BodyTemplate1 Title')

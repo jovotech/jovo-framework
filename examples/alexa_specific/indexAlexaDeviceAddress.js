@@ -1,12 +1,12 @@
 'use strict';
 
-const webhook = require('../index').Webhook;
+const webhook = require('../../index').Webhook;
 
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const app = require('../index').Jovo;
+const app = require('../../index').Jovo;
 app.enableRequestLogging();
 app.enableResponseLogging();
 
