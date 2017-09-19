@@ -7,8 +7,16 @@ webhook.listen(3000, function() {
 });
 
 const app = require('../index').Jovo;
-app.enableRequestLogging();
-app.enableResponseLogging();
+
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+
+    userMetaData: {
+        requestHistorySize: 10,
+        devices: true,
+    },
+});
 
 // listen for post requests
 webhook.post('/webhook', function(req, res) {
@@ -22,6 +30,11 @@ const handlers = {
     'LAUNCH': function() {
         app.toIntent('SaveUserDataIntent');
     },
+
+    'HelperFunctionsIntent': function() {
+        let seconds = this.user().getSecondsSinceLastSession();
+        app.tell('Seconds '+ seconds);
+    },
     'SaveUserDataIntent': function() {
         app.user().data.score = 'over 9000';
         app.tell('Saved!');
@@ -31,9 +44,11 @@ const handlers = {
         app.tell('You have ' + score + ' points');
     },
     'GetMetaDataIntent': function() {
-        let userCreatedAt = app.user().metaData.createdAt;
-        let userlastUsedAt = app.user().metaData.lastUsedAt;
-        let userSessionsCount = app.user().metaData.sessionsCount;
+        let userMetaData = app.user().metaData;
+
+        let userCreatedAt = userMetaData.createdAt;
+        let userlastUsedAt = userMetaData.lastUsedAt;
+        let userSessionsCount = userMetaData.sessionsCount;
 
         console.log(userCreatedAt);
         console.log(userlastUsedAt);

@@ -9,6 +9,7 @@ install:
   - "npm install request"
   - "npm install chai-as-promised"
   - "npm install jovo-cli -g"
+  - "npm install"
 
 node_js:
   - "7"

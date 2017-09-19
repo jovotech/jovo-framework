@@ -1,7 +1,7 @@
 'use strict';
 const expect = require('chai').expect;
 const AlexaResponse = require('../../../lib/platforms/alexa/alexaResponse').AlexaResponse;
-const BodyTemplate1Builder = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate1Builder').BodyTemplate1Builder;
+const BodyTemplate1 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate1').BodyTemplate1;
 
 describe('Tests for AlexaResponse Class', function() {
     describe('constructor(responseObj)', function() {
@@ -870,11 +870,10 @@ describe('Tests for AlexaResponse Class', function() {
     describe('addDisplayRenderTemplateDirective(template)', function() {
         it('should return a valid hint directive response', () => {
             let response = new AlexaResponse();
-            let template = (new BodyTemplate1Builder())
+            let template = new BodyTemplate1()
                 .setTitle('Hello World')
                 .setToken('tokenXYZ')
-                .setTextContent('primary', 'secondary')
-                .build();
+                .setTextContent('primary', 'secondary');
 
             response.addDisplayRenderTemplateDirective(template);
             expect(response.responseObj.response.directives).to.deep.include({
@@ -899,11 +898,10 @@ describe('Tests for AlexaResponse Class', function() {
 
         it('should return a valid response with more than one directives', () => {
             let response = new AlexaResponse();
-            let template = (new BodyTemplate1Builder())
+            let template = new BodyTemplate1()
                 .setTitle('Hello World')
                 .setToken('tokenXYZ')
-                .setTextContent('primary', 'secondary')
-                .build();
+                .setTextContent('primary', 'secondary');
 
             response.addDisplayRenderTemplateDirective(template);
             response.addHintDirective('Hint text').tell('Hello World');

@@ -6,6 +6,9 @@ webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
+const AlexaSpeechBuilder = require('./../index').AlexaSkill.AlexaSpeechBuilder; // eslint-disable-line
+const GoogleActionSpeechBuilder = require('./../index').GoogleAction.GoogleActionSpeechBuilder; // eslint-disable-line
+
 const app = require('../index').Jovo;
 app.enableRequestLogging();
 app.enableResponseLogging();
@@ -44,5 +47,5 @@ let handlers = {
 };
 
 // quick testing
-// node indexInputs.js --intent NameIntent --parameter name=John
+// node indexSpeechBuilder --launch
 
