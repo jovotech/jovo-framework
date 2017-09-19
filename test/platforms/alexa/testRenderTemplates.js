@@ -1,42 +1,42 @@
 'use strict';
 const expect = require('chai').expect;
 const AlexaSkill = require('../../../lib/platforms/alexa/alexaSkill').AlexaSkill;
-const RenderTemplateBuilder = require('../../../lib/platforms/alexa/renderTemplate/renderTemplateBuilder').RenderTemplateBuilder;
-const BodyTemplate1Builder = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate1Builder').BodyTemplate1Builder;
-const BodyTemplate2Builder = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate2Builder').BodyTemplate2Builder;
-const BodyTemplate3Builder = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate3Builder').BodyTemplate3Builder;
-const BodyTemplate6Builder = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate6Builder').BodyTemplate6Builder;
-const ListTemplate1Builder = require('../../../lib/platforms/alexa/renderTemplate/listTemplate1Builder').ListTemplate1Builder;
-const ListTemplate2Builder = require('../../../lib/platforms/alexa/renderTemplate/listTemplate2Builder').ListTemplate2Builder;
-const ListTemplate3Builder = require('../../../lib/platforms/alexa/renderTemplate/listTemplate3Builder').ListTemplate3Builder;
+const Template = require('../../../lib/platforms/alexa/renderTemplate/template').Template;
+const BodyTemplate1 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate1').BodyTemplate1;
+const BodyTemplate2 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate2').BodyTemplate2;
+const BodyTemplate3 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate3').BodyTemplate3;
+const BodyTemplate6 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate6').BodyTemplate6;
+const ListTemplate1 = require('../../../lib/platforms/alexa/renderTemplate/listTemplate1').ListTemplate1;
+const ListTemplate2 = require('../../../lib/platforms/alexa/renderTemplate/listTemplate2').ListTemplate2;
+const ListTemplate3 = require('../../../lib/platforms/alexa/renderTemplate/listTemplate3').ListTemplate3;
 
 
 describe('Tests for render templates', function() {
-    describe('templateBuilder(type)', function() {
+    describe('template(type)', function() {
         it('should return an instance of the specific template', () => {
             let alexaSkill = new AlexaSkill();
-            expect(alexaSkill.templateBuilder('BodyTemplate1')).to.be.an.instanceOf(BodyTemplate1Builder);
-            expect(alexaSkill.templateBuilder('BodyTemplate2')).to.be.an.instanceOf(BodyTemplate2Builder);
-            expect(alexaSkill.templateBuilder('BodyTemplate3')).to.be.an.instanceOf(BodyTemplate3Builder);
-            expect(alexaSkill.templateBuilder('BodyTemplate6')).to.be.an.instanceOf(BodyTemplate6Builder);
-            expect(alexaSkill.templateBuilder('ListTemplate1')).to.be.an.instanceOf(ListTemplate1Builder);
-            expect(alexaSkill.templateBuilder('ListTemplate2')).to.be.an.instanceOf(ListTemplate2Builder);
-            expect(alexaSkill.templateBuilder('ListTemplate3')).to.be.an.instanceOf(ListTemplate3Builder);
+            expect(alexaSkill.templateBuilder('BodyTemplate1')).to.be.an.instanceOf(BodyTemplate1);
+            expect(alexaSkill.templateBuilder('BodyTemplate2')).to.be.an.instanceOf(BodyTemplate2);
+            expect(alexaSkill.templateBuilder('BodyTemplate3')).to.be.an.instanceOf(BodyTemplate3);
+            expect(alexaSkill.templateBuilder('BodyTemplate6')).to.be.an.instanceOf(BodyTemplate6);
+            expect(alexaSkill.templateBuilder('ListTemplate1')).to.be.an.instanceOf(ListTemplate1);
+            expect(alexaSkill.templateBuilder('ListTemplate2')).to.be.an.instanceOf(ListTemplate2);
+            expect(alexaSkill.templateBuilder('ListTemplate3')).to.be.an.instanceOf(ListTemplate3);
         });
     });
 
-    describe('TemplateBuilder base class', function() {
+    describe('Template base class', function() {
        it('should return a valid template base response', () => {
-           let templateBuilder = (new RenderTemplateBuilder())
+           let template = (new Template())
                .setTitle('Hello World')
                .setToken('tokenXYZ')
                .setBackButton('VISIBLE')
                .setBackgroundImage('https://www.example.com/image.jpg')
-               .build();
-           expect(templateBuilder.title).to.equal('Hello World');
-           expect(templateBuilder.token).to.equal('tokenXYZ');
-           expect(templateBuilder.backButton).to.equal('VISIBLE');
-           expect(templateBuilder.backgroundImage).to.deep.include({
+               ;
+           expect(template.title).to.equal('Hello World');
+           expect(template.token).to.equal('tokenXYZ');
+           expect(template.backButton).to.equal('VISIBLE');
+           expect(template.backgroundImage).to.deep.include({
                sources: [
                    {
                        url: 'https://www.example.com/image.jpg',
@@ -45,18 +45,18 @@ describe('Tests for render templates', function() {
            });
        });
         it('should throw error on invalid backButton behaviour ', () => {
-            let templateBuilder = (new RenderTemplateBuilder());
+            let template = (new Template());
             expect(() => {
-              templateBuilder.setBackButton('FooBar');
+              template.setBackButton('FooBar');
             }).to.throw('Invalid visibility type');
         });
        it('should make a valid makeRichText object', () => {
-           expect(RenderTemplateBuilder.makeRichText('Any Text')).to.deep.include(
+           expect(Template.makeRichText('Any Text')).to.deep.include(
                {
                    text: 'Any Text',
                    type: 'RichText',
                });
-           expect(RenderTemplateBuilder.makeRichText(
+           expect(Template.makeRichText(
                {
                    text: 'Any Text 2',
                    type: 'RichText',
@@ -68,13 +68,13 @@ describe('Tests for render templates', function() {
                });
        });
        it('should make a valid makePlainText object', () => {
-            expect(RenderTemplateBuilder.makePlainText('Any Text')).to.deep.include(
+            expect(Template.makePlainText('Any Text')).to.deep.include(
                 {
                     text: 'Any Text',
                     type: 'PlainText',
                 });
 
-           expect(RenderTemplateBuilder.makePlainText(
+           expect(Template.makePlainText(
                {
                    text: 'Any Text 2',
                    type: 'PlainText',
@@ -87,7 +87,7 @@ describe('Tests for render templates', function() {
         });
 
         it('should make a valid makeTextContent object', () => {
-            let textContent1 = RenderTemplateBuilder.makeTextContent('Primary');
+            let textContent1 = Template.makeTextContent('Primary');
             expect(textContent1).to.deep.include(
                 {
                     primaryText: {
@@ -96,7 +96,7 @@ describe('Tests for render templates', function() {
                     },
                 });
 
-            let textContent2 = RenderTemplateBuilder.makeTextContent('Primary', 'Secondary');
+            let textContent2 = Template.makeTextContent('Primary', 'Secondary');
             expect(textContent2).to.deep.include(
                 {
                     primaryText: {
@@ -109,7 +109,7 @@ describe('Tests for render templates', function() {
                     },
                 });
 
-            let textContent3 = RenderTemplateBuilder.makeTextContent('Primary', 'Secondary', 'Tertiary');
+            let textContent3 = Template.makeTextContent('Primary', 'Secondary', 'Tertiary');
             expect(textContent3).to.deep.include(
                 {
                     primaryText: {
@@ -127,7 +127,7 @@ describe('Tests for render templates', function() {
                 });
         });
         it('should make a valid image with url as parameter', () => {
-            let image = RenderTemplateBuilder.makeImage('https://www.example.com/image.jpg');
+            let image = Template.makeImage('https://www.example.com/image.jpg');
 
             expect(image).to.deep.include(
                 {
@@ -140,7 +140,7 @@ describe('Tests for render templates', function() {
             );
         });
         it('should make a valid image with {url: x, description: y} as parameter', () => {
-            let image = RenderTemplateBuilder.makeImage({
+            let image = Template.makeImage({
                 url: 'https://www.example.com/image.jpg',
                 description: 'image description',
             });
@@ -156,7 +156,7 @@ describe('Tests for render templates', function() {
                 }
             );
             // no description
-            let image2 = RenderTemplateBuilder.makeImage({
+            let image2 = Template.makeImage({
                 url: 'https://www.example.com/image.jpg',
             });
 
@@ -172,7 +172,7 @@ describe('Tests for render templates', function() {
         });
 
         it('should make a valid image with image object as parameter', () => {
-            let image = RenderTemplateBuilder.makeImage({
+            let image = Template.makeImage({
                 contentDescription: 'image description',
                 sources: [
                     {
@@ -212,11 +212,10 @@ describe('Tests for render templates', function() {
         });
     });
 
-    describe('BodyTemplate1Builder', function() {
+    describe('BodyTemplate1', function() {
        it('should return a valid BodyTemplate1 response', () => {
-           let bodyTemplate1 = (new BodyTemplate1Builder())
-               .setTextContent('primary', 'secondary')
-               .build();
+           let bodyTemplate1 = new BodyTemplate1()
+               .setTextContent('primary', 'secondary');
            expect(bodyTemplate1.type).to.equal('BodyTemplate1');
            expect(bodyTemplate1.textContent).to.deep.include(
                {
@@ -233,12 +232,12 @@ describe('Tests for render templates', function() {
        });
     });
 
-    describe('BodyTemplate2Builder', function() {
+    describe('BodyTemplate2', function() {
         it('should return a valid BodyTemplate2 response', () => {
-            let bodyTemplate2 = (new BodyTemplate2Builder())
+            let bodyTemplate2 = (new BodyTemplate2())
                 .setTextContent('primary', 'secondary')
                 .setImage('https://www.example.com/image.jpg')
-                .build();
+                ;
             expect(bodyTemplate2.type).to.equal('BodyTemplate2');
             expect(bodyTemplate2.textContent).to.deep.include(
                 {
@@ -260,9 +259,9 @@ describe('Tests for render templates', function() {
                 ],
             });
 
-            let bodyTemplate2b = (new BodyTemplate2Builder())
+            let bodyTemplate2b = (new BodyTemplate2())
                 .setRightImage('https://www.example.com/image2.jpg')
-                .build();
+                ;
             expect(bodyTemplate2b.image).to.deep.include({
                 sources: [
                     {
@@ -273,12 +272,12 @@ describe('Tests for render templates', function() {
         });
     });
 
-    describe('BodyTemplate3Builder', function() {
+    describe('BodyTemplate3', function() {
         it('should return a valid BodyTemplate3 response', () => {
-            let bodyTemplate3 = (new BodyTemplate3Builder())
+            let bodyTemplate3 = (new BodyTemplate3())
                 .setTextContent('primary', 'secondary')
                 .setLeftImage('https://www.example.com/image.jpg')
-                .build();
+                ;
             expect(bodyTemplate3.type).to.equal('BodyTemplate3');
             expect(bodyTemplate3.textContent).to.deep.include(
                 {
@@ -301,12 +300,12 @@ describe('Tests for render templates', function() {
             });
         });
     });
-    describe('BodyTemplate6Builder', function() {
+    describe('BodyTemplate6', function() {
         it('should return a valid BodyTemplate6 response', () => {
-            let bodyTemplate6 = (new BodyTemplate6Builder())
+            let bodyTemplate6 = (new BodyTemplate6())
                 .setTextContent('primary', 'secondary')
                 .setFullScreenImage('https://www.example.com/image.jpg')
-                .build();
+                ;
             expect(bodyTemplate6.type).to.equal('BodyTemplate6');
             expect(bodyTemplate6.textContent).to.deep.include(
                 {
@@ -329,10 +328,10 @@ describe('Tests for render templates', function() {
             });
         });
     });
-    describe('ListTemplate1Builder', function() {
+    describe('ListTemplate1', function() {
         it('should return a valid ListTemplate1 response', () => {
-            let listTemplate1 = (new ListTemplate1Builder());
-            expect(listTemplate1.build().type).to.equal('ListTemplate1');
+            let listTemplate1 = (new ListTemplate1());
+            expect(listTemplate1.type).to.equal('ListTemplate1');
 
             listTemplate1.addItem(
                 'item1',
@@ -342,7 +341,7 @@ describe('Tests for render templates', function() {
                 'tertiary text'
             );
 
-            expect(listTemplate1.build().listItems[0]).to.deep.include(
+            expect(listTemplate1.listItems[0]).to.deep.include(
                 {
                     token: 'item1',
                     image: {
@@ -379,7 +378,7 @@ describe('Tests for render templates', function() {
                 'tertiary text2'
             );
 
-            expect(listTemplate1.build().listItems[1]).to.deep.include(
+            expect(listTemplate1.listItems[1]).to.deep.include(
                 {
                     token: 'item2',
                     image: {
@@ -407,7 +406,7 @@ describe('Tests for render templates', function() {
             );
         });
         it('should set an array of items correctly', () => {
-            let listTemplate1 = (new ListTemplate1Builder());
+            let listTemplate1 = (new ListTemplate1());
             let items = [
                 {
                     token: 'item1',
@@ -460,7 +459,7 @@ describe('Tests for render templates', function() {
             ];
 
             listTemplate1.setItems(items);
-            expect(listTemplate1.build().listItems[0]).to.deep.include(
+            expect(listTemplate1.listItems[0]).to.deep.include(
                 {
                     token: 'item1',
                     image: {
@@ -486,7 +485,7 @@ describe('Tests for render templates', function() {
                     },
                 }
             );
-            expect(listTemplate1.build().listItems[1]).to.deep.include(
+            expect(listTemplate1.listItems[1]).to.deep.include(
                 {
                     token: 'item2',
                     image: {
@@ -514,16 +513,16 @@ describe('Tests for render templates', function() {
             );
         });
     });
-    describe('ListTemplate2Builder', function() {
+    describe('ListTemplate2', function() {
         it('should return a valid ListTemplate2 response', () => {
-            let listTemplate2 = (new ListTemplate2Builder());
-            expect(listTemplate2.build().type).to.equal('ListTemplate2');
+            let listTemplate2 = (new ListTemplate2());
+            expect(listTemplate2.type).to.equal('ListTemplate2');
         });
     });
-    describe('ListTemplate3Builder', function() {
+    describe('ListTemplate3', function() {
         it('should return a valid ListTemplate3 response', () => {
-            let listTemplate3 = (new ListTemplate3Builder());
-            expect(listTemplate3.build().type).to.equal('ListTemplate3');
+            let listTemplate3 = (new ListTemplate3());
+            expect(listTemplate3.type).to.equal('ListTemplate3');
         });
     });
 });

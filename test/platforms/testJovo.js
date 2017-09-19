@@ -1,7 +1,8 @@
 'use strict';
-let chai = require('chai');
-let chaiAsPromised = require('chai-as-promised');
-let assert = chai.assert;
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const assert = chai.assert;
+const expect = require('chai').expect;
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -21,18 +22,18 @@ response.json = function(json) {};
 describe('enableRequestLogging()', function() {
     it('should return true when enabled', function() {
         let app = new Jovo.Jovo();
-        assert(app.logReq === false, 'false on default');
+        assert(app.requestLogging === false, 'false on default');
         app.enableRequestLogging();
-        assert(app.logReq === true, 'true after enabling');
+        assert(app.requestLogging === true, 'true after enabling');
     });
 });
 
 describe('enableResponseLogging()', function() {
     it('should return true when enabled', function() {
         let app = new Jovo.Jovo();
-        assert(app.logRes === false, 'false on default');
+        assert(app.responseLogging === false, 'false on default');
         app.enableResponseLogging();
-        assert(app.logRes === true, 'true after enabling');
+        assert(app.responseLogging === true, 'true after enabling');
     });
 });
 
@@ -88,9 +89,9 @@ describe('isRequestAllowed()', function() {
 });
 
 describe('setIntentMap', function() {
-    it('should return undefined intentMap', function() {
+    it('should return empty intentMap', function() {
         let app = new Jovo.Jovo();
-        assert(typeof app.intentMap === 'undefined', 'intentMap is not set');
+        assert(Object.keys(app.intentMap), 'intentMap is empty');
     });
 
     it('should return defined intentMap', function() {
@@ -742,7 +743,7 @@ describe('t', function() {
 
     it('should return translation for WELCOME', function() {
         let app = new Jovo.Jovo();
-        app.enableUserSave(false);
+        app.saveUserOnResponse(false);
 
         let request = (new RequestBuilderAlexaSkill())
             .intentRequest()
@@ -992,3 +993,85 @@ describe('getSortedArgumentsInput', function() {
         }).execute();
     });
 });
+
+describe('setConfig(config)', function() {
+    it('should return correct default config', function() {
+        let app = new Jovo.Jovo();
+
+        expect(app.requestLogging).to.equal(false);
+        expect(app.responseLogging).to.equal(false);
+        expect(app.saveUserOnResponseEnabled).to.equal(true);
+        expect(app.userDataCol).to.equal('userData');
+        expect(app.inputMap).to.deep.equal({});
+        expect(app.intentMap).to.deep.equal({});
+        expect(app.requestLoggingObjects).to.deep.equal([]);
+        expect(app.responseLoggingObjects).to.deep.equal([]);
+        expect(app.saveBeforeResponseEnabled).to.equal(false);
+        expect(app.allowedApplicationIds).to.deep.equal([]);
+        expect(app.localDbFilename).to.equal('db');
+
+        expect(app.userMetaData).to.deep.include({
+                lastUsedAt: true,
+                sessionsCount: true,
+                createdAt: true,
+                requestHistorySize: 0,
+                devices: false,
+        });
+
+        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(12);
+        expect(Object.keys(Jovo.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
+    });
+
+    it('should override default config', function() {
+        let app = new Jovo.Jovo();
+        app.setConfig({
+            requestLogging: true,
+            responseLogging: true,
+            saveUserOnResponseEnabled: false,
+            userDataCol: 'otherColumnName',
+            inputMap: {
+                'given-name': 'name',
+            },
+            intentMap: {
+                'AMAZON.StopIntent': 'StopIntent',
+            },
+            requestLoggingObjects: ['session'],
+            responseLoggingObjects: ['response'],
+            saveBeforeResponseEnabled: true,
+            allowedApplicationIds: ['id1', 'id2'],
+            localDbFilename: 'otherFilename',
+            userMetaData: {
+                lastUsedAt: false,
+                sessionsCount: false,
+                createdAt: false,
+                requestHistorySize: 5,
+                devices: true,
+            },
+        });
+
+        expect(app.requestLogging).to.equal(true);
+        expect(app.responseLogging).to.equal(true);
+        expect(app.saveUserOnResponseEnabled).to.equal(false);
+        expect(app.userDataCol).to.equal('otherColumnName');
+        expect(app.inputMap).to.deep.equal({
+            'given-name': 'name',
+        });
+        expect(app.intentMap).to.deep.equal({
+            'AMAZON.StopIntent': 'StopIntent',
+        });
+        expect(app.requestLoggingObjects).to.deep.equal(['session']);
+        expect(app.responseLoggingObjects).to.deep.equal(['response']);
+        expect(app.saveBeforeResponseEnabled).to.equal(true);
+        expect(app.allowedApplicationIds).to.deep.equal(['id1', 'id2']);
+        expect(app.localDbFilename).to.equal('otherFilename');
+
+        expect(app.userMetaData).to.deep.include({
+            lastUsedAt: false,
+            sessionsCount: false,
+            createdAt: false,
+            requestHistorySize: 5,
+            devices: true,
+        });
+    });
+});
+
