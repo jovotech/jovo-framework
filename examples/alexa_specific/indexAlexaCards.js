@@ -1,16 +1,21 @@
 'use strict';
 
-const webhook = require('../../index').Webhook;
+// =================================================================================
+// App Configuration: Create Webhook + Enable Logging
+// =================================================================================
 
+const webhook = require('../index').Webhook;
+const app = require('../index').Jovo;
+
+// Enable Logging for Quick Testing
+app.enableRequestLogging();
+app.enableResponseLogging();
+
+// Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const app = require('../../index').Jovo;
-app.enableRequestLogging();
-app.enableResponseLogging();
-
-// listen for post requests
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
     app.execute();
@@ -23,15 +28,16 @@ const AskForListPermissionsCard = require('../../index').AlexaSkill.AskForListPe
 const AskForLocationPermissionsCard = require('../../index').AlexaSkill.AskForLocationPermissionsCard;
 
 
-/**
- * Alexa specific cards
- */
+// =================================================================================
+// App Logic: Displays Alexa-specific cards
+// =================================================================================
 
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched');
+        app.tell('App launched.');
     },
+
     'SimpleCardIntent': function() {
         app.alexaSkill().showSimpleCard('Title', 'Content');
 
@@ -45,6 +51,7 @@ let handlers = {
 
         app.tell('This is a simple card');
     },
+
     'StandardCardIntent': function() {
         app.alexaSkill().showStandardCard('Title', 'Content', {
             smallImageUrl: 'https://via.placeholder.com/720x480',
@@ -62,6 +69,7 @@ let handlers = {
 
         app.tell('This is a standard card with an image');
     },
+
     'AccountLinkingCardIntent': function() {
         app.alexaSkill().showAccountLinkingCard();
         // or
@@ -69,6 +77,7 @@ let handlers = {
 
         app.tell('This is a card with an account linking CTA');
     },
+
     'AskForCountryAndPostalCodeCardIntent': function() {
         app.alexaSkill().showAskForCountryAndPostalCodeCard();
 
@@ -77,6 +86,7 @@ let handlers = {
             new AskForLocationPermissionsCard().setAskForCountryAndPostalCodePermission());
         app.tell('This is a card that asks for country and postal code permissions.');
     },
+
     'AskForAddressCardIntent': function() {
         app.alexaSkill().showAskForAddressCard();
 
@@ -85,6 +95,7 @@ let handlers = {
             new AskForLocationPermissionsCard().setAskForAddressPermission());
         app.tell('This is a card that asks for address permissions.');
     },
+
     'AskForListPermissionCardIntent': function() {
         app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 

@@ -1,39 +1,37 @@
 'use strict';
 
-const webhook = require('../../index').Webhook;
+// =================================================================================
+// App Configuration: Create Webhook + Enable Logging
+// =================================================================================
 
+const webhook = require('../index').Webhook;
+const app = require('../index').Jovo;
+
+// Enable Logging for Quick Testing
+app.enableRequestLogging();
+app.enableResponseLogging();
+
+// Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const BodyTemplate1 = require('./../../lib/platforms/alexa/alexaSkill').AlexaSkill.BodyTemplate1;
-
-const app = require('../../index').Jovo;
-
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-    intentMap: {
-        'BlaIntent': 'HelloWorld',
-    },
-});
-
-
-// listen for post requests
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
     app.execute();
 });
 
-// app.onElementSelected(function (err, data) {
-//
-// });
+
+// =================================================================================
+// App Logic: Add (Echo Show) Render Templates
+// =================================================================================
 
 let handlers = {
 
     'LAUNCH': function() {
+        // app.tell('App launched');
 
-        let bodyTemplate1 = new BodyTemplate1();
+        let bodyTemplate1 = app.alexaSkill().templateBuilder('BodyTemplate1');
         bodyTemplate1
             .setToken('token')
             .setTitle('BodyTemplate1 Title')
@@ -193,9 +191,11 @@ let handlers = {
 
         app.tell('Look at your Echo Show');
     },
+
     'HelloWorld': function() {
         app.tell('Hello World');
     },
+
     'ON_ELEMENT_SELECTED': {
         'token': function() {
             app.toIntent('HelloWorld');

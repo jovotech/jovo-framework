@@ -1,21 +1,30 @@
 'use strict';
 
-const webhook = require('../index').Webhook;
+// =================================================================================
+// App Configuration: Create Webhook + Enable Logging
+// =================================================================================
 
+const webhook = require('../index').Webhook;
+const app = require('../index').Jovo;
+
+// Enable Logging for Quick Testing
+app.enableRequestLogging();
+app.enableResponseLogging();
+
+// Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
 });
 
-const app = require('../index').Jovo;
-app.enableRequestLogging();
-app.enableResponseLogging();
-
-// listen for post requests
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
     app.execute();
 });
 
+
+// =================================================================================
+// App Logic: Say hey when in OnboardingState
+// =================================================================================
 
 let handlers = {
 
@@ -24,9 +33,11 @@ let handlers = {
             .followUpState('OnboardingState')
             .ask('Say hi', 'Say hello');
     },
+
     'HelloIntent': function() {
         app.tell('Welcome back!');
     },
+
     'OnboardingState': {
         'HelloIntent': function() {
             app.tell('Hey');
