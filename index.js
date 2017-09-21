@@ -114,7 +114,7 @@ if (process.argv.length > 2) {
 module.exports.Webhook = server;
 module.exports.WebhookVerified = verifiedServer;
 module.exports.Jovo = new Jovo();
-module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction; ;
+module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;
 module.exports.AlexaSkill = require('./lib/platforms/alexa/alexaSkill').AlexaSkill;
 
 module.exports.FilePersistence = FilePersistence;
