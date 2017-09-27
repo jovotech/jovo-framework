@@ -61,7 +61,7 @@ server.listen = function listen() {
 // Helper for fast debugging
 // simple intent and launch requests can be tested
 // TODO: work in progress
-if (!process.argv.includes('proxy') && process.argv.length > 2) {
+if (process.argv.indexOf('proxy') === -1 && process.argv.length > 2) {
     // using parameters
     try {
         let program = require('commander');
