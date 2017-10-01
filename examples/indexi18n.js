@@ -33,6 +33,7 @@ webhook.listen(3000, function() {
 
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
+    app.setLanguageResources(languageResources);
     app.execute();
 });
 
