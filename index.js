@@ -61,7 +61,7 @@ server.listen = function listen() {
 // Helper for fast debugging
 // simple intent and launch requests can be tested
 // TODO: work in progress
-if (process.argv.length > 2) {
+if (process.argv.indexOf('proxy') === -1 && process.argv.length > 2) {
     // using parameters
     try {
         let program = require('commander');
@@ -114,7 +114,7 @@ if (process.argv.length > 2) {
 module.exports.Webhook = server;
 module.exports.WebhookVerified = verifiedServer;
 module.exports.Jovo = new Jovo();
-module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction; ;
+module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;
 module.exports.AlexaSkill = require('./lib/platforms/alexa/alexaSkill').AlexaSkill;
 
 module.exports.FilePersistence = FilePersistence;

@@ -16,7 +16,7 @@ app.addVoiceLabsAlexa('Voicelabs Alexa Key');
 app.addVoiceLabsGoogleAction('Voicelabs Google Action Key');
 app.addDashbotGoogleAction('Dashbot Google Action Key');
 app.addDashbotAlexa('Dashbot Alexa Key');
-
+app.addBespokenAnalytics('Bespoken secret key')
 // Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');
