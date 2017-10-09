@@ -101,7 +101,15 @@ if (process.argv.length > 2) {
                 .then((response) => { });
         }
         if (program.launch) {
-            webhookTest.testLaunch().then((response) => {}).catch((error) => {
+            let launchRequest = (new RequestBuilderAlexaSkill())
+                .launchRequest();
+            if (program.locale) {
+                launchRequest.setLocale(program.locale);
+            }
+            webhookTest
+                .testLaunch(launchRequest.buildSimple())
+                .then((response) => {}).catch((error) => {
+                console.log(error);
             });
         }
     } catch (err) {

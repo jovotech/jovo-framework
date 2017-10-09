@@ -29,12 +29,12 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched');
+        app.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
         app.addSessionAttribute('name', 'John Doe');
-        app.tell('Hello World');
+        app.ask('What\'s your name?', 'Tell me your name, please.');
     },
 
     'SessionIntent': function() {

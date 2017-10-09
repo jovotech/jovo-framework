@@ -21,7 +21,6 @@ webhook.post('/webhook', function(req, res) {
     app.execute();
 });
 
-
 // =================================================================================
 // App Logic: Get name parameter and say hello
 // =================================================================================
@@ -29,7 +28,7 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched.');
+        app.ask('What\'s your name?', 'Tell me your name, please.');
     },
 
     'NameIntent': function(name) {

@@ -1017,8 +1017,8 @@ describe('setConfig(config)', function() {
                 requestHistorySize: 0,
                 devices: false,
         });
-
-        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(12);
+        expect(app.i18n).to.equal(undefined);
+        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(13);
         expect(Object.keys(Jovo.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
     });
 
@@ -1047,6 +1047,21 @@ describe('setConfig(config)', function() {
                 requestHistorySize: 5,
                 devices: true,
             },
+            i18n: {
+                returnObjects: true,
+                resources: {
+                    'en-US': {
+                        translation: {
+                            WELCOME: 'Welcome',
+                        },
+                    },
+                    'de-DE': {
+                        translation: {
+                            WELCOME: 'Willkommen',
+                        },
+                    },
+                },
+            },
         });
 
         expect(app.requestLogging).to.equal(true);
@@ -1072,6 +1087,23 @@ describe('setConfig(config)', function() {
             requestHistorySize: 5,
             devices: true,
         });
+        expect(app.i18nConfig).to.deep.include(
+            {
+                returnObjects: true,
+                resources: {
+                    'en-US': {
+                        translation: {
+                            WELCOME: 'Welcome',
+                        },
+                    },
+                    'de-DE': {
+                        translation: {
+                            WELCOME: 'Willkommen',
+                        },
+                    },
+                },
+            }
+        );
     });
 });
 

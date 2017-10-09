@@ -40,7 +40,7 @@ let handlers = {
 
     'OnboardingState': {
         'HelloIntent': function() {
-            app.tell('Hey');
+            app.followUpState(null).ask('Hey', 'Hello');
         },
     },
 };
