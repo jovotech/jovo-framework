@@ -1,4 +1,4 @@
-[![Jovo Framework](https://www.jovo.tech/img/github-logo.png)](https://www.jovo.tech)
+[![Jovo Framework](https://www.jovo.tech/downloads/jovo-header.png)](https://www.jovo.tech)
 
 <p align="center">The development framework for cross-platform voice apps</p>
 
