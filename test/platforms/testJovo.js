@@ -726,74 +726,14 @@ describe('toIntent', function() { // TODO works for all platforms?
 });
 
 describe('t', function() {
-    let languageResources = {
-        'en-US': {
-            translation: {
-                WELCOME: 'Welcome',
-                WELCOME_WITH_PARAMETER: 'Welcome %s',
-            },
-        },
-        'de-DE': {
-            translation: {
-                WELCOME: 'Willkommen',
-                WELCOME_WITH_PARAMETER: 'Willkommen %s',
-            },
-        },
-    };
-
-    it('should return translation for WELCOME', function() {
+    it('should return Error when trying to get translations and language resource object has not been set', function(done) {
         let app = new Jovo.Jovo();
-        app.saveUserOnResponse(false);
 
-        let request = (new RequestBuilderAlexaSkill())
-            .intentRequest()
-            .setIntentName('NameIntent')
-            .setLocale('en-US')
-            .build();
+        this.timeout(1000);
 
-        app.handleRequest(request, response, {
-            'NameIntent': function() {
-                assert(
-                    app.t('WELCOME') === 'Welcome',
-                    'Wrong locale3');
-
-                assert(
-                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Welcome Jovo',
-                    'Wrong locale4');
-            },
+        app.on('respond', function(app) {
+            done();
         });
-
-        app.setLanguageResources(languageResources);
-        app.execute();
-    });
-
-    it('should return translation for WELCOME path in de-DE', function() {
-        let app = new Jovo.Jovo();
-
-        let request = (new RequestBuilderAlexaSkill())
-            .intentRequest()
-            .setIntentName('NameIntent')
-            .setLocale('de-DE')
-            .build();
-
-        app.handleRequest(request, response, {
-            'NameIntent': function() {
-                assert(
-                    app.t('WELCOME') === 'Willkommen',
-                    'Wrong locale1');
-
-                assert(
-                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Willkommen Jovo',
-                    'Wrong locale2');
-            },
-        });
-
-        app.setLanguageResources(languageResources);
-        app.execute();
-    });
-
-    it('should return Error when trying to get translations and language resource object has not been set', function() {
-        let app = new Jovo.Jovo();
 
         let request = (new RequestBuilderAlexaSkill())
             .intentRequest()
@@ -810,11 +750,94 @@ describe('t', function() {
                     Error,
                     'Language resources have not been set for translation.'
                 );
+                app.tell('i18n test');
+            },
+        });
+        app.execute();
+    });
+    it('should return translation for WELCOME', function() {
+        let languageResources = {
+            'en-US': {
+                translation: {
+                    WELCOME: 'Welcome',
+                    WELCOME_WITH_PARAMETER: 'Welcome %s',
+                },
+            },
+            'de-DE': {
+                translation: {
+                    WELCOME: 'Willkommen',
+                    WELCOME_WITH_PARAMETER: 'Willkommen %s',
+                },
+            },
+        };
+        let app = new Jovo.Jovo();
+        // app.saveUserOnResponse(false);
+
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .setLocale('en-US')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.t('WELCOME') === 'Welcome',
+                    'Wrong locale3');
+
+                assert(
+                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Welcome Jovo',
+                    'Wrong locale4');
+                app.tell('i18n test');
+            },
+        });
+        app.setLanguageResources(languageResources);
+        app.execute();
+    });
+    it('should return translation for WELCOME path in de-DE', function(done) {
+        let app = new Jovo.Jovo();
+        this.timeout(1000);
+
+        let languageResources = {
+            'en-US': {
+                translation: {
+                    WELCOME: 'Welcome',
+                    WELCOME_WITH_PARAMETER: 'Welcome %s',
+                },
+            },
+            'de-DE': {
+                translation: {
+                    WELCOME: 'Willkommen',
+                    WELCOME_WITH_PARAMETER: 'Willkommen %s',
+                },
+            },
+        };
+        app.on('respond', function(app) {
+            done();
+        });
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('NameIntent')
+            .setLocale('de-DE')
+            .build();
+
+        app.handleRequest(request, response, {
+            'NameIntent': function() {
+                assert(
+                    app.t('WELCOME') === 'Willkommen',
+                    'Wrong locale1');
+
+                assert(
+                    app.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Willkommen Jovo',
+                    'Wrong locale2');
+                app.tell('i18n test');
             },
         });
 
+        app.setLanguageResources(languageResources);
         app.execute();
     });
+
 
     it('should return Error when trying to set an invalid language resource object', function() {
         let app = new Jovo.Jovo();
@@ -993,7 +1016,139 @@ describe('getSortedArgumentsInput', function() {
         }).execute();
     });
 });
+describe('Unhandled Intents', function() {
+    it('should jump to Unhandled intent when no intent defined', function(done) {
+        this.timeout(1000);
 
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('TestIntent')
+            .build();
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Unhandled'));
+            done();
+        });
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                app.tell('HelloWorld');
+            },
+            'Unhandled': function() {
+                app.tell('Unhandled');
+            },
+        }).execute();
+    });
+
+    it('should jump to Unhandled intent inside a state when no intent defined', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setState('TestState')
+            .setIntentName('TestIntent')
+            .build();
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Unhandled'));
+            done();
+        });
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                app.tell('HelloWorld');
+            },
+            'TestState': {
+                'Unhandled': function() {
+                    app.tell('Unhandled');
+                },
+            },
+        }).execute();
+    });
+
+    it('should throw an error if TestIntent is not defined', function() {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('TestIntent')
+            .build();
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                app.tell('HelloWorld');
+            },
+        });
+        app.execute().catch((error) => {
+            assert.ok(error.message === 'The intent name TestIntent has not been defined in your handler.');
+        });
+    });
+
+    it('should jump to a global TestIntent if there is no TestIntent in TestState', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('TestIntent')
+            .setState('TestState')
+            .build();
+
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Global TestIntent'));
+            done();
+        });
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                app.tell('HelloWorld');
+            },
+            'TestIntent': function() {
+                app.tell('Global TestIntent');
+            },
+            'TestState': {
+                'AnyIntent': function() {
+                    app.tell('AnyIntent');
+                },
+            },
+        });
+        app.execute();
+    });
+
+    it('should jump to the state Unhandled even if there is a global TestIntent', function(done) {
+        this.timeout(1000);
+
+        let app = new Jovo.Jovo();
+        let request = (new RequestBuilderAlexaSkill())
+            .intentRequest()
+            .setIntentName('TestIntent')
+            .setState('TestState')
+            .build();
+
+        app.on('respond', function(app) {
+            let response = app.getPlatform().getResponse();
+            assert.ok(response.isTell('Unhandled'));
+            done();
+        });
+
+        app.handleRequest(request, response, {
+            'HelloWorldIntent': function() {
+                app.tell('HelloWorld');
+            },
+            'TestIntent': function() {
+                app.tell('Global TestIntent');
+            },
+            'TestState': {
+                'Unhandled': function() {
+                    app.tell('Unhandled');
+                },
+            },
+        });
+        app.execute();
+    });
+});
 describe('setConfig(config)', function() {
     it('should return correct default config', function() {
         let app = new Jovo.Jovo();
