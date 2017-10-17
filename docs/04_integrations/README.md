@@ -94,13 +94,30 @@ The FilePersistence integration allows you to easily store user session data in 
 
 The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you’re running your voice app on AWS Lambda.
 
-You can simply integrate a DynamoDB table like this:
+#### DynamoDB for Apps Hosted on AWS Lambda
+
+If you're running on Lambda, you can simply integrate a DynamoDB table like this:
 
 ```
 app.setDynamoDb('TableName');
 ```
 
 This will create a table with a name specified by you, and use this to store and load data. To make it work, you need to give your Lambda Role DynamoDB permissions.
+
+#### DynamoDB for Apps Not Hosted on AWS Lambda
+
+In case you're hosting your voice app somewhere else, you can add DynamoDB with the following:
+
+```
+let awsConfig = {
+    accessKeyId: 'yourAccessKeyId',
+    secretAccessKey: 'yourSecretAccessKey', 
+    region:  'yourRegion',
+};
+
+app.setDynamoDb('TableName', awsConfig);
+```
+
 
 ## Analytics
 Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashbot.
