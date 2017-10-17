@@ -10,6 +10,7 @@ With third-party integrations, you can add more functionality to your voice apps
   * [Jovo Analytics Layer](#jovo-analytics-layer)
   * [VoiceLabs](#voicelabs)
   * [Dashbot](#dashbot)
+  * [Bespoken](#bespoken)
 
 
 ## Databases
