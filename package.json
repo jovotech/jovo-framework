@@ -10,7 +10,8 @@
     "i18next": "^8.4.3",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "lodash": "^4.17.4",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "uuid": "^3.1.0"
   },
   "directories": {
     "test": "test"

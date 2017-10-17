@@ -231,7 +231,7 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 #### Create a Dashbot Bot
 
-1. Create a Dashbot accounto or log in at https://www.dashbot.io.
+1. Create a Dashbot account or log in at https://www.dashbot.io.
 
 2. Click “Add a Bot” in the Admin panel:
 
@@ -271,4 +271,43 @@ $ npm install dashbot
 Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
 
 ![Dashbot Test](https://www.jovo.tech/img/docs/dashbot-test.jpg)
+
+
+
+### Bespoken
+
+To use Bespoken Analytics for your voice app, you need to complete the following steps:
+
+1. Create a Bespoken Dashboard account
+2. Enable Bespoken Analytics in your voice app
+3. Test your app
+
+#### Create a Bespoken Dashboard Account
+
+1. Create a Bespoken account or log in at https://apps.bespoken.io/dashboard/.
+
+2. Click the plus sign in the Home page:
+
+![Bespoken Add a Source](https://bespoken.io/wp-content/uploads/2017/10/DashboardHomePage.png)
+
+3. Set the name for your source and click on "Create Source"
+![Bespoken Set source name](https://bespoken.io/wp-content/uploads/2017/10/DashboardCreateASkill.png)
+
+4. Now that you are in your source main page, you can see your secret key for that source in the top right corner by clicking "Show"
+![Bespoken Source Main Page](https://bespoken.io/wp-content/uploads/2017/10/DashboardSkillMain.png)
+
+5. Copy the Secret Key
+
+#### Enable Bespoken Analytics
+
+Bespoken Analytics can be added to your voice app with the following commands:
+
+```
+app.addBespokenAnalytics(secretKey);
+```
+
+#### Test
+
+Test your voice app, after a bit your session should appear in the created skill.
+
 
