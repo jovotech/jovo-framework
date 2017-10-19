@@ -69,7 +69,7 @@ if (process.argv.length > 2) {
         if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1) {
             console.log('\n\nInfo: Fast debugging does not work with proxy.\n\n');
         }
-    } else {
+    } else if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1) {
         try {
             let program = require('commander');
             let parameters = [];
