@@ -45,7 +45,9 @@ server.listen = function listen() {
             for (let i = 0; i < result.tunnels.length; i++) {
                 let tunnel = result.tunnels[i];
                 if (tunnel.proto === 'https' && tunnel.config.addr === 'localhost:3000') {
-                    console.log('This is your webhook url: ' + result.tunnels[i].public_url+'/webhook');
+                    if (process.argv.indexOf('--bst-proxy') === -1) {
+                        console.log('This is your webhook url: ' + result.tunnels[i].public_url+'/webhook');
+                    }
                 }
             }
         });
@@ -57,64 +59,70 @@ server.listen = function listen() {
     let server = http.createServer(this);
     return server.listen.apply(server, arguments); // eslint-disable-line
 };
-
 // Helper for fast debugging
 // simple intent and launch requests can be tested
 // TODO: work in progress
-if (process.argv.indexOf('proxy') === -1 && process.argv.length > 2) {
-    // using parameters
-    try {
-        let program = require('commander');
-        let parameters = [];
-        program
-            .option('-i, --intent [intentName]', 'intent name')
-            .option('-l, --launch', 'launch')
-            .option('-s, --state [state]', 'state')
-            .option('-l, --locale [locale]', 'locale')
-            .option('-p, --parameter [value]', 'A repeatable value', function(val) {
-                parameters.push(val);
-            }, [])
-            .parse(process.argv);
-        let webhookTest = new WebhookTest();
 
-        if (program.intent) {
-            let intent = (new RequestBuilderAlexaSkill())
-                        .intentRequest(program.intent);
-            if (program.state) {
-                intent.addSessionAttribute('STATE', program.state);
-            }
-            if (program.locale) {
-                intent.setLocale(program.locale);
-            }
-            if (parameters.length > 0) {
-                for (let i = 0; i < parameters.length; i++) {
-                    let parameter = parameters[i].split('=');
-                    if (parameter.length !== 2) {
-                        console.log('Invalid parameter: '+ parameters[i]);
-                    } else {
-                        intent.addSlot(parameter[0], parameter[1]);
+if (process.argv.length > 2) {
+    // using parameters
+    if (process.argv.indexOf('--bst-proxy') > -1) {
+        if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1) {
+            console.log('\n\nInfo: Fast debugging does not work with proxy.\n\n');
+        }
+    } else {
+        try {
+            let program = require('commander');
+            let parameters = [];
+            program
+                .option('-i, --intent [intentName]', 'intent name')
+                .option('-l, --launch', 'launch')
+                .option('-s, --state [state]', 'state')
+                .option('-l, --locale [locale]', 'locale')
+                .option('-p, --parameter [value]', 'A repeatable value', function(val) {
+                    parameters.push(val);
+                }, [])
+                .parse(process.argv);
+            let webhookTest = new WebhookTest();
+
+            if (program.intent) {
+                let intent = (new RequestBuilderAlexaSkill())
+                    .intentRequest(program.intent);
+                if (program.state) {
+                    intent.addSessionAttribute('STATE', program.state);
+                }
+                if (program.locale) {
+                    intent.setLocale(program.locale);
+                }
+                if (parameters.length > 0) {
+                    for (let i = 0; i < parameters.length; i++) {
+                        let parameter = parameters[i].split('=');
+                        if (parameter.length !== 2) {
+                            console.log('Invalid parameter: '+ parameters[i]);
+                        } else {
+                            intent.addSlot(parameter[0], parameter[1]);
+                        }
                     }
                 }
+                webhookTest
+                    .testIntent(intent.buildSimple())
+                    .then((response) => { });
             }
-            webhookTest
-                .testIntent(intent.buildSimple())
-                .then((response) => { });
-        }
-        if (program.launch) {
-            let launchRequest = (new RequestBuilderAlexaSkill())
-                .launchRequest();
-            if (program.locale) {
-                launchRequest.setLocale(program.locale);
+            if (program.launch) {
+                let launchRequest = (new RequestBuilderAlexaSkill())
+                    .launchRequest();
+                if (program.locale) {
+                    launchRequest.setLocale(program.locale);
+                }
+                webhookTest
+                    .testLaunch(launchRequest.buildSimple())
+                    .then((response) => {}).catch((error) => {
+                    console.log(error);
+                });
             }
-            webhookTest
-                .testLaunch(launchRequest.buildSimple())
-                .then((response) => {}).catch((error) => {
-                console.log(error);
-            });
+        } catch (err) {
+            console.log(err);
+            console.log('\nPlease install commander: npm install commander\n');
         }
-    } catch (err) {
-        console.log(err);
-        console.log('\nPlease install commander: npm install commander\n');
     }
 }
 
