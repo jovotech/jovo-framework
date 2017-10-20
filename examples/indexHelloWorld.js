@@ -35,4 +35,7 @@ let handlers = {
     'HelloWorldIntent': function() {
         app.tell('Hello World!');
     },
+    'Unhandled': function() {
+        app.tell('Unhandled');
+    },
 };

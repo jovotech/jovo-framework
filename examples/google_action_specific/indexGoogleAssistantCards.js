@@ -29,15 +29,130 @@ webhook.post('/webhook', function(req, res) {
 
 let handlers = {
 
+    'ON_SIGN_IN': function() {
+        app.tell('signed in: ' + app.googleAction().getSignInStatus());
+    },
+
     'LAUNCH': function() {
-        app.toIntent('SuggestionsIntent');
+        // app.showAccountLinkingCard();
+        // app.googleAction().showAccountLinkingCard();
+        // app.addSessionAttribute('bla', 'blub');
+        app.tell('sdsd');
+        // app.toIntent('AccountLinkingIntent');
         // app.toIntent('ListIntent');
         // app.toIntent('CarouselIntent');
     },
+    'AccountLinkingIntent': function() {
+        // app.showAccountLinkingCard();
+        // app.ask('Account linking', 'yo');
+        let res2 = {
+            'speech': 'login',
+            'data': {
+                'google': {
+                    'expectUserResponse': true,
+                    'systemIntent': {
+                        'intent': 'actions.intent.SIGN_IN',
+                        'inputValueData': {},
+                    },
+                    'inputPrompt': {
+                        'initialPrompts': [
+                            {
+                                'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
+                            },
+                        ],
+                        'noInputPrompts': [],
+                    },
+                },
+            },
+        };
+        //
+        app.googleAction().setResponseObject(res2);
+        // let res = {
+        //     'speech': '<speak>test</speak>',
+        //     'data': {
+        //         'google': {
+        //             'expectUserResponse': true,
+        //             'expectedInputs': [
+        //                 {
+        //                     'inputPrompt': {
+        //                         'initialPrompts': [
+        //                             {
+        //                                 'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
+        //                             },
+        //                         ],
+        //                         'noInputPrompts': [],
+        //                     },
+        //                     'possibleIntents': [
+        //                         {
+        //                             'intent': 'actions.intent.SIGN_IN',
+        //                             'inputValueData': {},
+        //                         },
+        //                     ],
+        //                 },
+        //             ],
+        //         },
+        //     },
+        // };
+        //
+        // app.googleAction().setResponseObject(res);
+    },
     'BasicCardIntent': function() {
+        // app.showAccountLinkingCard().ask('bla');
+        // let res = {
+        //     'speech': '<speak>test</speak>',
+        //     'data': {
+        //         'google': {
+        //             'expectUserResponse': true,
+        //             'expectedInputs': [
+        //                 {
+        //                     'inputPrompt': {
+        //                         'initialPrompts': [
+        //                             {
+        //                                 'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
+        //                             },
+        //                         ],
+        //                         'noInputPrompts': [],
+        //                     },
+        //                     'possibleIntents': [
+        //                         {
+        //                             'intent': 'actions.intent.SIGN_IN',
+        //                             'inputValueData': {},
+        //                         },
+        //                     ],
+        //                 },
+        //             ],
+        //         },
+        //     },
+        // };
+        //
+        let res2 = {
+            'speech': 'login',
+            'data': {
+                'google': {
+                    'expectUserResponse': true,
+                    'systemIntent': {
+                        'intent': 'actions.intent.SIGN_IN',
+                        'inputValueData': {},
+                    },
+                    'inputPrompt': {
+                        'initialPrompts': [
+                            {
+                                'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
+                            },
+                        ],
+                        'noInputPrompts': [],
+                    },
+                },
+            },
+        };
+        //
+        app.googleAction().setResponseObject(res2);
+        return;
+
+
         let basicCard = new BasicCard()
             .setTitle('Title')
-            .setImage('https://via.placeholder.com/720x480', 'accessibilityText')
+            .setImage('http://via.placeholder.com/450x350?text=Basic+Card', 'accessibilityText')
             .setFormattedText('Formatted Text');
 
         app.googleAction().showBasicCard(basicCard);
@@ -48,7 +163,7 @@ let handlers = {
         // must end with an ask response
         app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
         app.googleAction().showLinkOutSuggestion('Name', 'http://www.example.com');
-        app.ask('Choose one', 'Choose one');
+        app.ask('Suggestion Chips Example', 'Suggestion Chips Example');
     },
     'ListIntent': function() {
         let list = new List();
@@ -58,7 +173,7 @@ let handlers = {
             (new OptionItem())
                 .setTitle('Show a BasicCard')
                 .setDescription('BasicCard')
-                .setImage('https://via.placeholder.com/720x480', 'accessibilityText')
+                .setImage('http://via.placeholder.com/450x350?text=List+item+1', 'accessibilityText')
                 .setKey('Listitem1key')
         );
         list.addItem(
@@ -78,14 +193,14 @@ let handlers = {
             (new OptionItem())
                 .setTitle('Show a BasicCard')
                 .setDescription('BasicCard')
-                .setImage('https://via.placeholder.com/720x480', 'accessibilityText')
+                .setImage('http://via.placeholder.com/650x350?text=Carousel+item+1', 'accessibilityText')
                 .setKey('Carouselitem1key')
         );
         carousel.addItem(
             (new OptionItem())
                 .setTitle('Show a List')
                 .setDescription('Description2')
-                .setImage('https://via.placeholder.com/720x480', 'accessibilityText')
+                .setImage('http://via.placeholder.com/650x350?text=Carousel+item+2', 'accessibilityText')
                 .setKey('Carouselitem2key')
         );
         app.googleAction().showCarousel(carousel);
