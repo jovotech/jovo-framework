@@ -6,8 +6,7 @@ In this section, you will learn more about how to use intents and states to rout
 
 * [Introduction to User Sessions](#introduction-to-user-sessions)
 * [Intents](#intents)
-  * ['LAUNCH' intent](#launch-intent)
-  * ['END' intent](#end-intent)
+  * [Standard Intents](#standard-intents)
   * [intentMap](#intentmap)
 * [States](#states)
   * [followUpState](#followupstate)
@@ -45,8 +44,7 @@ Intents are defined and handled in the `handlers` variable. Besides the required
 ```
 let handlers = {
     'LAUNCH' : function () {
-      // This intent is required
-      // Opened when people open the voice app without a specific query
+        // Opened when people open the voice app without a specific query
         app.tell('Hello World!');
     },
 
@@ -65,7 +63,7 @@ For this, offers two standard, built-in intents, `'LAUNCH'` and `'END'`, to make
 let handlers = {
 
     'LAUNCH' : function() {
-        // This intent called when a user opens your app without a specific query
+        // This intent is called when a user opens your app without a specific query
         // Groups LaunchRequest (Alexa) and Default Welcome Intent (API.AI)
     },
 
@@ -78,16 +76,40 @@ let handlers = {
 };
 ```
 
-You can learn more about the built-in intents in the following sections:
+You can learn more about Jovo standard intents in the following section:
 
+### Standard Intents
 
-### 'LAUNCH' intent
+#### 'LAUNCH' Intent
 
 The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just “open skill” or “talk to app” on the respective platforms). This intent is necessary to run your voice app.
 
 Usually, you would need to map the requests from Alexa and Google (as they have different names) to handle both in one intent block, but Jovo helps you there with a standard intent.
 
-### 'END' intent
+#### 'NEW_SESSION' Intent
+
+You can use the `'NEW_SESSION'` intent instead of the `'LAUNCH'` intent if you want to always map new session requests to one intent. This means that any request, even deep invocations, will be mapped to the `'NEW_SESSION'` intent. Either `'LAUNCH'` or `'NEW_SESSION'`are required.
+
+```
+'NEW_SESSION' : function() {
+    // This intent is always called when a user opens your app, no matter the query (new session)
+ },
+```
+This is helpful if you have some work to do, like collect data (timestamps), before you route the users to the intent they wanted with the `toIntent` method.
+
+#### 'NEW_USER' Intent
+
+Additionally to the other intents above, you can use the `'NEW_USER'` to direct a new user to this intent and do some initial work before proceeding to the interaction:
+
+```
+'NEW_USER' : function() {
+    // This intent is called when a user opens your app for the first time
+ },
+```
+For example, this saves you some time calling `if (app.user().isNewUser()) { }` in every intent where you require the access to user data.
+
+
+#### 'END' Intent
 
 A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn’t respond. Jovo uses the standard intent `'END'` to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
 
@@ -97,7 +119,8 @@ If you want to end the session without saying anything, use the following:
 app.endSession();
 ```
 
-### getEndReason
+
+##### getEndReason
 
 It is helpful to find out why a session ended. Use getEndReason insinde the `'END'` intent to receive more information. This currently only works for Amazon Alexa.
 
