@@ -117,7 +117,7 @@ let awsConfig = {
 
 app.setDynamoDb('TableName', awsConfig);
 ```
-
+You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
 
 ## Analytics
 Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashbot.
