@@ -1159,6 +1159,8 @@ describe('setConfig(config)', function() {
         expect(app.userDataCol).to.equal('userData');
         expect(app.inputMap).to.deep.equal({});
         expect(app.intentMap).to.deep.equal({});
+        expect(app.intentsToSkipUnhandled).to.deep.equal([]);
+
         expect(app.requestLoggingObjects).to.deep.equal([]);
         expect(app.responseLoggingObjects).to.deep.equal([]);
         expect(app.saveBeforeResponseEnabled).to.equal(false);
@@ -1173,7 +1175,7 @@ describe('setConfig(config)', function() {
                 devices: false,
         });
         expect(app.i18n).to.equal(undefined);
-        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(13);
+        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(14);
         expect(Object.keys(Jovo.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
     });
 
@@ -1190,6 +1192,7 @@ describe('setConfig(config)', function() {
             intentMap: {
                 'AMAZON.StopIntent': 'StopIntent',
             },
+            intentsToSkipUnhandled: ['IntentA', 'IntentB'],
             requestLoggingObjects: ['session'],
             responseLoggingObjects: ['response'],
             saveBeforeResponseEnabled: true,
@@ -1229,6 +1232,8 @@ describe('setConfig(config)', function() {
         expect(app.intentMap).to.deep.equal({
             'AMAZON.StopIntent': 'StopIntent',
         });
+        expect(app.intentsToSkipUnhandled).to.deep.equal(['IntentA', 'IntentB']);
+
         expect(app.requestLoggingObjects).to.deep.equal(['session']);
         expect(app.responseLoggingObjects).to.deep.equal(['response']);
         expect(app.saveBeforeResponseEnabled).to.equal(true);
