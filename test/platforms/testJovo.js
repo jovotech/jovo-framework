@@ -1159,6 +1159,8 @@ describe('setConfig(config)', function() {
         expect(app.userDataCol).to.equal('userData');
         expect(app.inputMap).to.deep.equal({});
         expect(app.intentMap).to.deep.equal({});
+        expect(app.intentsToSkipUnhandled).to.deep.equal([]);
+
         expect(app.requestLoggingObjects).to.deep.equal([]);
         expect(app.responseLoggingObjects).to.deep.equal([]);
         expect(app.saveBeforeResponseEnabled).to.equal(false);
@@ -1231,6 +1233,7 @@ describe('setConfig(config)', function() {
             'AMAZON.StopIntent': 'StopIntent',
         });
         expect(app.intentsToSkipUnhandled).to.deep.equal(['IntentA', 'IntentB']);
+
         expect(app.requestLoggingObjects).to.deep.equal(['session']);
         expect(app.responseLoggingObjects).to.deep.equal(['response']);
         expect(app.saveBeforeResponseEnabled).to.equal(true);
