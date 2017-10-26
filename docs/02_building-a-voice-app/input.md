@@ -23,7 +23,7 @@ In this section, you will learn how to deal with entities and slot values provid
 
 > If you're new to voice applications, you can learn more general info about principles like slots and entities here: [Voice App Basics/Natural Language Lingo](../getting-started/voice-app-basics.md).
 
-We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/API.AI an `entity`.
+We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity`.
 
 
 ## How to Access Input
@@ -46,7 +46,7 @@ let handlers = {
 };
 ```
 
-The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and API.AI. For some built-in entities at API.AI that use hyphens, the parameters should be in camelCase (for example, `given-name` can be accessed with a `givenName` parameter).
+The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow. For some built-in entities at Dialogflow that use hyphens, the parameters should be in camelCase (for example, `given-name` can be accessed with a `givenName` parameter).
 
 
 ### getInput | getInputs
@@ -84,10 +84,10 @@ let inputMap = {
 app.setInputMap(inputMap);
 ```
 
-Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on API.AI, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
+Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
 
 ```
-// Map API.AI standard parameter given-name with name
+// Map Dialogflow standard parameter given-name with name
 let inputMap = { 
     'given-name' : 'name' 
 };

@@ -64,7 +64,7 @@ let handlers = {
 
     'LAUNCH' : function() {
         // This intent is called when a user opens your app without a specific query
-        // Groups LaunchRequest (Alexa) and Default Welcome Intent (API.AI)
+        // Groups LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow)
     },
 
     // Add more intents here
@@ -144,7 +144,7 @@ let intentMap = {
 app.setIntentMap(intentMap);
 ```
 
-This is useful especially for platform-specific, built-in intents. One example could be Amazon’s standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on API.AI called `HelpIntent` and then do the matching with the Jovo `intentMap`.
+This is useful especially for platform-specific, built-in intents. One example could be Amazon’s standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
 
 ```
 let intentMap = {
@@ -152,7 +152,7 @@ let intentMap = {
 };
 ```
 
-This can also be used if you have different naming conventions on both platforms and want to match both intents to a new name. In the below example, the `AMAZON.HelpIntent` and an intent called `help-intent` on API.AI are matched to a Jovo intent called `HelpIntent`.
+This can also be used if you have different naming conventions on both platforms and want to match both intents to a new name. In the below example, the `AMAZON.HelpIntent` and an intent called `help-intent` on Dialogflow are matched to a Jovo intent called `HelpIntent`.
 
 ```
 let intentMap = {
@@ -166,7 +166,7 @@ let intentMap = {
 As mentioned above, the platforms offer different types of built-in intents.
 
 * Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
-* Google Assistant: Currently no documentation of built-in intents on API.AI
+* Google Assistant: Currently no documentation of built-in intents on Dialogflow
 
 
 

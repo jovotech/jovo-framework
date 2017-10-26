@@ -161,6 +161,10 @@ addText(text, 0.3)
 
 Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to support multilanguage voice apps.
 
+#### Language Resources
+
+i18n works by separating the content (the text/speech) from the application logic.
+
 To get started, create an object called `languageResources` in your `index.js` file, like this:
 
 ```
@@ -180,9 +184,55 @@ let languageResources = {
 };
 ```
 
+You can also refer to an external JSON file, like so:
+
+```
+let languageResources = require('./languageResources');
+```
+
+You can find out more about how these files are structure here: [i18next Essentials](https://www.i18next.com/essentials.html).
+
+#### Configuration
+
+Add the following to your app's configuration part:
+
+```
+app.setLanguageResources(languageResources);
+```
+
+You can also add additional configurations as an object:
+
+```
+app.setLanguageResources(languageResources, config);
+
+// Example
+app.setLanguageResources(languageResources, { returnObjects: true });
+```
+
+You can find a list of [i18next configuration options here](https://www.i18next.com/configuration-options.html).
+
+Additionally, you can also add the i18next configurations with in the `setConfig` method:
+
+```
+app.setConfig({
+  
+  // other configurations
+  
+  i18n: {
+    resources: languageResources,
+    config: { returnObjects: true },
+  },
+
+  // other configurations
+
+  })
+```
+
+#### Accessing the Content
+
 In your app logic, you can then use `app.t('key')` to access the right string. It is also possible to use parameters with `app.t('key', 'parameter)`.
 
-Here is some example code:
+Here is some example code for the languageResources object above:
 
 ```
 let handlers = {
@@ -194,6 +244,60 @@ let handlers = {
     'HelloWorldIntent': function() {
         app.tell(app.t('WELCOME_WITH_PARAMETER', 'John Doe'));
     },
+};
+```
+
+You can also use it with the Jovo SpeechBuilder, like so:
+
+```
+let handlers = {
+
+    'LAUNCH': function() {
+        let speech = app.speechBuilder()
+          .t('WELCOME');
+        app.tell(speech);
+    },
+};
+```
+
+
+#### Advanced i18n features
+
+If you're using the SpeechBuilder, you can also use arrays inside your languageResources object for randomized output.
+
+For this, you first have to enable the `returnObjects` config for i18next:
+
+```
+app.setLanguageResources(languageResources, { returnObjects: true });
+```
+
+For example, your languageResources could look like this:
+
+```
+let languageResources = {
+    'en-US': {
+        translation: {
+            WELCOME: [
+              'Hi!',
+              'Welcome!',
+              'Hello there!',
+            ],
+        },
+};
+```
+
+If you're then using a speechBuilder instance, it will use this array to add variability by returning randomized output:
+
+```
+let handlers = {
+
+    'LAUNCH': function() {
+        let speech = app.speechBuilder().t('WELCOME');
+        app.tell(speech);
+    },
+
+    // other intents
+
 };
 ```
 
@@ -309,7 +413,7 @@ You can find out more about Google Assistant specific cards and suggestion chips
 
 ## No Speech Output
 
-Sometimes, you might want to end a session without speech output. You can use the `endSession method for this case:
+Sometimes, you might want to end a session without speech output. You can use the `endSession` method for this case:
 
 ```
 app.endSession();
