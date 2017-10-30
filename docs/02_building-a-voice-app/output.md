@@ -360,7 +360,7 @@ let title = 'Card Title';
 let content = 'Card Content';
 let imageUrl = 'https://s3.amazonaws.com/jovocards/SampleImageCardSmall.png';
 
-app.addImageCard(title, content, imageUrl)
+app.showImageCard(title, content, imageUrl)
     .tell('Hello World!');
 ```
 
