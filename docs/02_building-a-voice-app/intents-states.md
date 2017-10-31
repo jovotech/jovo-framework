@@ -269,11 +269,11 @@ let handlers = {
 
 ### followUpState
 
-If you want to route a user to a state after you asked a specific question, prepend a `followUpState` call to an `ask` call.
+If you want to route a user to a state after you asked a specific question, you can add a `followUpState`. It is important that you do this before your `ask` call. For example, you can prepend it like this:
 
 ```
-app.ask(speech, reprompt)
-    .followUpState(stateName);
+app.followUpState(stateName)
+    .ask(speech, reprompt);
 ```
 
 This way, the voice app will first look if the response-intent is available in the given state. If not, it will go to the default called intent if it’s available outside a state.
@@ -321,7 +321,8 @@ let handlers = {
 
 ## toIntent | toStateIntent
 
-Use the `toIntent` or `toStateIntent` methods to jump into a new intent within the same request (similar, but different to the `followUpState` method that awaits the next request within the same session). For example, the  sample voice app uses this to go from `'LaunchIntent'` to `'HelloWorldIntent'`:
+Use the `toIntent` or `toStateIntent` methods to jump into a new intent within the same request (similar, but different to the `follow
+` method that awaits the next request within the same session). For example, the  sample voice app uses this to go from `'LaunchIntent'` to `'HelloWorldIntent'`:
 
 ```
 let handlers = {
