@@ -88,6 +88,6 @@ On Google Home, users converse with the Google Assistant. Apps for the Assistant
 
 Here is the official Google resource: [Invocation and Discovery](https://developers.google.com/actions/discovery/).
 
-To build a voice app for Google Assistant and Google Home, you need to create a project on the [Actions on Google Console](https://console.actions.google.com/). For interpreting the natural language of your users' speech input, you can use different kinds of integrations. Most developers use [API.AI](https://api.ai/) for the language model.
+To build a voice app for Google Assistant and Google Home, you need to create a project on the [Actions on Google Console](https://console.actions.google.com/). For interpreting the natural language of your users' speech input, you can use different kinds of integrations. Most developers use [Dialogflow](https://dialogflow.com/) (formerly API.AI) for the language model.
 
-Here are some helpful guides to get started with Google Actions: [Overview](https://developers.google.com/actions/) and a [tutorial for API.AI](https://developers.google.com/actions/apiai/tutorials/getting-started).
+Here are some helpful guides to get started with Google Actions: [Overview](https://developers.google.com/actions/) and a [tutorial for Dialogflow](https://developers.google.com/actions/dialogflow/).
