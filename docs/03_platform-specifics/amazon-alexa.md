@@ -25,13 +25,13 @@ Here is the [official reference by Amazon](https://developer.amazon.com/public/s
 
 Ask for list permissions:
 
-```
+```javascript
 app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 ```
 
 Here is some example code:
 
-```
+```javascript
 let handlers = {
 
     // Other intents
@@ -115,7 +115,7 @@ Here is the [official reference by Amazon](https://developer.amazon.com/public/s
 
 Ask for permissions like this:
 
-```
+```javascript
 // Country and Postal Code
 app.alexaSkill().showAskForCountryAndPostalCodeCard();
 
@@ -125,7 +125,7 @@ app.alexaSkill().showAskForAddressCard();
 
 Here is an example:
 
-```
+```javascript
 let handlers = {
 
     'LAUNCH': function() {

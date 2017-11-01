@@ -2,6 +2,8 @@
 
 [Take a look at the docs on our website, they're prettier there!](https://www.jovo.tech/framework/docs/)
 
+> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter 
+
 ## Overview
 
 * [1. Getting Started](../docs/01_getting-started)

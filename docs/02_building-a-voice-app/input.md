@@ -33,7 +33,7 @@ There are two ways to get the inputs provided by a user: either by adding parame
 ### Input as Parameter
 You can add parameters directly to your intent, like so:
 
-```
+```javascript
 let handlers = {
 
     // Other Intents and States
@@ -53,7 +53,7 @@ The parameter names need to be the same as the slot/entity names on the respecti
 
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput(inputName)`.
 
-```
+```javascript
 let handlers = {
 
     // Other Intents and States
@@ -76,7 +76,7 @@ let handlers = {
 
 Similar to [`intentMap`](../intents-states.md/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](./#jovo-app-structure) of your voice app:
 
-```
+```javascript
 // Create above webhook.post (webhook) or exports.handler (Lambda)
 let inputMap = { 
     'incomingInputName' : 'mappedInputName'
@@ -86,7 +86,7 @@ app.setInputMap(inputMap);
 
 Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
 
-```
+```javascript
 // Map Dialogflow standard parameter given-name with name
 let inputMap = { 
     'given-name' : 'name' 
@@ -101,7 +101,7 @@ For retrieving and storing this type of information, the Jovo `User Class`can be
 
 The user object can be accessed like this:
 
-```
+```javascript
 let user = app.user();
 ```
 
@@ -111,7 +111,7 @@ With our [database integrations](../04_integrations#databases), you can store us
 
 Just specify a key and a value, and you're good to go: 
 
-```
+```javascript
 app.user().data.key = value;
 
 // Example
@@ -127,7 +127,7 @@ The user object metadata is the first step towards building more contextual expe
 * lastUsedAt: When was the last time your user interacted with your app
 * sessionsCount: How often did your user engage with your app
 
-```
+```javascript
 let userCreatedAt = app.user().metaData.createdAt; 
 let userlastUsedAt = app.user().metaData.lastUsedAt; 
 let userSessionsCount = app.user().metaData.sessionsCount;
@@ -137,7 +137,7 @@ let userSessionsCount = app.user().metaData.sessionsCount;
 
 Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
 
-```
+```javascript
 app.user().getId();
 
 // Alternatively, you can also use this
@@ -158,7 +158,7 @@ ARke43GoJIqbF8g1vfyDdqL_Sffh
 
 Want to see which platform your user is currently interacting with? With getType, you can get exactly this.
 
-```
+```javascript
 app.getType();
 ```
 
@@ -176,7 +176,7 @@ GoogleAction
 
 When you’re using a webhook and ngrok, it’s easy to use logging for debugging, like this:
 
-```
+```javascript
 console.log('This is going to appear in the logs');
 ```
 
@@ -187,14 +187,14 @@ For voice app specific debugging, Jovo offers some handy functions for logging i
 
 You can log the incoming JSON requests by adding the following configuration:
 
-```
+```javascript
 // Place anywhere in your index.js
 app.enableRequestLogging();
 ```
 
 The result looks like this (data changed):
 
-```
+```javascript
 {
   "version": "1.0",
   "session": {
@@ -244,14 +244,14 @@ The result looks like this (data changed):
 
 You can log the outgoing JSON responses by adding the following configuration:
 
-```
+```json
 // Place anywhere in your index.js
 app.enableResponseLogging();
 ```
 
 The result looks like this:
 
-```
+```json
 {
   "version": "1.0",
   "response": {

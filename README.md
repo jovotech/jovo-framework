@@ -17,6 +17,11 @@
 
 <br/>
 
+With Jovo, you can build voice apps for both Amazon Alexa and Google Assistant with only one code base.
+
+> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter 
+
+
 ## Table of Contents
 
 * [Getting Started](#getting-started)

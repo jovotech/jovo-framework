@@ -23,7 +23,7 @@ Getting started with new platforms like Amazon Alexa and Google Assistant can so
 ## Voice App Courses
 Find our series of voice app development courses here:
 * [Project 1: Hello World!](https://www.jovo.tech/blog/project-1-hello-world/)
-* Project 2: Adventure Game (coming soon)
+* [Project 2: Adventure Game](https://www.jovo.tech/blog/project-2-adventure-game/)
 
 ## Suggest a Tutorial
 

@@ -25,7 +25,7 @@ This is an abstraction layer for persisting data across sessions. By default, th
 
 This will save data with your user's user ID as a mainKey, and a key and a value specified by you. This makes use of a callback function that's called after a successful (or unsuccessful, for error handling) call of the method.
 
-```
+```javascript
 save(key, value, callback)
 ​
 app.db().save(key, value, function(err) {
@@ -44,7 +44,7 @@ app.db().save('score', score, function(err) {
 
 After you saved data, you can use a key to retrieve a value from the database.
 
-```
+```javascript
 load(key, callback)
 ​
 app.db().load(key, function(err, data) {
@@ -63,7 +63,7 @@ app.db().load('score', function(err, data) {
 
 This will delete a data point from the database, specified by a key.
 
-```
+```javascript
 deleteData(key, callback)
 ​
 app.db().deleteData(key, function(err) {
@@ -75,7 +75,7 @@ app.db().deleteData(key, function(err) {
 
 This will delete your whole user's data (the mainKey) from the database.
 
-```
+```javascript
 deleteUser(callback)
 ​
 app.db().deleteUser(function(err) {
@@ -98,7 +98,7 @@ The DynamoDB integration allows you to store user session data in the NoSQL serv
 
 If you're running on Lambda, you can simply integrate a DynamoDB table like this:
 
-```
+```javascript
 app.setDynamoDb('TableName');
 ```
 
@@ -108,7 +108,7 @@ This will create a table with a name specified by you, and use this to store and
 
 In case you're hosting your voice app somewhere else, you can add DynamoDB with the following:
 
-```
+```javascript
 let awsConfig = {
     accessKeyId: 'yourAccessKeyId',
     secretAccessKey: 'yourSecretAccessKey', 
@@ -126,7 +126,7 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashb
 
 You can add and configure analytics by placing them in between the handleRequest and execute method calls of your voice app:
 
-```
+```javascript
 //  Place between handleRequest and execute
 webhook.post('/webhook', function(req, res) {
     app.handleRequest(req, res, handlers);
@@ -141,7 +141,7 @@ webhook.post('/webhook', function(req, res) {
 
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
-```
+```javascript
 // VoiceLabs integration
 app.addVoiceLabsAlexa(key);
 app.addVoiceLabsGoogleAction(key);
@@ -159,25 +159,25 @@ The Jovo Analytics class offers several enhancements to the vendor tracking, whi
 
 After adding analytics to your voice app, tracking is enabled by default. You can disable it with the following method:
 
-```
+```javascript
 app.analytics().disable();
 ```
 
 Also, you can enable analytics with this method:
 
-```
+```javascript
 app.analytics().enable();
 ```
 
 #### Skip Intents
 
-```
+```javascript
 app.analytics().skipIntents(intents);
 ```
 
 #### Skip Users
 
-```
+```javascript
 app.analytics().skipUsers(userIds);
 ```
 
@@ -211,7 +211,7 @@ To use VoiceLabs Insights for your voice app analytics, you need to complete the
 
 VoiceLabs Analytics can be added to your voice app with the following commands:
 
-```
+```javascript
 // For VoiceLabs Alexa Application
 app.addVoiceLabsAlexa(key);
 ​
@@ -268,7 +268,7 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 Dashbot Analytics can be added to your voice app with the following commands:
 
-```
+```javascript
 // For Dashbot Alexa Bot
 app.addDashbotAlexa(key);
 ​
@@ -320,7 +320,7 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 Bespoken Analytics can be added to your voice app with the following commands:
 
-```
+```javascript
 app.addBespokenAnalytics(secretKey);
 ```
 

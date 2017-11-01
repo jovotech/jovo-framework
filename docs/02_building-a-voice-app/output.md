@@ -35,7 +35,7 @@ The tell method is used to have Alexa or Google Home say something to your users
 
 Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](./intents-states.md/#introduction-to-user-sessions).
 
-```
+```javascript
 app.tell(speech);
 
 // Use plain text as speech output
@@ -52,7 +52,7 @@ Whenever you want to make the experience more interactive and get some user inpu
 
 This method keeps the mic open ([learn more about sessions here](./intents-states.md/#introduction-to-user-sessions)), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
 
-```
+```javascript
 app.ask(speech, reprompt);
 
 app.ask('How old are you?', 'Please tell me your age');
@@ -66,7 +66,7 @@ There are several ways to play pre-recorded audio files as an output. The platfo
 
 For this, you can use play. This includes an optional parameter `fallbacktext`, which is used for Google Assistant when the audio file can’t be accessed (with Alexa, the fallback option doesn’t work). The text is also displayed in the Google Assistant app on your users’ smartphones, if they access your action there.
 
-```
+```javascript
 app.play(url[, fallbacktext]);
 
 // Play weird pizza sound
@@ -90,7 +90,7 @@ SSML is short for "Speech Synthesis Markup Language," and you can use it to can 
 
 Here is an example how SSML-enriched output could look like:
 
-```
+```javascript
 let speech = '<speak>Welcome to this Pizza Skill.'
       + 'Don\'t we all want some <say-as interpret-as="spell-out">pizza</say-as>'
       + 'in our life? <break time="1s"/> Oh yes.'
@@ -105,7 +105,7 @@ But isn’t that a little inconvenient? Let’s take a look at the Jovo [speechB
 
 With the `speechBuilder`, you can assemble a speech element by adding different types of input:
 
-```
+```javascript
 let speech = app.speechBuilder()
                 .addText('Welcome to this Pizza Skill.')
                 .addBreak('300ms')
@@ -117,7 +117,7 @@ app.tell(speech);
 
 Here is what’s currently possible with speechBuilder:
 
-```
+```javascript
 // Add plain text for text-to-speech
 addText(text)
 
@@ -143,7 +143,7 @@ For more information on using audio files, see `[play](#play)`.
 
 You can also use speechBuilder to add variablity to your speech output. Here are a few things that work:
 
-```
+```javascript
 // Add array of elements for random selection
 addText([text1, text2, text3, ...])
 addText(['Hey there!', 'Welcome back!', 'Hi!'])
@@ -167,7 +167,7 @@ i18n works by separating the content (the text/speech) from the application logi
 
 To get started, create an object called `languageResources` in your `index.js` file, like this:
 
-```
+```javascript
 let languageResources = {
     'en-US': {
         translation: {
@@ -186,7 +186,7 @@ let languageResources = {
 
 You can also refer to an external JSON file, like so:
 
-```
+```javascript
 let languageResources = require('./languageResources');
 ```
 
@@ -196,13 +196,13 @@ You can find out more about how these files are structure here: [i18next Essenti
 
 Add the following to your app's configuration part:
 
-```
+```javascript
 app.setLanguageResources(languageResources);
 ```
 
 You can also add additional configurations as an object:
 
-```
+```javascript
 app.setLanguageResources(languageResources, config);
 
 // Example
@@ -213,7 +213,7 @@ You can find a list of [i18next configuration options here](https://www.i18next.
 
 Additionally, you can also add the i18next configurations with in the `setConfig` method:
 
-```
+```javascript
 app.setConfig({
   
   // other configurations
@@ -234,7 +234,7 @@ In your app logic, you can then use `app.t('key')` to access the right string. I
 
 Here is some example code for the languageResources object above:
 
-```
+```javascript
 let handlers = {
 
     'LAUNCH': function() {
@@ -249,7 +249,7 @@ let handlers = {
 
 You can also use it with the Jovo SpeechBuilder, like so:
 
-```
+```javascript
 let handlers = {
 
     'LAUNCH': function() {
@@ -267,13 +267,13 @@ If you're using the SpeechBuilder, you can also use arrays inside your languageR
 
 For this, you first have to enable the `returnObjects` config for i18next:
 
-```
+```javascript
 app.setLanguageResources(languageResources, { returnObjects: true });
 ```
 
 For example, your languageResources could look like this:
 
-```
+```javascript
 let languageResources = {
     'en-US': {
         translation: {
@@ -288,7 +288,7 @@ let languageResources = {
 
 If you're then using a speechBuilder instance, it will use this array to add variability by returning randomized output:
 
-```
+```javascript
 let handlers = {
 
     'LAUNCH': function() {
@@ -305,7 +305,7 @@ let handlers = {
 ### Raw JSON Responses
 If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `alexaSkill().setResponseObject` and `googleAction().setResponseObject`.
 
-```
+```javascript
 // Set a Raw JSON Response for Alexa
 app.alexaSkill().setResponseObject(obj);
 
@@ -335,7 +335,7 @@ You can find detailed documentation provided by the platforms here:
 
 A `SimpleCard` contains a title and body content. You can use the method `showSimpleCard` to display it.
 
-```
+```javascript
 let title = 'Card Title';
 let content = 'Card Content';
 
@@ -355,7 +355,7 @@ Result in the Actions on Google simulator:
 
 An `ImageCard` (`StandardCard` in Alexa terms) contains an additional image for more visual information. It can be added with the method `showImageCard`:
 
-```
+```javascript
 let title = 'Card Title';
 let content = 'Card Content';
 let imageUrl = 'https://s3.amazonaws.com/jovocards/SampleImageCardSmall.png';
@@ -374,7 +374,7 @@ Result in the Actions on Google simulator:
 
 You can also pass an object as `imageUrl` to provide a `smallImageUrl`and `largeImageUrl` (for Alexa Skills):
 
-```
+```javascript
 app.showImageCard('Card Title', ' Card Content', {
         smallImageUrl: 'https://via.placeholder.com/720x480',
         largeImageUrl: 'https://via.placeholder.com/1200x800',
@@ -388,7 +388,7 @@ Image dimensions:
 
 Important: Image files must be accessible by the public and support CORS (cross-origin resource sharing). For example, if you’re hosting the file with the wrong permissions on AWS S3, and try to access it, the response could look like this:
 
-```
+```json
 <Error>
   <Code>AccessDenied</Code>
   <Message>Access Denied</Message>
@@ -415,6 +415,6 @@ You can find out more about Google Assistant specific cards and suggestion chips
 
 Sometimes, you might want to end a session without speech output. You can use the `endSession` method for this case:
 
-```
+```javascript
 app.endSession();
 ```

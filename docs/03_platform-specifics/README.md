@@ -22,7 +22,7 @@ As Amazon Alexa and Google Assistant both have platform specific features, you c
 
 > Find an introduction to how Amazon Alexa works here: [Voice App Basics/Amazon Alexa](../getting-started/voice-app-basics#amazon-alexa).
 
-```
+```javascript
 let alexa = app.alexaSkill();
 ```
 
@@ -38,7 +38,7 @@ You can find the following Alexa specific features on the page [03. Platform Spe
 
 > Find an introduction to how Google Assistant works here: [Voice App Basics/Google Assistant](../getting-started/voice-app-basics#google-assistant).
 
-```
+```javascript
 let google = app.googleAction();
 ```
 
