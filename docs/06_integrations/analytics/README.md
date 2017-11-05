@@ -1,128 +1,14 @@
-# Integrations
+# [Integrations](./) > Analytics
 
-With third-party integrations, you can add more functionality to your voice apps.
-
-* [Databases](#databases)
-  * [Jovo Persistence Layer](#jovo-persistence-layer)
-  * [FilePersistence](#filepersistence)
-  * [DynamoDB](#dynamodb)
-* [Analytics](#analytics)
-  * [Jovo Analytics Layer](#jovo-analytics-layer)
-  * [VoiceLabs](#voicelabs)
-  * [Dashbot](#dashbot)
-  * [Bespoken](#bespoken)
-
-
-## Databases
-
-Jovo offers a Persistence Layer, which is an interface for off-the-shelf integrations with databases. Currently, we support a file-based system for prototyping, and DynamoDB.
-
-### Jovo Persistence Layer
-
-This is an abstraction layer for persisting data across sessions. By default, the file-based system will be used so you can start right away when prototyping locally.
-
-#### Save Data
-
-This will save data with your user's user ID as a mainKey, and a key and a value specified by you. This makes use of a callback function that's called after a successful (or unsuccessful, for error handling) call of the method.
-
-```javascript
-save(key, value, callback)
-​
-app.db().save(key, value, function(err) {
-     // do something
-});
-​
-// Example
-let score = 100;
-app.db().save('score', score, function(err) {
-       speech = 'Your new score is ' + score + ' points.';
-       app.tell(speech);
-});
-```
-
-#### Load Data
-
-After you saved data, you can use a key to retrieve a value from the database.
-
-```javascript
-load(key, callback)
-​
-app.db().load(key, function(err, data) {
-     // do something
-});
-​
-// Example
-app.db().load('score', function(err, data) {
-       let score = data;
-       speech = 'Your current score is ' + score + ' points.';
-       app.tell(speech);
-});
-```
-
-#### Delete Data
-
-This will delete a data point from the database, specified by a key.
-
-```javascript
-deleteData(key, callback)
-​
-app.db().deleteData(key, function(err) {
-      // do something
-});
-```
-
-#### Delete a User
-
-This will delete your whole user's data (the mainKey) from the database.
-
-```javascript
-deleteUser(callback)
-​
-app.db().deleteUser(function(err) {
-      // do something
-});
-```
-
-### FilePersistence
-
-The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
-
-![Jovo File Perstistence](https://www.jovo.tech/img/docs/filepersistence.jpg)
-
-
-### DynamoDB
-
-The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you’re running your voice app on AWS Lambda.
-
-#### DynamoDB for Apps Hosted on AWS Lambda
-
-If you're running on Lambda, you can simply integrate a DynamoDB table like this:
-
-```javascript
-app.setDynamoDb('TableName');
-```
-
-This will create a table with a name specified by you, and use this to store and load data. To make it work, you need to give your Lambda Role DynamoDB permissions.
-
-#### DynamoDB for Apps Not Hosted on AWS Lambda
-
-In case you're hosting your voice app somewhere else, you can add DynamoDB with the following:
-
-```javascript
-let awsConfig = {
-    accessKeyId: 'yourAccessKeyId',
-    secretAccessKey: 'yourSecretAccessKey', 
-    region:  'yourRegion',
-};
-
-app.setDynamoDb('TableName', awsConfig);
-```
-You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-## Analytics
 Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashbot.
 
-### Jovo Analytics Layer
+* [Jovo Analytics Layer](#jovo-analytics-layer)
+* [VoiceLabs](#voicelabs)
+* [Dashbot](#dashbot)
+* [Bespoken](#bespoken)
+
+
+## Jovo Analytics Layer
 
 You can add and configure analytics by placing them in between the handleRequest and execute method calls of your voice app:
 
@@ -137,7 +23,7 @@ webhook.post('/webhook', function(req, res) {
 });
 ```
 
-#### Add Analytics Integrations
+### Add Analytics Integrations
 
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
@@ -155,7 +41,7 @@ More detailed step-by-step guides can be found here: [VoiceLabs](#voicelabs) | [
 
 The Jovo Analytics class offers several enhancements to the vendor tracking, which can be found in the following sections.
 
-#### Turn Analytics On and Off
+### Turn Analytics On and Off
 
 After adding analytics to your voice app, tracking is enabled by default. You can disable it with the following method:
 
@@ -169,19 +55,19 @@ Also, you can enable analytics with this method:
 app.analytics().enable();
 ```
 
-#### Skip Intents
+### Skip Intents
 
 ```javascript
 app.analytics().skipIntents(intents);
 ```
 
-#### Skip Users
+### Skip Users
 
 ```javascript
 app.analytics().skipUsers(userIds);
 ```
 
-### VoiceLabs
+## VoiceLabs
 
 To use VoiceLabs Insights for your voice app analytics, you need to complete the following steps:
 
@@ -190,7 +76,7 @@ To use VoiceLabs Insights for your voice app analytics, you need to complete the
 3. Download the voicelabs npm package
 4. Test your app
 
-#### Create A VoiceLabs Application
+### Create A VoiceLabs Application
 
 1. Create a VoiceLabs account or log in at https://insights.voicelabs.co/login
 
@@ -207,7 +93,7 @@ To use VoiceLabs Insights for your voice app analytics, you need to complete the
 ![VoiceLabs Copy API Key](https://www.jovo.tech/img/docs/voicelabs-api-key.jpg)
 
 
-#### Enable VoiceLabs Analytics
+### Enable VoiceLabs Analytics
 
 VoiceLabs Analytics can be added to your voice app with the following commands:
 
@@ -219,7 +105,7 @@ app.addVoiceLabsAlexa(key);
 app.addVoiceLabsGoogleAction(key);
 ```
 
-#### Download the VoiceLabs Package
+### Download the VoiceLabs Package
 
 In your terminal, use the following command to download the package via npm:
 
@@ -231,14 +117,14 @@ $ npm install voicelabs
 $ npm install voicelabs-assistant-sdk
 ```
 
-#### Test
+### Test
 
 Test your voice app, after a bit your session should appear:
 
 ![VoiceLabs Test](https://www.jovo.tech/img/docs/voicelabs-test.jpg)
 
 
-### Dashbot
+## Dashbot
 
 To use Dashbot Analytics for your voice app, you need to complete the following steps:
 
@@ -247,7 +133,7 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 3. Download the dashbot npm package
 4. Test your app
 
-#### Create a Dashbot Bot
+### Create a Dashbot Bot
 
 1. Create a Dashbot account or log in at https://www.dashbot.io.
 
@@ -264,7 +150,7 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 ![Dashbot Copy API Key](https://www.jovo.tech/img/docs/dashbot-api-key.jpg)
 
-#### Enable Dashbot Analytics
+### Enable Dashbot Analytics
 
 Dashbot Analytics can be added to your voice app with the following commands:
 
@@ -276,7 +162,7 @@ app.addDashbotAlexa(key);
 app.addDashbotGoogleAction(key);
 ```
 
-#### Download the Dashbot Package
+### Download the Dashbot Package
 
 In your terminal, use the following command to download the package via npm:
 
@@ -284,7 +170,7 @@ In your terminal, use the following command to download the package via npm:
 $ npm install dashbot
 ```
 
-#### Test
+### Test
 
 Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
 
@@ -292,7 +178,7 @@ Test your voice app, after a bit your session should appear in the Report sectio
 
 
 
-### Bespoken
+## Bespoken
 
 To use Bespoken Analytics for your voice app, you need to complete the following steps:
 
@@ -300,7 +186,7 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 2. Enable Bespoken Analytics in your voice app
 3. Test your app
 
-#### Create a Bespoken Dashboard Account
+### Create a Bespoken Dashboard Account
 
 1. Create a Bespoken account or log in at https://apps.bespoken.io/dashboard/.
 
@@ -316,7 +202,7 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 5. Copy the Secret Key
 
-#### Enable Bespoken Analytics
+### Enable Bespoken Analytics
 
 Bespoken Analytics can be added to your voice app with the following commands:
 
@@ -324,7 +210,7 @@ Bespoken Analytics can be added to your voice app with the following commands:
 app.addBespokenAnalytics(secretKey);
 ```
 
-#### Test
+### Test
 
 Test your voice app, after a bit your session should appear in the created skill.
 

@@ -1,6 +1,4 @@
-# [Building a Voice App](./) > User Input and Data
-
-> Other pages in this category: [Handling Intents and States](intents-stated.md), [Creating Output](output.md).
+# [App Logic](./) > Data
 
 In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
 
@@ -10,8 +8,6 @@ In this section, you will learn how to deal with entities and slot values provid
   * [getInput | getInputs](#getinput-getinputs)
   * [inputMap](#inputmap)
 * [User Object](#user-object)
-  * [User ID](#user-id)
-  * [Platform Type](#platform-type)
 * [Logging](#logging)
   * [Log Requests](#log-requests)
   * [Log Responses](#log-responses)
@@ -21,9 +17,9 @@ In this section, you will learn how to deal with entities and slot values provid
 
 ## Introduction to User Input
 
-> If you're new to voice applications, you can learn more general info about principles like slots and entities here: [Voice App Basics/Natural Language Lingo](../getting-started/voice-app-basics.md).
+> If you're new to voice applications, you can learn more general info about principles like slots and entities here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
 
-We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity`.
+We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
 
 ## How to Access Input
@@ -34,7 +30,7 @@ There are two ways to get the inputs provided by a user: either by adding parame
 You can add parameters directly to your intent, like so:
 
 ```javascript
-let handlers = {
+const handlers = {
 
     // Other Intents and States
 
@@ -54,7 +50,7 @@ The parameter names need to be the same as the slot/entity names on the respecti
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput(inputName)`.
 
 ```javascript
-let handlers = {
+const handlers = {
 
     // Other Intents and States
 
@@ -74,14 +70,22 @@ let handlers = {
 
 ### inputMap
 
-Similar to [`intentMap`](../intents-states.md/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](./#jovo-app-structure) of your voice app:
+Similar to [`intentMap`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](./#jovo-app-structure) of your voice app:
 
 ```javascript
 // Create above webhook.post (webhook) or exports.handler (Lambda)
-let inputMap = { 
-    'incomingInputName' : 'mappedInputName'
+let myInputMap = { 
+    'incomingInputName' : 'mappedInputName',
 };
-app.setInputMap(inputMap);
+
+// Use setter
+app.setInputMap(myInputMap);
+
+// Use setConfig
+app.setConfig({
+    inputMap: myInputMap,
+    // Other configurations
+});
 ```
 
 Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
@@ -89,7 +93,7 @@ Example: You want to ask your users for their name and created a slot called `na
 ```javascript
 // Map Dialogflow standard parameter given-name with name
 let inputMap = { 
-    'given-name' : 'name' 
+    'given-name' : 'name',
 };
 ```
 
@@ -97,7 +101,7 @@ let inputMap = {
 
 Besides conversational parameters, there is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
 
-For retrieving and storing this type of information, the Jovo `User Class`can be used to create more contextual and adaptive experiences based on user specific data. You can find the class here: [user.js](https://github.com/jovotech/jovo-framework-nodejs/blob/master/lib/user.js).
+For retrieving and storing this type of information, the Jovo `User Class`can be used to create more contextual and adaptive experiences based on user specific data.
 
 The user object can be accessed like this:
 
@@ -105,54 +109,7 @@ The user object can be accessed like this:
 let user = app.user();
 ```
 
-### User Data
-
-With our [database integrations](../04_integrations#databases), you can store user specific data easily.
-
-Just specify a key and a value, and you're good to go: 
-
-```javascript
-app.user().data.key = value;
-
-// Example
-app.user().data.score = 300;
-```
-
-
-### Metadata
-
-The user object metadata is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence db.json, or DynamoDB if you enable it):
-
-* createdAt: When the user first used your app
-* lastUsedAt: When was the last time your user interacted with your app
-* sessionsCount: How often did your user engage with your app
-
-```javascript
-let userCreatedAt = app.user().metaData.createdAt; 
-let userlastUsedAt = app.user().metaData.lastUsedAt; 
-let userSessionsCount = app.user().metaData.sessionsCount;
-```
-
-### User ID
-
-Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
-
-```javascript
-app.user().getId();
-
-// Alternatively, you can also use this
-app.getUserId();
-```
-
-This is going to return an ID that looks like this:
-
-```
-// For Amazon Alexa
-amzn1.ask.account.AGJCMQPNU2XQWLNJXU2K23R3RWVTWCA6OX7YK7W57E7HVZJSLH4F5U2JOLYELR4PSDSFGSDSD32YHMRG36CUUAY3G5QI5QFNDZ44V5RG6SBN3GUCNTRHAVT5DSDSD334e34I37N3MP2GDCHO7LL2JL2LVN6UFJ6Q2GEVVKL5HNHOWBBD7ZQDQYWNHYR2BPPWJPTBPBXPIPBVFXA
-
-// For Google Assistant
-ARke43GoJIqbF8g1vfyDdqL_Sffh
-```
+You can find more information here: [App Logic > Data > User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md).
 
 ### Platform Type
 
@@ -172,6 +129,7 @@ AlexaSkill
 GoogleAction
 ```
 
+
 ## Logging
 
 When you’re using a webhook and ngrok, it’s easy to use logging for debugging, like this:
@@ -188,13 +146,19 @@ For voice app specific debugging, Jovo offers some handy functions for logging i
 You can log the incoming JSON requests by adding the following configuration:
 
 ```javascript
-// Place anywhere in your index.js
+// Use setter
 app.enableRequestLogging();
+
+// Use setConfig
+app.setConfig({
+  requestLogging: true,
+  // Other configurations
+});
 ```
 
 The result looks like this (data changed):
 
-```javascript
+```json
 {
   "version": "1.0",
   "session": {
@@ -240,13 +204,49 @@ The result looks like this (data changed):
 }
 ```
 
+#### Request Logging Objects
+
+As you can see above, the logs of a request are quite long and impractical, if you only need certain information. With `requestLoggingObjects`, you can limit the log output to specific objects.
+
+```javascript
+let myRequestLoggingObjects(['request']);
+
+// Use setter
+app.setRequestLoggingObjects(myRequestLoggingObjects);
+
+// Use setConfig
+app.setConfig({
+  requestLoggingObjects: myRequestLoggingObjects,
+  // Other configurations
+});
+```
+
+The example above will reduce the log output to this:
+
+```json
+"type": "IntentRequest",
+"requestId": "amzn1.echo-api.request.5c96e32a-d803-4ba0-ba04-4293ce23ggf1",
+"timestamp": "2017-07-03T09:56:44Z",
+"locale": "en-US",
+"intent": {
+  "name": "HelloWorldIntent",
+  "confirmationStatus": "NONE"
+}
+```
+
 ### Log Responses
 
 You can log the outgoing JSON responses by adding the following configuration:
 
 ```json
-// Place anywhere in your index.js
+// Use setter
 app.enableResponseLogging();
+
+// Use setConfig
+app.setConfig({
+  responseLogging: true,
+  // Other configurations
+});
 ```
 
 The result looks like this:
@@ -265,17 +265,46 @@ The result looks like this:
 }
 ```
 
+
+#### Response Logging Objects
+
+Similar to [`requestLoggingObjects`](#requestLoggingObjects), you can limit the response logging output to specific objects, as well.
+
+```javascript
+let myResponseLoggingObjects(['response']);
+
+// Use setter
+app.setResponseLoggingObjects(myResponseLoggingObjects);
+
+// Use setConfig
+app.setConfig({
+  responseLoggingObjects: myResponseLoggingObjects,
+  // Other configurations
+});
+```
+
+The example above will reduce the log output to this:
+
+```json
+"shouldEndSession": true,
+"outputSpeech": {
+  "type": "SSML",
+  "ssml": "<speak>Hello World!</speak>"
+}
+```
+
+
 ## Persisting Data
 
-> Learn more about Sessions here: [Handling Intents and States/Introduction to User Sessions](./intents-states.md#introduction-to-user-sessions)
+> Learn more about Sessions here: [Handling Intents and States/Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#introduction-to-user-sessions).
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [Handling Intents and States/Session Attributes](./intents-states.md#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [Handling Intents and States/Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#session-attributes).
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations/Databases](../04_integrations#databases).
+For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations/Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
 

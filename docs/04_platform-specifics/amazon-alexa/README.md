@@ -1,18 +1,22 @@
-# Platform Specifics > Amazon Alexa
+# [Platform Specifics](./) > Amazon Alexa
 
-> Other pages in this category: [Google Assistant](google-assistant.md).
+* [Audioplayer](#audioplayer)
+* [Dialog Mode](#dialog-mode)
+* [Render Templates for Echo Show](#render-templates-for-echo-show)
+* [Shopping and To Do Lists](#shopping-and-to-do-lists)
+* [User Specific Data](#user-specific-data)
 
-## Alexa AudioPlayer Skills
+## Audioplayer
 
-Coming soon.
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
 
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
 
 ## Dialog Mode
 
-Coming soon.
+You can find an example file here: [`indexDialog.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/dialog-interface-reference).
+
 
 ## Render Templates for Echo Show
 
@@ -107,11 +111,10 @@ let handlers = {
 };
 ```
 
-
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/access-the-alexa-shopping-and-to-do-lists).
 
 
-### User Specific Data
+## User Specific Data
 
 Ask for permissions like this:
 
@@ -126,7 +129,7 @@ app.alexaSkill().showAskForAddressCard();
 Here is an example:
 
 ```javascript
-let handlers = {
+const handlers = {
 
     'LAUNCH': function() {
        // app.toIntent('GetFullAddressIntent');
@@ -163,6 +166,5 @@ let handlers = {
     },
 };
 ```
-
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/device-address-api).

@@ -5,7 +5,7 @@
 <p align="center">
 <a href="https://www.jovo.tech/framework/docs/"><strong>Documentation</strong></a> -
 <a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="./CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
+<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework-nodejs/tree/master/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
 <br/>
 
 <p align="center">
@@ -17,19 +17,109 @@
 
 <br/>
 
-With Jovo, you can build voice apps for both Amazon Alexa and Google Assistant with only one code base.
+Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities. [Check out our features below.](#features)
 
 > 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter 
 
 
 ## Table of Contents
 
+* [Features](#features)
+  * [General](#general)
+  * [Platform Specific Features](#platform-specific-features)
+  * [Integrations](#integrations)
 * [Getting Started](#getting-started)
   * [Jovo CLI](#jovo-cli)
   * [Jovo Framework](#jovo-framework)
   * [Jovo Sample App](#jovo-sample-app)
 * [Tutorials](#tutorials)
+* [Community Projects](#community-projects)
 * [Development Roadmap](#development-roadmap)
+
+## Features
+
+### General
+
+#### Basic Concepts
+
+Name | Description | Docs
+------------ | ------------- | -------------
+Command Line Tools | Create and run Jovo projects from your command line | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_building-a-voice-app/cli.md)
+Routing | Easy routing capabilities for intents and states | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing)
+Data input | Deal with user specific data and request parameters (slots and entities) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data)
+Speech and visual output | Craft your responses, including speech an visual elements | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output)
+
+
+#### Advanced Features
+
+Name | Description | Docs
+------------ | ------------- | -------------
+User object | Create contextual experiences with user specific data and services | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md)
+Speech Builder | Helpful class to create speech output and add contextual variability | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output/speechbuilder.md)
+i18n | Create multilingual voice apps | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output/i18n.md)
+Persistence Layer | Persist user specific data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/databases)
+Analytics Layer | Get usage statistics and logging | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/analytics)
+
+
+### Platform Specific Features
+
+Jovo is not a common denominator solution. You can access platform specific features for Amazon Alexa and Google Assistant. See a list of supported features below.
+
+#### General
+
+Name | Description | Docs
+------------ | ------------- | -------------
+Multi-platform handler | Add or overwrite specific intents and states for platform specific app logic | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexMultiHandler.js)
+
+
+#### Amazon Alexa
+
+Name | Description | Docs
+------------ | ------------- | -------------
+Audioplayer | Build Alexa Audioplayer Skills | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md)
+Alexa Cards | Visual Output for Alexa Skills | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaCards.js)
+Alexa Device Address | Access a users' location | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaDeviceAddress.js)
+Alexa Lists | Access To Do and Shopping Lists | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaLists.js)
+Alexa Verifier | Makes it possible to host your Alexa skill on your own server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/#host-the-webhook-on-a-server)
+Alexa Dialog Mode | Use Alexa's Dialog Directives | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js)
+Echo Show Render Templates | Display visual elements on Echo Show | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js)
+
+
+#### Google Assistant
+
+Name | Description | Docs
+------------ | ------------- | -------------
+Google Assistant Cards | Visual Output for Google Actions | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js)
+Suggestion Chips | Allow your users to quickly reply on mobile phones | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant/#suggestion-chips) 
+
+### Integrations
+
+#### Database Integrations
+
+See the [Jovo Persistence Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#jovo-persistence-layer) for more information on storing user specific data.
+
+Name | Description | Docs
+------------ | ------------- | -------------
+File Persistence | Saves user specific data in JSON file for fast prototyping and development (default) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#filepersistence)
+Dynamo DB | Saves user specific data in AWS DynamoDB table | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#dynamodb)
+
+#### Analytics Integrations
+
+See the [Jovo Analytics Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#jovo-analytics-layer) for more information on analytics features.
+
+Name | Description | Docs
+------------ | ------------- | -------------
+VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#voicelabs)
+Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#dashbot)
+Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#bespoken)
+
+#### CLI Integrations
+
+See the [Jovo CLI Docs](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_building-a-voice-app/cli.md) for more information on CLI features.
+
+Name | Description | Docs
+------------ | ------------- | -------------
+bst proxy | Proxy service for local prototyping | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_building-a-voice-app/cli.md/#bst-proxy)
 
 
 ## Getting Started
@@ -42,12 +132,12 @@ Technical Requirements: Node.js version 4 or later & NPM (node package manager).
 
 The [Jovo Command Line Tools](https://github.com/jovotech/jovo-cli) offer an easy way to create new voice apps from templates. Install them with:
 
-```
+```sh
 $ npm install -g jovo-cli
 ```
 
 You can create a Jovo project into a new directory with the following command:
-```
+```sh
 $ jovo new <directory>
 ```
 This will clone the [Jovo Sample App](https://github.com/jovotech/jovo-sample-voice-app-nodejs) and install all the necessary dependencies so you can get started right away.
@@ -84,6 +174,13 @@ Find a quickstart guide and comprehensive tutorials here:
 * [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
 * [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 
+
+## Community Projects
+
+Name | Description | Repository
+------------ | ------------- | -------------
+ASK CLI Jovo Starter Template | Alexa Skill starter template using ASK CLI and Jovo Framework | [rmtuckerphx/ask-cli-jovo-starter](https://github.com/rmtuckerphx/ask-cli-jovo-starter)
+Advanced  Sample Voice App | Advanced folder structure and improvements for more complex voice applications | [tjbenton/jovo-sample-voice-app-nodejs](https://github.com/tjbenton/jovo-sample-voice-app-nodejs)
 
 
 ## Development Roadmap

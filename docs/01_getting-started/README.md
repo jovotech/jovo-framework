@@ -1,17 +1,17 @@
 # Getting Started
 
-> Other pages in this category: [Tutorials](tutorials.md), [Voice App Basics](voice-app-basics.md).
-
 * [Installation](#installation)
   * [Technical Requirements](#technical-requirements)
   * [Jovo CLI](#jovo-cli)
   * [Jovo-Framework](#jovo-framework)
   * [Clone a Sample App](#clone-a-sample-app)
+* [Build Your First Voice App](#build-your-first-voice-app)
+* [Voice App Basics](#voice-app-basics)
 
 
 ## Installation
 
-There are three ways to get started with the Jovo Framework. You can either install our command line tools (recommended), save the jovo-framework npm package, or clone our sample voice app.
+There are three ways to get started with the Jovo Framework. You can either install our command line tools (recommended), use the jovo-framework npm package in your code, or clone our sample voice app.
 
 ### Technical Requirements
 
@@ -24,17 +24,17 @@ Here are some tutorials to install Node.js and NPM: [Mac](http://blog.teamtreeho
 
 ### Jovo CLI
 
-The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [02. Building a Voice App](../02_building-a-voice-app).
+The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [05. Tools](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools).
 
 The open source GitHub repository can be found here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli) (pull requests encouraged!)
 
-```
+```sh
 $ npm install -g jovo-cli
 ```
 
 You can create a Jovo project into a new directory with the following command:
 
-```
+```sh
 $ jovo new <directory>
 ```
 
@@ -43,7 +43,7 @@ This will clone the [Jovo Sample App](#clone-a-sample-app) and install all the n
 ### Jovo Framework
 If you want to use the Jovo Framework as a dependency in an already existing project, you can also use npm to save it to your package.json:
 
-```
+```sh
 $ npm install --save jovo-framework
 ```
 
@@ -53,6 +53,17 @@ Right now, there is one sample app available, [which you can find here](https://
 
 You can clone it like this:
 
-```
+```sh
 $ git clone https://github.com/jovotech/jovo-sample-voice-app-nodejs.git
 ```
+
+
+## Build Your First Voice App
+
+To get started building voice apps with Jovo, take a look at the list of tutorials and courses [on GitHub](tutorials.md) and on the [Jovo Website](https://www.jovo.tech/learn).
+
+
+## Voice App Basics
+
+New to developing for voice platforms like Amazon Alexa and Google Assistant? Go to [> Voice App Basics](voice-app-basics.md) to get an introduction to voice and language models.
+

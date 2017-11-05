@@ -1,7 +1,5 @@
 # Platform Specifics
 
-> Other pages in this category: [Amazon Alexa](amazon-alexa.md), [Google Assistant](google-assistant.md).
-
 Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
 
 * [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)
@@ -20,13 +18,13 @@ As Amazon Alexa and Google Assistant both have platform specific features, you c
 
 ## Amazon Alexa
 
-> Find an introduction to how Amazon Alexa works here: [Voice App Basics/Amazon Alexa](../getting-started/voice-app-basics#amazon-alexa).
+> Find an introduction to how Amazon Alexa works here: [Voice App Basics/Amazon Alexa](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md/#amazon-alexa).
 
 ```javascript
 let alexa = app.alexaSkill();
 ```
 
-You can find the following Alexa specific features on the page [03. Platform Specifics > Amazon Alexa](amazon-alexa.md):
+You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](/amazon-alexa):
 
 * Alexa Audioplayer Skills
 * Dialog Mode
@@ -36,13 +34,13 @@ You can find the following Alexa specific features on the page [03. Platform Spe
 
 ## Google Assistant
 
-> Find an introduction to how Google Assistant works here: [Voice App Basics/Google Assistant](../getting-started/voice-app-basics#google-assistant).
+> Find an introduction to how Google Assistant works here: [Voice App Basics/Google Assistant](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md/#google-assistant).
 
 ```javascript
 let google = app.googleAction();
 ```
 
-You can find the following Google Assistant specific features on the page [03. Platform Specifics > Google Assistant](google-assistant.md):
+You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](/google-assistant):
 
 * Google Assistant Cards
 * Suggestion Chips

@@ -24,11 +24,11 @@ In the next section, we will go a little deeper into the underlying principles o
 
 ### Natural Language Lingo
 
-In order to find out what a user wants when they’re talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it’s important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities or slots).
+In order to find out what a user wants when they’re talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it’s important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities` or `slots`).
 
 ![Language Model Elements](https://www.jovo.tech/img/docs/voice-intents-utterances-entities.jpg)
 
-In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent', while there are potential slots like `restaurant type. Please note that this is a very simple example, other slot types like `area` or `price range could also be considered.
+In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent', while there are potential slots like `restaurant type. Please note that this is a very simple example, other slot types like `area` or `price range` could also be considered.
 
 ### Intents
 
