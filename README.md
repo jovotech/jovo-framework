@@ -43,7 +43,7 @@ Jovo is the first open source framework that lets you build voice apps for both 
 #### Basic Concepts
 
 Name | Description | Docs
---- | ------------- | ---
+:--- | :--- | :---
 Command Line Tools | Create and run Jovo projects from your command line | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli)
 Routing | Easy routing capabilities for intents and states | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing)
 Data input | Deal with user specific data and request parameters (slots and entities) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data)
@@ -53,11 +53,11 @@ Speech and visual output | Craft your responses, including speech an visual elem
 #### Advanced Features
 
 Name | Description | Docs
---- | ------------- | ---
+:--- | :--- | :---
 User object | Create contextual experiences with user specific data and services | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/i18n.md)
-Jovo Persistence Layer | Persist user specific data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/databases)
+Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/databases)
 Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/analytics)
 
 
@@ -68,14 +68,14 @@ Jovo is not a common denominator solution. You can access platform specific feat
 #### General
 
 Name | Description | Docs
---- | ------------- | ---
+:--- | :--- | :---
 Multi-platform handler | Add or overwrite specific intents and states for platform specific app logic | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexMultiHandler.js)
 
 
 #### Amazon Alexa
 
 Name | Description | Docs
---- | ------------- | ---
+:--- | :--- | :---
 Audioplayer | Build Alexa Audioplayer Skills | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md)
 Alexa Cards | Create visual output with home cards for Alexa Skills  | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaCards.js)
 Alexa Device Address | Access a users' device location | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaDeviceAddress.js)
@@ -88,8 +88,8 @@ Echo Show Render Templates | Display visual elements on Echo Show | [Example](ht
 #### Google Assistant
 
 Name | Description | Docs
---- | ------------- | ---
-Google Assistant Cards | Create visual Output for the Google Assistant mobile app | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js)
+:--- | :--- | :---
+Google Assistant Cards &nbsp; &nbsp; &nbsp; | Create visual Output for the Google Assistant mobile app | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js)
 Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant/#suggestion-chips) 
 
 ### Integrations
@@ -99,8 +99,8 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 See the [Jovo Persistence Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#jovo-persistence-layer) for more information on storing user specific data.
 
 Name | Description | Docs
---- | ------------- | ---
-File Persistence | Saves user specific data in JSON file for fast prototyping and development (default) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases/#filepersistence)
+:--- | :--- | :---
+File Persistence &nbsp; &nbsp; &nbsp; &nbsp; | Saves user specific data in JSON file for fast prototyping and development (default) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases/#filepersistence)
 Dynamo DB | Saves user specific data in AWS DynamoDB table | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases/#dynamodb)
 
 #### Analytics Integrations
@@ -108,7 +108,7 @@ Dynamo DB | Saves user specific data in AWS DynamoDB table | [📝](https://gith
 See the [Jovo Analytics Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics) for more information on analytics features.
 
 Name | Description | Docs
------------- | ------------- | -------------
+:--- | :--- | :---
 VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics/#voicelabs)
 Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics/#dashbot)
 Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics/#bespoken)
@@ -118,8 +118,8 @@ Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and M
 See the [Jovo CLI Docs](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_building-a-voice-app/cli.md) for more information on CLI features.
 
 Name | Description | Docs
------------- | ------------- | -------------
-bst proxy | Proxy service for local prototyping | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
+:--- | :--- | :---
+bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
 
 
 ## Getting Started
