@@ -46,8 +46,8 @@ Name | Description | Docs
 :--- | :--- | :---
 Command Line Tools | Create and run Jovo projects from your command line | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli)
 Routing | Easy routing capabilities for intents and states | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing)
-Data input | Deal with user specific data and request parameters (slots and entities) | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data)
-Speech and visual output | Craft your responses, including speech an visual elements | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output)
+Data input | Deal with user specific data and request parameters (slots and entities) easily| [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data)
+Speech and visual output &nbsp; &nbsp; | Craft your responses, including speech an visual elements | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output)
 
 
 #### Advanced Features
@@ -69,7 +69,7 @@ Jovo is not a common denominator solution. You can access platform specific feat
 
 Name | Description | Docs
 :--- | :--- | :---
-Multi-platform handler | Add or overwrite specific intents and states for platform specific app logic | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexMultiHandler.js)
+Multi-platform handler &nbsp; &nbsp; &nbsp; &nbsp; | Add or overwrite specific intents and states for platform specific app logic | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexMultiHandler.js)
 
 
 #### Amazon Alexa
