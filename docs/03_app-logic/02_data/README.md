@@ -41,8 +41,9 @@ const handlers = {
     // Other Intents and States
 };
 ```
-
-The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow. For some built-in entities at Dialogflow that use hyphens, the parameters should be in camelCase (for example, `given-name` can be accessed with a `givenName` parameter).
+Two important things to consider when using this option:
+* The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow
+* The incoming names are matched to `camelCase`, for example `given-name` can be accessed with a `givenName` parameter.
 
 
 ### getInput | getInputs
