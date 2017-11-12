@@ -156,4 +156,4 @@ User | userDataCol | Changes the name of the user data column in the database | 
  | userMetaData | Change the default configurations for storing user meta data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md#user-meta-data)
 Output | i18n | Enable multilingual output for your voice app | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/03_output/i18n.md#configuration)
 Integrations | Databases | Switch between supported database integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/databases)
-- | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/analytics)
+ | | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/analytics)
