@@ -35,7 +35,7 @@ webhook.post('/webhook', function(req, res) {
 const handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('SaveUserDataIntent');
+        app.toIntent('GetMetaDataIntent');
     },
 
     'SaveUserDataIntent': function() {

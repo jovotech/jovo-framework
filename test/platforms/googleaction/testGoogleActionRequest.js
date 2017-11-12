@@ -1,41 +1,14 @@
 'use strict';
-let assert = require('chai').assert;
+// const expect = require('chai').expect;
+const intentRequestSample = require('./../../../lib/platforms/googleaction/request/samples/dialogflow/intentSample.json');
+const GoogleActionDialogFlowRequest = require('./../../../lib/platforms/googleaction/request/googleActionDialogFlowRequest').GoogleActionDialogFlowRequest;
 
 describe('Tests for GoogleActionRequest Class', function() {
-    it.skip('constructor()', function() {
-        assert.ok(true);
-    });
-
-    it.skip('getUserId()', function() {
-
-    });
-
-    it.skip('getIntentName()', function() {
-
-    });
-
-    it.skip('getOriginalRequest()', function() {
-
-    });
-
-    it.skip('getResolvedQuery()', function() {
-
-    });
-
-    it.skip('getParameters()', function() {
-
-    });
-
-    it.skip('getContexts()', function() {
-
-    });
-
-    it.skip('getContextOut()', function() {
-
-    });
-
-    it.skip('getResponseObject()', function() {
-
+    it('constructor()', function() {
+        let request = new GoogleActionDialogFlowRequest(intentRequestSample); // eslint-disable-line
+        // console.log(JSON.stringify(request, null, '\t'));
+        // console.log(request.getOriginalRequest().getUserId());
+        // console.log(request.getId());
     });
 });
 

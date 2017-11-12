@@ -8,15 +8,17 @@ const webhook = require('../index').Webhook;
 const app = require('../index').Jovo;
 
 // Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 // Add Analytics Integrations
-app.addVoiceLabsAlexa('Voicelabs Alexa Key');
-app.addVoiceLabsGoogleAction('Voicelabs Google Action Key');
-app.addDashbotGoogleAction('Dashbot Google Action Key');
-app.addDashbotAlexa('Dashbot Alexa Key');
-app.addBespokenAnalytics('Bespoken secret key');
+// app.addVoiceLabsAlexa('23b55e80-3e3f-11a7-2167-0e2486876586');
+// app.addVoiceLabsGoogleAction('228f1d00-5764-11a7-023a-0e2486876586');
+app.addDashbotGoogleAction('1T3ZonKcbNzLv6eFLBwI9Fv8JAU5SBVorCCvvD1D');
+app.addDashbotAlexa('6Idg1n3pCbk4bMh4XYubQVx5ckjVtuHctMND4sMM');
+// app.addBespokenAnalytics('Bespoken secret key');
 // Listen for post requests
 webhook.listen(3000, function() {
     console.log('Example server listening on port 3000!');

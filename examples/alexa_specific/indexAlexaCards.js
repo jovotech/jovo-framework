@@ -4,12 +4,13 @@
 // App Configuration: Create Webhook + Enable Logging
 // =================================================================================
 
-const webhook = require('../index').Webhook;
-const app = require('../index').Jovo;
+const webhook = require('../../index').Webhook;
+const app = require('../../index').Jovo;
 
-// Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 // Listen for post requests
 webhook.listen(3000, function() {
@@ -35,7 +36,8 @@ const AskForLocationPermissionsCard = require('../../index').AlexaSkill.AskForLo
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched.');
+        // app.tell('App launched.');
+        app.toIntent('AskForCountryAndPostalCodeCardIntent');
     },
 
     'SimpleCardIntent': function() {

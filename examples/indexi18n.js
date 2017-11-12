@@ -8,8 +8,10 @@ const webhook = require('../index').Webhook;
 const app = require('../index').Jovo;
 
 // Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 
 let languageResources = {

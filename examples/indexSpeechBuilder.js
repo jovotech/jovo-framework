@@ -8,8 +8,10 @@ const webhook = require('../index').Webhook;
 const app = require('../index').Jovo;
 
 // Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 // Listen for post requests
 webhook.listen(3000, function() {
@@ -29,7 +31,7 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched');
+        app.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
@@ -48,7 +50,6 @@ let handlers = {
             .addBreak(['500ms', '1s'])
             .addAudio(['url1', 'url2', 'url3'])
             .addText('Good Bye.');
-
         app.tell(speech);
     },
 };

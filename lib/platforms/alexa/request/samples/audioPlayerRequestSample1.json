@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "context": {
+    "AudioPlayer": {
+      "offsetInMilliseconds": 0,
+      "token": "silence",
+      "playerActivity": "PLAYING"
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.ed2ae19f-d163-4655-a5d6-6c4763244baf"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AGKS3QUDHFJOYULCPLNS4D5TJFGOSTHBGDJVZ6OCY7UFTZYXB6IIFWVQ3ZCPU6F4JW4ZXKQBB4J4HXLISI6SZQHOFXH6KOIMMRVCX6XIGRLQAXKHPU7OUEF7UP2OUZFSCDBOTL5QN6VXO5ZRQO6MFVR4DNQ27FWZGK3PA6UXREJFMNAUYOVPDOF3UZEJ756LEC4QKSS4GCJSD7I"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.AEEKJQR537N7576QKTYJDBGY775ELDXYAYRGNC2FBYJJDVHSDUEXOIXQ4CPRNKT3AN4AIWUQSKLYNJVE676UCP4ZUZVSAXXQ3UL6XP6SQCW2DZGV7TG6ASOBH4VKYVGEKGY5HNKKFX43S3GGTI3O3EYJW3WA",
+        "supportedInterfaces": {
+          "AudioPlayer": {}
+        }
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com"
+    }
+  },
+  "request": {
+    "type": "AudioPlayer.PlaybackStarted",
+    "requestId": "amzn1.echo-api.request.6f7e7c55-eb4c-47e1-bc71-9b1ca853be4a",
+    "timestamp": "2017-10-30T20:17:48Z",
+    "locale": "de-DE",
+    "token": "silence",
+    "offsetInMilliseconds": 0
+  }
+}

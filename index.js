@@ -4,7 +4,8 @@ const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
 const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
-const RequestBuilderAlexaSkill = require('./lib/platforms/alexa/requestBuilderAlexaSkill').RequestBuilderAlexaSkill;
+const RequestBuilderAlexaSkill = require('./lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
+
 const http = require('http');
 const express = require('express');
 const verifier = require('alexa-verifier-middleware');
@@ -73,6 +74,7 @@ if (process.argv.length > 2) {
         try {
             let program = require('commander');
             let parameters = [];
+            let sessions = [];
             program
                 .option('-i, --intent [intentName]', 'intent name')
                 .option('-l, --launch', 'launch')
@@ -81,12 +83,16 @@ if (process.argv.length > 2) {
                 .option('-p, --parameter [value]', 'A repeatable value', function(val) {
                     parameters.push(val);
                 }, [])
+                .option('-e, --session [value]', 'Session variables', function(val) {
+                    sessions.push(val);
+                }, [])
                 .parse(process.argv);
             let webhookTest = new WebhookTest();
 
             if (program.intent) {
-                let intent = (new RequestBuilderAlexaSkill())
-                    .intentRequest(program.intent);
+                let intent = RequestBuilderAlexaSkill
+                    .intentRequest()
+                    .setIntentName(program.intent);
                 if (program.state) {
                     intent.addSessionAttribute('STATE', program.state);
                 }
@@ -103,18 +109,28 @@ if (process.argv.length > 2) {
                         }
                     }
                 }
+                if (sessions.length > 0) {
+                    for (let i = 0; i < sessions.length; i++) {
+                        let session = sessions[i].split('=');
+                        if (session.length !== 2) {
+                            console.log('Invalid session: '+ sessions[i]);
+                        } else {
+                            intent.addSessionAttribute(session[0], session[1]);
+                        }
+                    }
+                }
                 webhookTest
-                    .testIntent(intent.buildSimple())
+                    .testIntent(intent)
                     .then((response) => { });
             }
             if (program.launch) {
-                let launchRequest = (new RequestBuilderAlexaSkill())
+                let launchRequest = RequestBuilderAlexaSkill
                     .launchRequest();
                 if (program.locale) {
                     launchRequest.setLocale(program.locale);
                 }
                 webhookTest
-                    .testLaunch(launchRequest.buildSimple())
+                    .testLaunch(launchRequest)
                     .then((response) => {}).catch((error) => {
                     console.log(error);
                 });

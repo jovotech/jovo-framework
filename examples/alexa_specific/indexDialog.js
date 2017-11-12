@@ -8,8 +8,10 @@ const webhook = require('../../index').Webhook;
 const app = require('../../index').Jovo;
 
 // Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 // Listen for post requests
 webhook.listen(3000, function() {
@@ -32,8 +34,8 @@ let handlers = {
         app.toIntent('OnboardingIntent');
     },
     'OnboardingIntent': function() {
-        // delegate(app);
-        confirmSlotAndIntent(app);
+        delegate(app);
+        // confirmSlotAndIntent(app);
         // elicitSlotExample(app);
         // elicitSlotExampleWithUpdatedIntent(app);
     },

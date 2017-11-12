@@ -13,8 +13,10 @@ const Carousel = require('../../index').GoogleAction.Carousel;
 const List = require('../../index').GoogleAction.List;
 const OptionItem = require('../../index').GoogleAction.OptionItem;
 
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 app.setIntentMap({
     'Default Welcome Intent': 'HelloWorldIntent',
@@ -37,119 +39,15 @@ let handlers = {
         // app.showAccountLinkingCard();
         // app.googleAction().showAccountLinkingCard();
         // app.addSessionAttribute('bla', 'blub');
-        app.tell('sdsd');
+        // app.tell('sdsd');
         // app.toIntent('AccountLinkingIntent');
-        // app.toIntent('ListIntent');
+        app.toIntent('ListIntent');
         // app.toIntent('CarouselIntent');
     },
     'AccountLinkingIntent': function() {
-        // app.showAccountLinkingCard();
-        // app.ask('Account linking', 'yo');
-        let res2 = {
-            'speech': 'login',
-            'data': {
-                'google': {
-                    'expectUserResponse': true,
-                    'systemIntent': {
-                        'intent': 'actions.intent.SIGN_IN',
-                        'inputValueData': {},
-                    },
-                    'inputPrompt': {
-                        'initialPrompts': [
-                            {
-                                'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
-                            },
-                        ],
-                        'noInputPrompts': [],
-                    },
-                },
-            },
-        };
-        //
-        app.googleAction().setResponseObject(res2);
-        // let res = {
-        //     'speech': '<speak>test</speak>',
-        //     'data': {
-        //         'google': {
-        //             'expectUserResponse': true,
-        //             'expectedInputs': [
-        //                 {
-        //                     'inputPrompt': {
-        //                         'initialPrompts': [
-        //                             {
-        //                                 'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
-        //                             },
-        //                         ],
-        //                         'noInputPrompts': [],
-        //                     },
-        //                     'possibleIntents': [
-        //                         {
-        //                             'intent': 'actions.intent.SIGN_IN',
-        //                             'inputValueData': {},
-        //                         },
-        //                     ],
-        //                 },
-        //             ],
-        //         },
-        //     },
-        // };
-        //
-        // app.googleAction().setResponseObject(res);
+        app.showAccountLinkingCard();
     },
     'BasicCardIntent': function() {
-        // app.showAccountLinkingCard().ask('bla');
-        // let res = {
-        //     'speech': '<speak>test</speak>',
-        //     'data': {
-        //         'google': {
-        //             'expectUserResponse': true,
-        //             'expectedInputs': [
-        //                 {
-        //                     'inputPrompt': {
-        //                         'initialPrompts': [
-        //                             {
-        //                                 'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
-        //                             },
-        //                         ],
-        //                         'noInputPrompts': [],
-        //                     },
-        //                     'possibleIntents': [
-        //                         {
-        //                             'intent': 'actions.intent.SIGN_IN',
-        //                             'inputValueData': {},
-        //                         },
-        //                     ],
-        //                 },
-        //             ],
-        //         },
-        //     },
-        // };
-        //
-        let res2 = {
-            'speech': 'login',
-            'data': {
-                'google': {
-                    'expectUserResponse': true,
-                    'systemIntent': {
-                        'intent': 'actions.intent.SIGN_IN',
-                        'inputValueData': {},
-                    },
-                    'inputPrompt': {
-                        'initialPrompts': [
-                            {
-                                'textToSpeech': 'PLACEHOLDER_FOR_SIGN_IN',
-                            },
-                        ],
-                        'noInputPrompts': [],
-                    },
-                },
-            },
-        };
-        //
-        app.googleAction().setResponseObject(res2);
-        return;
-
-
         let basicCard = new BasicCard()
             .setTitle('Title')
             .setImage('http://via.placeholder.com/450x350?text=Basic+Card', 'accessibilityText')
@@ -213,7 +111,6 @@ let handlers = {
     },
     'ON_ELEMENT_SELECTED': function() {
         let selectedElement = this.getSelectedElementId();
-
         if (selectedElement === 'Listitem1key') {
             this.toIntent('BasicCardIntent');
         } else if (selectedElement === 'Listitem2key') {

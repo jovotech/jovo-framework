@@ -5,7 +5,7 @@ let chai = require('chai');
 const assert = chai.assert;
 // const path = require('path');
 
-let RequestBuilderAlexaSkill = require('../../lib/platforms/alexa/requestBuilderAlexaSkill').RequestBuilderAlexaSkill;
+const RequestBuilderAlexaSkill = require('../../lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
 let RequestBuilderGoogleAction = require('../../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;
 const AlexaUser = require('../../lib/platforms/alexa/alexaUser').AlexaUser;
 const GoogleActionUser = require('../../lib/platforms/googleaction/googleActionUser').GoogleActionUser;
@@ -27,7 +27,10 @@ describe('User Class', function() {
         it.skip('should return AlexaUser', function(done) {
             let app = new Jovo.Jovo();
             app.setConfig({
-                localDbFilename: dbFile,
+                db: {
+                    type: 'file',
+                    localDbFilename: dbFile,
+                },
             });
             app.on('respond', function(app) {
                 // app.db().deleteFile(function(err) {
@@ -37,8 +40,7 @@ describe('User Class', function() {
 
             let requestAlexa = (new RequestBuilderAlexaSkill())
                 .intentRequest()
-                .setIntentName('HelloWorldIntent')
-                .build();
+                .setIntentName('HelloWorldIntent');
 
             app.handleRequest(requestAlexa, response, {
                 'HelloWorldIntent': function() {
@@ -51,7 +53,10 @@ describe('User Class', function() {
         it.skip('should return GoogleAction', function(done) {
             let app = new Jovo.Jovo();
             app.setConfig({
-                localDbFilename: dbFile,
+                db: {
+                    type: 'file',
+                    localDbFilename: dbFile,
+                },
             });
             app.on('respond', function(app) {
                 // app.db().deleteFile(function(err) {

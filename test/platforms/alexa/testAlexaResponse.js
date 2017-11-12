@@ -1,7 +1,7 @@
 'use strict';
 const expect = require('chai').expect;
 const AlexaResponse = require('../../../lib/platforms/alexa/alexaResponse').AlexaResponse;
-const BodyTemplate1 = require('../../../lib/platforms/alexa/renderTemplate/bodyTemplate1').BodyTemplate1;
+const BodyTemplate1 = require('../../../lib/platforms/alexa/response/renderTemplate/bodyTemplate1').BodyTemplate1;
 
 describe('Tests for AlexaResponse Class', function() {
     describe('constructor(responseObj)', function() {

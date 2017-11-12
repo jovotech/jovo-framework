@@ -4,12 +4,14 @@
 // App Configuration: Create Webhook + Enable Logging
 // =================================================================================
 
-const webhook = require('../index').Webhook;
-const app = require('../index').Jovo;
+const webhook = require('../../index').Webhook;
+const app = require('../../index').Jovo;
 
 // Enable Logging for Quick Testing
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.setConfig({
+    requestLogging: true,
+    responseLogging: true,
+});
 
 // Listen for post requests
 webhook.listen(3000, function() {
@@ -32,7 +34,7 @@ let handlers = {
        // app.toIntent('GetShoppingListIntent');
        // app.toIntent('GetTodoListIntent');
        // app.toIntent('AddItemToToDoListIntent');
-       app.toIntent('UpdateToDoListItemIntent');
+       app.toIntent('GetShoppingListIntent');
     },
 
     'GetShoppingListIntent': function() {

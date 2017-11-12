@@ -1,0 +1,44 @@
+{
+  "user": {
+    "userId": "ABwppHFEX7u1TQfu54UX1mWvTP2Z8qKfCceBEteEjDIUSd2L_k7yCzur_smTEaWQt3QpHUDN5BbeZU1nAGZb-0w",
+    "locale": "en-US"
+  },
+  "conversation": {
+    "conversationId": "1509466030947",
+    "type": "NEW"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.MAIN",
+      "rawInputs": [
+        {
+          "inputType": "KEYBOARD",
+          "query": "Talk to my test app"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        },
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        }
+      ]
+    }
+  ]
+}

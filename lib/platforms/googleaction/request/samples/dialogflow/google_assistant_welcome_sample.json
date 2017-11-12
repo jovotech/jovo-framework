@@ -1,0 +1,110 @@
+{
+  "originalRequest": {
+    "source": "google",
+    "version": "2",
+    "data": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "Talk to jovo playground",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "intent": "actions.intent.MAIN"
+        }
+      ],
+      "user": {
+        "locale": "en-US",
+        "userId": "AP8TWv65bpfmNumgNlgAcpBepJ_l"
+      },
+      "conversation": {
+        "conversationId": "1509464924949",
+        "type": "NEW"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "id": "df081d34-b514-4867-8bc6-c5c7c3a0f4b2",
+  "timestamp": "2017-10-31T15:48:45.195Z",
+  "lang": "en-us",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "GOOGLE_ASSISTANT_WELCOME",
+    "speech": "",
+    "action": "input.welcome",
+    "actionIncomplete": false,
+    "parameters": {},
+    "contexts": [
+      {
+        "name": "google_assistant_welcome",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_screen_output",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_audio_output",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "google_assistant_input_type_keyboard",
+        "parameters": {},
+        "lifespan": 0
+      }
+    ],
+    "metadata": {
+      "intentId": "33d26ed4-45fb-4e78-b586-490682d2318e",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "nluResponseTime": 3,
+      "intentName": "Default Welcome Intent"
+    },
+    "fulfillment": {
+      "speech": "Good day!",
+      "messages": [
+        {
+          "type": "simple_response",
+          "platform": "google",
+          "textToSpeech": "Hi!"
+        },
+        {
+          "type": 0,
+          "speech": "Hi!"
+        }
+      ]
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "1509464924949"
+}
