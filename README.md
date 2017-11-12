@@ -13,6 +13,7 @@
 <a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://gitter.im/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://badges.gitter.im/jovotech/jovo-framework-nodejs.svg"></a>
+ <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
 <br/>
@@ -47,7 +48,7 @@ Name | Description | Docs
 Command Line Tools | Create and run Jovo projects from your command line | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli)
 Routing | Easy routing capabilities for intents and states | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing)
 Data input | Deal with user specific data and request parameters (slots and entities) easily| [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data)
-Speech and visual output &nbsp; &nbsp; | Craft your responses, including speech an visual elements | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output)
+Speech and visual output &nbsp; | Craft your responses, including speech an visual elements | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output)
 
 
 #### Advanced Features
@@ -96,7 +97,7 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 
 #### Database Integrations
 
-See the [Jovo Persistence Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_integrations#jovo-persistence-layer) for more information on storing user specific data.
+See the [Jovo Persistence Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases) for more information on storing user specific data.
 
 Name | Description | Docs
 :--- | :--- | :---
