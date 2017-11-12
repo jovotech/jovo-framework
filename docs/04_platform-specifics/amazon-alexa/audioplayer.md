@@ -1,13 +1,17 @@
-# [Platform Specifics](./) > [Amazon Alexa](README.md) > Audioplayer
+# [Platform](../) > [Amazon Alexa](./README.md) > Audioplayer
 
-Jovo also supports Alexa Audioplayer Skills.
+Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
-
-* [Introduction](#introduction)
+* [Introduction to AudioPlayer Skills](#introduction-to-audioplayer-skills)
 * [Features](#features)
+  * [Play a File](#play-a-file)
+  * [Enqueue](#enqueue)
+  * [Stop](#stop)
+* [AudioPlayer Directives](#audioplayer-directives)
 
-## Introduction
+## Introduction to AudioPlayer Skills
+
+AudioPlayer Skills can be used to stream long-form audio files like music. Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
 
 You get access to the `audioPlayer` object like this:
 
@@ -50,6 +54,8 @@ enqueue(url, token)
 audioPlayer.stop();
 ```
 
+
+## AudioPlayer Directives
 
 Add the following to your handlers variable:
 

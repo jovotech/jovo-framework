@@ -1,13 +1,15 @@
-# [App Logic](./) > [Data](README.md) > User
+# [App Logic](../) > [Data](./README.md) > User
 
-* [Introduction](#introduction)
+In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
+
+* [Introduction](#introduction-to-the-user-class)
 * [User Data](#user-data)
   * [Data Persistence](#data-persistence)
-  * [Metadata](#meta-data)
+  * [Meta Data](#meta-data)
   * [User ID](#user-id)
 
 
-## Introduction
+## Introduction to the User Class
 
 The `User` object offers helpful features to build contextual, user specific experiences into your voice applications.
 
@@ -21,9 +23,21 @@ let user = app.user();
 
 The User object contains the possibility to store and retrieve user specific data, including [meta data](#meta-data).
 
+Data is stored using our [database integrations](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases), with a file-based `db.json` structure enabled by default.
+
+Just specify a key and a value, and you're good to go:
+
+```javascript
+app.setConfig({
+    userDataCol: 'yourUserDataColName',
+    // Other configurations
+});
+```
+
+
 ### Data Persistence
 
-With our [database integrations](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases), you can store user specific data easily.
+With our Jovo Persistence Layer, you can store user specific data easily to either a database or a local JSON file.
 
 Just specify a key and a value, and you're good to go: 
 
@@ -34,19 +48,37 @@ app.user().data.key = value;
 app.user().data.score = 300;
 ```
 
+For more information on data persistence, take a look here: [Integrations > Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
+
 
 ### Meta Data
 
-The user object metadata is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence db.json, or DynamoDB if you enable it):
+The user object meta data is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
 
-* createdAt: When the user first used your app
-* lastUsedAt: When was the last time your user interacted with your app
-* sessionsCount: How often did your user engage with your app
+* `createdAt`: When the user first used your app
+* `lastUsedAt`: When was the last time your user interacted with your app
+* `sessionsCount`': How often did your user engage with your app
 
 ```javascript
 let userCreatedAt = app.user().metaData.createdAt; 
 let userlastUsedAt = app.user().metaData.lastUsedAt; 
 let userSessionsCount = app.user().metaData.sessionsCount;
+```
+
+You can change the type of meta data to store with the `setConfig` method. This is the default configuration for it:
+
+```javascript
+app.setConfig({
+    userMetaData: {
+        lastUsedAt: true,
+        sessionsCount: true,
+        createdAt: true,
+        requestHistorySize: 0,
+        devices: false,
+    }
+    // Other configurations
+});
+
 ```
 
 ### User ID

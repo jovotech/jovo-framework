@@ -1,4 +1,4 @@
-# [App Logic](./) > Routing
+V# [App Logic](./) > Routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
@@ -40,12 +40,12 @@ To save user data in form of attributes across requests during a session, take a
 
 If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
 
-Intents are defined and handled in the `handlers` variable. Besides either required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intent, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
+Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 
 ```javascript
 const handlers = {
     'LAUNCH': function () {
-        // Opened when people open the voice app without a specific query
+        // Triggered when people open the voice app without a specific query
         app.tell('Hello World!');
     },
 
@@ -65,30 +65,37 @@ For this, offers standard, built-in intents, `'LAUNCH'` and `'END'`, to make cro
 const handlers = {
 
     'LAUNCH': function() {
-        // This intent is called when a user opens your app without a specific query
+        // Triggered when people open the voice app without a specific query
         // Groups LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow)
     },
 
     // Add more intents here
 
     'END': function() {
-        // This intent is called when the session ends
+        // Triggered when the session ends
         // Currently supporting AMAZON.StopIntent and reprompt timeouts
     }
 };
 ```
 
-You can learn more about Jovo standard intents in the following section:
 
 ### Standard Intents
 
+You can learn more about Jovo standard intents in the following sections:
+
+* ['LAUNCH' Intent](#launch-intent)
+* ['END' Intent](#end-intent)
+* ['NEW_SESSION' Intent](#new-session-intent)
+* ['NEW_USER' Intent](#new-user-intent)
+* ['Unhandled' Intent](#unhandled-intent)
+
 #### 'LAUNCH' Intent
 
-The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just “open skill” or “talk to app” on the respective platforms). This intent is necessary to run your voice app.
+The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just “open skill” or “talk to app” on the respective platforms). If you don't have `'NEW_SESSION'` defined, this intent is necessary to run your voice app.
 
 ```javascript
 'LAUNCH': function() {
-    // This intent is called when a user opens your app without a specific query
+    // Triggered when a user opens your app without a specific query
  },
 ```
 
@@ -100,7 +107,7 @@ You can use the `'NEW_SESSION'` intent instead of the `'LAUNCH'` intent if you w
 
 ```javascript
 'NEW_SESSION': function() {
-    // This intent is always called when a user opens your app, no matter the query (new session)
+    // Always triggered when a user opens your app, no matter the query (new session)
  },
 ```
 This is helpful if you have some work to do, like collect data (timestamps), before you route the users to the intent they wanted with the `toIntent` method.
@@ -122,7 +129,7 @@ Additionally to the other intents above, you can use the `'NEW_USER'` to direct 
 
 ```javascript
 'NEW_USER': function() {
-    // This intent is called when a user opens your app for the first time
+    // Triggered when a user opens your app for the first time
  },
 ```
 For example, this saves you some time calling `if (app.user().isNewUser()) { }` in every intent where you require the access to user data.
@@ -134,7 +141,7 @@ A session could end due to various reasons. For example, a user could call “st
 
 ```javascript
 'END': function() {
-    // This intent is called when a session ends abrupty or with AMAZON.StopIntent
+    // Triggered when a session ends abrupty or with AMAZON.StopIntent
  },
 ```
 
@@ -168,7 +175,7 @@ Sometimes, an incoming intent might not be found either inside a state or among 
 
 ```javascript
 'Unhandled': function() {
-    // This intent is called when the requested intent could not be found in the handlers variable
+    // Triggered when the requested intent could not be found in the handlers variable
  },
 ```
 
@@ -433,7 +440,7 @@ const handlers = {
 };
 ```
 
-Alternatively, you can also use an `'Unhandled'` intent as described in the section above:
+Alternatively, you can also use an `['Unhandled'](#unhandled-intent)` intent as described in the section above:
 
 ```javascript
 const handlers = {
@@ -476,6 +483,43 @@ app.followUpState(stateName)
 ```
 
 This way, the voice app will first look if the response-intent is available in the given state. If not, it will go to the default called intent if it’s available outside a state.
+
+```javascript
+
+const handlers = {
+
+    'LAUNCH' : function() {
+        // Ask for a yes-no-question and route to order state
+        let speech = 'Do you want to order something?';
+        let reprompt = 'Please answer with yes or no.';
+        app.followUpState('OrderState').ask(speech, reprompt);
+    },
+    
+    // Example: behave differently for a 'yes' or 'no' answer inside order state
+    'OrderState' : {
+        
+        'YesIntent' : function() {
+           // do something
+        },
+
+        'NoIntent' : function() {
+           // do something
+        },
+
+    },
+
+    // Default intents without states below
+
+    'Unhandled' : function() {
+        // Do something
+    },
+
+    'END' : function() {
+        // do something
+    }
+
+};
+```
 
 ## Intent Redirects
 

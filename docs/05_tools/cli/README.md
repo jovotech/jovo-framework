@@ -3,6 +3,7 @@
 The Jovo Command Line Tools (see [GitHub Repository](https://github.com/jovotech/jovo-cli)) offer the ability to create, prototype, and test your voice app quickly.
 
 * [Installation](#installation)
+ * [Troubleshooting](#troubleshooting)
 * [jovo new](#jovo-new)
   * [Templates](#templates)
 * [jovo run](#jovo-run)
@@ -83,10 +84,11 @@ You can then use ngrok or another tool (like [bst proxy](#bst-proxy)) to tunnel 
 
 > If you want to see another integration, please feel free to submit an issue. Thanks!
 
+Here is a list of integrations that work with `jovo run`:
 
 Command | Description | Docs
 ------------ | ------------- | -------------
---bst-proxy | Creates a webhook URL for local testing | [📝](#bst-proxy)
+`--bst-proxy` | Creates a webhook URL for local testing | [📝](#bst-proxy)
 
 
 #### bst proxy
@@ -99,6 +101,6 @@ $ jovo run --bst-proxy
 
 The result should look like this:
 
-![Jovo and bst proxy](https://www.jovo.tech/img/docs/cli/bst-proxy-terminal.jpg)
+![Jovo and bst proxy](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 
 The URL also comes with logging and analytics capabilities for prototyping and testing.

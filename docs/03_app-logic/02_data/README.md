@@ -5,9 +5,10 @@ In this section, you will learn how to deal with entities and slot values provid
 * [Introduction to User Input](#introduction-to-user-input)
 * [How to Access Input](#how-to-access-input)
   * [Input as Parameter](#input-as-parameter)
-  * [getInput | getInputs](#getinput-getinputs)
+  * [getInput | getInputs](#getinput)
   * [inputMap](#inputmap)
 * [User Object](#user-object)
+  * [Platform Type](#platform-type)
 * [Logging](#logging)
   * [Log Requests](#log-requests)
   * [Log Responses](#log-responses)
@@ -17,18 +18,17 @@ In this section, you will learn how to deal with entities and slot values provid
 
 ## Introduction to User Input
 
-> If you're new to voice applications, you can learn more general info about principles like slots and entities here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
+> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
 
 We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
 
 ## How to Access Input
 
-There are two ways to get the inputs provided by a user: either by adding parameters to  your handlers' intent functions, or by using the `getInput` method.
+There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers`' intent functions, or by using the `[getInput](#getinput)` method.
 
 ### Input as Parameter
-You can add parameters directly to your intent, like so:
-
+You can access input by adding parameters directly to your intent, like so:
 ```javascript
 const handlers = {
 
@@ -42,10 +42,12 @@ const handlers = {
 };
 ```
 
-The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow. For some built-in entities at Dialogflow that use hyphens, the parameters should be in camelCase (for example, `given-name` can be accessed with a `givenName` parameter).
+Two important things to consider when using this option:
+* The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow
+* The incoming names are matched to `camelCase`, for example `given-name` can be accessed with a `givenName` parameter.
 
 
-### getInput | getInputs
+### getInput
 
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput(inputName)`.
 
@@ -70,7 +72,7 @@ const handlers = {
 
 ### inputMap
 
-Similar to [`intentMap`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo inputName. You can add this to the [configuration section](./#jovo-app-structure) of your voice app:
+Similar to [`intentMap`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
 
 ```javascript
 // Create above webhook.post (webhook) or exports.handler (Lambda)
@@ -92,8 +94,24 @@ Example: You want to ask your users for their name and created a slot called `na
 
 ```javascript
 // Map Dialogflow standard parameter given-name with name
-let inputMap = { 
-    'given-name' : 'name',
+app.setConfig({
+    inputMap: { 'given-name' : 'name', },
+    // Other configurations
+});
+```
+
+With this, you can use `name` as a parameter in your intent function:
+
+```javascript
+const handlers = {
+
+    // Other Intents and States
+
+    'MyNameIsIntent': function(name) {
+        app.tell('Hello ' + name + '!');
+    }
+
+    // Other Intents and States
 };
 ```
 
@@ -121,7 +139,7 @@ app.getType();
 
 This is going to return a type that looks like this:
 
-```
+```javascript
 // For Amazon Alexa
 AlexaSkill
 
@@ -238,7 +256,7 @@ The example above will reduce the log output to this:
 
 You can log the outgoing JSON responses by adding the following configuration:
 
-```json
+```javascript
 // Use setter
 app.enableResponseLogging();
 
@@ -268,7 +286,7 @@ The result looks like this:
 
 #### Response Logging Objects
 
-Similar to [`requestLoggingObjects`](#requestLoggingObjects), you can limit the response logging output to specific objects, as well.
+Similar to [`requestLoggingObjects`](#request-logging-objects), you can limit the response logging output to specific objects, as well.
 
 ```javascript
 let myResponseLoggingObjects(['response']);
@@ -296,15 +314,15 @@ The example above will reduce the log output to this:
 
 ## Persisting Data
 
-> Learn more about Sessions here: [Handling Intents and States/Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#introduction-to-user-sessions).
+> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#introduction-to-user-sessions).
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [Handling Intents and States/Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#session-attributes).
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations/Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
+For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations > Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
 

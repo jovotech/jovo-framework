@@ -18,7 +18,7 @@ A Jovo voice app ([`index.js`](https://github.com/jovotech/jovo-sample-voice-app
 
 In the sample voice app above, the upper part is used for [server configuration](#server-configuration), adding [integrations](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations) like analytics or databases, or global variables that are used throughout your app.
 
-The below part (the `handlers` variable) is where you're routing through your app and managing how you're responding to your users. You can find out more about this part here: [3. App Logic](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
+The below part (the `handlers` variable) is where you're routing through your app and managing how to respond to your users. You can find out more about this part here: [App Logic](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
 
 
 ## Server Configuration
@@ -29,10 +29,12 @@ There are just a few simple building blocks that make the difference between two
 
 ![Jovo Server Configuration](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-lambda-differences.jpg)
 
+You can find all the information for server configuration in this section: [App Configuration > Server](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server).
+
 
 ### Webhook
 
-Find out more about using a webhook here: [2. App Configuration > Server > Webhook](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/webhook.md).
+Find out more about using a webhook here: [App Configuration > Server > Webhook](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/webhook.md).
 
 Here is a code example:
 
@@ -58,7 +60,7 @@ webhook.post('/webhook', function(req, res) {
 
 ### AWS Lambda
 
-Find out more about deploying your voice app to AWS Lambda here: [2. App Configuration > Server > AWS Lambda](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md).
+Find out more about deploying your voice app to AWS Lambda here: [App Configuration > Server > AWS Lambda](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md).
 
 Here is a code example:
 
@@ -105,7 +107,7 @@ app.setConfig({
 });
 ```
 
-This is the default configuration:
+p
 
 ```javascript
 app.setConfig({
@@ -142,15 +144,16 @@ app.setConfig({
 Below is a list of all configurations:
 
 Category | Name | Description | Docs
------------- | ------------- | ------------- | -------------
-Routing | intentMap | Maps incoming intents to specified intent names | [📝]()
-- | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝]()
-- | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝]()
-Logging | requestLogging | Logs incoming requests | [📝]()
-- | responseLogging | Logs outgoing responses | [📝]()
-- | requestLoggingObjects | Limits request logs to the provided objects | [📝]()
-- | responseLoggingObjects | Limits response logs to the provided objects | [📝]()
-User | userDataCol | Changes the name of the user data column in the database | [📝]()
-- | userMetaData | Change the default configurations for storing user meta data | [📝]()
-Integrations | Databases | Switch between supported database integrations | [📝]()
-- | Analytics | Enable analytics integrations | [📝]()
+:--- | :--- | :--- | :---
+Routing | intentMap | Maps incoming intents to specified intent names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#intentmap)
+ | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#intentstoskipunhandled)
+Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#inputmap)
+ | requestLogging | Logs incoming requests | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#log-requests)
+ | responseLogging | Logs outgoing responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#log-responses)
+ | requestLoggingObjects | Limits request logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#request-logging-objects)
+ | responseLoggingObjects | Limits response logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#response-logging-objects)
+User | userDataCol | Changes the name of the user data column in the database | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md#user-data)
+ | userMetaData | Change the default configurations for storing user meta data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md#user-meta-data)
+Output | i18n | Enable multilingual output for your voice app | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/03_output/i18n.md#configuration)
+Integrations | Databases | Switch between supported database integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/databases)
+- | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/analytics)

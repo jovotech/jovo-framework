@@ -1,4 +1,4 @@
-# [App Logic](./) > Output
+# [App Logic](../) > Output
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
@@ -13,14 +13,11 @@ In this section, you will learn how to use Jovo to craft a response to your user
   * [i18n](#i18n)
   * [Raw JSON Responses](#raw-json-responses)
 * [Visual Output](#visual-output)
-  * [Cards](#cards)
-  * [Alexa Specific Visual Output](#alexa-specific-visual-output)
-  * [Google Assistant Specific Visual Output](#google-assistant-specific-visual-output)
 * [No Speech Output](#no-speech-output)
 
 ## Introduction to Output Types
 
-What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like tell, ask, and play, but also how to use SSML or the Jovo speechBuilder to create more advanced output elements.
+What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like `[tell](#tell)`, `[ask](#ask)`, and `[play](#play)`, but also how to use SSML or the Jovo [speechBuilder](#speechbuilder) to create more advanced output elements.
 
 
 ## Basic Output
@@ -31,7 +28,7 @@ Jovo's basic output options offer simple methods for text-to-speech, but also fo
 
 The tell method is used to have Alexa or Google Home say something to your users. You can either user plain text or [SSML](#ssml) (Speech Synthesis Markup Language).
 
-Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](./intents-states.md/#introduction-to-user-sessions).
+Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#introduction-to-user-sessions).
 
 ```javascript
 app.tell(speech);
@@ -48,7 +45,7 @@ app.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>')
 
 Whenever you want to make the experience more interactive and get some user input, the `ask` method is the way to go.
 
-This method keeps the mic open ([learn more about sessions here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#introduction-to-user-sessions)), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
+This method keeps the mic open ([learn more about sessions here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#introduction-to-user-sessions)), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
 
 ```javascript
 app.ask(speech, reprompt);
@@ -112,13 +109,13 @@ let speech = app.speechBuilder()
 app.tell(speech);
 ```
 
-You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output/speechbuilder.md).
+You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/speechbuilder.md).
 
 ### i18n
 
 Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to support multilanguage voice apps.
 
-Here's the detailed documentation for it: [App Logic > Output > i18n](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output/i18n.md). 
+Here's the detailed documentation for it: [App Logic > Output > i18n](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/i18n.md). 
 
 ### Raw JSON Responses
 If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `alexaSkill().setResponseObject` and `googleAction().setResponseObject`.
@@ -138,7 +135,7 @@ app.googleAction().setResponseObject(obj);
 
 The Jovo framework, besides sound and voice output, can also be used for visual output. The show-functions are constantly updated with more features, as new surfaces emerge.
 
-Learn more about visual output here: [App Logic > Output > Visual Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/output/visual-output.md). 
+Learn more about visual output here: [App Logic > Output > Visual Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/visual-output.md). 
 
 
 ## No Speech Output

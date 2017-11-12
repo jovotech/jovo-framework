@@ -1,31 +1,42 @@
-# [Integrations](./) > Databases
+# [Integrations](../) > Databases
+
+Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
 * [Jovo Persistence Layer](#jovo-persistence-layer)
+  * [Save Data](#save-data)
+  * [Load Data](#load-data)
+  * [Delete Data](#delete-data)
+  * [Delete a User](#delete-a-user)
 * [FilePersistence](#filepersistence)
 * [DynamoDB](#dynamodb)
+  * [DynamoDB for Apps Hosted on AWS Lambda](dynamodb-for-apps-hosted-on-aws-lambda)
+  * [DynamoDB for Apps Not Hosted on AWS Lambda](dynamodb-for-apps-not-hosted-on-aws-lambda)
 
 
 ## Jovo Persistence Layer
 
-This is an abstraction layer for persisting data across sessions. By default, the file-based system will be used so you can start right away when prototyping locally.
+This is an abstraction layer for persisting data across sessions. By default, the [file-based system](#filepersistence) will be used so you can start right away when prototyping locally.
 
 ### Save Data
 
-This will save data with your user's user ID as a mainKey, and a key and a value specified by you. This makes use of a callback function that's called after a successful (or unsuccessful, for error handling) call of the method.
+This will save data with your user's user ID as a mainKey, and a key and a value specified by you.
 
 The easiest way to do so is to use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md) for this:
 
 ```javascript
 app.user().data.key = value;
+
+// Example
+app.user().data.score = 300;
 ```
 
-Alternatively, you can use the following method with a callback:
+Alternatively, you can use the following method with a callback that's called after a successful (or unsuccessful, for error handling) call of the method:
 
 ```javascript
 save(key, value, callback)
 ​
 app.db().save(key, value, function(err) {
-     // do something
+     // Do something
 });
 ​
 // Example
@@ -38,7 +49,7 @@ app.db().save('score', score, function(err) {
 
 ### Load Data
 
-After you saved data, you can use a key to retrieve a value from the database.
+After you saved data, you can use a `key` to retrieve a `value` from the database.
 
 Again, you can use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md) for this:
 

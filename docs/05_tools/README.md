@@ -1,6 +1,6 @@
 # Tools
 
-Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
+Learn more about the tools provided by Jovo that help you develop voice apps faster.
 
 * [CLI](#cli)
 * [Audio Converter](#audio-converter)

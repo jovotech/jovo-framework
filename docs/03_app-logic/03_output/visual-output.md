@@ -1,4 +1,6 @@
-# [App Logic](./) > [Output](README.md) > Visual Output
+# [App Logic](../) > [Output](./README.md) > Visual Output
+
+In this section, you will learn about the different ways to add visual output to your voice application.
 
 * [Cards](#cards)
 * [Alexa Specific Visual Output](#alexa-specific-visual-output)

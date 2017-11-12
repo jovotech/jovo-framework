@@ -3,7 +3,7 @@
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 * [Lambda Configuration](#lambda-configuration)
-* [Setting up Lambda](#setting-up-lambda)
+* [Creating a Lambda Function](#creating-a-lambda-function)
 * [Things to Consider](#things-to-consider)
 * [Troubleshooting](#troubleshooting)
 
@@ -24,7 +24,7 @@ exports.handler = function(event, context, callback) {
 // App Logic below
 ```
 
-## Setting up Lambda
+## Creating a Lambda Function
 
 While for Alexa, the process of hosting a Skill on Lambda is straightforward, for a Google Action there are additional steps that need to be taken to create an API Gateway. To learn more about how to run your voice app on Lambda, please take a look at our step-by-step tutorials:
 

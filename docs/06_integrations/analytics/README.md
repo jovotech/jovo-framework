@@ -1,6 +1,6 @@
-# [Integrations](./) > Analytics
+# [Integrations](../) > Analytics
 
-Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashbot.
+Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot, and Bespoken.
 
 * [Jovo Analytics Layer](#jovo-analytics-layer)
 * [VoiceLabs](#voicelabs)
@@ -10,18 +10,6 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs and Dashb
 
 ## Jovo Analytics Layer
 
-You can add and configure analytics by placing them in between the handleRequest and execute method calls of your voice app:
-
-```javascript
-//  Place between handleRequest and execute
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    //
-    // place code somewhere here
-    //
-    app.execute();
-});
-```
 
 ### Add Analytics Integrations
 
@@ -35,9 +23,16 @@ app.addVoiceLabsGoogleAction(key);
 // Dashbot integration
 app.addDashbotAlexa(key);
 app.addDashbotGoogleAction(key);
+
+// Bespoken integration
+app.addBespokenAnalytics(key);
 ```
 
-More detailed step-by-step guides can be found here: [VoiceLabs](#voicelabs) | [Dashbot](#dashbot)
+More detailed step-by-step guides can be found here: 
+
+* [VoiceLabs](#voicelabs)
+* [Dashbot](#dashbot)
+* [Bespoken](#bespoken)
 
 The Jovo Analytics class offers several enhancements to the vendor tracking, which can be found in the following sections.
 
@@ -56,6 +51,8 @@ app.analytics().enable();
 ```
 
 ### Skip Intents
+
+You can disable tracking for specific intents by adding them as an array like this:
 
 ```javascript
 app.analytics().skipIntents(intents);
@@ -190,24 +187,24 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 1. Create a Bespoken account or log in at https://apps.bespoken.io/dashboard/.
 
-2. Click the plus sign in the Home page:
+2. Click the plus sign on the Home page:
 
 ![Bespoken Add a Source](https://bespoken.io/wp-content/uploads/2017/10/DashboardHomePage.png)
 
 3. Set the name for your source and click on "Create Source"
 ![Bespoken Set source name](https://bespoken.io/wp-content/uploads/2017/10/DashboardCreateASkill.png)
 
-4. Now that you are in your source main page, you can see your secret key for that source in the top right corner by clicking "Show"
+4. On your source main page, you can see your secret key for that source in the top right corner by clicking "Show"
 ![Bespoken Source Main Page](https://bespoken.io/wp-content/uploads/2017/10/DashboardSkillMain.png)
 
 5. Copy the Secret Key
 
 ### Enable Bespoken Analytics
 
-Bespoken Analytics can be added to your voice app with the following commands:
+Bespoken Analytics can be added to your voice app with the following command:
 
 ```javascript
-app.addBespokenAnalytics(secretKey);
+app.addBespokenAnalytics(key);
 ```
 
 ### Test
