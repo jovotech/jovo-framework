@@ -1,18 +1,35 @@
-# Platform Specifics > Amazon Alexa
+# [Platform](../) > Amazon Alexa
 
-> Other pages in this category: [Google Assistant](google-assistant.md).
+Learn more about Alexa specific features that can be used with the Jovo Framework.
 
-## Alexa AudioPlayer Skills
+* [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
+* [AudioPlayer Skills](#audioplayer-skills)
+* [Dialog Mode](#dialog-mode)
+* [Render Templates for Echo Show](#render-templates-for-echo-show)
+* [Shopping and To Do Lists](#shopping-and-to-do-lists)
+* [User Specific Data](#user-specific-data)
 
-Coming soon.
+## Introduction to Alexa Specific Features
 
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
+> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md/#amazon-alexa).
+
+You can access the `alexaSkill` object like this:
+
+```javascript
+let alexa = app.alexaSkill();
+```
+
+## AudioPlayer Skills
+
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
+
 
 ## Dialog Mode
 
-Coming soon.
+You can find an example file here: [`indexDialog.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/dialog-interface-reference).
+
 
 ## Render Templates for Echo Show
 
@@ -25,14 +42,14 @@ Here is the [official reference by Amazon](https://developer.amazon.com/public/s
 
 Ask for list permissions:
 
-```
+```javascript
 app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 ```
 
 Here is some example code:
 
-```
-let handlers = {
+```javascript
+const handlers = {
 
     // Other intents
 
@@ -107,15 +124,14 @@ let handlers = {
 };
 ```
 
-
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/access-the-alexa-shopping-and-to-do-lists).
 
 
-### User Specific Data
+## User Specific Data
 
 Ask for permissions like this:
 
-```
+```javascript
 // Country and Postal Code
 app.alexaSkill().showAskForCountryAndPostalCodeCard();
 
@@ -125,8 +141,8 @@ app.alexaSkill().showAskForAddressCard();
 
 Here is an example:
 
-```
-let handlers = {
+```javascript
+const handlers = {
 
     'LAUNCH': function() {
        // app.toIntent('GetFullAddressIntent');
@@ -163,6 +179,5 @@ let handlers = {
     },
 };
 ```
-
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/device-address-api).

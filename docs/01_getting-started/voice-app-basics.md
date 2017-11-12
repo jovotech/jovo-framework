@@ -24,17 +24,17 @@ In the next section, we will go a little deeper into the underlying principles o
 
 ### Natural Language Lingo
 
-In order to find out what a user wants when they’re talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it’s important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities or slots).
+In order to find out what a user wants when they’re talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it’s important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities` or `slots`).
 
 ![Language Model Elements](https://www.jovo.tech/img/docs/voice-intents-utterances-entities.jpg)
 
-In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent', while there are potential slots like `restaurant type. Please note that this is a very simple example, other slot types like `area` or `price range could also be considered.
+In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent', while there are potential slots like `restaurant type. Please note that this is a very simple example, other slot types like `area` or `price range` could also be considered.
 
 ### Intents
 
 In natural language processing (NLP), an intent is something users want to achieve when they are conversing with technology. When developing your voice app, you can create intents to handle different user needs and interactions.
 
-Find more detailed information here: [Handling Intents & States](./building-a-voice-app/intents-states.md).
+Find more detailed information here: [App Logic > Routing](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing).
 
 ### Utterances and User Expressions
 
@@ -44,7 +44,7 @@ What are all the potential phrases someone could use to express what they want? 
 
 This element has different wordings on various NLP platforms. It describes a specific, variable element in a set of utterances. For example, your intent could be to find a restaurant, but you could search for a pizza place, sushi, or even something cheap or very close.
 
-Find more detailed information here: [Handling User Input](./building-a-voice-app/input.md).
+Find more detailed information here: [App Logic > Data](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data).
 
 
 ## Voice Platforms

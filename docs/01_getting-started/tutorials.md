@@ -13,17 +13,23 @@ Comprehensive tutorials on how to build an Alexa Skill and Google Action.
 
 Getting started with new platforms like Amazon Alexa and Google Assistant can sometimes be a little overwhelming. This is why we created in-depth tutorials for beginners:
 
-[![Alexa Skill Course for Beginners][alexa-tutorial]](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
+Name | Description | Link
+------------ | ------------- | -------------
+Alexa Skill Beginner Tutorial | Build a "Hello World" Alexa Skill in Node.js with Jovo | [jovo.tech/blog/alexa-skill-tutorial-nodejs](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
+Google Action Beginner Tutorial | Build a "Hello World" Google Action in Node.js with Jovo | [jovo.tech/blog/google-action-tutorial-nodejs](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 
-[![Google Action Course for Beginners][google-action-tutorial]](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
-
-[alexa-tutorial]: https://www.jovo.tech/img/docs/alexa-skill-tutorial-og-image.jpg "Hello World on Alexa"
-[google-action-tutorial]: https://www.jovo.tech/img/docs/google-action-tutorial-og-image.jpg "Hello World on Google Assistant"
 
 ## Voice App Courses
+
 Find our series of voice app development courses here:
-* [Project 1: Hello World!](https://www.jovo.tech/blog/project-1-hello-world/)
-* Project 2: Adventure Game (coming soon)
+
+Name | Description | Link
+------------ | ------------- | -------------
+Project 1: Hello World! | Build a "Hello World" Voice App for both Alexa and Google Assistant | [jovo.tech/blog/project-1-hello-world](https://www.jovo.tech/blog/project-1-hello-world/)
+Project 2: Adventure Game | Build a choose-your-own-adventure type of game | [jovo.tech/blog/project-2-adventure-game](https://www.jovo.tech/blog/project-2-adventure-game/)
+
+> 🚀 Sign up for our newsletter to get new free courses: [jovo.tech/newsletter](https://www.jovo.tech/newsletter)
+
 
 ## Suggest a Tutorial
 
