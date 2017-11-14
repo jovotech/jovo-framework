@@ -52,6 +52,10 @@ let speech = 'Hello World!';
 let text = 'Hello Phone!';
 app.googleAction().displayText(text);
 app.tell(speech);
+
+// You can also add the tell directly to the Google Action object
+app.googleAction().displayText(text)
+    .tell(speech);
 ```
 
 Here is the [official reference by Google](https://developers.google.com/actions/assistant/responses).
