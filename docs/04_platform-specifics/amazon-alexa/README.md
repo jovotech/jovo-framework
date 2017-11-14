@@ -7,11 +7,11 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [Routing](#routing)
   * [Dialog Mode](#dialog-mode)
 * [Data](#data)
+ * [Shopping and To Do Lists](#shopping-and-to-do-lists)
+ * [User Specific Data](#user-specific-data)
 * [Output](#output)
   * [Progressive Responses](#progressive-responses)
   * [Render Templates for Echo Show](#render-templates-for-echo-show)
-* [Shopping and To Do Lists](#shopping-and-to-do-lists)
-* [User Specific Data](#user-specific-data)
 
 ## Introduction to Alexa Specific Features
 
