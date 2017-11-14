@@ -1121,7 +1121,7 @@ describe('Unhandled Intents', function() {
 describe('setConfig(config)', function() {
     it('should return correct default config', function() {
         let app = new Jovo.Jovo();
-
+        expect(app.config.logging).to.equal(false);
         expect(app.config.requestLogging).to.equal(false);
         expect(app.config.responseLogging).to.equal(false);
         expect(app.config.saveUserOnResponseEnabled).to.equal(true);
@@ -1144,13 +1144,14 @@ describe('setConfig(config)', function() {
                 devices: false,
         });
         expect(app.i18n).to.equal(undefined);
-        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(15);
+        expect(Object.keys(Jovo.DEFAULT_CONFIG)).to.have.a.lengthOf(16);
         expect(Object.keys(Jovo.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
     });
 
     it('should override default config', function() {
         let app = new Jovo.Jovo();
         app.setConfig({
+            logging: true,
             requestLogging: true,
             responseLogging: true,
             saveUserOnResponseEnabled: false,
@@ -1206,6 +1207,7 @@ describe('setConfig(config)', function() {
                 },
             },
         });
+        expect(app.config.logging).to.equal(true);
         expect(app.config.requestLogging).to.equal(true);
         expect(app.config.responseLogging).to.equal(true);
         expect(app.config.saveUserOnResponseEnabled).to.equal(false);
