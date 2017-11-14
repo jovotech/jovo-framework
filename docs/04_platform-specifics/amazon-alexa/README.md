@@ -1,11 +1,15 @@
-# [Platform](../) > Amazon Alexa
+# [Platforms](../) > Amazon Alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
 * [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
 * [AudioPlayer Skills](#audioplayer-skills)
-* [Dialog Mode](#dialog-mode)
-* [Render Templates for Echo Show](#render-templates-for-echo-show)
+* [Routing](#routing)
+  * [Dialog Mode](#dialog-mode)
+* [Data](#data)
+* [Output](#output)
+  * [Progressive Responses](#progressive-responses)
+  * [Render Templates for Echo Show](#render-templates-for-echo-show)
 * [Shopping and To Do Lists](#shopping-and-to-do-lists)
 * [User Specific Data](#user-specific-data)
 
@@ -24,21 +28,18 @@ let alexa = app.alexaSkill();
 You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
 
 
-## Dialog Mode
+## Routing
+
+### Dialog Mode
 
 You can find an example file here: [`indexDialog.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/dialog-interface-reference).
 
 
-## Render Templates for Echo Show
+## Data
 
-You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexRenderTemplate.js).
-
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
-
-
-## Shopping and To Do Lists
+### Shopping and To Do Lists
 
 Ask for list permissions:
 
@@ -127,7 +128,7 @@ const handlers = {
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/access-the-alexa-shopping-and-to-do-lists).
 
 
-## User Specific Data
+### User Specific Data
 
 Ask for permissions like this:
 
@@ -181,3 +182,24 @@ const handlers = {
 ```
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/device-address-api).
+
+## Output
+
+### Progressive Responses
+
+For responses that require long processing times, you can use progressive Responses to tell your users that you are currently working on fulfilling their request.
+
+Here is the official reference by Amazon: [Send the User a Progressive Response](https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html).
+
+```javascript
+app.alexaSkill().progressiveResponse(speech);
+```
+
+Find an example file here: [`indexProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexProgressiveResponse.js).
+
+## Render Templates for Echo Show
+
+You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexRenderTemplate.js).
+
+Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
+

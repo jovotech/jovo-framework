@@ -158,6 +158,21 @@ console.log('This is going to appear in the logs');
 
 For voice app specific debugging, Jovo offers some handy functions for logging incoming requests and outgoing responses.
 
+You can enable logging by using the following:
+
+```javascript
+// Use setter
+app.enableLogging();
+
+// Use setConfig
+app.setConfig({
+  logging: true,
+  // Other configurations
+});
+```
+
+This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be separately enabled. For this, see the sections below.
+
 
 ### Log Requests
 
