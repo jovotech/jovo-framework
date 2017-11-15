@@ -111,7 +111,7 @@ db/
 // Other files
 ```
 
-And this is an example how the file structure looks like, with the `userID` as a mainKey:
+And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`:
 
 ```json
 [
@@ -119,8 +119,8 @@ And this is an example how the file structure looks like, with the `userID` as a
 		"userId": "amzn1.ask.account.[some_user_id]",
 		"userData": {
 			"data": {
-    "someKey": "someValue"
-   },
+				"someKey": "someValue"
+			},
 			"metaData": {
 				"createdAt": "2017-11-13T13:46:37.421Z",
 				"lastUsedAt": "2017-11-13T14:12:05.738Z",
