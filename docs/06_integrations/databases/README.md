@@ -102,7 +102,34 @@ app.db().deleteUser(function(err) {
 
 The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
 
-![Jovo File Perstistence](https://www.jovo.tech/img/docs/filepersistence.jpg)
+This sort of data persistence is enabled by default. The `db.json` can be found in the the following folder:
+
+```javascript
+index.js
+db/
+  └── db.json
+// Other files
+```
+
+And this is an example how the file structure looks like, with the `userID` as a mainKey:
+
+```json
+[
+	{
+		"userId": "amzn1.ask.account.[some_user_id]",
+		"userData": {
+			"data": {
+    "someKey": "someValue"
+   },
+			"metaData": {
+				"createdAt": "2017-11-13T13:46:37.421Z",
+				"lastUsedAt": "2017-11-13T14:12:05.738Z",
+				"sessionsCount": 9
+			}
+		}
+	}
+]
+```
 
 
 ## DynamoDB
