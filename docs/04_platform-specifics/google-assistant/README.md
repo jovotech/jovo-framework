@@ -1,4 +1,4 @@
-# [Platforms](../) > Google Assistant
+# [Platform Specific Features](../) > Google Assistant
 
 Learn more about Google Assistant specific features that can be used with the Jovo Framework.
 

@@ -55,6 +55,16 @@ app.ask('How old are you?', 'Please tell me your age');
 
 You can also use [SSML](#ssml) for your speech and reprompt elements.
 
+#### Multiple Reprompts
+
+Google Assistant offers the functionality to use multiple reprompts.
+
+```javascript
+app.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
+```
+
+You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant#multiple-reprompts).
+
 ### play
 
 There are several ways to play pre-recorded audio files as output. The platforms expect [SSML](#ssml), which to generate you can use the speechbuilder for. However, sometimes you only want to play one sound.

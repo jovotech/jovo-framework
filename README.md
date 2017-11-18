@@ -122,6 +122,7 @@ See the [Jovo CLI Docs](https://github.com/jovotech/jovo-framework-nodejs/tree/m
 Name | Description | Docs
 :--- | :--- | :---
 bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
+nodemon | Monitor changes and automatically restart the server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#watch))
 
 
 ## Getting Started

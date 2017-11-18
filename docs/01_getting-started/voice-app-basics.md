@@ -1,4 +1,4 @@
-# [Getting Started](./) > Voice App Basics
+# [Getting Started](../) > Voice App Basics
 
 > Other pages in this category: [Getting Started](./), [Tutorials](./tutorials.md).
 

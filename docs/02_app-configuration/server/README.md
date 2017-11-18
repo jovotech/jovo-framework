@@ -1,4 +1,4 @@
-# [App Configuration](./) > Server
+# [App Configuration](../) > Server
 
 In this section, you can learn more about different types of server configurations to run your voice app.
 

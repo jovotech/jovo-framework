@@ -1,4 +1,4 @@
-# Installation
+# Getting Started > Installation
 
 * [Introduction](#introduction)
   * [Technical Requirements](#technical-requirements)

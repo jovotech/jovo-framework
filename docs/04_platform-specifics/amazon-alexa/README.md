@@ -1,9 +1,8 @@
-# [Platforms](../) > Amazon Alexa
+# [Platform Specific Features](../) > Amazon Alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
 * [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
-* [AudioPlayer Skills](#audioplayer-skills)
 * [Routing](#routing)
   * [Dialog Mode](#dialog-mode)
 * [Data](#data)
@@ -12,6 +11,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [Output](#output)
   * [Progressive Responses](#progressive-responses)
   * [Render Templates for Echo Show](#render-templates-for-echo-show)
+* [AudioPlayer Skills](#audioplayer-skills)
 
 ## Introduction to Alexa Specific Features
 
@@ -22,10 +22,6 @@ You can access the `alexaSkill` object like this:
 ```javascript
 let alexa = app.alexaSkill();
 ```
-
-## AudioPlayer Skills
-
-You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
 
 
 ## Routing
@@ -197,9 +193,13 @@ app.alexaSkill().progressiveResponse(speech);
 
 Find an example file here: [`indexProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexProgressiveResponse.js).
 
-## Render Templates for Echo Show
+### Render Templates for Echo Show
 
 You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexRenderTemplate.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
 
+
+## AudioPlayer Skills
+
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).

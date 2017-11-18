@@ -1,4 +1,4 @@
-# [App Configuration](./) > [Server](README.md) > AWS Lambda
+# [App Configuration](../) > [Server](README.md) > AWS Lambda
 
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 

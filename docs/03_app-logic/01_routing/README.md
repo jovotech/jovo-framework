@@ -603,7 +603,7 @@ app.toStatelessIntent(intent[, arg]);
 // Go to global PizzaIntent
 app.toStatelessIntent('PizzaIntent');
 
-// Go to PizzaIntent in state Onboarding and pass more data
+// Go to global PizzaIntent and pass more data
 app.toStatelessIntent('PizzaIntent', moreData);
 ```
 
