@@ -1,4 +1,4 @@
-# [Platform](../) > [Amazon Alexa](./README.md) > Audioplayer
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Audioplayer
 
 Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 

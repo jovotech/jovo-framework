@@ -107,22 +107,26 @@ app.setConfig({
 });
 ```
 
-p
+This is the default configuration:
 
 ```javascript
 app.setConfig({
+    logging: false,
     requestLogging: false,
     responseLogging: false,
+    requestLoggingObjects: [],
+    responseLoggingObjects: [],
     saveUserOnResponseEnabled: true,
     userDataCol: 'userData',
     inputMap: {},
     intentMap: {},
     intentsToSkipUnhandled: [],
-    requestLoggingObjects: [],
-    responseLoggingObjects: [],
     saveBeforeResponseEnabled: false,
     allowedApplicationIds: [],
-    localDbFilename: 'db',
+    db: {
+        type: 'file',
+        localDbFilename: 'db',
+    },
     userMetaData: {
         lastUsedAt: true,
         sessionsCount: true,
@@ -133,6 +137,11 @@ app.setConfig({
     i18n: {
         overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
         load: 'all',
+    },
+    analytics: {
+        intentsToSkip: [],
+        usersToSkip: [],
+        services: {},
     },
 });
 
@@ -145,15 +154,16 @@ Below is a list of all configurations:
 
 Category | Name | Description | Docs
 :--- | :--- | :--- | :---
-Routing | intentMap | Maps incoming intents to specified intent names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#intentmap)
- | | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#intentstoskipunhandled)
-Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#inputmap)
- | | requestLogging | Logs incoming requests | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#log-requests)
- | | responseLogging | Logs outgoing responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#log-responses)
- | | requestLoggingObjects | Limits request logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#request-logging-objects)
- | | responseLoggingObjects | Limits response logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data#response-logging-objects)
-User | userDataCol | Changes the name of the user data column in the database | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md#user-data)
- | | userMetaData | Change the default configurations for storing user meta data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md#user-meta-data)
-Output | i18n | Enable multilingual output for your voice app | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/03_output/i18n.md#configuration)
-Integrations | Databases | Switch between supported database integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/databases)
- | | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/06_integrations/analytics)
+Routing | intentMap | Maps incoming intents to specified intent names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_routing#intentmap)
+ | | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_routing#intentstoskipunhandled)
+Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#inputmap)
+ | | logging | Logs both requests and responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#logging)
+ | | requestLogging | Logs incoming requests | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#log-requests)
+ | | responseLogging | Logs outgoing responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#log-responses)
+ | | requestLoggingObjects | Limits request logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#request-logging-objects)
+ | | responseLoggingObjects | Limits response logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#response-logging-objects)
+User | userDataCol | Changes the name of the user data column in the database | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data/user.md#user-data)
+ | | userMetaData | Change the default configurations for storing user meta data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data/user.md#user-meta-data)
+Output | i18n | Enable multilingual output for your voice app | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/i18n.md#configuration)
+Integrations | Databases | Switch between supported database integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases)
+ | | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics)

@@ -30,13 +30,13 @@ let handlers = {
 
     'LAUNCH': function() {
         // async amazon api call
-        app.alexaSkill().progressResponse('Processing your request');
+        app.alexaSkill().progressiveResponse('Processing your request');
 
-        // or more than one progress responses
+        // or more than one progressive responses
 
-        // app.alexaSkill().progressResponse('Processing your request', () => {
+        // app.alexaSkill().progressiveResponse('Processing your request', () => {
         //     setTimeout( () => {
-        //         app.alexaSkill().progressResponse('Still processing');
+        //         app.alexaSkill().progressiveResponse('Still processing');
         //     }, 1500);
         // });
 

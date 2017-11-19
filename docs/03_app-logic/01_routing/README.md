@@ -1,4 +1,4 @@
-V# [App Logic](./) > Routing
+# [App Logic](../) > Routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
@@ -59,7 +59,7 @@ const handlers = {
 
 Whenever your application gets a request from one of the voice platforms, this will either be accompanied with an intent (which you need to add), or the signal to start or end the session.
 
-For this, offers standard, built-in intents, `'LAUNCH'` and `'END'`, to make cross-platform intent handling easier:
+For this, Jovo offers standard, built-in intents, `'LAUNCH'` and `'END'`, to make cross-platform intent handling easier:
 
 ```javascript
 const handlers = {
@@ -85,8 +85,8 @@ You can learn more about Jovo standard intents in the following sections:
 
 * ['LAUNCH' Intent](#launch-intent)
 * ['END' Intent](#end-intent)
-* ['NEW_SESSION' Intent](#new-session-intent)
-* ['NEW_USER' Intent](#new-user-intent)
+* ['NEW_SESSION' Intent](#new_session-intent)
+* ['NEW_USER' Intent](#new_user-intent)
 * ['Unhandled' Intent](#unhandled-intent)
 
 #### 'LAUNCH' Intent
@@ -603,7 +603,7 @@ app.toStatelessIntent(intent[, arg]);
 // Go to global PizzaIntent
 app.toStatelessIntent('PizzaIntent');
 
-// Go to PizzaIntent in state Onboarding and pass more data
+// Go to global PizzaIntent and pass more data
 app.toStatelessIntent('PizzaIntent', moreData);
 ```
 

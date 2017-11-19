@@ -9,8 +9,8 @@ Learn how to store user specific data to databases with the Jovo Persistence Lay
   * [Delete a User](#delete-a-user)
 * [FilePersistence](#filepersistence)
 * [DynamoDB](#dynamodb)
-  * [DynamoDB for Apps Hosted on AWS Lambda](dynamodb-for-apps-hosted-on-aws-lambda)
-  * [DynamoDB for Apps Not Hosted on AWS Lambda](dynamodb-for-apps-not-hosted-on-aws-lambda)
+  * [DynamoDB for Apps Hosted on AWS Lambda](#dynamodb-for-apps-hosted-on-aws-lambda)
+  * [DynamoDB for Apps Not Hosted on AWS Lambda](#dynamodb-for-apps-not-hosted-on-aws-lambda)
 
 
 ## Jovo Persistence Layer
@@ -21,7 +21,7 @@ This is an abstraction layer for persisting data across sessions. By default, th
 
 This will save data with your user's user ID as a mainKey, and a key and a value specified by you.
 
-The easiest way to do so is to use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md) for this:
+The easiest way to do so is to use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md) for this:
 
 ```javascript
 app.user().data.key = value;
@@ -51,7 +51,7 @@ app.db().save('score', score, function(err) {
 
 After you saved data, you can use a `key` to retrieve a `value` from the database.
 
-Again, you can use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md) for this:
+Again, you can use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md) for this:
 
 ```javascript
 let data = app.user().data.key;
@@ -88,7 +88,7 @@ app.db().deleteData(key, function(err) {
 
 ### Delete a User
 
-This will delete your whole user's data (the mainKey) from the database.
+This will delete your whole user's data (the `mainKey`) from the database.
 
 ```javascript
 deleteUser(callback)
@@ -100,14 +100,43 @@ app.db().deleteUser(function(err) {
 
 ## FilePersistence
 
+> This is the default database integration.
+
 The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
 
-![Jovo File Perstistence](https://www.jovo.tech/img/docs/filepersistence.jpg)
+This sort of data persistence is enabled by default. The `db.json` can be found in the the following folder:
+
+```javascript
+index.js
+db/
+  └── db.json
+// Other files
+```
+
+And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `app.user().data.someKey = 'someValue';`:
+
+```json
+[
+	{
+		"userId": "amzn1.ask.account.[some_user_id]",
+		"userData": {
+			"data": {
+				"someKey": "someValue"
+			},
+			"metaData": {
+				"createdAt": "2017-11-13T13:46:37.421Z",
+				"lastUsedAt": "2017-11-13T14:12:05.738Z",
+				"sessionsCount": 9
+			}
+		}
+	}
+]
+```
 
 
 ## DynamoDB
 
-The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you’re running your voice app on AWS Lambda.
+The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you’re running your voice app on AWS Lambda. Learn more about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
 
 ### DynamoDB for Apps Hosted on AWS Lambda
 
@@ -118,6 +147,8 @@ app.setDynamoDb('TableName');
 ```
 
 This will create a table with a name specified by you, and use this to store and load data. To make it work, you need to give your Lambda Role DynamoDB permissions.
+
+You can find out more in the official documentation by Amazon: [AWS Lambda Permissions Model](http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html). 
 
 ### DynamoDB for Apps Not Hosted on AWS Lambda
 

@@ -84,6 +84,7 @@ Alexa Lists | Access users' To Do and Shopping Lists | [Example](https://github.
 Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/#host-the-webhook-on-a-server)
 Alexa Dialog Mode | Use Alexa's Dialog Directives for multi-turn conversations | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js)
 Echo Show Render Templates | Display visual elements on Echo Show | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js)
+Progressive Responses | Keep your users engaged while processing a longer request | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa#progressive-responses)
 
 
 #### Google Assistant
@@ -121,6 +122,7 @@ See the [Jovo CLI Docs](https://github.com/jovotech/jovo-framework-nodejs/tree/m
 Name | Description | Docs
 :--- | :--- | :---
 bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
+nodemon | Monitor changes and automatically restart the server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#watch))
 
 
 ## Getting Started

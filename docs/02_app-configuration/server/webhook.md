@@ -1,4 +1,4 @@
-# [App Configuration](./) > [Server](README.md) > Webhook
+# [App Configuration](../) > [Server](README.md) > Webhook
 
 For voice apps in prototyping stage, we recommend using a webhook and a tunnel service like [ngrok](#ngrok) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md) every time.
 
