@@ -21,13 +21,13 @@ let google = app.googleAction();
 
 ## Output
 
-Below are specific output elements that can be used for Google Actions. 
+This section provides an overview of Google Assistant specific features for output. For the basic concept, take a look here: [App Logic > Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output). 
 
 ### Multiple Reprompts
 
 Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
 
-The reprompts can be added to the `ask` method by using an array.
+The reprompts can be added to the `[ask](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#ask)` method by using an array.
 
 ```javascript
 app.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
@@ -50,10 +50,6 @@ app.googleAction().displayText(text);
 // Example
 let speech = 'Hello World!';
 let text = 'Hello Phone!';
-app.googleAction().displayText(text);
-app.tell(speech);
-
-// You can also add the tell directly to the Google Action object
 app.googleAction().displayText(text)
     .tell(speech);
 ```
