@@ -11,6 +11,7 @@ Learn how to store user specific data to databases with the Jovo Persistence Lay
 * [DynamoDB](#dynamodb)
   * [DynamoDB for Apps Hosted on AWS Lambda](#dynamodb-for-apps-hosted-on-aws-lambda)
   * [DynamoDB for Apps Not Hosted on AWS Lambda](#dynamodb-for-apps-not-hosted-on-aws-lambda)
+  * [DynamoDB Troubleshooting](#dynamodb-troubleshooting)
 
 
 ## Jovo Persistence Layer
@@ -165,3 +166,8 @@ app.setDynamoDb('TableName', awsConfig);
 ```
 
 You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
+
+### DynamoDB Troubleshooting
+
+Here are a few things you need to consider when switching from a different database to DynamoDB
+* DynamoDB does not allow empty strings (`""`) as values: If you use them, please switch to `null` or a different value
