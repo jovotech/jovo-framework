@@ -201,7 +201,7 @@ Find an example file here: [`indexProgressiveResponse.js`](https://github.com/jo
 
 ### Render Templates for Echo Show
 
-You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/indexRenderTemplate.js).
+You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
 
