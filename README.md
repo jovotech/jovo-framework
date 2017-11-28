@@ -78,6 +78,7 @@ Multi-platform handler &nbsp; &nbsp; &nbsp; &nbsp; | Add or overwrite specific i
 Name | Description | Docs
 :--- | :--- | :---
 Audioplayer | Build Alexa Audioplayer Skills | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md)
+VideoApp | Build Alexa VideoApp Skills | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexVideoApp.js)
 Alexa Cards | Create visual output with home cards for Alexa Skills  | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaCards.js)
 Alexa Device Address | Access a users' device location | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaDeviceAddress.js)
 Alexa Lists | Access users' To Do and Shopping Lists | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaLists.js)
@@ -122,7 +123,7 @@ See the [Jovo CLI Docs](https://github.com/jovotech/jovo-framework-nodejs/tree/m
 Name | Description | Docs
 :--- | :--- | :---
 bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
-nodemon | Monitor changes and automatically restart the server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#watch))
+nodemon | Monitor changes and automatically restart the server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#watch)
 
 
 ## Getting Started
