@@ -151,4 +151,6 @@ module.exports.AlexaSkill = require('./lib/platforms/alexa/alexaSkill').AlexaSki
 
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
+module.exports.JovoClazz = Jovo;
+
 
