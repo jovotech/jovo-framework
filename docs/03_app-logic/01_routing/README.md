@@ -440,7 +440,7 @@ const handlers = {
 };
 ```
 
-Alternatively, you can also use an `['Unhandled'](#unhandled-intent)` intent as described in the section above:
+Alternatively, you can also use an [`Unhandled`](#unhandled-intent) intent as described in the section above:
 
 ```javascript
 const handlers = {

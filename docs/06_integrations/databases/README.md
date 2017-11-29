@@ -20,7 +20,7 @@ This is an abstraction layer for persisting data across sessions. By default, th
 
 ### Save Data
 
-This will save data with your user's user ID as a mainKey, and a key and a value specified by you.
+This will save data with your user's `userID` as a mainKey, and a `key` and a `value` specified by you.
 
 The easiest way to do so is to use the [user object](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md) for this:
 

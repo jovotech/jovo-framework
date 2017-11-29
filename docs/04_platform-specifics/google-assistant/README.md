@@ -27,7 +27,7 @@ This section provides an overview of Google Assistant specific features for outp
 
 Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
 
-The reprompts can be added to the `[ask](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#ask)` method by using an array.
+The reprompts can be added to the [`ask`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#ask) method by using an array.
 
 ```javascript
 app.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);

@@ -3,9 +3,9 @@
 Any questions with the framework? Just let us know, we're happy to help!
 
 * How to Reach Us
-  * Gitter
-  * Email
-  * Other Channels
+  * [Gitter](#gitter)
+  * [Email](#email)
+  * [Other Channels](#other-channels)
 
 ## How to Reach Us
 

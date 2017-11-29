@@ -17,7 +17,7 @@ In this section, you will learn how to use Jovo to craft a response to your user
 
 ## Introduction to Output Types
 
-What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like `[tell](#tell)`, `[ask](#ask)`, and `[play](#play)`, but also how to use SSML or the Jovo [speechBuilder](#speechbuilder) to create more advanced output elements.
+What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like [`tell`](#tell), [`ask`](#ask), and [`play`](#play), but also how to use SSML or the Jovo [speechBuilder](#speechbuilder) to create more advanced output elements.
 
 
 ## Basic Output
