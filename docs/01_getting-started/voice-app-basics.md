@@ -28,7 +28,7 @@ In order to find out what a user wants when they’re talking to your app, platf
 
 ![Language Model Elements](https://www.jovo.tech/img/docs/voice-intents-utterances-entities.jpg)
 
-In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent', while there are potential slots like `restaurant type. Please note that this is a very simple example, other slot types like `area` or `price range` could also be considered.
+In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent'`, while there are potential slots like `restaurant type`. Please note that this is a very simple example, other slot types like `area` or `price range` could also be considered.
 
 ### Intents
 
@@ -49,7 +49,7 @@ Find more detailed information here: [App Logic > Data](https://github.com/jovot
 
 ## Voice Platforms
 
-The Jovo framework currently supports Skiils for Amazon Alexa and Actions for Google Assistant (on Google Home). In this section, you can learn more about what you need to set up on the respective Developer Consoles in order to make your voice apps work.
+The Jovo framework currently supports Skills for Amazon Alexa and Actions for Google Assistant (on Google Home). In this section, you can learn more about what you need to set up on the respective Developer Consoles in order to make your voice apps work.
 
 ### Amazon Alexa
 
