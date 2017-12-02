@@ -25,7 +25,7 @@ We call user input any additional information your user provides besides an `int
 
 ## How to Access Input
 
-There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers`' intent functions, or by using the `[getInput](#getinput)` method.
+There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers` intent functions, or by using the [`getInput`](#getinput) method.
 
 ### Input as Parameter
 You can access input by adding parameters directly to your intent, like so:
@@ -119,7 +119,7 @@ const handlers = {
 
 Besides conversational parameters, there is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
 
-For retrieving and storing this type of information, the Jovo `User Class`can be used to create more contextual and adaptive experiences based on user specific data.
+For retrieving and storing this type of information, the Jovo `User Class` can be used to create more contextual and adaptive experiences based on user specific data.
 
 The user object can be accessed like this:
 
@@ -127,11 +127,11 @@ The user object can be accessed like this:
 let user = app.user();
 ```
 
-You can find more information here: [App Logic > Data > User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data/user.md).
+You can find more information here: [App Logic > Data > User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md).
 
 ### Platform Type
 
-Want to see which platform your user is currently interacting with? With getType, you can get exactly this.
+Want to see which platform your user is currently interacting with? With `getType`, you can get exactly this.
 
 ```javascript
 app.getType();
@@ -329,13 +329,13 @@ The example above will reduce the log output to this:
 
 ## Persisting Data
 
-> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#introduction-to-user-sessions).
+> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing/#introduction-to-user-sessions).
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing/#session-attributes).
 
 ### Database Integrations
 

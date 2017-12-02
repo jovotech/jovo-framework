@@ -31,7 +31,7 @@ Here is what’s currently possible with speechBuilder:
 Method | Description
 :--- | :---
 `addText(text)` | Add plain text for text-to-speech
-`t(key)` | Access `[i18n](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/03_output/i18n.md)` language resources for multilingual voice apps
+`t(key)` | Access [`i18n`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/03_output/i18n.md) language resources for multilingual voice apps
 `addAudio(url, alternativeText)` | Add link to audio file and alternative text for Google Assistant. For more information on using audio files, see [App Logic > Output > play](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#play)</a>.
 `addBreak(time)` | Add a break to the output. Make sure to add a unit, e.g. "300ms"
 `addSentence(text)` | Add a text within a sentence tag

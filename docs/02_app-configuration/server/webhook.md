@@ -91,8 +91,7 @@ You can run the proxy with the `jovo run` command:
 ```sh
 $ jovo run --bst-proxy
 ```
-
-p
+This is what the result looks like:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 

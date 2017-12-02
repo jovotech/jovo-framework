@@ -12,7 +12,7 @@
 <a href="https://travis-ci.org/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg?branch=master"></a>
 <a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://gitter.im/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://badges.gitter.im/jovotech/jovo-framework-nodejs.svg"></a>
+<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
  <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
@@ -184,7 +184,8 @@ Find a quickstart guide and comprehensive tutorials here:
 Name | Description | Repository
 ------------ | ------------- | -------------
 ASK CLI Jovo Starter Template | Alexa Skill starter template using ASK CLI and Jovo Framework | [rmtuckerphx/ask-cli-jovo-starter](https://github.com/rmtuckerphx/ask-cli-jovo-starter)
-Advanced  Sample Voice App | Advanced folder structure and improvements for more complex voice applications | [tjbenton/jovo-sample-voice-app-nodejs](https://github.com/tjbenton/jovo-sample-voice-app-nodejs)
+Advanced Sample Voice App | Advanced folder structure and improvements for more complex voice applications | [tjbenton/jovo-sample-voice-app-nodejs](https://github.com/tjbenton/jovo-sample-voice-app-nodejs)
+Jovo Babel Project | An example project using Jovo Framework alongside JavaScript ES6. | [Cawfree/jovo-babel-project](https://github.com/Cawfree/jovo-babel-project)
 
 
 ## Development Roadmap
