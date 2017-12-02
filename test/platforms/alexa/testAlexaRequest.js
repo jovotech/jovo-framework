@@ -25,7 +25,7 @@ describe('Tests for AlexaRequest Class', function() {
         let sessionEndedRequest2 = new SessionEndedRequest(sessionEndedRequestSample);
         let audioPlayerRequest = AlexaRequestBuilder.audioPlayerRequest();
         let audioPlayerRequest2 = new AudioPlayerRequest(audioPlayerRequestSample1);
-        let errorRequest = AlexaRequestBuilder.errorrRequest();
+        let errorRequest = AlexaRequestBuilder.errorRequest();
         let errorRequest2 = new ErrorRequest(errorRequestSample);
 
         expect(launchRequest).to.be.instanceOf(LaunchRequest);
@@ -455,7 +455,7 @@ describe('Tests for AlexaRequest Class', function() {
     });
 
     it('ErrorRequest getter', function() {
-        const errorRequest = AlexaRequestBuilder.errorrRequest();
+        const errorRequest = AlexaRequestBuilder.errorRequest();
 
         // request
         expect(errorRequest.getVersion()).to.be.equal('1.0');
@@ -479,7 +479,7 @@ describe('Tests for AlexaRequest Class', function() {
         expect(errorRequest.getUserId()).to.be.equal('amzn1.ask.account.AGKS3QUDHGJRYULCPLNS4D5TJFFOSFHBGDJVZ6OCY7UFTZYXB6IIFWVQ3ZCPU6F4JW4ZXKQBB4J4HXLISI6SZQHOFXH6KOIMMRVCX6XIGRLQAXKHPU7OUEF7UP2OUZFSCDBOTL5QN6VXO5ZRQO6MFVR4DNQ27FWZGK3PA6UXREJFMNAUYOVPDOF3UZEJ756LEC4QKSS4GCJSD7I');
     });
     it('ErrorRequest setter', function() {
-        const errorRequest = AlexaRequestBuilder.errorrRequest();
+        const errorRequest = AlexaRequestBuilder.errorRequest();
 
         errorRequest
             .setVersion('2.0')
