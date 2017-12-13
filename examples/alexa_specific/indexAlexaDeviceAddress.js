@@ -42,7 +42,7 @@ let handlers = {
                 app.tell('Your address');
             }).catch((error) => {
             if (error.code === 'NO_USER_PERMISSION') {
-                app
+                app.alexaSkill()
                     .showAskForAddressCard()
                     .tell('Please grant access to your address');
             }
@@ -58,7 +58,7 @@ let handlers = {
             }).catch((error) => {
             console.log(error);
             if (error.code === 'NO_USER_PERMISSION') {
-                app
+                app.alexaSkill()
                     .showAskForCountryAndPostalCodeCard()
                     .tell('Please grant access to your address');
             }
