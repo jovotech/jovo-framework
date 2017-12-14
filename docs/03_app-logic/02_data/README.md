@@ -49,7 +49,7 @@ Two important things to consider when using this option:
 
 ### getInput
 
-You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput(inputName)`.
+You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput('inputName')`.
 
 ```javascript
 const handlers = {
@@ -61,7 +61,7 @@ const handlers = {
         let inputs = app.getInputs();
 
         // Get input for a single slot or entity
-        let value = app.getInput(inputName);
+        let value = app.getInput('inputName');
 
         // Do something
     }
