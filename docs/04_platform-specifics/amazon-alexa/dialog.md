@@ -22,7 +22,7 @@ Every conversation is connected to an intent and it is maintained until all the 
 
 ## Requirements
 
-To use the dialog interface, you need a dialog model, which are built with the skill builder. In the dialog model, you define which slots are required for your intent and whether the user has to confirm them or the whole intent and which prompts Alexa should use and how the user might answer (utterances).
+To use the dialog interface, you need a dialog model, which you can create with the skill builder. In the dialog model, you select which slots are required for your intent and whether the user has to confirm them or the whole intent. You also define, which prompts Alexa should use and how the user might answer (utterances).
 In addition to that, you are not allowed to use the `AMAZON.YesIntent` or `AMAZON.NoIntent`, aswell as the `AMAZON.LITERAL` slot type.
 Last but no least, you're not allowed to use single-slot utterances in your intents utterances.
 
@@ -104,6 +104,8 @@ app.alexaSkill().dialogConfirmIntent("Your name is " + app.getInput('name') + " 
 #### Update Intent
 
 Updating an intent gives you the possibility to change slot values or the confirmation status for slots or intents. Here's an example:
+
+You already have the user's name stored in the database, so you don't want to ask for it again. Therefor you just update the intent and add the slot value.
 ```javascript
 let updatedIntent = {
     name: 'TestIntent',

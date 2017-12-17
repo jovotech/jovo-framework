@@ -30,7 +30,7 @@ This section provides an overview of Alexa specific features for routing. For th
 
 ### Dialog Interface
 
-You can find more about dialog mode here: [Platform specifics > Amazon Alexa > Dialog Mode](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/dialog.md).
+You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/dialog.md).
 
 
 ## Data
