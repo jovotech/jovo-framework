@@ -4,7 +4,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 
 * [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
 * [Routing](#routing)
-  * [Dialog Mode](#dialog-mode)
+  * [Dialog Interface](#dialog-interface)
 * [Data](#data)
   * [Shopping and To Do Lists](#shopping-and-to-do-lists)
   * [User Specific Data](#user-specific-data)
@@ -28,11 +28,9 @@ let alexa = app.alexaSkill();
 
 This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing).
 
-### Dialog Mode
+### Dialog Interface
 
-You can find an example file here: [`indexDialog.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js).
-
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/dialog-interface-reference).
+You can find more about dialog mode here: [Platform specifics > Amazon Alexa > Dialog Mode](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/dialog.md).
 
 
 ## Data
@@ -208,4 +206,4 @@ Here is the [official reference by Amazon](https://developer.amazon.com/public/s
 
 ## AudioPlayer Skills
 
-You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
