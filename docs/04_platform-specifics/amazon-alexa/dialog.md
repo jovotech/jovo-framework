@@ -89,7 +89,7 @@ If you want the user to fill a slot, use:
 app.alexaSkill().dialogElecitSlot(slotName, speechText[, repromptText, updatedIntent])
 
 // Example
-app.alexaSkill().dialogElecitSlot('name', 'What's your name?', 'Can you tell me your name, please?');
+app.alexaSkill().dialogElecitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
 ```
 
 #### Confirm Slot
