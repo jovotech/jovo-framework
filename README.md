@@ -83,7 +83,7 @@ Alexa Cards | Create visual output with home cards for Alexa Skills  | [Example]
 Alexa Device Address | Access a users' device location | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaDeviceAddress.js)
 Alexa Lists | Access users' To Do and Shopping Lists | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaLists.js)
 Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/#host-the-webhook-on-a-server)
-Alexa Dialog Mode | Use Alexa's Dialog Directives for multi-turn conversations | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexDialog.js)
+Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversations | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/04_platform-specifics/amazon-alexa/dialog.md)
 Echo Show Render Templates | Display visual elements on Echo Show | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js)
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa#progressive-responses)
 
