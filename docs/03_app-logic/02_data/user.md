@@ -122,5 +122,5 @@ app.getAccessToken();
 ```
 
 For more information on Account Linking, check out our blogposts:
-[Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
-[Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
