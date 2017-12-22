@@ -7,6 +7,7 @@ In this section, you will learn how to use the Jovo User class to persist user s
   * [Data Persistence](#data-persistence)
   * [Meta Data](#meta-data)
   * [User ID](#user-id)
+  * [Account Linking](#account-linking)
 
 
 ## Introduction to the User Class
@@ -101,3 +102,25 @@ amzn1.ask.account.AGJCMQPNU2XQWLNJXU2K23R3RWVTWCA6OX7YK7W57E7HVZJSLH4F5U2JOLYELR
 // For Google Assistant
 ARke43GoJIqbF8g1vfyDdqL_Sffh
 ```
+
+### Account Linking
+
+To implement Account Linking in your voice application you need two core methods.
+
+The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
+```javascript
+// Alexa Skill:
+app.alexaSkill().showAccountLinkingCard();
+
+// Google Actions:
+app.googleAction().showAccountLinkingCard();
+```
+
+The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
+```javascript
+app.getAccessToken();
+```
+
+For more information on Account Linking, check out our blogposts:
+* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
