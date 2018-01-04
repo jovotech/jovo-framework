@@ -13,14 +13,15 @@
 <a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
- <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
+<a href="https://www.codetriage.com/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework-nodejs/badges/users.svg"></a>
+<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
 <br/>
 
 Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities. [Check out our features below.](#features)
 
-> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter 
+> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
 
 
 ## Table of Contents
@@ -93,7 +94,7 @@ Progressive Responses | Keep your users engaged while processing a longer reques
 Name | Description | Docs
 :--- | :--- | :---
 Google Assistant Cards &nbsp; &nbsp; &nbsp; | Create visual Output for the Google Assistant mobile app | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js)
-Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant/#suggestion-chips) 
+Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant/#suggestion-chips)
 
 ### Integrations
 
