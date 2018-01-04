@@ -13,7 +13,6 @@
 <a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://www.codetriage.com/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework-nodejs/badges/users.svg"></a>
 <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
@@ -35,6 +34,7 @@ Jovo is the first open source framework that lets you build voice apps for both 
   * [Jovo Framework](#jovo-framework)
   * [Jovo Sample App](#jovo-sample-app)
 * [Tutorials](#tutorials)
+* [Contributing](#contributing)
 * [Community Projects](#community-projects)
 * [Development Roadmap](#development-roadmap)
 
@@ -179,6 +179,14 @@ Find a quickstart guide and comprehensive tutorials here:
 * [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
 * [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 
+
+## Contributing
+<a href="https://www.codetriage.com/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework-nodejs/badges/users.svg"></a>
+
+We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
+* [CONTRIBUTING.md](https://github.com/jovotech/jovo-framework-nodejs/tree/master/CONTRIBUTING.md)
+* Take a look at our [issues](https://github.com/jovotech/jovo-framework-nodejs/issues)
+* Add your project to [jovotech/builtwithjovo](https://github.com/jovotech/builtwithjovo)
 
 ## Community Projects
 
