@@ -51,7 +51,8 @@ let handlers = {
         let basicCard = new BasicCard()
             .setTitle('Title')
             .setImage('http://via.placeholder.com/450x350?text=Basic+Card', 'accessibilityText')
-            .setFormattedText('Formatted Text');
+            .setFormattedText('Formatted Text')
+            .setImageDisplay('WHITE');
 
         app.googleAction().showBasicCard(basicCard);
         app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
