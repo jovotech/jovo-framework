@@ -31,18 +31,18 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-       // app.toIntent('GetFullAddressIntent');
-       app.toIntent('GetCountryPostalCodeIntent');
+       // this.toIntent('GetFullAddressIntent');
+       this.toIntent('GetCountryPostalCodeIntent');
     },
 
     'GetFullAddressIntent': function() {
-        app.user().getAddress()
+        this.user().getAddress()
             .then((data) => {
                 console.log(data);
-                app.tell('Your address');
+                this.tell('Your address');
             }).catch((error) => {
             if (error.code === 'NO_USER_PERMISSION') {
-                app.alexaSkill()
+                this.alexaSkill()
                     .showAskForAddressCard()
                     .tell('Please grant access to your address');
             }
@@ -50,15 +50,15 @@ let handlers = {
     },
 
     'GetCountryPostalCodeIntent': function() {
-        app.user().getCountryAndPostalCode()
+        this.user().getCountryAndPostalCode()
             .then((data) => {
                 console.log(data);
 
-                app.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
+                this.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
             }).catch((error) => {
             console.log(error);
             if (error.code === 'NO_USER_PERMISSION') {
-                app.alexaSkill()
+                this.alexaSkill()
                     .showAskForCountryAndPostalCodeCard()
                     .tell('Please grant access to your address');
             }

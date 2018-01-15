@@ -31,18 +31,18 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app
+        this
             .followUpState('OnboardingState')
             .ask('Say hi', 'Say hello');
     },
 
     'HelloWorldIntent': function() {
-        app.tell('Welcome back!');
+        this.tell('Welcome back!');
     },
 
     'OnboardingState': {
         'HelloWorldIntent': function() {
-            app.followUpState(null).ask('Hey', 'Hello');
+            this.followUpState(null).ask('Hey', 'Hello');
         },
     },
 };

@@ -29,6 +29,6 @@ webhook.post('/webhook', function(req, res) {
 
 let handlers = {
     'LAUNCH': function() {
-        app.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle');
+        this.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle');
     },
 };

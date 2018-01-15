@@ -31,15 +31,15 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
-        app.addSessionAttribute('name', 'John Doe');
-        app.ask('What\'s your name?', 'Tell me your name, please.');
+        this.addSessionAttribute('name', 'John Doe');
+        this.ask('What\'s your name?', 'Tell me your name, please.');
     },
 
     'SessionIntent': function() {
-        app.tell('Hello ' + app.getSessionAttribute('name'));
+        this.tell('Hello ' + this.getSessionAttribute('name'));
     },
 };

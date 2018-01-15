@@ -31,7 +31,7 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('OnboardingIntent');
+        this.toIntent('OnboardingIntent');
     },
     'OnboardingIntent': function() {
         delegate(app);
@@ -42,13 +42,13 @@ let handlers = {
 };
 
 function confirmSlotAndIntent(app) {
-    if (app.alexaSkill().hasSlotValue('age') && !app.alexaSkill().isSlotConfirmed('age')) {
-        app.alexaSkill().dialogConfirmSlot('age', 'Your age is ' + app.getInput('age') + '. Is that correct?');
-    } else if (!app.alexaSkill().isDialogCompleted()) {
-        app.alexaSkill().dialogDelegate();
+    if (this.alexaSkill().hasSlotValue('age') && !this.alexaSkill().isSlotConfirmed('age')) {
+        this.alexaSkill().dialogConfirmSlot('age', 'Your age is ' + this.getInput('age') + '. Is that correct?');
+    } else if (!this.alexaSkill().isDialogCompleted()) {
+        this.alexaSkill().dialogDelegate();
     } else {
-        // app.tell('Name: ' + app.getInput('name') + ', City: ' + app.getInput('city') + ', Age: ' + app.getInput('age') + ' years old.');
-        app.alexaSkill().dialogConfirmIntent('Name: ' + app.getInput('name') + ', City: ' + app.getInput('city') + ', Age: ' + app.getInput('age') + ' years old.');
+        // this.tell('Name: ' + this.getInput('name') + ', City: ' + this.getInput('city') + ', Age: ' + this.getInput('age') + ' years old.');
+        this.alexaSkill().dialogConfirmIntent('Name: ' + this.getInput('name') + ', City: ' + this.getInput('city') + ', Age: ' + this.getInput('age') + ' years old.');
     }
 }
 
@@ -60,10 +60,10 @@ function confirmSlotAndIntent(app) {
  */
 function delegate(app) {
     // simple dialog delegate example
-    if (!app.alexaSkill().isDialogCompleted()) {
-        app.alexaSkill().dialogDelegate();
+    if (!this.alexaSkill().isDialogCompleted()) {
+        this.alexaSkill().dialogDelegate();
     } else {
-        app.tell('Name: ' + app.getInput('name') + ', City: ' + app.getInput('city') + ', Age: ' + app.getInput('age') + ' years old.');
+        this.tell('Name: ' + this.getInput('name') + ', City: ' + this.getInput('city') + ', Age: ' + this.getInput('age') + ' years old.');
     }
 }
 
@@ -72,13 +72,13 @@ function delegate(app) {
  * @param {Jovo} app
  */
 function elicitSlotExample(app) {
-    if (!app.alexaSkill().hasSlotValue('age')) {
-        app.alexaSkill().dialogElicitSlot(
+    if (!this.alexaSkill().hasSlotValue('age')) {
+        this.alexaSkill().dialogElicitSlot(
             'age',
             'What is your age?'
         );
     } else {
-        app.alexaSkill().dialogDelegate();
+        this.alexaSkill().dialogDelegate();
     }
 }
 
@@ -87,7 +87,7 @@ function elicitSlotExample(app) {
  * @param {Jovo} app
  */
 function elicitSlotExampleWithUpdatedIntent(app) {
-    if (!app.alexaSkill().hasSlotValue('age')) {
+    if (!this.alexaSkill().hasSlotValue('age')) {
         let updatedIntent = {
             name: 'OnboardingIntent',
             confirmationStatus: 'NONE',
@@ -108,15 +108,15 @@ function elicitSlotExampleWithUpdatedIntent(app) {
                 },
             },
         };
-        app.alexaSkill().dialogElicitSlot(
+        this.alexaSkill().dialogElicitSlot(
             'age',
             'What is your age?',
             'Your age please',
             updatedIntent
         );
-    } else if (!app.alexaSkill().isDialogCompleted()) {
-        app.alexaSkill().dialogDelegate();
+    } else if (!this.alexaSkill().isDialogCompleted()) {
+        this.alexaSkill().dialogDelegate();
     } else {
-        app.tell('Name: ' + app.getInput('name') + ', City: ' + app.getInput('city') + ', Age: ' + app.getInput('age') + ' years old.');
+        this.tell('Name: ' + this.getInput('name') + ', City: ' + this.getInput('city') + ', Age: ' + this.getInput('age') + ' years old.');
     }
 }

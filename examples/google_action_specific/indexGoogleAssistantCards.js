@@ -32,20 +32,20 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'ON_SIGN_IN': function() {
-        app.tell('signed in: ' + app.googleAction().getSignInStatus());
+        this.tell('signed in: ' + this.googleAction().getSignInStatus());
     },
 
     'LAUNCH': function() {
-        // app.showAccountLinkingCard();
-        // app.googleAction().showAccountLinkingCard();
-        // app.addSessionAttribute('bla', 'blub');
-        // app.tell('sdsd');
-        // app.toIntent('AccountLinkingIntent');
-        app.toIntent('ListIntent');
-        // app.toIntent('CarouselIntent');
+        // this.showAccountLinkingCard();
+        // this.googleAction().showAccountLinkingCard();
+        // this.addSessionAttribute('bla', 'blub');
+        // this.tell('sdsd');
+        // this.toIntent('AccountLinkingIntent');
+        this.toIntent('ListIntent');
+        // this.toIntent('CarouselIntent');
     },
     'AccountLinkingIntent': function() {
-        app.showAccountLinkingCard();
+        this.showAccountLinkingCard();
     },
     'BasicCardIntent': function() {
         let basicCard = new BasicCard()
@@ -54,15 +54,15 @@ let handlers = {
             .setFormattedText('Formatted Text')
             .setImageDisplay('WHITE');
 
-        app.googleAction().showBasicCard(basicCard);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.ask('Response with basic card', '?');
+        this.googleAction().showBasicCard(basicCard);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.ask('Response with basic card', '?');
     },
     'SuggestionsIntent': function() {
         // must end with an ask response
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.googleAction().showLinkOutSuggestion('Name', 'http://www.example.com');
-        app.ask('Suggestion Chips Example', 'Suggestion Chips Example');
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.googleAction().showLinkOutSuggestion('Name', 'http://www.example.com');
+        this.ask('Suggestion Chips Example', 'Suggestion Chips Example');
     },
     'ListIntent': function() {
         let list = new List();
@@ -81,9 +81,9 @@ let handlers = {
                 .setDescription('Carousel')
                 .setKey('Listitem2key')
         );
-        app.googleAction().showList(list);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.ask('Choose from list', 'Choose from list');
+        this.googleAction().showList(list);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.ask('Choose from list', 'Choose from list');
     },
     'CarouselIntent': function() {
         let carousel = new Carousel();
@@ -102,13 +102,13 @@ let handlers = {
                 .setImage('http://via.placeholder.com/650x350?text=Carousel+item+2', 'accessibilityText')
                 .setKey('Carouselitem2key')
         );
-        app.googleAction().showCarousel(carousel);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.googleAction().showCarousel(carousel);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
 
-        app.ask('Choose from list', 'Choose from list');
+        this.ask('Choose from list', 'Choose from list');
     },
     'HelloWorldIntent': function() {
-        app.tell('Hello World');
+        this.tell('Hello World');
     },
     'ON_ELEMENT_SELECTED': function() {
         let selectedElement = this.getSelectedElementId();

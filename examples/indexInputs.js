@@ -30,11 +30,11 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.ask('What\'s your name?', 'Tell me your name, please.');
+        this.ask('What\'s your name?', 'Tell me your name, please.');
     },
 
     'NameIntent': function(name) {
-        app.tell('Hello ' + name);
+        this.tell('Hello ' + name);
     },
 };
 

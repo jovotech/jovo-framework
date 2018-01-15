@@ -22,20 +22,20 @@ webhook.post('/webhook', function(req, res) {
 
 const handlers = {
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 };
 
 const alexaHandlers = {
 
     'HelloWorldIntent': function() {
-        app.tell('Hello Alexa User');
+        this.tell('Hello Alexa User');
     },
 };
 
 const googleActionHandlers = {
 
     'HelloWorldIntent': function() {
-        app.tell('Hello Google User');
+        this.tell('Hello Google User');
     },
 };

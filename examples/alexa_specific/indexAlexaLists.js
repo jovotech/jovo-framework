@@ -31,21 +31,21 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-       // app.toIntent('GetShoppingListIntent');
-       // app.toIntent('GetTodoListIntent');
-       // app.toIntent('AddItemToToDoListIntent');
-       app.toIntent('GetShoppingListIntent');
+       // this.toIntent('GetShoppingListIntent');
+       // this.toIntent('GetTodoListIntent');
+       // this.toIntent('AddItemToToDoListIntent');
+       this.toIntent('GetShoppingListIntent');
     },
 
     'GetShoppingListIntent': function() {
         // Active or completed
-        app.user().getShoppingList('active')
+        this.user().getShoppingList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
@@ -58,13 +58,13 @@ let handlers = {
 
     'GetTodoListIntent': function() {
         // Active or completed
-        app.user().getToDoList('active')
+        this.user().getToDoList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 console.log(error);
@@ -72,10 +72,10 @@ let handlers = {
     },
 
     'UpdateToDoListItemIntent': function() {
-        app.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
+        this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
             .then((data) => {
             console.log(data);
-                app.tell('Item updated.');
+                this.tell('Item updated.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
@@ -91,9 +91,9 @@ let handlers = {
     },
 
     'AddItemToToDoListIntent': function() {
-        app.user().addToTodoList('Sleep')
+        this.user().addToTodoList('Sleep')
             .then((data) => {
-                app.tell('Item added.');
+                this.tell('Item added.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {

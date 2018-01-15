@@ -32,10 +32,10 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        // app.toIntent('CatchAllIntent');
+        // this.toIntent('CatchAllIntent');
     },
 
     'CatchAllIntent': function(catchAll) {
-        app.tell(catchAll);
+        this.tell(catchAll);
     },
 };

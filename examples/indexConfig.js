@@ -42,9 +42,9 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell('App launched');
+        this.tell('App launched');
     },
     'HelloWorld': function() {
-        app.tell('Hello World');
+        this.tell('Hello World');
     },
 };

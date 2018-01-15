@@ -36,32 +36,32 @@ const AskForLocationPermissionsCard = require('../../index').AlexaSkill.AskForLo
 let handlers = {
 
     'LAUNCH': function() {
-        // app.tell('App launched.');
-        app.toIntent('AskForCountryAndPostalCodeCardIntent');
+        // this.tell('App launched.');
+        this.toIntent('AskForCountryAndPostalCodeCardIntent');
     },
 
     'SimpleCardIntent': function() {
-        app.alexaSkill().showSimpleCard('Title', 'Content');
+        this.alexaSkill().showSimpleCard('Title', 'Content');
 
         // or
 
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new SimpleCard()
             .setTitle('Title')
             .setContent('Content')
         );
 
-        app.tell('This is a simple card');
+        this.tell('This is a simple card');
     },
 
     'StandardCardIntent': function() {
-        app.alexaSkill().showStandardCard('Title', 'Content', {
+        this.alexaSkill().showStandardCard('Title', 'Content', {
             smallImageUrl: 'https://via.placeholder.com/720x480',
             largeImageUrl: 'https://via.placeholder.com/1200x800',
         });
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new StandardCard()
                 .setTitle('Title')
                 .setText('Text')
@@ -69,43 +69,43 @@ let handlers = {
                 .setLargeImageUrl('https://via.placeholder.com/720x480')
         );
 
-        app.tell('This is a standard card with an image');
+        this.tell('This is a standard card with an image');
     },
 
     'AccountLinkingCardIntent': function() {
-        app.alexaSkill().showAccountLinkingCard();
+        this.alexaSkill().showAccountLinkingCard();
         // or
-        app.alexaSkill().showCard(new LinkAccountCard());
+        this.alexaSkill().showCard(new LinkAccountCard());
 
-        app.tell('This is a card with an account linking CTA');
+        this.tell('This is a card with an account linking CTA');
     },
 
     'AskForCountryAndPostalCodeCardIntent': function() {
-        app.alexaSkill().showAskForCountryAndPostalCodeCard();
+        this.alexaSkill().showAskForCountryAndPostalCodeCard();
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForLocationPermissionsCard().setAskForCountryAndPostalCodePermission());
-        app.tell('This is a card that asks for country and postal code permissions.');
+        this.tell('This is a card that asks for country and postal code permissions.');
     },
 
     'AskForAddressCardIntent': function() {
-        app.alexaSkill().showAskForAddressCard();
+        this.alexaSkill().showAskForAddressCard();
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForLocationPermissionsCard().setAskForAddressPermission());
-        app.tell('This is a card that asks for address permissions.');
+        this.tell('This is a card that asks for address permissions.');
     },
 
     'AskForListPermissionCardIntent': function() {
-        app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
+        this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForListPermissionsCard()
                 .addReadPermission()
                 .addWritePermission());
-        app.tell('This is a card that asks for lists permissions.');
+        this.tell('This is a card that asks for lists permissions.');
     },
 };
