@@ -17,7 +17,7 @@ The `User` object offers helpful features to build contextual, user specific exp
 You can access the user object like this:
 
 ```javascript
-let user = app.user();
+let user = this.user();
 ```
 
 ## User Data
@@ -43,10 +43,10 @@ With our Jovo Persistence Layer, you can store user specific data easily to eith
 Just specify a key and a value, and you're good to go: 
 
 ```javascript
-app.user().data.key = value;
+this.user().data.key = value;
 
 // Example
-app.user().data.score = 300;
+this.user().data.score = 300;
 ```
 
 For more information on data persistence, take a look here: [Integrations > Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
@@ -61,9 +61,9 @@ The user object meta data is the first step towards building more contextual exp
 * `sessionsCount`': How often did your user engage with your app
 
 ```javascript
-let userCreatedAt = app.user().metaData.createdAt; 
-let userlastUsedAt = app.user().metaData.lastUsedAt; 
-let userSessionsCount = app.user().metaData.sessionsCount;
+let userCreatedAt = this.user().metaData.createdAt; 
+let userlastUsedAt = this.user().metaData.lastUsedAt; 
+let userSessionsCount = this.user().metaData.sessionsCount;
 ```
 
 You can change the type of meta data to store with the `setConfig` method. This is the default configuration for it:
@@ -87,10 +87,10 @@ app.setConfig({
 Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
 
 ```javascript
-app.user().getId();
+this.user().getId();
 
 // Alternatively, you can also use this
-app.getUserId();
+this.getUserId();
 ```
 
 This is going to return an ID that looks like this:
@@ -110,15 +110,15 @@ To implement Account Linking in your voice application you need two core methods
 The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
 ```javascript
 // Alexa Skill:
-app.alexaSkill().showAccountLinkingCard();
+this.alexaSkill().showAccountLinkingCard();
 
 // Google Actions:
-app.googleAction().showAccountLinkingCard();
+this.googleAction().showAccountLinkingCard();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
 ```javascript
-app.getAccessToken();
+this.getAccessToken();
 ```
 
 For more information on Account Linking, check out our blogposts:

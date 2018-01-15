@@ -31,11 +31,11 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
-        let speech = app.speechBuilder();
+        let speech = this.speechBuilder();
 
         let foo = false;
         let bar = true;
@@ -50,7 +50,7 @@ let handlers = {
             .addBreak(['500ms', '1s'])
             .addAudio(['url1', 'url2', 'url3'])
             .addText('Good Bye.');
-        app.tell(speech);
+        this.tell(speech);
     },
 };
 

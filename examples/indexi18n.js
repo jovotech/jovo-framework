@@ -52,17 +52,17 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        app.tell(app.t('WELCOME'));
+        this.tell(this.t('WELCOME'));
     },
 
     'HelloWorldIntent': function() {
-        app.tell(app.t('WELCOME_WITH_PARAMETER', 'John', 'Doe'));
+        this.tell(this.t('WELCOME_WITH_PARAMETER', 'John', 'Doe'));
     },
 
     'HelloWorldIntentWithArrays': function() {
-        let sb = app.speechBuilder();
-        sb.addText(app.t('WELCOME_ARRAY'));
-        app.tell(sb);
+        let sb = this.speechBuilder();
+        sb.addText(this.t('WELCOME_ARRAY'));
+        this.tell(sb);
     },
 };
 

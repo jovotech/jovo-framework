@@ -58,10 +58,10 @@ const handlers = {
 
     'SomeIntent': function() {
         // Get all inputs
-        let inputs = app.getInputs();
+        let inputs = this.getInputs();
 
         // Get input for a single slot or entity
-        let value = app.getInput('inputName');
+        let value = this.getInput('inputName');
 
         // Do something
     }
@@ -108,7 +108,7 @@ const handlers = {
     // Other Intents and States
 
     'MyNameIsIntent': function(name) {
-        app.tell('Hello ' + name + '!');
+        this.tell('Hello ' + name + '!');
     }
 
     // Other Intents and States
@@ -124,7 +124,7 @@ For retrieving and storing this type of information, the Jovo `User Class` can b
 The user object can be accessed like this:
 
 ```javascript
-let user = app.user();
+let user = this.user();
 ```
 
 You can find more information here: [App Logic > Data > User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md).
@@ -134,7 +134,7 @@ You can find more information here: [App Logic > Data > User](https://github.com
 Want to see which platform your user is currently interacting with? With `getType`, you can get exactly this.
 
 ```javascript
-app.getType();
+this.getType();
 ```
 
 This is going to return a type that looks like this:

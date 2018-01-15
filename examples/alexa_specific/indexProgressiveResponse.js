@@ -30,27 +30,27 @@ let handlers = {
 
     'LAUNCH': function() {
         // async amazon api call
-        app.alexaSkill().progressiveResponse('Processing your request');
+        this.alexaSkill().progressiveResponse('Processing your request');
 
         // or more than one progressive responses
 
-        // app.alexaSkill().progressiveResponse('Processing your request', () => {
+        // this.alexaSkill().progressiveResponse('Processing your request', () => {
         //     setTimeout( () => {
-        //         app.alexaSkill().progressiveResponse('Still processing');
+        //         this.alexaSkill().progressiveResponse('Still processing');
         //     }, 1500);
         // });
 
 
         dummyApiCall( () => {
-            app.tell('Here is your information.');
+            this.tell('Here is your information.');
         });
     },
 
     'HelloWorldIntent': function() {
-        app.tell('Hello World!');
+        this.tell('Hello World!');
     },
     'Unhandled': function() {
-        app.tell('Unhandled');
+        this.tell('Unhandled');
     },
 };
 

@@ -24,7 +24,7 @@ A `SimpleCard` contains a title and body content. You can use the method `showSi
 let title = 'Card Title';
 let content = 'Card Content';
 
-app.showSimpleCard(title, content)
+this.showSimpleCard(title, content)
     .tell('Hello World!');
 ```
 
@@ -45,7 +45,7 @@ let title = 'Card Title';
 let content = 'Card Content';
 let imageUrl = 'https://s3.amazonaws.com/jovocards/SampleImageCardSmall.png';
 
-app.showImageCard(title, content, imageUrl)
+this.showImageCard(title, content, imageUrl)
     .tell('Hello World!');
 ```
 
@@ -60,7 +60,7 @@ Result in the Actions on Google simulator:
 You can also pass an object as `imageUrl` to provide a `smallImageUrl`and `largeImageUrl` (for Alexa Skills):
 
 ```javascript
-app.showImageCard('Card Title', ' Card Content', {
+this.showImageCard('Card Title', ' Card Content', {
         smallImageUrl: 'https://via.placeholder.com/720x480',
         largeImageUrl: 'https://via.placeholder.com/1200x800',
     })

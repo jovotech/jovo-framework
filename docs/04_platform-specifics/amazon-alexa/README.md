@@ -20,7 +20,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = app.alexaSkill();
+let alexa = this.alexaSkill();
 ```
 
 
@@ -42,7 +42,7 @@ This section provides an overview of Alexa specific features for user data. For 
 Ask for list permissions:
 
 ```javascript
-app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
+this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 ```
 
 Here is some example code:
@@ -54,17 +54,17 @@ const handlers = {
 
     'GetShoppingListIntent': function() {
         // Active or completed
-        app.user().getShoppingList('active')
+        this.user().getShoppingList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read'])
                         .tell('Please grant the permission to access your lists.');
                 }
@@ -73,13 +73,13 @@ const handlers = {
 
     'GetTodoListIntent': function() {
         // Active or completed
-        app.user().getToDoList('active')
+        this.user().getToDoList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 console.log(error);
@@ -87,32 +87,32 @@ const handlers = {
     },
 
     'UpdateToDoListItemIntent': function() {
-        app.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
+        this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
             .then((data) => {
             console.log(data);
-                app.tell('Item updated.');
+                this.tell('Item updated.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read', 'write'])
                         .tell('Please grant the permission to access your lists.');
                 }
                 if (error.code === 'ITEM_NOT_FOUND') {
-                    app
+                    this
                         .tell('Item not found.');
                 }
         });
     },
 
     'AddItemToToDoListIntent': function() {
-        app.user().addToTodoList('Sleep')
+        this.user().addToTodoList('Sleep')
             .then((data) => {
-                app.tell('Item added.');
+                this.tell('Item added.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read', 'write'])
                         .tell('Please grant the permission to access your lists');
                 }
@@ -132,10 +132,10 @@ Ask for permissions like this:
 
 ```javascript
 // Country and Postal Code
-app.alexaSkill().showAskForCountryAndPostalCodeCard();
+this.alexaSkill().showAskForCountryAndPostalCodeCard();
 
 // Device Address
-app.alexaSkill().showAskForAddressCard();
+this.alexaSkill().showAskForAddressCard();
 ```
 
 Here is an example:
@@ -144,18 +144,18 @@ Here is an example:
 const handlers = {
 
     'LAUNCH': function() {
-       // app.toIntent('GetFullAddressIntent');
-       app.toIntent('GetCountryPostalCodeIntent');
+       // this.toIntent('GetFullAddressIntent');
+       this.toIntent('GetCountryPostalCodeIntent');
     },
 
     'GetFullAddressIntent': function() {
-        app.user().getAddress()
+        this.user().getAddress()
             .then((data) => {
                 console.log(data);
-                app.tell('Your address');
+                this.tell('Your address');
             }).catch((error) => {
             if (error.code === 'NO_USER_PERMISSION') {
-                app
+                this
                     .showAskForAddressCard()
                     .tell('Please grant access to your address');
             }
@@ -163,14 +163,14 @@ const handlers = {
     },
 
     'GetCountryPostalCodeIntent': function() {
-        app.user().getCountryAndPostalCode()
+        this.user().getCountryAndPostalCode()
             .then((data) => {
                 console.log(data);
-                app.tell('Your address');
+                this.tell('Your address');
             }).catch((error) => {
             console.log(error);
             if (error.code === 'NO_USER_PERMISSION') {
-                app
+                this
                     .showAskForCountryAndPostalCodeCard()
                     .tell('Please grant access to your address');
             }
@@ -192,7 +192,7 @@ For responses that require long processing times, you can use progressive respon
 Here is the official reference by Amazon: [Send the User a Progressive Response](https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html).
 
 ```javascript
-app.alexaSkill().progressiveResponse(speech);
+this.alexaSkill().progressiveResponse(speech);
 ```
 
 Find an example file here: [`indexProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexProgressiveResponse.js).

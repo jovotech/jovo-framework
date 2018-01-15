@@ -24,14 +24,14 @@ let handlers = {
 
     'LAUNCH': function() {
         // works currently only on google assistant on phone
-        app.googleAction().askForSignIn();
+        this.googleAction().askForSignIn();
     },
     'ON_SIGN_IN': function() {
-        if (app.googleAction().getSignInStatus() === 'CANCELLED') {
-           app.tell('Please sign in.');
-        } else if (app.googleAction().getSignInStatus() === 'OK') {
-            console.log(app.getAccessToken());
-            app.tell('You are signed in now.');
+        if (this.googleAction().getSignInStatus() === 'CANCELLED') {
+           this.tell('Please sign in.');
+        } else if (this.googleAction().getSignInStatus() === 'OK') {
+            console.log(this.getAccessToken());
+            this.tell('You are signed in now.');
         }
     },
 };

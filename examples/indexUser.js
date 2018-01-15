@@ -35,28 +35,28 @@ webhook.post('/webhook', function(req, res) {
 const handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('GetMetaDataIntent');
+        this.toIntent('GetMetaDataIntent');
     },
 
     'SaveUserDataIntent': function() {
-        app.user().data.score = 'over 9000';
-        app.tell('Saved!');
+        this.user().data.score = 'over 9000';
+        this.tell('Saved!');
     },
 
     'GetUserDataIntent': function() {
-        let score = app.user().data.score ? app.user().data.score : 'zero';
-        app.tell('You have ' + score + ' points');
+        let score = this.user().data.score ? this.user().data.score : 'zero';
+        this.tell('You have ' + score + ' points');
     },
 
     'GetMetaDataIntent': function() {
-        let userCreatedAt = app.user().metaData.createdAt;
-        let userlastUsedAt = app.user().metaData.lastUsedAt;
-        let userSessionsCount = app.user().metaData.sessionsCount;
+        let userCreatedAt = this.user().metaData.createdAt;
+        let userlastUsedAt = this.user().metaData.lastUsedAt;
+        let userSessionsCount = this.user().metaData.sessionsCount;
 
         console.log(userCreatedAt);
         console.log(userlastUsedAt);
         console.log(userSessionsCount);
-        app.tell('Here you go!');
+        this.tell('Here you go!');
     },
 };
 

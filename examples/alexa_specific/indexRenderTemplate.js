@@ -31,16 +31,16 @@ webhook.post('/webhook', function(req, res) {
 let handlers = {
 
     'LAUNCH': function() {
-        // app.tell('App launched');
+        // this.tell('App launched');
 
-        let bodyTemplate1 = app.alexaSkill().templateBuilder('BodyTemplate1');
+        let bodyTemplate1 = this.alexaSkill().templateBuilder('BodyTemplate1');
         bodyTemplate1
             .setToken('token')
             .setTitle('BodyTemplate1 Title')
             .setTextContent('Foo', 'Bar');
 
 
-        let bodyTemplate2 = app.alexaSkill().templateBuilder('BodyTemplate2');
+        let bodyTemplate2 = this.alexaSkill().templateBuilder('BodyTemplate2');
         bodyTemplate2
             .setToken('token')
             .setTitle('BodyTemplate2 Title')
@@ -50,7 +50,7 @@ let handlers = {
                 url: 'https://via.placeholder.com/350x150',
             });
 
-        let bodyTemplate3 = app.alexaSkill().templateBuilder('BodyTemplate3');
+        let bodyTemplate3 = this.alexaSkill().templateBuilder('BodyTemplate3');
         bodyTemplate3
             .setToken('token')
             .setTitle('BodyTemplate3 Title')
@@ -59,7 +59,7 @@ let handlers = {
                 description: 'Description',
                 url: 'https://via.placeholder.com/350x150',
             });
-        let bodyTemplate6 = app.alexaSkill().templateBuilder('BodyTemplate6');
+        let bodyTemplate6 = this.alexaSkill().templateBuilder('BodyTemplate6');
         bodyTemplate6
             .setToken('token')
             .setTextContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.', 'Bar')
@@ -68,7 +68,7 @@ let handlers = {
                 url: 'https://via.placeholder.com/1200x1000',
             });
 
-        let listTemplate1 = app.alexaSkill().templateBuilder('ListTemplate1');
+        let listTemplate1 = this.alexaSkill().templateBuilder('ListTemplate1');
         listTemplate1
             .setTitle('ListTemplate1 Title')
             .setToken('token')
@@ -106,7 +106,7 @@ let handlers = {
                 'secondary text',
                 'tertiary text'
             );
-        let listTemplate2 = app.alexaSkill().templateBuilder('ListTemplate2');
+        let listTemplate2 = this.alexaSkill().templateBuilder('ListTemplate2');
         listTemplate2
             .setTitle('ListTemplate2 Title')
             .setToken('token')
@@ -146,7 +146,7 @@ let handlers = {
         );
 
 
-        let listTemplate3 = app.alexaSkill().templateBuilder('ListTemplate3');
+        let listTemplate3 = this.alexaSkill().templateBuilder('ListTemplate3');
         listTemplate3
             .setTitle('ListTemplate3 Title')
             .setToken('token')
@@ -191,16 +191,16 @@ let handlers = {
             .showDisplayTemplate(listTemplate3)
             .showDisplayHint('Foo Bar');
 
-        app.tell('Look at your Echo Show');
+        this.tell('Look at your Echo Show');
     },
 
     'HelloWorld': function() {
-        app.tell('Hello World');
+        this.tell('Hello World');
     },
 
     'ON_ELEMENT_SELECTED': {
         'token': function() {
-            app.toIntent('HelloWorld');
+            this.toIntent('HelloWorld');
         },
     },
 };
