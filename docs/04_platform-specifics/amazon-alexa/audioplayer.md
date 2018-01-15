@@ -70,7 +70,7 @@ const handlers = {
             
             // Do something
             
-            app.endSession();
+            this.endSession();
         },
 
         'AudioPlayer.PlaybackNearlyFinished': function() {
@@ -78,7 +78,7 @@ const handlers = {
             
             // Do something
             
-            app.endSession();
+            this.endSession();
         },
 
         'AudioPlayer.PlaybackFinished': function() {
@@ -86,7 +86,7 @@ const handlers = {
             
             // Do something
             
-            app.endSession();
+            this.endSession();
         },
 
         'AudioPlayer.PlaybackStopped': function() {
@@ -94,7 +94,7 @@ const handlers = {
             
             // Do something
 
-            app.endSession();
+            this.endSession();
         },
 
     },

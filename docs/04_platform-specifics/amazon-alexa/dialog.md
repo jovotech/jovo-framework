@@ -36,19 +36,19 @@ When the intent is invoked for the first time, `dialogState` will be set to `STA
 
 To check the dialog state, use: 
 ```javascript
-app.alexaSkill().getDialogState()
+this.alexaSkill().getDialogState()
 ```
 
 Jovo also allows you to check for a specific state:
 ```javascript
 // STARTED
-app.alexaSkill().isDialogStarted()
+this.alexaSkill().isDialogStarted()
 
 // IN PROGRESS
-app.alexaSkill().isDialogInProgress()
+this.alexaSkill().isDialogInProgress()
 
 // COMPLETED
-app.alexaSkill().isDialogCompleted()
+this.alexaSkill().isDialogCompleted()
 ```
 
 ## Features
@@ -61,7 +61,7 @@ If you decide to delegate the conversation, Alexa will use the prompts you defin
 
 To delegte the conversation, use:
 ```javascript
-app.alexaSkill().dialogDelegate()
+this.alexaSkill().dialogDelegate()
 ```
 
 ### Control the Dialog in Your Code
@@ -76,40 +76,40 @@ From now on parameters, which are between these `[]` brackets, are optional. The
 
 To check, whether a slot has value or not, use:
 ```javascript
-app.alexaSkill().hasSlotValue(slotName)
+this.alexaSkill().hasSlotValue(slotName)
 
 // Example
-app.alexaSkill().hasSlotValue('name');
+this.alexaSkill().hasSlotValue('name');
 ```
 
 #### Elecit Slot
 
 If you want the user to fill a slot, use:
 ```javascript
-app.alexaSkill().dialogElecitSlot(slotName, speechText[, repromptText, updatedIntent])
+this.alexaSkill().dialogElecitSlot(slotName, speechText[, repromptText, updatedIntent])
 
 // Example
-app.alexaSkill().dialogElecitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
+this.alexaSkill().dialogElecitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
 ```
 
 #### Confirm Slot
 
 To confirm a slot use:
 ```javascript
-app.alexaSkill().dialogConfirmSlot(slotname, speechText[, repromptText, updatedIntent])
+this.alexaSkill().dialogConfirmSlot(slotname, speechText[, repromptText, updatedIntent])
 
 // Example
-app.alexaSkill().dialogConfirmSlot('name', 'Your name is ' + app.getInput('name') + ', right?');
+this.alexaSkill().dialogConfirmSlot('name', 'Your name is ' + this.getInput('name') + ', right?');
 ```
 
 #### Confirm Intent
 
 To confirm the whole intent, use:
 ```javascript
-app.alexaSkill().dialogConfirmIntent(speechText[, repromptText, updatedIntent])
+this.alexaSkill().dialogConfirmIntent(speechText[, repromptText, updatedIntent])
 
 // Example
-app.alexaSkill().dialogConfirmIntent('Your name is ' + app.getInput('name') + ' and you are from ' + app.getInput('city') + ', correct?');
+this.alexaSkill().dialogConfirmIntent('Your name is ' + this.getInput('name') + ' and you are from ' + this.getInput('city') + ', correct?');
 ```
 #### Update Intent
 
@@ -123,7 +123,7 @@ let updatedIntent = {
     slots: {
         name:{
             name: 'name',
-            value: app.user().data.name,
+            value: this.user().data.name,
             confirmationStatus: 'CONFIRMED',
         },
         city:{
@@ -134,5 +134,5 @@ let updatedIntent = {
 };
 // You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
-app.alexaSkill().dialogElecitSlot('city', 'Which city are you living in?', updatedIntent);
+this.alexaSkill().dialogElecitSlot('city', 'Which city are you living in?', updatedIntent);
 ```

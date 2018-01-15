@@ -14,15 +14,15 @@ In this section, you will learn how to use the Jovo SpeechBuilder, a helper clas
 With the `speechBuilder`, you can assemble a speech element by adding different types of input:
 
 ```javascript
-let speech = app.speechBuilder()
+let speech = this.speechBuilder()
                 .addText('Welcome to this Pizza Skill.')
                 .addBreak('300ms')
                 .addAudio('https://www.jovo.tech/downloads/pizza.mp3');
 
-app.tell(speech);
+this.tell(speech);
 ```
 
-As you can see above, you can initialize a new speechBuilder object by using `app.speechBuilder()`. Factory-like methods allow you to add your output subsequently. You can see all the [features below](#features).
+As you can see above, you can initialize a new speechBuilder object by using `this.speechBuilder()`. Factory-like methods allow you to add your output subsequently. You can see all the [features below](#features).
 
 ## Features
 
@@ -52,10 +52,10 @@ You can also use speechBuilder to add variety to your speech output. Here are a 
 For any of the speechBuilder methods, you can add an array of elements. The voice app will then pick a random item:
 
 ```javascript
-let speech = app.speechBuilder()
+let speech = this.speechBuilder()
                  .addText(['Hey there!', 'Welcome back!', 'Hi!']);
 
-app.tell(speech);
+this.tell(speech);
 ```
 
 ### Conditions
@@ -66,11 +66,11 @@ You can also add a condition as a parameter to any speechBuilder method. The out
 addText(text, condition)
 
 // Example
-let speech = app.speechBuilder()
-                 .addText('Welcome new user!', app.user().isNewUser())
-                 .addText('Welcome back!', !app.user().isNewUser());
+let speech = this.speechBuilder()
+                 .addText('Welcome new user!', this.user().isNewUser())
+                 .addText('Welcome back!', !this.user().isNewUser());
 
-app.tell(speech);
+this.tell(speech);
 ```
 
 ### Probabilities
@@ -81,9 +81,9 @@ Similar to conditions, you can also add probabilities to speechBuilder methods. 
 addText(text, probability)
 
 // Example
-let speech = app.speechBuilder()
+let speech = this.speechBuilder()
                  .addText('Welcome!')
                  .addText('What a beautiful day.', 0.3);
 
-app.tell(speech);
+this.tell(speech);
 ```

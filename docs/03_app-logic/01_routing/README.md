@@ -46,7 +46,7 @@ Intents are defined and handled in the `handlers` variable. Besides at least one
 const handlers = {
     'LAUNCH': function () {
         // Triggered when people open the voice app without a specific query
-        app.tell('Hello World!');
+        this.tell('Hello World!');
     },
 
     'YourFirstIntent': function () {
@@ -118,7 +118,7 @@ This could look like this:
 'NEW_SESSION': function() {
     // Do some work here
 
-    app.toIntent(app.getIntentName());
+    this.toIntent(this.getIntentName());
 },
 ```
 
@@ -132,7 +132,7 @@ Additionally to the other intents above, you can use the `'NEW_USER'` to direct 
     // Triggered when a user opens your app for the first time
  },
 ```
-For example, this saves you some time calling `if (app.user().isNewUser()) { }` in every intent where you require the access to user data.
+For example, this saves you some time calling `if (this.user().isNewUser()) { }` in every intent where you require the access to user data.
 
 
 #### 'END' Intent
@@ -148,7 +148,7 @@ A session could end due to various reasons. For example, a user could call “st
 If you want to end the session without saying anything, use the following:
 
 ```javascript
-app.endSession();
+this.endSession();
 ```
 
 
@@ -158,12 +158,12 @@ It is helpful to find out why a session ended. Use getEndReason inside the `'END
 
 ```javascript
 'END': function() {
-    let reason = app.getEndReason();
+    let reason = this.getEndReason();
 
     // For example, log
     console.log(reason);
 
-    app.tell('Goodbye!');
+    this.tell('Goodbye!');
  },
 ```
 
@@ -189,13 +189,13 @@ In the below example all intents that aren't found, are automatically calling th
 const handlers = {
 
     'LAUNCH': function() {
-        app.tell('Hello World!');
+        this.tell('Hello World!');
     },
 
     // Add more intents here
 
     'Unhandled': function() {
-        app.toIntent('LAUNCH');
+        this.toIntent('LAUNCH');
     }
 };
 ```
@@ -214,7 +214,7 @@ const handlers = {
     'LAUNCH': function() {
         let speech = 'Do you want to play a game?';
         let reprompt = 'Please answer with yes or no.';
-        app.followUpState('PlayGameState')
+        this.followUpState('PlayGameState')
             .ask(speech, reprompt);
     },
 
@@ -230,7 +230,7 @@ const handlers = {
         'Unhandled': function() {
             let speech = 'You need to answer with yes, to play a game.';
             let reprompt = 'Please answer with yes or no.';
-            app.ask(speech, reprompt);
+            this.ask(speech, reprompt);
         },
     },
 
@@ -272,7 +272,7 @@ const handlers = {
     'LAUNCH': function() {
         let speech = 'Do you want to play a game?';
         let reprompt = 'Please answer with yes or no.';
-        app.followUpState('PlayGameState')
+        this.followUpState('PlayGameState')
             .ask(speech, reprompt);
     },
 
@@ -288,7 +288,7 @@ const handlers = {
         'Unhandled': function() {
             let speech = 'You need to answer with yes, to play a game.';
             let reprompt = 'Please answer with yes or no.';
-            app.ask(speech, reprompt);
+            this.ask(speech, reprompt);
         },
     },
 
@@ -383,7 +383,7 @@ const handlers = {
     'LAUNCH' : function() {
         let speech = 'Do you want to order something?';
         let reprompt = 'Please answer with yes or no.';
-        app.followUpState('OrderState')
+        this.followUpState('OrderState')
             .ask(speech, reprompt);
     },
     
@@ -478,7 +478,7 @@ const handlers = {
 If you want to route a user to a state after you asked a specific question, you can add a `followUpState`. It is important that you do this before your `ask` call. For example, you can prepend it like this:
 
 ```javascript
-app.followUpState(stateName)
+this.followUpState(stateName)
     .ask(speech, reprompt);
 ```
 
@@ -492,7 +492,7 @@ const handlers = {
         // Ask for a yes-no-question and route to order state
         let speech = 'Do you want to order something?';
         let reprompt = 'Please answer with yes or no.';
-        app.followUpState('OrderState').ask(speech, reprompt);
+        this.followUpState('OrderState').ask(speech, reprompt);
     },
     
     // Example: behave differently for a 'yes' or 'no' answer inside order state
@@ -529,11 +529,11 @@ Jovo offers the ability to redirect incoming intents to others. For example, the
 const handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
-        app.tell('Hello World!');
+        this.tell('Hello World!');
     }
 };
 ```
@@ -550,13 +550,13 @@ Use  `toIntent` to jump into a new intent within the same request.
 Sometimes, you may want to pass additional information (like user input) to another intent. You can use the `arg` parameter to do exactly this.
 
 ```javascript
-app.toIntent(intent[, arg]);
+this.toIntent(intent[, arg]);
 
 // Go to PizzaIntent
-app.toIntent('PizzaIntent');
+this.toIntent('PizzaIntent');
 
 // Go to PizzaIntent and pass more data
-app.toIntent('PizzaIntent', moreData);
+this.toIntent('PizzaIntent', moreData);
 ```
 
 To make use of the passed data, add a parameter to your intent handler:
@@ -566,11 +566,11 @@ const handlers = {
 
     'LAUNCH': function() {
         let data = 'data';
-        app.toIntent('HelloWorldIntent', data);
+        this.toIntent('HelloWorldIntent', data);
     },
 
     'HelloWorldIntent': function(data) {
-        app.tell('Hello World' + data + '!');
+        this.tell('Hello World' + data + '!');
     }
 };
 ```
@@ -583,13 +583,13 @@ Similar to [`toIntent`](#tointent), you can use `toStateIntent` to redirect to a
 The routing will look for an intent within the given state, and go there if available. If not, it will go to the fallback option outside your defined states.
 
 ```javascript
-app.toStateIntent(state, intent[, arg]);
+this.toStateIntent(state, intent[, arg]);
 
 // Go to PizzaIntent in state Onboarding
-app.toStateIntent('OnboardingState', 'PizzaIntent');
+this.toStateIntent('OnboardingState', 'PizzaIntent');
 
 // Go to PizzaIntent in state Onboarding and pass more data
-app.toStateIntent('OnboardingState', 'PizzaIntent', moreData);
+this.toStateIntent('OnboardingState', 'PizzaIntent', moreData);
 ```
 
 
@@ -598,13 +598,13 @@ app.toStateIntent('OnboardingState', 'PizzaIntent', moreData);
 If you're inside a state and want to go to a global intent, you can use `toStatelessIntent` to do exactly this:
 
 ```javascript
-app.toStatelessIntent(intent[, arg]);
+this.toStatelessIntent(intent[, arg]);
 
 // Go to global PizzaIntent
-app.toStatelessIntent('PizzaIntent');
+this.toStatelessIntent('PizzaIntent');
 
 // Go to global PizzaIntent and pass more data
-app.toStatelessIntent('PizzaIntent', moreData);
+this.toStatelessIntent('PizzaIntent', moreData);
 ```
 
 
@@ -616,24 +616,24 @@ It might be helpful to save certain information across requests during a session
 The `setSessionAttribute` and `setSessionAttributes` methods can be used to store certain information that you can use later within the session. It’s like a cookie that’s alive until the session ends (usually after calling the `tell` function or when the user requests to stop).
 
 ```javascript
-app.setSessionAttribute(key, value);
-app.setSessionAttributes(attributes);
+this.setSessionAttribute(key, value);
+this.setSessionAttributes(attributes);
 
 // Set the current game score to 130 points
-app.setSessionAttribute('score', 130);
+this.setSessionAttribute('score', 130);
 
 // Set the current game score to 130 points and number of games to 2
-app.setSessionAttributes({ score: 130, games: 2 });
+this.setSessionAttributes({ score: 130, games: 2 });
 ```
 
 You can either access all session attributes with `getSessionAttributes`, or call for a certain attribute with `getSessionAttribute(key)`.
 
 ```javascript
-let attributes = app.getSessionAttributes();
-let value = app.getSessionAttribute(key);
+let attributes = this.getSessionAttributes();
+let value = this.getSessionAttribute(key);
 
 // Save current session's game score to variable
-let score = app.getSessionAttribute('score');
+let score = this.getSessionAttribute('score');
 ```
 
 Have a look at [App Logic > Data](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data) to learn more about how to persist data across sessions.

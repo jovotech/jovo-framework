@@ -31,13 +31,13 @@ The tell method is used to have Alexa or Google Home say something to your users
 Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#introduction-to-user-sessions).
 
 ```javascript
-app.tell(speech);
+this.tell(speech);
 
 // Use plain text as speech output
-app.tell('Hello World!');
+this.tell('Hello World!');
 
 // Use SSML as speech output
-app.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>');
+this.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>');
 ```
 
 
@@ -48,9 +48,9 @@ Whenever you want to make the experience more interactive and get some user inpu
 This method keeps the mic open ([learn more about sessions here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing#introduction-to-user-sessions)), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
 
 ```javascript
-app.ask(speech, reprompt);
+this.ask(speech, reprompt);
 
-app.ask('How old are you?', 'Please tell me your age');
+this.ask('How old are you?', 'Please tell me your age');
 ```
 
 You can also use [SSML](#ssml) for your speech and reprompt elements.
@@ -60,7 +60,7 @@ You can also use [SSML](#ssml) for your speech and reprompt elements.
 Google Assistant offers the functionality to use multiple reprompts.
 
 ```javascript
-app.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
+this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
 You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant#multiple-reprompts).
@@ -72,13 +72,13 @@ There are several ways to play pre-recorded audio files as output. The platforms
 For this, you can use `play`. This includes an optional parameter `fallbacktext`, which is used for Google Assistant when the audio file can’t be accessed (with Alexa, the fallback option doesn’t work). The text is also displayed in the Google Assistant app on your users’ smartphones, if they access your action there.
 
 ```javascript
-app.play(url[, fallbacktext]);
+this.play(url[, fallbacktext]);
 
 // Play weird pizza sound
-app.play('https://www.jovo.tech/downloads/pizza.mp3');
+this.play('https://www.jovo.tech/downloads/pizza.mp3');
 
 // Play weird pizza sound with fallback text for Google Actions
-app.play('https://www.jovo.tech/downloads/pizza.mp3', 'Pizza, Pizza, Pizza!');
+this.play('https://www.jovo.tech/downloads/pizza.mp3', 'Pizza, Pizza, Pizza!');
 ```
 
 Note: When you’re developing locally, make sure you have the audio file uploaded to a server that supports SSL, and that it meets the platform requirements ([Amazon Alexa](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference#audio) and [Google Assistant](https://www.w3.org/TR/speech-synthesis/#S3.3.1)).
@@ -101,7 +101,7 @@ let speech = '<speak>Welcome to this Pizza Skill.'
       + 'in our life? <break time="1s"/> Oh yes.'
       + '<audio src="https://www.jovo.tech/downloads/pizza.mp3"/></speak>';
 
-app.tell(speech);
+this.tell(speech);
 ```
 
 But isn’t that a little inconvenient? Let’s take a look at the Jovo [speechBuilder](#speechbuilder).
@@ -111,12 +111,12 @@ But isn’t that a little inconvenient? Let’s take a look at the Jovo [speechB
 With the `speechBuilder`, you can assemble a speech element by adding different types of input:
 
 ```javascript
-let speech = app.speechBuilder()
+let speech = this.speechBuilder()
                 .addText('Welcome to this Pizza Skill.')
                 .addBreak('300ms')
                 .addAudio('https://www.jovo.tech/downloads/pizza.mp3');
 
-app.tell(speech);
+this.tell(speech);
 ```
 
 You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/speechbuilder.md).
@@ -132,10 +132,10 @@ If you prefer to return some specific responses in a raw JSON format, you can do
 
 ```javascript
 // Set a Raw JSON Response for Alexa
-app.alexaSkill().setResponseObject(obj);
+this.alexaSkill().setResponseObject(obj);
 
 // Set a Raw JSON Response for Google Assistant
-app.googleAction().setResponseObject(obj);
+this.googleAction().setResponseObject(obj);
 ```
 
 > Learn more about platform-specific features and resonses here: [Platform Specifics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics).
@@ -153,5 +153,5 @@ Learn more about visual output here: [App Logic > Output > Visual Output](https:
 Sometimes, you might want to end a session without speech output. You can use the `endSession` method for this case:
 
 ```javascript
-app.endSession();
+this.endSession();
 ```

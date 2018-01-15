@@ -16,11 +16,11 @@ The Jovo `app` object figures out which platform the user is conversing with, an
 
 As Amazon Alexa and Google Assistant both have platform specific features, you can access them directly by calling the `alexaSkill` or `googleAction` objects. By using those classes, keep in mind that, in the end, there needs to be a function call where an emit happens for the platforms you're using. For example, in the [tell](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#tell), [ask](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#ask), [endSession](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#no-speech-output), and raw [JSON response calls](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#raw-json-responses).
 
-These emit methods can also be accessed directly with the platform specific objects, so you don't have to use `app.tell` when developing only for one platform:
+These emit methods can also be accessed directly with the platform specific objects, so you don't have to use `this.tell` when developing only for one platform:
 
 ```javascript
 // Example
-let alexa = app.alexaSkill();
+let alexa = this.alexaSkill();
 alexa.tell('Hello World!');
 ```
 
@@ -32,7 +32,7 @@ alexa.tell('Hello World!');
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = app.alexaSkill();
+let alexa = this.alexaSkill();
 ```
 
 You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa):
@@ -50,7 +50,7 @@ You can find the following Alexa specific features on the page [Platform Specifi
 You can access the `googleAction` object like this:
 
 ```javascript
-let google = app.googleAction();
+let google = this.googleAction();
 ```
 
 You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant):

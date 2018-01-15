@@ -21,11 +21,11 @@ For example, in the sample voice app [`index.js`](https://github.com/jovotech/jo
 const handlers = {
 
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
-        app.tell('Hello World!');
+        this.tell('Hello World!');
     },
 };
 ```
