@@ -59,8 +59,8 @@ Name | Description | Docs
 User object | Create contextual experiences with user specific data and services | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/i18n.md)
-Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/databases)
-Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/analytics)
+Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases#integrations--databases)
+Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics#integrations--analytics)
 
 
 ### Platform Specific Features
