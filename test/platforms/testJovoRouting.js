@@ -21,149 +21,169 @@ let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 // workaround
 response.json = function(json) {};
 
-describe('enableRequestLogging()', function() {
-    it('should return true when enabled', function() {
+describe('intent mapping', function() {
+    it('should jump into REQUEST with async data', function(done) {
         let app = new App();
-        assert(app.config.requestLogging === false, 'false on default');
-        app.enableRequestLogging();
-        assert(app.config.requestLogging === true, 'true after enabling');
-    });
-});
 
-describe('enableResponseLogging()', function() {
-    it('should return true when enabled', function() {
-        let app = new App();
-        assert(app.config.responseLogging === false, 'false on default');
-        app.enableResponseLogging();
-        assert(app.config.responseLogging === true, 'true after enabling');
-    });
-});
-describe('isRequestAllowed()', function() {
-    it('should return true if no application ids were set', function() {
-        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest()
-            .setIntentName('HelloWorldIntent')
-            .setApplicationId('xyz');
-        app.setHandler({
-            'HelloWorldIntent': function() {
+            .setIntentName('HelloWorldIntent');
 
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_    REQUEST': function(done) {
+                setTimeout(() => {
+                    this.toIntent('SecondIntent');
+                    done();
+                }, 500);
+            },
+            'SecondIntent': function() {
+                done();
             },
         });
-        app.handleRequest(request.buildHttpRequest(), response);
-
     });
-
-    it('should return true if correct applications were set', function() {
-
-
-        let app = new App({
-            alexaSkill: {
-                allowedApplicationIds: ['abc', 'xyz'],
-            },
-        });
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('HelloWorldIntent')
-            .setApplicationId('xyz');
-        app.setHandler({
-            'HelloWorldIntent': function() {
-            },
-        });
-        app.handleRequest(request.buildHttpRequest(), response);
-
-    });
-
-    it('should return false if incorrect applications were set', function() {
-        let app = new App({
-            alexaSkill: {
-                allowedApplicationIds: ['abc'],
-            },
-        });
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('HelloWorldIntent')
-            .setApplicationId('xyz');
-        app.setHandler({
-            'HelloWorldIntent': function() {
-
-            },
-        });
-        assert.throws(
-            function() {
-                app.handleRequest(request.buildHttpRequest(), response);
-            },
-            Error,
-            'Request application id is not allowed'
-        );
-
-    });
-});
-describe('setIntentMap', function() {
-    it('should return empty intentMap', function() {
+    it('should jump into REQUEST with sync data', function(done) {
         let app = new App();
-        assert(Object.keys(app.config.intentMap), 'intentMap is empty');
+
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setIntentName('HelloWorldIntent');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_REQUEST': function() {
+                this.variableXYZ = 'from request';
+            },
+            'HelloWorldIntent': function() {
+                assert.ok(this.variableXYZ === 'from request');
+                done();
+            },
+        });
     });
 
-    it('should return defined intentMap', function() {
+    it('should jump into NEW_SESSION from launch request', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .launchRequest()
+            .setSessionNew(true);
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'NEW_SESSION': function() {
+                done();
+            },
+        });
+    });
+    it('should jump into NEW_SESSION from intent request', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setSessionNew(true);
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'NEW_SESSION': function() {
+                done();
+            },
+        });
+    });
+    it('should jump from NEW_SESSION to an intent request', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setIntentConfirmationStatus('HelloWorldIntent')
+            .setSessionNew(true);
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'NEW_SESSION': function() {
+                this.toIntent('HelloWorldIntent');
+            },
+            'HelloWorldIntent': function() {
+                done();
+            },
+        });
+    });
+
+    it('should jump into NEW_USER from launch request', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .launchRequest()
+            .setUserId('TEST_USER'+Math.random());
+
+        app.on('respond', () => {
+            done();
+        });
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'NEW_USER': function() {
+                this.tell('Hello new user');
+            },
+        });
+    });
+    it('should jump into NEW_USER from intent request', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setUserId('TEST_USER'+Math.random());
+
+        app.on('respond', () => {
+            done();
+        });
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'NEW_USER': function() {
+                this.tell('Hello new user');
+            },
+        });
+    });
+    it('should jump into LAUNCH', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .launchRequest();
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'LAUNCH': function() {
+                done();
+            },
+        });
+    });
+    it('should return mapped intent (standard)', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setIntentName('AMAZON.StopIntent');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'END': function() {
+                assert(
+                    this.getIntentName() === 'END',
+                    'Standard intent mapping failed');
+                done();
+            },
+        });
+    });
+    it('should return mapped intent (custom)', function(done) {
         let app = new App({
             intentMap: {
                 'NameIntent': 'HelloWorldIntent',
             },
         });
-        assert(typeof app.config.intentMap !== 'undefined', 'intentMap is not undefined');
-        assert(app.config.intentMap['NameIntent'] === 'HelloWorldIntent', 'mapping is correct');
-    });
-
-});
-describe('setInputMap', function() {
-    it('should return defined inputMap', function() {
-        let app = new App({
-            inputMap: {
-                'given-name': 'name',
-            },
-        });
-
-        assert(typeof app.config.inputMap !== 'undefined', 'inputMap is not undefined');
-        assert(app.config.inputMap['given-name'] === 'name', 'mapping is correct');
-    });
-
-    it('should return mapped input', function(done) {
-        let app = new App({
-            inputMap: {
-                'firstname': 'name',
-            },
-        });
-
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('HelloWorldIntent')
-            .addSlot('firstname', 'foobar');
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'HelloWorldIntent': function() {
-                assert(this.getInput('name').value === 'foobar', 'mapping is correct');
-                done();
-            },
-        });
-    });
-});
-describe('getIntentName', function() {
-    it('should return NameIntent', function(done) {
-        let app = new App();
-
         let request = RequestBuilderAlexaSkill
             .intentRequest()
             .setIntentName('NameIntent');
 
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'NameIntent': function() {
+        app.setHandler({
+            'HelloWorldIntent': function() {
                 assert(
-                    this.getIntentName() === 'NameIntent',
-                    'Wrong intent');
+                    this.getIntentName() === 'HelloWorldIntent',
+                    'Intent mapped correctly');
                 done();
             },
         });
+        app.handleRequest(request.buildHttpRequest(), response);
     });
 
     it('should return mapped intent (standard)', function(done) {
@@ -183,59 +203,7 @@ describe('getIntentName', function() {
         });
     });
 });
-describe('getHandlerPath', function() {
-    it('should return "LAUNCH" path', function(done) {
-        let app = new App();
 
-        let request = RequestBuilderAlexaSkill
-            .launchRequest();
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'LAUNCH': function() {
-                assert(
-                    this.getHandlerPath() === 'LAUNCH',
-                    'Correct path to LAUNCH');
-                done();
-            },
-        });
-    });
-    it('should return path to intent', function(done) {
-        let app = new App();
-
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('HelloWorldIntent');
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'HelloWorldIntent': function() {
-                assert(
-                    this.getHandlerPath() === 'HelloWorldIntent',
-                    'Correct path to HelloWorldIntent');
-                done();
-            },
-        });
-    });
-
-    it('should return path to intent in state', function(done) {
-        let app = new App();
-
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setState('Onboarding')
-            .setIntentName('HelloWorldIntent');
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'Onboarding': {
-                'HelloWorldIntent': function() {
-                    assert(
-                        this.getHandlerPath() === 'Onboarding: HelloWorldIntent',
-                        `Correct path to HelloWorldIntent (AlexaSkill): ${this.getHandlerPath()}`);
-                    done();
-                },
-            },
-        });
-    });
-});
 
 describe('followUpState', function() {
     describe('AlexaSkill', function() {
@@ -669,144 +637,6 @@ describe('toIntent', function() { // TODO works for all platforms?
     });
 });
 
-describe('t', function() {
-    it('should return Error when trying to get translations and language resource object has not been set', function(done) {
-        let app = new App();
-
-        this.timeout(1000);
-
-        app.on('respond', function(jovo) {
-            done();
-        });
-
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('NameIntent')
-            .setLocale('en-US');
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'NameIntent': function() {
-                assert.throws(
-                    () => {
-                        this.t('WELCOME');
-                    },
-                    Error,
-                    'Language resources have not been set for translation.'
-                );
-                this.tell('i18n test');
-            },
-        });
-    });
-    it('should return translation for WELCOME', function(done) {
-        let languageResources = {
-            'en-US': {
-                translation: {
-                    WELCOME: 'Welcome',
-                    WELCOME_WITH_PARAMETER: 'Welcome %s',
-                },
-            },
-            'de-DE': {
-                translation: {
-                    WELCOME: 'Willkommen',
-                    WELCOME_WITH_PARAMETER: 'Willkommen %s',
-                },
-            },
-        };
-        let app = new App();
-        app.on('respond', function(jovo) {
-            done();
-        });
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('NameIntent')
-            .setLocale('en-US');
-        app.setLanguageResources(languageResources);
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'NameIntent': function() {
-                assert(
-                    this.t('WELCOME') === 'Welcome',
-                    'Wrong locale3');
-
-                assert(
-                    this.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Welcome Jovo',
-                    'Wrong locale4');
-                this.tell('i18n test');
-            },
-        });
-    });
-    it('should return translation for WELCOME path in de-DE', function(done) {
-        let app = new App();
-        this.timeout(1000);
-
-        let languageResources = {
-            'en-US': {
-                translation: {
-                    WELCOME: 'Welcome',
-                    WELCOME_WITH_PARAMETER: 'Welcome %s',
-                },
-            },
-            'de-DE': {
-                translation: {
-                    WELCOME: 'Willkommen',
-                    WELCOME_WITH_PARAMETER: 'Willkommen %s',
-                },
-            },
-        };
-        app.on('respond', function(jovo) {
-            done();
-        });
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('NameIntent')
-            .setLocale('de-DE').buildHttpRequest();
-        app.setLanguageResources(languageResources);
-        app.handleRequest(request, response, {
-            'NameIntent': function() {
-                assert(
-                    this.t('WELCOME') === 'Willkommen',
-                    'Wrong locale1');
-
-                assert(
-                    this.t('WELCOME_WITH_PARAMETER', 'Jovo') === 'Willkommen Jovo',
-                    'Wrong locale2');
-                this.tell('i18n test');
-            },
-        });
-
-    });
-
-
-    it('should return Error when trying to set an invalid language resource object', function() {
-        let app = new App();
-
-        assert.throws(
-            () => {
-                app.setLanguageResources();
-            },
-            Error,
-            'Invalid language resource.'
-        );
-
-        assert.throws(
-            function() {
-                const invalidLanguageResources = undefined;
-                app.setLanguageResources(invalidLanguageResources);
-            },
-            Error,
-            'Invalid language resource.'
-        );
-
-        assert.throws(
-            function() {
-                const invalidLanguageResources = {};
-                app.setLanguageResources(invalidLanguageResources);
-            },
-            Error,
-            'Invalid language resource.'
-        );
-    });
-});
-
 describe('toStateIntent', function() { // TODO works for all platforms?
     it('should skip the intent from the request and call the state-intent in the arguments', function(done) {
         this.timeout(1000);
@@ -925,31 +755,6 @@ describe('toStateIntent', function() { // TODO works for all platforms?
     });
 });
 
-describe('getSortedArgumentsInput', function() {
-    it('should match the slots to arguments', function(done) {
-        let app = new App();
-        this.timeout(1000);
-        let request = RequestBuilderAlexaSkill
-            .intentRequest()
-            .setIntentName('HelloWorldIntent')
-            .addSlot('name', 'John')
-            .addSlot('age', 45)
-            .addSlot('location', 'New York');
-        app.on('respond', function(jovo) {
-            done();
-        });
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'HelloWorldIntent': function(age, name, location) {
-                assert(
-                    age.value === 45 &&
-                    name.value === 'John' &&
-                    location.value === 'New York',
-                    'Correct arguments matching');
-                this.tell('test');
-            },
-        });
-    });
-});
 describe('Unhandled Intents', function() {
     it('should jump to Unhandled intent when no intent defined', function(done) {
         this.timeout(1000);
@@ -1074,155 +879,6 @@ describe('Unhandled Intents', function() {
                 },
             },
         });
-    });
-});
-describe('setConfig(config)', function() {
-    it('should return correct default config', function() {
-        let app = new App();
-        expect(app.config.logging).to.equal(false);
-        expect(app.config.requestLogging).to.equal(false);
-        expect(app.config.responseLogging).to.equal(false);
-        expect(app.config.saveUserOnResponseEnabled).to.equal(true);
-        expect(app.config.userDataCol).to.equal('userData');
-        expect(app.config.inputMap).to.deep.equal({});
-        expect(app.config.intentMap).to.deep.equal({});
-        expect(app.config.intentsToSkipUnhandled).to.deep.equal([]);
-
-        expect(app.config.requestLoggingObjects).to.deep.equal([]);
-        expect(app.config.responseLoggingObjects).to.deep.equal([]);
-        expect(app.config.saveBeforeResponseEnabled).to.equal(false);
-        expect(app.config.allowedApplicationIds).to.deep.equal([]);
-        expect(app.config.db.localDbFilename).to.equal('db');
-
-        expect(app.config.userMetaData).to.deep.include({
-                lastUsedAt: true,
-                sessionsCount: true,
-                createdAt: true,
-                requestHistorySize: 0,
-                devices: false,
-        });
-        expect(app.i18n).to.equal(undefined);
-        expect(Object.keys(BaseApp.DEFAULT_CONFIG)).to.have.a.lengthOf(18);
-        expect(Object.keys(BaseApp.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
-    });
-
-    it('should override default config', function() {
-        let app = new App();
-        app.setConfig({
-            logging: true,
-            requestLogging: true,
-            responseLogging: true,
-            saveUserOnResponseEnabled: false,
-            userDataCol: 'otherColumnName',
-            inputMap: {
-                'given-name': 'name',
-            },
-            intentMap: {
-                'AMAZON.StopIntent': 'StopIntent',
-            },
-            intentsToSkipUnhandled: ['IntentA', 'IntentB'],
-            requestLoggingObjects: ['session'],
-            responseLoggingObjects: ['response'],
-            saveBeforeResponseEnabled: true,
-            allowedApplicationIds: ['id1', 'id2'],
-            db: {
-                type: 'file',
-                localDbFilename: 'otherFilename',
-            },
-            userMetaData: {
-                lastUsedAt: false,
-                sessionsCount: false,
-                createdAt: false,
-                requestHistorySize: 5,
-                devices: true,
-            },
-            i18n: {
-                returnObjects: true,
-                resources: {
-                    'en-US': {
-                        translation: {
-                            WELCOME: 'Welcome',
-                        },
-                    },
-                    'de-DE': {
-                        translation: {
-                            WELCOME: 'Willkommen',
-                        },
-                    },
-                },
-            },
-            analytics: {
-                intentsToSkip: [],
-                usersToSkip: [],
-                intentsToTrack: [],
-                services: {
-                    VoiceLabsAlexa: {
-                        key: 'ACCESS_KEY',
-                    },
-                    VoiceLabsGoogleAction: {
-                        key: 'ACCESS_KEY',
-                    },
-                },
-            },
-        });
-        expect(app.config.logging).to.equal(true);
-        expect(app.config.requestLogging).to.equal(true);
-        expect(app.config.responseLogging).to.equal(true);
-        expect(app.config.saveUserOnResponseEnabled).to.equal(false);
-        expect(app.config.userDataCol).to.equal('otherColumnName');
-        expect(app.config.inputMap).to.deep.equal({
-            'given-name': 'name',
-        });
-        expect(app.config.intentMap).to.deep.equal({
-            'AMAZON.StopIntent': 'StopIntent',
-        });
-        expect(app.config.intentsToSkipUnhandled).to.deep.equal(['IntentA', 'IntentB']);
-
-        expect(app.config.requestLoggingObjects).to.deep.equal(['session']);
-        expect(app.config.responseLoggingObjects).to.deep.equal(['response']);
-        expect(app.config.saveBeforeResponseEnabled).to.equal(true);
-        expect(app.config.allowedApplicationIds).to.deep.equal(['id1', 'id2']);
-        expect(app.config.db.localDbFilename).to.equal('otherFilename');
-
-        expect(app.config.userMetaData).to.deep.include({
-            lastUsedAt: false,
-            sessionsCount: false,
-            createdAt: false,
-            requestHistorySize: 5,
-            devices: true,
-        });
-        expect(app.config.i18n).to.deep.include(
-            {
-                returnObjects: true,
-                resources: {
-                    'en-US': {
-                        translation: {
-                            WELCOME: 'Welcome',
-                        },
-                    },
-                    'de-DE': {
-                        translation: {
-                            WELCOME: 'Willkommen',
-                        },
-                    },
-                },
-            }
-        );
-        expect(app.config.analytics).to.deep.include(
-            {
-                intentsToSkip: [],
-                usersToSkip: [],
-                intentsToTrack: [],
-                services: {
-                    VoiceLabsAlexa: {
-                        key: 'ACCESS_KEY',
-                    },
-                    VoiceLabsGoogleAction: {
-                        key: 'ACCESS_KEY',
-                    },
-                },
-            }
-        );
     });
 });
 

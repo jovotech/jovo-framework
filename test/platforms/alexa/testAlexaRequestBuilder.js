@@ -14,6 +14,8 @@ const sessionEndedSample = require('./../../../lib/platforms/alexa/request/sampl
 const errorSample = require('./../../../lib/platforms/alexa/request/samples/errorRequestSample.json');
 const audioPlayerSample = require('./../../../lib/platforms/alexa/request/samples/audioPlayerRequestSample1.json');
 
+
+
 describe('Alexa Request Builder', function() {
     it('launchRequest()', function() {
         let launchRequest = AlexaRequestBuilder.launchRequest();

@@ -10,7 +10,7 @@ const http = require('http');
 const express = require('express');
 const verifier = require('alexa-verifier-middleware');
 const bodyParser = require('body-parser');
-
+const path = require('path');
 
 let server = express();
 server.use(bodyParser.json());
@@ -70,14 +70,16 @@ if (process.argv.length > 2) {
         if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1) {
             console.log('\n\nInfo: Fast debugging does not work with proxy.\n\n');
         }
-    } else if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1) {
+    } else if (process.argv.indexOf('--intent') > -1 || process.argv.indexOf('--launch') > -1 || process.argv.indexOf('--file') > -1) {
         try {
             let program = require('commander');
             let parameters = [];
             let sessions = [];
             program
+                .option('-f, --file [file]', 'path to file')
                 .option('-i, --intent [intentName]', 'intent name')
                 .option('-l, --launch', 'launch')
+                .option('-w, --webhook', 'webhook')
                 .option('-s, --state [state]', 'state')
                 .option('-l, --locale [locale]', 'locale')
                 .option('-p, --parameter [value]', 'A repeatable value', function(val) {
@@ -135,6 +137,19 @@ if (process.argv.length > 2) {
                     console.log(error);
                 });
             }
+
+            if (program.file) {
+                let file = program.file.replace(/\\/g, '/');
+
+                let alexaRequest = RequestBuilderAlexaSkill
+                    .alexaRequest(require(file));
+                webhookTest
+                    .testRequest(alexaRequest)
+                    .then((response) => {}).catch((error) => {
+                    console.log(error);
+                });
+            }
+
         } catch (err) {
             console.log(err);
             console.log('\nPlease install commander: npm install commander\n');
@@ -142,16 +157,21 @@ if (process.argv.length > 2) {
     }
 }
 
+module.exports.isWebhook = function() {
+    return process.argv.indexOf('--webhook') > -1 ? 'webhook' : '';
+};
+
 
 module.exports.Webhook = server;
 module.exports.WebhookVerified = verifiedServer;
-module.exports.Jovo = new Jovo();
+// module.exports.Jovo = new Jovo();
 module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;
 module.exports.AlexaSkill = require('./lib/platforms/alexa/alexaSkill').AlexaSkill;
 
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
 module.exports.JovoClazz = Jovo;
-module.exports.App = Jovo;
+// module.exports.App = Jovo;
+module.exports.App = require('./lib/app').App;
 
 

@@ -14,14 +14,13 @@ const ListTemplate3 = require('../../../lib/platforms/alexa/response/renderTempl
 describe('Tests for render templates', function() {
     describe('template(type)', function() {
         it('should return an instance of the specific template', () => {
-            let alexaSkill = new AlexaSkill();
-            expect(alexaSkill.templateBuilder('BodyTemplate1')).to.be.an.instanceOf(BodyTemplate1);
-            expect(alexaSkill.templateBuilder('BodyTemplate2')).to.be.an.instanceOf(BodyTemplate2);
-            expect(alexaSkill.templateBuilder('BodyTemplate3')).to.be.an.instanceOf(BodyTemplate3);
-            expect(alexaSkill.templateBuilder('BodyTemplate6')).to.be.an.instanceOf(BodyTemplate6);
-            expect(alexaSkill.templateBuilder('ListTemplate1')).to.be.an.instanceOf(ListTemplate1);
-            expect(alexaSkill.templateBuilder('ListTemplate2')).to.be.an.instanceOf(ListTemplate2);
-            expect(alexaSkill.templateBuilder('ListTemplate3')).to.be.an.instanceOf(ListTemplate3);
+            expect(AlexaSkill.templateBuilder('BodyTemplate1')).to.be.an.instanceOf(BodyTemplate1);
+            expect(AlexaSkill.templateBuilder('BodyTemplate2')).to.be.an.instanceOf(BodyTemplate2);
+            expect(AlexaSkill.templateBuilder('BodyTemplate3')).to.be.an.instanceOf(BodyTemplate3);
+            expect(AlexaSkill.templateBuilder('BodyTemplate6')).to.be.an.instanceOf(BodyTemplate6);
+            expect(AlexaSkill.templateBuilder('ListTemplate1')).to.be.an.instanceOf(ListTemplate1);
+            expect(AlexaSkill.templateBuilder('ListTemplate2')).to.be.an.instanceOf(ListTemplate2);
+            expect(AlexaSkill.templateBuilder('ListTemplate3')).to.be.an.instanceOf(ListTemplate3);
         });
     });
 

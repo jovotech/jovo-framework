@@ -11,6 +11,9 @@ const webhookAlexaIntentRequestResponseJSON = '{"domain":null,"_events":{},"_eve
 let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 
 const simpleIntentSample = require('../../../lib/platforms/alexa/request/samples/intentRequestSample2.json');
+const App = require('../../../lib/app').App;
+const BaseApp = require('../../../lib/app');
+
 
 
 // workaround
@@ -18,96 +21,101 @@ response.json = function(json) {};
 
 
 describe('alexaSkill()', function() {
-    it('should return null because request is from google', function() {
-        let app = new Jovo.Jovo();
+    it('should return null because request is from google', function(done) {
+        let app = new App();
 
         let request = (new RequestBuilderGoogleAction())
             .intentRequest()
+            .setIntentName('HelloWorld')
             .build();
 
         app.handleRequest(request, response, {
             'HelloWorld': function() {
+                assert(this.alexaSkill() === null, 'alexaSkill() returns null');
+                done();
             },
         });
-        assert(app.alexaSkill() === null, 'alexaSkill() returns null');
     });
-    it('should be type of object', function() {
-        let app = new Jovo.Jovo();
+    it('should be type of object', function(done) {
+        let app = new App();
 
         let request = RequestBuilderAlexaSkill
-            .intentRequest();
+            .intentRequest()
+            .setIntentName('HelloWorldIntent');
+
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
+                assert(typeof this.alexaSkill() === 'object', 'typeof object');
+                done();
             },
         });
-        assert(typeof app.alexaSkill() === 'object', 'typeof object');
     });
 
     it('getIntentName() - should return the correct intent name', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample);
         request.setIntentName('HelloWorldIntent');
 
-        app.on('respond', function(app) {
-            let response = app.getPlatform().getResponse();
+        app.on('respond', function(jovo) {
+            let response = jovo.getPlatform().getResponse();
             assert.ok(response.isTell('HelloWorldIntent'));
             done();
         });
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                app.tell(app.alexaSkill().getIntentName());
+                this.tell(this.alexaSkill().getIntentName());
             },
-        }).execute();
+        });
     });
 
     it('getIntentName() - should return error when launch request', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .launchRequest();
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'LAUNCH': function() {
                 assert.throws(
-                    function() {
-                        app.alexaSkill().getIntentName();
+                    () => {
+                        this.alexaSkill().getIntentName();
                     },
                     Error,
                     'this.request.getIntentName is not a function'
                 );
                 done();
             },
-        }).execute();
+        });
     });
     it('getIntentName() - should return error when session ended request', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .sessionEndedRequest();
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'END': function() {
                 assert.throws(
-                    function() {
-                        app.alexaSkill().getIntentName();
+                    () => {
+                        this.alexaSkill().getIntentName();
                     },
                     Error,
                     'this.request.getIntentName is not a function'
                 );
                 done();
             },
-        }).execute();
+        });
     });
     it('getInputs() - should return empty object', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent');
@@ -115,15 +123,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getInputs()).to.be.empty;
+                expect(this.alexaSkill().getInputs()).to.be.empty;
                 done();
             },
-        }).execute();
+        });
     });
     it('getInputs() - should return object with two inputs', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -133,15 +141,25 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getInputs()).to.deep.equal({foo: 'bar', test: 'ok'});
+                expect(this.alexaSkill().getInputs()).to.have.property('foo');
+                expect(this.alexaSkill().getInputs().foo).to.deep.include({
+                            name: 'foo',
+                            value: 'bar',
+                });
+
+                expect(this.alexaSkill().getInputs()).to.have.property('test');
+                expect(this.alexaSkill().getInputs().test).to.deep.include({
+                    name: 'test',
+                    value: 'ok',
+                });
                 done();
             },
-        }).execute();
+        });
     });
     it('getInput(name) - should return undefined for non existing input', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent');
@@ -149,16 +167,16 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getInput('foo')).to.be.an('undefined');
+                expect(this.alexaSkill().getInput('foo')).to.be.an('undefined');
                 done();
             },
-        }).execute();
+        });
     });
 
     it('getInput(name) - should return input value', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -167,15 +185,18 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getInput('foo')).to.equal('bar');
+                expect(this.alexaSkill().getInput('foo')).to.deep.include({
+                    name: 'foo',
+                    value: 'bar',
+                });
                 done();
             },
-        }).execute();
+        });
     });
     it('getUserId() - should return correct userId', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -184,15 +205,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getUserId()).to.equal('random-user-id');
+                expect(this.alexaSkill().getUserId()).to.equal('random-user-id');
                 done();
             },
-        }).execute();
+        });
     });
     it('getLocale() - should return correct locale', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -201,15 +222,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getLocale()).to.equal('de-DE');
+                expect(this.alexaSkill().getLocale()).to.equal('de-DE');
                 done();
             },
-        }).execute();
+        });
     });
     it('getAccessToken() - should return correct access token', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -218,30 +239,30 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getAccessToken()).to.equal('random-access-token');
+                expect(this.alexaSkill().getAccessToken()).to.equal('random-access-token');
                 done();
             },
-        }).execute();
+        });
     });
 
     it('isNewSession() - should return correct value from launch request', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .launchRequest();
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'LAUNCH': function() {
-                expect(app.alexaSkill().isNewSession()).to.equal(true);
+                expect(this.alexaSkill().isNewSession()).to.equal(true);
                 done();
             },
-        }).execute();
+        });
     });
     it('isNewSession() - should return correct value from intent request', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -249,15 +270,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().isNewSession()).to.equal(false);
+                expect(this.alexaSkill().isNewSession()).to.equal(false);
                 done();
             },
-        }).execute();
+        });
     });
     it('getTimestamp() - should return correct timestamp', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -265,15 +286,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getTimestamp()).to.equal('2015-05-13T12:34:56Z');
+                expect(this.alexaSkill().getTimestamp()).to.equal('2015-05-13T12:34:56Z');
                 done();
             },
-        }).execute();
+        });
     });
     it('hasAudioInterface() returns true if device supports audio', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -283,15 +304,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().hasAudioInterface()).to.equal(true);
+                expect(this.alexaSkill().hasAudioInterface()).to.equal(true);
                 done();
             },
-        }).execute();
+        });
     });
     it('hasAudioInterface() returns true if device supports audio', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -306,15 +327,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().hasAudioInterface()).to.equal(true);
+                expect(this.alexaSkill().hasAudioInterface()).to.equal(true);
                 done();
             },
-        }).execute();
+        });
     });
     it('hasAudioPlayerInterface() returns true if device supports audio player', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -324,17 +345,17 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().hasAudioPlayerInterface()).to.equal(true);
-                expect(app.alexaSkill().hasScreenInterface()).to.equal(false);
-                expect(app.alexaSkill().hasVideoInterface()).to.equal(false);
+                expect(this.alexaSkill().hasAudioPlayerInterface()).to.equal(true);
+                expect(this.alexaSkill().hasScreenInterface()).to.equal(false);
+                expect(this.alexaSkill().hasVideoInterface()).to.equal(false);
                 done();
             },
-        }).execute();
+        });
     });
     it('hasScreenInterface() returns true if device supports a screen', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -349,15 +370,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().hasScreenInterface()).to.equal(true);
+                expect(this.alexaSkill().hasScreenInterface()).to.equal(true);
                 done();
             },
-        }).execute();
+        });
     });
     it('hasVideoInterface() returns true if device supports video apps', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -372,16 +393,16 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().hasVideoInterface()).to.equal(true);
+                expect(this.alexaSkill().hasVideoInterface()).to.equal(true);
                 done();
             },
-        }).execute();
+        });
     });
 
     it('getDeviceId() - should return correct device id', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -389,15 +410,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getDeviceId()).to.equal('any-device-id');
+                expect(this.alexaSkill().getDeviceId()).to.equal('any-device-id');
                 done();
             },
-        }).execute();
+        });
     });
     it('getApplicationId() - should return correct application/skill id', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('HelloWorldIntent')
@@ -405,16 +426,16 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getApplicationId()).to.equal('any-application-id');
+                expect(this.alexaSkill().getApplicationId()).to.equal('any-application-id');
                 done();
             },
-        }).execute();
+        });
     });
 
     it('getRawText() - should return correct value ', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('CatchAllIntent')
@@ -422,16 +443,16 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'CatchAllIntent': function() {
-                expect(app.alexaSkill().getRawText()).to.equal('This is a test');
+                expect(this.alexaSkill().getRawText()).to.equal('This is a test');
                 done();
             },
-        }).execute();
+        });
     });
 
     it('getRawText() - should return error ', function(done) {
         this.timeout(250);
 
-        let app = new Jovo.Jovo();
+        let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest(simpleIntentSample)
             .setIntentName('CatchAllIntent');
@@ -439,22 +460,22 @@ describe('alexaSkill()', function() {
         app.handleRequest(request.buildHttpRequest(), response, {
             'CatchAllIntent': function() {
                 assert.throws(
-                    function() {
-                        app.alexaSkill().getRawText();
+                    () => {
+                        this.alexaSkill().getRawText();
                     },
                     Error,
                     'Only available with catchAll slot'
                 );
                 done();
             },
-        }).execute();
+        });
     });
 
     it.skip('getSelctedElementId() - should return correct element id ', function(done) {
     });
 
     it('getRequest() - should return request object ', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -462,14 +483,14 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getRequest()).to.deep.equal(simpleIntentSample);
+                expect(this.alexaSkill().getRequest()).to.deep.equal(simpleIntentSample);
                 done();
             },
-        }).execute();
+        });
     });
 
     it('should return ALEXA_SKILL as platformtype', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -478,13 +499,13 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                assert(app.alexaSkill().getType() === Jovo.PLATFORM_ENUM.ALEXA_SKILL, 'ALEXA_SKILL');
+                assert(this.alexaSkill().getType() === BaseApp.PLATFORM_ENUM.ALEXA_SKILL, 'ALEXA_SKILL');
                 done();
             },
-        }).execute();
+        });
     });
     it('should return empty session attribute object', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -493,14 +514,13 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getSessionAttributes()).to.be.empty;
-
+                expect(this.alexaSkill().getSessionAttributes()).to.be.empty;
                 done();
             },
-        }).execute();
+        });
     });
     it('should return session attributes object', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -515,7 +535,7 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getSessionAttributes()).to.deep.equal({
+                expect(this.alexaSkill().getSessionAttributes()).to.deep.equal({
                     foo: {
                         test: 'value',
                     },
@@ -524,10 +544,10 @@ describe('alexaSkill()', function() {
 
                 done();
             },
-        }).execute();
+        });
     });
     it('should return session attribute by key', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -542,15 +562,15 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getSessionAttribute('foo')).to.deep.equal({
+                expect(this.alexaSkill().getSessionAttribute('foo')).to.deep.equal({
                         test: 'value',
                 });
                 done();
             },
-        }).execute();
+        });
     });
     it('should return undefined session attribute', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -562,14 +582,14 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                expect(app.alexaSkill().getSessionAttribute('foo')).is.an('undefined');
+                expect(this.alexaSkill().getSessionAttribute('foo')).is.an('undefined');
                 done();
             },
-        }).execute();
+        });
     });
 
     it('getState() - should return the correct state', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -580,14 +600,14 @@ describe('alexaSkill()', function() {
         app.handleRequest(request.buildHttpRequest(), response, {
             'State1': {
                 'HelloWorldIntent': function() {
-                    expect(app.alexaSkill().getState()).is.equal('State1');
+                    expect(this.alexaSkill().getState()).is.equal('State1');
                     done();
                 },
             },
-        }).execute();
+        });
     });
     it('getState() - should return undefined ', function(done) {
-        let app = new Jovo.Jovo();
+        let app = new App();
         this.timeout(250);
 
         let request = RequestBuilderAlexaSkill
@@ -596,9 +616,9 @@ describe('alexaSkill()', function() {
 
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
-                    expect(app.alexaSkill().getState()).is.an('undefined');
+                    expect(this.alexaSkill().getState()).is.an('undefined');
                     done();
                 },
-        }).execute();
+        });
     });
 });

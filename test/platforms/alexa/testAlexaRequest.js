@@ -14,7 +14,6 @@ const SessionEndedRequest = require('./../../../lib/platforms/alexa/request/sess
 const AudioPlayerRequest = require('./../../../lib/platforms/alexa/request/audioPlayerRequest').AudioPlayerRequest;
 const ErrorRequest = require('./../../../lib/platforms/alexa/request/errorRequest').ErrorRequest;
 
-
 describe('Tests for AlexaRequest Class', function() {
     it('constructor()', function() {
         let launchRequest = AlexaRequestBuilder.launchRequest();
