@@ -100,17 +100,19 @@ app.enableRequestLogging();
 app.enableResponseLogging();
 
 // Enable request logging with setConfig
-app.setConfig({
+const config = {
     requestLogging: true,
     responseLogging: true,
     // other configurations
-});
+};
+
+const app = new App(config);
 ```
 
 This is the default configuration:
 
 ```javascript
-app.setConfig({
+const config = {
     logging: false,
     requestLogging: false,
     responseLogging: false,
@@ -143,7 +145,7 @@ app.setConfig({
         usersToSkip: [],
         services: {},
     },
-});
+};
 
 ```
 

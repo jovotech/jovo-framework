@@ -30,7 +30,7 @@ There are two ways to get the inputs provided by a user: either by [adding param
 ### Input as Parameter
 You can access input by adding parameters directly to your intent, like so:
 ```javascript
-const handlers = {
+app.setHandler({
 
     // Other Intents and States
 
@@ -39,7 +39,7 @@ const handlers = {
     }
 
     // Other Intents and States
-};
+});
 ```
 
 Two important things to consider when using this option:
@@ -52,7 +52,7 @@ Two important things to consider when using this option:
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput('inputName')`.
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     // Other Intents and States
 
@@ -67,7 +67,7 @@ const handlers = {
     }
 
     // Other Intents and States
-};
+});
 ```
 
 ### inputMap
@@ -103,7 +103,7 @@ app.setConfig({
 With this, you can use `name` as a parameter in your intent function:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     // Other Intents and States
 
@@ -112,7 +112,7 @@ const handlers = {
     }
 
     // Other Intents and States
-};
+});
 ```
 
 ## User Object

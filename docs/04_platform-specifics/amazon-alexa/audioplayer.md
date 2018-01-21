@@ -60,7 +60,7 @@ audioPlayer.stop();
 Add the following to your handlers variable:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     // Other intents
 
@@ -99,7 +99,7 @@ const handlers = {
 
     },
 
-};
+});
 
 ```
 
