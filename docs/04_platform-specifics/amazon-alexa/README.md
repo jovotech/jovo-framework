@@ -48,7 +48,7 @@ this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 Here is some example code:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     // Other intents
 
@@ -120,7 +120,7 @@ const handlers = {
             });
     },
 
-};
+});
 ```
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/access-the-alexa-shopping-and-to-do-lists).
@@ -141,7 +141,7 @@ this.alexaSkill().showAskForAddressCard();
 Here is an example:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
        // this.toIntent('GetFullAddressIntent');
@@ -176,7 +176,7 @@ const handlers = {
             }
         });
     },
-};
+});
 ```
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/device-address-api).

@@ -18,7 +18,7 @@ For example, in the sample voice app [`index.js`](https://github.com/jovotech/jo
 ```javascript
 // Configurations above
 
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         this.toIntent('HelloWorldIntent');
@@ -27,7 +27,7 @@ const handlers = {
     'HelloWorldIntent': function() {
         this.tell('Hello World!');
     },
-};
+});
 ```
 
 
