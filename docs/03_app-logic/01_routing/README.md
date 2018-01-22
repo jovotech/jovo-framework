@@ -43,7 +43,7 @@ If you're new to voice applications, you can learn more general info about princ
 Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 
 ```javascript
-const handlers = {
+app.setHandler({
     'LAUNCH': function () {
         // Triggered when people open the voice app without a specific query
         this.tell('Hello World!');
@@ -54,7 +54,7 @@ const handlers = {
 
     },
 
-};
+});
 ```
 
 Whenever your application gets a request from one of the voice platforms, this will either be accompanied with an intent (which you need to add), or the signal to start or end the session.
@@ -62,7 +62,7 @@ Whenever your application gets a request from one of the voice platforms, this w
 For this, Jovo offers standard, built-in intents, `'LAUNCH'` and `'END'`, to make cross-platform intent handling easier:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         // Triggered when people open the voice app without a specific query
@@ -75,7 +75,7 @@ const handlers = {
         // Triggered when the session ends
         // Currently supporting AMAZON.StopIntent and reprompt timeouts
     }
-};
+});
 ```
 
 
@@ -186,7 +186,7 @@ One `'Unhandled'` intent may be used outside a state to match all incoming reque
 In the below example all intents that aren't found, are automatically calling the `'Unhandled'` intent, which redirects to `'LAUNCH'`:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         this.tell('Hello World!');
@@ -197,7 +197,7 @@ const handlers = {
     'Unhandled': function() {
         this.toIntent('LAUNCH');
     }
-};
+});
 ```
 
 ##### State 'Unhandled' Intents
@@ -209,7 +209,7 @@ Sometimes though, you may want to stay inside that state, and try to capture onl
 See this example:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         let speech = 'Do you want to play a game?';
@@ -236,7 +236,7 @@ const handlers = {
 
     // Add more intents here
 
-};
+});
 ```
 
 This helps you to make sure that certain steps are really taken in the user flow.
@@ -267,7 +267,7 @@ app.setConfig({
 In the below example, if a person answers to the first question with "Help," it is not going to `'Unhandled'`, but to the global `'HelpIntent'`:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         let speech = 'Do you want to play a game?';
@@ -298,7 +298,7 @@ const handlers = {
 
     // Add more intents here
 
-};
+});
 ```
 
 ### intentMap
@@ -351,7 +351,7 @@ As mentioned above, the platforms offer different types of built-in intents.
 For simple voice apps, the structure to handle the logic is quite simple:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH' : function() {
         // Do something
@@ -368,7 +368,7 @@ const handlers = {
     'END' : function() {
         // Do something
     }
-};
+});
 ```
 
 This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `'YesIntent'` or `'NoIntent'`. As a developer need to figure out yourself which question they just answered with "Yes."
@@ -378,7 +378,7 @@ This is where `states` can be helpful. For more complex voice apps that include 
 With Jovo, you can include states like this:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH' : function() {
         let speech = 'Do you want to order something?';
@@ -398,7 +398,7 @@ const handlers = {
            // Do something
         },
     },
-};
+});
 ```
 
 By routing a user to a state (by using [`followUpState`](#followupstate)), this means you can react specifically to this certain situation in the process.
@@ -406,7 +406,7 @@ By routing a user to a state (by using [`followUpState`](#followupstate)), this 
 When a user is in a certain state and calls an intent, Jovo will first look if that intent is available in the given state. If not, a fallback option needs to be provided outside any state:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH' : function() {
         // do something
@@ -437,13 +437,13 @@ const handlers = {
         // do something
     }
 
-};
+});
 ```
 
 Alternatively, you can also use an [`Unhandled`](#unhandled-intent) intent as described in the section above:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH' : function() {
         // do something
@@ -470,7 +470,7 @@ const handlers = {
         // Do something
     }
 
-};
+});
 ```
 
 ### followUpState
@@ -486,7 +486,7 @@ This way, the voice app will first look if the response-intent is available in t
 
 ```javascript
 
-const handlers = {
+app.setHandler({
 
     'LAUNCH' : function() {
         // Ask for a yes-no-question and route to order state
@@ -518,7 +518,7 @@ const handlers = {
         // do something
     }
 
-};
+});
 ```
 
 ## Intent Redirects
@@ -526,7 +526,7 @@ const handlers = {
 Jovo offers the ability to redirect incoming intents to others. For example, the  sample voice app uses this to go from `'LaunchIntent'` to `'HelloWorldIntent'`:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         this.toIntent('HelloWorldIntent');
@@ -535,7 +535,7 @@ const handlers = {
     'HelloWorldIntent': function() {
         this.tell('Hello World!');
     }
-};
+});
 ```
 
 You can use the following methods to redirect intents:
@@ -562,7 +562,7 @@ this.toIntent('PizzaIntent', moreData);
 To make use of the passed data, add a parameter to your intent handler:
 
 ```javascript
-const handlers = {
+app.setHandler({
 
     'LAUNCH': function() {
         let data = 'data';
@@ -572,7 +572,7 @@ const handlers = {
     'HelloWorldIntent': function(data) {
         this.tell('Hello World' + data + '!');
     }
-};
+});
 ```
 
 
