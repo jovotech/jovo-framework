@@ -4,7 +4,7 @@ const Jovo = require('./lib/jovo').Jovo;
 const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
 const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
-const RequestBuilderAlexaSkill = require('./lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
+const RequestBuilderAlexaSkill = require('./lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
 const http = require('http');
 const express = require('express');
@@ -165,7 +165,7 @@ module.exports.Webhook = server;
 module.exports.WebhookVerified = verifiedServer;
 // module.exports.Jovo = new Jovo();
 module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;
-module.exports.AlexaSkill = require('./lib/platforms/alexa/alexaSkill').AlexaSkill;
+module.exports.AlexaSkill = require('./lib/platforms/alexaSkill/alexaSkill').AlexaSkill;
 
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;

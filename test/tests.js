@@ -3,7 +3,7 @@ let assert = require('chai').assert;
 
 let Jovo = require('../lib/jovo');
 
-const RequestBuilderAlexaSkill = require('../lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
+const RequestBuilderAlexaSkill = require('../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
 
 let RequestBuilderGoogleAction = require('../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;

@@ -8,7 +8,7 @@ chai.should();
 
 
 // let should = chai.should;
-const RequestBuilderAlexaSkill = require('../../lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
+const RequestBuilderAlexaSkill = require('../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 const App = require('../../lib/app').App;
 
 let RequestBuilderGoogleAction = require('../../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;

@@ -1,14 +1,14 @@
 'use strict';
 const expect = require('chai').expect;
-const AlexaSkill = require('../../../lib/platforms/alexa/alexaSkill').AlexaSkill;
-const Template = require('../../../lib/platforms/alexa/response/renderTemplate/template').Template;
-const BodyTemplate1 = require('../../../lib/platforms/alexa/response/renderTemplate/bodyTemplate1').BodyTemplate1;
-const BodyTemplate2 = require('../../../lib/platforms/alexa/response/renderTemplate/bodyTemplate2').BodyTemplate2;
-const BodyTemplate3 = require('../../../lib/platforms/alexa/response/renderTemplate/bodyTemplate3').BodyTemplate3;
-const BodyTemplate6 = require('../../../lib/platforms/alexa/response/renderTemplate/bodyTemplate6').BodyTemplate6;
-const ListTemplate1 = require('../../../lib/platforms/alexa/response/renderTemplate/listTemplate1').ListTemplate1;
-const ListTemplate2 = require('../../../lib/platforms/alexa/response/renderTemplate/listTemplate2').ListTemplate2;
-const ListTemplate3 = require('../../../lib/platforms/alexa/response/renderTemplate/listTemplate3').ListTemplate3;
+const AlexaSkill = require('../../../lib/platforms/alexaSkill/alexaSkill').AlexaSkill;
+const Template = require('../../../lib/platforms/alexaSkill/response/renderTemplate/template').Template;
+const BodyTemplate1 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/bodyTemplate1').BodyTemplate1;
+const BodyTemplate2 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/bodyTemplate2').BodyTemplate2;
+const BodyTemplate3 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/bodyTemplate3').BodyTemplate3;
+const BodyTemplate6 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/bodyTemplate6').BodyTemplate6;
+const ListTemplate1 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/listTemplate1').ListTemplate1;
+const ListTemplate2 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/listTemplate2').ListTemplate2;
+const ListTemplate3 = require('../../../lib/platforms/alexaSkill/response/renderTemplate/listTemplate3').ListTemplate3;
 
 
 describe('Tests for render templates', function() {
