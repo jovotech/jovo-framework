@@ -149,7 +149,6 @@ if (process.argv.length > 2) {
                     console.log(error);
                 });
             }
-
         } catch (err) {
             console.log(err);
             console.log('\nPlease install commander: npm install commander\n');

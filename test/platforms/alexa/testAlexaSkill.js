@@ -15,7 +15,6 @@ const App = require('../../../lib/app').App;
 const BaseApp = require('../../../lib/app');
 
 
-
 // workaround
 response.json = function(json) {};
 

@@ -231,7 +231,7 @@ describe('followUpState', function() {
                         // do nothing
                     },
                 },
-            })
+            });
             app.on('respond', (jovo) => {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello World!'));

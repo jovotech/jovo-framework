@@ -19,7 +19,6 @@ response.json = function(json) {};
 
 
 describe('Jovo Class - Alexa Webhook tests', function() {
-
     describe('validateHandler(handler)', function() {
         it('should be at least one intent in the handler', function() {
             assert.throws(
@@ -164,7 +163,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                             .tell('Hello World');
                     },
                 });
-
             });
             it('should return valid tell with an image card (2)', function(done) {
                 this.timeout(1000);
@@ -488,7 +486,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                             .ask('What is your name?', 'Your name please');
                     },
                 });
-
             });
             it('should return valid ask with an image card (2)', function(done) {
                 this.timeout(1000);

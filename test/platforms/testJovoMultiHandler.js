@@ -222,6 +222,5 @@ describe('extending handlers', function() {
                 this.tell('Hello World');
             },
         });
-
     });
 });

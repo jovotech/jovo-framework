@@ -51,12 +51,9 @@ describe('isRequestAllowed()', function() {
             },
         });
         app.handleRequest(request.buildHttpRequest(), response);
-
     });
 
     it('should return true if correct applications were set', function() {
-
-
         let app = new App({
             alexaSkill: {
                 allowedApplicationIds: ['abc', 'xyz'],
@@ -71,7 +68,6 @@ describe('isRequestAllowed()', function() {
             },
         });
         app.handleRequest(request.buildHttpRequest(), response);
-
     });
 
     it('should return false if incorrect applications were set', function() {
@@ -96,7 +92,6 @@ describe('isRequestAllowed()', function() {
             Error,
             'Request application id is not allowed'
         );
-
     });
 });
 describe('setIntentMap', function() {
@@ -114,7 +109,6 @@ describe('setIntentMap', function() {
         assert(typeof app.config.intentMap !== 'undefined', 'intentMap is not undefined');
         assert(app.config.intentMap['NameIntent'] === 'HelloWorldIntent', 'mapping is correct');
     });
-
 });
 describe('setInputMap', function() {
     it('should return defined inputMap', function() {
@@ -263,7 +257,7 @@ describe('followUpState', function() {
                         // do nothing
                     },
                 },
-            })
+            });
             app.on('respond', (jovo) => {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello World!'));
@@ -772,7 +766,6 @@ describe('t', function() {
                 this.tell('i18n test');
             },
         });
-
     });
 
 
