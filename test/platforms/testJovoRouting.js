@@ -30,7 +30,7 @@ describe('intent mapping', function() {
             .setIntentName('HelloWorldIntent');
 
         app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_    REQUEST': function(done) {
+            'ON_REQUEST': function(done) {
                 setTimeout(() => {
                     this.toIntent('SecondIntent');
                     done();
