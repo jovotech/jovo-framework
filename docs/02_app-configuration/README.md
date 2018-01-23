@@ -56,13 +56,12 @@ The other possibility is to use one of the setter functions:
 // Enable logging with setters
 app.enableRequestLogging();
 app.enableResponseLogging();
-});
 ```
 
 This is the default configuration:
 
 ```javascript
-app.setConfig({
+const config = {
     logging: false,
     requestLogging: false,
     responseLogging: false,
@@ -95,8 +94,7 @@ app.setConfig({
         usersToSkip: [],
         services: {},
     },
-});
-
+};
 ```
 
 
