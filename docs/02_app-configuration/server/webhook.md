@@ -11,25 +11,23 @@ For voice apps in prototyping stage, we recommend using a webhook and a tunnel s
 
 ## Webhook Configuration
 
-Jovo uses the [`express`](https://expressjs.com/) framework for running a server. Here is what the beginning of a Jovo project with a webhook looks like (from the sample repository `[index.js]`(https://github.com/jovotech/jovo-sample-voice-app-nodejs/blob/master/index.js)):
+Jovo uses the [`express`](https://expressjs.com/) framework for running a server. Here is how the part of `index.js`, which is used to run the app on a webhook, looks like:
 
 ```javascript
-const app = require('jovo-framework').Jovo;
-const webhook = require('jovo-framework').Webhook;
+'use strict';
 
-// Other configurations go somewhere here
+const {Webhook} = require('jovo-framework');
+const {app} = require('./app/app.js');
 
-// Listen for post requests
-webhook.listen(3000, function() {
-    console.log('Local development server listening on port 3000.');
-});
-
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
-
-// App Logic below
+if (isWebhook()) {
+    const port = process.env.PORT || 3000;
+    Webhook.listen(port, () => {
+        console.log(`Example server listening on port ${port}!`);
+    });
+    Webhook.post('/webhook', (req, res) => {
+        app.handleWebhook(req, res);
+    });
+}
 ```
 
 You can either run your server locally, or deploy to a webhosting service.

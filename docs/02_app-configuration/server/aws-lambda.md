@@ -9,19 +9,16 @@
 
 ## Lambda Configuration
 
-Here is what the beginning of a Jovo project for Lambda looks like ([see the sample repository index_lambda.js](https://github.com/jovotech/jovo-sample-voice-app-nodejs/blob/master/index_lambda.js)):
+Here is how the part of `index.js`, which is used to run the app on AWS Lambda, looks like: 
 
 ```javascript
-const app = require('jovo-framework').Jovo;
+'use strict';
 
-// Other configurations go somewhere here
+const {app} = require('./app/app.js');
 
-exports.handler = function(event, context, callback) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
+exports.handler = (event, context, callback) => {
+    app.handleLambda(event, context, callback);
 };
-
-// App Logic below
 ```
 
 ## Creating a Lambda Function
