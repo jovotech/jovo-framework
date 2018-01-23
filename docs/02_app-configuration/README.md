@@ -3,9 +3,9 @@
 In this section, you will learn more about the essential configurations of a Jovo Voice App.
 
 * [Jovo App Structure](#jovo-app-structure)
-  * [Index.js - Server Configuration](#index.js)
-  * [App.js - Application Logic](#app.js)
-  * [Models - Language Model](#models)
+  * [Index.js - Server Configuration](#index.js---server-configuration)
+  * [App.js - Application Logic](#app.js---application-logic)
+  * [Models - Language Model](#models---language-model)
 * [How to Add Configurations](#how-to-add-configurations)
   * [Available Configurations](#available-configurations)
 
@@ -15,21 +15,137 @@ A Jovo voice app is divided into three main building blocks: [`index.js`](https:
 
 ### Index.js - Server Configuration
 Everything related to running your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js). 
+
+```javascript
+'use strict';
+
+const {Webhook} = require('jovo-framework');
+const {app} = require('./app/app.js');
+
+// =================================================================================
+// Server Configuration
+// =================================================================================
+
+if (isWebhook()) {
+    const port = process.env.PORT || 3000;
+    Webhook.listen(port, () => {
+        console.log(`Example server listening on port ${port}!`);
+    });
+    Webhook.post('/webhook', (req, res) => {
+        app.handleWebhook(req, res);
+    });
+}
+
+exports.handler = (event, context, callback) => {
+    app.handleLambda(event, context, callback);
+};
+```
 You can find all the information regarding server configuration in this section: [App Configuration > Server](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server).
 
-HIER BILD VON INDEX.JS
-
 ### App.js - Application Logic
-[`App.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js) is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
+[`App.js`]() is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
 
-HIER BILD VON APP.JS
+```javascript
+'use strict';
+
+// =================================================================================
+// App Configuration
+// =================================================================================
+
+const {App} = require('jovo-framework');
+
+const config = {
+    logging: true,
+};
+
+const app = new App(config);
+
+
+// =================================================================================
+// App Logic
+// =================================================================================
+
+app.setHandler({
+    'LAUNCH': function() {
+        this.toIntent('HelloWorldIntent');
+    },
+
+    'HelloWorldIntent': function() {
+        this.ask('Hello World! What is your name?', 'Please tell me your name.');
+    },
+
+    'MyNameIsIntent': function(name) {
+        this.tell('Hey ' + name + ', nice to meet you!');
+    },
+});
+
+module.exports.app = app;
+```
 
 You can find everythign related to the app logic here: [App Logic](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
 
 ### Models - Language Model
 The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](LINK ZU JOVO CLI FOLDER). The idea is to maintain a single language model instead of multiple ones for every platform you choose to deploy your voice application to. 
 
-BILD VON MODLES/EN-US.JSON
+```javascript
+{  
+    "invocation":"jovo beta",
+    "intents":[  
+        {  
+            "name":"HelloWorldIntent",
+            "phrases":[  
+                "hello",
+                "say hello",
+                "say hello world"
+            ]
+        },
+        {  
+            "name":"MyNameIsIntent",
+            "phrases":[  
+                "{name}",
+                "my name is {name}",
+                "i am {name}",
+                "you can call me {name}"
+            ],
+            "inputs":[  
+                {  
+                    "name":"name",
+                    "type":{  
+                        "alexa":"AMAZON.US_FIRST_NAME",
+                        "dialogflow":"@sys.given-name"
+                    }
+                }
+            ]
+        }
+    ],
+    "alexa":{  
+        "interactionModel":{  
+            "languageModel":{  
+                "intents":[  
+                    {  
+                        "name":"AMAZON.CancelIntent",
+                        "samples":[  
+
+                        ]
+                    },
+                    {  
+                        "name":"AMAZON.HelpIntent",
+                        "samples":[  
+
+                        ]
+                    },
+                    {  
+                        "name":"AMAZON.StopIntent",
+                        "samples":[  
+
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
+```
 
 You can find out more about that here [App Logic > Models]()
 
