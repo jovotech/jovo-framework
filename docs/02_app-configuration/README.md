@@ -3,107 +3,59 @@
 In this section, you will learn more about the essential configurations of a Jovo Voice App.
 
 * [Jovo App Structure](#jovo-app-structure)
-* [Server Configuration](#server-configuration)
-  * [Webhook](#webhook)
-  * [AWS Lambda](#aws-lambda)
+  * [Index.js - Server Configuration](#index.js)
+  * [App.js - Application Logic](#app.js)
+  * [Models - Language Model](#models)
 * [How to Add Configurations](#how-to-add-configurations)
-  * [setConfig](#setconfig)
   * [Available Configurations](#available-configurations)
 
 
 ## Jovo App Structure
-A Jovo voice app ([`index.js`](https://github.com/jovotech/jovo-sample-voice-app-nodejs/blob/master/index.js)) is divided into two main building blocks: `Configuration` and `Logic`:
+A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js), [`app.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js) and [`models`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/models/en-US.json).
 
-![Jovo App Structure](https://www.jovo.tech/img/docs/jovo-architecture.jpg)
+### Index.js - Server Configuration
+Everything related to running your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js). 
+You can find all the information regarding server configuration in this section: [App Configuration > Server](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server).
 
-In the sample voice app above, the upper part is used for [server configuration](#server-configuration), adding [integrations](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations) like analytics or databases, or global variables that are used throughout your app.
+HIER BILD VON INDEX.JS
 
-The below part (the `handlers` variable) is where you're routing through your app and managing how to respond to your users. You can find out more about this part here: [App Logic](ttps://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
+### App.js - Application Logic
+[`App.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js) is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
 
+HIER BILD VON APP.JS
 
-## Server Configuration
+You can find everythign related to the app logic here: [App Logic](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
 
-This building block changes depending on where you want to host your voice app. Jovo currently supports a [webhook](#webhook) (which we recommend for local prototyping) and [AWS Lambda](#aws-lambda). The [sample repository](https://github.com/jovotech/jovo-sample-voice-app-nodejs) offers examples for both, which you can see in more detail below.
+### Models - Language Model
+The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](LINK ZU JOVO CLI FOLDER). The idea is to maintain a single language model instead of multiple ones for every platform you choose to deploy your voice application to. 
 
-There are just a few simple building blocks that make the difference between two types, as you can see in the image below. This makes it easy to switch from local development mode to publishing your voice app, if you prefer AWS Lambda for that.
+BILD VON MODLES/EN-US.JSON
 
-![Jovo Server Configuration](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-lambda-differences.jpg)
-
-You can find all the information for server configuration in this section: [App Configuration > Server](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server).
-
-
-### Webhook
-
-Find out more about using a webhook here: [App Configuration > Server > Webhook](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/webhook.md).
-
-Here is a code example:
-
-```javascript
-const app = require('jovo-framework').Jovo;
-const webhook = require('jovo-framework').Webhook;
-
-// Other configurations go somewhere here
-
-// Listen for post requests
-webhook.listen(3000, function() {
-    console.log('Local development server listening on port 3000.');
-});
-
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
-
-// App Logic below
-```
-
-
-### AWS Lambda
-
-Find out more about deploying your voice app to AWS Lambda here: [App Configuration > Server > AWS Lambda](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md).
-
-Here is a code example:
-
-```javascript
-const app = require('jovo-framework').Jovo;
-
-// Other configurations go somewhere here
-
-exports.handler = function(event, context, callback) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-};
-
-// App Logic below
-```
-
-
+You can find out more about that here [App Logic > Models]()
 
 ## How to Add Configurations
-
-To add configurations, you have two options: You can either add them to the main file (outside any function), or to the `webhook.post`/`exports.handler` so that they are loaded with any new request. This depends on the type of configuration.
+To add configurations, you have two options: You can either add them at the beginning of [`app.js`](#app.js) in the constructor or you use the setter function of each configuration.
 
 You can find a list of all [available configurations below](#available-configurations).
 
-Each configuration has its own setter function, but can also be added to a `setConfig` method call.
+To add them with the constructor you simply change the content of the config object at the beginning of [`app.js`](#app.js):
 
+```javascript
+const config = {
+    requestLogging: true,
+    responseLogging: true,
+    // Add other configurations
+};
 
-### setConfig
+const app = new App(config);
+```
 
-You can use `setConfig` to have all configurations in one place.
-
-Here is an example of the difference:
+The other possibility is to use one of the setter functions:
 
 ```javascript
 // Enable logging with setters
 app.enableRequestLogging();
 app.enableResponseLogging();
-
-// Enable request logging with setConfig
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-    // other configurations
 });
 ```
 
