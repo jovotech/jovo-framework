@@ -10,7 +10,7 @@ In this section, you will learn more about the Jovo interaction model.
   * [Alexa](#alexa)
 
 ## Introduction
-The Jovo language model allows you to maintain only a single file, which can be used to create the platform specific language models with the help of the [`Jovo CLI`](). Overall the Jovo model is similar to the Alexa interaction model with some small changes here and there.
+The Jovo language model allows you to maintain only a single file, which can be used to create the platform specific language models with the help of the [`Jovo CLI`](). Every language you choose to support will have its very own interaction model (`en-US`, `de-DE`, etc.). Overall the Jovo model is similar to the Alexa interaction model with some small changes here and there.
 
 ```javascript
 {  
