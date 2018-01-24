@@ -7,9 +7,9 @@ Learn more about the tools provided by Jovo that help you develop voice apps fas
 
 ## CLI
 
-The Jovo Command Line Tools (find the GitHub repository here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli)) offer a way to create and run voice apps from your command line.
+The Jovo Command Line Tools (find the GitHub repository here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli)) offer a way to create, prototype, test and deploy voice apps from your command line.
 
-Find the detailed reference here: [Tools > CLI](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli).
+Find the detailed reference here: [Tools > CLI](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_cli/).
 
 ## Audio Converter
 
