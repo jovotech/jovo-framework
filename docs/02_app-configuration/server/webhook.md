@@ -102,12 +102,12 @@ Now, you can not only use the link as an endpoint, but also use it to access [Be
 
 When you want to deploy your code to a webserver other than AWS Lambda, you need to verify that Alexa Skill requests are actually coming from Amazon.
 
-For this, Jovo uses a package called [alexa-verifier](https://github.com/mreinstein/alexa-verifier), which can be accessed by switching one line of the configuration:
+For this, Jovo uses a package called [alexa-verifier](https://github.com/mreinstein/alexa-verifier), which can be accessed by switching one line of the configuration in `index.js`:
 
 ```javascript
 // Use this
-const webhook = require('jovo-framework').WebhookVerified;
+const {WebhookVerified} = require('jovo-framework');
 
 // Instead of this
-const webhook = require('jovo-framework').Webhook;
+const {Webhook} = require('jovo-framework');
 ```

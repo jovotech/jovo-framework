@@ -29,10 +29,10 @@ Data is stored using our [database integrations](https://github.com/jovotech/jov
 Just specify a key and a value, and you're good to go:
 
 ```javascript
-app.setConfig({
+const config = {
     userDataCol: 'yourUserDataColName',
     // Other configurations
-});
+};
 ```
 
 
@@ -69,7 +69,7 @@ let userSessionsCount = this.user().metaData.sessionsCount;
 You can change the type of meta data to store with the `setConfig` method. This is the default configuration for it:
 
 ```javascript
-app.setConfig({
+const config = {
     userMetaData: {
         lastUsedAt: true,
         sessionsCount: true,
@@ -78,7 +78,7 @@ app.setConfig({
         devices: false,
     }
     // Other configurations
-});
+};
 
 ```
 

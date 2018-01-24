@@ -13,11 +13,7 @@ In this section, you will learn more about the essentials of building the logic 
 
 The `handlers` variable is the main building block of your voice app. This is where the logic happens.
 
-For example, in the sample voice app [`index.js`](https://github.com/jovotech/jovo-sample-voice-app-nodejs/blob/master/index.js) file, the Voice App Logic part looks like this:
-
 ```javascript
-// Configurations above
-
 app.setHandler({
 
     'LAUNCH': function() {
