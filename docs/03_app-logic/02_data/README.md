@@ -83,21 +83,21 @@ let myInputMap = {
 // Use setter
 app.setInputMap(myInputMap);
 
-// Use setConfig
-app.setConfig({
+// Has to be added to the constructor at the beginning of app.js
+const config = {
     inputMap: myInputMap,
     // Other configurations
-});
+};
 ```
 
-Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
+Example: You wnt to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
 
 ```javascript
 // Map Dialogflow standard parameter given-name with name
-app.setConfig({
+const config = {
     inputMap: { 'given-name' : 'name', },
     // Other configurations
-});
+};
 ```
 
 With this, you can use `name` as a parameter in your intent function:
@@ -164,11 +164,10 @@ You can enable logging by using the following:
 // Use setter
 app.enableLogging();
 
-// Use setConfig
-app.setConfig({
+const config = {
   logging: true,
   // Other configurations
-});
+};
 ```
 
 This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be separately enabled. For this, see the sections below.
@@ -182,11 +181,10 @@ You can log the incoming JSON requests by adding the following configuration:
 // Use setter
 app.enableRequestLogging();
 
-// Use setConfig
-app.setConfig({
+const config = {
   requestLogging: true,
   // Other configurations
-});
+};
 ```
 
 The result looks like this (data changed):
@@ -247,11 +245,10 @@ let myRequestLoggingObjects(['request']);
 // Use setter
 app.setRequestLoggingObjects(myRequestLoggingObjects);
 
-// Use setConfig
-app.setConfig({
+const config = {
   requestLoggingObjects: myRequestLoggingObjects,
   // Other configurations
-});
+};
 ```
 
 The example above will reduce the log output to this:
@@ -275,11 +272,10 @@ You can log the outgoing JSON responses by adding the following configuration:
 // Use setter
 app.enableResponseLogging();
 
-// Use setConfig
-app.setConfig({
+const config = {
   responseLogging: true,
   // Other configurations
-});
+};
 ```
 
 The result looks like this:
@@ -309,11 +305,10 @@ let myResponseLoggingObjects(['response']);
 // Use setter
 app.setResponseLoggingObjects(myResponseLoggingObjects);
 
-// Use setConfig
-app.setConfig({
+const config = {
   responseLoggingObjects: myResponseLoggingObjects,
   // Other configurations
-});
+};
 ```
 
 The example above will reduce the log output to this:
