@@ -42,8 +42,8 @@ $ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US |
 $ jovo help new
 ```
 **Options**:
-`template`: Used to specify, which template should be used. Get a list of all the templates [here](). Default: `helloworld`
 
+`template`: Used to specify, which template should be used. Get a list of all the templates [here](). Default: `helloworld`
 
 `locale`: Choose the language of the interaction models. Default: `en-US`
 
@@ -64,7 +64,9 @@ $ jovo build [-p | --platform <alexaSkill | googleAction>] [-l | --locale <de-DE
 $ jovo help build
 ```
 **Options**:
+
 `--platform`, `-l`: It is required, if you want to initialise a platform. If you want to update your platform folders, you can leave it out and it will update the ones listed in `app.json`, but you can still use it, if you want to update a specific one.
+
 `--locale`, `-l`: Specify the locale, which should be created/updated. Default: `en-US`
 
 `--deploy`, `-d`: Deploy the platform files to their respective developer site. It will deploy to the platform you specified with with `--platform`. The Dialogflow API v1 does not support programmatic agent creation. Therefor you are not able to deploy the application using the Jovo CLI.  But you can use the CLI to create `zip` file, which you can then import into Dialogflow.
@@ -80,8 +82,6 @@ $ jovo get -p alexaSkill -s <skill-id>
 # Help command:
 $ jovo help get
 ```
-**Options**:
-`--list-skills`, `l`: 
 
 ## jovo deploy
 `jovo deploy` is used to upload the platform folders to their respective developer site. Since the Dialogflow API v1 does not support programmatic agent creation, the deploy command will create `zip` file, which you can then import into Dialogflow. To deploy to the Amazon developer console, you have to set up the [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
@@ -92,6 +92,7 @@ $ jovo deploy --platform <alexaSkill | googleAction> [-l | --locale <de-DE | en-
 $ jovo help deploy
 ```
 **Options**:
+
 `--locale`, `-l`: Specify the locale, which should be deployed. Default: `en-US`
 
 `--target`, `-t`: Specify, if you want to deploy the updated interaction model with `model`, the updated skill information with `skill` or all of it with `all`.
