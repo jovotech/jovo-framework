@@ -35,7 +35,8 @@ If you run into problems, please submit an issue here: [jovotech/jovo-cli](https
 You can create a Jovo project into a new directory with the following command:
 
 ```sh
-$ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US | de-DE | etc.>] [-b | --build <alexaSkill | googleAction>] [-d | --deploy]
+$ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US | de-DE | etc.>] 
+  [-b | --build <alexaSkill | googleAction>] [-d | --deploy]
 
 # Help command:
 $ jovo help new
