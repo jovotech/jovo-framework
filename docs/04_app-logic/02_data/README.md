@@ -18,7 +18,7 @@ In this section, you will learn how to deal with entities and slot values provid
 
 ## Introduction to User Input
 
-> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
+> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](../01_getting-started/voice-app-basics.md).
 
 We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
@@ -72,7 +72,7 @@ app.setHandler({
 
 ### inputMap
 
-Similar to [`intentMap`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
+Similar to [`intentMap`](../04_app-logic/routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
 
 ```javascript
 // Create above webhook.post (webhook) or exports.handler (Lambda)
@@ -127,7 +127,7 @@ The user object can be accessed like this:
 let user = this.user();
 ```
 
-You can find more information here: [App Logic > Data > User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md).
+You can find more information here: [App Logic > Data > User](../04_app-logic/02_data/user.md).
 
 ### Platform Type
 
@@ -324,15 +324,15 @@ The example above will reduce the log output to this:
 
 ## Persisting Data
 
-> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing/#introduction-to-user-sessions).
+> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](../04_app-logic/01_routing/#introduction-to-user-sessions).
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing/#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](../04_app-logic/01_routing/#session-attributes).
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations > Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
+For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations > Databases](../07_integrations/databases).
 

@@ -15,7 +15,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 
 ## Introduction to Alexa Specific Features
 
-> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md/#amazon-alexa).
+> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../01_getting-started/voice-app-basics.md/#amazon-alexa).
 
 You can access the `alexaSkill` object like this:
 
@@ -26,16 +26,16 @@ let alexa = this.alexaSkill();
 
 ## Routing
 
-This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing).
+This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](../04_app-logic/01_routing).
 
 ### Dialog Interface
 
-You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/dialog.md).
+You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](../05_platform-specifics/amazon-alexa/dialog.md).
 
 
 ## Data
 
-This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data).
+This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../04_app-logic/02_data).
 
 ### Shopping and To Do Lists
 
@@ -183,7 +183,7 @@ Here is the [official reference by Amazon](https://developer.amazon.com/public/s
 
 ## Output
 
-This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output).
+This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](../04_app-logic/03_output).
 
 ### Progressive Responses
 
@@ -195,15 +195,15 @@ Here is the official reference by Amazon: [Send the User a Progressive Response]
 this.alexaSkill().progressiveResponse(speech);
 ```
 
-Find an example file here: [`indexProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexProgressiveResponse.js).
+Find an example file here: [`indexProgressiveResponse.js`](.../examples/alexa_specific/indexProgressiveResponse.js).
 
 ### Render Templates for Echo Show
 
-You can find some example code here: [`indexRenderTemplate.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js).
+You can find some example code here: [`indexRenderTemplate.js`](.../examples/alexa_specific/indexRenderTemplate.js).
 
 Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
 
 
 ## AudioPlayer Skills
 
-You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md).
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](../05_platform-specifics/amazon-alexa/audioplayer.md).

@@ -19,8 +19,8 @@ Find more information on server integrations here:
 
 Name | Description | Docs
 ------------ | ------------- | -------------
-Webhook | Run an express server as HTTPS endpoint | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/webhook.md)
-AWS Lambda | Run the voice app as AWS Lambda Function | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md)
+Webhook | Run an express server as HTTPS endpoint | [📝](../03_app-configuration/server/webhook.md)
+AWS Lambda | Run the voice app as AWS Lambda Function | [📝](../03_app-configuration/server/aws-lambda.md)
 
 
 ## Code Example

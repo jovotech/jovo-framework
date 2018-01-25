@@ -10,7 +10,6 @@ The Jovo Command Line Tools (see [GitHub Repository](https://github.com/jovotech
 * [jovo deploy](#jovo-deploy)
 * [jovo run](#jovo-run)
   * [Integrations](#integrations)
-* [Templates](#templates)
 
 ## Installation
 
@@ -43,7 +42,7 @@ $ jovo help new
 ```
 **Options**:
 
-`template`: Used to specify, which template should be used. Get a list of all the templates [here](). Default: `helloworld`
+`template`: Used to specify, which template should be used. Get a list of all the templates [here](https://github.com/jovotech/jovo-patterns). Default: `helloworld`
 
 `locale`: Choose the language of the interaction models. Default: `en-US`
 
@@ -153,20 +152,3 @@ $ jovo run --watch
 ```
 
 For this, we're using [`nodemon`](https://github.com/remy/nodemon), a neat package that monitors your app files and automatically restarts the server.
-
-## Templates
-
-We're currently working on adding more starter templates, with `helloworld` being the default. 
-
-```sh
-$ jovo new <directory> --template <template>
-
-# Example
-$ jovo new HelloWorld --template helloworld
-```
-
-You can find a list of templates here:
-
-Template | Description | Repository
------------- | ------------- | -------------
-helloworld | Creates a "Hello World" sample voice app | [jovo-sample-voice-app-nodejs](https://github.com/jovotech/jovo-sample-voice-app-nodejs)

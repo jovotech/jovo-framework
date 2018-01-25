@@ -31,7 +31,7 @@ There are three ways to get started with the Jovo Framework. You can either inst
 
 ### Jovo CLI
 
-The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [CLI](./02_cli/README.md).
+The Jovo Command Line Tools offer an easy way to create new voice apps from templates. You can find a more detailed description in the section [CLI](../02_cli).
 
 The open source GitHub repository can be found here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli) (pull requests encouraged!)
 

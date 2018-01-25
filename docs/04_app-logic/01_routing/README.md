@@ -33,12 +33,12 @@ For more conversational experiences that require back and forth between your app
 
 ![Two Sessions](https://www.jovo.tech/img/docs/session-ask.jpg)
 
-To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases).
+To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../07_integrations/databases#filepersistence).
 
 
 ## Intents
 
-If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md).
+If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../01_getting-started/voice-app-basics.md).
 
 Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 
@@ -651,4 +651,4 @@ let value = this.getSessionAttribute(key);
 let score = this.getSessionAttribute('score');
 ```
 
-Have a look at [App Logic > Data](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/data) to learn more about how to persist data across sessions.
+Have a look at [App Logic > Data](../04_app-logic/data) to learn more about how to persist data across sessions.

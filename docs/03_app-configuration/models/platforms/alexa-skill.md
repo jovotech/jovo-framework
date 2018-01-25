@@ -8,7 +8,7 @@ In this section, you will learn more about the contents of the `platforms/alexaS
 * [Skill.json](#skill.json)
 
 ## Overview
-The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon developer portal using the [`Jovo CLI`]().
+The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon developer portal using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli).
 
 ## .ask
 The `.ask` folder contains the `config` file, which has the basic deploy settings of your skill. We recommend you to not make any changes to this file.

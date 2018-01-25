@@ -40,7 +40,7 @@ exports.handler = (event, context, callback) => {
     app.handleLambda(event, context, callback);
 };
 ```
-You can find all the information regarding server configuration in this section: [App Configuration > Server](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server).
+You can find all the information regarding server configuration in this section: [App Configuration > Server](../03_app-configuration/server).
 
 ### App.js - Application Logic
 [`App.js`]() is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
@@ -82,10 +82,10 @@ app.setHandler({
 module.exports.app = app;
 ```
 
-You can find everythign related to the app logic here: [App Logic](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic).
+You can find everythign related to the app logic here: [App Logic](../04_app-logic).
 
 ### Models - Language Model
-The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](LINK ZU JOVO CLI FOLDER). The idea is to maintain a single language model instead of multiple ones for every platform you choose to deploy your voice application to. 
+The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). The idea is to maintain a single language model instead of multiple ones for every platform you choose to deploy your voice application to. 
 
 ```javascript
 {  
@@ -147,7 +147,7 @@ The models folder contains the Jovo language model, which can be used to create 
 }
 ```
 
-You can find out more about that here [App Logic > Models]()
+You can find out more about that here [App Configuration > Models](../03_app-configuration/models)
 
 ## How to Add Configurations
 To add configurations, you have two options: You can either add them at the beginning of [`app.js`](#app.js) in the constructor or you use the setter function of each configuration.

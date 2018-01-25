@@ -10,7 +10,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 
 ## Introduction to Google Assistant Specific Features
 
-> Find an introduction to how Google Assistant works here: [Getting Started > Voice App Basics > Google Assistant](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md/#google-assistant).
+> Find an introduction to how Google Assistant works here: [Getting Started > Voice App Basics > Google Assistant](../01_getting-started/voice-app-basics.md/#google-assistant).
 
 You can access the `googleAction` object like this:
 
@@ -21,13 +21,13 @@ let google = this.googleAction();
 
 ## Output
 
-This section provides an overview of Google Assistant specific features for output. For the basic concept, take a look here: [App Logic > Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output). 
+This section provides an overview of Google Assistant specific features for output. For the basic concept, take a look here: [App Logic > Output](../04_app-logic/03_output). 
 
 ### Multiple Reprompts
 
 Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
 
-The reprompts can be added to the [`ask`](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output#ask) method by using an array.
+The reprompts can be added to the [`ask`](../04_app-logic/03_output#ask) method by using an array.
 
 ```javascript
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
@@ -60,7 +60,7 @@ Here is the [official reference by Google](https://developers.google.com/actions
 
 With Jovo, you can display cards on Google Assistant surfaces. 
 
-You can find an example file here: [`indexGoogleAssistantCards.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js).
+You can find an example file here: [`indexGoogleAssistantCards.js`](.../examples/google_action_specific/indexGoogleAssistantCards.js).
 
 
 ### Suggestion Chips
@@ -71,4 +71,4 @@ Suggestion Chips provide the ability for your users to quickly answer a question
 this.googleAction().showSuggestionChips(['Chip1', 'Chip2', 'Chip3']);
 ```
 
-Find an example here: [`indexGoogleAssistantCards.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/indexGoogleAssistantCards.js).
+Find an example here: [`indexGoogleAssistantCards.js`](.../examples/google_action_specific/indexGoogleAssistantCards.js).
