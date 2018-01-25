@@ -11,7 +11,7 @@ In this section, you can learn more about different types of server configuratio
 
 Jovo come with off-the-shelf server integrations that make it easier for you to deploy your voice app to the provider of your choice.
 
-Jovo currently supports a [webhook](#webhook) (which we recommend for local prototyping) and [AWS Lambda](#aws-lambda). 
+Jovo currently supports a [webhook](./webhook.md) (which we recommend for local prototyping) and [AWS Lambda](./aws-lambda.md). 
 
 ## Available Integrations
 
@@ -19,8 +19,8 @@ Find more information on server integrations here:
 
 Name | Description | Docs
 ------------ | ------------- | -------------
-Webhook | Run an express server as HTTPS endpoint | [📝](../03_app-configuration/server/webhook.md)
-AWS Lambda | Run the voice app as AWS Lambda Function | [📝](../03_app-configuration/server/aws-lambda.md)
+Webhook | Run an express server as HTTPS endpoint | [📝](./webhook.md)
+AWS Lambda | Run the voice app as AWS Lambda Function | [📝](./aws-lambda.md)
 
 
 ## Code Example
