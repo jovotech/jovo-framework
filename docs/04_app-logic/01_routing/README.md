@@ -84,9 +84,10 @@ app.setHandler({
 You can learn more about Jovo standard intents in the following sections:
 
 * ['LAUNCH' Intent](#launch-intent)
-* ['END' Intent](#end-intent)
 * ['NEW_SESSION' Intent](#new_session-intent)
 * ['NEW_USER' Intent](#new_user-intent)
+* ['ON_REQUEST' Intent](#on_request-intent)
+* ['END' Intent](#end-intent)
 * ['Unhandled' Intent](#unhandled-intent)
 
 #### 'LAUNCH' Intent
@@ -134,6 +135,21 @@ Additionally to the other intents above, you can use the `'NEW_USER'` to direct 
 ```
 For example, this saves you some time calling `if (this.user().isNewUser()) { }` in every intent where you require the access to user data.
 
+#### 'ON_REQUEST' Intent
+
+The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. 
+
+```javascript
+'ON_REQUEUST': function() {
+    // Triggered with every request
+},
+
+// Example
+'ON_REQUEST': function() {
+    this.audioPlayer = this.alexaSkill().audioPlayer();
+},
+```
+
 
 #### 'END' Intent
 
@@ -166,7 +182,6 @@ It is helpful to find out why a session ended. Use getEndReason inside the `'END
     this.tell('Goodbye!');
  },
 ```
-
 
 
 #### 'Unhandled' Intent
@@ -258,10 +273,10 @@ let myIntentsToSkipUnhandled = [
 app.setIntentsToSkipUnhandled(myIntentsToSkipUnhandled);
 
 // Use setConfig
-app.setConfig({
+const config = {
     intentsToSkipUnhandled: myIntentsToSkipUnhandled,
     // Other configurations
-});
+};
 ```
 
 In the below example, if a person answers to the first question with "Help," it is not going to `'Unhandled'`, but to the global `'HelpIntent'`:
@@ -314,10 +329,10 @@ let myIntentMap = {
 app.setIntentMap(myIntentMap);
 
 // Use setConfig
-app.setConfig({
+const config = {
     intentMap: myIntentMap,
     // Other configurations
-});
+};
 ```
 
 This is useful especially for platform-specific, built-in intents. One example could be Amazon’s standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
