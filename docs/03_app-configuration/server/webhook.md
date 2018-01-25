@@ -1,6 +1,6 @@
 # [App Configuration](../) > [Server](README.md) > Webhook
 
-For voice apps in prototyping stage, we recommend using a webhook and a tunnel service like [ngrok](#ngrok) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](../03_app-configuration/server/aws-lambda.md) every time.
+For voice apps in prototyping stage, we recommend using a webhook and a tunnel service like [ngrok](#ngrok) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md) every time.
 
 * [Webhook Configuration](#webhook-configuration)
 * [Run the Webhook Locally](#run-the-webhook-locally)
@@ -45,7 +45,7 @@ $ jovo run
 $ node index.js
 ```
 
-Find more information on the `jovo run` command here: [CLI](../02_cli).
+Find more information on the `jovo run` command here: [CLI](.../02_cli).
 
 It should return this:
 
@@ -93,7 +93,7 @@ This is what the result looks like:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../07_integrations/analytics#bespoken) for powerful logging capabilities:
+Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](.../07_integrations/analytics#bespoken) for powerful logging capabilities:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/bespoken-logging.jpg)
 

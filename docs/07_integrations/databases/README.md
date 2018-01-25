@@ -22,7 +22,7 @@ This is an abstraction layer for persisting data across sessions. By default, th
 
 This will save data with your user's `userID` as a mainKey, and a `key` and a `value` specified by you.
 
-The easiest way to do so is to use the [user object](../04_app-logic/02_data/user.md) for this:
+The easiest way to do so is to use the [user object](.../04_app-logic/02_data/user.md) for this:
 
 ```javascript
 this.user().data.key = value;
@@ -52,7 +52,7 @@ this.db().save('score', score, function(err) {
 
 After you saved data, you can use a `key` to retrieve a `value` from the database.
 
-Again, you can use the [user object](../04_app-logic/02_data/user.md) for this:
+Again, you can use the [user object](.../04_app-logic/02_data/user.md) for this:
 
 ```javascript
 let data = this.user().data.key;

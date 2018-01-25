@@ -24,7 +24,7 @@ let user = this.user();
 
 The User object contains the possibility to store and retrieve user specific data, including [meta data](#meta-data).
 
-Data is stored using our [database integrations](../07_integrations/databases), with a file-based `db.json` structure enabled by default.
+Data is stored using our [database integrations](.../07_integrations/databases), with a file-based `db.json` structure enabled by default.
 
 Just specify a key and a value, and you're good to go:
 
@@ -49,7 +49,7 @@ this.user().data.key = value;
 this.user().data.score = 300;
 ```
 
-For more information on data persistence, take a look here: [Integrations > Databases](../07_integrations/databases).
+For more information on data persistence, take a look here: [Integrations > Databases](.../07_integrations/databases).
 
 
 ### Meta Data

@@ -40,7 +40,7 @@ exports.handler = (event, context, callback) => {
     app.handleLambda(event, context, callback);
 };
 ```
-You can find all the information regarding server configuration in this section: [App Configuration > Server](../03_app-configuration/server).
+You can find all the information regarding server configuration in this section: [App Configuration > Server](./server).
 
 ### App.js - Application Logic
 [`App.js`]() is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
@@ -220,16 +220,16 @@ Below is a list of all configurations:
 
 Category | Name | Description | Docs
 :--- | :--- | :--- | :---
-Routing | intentMap | Maps incoming intents to specified intent names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_routing#intentmap)
- | | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_routing#intentstoskipunhandled)
-Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#inputmap)
- | | logging | Logs both requests and responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#logging)
- | | requestLogging | Logs incoming requests | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#log-requests)
- | | responseLogging | Logs outgoing responses | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#log-responses)
- | | requestLoggingObjects | Limits request logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#request-logging-objects)
- | | responseLoggingObjects | Limits response logs to the provided objects | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data#response-logging-objects)
-User | userDataCol | Changes the name of the user data column in the database | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data/user.md#user-data)
- | | userMetaData | Change the default configurations for storing user meta data | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_data/user.md#user-meta-data)
-Output | i18n | Enable multilingual output for your voice app | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-logic/i18n.md#configuration)
-Integrations | Databases | Switch between supported database integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases)
- | | Analytics | Enable analytics integrations | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics)
+Routing | intentMap | Maps incoming intents to specified intent names | [📝](../04_app-logic/01_routing#intentmap)
+ | | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](../04_app-logic/01_routing#intentstoskipunhandled)
+Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](../04_app-logic/02_data#inputmap)
+ | | logging | Logs both requests and responses | [📝](../04_app-logic/02_data#logging)
+ | | requestLogging | Logs incoming requests | [📝](../04_app-logic/02_data#log-requests)
+ | | responseLogging | Logs outgoing responses | [📝](../04_app-logic/02_data#log-responses)
+ | | requestLoggingObjects | Limits request logs to the provided objects | [📝](../04_app-logic/02_data#request-logging-objects)
+ | | responseLoggingObjects | Limits response logs to the provided objects | [📝](../04_app-logic/02_data#response-logging-objects)
+User | userDataCol | Changes the name of the user data column in the database | [📝](../04_app-logic/02_data/user.md#user-data)
+ | | userMetaData | Change the default configurations for storing user meta data | [📝](../04_app-logic/02_data/user.md#user-meta-data)
+Output | i18n | Enable multilingual output for your voice app | [📝](../04_app-logic/03_app-logic/i18n.md#configuration)
+Integrations | Databases | Switch between supported database integrations | [📝](../07_integrations/databases/readme.md)
+ | | Analytics | Enable analytics integrations | [📝](../07_integrations/analytics)

@@ -88,9 +88,9 @@ You can find a troubleshooting guide by Amazon [here](https://developer.amazon.c
 
 ## Alexa Specific Visual Output
 
-You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa).
+You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [Platform Specifics > Amazon Alexa](.../05_platform-specifics/amazon-alexa).
 
 
 ## Google Assistant Specific Visual Output
 
-You can find out more about Google Assistant specific cards and suggestion chips here: [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant).
+You can find out more about Google Assistant specific cards and suggestion chips here: [Platform Specifics > Google Assistant](.../05_platform-specifics/google-assistant).
