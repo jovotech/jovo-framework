@@ -6,10 +6,13 @@ Comprehensive tutorials on how to build an Alexa Skill and Google Action.
 
 * [Beginner Tutorials](#beginner-tutorials)
 * [Voice App Courses](#voice-app-courses)
+* [Advanced Tutorials](#advanced-tutorials)
 * [Suggest a Tutorial](#suggest-a-tutorial)
 
 
 ## Beginner Tutorials
+
+> 🚀 Sign up for our newsletter to get new free courses and tutorials: [jovo.tech/newsletter](https://www.jovo.tech/newsletter)
 
 Getting started with new platforms like Amazon Alexa and Google Assistant can sometimes be a little overwhelming. This is why we created in-depth tutorials for beginners:
 
@@ -28,7 +31,16 @@ Name | Description | Link
 Project 1: Hello World! | Build a "Hello World" Voice App for both Alexa and Google Assistant | [jovo.tech/blog/project-1-hello-world](https://www.jovo.tech/blog/project-1-hello-world/)
 Project 2: Adventure Game | Build a choose-your-own-adventure type of game | [jovo.tech/blog/project-2-adventure-game](https://www.jovo.tech/blog/project-2-adventure-game/)
 
-> 🚀 Sign up for our newsletter to get new free courses: [jovo.tech/newsletter](https://www.jovo.tech/newsletter)
+
+## Advanced Tutorials
+
+Category | Tutorial
+------------ | -------------
+Account Linking | [How to set up Account Linking for Alexa with Auth0 and Jovo](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+| | [How to set up Account Linking for Google Actions with Auth0 and Jovo](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+| | [Login with Amazon: How to get your Alexa Skill User’s Email](https://www.jovo.tech/blog/alexa-login-with-amazon-email/)
+| Deployment | [How to Deploy your Alexa Skill and Google Action to Heroku](https://www.jovo.tech/blog/deploy-to-heroku/)
+
 
 
 ## Suggest a Tutorial
