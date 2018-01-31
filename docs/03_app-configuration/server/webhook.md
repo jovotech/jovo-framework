@@ -106,7 +106,7 @@ For this, Jovo uses a package called [alexa-verifier](https://github.com/mreinst
 
 ```javascript
 // Use this
-const {Webhook} = require('jovo-framework').WebhookVerified;
+const {WebhookVerified} = require('jovo-framework');
 
 // Instead of this
 const {Webhook} = require('jovo-framework');
