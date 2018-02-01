@@ -88,6 +88,8 @@ $ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US |
 
 #### jovo run
 
+![jovo run command](../img/jovo-run.png "jovo run command")
+
 You can use the `jovo run` command to start the development server in your `index.js` file. 
 
 Learn more here: [App Configuration > Server Configuration](../03_app-configuration/server).
@@ -157,6 +159,8 @@ Platform commands are used to interact with the voice platforms (Amazon Alexa or
 
 #### jovo init
 
+![jovo init command](../img/jovo-init.png "jovo init command")
+
 `jovo init` is the command to initialize a voice platform project to use with the Jovo Framework. This will create or update a file `app.json` with all the information needed to later [`build`](#jovo-build) the language models.
 
 To create it, use the following command: 
@@ -173,6 +177,9 @@ The resulting `app.json` file looks like this:
 // TODO
 
 #### jovo build
+
+![jovo build command](../img/jovo-build.png "jovo build command")
+
 `jovo build` is the command to create and update the platform specific interaction models using the Jovo model. Using the files in the `models/` folder and converting them into files in the `platforms/` folder.
 
 To learn more about Jovo language models, take a look at [App Configuration > Models](../03_app-configuration/models).
@@ -196,6 +203,9 @@ $ jovo build [-p | --platform <alexaSkill | googleAction>] [-l | --locale <de-DE
 `--deploy`, `-d`: Deploy the platform files to their respective developer site. It will deploy to the platform you specified with with `--platform`. The Dialogflow API v1 does not support programmatic agent creation. Therefor you are not able to deploy the application using the Jovo CLI.  But you can use the CLI to create `zip` file, which you can then import into Dialogflow.
 
 #### jovo get
+
+![jovo get command](../img/jovo-get.png "jovo get command")
+
 `jovo get` will import an existing Alexa Skill. Currently it is not possible to import a Google Action, since it is not supported by the Dialogflow API v1.
 
 To get the Skill from the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
@@ -212,6 +222,9 @@ $ jovo get --platform alexaSkill [-s | --skill-id <skill ID>] [-l | --list-skill
 ```
 
 #### jovo deploy
+
+![jovo deploy command](../img/jovo-deploy.png "jovo deploy command")
+
 `jovo deploy` is used to upload the platform folders to their respective developer site. Since the Dialogflow API v1 does not support programmatic agent creation, the deploy command will create `zip` file, which you can then import into Dialogflow. 
 
 To deploy to the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
