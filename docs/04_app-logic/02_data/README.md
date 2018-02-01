@@ -25,7 +25,12 @@ We call user input any additional information your user provides besides an `int
 
 ## How to Access Input
 
+ > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our migration document. // TODO
+
 There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers` intent functions, or by using the [`getInput`](#getinput) method.
+
+How the input looks like
+// TODO
 
 ### Input as Parameter
 You can access input by adding parameters directly to your intent, like so:
@@ -51,6 +56,8 @@ Two important things to consider when using this option:
 
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput('inputName')`.
 
+// TODO
+
 ```javascript
 app.setHandler({
 
@@ -61,7 +68,7 @@ app.setHandler({
         let inputs = this.getInputs();
 
         // Get input for a single slot or entity
-        let value = this.getInput('inputName');
+        let value = this.getInput('inputName').value;
 
         // Do something
     }
@@ -108,7 +115,7 @@ app.setHandler({
     // Other Intents and States
 
     'MyNameIsIntent': function(name) {
-        this.tell('Hello ' + name + '!');
+        this.tell('Hello ' + name.value + '!');
     }
 
     // Other Intents and States
@@ -189,7 +196,7 @@ const config = {
 
 The result looks like this (data changed):
 
-```json
+```javascript
 {
   "version": "1.0",
   "session": {

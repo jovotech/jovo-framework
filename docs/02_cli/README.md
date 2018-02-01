@@ -10,6 +10,7 @@ The Jovo Command Line Tools offer the ability to create, prototype, test and dep
     * [jovo new](#jovo-new)
     * [jovo run](#jovo-run)
   * [Platform Commands](#platform-commands)
+    * [jovo init](#jovo-init)
     * [jovo build](#jovo-build)
     * [jovo get](#jovo-get)
     * [jovo deploy](#jovo-deploy)
@@ -45,17 +46,21 @@ If you run into other problems, please submit an issue here: [jovotech/jovo-cli]
 
 ## Commands
 
+Jovo CLI commands can be divided into [basic commands](#basic-commands) (to create and run projects) and [platform commands](#platform-commands) (to interact with a voice platform).
+
 || Command | Description 
 ------------ | ------------ | ------------- 
 [Basic Commands](#basic-commands) | [`jovo new`](#jovo-new) | Create a new Jovo project || [`jovo run`](#jovo-run) | Runs a local development server (webhook)
 || [`jovo run`](#jovo-run) | Runs a local development server (webhook)
-[Platform Commands](#platform-commands) | [`jovo init`](#jovo-build) | Initializes platform-specific projects
+[Platform Commands](#platform-commands) | [`jovo init`](#jovo-build) | Initializes platform-specific projects in `app.json`
 | | [`jovo build`](#jovo-build) | Build platform-specific language models based on jovo `models` folder
 || [`jovo get`](#jovo-get) | Downloads an existing platform project into the `platforms` folder
 || [`jovo deploy`](#jovo-deploy) | Deploys the project to the voice platform
 
 
 ### Basic Commands
+
+These are the basic commands that help you develop Jovo voice apps faster, without interacting with the voice platforms (see [platform commands](#platform-commands) for features that are language model specific).
 
 #### jovo new
 You can create a Jovo project into a new directory with the following command:
@@ -70,9 +75,9 @@ $ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US |
 ```
 **Options**:
 
-`template`: Used to specify which template should be used. Get a list of all the templates [here](https://github.com/jovotech/jovo-templates). Default: `helloworld`
+`template`: Used to specify which template should be used. Get a list of all the templates [here](https://github.com/jovotech/jovo-templates). Default: `helloworld`.
 
-`locale`: Choose the language of the interaction models in the `models` folder. Default: `en-US`
+`locale`: Choose the language of the interaction models in the `models` folder. Default: `en-US`.
 
 `build`: Speed up the creation of your voice application, by building the platform specific files into the `platforms` folder right at the beginning. Additional parameters: `alexaSkill` or `googleAction`.
 
@@ -144,9 +149,12 @@ For this, we're using [`nodemon`](https://github.com/remy/nodemon), a neat packa
 
 ### Platform Commands
 
+Platform commands are used to interact with the voice platforms (Amazon Alexa or Google Assistant/Dialogflow). You don't have to use these commands if you just want to maintain the language/interaction models on the respective developer platforms.
+
+
 #### jovo init
 
-`jovo init` is the command to create initialize a voice platform project to use with the Jovo Framework. This will create or update a file `app.json` with all the information needed to later `build` the language models.
+`jovo init` is the command to initialize a voice platform project to use with the Jovo Framework. This will create or update a file `app.json` with all the information needed to later [`build`](#jovo-build) the language models.
 
 To create it, use the following command: 
 
@@ -157,7 +165,9 @@ $ jovo init --platform <alexaSkill | googleAction>
 # Options
 $ jovo init [-p | --platform <alexaSkill | googleAction>] ...
 ```
-This will also create an `app.json` file that stores the information needed to run `build` commands later.
+The resulting `app.json` file looks like this:
+
+// TODO
 
 #### jovo build
 `jovo build` is the command to create and update the platform specific interaction models using the Jovo model. Using the files in the `models/` folder and converting them into files in the `platforms/` folder.
@@ -165,7 +175,7 @@ This will also create an `app.json` file that stores the information needed to r
 To learn more about Jovo language models, take a look at [App Configuration > Models](../03_app-configuration/models).
 
 
-After the initial `build` process, you can either run it separately for each platform, or just let the CLI fetch the right information from the `app.json` file.
+After the initial [`init`](#jovo-init) process, you can either run `build`  separately for each platform, or just let the CLI fetch the right information from the `app.json` file.
 
 ```sh
 # Default

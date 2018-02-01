@@ -1,4 +1,4 @@
-# Alexa Skill
+# Google Action
 
 In this section, you will learn more about the contents of the `platforms/googleAction` folder.
 

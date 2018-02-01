@@ -3,8 +3,8 @@
 In this section, you will learn more about the essential configurations of a Jovo Voice App.
 
 * [Jovo App Structure](#jovo-app-structure)
-  * [Index.js - Server Configuration](#index.js---server-configuration)
-  * [App.js - Application Logic](#app.js---application-logic)
+  * [Index.js - Server Configuration](#indexjs---server-configuration)
+  * [App.js - Application Logic](#appjs---application-logic)
   * [Models - Language Model](#models---language-model)
 * [How to Add Configurations](#how-to-add-configurations)
   * [Available Configurations](#available-configurations)
@@ -26,7 +26,7 @@ const {app} = require('./app/app.js');
 // Server Configuration
 // =================================================================================
 
-if (isWebhook()) {
+if (app.isWebhook()) {
     const port = process.env.PORT || 3000;
     Webhook.listen(port, () => {
         console.log(`Example server listening on port ${port}!`);
@@ -43,7 +43,7 @@ exports.handler = (event, context, callback) => {
 You can find all the information regarding server configuration in this section: [App Configuration > Server](./server).
 
 ### App.js - Application Logic
-[`App.js`]() is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
+The `app` folder, and specifically `app.js` is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
 
 ```javascript
 'use strict';
@@ -82,14 +82,18 @@ app.setHandler({
 module.exports.app = app;
 ```
 
-You can find everythign related to the app logic here: [App Logic](../04_app-logic).
+You can find everything related to the app logic here: [App Logic](../04_app-logic).
 
 ### Models - Language Model
-The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). The idea is to maintain a single language model instead of multiple ones for every platform you choose to deploy your voice application to. 
+The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
+
+The idea is to maintain a single language model locally instead of having to go to the platform developer consoles independently.
+
+In the `models` folder, every language gets a file. For example, here's how a file `en-US.json` could look like:
 
 ```javascript
 {  
-    "invocation":"jovo beta",
+    "invocation": "your invocation name",
     "intents":[  
         {  
             "name":"HelloWorldIntent",
@@ -147,7 +151,7 @@ The models folder contains the Jovo language model, which can be used to create 
 }
 ```
 
-You can find out more about that here [App Configuration > Models](../03_app-configuration/models)
+You can find out more about that here [App Configuration > Models](../03_app-configuration/models).
 
 ## How to Add Configurations
 To add configurations, you have two options: You can either add them at the beginning of [`app.js`](#app.js) in the constructor or you use the setter function of each configuration.
@@ -158,8 +162,7 @@ To add them with the constructor you simply change the content of the config obj
 
 ```javascript
 const config = {
-    requestLogging: true,
-    responseLogging: true,
+    logging: true,
     // Add other configurations
 };
 
@@ -170,11 +173,12 @@ The other possibility is to use one of the setter functions:
 
 ```javascript
 // Enable logging with setters
-app.enableRequestLogging();
-app.enableResponseLogging();
+app.enableLogging();
 ```
 
 This is the default configuration:
+
+// TODO
 
 ```javascript
 const config = {
@@ -218,18 +222,18 @@ const config = {
 
 Below is a list of all configurations:
 
-Category | Name | Description | Docs
-:--- | :--- | :--- | :---
-Routing | intentMap | Maps incoming intents to specified intent names | [📝](../04_app-logic/01_routing#intentmap)
- | | intentsToSkipUnhandled | Intents which should not be mapped to 'Unhandled' when not found in a certain state | [📝](../04_app-logic/01_routing#intentstoskipunhandled)
-Data | inputMap | Maps incoming input (slots and parameters) to specified input names | [📝](../04_app-logic/02_data#inputmap)
- | | logging | Logs both requests and responses | [📝](../04_app-logic/02_data#logging)
- | | requestLogging | Logs incoming requests | [📝](../04_app-logic/02_data#log-requests)
- | | responseLogging | Logs outgoing responses | [📝](../04_app-logic/02_data#log-responses)
- | | requestLoggingObjects | Limits request logs to the provided objects | [📝](../04_app-logic/02_data#request-logging-objects)
- | | responseLoggingObjects | Limits response logs to the provided objects | [📝](../04_app-logic/02_data#response-logging-objects)
-User | userDataCol | Changes the name of the user data column in the database | [📝](../04_app-logic/02_data/user.md#user-data)
- | | userMetaData | Change the default configurations for storing user meta data | [📝](../04_app-logic/02_data/user.md#user-meta-data)
-Output | i18n | Enable multilingual output for your voice app | [📝](../04_app-logic/03_app-logic/i18n.md#configuration)
-Integrations | Databases | Switch between supported database integrations | [📝](../07_integrations/databases/readme.md)
- | | Analytics | Enable analytics integrations | [📝](../07_integrations/analytics)
+Category | Name | Description
+:--- | :--- | :---
+Routing | [intentMap]((../04_app-logic/01_routing#intentmap)) | Maps incoming intents to specified intent names
+ | | [intentsToSkipUnhandled]((../04_app-logic/01_routing#intentstoskipunhandled)) | Intents which should not be mapped to 'Unhandled' when not found in a certain state
+Data | [inputMap]((../04_app-logic/02_data#inputmap)) | Maps incoming input (slots and parameters) to specified input names
+ | | [logging]((../04_app-logic/02_data#logging)) | Logs both requests and responses
+ | | [requestLogging]((../04_app-logic/02_data#log-requests)) | Logs incoming requests
+ | | [responseLogging]((../04_app-logic/02_data#log-responses)) | Logs outgoing responses
+ | | [requestLoggingObjects]((../04_app-logic/02_data#request-logging-objects)) | Limits request logs to the provided objects
+ | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects) | Limits response logs to the provided objects
+User | [userDataCol]((../04_app-logic/02_data/user.md#user-data)) | Changes the name of the user data column in the database
+ | | [userMetaData]((../04_app-logic/02_data/user.md#user-meta-data)) | Change the default configurations for storing user meta data
+Output | [i18n]((../04_app-logic/03_app-logic/i18n.md#configuration)) | Enable multilingual output for your voice app
+Integrations | [Databases]((../07_integrations/databases/readme.md)) | Switch between supported database integrations
+ | | [Analytics]((../07_integrations/analytics)) | Enable analytics integrations

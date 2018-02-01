@@ -26,11 +26,13 @@ A `session` is an uninterrupted interaction between a user and your application.
 
 Sessions that contain only a single request with a `tell` response could look like this:
 
+// TODO
 ![One Session](https://www.jovo.tech/img/docs/session-tell.jpg)
 
 
 For more conversational experiences that require back and forth between your app and user, you need to use the `ask` method. Here is what a session with two requests could look like:
 
+//TODO
 ![Two Sessions](https://www.jovo.tech/img/docs/session-ask.jpg)
 
 To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](.../07_integrations/databases#filepersistence).
