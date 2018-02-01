@@ -1,4 +1,4 @@
-# Models/Platforms
+# Platforms
 
 Learn more about the `platforms` folder, which is represents the voice platform projects, including information and language models.
 
@@ -13,14 +13,25 @@ Learn more about the `platforms` folder, which is represents the voice platform 
 
 ## Introduction
 
-// TODO
+The `platforms` folder includes all the information you need to deploy the project to the respective developer platforms Amazon Alexa and Google Assistant.
+
+![Platforms Folder in a Jovo Project](../../../img/folder-structure-platforms.png "Platforms Folder in a Jovo Project" )
+
+At the beginning of a new project, the folder doesn't exist until you either import an existing Alexa Skill project with [`jovo get`](../../../02_cli#jovo-get), or initialize the platforms with [`jovo init`](../../../02_cli#jovo-init) and then create the files from the Jovo Language Model with [`jovo build`](../../../02_cli#jovo-build).
+
+If you only want to work with a platform specific model, for example, you want to create just an Alexa Skill, you don't necessarily need the `models` folder: The `platforms` folder and the [`jovo deploy`](../../../02_cli#jovo-deploy) command are enough. Go to [Jovo CLI](../../../02_cli) to learn more about all commands.
+
+
 
 ## Alexa Skill
 
-The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon developer portal using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli).
+The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon Developer Portal using the [`Jovo CLI`](../../../02_cli).
+
+![Alexa Skill Folder in a Jovo Project](../../../img/folder-structure-alexaSkill.png "Alexa Skill Folder in a Jovo Project" )
 
 ### .ask
 The `.ask` folder contains the `config` file, which has the basic deploy settings of your skill. We recommend you to not make any changes to this file.
+
 ```javascript
 {
 	"deploy_settings": {
@@ -33,12 +44,16 @@ The `.ask` folder contains the `config` file, which has the basic deploy setting
 ```
 
 ### models
-The Alexa interaction model, which was created with the Jovo model, will be stored here. 
+
+The Alexa Interaction Model is stored in this folder. It can either be built by the [`jovo build`](../../../02_cli#jovo-build) command (if you're making use of the Jovo Language Model), updated manually, or updated in the Amazon Developer Portal and then imported with [`jovo get`](../../../02_cli#jovo-get).
+
+For more information about Alexa Interaction Models, please see the official reference by Amazon: [Custom Interaction Model Reference (Intents, Slots, Sample Utterances)](https://developer.amazon.com/docs/custom-skills/custom-interaction-model-reference.html).
+
 ```javascript
 {
 	"interactionModel": {
 		"languageModel": {
-			"invocationName": "jovo beta",
+			"invocationName": "my test app",
 			"types": [],
 			"intents": [
 				{
@@ -83,16 +98,18 @@ The Alexa interaction model, which was created with the Jovo model, will be stor
 ```
 
 ### skill.json
-`Skill.json` contains the publication and configuration information of your Skill. 
+
+`Skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../02_cli#jovo-get) command).
+
 ```javascript
 {
 	"skillManifest": {
 		"publishingInformation": {
 			"locales": {
 				"en-US": {
-					"summary": "Sample Short Description",
+					"summary": "Jovo Sample App",
 					"examplePhrases": [
-						"Alexa open hello world"
+						"Alexa open my test app"
 					],
 					"name": "hello-world",
 					"description": "Sample Full Description"
@@ -113,13 +130,118 @@ The Alexa interaction model, which was created with the Jovo model, will be stor
 
 ## Google Action
 
-// TODO
+The `googleAction` folder currently contains the `dialogflow` (as supported natural language understanding tool) folder with all the files needed to  deploy the agent to Dialogflow Console using the [`Jovo CLI`](../../../02_cli).
+
+![Google Action Folder in a Jovo Project](../../../img/folder-structure-googleAction.png "Google Action Folder in a Jovo Project" )
+
+Please note that Jovo currently supports **Dialogflow v1**, which means that you can't programmatically create or update your agent. However, the [`jovo deploy`](../../../02_cli#jovo-deploy) command will create a `zip` which you can then import into Dialogflow.
+
+It will be stored inside the `googleAction` folder:
+
+![Dialogflow Agent Export](../../../img/dialogflow-agent-zip.png "Dialogflow Agent Export")
 
 ### Dialogflow
-The Dialogflow API v1 does not support programmatic agent creation. Therefor you are not able to deploy the application using the Jovo CLI.  But you can use the CLI to create `zip` file, which you can then import into Dialogflow.
+
+The `dialogflow` folder contains the following folders:
+
+![Dialogflow Folder Structure](../../../img/folder-structure-dialogflow.png "Dialogflow Folder Structure")
 
 #### Intents
-Here you will find the intents, which were created using the Jovo interaction model. 
+
+All the `intents` are saved in separate files and look like this:
+
+```javascript
+{
+	"name": "MyNameIsIntent",
+	"auto": true,
+	"webhookUsed": true,
+	"responses": [
+		{
+			"parameters": [
+				{
+					"isList": false,
+					"name": "name",
+					"value": "$name",
+					"dataType": "@sys.given-name"
+				}
+			]
+		}
+	]
+}
+```
+
+It is important that `"webhookUsed"` is set to `true` for your Jovo code to be triggered when this intent is called.
+
+The user phrases are added to a different file for each language, e.g. `MyNameIsIntent_usersays_en-us.json`, and look like this:
+
+```javascript
+[
+	{
+		"data": [
+			{
+				"text": "name",
+				"userDefined": true,
+				"alias": "name",
+				"meta": "@sys.given-name"
+			}
+		],
+		"isTemplate": false,
+		"count": 0
+	},
+	{
+		"data": [
+			{
+				"text": "my name is ",
+				"userDefined": false
+			},
+			{
+				"text": "name",
+				"userDefined": true,
+				"alias": "name",
+				"meta": "@sys.given-name"
+			}
+		],
+		"isTemplate": false,
+		"count": 0
+	},
+	{
+		"data": [
+			{
+				"text": "i am ",
+				"userDefined": false
+			},
+			{
+				"text": "name",
+				"userDefined": true,
+				"alias": "name",
+				"meta": "@sys.given-name"
+			}
+		],
+		"isTemplate": false,
+		"count": 0
+	},
+	{
+		"data": [
+			{
+				"text": "you can call me ",
+				"userDefined": false
+			},
+			{
+				"text": "name",
+				"userDefined": true,
+				"alias": "name",
+				"meta": "@sys.given-name"
+			}
+		],
+		"isTemplate": false,
+		"count": 0
+	}
+```
 
 #### Entities
-The input types, which you created yourself, will be stored here. 
+
+If you have defined input types, you will find the `entities` in separate folders as well.
+
+#### package.json
+
+This includes some agent specific information. We recommend to not change this file unless you know what you're doing.
