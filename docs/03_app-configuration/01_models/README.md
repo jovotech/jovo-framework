@@ -4,16 +4,21 @@ In this section, you will learn more about the Jovo Language Model, found in the
 
 * [Introduction](#introduction)
 * [Language Model Elements](#language-model-elements)
+    * [Invocation](#invocation)
     * [Intents](#intents)
+        * [Intent Name](#intent-name)
         * [Phrases](#phrases)
         * [Inputs](#inputs)
     * [Input Types](#input-types)
+        * [Input Type Name](#input-type-name)
+        * [Values](#values)
+        * [Synonyms](#synonyms)
 * [Platform Specific Elements](#platform-specific-elements)
   * [Alexa](#alexa)
   * [Dialogflow](#dialogflow)
 
 ## Introduction
-The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform specific language models with the help of the [`Jovo CLI`](../../02_cli). 
+The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../../02_cli). For the platform specific `nlu` (natural language understanding), we currently support built-in `alexa` for Alexa Skills, and `dialogflow` for Google Actions. These are referenced in the `app.json` file after the platforms are initialized with [`jovo init <platform>`](../../02_cli#jovo-init). To learn more about how the resulting platform models look like, please read [App Configuration > Models > Platforms](./platforms).
 
 You can find the language model files in the `models` folder of your Jovo project:
 
@@ -28,51 +33,51 @@ For example, the `en-US.json` in the [Jovo Sample Voice App](https://github.com/
     "invocation": "my test app",
     "intents":[  
         {  
-            "name":"HelloWorldIntent",
-            "phrases":[  
+            "name": "HelloWorldIntent",
+            "phrases": [  
                 "hello",
                 "say hello",
                 "say hello world"
             ]
         },
         {  
-            "name":"MyNameIsIntent",
-            "phrases":[  
+            "name": "MyNameIsIntent",
+            "phrases": [  
                 "{name}",
                 "my name is {name}",
                 "i am {name}",
                 "you can call me {name}"
             ],
-            "inputs":[  
+            "inputs": [  
                 {  
-                    "name":"name",
-                    "type":{  
-                        "alexa":"AMAZON.US_FIRST_NAME",
-                        "dialogflow":"@sys.given-name"
+                    "name": "name",
+                    "type": {  
+                        "alexa": "AMAZON.US_FIRST_NAME",
+                        "dialogflow": "@sys.given-name"
                     }
                 }
             ]
         }
     ],
-    "alexa":{  
-        "interactionModel":{  
-            "languageModel":{  
-                "intents":[  
+    "alexa": {  
+        "interactionModel": {  
+            "languageModel": {  
+                "intents": [  
                     {  
-                        "name":"AMAZON.CancelIntent",
-                        "samples":[  
+                        "name": "AMAZON.CancelIntent",
+                        "samples": [  
 
                         ]
                     },
                     {  
-                        "name":"AMAZON.HelpIntent",
-                        "samples":[  
+                        "name": "AMAZON.HelpIntent",
+                        "samples": [  
 
                         ]
                     },
                     {  
-                        "name":"AMAZON.StopIntent",
-                        "samples":[  
+                        "name": "AMAZON.StopIntent",
+                        "samples": [  
 
                         ]
                     }
@@ -90,9 +95,13 @@ The Jovo Language Model consists of several elements, which we will go through s
 
 * [Invocation](#invocation)
 * [Intents](#intents)
+    * [Intent Name](#intent-name)
     * [Phrases](#phrases)
     * [Inputs](#inputs)
 * [Input Types](#input-types)
+    * [Input Type Name](#input-type-name)
+    * [Values](#values)
+    * [Synonyms](#synonyms)
 
 For platform specific language model elements, take a look at the sections below:
 
@@ -101,41 +110,52 @@ For platform specific language model elements, take a look at the sections below
     * [Dialogflow](#dialogflow)
 
 ### Invocation
-Sets the invocation name of your voice application, although it only works on Alexa Skills, since the invocation name for Google Actions has to be set in the developer console.
+
+The `invocation` is the first element of the Jovo Language Model. It sets the invocation name of your voice application (the one people are using to talk to your voice app, see [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md) for more information).
 
 ```javascript
-"invocation":"my test app",
+"invocation": "my test app",
 ```
 
+Please note: The `invocation` element is currently only exported to Alexa Skills. Invocation names for Google Actions have to be set in the Actions on Google developer console.
+
+
 ### Intents
-Every Intent, which can be used across multiple platforms, will be defined here. Each intent is an object that includes a `name`, sample `phrases`, and `inputs` (optional):
+
+Intents can be added to the JSON as objects that include a `name`, sample `phrases`, and `inputs` (optional):
 
 ```javascript
 {  
-    "name":"MyNameIsIntent",
-    "phrases":[  
+    "name": "MyNameIsIntent",
+    "phrases": [  
         "{name}",
         "my name is {name}",
         "i am {name}",
         "you can call me {name}"
     ],
-    "inputs":[  
+    "inputs": [  
         {  
-            "name":"name",
-            "type":{  
-                "alexa":"AMAZON.US_FIRST_NAME",
-                "dialogflow":"@sys.given-name"
+            "name": "name",
+            "type": {  
+                "alexa": "AMAZON.US_FIRST_NAME",
+                "dialogflow": "@sys.given-name"
             }
         }
     ]
 }
 ```
 
+#### Intent Name
+
+The `name` specifies how the intent is called on the platforms. We recommend using a consistent standard. In our examples, we `Intent` to each name, like `MyNameIsIntent`.
+
 #### Phrases
 
+This is an array of example sentences, or, `phrases`, which will be used to train the language model on Alexa and Dialogflow. This is the equivalent to utterances or "user says" on the respective developer platforms.
 
 #### Inputs
-While defining your inputs (slots on Amazon Alexa and entity on Google Action) you can choose to either provide seperate input types for each platform or you simply use your own input type.
+While defining your `inputs` (slots on Alexa and entities in Dialogflow) you can choose to either provide seperate input types for each platform, or define your own input type:
+
 ```javascript
 "inputs": [
     {
@@ -153,9 +173,16 @@ While defining your inputs (slots on Amazon Alexa and entity on Google Action) y
     }
 ]
 ```
+In the upper part of the example above, for the `name` input, we distinguish between input types for `alexa` and `dialogflow`. Learn more about their built-in input types here:
+* Amazon Alexa: [Slot Type Reference](https://developer.amazon.com/docs/custom-skills/slot-type-reference.html)
+* Dialogflow: [System Entities](https://dialogflow.com/docs/reference/system-entities)
+
+In the lower part, we reference a new input type called `myCityInputType`, which we need to define outside the `intents` array of the overall model.
 
 ### Input Types
-This is the place, where you can define your own input types.
+
+The `inputTypes` array is the place where you can define your own input types and provide a `name`, `values`, and `synonyms` (optional).
+
 ```javascript
 "inputTypes": [
     {
@@ -167,8 +194,7 @@ This is the place, where you can define your own input types.
             {
                 "value": "New York",
                 "synonyms": [
-                    "New York City",
-                    "the city that never sleeps"
+                    "New York City"
                 ]
             }
         ]
@@ -176,11 +202,26 @@ This is the place, where you can define your own input types.
 ],
 ```
 
+#### Input Type Name
+
+The `name` specifies how the input type is referenced. Again, we recommend to use a consistent style throughout all input types to keep it organized.
+
+#### Values
+
+This is an array of elements that each contain a `value` and optionally `synonyms`. With the values, you can define which inputs you're expecting from the user.
+
+#### Synonyms
+
+Sometimes different words have the same meaning. In the example above, we have a main value `New York` and a synonym `New York City`. 
+
+To learn more about how these input values and synonyms can be accessed, take a look at [App Logic > Data](../../04_app-logic/02_data).
+
+
 ## Platform Specific Elements
 
 If you only want to use certain features for one of the platforms, you can also add objects for their natural language understanding tools (`nlu`) to the model.
 
-For Alexa Skills, Jovo currently supports the built-in nlu [`alexa`](#alexa), while for Google Assistant, [`dialogflow`](#dialogflow) is supported.
+For Alexa Skills, Jovo currently supports the built-in NLU (natural language understanding) [`alexa`](#alexa), while for Google Assistant, [`dialogflow`](#dialogflow) is supported.
 
 ### Alexa
 
@@ -190,7 +231,7 @@ Here are some examples:
 * Built-in intents and slots (the ones with `AMAZON.` prepended to their names)
 * Other Alexa-specific features like the Dialog Interface
 
-// TODO
+This is how it looks like:
 
 ```javascript
 "alexa": {
@@ -214,7 +255,8 @@ Here are some examples:
     }
 }
 ```
+The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder (beta) and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
 ### Dialogflow
 
-// TODO
+`dialogflow` specific elements will be added soon.
