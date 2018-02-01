@@ -39,7 +39,7 @@ $ jovo -V
 If you had the CLI installed before the release of Jovo Framework v1, and are running into problems after updating it to the newest version, please try to uninstall it globally before you install it again:
 
 ```sh
-$ npm remove -g jovo-cli
+$ npm uninstall -g jovo-cli
 ```
 
 If you run into other problems, please submit an issue here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli). Thank you! 
@@ -63,6 +63,9 @@ Jovo CLI commands can be divided into [basic commands](#basic-commands) (to crea
 These are the basic commands that help you develop Jovo voice apps faster, without interacting with the voice platforms (see [platform commands](#platform-commands) for features that are language model specific).
 
 #### jovo new
+
+![jovo new command](../img/jovo-new.png "jovo new command")
+
 You can create a Jovo project into a new directory with the following command:
 
 ```sh
