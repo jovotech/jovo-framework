@@ -1,6 +1,6 @@
-# Models
+# Jovo Language Model
 
-In this section, you will learn more about the Jovo interaction model.
+In this section, you will learn more about the Jovo Language Model, found in the `models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../../02_cli).
 
 * [Introduction](#introduction)
 * [Language Model Elements](#language-model-elements)
@@ -13,11 +13,17 @@ In this section, you will learn more about the Jovo interaction model.
   * [Dialogflow](#dialogflow)
 
 ## Introduction
-The Jovo language model allows you to maintain only a single file, which can be used to create the platform specific language models with the help of the [`Jovo CLI`](). Every language you choose to support will have its very own interaction model (`en-US`, `de-DE`, etc.). Overall the Jovo model is similar to the Alexa interaction model with some small changes here and there.
+The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform specific language models with the help of the [`Jovo CLI`](../../02_cli). 
+
+You can find the language model files in the `models` folder of your Jovo project:
+
+![Model Folder in a Jovo Project](../../img/folder-structure-models.png "Model Folder in a Jovo Project")
+
+Every language you choose to support will have its very own interaction model (`en-US`, `de-DE`, etc.). Overall the Jovo model is similar to the Alexa interaction model with some small changes here and there.
 
 ```javascript
 {  
-    "invocation":"jovo beta",
+    "invocation": "your invocation name",
     "intents":[  
         {  
             "name":"HelloWorldIntent",

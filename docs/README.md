@@ -13,7 +13,8 @@ Getting Started | [Installation](./01_getting-started) | &nbsp;
 &nbsp; | [Voice App Basics](./01_getting-started/voice-app-basics.md) | &nbsp;
 CLI | [Overview](./02_cli) | &nbsp;
 App Configuration | [Overview](./03_app-configuration) | &nbsp;
-&nbsp; | [Server Configuration](./03_app-configuration/server) | [Webhook](./03_app-configuration/server/webhook.md), [AWS Lambda](./03_app-configuration/server/aws-lambda.md)
+&nbsp; | [Language Models](./03_app-configuration/01_models)  | &nbsp;
+&nbsp; | [Server Configuration](./03_app-configuration/02_server) | [Webhook](./03_app-configuration/server/webhook.md), [AWS Lambda](./03_app-configuration/server/aws-lambda.md)
 App Logic | [Overview](./04_app-logic) | &nbsp;
 &nbsp; | [Routing](./04_app-logic/01_routing) | &nbsp;
 &nbsp; | [Data](./04_app-logic/02_data) | [User](./04_app-logic/02_data/user.md)
