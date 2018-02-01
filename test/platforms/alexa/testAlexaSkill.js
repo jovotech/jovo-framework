@@ -2,7 +2,6 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
 
-let Jovo = require('../../../lib/jovo');
 const RequestBuilderAlexaSkill = require('../../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
 let RequestBuilderGoogleAction = require('../../../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;

@@ -8,18 +8,10 @@ const RequestBuilderAlexaSkill = require('./lib/platforms/alexaSkill/request/uti
 
 const http = require('http');
 const express = require('express');
-const verifier = require('alexa-verifier-middleware');
 const bodyParser = require('body-parser');
-const path = require('path');
 
 let server = express();
 server.use(bodyParser.json());
-
-const verifiedServer = express();
-const alexaRouter = express.Router(); // eslint-disable-line
-verifiedServer.use(alexaRouter);
-alexaRouter.use(verifier);
-alexaRouter.use(bodyParser.json());
 
 // check for running ngrok tunnel
 server.listen = function listen() {
@@ -156,12 +148,32 @@ if (process.argv.length > 2) {
     }
 }
 
-module.exports.isWebhook = function() {
-    return process.argv.indexOf('--webhook') > -1 ? 'webhook' : '';
-};
-
 
 module.exports.Webhook = server;
+
+
+const verifiedServer = express();
+verifiedServer.listen = function() {
+    try {
+        const verifier = require('alexa-verifier-middleware');
+        let router = express.Router(); //eslint-disable-line
+        verifiedServer.use(router);
+        router.use(verifier);
+        router.use(bodyParser.json());
+        let server = http.createServer(this);
+        return server.listen.apply(server, arguments); // eslint-disable-line
+    } catch (error) {
+        if (error.code === 'MODULE_NOT_FOUND') {
+            console.log();
+            console.log('  Please install module alexa-verifier-middleware');
+            console.log('  $ npm install alexa-verifier-middleware');
+            console.log();
+        } else {
+            console.log(error);
+        }
+    }
+};
+
 module.exports.WebhookVerified = verifiedServer;
 // module.exports.Jovo = new Jovo();
 module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;

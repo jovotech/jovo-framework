@@ -2,7 +2,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const assert = chai.assert;
-const expect = require('chai').expect;
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -10,7 +9,6 @@ chai.should();
 
 // let should = chai.should;
 const App = require('../../lib/app').App;
-const BaseApp = require('../../lib/app');
 
 const RequestBuilderAlexaSkill = require('../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
