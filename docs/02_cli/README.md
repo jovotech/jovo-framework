@@ -167,10 +167,10 @@ To create it, use the following command:
 
 ```sh
 # Default
-$ jovo init --platform <alexaSkill | googleAction>
+$ jovo init <alexaSkill | googleAction>
 
 # Options
-$ jovo init [-p | --platform <alexaSkill | googleAction>] ...
+$ jovo init <alexaSkill | googleAction> [-e | --endpoint <ngrok | bst-proxy>]
 ```
 The resulting `app.json` file looks like this:
 
