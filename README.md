@@ -15,8 +15,23 @@
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
 <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
-
 <br/>
+
+```javascript
+app.setHandler({
+    'LAUNCH': function() {
+        this.toIntent('HelloWorldIntent');
+    },
+
+    'HelloWorldIntent': function() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    'MyNameIsIntent': function(name) {
+        this.tell('Hey ' + name.value + ', nice to meet you!');
+    },
+});
+```
 
 Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities. [Check out our features below.](#features)
 
@@ -25,6 +40,7 @@ Jovo is the first open source framework that lets you build voice apps for both 
 
 ## Table of Contents
 
+* [Installation](#installation)
 * [Features](#features)
   * [General](#general)
   * [Platform Specific Features](#platform-specific-features)
@@ -37,6 +53,23 @@ Jovo is the first open source framework that lets you build voice apps for both 
 * [Contributing](#contributing)
 * [Community Projects](#community-projects)
 * [Development Roadmap](#development-roadmap)
+
+
+## Installation
+
+> Read more in our [Getting Started Guide](./01_getting-started).
+
+Install the Jovo CLI:
+
+```sh
+$ npm install -g jovo-cli
+```
+
+Create a new Jovo project:
+
+```sh
+$ jovo new <directory>
+```
 
 ## Features
 
@@ -126,50 +159,6 @@ Name | Description | Docs
 bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#bst-proxy)
 nodemon | Monitor changes and automatically restart the server | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli/#watch)
 
-
-## Getting Started
-
-There are three ways to get started with the Jovo Framework. You can either install our command line tools (recommended), save the jovo-framework npm package, or clone our sample voice app.
-
-Technical Requirements: Node.js version 4 or later & NPM (node package manager). Here are some tutorials to install Node.js and NPM: [Mac](http://blog.teamtreehouse.com/install-node-js-npm-mac), [Windows](http://blog.teamtreehouse.com/install-node-js-npm-windows).
-
-### Jovo CLI
-
-The [Jovo Command Line Tools](https://github.com/jovotech/jovo-cli) offer an easy way to create new voice apps from templates. Install them with:
-
-```sh
-$ npm install -g jovo-cli
-```
-
-You can create a Jovo project into a new directory with the following command:
-```sh
-$ jovo new <directory>
-```
-This will clone the [Jovo Sample App](https://github.com/jovotech/jovo-sample-voice-app-nodejs) and install all the necessary dependencies so you can get started right away.
-
-### Jovo Framework
-
-If you want to use the Jovo Framework as a dependency in an already existing project, you can also use npm to save it to your package.json:
-
-```
-$ npm install --save jovo-framework
-```
-
-### Jovo Sample App
-
-Right now, there is one sample app available, [which you can find here](https://github.com/jovotech/jovo-sample-voice-app-nodejs).
-
-You can clone it like this:
-
-```
-$ git clone https://github.com/jovotech/jovo-sample-voice-app-nodejs.git
-```
-
-Afterwards, go to the app directory and do
-
-```
-$ npm install
-```
 
 ## Tutorials
 

@@ -36,7 +36,9 @@ $ jovo -V
 
 ### Troubleshooting
 
-If you had the CLI installed before the release of Jovo Framework v1, and are running into problems after updating it to the newest version, please try to uninstall it globally before you install it again:
+Find out more about technical requirements here: [Getting Started > Installation](../01_getting-started#technical-requirements).
+
+If you had the CLI installed before the release of Jovo Framework `v1.0`, and are running into problems after updating it to the newest version, please try to uninstall it globally before you install it again:
 
 ```sh
 $ npm uninstall -g jovo-cli
@@ -52,7 +54,7 @@ Jovo CLI commands can be divided into [basic commands](#basic-commands) (to crea
 ------------ | ------------ | ------------- 
 [Basic Commands](#basic-commands) | [`jovo new`](#jovo-new) | Create a new Jovo project || [`jovo run`](#jovo-run) | Runs a local development server (webhook)
 || [`jovo run`](#jovo-run) | Runs a local development server (webhook)
-[Platform Commands](#platform-commands) | [`jovo init`](#jovo-build) | Initializes platform-specific projects in `app.json`
+[Platform Commands](#platform-commands) | [`jovo init`](#jovo-init) | Initializes platform-specific projects in `app.json`
 | | [`jovo build`](#jovo-build) | Build platform-specific language models based on jovo `models` folder
 || [`jovo get`](#jovo-get) | Downloads an existing platform project into the `platforms` folder
 || [`jovo deploy`](#jovo-deploy) | Deploys the project to the voice platform
@@ -85,6 +87,18 @@ $ jovo new <directory> [-t | --template <template-name>] [-l | --locale <en-US |
 `build`: Speed up the creation of your voice application, by building the platform specific files into the `platforms` folder right at the beginning. Additional parameters: `alexaSkill` or `googleAction`.
 
 `deploy`: Deploy the platform files to their respective developer site. It will deploy to the platform you specified with the `build`. The Dialogflow API v1 does not support programmatic agent creation. Therefor you are not able to deploy the application using the Jovo CLI. But you can use the CLI to create `zip` file, which you can then import into Dialogflow.
+
+**Templates**
+
+Below is a list of templates that can currently be used with the `jovo new` command.
+
+You can find the complete repository on GitHub: [jovotech/jovo-templates](https://github.com/jovotech/jovo-templates).
+
+Name | Description 
+:--- | :---
+[`helloworld`](https://github.com/jovotech/jovo-templates/01_helloworld) | `Default`. Jovo Sample Voice App with a simple "Hello World!" + asking for the user's name
+[`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/02_alexa-audioplayer) | Sample Alexa Audioplayer Skill that plays a longform audio file with the Audioplayer directive
+
 
 #### jovo run
 

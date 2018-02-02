@@ -12,13 +12,14 @@ In this section, you will learn more about how to use intents and states to rout
   * [toIntent](#tointent)
   * [toStateIntent](#tostateintent)
   * [toStatelessIntent](#tostatelessintent)
+* [User Input](#user-input)
 * [Session Attributes](#session-attributes)
 
 ## Introduction to User Sessions
 
 To build engaging voice apps, it's important to understand the concept of user sessions on voice platforms.
 
-A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request`, but can consist of multiple sequential inputs and outputs. The length of a session is dependent of the following factors:
+A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request`, but can have a series of inputs and outputs. A session can end for the following reasons:
 
 * The response includes `shouldEndSession`, which is true for `tell` and `endSession` method calls
 * A user doesn't respond to an ask prompt and the session times out
@@ -624,7 +625,9 @@ this.toStatelessIntent('PizzaIntent');
 this.toStatelessIntent('PizzaIntent', moreData);
 ```
 
+## User Input
 
+// TODO
 
 ## Session Attributes
 
