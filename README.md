@@ -92,8 +92,8 @@ Name | Description | Docs
 User object | Create contextual experiences with user specific data and services | [📝](./docs/04_app-logic/02_data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](./docs/04_app-logic/03_output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](./docs/04_app-logic/03_output/i18n.md)
-Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](./docs/05_platform-specifics/databases)
-Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](./docs/05_platform-specifics/analytics)
+Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](./docs/07_integrations/databases)
+Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](./docs/07_integrations/analytics)
 
 
 ### Platform Specific Features
@@ -104,7 +104,7 @@ Jovo is not a common denominator solution. You can access platform specific feat
 
 Name | Description | Docs
 :--- | :--- | :---
-Multi-platform handler &nbsp; &nbsp; &nbsp; &nbsp; | Add or overwrite specific intents and states for platform specific app logic | [Example](./docs/04_app-logic/readme.md#handler)
+Multi-platform handler &nbsp; &nbsp; &nbsp; &nbsp; | Add or overwrite specific intents and states for platform specific app logic | [📝](./docs/04_app-logic#handler)
 
 
 #### Amazon Alexa
@@ -116,9 +116,9 @@ VideoApp | Build Alexa VideoApp Skills | [📝](./docs/05_platform-specifics/ama
 Alexa Cards | Create visual output with home cards for Alexa Skills  | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#cards)
 Alexa Device Address | Access a users' device location | [Example](./examples/alexa_specific/indexAlexaDeviceAddress.js)
 Alexa Lists | Access users' To Do and Shopping Lists | [Example](./examples/alexa_specific/indexAlexaLists.js)
-Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](./docs/03_app-configuration/server/#host-the-webhook-on-a-server)
+Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](./docs/03_app-configuration/server/webhook.md#host-the-webhook-on-a-server)
 Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversations | [📝](./docs/05_platform-specifics/amazon-alexa/dialog.md)
-Echo Show Render Templates | Display visual elements on Echo Show | [📝](./docs/05_platform-specifics/amazon-alexa/display-templates)
+Echo Show Render Templates | Display visual elements on Echo Show | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#display-templates)
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](./docs/05_platform-specifics/amazon-alexa#progressive-responses)
 
 
@@ -127,7 +127,7 @@ Progressive Responses | Keep your users engaged while processing a longer reques
 Name | Description | Docs
 :--- | :--- | :---
 Google Assistant Cards &nbsp; &nbsp; &nbsp; | Create visual Output for the Google Assistant mobile app | [Example](./examples/google_action_specific/indexGoogleAssistantCards.js)
-Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](./docs/05_platform-specifics/google-assistant/readme.md#suggestion-chips)
+Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](./docs/05_platform-specifics/google-assistant#suggestion-chips)
 
 ### Integrations
 
@@ -152,12 +152,12 @@ Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and M
 
 #### CLI Integrations
 
-See the [Jovo CLI Docs](./docs/02_cli/readme.md) for more information on CLI features.
+See the [Jovo CLI Docs](./docs/02_cli/) for more information on CLI features.
 
 Name | Description | Docs
 :--- | :--- | :---
-bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](./docs/02_cli/readme.md#bst-proxy)
-nodemon | Monitor changes and automatically restart the server | [📝](./docs/02_cli/readme.md#watch)
+bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](./docs/02_cli#bst-proxy)
+nodemon | Monitor changes and automatically restart the server | [📝](./docs/02_cli#watch)
 
 
 ## Tutorials
