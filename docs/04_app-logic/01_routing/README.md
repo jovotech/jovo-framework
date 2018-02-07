@@ -143,7 +143,7 @@ For example, this saves you some time calling `if (this.user().isNewUser()) { }`
 The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. 
 
 ```javascript
-'ON_REQUEUST': function() {
+'ON_REQUEST': function() {
     // Triggered with every request
 },
 
