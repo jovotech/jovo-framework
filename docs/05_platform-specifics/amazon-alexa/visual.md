@@ -14,8 +14,7 @@ Learn more about how to build Alexa Skills with visual output using the Jovo Fra
 
 ## Introduction to Visual Ouput
 
-Visual output is used to describe or enhance the voice interaction. This ranges from simple [cards](#cards) with additional information to a [video](#video), but some of these features are only availabe for certain devises.
-
+Visual output is used to describe or enhance the voice interaction. This ranges from simple [cards](#cards) to displaying a [video](#video).
 ## Features
 
 ### Cards
@@ -169,7 +168,7 @@ this.alexaSkill().showDisplayTemplate(bodyTemplate6);
 
 #### List Templates
 
-As the name says, the list template is used to display a set of scrollabe items (text and images).
+The list template is used to display a set of scrollabe and selectable items (text and images).
 
 [ListTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate1-for-text-lists-and-optional-images)
 ```javascript
@@ -229,4 +228,4 @@ To launch videos on an Echo Show you can use the `VideoApp` interface:
 ```javascript
 this.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle');
 ```
-[Official Amazon reference](#https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html)
+[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html)

@@ -11,7 +11,7 @@ In this section, you will learn more about the essentials of building the logic 
 
 ## Basic Concepts
 
-In the following sections, you will learn how to [handle](#handler) and [route](#routing) through intents and states, handling [user input and data](#data), and crafting speech and visual [output](#output). 
+In the following sections, you will learn about [handling](#handler) and [routing](#routing) through intents and states, accessing [user input and data](#data), and crafting speech and visual [output](#output). 
 
 ### Handler
 

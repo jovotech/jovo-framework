@@ -111,14 +111,14 @@ Multi-platform handler &nbsp; &nbsp; &nbsp; &nbsp; | Add or overwrite specific i
 
 Name | Description | Docs
 :--- | :--- | :---
-Audioplayer | Build Alexa Audioplayer Skills | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md)
-VideoApp | Build Alexa VideoApp Skills | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexVideoApp.js)
-Alexa Cards | Create visual output with home cards for Alexa Skills  | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaCards.js)
+Audioplayer | Build Alexa Audioplayer Skills | [📝](./docs/05_platform-specifics/amazon-alexa/audioplayer.md)
+VideoApp | Build Alexa VideoApp Skills | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#video)
+Alexa Cards | Create visual output with home cards for Alexa Skills  | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#cards)
 Alexa Device Address | Access a users' device location | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaDeviceAddress.js)
 Alexa Lists | Access users' To Do and Shopping Lists | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexAlexaLists.js)
 Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/#host-the-webhook-on-a-server)
 Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversations | [📝](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/04_platform-specifics/amazon-alexa/dialog.md)
-Echo Show Render Templates | Display visual elements on Echo Show | [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/indexRenderTemplate.js)
+Echo Show Render Templates | Display visual elements on Echo Show | [📝](./docs/05_platform-specifics/amazon-alexa/display-templates)
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa#progressive-responses)
 
 
