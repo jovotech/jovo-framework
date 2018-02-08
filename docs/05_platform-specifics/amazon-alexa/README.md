@@ -77,9 +77,9 @@ Get the address:
 this.user().getDeviceAddress();
 
 // example
-this.user().getAddress()
+this.user().getDeviceAddress()
     .then((data) => {
-        this.tell('Your address');
+        this.tell('I got your address');
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
             this.alexaSkill().showAskForAddressCard()

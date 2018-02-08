@@ -19,7 +19,7 @@ this.tell('Please grant the permission to access your lists.');
 
 ### Shopping List
 
-Retrieve the user's shopping list:
+Get the user's shopping list:
 
 ```javascript
 this.user().getShoppingList(status);
@@ -81,7 +81,7 @@ this.user().updateShoppingList('milk', 'almond milk', 'active')
 
 ### To-Do List
 
-Retrieve the user's to-do list:
+Get the user's to-do list:
 
 ```javascript
 this.user().getToDoList(status);
