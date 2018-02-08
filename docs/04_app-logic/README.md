@@ -2,14 +2,18 @@
 
 In this section, you will learn more about the essentials of building the logic of your Jovo Voice App.
 
-* [Overview](#overview)
 * [Basic Concepts](#basic-concepts)
+  * [Handler](#handler)
   * [Routing](#routing)
   * [Data](#data)
   * [Output](#output)
 
 
-## Overview
+## Basic Concepts
+
+In the following sections, you will learn about [handling](#handler) and [routing](#routing) through intents and states, accessing [user input and data](#data), and crafting speech and visual [output](#output). 
+
+### Handler
 
 The `handlers` variable is the main building block of your voice app. This is where the logic happens.
 
@@ -26,10 +30,21 @@ app.setHandler({
 });
 ```
 
+You can also define seperate handlers for each platform to overwrite specific intents and states for platform specific app logic.
 
-## Basic Concepts
+```javascript
+app.setAlexaHandler({
+    'HelloWorldIntent': function() {
+        this.tell('Hello Alexa user');
+    }
+});
 
-In the following sections, you will learn how to [route](#routing) through intents and states, handling [user input and data](#data), and crafting speech and visual [output](#output). 
+app.setGoogleActionHandler({
+    'HelloWorldIntent': function() {
+        this.tell('Hello Google user');
+    }
+});
+```
 
 ### Routing
 

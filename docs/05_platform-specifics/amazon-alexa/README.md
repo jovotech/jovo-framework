@@ -10,7 +10,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
   * [User Specific Data](#user-specific-data)
 * [Output](#output)
   * [Progressive Responses](#progressive-responses)
-  * [Render Templates for Echo Show](#render-templates-for-echo-show)
+  * [Visual Output](#visual-output)
 * [AudioPlayer Skills](#audioplayer-skills)
 
 ## Introduction to Alexa Specific Features
@@ -197,11 +197,9 @@ this.alexaSkill().progressiveResponse(speech);
 
 Find an example file here: [`indexProgressiveResponse.js`](../../../examples/alexa_specific/indexProgressiveResponse.js).
 
-### Render Templates for Echo Show
+### Visual Output
 
-You can find some example code here: [`indexRenderTemplate.js`](../../../examples/alexa_specific/indexRenderTemplate.js).
-
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/display-interface-reference).
+You can find out more about visual output [here](./visual.md)
 
 
 ## AudioPlayer Skills
