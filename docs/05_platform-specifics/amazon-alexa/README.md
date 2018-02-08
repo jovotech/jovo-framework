@@ -7,7 +7,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
   * [Dialog Interface](#dialog-interface)
 * [Data](#data)
   * [Shopping and To Do Lists](#shopping-and-to-do-lists)
-  * [User Specific Data](#user-specific-data)
+  * [Location](#location)
 * [Output](#output)
   * [Progressive Responses](#progressive-responses)
   * [Visual Output](#visual-output)
@@ -39,96 +39,12 @@ This section provides an overview of Alexa specific features for user data. For 
 
 ### Shopping and To Do Lists
 
-Ask for list permissions:
+You can find more about lists here: [Platform specifics > Amazon Alexa > List](./list.md)
 
-```javascript
-this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
-```
+### Location
 
-Here is some example code:
-
-```javascript
-app.setHandler({
-
-    // Other intents
-
-    'GetShoppingListIntent': function() {
-        // Active or completed
-        this.user().getShoppingList('active')
-            .then((data) => {
-                // Iterate through items on list
-                for (let obj of data.items) {
-                    this.speech.addSentence(obj.value);
-                }
-                this.tell(this.speech);
-            })
-            .catch((error) => {
-                if (error.code === 'NO_USER_PERMISSION') {
-                    this
-                        .showAskForListPermissionCard(['read'])
-                        .tell('Please grant the permission to access your lists.');
-                }
-            });
-    },
-
-    'GetTodoListIntent': function() {
-        // Active or completed
-        this.user().getToDoList('active')
-            .then((data) => {
-                // Iterate through items on list
-                for (let obj of data.items) {
-                    this.speech.addSentence(obj.value);
-                }
-                this.tell(this.speech);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    },
-
-    'UpdateToDoListItemIntent': function() {
-        this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
-            .then((data) => {
-            console.log(data);
-                this.tell('Item updated.');
-            })
-            .catch((error) => {
-                if (error.code === 'NO_USER_PERMISSION') {
-                    this
-                        .showAskForListPermissionCard(['read', 'write'])
-                        .tell('Please grant the permission to access your lists.');
-                }
-                if (error.code === 'ITEM_NOT_FOUND') {
-                    this
-                        .tell('Item not found.');
-                }
-        });
-    },
-
-    'AddItemToToDoListIntent': function() {
-        this.user().addToTodoList('Sleep')
-            .then((data) => {
-                this.tell('Item added.');
-            })
-            .catch((error) => {
-                if (error.code === 'NO_USER_PERMISSION') {
-                    this
-                        .showAskForListPermissionCard(['read', 'write'])
-                        .tell('Please grant the permission to access your lists');
-                }
-                console.log(error);
-            });
-    },
-
-});
-```
-
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/access-the-alexa-shopping-and-to-do-lists).
-
-
-### User Specific Data
-
-Ask for permissions like this:
+You can use the user's address data to provide location specific features, but you have to obtain their permission first.
+A [`permission card`](./visual.md#permission-card) will do the job:
 
 ```javascript
 // Country and Postal Code
@@ -138,48 +54,40 @@ this.alexaSkill().showAskForCountryAndPostalCodeCard();
 this.alexaSkill().showAskForAddressCard();
 ```
 
-Here is an example:
+Get the country and postal code:
 
 ```javascript
-app.setHandler({
+this.alexaSkill().getCountryAndPostalCode();
 
-    'LAUNCH': function() {
-       // this.toIntent('GetFullAddressIntent');
-       this.toIntent('GetCountryPostalCodeIntent');
-    },
-
-    'GetFullAddressIntent': function() {
-        this.user().getAddress()
-            .then((data) => {
-                console.log(data);
-                this.tell('Your address');
-            }).catch((error) => {
-            if (error.code === 'NO_USER_PERMISSION') {
-                this
-                    .showAskForAddressCard()
-                    .tell('Please grant access to your address');
-            }
-        });
-    },
-
-    'GetCountryPostalCodeIntent': function() {
-        this.user().getCountryAndPostalCode()
-            .then((data) => {
-                console.log(data);
-                this.tell('Your address');
-            }).catch((error) => {
-            console.log(error);
-            if (error.code === 'NO_USER_PERMISSION') {
-                this
-                    .showAskForCountryAndPostalCodeCard()
-                    .tell('Please grant access to your address');
-            }
-        });
-    },
-});
+// example
+this.user().getCountryAndPostalCode()
+    .then((data) => {
+        this.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
+    }).catch((error) => {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.alexaSkill().showAskForCountryAndPostalCodeCard()
+            this.tell('Please grant access to your address');
+        }
+    });
 ```
 
-Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/device-address-api).
+Get the address:
+
+```javascript
+this.user().getDeviceAddress();
+
+// example
+this.user().getDeviceAddress()
+    .then((data) => {
+        this.tell('I got your address');
+    }).catch((error) => {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.alexaSkill().showAskForAddressCard()
+            this.tell('Please grant access to your address');
+        }
+    });
+```
+
 
 ## Output
 
@@ -199,7 +107,7 @@ Find an example file here: [`indexProgressiveResponse.js`](../../../examples/ale
 
 ### Visual Output
 
-You can find out more about visual output [here](./visual.md)
+You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md)
 
 
 ## AudioPlayer Skills
