@@ -1,4 +1,4 @@
-# CLI
+# Jovo CLI
 
 The Jovo Command Line Tools offer the ability to create, prototype, test and deploy your voice app quickly.
 
@@ -226,13 +226,13 @@ To get the Skill from the Amazon developer console, you have to set up [ASK CLI]
 
 ```sh
 # Choose from list of Skills
-$ jovo get -p alexaSkill
+$ jovo get alexaSkill
 
 # Get specific Skill ID
-$ jovo get --platform alexaSkill --skill-id <skill ID>
+$ jovo get alexaSkill --skill-id <skill ID>
 
 # Options
-$ jovo get --platform alexaSkill [-s | --skill-id <skill ID>] [-l | --list-skills]
+$ jovo get alexaSkill [-s | --skill-id <skill ID>] [-l | --list-skills]
 ```
 
 #### jovo deploy
