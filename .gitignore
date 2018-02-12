@@ -53,5 +53,6 @@ testproject
 npm-debug.log
 out
 ./db
+db.json
 jsdoc.json
 ./test/debug

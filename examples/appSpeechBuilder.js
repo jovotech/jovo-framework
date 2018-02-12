@@ -1,41 +1,29 @@
 'use strict';
 
 // =================================================================================
-// App Configuration: Create Webhook + Enable Logging
+// App Configuration
 // =================================================================================
 
-const webhook = require('../index').Webhook;
-const app = require('../index').Jovo;
+const {App} = require('jovo-framework');
 
-// Enable Logging for Quick Testing
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-});
+const config = {
+    logging: true,
+};
 
-// Listen for post requests
-webhook.listen(3000, function() {
-    console.log('Example server listening on port 3000!');
-});
-
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
+const app = new App(config);
 
 
 // =================================================================================
-// App Logic: Example of speechBuilder methods and conditions
+// App Logic
 // =================================================================================
 
-let handlers = {
-
+app.setHandler({
     'LAUNCH': function() {
-        app.toIntent('HelloWorldIntent');
+        this.toIntent('HelloWorldIntent');
     },
 
     'HelloWorldIntent': function() {
-        let speech = app.speechBuilder();
+        let speech = this.speechBuilder();
 
         let foo = false;
         let bar = true;
@@ -50,10 +38,12 @@ let handlers = {
             .addBreak(['500ms', '1s'])
             .addAudio(['url1', 'url2', 'url3'])
             .addText('Good Bye.');
-        app.tell(speech);
+        this.tell(speech);
     },
-};
+});
+
+module.exports.app = app;
 
 // quick testing
-// node indexSpeechBuilder --launch
+// node node .\index.js .\appSpeechBuilder.js --launch
 

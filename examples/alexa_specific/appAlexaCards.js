@@ -1,26 +1,10 @@
 'use strict';
 
 // =================================================================================
-// App Configuration: Create Webhook + Enable Logging
+// App Configuration
 // =================================================================================
 
-const webhook = require('../../index').Webhook;
-const app = require('../../index').Jovo;
-
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-});
-
-// Listen for post requests
-webhook.listen(3000, function() {
-    console.log('Example server listening on port 3000!');
-});
-
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
+const {App} = require('jovo-framework');
 
 const SimpleCard = require('../../index').AlexaSkill.SimpleCard;
 const StandardCard = require('../../index').AlexaSkill.StandardCard;
@@ -28,40 +12,51 @@ const LinkAccountCard = require('../../index').AlexaSkill.LinkAccountCard;
 const AskForListPermissionsCard = require('../../index').AlexaSkill.AskForListPermissionsCard;
 const AskForLocationPermissionsCard = require('../../index').AlexaSkill.AskForLocationPermissionsCard;
 
+const config = {
+    logging: true,
+};
+
+const app = new App(config);
+
 
 // =================================================================================
-// App Logic: Displays Alexa-specific cards
+// App Logic
 // =================================================================================
 
-let handlers = {
-
+app.setHandler({
     'LAUNCH': function() {
-        // app.tell('App launched.');
-        app.toIntent('AskForCountryAndPostalCodeCardIntent');
+        // this.tell('App launched.');
+        // this.toIntent('AskForCountryAndPostalCodeCardIntent');
+        this.alexaSkill().showCard(
+            new SimpleCard()
+                .setTitle('Title')
+                .setContent('Content')
+        );
+        this.tell('yo');
     },
 
     'SimpleCardIntent': function() {
-        app.alexaSkill().showSimpleCard('Title', 'Content');
+        this.alexaSkill().showSimpleCard('Title', 'Content');
 
         // or
 
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new SimpleCard()
-            .setTitle('Title')
-            .setContent('Content')
+                .setTitle('Title')
+                .setContent('Content')
         );
 
-        app.tell('This is a simple card');
+        this.tell('This is a simple card');
     },
 
     'StandardCardIntent': function() {
-        app.alexaSkill().showStandardCard('Title', 'Content', {
+        this.alexaSkill().showStandardCard('Title', 'Content', {
             smallImageUrl: 'https://via.placeholder.com/720x480',
             largeImageUrl: 'https://via.placeholder.com/1200x800',
         });
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new StandardCard()
                 .setTitle('Title')
                 .setText('Text')
@@ -69,43 +64,48 @@ let handlers = {
                 .setLargeImageUrl('https://via.placeholder.com/720x480')
         );
 
-        app.tell('This is a standard card with an image');
+        this.tell('This is a standard card with an image');
     },
 
     'AccountLinkingCardIntent': function() {
-        app.alexaSkill().showAccountLinkingCard();
+        this.alexaSkill().showAccountLinkingCard();
         // or
-        app.alexaSkill().showCard(new LinkAccountCard());
+        this.alexaSkill().showCard(new LinkAccountCard());
 
-        app.tell('This is a card with an account linking CTA');
+        this.tell('This is a card with an account linking CTA');
     },
 
     'AskForCountryAndPostalCodeCardIntent': function() {
-        app.alexaSkill().showAskForCountryAndPostalCodeCard();
+        this.alexaSkill().showAskForCountryAndPostalCodeCard();
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForLocationPermissionsCard().setAskForCountryAndPostalCodePermission());
-        app.tell('This is a card that asks for country and postal code permissions.');
+        this.tell('This is a card that asks for country and postal code permissions.');
     },
 
     'AskForAddressCardIntent': function() {
-        app.alexaSkill().showAskForAddressCard();
+        this.alexaSkill().showAskForAddressCard();
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForLocationPermissionsCard().setAskForAddressPermission());
-        app.tell('This is a card that asks for address permissions.');
+        this.tell('This is a card that asks for address permissions.');
     },
 
     'AskForListPermissionCardIntent': function() {
-        app.alexaSkill().showAskForListPermissionCard(['read', 'write']);
+        this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
 
         // or
-        app.alexaSkill().showCard(
+        this.alexaSkill().showCard(
             new AskForListPermissionsCard()
                 .addReadPermission()
                 .addWritePermission());
-        app.tell('This is a card that asks for lists permissions.');
+        this.tell('This is a card that asks for lists permissions.');
     },
-};
+});
+
+module.exports.app = app;
+
+// quick testing
+// node .\index.js .\alexa_specific\appAlexaCards.js --launch

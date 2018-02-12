@@ -16,7 +16,6 @@ server.use(bodyParser.json());
 
 // check for running ngrok tunnel
 server.listen = function listen() {
-    console.log('listening');
     if (process.argv.indexOf('--bst-proxy') === -1 &&
         process.argv.indexOf('--jovo-webhook') === -1) {
         showNgrokUrl();

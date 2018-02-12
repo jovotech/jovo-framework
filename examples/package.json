@@ -1,0 +1,14 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "This folder provides code examples for various Jovo features. These are mostly index.js files with enabled logging so you can start testing right away from your command line.",
+  "main": "index.js",
+  "dependencies": {
+    "jovo-framework": "file:../"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,38 +1,32 @@
 'use strict';
 
-const webhook = require('../../index').Webhook;
+// =================================================================================
+// App Configuration
+// =================================================================================
 
-webhook.listen(3000, function() {
-    console.log('Example server listening on port 3000!');
-});
+const {App} = require('jovo-framework');
 
-const app = require('../../index').Jovo;
-
+const config = {
+    logging: true,
+};
 const BasicCard = require('../../index').GoogleAction.BasicCard;
 const Carousel = require('../../index').GoogleAction.Carousel;
 const List = require('../../index').GoogleAction.List;
 const OptionItem = require('../../index').GoogleAction.OptionItem;
 
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-});
-
+const app = new App(config);
 app.setIntentMap({
     'Default Welcome Intent': 'HelloWorldIntent',
 });
 
-// listen for post requests
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
 
+// =================================================================================
+// App Logic
+// =================================================================================
 
-let handlers = {
-
+app.setHandler({
     'ON_SIGN_IN': function() {
-        app.tell('signed in: ' + app.googleAction().getSignInStatus());
+        this.tell('signed in: ' + app.googleAction().getSignInStatus());
     },
 
     'LAUNCH': function() {
@@ -41,11 +35,11 @@ let handlers = {
         // app.addSessionAttribute('bla', 'blub');
         // app.tell('sdsd');
         // app.toIntent('AccountLinkingIntent');
-        app.toIntent('ListIntent');
-        // app.toIntent('CarouselIntent');
+        // app.toIntent('ListIntent');
+        this.toIntent('CarouselIntent');
     },
     'AccountLinkingIntent': function() {
-        app.showAccountLinkingCard();
+        this.showAccountLinkingCard();
     },
     'BasicCardIntent': function() {
         let basicCard = new BasicCard()
@@ -53,15 +47,15 @@ let handlers = {
             .setImage('http://via.placeholder.com/450x350?text=Basic+Card', 'accessibilityText')
             .setFormattedText('Formatted Text');
 
-        app.googleAction().showBasicCard(basicCard);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.ask('Response with basic card', '?');
+        this.googleAction().showBasicCard(basicCard);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.ask('Response with basic card', '?');
     },
     'SuggestionsIntent': function() {
         // must end with an ask response
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.googleAction().showLinkOutSuggestion('Name', 'http://www.example.com');
-        app.ask('Suggestion Chips Example', 'Suggestion Chips Example');
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.googleAction().showLinkOutSuggestion('Name', 'http://www.example.com');
+        this.ask('Suggestion Chips Example', 'Suggestion Chips Example');
     },
     'ListIntent': function() {
         let list = new List();
@@ -80,9 +74,9 @@ let handlers = {
                 .setDescription('Carousel')
                 .setKey('Listitem2key')
         );
-        app.googleAction().showList(list);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
-        app.ask('Choose from list', 'Choose from list');
+        this.googleAction().showList(list);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.ask('Choose from list', 'Choose from list');
     },
     'CarouselIntent': function() {
         let carousel = new Carousel();
@@ -101,26 +95,29 @@ let handlers = {
                 .setImage('http://via.placeholder.com/650x350?text=Carousel+item+2', 'accessibilityText')
                 .setKey('Carouselitem2key')
         );
-        app.googleAction().showCarousel(carousel);
-        app.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
+        this.googleAction().showCarousel(carousel);
+        this.googleAction().showSuggestionChips(['List', 'Carousel', 'Basic card']);
 
-        app.ask('Choose from list', 'Choose from list');
+        this.ask('Choose from list', 'Choose from list');
     },
     'HelloWorldIntent': function() {
-        app.tell('Hello World');
+        this.tell('Hello World');
     },
-    'ON_ELEMENT_SELECTED': function() {
-        let selectedElement = this.getSelectedElementId();
-        if (selectedElement === 'Listitem1key') {
-            this.toIntent('BasicCardIntent');
-        } else if (selectedElement === 'Listitem2key') {
-            this.toIntent('CarouselIntent');
-        } else if (selectedElement === 'Carouselitem1key') {
-            this.toIntent('BasicCardIntent');
-        } else if (selectedElement === 'Carouselitem2key') {
-            this.toIntent('ListIntent');
-        } else {
-            this.tell(this.getSelectedElementId());
-        }
-    },
-};
+    // 'ON_ELEMENT_SELECTED': function() {
+    //     let selectedElement = this.getSelectedElementId();
+    //     console.log('ON_ELEMENT_SELECTED');
+    //     if (selectedElement === 'Listitem1key') {
+    //         this.toIntent('BasicCardIntent');
+    //     } else if (selectedElement === 'Listitem2key') {
+    //         this.toIntent('CarouselIntent');
+    //     } else if (selectedElement === 'Carouselitem1key') {
+    //         this.toIntent('BasicCardIntent');
+    //     } else if (selectedElement === 'Carouselitem2key') {
+    //         this.toIntent('ListIntent');
+    //     } else {
+    //         this.tell(this.getSelectedElementId());
+    //     }
+    // },
+});
+
+module.exports.app = app;

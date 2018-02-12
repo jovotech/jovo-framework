@@ -1,70 +1,59 @@
 'use strict';
 
 // =================================================================================
-// App Configuration: Create Webhook + Enable Logging
+// App Configuration
 // =================================================================================
 
-const webhook = require('../../index').Webhook;
-const app = require('../../index').Jovo;
+const {App} = require('jovo-framework');
 
-// Enable Logging for Quick Testing
-app.setConfig({
-    requestLogging: true,
-    responseLogging: true,
-});
+const config = {
+    logging: true,
+};
 
-// Listen for post requests
-webhook.listen(3000, function() {
-    console.log('Example server listening on port 3000!');
-});
-
-webhook.post('/webhook', function(req, res) {
-    app.handleRequest(req, res, handlers);
-    app.execute();
-});
-
+const app = new App(config);
 
 // =================================================================================
-// App Logic: Get and Update Shopping and ToDo-List-Items
+// App Logic
 // =================================================================================
 
-let handlers = {
-
+app.setHandler({
     'LAUNCH': function() {
-       // app.toIntent('GetShoppingListIntent');
-       // app.toIntent('GetTodoListIntent');
-       // app.toIntent('AddItemToToDoListIntent');
-       app.toIntent('GetShoppingListIntent');
+        // app.toIntent('GetShoppingListIntent');
+        // app.toIntent('GetTodoListIntent');
+        // app.toIntent('AddItemToToDoListIntent');
+        this.toIntent('GetShoppingListIntent');
     },
 
     'GetShoppingListIntent': function() {
         // Active or completed
-        app.user().getShoppingList('active')
+        this.user().getShoppingList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read'])
                         .tell('Please grant the permission to access your lists.');
+                } else {
+                    this.tell(error.message);
                 }
             });
     },
 
     'GetTodoListIntent': function() {
         // Active or completed
-        app.user().getToDoList('active')
+        this.user().getToDoList('active')
             .then((data) => {
                 // Iterate through items on list
                 for (let obj of data.items) {
-                    app.speech.addSentence(obj.value);
+                    this.speech.addSentence(obj.value);
                 }
-                app.tell(app.speech);
+                this.tell(this.speech);
             })
             .catch((error) => {
                 console.log(error);
@@ -72,37 +61,45 @@ let handlers = {
     },
 
     'UpdateToDoListItemIntent': function() {
-        app.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
+        this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
             .then((data) => {
-            console.log(data);
-                app.tell('Item updated.');
+                console.log(data);
+                this.tell('Item updated.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read', 'write'])
                         .tell('Please grant the permission to access your lists.');
                 }
                 if (error.code === 'ITEM_NOT_FOUND') {
-                    app
+                    this
                         .tell('Item not found.');
+                } else {
+                    this.tell(error.message);
                 }
-        });
+            });
     },
 
     'AddItemToToDoListIntent': function() {
-        app.user().addToTodoList('Sleep')
+        this.user().addToTodoList('Sleep')
             .then((data) => {
-                app.tell('Item added.');
+                this.tell('Item added.');
             })
             .catch((error) => {
                 if (error.code === 'NO_USER_PERMISSION') {
-                    app
+                    this
                         .showAskForListPermissionCard(['read', 'write'])
                         .tell('Please grant the permission to access your lists');
                 }
                 console.log(error);
             });
     },
+});
 
-};
+module.exports.app = app;
+
+// quick testing
+// node index.js appHelloWorld.js --launch
+// node index.js appHelloWorld.js --intent MyNameIsIntent --parameter name=Alex
+
