@@ -36,7 +36,7 @@ const {app} = require('./app/app.js');
 // =================================================================================
 
 // Used if you run the application on a webhook
-if (isWebhook()) {
+if (app.isWebhook()) {
     const port = process.env.PORT || 3000;
     Webhook.listen(port, () => {
         console.log(`Example server listening on port ${port}!`);

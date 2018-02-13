@@ -3,6 +3,7 @@
 Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
 * [Jovo Persistence Layer](#jovo-persistence-layer)
+  * [Configuration](#configuration)
   * [Save Data](#save-data)
   * [Load Data](#load-data)
   * [Delete Data](#delete-data)
@@ -18,11 +19,26 @@ Learn how to store user specific data to databases with the Jovo Persistence Lay
 
 This is an abstraction layer for persisting data across sessions. By default, the [file-based system](#filepersistence) will be used so you can start right away when prototyping locally.
 
+### Configuration
+
+You can add different database integrations in the Jovo app constructor. This is the default configuration:
+
+```js
+const config = {
+    db: {
+        type: 'file',
+        localDbFilename: 'db',
+    },
+    // Other configurations
+}
+```
+
+
 ### Save Data
 
 This will save data with your user's `userID` as a mainKey, and a `key` and a `value` specified by you.
 
-The easiest way to do so is to use the [user object](.../04_app-logic/02_data/user.md) for this:
+The easiest way to do so is to use the [user object](../../04_app-logic/02_data/user.md) for this:
 
 ```javascript
 this.user().data.key = value;
@@ -31,22 +47,6 @@ this.user().data.key = value;
 this.user().data.score = 300;
 ```
 
-Alternatively, you can use the following method with a callback that's called after a successful (or unsuccessful, for error handling) call of the method:
-
-```javascript
-save(key, value, callback)
-​
-this.db().save(key, value, function(err) {
-     // Do something
-});
-​
-// Example
-let score = 100;
-this.db().save('score', score, function(err) {
-       speech = 'Your new score is ' + score + ' points.';
-       this.tell(speech);
-});
-```
 
 ### Load Data
 
@@ -56,23 +56,6 @@ Again, you can use the [user object](.../04_app-logic/02_data/user.md) for this:
 
 ```javascript
 let data = this.user().data.key;
-```
-
-Or use the `load` method:
-
-```javascript
-load(key, callback)
-​
-this.db().load(key, function(err, data) {
-    // Do something
-});
-​
-// Example
-this.db().load('score', function(err, data) {
-    let score = data;
-    speech = 'Your current score is ' + score + ' points.';
-    this.tell(speech);
-});
 ```
 
 ### Delete Data
@@ -116,7 +99,8 @@ db/
 
 And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.user().data.someKey = 'someValue';`:
 
-```json
+```js
+// Example for Amazon Alexa
 [
 	{
 		"userId": "amzn1.ask.account.[some_user_id]",

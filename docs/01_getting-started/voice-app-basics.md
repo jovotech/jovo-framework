@@ -15,7 +15,7 @@ This section provides an overview of how voice applications work, and the differ
 
 Below, you can see a high-level illustration, how a voice app works:
 
-![How Voice Apps Work](https://www.jovo.tech/img/docs/voice-app-process.jpg)
+![How Voice Apps Work](../img/voice-app-process.jpg)
 
 The user first converses with a smart speaker (or other voice assistant enabled device) and then prompts it to open your app (which is also called invocation) with a certain `speech input`. The voice platform recognizes this and sends a `request` to your app. It is now up to you to use this request to craft a `response`, which is returned to the platform's API. The response is then turned into `speech output` (what your user is hearing), which can consist of both text-to-speech and audio files.
 
@@ -26,7 +26,7 @@ In the next section, we will go a little deeper into the underlying principles o
 
 In order to find out what a user wants when they’re talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it’s important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities` or `slots`).
 
-![Language Model Elements](https://www.jovo.tech/img/docs/voice-intents-utterances-entities.jpg)
+![Language Model Elements](../img/voice-intents-utterances-entities.jpg)
 
 In the example above, possible sentences a user could say can be grouped to a `'FindRestaurantIntent'`, while there are potential slots like `restaurant type`. Please note that this is a very simple example, other slot types like `area` or `price range` could also be considered.
 
@@ -39,6 +39,8 @@ Find more detailed information here: [App Logic > Routing](../04_app-logic/01_ro
 ### Utterances and User Expressions
 
 What are all the potential phrases someone could use to express what they want? Having a good set of utterances increases your chances of reacting to a user's input.
+
+Find more detailed information here: [App Configuration > Jovo Language Model](../03_app-configuration/01_models).
 
 ### Slots, Parameters, and Entities
 
@@ -66,13 +68,13 @@ On the Amazon Echo product suite or other devices that support Amazon Alexa, use
 'Alexa, ask Pizza Temple to find me a restaurant.'
 ```
 
-In order to build a skill for Amazon Alexa, you need to create an account at the Amazon Developer Portal. You can find an [official step-by-step guide by Amazon here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/registering-and-managing-alexa-skills-in-the-developer-portal).
+In order to build a skill for Amazon Alexa, you need to create an account on the Amazon Developer Portal. You can find an [official step-by-step guide by Amazon here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/registering-and-managing-alexa-skills-in-the-developer-portal).
 
 ### Google Assistant
 
 > See also: Beginner Tutorial: [Build a Google Action in Node.js with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/).
 
-![Google Home, Google Assistant, and Google Actions](https://www.jovo.tech/img/docs/voice-app-basics/google-home-google-assistant.png)
+![Google Home, Google Assistant, and Google Actions](../img/google-home-google-assistant.png)
 
 On Google Home, users converse with the Google Assistant. Apps for the Assistant are called Actions on Google (however, they're now in the process of switching to just calling them Apps). 
 

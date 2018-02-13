@@ -3,6 +3,7 @@
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
 * [Introduction](#introduction-to-the-user-class)
+  * [Configuration](#configuration)
 * [User Data](#user-data)
   * [Data Persistence](#data-persistence)
   * [Meta Data](#meta-data)
@@ -20,20 +21,37 @@ You can access the user object like this:
 let user = this.user();
 ```
 
-## User Data
+### Configuration
 
-The User object contains the possibility to store and retrieve user specific data, including [meta data](#meta-data).
-
-Data is stored using our [database integrations](.../07_integrations/databases), with a file-based `db.json` structure enabled by default.
-
-Just specify a key and a value, and you're good to go:
+There are certain configurations that can be changed when dealing with the user object. The following are part of the Jovo default configuration:
 
 ```javascript
+// Using the constructor
 const config = {
-    userDataCol: 'yourUserDataColName',
+    saveUserOnResponseEnabled: true,
+    userDataCol: 'userData',
+    userMetaData: {
+        lastUsedAt: true,
+        sessionsCount: true,
+        createdAt: true,
+        requestHistorySize: 0,
+        devices: false,
+    },
     // Other configurations
 };
 ```
+`saveUserOnResponseEnabled`: You can set this to `false` if you choose not to save any user-specific data.
+
+`userDataCol`: Specifies the name of the column that the user data is saved to.
+
+`userMetaData`: Specifies what and how meta data is saved. [Learn more about meta data here](#meta-data).
+
+
+## User Data
+
+The User object offers the capability to store and retrieve user specific data, including [meta data](#meta-data).
+
+Data is stored using our [database integrations](../../06_integrations/databases), with a file-based `db.json` structure enabled by default.
 
 
 ### Data Persistence
@@ -49,24 +67,21 @@ this.user().data.key = value;
 this.user().data.score = 300;
 ```
 
-For more information on data persistence, take a look here: [Integrations > Databases](.../07_integrations/databases).
+For more information on data persistence, take a look here: [Integrations > Databases](../../06_integrations/databases).
 
 
 ### Meta Data
 
 The user object meta data is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
 
-* `createdAt`: When the user first used your app
-* `lastUsedAt`: When was the last time your user interacted with your app
-* `sessionsCount`': How often did your user engage with your app
+Meta Data | Usage | Description
+:--- | :--- | :---
+createdAt | `this.user().metaData.createdAt` | Timestamp: When the user first used your app
+lastUsedAt | `this.user().metaData.lastUsedAt` | Timestamp: The last time your user interacted with your app
+sessionsCount | `this.user().metaData.sessionsCount` | Timestamp: How often your user engaged with your app
 
-```javascript
-let userCreatedAt = this.user().metaData.createdAt; 
-let userlastUsedAt = this.user().metaData.lastUsedAt; 
-let userSessionsCount = this.user().metaData.sessionsCount;
-```
 
-You can change the type of meta data to store with the `setConfig` method. This is the default configuration for it:
+You can change the type of meta data to store with the Jovo app constructor. This is the default configuration for it:
 
 ```javascript
 const config = {
@@ -95,7 +110,7 @@ this.getUserId();
 
 This is going to return an ID that looks like this:
 
-```
+```js
 // For Amazon Alexa
 amzn1.ask.account.AGJCMQPNU2XQWLNJXU2K23R3RWVTWCA6OX7YK7W57E7HVZJSLH4F5U2JOLYELR4PSDSFGSDSD32YHMRG36CUUAY3G5QI5QFNDZ44V5RG6SBN3GUCNTRHAVT5DSDSD334e34I37N3MP2GDCHO7LL2JL2LVN6UFJ6Q2GEVVKL5HNHOWBBD7ZQDQYWNHYR2BPPWJPTBPBXPIPBVFXA
 
@@ -105,7 +120,7 @@ ARke43GoJIqbF8g1vfyDdqL_Sffh
 
 ### Account Linking
 
-To implement Account Linking in your voice application you need two core methods.
+To implement Account Linking in your voice application, you need two core methods.
 
 The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
 ```javascript
@@ -113,7 +128,7 @@ The first allows you to prompt the user to link their account, by showing a card
 this.alexaSkill().showAccountLinkingCard();
 
 // Google Actions:
-this.googleAction().showAccountLinkingCard();
+this.googleAction().askForSignIn();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:

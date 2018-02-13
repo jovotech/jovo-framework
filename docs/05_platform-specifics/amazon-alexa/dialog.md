@@ -1,6 +1,6 @@
 # [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Dialog Interface
 
-In this section, you are going to learn how to manage multi-turn conversations with the Alexa Dialog Interface.
+In this section, you will learn how to manage multi-turn conversations with the Alexa Dialog Interface.
 
 * [Introduction](#introduction)
 * [Requirements](#requirements)
@@ -9,7 +9,7 @@ In this section, you are going to learn how to manage multi-turn conversations w
     * [Dialog Delegate](#dialog-delegate)
     * [Control the Dialog in your Code](#control-the-dialog-in-your-code)
         * [Slot Value](#slot-value)
-        * [Elecit Slot](#elecit-slot)
+        * [Elicit Slot](#elecit-slot)
         * [Confirm Slot](#confirm-slot)
         * [Confirm Intent](#confirm-intent)
         * [Update Intent](#update-intent)
@@ -40,6 +40,7 @@ this.alexaSkill().getDialogState()
 ```
 
 Jovo also allows you to check for a specific state:
+
 ```javascript
 // STARTED
 this.alexaSkill().isDialogStarted()
@@ -53,13 +54,13 @@ this.alexaSkill().isDialogCompleted()
 
 ## Features
 
-When using the dialog interface, you can decide between letting Alexa handle the conversation or controlling each step yourself. There is also the possibility to combine both options.
+When using the Dialog Interface, you can decide between letting Alexa handle the conversation or controlling each step yourself. There is also the possibility to combine both options.
 
 ### Dialog Delegate
 
 If you decide to delegate the conversation, Alexa will use the prompts you defined in your dialog model to fill the required slots. Alexa will also confirm both slots or the whole intent if you selected that in the dialog model.
 
-To delegte the conversation, use:
+To delegate the conversation, use:
 ```javascript
 this.alexaSkill().dialogDelegate()
 ```
@@ -70,19 +71,19 @@ The Dialog Interface allows you to jump in and control the conversation yourself
 
 You have the possibility the ask the user to fill a certain slot, confirm a slot, or confirm the whole intent. You can also update the intent if you have certain values, for example the user's name, saved in a database. 
 
-From now on parameters, which are between these `[]` brackets, are optional. These parameters are `repromptText` and `updatedIntent`. If you don't specifiy a `repromptText`, the speechText will be used twice. 
+From now on, parameters which are between these `[]` brackets are optional. These parameters are `repromptText` and `updatedIntent`. If you don't specifiy a `repromptText`, the speechText will be used twice. 
 
 #### Slot Value
 
-To check, whether a slot has value or not, use:
+To check, whether a slot has a value or not, use:
 ```javascript
-this.alexaSkill().hasSlotValue(slotName)
+this.alexaSkill().hasSlotValue('slotName')
 
 // Example
 this.alexaSkill().hasSlotValue('name');
 ```
 
-#### Elecit Slot
+#### Elicit Slot
 
 If you want the user to fill a slot, use:
 ```javascript
@@ -99,7 +100,7 @@ To confirm a slot use:
 this.alexaSkill().dialogConfirmSlot(slotname, speechText[, repromptText, updatedIntent])
 
 // Example
-this.alexaSkill().dialogConfirmSlot('name', 'Your name is ' + this.getInput('name') + ', right?');
+this.alexaSkill().dialogConfirmSlot('name', 'Your name is ' + this.getInput('name').value + ', right?');
 ```
 
 #### Confirm Intent
@@ -113,7 +114,7 @@ this.alexaSkill().dialogConfirmIntent('Your name is ' + this.getInput('name') + 
 ```
 #### Update Intent
 
-Updating an intent gives you the possibility to change slot values or the confirmation status for slots or intents. Here's an example:
+Updating an intent gives you the ability to change slot values or the confirmation status for slots or intents. Here's an example:
 
 You already have the user's name stored in the database, so you don't want to ask for it again. Therefor you just update the intent and add the slot value.
 ```javascript

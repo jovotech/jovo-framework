@@ -1,6 +1,6 @@
 # Jovo Language Model
 
-In this section, you will learn more about the Jovo Language Model, found in the `models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../../02_cli).
+In this section, you will learn more about the Jovo Language Model, found in the `/models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../../02_cli).
 
 * [Introduction](#introduction)
 * [Language Model Elements](#language-model-elements)
@@ -18,11 +18,15 @@ In this section, you will learn more about the Jovo Language Model, found in the
   * [Dialogflow](#dialogflow)
 
 ## Introduction
-The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../../02_cli). For the platform specific `nlu` (natural language understanding), we currently support built-in `alexa` for Alexa Skills, and `dialogflow` for Google Actions. These are referenced in the `app.json` file after the platforms are initialized with [`jovo init <platform>`](../../02_cli#jovo-init). To learn more about how the resulting platform models look like, please read [App Configuration > Models > Platforms](./platforms).
+The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../../02_cli). 
 
-You can find the language model files in the `models` folder of your Jovo project:
+You can find the language model files in the `/models` folder of your Jovo project:
 
-![Model Folder in a Jovo Project](../../img/folder-structure-models.png "Model Folder in a Jovo Project" )
+![Models Folder in a Jovo Project](../../img/folder-structure-models.png "Models Folder in a Jovo Project" )
+
+For the platform specific `nlu` (natural language understanding), we currently support built-in `alexa` for Alexa Skills, and `dialogflow` for Google Actions. These are referenced in the `app.json` file after the platforms are initialized with [`jovo init <platform>`](../../02_cli#jovo-init). To learn more about how the resulting platform models look like, please read [App Configuration > Models > Platforms](./platforms).
+
+
 
 Every language you choose to support will have its very own language model (`en-US`, `de-DE`, etc.). Overall the Jovo Language Model is similar to the Alexa interaction model with some small changes here and there.
 
@@ -225,7 +229,7 @@ For Alexa Skills, Jovo currently supports the built-in NLU (natural language und
 
 ### Alexa
 
-Some of the features Alexa provides have to be implemented separately in the `alexa` NLU section. 
+Some of the features Alexa provides have to be implemented separately in the `alexa` nlu section. 
 
 Here are some examples:
 * Built-in intents and slots (the ones with `AMAZON.` prepended to their names)
@@ -255,8 +259,67 @@ This is how it looks like:
     }
 }
 ```
+
+If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init) command will automatically append it with all the built-in intents required by Amazon.
+
 The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder (beta) and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
 ### Dialogflow
 
-`dialogflow` specific elements will be added soon.
+There are two ways you can add `dialogflow` specific elements:
+* Add options to Jovo Language Model intents
+* Add intents and entities to `dialogflow` element
+
+You can add options to Jovo intents like this:
+```javascript
+{  
+    "name":"HelloWorldIntent",
+    "phrases":[  
+        "hello",
+        "say hello",
+        "say hello world"
+    ],
+    "dialogflow": {
+        "priority": 1,
+        "webhookForSlotFilling": true
+    }
+},
+```
+In the above example, you can see that you can add specific elements like a `priority` to an intent.
+
+Similar to the [`alexa`](#alexa) element, you can also add `dialogflow` specific intents and entities to the language model. 
+
+```javascript
+ "dialogflow": {
+    "intents": [
+        {
+            "name": "Default Fallback Intent",
+            "auto": true,
+            "webhookUsed": true,
+            "fallbackIntent": true
+        },
+        {
+            "name": "Default Welcome Intent",
+            "auto": true,
+            "webhookUsed": true,
+            "events": [
+                {
+                    "name": "WELCOME"
+                }
+            ]
+        }
+    ],
+    "entities": [
+        {
+            "name": "hobby",
+            "isOverridable": true,
+            "isEnum": false,
+            "automatedExpansion": false
+        }
+    ]
+}
+```
+
+If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init) command will automatically append it with all the intents required by Dialogflow.
+
+The `dialogflow` object contains the agent data in its original syntax. For example, you export your Dialoglow Agent, look at the filex, and copy-paste the stuff that you need into this part of the Jovo Language Model file.

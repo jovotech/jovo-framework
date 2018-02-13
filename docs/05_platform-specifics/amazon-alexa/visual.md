@@ -1,25 +1,24 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Visuals
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Visual Output
+
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
 * [Introduction to Visual Output](#introduction-to-visual-output)
-* [Features](#features)
-  * [Cards](#cards)
-    * [Simple Card](#simple-card)
-    * [Standard Card](#standard-card)
-    * [Account Linking Card](#account-linking-card)
-    * [Permission Card](#permission-card)
-  * [Display Templates](#display-templates)
-    * [Body Template](#body-template)
-  * [Video](#video)
+* [Cards](#cards)
+  * [Simple Card](#simple-card)
+  * [Standard Card](#standard-card)
+  * [Account Linking Card](#account-linking-card)
+  * [Permission Card](#permission-card)
+* [Display Templates](#display-templates)
+  * [Body Template](#body-template)
+* [Video](#video)
 
 ## Introduction to Visual Ouput
 
-Visual output is used to describe or enhance the voice interaction. This ranges from simple [cards](#cards) to displaying a [video](#video).
-## Features
+Visual output is used to describe or enhance the voice interaction. This ranges from simple [cards](#cards), Echo Show and Echo Spot [Display Templates](#display-templates) to displaying a [video](#video).
 
-### Cards
+## Cards
 
-Cards are used for the most basic cases of visual output. They can be used to display plain text and images or to ask for certain permissions (account linking, to-do/shopping lists, etc.) in addition to the speech output.
+Cards are used for the most basic cases of visual output. They can be used to display plain text and images or to ask for certain permissions (Account Linking, to-do/shopping lists, etc.) in addition to the speech output.
 
 ```javascript
 this.alexaSkill().showStandardCard('Hello World', 'This is a standard card');
@@ -27,7 +26,7 @@ this.alexaSkill().showStandardCard('Hello World', 'This is a standard card');
 this.tell('I added a card to the response!');
 ```
 
-#### Simple Card
+### Simple Card
 
 The simple card can only contain plain text, which is split up into a title and content.
 
@@ -43,9 +42,9 @@ this.alexaSkill().showCard(
 );
 ```
 
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-basic-home-card-to-display-text)
+[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-basic-home-card-to-display-text).
 
-#### Standard Card
+### Standard Card
 
 The standard card allows you to add an image in addition to the plain text, which has to be provided in two different sizes.
 
@@ -66,11 +65,11 @@ this.alexaSkill().showCard(
 );
 ```
 
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-home-card-to-display-text-and-an-image)
+[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-home-card-to-display-text-and-an-image).
 
-#### Account Linking Card
+### Account Linking Card
 
-The account linking card is used to prompt the user to connect their account by providing the authorization url you defined in the configuration of your Skill in the Amazon developer console.
+The Account Linking card is used to prompt the user to connect their account by providing the authorization url you defined in the configuration of your Skill in the Amazon developer console.
 
 ```javascript
 this.alexaSkill().showAccountLinkingCard();
@@ -80,9 +79,9 @@ const {AlexaSkill} = require('jovo-framework');
 this.alexaSkill().showCard(new AlexaSkill.LinkAccountCard());
 ```
 
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#defining-a-card-for-use-with-account-linking)
+[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#defining-a-card-for-use-with-account-linking).
 
-#### Permission Card
+### Permission Card
 
 To get access to the user's address data or their lists you have to first ask for permission using a card. There is the `AddressPermission`,`CountryAndPostalCodePermission` and `ListPermission` card:
 ```javascript
@@ -100,18 +99,18 @@ this.alexaSkill().showAskForListPermissionCard(['read']);
 this.alexaSkill().showAskForListPermissionCard(['write']);
 ```
 
-Find out more about the [Device Address API](#https://developer.amazon.com/docs/custom-skills/device-address-api.html) and the [Alexa Lists](#https://developer.amazon.com/docs/custom-skills/access-the-alexa-shopping-and-to-do-lists.html)
+Find out more about the [Device Address API](#https://developer.amazon.com/docs/custom-skills/device-address-api.html) and the [Alexa Lists](#https://developer.amazon.com/docs/custom-skills/access-the-alexa-shopping-and-to-do-lists.html).
 
-### Display Templates
+## Display Templates
 
 Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features.
 [Official Amazon reference](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html) 
 
-#### Body Templates
+### Body Templates
 
-The body template is only capable of displaying images and text. There are multiple body templates, each having a different composition.
+Body templates are only capable of displaying images and text. There are multiple body templates, each having a different composition.
 
-[BodyTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate1-for-simple-text-and-image-views)
+[BodyTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate1-for-simple-text-and-image-views):
 ```javascript
 let bodyTemplate1 = this.alexaSkill().templateBuilder('BodyTemplate1');
 bodyTemplate1
@@ -122,7 +121,7 @@ bodyTemplate1
 this.alexaSkill().showDisplayTemplate(bodyTemplate1);
 ```
 
-[BodyTemplate2](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate2-for-image-views-and-limited-centered-text)
+[BodyTemplate2](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate2-for-image-views-and-limited-centered-text):
 ```javascript
 let bodyTemplate2 = this.alexaSkill().templateBuilder('BodyTemplate2');
 bodyTemplate2
@@ -137,7 +136,8 @@ bodyTemplate2
 this.alexaSkill().showDisplayTemplate(bodyTemplate2);
 ```
 
-[BodyTemplate3](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate3-for-image-views-and-limited-left-aligned-text)
+[BodyTemplate3](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate3-for-image-views-and-limited-left-aligned-text):
+
 ```javascript
 let bodyTemplate3 = this.alexaSkill().templateBuilder('BodyTemplate3');
 bodyTemplate3
@@ -152,7 +152,8 @@ bodyTemplate3
 this.alexaSkill().showDisplayTemplate(bodyTemplate3);
 ```
 
-[BodyTemplate6](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate6-for-text-and-optional-background-image)
+[BodyTemplate6](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate6-for-text-and-optional-background-image):
+
 ```javascript
 let bodyTemplate6 = this.alexaSkill().templateBuilder('BodyTemplate6');
 bodyTemplate6
@@ -166,11 +167,12 @@ bodyTemplate6
 this.alexaSkill().showDisplayTemplate(bodyTemplate6);
 ```
 
-#### List Templates
+### List Templates
 
 The list template is used to display a set of scrollabe and selectable items (text and images).
 
-[ListTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate1-for-text-lists-and-optional-images)
+[ListTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate1-for-text-lists-and-optional-images):
+
 ```javascript
 let listTemplate1 = this.alexaSkill().templateBuilder('ListTemplate1');
 listTemplate1
@@ -196,7 +198,8 @@ listTemplate1
 this.alexaSkill().showDisplayTemplate(listTemplate1);
 ```
 
-[ListTemplate2](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate2-for-list-images-and-optional-text)
+[ListTemplate2](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate2-for-list-images-and-optional-text):
+
 ```javascript
 let listTemplate2 = this.alexaSkill().templateBuilder('ListTemplate2');
 listTemplate2
@@ -222,10 +225,12 @@ listTemplate2
 this.alexaSkill().showDisplayTemplate(listTemplate2);
 ```
 
-### Video
+## Video
 
 To launch videos on an Echo Show you can use the `VideoApp` interface:
+
 ```javascript
 this.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle');
 ```
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html)
+
+Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).

@@ -6,7 +6,6 @@ In this section, you will learn how to use Jovo to craft a response to your user
 * [Basic Output](#basic-output)
   * [tell](#tell)
   * [ask](#ask)
-  * [play](#play)
 * [Advanced Output](#advanced-output)
   * [SSML](#ssml)
   * [speechBuilder](#speechbuilder)
@@ -17,16 +16,16 @@ In this section, you will learn how to use Jovo to craft a response to your user
 
 ## Introduction to Output Types
 
-What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like [`tell`](#tell), [`ask`](#ask), and [`play`](#play), but also how to use SSML or the Jovo [speechBuilder](#speechbuilder) to create more advanced output elements.
+What do users expect from a voice assistant? Usually, it's either direct or indirect output in form of speech, audio, or visual information. In this section, you will learn more about basic output types like [`tell`](#tell), [`ask`](#ask), but also how to use SSML or the Jovo [speechBuilder](#speechbuilder) to create more advanced output elements.
 
 
 ## Basic Output
 
-Jovo's basic output options offer simple methods for text-to-speech, but also for playing pre-recorded audio files. If you're interested in more, take a look at [Advanced Output](#advanced-output).
+Jovo's basic output options offer simple methods for interacting with users through text-to-speech. If you're interested in more, take a look at [Advanced Output](#advanced-output).
 
 ### tell
 
-The tell method is used to have Alexa or Google Home say something to your users. You can either user plain text or [SSML](#ssml) (Speech Synthesis Markup Language).
+The tell method is used to have Alexa or Google Home say something to your users. You can either use plain text or [SSML](#ssml) (Speech Synthesis Markup Language).
 
 Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](../01_routing/README.md#introduction-to-user-sessions).
 
@@ -63,27 +62,7 @@ Google Assistant offers the functionality to use multiple reprompts.
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
-You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](.../05_platform-specifics/google-assistant/README.md#multiple-reprompts).
-
-### play
-
-There are several ways to play pre-recorded audio files as output. The platforms expect [SSML](#ssml), which to generate you can use the speechbuilder for. However, sometimes you only want to play one sound.
-
-For this, you can use `play`. This includes an optional parameter `fallbacktext`, which is used for Google Assistant when the audio file can’t be accessed (with Alexa, the fallback option doesn’t work). The text is also displayed in the Google Assistant app on your users’ smartphones, if they access your action there.
-
-```javascript
-this.play(url[, fallbacktext]);
-
-// Play weird pizza sound
-this.play('https://www.jovo.tech/downloads/pizza.mp3');
-
-// Play weird pizza sound with fallback text for Google Actions
-this.play('https://www.jovo.tech/downloads/pizza.mp3', 'Pizza, Pizza, Pizza!');
-```
-
-Note: When you’re developing locally, make sure you have the audio file uploaded to a server that supports SSL, and that it meets the platform requirements ([Amazon Alexa](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference#audio) and [Google Assistant](https://www.w3.org/TR/speech-synthesis/#S3.3.1)).
-
-> You can use this free tool to convert and host audio files for 24 hours: [Audio Converter](https://www.jovo.tech/audio-converter).
+You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](../../05_platform-specifics/google-assistant/README.md#multiple-reprompts).
 
 ## Advanced Output
 
@@ -91,7 +70,7 @@ Voice platforms offer a lot more than just converting a sentence or paragraph to
 
 ### SSML
 
-SSML is short for "Speech Synthesis Markup Language," and you can use it to can add more things like pronunciations, breaks, or audio files. For some more info, see the [SSML reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference), and [by Google](https://developers.google.com/actions/reference/ssml). Here’s another valuable resource for [cross-platform SSML](http://ssml.green/).
+SSML is short for "Speech Synthesis Markup Language." You can use it to can add more things like pronunciations, breaks, or audio files. For some more info, see the SSML references [by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference), and [by Google](https://developers.google.com/actions/reference/ssml). Here’s another valuable resource for [cross-platform SSML](http://ssml.green/).
 
 Here is an example how SSML-enriched output could look like:
 
@@ -138,12 +117,12 @@ this.alexaSkill().setResponseObject(obj);
 this.googleAction().setResponseObject(obj);
 ```
 
-> Learn more about platform-specific features and resonses here: [Platform Specifics](.../05_platform-specifics).
+> Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics).
 
 
 ## Visual Output
 
-The Jovo framework, besides sound and voice output, can also be used for visual output. The show-functions are constantly updated with more features, as new surfaces emerge.
+The Jovo framework, besides sound and voice output, can also be used for visual output.
 
 Learn more about visual output here: [App Logic > Output > Visual Output](./visual-output.md). 
 

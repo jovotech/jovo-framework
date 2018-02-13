@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > List
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Lists
 This section provides an overview of Alexa specific features for user data.
 
 * [Lists](#lists)

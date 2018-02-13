@@ -13,21 +13,11 @@ Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
 AudioPlayer Skills can be used to stream long-form audio files like music. Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
 
-You get access to the `audioPlayer` object like this:
+You can get started by creating a new Jovo project with the [`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/02_alexa-audioplayer) template:
 
-```javascript
-let audioPlayer;
-
-exports.handler = function(event, context, callback) {
-    app.handleRequest(event, callback, handlers);
-    
-    // Get audioPlayer object with new request
-    audioPlayer = app.alexaSkill().audioPlayer();
-    app.execute();
-};
-
+```sh
+$ jovo new <directory> --template alexa-audioplayer
 ```
-
 
 ## Features
 
@@ -37,7 +27,7 @@ exports.handler = function(event, context, callback) {
 play(url, token, playBehavior)
 
 // Start playing a file from the beginning
-audioPlayer.setOffsetInMilliseconds(0)
+this.alexaSkill().audioPlayer().setOffsetInMilliseconds(0)
     .play(url, token)
     .tell(speech);
 ```
@@ -45,13 +35,13 @@ audioPlayer.setOffsetInMilliseconds(0)
 ### Enqueue
 
 ```javascript
-enqueue(url, token)
+this.alexaSkill().audioPlayer().enqueue(url, token)
 ```
 
 ### Stop
 
 ```javascript
-audioPlayer.stop();
+this.alexaSkill().audioPlayer().stop();
 ```
 
 

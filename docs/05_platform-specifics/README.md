@@ -3,6 +3,7 @@
 Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
 
 * [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)
+  * [Get Platform Type](#get-platform-type)
 * [Amazon Alexa](#amazon-alexa)
 * [Google Assistant](#google-assistant)
 
@@ -10,9 +11,9 @@ Jovo is not only about the common denominator. In this section, you will learn m
 
 To learn more about how to make most out of the platform-specific features, it's helpful to understand how the Jovo cross-platform architecture works.
 
-![Jovo Platform Specific Tell Response](https://www.jovo.tech/img/docs/platform-specific-tell.jpg)
+![Jovo Platform Specific Tell Response](../img/platform-specific-tell.png)
 
-The Jovo `app` object figures out which platform the user is conversing with, and then uses this information to either call the functions of the `alexaSkill` or `googleAction` object.
+The Jovo app object (`this` inside `app.js`) figures out which platform the user is conversing with, and then uses this information to either call the functions of the `alexaSkill` or `googleAction` object.
 
 As Amazon Alexa and Google Assistant both have platform specific features, you can access them directly by calling the `alexaSkill` or `googleAction` objects. By using those classes, keep in mind that, in the end, there needs to be a function call where an emit happens for the platforms you're using. For example, in the [tell](../04_app-logic/03_output#tell), [ask](../04_app-logic/03_output#ask), [endSession](../04_app-logic/03_output#no-speech-output), and raw [JSON response calls](../04_app-logic/03_output#raw-json-responses).
 
@@ -22,6 +23,24 @@ These emit methods can also be accessed directly with the platform specific obje
 // Example
 let alexa = this.alexaSkill();
 alexa.tell('Hello World!');
+```
+
+### Get Platform Type
+
+Want to see which platform your user is currently interacting with? With `getType`, you can get exactly this.
+
+```javascript
+this.getType();
+```
+
+This is going to return a type that looks like this:
+
+```javascript
+// For Amazon Alexa
+AlexaSkill
+
+// For Google Assistant
+GoogleAction
 ```
 
 

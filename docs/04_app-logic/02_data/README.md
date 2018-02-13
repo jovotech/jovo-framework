@@ -8,13 +8,13 @@ In this section, you will learn how to deal with entities and slot values provid
   * [getInput | getInputs](#getinput)
   * [inputMap](#inputmap)
 * [User Object](#user-object)
-  * [Platform Type](#platform-type)
 * [Logging](#logging)
   * [Log Requests](#log-requests)
   * [Log Responses](#log-responses)
 * [Persisting Data](#persisting-data)
   * [Session Attributes](#session-attributes)
   * [Database Integrations](#database-integrations)
+* [Account Linking](#account-linking)
 
 ## Introduction to User Input
 
@@ -25,25 +25,37 @@ We call user input any additional information your user provides besides an `int
 
 ## How to Access Input
 
- > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our migration document. // TODO
+ > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our [migration document]( https://www.jovo.tech/blog/jovo-v1-migration-guide/).
 
 There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers` intent functions, or by using the [`getInput`](#getinput) method.
 
-How the input looks like
-// TODO
+Each input is an object which looks like this:
+
+```javascript
+{
+  name: 'inputName',
+  value: 'inputValue',
+  key: 'mappedInputValue', // may differ from value if synonyms are used in language model
+}
+```
+For example, if we want to access the value of an input `name` provided by the user, we can do so by using `name.value`.
+
+Other parameters (like `id` or platform specific elements) can be found in the object as well.
+
 
 ### Input as Parameter
-You can access input by adding parameters directly to your intent, like so:
+You can access input by adding parameters directly to your intent.
+
+For example, the sample voice app does it like this: 
+
 ```javascript
 app.setHandler({
 
     // Other Intents and States
 
-    'SomeIntent': function(inputNameOne, inputNameTwo) {
-        // Do something
-    }
-
-    // Other Intents and States
+     'MyNameIsIntent': function(name) {
+        this.tell('Hey ' + name.value + ', nice to meet you!');
+    },
 });
 ```
 
@@ -55,8 +67,6 @@ Two important things to consider when using this option:
 ### getInput
 
 You can either access the values of all user inputs with the `getInputs` method, or get specific values directly with `getInput('inputName')`.
-
-// TODO
 
 ```javascript
 app.setHandler({
@@ -82,22 +92,21 @@ app.setHandler({
 Similar to [`intentMap`](../01_routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
 
 ```javascript
-// Create above webhook.post (webhook) or exports.handler (Lambda)
 let myInputMap = { 
     'incomingInputName' : 'mappedInputName',
 };
 
-// Use setter
-app.setInputMap(myInputMap);
-
-// Has to be added to the constructor at the beginning of app.js
+// Using the constructor
 const config = {
     inputMap: myInputMap,
     // Other configurations
 };
+
+// Using the setter
+app.setInputMap(myInputMap);
 ```
 
-Example: You wnt to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
+Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
 
 ```javascript
 // Map Dialogflow standard parameter given-name with name
@@ -126,7 +135,7 @@ app.setHandler({
 
 Besides conversational parameters, there is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
 
-For retrieving and storing this type of information, the Jovo `User Class` can be used to create more contextual and adaptive experiences based on user specific data.
+For retrieving and storing this type of information, the Jovo [`User Class`](./user.md) can be used to create more contextual and adaptive experiences based on user specific data.
 
 The user object can be accessed like this:
 
@@ -136,28 +145,9 @@ let user = this.user();
 
 You can find more information here: [App Logic > Data > User](./user.md).
 
-### Platform Type
-
-Want to see which platform your user is currently interacting with? With `getType`, you can get exactly this.
-
-```javascript
-this.getType();
-```
-
-This is going to return a type that looks like this:
-
-```javascript
-// For Amazon Alexa
-AlexaSkill
-
-// For Google Assistant
-GoogleAction
-```
-
-
 ## Logging
 
-When you’re using a webhook and ngrok, it’s easy to use logging for debugging, like this:
+When you’re using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook)), it’s easy to use logging for debugging, like this:
 
 ```javascript
 console.log('This is going to appear in the logs');
@@ -168,16 +158,18 @@ For voice app specific debugging, Jovo offers some handy functions for logging i
 You can enable logging by using the following:
 
 ```javascript
-// Use setter
-app.enableLogging();
-
+// Using the constructor
 const config = {
   logging: true,
   // Other configurations
 };
+
+// Using the setter
+app.enableLogging();
+
 ```
 
-This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be separately enabled. For this, see the sections below.
+This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be  enabled separately. For this, see the sections below.
 
 
 ### Log Requests
@@ -185,18 +177,20 @@ This will enable both [Request Logging](#log-requests) and [Response Logging](#l
 You can log the incoming JSON requests by adding the following configuration:
 
 ```javascript
-// Use setter
-app.enableRequestLogging();
-
+// Using the constructor
 const config = {
   requestLogging: true,
   // Other configurations
 };
+
+// Using the setter
+app.enableRequestLogging();
 ```
 
 The result looks like this (data changed):
 
 ```javascript
+// Amazon Alexa Request Example
 {
   "version": "1.0",
   "session": {
@@ -249,18 +243,20 @@ As you can see above, the logs of a request are quite long and impractical, if y
 ```javascript
 let myRequestLoggingObjects(['request']);
 
-// Use setter
-app.setRequestLoggingObjects(myRequestLoggingObjects);
-
+// Using the constructor
 const config = {
   requestLoggingObjects: myRequestLoggingObjects,
   // Other configurations
+
+// Using the setter
+app.setRequestLoggingObjects(myRequestLoggingObjects);
 };
 ```
 
 The example above will reduce the log output to this:
 
-```json
+```javascript
+// Amazon Alexa Request Example
 "type": "IntentRequest",
 "requestId": "amzn1.echo-api.request.5c96e32a-d803-4ba0-ba04-4293ce23ggf1",
 "timestamp": "2017-07-03T09:56:44Z",
@@ -276,18 +272,20 @@ The example above will reduce the log output to this:
 You can log the outgoing JSON responses by adding the following configuration:
 
 ```javascript
-// Use setter
-app.enableResponseLogging();
-
+// Using the constructor
 const config = {
   responseLogging: true,
   // Other configurations
 };
+
+// Using the setter
+app.enableResponseLogging();
 ```
 
 The result looks like this:
 
-```json
+```js
+// Amazon Alexa Response Example
 {
   "version": "1.0",
   "response": {
@@ -309,18 +307,20 @@ Similar to [`requestLoggingObjects`](#request-logging-objects), you can limit th
 ```javascript
 let myResponseLoggingObjects(['response']);
 
-// Use setter
-app.setResponseLoggingObjects(myResponseLoggingObjects);
-
+// Using the constructor
 const config = {
   responseLoggingObjects: myResponseLoggingObjects,
   // Other configurations
 };
+
+// Using the setter
+app.setResponseLoggingObjects(myResponseLoggingObjects);
 ```
 
 The example above will reduce the log output to this:
 
-```json
+```js
+// Amazon Alexa Request Example
 "shouldEndSession": true,
 "outputSpeech": {
   "type": "SSML",
@@ -341,5 +341,28 @@ For information that is only needed across multiple requests during one session,
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our database integrations. Learn more here: [Integrations > Databases](../07_integrations/databases).
+For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md), [Integrations > Databases](../../07_integrations/databases).
 
+
+## Account Linking
+
+To implement Account Linking in your voice application, you need two core methods.
+
+The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
+
+```javascript
+// Alexa Skill:
+this.alexaSkill().showAccountLinkingCard();
+
+// Google Actions:
+this.googleAction().askForSignIn();
+```
+
+The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
+```javascript
+this.getAccessToken();
+```
+
+For more information on Account Linking, check out our blogposts:
+* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)

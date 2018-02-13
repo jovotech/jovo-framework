@@ -4,14 +4,19 @@ In this section, you will learn more about the essential configurations of a Jov
 
 * [Jovo App Structure](#jovo-app-structure)
   * [Index.js - Server Configuration](#indexjs---server-configuration)
-  * [App.js - Application Logic](#appjs---application-logic)
+  * [App - Application Logic](#app---application-logic)
   * [Models - Language Model](#models---language-model)
 * [How to Add Configurations](#how-to-add-configurations)
   * [Available Configurations](#available-configurations)
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js), [`app.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js) and [`models`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/models/en-US.json).
+A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/models/en-US.json) ([Jovo Language Model](./01:models)).
+
+
+![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
+
+
 
 ### Index.js - Server Configuration
 Everything related to running your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js). 
@@ -40,10 +45,10 @@ exports.handler = (event, context, callback) => {
     app.handleLambda(event, context, callback);
 };
 ```
-You can find all the information regarding server configuration in this section: [App Configuration > Server](./server).
+You can find all the information regarding server configuration in this section: [App Configuration > Server](./02_server).
 
-### App.js - Application Logic
-The `app` folder, and specifically `app.js` is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
+### /app - Application Logic
+The `/app` folder, and specifically `app.js` is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
 
 ```javascript
 'use strict';
@@ -71,7 +76,7 @@ app.setHandler({
     },
 
     'HelloWorldIntent': function() {
-        this.ask('Hello World! What is your name?', 'Please tell me your name.');
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 
     'MyNameIsIntent': function(name) {
@@ -85,15 +90,15 @@ module.exports.app = app;
 You can find everything related to the app logic here: [App Logic](../04_app-logic).
 
 ### Models - Language Model
-The models folder contains the Jovo language model, which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
+The models folder contains the [Jovo Language Model](./01_models), which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
 
 The idea is to maintain a single language model locally instead of having to go to the platform developer consoles independently.
 
-In the `models` folder, every language gets a file. For example, here's how a file `en-US.json` could look like:
+In the `/models` folder, every language gets a file. For example, here's how a file `en-US.json` could look like:
 
 ```javascript
 {  
-    "invocation": "your invocation name",
+    "invocation": "my test app",
     "intents":[  
         {  
             "name":"HelloWorldIntent",
@@ -151,7 +156,7 @@ In the `models` folder, every language gets a file. For example, here's how a fi
 }
 ```
 
-You can find out more about that here [App Configuration > Models](../03_app-configuration/models).
+You can find out more about that here [App Configuration > Models](../03_app-configuration/01_models).
 
 ## How to Add Configurations
 To add configurations, you have two options: You can either add them at the beginning of [`app.js`](#app.js) in the constructor or you use the setter function of each configuration.
@@ -177,8 +182,6 @@ app.enableLogging();
 ```
 
 This is the default configuration:
-
-// TODO
 
 ```javascript
 const config = {
@@ -208,12 +211,15 @@ const config = {
     i18n: {
         overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
         load: 'all',
+        returnObjects: true,
     },
     analytics: {
         intentsToSkip: [],
         usersToSkip: [],
         services: {},
     },
+    alexaSkill: {},
+    googleAction: {},
 };
 ```
 
@@ -234,6 +240,6 @@ Data | [inputMap]((../04_app-logic/02_data#inputmap)) | Maps incoming input (slo
  | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects) | Limits response logs to the provided objects
 User | [userDataCol]((../04_app-logic/02_data/user.md#user-data)) | Changes the name of the user data column in the database
  | | [userMetaData]((../04_app-logic/02_data/user.md#user-meta-data)) | Change the default configurations for storing user meta data
-Output | [i18n]((../04_app-logic/03_app-logic/i18n.md#configuration)) | Enable multilingual output for your voice app
-Integrations | [Databases]((../07_integrations/databases/readme.md)) | Switch between supported database integrations
- | | [Analytics]((../07_integrations/analytics)) | Enable analytics integrations
+Output | [i18n]((../04_app-logic/i18n.md#configuration)) | Enable multilingual output for your voice app
+Integrations | [Databases]((../06_integrations/databases/readme.md)) | Switch between supported database integrations
+ | | [Analytics]((../06_integrations/analytics)) | Enable analytics integrations

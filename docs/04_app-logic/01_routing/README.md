@@ -27,14 +27,12 @@ A `session` is an uninterrupted interaction between a user and your application.
 
 Sessions that contain only a single request with a `tell` response could look like this:
 
-// TODO
-![One Session](https://www.jovo.tech/img/docs/session-tell.jpg)
+![One Session](../../img/session-tell.png)
 
 
 For more conversational experiences that require back and forth between your app and user, you need to use the `ask` method. Here is what a session with two requests could look like:
 
-//TODO
-![Two Sessions](https://www.jovo.tech/img/docs/session-ask.jpg)
+![Two Sessions](../../img/session-ask.png)
 
 To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](.../07_integrations/databases#filepersistence).
 
@@ -140,7 +138,7 @@ For example, this saves you some time calling `if (this.user().isNewUser()) { }`
 
 #### 'ON_REQUEST' Intent
 
-The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. 
+The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent.
 
 ```javascript
 'ON_REQUEST': function() {
@@ -272,14 +270,14 @@ let myIntentsToSkipUnhandled = [
     'HelpIntent',
 ];
 
-// Use the setter
-app.setIntentsToSkipUnhandled(myIntentsToSkipUnhandled);
-
-// Use setConfig
+// Use constructor
 const config = {
     intentsToSkipUnhandled: myIntentsToSkipUnhandled,
     // Other configurations
 };
+
+// Use the setter
+app.setIntentsToSkipUnhandled(myIntentsToSkipUnhandled);
 ```
 
 In the below example, if a person answers to the first question with "Help," it is not going to `'Unhandled'`, but to the global `'HelpIntent'`:
@@ -328,14 +326,14 @@ let myIntentMap = {
     'incomingIntentName' : 'mappedIntentName'
 };
 
-// Use setter
-app.setIntentMap(myIntentMap);
-
-// Use setConfig
+// Use constructor
 const config = {
     intentMap: myIntentMap,
     // Other configurations
 };
+
+// Use setter
+app.setIntentMap(myIntentMap);
 ```
 
 This is useful especially for platform-specific, built-in intents. One example could be Amazon’s standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
@@ -361,7 +359,6 @@ As mentioned above, the platforms offer different types of built-in intents.
 
 * Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
 * Google Assistant: Currently no documentation of built-in intents on Dialogflow
-
 
 
 ## States
@@ -510,7 +507,8 @@ app.setHandler({
         // Ask for a yes-no-question and route to order state
         let speech = 'Do you want to order something?';
         let reprompt = 'Please answer with yes or no.';
-        this.followUpState('OrderState').ask(speech, reprompt);
+        this.followUpState('OrderState')
+            .ask(speech, reprompt);
     },
     
     // Example: behave differently for a 'yes' or 'no' answer inside order state
@@ -551,8 +549,8 @@ app.setHandler({
     },
 
     'HelloWorldIntent': function() {
-        this.tell('Hello World!');
-    }
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
 });
 ```
 
@@ -627,7 +625,7 @@ this.toStatelessIntent('PizzaIntent', moreData);
 
 ## User Input
 
-// TODO
+To learn more about how to make use of user input (slots on Alexa and entities on Dialoflow), take a look at this section: [App Logic > Data](../02_data).
 
 ## Session Attributes
 

@@ -15,7 +15,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 
 ## Introduction to Alexa Specific Features
 
-> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](.../01_getting-started/voice-app-basics.md/#amazon-alexa).
+> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../../01_getting-started/voice-app-basics.md/#amazon-alexa).
 
 You can access the `alexaSkill` object like this:
 
@@ -26,7 +26,7 @@ let alexa = this.alexaSkill();
 
 ## Routing
 
-This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](.../04_app-logic/01_routing).
+This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](../../04_app-logic/01_routing).
 
 ### Dialog Interface
 
@@ -35,11 +35,11 @@ You can find more about dialog interface here: [Platform specifics > Amazon Alex
 
 ## Data
 
-This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](.../04_app-logic/02_data).
+This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../../04_app-logic/02_data).
 
 ### Shopping and To Do Lists
 
-You can find more about lists here: [Platform specifics > Amazon Alexa > List](./list.md)
+You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md)
 
 ### Location
 
@@ -66,7 +66,7 @@ this.user().getCountryAndPostalCode()
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
             this.alexaSkill().showAskForCountryAndPostalCodeCard()
-            this.tell('Please grant access to your address');
+                .tell('Please grant access to your address');
         }
     });
 ```
@@ -83,7 +83,7 @@ this.user().getDeviceAddress()
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
             this.alexaSkill().showAskForAddressCard()
-            this.tell('Please grant access to your address');
+                .tell('Please grant access to your address');
         }
     });
 ```
@@ -91,7 +91,7 @@ this.user().getDeviceAddress()
 
 ## Output
 
-This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](.../04_app-logic/03_output).
+This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](../../04_app-logic/03_output).
 
 ### Progressive Responses
 
@@ -103,7 +103,7 @@ Here is the official reference by Amazon: [Send the User a Progressive Response]
 this.alexaSkill().progressiveResponse(speech);
 ```
 
-Find an example file here: [`indexProgressiveResponse.js`](../../../examples/alexa_specific/indexProgressiveResponse.js).
+Find an example file here: [`indexProgressiveResponse.js`](../../../examples/alexa_specific/appProgressiveResponse.js).
 
 ### Visual Output
 

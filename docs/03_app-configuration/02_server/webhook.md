@@ -1,11 +1,12 @@
 # [App Configuration](../) > [Server](README.md) > Webhook
 
-For voice apps in prototyping stage, we recommend using a webhook and a tunnel service like [ngrok](#ngrok) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md) every time.
+For voice apps in prototyping stage, we recommend using a local webserver and a service like [jovo webhook](#jovo-webhook) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md) every time.
 
 * [Webhook Configuration](#webhook-configuration)
 * [Run the Webhook Locally](#run-the-webhook-locally)
-  * [ngrok](#ngrok)
+  * [jovo webhook](#jovo-webhook)
   * [bst proxy](#bst-proxy)
+  * [ngrok](#ngrok)
 * [Deploy to a Server](#deploy-to-a-server)
 
 
@@ -19,7 +20,7 @@ Jovo uses the [`express`](https://expressjs.com/) framework for running a server
 const {Webhook} = require('jovo-framework');
 const {app} = require('./app/app.js');
 
-if (isWebhook()) {
+if (app.isWebhook()) {
     const port = process.env.PORT || 3000;
     Webhook.listen(port, () => {
         console.log(`Example server listening on port ${port}!`);
@@ -45,44 +46,45 @@ $ jovo run
 $ node index.js
 ```
 
-Find more information on the `jovo run` command here: [CLI](.../02_cli).
+Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](.../02_cli#jovo-run).
 
-It should return this:
+`$ jovo run` should return this:
 
 ```sh
 Local development server listening on port 3000.
+This is your webhook url: https://webhook.jovo.cloud/[your-id]
 ```
 
-Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again.
+As you can see, a [`jovo webhook`](#jovo-webhook) URL is automatically created, which serves as a link to your local webhook and can be posted as a HTTPS endpoint to the voice platforms.
 
-After running the server, you can use either [ngrok](#ngrok) or [bst proxy](#bst-proxy) to create a link to a your local webhook, which can then be posted as a HTTPS endpoint to the voice platforms.
+Here are all the services that can point to your local development server:
+* [jovo webhook](#jovo-webhook) (default)
+* [bst proxy](#bst-proxy)
+* [ngrok](#ngrok)
 
-### ngrok
 
-[Ngrok](https://ngrok.com/) is a tunneling service that makes your localhost accessible to outside APIs. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time. You can download ngrok like so:
+### jovo webhook
 
-```sh
-# Open a new tab in your command line tool, then:
-$ npm install ngrok -g
+The `jovo webhook` is a free service  that creates a link to your local webserver. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time.
 
-# Point ngrok to your localhost:3000
-$ ngrok http 3000
+By using the [`jovo init`](../../02_cli#jovo-init) command or [`jovo run`](../../02_cli#jovo-run), a unique, anonymized link is created that looks like this:
+
 ```
+https://webhook.jovo.cloud/[your-id]
+```
+This link simply makes it easier for you to prototype locally by being able to see the logs in your command line, and to make fast changes without uploading your code to AWS Lambda.
 
-It should display something similar to this:
-
-![ngrok window](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-url.jpg)
-
-Now use the `https://xyz.ngrok.io` address provided by ngrok, add `/webhook` and paste it as webhook link to the respective developer platform consoles.
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../../02_cli#jovo-deploy) command to upload it from the command line (`jovo webhook` is the default `endpoint` added to `app.json` with the [`jovo init`](../../02_cli#jovo-init) command).
 
 Find the following sections in our beginner tutorials to learn how to do so:
 
 * [Amazon Alexa: Add Webhook as HTTPS Endpoint](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#app-configuration)
 * [Google Assistant: Add Webhook as Dialogflow Fulfillment](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#endpoint)
 
+
 ### bst proxy
 
-With the bst proxy by [Bespoken](https://bespoken.io/), you can create a link similar to ngrok, but with powerful features like logging.
+With the bst proxy by [Bespoken](https://bespoken.io/), you can create a link similar to the [jovo webhook](#jovo-webhook), but with additional features like logging.
 
 You can run the proxy with the `jovo run` command:
 
@@ -97,12 +99,29 @@ Now, you can not only use the link as an endpoint, but also use it to access [Be
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/bespoken-logging.jpg)
 
+### ngrok
+
+[Ngrok](https://ngrok.com/) is a tunneling service that makes your localhost accessible to outside APIs.
+
+You can download ngrok like so:
+
+```sh
+# Open a new tab in your command line tool, then:
+$ npm install ngrok -g
+
+# Point ngrok to your localhost:3000
+$ ngrok http 3000
+```
+
+It should display something similar to this:
+
+![ngrok window](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-url.jpg)
 
 ## Deploy to a Server
 
 When you want to deploy your code to a webserver other than AWS Lambda, you need to verify that Alexa Skill requests are actually coming from Amazon.
 
-For this, Jovo uses a package called [alexa-verifier](https://github.com/mreinstein/alexa-verifier), which can be accessed by switching one line of the configuration in `index.js`:
+For this, Jovo uses a package called [alexa-verifier-middleware](https://github.com/alexa-js/alexa-verifier-middleware), which can be accessed by switching one line of the configuration in `index.js`:
 
 ```javascript
 // Use this
@@ -110,4 +129,10 @@ const {WebhookVerified} = require('jovo-framework');
 
 // Instead of this
 const {Webhook} = require('jovo-framework');
+```
+
+To make use of it, please install the it like so:
+
+```sh
+$ npm install alexa-verifier-middleware
 ```

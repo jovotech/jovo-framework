@@ -31,7 +31,7 @@ Here is what’s currently possible with speechBuilder:
 Method | Description
 :--- | :---
 `addText(text)` | Add plain text for text-to-speech
-`t(key)` | Access [`i18n`](./i18n.md) language resources for multilingual voice apps
+`addT(key)` | Access [`i18n`](./i18n.md) language resources for multilingual voice apps
 `addAudio(url, alternativeText)` | Add link to audio file and alternative text for Google Assistant. For more information on using audio files, see [App Logic > Output > play](./readme.md#play)</a>.
 `addBreak(time)` | Add a break to the output. Make sure to add a unit, e.g. "300ms"
 `addSentence(text)` | Add a text within a sentence tag
