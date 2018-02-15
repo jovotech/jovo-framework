@@ -11,7 +11,7 @@ In this section, you will learn more about the essential configurations of a Jov
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/models/en-US.json) ([Jovo Language Model](./01:models)).
+A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/models/en-US.json) ([Jovo Language Model](./01_models)).
 
 
 ![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
