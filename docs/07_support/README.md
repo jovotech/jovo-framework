@@ -2,7 +2,7 @@
 
 Any questions with the framework? Just let us know, we're happy to help!
 
-* How to Reach Us
+* [How to Reach Us](#how-to-reach-us)
   * [Slack](#slack)
   * [Email](#email)
   * [Other Channels](#other-channels)

@@ -9,7 +9,7 @@ In this section, you will learn how to manage multi-turn conversations with the 
     * [Dialog Delegate](#dialog-delegate)
     * [Control the Dialog in your Code](#control-the-dialog-in-your-code)
         * [Slot Value](#slot-value)
-        * [Elicit Slot](#elecit-slot)
+        * [Elicit Slot](#elicit-slot)
         * [Confirm Slot](#confirm-slot)
         * [Confirm Intent](#confirm-intent)
         * [Update Intent](#update-intent)
@@ -87,10 +87,10 @@ this.alexaSkill().hasSlotValue('name');
 
 If you want the user to fill a slot, use:
 ```javascript
-this.alexaSkill().dialogElecitSlot(slotName, speechText[, repromptText, updatedIntent])
+this.alexaSkill().dialogElicitSlot(slotName, speechText[, repromptText, updatedIntent])
 
 // Example
-this.alexaSkill().dialogElecitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
+this.alexaSkill().dialogElicitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
 ```
 
 #### Confirm Slot
@@ -135,5 +135,5 @@ let updatedIntent = {
 };
 // You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
-this.alexaSkill().dialogElecitSlot('city', 'Which city are you living in?', updatedIntent);
+this.alexaSkill().dialogElicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```

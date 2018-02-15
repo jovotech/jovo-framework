@@ -3,9 +3,12 @@
 Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot, and Bespoken.
 
 * [Jovo Analytics Layer](#jovo-analytics-layer)
-* [VoiceLabs](#voicelabs)
+  * [Turn Analytics On and Off](#turn-analytics-on-and-off)
+  * [Skip Intents](#skip-intents)
+  * [Skip Users](#skip-users)
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
+* [VoiceLabs](#voicelabs)
 
 
 ## Jovo Analytics Layer

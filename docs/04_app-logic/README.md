@@ -2,7 +2,7 @@
 
 In this section, you will learn more about the essentials of building the logic of your Jovo Voice App.
 
-* [Introduction](#overview)
+* [Overview](#overview)
 * [Basic Concepts](#basic-concepts)
   * [Handler](#handler)
   * [Routing](#routing)

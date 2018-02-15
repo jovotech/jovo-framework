@@ -3,7 +3,7 @@
 This section shows workflows and step by step guides that can be used with the Jovo CLI to create and update projects.
 
 * [Introduction](#introduction)
-* [Create and Deploy a New Project](#create-and-deploy-a-new-Project)
+* [Create and Deploy a New Project](#create-and-deploy-a-new-project)
 * [Import an Existing Project](#import-an-existing-project)
 
 
