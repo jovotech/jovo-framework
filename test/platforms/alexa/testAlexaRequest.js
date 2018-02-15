@@ -1,19 +1,18 @@
 'use strict';
 const expect = require('chai').expect;
-const AlexaRequestBuilder = require('../../../lib/platforms/alexa/request/util/requestBuilder').RequestBuilder;
-const launchRequestSample = require('./../../../lib/platforms/alexa/request/samples/launchRequestSample.json');
-const intentRequestSample = require('./../../../lib/platforms/alexa/request/samples/intentRequestSample.json');
+const AlexaRequestBuilder = require('../../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
+const launchRequestSample = require('../../../lib/platforms/alexaSkill/request/samples/launchRequestSample.json');
+const intentRequestSample = require('../../../lib/platforms/alexaSkill/request/samples/intentRequestSample.json');
 
-const sessionEndedRequestSample = require('./../../../lib/platforms/alexa/request/samples/sessionEndedRequestSample.json');
-const audioPlayerRequestSample1 = require('./../../../lib/platforms/alexa/request/samples/audioPlayerRequestSample1.json');
-const errorRequestSample = require('./../../../lib/platforms/alexa/request/samples/errorRequestSample.json');
+const sessionEndedRequestSample = require('../../../lib/platforms/alexaSkill/request/samples/sessionEndedRequestSample.json');
+const audioPlayerRequestSample1 = require('../../../lib/platforms/alexaSkill/request/samples/audioPlayerRequestSample1.json');
+const errorRequestSample = require('../../../lib/platforms/alexaSkill/request/samples/errorRequestSample.json');
 
-const LaunchRequest = require('./../../../lib/platforms/alexa/request/launchRequest').LaunchRequest;
-const IntentRequest = require('./../../../lib/platforms/alexa/request/intentRequest').IntentRequest;
-const SessionEndedRequest = require('./../../../lib/platforms/alexa/request/sessionEndedRequest').SessionEndedRequest;
-const AudioPlayerRequest = require('./../../../lib/platforms/alexa/request/audioPlayerRequest').AudioPlayerRequest;
-const ErrorRequest = require('./../../../lib/platforms/alexa/request/errorRequest').ErrorRequest;
-
+const LaunchRequest = require('../../../lib/platforms/alexaSkill/request/launchRequest').LaunchRequest;
+const IntentRequest = require('../../../lib/platforms/alexaSkill/request/intentRequest').IntentRequest;
+const SessionEndedRequest = require('../../../lib/platforms/alexaSkill/request/sessionEndedRequest').SessionEndedRequest;
+const AudioPlayerRequest = require('../../../lib/platforms/alexaSkill/request/audioPlayerRequest').AudioPlayerRequest;
+const ErrorRequest = require('../../../lib/platforms/alexaSkill/request/errorRequest').ErrorRequest;
 
 describe('Tests for AlexaRequest Class', function() {
     it('constructor()', function() {
