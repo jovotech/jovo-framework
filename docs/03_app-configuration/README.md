@@ -240,6 +240,6 @@ Data | [inputMap](../04_app-logic/02_data#inputmap) | Maps incoming input (slots
  | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects) | Limits response logs to the provided objects
 User | [userDataCol](../04_app-logic/02_data/user.md#user-data) | Changes the name of the user data column in the database
  | | [userMetaData](../04_app-logic/02_data/user.md#user-meta-data) | Change the default configurations for storing user meta data
-Output | [i18n]((../04_app-logic/i18n.md#configuration)) | Enable multilingual output for your voice app
-Integrations | [Databases](../06_integrations/databases/readme.md) | Switch between supported database integrations
+Output | [i18n](../04_app-logic/i18n.md#configuration) | Enable multilingual output for your voice app
+Integrations | [Databases](../06_integrations/databases) | Switch between supported database integrations
  | | [Analytics](../06_integrations/analytics) | Enable analytics integrations
