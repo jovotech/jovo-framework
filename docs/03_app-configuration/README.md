@@ -11,7 +11,7 @@ In this section, you will learn more about the essential configurations of a Jov
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/models/en-US.json) ([Jovo Language Model](./01:models)).
+A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/models/en-US.json) ([Jovo Language Model](./01_models)).
 
 
 ![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
@@ -230,16 +230,16 @@ Below is a list of all configurations:
 
 Category | Name | Description
 :--- | :--- | :---
-Routing | [intentMap]((../04_app-logic/01_routing#intentmap)) | Maps incoming intents to specified intent names
- | | [intentsToSkipUnhandled]((../04_app-logic/01_routing#intentstoskipunhandled)) | Intents which should not be mapped to 'Unhandled' when not found in a certain state
-Data | [inputMap]((../04_app-logic/02_data#inputmap)) | Maps incoming input (slots and parameters) to specified input names
- | | [logging]((../04_app-logic/02_data#logging)) | Logs both requests and responses
- | | [requestLogging]((../04_app-logic/02_data#log-requests)) | Logs incoming requests
- | | [responseLogging]((../04_app-logic/02_data#log-responses)) | Logs outgoing responses
- | | [requestLoggingObjects]((../04_app-logic/02_data#request-logging-objects)) | Limits request logs to the provided objects
+Routing | [intentMap](../04_app-logic/01_routing#intentmap) | Maps incoming intents to specified intent names
+ | | [intentsToSkipUnhandled](../04_app-logic/01_routing#intentstoskipunhandled) | Intents which should not be mapped to 'Unhandled' when not found in a certain state
+Data | [inputMap](../04_app-logic/02_data#inputmap) | Maps incoming input (slots and parameters) to specified input names
+ | | [logging](../04_app-logic/02_data#logging) | Logs both requests and responses
+ | | [requestLogging](../04_app-logic/02_data#log-requests) | Logs incoming requests
+ | | [responseLogging](../04_app-logic/02_data#log-responses) | Logs outgoing responses
+ | | [requestLoggingObjects](../04_app-logic/02_data#request-logging-objects) | Limits request logs to the provided objects
  | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects) | Limits response logs to the provided objects
-User | [userDataCol]((../04_app-logic/02_data/user.md#user-data)) | Changes the name of the user data column in the database
- | | [userMetaData]((../04_app-logic/02_data/user.md#user-meta-data)) | Change the default configurations for storing user meta data
-Output | [i18n]((../04_app-logic/i18n.md#configuration)) | Enable multilingual output for your voice app
-Integrations | [Databases]((../06_integrations/databases/readme.md)) | Switch between supported database integrations
- | | [Analytics]((../06_integrations/analytics)) | Enable analytics integrations
+User | [userDataCol](../04_app-logic/02_data/user.md#user-data) | Changes the name of the user data column in the database
+ | | [userMetaData](../04_app-logic/02_data/user.md#user-meta-data) | Change the default configurations for storing user meta data
+Output | [i18n](../04_app-logic/i18n.md#configuration) | Enable multilingual output for your voice app
+Integrations | [Databases](../06_integrations/databases) | Switch between supported database integrations
+ | | [Analytics](../06_integrations/analytics) | Enable analytics integrations
