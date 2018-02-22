@@ -13,7 +13,7 @@ const ListTemplate3 = require('../../../lib/platforms/alexaSkill/response/render
 
 describe('Tests for render templates', function() {
     describe('template(type)', function() {
-        it('should return an instance of the specific template', () => {
+        it.skip('should return an instance of the specific template', () => {
             expect(AlexaSkill.templateBuilder('BodyTemplate1')).to.be.an.instanceOf(BodyTemplate1);
             expect(AlexaSkill.templateBuilder('BodyTemplate2')).to.be.an.instanceOf(BodyTemplate2);
             expect(AlexaSkill.templateBuilder('BodyTemplate3')).to.be.an.instanceOf(BodyTemplate3);

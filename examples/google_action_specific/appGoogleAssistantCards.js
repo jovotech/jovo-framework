@@ -36,7 +36,7 @@ app.setHandler({
         // app.tell('sdsd');
         // app.toIntent('AccountLinkingIntent');
         // app.toIntent('ListIntent');
-        this.toIntent('CarouselIntent');
+        this.toIntent('BasicCardIntent');
     },
     'AccountLinkingIntent': function() {
         this.showAccountLinkingCard();
@@ -104,21 +104,22 @@ app.setHandler({
     'HelloWorldIntent': function() {
         this.tell('Hello World');
     },
-    // 'ON_ELEMENT_SELECTED': function() {
-    //     let selectedElement = this.getSelectedElementId();
-    //     console.log('ON_ELEMENT_SELECTED');
-    //     if (selectedElement === 'Listitem1key') {
-    //         this.toIntent('BasicCardIntent');
-    //     } else if (selectedElement === 'Listitem2key') {
-    //         this.toIntent('CarouselIntent');
-    //     } else if (selectedElement === 'Carouselitem1key') {
-    //         this.toIntent('BasicCardIntent');
-    //     } else if (selectedElement === 'Carouselitem2key') {
-    //         this.toIntent('ListIntent');
-    //     } else {
-    //         this.tell(this.getSelectedElementId());
-    //     }
-    // },
+    'ON_ELEMENT_SELECTED': function() {
+        let selectedElement = this.getSelectedElementId();
+        console.log('ON_ELEMENT_SELECTED');
+        console.log(selectedElement);
+        if (selectedElement === 'Listitem1key') {
+            this.toIntent('BasicCardIntent');
+        } else if (selectedElement === 'Listitem2key') {
+            this.toIntent('CarouselIntent');
+        } else if (selectedElement === 'Carouselitem1key') {
+            this.toIntent('BasicCardIntent');
+        } else if (selectedElement === 'Carouselitem2key') {
+            this.toIntent('ListIntent');
+        } else {
+            this.tell(this.getSelectedElementId());
+        }
+    },
 });
 
 module.exports.app = app;
