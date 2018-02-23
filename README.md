@@ -45,10 +45,10 @@ Jovo is the first open source framework that lets you build voice apps for both 
   * [General](#general)
   * [Platform Specific Features](#platform-specific-features)
   * [Integrations](#integrations)
-* [Getting Started](#getting-started)
-  * [Jovo CLI](#jovo-cli)
-  * [Jovo Framework](#jovo-framework)
-  * [Jovo Sample App](#jovo-sample-app)
+* [Getting Started](./docs/01_getting-started)
+  * [Jovo CLI](./docs/01_getting-started#getting-started)
+  * [Jovo Framework](./docs/01_getting-started#jovo-framework-npm-package)
+  * [Jovo Sample App](./docs/01_getting-started#jovo-sample-voice-app)
 * [Tutorials](#tutorials)
 * [Contributing](#contributing)
 * [Community Projects](#community-projects)
@@ -57,7 +57,7 @@ Jovo is the first open source framework that lets you build voice apps for both 
 
 ## Installation
 
-> Read more in our [Getting Started Guide](./01_getting-started).
+> Read more in our [Getting Started Guide](.docs/01_getting-started).
 
 Install the Jovo CLI:
 
