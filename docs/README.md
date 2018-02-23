@@ -8,21 +8,22 @@
 
 Category | Sub-Category | Additional Content
 :--- | :--- | :---
-Getting Started | [Installation](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started) | &nbsp;
-&nbsp; | [Tutorials](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/tutorials.md) | &nbsp;
-&nbsp; | [Voice App Basics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/01_getting-started/voice-app-basics.md) | &nbsp;
-App Configuration | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration) | &nbsp;
-&nbsp; | [Server Configuration](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server) | [Webhook](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/webhook.md), [AWS Lambda](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/02_app-configuration/server/aws-lambda.md)
-App Logic | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic) | &nbsp;
-&nbsp; | [Routing](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/01_routing) | &nbsp;
-&nbsp; | [Data](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data) | [User](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/02_data/user.md)
-&nbsp; | [Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output) | [speechBuilder](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/speechbuilder.md), [i18n](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/i18n.md), [Visual Output](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-logic/03_output/visual-output.md)
-Platform-specific Features | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics) | &nbsp;
-&nbsp; | [Amazon Alexa](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa) | [Audioplayer](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/audioplayer.md), [Dialog Interface](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/amazon-alexa/dialog.md)
-&nbsp; | [Google Assistant](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/04_platform-specifics/google-assistant) | &nbsp;
-Tools | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools) | &nbsp;
-&nbsp; | [CLI](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/05_tools/cli) | &nbsp;
-Integrations | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations) | &nbsp;
-&nbsp; | [Databases](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/databases) | &nbsp;
-&nbsp; | [Analytics](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/06_integrations/analytics) | &nbsp;
-Support | [Overview](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/07_support) | &nbsp;
+Getting Started | [Installation](./01_getting-started) | &nbsp;
+&nbsp; | [Tutorials](./01_getting-started/tutorials.md) | &nbsp;
+&nbsp; | [Voice App Basics](./01_getting-started/voice-app-basics.md) | &nbsp;
+CLI | [Overview](./02_cli) | &nbsp;
+&nbsp; | [Workflows](../02_cli/workflows.md) | &nbsp;
+App Configuration | [Overview](./03_app-configuration) | &nbsp;
+&nbsp; | [Language Models](./03_app-configuration/01_models)  | [Platforms](./03_app-configuration/01_models/platforms)
+&nbsp; | [Server Configuration](./03_app-configuration/02_server) | [Webhook](./03_app-configuration/server/webhook.md), [AWS Lambda](./03_app-configuration/server/aws-lambda.md)
+App Logic | [Overview](./04_app-logic) | &nbsp;
+&nbsp; | [Routing](./04_app-logic/01_routing) | &nbsp;
+&nbsp; | [Data](./04_app-logic/02_data) | [User](./04_app-logic/02_data/user.md)
+&nbsp; | [Output](./04_app-logic/03_output) | [speechBuilder](./04_app-logic/03_output/speechbuilder.md), [i18n](./04_app-logic/03_output/i18n.md), [Visual Output](./04_app-logic/03_output/visual-output.md)
+Platform-specific Features | [Overview](./05_platform-specifics) | &nbsp;
+&nbsp; | [Amazon Alexa](./05_platform-specifics/amazon-alexa) | [Audioplayer](./05_platform-specifics/amazon-alexa/audioplayer.md), [Dialog Interface](./05_platform-specifics/amazon-alexa/dialog.md), [Visual Output](./05_platform-specifics/amazon-alexa/visuals.md), [List](./05_platform-specifics/amazon-alexa/list.md)
+&nbsp; | [Google Assistant](./05_platform-specifics/google-assistant) | &nbsp;
+Integrations | [Overview](./06_integrations) | &nbsp;
+&nbsp; | [Databases](./06_integrations/databases) | &nbsp;
+&nbsp; | [Analytics](./06_integrations/analytics) | &nbsp;
+Support | [Overview](./08_support) | &nbsp;

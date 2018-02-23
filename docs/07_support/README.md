@@ -2,8 +2,8 @@
 
 Any questions with the framework? Just let us know, we're happy to help!
 
-* How to Reach Us
-  * [Gitter](#gitter)
+* [How to Reach Us](#how-to-reach-us)
+  * [Slack](#slack)
   * [Email](#email)
   * [Other Channels](#other-channels)
 
@@ -11,9 +11,9 @@ Any questions with the framework? Just let us know, we're happy to help!
 
 We're trying to be as responsive as possible, so please feel free to reach out to us with any feedback or suggestion. Below, you can find a list of channels:
 
-### Gitter
+### Slack
 
-For ad hoc, immediate support of very specific questions, Gitter is a great messaging based community. We created a new chat group on Gitter: [jovo-framework-nodejs](https://gitter.im/jovotech/jovo-framework-nodejs).
+Join our friendly and helpful Slack community here: [jovo.tech/slack](https://www.jovo.tech/slack).
 
 Please reach out to us and say hi, we're happy to help there.
 

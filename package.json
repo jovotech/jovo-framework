@@ -1,16 +1,14 @@
 {
   "name": "jovo-framework",
-  "version": "0.6.25",
+  "version": "1.0.1",
   "description": "Jovo is a node.js framework for cross-platform voice app development. We currently support Amazon Alexa Skills and Actions for Google Home.",
   "main": "index.js",
   "dependencies": {
-    "alexa-verifier-middleware": "^0.2.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "i18next": "^8.4.3",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "lodash": "^4.17.4",
-    "request": "^2.81.0",
     "uuid": "^3.1.0"
   },
   "directories": {
@@ -37,9 +35,6 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.8.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^5.0.1",
-    "eslint-plugin-react": "^7.0.1",
     "mocha": "^3.5.0"
   }
 }
