@@ -17,7 +17,7 @@ This folder provides code examples for various Jovo features. These are mostly a
 * [Integrations](#integrations)
   * [Analytics](#analytics)
 * [Alexa-specific Features](#alexa-specific-features)
-  * [Cards](#cards)
+  * [Alexa Cards](#alexa-cards)
   * [Lists](#lists)
   * [Device Address](#device-address)
   * [Render Templates](#render-templates)
@@ -26,7 +26,7 @@ This folder provides code examples for various Jovo features. These are mostly a
 * [Actions on Google specific Features](#actions-on-google-specific-features)
   * [Permission](#permission)
   * [Account Linking](#account-linking)
-  * [Cards](#cards)
+  * [Google Action Cards](#google-action-cards)
   
 ## Basics and Routing
 
@@ -34,7 +34,7 @@ This folder provides code examples for various Jovo features. These are mostly a
 The file [appHelloWorld.js](./appHelloWorld.js) provides a simple voice app with "Hello World" output, similar to the [Jovo Sample Voice App](https://github.com/jovotech/jovo-sample-voice-app-nodejs).
 
 ### followUpState
-The file [appFollowUpState](./appFollowUpState.js) shows how to add a state to an ask-call.
+The file [appFollowUpState.js](./appFollowUpState.js) shows how to add a state to an ask-call.
 
 ### Input (Slots and Entities)
 The file [appInputs.js](./appInputs.js) shows how easy it is to access user data (slots, entities, parameters).
@@ -63,7 +63,7 @@ The file [appAnalyticsIntegration.js](./appAnalyticsIntegration.js) shows how ea
 
 ## Alexa-specific Features
 
-### Cards
+### Alexa Cards
 The file [appAlexaCards.js](./alexa_specific/appAlexaCards.js) provides examples for adding Home Cards as visual output to the Alexa companion app.
 
 ### Lists
@@ -89,5 +89,5 @@ The file [appAskForPermission.js](./google_action_specific/appAskForPermission.j
 ### Account Linking
 The file [appAskForSignIn.js](./google_action_specific/appAskForSignIn.js) shows how to ask the user to link their account. 
 
-### Cards
+### Google Action Cards
 The file [appGoogleAssistantCards.js](./google_action_specific/appGoogleAssistantCards.js) provides examples for adding cards as visual output to the Google Home companion app.
