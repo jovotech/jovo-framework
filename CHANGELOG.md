@@ -10,7 +10,7 @@
 
 ## 1.0.2 (February 24, 2018)
 
-* cc5a888: Added app.onRequest() and app.onResponse() listeners (see issue #85)
+* [cc5a888](https://github.com/jovotech/jovo-framework-nodejs/commit/cc5a888977c870e6d44636ae48cbd95efb9e9251): Added `app.onRequest()` and `app.onResponse()` listeners (see issue #85)
 
 ## 1.0.1 (February 22, 2018)
 
