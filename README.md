@@ -92,8 +92,8 @@ Name | Description | Docs
 User object | Create contextual experiences with user specific data and services | [📝](./docs/04_app-logic/02_data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](./docs/04_app-logic/03_output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](./docs/04_app-logic/03_output/i18n.md)
-Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](./docs/07_integrations/databases)
-Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](./docs/07_integrations/analytics)
+Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](./docs/06_integrations/databases)
+Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](./docs/06_integrations/analytics)
 
 
 ### Platform Specific Features
@@ -133,22 +133,22 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 
 #### Database Integrations
 
-See the [Jovo Persistence Layer](./docs/07_integrations/databases) for more information on storing user specific data.
+See the [Jovo Persistence Layer](./docs/06_integrations/databases) for more information on storing user specific data.
 
 Name | Description | Docs
 :--- | :--- | :---
-File Persistence &nbsp; &nbsp; &nbsp; &nbsp; | Saves user specific data in JSON file for fast prototyping and development (default) | [📝](./docs/07_integrations/databases/#filepersistence)
-Dynamo DB | Saves user specific data in AWS DynamoDB table | [📝](./docs/07_integrations/databases/#dynamodb)
+File Persistence &nbsp; &nbsp; &nbsp; &nbsp; | Saves user specific data in JSON file for fast prototyping and development (default) | [📝](./docs/06_integrations/databases/#filepersistence)
+Dynamo DB | Saves user specific data in AWS DynamoDB table | [📝](./docs/06_integrations/databases/#dynamodb)
 
 #### Analytics Integrations
 
-See the [Jovo Analytics Layer](./docs/07_integrations/analytics) for more information on analytics features.
+See the [Jovo Analytics Layer](./docs/06_integrations/analytics) for more information on analytics features.
 
 Name | Description | Docs
 :--- | :--- | :---
-VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](./docs/07_integrations/analytics/#voicelabs)
-Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](./docs/07_integrations/analytics/#dashbot)
-Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/07_integrations/analytics/#bespoken)
+VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](./docs/06_integrations/analytics/#voicelabs)
+Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](./docs/06_integrations/analytics/#dashbot)
+Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/06_integrations/analytics/#bespoken)
 
 #### CLI Integrations
 
