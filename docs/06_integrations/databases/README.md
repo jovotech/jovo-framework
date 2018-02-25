@@ -52,7 +52,7 @@ this.user().data.score = 300;
 
 After you saved data, you can use a `key` to retrieve a `value` from the database.
 
-Again, you can use the [user object](.../04_app-logic/02_data/user.md) for this:
+Again, you can use the [user object](../../04_app-logic/02_data/user.md) for this:
 
 ```javascript
 let data = this.user().data.key;

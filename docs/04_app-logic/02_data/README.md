@@ -18,7 +18,7 @@ In this section, you will learn how to deal with entities and slot values provid
 
 ## Introduction to User Input
 
-> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](.../01_getting-started/voice-app-basics.md).
+> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md).
 
 We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
@@ -341,7 +341,7 @@ For information that is only needed across multiple requests during one session,
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md), [Integrations > Databases](../../07_integrations/databases).
+For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md), [Integrations > Databases](../../06_integrations/databases).
 
 
 ## Account Linking

@@ -30,7 +30,7 @@ While for Alexa, the process of hosting a Skill on Lambda is straightforward, fo
 
 ## Things to Consider
 
-The [FilePersistence](.../07_integrations/databases/#filepersistence) database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](.../07_integrations/databases/#dynamodb) before uploading to Lambda.
+The [FilePersistence](../../06_integrations/databases/#filepersistence) database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../06_integrations/databases/#dynamodb) before uploading to Lambda.
 
 ## Troubleshooting
 

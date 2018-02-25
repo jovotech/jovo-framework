@@ -34,12 +34,12 @@ For more conversational experiences that require back and forth between your app
 
 ![Two Sessions](../../img/session-ask.png)
 
-To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](.../07_integrations/databases#filepersistence).
+To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../../06_integrations/databases#filepersistence).
 
 
 ## Intents
 
-If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](.../01_getting-started/voice-app-basics.md).
+If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md).
 
 Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 

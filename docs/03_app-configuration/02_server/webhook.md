@@ -46,7 +46,7 @@ $ jovo run
 $ node index.js
 ```
 
-Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](.../02_cli#jovo-run).
+Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](../../02_cli#jovo-run).
 
 `$ jovo run` should return this:
 
@@ -95,7 +95,7 @@ This is what the result looks like:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](.../07_integrations/analytics#bespoken) for powerful logging capabilities:
+Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../../06_integrations/analytics#bespoken) for powerful logging capabilities:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/bespoken-logging.jpg)
 
