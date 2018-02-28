@@ -125,13 +125,13 @@ For this, Jovo uses a package called [alexa-verifier-middleware](https://github.
 
 ```javascript
 // Use this
-const {WebhookVerified} = require('jovo-framework');
+const Webhook = require('jovo-framework').WebhookVerified;
 
 // Instead of this
 const {Webhook} = require('jovo-framework');
 ```
 
-To make use of it, please install the it like so:
+To make use of it, please install it like so:
 
 ```sh
 $ npm install alexa-verifier-middleware
