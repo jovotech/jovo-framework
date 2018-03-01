@@ -8,9 +8,11 @@
 
 # Jovo Framework Changelog
 
-## 1.0.3 (tba)
-
-* 
+## 1.0.3 (February 28, 2018)
+* Added Skill/List events for Alexa Skills ([see issue 23](https://github.com/jovotech/jovo-framework-nodejs/issues/23))
+* Added more unit tests
+* Added this.reprompt SpeechBuilder instance
+* Fixed Dialogflow session context bug
 
 ## 1.0.2 (February 24, 2018)
 
