@@ -275,6 +275,7 @@ $ jovo build -p googleAction --reverse
 `jovo get` will import an existing Alexa Skill (Skill Information and Interaction Model) or Dialogflow agent into the `/platforms` folder. 
 
 To import a Dialogflow agent you have to enable the Dialogflow V2 API in your agent's settings first and then go through the following setup [guide](https://dialogflow.com/docs/reference/v2-auth-setup).
+
 To get the Skill from the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
 
 ```sh
@@ -313,6 +314,7 @@ $ jovo get alexaSkill [-s | --skill-id <skill ID>] [--project-id <project ID>] [
 `jovo deploy` is used to upload the platform folders to their respective developer site. 
 
 To deploy a Dialogflow agent you have to enable the Dialogflow V2 API in your agent's settings first and then go through the following setup [guide](https://dialogflow.com/docs/reference/v2-auth-setup).
+
 To deploy to the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
 
 ```sh
