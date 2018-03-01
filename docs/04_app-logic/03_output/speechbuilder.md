@@ -38,6 +38,7 @@ Method | Description
 `addSayAsCardinal(text)` | Reads a number as cardinal
 `addSayAsOrdinal(text)` | Reads a number as ordinal
 `addSayAsCharacters(text)` | Reads all characters of a provided string
+`toString()` | Returns the content of the speechbuilder as a string. 
 
 ## Add Variety to Your Speech Output
 

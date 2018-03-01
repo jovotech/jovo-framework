@@ -8,6 +8,7 @@ In this section, you will learn how to use the Jovo User class to persist user s
   * [Data Persistence](#data-persistence)
   * [Meta Data](#meta-data)
   * [User ID](#user-id)
+  * [Locale](#locale)
   * [Account Linking](#account-linking)
 
 
@@ -116,6 +117,17 @@ amzn1.ask.account.AGJCMQPNU2XQWLNJXU2K23R3RWVTWCA6OX7YK7W57E7HVZJSLH4F5U2JOLYELR
 
 // For Google Assistant
 ARke43GoJIqbF8g1vfyDdqL_Sffh
+```
+
+### Locale
+
+Returns the platform's locale:
+
+```javascript
+this.user().getLocale();
+
+// Alternatively, you can also use this
+this.getLocale();
 ```
 
 ### Account Linking
