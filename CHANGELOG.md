@@ -8,6 +8,9 @@
 
 # Jovo Framework Changelog
 
+## 1.0.4 (March 1, 2018)
+* Fixed error in handleElementSelectRequest function ([see issue 91](https://github.com/jovotech/jovo-framework-nodejs/issues/91))
+
 ## 1.0.3 (February 28, 2018)
 * Added Skill/List events for Alexa Skills ([see issue 23](https://github.com/jovotech/jovo-framework-nodejs/issues/23))
 * Added more unit tests
