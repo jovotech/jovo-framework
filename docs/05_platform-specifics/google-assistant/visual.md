@@ -3,6 +3,7 @@
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
 * [Introduction to Visual Output](#introduction-to-visual-output)
+* [Display Text](#display-text)
 * [Basic Card](#basic-card)
 * [Option Item](#option-item)
   * [List Selector](#list-selector)
@@ -14,6 +15,22 @@ Learn more about how to build Google Actions with visual output using the Jovo F
 ## Introduction to Visual Output
 
 Visual output is used to describe or enhance the voice interaction.
+
+## Display Text
+
+This will display an alternative text instead of the written speech output on your screen surface, e.g. the Google Assistant mobile phone app.
+
+```javascript
+this.googleAction().displayText(text);
+
+// Example
+let speech = 'Hello World!';
+let text = 'Hello Phone!';
+this.googleAction().displayText(text)
+    .tell(speech);
+```
+
+[Official Documentation](https://developers.google.com/actions/assistant/responses).
 
 ## Basic Card
 
