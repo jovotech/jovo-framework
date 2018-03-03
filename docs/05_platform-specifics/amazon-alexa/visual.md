@@ -36,7 +36,7 @@ this.alexaSkill().showSimpleCard('Title', 'Content');
 const {AlexaSkill} = require('jovo-framework');
 
 this.alexaSkill().showCard(
-    new SimpleCard()
+    new AlexaSkill.SimpleCard()
         .setTitle('Title')
         .setContent('Content')
 );
