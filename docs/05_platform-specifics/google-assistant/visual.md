@@ -7,11 +7,11 @@ Learn more about how to build Google Actions with visual output using the Jovo F
 * [Option Item](#option-item)
   * [List Selector](#list-selector)
   * [Carousel Selector](#carousel-selector)
-  * [ON_ELEMENT_SELECTED](#on-_-element-_-selected)
+  * [ON_ELEMENT_SELECTED](#on_element_selected)
 * [Suggestion Chips](#suggestion-chips)
 
 
-## Introduction to Visual Ouput
+## Introduction to Visual Output
 
 Visual output is used to describe or enhance the voice interaction.
 
@@ -24,7 +24,7 @@ Method | Description
 `setTitle(title)` | Title of the card
 `setSubtitle(subtitle)` | Subtitle of the card
 `setFormattedText(text)` | Body text of the card
-`setImage(imageURL, accessibilityText, width, height` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
+`setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
 `setImageDisplay(option)` | Choose the [display option](https://developers.google.com/actions/reference/rest/Shared.Types/ImageDisplayOptions)
 `addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
 
