@@ -94,7 +94,7 @@ itemOne
 
 ### List Selector
 
-The list selector can be used to display a vertial list of selectable items.
+The list selector can be used to display a vertical list of selectable items.
 
 Method | Description
 :--- | :---
@@ -123,7 +123,6 @@ The carousel selector can be used to display a horizontal list of selectable ite
 
 Method | Description
 :--- | :---
-`setTitle(title)` | Title of the carousel
 `addItem(optionItem)` | Add an [Option Item](#option-item)
 
 ```javascript

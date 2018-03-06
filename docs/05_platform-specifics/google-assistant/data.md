@@ -15,7 +15,7 @@ User information is mainly used to offer a more personalized expierence, but you
 
 ## ON_PERMISSION
 
-After they have given you the information, the will be redirected to the `ON_PERMISSION` intent, if availabe, where you can access and store the data.
+After the user has answered your request, they will be redirected to the `ON_PERMISSION` intent, if availabe, where you can access and store the data.
 
 ```javascript
 'ON_PERMISSION': function() {
@@ -50,7 +50,7 @@ this.googleAction().askForName(speech);
 
 ## Location
 
-Get access to the user's [location](https://developers.google.com/actions/reference/v1/conversation#Device)
+Get access to the user's [location](https://developers.google.com/actions/reference/v1/conversation#Device).
 Depending on the device the request comes from and the permission you have, you can get access to different data. 
 
 If it's a phone, you can only access the `latitue` and `longitute` with the `DEVICE_PRECISE_LOCATION` permission.
