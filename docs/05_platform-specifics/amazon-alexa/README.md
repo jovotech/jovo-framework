@@ -32,7 +32,6 @@ This section provides an overview of Alexa specific features for routing. For th
 
 You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](./dialog.md).
 
-
 ## Data
 
 This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../../04_app-logic/02_data).
@@ -43,51 +42,7 @@ You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](
 
 ### Location
 
-You can use the user's address data to provide location specific features, but you have to obtain their permission first.
-A [`permission card`](./visual.md#permission-card) will do the job:
-
-```javascript
-// Country and Postal Code
-this.alexaSkill().showAskForCountryAndPostalCodeCard();
-
-// Device Address
-this.alexaSkill().showAskForAddressCard();
-```
-
-Get the country and postal code:
-
-```javascript
-this.alexaSkill().getCountryAndPostalCode();
-
-// example
-this.user().getCountryAndPostalCode()
-    .then((data) => {
-        this.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
-    }).catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForCountryAndPostalCodeCard()
-                .tell('Please grant access to your address');
-        }
-    });
-```
-
-Get the address:
-
-```javascript
-this.user().getDeviceAddress();
-
-// example
-this.user().getDeviceAddress()
-    .then((data) => {
-        this.tell('I got your address');
-    }).catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForAddressCard()
-                .tell('Please grant access to your address');
-        }
-    });
-```
-
+Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location)
 
 ## Output
 

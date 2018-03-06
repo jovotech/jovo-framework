@@ -6,6 +6,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 * [Output](#output)
   * [Multiple Reprompts](#multiple-reprompts)
   * [Screen Surfaces](#screen-surfaces)
+* [Data](#data)
 
 
 ## Introduction to Google Assistant Specific Features
@@ -17,7 +18,6 @@ You can access the `googleAction` object like this:
 ```javascript
 let google = this.googleAction();
 ```
-
 
 ## Output
 
@@ -38,3 +38,7 @@ The first two messages are usually reprompt messages, the third one is used to s
 ### Screen Surfaces
 
 You can find out more about visual output here: [Platform specifics > Google Assistant > Visual](./visual.md)
+
+## Data
+
+You can find out more about your Google Action user's data here: [Platform specifics > Google Assistant > Data](./data.md)
