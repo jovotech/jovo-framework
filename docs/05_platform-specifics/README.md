@@ -60,6 +60,8 @@ You can find the following Alexa specific features on the page [Platform Specifi
 * Dialog Mode
 * Render Templates for Echo Show
 * Shopping and To Do Lists
+* Account Linking
+* User location
 
 
 ## Google Assistant
@@ -76,3 +78,5 @@ You can find the following Google Assistant specific features on the page [Platf
 
 * Google Assistant Cards
 * Suggestion Chips
+* User location
+* Account Linking

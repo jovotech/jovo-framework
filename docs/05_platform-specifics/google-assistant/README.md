@@ -6,6 +6,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 * [Output](#output)
   * [Multiple Reprompts](#multiple-reprompts)
   * [Screen Surfaces](#screen-surfaces)
+* [Data](#data)
 
 
 ## Introduction to Google Assistant Specific Features
@@ -17,7 +18,6 @@ You can access the `googleAction` object like this:
 ```javascript
 let google = this.googleAction();
 ```
-
 
 ## Output
 
@@ -37,38 +37,8 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 ### Screen Surfaces
 
-Below are fetures that are specific for Google Actions with screen surfaces. Find the official refference by Google here: [Surface Capabilities](https://developers.google.com/actions/assistant/surface-capabilities).
+You can find out more about visual output here: [Platform specifics > Google Assistant > Visual](./visual.md)
 
+## Data
 
-#### Display Text
-
-This will display an alternative text instead of the written speech output on your screen surface, e.g. the Google Assistant mobile phone app.
-
-```javascript
-this.googleAction().displayText(text);
-
-// Example
-let speech = 'Hello World!';
-let text = 'Hello Phone!';
-this.googleAction().displayText(text)
-    .tell(speech);
-```
-
-Here is the [official reference by Google](https://developers.google.com/actions/assistant/responses).
-
-#### Google Assistant Cards
-
-With Jovo, you can display cards on Google Assistant surfaces. 
-
-You can find an example file here: [`indexGoogleAssistantCards.js`](../../../examples/google_action_specific/appGoogleAssistantCards).
-
-
-### Suggestion Chips
-
-Suggestion Chips provide the ability for your users to quickly answer a question by tapping on a button. Here is the official reference by Google: [Suggestion Chip](https://developers.google.com/actions/assistant/responses#suggestion-chip).
-
-```javascript
-this.googleAction().showSuggestionChips(['Chip1', 'Chip2', 'Chip3']);
-```
-
-Find an example here: [`indexGoogleAssistantCards.js`](../../../examples/google_action_specific/appGoogleAssistantCards).
+You can find out more about your Google Action user's data here: [Platform specifics > Google Assistant > Data](./data.md)

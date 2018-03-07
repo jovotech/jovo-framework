@@ -351,11 +351,12 @@ To implement Account Linking in your voice application, you need two core method
 The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
 
 ```javascript
-// Alexa Skill:
+// Alexa Skill: Account Linking Card added to the response, need to add other output
 this.alexaSkill().showAccountLinkingCard();
+this.tell('Please link your account');
 
-// Google Actions:
-this.googleAction().askForSignIn();
+// Google Actions: Standalone! Don't add any other output.
+this.googleAction().showAccountLinkingCard();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:

@@ -6,8 +6,6 @@ Learn more about how to build Alexa Skills with visual output using the Jovo Fra
 * [Cards](#cards)
   * [Simple Card](#simple-card)
   * [Standard Card](#standard-card)
-  * [Account Linking Card](#account-linking-card)
-  * [Permission Card](#permission-card)
 * [Display Templates](#display-templates)
   * [Body Template](#body-template)
 * [Video](#video)
@@ -36,7 +34,7 @@ this.alexaSkill().showSimpleCard('Title', 'Content');
 const {AlexaSkill} = require('jovo-framework');
 
 this.alexaSkill().showCard(
-    new SimpleCard()
+    new AlexaSkill.SimpleCard()
         .setTitle('Title')
         .setContent('Content')
 );
@@ -66,40 +64,6 @@ this.alexaSkill().showCard(
 ```
 
 [Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-home-card-to-display-text-and-an-image).
-
-### Account Linking Card
-
-The Account Linking card is used to prompt the user to connect their account by providing the authorization url you defined in the configuration of your Skill in the Amazon developer console.
-
-```javascript
-this.alexaSkill().showAccountLinkingCard();
-// or
-const {AlexaSkill} = require('jovo-framework');
-
-this.alexaSkill().showCard(new AlexaSkill.LinkAccountCard());
-```
-
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#defining-a-card-for-use-with-account-linking).
-
-### Permission Card
-
-To get access to the user's address data or their lists you have to first ask for permission using a card. There is the `AddressPermission`,`CountryAndPostalCodePermission` and `ListPermission` card:
-```javascript
-// country and postal code permission
-this.alexaSkill().showAskForCountryAndPostalCodeCard();
-
-// address permission
-this.alexaSkill().showAskforAddressCard();
-
-// list permission
-this.alexaSkill().showAskForListPermissionCard(['read', 'write']);
-// or
-this.alexaSkill().showAskForListPermissionCard(['read']);
-
-this.alexaSkill().showAskForListPermissionCard(['write']);
-```
-
-Find out more about the [Device Address API](#https://developer.amazon.com/docs/custom-skills/device-address-api.html) and the [Alexa Lists](#https://developer.amazon.com/docs/custom-skills/access-the-alexa-shopping-and-to-do-lists.html).
 
 ## Display Templates
 
