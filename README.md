@@ -114,7 +114,7 @@ Name | Description | Docs
 Audioplayer | Build Alexa Audioplayer Skills | [📝](./docs/05_platform-specifics/amazon-alexa/audioplayer.md)
 VideoApp | Build Alexa VideoApp Skills | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#video)
 Alexa Cards | Create visual output with home cards for Alexa Skills  | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#cards)
-Alexa Device Address | Access a users' device location | [📝](./docs/05_platform-specifics/amazon-alexa/data.md#location)
+Alexa Device Address | Access users' device location | [📝](./docs/05_platform-specifics/amazon-alexa/data.md#location)
 Alexa Lists | Access users' To Do and Shopping Lists | [📝](././docs/05_platform-specifics/amazon-alexa/list.md)
 Alexa Verifier | Makes it possible to host your Alexa skill on your own server instead of AWS Lambda | [📝](./docs/03_app-configuration/server/webhook.md#deploy-to-a-server)
 Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversations | [📝](./docs/05_platform-specifics/amazon-alexa/dialog.md)
