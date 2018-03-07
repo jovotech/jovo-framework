@@ -128,6 +128,16 @@ The DynamoDB integration allows you to store user session data in the NoSQL serv
 If you're running on Lambda, you can simply integrate a DynamoDB table like this:
 
 ```javascript
+// Using the constructor
+const config = {
+    db: {
+        type: 'dynamodb',
+        tableName: 'TableName',
+    },
+    // Other configurations
+};
+
+// Using the setter
 app.setDynamoDb('TableName');
 ```
 
@@ -146,6 +156,17 @@ let awsConfig = {
     region:  'yourRegion',
 };
 
+// Using the constructor
+const config = {
+    db: {
+        type: 'dynamodb',
+        tableName: 'TableName',
+        awsConfig: awsConfig,
+    },
+    // Other configurations
+};
+
+// Using the setter
 app.setDynamoDb('TableName', awsConfig);
 ```
 
