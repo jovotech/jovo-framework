@@ -150,6 +150,7 @@ Name | Description | Docs
 VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](./docs/06_integrations/analytics/#voicelabs)
 Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](./docs/06_integrations/analytics/#dashbot)
 Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/06_integrations/analytics/#bespoken)
+Chatbase | Voice App Analytics including Usage Metrics, Session Flows and Link Tracking | [📝](./docs/06_integrations/analytics/#chatbase)
 
 #### CLI Integrations
 

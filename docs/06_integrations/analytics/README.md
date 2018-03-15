@@ -9,6 +9,7 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [VoiceLabs](#voicelabs)
+* [Chatbase](#chatbase)
 
 
 ## Jovo Analytics Layer
@@ -216,3 +217,39 @@ Test your voice app, after a bit your session should appear:
 
 ![VoiceLabs Test](https://www.jovo.tech/img/docs/voicelabs-test.jpg)
 
+## Chatbase
+
+To use Chatbase Analytics for your voice app, you need to complete the following steps:
+
+1. Create a Chatbase Bot
+2. Enable Chatbase Anaytics in your voice app
+3. Test your app
+
+### Create a Chatbase Account
+
+1. Create a Chatbase account or log in at https://chatbase.com/
+
+2. Create a new bot
+
+![Create Chatbase Bot](../../img/chatbase_01.png)
+
+3. Choose your bot's name and region
+
+![Chatbase Bot Name](../../img/chatbase_02.png)
+
+4. Copy API Key
+
+![API Key](../../img/chatbase_03.png)
+
+### Enable Chatbase Analytics
+
+Chatbase Analytics can be added to your voice app with the following command:
+```javascript
+app.addChatbaseAnalytics(key);
+```
+
+### Test
+
+Test you voice app. It can take up to 6 hours until all the data can be seen on the Chatbase dashboard.
+
+![Chatbase Dashboard](../../img/chatbase_04.png)
