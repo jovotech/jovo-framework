@@ -1,8 +1,13 @@
 'use strict';
 let assert = require('chai').assert;
-const FilePersistence = require('../../lib/integrations/db/filePersistence').FilePersistence;
+const FilePersistence = require('../../lib/integrations/db/filePersistenceV2').FilePersistence;
 
 const fs = require('fs');
+
+var testFileContent = "[ { \"userId\": \"testID\", \"data\": { \"foo\": \"bar\" } } ]";
+var testFileContentEmpty = "[ { \"userId\": \"testID\", \"data\": {  } } ]";
+
+
 describe('FilePersistence Class', function() {
     describe('constructor', function() {
         it('should throw error Filename not valid', function() {
@@ -18,6 +23,8 @@ describe('FilePersistence Class', function() {
         it('should set filename', function() {
             let fp = new FilePersistence('mydb');
             assert(fp.filename === './db/mydb.json', 'filename set correctly');
+            fp = new FilePersistence('./tmp/mydb');
+            assert(fp.filename === './tmp/mydb.json', 'filename set correctly');
         });
     });
 
@@ -47,23 +54,23 @@ describe('FilePersistence Class', function() {
                     if (!err) {
                         let fileObj = data.length > 0 ? JSON.parse(data) : {};
                         assert.ok(data.length > 0);
-                        assert.ok(fileObj['testID']);
-                        assert.ok(fileObj['testID']['foo']);
-                        assert.ok(fileObj['testID']['foo'] === 'bar');
+                        assert.ok(fileObj[0]['userId']);
+                        assert.ok(fileObj[0]['data']['foo']);
+                        assert.ok(fileObj[0]['data']['foo'] === 'bar');
                         fs.unlinkSync(filename);
                         done();
                     }
                 });
             });
         });
-        //
+
         it('should save file overwriting old data with new data', function(done) {
             this.timeout(1000);
             let filename = './db/testdb5.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
 
             let existingData = fs.readFileSync(filename, 'utf8');
-            assert.ok(JSON.parse(existingData)['testID']['foo'] === 'bar');
+            assert.ok(JSON.parse(existingData)[0]['data']['foo'] === 'bar');
 
             let fp = new FilePersistence('testdb5');
             fp.setMainKey('testID');
@@ -71,7 +78,7 @@ describe('FilePersistence Class', function() {
                 fs.readFile(filename, 'utf8', function(err, data) {
                     if (!err) {
                         let fileObj = data.length > 0 ? JSON.parse(data) : {};
-                        assert.ok(fileObj['testID']['foo'] === 'barbarbar');
+                        assert.ok(fileObj[0]['data']['foo'] === 'barbarbar');
                         fs.unlinkSync(filename);
                         done();
                     }
@@ -82,7 +89,7 @@ describe('FilePersistence Class', function() {
         it('should save file with additional data', function(done) {
             this.timeout(1000);
             let filename = './db/testdb6.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
 
             let fp = new FilePersistence('testdb6');
             fp.setMainKey('testID');
@@ -90,8 +97,8 @@ describe('FilePersistence Class', function() {
                 fs.readFile(filename, 'utf8', function(err, data) {
                     if (!err) {
                         let fileObj = data.length > 0 ? JSON.parse(data) : {};
-                        assert.ok(fileObj['testID']['foo'] === 'bar');
-                        assert.ok(fileObj['testID']['hello'] === 'world');
+                        assert.ok(fileObj[0]['data']['foo'] === 'bar');
+                        assert.ok(fileObj[0]['data']['hello'] === 'world');
                         fs.unlinkSync(filename);
                         done();
                     }
@@ -103,7 +110,7 @@ describe('FilePersistence Class', function() {
     describe('load', function() {
         it('should load a file without main key', function(done) {
             let filename = './db/testdb2.json';
-            fs.writeFileSync(filename, '{}');
+            fs.writeFileSync(filename, '[]');
             let fp = new FilePersistence('testdb2');
             fp.setMainKey('testID');
             fp.load('testKey', function(err, data) {
@@ -114,7 +121,7 @@ describe('FilePersistence Class', function() {
         });
         it('should load a file without data key', function(done) {
             let filename = './db/testdb3.json';
-            fs.writeFileSync(filename, '{"testID": {}}');
+            fs.writeFileSync(filename, testFileContentEmpty);
             let fp = new FilePersistence('testdb3');
             fp.setMainKey('testID');
             fp.load('testKey', function(err, data) {
@@ -126,7 +133,7 @@ describe('FilePersistence Class', function() {
 
         it('should load a file and read data for given key', function(done) {
             let filename = './db/testdb4.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let fp = new FilePersistence('testdb4');
             fp.setMainKey('testID');
             fp.load('foo', function(err, data) {
@@ -148,7 +155,7 @@ describe('FilePersistence Class', function() {
         });
         it('should return error if user does not exist', function(done) {
             let filename = './db/testdb7.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let fp = new FilePersistence('testdb7');
             fp.setMainKey('testID2');
             fp.deleteUser( function(err, deleted) {
@@ -159,9 +166,9 @@ describe('FilePersistence Class', function() {
         });
         it('should return remove all user data', function(done) {
             let filename = './db/testdb9.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let existingData = fs.readFileSync(filename, 'utf8');
-            assert.ok(JSON.parse(existingData)['testID']['foo'] === 'bar');
+            assert.ok(JSON.parse(existingData)[0]['data']['foo'] === 'bar');
             let fp = new FilePersistence('testdb9');
             fp.setMainKey('testID');
             fp.deleteUser(function(err, deleted) {
@@ -183,7 +190,7 @@ describe('FilePersistence Class', function() {
         });
         it('should return error if user does not exist', function(done) {
             let filename = './db/testdb11.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let fp = new FilePersistence('testdb11');
             fp.setMainKey('testID2');
             fp.deleteData('foo', function(err, deleted) {
@@ -194,7 +201,7 @@ describe('FilePersistence Class', function() {
         });
         it('should return error if key does not exist', function(done) {
             let filename = './db/testdb12.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let fp = new FilePersistence('testdb12');
             fp.setMainKey('testID');
             fp.deleteData('foofoofoo', function(err, deleted) {
@@ -205,9 +212,9 @@ describe('FilePersistence Class', function() {
         });
         it('should return remove data for given key', function(done) {
             let filename = './db/testdb13.json';
-            fs.writeFileSync(filename, '{"testID": {"foo": "bar"}}');
+            fs.writeFileSync(filename, testFileContent);
             let existingData = fs.readFileSync(filename, 'utf8');
-            assert.ok(JSON.parse(existingData)['testID']['foo'] === 'bar');
+            assert.ok(JSON.parse(existingData)[0]['data']['foo'] === 'bar');
             let fp = new FilePersistence('testdb13');
             fp.setMainKey('testID');
             fp.deleteData('foo', function(err, deleted) {
