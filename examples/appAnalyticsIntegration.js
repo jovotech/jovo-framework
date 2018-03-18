@@ -24,6 +24,7 @@ app.addVoiceLabsAlexa('<key>');
 // app.addDashbotGoogleAction('<key>');
 // app.addDashbotAlexa('<key>');
 // app.addBespokenAnalytics('Bespoken secret key');
+// app.addChatbaseAnalytics('<key>', 'version');
 // =================================================================================
 // App Logic
 // =================================================================================
