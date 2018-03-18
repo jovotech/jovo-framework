@@ -96,9 +96,25 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 ### Enable Dashbot Analytics
 
-Dashbot Analytics can be added to your voice app with the following commands:
+Dashbot Analytics can be added to your voice app using the config or with the following commands:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            DashbotAlexa: {
+                key: '<key>',
+            },
+            DashbotGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
 // For Dashbot Alexa Bot
 app.addDashbotAlexa(key);
 ​
@@ -148,9 +164,26 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 ### Enable Bespoken Analytics
 
-Bespoken Analytics can be added to your voice app with the following command:
+Bespoken Analytics can be added to your voice app using the config or with the following command:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            BespokenAlexa: {
+                key: '<key>',
+            },
+            BespokenGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
+// command
 app.addBespokenAnalytics(key);
 ```
 
@@ -192,6 +225,22 @@ To use VoiceLabs Insights for your voice app analytics, you need to complete the
 VoiceLabs Analytics can be added to your voice app with the following commands:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            VoiceLabsAlexa: {
+                key: '<key>',
+            },
+            VoiceGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
 // For VoiceLabs Alexa Application
 app.addVoiceLabsAlexa(key);
 ​
@@ -244,7 +293,27 @@ To use Chatbase Analytics for your voice app, you need to complete the following
 ### Enable Chatbase Analytics
 
 Chatbase Analytics can be added to your voice app with the following command:
+
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            ChatbaseAlexa: {
+                key: '<key>',
+                version: 'version',
+            },
+            ChatbaseGoogleAction: {
+                key: '<key>',
+                version: 'version',
+            },
+        },
+    },
+};
+// command
 app.addChatbaseAnalytics(key);
 ```
 
