@@ -5,6 +5,12 @@ In this section, you will learn more about how to use intents and states to rout
 * [Introduction to User Sessions](#introduction-to-user-sessions)
 * [Intents](#intents)
   * [Standard Intents](#standard-intents)
+    * [LAUNCH](#launch-intent)
+    * [NEW_SESSION](#new_session-intent)
+    * [NEW_USER](#new_user-intent)
+    * [ON_REQUEST](#on_request-intent)
+    * [END](#end-intent)
+    * [Unhandled](#unhandled-intent)
   * [intentMap](#intentmap)
 * [States](#states)
   * [followUpState](#followupstate)
@@ -12,6 +18,7 @@ In this section, you will learn more about how to use intents and states to rout
   * [toIntent](#tointent)
   * [toStateIntent](#tostateintent)
   * [toStatelessIntent](#tostatelessintent)
+* [Event Listener](#event-listener)
 * [User Input](#user-input)
 * [Session Attributes](#session-attributes)
 
@@ -138,7 +145,7 @@ For example, this saves you some time calling `if (this.user().isNewUser()) { }`
 
 #### 'ON_REQUEST' Intent
 
-The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent.
+The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent. If you make any async calls in the `'ON_REQUEST'` intent, use a callback method, otherwise the intent will simply route the user to the desired intent, while the call is still running.
 
 ```javascript
 'ON_REQUEST': function() {
@@ -622,6 +629,10 @@ this.toStatelessIntent('PizzaIntent');
 // Go to global PizzaIntent and pass more data
 this.toStatelessIntent('PizzaIntent', moreData);
 ```
+
+## Event Listener
+
+Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listener.md)
 
 ## User Input
 
