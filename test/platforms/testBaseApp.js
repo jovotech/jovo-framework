@@ -282,7 +282,7 @@ describe('setDB()', function() {
                 });
             },
             Error,
-            'Currently only file and dynamodb are supported'
+            'Database type otherdb is not supported.'
         );
 
         assert.throws(
@@ -292,7 +292,7 @@ describe('setDB()', function() {
                 });
             },
             Error,
-            'localDbFile variable is not defined'
+            'localDbFilename variable is not defined'
         );
         assert.throws(
             function() {
@@ -310,15 +310,15 @@ describe('setDB()', function() {
             localDbFilename: 'db',
         });
         assert(app.moduleDatabase.constructor.name === 'Db', 'Db class');
-        assert(app.moduleDatabase.databases.file.constructor.name === 'FilePersistence', 'FilePersistence class');
-        assert(app.moduleDatabase.databases.file.filename === './db/db.json', 'db.json');
+        assert(app.moduleDatabase.databaseInstances.file.constructor.name === 'FilePersistence', 'FilePersistence class');
+        assert(app.moduleDatabase.databaseInstances.file.filename === './db/db.json', 'db.json');
 
         app.setDb({
             type: 'dynamodb',
             tableName: 'myvoiceapp',
         });
         assert(app.moduleDatabase.constructor.name === 'Db', 'Db class');
-        assert(app.moduleDatabase.databases.dynamodb.constructor.name === 'DynamoDb', 'DynamoDb class');
+        assert(app.moduleDatabase.databaseInstances.dynamodb.constructor.name === 'DynamoDb', 'DynamoDb class');
     });
 });
 
@@ -327,7 +327,7 @@ describe('setDynamoDB()', function() {
         let app = new App();
         app.setDynamoDb('myvoiceapp');
         assert(app.moduleDatabase.constructor.name === 'Db', 'Db class');
-        assert(app.moduleDatabase.databases.dynamodb.constructor.name === 'DynamoDb', 'DynamoDb class');
+        assert(app.moduleDatabase.databaseInstances.dynamodb.constructor.name === 'DynamoDb', 'DynamoDb class');
     });
 });
 
@@ -804,4 +804,3 @@ describe('setConfig(config)', function() {
         );
     });
 });
-
