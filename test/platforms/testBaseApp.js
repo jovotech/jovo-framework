@@ -20,6 +20,7 @@ response.json = function(json) {};
 describe('constructor', function() {
     it('should set the default config', function() {
         const app = new App();
+        delete app.config.plugins;
         expect(app.config).to.deep.equal(BaseApp.DEFAULT_CONFIG);
     });
     it('should override the default config', function() {
@@ -146,6 +147,7 @@ describe('constructor', function() {
 describe('getConfig', function() {
     it('should return config', function() {
         const app = new App();
+        delete app.config.plugins;
         expect(app.getConfig()).to.deep.equal(BaseApp.DEFAULT_CONFIG);
     });
 });
