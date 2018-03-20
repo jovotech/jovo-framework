@@ -4,6 +4,7 @@
   "description": "This folder provides code examples for various Jovo features. These are mostly index.js files with enabled logging so you can start testing right away from your command line.",
   "main": "index.js",
   "dependencies": {
+    "dashbot": "^9.5.0",
     "jovo-framework": "file:../"
   },
   "scripts": {
