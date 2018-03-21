@@ -1,12 +1,8 @@
 language: node_js
 install:
-  - "npm install i18next"
-  - "npm install i18next-sprintf-postprocessor"
-  - "npm install lodash"
   - "npm install mocha"
   - "npm install sinon"
   - "npm install chai"
-  - "npm install request"
   - "npm install chai-as-promised"
   - "npm install aws-sdk"
   - "npm install dashbot"
