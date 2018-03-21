@@ -160,8 +160,8 @@ Use suggestion chips to add possible responses.
 
 Method | Description
 :--- | :---
-`addSuggestionChips(chips)` | Add suggestion chips to the response. Only works with `ask` responses.
-`addLinkOutSuggestion(name, url)` | Add a [LinkOutSuggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#linkoutsuggestion), which leads to an app or site.
+`showSuggestionChips(chips)` | Add suggestion chips to the response. Only works with `ask` responses.
+`showLinkOutSuggestion(name, url)` | Add a [LinkOutSuggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#linkoutsuggestion), which leads to an app or site.
 
 ```javascript
 this.googleAction().showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
