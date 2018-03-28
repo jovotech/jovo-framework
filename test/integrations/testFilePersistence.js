@@ -4,8 +4,8 @@ const FilePersistence = require('../../lib/integrations/db/filePersistenceV2').F
 
 const fs = require('fs');
 
-var testFileContent = "[ { \"userId\": \"testID\", \"data\": { \"foo\": \"bar\" } } ]";
-var testFileContentEmpty = "[ { \"userId\": \"testID\", \"data\": {  } } ]";
+let testFileContent = '[ { "userId": "testID", "data": { "foo": "bar" } } ]';
+let testFileContentEmpty = '[ { "userId": "testID", "data": {  } } ]';
 
 
 describe('FilePersistence Class', function() {
