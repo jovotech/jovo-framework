@@ -1,3 +1,4 @@
+'use strict';
 /** *********************************
 * You have to run the local datastore simulator for this to work!
 ***************************************/
