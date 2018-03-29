@@ -321,7 +321,8 @@ describe('setDB()', function() {
         //     tableName: 'myvoiceapp',
         // });
         // assert(app.moduleDatabase.constructor.name === 'Db', 'Db class');
-        // assert(app.moduleDatabase.databaseInstances.dynamodb.constructor.name === 'DynamoDb', 'DynamoDb class');
+        //  assert(app.moduleDatabase.databaseInstances.dynamodb.constructor.name === 'DynamoDb',
+        //      'DynamoDb class');
     });
 });
 

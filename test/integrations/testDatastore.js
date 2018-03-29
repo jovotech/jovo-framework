@@ -11,10 +11,10 @@ var DatastoreDb = require('../../lib/integrations/db/datastore.js').DatastoreDb;
 /**
 * Some settings
 */
-let config = {
-  apiEndpoint: 'localhost:8081',
-  projectId: 'testprojekt',
-};
+// let config = {
+//   apiEndpoint: 'localhost:8081',
+//   projectId: 'testprojekt',
+// };
 
 describe('Datastore jovo Connector', function() {
 /*  var originalValue = uuid();
