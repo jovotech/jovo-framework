@@ -8,6 +8,16 @@
 
 # Jovo Framework Changelog
 
+## 1.1.0 (March 29, 2018)
+* [#96](https://github.com/jovotech/jovo-framework-nodejs/pull/96): Add Chatbase integration - [@KaanKC](https://github.com/KaanKC).
+* [#104](https://github.com/jovotech/jovo-framework-nodejs/pull/104): Add Azure Functions support - [@trevorwang](https://github.com/trevorwang).
+* [#106](https://github.com/jovotech/jovo-framework-nodejs/pull/106): Add aliases for Speechbuilder's 'say-as' methods - [@FlorianHollandt](https://github.com/FlorianHollandt).
+* [#99](https://github.com/jovotech/jovo-framework-nodejs/pull/99): Add gcloud datastore integration - [@mehl](https://github.com/mehl).
+* [#502c141](https://github.com/jovotech/jovo-framework-nodejs/commit/502c14112484737bee75c5ee815ce1b9423ebb84): Add MediaResponses (AudioPlayer) and CarouselBrowse to Google Actions
+* [4d6308b](https://github.com/jovotech/jovo-framework-nodejs/commit/4d6308b89c314e2f34e4cb0f9face494ba264b8a):  Add emits to public methods
+* [f2fb9c2](https://github.com/jovotech/jovo-framework-nodejs/commit/f2fb9c2f88ce9da52eb86c7f9fa5f22a3b2cc525):  Add plugin functionality
+ 
+
 ## 1.0.4 (March 1, 2018)
 * Fixed error in handleElementSelectRequest function ([see issue 91](https://github.com/jovotech/jovo-framework-nodejs/issues/91))
 
