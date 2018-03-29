@@ -7,6 +7,7 @@ install:
   - "npm install aws-sdk"
   - "npm install dashbot"
   - "npm install"
+  - "npm run eslint"
 
 node_js:
   - "8"
