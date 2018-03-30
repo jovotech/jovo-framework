@@ -9,6 +9,7 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [VoiceLabs](#voicelabs)
+* [Chatbase](#chatbase)
 
 
 ## Jovo Analytics Layer
@@ -95,9 +96,25 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 ### Enable Dashbot Analytics
 
-Dashbot Analytics can be added to your voice app with the following commands:
+Dashbot Analytics can be added to your voice app using the config or with the following commands:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            DashbotAlexa: {
+                key: '<key>',
+            },
+            DashbotGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
 // For Dashbot Alexa Bot
 app.addDashbotAlexa(key);
 ​
@@ -147,9 +164,26 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 ### Enable Bespoken Analytics
 
-Bespoken Analytics can be added to your voice app with the following command:
+Bespoken Analytics can be added to your voice app using the config or with the following command:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            BespokenAlexa: {
+                key: '<key>',
+            },
+            BespokenGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
+// command
 app.addBespokenAnalytics(key);
 ```
 
@@ -191,6 +225,22 @@ To use VoiceLabs Insights for your voice app analytics, you need to complete the
 VoiceLabs Analytics can be added to your voice app with the following commands:
 
 ```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            VoiceLabsAlexa: {
+                key: '<key>',
+            },
+            VoiceGoogleAction: {
+                key: '<key>',
+            },
+        },
+    },
+};
 // For VoiceLabs Alexa Application
 app.addVoiceLabsAlexa(key);
 ​
@@ -216,3 +266,59 @@ Test your voice app, after a bit your session should appear:
 
 ![VoiceLabs Test](https://www.jovo.tech/img/docs/voicelabs-test.jpg)
 
+## Chatbase
+
+To use Chatbase Analytics for your voice app, you need to complete the following steps:
+
+1. Create a Chatbase Bot
+2. Enable Chatbase Anaytics in your voice app
+3. Test your app
+
+### Create a Chatbase Account
+
+1. Create a Chatbase account or log in at https://chatbase.com/
+
+2. Create a new bot
+
+![Create Chatbase Bot](../../img/chatbase_01.png)
+
+3. Choose your bot's name and region
+
+![Chatbase Bot Name](../../img/chatbase_02.png)
+
+4. Copy API Key
+
+![API Key](../../img/chatbase_03.png)
+
+### Enable Chatbase Analytics
+
+Chatbase Analytics can be added to your voice app with the following command:
+
+```javascript
+// config
+const config = {
+    /**
+     * other settings
+     */
+    analytics: {
+        services: {
+            ChatbaseAlexa: {
+                key: '<key>',
+                version: 'version',
+            },
+            ChatbaseGoogleAction: {
+                key: '<key>',
+                version: 'version',
+            },
+        },
+    },
+};
+// command
+app.addChatbaseAnalytics(key);
+```
+
+### Test
+
+Test you voice app. It can take up to 6 hours until all the data can be seen on the Chatbase dashboard.
+
+![Chatbase Dashboard](../../img/chatbase_04.png)

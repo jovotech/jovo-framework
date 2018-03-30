@@ -522,6 +522,15 @@ describe('addAnalytics', function() {
         assert(app.moduleAnalytics.services['BespokenGoogleAction'].constructor.name === 'BespokenGoogleAction');
         assert(app.moduleAnalytics.services['BespokenGoogleAction'].platformType === 'GoogleAction');
     });
+    it('addChatbaseAnalytics()', function() {
+        let app = new App();
+        app.addChatbaseAnalytics('key1');
+        assert(app.moduleAnalytics.services['ChatbaseAlexa'].constructor.name === 'ChatbaseAlexa');
+        assert(app.moduleAnalytics.services['ChatbaseAlexa'].platformType === 'AlexaSkill');
+
+        assert(app.moduleAnalytics.services['ChatbaseGoogleAction'].constructor.name === 'ChatbaseGoogleAction');
+        assert(app.moduleAnalytics.services['ChatbaseGoogleAction'].platformType === 'GoogleAction');
+    });
 });
 
 describe('setPolly', function() {
