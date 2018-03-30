@@ -8,6 +8,9 @@
 
 # Jovo Framework Changelog
 
+## 1.1.1 (March 30, 2018)
+* Fixed broken PR merge
+
 ## 1.1.0 (March 29, 2018)
 * [#96](https://github.com/jovotech/jovo-framework-nodejs/pull/96): Added Chatbase integration - [@KaanKC](https://github.com/KaanKC).
 * [#104](https://github.com/jovotech/jovo-framework-nodejs/pull/104): Added Azure Functions support - [@trevorwang](https://github.com/trevorwang).
