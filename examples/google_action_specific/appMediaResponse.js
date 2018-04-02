@@ -21,7 +21,7 @@ const app = new App(config);
 app.setHandler({
     'LAUNCH': function() {
         // keep session open
-        this.googleAction().audioPlayer().play('https://www.swetlow.de/uneasy.mp3', 'song one');
+        this.googleAction().audioPlayer().play('https://www.url.to/file.mp3', 'song one');
         this.googleAction().showSuggestionChips([' Chip1'])
         this.ask('This is my song');
 
@@ -31,7 +31,7 @@ app.setHandler({
     },
     'AUDIOPLAYER': {
         'GoogleAction.Finished': function() { // is called when session is still active
-            this.googleAction().audioPlayer().play('https://www.swetlow.de/uneasy.mp3', 'song one');
+            this.googleAction().audioPlayer().play('https://www.url.to/file.mp3', 'song one');
             this.googleAction().showSuggestionChips([' Chip1'])
             this.tell('One more time');
         },
