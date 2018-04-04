@@ -588,10 +588,42 @@ describe('setHandler', function() {
         });
         expect(app.config.handlers).to.have.all.keys('LAUNCH', 'HelloWorldIntent');
     });
+    it('should allow seperate objects as handler', function() {
+        let app = new App();
+
+        const handler1 = {
+            'LAUNCH': function() {
+            },
+        };
+
+        const handler2 = {
+            'State1': {
+                'Intent1': function() {
+                    this.tell();
+                },
+            },
+        };
+
+        const handler3 = {
+            'State2': {
+                'Intent2': function() {
+                    this.tell();
+                },
+            },
+        };
+
+        app.setHandler(
+            handler1,
+            handler2,
+            handler3
+        );
+
+        expect(app.config.handlers).to.have.all.keys('LAUNCH', 'State1', 'State2');
+    });
 });
 
 describe('setAlexaHandler', function() {
-    it('should set the correct handler', function() {
+    it('should set the correct handler (AlexaSkill)', function() {
         let app = new App();
 
         app.setAlexaHandler({
@@ -601,6 +633,37 @@ describe('setAlexaHandler', function() {
             },
         });
         expect(app.config.alexaSkill.handlers).to.have.all.keys('LAUNCH', 'AlexaHelloWorldIntent');
+    });
+
+    it('should allow seperate objects as handler', function() {
+        let app = new App();
+
+        const handler1 = {
+            'LAUNCH': function() {
+            },
+        };
+
+        const handler2 = {
+            'AlexaHelloWorldIntent': function() {
+                    this.tell();
+            },
+        };
+
+        const handler3 = {
+            'State2': {
+                'Intent2': function() {
+                    this.tell();
+                },
+            },
+        };
+
+        app.setAlexaHandler(
+            handler1,
+            handler2,
+            handler3
+        );
+
+        expect(app.config.alexaSkill.handlers).to.have.all.keys('LAUNCH', 'AlexaHelloWorldIntent', 'State2');
     });
 });
 
@@ -615,6 +678,37 @@ describe('setGoogleActionHandler', function() {
             },
         });
         expect(app.config.googleAction.handlers).to.have.all.keys('LAUNCH', 'GoogleActionHelloWorldIntent');
+    });
+
+    it('should allow seperate objects as handler', function() {
+        let app = new App();
+
+        const handler1 = {
+            'LAUNCH': function() {
+            },
+        };
+
+        const handler2 = {
+            'GoogleActionHelloWorldIntent': function() {
+                this.tell();
+            },
+        };
+
+        const handler3 = {
+            'State2': {
+                'Intent2': function() {
+                    this.tell();
+                },
+            },
+        };
+
+        app.setGoogleActionHandler(
+            handler1,
+            handler2,
+            handler3
+        );
+
+        expect(app.config.googleAction.handlers).to.have.all.keys('LAUNCH', 'GoogleActionHelloWorldIntent', 'State2');
     });
 });
 
