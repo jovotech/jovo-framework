@@ -1,0 +1,108 @@
+{
+  "originalRequest": {
+    "source": "google",
+    "version": "2",
+    "data": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "stop",
+              "inputType": "VOICE"
+            }
+          ],
+          "intent": "actions.intent.CANCEL"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-04-03T14:02:53Z",
+        "locale": "en-US",
+        "userId": "userID"
+      },
+      "conversation": {
+        "conversationId": "1522764201023",
+        "type": "ACTIVE",
+        "conversationToken": "[\"session\"]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "id": "569ec8e1-1f57-49c2-b4d2-678858c3a0fc",
+  "timestamp": "2018-04-03T14:03:26.254Z",
+  "lang": "en-us",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "actions_intent_CANCEL",
+    "speech": "",
+    "action": "",
+    "actionIncomplete": false,
+    "parameters": {},
+    "contexts": [
+      {
+        "name": "actions_intent_cancel",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "session",
+        "parameters": {},
+        "lifespan": 9999
+      },
+      {
+        "name": "actions_capability_audio_output",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "google_assistant_input_type_voice",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_media_response_audio",
+        "parameters": {},
+        "lifespan": 0
+      }
+    ],
+    "metadata": {
+      "intentId": "4d97510a-35f3-488f-9ce8-17657d4ad97b",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "nluResponseTime": 0,
+      "intentName": "StopIntent"
+    },
+    "fulfillment": {
+      "speech": "",
+      "messages": []
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success",
+    "webhookTimedOut": false
+  },
+  "sessionId": "1522764201023"
+}
