@@ -43,7 +43,7 @@ describe('getIntentName', function() {
 });
 
 describe('isRequestAllowed()', function() {
-    it('should return true if no application ids were set', function() {
+    it('should return true if no application ids were set', function(done) {
         let app = new App();
         let request = RequestBuilderAlexaSkill
             .intentRequest()
@@ -51,7 +51,7 @@ describe('isRequestAllowed()', function() {
             .setApplicationId('xyz');
         app.setHandler({
             'HelloWorldIntent': function() {
-
+                done();
             },
         });
         app.handleRequest(request.buildHttpRequest(), response);
@@ -387,7 +387,7 @@ describe('followUpState', function() {
             app.on('respond', function(jovo) {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello World'));
-                assert.ok(!response.hasState(null));
+                assert.ok(response.hasState(null));
                 done();
             });
 
