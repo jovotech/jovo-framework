@@ -8,6 +8,11 @@
 
 # Jovo Framework Changelog
 
+## 1.1.2 (April 05, 2018)
+* [#115](https://github.com/jovotech/jovo-framework-nodejs/pull/115): Improved setHandler method - [@aswetlow](https://github.com/aswetlow).
+* [#114](https://github.com/jovotech/jovo-framework-nodejs/pull/114): Added more unit tests - [@aswetlow](https://github.com/aswetlow).
+
+
 ## 1.1.1 (March 30, 2018)
 * Fixed broken PR merge
 
