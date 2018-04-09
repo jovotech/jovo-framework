@@ -472,8 +472,8 @@ describe('setAnalytics', function() {
                 intentsToSkip: ['HelloWorldIntent'],
                 usersToSkip: ['userId123'],
                 services: {
-                    DashbotAlexa: {
-                        key: 'dashbotkey',
+                    ChatbaseAlexa: {
+                        key: 'chatbasekey',
                     },
                 },
             }
@@ -482,8 +482,8 @@ describe('setAnalytics', function() {
                 intentsToSkip: ['HelloWorldIntent'],
                 usersToSkip: ['userId123'],
                 services: {
-                    DashbotAlexa: {
-                        key: 'dashbotkey',
+                    ChatbaseAlexa: {
+                        key: 'chatbasekey',
                     },
                 },
             });
@@ -494,25 +494,14 @@ describe('setAnalytics', function() {
 describe('addAnalytics', function() {
     it('should add the correct analytics', function() {
         let app = new App();
-        app.addAnalytics('DashbotAlexa', {
+        app.addAnalytics('ChatbaseAlexa', {
             key: 'key1',
         });
         assert(app.moduleAnalytics.constructor.name === 'Analytics');
-        assert(app.moduleAnalytics.services['DashbotAlexa'].constructor.name === 'DashbotAlexa');
-        assert(app.moduleAnalytics.services['DashbotAlexa'].platformType === 'AlexaSkill');
+        assert(app.moduleAnalytics.services['ChatbaseAlexa'].constructor.name === 'ChatbaseAlexa');
+        assert(app.moduleAnalytics.services['ChatbaseAlexa'].platformType === 'AlexaSkill');
     });
-    it('addDashbotAlexa()', function() {
-        let app = new App();
-        app.addDashbotAlexa('key1');
-        assert(app.moduleAnalytics.services['DashbotAlexa'].constructor.name === 'DashbotAlexa');
-        assert(app.moduleAnalytics.services['DashbotAlexa'].platformType === 'AlexaSkill');
-    });
-    it('addDashbotGoogleAction()', function() {
-        let app = new App();
-        app.addDashbotGoogleAction('key1');
-        assert(app.moduleAnalytics.services['DashbotGoogleAction'].constructor.name === 'DashbotGoogleAction');
-        assert(app.moduleAnalytics.services['DashbotGoogleAction'].platformType === 'GoogleAction');
-    });
+
     it('addBespokenAnalytics()', function() {
         let app = new App();
         app.addBespokenAnalytics('key1');
