@@ -8,6 +8,10 @@
 
 # Jovo Framework Changelog
 
+## 1.1.3 (April 09, 2018)
+* [#116](https://github.com/jovotech/jovo-framework-nodejs/pull/117): Fix dialogflow V2 input handling (issue #116) - [@fgnass](https://github.com/fgnass).
+
+
 ## 1.1.2 (April 05, 2018)
 * [#115](https://github.com/jovotech/jovo-framework-nodejs/pull/115): Improved setHandler method - [@aswetlow](https://github.com/aswetlow).
 * [#114](https://github.com/jovotech/jovo-framework-nodejs/pull/114): Added more unit tests - [@aswetlow](https://github.com/aswetlow).
