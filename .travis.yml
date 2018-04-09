@@ -5,7 +5,6 @@ install:
   - "npm install chai"
   - "npm install chai-as-promised"
   - "npm install aws-sdk"
-  - "npm install dashbot"
   - "npm install"
   - "npm run eslint"
 
