@@ -12,6 +12,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
   * [Progressive Responses](#progressive-responses)
   * [Visual Output](#visual-output)
 * [AudioPlayer Skills](#audioplayer-skills)
+* [Skill Events](#skill-events)
 
 ## Introduction to Alexa Specific Features
 
@@ -68,3 +69,7 @@ You can find out more about visual output here: [Platform specifics > Amazon Ale
 ## AudioPlayer Skills
 
 You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](./audioplayer.md).
+
+## Skill Events
+
+Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md)

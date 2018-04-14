@@ -22,8 +22,8 @@ App Logic | [Overview](./04_app-logic) | &nbsp;
 &nbsp; | [Output](./04_app-logic/03_output) | [speechBuilder](./04_app-logic/03_output/speechbuilder.md), [i18n](./04_app-logic/03_output/i18n.md), [Visual Output](./04_app-logic/03_output/visual-output.md)
 Platform-specific Features | [Overview](./05_platform-specifics) | &nbsp;
 &nbsp; | [Amazon Alexa](./05_platform-specifics/amazon-alexa) | [Audioplayer](./05_platform-specifics/amazon-alexa/audioplayer.md), [Dialog Interface](./05_platform-specifics/amazon-alexa/dialog.md), [Visual Output](./05_platform-specifics/amazon-alexa/visuals.md), [List](./05_platform-specifics/amazon-alexa/list.md)
-&nbsp; | [Google Assistant](./05_platform-specifics/google-assistant) | &nbsp;
-Integrations | [Overview](./06_integrations) | &nbsp;
+&nbsp; | [Google Assistant](./05_platform-specifics/google-assistant) | [Visual Output](./05_platform-specifics/google-assistant/visual.md), [Data](./05_platform-specifics/google-assistant/data.md)
+&nbsp; Integrations | [Overview](./06_integrations) | &nbsp;
 &nbsp; | [Databases](./06_integrations/databases) | &nbsp;
 &nbsp; | [Analytics](./06_integrations/analytics) | &nbsp;
 Support | [Overview](./08_support) | &nbsp;
