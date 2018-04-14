@@ -120,6 +120,7 @@ Alexa Verifier | Makes it possible to host your Alexa skill on your own server i
 Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversations | [📝](./docs/05_platform-specifics/amazon-alexa/dialog.md)
 Echo Show Render Templates | Display visual elements on Echo Show | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#display-templates)
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](./docs/05_platform-specifics/amazon-alexa#progressive-responses)
+Skill Events | Get notified when an event (e.g. Skill enabled/disabled) occurs | [📝](./docs/05_platform-specifics/amazon-alexa/skillevents.md)
 
 
 #### Google Assistant
