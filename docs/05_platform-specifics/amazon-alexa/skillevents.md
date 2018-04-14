@@ -13,7 +13,7 @@ Learn more about how to use Skill Events with the Jovo Framework.
 
 ## Introduction to Skill Events
 
-Skill Events can be used to notify you if a certain event occurs, which range from the customer disabling your Skill to them linking their Account using the Alexa app. The notification comes in form of a request to your Skill. 
+Skill Events can be used to notify you if a certain event occurs, which range from the customer disabling your Skill to them linking their account using the Alexa app. The notification comes in form of a request to your Skill. 
 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html)
 ## Requirements
