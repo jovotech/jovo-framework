@@ -44,7 +44,7 @@ The `skill.json` of a newly created project looks like this:
 			"custom": {
 				"endpoint": {
 					"sslCertificateType": "Wildcard",
-					"uri": "https://webhook.jovo.cloud/ed7c57e3-a03b-4806-9f8d-5398aa8398d3"
+					"uri": "https://webhook.jovo.cloud/xyz"
 				}
 			}
 		},
