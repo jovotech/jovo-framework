@@ -130,6 +130,7 @@ Name | Description | Docs
 Google Assistant Cards &nbsp; &nbsp; &nbsp; | Create visual Output for the Google Assistant mobile app | [📝](./docs/05_platform-specifics/google-assistant/visual.md#basic-card)
 Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](./docs/05_platform-specifics/google-assistant/visual.md#suggestion-chips)
 Location | Access your user's location data | [📝](./docs/05_platform-specifics/google-assistant/data.md#location)
+Media Response | Play longform audio | [📝](./docs/05_platform-specifics/google-assistant/mediaresponse.md)
 
 ### Integrations
 
