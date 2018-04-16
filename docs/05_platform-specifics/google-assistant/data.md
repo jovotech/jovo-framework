@@ -11,7 +11,7 @@ Learn more about how to get access to user information.
 
 ## Introduction
 
-User information is mainly used to offer a more personalized expierence, but you can't access it right away. First you have to ask for permission.
+User information is mainly used to offer a more personalized experience, but you can't access it right away. First you have to ask for permission.
 
 ## ON_PERMISSION
 
@@ -123,3 +123,7 @@ this.googleAction().getSignInStatus();
 [Official Documentation](https://developers.google.com/actions/identity/account-linking#request_the_signin_helper)
 
 [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appAskForSignIn.js)
+
+
+
+<!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data" }-->

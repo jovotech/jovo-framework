@@ -1,6 +1,6 @@
 # Jovo Language Model
 
-In this section, you will learn more about the Jovo Language Model, found in the `/models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../../02_cli).
+In this section, you will learn more about the Jovo Language Model, found in the `/models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../../02_cli './cli').
 
 * [Introduction](#introduction)
 * [Language Model Elements](#language-model-elements)
@@ -18,13 +18,13 @@ In this section, you will learn more about the Jovo Language Model, found in the
   * [Dialogflow](#dialogflow)
 
 ## Introduction
-The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../../02_cli). 
+The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../../02_cli './cli'). 
 
 You can find the language model files in the `/models` folder of your Jovo project:
 
 ![Models Folder in a Jovo Project](../../img/folder-structure-models.png "Models Folder in a Jovo Project" )
 
-For the platform specific `nlu` (natural language understanding), we currently support built-in `alexa` for Alexa Skills, and `dialogflow` for Google Actions. These are referenced in the `app.json` file after the platforms are initialized with [`jovo init <platform>`](../../02_cli#jovo-init). To learn more about how the resulting platform models look like, please read [App Configuration > Models > Platforms](./platforms).
+For the platform specific `nlu` (natural language understanding), we currently support built-in `alexa` for Alexa Skills, and `dialogflow` for Google Actions. These are referenced in the `app.json` file after the platforms are initialized with [`jovo init <platform>`](../../02_cli#jovo-init './cli#jovo-init'). To learn more about how the resulting platform models look like, please read [App Configuration > Models > Platforms](./platforms './model/platforms').
 
 
 
@@ -115,7 +115,7 @@ For platform specific language model elements, take a look at the sections below
 
 ### Invocation
 
-The `invocation` is the first element of the Jovo Language Model. It sets the invocation name of your voice application (the one people are using to talk to your voice app, see [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md) for more information).
+The `invocation` is the first element of the Jovo Language Model. It sets the invocation name of your voice application (the one people are using to talk to your voice app, see [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics') for more information).
 
 ```javascript
 "invocation": "my test app",
@@ -218,7 +218,7 @@ This is an array of elements that each contain a `value` and optionally `synonym
 
 Sometimes different words have the same meaning. In the example above, we have a main value `New York` and a synonym `New York City`. 
 
-To learn more about how these input values and synonyms can be accessed, take a look at [App Logic > Data](../../04_app-logic/02_data).
+To learn more about how these input values and synonyms can be accessed, take a look at [App Logic > Data](../../04_app-logic/02_data './data').
 
 
 ## Platform Specific Elements
@@ -260,7 +260,7 @@ This is how it looks like:
 }
 ```
 
-If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init) command will automatically append it with all the built-in intents required by Amazon.
+If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init './cli#jovo-init') command will automatically append it with all the built-in intents required by Amazon.
 
 The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder (beta) and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
@@ -320,6 +320,19 @@ Similar to the [`alexa`](#alexa) element, you can also add `dialogflow` specific
 }
 ```
 
-If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init) command will automatically append it with all the intents required by Dialogflow.
+If you don't have this object in your language model, the [`jovo init`](../../02_cli/#jovo-init './cli#jovo-init') command will automatically append it with all the intents required by Dialogflow.
 
 The `dialogflow` object contains the agent data in its original syntax. For example, you export your Dialoglow Agent, look at the filex, and copy-paste the stuff that you need into this part of the Jovo Language Model file.
+
+
+<!--[metadata]: {"title": "Jovo Language Model", 
+                "description": " Learn more about the Jovo Language Model, a consolidated model for your Alexa Skill and Google Action.",
+                "activeSections": ["configuration", "model", "model_index"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Configuration": "framework/docs/app-configuration",
+                                "Model": ""
+                                },
+		"commentsID": "framework/docs/model"
+                }-->

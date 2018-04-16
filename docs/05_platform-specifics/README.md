@@ -15,7 +15,7 @@ To learn more about how to make most out of the platform-specific features, it's
 
 The Jovo app object (`this` inside `app.js`) figures out which platform the user is conversing with, and then uses this information to either call the functions of the `alexaSkill` or `googleAction` object.
 
-As Amazon Alexa and Google Assistant both have platform specific features, you can access them directly by calling the `alexaSkill` or `googleAction` objects. By using those classes, keep in mind that, in the end, there needs to be a function call where an emit happens for the platforms you're using. For example, in the [tell](../04_app-logic/03_output#tell), [ask](../04_app-logic/03_output#ask), [endSession](../04_app-logic/03_output#no-speech-output), and raw [JSON response calls](../04_app-logic/03_output#raw-json-responses).
+As Amazon Alexa and Google Assistant both have platform specific features, you can access them directly by calling the `alexaSkill` or `googleAction` objects. By using those classes, keep in mind that, in the end, there needs to be a function call where an emit happens for the platforms you're using. For example, in the [tell](../04_app-logic/03_output#tell './output#tell'), [ask](../04_app-logic/03_output#ask './output#ask'), [endSession](../04_app-logic/03_output#no-speech-output './output#no-speech-output'), and raw [JSON response calls](../04_app-logic/03_output#raw-json-responses './output#raw-json-responses').
 
 These emit methods can also be accessed directly with the platform specific objects, so you don't have to use `this.tell` when developing only for one platform:
 
@@ -46,7 +46,7 @@ GoogleAction
 
 ## Amazon Alexa
 
-> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../01_getting-started/voice-app-basics.md/#amazon-alexa).
+> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../01_getting-started/voice-app-basics.md/#amazon-alexa './voice-app-basics#amazon-alexa').
 
 You can access the `alexaSkill` object like this:
 
@@ -54,7 +54,7 @@ You can access the `alexaSkill` object like this:
 let alexa = this.alexaSkill();
 ```
 
-You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa):
+You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa './amazon-alexa'):
 
 * Alexa Audioplayer Skills
 * Dialog Mode
@@ -66,7 +66,7 @@ You can find the following Alexa specific features on the page [Platform Specifi
 
 ## Google Assistant
 
-> Find an introduction to how Google Assistant works here: [Getting Started > Voice App Basics > Google Assistant](../01_getting-started/voice-app-basics.md/#google-assistant).
+> Find an introduction to how Google Assistant works here: [Getting Started > Voice App Basics > Google Assistant](../01_getting-started/voice-app-basics.md/#google-assistant './voice-app-basics#google-assistant').
 
 You can access the `googleAction` object like this:
 
@@ -74,9 +74,23 @@ You can access the `googleAction` object like this:
 let google = this.googleAction();
 ```
 
-You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant):
+You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant './google-assistant'):
 
 * Google Assistant Cards
 * Suggestion Chips
 * User location
 * Account Linking
+
+
+
+
+<!--[metadata]: {"title": "Specific Features", 
+                "description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
+                "activeSections": ["platforms", "platforms_index"],
+                "expandedSections": "platforms",
+                "inSections": "platforms",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"Platforms": ""
+                                },
+		"commentsID": "framework/docs/platforms"
+                }-->

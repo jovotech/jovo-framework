@@ -30,7 +30,7 @@ While for Alexa, the process of hosting a Skill on Lambda is straightforward, fo
 
 ## Things to Consider
 
-The [FilePersistence](../../06_integrations/databases/#filepersistence) database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../06_integrations/databases/#dynamodb) before uploading to Lambda.
+The [FilePersistence](../../06_integrations/databases/#filepersistence '../databases#filepersistence') database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../06_integrations/databases/#dynamodb '../databases#dynamodb') before uploading to Lambda.
 
 ## Troubleshooting
 
@@ -39,3 +39,16 @@ If your `tell` or `ask` responses aren't firing inside callbacks or promises on 
 ```javascript
 context.callbackWaitsForEmptyEventLoop = false;
 ```
+
+<!--[metadata]: {"title": "AWS Lambda Configuration", 
+                "description": "Deploy your Alexa Skills and Google Actions on AWS Lambda with the Jovo Framework",
+                "activeSections": ["configuration", "server", "lambda"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Configuration": "framework/docs/app-configuration",
+				"Server": "framework/docs/server",
+                                "AWS Lambda": ""
+                                },
+		"commentsID": "framework/docs/server/aws-lambda"
+                }-->

@@ -137,3 +137,8 @@ let updatedIntent = {
 
 this.alexaSkill().dialogElicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```
+
+
+
+<!--[metadata]: {"title": "Alexa Dialog Interface", "description": "Learn how to use the Alexa Dialog Interface with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_dialog"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
+"Amazon Alexa": "framework/docs/amazon-alexa", "Dialog Interface": "" }, "commentsID": "framework/docs/amazon-alexa/dialog-interface" }-->

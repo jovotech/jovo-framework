@@ -130,7 +130,7 @@ In your terminal, use the following command to download the package via npm:
 $ npm install dashbot
 ```
 
-### Test
+### Test Dashbot
 
 Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
 
@@ -187,7 +187,7 @@ const config = {
 app.addBespokenAnalytics(key);
 ```
 
-### Test
+### Test Bespoken
 
 Test your voice app, after a bit your session should appear in the created skill.
 
@@ -260,7 +260,7 @@ $ npm install voicelabs
 $ npm install voicelabs-assistant-sdk
 ```
 
-### Test
+### Test VoiceLabs
 
 Test your voice app, after a bit your session should appear:
 
@@ -317,8 +317,10 @@ const config = {
 app.addChatbaseAnalytics(key);
 ```
 
-### Test
+### Test Chatbase
 
 Test you voice app. It can take up to 6 hours until all the data can be seen on the Chatbase dashboard.
 
 ![Chatbase Dashboard](../../img/chatbase_04.png)
+
+<!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "framework/docs", "Integrations": "framework/docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics" }-->

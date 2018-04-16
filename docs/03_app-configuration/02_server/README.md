@@ -1,4 +1,4 @@
-# [App Configuration](../) > Server
+﻿# [App Configuration](../) > Server
 
 In this section, you can learn more about different types of server configurations to run your voice app.
 
@@ -11,16 +11,16 @@ In this section, you can learn more about different types of server configuratio
 
 Jovo come with off-the-shelf server integrations that make it easier for you to deploy your voice app to the provider of your choice.
 
-Jovo currently supports a [webhook](./webhook.md) (which we recommend for local prototyping) and [AWS Lambda](./aws-lambda.md). 
+Jovo currently supports a [webhook](./webhook.md './server/webhook') (which we recommend for local prototyping) and [AWS Lambda](./aws-lambda.md './server/aws-lambda'). 
 
 ## Available Integrations
 
 Find more information on server integrations here:
 
-Name | Description | Docs
------------- | ------------- | -------------
-Webhook | Run an express server as HTTPS endpoint | [📝](./webhook.md)
-AWS Lambda | Run the voice app as AWS Lambda Function | [📝](./aws-lambda.md)
+Name | Description
+------------ | -------------
+[Webhook](./webhook.md '/server/webhook') | Run an express server as HTTPS endpoint
+[AWS Lambda](./webhook.md '/server/webhook') | Run the voice app as AWS Lambda Function
 
 
 ## Code Example
@@ -51,3 +51,15 @@ exports.handler = (event, context, callback) => {
     app.handleLambda(event, context, callback);
 };
 ```
+
+<!--[metadata]: {"title": "Server Configuration", 
+                "description": "Host your Alexa Skill and Google Action on AWS Lambda or a Webserver with Jovo.",
+                "activeSections": ["configuration", "server", "server_index"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Configuration": "framework/docs/app-configuration",
+                                "Server": ""
+                                },
+		"commentsID": "framework/docs/server"
+                }-->

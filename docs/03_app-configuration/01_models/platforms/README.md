@@ -17,15 +17,15 @@ The `platforms` folder includes all the information you need to deploy the proje
 
 ![Platforms Folder in a Jovo Project](../../../img/folder-structure-platforms.png "Platforms Folder in a Jovo Project" )
 
-At the beginning of a new project, the folder doesn't exist until you either import an existing Alexa Skill project with [`jovo get`](../../../02_cli#jovo-get), or initialize the platforms with [`jovo init`](../../../02_cli#jovo-init) and then create the files from the Jovo Language Model with [`jovo build`](../../../02_cli#jovo-build) (see [CLI > Workflows](../../../02_cli/workflows.md) for examples).
+At the beginning of a new project, the folder doesn't exist until you either import an existing Alexa Skill project with [`jovo get`](../../../02_cli#jovo-get '../cli#jovo-get'), or initialize the platforms with [`jovo init`](../../../02_cli#jovo-init '../cli#jovo-init') and then create the files from the Jovo Language Model with [`jovo build`](../../../02_cli#jovo-build '../cli#jovo-build') (see [CLI > Workflows](../../../02_cli/workflows.md '../cli/workflows') for examples).
 
-If you only want to work with a platform specific model, for example, you want to create just an Alexa Skill, you don't necessarily need the `/models` folder: The `/platforms` folder and the [`jovo deploy`](../../../02_cli/#jovo-deploy) command are enough. Go to [Jovo CLI](../../../02_cli) to learn more about all commands.
+If you only want to work with a platform specific model, for example, you want to create just an Alexa Skill, you don't necessarily need the `/models` folder: The `/platforms` folder and the [`jovo deploy`](../../../02_cli/#jovo-deploy '../cli#jovo-deploy') command are enough. Go to [Jovo CLI](../../../02_cli '../cli') to learn more about all commands.
 
 
 
 ## Alexa Skill
 
-The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon Developer Portal using the [`Jovo CLI`](../../../02_cli).
+The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon Developer Portal using the [`Jovo CLI`](../../../02_cli '../cli').
 
 ![Alexa Skill Folder in a Jovo Project](../../../img/folder-structure-alexaSkill.png "Alexa Skill Folder in a Jovo Project" )
 
@@ -45,7 +45,7 @@ The `.ask` folder contains the `config` file, which has the basic deploy setting
 
 ### models
 
-The Alexa Interaction Model is stored in this folder. It can either be built by the [`jovo build`](../../../02_cli#jovo-build) command (if you're making use of the [Jovo Language Model](../)), updated manually, or updated in the Amazon Developer Portal and then imported with [`jovo get`](../../../02_cli#jovo-get).
+The Alexa Interaction Model is stored in this folder. It can either be built by the [`jovo build`](../../../02_cli#jovo-build '../cli#jovo-build') command (if you're making use of the [Jovo Language Model](../ './')), updated manually, or updated in the Amazon Developer Portal and then imported with [`jovo get`](../../../02_cli#jovo-get '../cli#jovo-get').
 
 For more information about Alexa Interaction Models, please see the official reference by Amazon: [Custom Interaction Model Reference (Intents, Slots, Sample Utterances)](https://developer.amazon.com/docs/custom-skills/custom-interaction-model-reference.html).
 
@@ -99,7 +99,7 @@ For more information about Alexa Interaction Models, please see the official ref
 
 ### skill.json
 
-`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../02_cli#jovo-get) command).
+`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../02_cli#jovo-get '../cli#jovo-get') command).
 
 ```javascript
 {
@@ -130,11 +130,11 @@ For more information about Alexa Interaction Models, please see the official ref
 
 ## Google Action
 
-The `googleAction` folder currently contains the `dialogflow` (as supported natural language understanding tool) folder with all the files needed to  deploy the agent to Dialogflow Console using the [`Jovo CLI`](../../../02_cli).
+The `googleAction` folder currently contains the `dialogflow` (as supported natural language understanding tool) folder with all the files needed to  deploy the agent to Dialogflow Console using the [`Jovo CLI`](../../../02_cli '../cli').
 
 ![Google Action Folder in a Jovo Project](../../../img/folder-structure-googleAction.png "Google Action Folder in a Jovo Project" )
 
-Please note that Jovo currently supports **Dialogflow v1**, which means that you can't programmatically create or update your agent. However, the [`jovo deploy`](../../../02_cli#jovo-deploy) command will create a `zip` which you can then import into Dialogflow.
+Please note that Jovo currently supports **Dialogflow v1**, which means that you can't programmatically create or update your agent. However, the [`jovo deploy`](../../../02_cli#jovo-deploy '../cli#jovo-deploy') command will create a `zip` which you can then import into Dialogflow.
 
 It will be stored inside the `googleAction` folder:
 
@@ -245,3 +245,17 @@ If you have defined input types, you will find the `entities` in separate folder
 #### package.json
 
 This includes some agent specific information. We recommend to not change this file unless you know what you're doing.
+
+<!--[metadata]: {"title": "Platform Language Models", 
+                "description": "Convert your Jovo Language Model to both Amazon Alexa and Dialogflow (for Google Assistant).",
+                "activeSections": ["configuration", "model", "model_platforms"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Configuration": "framework/docs/app-configuration",
+				"Jovo Language Model": "framework/docs/model",
+                                "Platforms": ""
+                                },
+		"commentsID": "framework/docs/model/platforms"
+                }-->
+

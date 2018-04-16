@@ -1,4 +1,4 @@
-# [App Logic](../) > Data
+﻿# [App Logic](../) > Data
 
 In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
 
@@ -18,7 +18,7 @@ In this section, you will learn how to deal with entities and slot values provid
 
 ## Introduction to User Input
 
-> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md).
+> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics').
 
 We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
@@ -89,7 +89,7 @@ app.setHandler({
 
 ### inputMap
 
-Similar to [`intentMap`](../01_routing/#intentmap), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
+Similar to [`intentMap`](../01_routing/#intentmap './routing#intentmap'), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
 
 ```javascript
 let myInputMap = { 
@@ -135,7 +135,7 @@ app.setHandler({
 
 Besides conversational parameters, there is also additional information that is not explicitly provided by a user, like which device they are using, or their ID. Learn more about different types of implicit user input in this section.
 
-For retrieving and storing this type of information, the Jovo [`User Class`](./user.md) can be used to create more contextual and adaptive experiences based on user specific data.
+For retrieving and storing this type of information, the Jovo [`User Class`](./user.md './data/user') can be used to create more contextual and adaptive experiences based on user specific data.
 
 The user object can be accessed like this:
 
@@ -143,11 +143,11 @@ The user object can be accessed like this:
 let user = this.user();
 ```
 
-You can find more information here: [App Logic > Data > User](./user.md).
+You can find more information here: [App Logic > Data > User](./user.md './data/user').
 
 ## Logging
 
-When you’re using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook)), it’s easy to use logging for debugging, like this:
+When you’re using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook './server/webhook#jovo-webhook')), it’s easy to use logging for debugging, like this:
 
 ```javascript
 console.log('This is going to appear in the logs');
@@ -331,17 +331,17 @@ The example above will reduce the log output to this:
 
 ## Persisting Data
 
-> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](../01_routing/#introduction-to-user-sessions).
+> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](../01_routing/#introduction-to-user-sessions './routing#introduction-to-user-sessions').
 
 If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
 
 ### Session Attributes
 
-For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](../01_routing/#session-attributes).
+For information that is only needed across multiple requests during one session, you can attach attributes to your responses. Learn more here: [App Logic > Routing > Session Attributes](../01_routing/#session-attributes './routing#session-attributes').
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md), [Integrations > Databases](../../06_integrations/databases).
+For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md './data/user'), [Integrations > Databases](../../06_integrations/databases './databases').
 
 
 ## Account Linking
@@ -367,3 +367,15 @@ this.getAccessToken();
 For more information on Account Linking, check out our blogposts:
 * [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
 * [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+
+<!--[metadata]: {"title": "Data: Handling User Input", 
+                "description": "Learn how to deal with user input and data when using the Jovo Framework.",
+                "activeSections": ["logic", "data", "data_index"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Logic": "framework/docs/app-logic",
+                                "Data": ""
+                                },
+		"commentsID": "framework/docs/data"
+                }-->

@@ -1,6 +1,6 @@
-# [Getting Started](../) > Voice App Basics
+﻿# [Getting Started](../) > Voice App Basics
 
-> Other pages in this category: [Installation](./), [Tutorials](./tutorials.md).
+> Other pages in this category: [Installation](./ './installation'), [Tutorials](./tutorials.md './tutorials').
 
 This section provides an overview of how voice applications work, and the differences between voice platforms. Currently, Jovo supports [Amazon Alexa](#amazon-alexa) and [Google Assistant](#google-assistant).
 
@@ -34,19 +34,19 @@ In the example above, possible sentences a user could say can be grouped to a `'
 
 In natural language processing (NLP), an intent is something users want to achieve when they are conversing with technology. When developing your voice app, you can create intents to handle different user needs and interactions.
 
-Find more detailed information here: [App Logic > Routing](../04_app-logic/01_routing).
+Find more detailed information here: [App Logic > Routing](../04_app-logic/01_routing './routing').
 
 ### Utterances and User Expressions
 
 What are all the potential phrases someone could use to express what they want? Having a good set of utterances increases your chances of reacting to a user's input.
 
-Find more detailed information here: [App Configuration > Jovo Language Model](../03_app-configuration/01_models).
+Find more detailed information here: [App Configuration > Jovo Language Model](../03_app-configuration/01_models './model').
 
 ### Slots, Parameters, and Entities
 
 This element has different wordings on various NLP platforms. It describes a specific, variable element in a set of utterances. For example, your intent could be to find a restaurant, but you could search for a pizza place, sushi, or even something cheap or very close.
 
-Find more detailed information here: [App Logic > Data](../04_app-logic/02_data).
+Find more detailed information here: [App Logic > Data](../04_app-logic/02_data './data').
 
 
 ## Voice Platforms
@@ -93,3 +93,16 @@ Here is the official Google resource: [Invocation and Discovery](https://develop
 To build a voice app for Google Assistant and Google Home, you need to create a project on the [Actions on Google Console](https://console.actions.google.com/). For interpreting the natural language of your users' speech input, you can use different kinds of integrations. Most developers use [Dialogflow](https://dialogflow.com/) (formerly API.AI) for the language model.
 
 Here are some helpful guides to get started with Google Actions: [Overview](https://developers.google.com/actions/) and a [tutorial for Dialogflow](https://developers.google.com/actions/dialogflow/).
+
+
+<!--[metadata]: {"title": "Voice App Basics", 
+                "description": "Learn the essentials of voice apps like Amazon Alexa and Google Assistant on Google Home.",
+                "activeSections": ["voice-app-basics", "gettingstarted"],
+                "expandedSections": "gettingstarted",
+                "inSections": "gettingstarted",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"Getting Started": "framework/docs",
+                                "Voice App Basics": ""
+                                },
+		"commentsID": "framework/docs/voice-app-basics"
+                }-->
