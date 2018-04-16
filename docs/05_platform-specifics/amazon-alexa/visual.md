@@ -198,3 +198,7 @@ this.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Su
 ```
 
 Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).
+
+
+<!--[metadata]: {"title": "Alexa Visual Output", "description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
+"Amazon Alexa": "framework/docs/amazon-alexa", "Visual Output": "" }, "commentsID": "framework/docs/amazon-alexa" }-->

@@ -8,7 +8,7 @@ This section provides an overview of Alexa specific features for user data.
 ## Lists
 
 Currently Amazon Alexa offers a to-do and a shopping list, which both can be updated and read by you, if you have the necessary permissions.
-Use a [`card`](./visual.md#permission-card) to ask for the required permission:
+Use a [`card`](./visual.md#permission-card './visual-output#permission-card') to ask for the required permission:
 
 ```javascript
 this.alexaSkill().showAskforListPermissionCard(['read', 'write']);
@@ -140,3 +140,9 @@ this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
         }
     });
 ```
+
+
+
+
+<!--[metadata]: {"title": "Alexa Lists", "description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_lists"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
+"Amazon Alexa": "framework/docs/amazon-alexa", "Lists": "" }, "commentsID": "framework/docs/amazon-alexa/lists" }-->

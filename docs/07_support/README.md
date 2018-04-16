@@ -1,4 +1,4 @@
-# Support
+# Support Hello World
 
 Any questions with the framework? Just let us know, we're happy to help!
 
@@ -28,3 +28,8 @@ For more detailed feedback and feature suggestions, we also appreciate email. Yo
 * Reach out in the following Slack channels (@jankoenig and @aswetlow): [Alexa Slack](http://www.alexaslack.com/), [Google Home Slack](http://googleslack.com/), [Microsoft Cortana Slack](https://bit.ly/2qRqHMw)
 * Create a comment [here](https://www.jovo.tech/framework/docs/support#comments-and-questions)
 * Tweet at us [@jovotech](https://twitter.com/jovotech)
+
+<!--[metadata]: {"title": "Support", 
+		"description": "Questions about developing an Alexa Skill or Google Action? Jovo is here to help!", 
+		"activeSections": ["support"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "framework/docs", "Integrations": "framework/docs/integrations", "Databases": "" }, "commentsID": "framework/docs/support" }-->
+
