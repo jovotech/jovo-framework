@@ -1,6 +1,6 @@
 # [Platform Specific Features](../) > [Google Assistant](./README.md) > Media Response
 
-Learn more about how to use the Google Action Media Response with Jovo.
+Learn how to use the Google Action Media Response with Jovo.
 
 * [Introduction](#introduction)
 * [Features](#features)
@@ -30,7 +30,7 @@ this.tell('Enjoy the song!');
 ```
 If you use `tell()` it will be handled as a [final response](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#finalresponse) and you wont receive a callback that the audio playback is completed. 
 
-The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](./visual.md#suggestion-chips) to your response.
+The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](./visual.md#suggestion-chips './visual#suggestion-chips') to your response.
 ```javascript
 this.googleAction().audioPlayer().play('https://www.url.to/file.mp3', 'song one');
 this.googleAction().showSuggestionChips(['Chip 1', 'Chip 2']);
@@ -48,3 +48,16 @@ The callback after the audio playback is finished will be mapped to the `GoogleA
   },
 },
 ```
+
+<!--[metadata]: {"title": "Google Assistant Media Response", 
+                "description": "Learn how to use the Google Action Media Response with Jovo.",
+                "activeSections": ["platforms", "assistant", "assistant_media-response"],
+                "expandedSections": "platforms",
+                "inSections": "platforms",
+                "breadCrumbs": {
+                  "Docs": "framework/docs",
+				          "Platforms": "framework/docs/platforms",
+                  "Google Assistant": ""
+                },
+		            "commentsID": "framework/docs/google-assistant/media-response"
+                }-->
