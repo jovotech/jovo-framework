@@ -52,7 +52,7 @@ const config = {
 
 The User object offers the capability to store and retrieve user specific data, including [meta data](#meta-data).
 
-Data is stored using our [database integrations](../../06_integrations/databases), with a file-based `db.json` structure enabled by default.
+Data is stored using our [database integrations](../../06_integrations/databases './databases'), with a file-based `db.json` structure enabled by default.
 
 
 ### Data Persistence
@@ -68,7 +68,7 @@ this.user().data.key = value;
 this.user().data.score = 300;
 ```
 
-For more information on data persistence, take a look here: [Integrations > Databases](../../06_integrations/databases).
+For more information on data persistence, take a look here: [Integrations > Databases](../../06_integrations/databases './databases').
 
 
 ### Meta Data
@@ -151,3 +151,16 @@ this.getAccessToken();
 For more information on Account Linking, check out our blogposts:
 * [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
 * [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+
+<!--[metadata]: {"title": "User Class", 
+                "description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
+                "activeSections": ["logic", "data", "user"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Logic": "framework/docs/app-logic",
+                                "Data": "framework/docs/data",
+				"User": ""
+                                },
+		"commentsID": "framework/docs/data/user"
+                }-->

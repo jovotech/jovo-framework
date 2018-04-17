@@ -1,4 +1,4 @@
-# [App Logic](../) > Routing
+﻿# [App Logic](../) > Routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
@@ -41,12 +41,12 @@ For more conversational experiences that require back and forth between your app
 
 ![Two Sessions](../../img/session-ask.png)
 
-To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../../06_integrations/databases#filepersistence).
+To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../../06_integrations/databases#filepersistence './databases#filepersistence').
 
 
 ## Intents
 
-If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md).
+If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics').
 
 Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 
@@ -632,11 +632,11 @@ this.toStatelessIntent('PizzaIntent', moreData);
 
 ## Event Listener
 
-Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listener.md)
+Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listener.md './event-listeners')
 
 ## User Input
 
-To learn more about how to make use of user input (slots on Alexa and entities on Dialoflow), take a look at this section: [App Logic > Data](../02_data).
+To learn more about how to make use of user input (slots on Alexa and entities on Dialoflow), take a look at this section: [App Logic > Data](../02_data './data').
 
 ## Session Attributes
 
@@ -665,4 +665,17 @@ let value = this.getSessionAttribute(key);
 let score = this.getSessionAttribute('score');
 ```
 
-Have a look at [App Logic > Data](../02_data) to learn more about how to persist data across sessions.
+Have a look at [App Logic > Data](../02_data './data') to learn more about how to persist data across sessions.
+
+
+<!--[metadata]: {"title": "Routing: Handling Intents & States", 
+                "description": "Learn how to route through your voice app logic with Jovo.",
+                "activeSections": ["logic", "routing", "routing_index"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Logic": "framework/docs/app-logic",
+                                "Routing": ""
+                                },
+		"commentsID": "framework/docs/routing"
+                }-->

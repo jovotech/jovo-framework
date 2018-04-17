@@ -1,4 +1,4 @@
-# [App Logic](../) > [Output](./README.md) > SpeechBuilder
+﻿# [App Logic](../) > [Output](./README.md) > SpeechBuilder
 
 In this section, you will learn how to use the Jovo SpeechBuilder, a helper class that makes it easier to build speech responses and add variety to your voice app.
 
@@ -31,8 +31,8 @@ Here is what’s currently possible with speechBuilder:
 Method | Description
 :--- | :---
 `addText(text)` | Add plain text for text-to-speech
-`addT(key)` | Access [`i18n`](./i18n.md) language resources for multilingual voice apps
-`addAudio(url, alternativeText)` | Add link to audio file and alternative text for Google Assistant. For more information on using audio files, see [App Logic > Output > play](./readme.md#play)</a>.
+`addT(key)` | Access [`i18n`](./i18n.md  './i18n') language resources for multilingual voice apps
+`addAudio(url, alternativeText)` | Add link to audio file and alternative text for Google Assistant. For more information on using audio files, see [App Logic > Output > play](./readme.md#play './#play').
 `addBreak(time)` | Add a break to the output. Make sure to add a unit, e.g. "300ms"
 `addSentence(text)` | Add a text within a sentence tag
 `addSayAsCardinal(text)` | Reads a number as cardinal
@@ -88,3 +88,17 @@ let speech = this.speechBuilder()
 
 this.tell(speech);
 ```
+
+
+<!--[metadata]: {"title": "SpeechBuilder", 
+                "description": "Learn how to use the Jovo SpeechBuilder to add variety to your Alexa Skill and Google Action",
+                "activeSections": ["logic", "output", "speechbuilder"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Logic": "framework/docs/app-logic",
+				"Output": "framework/docs/output",
+				"Speechbuilder": ""
+                                },
+		"commentsID": "framework/docs/output/speechbuilder"
+                }-->

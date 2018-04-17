@@ -1,6 +1,6 @@
-# Getting Started > Installation
+﻿# Getting Started > Installation
 
-> Other pages in this category: [Tutorials](./tutorials.md), [Voice App Basics](./voice-app-basics.md).
+> Other pages in this category: [Tutorials](./tutorials.md './tutorials'), [Voice App Basics](./voice-app-basics.md './voice-app-basics').
 
 * [Introduction](#introduction)
   * [Technical Requirements](#technical-requirements)
@@ -33,9 +33,9 @@ Need help with that? Here are some tutorials to install Node.js and npm: [Mac](h
 
 ## Getting Started
 
-We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. [Find the full CLI Docs here](../02_cli), and the open source GitHub repository here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli) (pull requests encouraged!)
+We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. [Find the full CLI Docs here](../02_cli './cli'), and the open source GitHub repository here: [jovotech/jovo-cli](https://github.com/jovotech/jovo-cli) (pull requests encouraged!)
 
-You can find other ways to get started wit Jovo below: Install the [jovo-framework npm package](jovo-framework-npm-package), or clone the [Jovo Sample Voice App](#jovo-sample-voice-app). 
+You can find other ways to get started wit Jovo below: Install the [jovo-framework npm package](#jovo-framework-npm-package), or clone the [Jovo Sample Voice App](#jovo-sample-voice-app). 
 
 ### 1. Jovo CLI Installation
 
@@ -87,26 +87,26 @@ models/
   └── en-US.json
 ```
 
-You can find out more about the Jovo project structure in [App Configuration](../03_app-configuration).
+You can find out more about the Jovo project structure in [App Configuration](../03_app-configuration './app-configuration').
 
 ### 3. Create a Language Model
 
 Before building out the logic of your voice application, you need to create a language model (also called interaction model) on the voice platform(s) you want to interact with.
 
-If you're new to how the voice platforms and language models work, take a look at [Voice App Basics](voice-app-basics.md).
+If you're new to how the voice platforms and language models work, take a look at [Voice App Basics](voice-app-basics.md './voice-app-basics').
 
 There are several ways how to do that:
 * Create the language models manually for each platform in the respective developer console
   * [Amazon Alexa Tutorial](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
   * [Google Assistant Tutorial (Dialogflow)](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 * Create a Jovo language model in the `/models` folder and deploy it to the platforms with the Jovo CLI
-  * [Language Model Docs](../03_app-configuration/models)
+  * [Language Model Docs](../03_app-configuration/models '.model')
 
 ### 4. Run and Test the Code
 
 For your first "Hello World!", you need to run the software on either
-* a local development server with `$ jovo run` (recommended), as described in [App Configuration > Server Configuration > Webhook](../03_app-configuration/server/webhook.md)
-* or on AWS Lambda, as described in [App Configuration > Server Configuration > AWS Lambda](../03_app-configuration/server/aws-lambda.md)
+* a local development server with `$ jovo run` (recommended), as described in [App Configuration > Server Configuration > Webhook](../03_app-configuration/server/webhook.md './server/webhook')
+* or on AWS Lambda, as described in [App Configuration > Server Configuration > AWS Lambda](../03_app-configuration/server/aws-lambda.md './server/aws-lambda')
 
 You can find a full step-by-step course for both Amazon Alexa and Google Assistant here: [Voice App Project 1: Hello World](https://www.jovo.tech/blog/project-1-hello-world/). 
 
@@ -146,9 +146,22 @@ $ npm install
 
 ## Build Your First Voice App
 
-To get started building voice apps with Jovo, take a look at the list of tutorials and courses [on GitHub](./tutorials.md) and on the [Jovo Website](https://www.jovo.tech/learn).
+To get started building voice apps with Jovo, take a look at the list of tutorials and courses [on GitHub](./tutorials.md '../learn') and on the [Jovo Website](https://www.jovo.tech/learn).
 
 
 ## Voice App Basics
 
-New to developing for voice platforms like Amazon Alexa and Google Assistant? Go to [ Voice App Basics](./voice-app-basics.md) to get an introduction to voice and language models.
+New to developing for voice platforms like Amazon Alexa and Google Assistant? Go to [ Voice App Basics](./voice-app-basics.md './voice-app-basics') to get an introduction to voice and language models.
+
+
+<!--[metadata]: {"title": "Installation", 
+                "description": "Learn how to install the Jovo Framework and Jovo CLI to develop Cross-Platform Voice Apps for Alexa and Google Assistant",
+                "activeSections": ["gettingstarted", "installation"],
+                "expandedSections": "installation",
+                "inSections": "gettingstarted",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"Getting Started": "framework/docs",
+                                "Installation": ""
+                                },
+		"commentsID": "framework/docs/getting-started"
+                }-->

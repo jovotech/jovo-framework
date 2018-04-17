@@ -16,7 +16,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 
 ## Introduction to Alexa Specific Features
 
-> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../../01_getting-started/voice-app-basics.md/#amazon-alexa).
+> Find an introduction to how Amazon Alexa works here: [Getting Started > Voice App Basics > Amazon Alexa](../../01_getting-started/voice-app-basics.md/#amazon-alexa './voice-app-basics#amazon-alexa').
 
 You can access the `alexaSkill` object like this:
 
@@ -27,27 +27,27 @@ let alexa = this.alexaSkill();
 
 ## Routing
 
-This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](../../04_app-logic/01_routing).
+This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](../../04_app-logic/01_routing './routing').
 
 ### Dialog Interface
 
-You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](./dialog.md).
+You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](./dialog.md './amazon-alexa/dialog-interface').
 
 ## Data
 
-This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../../04_app-logic/02_data).
+This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../../04_app-logic/02_data './amazon-alexa/data').
 
 ### Shopping and To Do Lists
 
-You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md)
+You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md './amazon-alexa/lists')
 
 ### Location
 
-Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location)
+Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location './amazon-alexa/data#location')
 
 ## Output
 
-This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](../../04_app-logic/03_output).
+This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](../../04_app-logic/03_output './output').
 
 ### Progressive Responses
 
@@ -63,13 +63,17 @@ Find an example file here: [`indexProgressiveResponse.js`](../../../examples/ale
 
 ### Visual Output
 
-You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md)
+You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual-output')
 
 
 ## AudioPlayer Skills
 
-You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](./audioplayer.md).
+You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](./audioplayer.md './amazon-alexa/audioplayer').
+
 
 ## Skill Events
 
-Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md)
+Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skillevents')
+
+<!--[metadata]: {"title": "Amazon Alexa Specific Features", "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
+"Amazon Alexa": "" }, "commentsID": "framework/docs/amazon-alexa" }-->

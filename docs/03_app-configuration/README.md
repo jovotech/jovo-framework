@@ -11,7 +11,7 @@ In this section, you will learn more about the essential configurations of a Jov
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server)), [`/app`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/app/app.js), (app configuration and [logic](../04_app-logic)), and [`models`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/models/en-US.json) ([Jovo Language Model](./01_models)).
+A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server './server')), [`/app`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/app/app.js), (app configuration and [logic](../04_app-logic './app-logic')), and [`models`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/models/en-US.json) ([Jovo Language Model](./01_models './model')).
 
 
 ![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
@@ -45,7 +45,7 @@ exports.handler = (event, context, callback) => {
     app.handleLambda(event, context, callback);
 };
 ```
-You can find all the information regarding server configuration in this section: [App Configuration > Server](./02_server).
+You can find all the information regarding server configuration in this section: [App Configuration > Server](./02_server './server').
 
 ### /app - Application Logic
 The `/app` folder, and specifically `app.js` is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
@@ -87,10 +87,10 @@ app.setHandler({
 module.exports.app = app;
 ```
 
-You can find everything related to the app logic here: [App Logic](../04_app-logic).
+You can find everything related to the app logic here: [App Logic](../04_app-logic './app-logic').
 
 ### Models - Language Model
-The models folder contains the [Jovo Language Model](./01_models), which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
+The models folder contains the [Jovo Language Model](./01_models './model'), which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
 
 The idea is to maintain a single language model locally instead of having to go to the platform developer consoles independently.
 
@@ -156,7 +156,7 @@ In the `/models` folder, every language gets a file. For example, here's how a f
 }
 ```
 
-You can find out more about that here [App Configuration > Models](../03_app-configuration/01_models).
+You can find out more about that here [App Configuration > Models](../03_app-configuration/01_models './model').
 
 ## How to Add Configurations
 To add configurations, you have two options: You can either add them at the beginning of [`app.js`](#app.js) in the constructor or you use the setter function of each configuration.
@@ -230,16 +230,28 @@ Below is a list of all configurations:
 
 Category | Name | Description
 :--- | :--- | :---
-Routing | [intentMap](../04_app-logic/01_routing#intentmap) | Maps incoming intents to specified intent names
- | | [intentsToSkipUnhandled](../04_app-logic/01_routing#intentstoskipunhandled) | Intents which should not be mapped to 'Unhandled' when not found in a certain state
-Data | [inputMap](../04_app-logic/02_data#inputmap) | Maps incoming input (slots and parameters) to specified input names
- | | [logging](../04_app-logic/02_data#logging) | Logs both requests and responses
- | | [requestLogging](../04_app-logic/02_data#log-requests) | Logs incoming requests
- | | [responseLogging](../04_app-logic/02_data#log-responses) | Logs outgoing responses
- | | [requestLoggingObjects](../04_app-logic/02_data#request-logging-objects) | Limits request logs to the provided objects
- | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects) | Limits response logs to the provided objects
-User | [userDataCol](../04_app-logic/02_data/user.md#user-data) | Changes the name of the user data column in the database
- | | [userMetaData](../04_app-logic/02_data/user.md#user-meta-data) | Change the default configurations for storing user meta data
-Output | [i18n](../04_app-logic/i18n.md#configuration) | Enable multilingual output for your voice app
-Integrations | [Databases](../06_integrations/databases) | Switch between supported database integrations
- | | [Analytics](../06_integrations/analytics) | Enable analytics integrations
+Routing | [intentMap](../04_app-logic/01_routing#intentmap './app-logic#intentmap') | Maps incoming intents to specified intent names
+ | | [intentsToSkipUnhandled](../04_app-logic/01_routing#intentstoskipunhandled './routing#intentstoskipunhandled') | Intents which should not be mapped to 'Unhandled' when not found in a certain state
+Data | [inputMap](../04_app-logic/02_data#inputmap './data#inputmap') | Maps incoming input (slots and parameters) to specified input names
+ | | [logging](../04_app-logic/02_data#logging './data#logging') | Logs both requests and responses
+ | | [requestLogging](../04_app-logic/02_data#log-requests './data#log-requests') | Logs incoming requests
+ | | [responseLogging](../04_app-logic/02_data#log-responses './data#log-responses') | Logs outgoing responses
+ | | [requestLoggingObjects](../04_app-logic/02_data#request-logging-objects './data#request-logging-objects') | Limits request logs to the provided objects
+ | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects './data#response-logging-objects') | Limits response logs to the provided objects
+User | [userDataCol](../04_app-logic/02_data/user.md#user-data './data/user#user-data') | Changes the name of the user data column in the database
+ | | [userMetaData](../04_app-logic/02_data/user.md#user-meta-data './data/user#user-meta-data') | Change the default configurations for storing user meta data
+Output | [i18n](../04_app-logic/i18n.md#configuration './output/i18n#configuration') | Enable multilingual output for your voice app
+Integrations | [Databases](../06_integrations/databases './databases') | Switch between supported database integrations
+ | | [Analytics](../06_integrations/analytics './analytics') | Enable analytics integrations
+
+
+<!--[metadata]: {"title": "App Configuration", 
+                "description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant",
+                "activeSections": ["configuration", "configuration_index"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+                                "App Configuration": ""
+                                },
+		"commentsID": "framework/docs/app-configuration"
+                }-->

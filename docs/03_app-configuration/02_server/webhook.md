@@ -1,6 +1,6 @@
 # [App Configuration](../) > [Server](README.md) > Webhook
 
-For voice apps in prototyping stage, we recommend using a local webserver and a service like [jovo webhook](#jovo-webhook) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md) every time.
+For voice apps in prototyping stage, we recommend using a local webserver and a service like [jovo webhook](#jovo-webhook) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md './aws-lambda') every time.
 
 * [Webhook Configuration](#webhook-configuration)
 * [Run the Webhook Locally](#run-the-webhook-locally)
@@ -46,7 +46,7 @@ $ jovo run
 $ node index.js
 ```
 
-Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](../../02_cli#jovo-run).
+Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](../../02_cli#jovo-run '../cli#jovo-run').
 
 `$ jovo run` should return this:
 
@@ -67,14 +67,14 @@ Here are all the services that can point to your local development server:
 
 The `jovo webhook` is a free service  that creates a link to your local webserver. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time.
 
-By using the [`jovo init`](../../02_cli#jovo-init) command or [`jovo run`](../../02_cli#jovo-run), a unique, anonymized link is created that looks like this:
+By using the [`jovo init`](../../02_cli#jovo-init '../cli#jovo-init') command or [`jovo run`](../../02_cli#jovo-run '../cli#jovo-run'), a unique, anonymized link is created that looks like this:
 
-```
+```sh
 https://webhook.jovo.cloud/[your-id]
 ```
 This link simply makes it easier for you to prototype locally by being able to see the logs in your command line, and to make fast changes without uploading your code to AWS Lambda.
 
-You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../../02_cli#jovo-deploy) command to upload it from the command line (`jovo webhook` is the default `endpoint` added to `app.json` with the [`jovo init`](../../02_cli#jovo-init) command).
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../../02_cli#jovo-deploy '../cli#jovo-deploy') command to upload it from the command line (`jovo webhook` is the default `endpoint` added to `app.json` with the [`jovo init`](../../02_cli#jovo-init '../cli#jovo-init') command).
 
 Find the following sections in our beginner tutorials to learn how to do so:
 
@@ -95,7 +95,7 @@ This is what the result looks like:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../../06_integrations/analytics#bespoken) for powerful logging capabilities:
+Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../../06_integrations/analytics#bespoken '../analytics#bespoken') for powerful logging capabilities:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/bespoken-logging.jpg)
 
@@ -136,3 +136,17 @@ To make use of it, please install it like so:
 ```sh
 $ npm install alexa-verifier-middleware
 ```
+
+
+<!--[metadata]: {"title": "Webhook Configuration", 
+                "description": "Find out how to create a webhook for Alexa Skills and Google Actions with the Jovo Framework",
+                "activeSections": ["configuration", "server", "webhook"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Configuration": "framework/docs/app-configuration",
+				"Server": "framework/docs/server",
+                                "Webhook": ""
+                                },
+		"commentsID": "framework/docs/server/webhook"
+                }-->

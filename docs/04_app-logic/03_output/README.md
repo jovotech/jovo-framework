@@ -1,4 +1,4 @@
-# [App Logic](../) > Output
+﻿# [App Logic](../) > Output
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
@@ -27,7 +27,7 @@ Jovo's basic output options offer simple methods for interacting with users thro
 
 The tell method is used to have Alexa or Google Home say something to your users. You can either use plain text or [SSML](#ssml) (Speech Synthesis Markup Language).
 
-Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](../01_routing/README.md#introduction-to-user-sessions).
+Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](../01_routing#introduction-to-user-sessions  './routing#introduction-to-user-sessions').
 
 ```javascript
 this.tell(speech);
@@ -44,7 +44,7 @@ this.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>'
 
 Whenever you want to make the experience more interactive and get some user input, the `ask` method is the way to go.
 
-This method keeps the mic open ([learn more about sessions here](../01_routing/README.md#introduction-to-user-sessions)), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
+This method keeps the mic open ([learn more about sessions here](../01_routing/README.md#introduction-to-user-sessions  './routing#introduction-to-user-sessions')), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
 
 ```javascript
 this.ask(speech, reprompt);
@@ -62,7 +62,7 @@ Google Assistant offers the functionality to use multiple reprompts.
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
-You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](../../05_platform-specifics/google-assistant/README.md#multiple-reprompts).
+You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](../../05_platform-specifics/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
 
 ## Advanced Output
 
@@ -98,13 +98,13 @@ let speech = this.speechBuilder()
 this.tell(speech);
 ```
 
-You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](./speechbuilder.md).
+You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](./speechbuilder.md  './output/speechbuilder').
 
 ### i18n
 
 Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to support multilanguage voice apps.
 
-Here's the detailed documentation for it: [App Logic > Output > i18n](./i18n.md). 
+Here's the detailed documentation for it: [App Logic > Output > i18n](./i18n.md  './output/i18n'). 
 
 ### Raw JSON Responses
 If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `alexaSkill().setResponseObject` and `googleAction().setResponseObject`.
@@ -117,14 +117,14 @@ this.alexaSkill().setResponseObject(obj);
 this.googleAction().setResponseObject(obj);
 ```
 
-> Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics).
+> Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics './platforms').
 
 
 ## Visual Output
 
 The Jovo framework, besides sound and voice output, can also be used for visual output.
 
-Learn more about visual output here: [App Logic > Output > Visual Output](./visual-output.md). 
+Learn more about visual output here: [App Logic > Output > Visual Output](./visual-output.md './output/visual-output'). 
 
 
 ## No Speech Output
@@ -134,3 +134,16 @@ Sometimes, you might want to end a session without speech output. You can use th
 ```javascript
 this.endSession();
 ```
+
+
+<!--[metadata]: {"title": "Output: Creating a Response", 
+                "description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",
+                "activeSections": ["logic", "output", "output_index"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "framework/docs",
+				"App Logic": "framework/docs/app-logic",
+				"Output": ""
+                                },
+		"commentsID": "framework/docs/output"
+                }-->
