@@ -39,7 +39,17 @@ this.ask('Enjoy the song');
 
 ## Directive
 
-The callback after the audio playback is finished will be mapped to the `GoogleAction.Finished` intent, which has to be placed in the `AUDIOPLAYER` state.
+The callback after the audio playback is finished will be mapped to the `GoogleAction.Finished` intent, which has to be placed in either the `'MEDIARESPONSE'` or the `'AUDIOPLAYER'` directive of your handler.
+
+```javascript
+'MEDIARESPONSE': {
+  'GoogleAction.Finished': function() { 
+    // ...
+  },
+},
+```
+
+You can also use the `'AUDIOPLAYER'` directive for cross-platform compatibility with the Alexa Audioplayer:
 
 ```javascript
 'AUDIOPLAYER': {
