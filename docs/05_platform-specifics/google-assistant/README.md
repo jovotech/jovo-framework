@@ -42,7 +42,7 @@ You can find out more about visual output here: [Platform specifics > Google Ass
 
 ### Media Response
 
-You can find out more about media responses here: [Platform specifics > Google Assistant > Media Response](./mediaresponse.md)
+You can find out more about media responses here: [Platform specifics > Google Assistant > Media Response](./media-response.md './google-assistant/media-response')
 
 ## Data
 
