@@ -14,11 +14,12 @@ In this section, you will learn more about how to use intents and states to rout
   * [intentMap](#intentmap)
 * [States](#states)
   * [followUpState](#followupstate)
+  * [Remove a State](#remove-a-state)
 * [Intent Redirects](#intent-redirects)
   * [toIntent](#tointent)
   * [toStateIntent](#tostateintent)
   * [toStatelessIntent](#tostatelessintent)
-* [Event Listener](#event-listener)
+* [Event Listeners](#event-listeners)
 * [User Input](#user-input)
 * [Session Attributes](#session-attributes)
 
@@ -544,6 +545,18 @@ app.setHandler({
 });
 ```
 
+### Remove a State
+
+If you are inside a state and want to move outside to a global (stateless) intent in the next request, you have two options:
+
+```javascript
+this.removeState();
+
+// Alternative: Use null as followUpState
+this.followUpState(null);
+```
+
+
 ## Intent Redirects
 
 Jovo offers the ability to redirect incoming intents to others. For example, the  sample voice app uses this to go from `'LaunchIntent'` to `'HelloWorldIntent'`:
@@ -630,9 +643,9 @@ this.toStatelessIntent('PizzaIntent');
 this.toStatelessIntent('PizzaIntent', moreData);
 ```
 
-## Event Listener
+## Event Listeners
 
-Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listener.md './event-listeners')
+Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listeners.md './event-listeners')
 
 ## User Input
 

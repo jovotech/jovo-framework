@@ -1,4 +1,4 @@
-# [App Logic](../) > [Routing](./README.md) > Event Listener
+# [App Logic](../) > [Routing](./README.md) > Event Listeners
 
 Learn more about how to use Event Listeners with Jovo
 
