@@ -13,6 +13,7 @@ In this section, you will learn how to manage multi-turn conversations with the 
         * [Confirm Slot](#confirm-slot)
         * [Confirm Intent](#confirm-intent)
         * [Update Intent](#update-intent)
+* [Jovo Language Model](#jovo-language-model)
 
 ## Introduction
 
@@ -138,6 +139,9 @@ let updatedIntent = {
 this.alexaSkill().dialogElicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```
 
+## Jovo Language Model
+
+You can check out a sample implementation of the Dialog Interface in the Jovo language model here: [Alexa Dialog Interface Template](https://github.com/jovotech/jovo-templates/blob/master/alexa/dialoginterface/models/en-US.json)
 
 
 <!--[metadata]: {"title": "Alexa Dialog Interface", "description": "Learn how to use the Alexa Dialog Interface with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_dialog"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
