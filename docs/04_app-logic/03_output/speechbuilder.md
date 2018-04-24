@@ -26,7 +26,7 @@ As you can see above, you can initialize a new speechBuilder object by using `th
 
 ## Features
 
-Here is what’s currently possible with speechBuilder:
+Here is what's currently possible with speechBuilder:
 
 Method | Description
 :--- | :---

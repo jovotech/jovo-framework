@@ -38,7 +38,7 @@ Category | Tutorial
 ------------ | -------------
 Account Linking | [How to set up Account Linking for Alexa with Auth0 and Jovo](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
 | | [How to set up Account Linking for Google Actions with Auth0 and Jovo](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
-| | [Login with Amazon: How to get your Alexa Skill User’s Email](https://www.jovo.tech/blog/alexa-login-with-amazon-email/)
+| | [Login with Amazon: How to get your Alexa Skill User's Email](https://www.jovo.tech/blog/alexa-login-with-amazon-email/)
 | Deployment | [How to Deploy your Alexa Skill and Google Action to Heroku](https://www.jovo.tech/blog/deploy-to-heroku/)
 
 

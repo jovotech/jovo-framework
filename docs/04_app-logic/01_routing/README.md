@@ -162,7 +162,7 @@ The `'ON_REQUEST'` intent can be used to map every incoming request to a single 
 
 #### 'END' Intent
 
-A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn’t respond. Jovo uses the standard intent `'END'` to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
+A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `'END'` to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
 
 ```javascript
 'END': function() {
@@ -344,7 +344,7 @@ const config = {
 app.setIntentMap(myIntentMap);
 ```
 
-This is useful especially for platform-specific, built-in intents. One example could be Amazon’s standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
+This is useful especially for platform-specific, built-in intents. One example could be Amazon's standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
 
 ```javascript
 let intentMap = {
@@ -396,7 +396,7 @@ app.setHandler({
 
 This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `'YesIntent'` or `'NoIntent'`. As a developer need to figure out yourself which question they just answered with "Yes."
 
-This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially “Yes” and “No” as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes’s and No’s.
+This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially “Yes” and “No” as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes's and No's.
 
 With Jovo, you can include states like this:
 
@@ -505,7 +505,7 @@ this.followUpState(stateName)
     .ask(speech, reprompt);
 ```
 
-This way, the voice app will first look if the response-intent is available in the given state. If not, it will go to the default called intent if it’s available outside a state.
+This way, the voice app will first look if the response-intent is available in the given state. If not, it will go to the default called intent if it's available outside a state.
 
 ```javascript
 
@@ -655,7 +655,7 @@ To learn more about how to make use of user input (slots on Alexa and entities o
 
 It might be helpful to save certain information across requests during a session (find out more about [session management in the introduction above](#introduction-to-session-management)). This can be done with Session Attributes.
 
-The `setSessionAttribute` and `setSessionAttributes` methods can be used to store certain information that you can use later within the session. It’s like a cookie that’s alive until the session ends (usually after calling the `tell` function or when the user requests to stop).
+The `setSessionAttribute` and `setSessionAttributes` methods can be used to store certain information that you can use later within the session. It's like a cookie that's alive until the session ends (usually after calling the `tell` function or when the user requests to stop).
 
 ```javascript
 this.setSessionAttribute(key, value);

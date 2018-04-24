@@ -71,7 +71,7 @@ Image dimensions:
 * Amazon Alexa: Small images (`720px x 480px`) and large images (`1200px x 800px`)
 * Google Assistant: Height is fixed to `192dp` ([see here](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard))
 
-Important: Image files must be accessible by the public and support CORS (cross-origin resource sharing). For example, if you’re hosting the file with the wrong permissions on AWS S3, and try to access it, the response could look like this:
+Important: Image files must be accessible by the public and support CORS (cross-origin resource sharing). For example, if you're hosting the file with the wrong permissions on AWS S3, and try to access it, the response could look like this:
 
 ```json
 <Error>

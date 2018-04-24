@@ -147,7 +147,7 @@ You can find more information here: [App Logic > Data > User](./user.md './data/
 
 ## Logging
 
-When you’re using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook './server/webhook#jovo-webhook')), it’s easy to use logging for debugging, like this:
+When you're using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook './server/webhook#jovo-webhook')), it's easy to use logging for debugging, like this:
 
 ```javascript
 console.log('This is going to appear in the logs');
