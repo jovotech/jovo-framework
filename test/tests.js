@@ -27,61 +27,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 'There should be at least one intent in the handler.'
             );
         });
-
-        it('should be the correct type', function() {
-            assert.throws(
-                function() {
-                    let handlers = {
-                        'test': 'test',
-                    };
-                    util.validateHandlers(handlers);
-                },
-                Error,
-                'Wrong handler types. Should be object for a state or a function for an intent.'
-            );
-        });
-
-        it('should be at least one intent in the state', function() {
-            assert.throws(
-                function() {
-                    let handlers = {
-                        'state': {},
-                    };
-                    util.validateHandlers(handlers);
-                },
-                Error,
-                'There should be at least one intent in the state.'
-            );
-        });
-
-        it('should be a function in the state', function() {
-            assert.throws(
-                function() {
-                    let handlers = {
-                        'state': {
-                            'intent': 'test',
-                        },
-                    };
-                    util.validateHandlers(handlers);
-                },
-                Error,
-                'IntentHandler inside of a state should be a function'
-            );
-
-
-            assert.throws(
-                function() {
-                    let handlers = {
-                        'state': {
-                            'intent': {},
-                        },
-                    };
-                    util.validateHandlers(handlers);
-                },
-                Error,
-                'IntentHandler inside of a state should be a function'
-            );
-        });
     });
 
 

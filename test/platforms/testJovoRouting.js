@@ -2,7 +2,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const assert = chai.assert;
-
+const expect = chai.expect;
 chai.use(chaiAsPromised);
 chai.should();
 
@@ -66,6 +66,10 @@ describe('intent mapping', function() {
 
             app.handleRequest(request.buildHttpRequest(), response, {
                 'NEW_SESSION': function() {
+                    this.variableXYZ = 'from session';
+                },
+                'HelloWorldIntent': function() {
+                    assert.ok(this.variableXYZ === 'from session');
                     done();
                 },
             });
@@ -79,6 +83,10 @@ describe('intent mapping', function() {
 
             app.handleRequest(request.buildHttpRequest(), response, {
                 'NEW_SESSION': function() {
+                    this.variableXYZ = 'from session';
+                },
+                'HelloWorldIntent': function() {
+                    assert.ok(this.variableXYZ === 'from session');
                     done();
                 },
             });
@@ -92,9 +100,9 @@ describe('intent mapping', function() {
 
             app.handleRequest(request.buildHttpRequest(), response, {
                 'NEW_SESSION': function() {
-                    this.toIntent('HelloWorldIntent');
+                    this.toIntent('HelloWorldIntent123');
                 },
-                'HelloWorldIntent': function() {
+                'HelloWorldIntent123': function() {
                     done();
                 },
             });
@@ -104,6 +112,7 @@ describe('intent mapping', function() {
             let app = new App();
 
             let request = p.intent()
+                .setIntentName('HelloWorldIntent')
                 .setUserId('TEST_USER'+Math.random());
 
             app.on('respond', () => {
@@ -114,12 +123,15 @@ describe('intent mapping', function() {
                 'NEW_USER': function() {
                     this.tell('Hello new user');
                 },
+                'HelloWorldIntent': function() {
+                },
             });
         });
         it('should jump into NEW_USER from intent request (' + p.type() + ')', function(done) {
             let app = new App();
 
             let request = p.intent()
+                .setIntentName('HelloWorldIntent')
                 .setUserId('TEST_USER'+Math.random());
 
             app.on('respond', () => {
@@ -129,6 +141,8 @@ describe('intent mapping', function() {
             app.handleRequest(request.buildHttpRequest(), response, {
                 'NEW_USER': function() {
                     this.tell('Hello new user');
+                },
+                'HelloWorldIntent': function() {
                 },
             });
         });
@@ -208,6 +222,12 @@ describe('followUpState', function() {
             let request = p.intent()
                 .setIntentName('HelloWorldIntent');
 
+            app.on('respond', (jovo) => {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('Hello World!'));
+                assert.ok(response.hasState('TestState'));
+                done();
+            });
             app.handleRequest(request.buildHttpRequest(), response, {
                 'HelloWorldIntent': function() {
                     assert.throws(
@@ -224,12 +244,6 @@ describe('followUpState', function() {
                         // do nothing
                     },
                 },
-            });
-            app.on('respond', (jovo) => {
-                let response = jovo.getPlatform().getResponse();
-                assert.ok(response.isTell('Hello World!'));
-                assert.ok(response.hasState('TestState'));
-                done();
             });
         });
 
@@ -274,7 +288,6 @@ describe('Unhandled', function() {
                 assert.ok(response.isTell('Help'));
                 done();
             });
-
 
             let request = p.intent()
                 .setIntentName('HelpIntent')
@@ -571,7 +584,7 @@ describe('toStateIntent', function() {
                             this.toStateIntent('TestStateABC', 'OtherIntents', 'John Doe');
                         },
                         Error,
-                        'State TestStateABC could not be found in your handler'
+                        'Route TestStateABC.OtherIntents could not be found in your handler'
                     );
 
                     assert.throws(
@@ -579,7 +592,7 @@ describe('toStateIntent', function() {
                             this.toStateIntent('TestState', 'OtherIntents', 'John Doe');
                         },
                         Error,
-                        'TestState-OtherIntents could not be found in your handler'
+                        'Route TestState.OtherIntents could not be found in your handler'
                     );
                     this.toStateIntent('TestState', 'OtherIntent', name, age);
                 },
@@ -613,7 +626,7 @@ describe('toStateIntent', function() {
                             this.toStateIntent('TestStateABC', 'OtherIntents', 'John Doe');
                         },
                         Error,
-                        'State TestStateABC could not be found in your handler'
+                        'Route TestStateABC.OtherIntents could not be found in your handler'
                     );
 
                     assert.throws(
@@ -621,7 +634,7 @@ describe('toStateIntent', function() {
                             this.toStateIntent('TestState', 'OtherIntents', 'John Doe');
                         },
                         Error,
-                        'TestState-OtherIntents could not be found in your handler'
+                        'Route TestState.OtherIntents could not be found in your handler'
                     );
                     this.toStateIntent('TestState', 'OtherIntent', 'John Doe');
                 },
@@ -652,6 +665,62 @@ describe('toStateIntent', function() {
                 'TestState': {
                     'HelloWorldIntent': function() {
                         this.toStateIntent(null, 'OtherIntent');
+                    },
+                },
+                'OtherIntent': function() {
+                    this.tell('Hello World');
+                },
+            });
+        });
+
+        it('should jump to intent in the global handler (toStatelessIntent)', function(done) {
+            this.timeout(1000);
+
+            let app = new App();
+
+            app.on('respond', function(jovo) {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('Hello World'));
+                done();
+            });
+
+
+            let request = p.intent()
+                .setIntentName('HelloWorldIntent')
+                .setState('TestState');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        this.toStatelessIntent('OtherIntent');
+                    },
+                },
+                'OtherIntent': function() {
+                    this.tell('Hello World');
+                },
+            });
+        });
+
+        it('should jump to intent in the global handler (toGlobalIntent)', function(done) {
+            this.timeout(1000);
+
+            let app = new App();
+
+            app.on('respond', function(jovo) {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('Hello World'));
+                done();
+            });
+
+
+            let request = p.intent()
+                .setIntentName('HelloWorldIntent')
+                .setState('TestState');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'TestState': {
+                    'HelloWorldIntent': function() {
+                        this.toStatelessIntent('OtherIntent');
                     },
                 },
                 'OtherIntent': function() {
@@ -722,7 +791,7 @@ describe('Unhandled Intents', function() {
                     this.tell('HelloWorld');
                 },
             }).catch((error) => {
-                assert.ok(error.message === 'The intent name TestIntent has not been defined in your handler.');
+                assert.ok(error.message === 'Could not find the route "TestIntent" in your handler function.');
                 done();
             });
         });
@@ -784,6 +853,102 @@ describe('Unhandled Intents', function() {
                 },
             });
         });
+
+        it('should jump to the state Unhandled two levels below', function(done) {
+            this.timeout(1000);
+
+            let app = new App();
+            let request = p.intent()
+                .setIntentName('TestIntent')
+                .setState('TestState1.TestState2.TestState3');
+
+            app.on('respond', function(jovo) {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('Unhandled TestState1'));
+                done();
+            });
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'HelloWorldIntent': function() {
+                    this.tell('HelloWorld');
+                },
+                'TestIntent': function() {
+                    this.tell('Global TestIntent');
+                },
+                'TestState1': {
+                    'Unhandled': function() {
+                        this.tell('Unhandled TestState1');
+                    },
+                    'TestState2': {
+                        'TestState3': {
+                        },
+                    },
+                },
+            });
+        });
+        it('should jump to the TestIntent in global', function(done) {
+            this.timeout(1000);
+
+            let app = new App();
+            let request = p.intent()
+                .setIntentName('TestIntent')
+                .setState('TestState1.TestState2.TestState3');
+
+            app.on('respond', function(jovo) {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('Global TestIntent'));
+                done();
+            });
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'HelloWorldIntent': function() {
+                    this.tell('HelloWorld');
+                },
+                'TestIntent': function() {
+                    this.tell('Global TestIntent');
+                },
+                'TestState1': {
+                    'TestState2': {
+                        'TestState3': {
+                        },
+                    },
+                },
+            });
+        });
+
+        it('should jump to unhandled in third level state', function(done) {
+            this.timeout(1000);
+
+            let app = new App();
+            let request = p.intent()
+                .setIntentName('TestIntent')
+                .setState('TestState1.TestState2.TestState3');
+
+            app.on('respond', function(jovo) {
+                let response = jovo.getPlatform().getResponse();
+                assert.ok(response.isTell('TestState3 Unhandled'));
+                done();
+            });
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'HelloWorldIntent': function() {
+                    this.tell('HelloWorld');
+                },
+                'TestIntent': function() {
+                    this.tell('Global TestIntent');
+                },
+                'TestState1': {
+                    'TestState2': {
+                        'TestState3': {
+                            'Unhandled': function() {
+                                this.tell('TestState3 Unhandled');
+                            },
+                        },
+                    },
+                },
+            });
+        });
     }
 });
+
 
