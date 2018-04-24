@@ -662,6 +662,398 @@ describe('toStateIntent', function() {
     }
 });
 
+describe('toStatelessIntent', function() {
+    for (let p of util.getPlatformRequestBuilder()) {
+        it('should successfully jump into the stateless intent', function(done) {
+            this.timeout(1000);
+            let app = new App();
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('LaunchIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'LaunchIntent': function() {
+                        this.toStatelessIntent('TestIntent');
+                    },
+
+                    'TestIntent': function() {
+                    },
+                },
+
+                'TestIntent': function() {
+                    done();
+                },
+            });
+        });
+
+        it('should jump to global UnhandledIntent if stateless intent does not exist', function(done) {
+            this.timeout(1000);
+            let app = new App();
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('LaunchIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'LaunchIntent': function() {
+                        this.toStatelessIntent('TestIntent');
+                    },
+
+                    'TestIntent': function() {
+                    },
+                },
+
+                'Unhandled': function() {
+                    done();
+                },
+            });
+        });
+
+        it('should throw an error if the intent and UnhandledIntent are not defined', function(done) {
+            this.timeout(1000);
+            let app = new App();
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('LaunchIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'LaunchIntent': function() {
+                        expect(() => {
+                            this.toStatelessIntent('Test1Intent', 'John Doe');
+                        }).to.throw('Route Test1Intent could not be found in your handler');
+                        done();
+                    },
+
+                    'TestIntent': function() {
+                    },
+                },
+
+                'TestIntent': function() {
+                },
+            });
+        });
+
+        it('should pass data to stateless intent', function(done) {
+            this.timeout(1000);
+            let app = new App();
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('LaunchIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'LaunchIntent': function() {
+                        this.toStatelessIntent('TestIntent', {name: 'John'});
+                    },
+
+                    'TestIntent': function() {
+                    },
+                },
+
+                'TestIntent': function(data) {
+                    expect(data.name).to.equal('John');
+                    done();
+                },
+
+                'Unhandled': function() {
+                },
+            });
+        });
+    }
+});
+
+describe('StateStacking', function() {
+    describe('toStateIntent', function() {
+        for (let p of util.getPlatformRequestBuilder()) {
+            it('should look for a local state and jump into it', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            this.toStateIntent('State1.State11', 'TestIntent');
+                        },
+
+                        'State11': {
+                            'TestIntent': function() {
+                                done();
+                            },
+                        },
+                    },
+
+                    'State11': {
+                        'TestIntent': function() {
+                        },
+                    },
+                });
+            });
+
+            it('should exit the current state to jump into the stacked state', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            this.toStateIntent('State2.State21', 'TestIntent');
+                        },
+                    },
+
+                    'State2': {
+                        'TestIntent': function() {
+                        },
+                        'State21': {
+                            'TestIntent': function() {
+                                done();
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('should throw an error if state doesn\'t exist', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            expect(() => {
+                                this.toStateIntent('State2.State21', 'TestIntent');
+                            }).to.throw('Route State2.State21.TestIntent could not be found in your handler');
+                            done();
+                        },
+                    },
+                });
+            });
+
+            it('should pass data to state stack', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            this.toStateIntent('State1.State11', 'TestIntent', {name: 'John'});
+                        },
+
+                        'State11': {
+                            'TestIntent': function(data) {
+                                expect(data.name).to.equal('John');
+                                done();
+                            },
+                        },
+                    },
+                });
+            });
+        }
+    });
+
+    describe('followUpState', function() {
+        for (let p of util.getPlatformRequestBuilder()) {
+            it('should look for a local state and jump into it', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+
+                    'State1': {
+                        'TestIntent': function() {
+                            this.followUpState('State1.State11').tell('Hello World.');
+                        },
+
+                        'State11': {
+                            'TestIntent': function() {
+                            },
+                        },
+                    },
+                });
+
+                app.on('respond', (jovo) => {
+                    let response = jovo.getPlatform().getResponse();
+                    assert.ok(response.isTell('Hello World.'));
+                    assert.ok(response.hasState('State1.State11'));
+                    done();
+                });
+            });
+
+            it('should exit the current state to jump into the stacked state', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            this.followUpState('State2.State21').tell('Hello World.');                          // TODO test ask?
+                        },
+                    },
+
+                    'State2': {
+                        'TestIntent': function() {
+                        },
+                        'State21': {},
+                    },
+                });
+
+                app.on('respond', (jovo) => {
+                    let response = jovo.getPlatform().getResponse();
+                    assert.ok(response.isTell('Hello World.'));
+                    assert.ok(response.hasState('State2.State21'));
+                    done();
+                });
+            });
+
+            it('should throw error if state doesn\'t exist', function(done) {
+                this.timeout(1000);
+
+                let app = new App();
+
+                let request = p.intent()
+                    .setState('State1')
+                    .setIntentName('TestIntent');
+
+                app.handleRequest(request.buildHttpRequest(), response, {
+                    'State1': {
+                        'TestIntent': function() {
+                            expect(() => {
+                                this.followUpState('State2.State11').tell('Hello World.');
+                            }).to.throw('State State2.State11 could not be found in your handler');
+                            done();
+                        },
+
+                        'State11': {
+                            'TestIntent': function() {
+                            },
+                        },
+                    },
+                });
+            });
+        }
+    });
+});
+
+describe('intentsToSkipUnhandled', function() {
+    for (let p of util.getPlatformRequestBuilder()) {
+        it('should skip the local UnhandledIntent and jump right into the global HelpIntent', function(done) {
+            this.timeout(1000);
+
+            let app = new App({
+                intentsToSkipUnhandled: [
+                    'HelpIntent',
+                ],
+            });
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('HelpIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'TestIntent': function() {
+                    },
+
+                    'Unhandled': function() {
+                    },
+                },
+
+                'HelpIntent': function() {
+                    done();
+                },
+            });
+        });
+
+        it('should skip the global UnhandledIntent and jump right into the global HelpIntent', function(done) {
+            this.timeout(1000);
+            let app = new App({
+                intentsToSkipUnhandled: [
+                    'HelpIntent',
+                ],
+            });
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('HelpIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'TestIntent': function() {},
+
+                    'Unhandled': function() {},
+                },
+
+                'HelpIntent': function() {
+                    done();
+                },
+
+                'Unhandled': function() {
+                },
+            });
+        });
+
+        it('should jump into UnhandledIntent if intent is not defined', function(done) {
+            this.timeout(1000);
+            let app = new App({
+                intentsToSkipUnhandled: [
+                    'HelpIntent',
+                ],
+            });
+
+            let request = p.intent()
+                .setState('State1')
+                .setIntentName('HelpIntent');
+
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'State1': {
+                    'TestIntent': function() {
+                    },
+                },
+
+                'Unhandled': function() {
+                    done();
+                },
+            });
+        });
+    }
+});
+
+
 describe('Unhandled Intents', function() {
     for (let p of util.getPlatformRequestBuilder()) {
         it('should jump to Unhandled intent when no intent defined', function(done) {
