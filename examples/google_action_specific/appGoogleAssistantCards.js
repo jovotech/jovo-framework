@@ -30,13 +30,13 @@ app.setHandler({
     },
 
     'LAUNCH': function() {
-        // app.showAccountLinkingCard();
-        // app.googleAction().showAccountLinkingCard();
-        // app.addSessionAttribute('bla', 'blub');
-        // app.tell('sdsd');
-        // app.toIntent('AccountLinkingIntent');
-        // app.toIntent('ListIntent');
-        this.toIntent('BasicCardIntent');
+        // this.showAccountLinkingCard();
+        // this.googleAction().showAccountLinkingCard();
+        // this.addSessionAttribute('bla', 'blub');
+        // this.tell('sdsd');
+        // this.toIntent('AccountLinkingIntent');
+        this.toIntent('ListIntent');
+        // this.toIntent('BasicCardIntent');
     },
     'AccountLinkingIntent': function() {
         this.showAccountLinkingCard();
