@@ -8,6 +8,10 @@
 
 # Jovo Framework Changelog
 
+## 1.1.5 (April 25, 2018)
+* [#133](https://github.com/jovotech/jovo-framework-nodejs/pull/133): Refactored routing and added tests  - [@aswetlow](https://github.com/aswetlow).
+
+
 ## 1.1.4 (April 19, 2018)
 * Fix Dialogflow V2 session handling
 * Fix Dialogflow getAccessToken() bug (issue #126)
