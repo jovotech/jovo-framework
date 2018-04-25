@@ -17,98 +17,89 @@ let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 // workaround
 response.json = function(json) {};
 
-describe('skill events', function() {
-    it('should return AlexaSkillEvent.SkillEnabled handler', function(done) {
+describe('audio player requests', function() {
+    it('should return AudioPlayer.PlaybackStarted handler', function(done) {
         let app = new App();
 
         let request = RequestBuilderAlexaSkill
-            .skillEventRequest()
-            .setType('AlexaSkillEvent.SkillEnabled');
+            .audioPlayerRequest()
+            .setType('AudioPlayer.PlaybackStarted');
 
         app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_EVENT': {
-                'AlexaSkillEvent.SkillEnabled': function() {
+            'AUDIOPLAYER': {
+                'AudioPlayer.PlaybackStarted': function() {
+                    done();
+                },
+            },
+        });
+    });
+    it('should return AudioPlayer.PlaybackStopped handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .audioPlayerRequest()
+            .setType('AudioPlayer.PlaybackStopped');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'AUDIOPLAYER': {
+                'AudioPlayer.PlaybackStopped': function() {
+                    done();
+                },
+            },
+        });
+    });
+    it('should return AudioPlayer.PlaybackNearlyFinished handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .audioPlayerRequest()
+            .setType('AudioPlayer.PlaybackNearlyFinished');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'AUDIOPLAYER': {
+                'AudioPlayer.PlaybackNearlyFinished': function() {
                     done();
                 },
             },
         });
     });
 
-    it('should return AlexaSkillEvent.SkillDisabled handler', function(done) {
+    it('should return AudioPlayer.PlaybackFinished handler', function(done) {
         let app = new App();
 
         let request = RequestBuilderAlexaSkill
-            .skillEventRequest()
-            .setType('AlexaSkillEvent.SkillDisabled');
+            .audioPlayerRequest()
+            .setType('AudioPlayer.PlaybackFinished');
 
         app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_EVENT': {
-                'AlexaSkillEvent.SkillDisabled': function() {
+            'AUDIOPLAYER': {
+                'AudioPlayer.PlaybackFinished': function() {
                     done();
                 },
             },
         });
     });
-
-    it('should return AlexaSkillEvent.SkillAccountLinked handler', function(done) {
+    it('should return AudioPlayer.PlaybackStopped handler with audio player meta data', function(done) {
         let app = new App();
 
         let request = RequestBuilderAlexaSkill
-            .skillEventRequest()
-            .setType('AlexaSkillEvent.SkillAccountLinked')
-            .setBody({
-                accessToken: 'tokenABC',
-            });
+            .audioPlayerRequest()
+            .setType('AudioPlayer.PlaybackStopped')
+            .setAudioPlayerOffsetInMilliseconds(1000)
+            .setAudioPlayerActivity('STOPPED')
+            .setAudioPlayerToken('tokenABC');
 
         app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_EVENT': {
-                'AlexaSkillEvent.SkillAccountLinked': function() {
-                    expect(this.alexaSkill().getSkillEventBody().accessToken)
+            'AUDIOPLAYER': {
+                'AudioPlayer.PlaybackStopped': function() {
+                    expect(this.alexaSkill().audioPlayer().getOffsetInMilliseconds())
+                        .to.be.equal(1000);
+
+                    expect(this.alexaSkill().audioPlayer().getPlayerActivity())
+                        .to.be.equal('STOPPED');
+
+                    expect(this.alexaSkill().audioPlayer().getToken())
                         .to.be.equal('tokenABC');
-                    done();
-                },
-            },
-        });
-    });
-
-    it('should return AlexaSkillEvent.SkillPermissionAccepted handler', function(done) {
-        let app = new App();
-
-        let request = RequestBuilderAlexaSkill
-            .skillEventRequest()
-            .setType('AlexaSkillEvent.SkillPermissionAccepted')
-            .setBody({
-                acceptedPermissions: [],
-            });
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_EVENT': {
-                'AlexaSkillEvent.SkillPermissionAccepted': function() {
-                    expect(
-                        this.alexaSkill().getSkillEventBody().acceptedPermissions)
-                        .to.be.deep.equal([]);
-                    done();
-                },
-            },
-        });
-    });
-
-    it('should return AlexaSkillEvent.SkillPermissionChanged handler', function(done) {
-        let app = new App();
-
-        let request = RequestBuilderAlexaSkill
-            .skillEventRequest()
-            .setType('AlexaSkillEvent.SkillPermissionChanged')
-            .setBody({
-                acceptedPermissions: [],
-            });
-
-        app.handleRequest(request.buildHttpRequest(), response, {
-            'ON_EVENT': {
-                'AlexaSkillEvent.SkillPermissionChanged': function() {
-                    expect(
-                        this.alexaSkill().getSkillEventBody().acceptedPermissions)
-                        .to.be.deep.equal([]);
                     done();
                 },
             },
