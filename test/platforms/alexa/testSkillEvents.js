@@ -114,6 +114,70 @@ describe('skill events', function() {
             },
         });
     });
+
+    it('should return AlexaHouseholdListEvent.ItemsCreated handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .skillEventRequest()
+            .setType('AlexaHouseholdListEvent.ItemsCreated');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_EVENT': {
+                'AlexaHouseholdListEvent.ItemsCreated': function() {
+                    done();
+                },
+            },
+        });
+    });
+
+    it('should return AlexaHouseholdListEvent.ListUpdated handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .skillEventRequest()
+            .setType('AlexaHouseholdListEvent.ListUpdated');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_EVENT': {
+                'AlexaHouseholdListEvent.ListUpdated': function() {
+                    done();
+                },
+            },
+        });
+    });
+
+    it('should return AlexaHouseholdListEvent.ListDeleted handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .skillEventRequest()
+            .setType('AlexaHouseholdListEvent.ListDeleted');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_EVENT': {
+                'AlexaHouseholdListEvent.ListDeleted': function() {
+                    done();
+                },
+            },
+        });
+    });
+
+    it('should return AlexaHouseholdListEvent.ListCreated handler', function(done) {
+        let app = new App();
+
+        let request = RequestBuilderAlexaSkill
+            .skillEventRequest()
+            .setType('AlexaHouseholdListEvent.ListCreated');
+
+        app.handleRequest(request.buildHttpRequest(), response, {
+            'ON_EVENT': {
+                'AlexaHouseholdListEvent.ListCreated': function() {
+                    done();
+                },
+            },
+        });
+    });
 });
 
 
