@@ -26,6 +26,11 @@ app.setHandler({
 
         // or location zip and city (google home)
         // this.googleAction().askForZipCodeAndCity('Location pre text');
+
+        // ask for more than one permission
+        // this.googleAction().askForPermissions([
+        //     'NAME', 'DEVICE_PRECISE_LOCATION',
+        // ], 'Give me your data!');
     },
     'ON_PERMISSION': function() {
         if (!this.googleAction().isPermissionGranted()) {
@@ -34,6 +39,13 @@ app.setHandler({
         }
         let requestUser = this.googleAction().getRequest().getUser();
 
+        if (requestUser.permissions.indexOf('DEVICE_PRECISE_LOCATION') > -1 &&
+            requestUser.permissions.indexOf('NAME') > -1) {
+            let device = this.googleAction().getRequest().getDevice();
+            console.log(device);
+            this.tell('Hey ' + requestUser.profile.givenName + '.Thanks for your location');
+            return;
+        }
         if (requestUser.permissions.indexOf('NAME') > -1) {
             this.tell('Hey ' + requestUser.profile.givenName);
         }

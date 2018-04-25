@@ -33,6 +33,8 @@ app.setHandler({
     'ON_SIGN_IN': function() {
         if (this.googleAction().getSignInStatus() === 'CANCELLED') {
             this.tell('Please sign in.');
+        } else if (this.googleAction().getSignInStatus() === 'ERROR') {
+            this.tell('Something went wrong.');
         } else if (this.googleAction().getSignInStatus() === 'OK') {
             this.tell('You are signed in now.');
         }
