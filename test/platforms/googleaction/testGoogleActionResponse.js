@@ -2,12 +2,12 @@
 let expect = require('chai').expect;
 const GoogleActionResponse = require('../../../lib/platforms/googleaction/googleActionResponse').GoogleActionResponse;
 
-describe('Tests for GoogleActionResponse Class', function () {
-    describe.skip('constructor()', function () {
+describe('Tests for GoogleActionResponse Class', function() {
+    describe.skip('constructor()', function() {
         //
     });
 
-    describe('tell()', function () {
+    describe('tell()', function() {
         it('should return a valid tell response object', () => {
             let response = new GoogleActionResponse();
             response.tell('<speak>Hello Test</speak>');
@@ -20,7 +20,7 @@ describe('Tests for GoogleActionResponse Class', function () {
         });
     });
 
-    describe('ask()', function () {
+    describe('ask()', function() {
         it('should return a valid ask response object', () => {
             let response = new GoogleActionResponse();
             response.ask('<speak>Hello Test?</speak>', ['<speak>Hello?</speak>']);          // TODO only works with array, what if just a string is passed
@@ -34,7 +34,7 @@ describe('Tests for GoogleActionResponse Class', function () {
         });
     });
 
-    describe('play()', function () {
+    describe('play()', function() {
         it('should return a valid tell response object that plays ssml audio', () => {
             let response = new GoogleActionResponse();
             response.play('https://www.example.com/audio.mp3', 'FallbackText');
@@ -52,7 +52,7 @@ describe('Tests for GoogleActionResponse Class', function () {
         });
     });
 
-    describe('addBasicCard()', function () {
+    describe('addBasicCard()', function() {
         it('should return a valid tell response with a basic card', () => {
             let response = new GoogleActionResponse();
             response.addBasicCard('Title', 'Body').tell('<speak>Hello Test</speak>');
@@ -82,7 +82,7 @@ describe('Tests for GoogleActionResponse Class', function () {
         });
     });
 
-    describe('addImageCard()', function () {
+    describe('addImageCard()', function() {
         it('should return a valid tell response with an image card', () => {
             let response = new GoogleActionResponse();
             response.addImageCard('Title', 'Body', 'https://expample.org/image.png', 'Accessibility').tell('<speak>Hello Test</speak>');
@@ -100,59 +100,59 @@ describe('Tests for GoogleActionResponse Class', function () {
         });
     });
 
-    describe.skip('getContextOut()', function () {
+    describe.skip('getContextOut()', function() {
 
     });
 
-    describe.skip('setContextOut()', function () {
+    describe.skip('setContextOut()', function() {
 
     });
 
-    describe.skip('addContextOutObject()', function () {
+    describe.skip('addContextOutObject()', function() {
 
     });
 
-    describe.skip('addContextOutParameter()', function () {
+    describe.skip('addContextOutParameter()', function() {
 
     });
 
-    describe.skip('getContextOutParameter()', function () {
+    describe.skip('getContextOutParameter()', function() {
 
     });
 
-    describe.skip('getResponseObject()', function () {
+    describe.skip('getResponseObject()', function() {
 
     });
 
-    describe.skip('getSpeechText()', function () {
+    describe.skip('getSpeechText()', function() {
 
     });
 
-    describe.skip('isTell()', function () {
+    describe.skip('isTell()', function() {
 
     });
 
-    describe.skip('isAsk()', function () {
+    describe.skip('isAsk()', function() {
 
     });
 
-    describe.skip('isPlay()', function () {
+    describe.skip('isPlay()', function() {
 
     });
 
-    describe.skip('hasBasicCard()', function () {
+    describe.skip('hasBasicCard()', function() {
 
     });
 
-    describe.skip('hasImageCard()', function () {
+    describe.skip('hasImageCard()', function() {
 
     });
 
-    describe.skip('hasContextOutParameter()', function () {
+    describe.skip('hasContextOutParameter()', function() {
 
     });
 
-    describe.skip('speechTextContains()', function () {
+    describe.skip('speechTextContains()', function() {
 
     });
 });
