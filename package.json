@@ -6,9 +6,11 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "fs": "^0.0.1-security",
     "i18next": "^8.4.3",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "lodash": "^4.17.4",
+    "path": "^0.12.7",
     "uuid": "^3.1.0"
   },
   "directories": {
@@ -31,10 +33,10 @@
   },
   "homepage": "https://github.com/jovotech/jovo-framework-nodejs#readme",
   "devDependencies": {
-    "chai": "^4.1.1",
+    "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.8.0",
-    "mocha": "^3.5.0"
+    "mocha": "^5.1.0"
   }
 }
