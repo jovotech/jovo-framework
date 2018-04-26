@@ -186,10 +186,11 @@ module.exports.WebhookVerified = verifiedServer;
 // module.exports.Jovo = new Jovo();
 module.exports.GoogleAction = require('./lib/platforms/googleaction/googleAction').GoogleAction;
 module.exports.AlexaSkill = require('./lib/platforms/alexaSkill/alexaSkill').AlexaSkill;
-
+module.exports.Plugin = require('./lib/integrations/plugin').Plugin;
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
 module.exports.JovoClazz = Jovo;
+
 // module.exports.App = Jovo;
 module.exports.App = require('./lib/app').App;
 

@@ -70,7 +70,7 @@ Voice platforms offer a lot more than just converting a sentence or paragraph to
 
 ### SSML
 
-SSML is short for "Speech Synthesis Markup Language." You can use it to can add more things like pronunciations, breaks, or audio files. For some more info, see the SSML references [by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference), and [by Google](https://developers.google.com/actions/reference/ssml). Here’s another valuable resource for [cross-platform SSML](http://ssml.green/).
+SSML is short for "Speech Synthesis Markup Language." You can use it to can add more things like pronunciations, breaks, or audio files. For some more info, see the SSML references [by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference), and [by Google](https://developers.google.com/actions/reference/ssml). Here's another valuable resource for [cross-platform SSML](http://ssml.green/).
 
 Here is an example how SSML-enriched output could look like:
 
@@ -83,7 +83,7 @@ let speech = '<speak>Welcome to this Pizza Skill.'
 this.tell(speech);
 ```
 
-But isn’t that a little inconvenient? Let’s take a look at the Jovo [speechBuilder](#speechbuilder).
+But isn't that a little inconvenient? Let's take a look at the Jovo [speechBuilder](#speechbuilder).
 
 ### speechBuilder
 

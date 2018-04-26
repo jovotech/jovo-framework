@@ -6,6 +6,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 * [Output](#output)
   * [Multiple Reprompts](#multiple-reprompts)
   * [Screen Surfaces](#screen-surfaces)
+  * [Media Response](#media-response)
 * [Data](#data)
 
 
@@ -37,11 +38,15 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 ### Screen Surfaces
 
-You can find out more about visual output here: [Platform specifics > Google Assistant > Visual](./visual.md './google-assistant/visual-output')
+You can find out more about visual output here: [Platform specifics > Google Assistant > Visual](./visual.md './google-assistant/visual-output').
+
+### Media Response
+
+You can find out more about media responses here: [Platform specifics > Google Assistant > Media Response](./media-response.md './google-assistant/media-response').
 
 ## Data
 
-You can find out more about your Google Action user's data here: [Platform specifics > Google Assistant > Data](./data.md './google-assistant/data')
+You can find out more about your Google Action user's data here: [Platform specifics > Google Assistant > Data](./data.md './google-assistant/data').
 
 
 
