@@ -2,6 +2,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const assert = chai.assert;
+const expect = chai.expect;
 chai.use(chaiAsPromised);
 chai.should();
 
