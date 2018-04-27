@@ -8,8 +8,8 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
   * [Skip Users](#skip-users)
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
-* [VoiceLabs](#voicelabs)
 * [Chatbase](#chatbase)
+* [VoiceLabs](#voicelabs) (shut down)
 
 
 ## Jovo Analytics Layer
@@ -20,6 +20,22 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
 ```javascript
+// config
+const config = {
+    /**
+     * Other settings
+     */
+    analytics: {
+        services: {
+            // Add services here
+        },
+    },
+};
+```
+
+You can also use a dedicated method for each analytics vendor and platform:
+```javascript
+
 // Dashbot integration
 app.addDashbotAlexa(key);
 app.addDashbotGoogleAction(key);
@@ -36,7 +52,8 @@ More detailed step-by-step guides can be found here:
 
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
-* [VoiceLabs](#voicelabs) (shutting down)
+* [Chatbase](#chatbase)
+* [VoiceLabs](#voicelabs) (shut down)
 
 The Jovo Analytics class offers several enhancements to the vendor tracking, which can be found in the following sections.
 
@@ -83,16 +100,16 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 2. Click “Add a Bot” in the Admin panel:
 
-![Dashbot Add a Bot](https://www.jovo.tech/img/docs/dashbot-add-bot.jpg)
-![Dashbot Add a Bot Step 2](https://www.jovo.tech/img/docs/dashbot-add-bot2.jpg)
+![Dashbot Add a Bot](../../img/dashbot-add-bot.jpg)
+![Dashbot Add a Bot Step 2](../../img/dashbot-add-bot2.jpg)
  
 3. Select the right Platform: Alexa for Alexa Skills, or Google for Google Actions (if you are developing for both Amazon Alexa and Google Assistant, please create 2 distinct Dashbot Bots):
 
-![Dashbot Select Platform](https://www.jovo.tech/img/docs/dashbot-select-platform.jpg)
+![Dashbot Select Platform](../../img/dashbot-select-platform.jpg)
 
 4. Copy API Key
 
-![Dashbot Copy API Key](https://www.jovo.tech/img/docs/dashbot-api-key.jpg)
+![Dashbot Copy API Key](../../img/dashbot-api-key.jpg)
 
 ### Enable Dashbot Analytics
 
@@ -134,7 +151,7 @@ $ npm install dashbot
 
 Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
 
-![Dashbot Test](https://www.jovo.tech/img/docs/dashbot-test.jpg)
+![Dashbot Test](../../img/dashbot-test.jpg)
 
 
 
@@ -194,77 +211,7 @@ Test your voice app, after a bit your session should appear in the created skill
 
 ## VoiceLabs
 
-> IMPORTANT: VoiceLabs is shutting down its service on March 29, 2018. We strongly recommend to move to another analytics vendor. [Read more here](http://voicelabs.co/2018/01/29/voicelabs-exits-analytics-business/).
-
-To use VoiceLabs Insights for your voice app analytics, you need to complete the following steps:
-
-1. Create a VoiceLabs Application
-2. Enable VoiceLabs Anaytics in your voice app
-3. Download the voicelabs npm package
-4. Test your app
-
-### Create A VoiceLabs Application
-
-1. Create a VoiceLabs account or log in at https://insights.voicelabs.co/login
-
-2. Create a new application
-
-![Create VoiceLabs Application](https://www.jovo.tech/img/docs/voicelabs-new-application.jpg)
-
-3. Select the platform you want to use (if you are developing for both Amazon Alexa and Google Assistant, please create 2 distinct applications)
-
-![VoiceLabs Select Platform](https://www.jovo.tech/img/docs/voicelabs-select-platform.jpg)
-
-4. Copy API Key
-
-![VoiceLabs Copy API Key](https://www.jovo.tech/img/docs/voicelabs-api-key.jpg)
-
-
-### Enable VoiceLabs Analytics
-
-VoiceLabs Analytics can be added to your voice app with the following commands:
-
-```javascript
-// config
-const config = {
-    /**
-     * other settings
-     */
-    analytics: {
-        services: {
-            VoiceLabsAlexa: {
-                key: '<key>',
-            },
-            VoiceGoogleAction: {
-                key: '<key>',
-            },
-        },
-    },
-};
-// For VoiceLabs Alexa Application
-app.addVoiceLabsAlexa(key);
-​
-// For VoiceLabs Google Assistant Application
-app.addVoiceLabsGoogleAction(key);
-```
-
-### Download the VoiceLabs Package
-
-In your terminal, use the following command to download the package via npm:
-
-```
-# For Alexa Skills
-$ npm install voicelabs
-​
-# For Google Actions
-$ npm install voicelabs-assistant-sdk
-```
-
-### Test VoiceLabs
-
-Test your voice app, after a bit your session should appear:
-
-![VoiceLabs Test](https://www.jovo.tech/img/docs/voicelabs-test.jpg)
+> IMPORTANT: VoiceLabs shut down down its service on March 29, 2018. [Read more here](http://voicelabs.co/2018/01/29/voicelabs-exits-analytics-business/).
 
 ## Chatbase
 

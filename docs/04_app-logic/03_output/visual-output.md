@@ -30,11 +30,11 @@ this.showSimpleCard(title, content)
 
 Result in Alexa app:
 
-![Alexa SimpleCard](https://www.jovo.tech/img/docs/simplecard-alexa.jpg)
+![Alexa SimpleCard](../../img/simplecard-alexa.jpg)
 
 Result in the Actions on Google simulator:
 
-![Google Action SimpleCard](https://www.jovo.tech/img/docs/simplecard-google-assistant.jpg)
+![Google Action SimpleCard](../../img/simplecard-google-assistant.jpg)
 
 ### Image Card
 
@@ -51,11 +51,11 @@ this.showImageCard(title, content, imageUrl)
 
 Result in Alexa app:
 
-![Alexa ImageCard](https://www.jovo.tech/img/docs/imagecard-alexa.jpg)
+![Alexa ImageCard](../../img/imagecard-alexa.jpg)
 
 Result in the Actions on Google simulator:
 
-![Google Action ImageCard](https://www.jovo.tech/img/docs/imagecard-google-assistant.jpg)
+![Google Action ImageCard](../../img/imagecard-google-assistant.jpg)
 
 You can also pass an object as `imageUrl` to provide a `smallImageUrl`and `largeImageUrl` (for Alexa Skills):
 

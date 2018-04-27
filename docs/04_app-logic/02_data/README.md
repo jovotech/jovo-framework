@@ -25,7 +25,7 @@ We call user input any additional information your user provides besides an `int
 
 ## How to Access Input
 
- > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our [migration document]( https://www.jovo.tech/blog/jovo-v1-migration-guide/).
+ > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our [migration document](https://www.jovo.tech/blog/v1-migration-guide/).
 
 There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers` intent functions, or by using the [`getInput`](#getinput) method.
 
