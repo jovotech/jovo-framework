@@ -1,16 +1,16 @@
-﻿# [App Logic](../) > Routing
+# [App Logic](../) > Routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
 * [Introduction to User Sessions](#introduction-to-user-sessions)
 * [Intents](#intents)
   * [Standard Intents](#standard-intents)
-    * [LAUNCH](#launch-intent)
-    * [NEW_SESSION](#new_session-intent)
-    * [NEW_USER](#new_user-intent)
-    * [ON_REQUEST](#on_request-intent)
-    * [END](#end-intent)
-    * [Unhandled](#unhandled-intent)
+     * [LAUNCH](#launch-intent)
+     * [NEW_SESSION](#new_session-intent)
+     * [NEW_USER](#new_user-intent)
+     * [ON_REQUEST](#on_request-intent)
+     * [END](#end-intent)
+     * [Unhandled](#unhandled-intent)
   * [intentMap](#intentmap)
 * [States](#states)
   * [followUpState](#followupstate)
