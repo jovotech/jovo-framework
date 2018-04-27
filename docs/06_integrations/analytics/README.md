@@ -169,13 +169,13 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 2. Click the plus sign on the Home page:
 
-![Bespoken Add a Source](https://bespoken.io/wp-content/uploads/2017/10/DashboardHomePage.png)
+![Bespoken Add a Source](../../img/bespoken-dashboard.png)
 
 3. Set the name for your source and click on "Create Source"
-![Bespoken Set source name](https://bespoken.io/wp-content/uploads/2017/10/DashboardCreateASkill.png)
+![Bespoken Set source name](../../img/bespoken-dashboard-create.png)
 
 4. On your source main page, you can see your secret key for that source in the top right corner by clicking "Show"
-![Bespoken Source Main Page](https://bespoken.io/wp-content/uploads/2017/10/DashboardSkillMain.png)
+![Bespoken Source Main Page](../../img/bespoken-dashboard-main.png)
 
 5. Copy the Secret Key
 
