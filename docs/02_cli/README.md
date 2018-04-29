@@ -148,7 +148,8 @@ You can also use other tools like [bst proxy](#bst-proxy) to tunnel to your loca
 
 `--port`, `-p`: Defines the port that will be used to run the local development server. Default: `3000`.
 
-`--inspect`: Run debugging mod.
+`--inspect`: Run debugging mode.
+
 
 **Integrations**
 
