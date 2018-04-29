@@ -107,12 +107,12 @@ You can find the complete repository on GitHub: [jovotech/jovo-templates](https:
 
 Name | Description 
 :--- | :---
-[`helloworld`](https://github.com/jovotech/jovo-templates/01_helloworld) | `Default`. Jovo Sample Voice App with a simple "Hello World!" + asking for the user's name 
-[`trivia-game`](https://github.com/jovotech/jovo-templates/02_trivia-game) | Trivia game voice app that makes use of states, helper functions, and i18n
-[`alexa/audioplayer`](https://github.com/jovotech/jovo-templates/alexa/audioplayer) | Sample Alexa Audioplayer Skill that plays a longform audio file with the Audioplayer directive
-[`alexa/dialoginterface`](https://github.com/jovotech/jovo-templates/alexa/dialoginterface) | Sample implementation of the Alexa Dialog Interface
-[`alexa/skillevents`](https://github.com/jovotech/jovo-templates/alexa/skillevents) | Sample implementation of the Alexa Skill Events.
-[`google/mediaresponse`](https://github.com/jovotech/jovo-templates/google/mediaresponse) | Sample Google Action media response app that plays longform audio file
+[`helloworld`](https://github.com/jovotech/jovo-templates/tree/master/01_helloworld) | `Default`. Jovo Sample Voice App with a simple "Hello World!" + asking for the user's name 
+[`trivia-game`](https://github.com/jovotech/jovo-templates/tree/master/02_trivia-game) | Trivia game voice app that makes use of states, helper functions, and i18n
+[`alexa/audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer) | Sample Alexa Audioplayer Skill that plays a longform audio file with the Audioplayer directive
+[`alexa/dialoginterface`](https://github.com/jovotech/jovo-templates/tree/master/alexa/dialoginterface) | Sample implementation of the Alexa Dialog Interface
+[`alexa/skillevents`](https://github.com/jovotech/jovo-templates/tree/master/alexa/skillevents) | Sample implementation of the Alexa Skill Events.
+[`google/mediaresponse`](https://github.com/jovotech/jovo-templates/tree/master/google/mediaresponse) | Sample Google Action media response app that plays longform audio file
 
 
 #### jovo run
