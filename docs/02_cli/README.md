@@ -107,8 +107,12 @@ You can find the complete repository on GitHub: [jovotech/jovo-templates](https:
 
 Name | Description 
 :--- | :---
-[`helloworld`](https://github.com/jovotech/jovo-templates/01_helloworld) | `Default`. Jovo Sample Voice App with a simple "Hello World!" + asking for the user's name
-[`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/02_alexa-audioplayer) | Sample Alexa Audioplayer Skill that plays a longform audio file with the Audioplayer directive
+[`helloworld`](https://github.com/jovotech/jovo-templates/01_helloworld) | `Default`. Jovo Sample Voice App with a simple "Hello World!" + asking for the user's name 
+[`trivia-game`](https://github.com/jovotech/jovo-templates/02_trivia-game) | Trivia game voice app that makes use of states, helper functions, and i18n
+[`alexa/audioplayer`](https://github.com/jovotech/jovo-templates/alexa/audioplayer) | Sample Alexa Audioplayer Skill that plays a longform audio file with the Audioplayer directive
+[`alexa/dialoginterface`](https://github.com/jovotech/jovo-templates/alexa/dialoginterface) | Sample implementation of the Alexa Dialog Interface
+[`alexa/skillevents`](https://github.com/jovotech/jovo-templates/alexa/skillevents) | Sample implementation of the Alexa Skill Events.
+[`google/mediaresponse`](https://github.com/jovotech/jovo-templates/google/mediaresponse) | Sample Google Action media response app that plays longform audio file
 
 
 #### jovo run
@@ -124,7 +128,7 @@ Learn more here: [App Configuration > Server Configuration](../03_app-configurat
 $ jovo run
 
 # Options
-$ jovo run [-b | --bst-proxy] [-w | --watch] [-p, --port <port>]
+$ jovo run [-b | --bst-proxy] [-w | --watch] [-p, --port <port>] [--inspect]
 ```
 
 You can also specify the file you want to run:
@@ -135,7 +139,7 @@ $ jovo run <file>
 $ jovo run index.js
 
 # Alternative
-$ node index.js
+$ node index.js --webhook
 ```
 
 You can also use other tools like [bst proxy](#bst-proxy) to tunnel to your local server.
@@ -143,6 +147,8 @@ You can also use other tools like [bst proxy](#bst-proxy) to tunnel to your loca
 **Options**
 
 `--port`, `-p`: Defines the port that will be used to run the local development server. Default: `3000`.
+
+`--inspect`: Run debugging mod.
 
 **Integrations**
 
