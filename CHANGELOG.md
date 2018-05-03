@@ -8,6 +8,12 @@
 
 # Jovo Framework Changelog
 
+## 1.1.6 (May 02, 2018)
+* [#135](https://github.com/jovotech/jovo-framework-nodejs/pull/135): Fixed getTimestamp() on GoogleAction requests - [@KaanKC](https://github.com/KaanKC).
+* [#136](https://github.com/jovotech/jovo-framework-nodejs/pull/136): Import app config from app.json - [@aswetlow](https://github.com/aswetlow).
+* Add an additional check to GoogleActionResponse (issue #126) - thx to [@tony-gutierrez](https://github.com/tony-gutierrez)
+
+
 ## 1.1.5 (April 25, 2018)
 * [#133](https://github.com/jovotech/jovo-framework-nodejs/pull/133): Refactored routing and added tests  - [@aswetlow](https://github.com/aswetlow).
 
