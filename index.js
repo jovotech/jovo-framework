@@ -191,6 +191,8 @@ module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
 module.exports.JovoClazz = Jovo;
 
+module.exports.Jester = require('./lib/tools/jester');
+
 // module.exports.App = Jovo;
 module.exports.App = require('./lib/app').App;
 

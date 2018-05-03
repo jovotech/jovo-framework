@@ -5,14 +5,14 @@
       "playerActivity": "IDLE"
     },
     "Display": {
-      "token": "tokenABC"
+      "token": "token"
     },
     "System": {
       "application": {
-        "applicationId": "amzn1.ask.skill.5c7e7c5b-ad83-428e-9fa2-12373adaaaaa"
+        "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
       },
       "user": {
-        "userId": "amzn1.ask.account.XXXXXRG37ZW5R7NOGKN6U6PJY5SKWXOWSAAUMF6TQNHJ4PME2FNOARJRLATQL7PN3HWOI4VUUA6KDZ5LKWDOCYNPBQ4TBTFJ2LHFYNG2UZWGQET3YZ6IQA7LGLZONHSFZ4BGPMUG2L6PIMQRMHIRDK6MDUCILJLRUGUCYWB7DA56COTG6X6OPMPDMUJZS6VUO5CYIWG65CTXDY"
+        "userId": "amzn1.account.AM3B00000000000000000000000"
       },
       "device": {
         "deviceId": "amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA",
@@ -31,9 +31,9 @@
   },
   "request": {
     "type": "Display.ElementSelected",
-    "requestId": "amzn1.echo-api.request.1e72fac1-ad38-4d2c-8a24-0491c51ebe3c",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
     "timestamp": "2018-04-25T09:32:25Z",
     "locale": "de-DE",
-    "token": "tokenABC"
+    "token": "token"
   }
 }
