@@ -119,7 +119,7 @@ Response | speech | `this.user().context.prev[i].response.speech` | String: Prim
 You can freely adjust how many of these pairs should be saved by changing `prevLevel` in your app's config to an Integer equal to or bigger than 0:
 ```javascript
 const config = {
-    context: {
+    userContext: {
         prevLevel: 3,
     },
 };
@@ -128,7 +128,7 @@ const config = {
 You can also decide what you want to save and what not. Simply change the value of the unwanted data to `false`:
 ```javascript
 const config = {
-    context: {
+    userContext: {
         prevLevel: 1,
         prev: {
             request: {
@@ -145,7 +145,7 @@ const config = {
 The default configuration looks like this:
 ```javascript
 const config = {
-    context: {
+    userContext: {
         prevLevel: 1,
         prev: {
             request: {

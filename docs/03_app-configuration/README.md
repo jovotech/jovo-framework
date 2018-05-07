@@ -256,7 +256,7 @@ Data | [inputMap](../04_app-logic/02_data#inputmap './data#inputmap') | Maps inc
  | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects './data#response-logging-objects') | Limits response logs to the provided objects
 User | [userDataCol](../04_app-logic/02_data/user.md#user-data './data/user#user-data') | Changes the name of the user data column in the database
  | | [userMetaData](../04_app-logic/02_data/user.md#meta-data './data/user#user-meta-data') | Change the default configurations for storing user meta data
- | | [context](../04_app-logic/02_data/user.md#context './data/user#context') | Change the default configurations for storing context data
+ | | [userContext](../04_app-logic/02_data/user.md#context './data/user#context') | Change the default configurations for storing context data
 Output | [i18n](../04_app-logic/i18n.md#configuration './output/i18n#configuration') | Enable multilingual output for your voice app
 Integrations | [Databases](../06_integrations/databases './databases') | Switch between supported database integrations
  | | [Analytics](../06_integrations/analytics './analytics') | Enable analytics integrations
