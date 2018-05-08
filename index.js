@@ -14,6 +14,8 @@ let server = express();
 server.use(bodyParser.json());
 
 
+
+
 // check for running ngrok tunnel
 server.listen = function listen() {
     if (process.argv.indexOf('--bst-proxy') === -1 &&
