@@ -17,6 +17,8 @@ server.use(bodyParser.json());
 for (let command of process.argv) {
     if (command.substr(0, 8) === '--record') {
         App.record(true, command.substr(9, command.length));
+    } else {
+        App.record(false);
     }
 }
 
@@ -49,10 +51,10 @@ server.listen = function listen() {
                 .option('-w, --webhook', 'webhook')
                 .option('-s, --state [state]', 'state')
                 .option('-l, --locale [locale]', 'locale')
-                .option('-p, --parameter [value]', 'A repeatable value', function (val) {
+                .option('-p, --parameter [value]', 'A repeatable value', function(val) {
                     parameters.push(val);
                 }, [])
-                .option('-e, --session [value]', 'Session variables', function (val) {
+                .option('-e, --session [value]', 'Session variables', function(val) {
                     sessions.push(val);
                 }, [])
                 .parse(process.argv);
@@ -143,14 +145,14 @@ function showNgrokUrl() {
         },
     };
 
-    http.get(options, function (response) {
+    http.get(options, function(response) {
         let str = '';
 
-        response.on('data', function (chunk) {
+        response.on('data', function(chunk) {
             str += chunk;
         });
 
-        response.on('end', function () {
+        response.on('end', function() {
             let result = JSON.parse(str);
 
             // find https tunnel
@@ -163,14 +165,14 @@ function showNgrokUrl() {
                 }
             }
         });
-    }).setTimeout(50).on('error', function (err) {
+    }).setTimeout(50).on('error', function(err) {
 
     });
 }
 
 
 const verifiedServer = express();
-verifiedServer.listen = function () {
+verifiedServer.listen = function() {
     try {
         const verifier = require('alexa-verifier-middleware');
         let router = express.Router(); //eslint-disable-line
