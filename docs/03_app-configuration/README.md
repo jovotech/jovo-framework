@@ -208,6 +208,22 @@ const config = {
         requestHistorySize: 0,
         devices: false,
     },
+    context: {
+        prevLevel: 1,
+        prev: {
+            request: {
+                intent: true,
+                state: true,
+                timestamp: true,
+            },
+            response: {
+                speech: true,
+                reprompt: true,
+                state: true,
+                timestamp: true,
+            },
+        },
+    },
     i18n: {
         overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
         load: 'all',
@@ -239,7 +255,8 @@ Data | [inputMap](../04_app-logic/02_data#inputmap './data#inputmap') | Maps inc
  | | [requestLoggingObjects](../04_app-logic/02_data#request-logging-objects './data#request-logging-objects') | Limits request logs to the provided objects
  | | [responseLoggingObjects](../04_app-logic/02_data#response-logging-objects './data#response-logging-objects') | Limits response logs to the provided objects
 User | [userDataCol](../04_app-logic/02_data/user.md#user-data './data/user#user-data') | Changes the name of the user data column in the database
- | | [userMetaData](../04_app-logic/02_data/user.md#user-meta-data './data/user#user-meta-data') | Change the default configurations for storing user meta data
+ | | [userMetaData](../04_app-logic/02_data/user.md#meta-data './data/user#user-meta-data') | Change the default configurations for storing user meta data
+ | | [userContext](../04_app-logic/02_data/user.md#context './data/user#context') | Change the default configurations for storing context data
 Output | [i18n](../04_app-logic/i18n.md#configuration './output/i18n#configuration') | Enable multilingual output for your voice app
 Integrations | [Databases](../06_integrations/databases './databases') | Switch between supported database integrations
  | | [Analytics](../06_integrations/analytics './analytics') | Enable analytics integrations

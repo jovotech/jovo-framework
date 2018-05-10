@@ -7,6 +7,7 @@ In this section, you will learn how to use the Jovo User class to persist user s
 * [User Data](#user-data)
   * [Data Persistence](#data-persistence)
   * [Meta Data](#meta-data)
+  * [Context](#context)
   * [User ID](#user-id)
   * [Locale](#locale)
   * [Account Linking](#account-linking)
@@ -95,7 +96,72 @@ const config = {
     }
     // Other configurations
 };
+```
 
+### Context
+
+The user context is used to automatically store data from past request and response pairs inside an array.
+
+The most recent request and response pair will be stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[prevLevel - 1]`.
+
+Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
+
+Category | Data | Usage | Description
+:--- | :--- | :--- | :----
+Request | intent | `this.user().context.prev[i].request.intent` | String: Intent name
+&nbsp; | state | `this.user().context.prev[i].request.state` | String: State name
+&nbsp; | timestamp | `this.user().context.prev[i].request.timestamp` | String: Timestamp of request
+Response | speech | `this.user().context.prev[i].response.speech` | String: Primary speech element
+&nbsp; | reprompt | `this.user().context.prev[i].response.reprompt` | String: Reprompt element
+&nbsp; | state | `this.user().context.prev[i].response.state` | String: State name
+&nbsp; | timestamp | `this.user().context.prev[i].response.timestamp` | String: Timestamp of response
+
+You can freely adjust how many of these pairs should be saved by changing `prevLevel` in your app's config to an Integer equal to or bigger than 0:
+```javascript
+const config = {
+    userContext: {
+        prevLevel: 3,
+    },
+};
+```
+
+You can also decide what you want to save and what not. Simply change the value of the unwanted data to `false`:
+```javascript
+const config = {
+    userContext: {
+        prevLevel: 1,
+        prev: {
+            request: {
+                timestamp: false,
+            },
+            response: {
+                state: false,
+            },
+        },
+    },
+};
+```
+
+The default configuration looks like this:
+```javascript
+const config = {
+    userContext: {
+        prevLevel: 1,
+        prev: {
+            request: {
+                intent: true,
+                state: true,
+                timestamp: true,
+            },
+            response: {
+                speech: true,
+                reprompt: true,
+                state: true,
+                timestamp: true,
+            },
+        },
+    },
+}
 ```
 
 ### User ID

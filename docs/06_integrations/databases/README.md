@@ -64,7 +64,7 @@ This will delete a data point from the database, specified by a key.
 
 ```javascript
 deleteData(key, callback)
-​
+
 this.db().deleteData(key, function(err) {
     // Do something
 });
@@ -76,7 +76,7 @@ This will delete your whole user's data (the `mainKey`) from the database.
 
 ```javascript
 deleteUser(callback)
-​
+
 this.db().deleteUser(function(err) {
     // Do something
 });
@@ -93,7 +93,7 @@ This sort of data persistence is enabled by default. The `db.json` can be found 
 ```javascript
 index.js
 db/
-  └── db.json
+  -- db.json
 // Other files
 ```
 
