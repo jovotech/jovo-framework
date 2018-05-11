@@ -111,16 +111,19 @@ Category | Data | Usage | Description
 Request | intent | `this.user().context.prev[i].request.intent` | String: Intent name
 &nbsp; | state | `this.user().context.prev[i].request.state` | String: State name
 &nbsp; | timestamp | `this.user().context.prev[i].request.timestamp` | String: Timestamp of request
+&nbsp; | inputs | `this.user().context.prev[i].request.inputs` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().context.prev[i].request.inputs.city.value`.
 Response | speech | `this.user().context.prev[i].response.speech` | String: Primary speech element
 &nbsp; | reprompt | `this.user().context.prev[i].response.reprompt` | String: Reprompt element
 &nbsp; | state | `this.user().context.prev[i].response.state` | String: State name
 &nbsp; | timestamp | `this.user().context.prev[i].response.timestamp` | String: Timestamp of response
 
-You can freely adjust how many of these pairs should be saved by changing `prevLevel` in your app's config to an Integer equal to or bigger than 0:
+You can freely adjust how many of these pairs should be saved by changing `size` in your app's config to an Integer equal to or bigger than 0:
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 3,
+        prev: {
+            size: 3,
+        },
     },
 };
 ```
@@ -129,8 +132,8 @@ You can also decide what you want to save and what not. Simply change the value 
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 1,
         prev: {
+            size: 1,
             request: {
                 timestamp: false,
             },
@@ -146,11 +149,12 @@ The default configuration looks like this:
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 1,
         prev: {
+            size: 1,
             request: {
                 intent: true,
                 state: true,
+                inputs: true,
                 timestamp: true,
             },
             response: {
