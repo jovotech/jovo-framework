@@ -3,6 +3,9 @@
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
 * [Introduction to User Sessions](#introduction-to-user-sessions)
+* [Handlers](#handlers)
+  * [Separate Handlers](#separate-handlers)
+  * [Platform Handlers](#platform-handlers) 
 * [Intents](#intents)
   * [Standard Intents](#standard-intents)
      * [LAUNCH](#launch-intent)
@@ -14,6 +17,7 @@ In this section, you will learn more about how to use intents and states to rout
   * [intentMap](#intentmap)
 * [States](#states)
   * [followUpState](#followupstate)
+  * [Nested States](#nested-states)
   * [Remove a State](#remove-a-state)
 * [Intent Redirects](#intent-redirects)
   * [toIntent](#tointent)
@@ -44,12 +48,95 @@ For more conversational experiences that require back and forth between your app
 
 To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../../06_integrations/databases#filepersistence './databases#filepersistence').
 
+## Handlers
+
+The routing is done with `handlers`, which can be added with the `app.setHandler` method in the `app.js`:
+
+```javascript
+app.setHandler({
+    
+    // Add intents and states here
+
+});
+```
+
+### Separate Handlers
+
+You can add multiple handlers by passing more than one object to the `setHandler` method:
+
+```javascript
+app.setHandler(handler1, handler2, ..);
+```
+
+This allows you to have the handlers separated into different files (as modules), which can then be added to `setHandler` by using `require`:
+
+```javascript
+app.setHandler(
+    require('./handlers/stateless'),
+
+    // Option 1: Require full object
+    require('./handlers/firstState'),
+
+    // Option 2: Require inside state object
+    {
+        'SecondState': require('./handlers/secondState'),
+    }
+);
+```
+
+The `stateless.js` file could look like this:
+
+```javascript
+module.exports = {
+    'LAUNCH': function() {
+        this.followUpState('FirstState')
+            .ask('Do you want to get started?');
+    },
+
+    'Unhandled': function() {
+        this.toIntent('LAUNCH');
+    },
+};
+```
+A more general [introduction to states](#states) can be found below.
+
+For a full example of separating handlers into different files, take a look at this GitHub repository: [jankoenig/jovo-separate-handlers](https://github.com/jankoenig/jovo-separate-handlers).
+
+### Platform Handlers
+
+For cases where the experience differs on Alexa and Google Assistant, you can use the methods `setAlexaHandler` and `setGoogleActionHandler` to overwrite the default handlers.
+
+Here is an example that offers different output for the two platforms:
+
+```javascript
+const handlers = {
+    'LAUNCH': function() {
+        this.toIntent('HelloWorldIntent');
+    },
+};
+
+const alexaHandlers = {
+    'HelloWorldIntent': function() {
+        this.tell('Hello Alexa User');
+    },
+};
+
+const googleActionHandlers = {
+    'HelloWorldIntent': function() {
+        this.tell('Hello Google User');
+    },
+};
+
+app.setHandler(handlers);
+app.setAlexaHandler(alexaHandlers);
+app.setGoogleActionHandler(googleActionHandlers);
+```
 
 ## Intents
 
 If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics').
 
-Intents are defined and handled in the `handlers` variable. Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
+Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
 
 ```javascript
 app.setHandler({
@@ -543,6 +630,41 @@ app.setHandler({
     }
 
 });
+```
+
+### Nested States
+
+You can also nest states for more complex multi-turn conversations:
+
+```javascript
+app.setHandler({
+
+    // Other intents
+
+    'State1' : {
+
+        // Other intents
+
+        'SomeIntent': function() {
+            this.followUpState('State1.State2')
+                .ask('Do you want to proceed?');
+        },
+
+        'State2': {
+            // Add intents here
+        },
+
+
+
+    },
+
+});
+```
+
+You can nest as many states as you want. As they are objects, you reach them with the `.` separator. You can also use `getState()` to access the current state:
+
+```javascript
+this.followUpState(this.getState() + '.State2')
 ```
 
 ### Remove a State
