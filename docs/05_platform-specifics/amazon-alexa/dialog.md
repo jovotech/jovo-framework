@@ -25,10 +25,7 @@ Every conversation is connected to an intent and it is maintained until all the 
 
 To use the Dialog Interface, you need a dialog model, which you can create with the Skill Builder. In the dialog model, you select which slots are required for your intent and whether the user has to confirm them or the whole intent. You also define, which prompts Alexa should use and how the user might answer (utterances).
 
-Please consider that you're not allowed to use:
-* `AMAZON.YesIntent`, `AMAZON.NoIntent` built-in intents
-* `AMAZON.LITERAL` slot type
-* Single-slot utterances in your intents' utterances
+Please consider that you're not allowed to use the `AMAZON.LITERAL` slot type.
 
 ## Dialog State
 
