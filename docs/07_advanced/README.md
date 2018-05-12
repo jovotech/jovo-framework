@@ -4,7 +4,7 @@ Learn more about features for advanced voice applications.
 
 * [Overview](#overview)
 * [Staging](#staging)
-* [Extending the Framework](#extending-the-framework)
+* [Plugins](#plugins)
 * [Testing](#testing)
 
 ## Overview
@@ -95,7 +95,66 @@ For the `dev` stage, it automatically grabs the user's Jovo Webhook url by using
 
 For the `test` stage, an AWS Lambda ARN is used as `endpoint`. Additionally to a different `skillId`, the `company` profile is used for deployment to the Amazon Developer Portal. Also, this stage specifies a new `db` config that differs from the default FileDB.
 
-## Extending the Framework
+## Plugins
+
+Plugins allow you to easily extend the Jovo Framework without having to mess with the core code and architecture.
+
+```javascript
+const {App, Plugin} = require('jovo-framework');
+```
+
+```javascript
+class PluginName extends Plugin {
+    constructor(options) {
+        super(options);
+    }
+    init() {
+        // Specify what it does at certain events
+    }
+}
+```
+For example, ...
+
+```javascript
+this.app.on('request', (jovo) => {
+    console.log();
+    console.log(`Request-Type: ${jovo.getPlatform().getRequestType()}`);
+});
+```
+See Event Listeners for availabe options.
+
+Then, register Plugin.
+
+```javascript
+app.register('PluginName', new PluginName());
+```
+
+
+### Plugin Example
+
+```javascript
+class CustomLogging extends Plugin {
+    constructor(options) {
+        super(options);
+    }
+    init() {
+        this.app.on('request', (jovo) => {
+            console.log();
+            console.log(`Request-Type: ${jovo.getPlatform().getRequestType()}`);
+        });
+        this.app.on('toIntent', (jovo, intent) => {
+            console.log(`toIntent -> ${intent} `);
+        });
+        this.app.on('tell', (jovo, speech) => {
+            console.log(`tell -> ${speech} `);
+        });
+    }
+
+}
+app.register('CustomLogging', new CustomLogging());
+```
+
+You can find the full example file here: [CustomLogging Plugin](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/appPlugins.js).
 
 ## Testing
 
