@@ -7,6 +7,7 @@ In this section, you will learn how to use the Jovo User class to persist user s
 * [User Data](#user-data)
   * [Data Persistence](#data-persistence)
   * [Meta Data](#meta-data)
+  * [Context](#context)
   * [User ID](#user-id)
   * [Locale](#locale)
   * [Account Linking](#account-linking)
@@ -95,7 +96,74 @@ const config = {
     }
     // Other configurations
 };
+```
 
+### Context
+
+The user context is used to automatically store data from past request and response pairs inside an array.
+
+The most recent request and response pair will be stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[this.config.userContext.prev.size - 1]`.
+
+Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
+
+Category | Data | Usage | Description
+:--- | :--- | :--- | :----
+Request | intent | `this.user().getPrevIntent(index)` | String: Intent name
+&nbsp; | state | `this.user().getPrevRequestState(index)` | String: State name
+&nbsp; | timestamp | `this.user().getPrevTimestamp(index)` | String: Timestamp of request
+&nbsp; | inputs | `this.user().getPrevInputs(index)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().getPrevInputs(index).city.value`.
+Response | speech | `this.user().getPrevSpeech(index)` | String: Primary speech element
+&nbsp; | reprompt | `this.user().getPrevReprompt(index)` | String: Reprompt element
+&nbsp; | state | `this.user().getPrevResponseState(index)` | String: State name
+
+You can freely adjust how many of these pairs should be saved by changing `size` in your app's config to an Integer equal to or bigger than 0:
+```javascript
+const config = {
+    userContext: {
+        prev: {
+            size: 3,
+        },
+    },
+};
+```
+
+You can also decide what you want to save and what not. Simply change the value of the unwanted data to `false`:
+```javascript
+const config = {
+    userContext: {
+        prev: {
+            size: 1,
+            request: {
+                timestamp: false,
+            },
+            response: {
+                state: false,
+            },
+        },
+    },
+};
+```
+
+The default configuration looks like this:
+```javascript
+const config = {
+    userContext: {
+        prev: {
+            size: 1,
+            request: {
+                intent: true,
+                state: true,
+                inputs: true,
+                timestamp: true,
+            },
+            response: {
+                speech: true,
+                reprompt: true,
+                state: true,
+            },
+        },
+    },
+}
 ```
 
 ### User ID
