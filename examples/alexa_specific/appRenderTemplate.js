@@ -18,7 +18,7 @@ const app = new App(config);
 // =================================================================================
 
 app.setHandler({
-    'LAUNCH': function() {
+    'WelcomeIntent': function() {
         // app.tell('App launched');
 
         let bodyTemplate1 = this.alexaSkill().templateBuilder('BodyTemplate1');
