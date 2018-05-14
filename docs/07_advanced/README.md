@@ -97,11 +97,17 @@ For the `test` stage, an AWS Lambda ARN is used as `endpoint`. Additionally to a
 
 ## Plugins
 
-Plugins allow you to easily extend the Jovo Framework without having to mess with the core code and architecture.
+Plugins allow you to easily extend the Jovo Framework without having to mess with its core code and architecture.
+
+You can find an example file that uses the plugin system on GitHub: [examples/appPlugins.js](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/appPlugins.js).
+
+Make sure you `require` the Jovo `Plugin` class. In the example, we do that by modifying the part in our `app.js` that imports the `jovo-framework` package.
 
 ```javascript
 const {App, Plugin} = require('jovo-framework');
 ```
+
+A plugin with the name `PluginName` can be created like this.
 
 ```javascript
 class PluginName extends Plugin {
@@ -113,24 +119,53 @@ class PluginName extends Plugin {
     }
 }
 ```
-For example, ...
-
-```javascript
-this.app.on('request', (jovo) => {
-    console.log();
-    console.log(`Request-Type: ${jovo.getPlatform().getRequestType()}`);
-});
-```
-See Event Listeners for availabe options.
-
-Then, register Plugin.
+In the app, the plugin can then get registered. The `constructor` part of the plugin can be used to define certain `options` that the plugin needs to work (e.g. credentials):
 
 ```javascript
 app.register('PluginName', new PluginName());
+
+// If you define options in your constructor
+app.register('PluginName', new PluginName(options));
 ```
+
+In `init()`, you can define listeners and what to do when a certain event happens. The example below logs the `Request Type` for any incoming request: 
+
+```javascript
+this.app.on(event, (arguments) => {
+    // Do something
+});
+
+// Example
+this.app.on('request', (jovo) => {
+    console.log(`Request-Type: ${jovo.getPlatform().getRequestType()}`);
+});
+```
+
+Here is a list of all events that can be used:
+
+Category | Name | Method | Arguments
+:--- | :--- | :--- | :---
+Routing | request | `this.app.on('request')` | `jovo`
+ | | response | `this.app.on('response')` | `jovo`
+ | | followUpState | `this.app.on('followUpState')` | `jovo`, `state`
+ | | removeState | `this.app.on('removeState')` | `jovo`
+ | | toIntent | `this.app.on('toIntent')` | `jovo`, `intent`
+ | | toStateIntent | `this.app.on('toStateIntent')` | `jovo`, `state`, `intent`
+ | | toStatelessIntent | `this.app.on('toStatelessIntent')` | `jovo`, `intent`
+ | | endSession | `this.app.on('endSession')` | `jovo`
+Output | tell | `this.app.on('tell')` | `jovo`, `speech`
+ | | ask | `this.app.on('ask')` | `jovo`, `speech`, `repromptSpeech`
+ | | ShowSimpleCard | `this.app.on('showSimpleCard')` | `jovo`, `title`, `content`
+ | | ShowImageCard | `this.app.on('showImageCard')` | `jovo`, `title`, `content`, `imageUrl`
+ | | ShowAccountLinkingCard | `this.app.on('showAccountLinkingCard')` | `jovo`
+
 
 
 ### Plugin Example
+
+The plugin below is called `CustomLogging` and enables you to modify what is being logged when. You can find the full example file here: [CustomLogging Plugin](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/appPlugins.js).
+
+For example, the `Request Type` of every request is logged. Also, if a redirect `toIntent` is done, this is also logged to be able to follow the user's flow through the app. Finally, the `tell` output is logged as well.
 
 ```javascript
 class CustomLogging extends Plugin {
@@ -154,10 +189,10 @@ class CustomLogging extends Plugin {
 app.register('CustomLogging', new CustomLogging());
 ```
 
-You can find the full example file here: [CustomLogging Plugin](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/appPlugins.js).
 
 ## Testing
 
+Unit Testing is a feature that is currently in `beta`. For a sample project that uses testing, take a look at this GitHub repository: [milksnatcher/jovo-framework-test](https://github.com/milksnatcher/jovo-framework-test/).
 
 
 <!--[metadata]: {"title": "Advanced Features", 
