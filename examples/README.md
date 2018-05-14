@@ -16,6 +16,7 @@ This folder provides code examples for various Jovo features. These are mostly a
   * [Multiple Handler](#multiple-handler)
 * [Integrations](#integrations)
   * [Analytics](#analytics)
+  * [Azure Functions](#azure-functions)
 * [Alexa-specific Features](#alexa-specific-features)
   * [Alexa Cards](#alexa-cards)
   * [Lists](#lists)
@@ -60,6 +61,10 @@ The file [appMultiHandler.js](./appMultiHandler.js) shows the implementation of 
 
 ### Analytics
 The file [appAnalyticsIntegration.js](./appAnalyticsIntegration.js) shows how easy it is to add analytics integrations with just one line of code.
+
+### Azure Functions
+The files [index.js](./azure_functions/webhook/index.js) shows how to integrate azure functions.
+Setup your local development environment by following [https://github.com/Azure/azure-functions-core-tools](https://github.com/Azure/azure-functions-core-tools), and then start server by executing `func host start` in `azure_functions` folder.
 
 ## Alexa-specific Features
 
