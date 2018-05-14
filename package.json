@@ -12,6 +12,7 @@
     "lodash": "^4.17.4",
     "path": "^0.12.7",
     "request": "^2.85.0",
+    "shelljs": "^0.8.2",
     "uuid": "^3.1.0"
   },
   "directories": {
