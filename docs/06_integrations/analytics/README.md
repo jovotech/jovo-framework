@@ -98,7 +98,7 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 1. Create a Dashbot account or log in at https://www.dashbot.io.
 
-2. Click “Add a Bot” in the Admin panel:
+2. Click "Add a Bot" in the Admin panel:
 
 ![Dashbot Add a Bot](../../img/dashbot-add-bot.jpg)
 ![Dashbot Add a Bot Step 2](../../img/dashbot-add-bot2.jpg)
@@ -134,7 +134,7 @@ const config = {
 };
 // For Dashbot Alexa Bot
 app.addDashbotAlexa(key);
-​
+
 // For Dashbot Google Bot
 app.addDashbotGoogleAction(key);
 ```
