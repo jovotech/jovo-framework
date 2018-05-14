@@ -17,6 +17,7 @@ server.use(bodyParser.json());
 for (let command of process.argv) {
     if (command.substr(0, 8) === '--record') {
         App.record(true, command.substr(9, command.length));
+        console.log('Jovo is now recording your incoming requests and outgoing responses.');
     }
 }
 
