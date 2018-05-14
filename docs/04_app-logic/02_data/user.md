@@ -102,25 +102,27 @@ const config = {
 
 The user context is used to automatically store data from past request and response pairs inside an array.
 
-The most recent request and response pair will be stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[prevLevel - 1]`.
+The most recent request and response pair will be stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[this.config.userContext.prev.size - 1]`.
 
 Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
 
 Category | Data | Usage | Description
 :--- | :--- | :--- | :----
-Request | intent | `this.user().context.prev[i].request.intent` | String: Intent name
-&nbsp; | state | `this.user().context.prev[i].request.state` | String: State name
-&nbsp; | timestamp | `this.user().context.prev[i].request.timestamp` | String: Timestamp of request
-Response | speech | `this.user().context.prev[i].response.speech` | String: Primary speech element
-&nbsp; | reprompt | `this.user().context.prev[i].response.reprompt` | String: Reprompt element
-&nbsp; | state | `this.user().context.prev[i].response.state` | String: State name
-&nbsp; | timestamp | `this.user().context.prev[i].response.timestamp` | String: Timestamp of response
+Request | intent | `this.user().getPrevIntent(index)` | String: Intent name
+&nbsp; | state | `this.user().getPrevRequestState(index)` | String: State name
+&nbsp; | timestamp | `this.user().getPrevTimestamp(index)` | String: Timestamp of request
+&nbsp; | inputs | `this.user().getPrevInputs(index)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().getPrevInputs(index).city.value`.
+Response | speech | `this.user().getPrevSpeech(index)` | String: Primary speech element
+&nbsp; | reprompt | `this.user().getPrevReprompt(index)` | String: Reprompt element
+&nbsp; | state | `this.user().getPrevResponseState(index)` | String: State name
 
-You can freely adjust how many of these pairs should be saved by changing `prevLevel` in your app's config to an Integer equal to or bigger than 0:
+You can freely adjust how many of these pairs should be saved by changing `size` in your app's config to an Integer equal to or bigger than 0:
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 3,
+        prev: {
+            size: 3,
+        },
     },
 };
 ```
@@ -129,8 +131,8 @@ You can also decide what you want to save and what not. Simply change the value 
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 1,
         prev: {
+            size: 1,
             request: {
                 timestamp: false,
             },
@@ -146,18 +148,18 @@ The default configuration looks like this:
 ```javascript
 const config = {
     userContext: {
-        prevLevel: 1,
         prev: {
+            size: 1,
             request: {
                 intent: true,
                 state: true,
+                inputs: true,
                 timestamp: true,
             },
             response: {
                 speech: true,
                 reprompt: true,
                 state: true,
-                timestamp: true,
             },
         },
     },
