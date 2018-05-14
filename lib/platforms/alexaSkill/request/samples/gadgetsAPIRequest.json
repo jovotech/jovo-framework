@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.e257cbdc-6cac-4073-9a86-125f8a20959b"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AGNIII7KII57SM52ADHNCE5XGCD5RUX4O6JYYYCDJXIY3OPFIOS2ZZBKZ5GAQOG3XG3ANAAZ2SLEWKWUELMC2JCYPHPTBJUBPRP2DX4SVUSJZUWH77G5LDTP5Y4HYDYR24KKRA7JJABITOETDZD2OUW3JCBA44CAWMKRK737RI2RCFVGW5NJG33OYOM2DZUFG7EJPW2KEL4OOII"
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com",
+      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLmUyNTdjYmRjLTZjYWMtNDA3My05YTg2LTEyNWY4YTIwOTU5YiIsImV4cCI6MTUyNDU4OTg0MSwiaWF0IjoxNTI0NTg2MjQxLCJuYmYiOjE1MjQ1ODYyNDEsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjpudWxsLCJ1c2VySWQiOiJhbXpuMS5hc2suYWNjb3VudC5BR05JSUk3S0lJNTdTTTUyQURITkNFNVhHQ0Q1UlVYNE82SllZWUNESlhJWTNPUEZJT1MyWlpCS1o1R0FRT0czWEczQU5BQVoyU0xFV0tXVUVMTUMySkNZUEhQVEJKVUJQUlAyRFg0U1ZVU0paVVdINzdHNUxEVFA1WTRIWURZUjI0S0tSQTdKSkFCSVRPRVREWkQyT1VXM0pDQkE0NENBV01LUks3MzdSSTJSQ0ZWR1c1TkpHMzNPWU9NMkRaVUZHN0VKUFcyS0VMNE9PSUkifX0.CNcf5MFMuih_DVCufg78bD0jSHu455fUvm58GiBe8GqSY4vJu67i0WzZEUksc4G9w8hzBXKVvCiETjzHcMtNZXeHUwLM-a7htYfrAzX2VlvuDCMb0NC-nN-792qTFvlBE_KIk0qO6a8nKDHhIkq4C_XI-ZyA9-zrdIx4UapiY8UcBQLIGQONaa1Kvls9gPNsK_4dTqKQhA0BsJ5dfLapCvSeRS89g2cN5kQ8u6W2VCSDoSLqIWZ0CAzBkcjvZNCn66CzJWwke-r_2xC_weJBzEKPPJ6OUiH_kNB2MRtGsC5Byia9zR9rNVhoAmCgghxOMEFqhx431T0TrkXMxJS80Q"
+    }
+  },
+  "request": {
+    "type": "GameEngine.InputHandlerEvent",
+    "requestId": "amzn1.echo-api.request.66038bab-eefc-42e6-9223-fa9de715eebe",
+    "timestamp": "2018-04-25T13:17:42Z",
+    "locale": "de-DE",
+    "originatingRequestId": "amzn1.echo-api.request.d6799b1d-1366-4ef0-b70a-218217130820",
+    "events": [
+      {
+        "name": "game_timeout",
+        "inputEvents": [
+          {
+            "gadgetId": "amzn1.ask.gadget.05RPH7PJG9C61DHI4QR0RLOQOHKH6EMUOCUC4OVK0L53TPS950R3F2UNG6304U5GQ6PLH0Q02QDQS7KLC2M0OVF2RPF8IPP5J567BV63JKJAGDR94JNTGJKD3HE4IO8E4RQQ3LUFE8929JPSGKLN6GTBIKVN4D30NFIAC9D9KLHI4U7J86UB0",
+            "timestamp": "2018-04-25T13:17:12.624Z",
+            "color": "FF0000",
+            "feature": "press",
+            "action": "down"
+          },
+          {
+            "gadgetId": "amzn1.ask.gadget.05RPH7PJG9C61DHI4QR0RLOQOHKH6EMUOCUC4OVK0L53TPS950R3F2UNG6304U5GQ6PLH0Q02QDQS7KLC2M0OVF2RPF8IPP5J567BV63JKJAGDR94JNTGJKD3HE4IO8E4RQQ3LUFE8929JPSGKLN6GTBIKVN4D30NFIAC9D9KLHI4U7J86UB0",
+            "timestamp": "2018-04-25T13:17:12.778Z",
+            "color": "DE0000",
+            "feature": "press",
+            "action": "up"
+          }
+        ]
+      }
+    ]
+  }
+}
