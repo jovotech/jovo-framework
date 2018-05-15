@@ -14,13 +14,6 @@ const bodyParser = require('body-parser');
 let server = express();
 server.use(bodyParser.json());
 
-for (let command of process.argv) {
-    if (command.substr(0, 8) === '--record') {
-        App.record(true, command.substr(9, command.length));
-        console.log('Jovo is now recording your incoming requests and outgoing responses.');
-    }
-}
-
 // check for running ngrok tunnel
 server.listen = function listen() {
     if (process.argv.indexOf('--bst-proxy') === -1 &&
@@ -201,7 +194,7 @@ module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
 module.exports.JovoClazz = Jovo;
 
-module.exports.Jester = require('./lib/tools/jester');
+module.exports.TestSuite = require('./lib/tools/testSuite');
 
 // module.exports.App = Jovo;
 module.exports.App = App;

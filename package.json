@@ -6,13 +6,9 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "fs": "^0.0.1-security",
     "i18next": "^8.4.3",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "lodash": "^4.17.4",
-    "path": "^0.12.7",
-    "request": "^2.85.0",
-    "shelljs": "^0.8.2",
     "uuid": "^3.1.0"
   },
   "directories": {
