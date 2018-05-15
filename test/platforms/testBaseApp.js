@@ -777,7 +777,7 @@ describe('setConfig(config)', function() {
                 devices: false,
         });
         expect(app.i18n).to.equal(undefined);
-        expect(Object.keys(BaseApp.DEFAULT_CONFIG)).to.have.a.lengthOf(18);
+        expect(Object.keys(BaseApp.DEFAULT_CONFIG)).to.have.a.lengthOf(19);
         expect(Object.keys(BaseApp.DEFAULT_CONFIG.userMetaData)).to.have.a.lengthOf(5);
     });
 

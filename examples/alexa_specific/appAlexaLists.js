@@ -18,10 +18,10 @@ const app = new App(config);
 
 app.setHandler({
     'LAUNCH': function() {
-        // app.toIntent('GetShoppingListIntent');
-        // app.toIntent('GetTodoListIntent');
-        // app.toIntent('AddItemToToDoListIntent');
         this.toIntent('GetShoppingListIntent');
+        // this.toIntent('GetTodoListIntent');
+        // this.toIntent('AddItemToToDoListIntent');
+        // this.toIntent('AddItemToShoppingListIntent');
     },
 
     'GetShoppingListIntent': function() {
@@ -35,8 +35,9 @@ app.setHandler({
                 this.tell(this.speech);
             })
             .catch((error) => {
+                console.log(error);
                 if (error.code === 'NO_USER_PERMISSION') {
-                    this
+                    this.alexaSkill()
                         .showAskForListPermissionCard(['read'])
                         .tell('Please grant the permission to access your lists.');
                 } else {
@@ -82,7 +83,22 @@ app.setHandler({
     },
 
     'AddItemToToDoListIntent': function() {
-        this.user().addToTodoList('Sleep')
+        this.user().addToTodoList('Sport')
+            .then((data) => {
+                this.tell('Item added.');
+            })
+            .catch((error) => {
+                if (error.code === 'NO_USER_PERMISSION') {
+                    this
+                        .showAskForListPermissionCard(['read', 'write'])
+                        .tell('Please grant the permission to access your lists');
+                }
+                console.log(error);
+            });
+    },
+
+    'AddItemToShoppingListIntent': function() {
+        this.user().addToShoppingList('Bread')
             .then((data) => {
                 this.tell('Item added.');
             })
