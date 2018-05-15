@@ -100,23 +100,24 @@ const config = {
 
 ### Context
 
-The user context is used to automatically store data from past request and response pairs inside an array.
+The user context is used to automatically store data from past interaction pairs (request and response) inside an array. To be able to use this feature, a database integration is required (data is stored in the FilePersistence `db.json` by default, but for e.g. AWS Lambda it is important to set up DynamoDB.
 
-The most recent request and response pair will be stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[this.config.userContext.prev.size - 1]`.
+This works like pagination. The most recent request and response pair are stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[this.config.userContext.prev.size - 1]`.
 
-Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
+Right now, the following data can be accessed (with index `i`):
 
-Category | Data | Usage | Description
-:--- | :--- | :--- | :----
-Request | intent | `this.user().getPrevIntent(index)` | String: Intent name
-&nbsp; | state | `this.user().getPrevRequestState(index)` | String: State name
-&nbsp; | timestamp | `this.user().getPrevTimestamp(index)` | String: Timestamp of request
-&nbsp; | inputs | `this.user().getPrevInputs(index)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().getPrevInputs(index).city.value`.
-Response | speech | `this.user().getPrevSpeech(index)` | String: Primary speech element
-&nbsp; | reprompt | `this.user().getPrevReprompt(index)` | String: Reprompt element
-&nbsp; | state | `this.user().getPrevResponseState(index)` | String: State name
+Category | Data | Usage |  | Description
+:--- | :--- | :--- | :--- | :----
+Request | intent | `this.user().context.prev[i].request.intent` | `this.user().getPrevIntent(i)` | String: Intent name
+&nbsp; | state | `this.user().context.prev[i].request.state` | `this.user().getPrevRequestState(i)` | String: State name
+&nbsp; | timestamp | `this.user().context.prev[i].request.timestamp` | `this.user().getPrevTimestamp(i)` | String: Timestamp of request
+&nbsp; | inputs | `this.user().context.prev[i].request.inputs` | `this.user().getPrevInputs(i)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().getPrevInputs(i).city.value`.
+Response | speech | `this.user().context.prev[i].response.speech` |  `this.user().getPrevSpeech(i)` | String: Primary speech element
+&nbsp; | reprompt | `this.user().context.prev[i].response.reprompt` | `this.user().getPrevReprompt(i)` | String: Reprompt element
+&nbsp; | state | `this.user().context.prev[i].response.state` | `this.user().getPrevResponseState(i)` | String: State name
 
-You can freely adjust how many of these pairs should be saved by changing `size` in your app's config to an Integer equal to or bigger than 0:
+By default, only the last interaction pair is stored. You can freely adjust how many of these pairs should be saved by changing the array `size` in your app's config to an Integer equal to or bigger than 0.
+
 ```javascript
 const config = {
     userContext: {
