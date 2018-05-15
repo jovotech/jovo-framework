@@ -2,12 +2,9 @@
 
 Learn more about features for advanced voice applications.
 
-* [Overview](#overview)
 * [Staging](#staging)
 * [Plugins](#plugins)
 * [Testing](#testing)
-
-## Overview
 
 ## Staging
 
