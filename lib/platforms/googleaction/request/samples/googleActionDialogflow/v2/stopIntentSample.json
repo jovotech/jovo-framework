@@ -1,0 +1,101 @@
+{
+  "responseId": "b3ddc2c5-5d2f-467b-909d-befbeb0b64b3",
+  "queryResult": {
+    "queryText": "actions_intent_CANCEL",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_intent_cancel"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/newagent-904be/agent/intents/b3a6d265-f065-4928-94d6-5e964b9c2187",
+      "displayName": "StopIntent"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "stop",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "intent": "actions.intent.CANCEL"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-05-15T19:46:52Z",
+        "locale": "en-US",
+        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+      },
+      "conversation": {
+        "conversationId": "1526414104011",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/newagent-904be/agent/sessions/1526414104011"
+}

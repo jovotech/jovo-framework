@@ -196,6 +196,7 @@ module.exports.JovoClazz = Jovo;
 
 module.exports.TestSuite = require('./lib/tools/testSuite');
 
+module.exports.util = require('./lib/util');
 // module.exports.App = Jovo;
 module.exports.App = App;
 

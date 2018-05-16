@@ -1,6 +1,6 @@
 'use strict';
 // const expect = require('chai').expect;
-const intentRequestSample = require('./../../../lib/platforms/googleaction/request/samples/dialogflow/intentSample.json');
+const intentRequestSample = require('../../../lib/platforms/googleaction/request/samples/googleActionDialogflow/v1/intentSample.json');
 const GoogleActionDialogFlowRequest = require('./../../../lib/platforms/googleaction/request/googleActionDialogFlowRequest').GoogleActionDialogFlowRequest;
 
 describe('Tests for GoogleActionRequest Class', function() {

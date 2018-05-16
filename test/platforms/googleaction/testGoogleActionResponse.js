@@ -2,7 +2,7 @@
 let expect = require('chai').expect;
 const GoogleActionResponse = require('../../../lib/platforms/googleaction/googleActionResponse').GoogleActionResponse;
 
-describe('Tests for GoogleActionResponse Class', function() {
+describe.skip('Tests for GoogleActionResponse Class', function() {
     describe.skip('constructor()', function() {
         //
     });

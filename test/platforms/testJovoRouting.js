@@ -26,7 +26,6 @@ describe('intent mapping', function() {
 
             let request = p.intent()
                 .setIntentName('HelloWorldIntent');
-
             app.handleRequest(request.buildHttpRequest(), response, {
                 'ON_REQUEST': function(done) {
                     setTimeout(() => {
@@ -1125,7 +1124,7 @@ describe('intentsToSkipUnhandled', function() {
 
 describe('Unhandled Intents', function() {
     for (let p of util.getPlatformRequestBuilder()) {
-        it('should jump to Unhandled intent when no intent defined', function(done) {
+        it('should jump to Unhandled intent when no intent defined (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1147,7 +1146,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should jump to Unhandled intent inside a state when no intent defined', function(done) {
+        it('should jump to Unhandled intent inside a state when no intent defined (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1171,7 +1170,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should throw an error if TestIntent is not defined', function(done) {
+        it('should throw an error if TestIntent is not defined (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1188,7 +1187,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should jump to a global TestIntent if there is no TestIntent in TestState', function(done) {
+        it('should jump to a global TestIntent if there is no TestIntent in TestState (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1217,7 +1216,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should jump to the state Unhandled even if there is a global TestIntent', function(done) {
+        it('should jump to the state Unhandled even if there is a global TestIntent (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1246,7 +1245,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should jump to the state Unhandled two levels below', function(done) {
+        it('should jump to the state Unhandled two levels below (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1278,7 +1277,7 @@ describe('Unhandled Intents', function() {
                 },
             });
         });
-        it('should jump to the TestIntent in global', function(done) {
+        it('should jump to the TestIntent in global (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
@@ -1308,7 +1307,7 @@ describe('Unhandled Intents', function() {
             });
         });
 
-        it('should jump to unhandled in third level state', function(done) {
+        it('should jump to unhandled in third level state (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
