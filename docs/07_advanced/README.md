@@ -46,9 +46,8 @@ Alternatively, you can also define a `defaultStage` if you prefer to have the de
 
 ```javascript
 {
-    
+    "defaultStage": "local",
     "stages": {
-        "defaultStage": "local",
         "local": {
             "endpoint": "${JOVO_WEBHOOK_URL}",
         },
@@ -78,9 +77,8 @@ The staging also offers the ability to overwrite `config` elements specified in 
 
 ```javascript
 {
-    
+    "defaultStage": "local",
     "stages": {
-        "defaultStage": "local",
         "local": {
             "endpoint": "${JOVO_WEBHOOK_URL}",
         },
@@ -99,8 +97,11 @@ The staging also offers the ability to overwrite `config` elements specified in 
 
 To let the framework know which stage the app is currently in, you have two options:
 
-* Define an environment variable `STAGE=<your stage>` and change it according to the current stage
-* Update the `defaultStage` element in the `app.json`
+1) Define an environment variable `STAGE=<your stage>` and change it according to the current stage. For example, this can be done in an `.env` file in the project directory. For AWS Lambda, you can define environment variable in the function configuration:
+
+
+
+2) Update the `defaultStage` element in the `app.json`.
 
 You can also reference environment variables in the `app.json` with `${process.env.<VARIABLE_NAME}`:
 
