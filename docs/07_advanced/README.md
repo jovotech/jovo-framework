@@ -3,16 +3,16 @@
 Learn more about features for advanced voice applications.
 
 * [Staging](#staging)
+   * [Staging Example](#staging-example)
 * [Plugins](#plugins)
 * [Testing](#testing)
 
 ## Staging
 
-If you want to use several stages like `dev`, `test`, and `prod` in your development environment, you can do so by adding them to your `app.json`.
+Jovo allows you to define multiple staging environments like `dev`, `test`, and `prod` in your `app.json`:
 
 ```javascript
 {
-    "defaultStage": "dev",
     "stages": {
         "dev": {
             
@@ -26,52 +26,122 @@ If you want to use several stages like `dev`, `test`, and `prod` in your develop
     }
 }
 ```
-In a stage, you can define elements that overwrite the default option, for example `endpoint`, or whole objects like `alexaSkill` that include a `skillId` (see [Staging Example](#staging-example) below).
 
-The staging also offers the ability to overwrite `config` elements specified in the [App Configuration](../03_app-configuration/README.md#available-configurations) in your `app.js`. This way, you can change certain elements, like logging, analytics, or database integrations depending on the stage. Just add a `config` object to a stage like this:
+In a stage, you can define elements that merge with the default options, for example `endpoint`, or whole objects like `alexaSkill` that include a `skillId` (see [Staging Example](#staging-example) below).
+
+For example, if your endpoint usually is the Jovo Webhook for local development, you can define a different endpoint (e.g. a Lambda ARN) for the `dev` environment:
+
+```javascript
+{
+    "endpoint": "${JOVO_WEBHOOK_URL}",
+    "stages": {
+        "dev": {
+            "endpoint": "<your lambda arn>"    
+        }
+    }
+}
+```
+
+Alternatively, you can also define a `defaultStage` if you prefer to have the default options organized in one place:
+
+```javascript
+{
+    
+    "stages": {
+        "defaultStage": "local",
+        "local": {
+            "endpoint": "${JOVO_WEBHOOK_URL}",
+        },
+        "dev": {
+            "endpoint": "<your lambda arn>"    
+        }
+    }
+}
+```
+
+Different endpoints require changes to the platform specific files. You can build and deploy them for required stage with the following Jovo CLI commands:
+
+```sh
+# Uses default options or defaultStage, if set
+$ jovo build
+
+# Alternative: Uses dev stage
+$ jovo build --stage dev
+
+# Then: Deploy to platform
+$ jovo deploy
+```
+
+
+The staging also offers the ability to overwrite `config` elements specified in the [App Configuration](../03_app-configuration/README.md#available-configurations './app-configuration#available-configurations') in your `app.js`. This way, you can change certain elements, like logging, analytics, or database integrations depending on the stage. Just add a `config` object to a stage like this:
 
 
 ```javascript
 {
-    "defaultStage": "dev",
+    
     "stages": {
-        "dev": {
-            
+        "defaultStage": "local",
+        "local": {
+            "endpoint": "${JOVO_WEBHOOK_URL}",
         },
-        "test": {
+        "dev": {
+            "endpoint": "<your lambda arn>",
             "config": {
-                
-            }
-        },
-        "prod": {
-
+                "db": {
+                    "type": "dynamodb",
+                    "tableName": "<your table name>"
+                }
+            } 
         }
     }
 }
 ```
-See the example below for more details.
+
+To let the framework know which stage the app is currently in, you have two options:
+
+* Define an environment variable `STAGE=<your stage>` and change it according to the current stage
+* Update the `defaultStage` element in the `app.json`
+
+You can also reference environment variables in the `app.json` with `${process.env.<VARIABLE_NAME}`:
+
+```javascript
+{
+    
+    "stages": {
+        "defaultStage": "local",
+        "local": {
+            "endpoint": "${JOVO_WEBHOOK_URL}",
+        },
+        "dev": {
+            "endpoint": "<your lambda arn>",
+            "config": {
+                "db": {
+                    "type": "dynamodb",
+                    "tableName": "${process.env.TABLE_NAME}"
+                }
+            } 
+        }
+    }
+}
+```
+
 
 ### Staging Example
 
 Let's assume we want to build an Alexa Skill that has the following stages:
 
-* A `dev` stage that uses the [Jovo Webhook](../03_app-configuration/02_server/webhook.md#jovo-webhook) and the local [FileDB](../06_integrations/databases/README.md#filepersistence) for fast prototyping. The Skill is deployed to the developer's Amazon developer account (`default` ASK profile).
-* A `test` stage that is hosted on [AWS Lambda](../03_app-configuration/02_server/aws-lambda.md) with [DynamoDB](../06_integrations/databases/README.md#dynamodb) as database. The Skill is deployed to the company's Amazon developer account (`company` ASK profile).
+* A default option for local development that uses the [Jovo Webhook](../03_app-configuration/02_server/webhook.md#jovo-webhook '../server/webhook#jovo-webhook') and the local [FileDB](../06_integrations/databases/README.md#filepersistence '../databases#filepersistence') for fast prototyping. The Skill is deployed to the developer's Amazon developer account (`default` ASK profile).
+* A `dev` stage that is hosted on [AWS Lambda](../03_app-configuration/02_server/aws-lambda.md '../server/aws-lambda') with [DynamoDB](../06_integrations/databases/README.md#dynamodb '../databases#dynamodb') as database. The Skill is deployed to the company's Amazon developer account (`company` ASK profile).
 
 ```javascript
 {
     "alexaSkill": {
-        "nlu": "alexa"
+        "nlu": "alexa",
+        "skillId": "amzn1.ask.skill.XXX"
     },
-    "defaultStage": "dev",
+    "endpoint": "${JOVO_WEBHOOK_URL}",
     "stages": {
         "dev": {
-            "endpoint": "${JOVO_WEBHOOK_URL}",
-            "alexaSkill": {
-                "skillId": "amzn1.ask.skill.XXX"
-            }
-        },
-        "test": {
             "endpoint": "arn:aws:lambda:us-east-1:XXX",
             "alexaSkill": {
                 "skillId": "amzn1.ask.skill.YYY",
@@ -80,7 +150,7 @@ Let's assume we want to build an Alexa Skill that has the following stages:
             "config": {
                 "db": {
                     "type": "dynamodb",
-                    "tableName": "SomeTableName"
+                    "tableName": "${process.env.TABLE_NAME}"
                 }
             }
         }
@@ -88,9 +158,9 @@ Let's assume we want to build an Alexa Skill that has the following stages:
 }
 ```
 
-For the `dev` stage, it automatically grabs the user's Jovo Webhook url by using the placeholder `${JOVO_WEBHOOK_URL}`. For the `alexaSkill` object, there is no need to specify the `ask-profile`, as the `default` is used.
+For the local development, it automatically grabs the user's Jovo Webhook url by using the placeholder `${JOVO_WEBHOOK_URL}`. For the `alexaSkill` object, there is no need to specify the `ask-profile`, as the `default` is used.
 
-For the `test` stage, an AWS Lambda ARN is used as `endpoint`. Additionally to a different `skillId`, the `company` profile is used for deployment to the Amazon Developer Portal. Also, this stage specifies a new `db` config that differs from the default FileDB.
+For the `dev` stage, an AWS Lambda ARN is used as `endpoint`. Additionally to a different `skillId`, the `company` profile is used for deployment to the Amazon Developer Portal. Also, this stage specifies a new `db` config that differs from the default FileDB and uses a table name referenced in the environment variables in Lambda: `${process.env.TABLE_NAME}`.
 
 ## Plugins
 
@@ -189,7 +259,23 @@ app.register('CustomLogging', new CustomLogging());
 
 ## Testing
 
-Unit Testing is a feature that is currently in `beta`. For a sample project that uses testing, take a look at this GitHub repository: [milksnatcher/jovo-framework-test](https://github.com/milksnatcher/jovo-framework-test/).
+You can now use the Jovo TestSuite to integrate unit tests into your voice app project.
+
+```javascript
+describe('LaunchIntent', function () {
+    for (let requestBuilder of [alexaRequestBuilder, googleActionRequestBuilder]) {
+        it('should go successfully into LaunchIntent for ' + requestBuilder.type(), function (done) {
+            send(requestBuilder.launch())
+                .then((res) => {
+                    expect(res.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')).to.equal(true);
+                    done();
+                });
+        });
+    }
+});
+```
+
+Unit Testing is a feature that is currently in `beta`. For a sample project that uses testing, take a look at this GitHub repository: [milksnatcher/DefaultTests](https://github.com/Milksnatcher/DefaultTests).
 
 
 <!--[metadata]: {"title": "Advanced Features", 

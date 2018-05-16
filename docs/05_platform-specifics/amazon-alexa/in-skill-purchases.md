@@ -133,7 +133,7 @@ It is recommended to check if the product has already been purchased, which you 
 },
 ```
 
-Similar to `buy`, you can also refund a product by using `this.alexaSkill().inSkillPurchase().cancel(product.productId);`
+Similar to `buy`, you can also refund a product by using `this.alexaSkill().inSkillPurchase().cancel    (product.productId);`
 
 After successfully going through the process of purchasing or refunding a product, the session will go into the `'ON_PURCHASE'` handler:
 
