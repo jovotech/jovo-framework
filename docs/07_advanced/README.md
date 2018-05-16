@@ -99,7 +99,7 @@ To let the framework know which stage the app is currently in, you have two opti
 
 1) Define an environment variable `STAGE=<your stage>` and change it according to the current stage. For example, this can be done in an `.env` file in the project directory. For AWS Lambda, you can define environment variable in the function configuration:
 
-
+![Staging environment variable in AWS Lambda](../img/staging-env-lambda.png "How to set the stage variable in Lambda")
 
 2) Update the `defaultStage` element in the `app.json`.
 
