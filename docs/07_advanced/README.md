@@ -77,11 +77,7 @@ The staging also offers the ability to overwrite `config` elements specified in 
 
 ```javascript
 {
-    "defaultStage": "local",
     "stages": {
-        "local": {
-            "endpoint": "${JOVO_WEBHOOK_URL}",
-        },
         "dev": {
             "endpoint": "<your lambda arn>",
             "config": {
@@ -103,16 +99,11 @@ To let the framework know which stage the app is currently in, you have two opti
 
 2) Update the `defaultStage` element in the `app.json`.
 
-You can also reference environment variables in the `app.json` with `${process.env.<VARIABLE_NAME}`:
+You can also reference environment variables in the `app.json` with `${process.env.<VARIABLE_NAME>}`:
 
 ```javascript
 {
-    
     "stages": {
-        "defaultStage": "local",
-        "local": {
-            "endpoint": "${JOVO_WEBHOOK_URL}",
-        },
         "dev": {
             "endpoint": "<your lambda arn>",
             "config": {
