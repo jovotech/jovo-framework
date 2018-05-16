@@ -246,7 +246,7 @@ describe('followUpState', function() {
             });
         });
 
-        it.only('should go to an intent inside the follow up state (' + p.type() + ')', function(done) {
+        it('should go to an intent inside the follow up state (' + p.type() + ')', function(done) {
             this.timeout(1000);
 
             let app = new App();
