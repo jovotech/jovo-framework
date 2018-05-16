@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "dotenv": "^5.0.1",
     "express": "^4.15.3",
     "fs": "^0.0.1-security",
     "i18next": "^8.4.3",
