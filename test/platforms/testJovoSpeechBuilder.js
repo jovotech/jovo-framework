@@ -215,4 +215,52 @@ describe('SpeechBuilder Class', function() {
             });
         });
     });
+
+    describe('addPhoneme ', () => {
+        it('should add an x-sampa phoneme tag', () => {
+            const speech = new SpeechBuilder();
+            speech.addPhoneme('quote', '"kvo:t@', 'x-sampa');
+            assert.equal(speech.build(), '<phoneme alphabet="x-sampa" ph="&quot;kvo:t@">quote</phoneme>');
+        });
+
+        it('should use ipa by default', () => {
+            const speech = new SpeechBuilder();
+            speech.addPhoneme('quote', 'ˈkvoːtə');
+            assert.equal(speech.build(), '<phoneme alphabet="ipa" ph="ˈkvoːtə">quote</phoneme>');
+        });
+
+        it('should add plain text on google', () => {
+            const speech = new GoogleActionSpeechBuilder();
+            speech.addPhoneme('quote', 'ˈkvoːtə', 'ipa');
+            assert.equal(speech.build(), 'quote');
+        });
+    });
+
+    describe('addIpa ', () => {
+        it('should add an ipa phoneme tag', () => {
+            const speech = new SpeechBuilder();
+            speech.addIpa('quote', 'ˈkvoːtə');
+            assert.equal(speech.build(), '<phoneme alphabet="ipa" ph="ˈkvoːtə">quote</phoneme>');
+        });
+
+        it('should add plain text on google', () => {
+            const speech = new GoogleActionSpeechBuilder();
+            speech.addIpa('quote', 'ˈkvoːtə');
+            assert.equal(speech.build(), 'quote');
+        });
+    });
+
+    describe('addXSampa ', () => {
+        it('should add an x-sampa phoneme tag', () => {
+            const speech = new SpeechBuilder();
+            speech.addXSampa('quote', '"kvo:t@');
+            assert.equal(speech.build(), '<phoneme alphabet="x-sampa" ph="&quot;kvo:t@">quote</phoneme>');
+        });
+
+        it('should add plain text on google', () => {
+            const speech = new GoogleActionSpeechBuilder();
+            speech.addXSampa('quote', '"kvo:t@');
+            assert.equal(speech.build(), 'quote');
+        });
+    });
 });
