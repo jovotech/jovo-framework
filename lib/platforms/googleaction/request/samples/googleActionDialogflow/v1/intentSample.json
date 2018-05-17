@@ -87,7 +87,7 @@
       "webhookUsed": "true",
       "webhookForSlotFillingUsed": "false",
       "nluResponseTime": 4,
-      "intentName": "HelloIntent"
+      "intentName": "HelpIntent"
     },
     "fulfillment": {
       "speech": "",
