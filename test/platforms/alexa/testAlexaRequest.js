@@ -59,7 +59,7 @@ describe('Tests for AlexaRequest Class', function() {
         expect(launchRequest.getSupportedInterfaces()).to.deep.equal({'AudioPlayer': {}});
         expect(launchRequest.getAudioPlayerActivity()).to.be.equal('IDLE');
         expect(launchRequest.getAudioPlayerOffsetInMilliseconds()).to.be.equal(0);
-        expect(launchRequest.getDeviceId()).to.be.equal('amzn1.ask.device.AEDKJQQ537N7576QKTYJDBGY775ELDXYAYRGNC2FBYJJDVHSDUEXOIXQ4CPRNKT3AN4AIWUQSKLYNJVE676UCP4ZUZVSAXXQ3UL6XP6SQCW2DZGV7TG6ASOBH4VKYVGEKGY5HNKKFX43S3GGTI3O3EYJW3WA');
+        expect(launchRequest.getDeviceId()).to.be.equal('amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA');
     });
     it('LaunchRequest setter', function() {
         const launchRequest = AlexaRequestBuilder.launchRequest();
@@ -134,33 +134,20 @@ describe('Tests for AlexaRequest Class', function() {
 
         // intent
         expect(intentRequest.getDialogState()).to.be.equal('COMPLETED');
-        expect(intentRequest.getIntentName()).to.be.equal('GetZodiacHoroscopeIntent');
+        expect(intentRequest.getIntentName()).to.be.equal('HelpIntent');
         expect(intentRequest.getIntentConfirmationStatus()).to.be.equal('NONE');
-        expect(intentRequest.getSlots()).to.deep.equal({
-            'ZodiacSign': {
-                'name': 'ZodiacSign',
-                'value': 'virgo',
-                'confirmationStatus': 'NONE',
-            },
-        });
 
         // session
         expect(intentRequest.getSessionNew()).to.be.equal(false);
         expect(intentRequest.getSessionId()).to.be.equal('amzn1.echo-api.session.0000000-0000-0000-0000-00000000000');
         expect(intentRequest.getApplicationId()).to.be.equal('amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe');
         expect(intentRequest.getUserId()).to.be.equal('amzn1.account.AM3B00000000000000000000000');
-        expect(intentRequest.getSessionAttributes()).to.deep.equal({
-            'supportedHoroscopePeriods': {
-                'daily': true,
-                'weekly': false,
-                'monthly': false,
-            }});
 
         // context
         expect(intentRequest.getSupportedInterfaces()).to.deep.equal({'AudioPlayer': {}});
         expect(intentRequest.getAudioPlayerActivity()).to.be.equal('IDLE');
         expect(intentRequest.getAudioPlayerOffsetInMilliseconds()).to.be.equal(0);
-        expect(intentRequest.getDeviceId()).to.be.equal('amzn1.ask.device.AEDKJQQ537N7576QKTYJDBGY775ELDXYAYRGNC2FBYJJDVHSDUEXOIXQ4CPRNKT3AN4AIWUQSKLYNJVE676UCP4ZUZVSAXXQ3UL6XP6SQCW2DZGV7TG6ASOBH4VKYVGEKGY5HNKKFX43S3GGTI3O3EYJW3WA');
+        expect(intentRequest.getDeviceId()).to.be.equal('amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA');
     });
 
     it('IntentRequest setter', function() {
@@ -388,7 +375,7 @@ describe('Tests for AlexaRequest Class', function() {
         // request
         expect(audioPlayerRequest.getVersion()).to.be.equal('1.0');
         expect(audioPlayerRequest.getType()).to.be.equal('AudioPlayer.PlaybackStarted');
-        expect(audioPlayerRequest.getRequestId()).to.be.equal('amzn1.echo-api.request.6f7e7c55-eb4c-47e1-bc71-9b1ca853be4a');
+        expect(audioPlayerRequest.getRequestId()).to.be.equal('amzn1.echo-api.request.0000000-0000-0000-0000-00000000000');
         expect(audioPlayerRequest.getTimestamp()).to.be.equal('2017-10-30T20:17:48Z');
         expect(audioPlayerRequest.getLocale()).to.be.equal('de-DE');
         expect(audioPlayerRequest.getOffsetInMilliseconds()).to.be.equal(0);
@@ -398,8 +385,8 @@ describe('Tests for AlexaRequest Class', function() {
         expect(audioPlayerRequest.getSupportedInterfaces()).to.deep.equal({'AudioPlayer': {}});
         expect(audioPlayerRequest.getAudioPlayerActivity()).to.be.equal('PLAYING');
         expect(audioPlayerRequest.getAudioPlayerOffsetInMilliseconds()).to.be.equal(0);
-        expect(audioPlayerRequest.getDeviceId()).to.be.equal('amzn1.ask.device.AEEKJQR537N7576QKTYJDBGY775ELDXYAYRGNC2FBYJJDVHSDUEXOIXQ4CPRNKT3AN4AIWUQSKLYNJVE676UCP4ZUZVSAXXQ3UL6XP6SQCW2DZGV7TG6ASOBH4VKYVGEKGY5HNKKFX43S3GGTI3O3EYJW3WA');
-        expect(audioPlayerRequest.getUserId()).to.be.equal('amzn1.ask.account.AGKS3QUDHFJOYULCPLNS4D5TJFGOSTHBGDJVZ6OCY7UFTZYXB6IIFWVQ3ZCPU6F4JW4ZXKQBB4J4HXLISI6SZQHOFXH6KOIMMRVCX6XIGRLQAXKHPU7OUEF7UP2OUZFSCDBOTL5QN6VXO5ZRQO6MFVR4DNQ27FWZGK3PA6UXREJFMNAUYOVPDOF3UZEJ756LEC4QKSS4GCJSD7I');
+        expect(audioPlayerRequest.getDeviceId()).to.be.equal('amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA');
+        expect(audioPlayerRequest.getUserId()).to.be.equal('amzn1.account.AM3B00000000000000000000000');
     });
     it('AudioPlayerRequest setter', function() {
         const audioPlayerRequest = AlexaRequestBuilder.audioPlayerRequest();
@@ -459,7 +446,7 @@ describe('Tests for AlexaRequest Class', function() {
         // request
         expect(errorRequest.getVersion()).to.be.equal('1.0');
         expect(errorRequest.getType()).to.be.equal('System.ExceptionEncountered');
-        expect(errorRequest.getRequestId()).to.be.equal('amzn1.echo-api.request.1092bded-84e6-41ed-bd7f-ca6a5d66b613');
+        expect(errorRequest.getRequestId()).to.be.equal('amzn1.echo-api.request.0000000-0000-0000-0000-00000000000');
         expect(errorRequest.getTimestamp()).to.be.equal('2017-10-30T20:21:01Z');
         expect(errorRequest.getLocale()).to.be.equal('de-DE');
         expect(errorRequest.getError()).to.deep.equal({
@@ -467,15 +454,15 @@ describe('Tests for AlexaRequest Class', function() {
             'message': 'An exception occurred while dispatching the request to the skill.',
         });
         expect(errorRequest.getCause()).to.deep.equal({
-            'requestId': 'amzn1.echo-api.request.edf998dd-49bf-4b7e-978a-28874d6c4447',
+            'requestId': 'amzn1.echo-api.request.0000000-0000-0000-0000-00000000000',
         });
 
         // context
         expect(errorRequest.getSupportedInterfaces()).to.deep.equal({'AudioPlayer': {}});
         expect(errorRequest.getAudioPlayerActivity()).to.be.equal('PLAYING');
         expect(errorRequest.getAudioPlayerOffsetInMilliseconds()).to.be.equal(0);
-        expect(errorRequest.getDeviceId()).to.be.equal('amzn1.ask.device.AEDKJQQ537N7576QKTYJDBGY775ELDXYAYRGNC2FBYJJDVHSDUEXOIXQ4CPRNKT3AN4AIWUQSKLYNJVE676UCP4ZUZVSAXXQ3UL6XP6SQCW2DZGV7TG6ASOBH4VKYVGEKGY5HNKKFX43S3GGTI3O3EYJW3WA');
-        expect(errorRequest.getUserId()).to.be.equal('amzn1.ask.account.AGKS3QUDHGJRYULCPLNS4D5TJFFOSFHBGDJVZ6OCY7UFTZYXB6IIFWVQ3ZCPU6F4JW4ZXKQBB4J4HXLISI6SZQHOFXH6KOIMMRVCX6XIGRLQAXKHPU7OUEF7UP2OUZFSCDBOTL5QN6VXO5ZRQO6MFVR4DNQ27FWZGK3PA6UXREJFMNAUYOVPDOF3UZEJ756LEC4QKSS4GCJSD7I');
+        expect(errorRequest.getDeviceId()).to.be.equal('amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA');
+        expect(errorRequest.getUserId()).to.be.equal('amzn1.account.AM3B00000000000000000000000');
     });
     it('ErrorRequest setter', function() {
         const errorRequest = AlexaRequestBuilder.errorRequest();
