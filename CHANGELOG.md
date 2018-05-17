@@ -8,6 +8,17 @@
 
 # Jovo Framework Changelog
 
+## 1.2.0 (May 17, 2018)
+* [#153](https://github.com/jovotech/jovo-framework-nodejs/pull/153): Added Voice App Unit Testing (Beta) - [@Milksnatcher](https://github.com/Milksnatcher).
+* [#150](https://github.com/jovotech/jovo-framework-nodejs/pull/150): Added user context functionality - [@KaanKC](https://github.com/KaanKC).
+* [#144](https://github.com/jovotech/jovo-framework-nodejs/pull/144): Added In Skill Purchase for Alexa Skills - [@aswetlow](https://github.com/aswetlow).
+* [#151](https://github.com/jovotech/jovo-framework-nodejs/pull/151): Added <phoneme> support to SpeechBuilder - [@fgnass](https://github.com/fgnass).
+* [#136](https://github.com/jovotech/jovo-framework-nodejs/pull/136): Added app.json config support - [@aswetlow](https://github.com/aswetlow).
+* Fixed getPermissionToken() bug (issue #152)
+* Fixed nodemon dependecy bug (issue #112)
+* Fixed Fixed encoding in Google Action Dialogflow V2 requests
+* ...
+
 ## 1.1.6 (May 02, 2018)
 * [#135](https://github.com/jovotech/jovo-framework-nodejs/pull/135): Fixed getTimestamp() on GoogleAction requests - [@KaanKC](https://github.com/KaanKC).
 * [#136](https://github.com/jovotech/jovo-framework-nodejs/pull/136): Import app config from app.json - [@aswetlow](https://github.com/aswetlow).
