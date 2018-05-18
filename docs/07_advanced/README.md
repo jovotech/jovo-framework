@@ -254,17 +254,17 @@ app.register('CustomLogging', new CustomLogging());
 You can now use the Jovo TestSuite to integrate unit tests into your voice app project.
 
 ```javascript
-describe('LaunchIntent', function () {
-    for (let requestBuilder of [alexaRequestBuilder, googleActionRequestBuilder]) {
-        it('should go successfully into LaunchIntent for ' + requestBuilder.type(), function (done) {
-            send(requestBuilder.launch())
+for (let rb of getPlatformRequestBuilder('AlexaSkill', 'GoogleActionDialogFlow')) {
+    describe('LAUNCH_INTENT', function () {
+        it('should successfully go into LaunchIntent for ' + rb.type(), function (done) {
+            send(rb.launch())
                 .then((res) => {
                     expect(res.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')).to.equal(true);
                     done();
                 });
         });
-    }
-});
+    });
+}
 ```
 
 Unit Testing is a feature that is currently in `beta`. For a sample project that uses testing, take a look at this GitHub repository: [milksnatcher/DefaultTests](https://github.com/Milksnatcher/DefaultTests).
