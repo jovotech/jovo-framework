@@ -188,7 +188,7 @@ You can learn more about Jovo standard intents in the following sections:
 
 #### 'LAUNCH' Intent
 
-The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just “open skill” or “talk to app” on the respective platforms). If you don't have `'NEW_SESSION'` defined, this intent is necessary to run your voice app.
+The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just "open skill" or "talk to app" on the respective platforms). If you don't have `'NEW_SESSION'` defined, this intent is necessary to run your voice app.
 
 ```javascript
 'LAUNCH': function() {
@@ -249,7 +249,7 @@ The `'ON_REQUEST'` intent can be used to map every incoming request to a single 
 
 #### 'END' Intent
 
-A session could end due to various reasons. For example, a user could call “stop,” there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `'END'` to match those reasons for you to “clean up” (for example, to get the reason why the session ended, or save something to the database).
+A session could end due to various reasons. For example, a user could call "stop," there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `'END'` to match those reasons for you to "clean up" (for example, to get the reason why the session ended, or save something to the database).
 
 ```javascript
 'END': function() {
@@ -483,7 +483,7 @@ app.setHandler({
 
 This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `'YesIntent'` or `'NoIntent'`. As a developer need to figure out yourself which question they just answered with "Yes."
 
-This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially “Yes” and “No” as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes's and No's.
+This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially "Yes" and "No" as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes's and No's.
 
 With Jovo, you can include states like this:
 
