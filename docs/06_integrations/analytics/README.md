@@ -9,7 +9,6 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [Chatbase](#chatbase)
-* [VoiceLabs](#voicelabs) (shut down)
 
 
 ## Jovo Analytics Layer
@@ -207,11 +206,6 @@ app.addBespokenAnalytics(key);
 ### Test Bespoken
 
 Test your voice app, after a bit your session should appear in the created skill.
-
-
-## VoiceLabs
-
-> IMPORTANT: VoiceLabs shut down down its service on March 29, 2018. [Read more here](http://voicelabs.co/2018/01/29/voicelabs-exits-analytics-business/).
 
 ## Chatbase
 

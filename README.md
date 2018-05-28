@@ -93,7 +93,10 @@ User object | Create contextual experiences with user specific data and services
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](./docs/04_app-logic/03_output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](./docs/04_app-logic/03_output/i18n.md)
 Jovo Persistence Layer &nbsp; &nbsp; &nbsp;| Persist user specific data | [📝](./docs/06_integrations/databases)
-Jovo Analytics Layer | Get usage statistics and logging with analytics integrations| [📝](./docs/06_integrations/analytics)
+Jovo Analytics Layer | Get usage statistics and logging with analytics integrations | [📝](./docs/06_integrations/analytics)
+Staging | Create and maintain different environments | [📝](./docs/07_advanced/README.md#staging)
+Plugins | Extend the Jovo Framework without having to mess with its core code and architecture | [📝](./docs/07_advanced/README.md#plugins)
+Testing | Use the Jovo TestSuite to integrate unit tests into your voice app project | [📝](./docs/07_advanced/README.md#testing)
 
 
 ### Platform Specific Features
@@ -149,7 +152,6 @@ See the [Jovo Analytics Layer](./docs/06_integrations/analytics) for more inform
 
 Name | Description | Docs
 :--- | :--- | :---
-VoiceLabs | Voice App Analytics including Usage Metrics and Behavior Paths | [📝](./docs/06_integrations/analytics/#voicelabs)
 Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](./docs/06_integrations/analytics/#dashbot)
 Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/06_integrations/analytics/#bespoken)
 Chatbase | Voice App Analytics including Usage Metrics, Session Flows and Link Tracking | [📝](./docs/06_integrations/analytics/#chatbase)
