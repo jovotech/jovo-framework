@@ -19,21 +19,6 @@ response.json = function(json) {};
 
 
 describe('alexaSkill()', function() {
-    it('should return null because request is from google', function(done) {
-        let app = new App();
-
-        let request = (new RequestBuilderGoogleAction())
-            .intentRequest()
-            .setIntentName('HelloWorld')
-            .build();
-
-        app.handleRequest(request, response, {
-            'HelloWorld': function() {
-                assert(this.alexaSkill() === null, 'alexaSkill() returns null');
-                done();
-            },
-        });
-    });
     it('should be type of object', function(done) {
         let app = new App();
 
@@ -45,6 +30,7 @@ describe('alexaSkill()', function() {
         app.handleRequest(request.buildHttpRequest(), response, {
             'HelloWorldIntent': function() {
                 assert(typeof this.alexaSkill() === 'object', 'typeof object');
+                assert(this.getPlatform().constructor.name === 'AlexaSkill');
                 done();
             },
         });
