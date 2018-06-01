@@ -330,9 +330,10 @@ The `dialogflow` object contains the agent data in its original syntax. For exam
                 "activeSections": ["configuration", "model", "model_index"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Configuration": "framework/docs/app-configuration",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
                                 "Model": ""
                                 },
-		"commentsID": "framework/docs/model"
+		"commentsID": "framework/docs/model",
+		"route": "docs/model"
                 }-->

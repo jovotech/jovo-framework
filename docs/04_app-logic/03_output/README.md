@@ -158,9 +158,10 @@ this.endSession();
                 "activeSections": ["logic", "output", "output_index"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
 				"Output": ""
                                 },
-		"commentsID": "framework/docs/output"
+		"commentsID": "framework/docs/output",
+		"route": "docs/output"
                 }-->

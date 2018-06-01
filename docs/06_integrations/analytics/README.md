@@ -9,6 +9,7 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [Chatbase](#chatbase)
+* [VoiceLabs](#voicelabs) (shut down)
 
 
 ## Jovo Analytics Layer
@@ -207,6 +208,11 @@ app.addBespokenAnalytics(key);
 
 Test your voice app, after a bit your session should appear in the created skill.
 
+
+## VoiceLabs
+
+> IMPORTANT: VoiceLabs shut down down its service on March 29, 2018. [Read more here](http://voicelabs.co/2018/01/29/voicelabs-exits-analytics-business/).
+
 ## Chatbase
 
 To use Chatbase Analytics for your voice app, you need to complete the following steps:
@@ -264,4 +270,5 @@ Test you voice app. It can take up to 6 hours until all the data can be seen on 
 
 ![Chatbase Dashboard](../../img/chatbase_04.png)
 
-<!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "framework/docs", "Integrations": "framework/docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics" }-->
+<!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics",
+"route": "docs/analytics" }-->

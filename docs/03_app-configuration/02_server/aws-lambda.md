@@ -45,10 +45,11 @@ context.callbackWaitsForEmptyEventLoop = false;
                 "activeSections": ["configuration", "server", "lambda"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Configuration": "framework/docs/app-configuration",
-				"Server": "framework/docs/server",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Server": "docs/server",
                                 "AWS Lambda": ""
                                 },
-		"commentsID": "framework/docs/server/aws-lambda"
+		"commentsID": "framework/docs/server/aws-lambda",
+		"route": "docs/server/aws-lambda"
                 }-->

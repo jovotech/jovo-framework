@@ -57,9 +57,10 @@ exports.handler = (event, context, callback) => {
                 "activeSections": ["configuration", "server", "server_index"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Configuration": "framework/docs/app-configuration",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
                                 "Server": ""
                                 },
-		"commentsID": "framework/docs/server"
+		"commentsID": "framework/docs/server",
+		"route": "docs/server"
                 }-->

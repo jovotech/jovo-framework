@@ -100,10 +100,11 @@ You can find out more about Google Assistant specific cards and suggestion chips
                 "activeSections": ["logic", "output", "visual"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
-				"Output": "framework/docs/output",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
+				"Output": "docs/output",
 				"Visual Output": ""
                                 },
-		"commentsID": "framework/docs/output/visual-output"
+		"commentsID": "framework/docs/output/visual-output",
+		"route": "docs/output/visual-output"
                 }-->

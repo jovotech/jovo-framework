@@ -225,5 +225,6 @@ this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
 
 
 
-<!--[metadata]: {"title": "Alexa Lists", "description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_lists"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "framework/docs/amazon-alexa", "Lists": "" }, "commentsID": "framework/docs/amazon-alexa/lists" }-->
+<!--[metadata]: {"title": "Alexa Lists", "description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_lists"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "Lists": "" }, "commentsID": "framework/docs/amazon-alexa/lists",
+"route": "docs/amazon-alexa/lists" }-->

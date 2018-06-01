@@ -63,9 +63,10 @@ After this, you can start updating the files in the `/models` folder and use the
                 "activeSections": ["cli", "cli_workflows"],
                 "expandedSections": "cli",
                 "inSections": "cli",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"CLI": "framework/docs/cli",
+                "breadCrumbs": {"Docs": "docs",
+				"CLI": "docs/cli",
                                 "Workflows": ""
                                 },
-		"commentsID": "framework/docs/cli/workflows"
+		"commentsID": "framework/docs/cli/workflows",
+		"route": "docs/cli/workflows"
                 }-->

@@ -161,5 +161,6 @@ app.setHandler({
 });
 ```
 
-<!--[metadata]: {"title": " In-Skill Purchases", "description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.", "activeSections": ["platforms", "alexa", "alexa_isp"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "framework/docs/amazon-alexa", "In-Skill Purchases": "" }, "commentsID": "framework/docs/amazon-alexa/in-skill-purchases" }-->
+<!--[metadata]: {"title": " In-Skill Purchases", "description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.", "activeSections": ["platforms", "alexa", "alexa_isp"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "In-Skill Purchases": "" }, "commentsID": "framework/docs/amazon-alexa/in-skill-purchases",
+"route": "docs/amazon-alexa/in-skill-purchases" }-->
