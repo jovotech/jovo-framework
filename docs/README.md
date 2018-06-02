@@ -26,5 +26,5 @@ Platform-specific Features | [Overview](./05_platform-specifics) | &nbsp;
 &nbsp; Integrations | [Overview](./06_integrations) | &nbsp;
 &nbsp; | [Databases](./06_integrations/databases) | &nbsp;
 &nbsp; | [Analytics](./06_integrations/analytics) | &nbsp;
-Advanced Features | [Overview](./07_advanced) | [Staging](./docs/07_advanced/README.md#staging), [Plugins](./docs/07_advanced/README.md#plugins), [Testing](./docs/07_advanced/README.md#testing) &nbsp;
+Advanced Features | [Overview](./07_advanced) | [Staging](./07_advanced/README.md#staging), [Plugins](./07_advanced/README.md#plugins), [Testing](./07_advanced/README.md#testing) &nbsp;
 Support | [Overview](./08_support) | &nbsp;
