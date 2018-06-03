@@ -181,10 +181,10 @@ class PluginName extends Plugin {
 In the app, the plugin can then get registered. The `constructor` part of the plugin can be used to define certain `options` that the plugin needs to work (e.g. credentials):
 
 ```javascript
-app.register('PluginName', new PluginName());
+app.register(new PluginName());
 
 // If you define options in your constructor
-app.register('PluginName', new PluginName(options));
+app.register(new PluginName(options));
 ```
 
 In `init()`, you can define listeners and what to do when a certain event happens. The example below logs the `Request Type` for any incoming request: 
