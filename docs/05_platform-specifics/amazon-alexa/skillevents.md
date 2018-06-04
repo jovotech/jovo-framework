@@ -231,3 +231,12 @@ And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` s
 ```
 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event)
+
+<!--[metadata]: {"title": "Alexa Skill Events", 
+"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], 
+"expandedSections": "platforms", "inSections": "platforms", 
+"breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "" }, 
+"commentsID": "framework/docs/skill-events", 
+"route": "docs/amazon-alexa/skill-events" 
+}-->

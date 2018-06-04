@@ -126,4 +126,5 @@ this.googleAction().getSignInStatus();
 
 
 
-<!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data" }-->
+<!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data",
+"route": "docs/google-assistant/data" }-->

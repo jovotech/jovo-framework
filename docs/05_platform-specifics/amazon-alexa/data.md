@@ -73,5 +73,6 @@ this.alexaSkill().showCard(new AlexaSkill.LinkAccountCard());
 
 
 
-<!--[metadata]: {"title": "Alexa Data", "description": "Learn how to use the Alexa Dialog Interface with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "framework/docs/amazon-alexa", "Dialog Interface": "" }, "commentsID": "framework/docs/amazon-alexa/data" }-->
+<!--[metadata]: {"title": "Alexa Data", "description": "Learn how to use the Alexa Dialog Interface with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "Dialog Interface": "" }, "commentsID": "framework/docs/amazon-alexa/data",
+"route": "docs/amazon-alexa/data" }-->

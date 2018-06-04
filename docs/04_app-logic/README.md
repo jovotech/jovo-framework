@@ -74,8 +74,9 @@ In section [App Logic > Output](./03_output './output'), you can learn more abou
                 "activeSections": ["logic", "logic_index"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
 				"App Logic": ""
                                 },
-		"commentsID": "framework/docs/app-logic"
+		"commentsID": "framework/docs/app-logic",
+		"route": "docs/logic"
                 }-->

@@ -95,10 +95,11 @@ this.tell(speech);
                 "activeSections": ["logic", "output", "speechbuilder"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
-				"Output": "framework/docs/output",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
+				"Output": "docs/output",
 				"Speechbuilder": ""
                                 },
-		"commentsID": "framework/docs/output/speechbuilder"
+		"commentsID": "framework/docs/output/speechbuilder",
+		"route": "docs/output/speechbuilder"
                 }-->

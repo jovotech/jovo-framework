@@ -89,8 +89,9 @@ You can find the following Google Assistant specific features on the page [Platf
                 "activeSections": ["platforms", "platforms_index"],
                 "expandedSections": "platforms",
                 "inSections": "platforms",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
 				"Platforms": ""
                                 },
-		"commentsID": "framework/docs/platforms"
+		"commentsID": "framework/docs/platforms",
+		"route": "docs/platform-specifics"
                 }-->
