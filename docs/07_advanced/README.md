@@ -275,8 +275,9 @@ Unit Testing is a feature that is currently in `beta`. For a sample project that
                 "activeSections": ["advanced", "advanced_index"],
                 "expandedSections": "advanced",
                 "inSections": "advanced",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
 				"Advanced Features": ""
                                 },
-		"commentsID": "framework/docs/advanced"
+		"commentsID": "framework/docs/advanced",
+		"route": "docs/advanced"
                 }-->

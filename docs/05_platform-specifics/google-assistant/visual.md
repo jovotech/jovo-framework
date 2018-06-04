@@ -171,5 +171,6 @@ this.googleAction().showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)
 
-<!--[metadata]: {"title": "Google Assistant Visual Output", "description": "Learn more about how to implement visual output into your voice driven application.", "activeSections": ["platforms", "assistant", "assistant_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/visual" }
+<!--[metadata]: {"title": "Google Assistant Visual Output", "description": "Learn more about how to implement visual output into your voice driven application.", "activeSections": ["platforms", "assistant", "assistant_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/visual",
+"route": "docs/google-assistant/visual" }
 -->

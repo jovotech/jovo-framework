@@ -75,5 +75,12 @@ You can find more about Jovo Audioplayer support here: [Platform specifics > Ama
 
 Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skillevents')
 
-<!--[metadata]: {"title": "Amazon Alexa Specific Features", "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "" }, "commentsID": "framework/docs/amazon-alexa" }-->
+<!--[metadata]: {"title": "Amazon Alexa Specific Features", 
+                 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
+                 "expandedSections": "platforms", "inSections": "platforms", 
+                 "breadCrumbs": {"Docs": "docs/", 
+                                 "Platforms": "docs/platforms",
+                                 "Amazon Alexa": "" }, 
+                 "commentsID": "framework/docs/amazon-alexa", 
+                 "route": "docs/amazon-alexa" 
+}-->

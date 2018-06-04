@@ -350,8 +350,9 @@ $ jovo deploy --platform <alexaSkill | googleAction> [--project-id <project ID>]
                 "activeSections": ["cli", "cli_index"],
                 "expandedSections": "cli",
                 "inSections": "cli",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
                                 "CLI": ""
                                 },
-		"commentsID": "framework/docs/cli"
+		"commentsID": "framework/docs/cli",
+		"route": "docs/cli"
                 }-->

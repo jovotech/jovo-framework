@@ -808,9 +808,10 @@ Have a look at [App Logic > Data](../02_data './data') to learn more about how t
                 "activeSections": ["logic", "routing", "routing_index"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
                                 "Routing": ""
                                 },
-		"commentsID": "framework/docs/routing"
+		"commentsID": "framework/docs/routing",
+		"route": "docs/routing"
                 }-->
