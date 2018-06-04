@@ -143,10 +143,11 @@ $ npm install alexa-verifier-middleware
                 "activeSections": ["configuration", "server", "webhook"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Configuration": "framework/docs/app-configuration",
-				"Server": "framework/docs/server",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Server": "docs/server",
                                 "Webhook": ""
                                 },
-		"commentsID": "framework/docs/server/webhook"
+		"commentsID": "framework/docs/server/webhook",
+		"route": "docs/server/webhook"
                 }-->

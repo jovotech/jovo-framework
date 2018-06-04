@@ -181,10 +181,10 @@ class PluginName extends Plugin {
 In the app, the plugin can then get registered. The `constructor` part of the plugin can be used to define certain `options` that the plugin needs to work (e.g. credentials):
 
 ```javascript
-app.register('PluginName', new PluginName());
+app.register(new PluginName());
 
 // If you define options in your constructor
-app.register('PluginName', new PluginName(options));
+app.register(new PluginName(options));
 ```
 
 In `init()`, you can define listeners and what to do when a certain event happens. The example below logs the `Request Type` for any incoming request: 
@@ -275,8 +275,9 @@ Unit Testing is a feature that is currently in `beta`. For a sample project that
                 "activeSections": ["advanced", "advanced_index"],
                 "expandedSections": "advanced",
                 "inSections": "advanced",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
 				"Advanced Features": ""
                                 },
-		"commentsID": "framework/docs/advanced"
+		"commentsID": "framework/docs/advanced",
+		"route": "docs/advanced"
                 }-->

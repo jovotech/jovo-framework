@@ -50,5 +50,6 @@ You can find out more about your Google Action user's data here: [Platform speci
 
 
 
-<!--[metadata]: {"title": "Google Assistant Specific Features", "description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here", "activeSections": ["platforms", "assistant", "assistant_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant" }
+<!--[metadata]: {"title": "Google Assistant Specific Features", "description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here", "activeSections": ["platforms", "assistant", "assistant_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant",
+"route": "docs/google-assistant" }
 -->

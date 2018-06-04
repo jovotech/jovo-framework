@@ -52,8 +52,9 @@ app.onResponse(function(jovo) {
                 "activeSections": ["logic", "routing", "eventlisteners"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
                                 "App Logic": ""
                                 },
-		"commentsID": "framework/docs/event-listeners"
+		"commentsID": "framework/docs/event-listeners",
+		"route": "docs/routing/event-listeners"
                 }-->

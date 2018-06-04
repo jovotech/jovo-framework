@@ -159,9 +159,10 @@ New to developing for voice platforms like Amazon Alexa and Google Assistant? Go
                 "activeSections": ["gettingstarted", "installation"],
                 "expandedSections": "installation",
                 "inSections": "gettingstarted",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"Getting Started": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
+                "Getting Started": "docs",
                                 "Installation": ""
                                 },
-		"commentsID": "framework/docs/getting-started"
+"commentsID": "framework/docs/getting-started",
+"route": "docs/getting-started"
                 }-->

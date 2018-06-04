@@ -65,9 +65,10 @@ You can also use the `'AUDIOPLAYER'` directive for cross-platform compatibility 
                 "expandedSections": "platforms",
                 "inSections": "platforms",
                 "breadCrumbs": {
-                  "Docs": "framework/docs",
-				          "Platforms": "framework/docs/platforms",
+                  "Docs": "docs/", 
+				          "Platforms": "docs/platforms",
                   "Google Assistant": ""
                 },
-		            "commentsID": "framework/docs/google-assistant/media-response"
+		            "commentsID": "framework/docs/google-assistant/media-response",
+		"route": "docs/google-assistant/media-response"
                 }-->

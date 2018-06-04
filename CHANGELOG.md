@@ -8,6 +8,11 @@
 
 # Jovo Framework Changelog
 
+## 1.2.1 (June 04, 2018)
+* Fixed bugs in error handling
+* Fixed googleAction()/alexaSkill() 'undefined' bugs in Alexa Skill / Google Action requests
+
+
 ## 1.2.0 (May 17, 2018)
 * [#153](https://github.com/jovotech/jovo-framework-nodejs/pull/153): Added Voice App Unit Testing (Beta) - [@Milksnatcher](https://github.com/Milksnatcher).
 * [#150](https://github.com/jovotech/jovo-framework-nodejs/pull/150): Added user context functionality - [@KaanKC](https://github.com/KaanKC).
