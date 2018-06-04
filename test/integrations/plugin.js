@@ -1,5 +1,5 @@
-const {App} = require('../../lib/app');
-const {Plugin} = require('../../lib/integrations/plugin');
+const App = require('../../lib/app').App;
+const Plugin = require('../../lib/integrations/plugin').Plugin;
 const expect = require('chai').expect;
 
 describe('plugin', () => {
