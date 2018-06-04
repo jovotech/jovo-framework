@@ -1,3 +1,4 @@
+'use strict';
 const App = require('../../lib/app').App;
 const Plugin = require('../../lib/integrations/plugin').Plugin;
 const expect = require('chai').expect;
