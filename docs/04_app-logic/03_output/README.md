@@ -6,6 +6,7 @@ In this section, you will learn how to use Jovo to craft a response to your user
 * [Basic Output](#basic-output)
   * [tell](#tell)
   * [ask](#ask)
+  * [repeat](#repeat)
 * [Advanced Output](#advanced-output)
   * [SSML](#ssml)
   * [speechBuilder](#speechbuilder)
@@ -63,6 +64,22 @@ this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
 You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](../../05_platform-specifics/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
+
+### repeat
+
+It is recommended to use a `'RepeatIntent'` (e.g. the `'AMAZON.RepeatIntent'`) that allows users to ask your app to repeat the previous output if they missed it.
+
+```javascript
+this.repeat();
+
+// Example
+'RepeatIntent' function() {
+    this.repeat();
+}
+```
+
+This feature makes use of the [Jovo User Context](../02_data/user.md#context './data/user#context'). To be able to use it, please make sure that you have a database integration set up and an have not set the `userContext.prev.size` element to 0 (default is 1) in your config.
+
 
 ## Advanced Output
 

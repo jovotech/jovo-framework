@@ -221,8 +221,7 @@ The resulting `app.json` file looks like this:
   },
   "googleAction": {
     "nlu": {
-      "name": "dialogflow",
-      "version": 1
+      "name": "dialogflow"
     }
   },
   "endpoint": "https://webhook.jovo.cloud/[jovo-endpoint-id]"
@@ -230,7 +229,7 @@ The resulting `app.json` file looks like this:
 ```
 Currently, the platform `nlu` (natural language understanding) services are:
 * Amazon Alexa: The built-in `alexa` interaction model
-* Google Assistant: `dialogflow` API version `1`
+* Google Assistant: `dialogflow` API versions `1` or `2` (Jovo supports boths)
 
 The default `endpoint` uri is automatically generated and provides a simple solution to run a local webserver for easy debugging. Learn more here: [App Configuration > Server Configuration > Webhook](../03_app-configuration/02_server/webhook.md './server/webhook'). For more options, see below.
 
@@ -280,9 +279,7 @@ $ jovo build -p googleAction --reverse
 
 ![jovo get command](../img/jovo-get.png "jovo get command")
 
-`jovo get` will import an existing Alexa Skill (Skill Information and Interaction Model) or Dialogflow agent into the `/platforms` folder. 
-
-To import a Dialogflow agent you have to enable the Dialogflow V2 API in your agent's settings first and then go through the following setup [guide](https://dialogflow.com/docs/reference/v2-auth-setup).
+`jovo get` will import an existing Alexa Skill (Skill Information and Interaction Model) or Dialogflow agent (work in progress) into the `/platforms` folder. 
 
 To get the Skill from the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
 
@@ -294,6 +291,7 @@ $ jovo get <alexaSkill|googleAction>
 $ jovo get alexaSkill --skill-id <skill ID>
 
 # Get specific Dialogflow agent using the Project ID
+# Coming soon
 $ jovo get googleAction --project-id <project ID>
 
 # Options
@@ -321,11 +319,11 @@ $ jovo get alexaSkill [-s | --skill-id <skill ID>] [--project-id <project ID>] [
 
 `jovo deploy` is used to upload the platform folders to their respective developer site. 
 
+To deploy to the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
+
 To deploy a Dialogflow agent you have 2 options:
 * Import the dialogflow_agent.zip file into your Dialogflow agent (we recommend using the option RESTORE)
-* Enable the Dialogflow V2 API in your agent's settings first and then go through the following setup [guide](https://dialogflow.com/docs/reference/v2-auth-setup)
-
-To deploy to the Amazon developer console, you have to set up [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
+* If you're using the Dialogflow v2 API (default since April 17, 2018), you can also deploy the agent directly to the platform. First, you need to go through the following [auth setup guide](https://dialogflow.com/docs/reference/v2-auth-setup).
 
 ```sh
 # Default
