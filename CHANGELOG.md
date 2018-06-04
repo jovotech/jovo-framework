@@ -10,6 +10,7 @@
 
 ## 1.2.1 (June 04, 2018)
 * Fixed bugs in error handling
+* Fixed googleAction()/alexaSkill() 'undefined' bugs in Alexa Skill / Google Action requests
 
 
 ## 1.2.0 (May 17, 2018)
