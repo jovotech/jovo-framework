@@ -63,7 +63,7 @@ Find an example file here: [`indexProgressiveResponse.js`](../../../examples/ale
 
 ### Visual Output
 
-You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual-output')
+You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual')
 
 
 ## AudioPlayer Skills
