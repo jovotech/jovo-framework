@@ -7,7 +7,7 @@ Learn more about how to build Alexa Skills with visual output using the Jovo Fra
   * [Simple Card](#simple-card)
   * [Standard Card](#standard-card)
 * [Display Templates](#display-templates)
-  * [Body Template](#body-template)
+  * [Body Templates](#body-templates)
 * [Video](#video)
 
 ## Introduction to Visual Ouput
