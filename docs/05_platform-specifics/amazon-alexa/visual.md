@@ -67,8 +67,14 @@ this.alexaSkill().showCard(
 
 ## Display Templates
 
-Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features.
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html) 
+Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features. You can find the 
+[official Amazon reference here](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html).
+
+To be able to use display templates for devices like Echo Show, you need to enable them in the Interfaces tab in the Amazon Developer Console:
+
+![One Session](../../img/alexa-enable-display-interface.jpg)
+
+
 
 ### Body Templates
 
