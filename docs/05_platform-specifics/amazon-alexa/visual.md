@@ -122,7 +122,7 @@ this.alexaSkill().showDisplayTemplate(bodyTemplate3);
 let bodyTemplate6 = this.alexaSkill().templateBuilder('BodyTemplate6');
 bodyTemplate6
   .setToken('token')
-  .setTextContent('Primary Text', 'Secondary Text'. 'Tertiary Text')
+  .setTextContent('Primary Text', 'Secondary Text', 'Tertiary Text')
   .setFullScreenImage({
     description: 'Description',
     url: 'https://via.placeholder.com/1200x1000',
