@@ -177,4 +177,5 @@ You can find a detailed guide by Amazon about setting up your DynamoDB for progr
 Here are a few things you need to consider when switching from a different database to DynamoDB
 * DynamoDB does not allow empty strings (`""`) as values: If you use them, please switch to `null` or a different value
 
-<!--[metadata]: {"title": "Database Integrations", "description": "Learn how to store user specific data to different types of databases with the Jovo Framework", "activeSections": ["integrations", "databases"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "framework/docs", "Integrations": "framework/docs/integrations", "Databases": "" }, "commentsID": "framework/docs/databases" }-->
+<!--[metadata]: {"title": "Database Integrations", "description": "Learn how to store user specific data to different types of databases with the Jovo Framework", "activeSections": ["integrations", "databases"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Databases": "" }, "commentsID": "framework/docs/databases",
+"route": "docs/databases" }-->

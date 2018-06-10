@@ -1,7 +1,5 @@
 # Jovo CLI
 
-> Other pages in this category: [Workflows](./workflows.md './cli/workflows').
-
 The Jovo Command Line Tools offer the ability to create, prototype, test, and deploy your voice app quickly.
 
 * [Introduction](#introduction)
@@ -350,8 +348,9 @@ $ jovo deploy --platform <alexaSkill | googleAction> [--project-id <project ID>]
                 "activeSections": ["cli", "cli_index"],
                 "expandedSections": "cli",
                 "inSections": "cli",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
                                 "CLI": ""
                                 },
-		"commentsID": "framework/docs/cli"
+		"commentsID": "framework/docs/cli",
+		"route": "docs/cli"
                 }-->

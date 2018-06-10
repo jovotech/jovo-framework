@@ -8,7 +8,7 @@ Learn more about how to use Event Listeners with Jovo.
 
 ## Introduction
 
-Event Listeners are a type of routing that get triggered when a specific event occurs, e.g. at the time a request (`onRequest`) or response (`onResponse`) happens, as shown below:
+Event Listeners are a type of [routing](./README.md './routing') that get triggered when a specific event occurs, e.g. at the time a request (`onRequest`) or response (`onResponse`) happens, as shown below:
 
 ```javascript
 app.onRequest(function(jovo) {
@@ -52,8 +52,9 @@ app.onResponse(function(jovo) {
                 "activeSections": ["logic", "routing", "eventlisteners"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
                                 "App Logic": ""
                                 },
-		"commentsID": "framework/docs/event-listeners"
+		"commentsID": "framework/docs/event-listeners",
+		"route": "docs/routing/event-listeners"
                 }-->

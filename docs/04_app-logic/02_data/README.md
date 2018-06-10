@@ -373,9 +373,10 @@ For more information on Account Linking, check out our blogposts:
                 "activeSections": ["logic", "data", "data_index"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
                                 "Data": ""
                                 },
-		"commentsID": "framework/docs/data"
+		"commentsID": "framework/docs/data",
+		"route": "docs/data"
                 }-->

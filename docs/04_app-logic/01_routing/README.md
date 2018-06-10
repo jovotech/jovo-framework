@@ -29,8 +29,6 @@ In this section, you will learn more about how to use intents and states to rout
 
 ## Introduction to User Sessions
 
-To build engaging voice apps, it's important to understand the concept of user sessions on voice platforms.
-
 A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request`, but can have a series of inputs and outputs. A session can end for the following reasons:
 
 * The response includes `shouldEndSession`, which is true for `tell` and `endSession` method calls
@@ -808,9 +806,10 @@ Have a look at [App Logic > Data](../02_data './data') to learn more about how t
                 "activeSections": ["logic", "routing", "routing_index"],
                 "expandedSections": "logic",
                 "inSections": "logic",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Logic": "framework/docs/app-logic",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": "docs/logic",
                                 "Routing": ""
                                 },
-		"commentsID": "framework/docs/routing"
+		"commentsID": "framework/docs/routing",
+		"route": "docs/routing"
                 }-->

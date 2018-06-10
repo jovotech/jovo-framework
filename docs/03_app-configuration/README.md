@@ -267,8 +267,9 @@ Integrations | [Databases](../06_integrations/databases './databases') | Switch 
                 "activeSections": ["configuration", "configuration_index"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
                                 "App Configuration": ""
                                 },
-		"commentsID": "framework/docs/app-configuration"
+		"commentsID": "framework/docs/app-configuration",
+		"route": "docs/configuration"
                 }-->

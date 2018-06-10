@@ -39,11 +39,11 @@ This section provides an overview of Alexa specific features for user data. For 
 
 ### Shopping and To Do Lists
 
-You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md './amazon-alexa/lists')
+You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md './amazon-alexa/lists').
 
 ### Location
 
-Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location './amazon-alexa/data#location')
+Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location './amazon-alexa/data#location').
 
 ## Output
 
@@ -63,7 +63,7 @@ Find an example file here: [`indexProgressiveResponse.js`](../../../examples/ale
 
 ### Visual Output
 
-You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual-output')
+You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual').
 
 
 ## AudioPlayer Skills
@@ -75,5 +75,12 @@ You can find more about Jovo Audioplayer support here: [Platform specifics > Ama
 
 Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skillevents')
 
-<!--[metadata]: {"title": "Amazon Alexa Specific Features", "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "" }, "commentsID": "framework/docs/amazon-alexa" }-->
+<!--[metadata]: {"title": "Amazon Alexa Specific Features", 
+                 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
+                 "expandedSections": "platforms", "inSections": "platforms", 
+                 "breadCrumbs": {"Docs": "docs/", 
+                                 "Platforms": "docs/platforms",
+                                 "Amazon Alexa": "" }, 
+                 "commentsID": "framework/docs/amazon-alexa", 
+                 "route": "docs/amazon-alexa" 
+}-->

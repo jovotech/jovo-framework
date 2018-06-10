@@ -7,7 +7,7 @@ Learn more about how to build Alexa Skills with visual output using the Jovo Fra
   * [Simple Card](#simple-card)
   * [Standard Card](#standard-card)
 * [Display Templates](#display-templates)
-  * [Body Template](#body-template)
+  * [Body Templates](#body-templates)
 * [Video](#video)
 
 ## Introduction to Visual Ouput
@@ -67,8 +67,14 @@ this.alexaSkill().showCard(
 
 ## Display Templates
 
-Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features.
-[Official Amazon reference](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html) 
+Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features. You can find the 
+[official Amazon reference here](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html).
+
+To be able to use display templates for devices like Echo Show, you need to enable them in the Interfaces tab in the Amazon Developer Console:
+
+![One Session](../../img/alexa-enable-display-interface.jpg)
+
+
 
 ### Body Templates
 
@@ -122,7 +128,7 @@ this.alexaSkill().showDisplayTemplate(bodyTemplate3);
 let bodyTemplate6 = this.alexaSkill().templateBuilder('BodyTemplate6');
 bodyTemplate6
   .setToken('token')
-  .setTextContent('Primary Text', 'Secondary Text'. 'Tertiary Text')
+  .setTextContent('Primary Text', 'Secondary Text', 'Tertiary Text')
   .setFullScreenImage({
     description: 'Description',
     url: 'https://via.placeholder.com/1200x1000',
@@ -200,5 +206,6 @@ this.alexaSkill().showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Su
 Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).
 
 
-<!--[metadata]: {"title": "Alexa Visual Output", "description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "framework/docs", "Platforms": "framework/docs/platforms",
-"Amazon Alexa": "framework/docs/amazon-alexa", "Visual Output": "" }, "commentsID": "framework/docs/amazon-alexa" }-->
+<!--[metadata]: {"title": "Alexa Visual Output", "description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "Visual Output": "" }, "commentsID": "framework/docs/amazon-alexa",
+"route": "docs/amazon-alexa/visual" }-->

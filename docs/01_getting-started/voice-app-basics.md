@@ -100,9 +100,10 @@ Here are some helpful guides to get started with Google Actions: [Overview](http
                 "activeSections": ["voice-app-basics", "gettingstarted"],
                 "expandedSections": "gettingstarted",
                 "inSections": "gettingstarted",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"Getting Started": "framework/docs",
+                "breadCrumbs": {"Docs": "docs/",
+				"Getting Started": "docs/",
                                 "Voice App Basics": ""
                                 },
-		"commentsID": "framework/docs/voice-app-basics"
+		"commentsID": "framework/docs/voice-app-basics",
+		"route": "docs/voice-app-basics"
                 }-->

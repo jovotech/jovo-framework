@@ -251,11 +251,12 @@ This includes some agent specific information. We recommend to not change this f
                 "activeSections": ["configuration", "model", "model_platforms"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
-                "breadCrumbs": {"Docs": "framework/docs",
-				"App Configuration": "framework/docs/app-configuration",
-				"Jovo Language Model": "framework/docs/model",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Jovo Language Model": "docs/model",
                                 "Platforms": ""
                                 },
-		"commentsID": "framework/docs/model/platforms"
+		"commentsID": "framework/docs/model/platforms",
+		"route": "docs/model/platforms"
                 }-->
 

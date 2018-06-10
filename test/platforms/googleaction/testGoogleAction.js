@@ -13,21 +13,6 @@ response.json = function(json) {};
 
 
 describe('googleAction()', function() {
-    it('should return null because request is from google home', function(done) {
-        let app = new App();
-
-        let request = (new RequestBuilderGoogleAction())
-            .intentRequest()
-            .setIntentName('HelloWorld')
-            .build();
-
-        app.handleRequest(request, response, {
-            'HelloWorld': function() {
-                assert(this.alexaSkill() === null, 'alexaSkill() returns null');
-                done();
-            },
-        });
-    });
     it('should be type of object', function(done) {
         let app = new App();
 
@@ -39,6 +24,8 @@ describe('googleAction()', function() {
         app.handleRequest(request, response, {
             'HelloWorld': function() {
                 assert(typeof this.googleAction() === 'object', 'typeof object');
+                assert(this.getPlatform().constructor.name === 'GoogleAction');
+
                 done();
             },
         });
