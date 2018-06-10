@@ -214,9 +214,11 @@ Routing | request | `this.app.on('request')` | `jovo`
  | | endSession | `this.app.on('endSession')` | `jovo`
 Output | tell | `this.app.on('tell')` | `jovo`, `speech`
  | | ask | `this.app.on('ask')` | `jovo`, `speech`, `repromptSpeech`
- | | ShowSimpleCard | `this.app.on('showSimpleCard')` | `jovo`, `title`, `content`
- | | ShowImageCard | `this.app.on('showImageCard')` | `jovo`, `title`, `content`, `imageUrl`
- | | ShowAccountLinkingCard | `this.app.on('showAccountLinkingCard')` | `jovo`
+ | | showSimpleCard | `this.app.on('showSimpleCard')` | `jovo`, `title`, `content`
+ | | showImageCard | `this.app.on('showImageCard')` | `jovo`, `title`, `content`, `imageUrl`
+ | | showAccountLinkingCard | `this.app.on('showAccountLinkingCard')` | `jovo`
+ Error | handlerError | `this.app.on('handlerError')` | `jovo`, `error`
+ | | responseError | `this.app.on('responseError')` | `jovo`, `error`
 
 
 
