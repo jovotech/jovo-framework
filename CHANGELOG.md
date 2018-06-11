@@ -1,11 +1,3 @@
-[![Jovo Framework](https://www.jovo.tech/img/we-love-prs.png)](./CONTRIBUTING.md)
-
-<p align="center">
-	<a href="https://gitmoji.carloscuesta.me"><img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji"></a>
-</p>
-
-<br/>
-
 # Jovo Framework Changelog
 
 ## 1.2.1 (June 04, 2018)
