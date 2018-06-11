@@ -24,7 +24,7 @@ app.setHandler({
     },
 
     'GetFullAddressIntent': function() {
-        this.user().getAddress()
+        this.user().getDeviceAddress()
             .then((data) => {
                 console.log(data);
                 this.tell('Your address');
