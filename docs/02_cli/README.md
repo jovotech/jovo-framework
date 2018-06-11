@@ -1,7 +1,5 @@
 # Jovo CLI
 
-> Other pages in this category: [Workflows](./workflows.md './cli/workflows').
-
 The Jovo Command Line Tools offer the ability to create, prototype, test, and deploy your voice app quickly.
 
 * [Introduction](#introduction)
