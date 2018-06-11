@@ -59,7 +59,7 @@ Here is the official reference by Amazon: [Send the User a Progressive Response]
 this.alexaSkill().progressiveResponse(speech);
 ```
 
-Find an example file here: [`indexProgressiveResponse.js`](../../../examples/alexa_specific/appProgressiveResponse.js).
+Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/appProgressiveResponse.js).
 
 ### Visual Output
 
