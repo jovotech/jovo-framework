@@ -239,7 +239,7 @@ To use Chatbase Analytics for your voice app, you need to complete the following
 
 ### Enable Chatbase Analytics
 
-Chatbase Analytics can be enabled in your Jovo app's config (you can use the same API key for both platforms):
+Chatbase Analytics can be enabled in your Jovo app's config. Note: You can use the same API key for both platforms:
 
 ```javascript
 // config
