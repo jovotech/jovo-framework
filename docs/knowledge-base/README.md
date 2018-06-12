@@ -1,6 +1,6 @@
 # Jovo Knowledge Base
 
-* [Deploy a Dialogflow Agent with the Jovo CLI](./deploy-dialogflow-agent './kb/deploy-dialogflow-agent')
+* [Deploy a Dialogflow Agent with the Jovo CLI](./deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent')
 
 
 <!--[metadata]: {"title": "Jovo Knowledge Base", 
