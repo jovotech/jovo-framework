@@ -239,7 +239,7 @@ To use Chatbase Analytics for your voice app, you need to complete the following
 
 ### Enable Chatbase Analytics
 
-Chatbase Analytics can be added to your voice app with the following command:
+Chatbase Analytics can be added in your voice app's config (you can use the same API key for both platforms):
 
 ```javascript
 // config
@@ -261,7 +261,7 @@ const config = {
     },
 };
 // command
-app.addChatbaseAnalytics(key);
+app.addChatbaseAnalytics(key, version);
 ```
 
 ### Test Chatbase
