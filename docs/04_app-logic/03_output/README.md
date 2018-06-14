@@ -73,7 +73,7 @@ It is recommended to use a `'RepeatIntent'` (e.g. the `'AMAZON.RepeatIntent'`) t
 this.repeat();
 
 // Example
-'RepeatIntent' function() {
+'RepeatIntent': function() {
     this.repeat();
 }
 ```
