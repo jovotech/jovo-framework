@@ -20,7 +20,7 @@ Find more information on server integrations here:
 Name | Description
 ------------ | -------------
 [Webhook](./webhook.md './server/webhook') | Run an express server as HTTPS endpoint
-[AWS Lambda](./webhook.md './server/webhook') | Run the voice app as AWS Lambda Function
+[AWS Lambda](./aws-lambda.md './server/aws-lambda') | Run the voice app as AWS Lambda Function
 
 
 ## Code Example
