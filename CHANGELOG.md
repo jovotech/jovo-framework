@@ -8,6 +8,11 @@
 
 # Jovo Framework Changelog
 
+## 1.2.2 (June 15, 2018)
+* Fixed bugs in input mapping
+* Added better debugging (alpha release for talk.to.me hackathon berlin)
+
+
 ## 1.2.1 (June 04, 2018)
 * Fixed bugs in error handling
 * Fixed googleAction()/alexaSkill() 'undefined' bugs in Alexa Skill / Google Action requests
