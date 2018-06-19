@@ -3,22 +3,23 @@
 In this section, you will learn more about the essential configurations of a Jovo Voice App.
 
 * [Jovo App Structure](#jovo-app-structure)
-  * [Index.js - Server Configuration](#indexjs---server-configuration)
-  * [App - Application Logic](#app---application-logic)
-  * [Models - Language Model](#models---language-model)
+  * [index.js - Server Configuration](#indexjs---server-configuration)
+  * [app.json - Project Configuration](#appjson---project-configuration)
+  * [/app - Application Logic](#app---application-logic)
+  * [/models - Language Model](#models---language-model)
 * [How to Add Configurations](#how-to-add-configurations)
   * [Available Configurations](#available-configurations)
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into three main building blocks: [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js) ([server configuration](02_server './server')), [`/app`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/app/app.js), (app configuration and [logic](../04_app-logic './app-logic')), and [`models`](https://github.com/jovotech/jovo-templates/blob/master/hello-world/models/en-US.json) ([Jovo Language Model](./01_models './model')).
+A Jovo voice app is divided into four main building blocks: `index.js` ([server configuration](./02_server './server')), `app.json` ([project configuration](./app-json.md './app-json')), `/app` (app configuration and [logic](../04_app-logic './logic')), and `models` ([Jovo Language Model](./01_models './model')).
 
 
 ![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
 
 
 
-### Index.js - Server Configuration
+### index.js - Server Configuration
 Everything related to running your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in [`index.js`](https://github.com/jovotech/jovo-patterns/blob/master/hello-world/hello-world/index.js). 
 
 ```javascript
@@ -46,6 +47,12 @@ exports.handler = (event, context, callback) => {
 };
 ```
 You can find all the information regarding server configuration in this section: [App Configuration > Server](./02_server './server').
+
+### app.json - Project Configuration
+
+The `app.json` file stores all the necessary information for your Jovo project and is automatically created with the first [`jovo init` command](../02_cli#jovo-init './cli#jovo-init').
+
+Learn more about everything that can go into the `app.json` here: [App Configuration > app.json](./app-json.md './app-json').
 
 ### /app - Application Logic
 The `/app` folder, and specifically `app.js` is used for the logic of your voice application, which contains handlers, intents and the configuration of your voice app (we will get to that shortly). 
@@ -87,9 +94,9 @@ app.setHandler({
 module.exports.app = app;
 ```
 
-You can find everything related to the app logic here: [App Logic](../04_app-logic './app-logic').
+You can find everything related to the app logic here: [App Logic](../04_app-logic './logic').
 
-### Models - Language Model
+### /models - Language Model
 The models folder contains the [Jovo Language Model](./01_models './model'), which can be used to create and update platform specific language models using the [`Jovo CLI`](https://github.com/jovotech/jovo-cli). 
 
 The idea is to maintain a single language model locally instead of having to go to the platform developer consoles independently.
@@ -246,7 +253,7 @@ Below is a list of all configurations:
 
 Category | Name | Description
 :--- | :--- | :---
-Routing | [intentMap](../04_app-logic/01_routing#intentmap './app-logic#intentmap') | Maps incoming intents to specified intent names
+Routing | [intentMap](../04_app-logic/01_routing#intentmap './logic#intentmap') | Maps incoming intents to specified intent names
  | | [intentsToSkipUnhandled](../04_app-logic/01_routing#intentstoskipunhandled './routing#intentstoskipunhandled') | Intents which should not be mapped to 'Unhandled' when not found in a certain state
 Data | [inputMap](../04_app-logic/02_data#inputmap './data#inputmap') | Maps incoming input (slots and parameters) to specified input names
  | | [logging](../04_app-logic/02_data#logging './data#logging') | Logs both requests and responses
