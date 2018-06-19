@@ -78,9 +78,9 @@ These environment variables are usually stored in a `.env` file or in your cloud
 
 ## Platforms
 
-With the Jovo CLI, you can create and deploy project files (e.g. [language models](../02_models './model')) that are specific to each voice platform. 
+With the Jovo CLI, you can create and deploy project files (e.g. [language models](../03_app-configuration/02_models './model')) that are specific to each voice platform. 
 
-The [introduction](#introduction) already shows how a freshly created `app.json` looks like after initializing both platforms [`alexaSkill`](#alexaSkill) and [`googleAction`](#googleAction). In the following section, you will learn about additional configurations to the voice platform projects.
+The [introduction](#introduction) already shows how a freshly created `app.json` looks like after initializing both platforms [`alexaSkill`](#alexaskill) and [`googleAction`](#googleaction). In the following section, you will learn about additional configurations to the voice platform projects.
 
 ### alexaSkill
 
@@ -89,14 +89,16 @@ The following elements can be added to the `alexaSkill` object:
 ```javascript
 {
     "alexaSkill": {
-		"nlu": "alexa",
+        "nlu": {
+            "name": "alexa"
+        },
         "skillId": "<your-skill-id>",
         "askProfile": "<your-ask-cli-profile>"
-	},
+    },
 }
 ```
 
-In the deployment process with the Jovo CLI ([`jovo deploy`](../02_cli#jovo-deploy './cli#jovo-deploy')), `skillId` and `askProfile` are by default taken from the existing `skill.json` in the `/platforms/alexaSkill` folder. Specifying those in the `app.json` to override the `skill.json` is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
+In the deployment process with the Jovo CLI ([`jovo deploy`](../02_cli#jovo-deploy './cli#jovo-deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `app.json` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
 
 You can also add information to go into the `skill.json`. You can basically add any element that you can find in the skill manifest:
 
@@ -106,7 +108,7 @@ You can also add information to go into the `skill.json`. You can basically add 
         "manifest": {
             // Add element to override here
         }
-	},
+    },
 }
 ```
 
