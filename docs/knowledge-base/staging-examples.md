@@ -1,6 +1,6 @@
 # Staging Examples
 
-This page offers a selection of examples to learn how to deploy your Alexa Skill and Google Action to different environments. To learn more about the essentials of different stages, take a look at [App Configuration > app.json](../03_app-configuration/app-json.md './app-json') and [Advanced Features > Staging](../07_advanced#staging './advanced#staging').
+This page offers a selection of examples to learn how to deploy your Alexa Skill and Google Action to different environments. To learn more about the essentials of different stages, take a look at [App Configuration > app.json](../03_app-configuration/app-json.md '../app-json') and [Advanced Features > Staging](../07_advanced#staging '../advanced#staging').
 
 * [Basic setup](#basic-setup)
 * [Different endpoints](#different-endpoints)

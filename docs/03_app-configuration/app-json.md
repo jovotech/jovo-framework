@@ -216,7 +216,7 @@ In the above example, the object specifies the following process for the [`jovo 
 
 ### Config Overrides
 
-You may already know the [App Configuration](./README.md './configuration') that is done in `app/app.js` in the `config`variable.
+You may already know the [App Configuration](./README.md './configuration') that is done in `app/app.js` in the `config` variable.
 
 With the `app.json`, you can override some of the configurations made in the Jovo app, by adding the `config` block:
 
