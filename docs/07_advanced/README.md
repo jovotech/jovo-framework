@@ -122,8 +122,8 @@ You can also reference environment variables in the `app.json` with `${process.e
 
 Let's assume we want to build an Alexa Skill that has the following stages:
 
-* A default option for local development that uses the [Jovo Webhook](../03_app-configuration/02_server/webhook.md#jovo-webhook '../server/webhook#jovo-webhook') and the local [FileDB](../06_integrations/databases/README.md#filepersistence '../databases#filepersistence') for fast prototyping. The Skill is deployed to the developer's Amazon developer account (`default` ASK profile).
-* A `dev` stage that is hosted on [AWS Lambda](../03_app-configuration/02_server/aws-lambda.md '../server/aws-lambda') with [DynamoDB](../06_integrations/databases/README.md#dynamodb '../databases#dynamodb') as database. The Skill is deployed to the company's Amazon developer account (`company` ASK profile).
+* A default option for local development that uses the [Jovo Webhook](../03_app-configuration/02_server/webhook.md#jovo-webhook './server/webhook#jovo-webhook') and the local [FileDB](../06_integrations/databases/README.md#filepersistence './databases#filepersistence') for fast prototyping. The Skill is deployed to the developer's Amazon developer account (`default` ASK profile).
+* A `dev` stage that is hosted on [AWS Lambda](../03_app-configuration/02_server/aws-lambda.md './server/aws-lambda') with [DynamoDB](../06_integrations/databases/README.md#dynamodb './databases#dynamodb') as database. The Skill is deployed to the company's Amazon developer account (`company` ASK profile).
 
 ```javascript
 {
