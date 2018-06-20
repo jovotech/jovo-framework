@@ -1,7 +1,7 @@
 {
   "responseId": "14b77881-d5bc-475e-acd2-c0eff6e884f2",
   "queryResult": {
-    "queryText": "hello",
+    "queryText": "help",
     "parameters": {},
     "allRequiredParamsPresent": true,
     "outputContexts": [
@@ -23,7 +23,7 @@
     ],
     "intent": {
       "name": "projects/newagent-904be/agent/intents/70f56b11-ef4b-48dd-b94b-8cce040b94df",
-      "displayName": "HelloWorldIntent"
+      "displayName": "HelpIntent"
     },
     "intentDetectionConfidence": 1,
     "diagnosticInfo": {},
@@ -54,14 +54,14 @@
         {
           "rawInputs": [
             {
-              "query": "hello",
+              "query": "help",
               "inputType": "KEYBOARD"
             }
           ],
           "arguments": [
             {
-              "rawText": "hello",
-              "textValue": "hello",
+              "rawText": "help",
+              "textValue": "help",
               "name": "text"
             }
           ],
