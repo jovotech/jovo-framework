@@ -7,43 +7,44 @@ const webhookAlexaIntentRequestResponseJSON = '{"domain":null,"_events":{},"_eve
 let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 const App = require('../../../lib/app').App;
 const BaseApp = require('../../../lib/app');
+const util = require('../../../lib/util');
 
 // workaround
-response.json = function(json) {};
+response.json = function (json) {
+};
 
 
-describe('googleAction()', function() {
-    it('should be type of object', function(done) {
-        let app = new App();
+describe('googleAction()', function () {
+    for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlowV2', 'GoogleActionDialogFlow')) {
+        it('should be type of object for ' + rb.type(), function (done) {
+            let app = new App();
 
-        let request = (new RequestBuilderGoogleAction())
-            .intentRequest()
-            .setIntentName('HelloWorld')
-            .build();
+            let request = rb.intentRequest()
+                .setIntentName('HelloWorld');
 
-        app.handleRequest(request, response, {
-            'HelloWorld': function() {
-                assert(typeof this.googleAction() === 'object', 'typeof object');
-                assert(this.getPlatform().constructor.name === 'GoogleAction');
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'HelloWorld': function () {
+                    assert(typeof this.googleAction() === 'object', 'typeof object');
+                    assert(this.getPlatform().constructor.name === 'GoogleAction');
 
-                done();
-            },
+                    done();
+                },
+            });
+
         });
-    });
 
-    it('should return GOOGLE_ACTION as platformtype', function(done) {
-        let app = new App();
+        it('should return GOOGLE_ACTION as platformtype for ' + rb.type(), function(done) {
+            let app = new App();
 
-        let request = (new RequestBuilderGoogleAction())
-            .intentRequest()
-            .setIntentName('HelloWorld')
-            .build();
+            let request = rb.intentRequest()
+                .setIntentName('HelloWorld');
 
-        app.handleRequest(request, response, {
-            'HelloWorld': function() {
-                assert(this.googleAction().getType() === BaseApp.PLATFORM_ENUM.GOOGLE_ACTION, 'GOOGLE_ACTION');
-                done();
-            },
+            app.handleRequest(request.buildHttpRequest(), response, {
+                'HelloWorld': function () {
+                    assert(this.googleAction().getType() === BaseApp.PLATFORM_ENUM.GOOGLE_ACTION, 'GOOGLE_ACTION');
+                    done();
+                },
+            });
         });
-    });
+    }
 });
