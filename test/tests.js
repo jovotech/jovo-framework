@@ -136,13 +136,13 @@ describe('Jovo Class - Alexa Webhook tests', function() {
             });
         });
         describe('GoogleAction', function() {
-            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
-                it('should return valid tell with inputs ("name":"John Doe") response', function (done) {
+            for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return valid tell with inputs ("name":"John Doe") response', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hey John Doe'));
                         done();
@@ -154,18 +154,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .addParameter('name', 'John Doe');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.tell('Hey ' + this.getInput('name').value);
                         },
                     });
                 });
 
-                it('should return valid tell with a simple card', function (done) {
+                it('should return valid tell with a simple card', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hello World'));
                         assert.ok(response.hasBasicCard('Foo', 'Bar'));
@@ -177,19 +177,19 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.showSimpleCard('Foo', 'Bar')
                                 .tell('Hello World');
                         },
                     });
                 });
 
-                it('should return valid tell with an image card (1)', function (done) {
+                it('should return valid tell with an image card (1)', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hello World'));
                         assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
@@ -201,18 +201,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
                                 .tell('Hello World');
                         },
                     });
                 });
-                it('should return valid tell with an image card (2)', function (done) {
+                it('should return valid tell with an image card (2)', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hello World'));
                         assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
@@ -224,7 +224,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             const imageObject = {
                                 smallImageUrl: 'https://any.url.com/image.jpg',
                                 largeImageUrl: 'https://any.url.com/image.jpg',
@@ -237,7 +237,6 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                 });
             }
         });
-
     });
 
     describe('ask', function() {
@@ -350,13 +349,13 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
-                it('should return valid simple ask ("What is your name?","Your name please") response', function (done) {
+            for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return valid simple ask ("What is your name?","Your name please") response', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isAsk('What is your name?', 'Your name please'));
                         done();
@@ -366,18 +365,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.ask('What is your name?', 'Your name please');
                         },
                     });
                 });
 
-                it('should return valid ask with a simple card', function (done) {
+                it('should return valid ask with a simple card', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isAsk('What is your name?', 'Your name please'));
                         assert.ok(response.hasBasicCard('Foo', 'Bar'));
@@ -388,19 +387,19 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.showSimpleCard('Foo', 'Bar')
                                 .ask('What is your name?', 'Your name please');
                         },
                     });
                 });
 
-                it('should return valid ask with an image card (1)', function (done) {
+                it('should return valid ask with an image card (1)', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isAsk('What is your name?', 'Your name please'));
                         assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
@@ -411,18 +410,18 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
                                 .ask('What is your name?', 'Your name please');
                         },
                     });
                 });
-                it('should return valid ask with an image card (2)', function (done) {
+                it('should return valid ask with an image card (2)', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isAsk('What is your name?', 'Your name please'));
                         assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
@@ -433,7 +432,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             const imageObject = {
                                 smallImageUrl: 'https://any.url.com/image.jpg',
                                 largeImageUrl: 'https://any.url.com/image.jpg',
@@ -475,13 +474,13 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
-                it('should return simple play response', function (done) {
+            for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return simple play response', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isPlay('https://any.url.com/file.mp3', 'FallbackText'));
                         done();
@@ -491,7 +490,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setIntentName('HelloWorldIntent');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.play('https://any.url.com/file.mp3', 'FallbackText');
                         },
                     });
@@ -555,13 +554,13 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
-                it('should set the name session attribute and update the age session attribute', function (done) {
+            for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should set the name session attribute and update the age session attribute', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.hasContextOutParameter('session', 'name', 'John Doe'));
                         assert.ok(response.hasContextOutParameter('session', 'age', 40));
@@ -574,19 +573,19 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setSessionAttribute('age', 50);
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'HelloWorldIntent': function () {
+                        'HelloWorldIntent': function() {
                             this.addSessionAttribute('age', 40);
                             this.addSessionAttribute('name', 'John Doe').tell('Hello World!');
                         },
                     });
                 });
 
-                it('should get the session attribute ', function (done) {
+                it('should get the session attribute ', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hello undefined'));
 
@@ -599,7 +598,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                         .setSessionAttribute('name', 'John Doe');
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'AnotherIntent': function () {
+                        'AnotherIntent': function() {
                             this.tell('Hello ' + this.getSessionAttribute('firstname'));
                         },
                     });
@@ -634,13 +633,13 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
-                it('should call LAUNCH ', function (done) {
+            for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should call LAUNCH ', function(done) {
                     this.timeout(1000);
 
                     let app = new App();
 
-                    app.on('respond', function (jovo) {
+                    app.on('respond', function(jovo) {
                         let response = jovo.getPlatform().getResponse();
                         assert.ok(response.isTell('Hello World!'));
                         done();
@@ -649,7 +648,7 @@ describe('Jovo Class - Alexa Webhook tests', function() {
                     let request = rb.launchRequest();
 
                     app.handleRequest(request.buildHttpRequest(), response, {
-                        'LAUNCH': function () {
+                        'LAUNCH': function() {
                             this.tell('Hello World!');
                         },
                     });
