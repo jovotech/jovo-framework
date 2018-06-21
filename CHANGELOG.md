@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.2.3 (June 21, 2018)
+* Fixed Jovo Debugger related issues
+
 ## 1.2.2 (June 15, 2018)
 * Fixed bugs in input mapping
 * Added better debugging (alpha release for talk.to.me hackathon berlin)
