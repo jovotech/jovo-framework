@@ -44,6 +44,15 @@ this.alexaSkill().audioPlayer().enqueue(url, token)
 this.alexaSkill().audioPlayer().stop();
 ```
 
+### Set Track Metadata
+```javascript
+this.alexaSkill().audioPlayer()
+    .setTitle("First Track")
+    .setSubtitle("A simple subtitle")
+    .addArtwork("https://www.somewhere.com/image.png")
+    .addBackgroundImage("https://www.somewhere.com/background.jpg")
+```
+
 
 ## AudioPlayer Directives
 
