@@ -5,8 +5,6 @@ let chai = require('chai');
 const assert = chai.assert;
 // const path = require('path');
 
-const RequestBuilderAlexaSkill = require('../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
-let RequestBuilderGoogleAction = require('../../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;
 const AlexaUser = require('../../lib/platforms/alexaSkill/alexaUser').AlexaUser;
 const GoogleActionUser = require('../../lib/platforms/googleaction/googleActionUser').GoogleActionUser;
 

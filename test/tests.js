@@ -3,8 +3,6 @@ let assert = require('chai').assert;
 
 const RequestBuilderAlexaSkill = require('../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
-
-let RequestBuilderGoogleAction = require('../lib/platforms/googleaction/requestBuilderGoogleAction').RequestBuilderGoogleAction;
 const App = require('../lib/app').App;
 
 const util = require('../lib/util');
@@ -138,113 +136,108 @@ describe('Jovo Class - Alexa Webhook tests', function() {
             });
         });
         describe('GoogleAction', function() {
-            it('should return valid tell with inputs ("name":"John Doe") response', function(done) {
-                this.timeout(1000);
+            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return valid tell with inputs ("name":"John Doe") response', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hey John Doe'));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hey John Doe'));
+                        done();
+                    });
+
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent')
+                        .addParameter('name', 'John Doe');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.tell('Hey ' + this.getInput('name').value);
+                        },
+                    });
                 });
 
+                it('should return valid tell with a simple card', function (done) {
+                    this.timeout(1000);
 
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .addParameter('name', 'John Doe')
-                    .build();
+                    let app = new App();
 
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.tell('Hey ' + this.getInput('name').value);
-                    },
-                });
-            });
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hello World'));
+                        assert.ok(response.hasBasicCard('Foo', 'Bar'));
+                        done();
+                    });
 
-            it('should return valid tell with a simple card', function(done) {
-                this.timeout(1000);
 
-                let app = new App();
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello World'));
-                    assert.ok(response.hasBasicCard('Foo', 'Bar'));
-                    done();
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.showSimpleCard('Foo', 'Bar')
+                                .tell('Hello World');
+                        },
+                    });
                 });
 
+                it('should return valid tell with an image card (1)', function (done) {
+                    this.timeout(1000);
 
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
+                    let app = new App();
 
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.showSimpleCard('Foo', 'Bar')
-                            .tell('Hello World');
-                    },
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hello World'));
+                        assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
+                        done();
+                    });
+
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
+                                .tell('Hello World');
+                        },
+                    });
                 });
-            });
+                it('should return valid tell with an image card (2)', function (done) {
+                    this.timeout(1000);
 
-            it('should return valid tell with an image card (1)', function(done) {
-                this.timeout(1000);
+                    let app = new App();
 
-                let app = new App();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hello World'));
+                        assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
+                        done();
+                    });
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello World'));
-                    assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
-                    done();
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            const imageObject = {
+                                smallImageUrl: 'https://any.url.com/image.jpg',
+                                largeImageUrl: 'https://any.url.com/image.jpg',
+                            };
+
+                            this.showImageCard('Foo', 'Bar', imageObject)
+                                .tell('Hello World');
+                        },
+                    });
                 });
-
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
-                            .tell('Hello World');
-                    },
-                });
-            });
-            it('should return valid tell with an image card (2)', function(done) {
-                this.timeout(1000);
-
-                let app = new App();
-
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello World'));
-                    assert.ok(response.hasImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
-                    done();
-                });
-
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        const imageObject = {
-                            smallImageUrl: 'https://any.url.com/image.jpg',
-                            largeImageUrl: 'https://any.url.com/image.jpg',
-                        };
-
-                        this.showImageCard('Foo', 'Bar', imageObject)
-                            .tell('Hello World');
-                    },
-                });
-            });
+            }
         });
+
     });
 
     describe('ask', function() {
@@ -357,107 +350,101 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            it('should return valid simple ask ("What is your name?","Your name please") response', function(done) {
-                this.timeout(1000);
+            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return valid simple ask ("What is your name?","Your name please") response', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isAsk('What is your name?', 'Your name please'));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isAsk('What is your name?', 'Your name please'));
+                        done();
+                    });
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.ask('What is your name?', 'Your name please');
+                        },
+                    });
                 });
 
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
+                it('should return valid ask with a simple card', function (done) {
+                    this.timeout(1000);
 
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.ask('What is your name?', 'Your name please');
-                    },
-                });
-            });
+                    let app = new App();
 
-            it('should return valid ask with a simple card', function(done) {
-                this.timeout(1000);
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isAsk('What is your name?', 'Your name please'));
+                        assert.ok(response.hasBasicCard('Foo', 'Bar'));
+                        done();
+                    });
 
-                let app = new App();
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isAsk('What is your name?', 'Your name please'));
-                    assert.ok(response.hasBasicCard('Foo', 'Bar'));
-                    done();
-                });
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.showSimpleCard('Foo', 'Bar')
-                            .ask('What is your name?', 'Your name please');
-                    },
-                });
-            });
-
-            it('should return valid ask with an image card (1)', function(done) {
-                this.timeout(1000);
-
-                let app = new App();
-
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isAsk('What is your name?', 'Your name please'));
-                    assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
-                    done();
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.showSimpleCard('Foo', 'Bar')
+                                .ask('What is your name?', 'Your name please');
+                        },
+                    });
                 });
 
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
+                it('should return valid ask with an image card (1)', function (done) {
+                    this.timeout(1000);
 
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
-                            .ask('What is your name?', 'Your name please');
-                    },
+                    let app = new App();
+
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isAsk('What is your name?', 'Your name please'));
+                        assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
+                        done();
+                    });
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.showImageCard('Foo', 'Bar', 'https://any.url.com/image.jpg')
+                                .ask('What is your name?', 'Your name please');
+                        },
+                    });
                 });
-            });
-            it('should return valid ask with an image card (2)', function(done) {
-                this.timeout(1000);
+                it('should return valid ask with an image card (2)', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isAsk('What is your name?', 'Your name please'));
-                    assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isAsk('What is your name?', 'Your name please'));
+                        assert.ok(response.hasBasicCard('Foo', 'Bar', 'https://any.url.com/image.jpg', 'Foo'));
+                        done();
+                    });
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            const imageObject = {
+                                smallImageUrl: 'https://any.url.com/image.jpg',
+                                largeImageUrl: 'https://any.url.com/image.jpg',
+                            };
+
+                            this.showImageCard('Foo', 'Bar', imageObject)
+                                .ask('What is your name?', 'Your name please');
+                        },
+                    });
                 });
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        const imageObject = {
-                            smallImageUrl: 'https://any.url.com/image.jpg',
-                            largeImageUrl: 'https://any.url.com/image.jpg',
-                        };
-
-                        this.showImageCard('Foo', 'Bar', imageObject)
-                            .ask('What is your name?', 'Your name please');
-                    },
-                });
-            });
+            }
         });
     });
 
@@ -488,28 +475,28 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            it('should return simple play response', function(done) {
-                this.timeout(1000);
+            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should return simple play response', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isPlay('https://any.url.com/file.mp3', 'FallbackText'));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isPlay('https://any.url.com/file.mp3', 'FallbackText'));
+                        done();
+                    });
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.play('https://any.url.com/file.mp3', 'FallbackText');
+                        },
+                    });
                 });
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.play('https://any.url.com/file.mp3', 'FallbackText');
-                    },
-                });
-            });
+            }
         });
     });
 
@@ -568,57 +555,56 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            it('should set the name session attribute and update the age session attribute', function(done) {
-                this.timeout(1000);
+            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should set the name session attribute and update the age session attribute', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.hasContextOutParameter('session', 'name', 'John Doe'));
-                    assert.ok(response.hasContextOutParameter('session', 'age', 40));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.hasContextOutParameter('session', 'name', 'John Doe'));
+                        assert.ok(response.hasContextOutParameter('session', 'age', 40));
+                        done();
+                    });
+
+
+                    let request = rb.intentRequest()
+                        .setIntentName('HelloWorldIntent')
+                        .setSessionAttribute('age', 50);
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'HelloWorldIntent': function () {
+                            this.addSessionAttribute('age', 40);
+                            this.addSessionAttribute('name', 'John Doe').tell('Hello World!');
+                        },
+                    });
                 });
 
+                it('should get the session attribute ', function (done) {
+                    this.timeout(1000);
 
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('HelloWorldIntent')
-                    .addContextParameter('session', 'age', 50)
-                    .build();
-                app.handleRequest(request, response, {
-                    'HelloWorldIntent': function() {
-                        this.addSessionAttribute('age', 40);
-                        this.addSessionAttribute('name', 'John Doe').tell('Hello World!');
-                    },
+                    let app = new App();
+
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hello undefined'));
+
+                        done();
+                    });
+
+
+                    let request = rb.intentRequest()
+                        .setIntentName('AnotherIntent')
+                        .setSessionAttribute('name', 'John Doe');
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'AnotherIntent': function () {
+                            this.tell('Hello ' + this.getSessionAttribute('firstname'));
+                        },
+                    });
                 });
-            });
-
-            it('should get the session attribute ', function(done) {
-                this.timeout(1000);
-
-                let app = new App();
-
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello undefined'));
-
-                    done();
-                });
-
-
-                let request = (new RequestBuilderGoogleAction())
-                    .intentRequest()
-                    .setIntentName('AnotherIntent')
-                    .addContextParameter('session', 'name', 'John Doe')
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'AnotherIntent': function() {
-                        this.tell('Hello ' + this.getSessionAttribute('firstname'));
-                    },
-                });
-            });
+            }
         });
     });
 
@@ -648,27 +634,27 @@ describe('Jovo Class - Alexa Webhook tests', function() {
         });
 
         describe('GoogleAction', function() {
-            it('should call LAUNCH ', function(done) {
-                this.timeout(1000);
+            for(let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlow', 'GoogleActionDialogFlowV2')) {
+                it('should call LAUNCH ', function (done) {
+                    this.timeout(1000);
 
-                let app = new App();
+                    let app = new App();
 
-                app.on('respond', function(jovo) {
-                    let response = jovo.getPlatform().getResponse();
-                    assert.ok(response.isTell('Hello World!'));
-                    done();
+                    app.on('respond', function (jovo) {
+                        let response = jovo.getPlatform().getResponse();
+                        assert.ok(response.isTell('Hello World!'));
+                        done();
+                    });
+
+                    let request = rb.launchRequest();
+
+                    app.handleRequest(request.buildHttpRequest(), response, {
+                        'LAUNCH': function () {
+                            this.tell('Hello World!');
+                        },
+                    });
                 });
-
-                let request = (new RequestBuilderGoogleAction())
-                    .launchRequest()
-                    .build();
-
-                app.handleRequest(request, response, {
-                    'LAUNCH': function() {
-                        this.tell('Hello World!');
-                    },
-                });
-            });
+            }
         });
     });
 

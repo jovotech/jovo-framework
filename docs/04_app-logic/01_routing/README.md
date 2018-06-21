@@ -765,7 +765,7 @@ this.toStatelessIntent('PizzaIntent', moreData);
 
 ## Event Listeners
 
-Find out more about event listeners here: [App Logic > Routing > Event Listener](./event-listeners.md './event-listeners')
+Event Listeners offer a way for you to react on certain events like `onRequest` and `onResponse`. Find out more about event listeners here: [App Logic > Routing > Event Listeners](./event-listeners.md './routing/event-listeners').
 
 ## User Input
 

@@ -48,7 +48,7 @@ app.onResponse(function(jovo) {
 ```
 
 <!--[metadata]: {"title": "Event Listeners", 
-                "description": "Find out how to build voice app logic with the Jovo Framework",
+                "description": "Find out how to use event listeners with the Jovo Framework",
                 "activeSections": ["logic", "routing", "eventlisteners"],
                 "expandedSections": "logic",
                 "inSections": "logic",
