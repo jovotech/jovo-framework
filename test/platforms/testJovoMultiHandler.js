@@ -90,12 +90,12 @@ describe('extending handlers', function() {
     });
 
     for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlowV2', 'GoogleActionDialogFlow')) {
-        it('should extend handler with alexa specific handler (google action request)', function (done) {
+        it('should extend handler with alexa specific handler (google action request)', function(done) {
             this.timeout(1000);
 
             let app = new App();
 
-            app.on('respond', function (jovo) {
+            app.on('respond', function(jovo) {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello World'));
                 done();
@@ -105,37 +105,37 @@ describe('extending handlers', function() {
                 .setIntentName('HelloWorldIntent');
 
             app.setAlexaHandler({
-                'HelloWorldIntent': function () {
+                'HelloWorldIntent': function() {
                     this.tell('Hello Alexa');
                 },
             });
             app.handleRequest(requestGoogleAction.buildHttpRequest(), response, {
-                'HelloWorldIntent': function () {
+                'HelloWorldIntent': function() {
                     this.tell('Hello World');
                 },
             });
         });
 
-        it('should extend handler with google action specific handler (google action request)', function (done) {
+        it('should extend handler with google action specific handler (google action request)', function(done) {
             this.timeout(1000);
 
             let app = new App();
 
-            app.on('respond', function (jovo) {
+            app.on('respond', function(jovo) {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello Google'));
                 done();
             });
 
             let requestGoogleAction = rb.intentRequest()
-                .setIntentName('HelloWorldIntent')
+                .setIntentName('HelloWorldIntent');
             app.setGoogleActionHandler({
-                'HelloWorldIntent': function () {
+                'HelloWorldIntent': function() {
                     this.tell('Hello Google');
                 },
             });
             app.handleRequest(requestGoogleAction.buildHttpRequest(), response, {
-                'HelloWorldIntent': function () {
+                'HelloWorldIntent': function() {
                     this.tell('Hello World');
                 },
             });
@@ -197,12 +197,12 @@ describe('extending handlers', function() {
     });
 
     for (let rb of util.getPlatformRequestBuilder('GoogleActionDialogFlowV2', 'GoogleActionDialogFlow')) {
-        it('should handle extended google action handler without existing intent (google action request)', function (done) {
+        it('should handle extended google action handler without existing intent (google action request)', function(done) {
             this.timeout(2000);
 
             let app = new App();
 
-            app.on('respond', function (jovo) {
+            app.on('respond', function(jovo) {
                 let response = jovo.getPlatform().getResponse();
                 assert.ok(response.isTell('Hello Google'));
                 done();
@@ -212,12 +212,12 @@ describe('extending handlers', function() {
                 .setIntentName('HelloWorldIntent');
 
             app.setGoogleActionHandler({
-                'HelloWorldIntent': function () {
+                'HelloWorldIntent': function() {
                     this.tell('Hello Google');
                 },
             });
             app.handleRequest(requestGoogleAction.buildHttpRequest(), response, {
-                'LAUNCH': function () {
+                'LAUNCH': function() {
                     this.tell('Hello World');
                 },
             });
