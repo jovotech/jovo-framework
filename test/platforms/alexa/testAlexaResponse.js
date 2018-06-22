@@ -951,6 +951,22 @@ describe('Tests for AlexaResponse Class', function() {
         it('should return a valid add video directive', () => {
             let response = new AlexaResponse();
             response
+                .addVideoDirective('https://www.example.com/video.mp4', 'Title', 'Subtitle', 'Preamble');
+
+            expect(response.getSpeechText()).to.equal('Preamble');
+            expect(response.responseObj.response.directives).to.deep.include({
+                type: 'VideoApp.Launch',
+                videoItem: {
+                    source: 'https://www.example.com/video.mp4',
+                    metadata: {
+                        title: 'Title',
+                        subtitle: 'Subtitle',
+                    },
+                },
+            });
+
+            response = new AlexaResponse();
+            response
                 .addVideoDirective('https://www.example.com/video.mp4', 'Title', 'Subtitle');
 
             expect(response.responseObj.response.directives).to.deep.include({
