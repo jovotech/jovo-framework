@@ -1,5 +1,13 @@
 # Jovo Framework Changelog
 
+## 1.3.0 (June 22, 2018)
+* Added Jovo Debugger plugin to Jovo Webhook (Beta) http://webhook.jovo.cloud/<your-webhook-id>
+* [#184](https://github.com/jovotech/jovo-framework-nodejs/pull/184) Added Alexa Video Preamble Option - [@MerryOscar](https://github.com/MerryOscar)
+* [#183](https://github.com/jovotech/jovo-framework-nodejs/pull/183) Added support for audio track metadata in the Alexa Audio Player - [@blforce](https://github.com/blforce)
+* [#169](https://github.com/jovotech/jovo-framework-nodejs/pull/169) Prevent (and gracefully handle) DynamoDB error - [@fgnass](https://github.com/fgnass)
+* [#166](https://github.com/jovotech/jovo-framework-nodejs/pull/166) Register plugins without a name - [@fgnass](https://github.com/fgnass)
+* [#164](https://github.com/jovotech/jovo-framework-nodejs/pull/164) Improve error handling - [@fgnass](https://github.com/fgnass)
+
 ## 1.2.3 (June 21, 2018)
 * Fixed Jovo Debugger related issues
 
