@@ -76,7 +76,7 @@ let google = this.googleAction();
 
 You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant './google-assistant'):
 
-* Google Assistant Cards
+* Visual Output (Google Assistant Cards)
 * Suggestion Chips
 * User location
 * Account Linking
