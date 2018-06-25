@@ -162,5 +162,5 @@ New to developing for voice platforms like Amazon Alexa and Google Assistant? Go
                                 "Installation": ""
                                 },
 "commentsID": "framework/docs/getting-started",
-"route": "docs/getting-started"
+"route": "docs/installation"
                 }-->
