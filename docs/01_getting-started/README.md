@@ -1,6 +1,4 @@
-﻿# Getting Started > Installation
-
-> Other pages in this category: [Tutorials](./tutorials.md './tutorials'), [Voice App Basics](./voice-app-basics.md './voice-app-basics').
+# Getting Started > Installation
 
 * [Introduction](#introduction)
   * [Technical Requirements](#technical-requirements)
