@@ -300,7 +300,7 @@ Note: If you're only building an Alexa Skill, der is no need to specify a host w
 
 <!--[metadata]: {"title": "app.json - Project Configuration", 
                 "description": "The app.json is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.",
-                "activeSections": ["configuration", "configuration_appjson"],
+                "activeSections": ["configuration", "appjson"],
                 "expandedSections": "configuration",
                 "inSections": "configuration",
                 "breadCrumbs": {"Docs": "docs/",

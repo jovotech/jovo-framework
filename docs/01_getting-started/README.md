@@ -1,6 +1,4 @@
-﻿# Getting Started > Installation
-
-> Other pages in this category: [Tutorials](./tutorials.md './tutorials'), [Voice App Basics](./voice-app-basics.md './voice-app-basics').
+# Getting Started > Installation
 
 * [Introduction](#introduction)
   * [Technical Requirements](#technical-requirements)
@@ -164,5 +162,5 @@ New to developing for voice platforms like Amazon Alexa and Google Assistant? Go
                                 "Installation": ""
                                 },
 "commentsID": "framework/docs/getting-started",
-"route": "docs/getting-started"
+"route": "docs/installation"
                 }-->
