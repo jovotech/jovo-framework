@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.3.1 (June 28, 2018)
+* Improved Jovo Debugger plugin
+
 ## 1.3.0 (June 22, 2018)
 * Added Jovo Debugger plugin to Jovo Webhook (Beta) http://webhook.jovo.cloud/your-webhook-id
 * [#184](https://github.com/jovotech/jovo-framework-nodejs/pull/184) Added Alexa Video Preamble Option - [@MerryOscar](https://github.com/MerryOscar)
