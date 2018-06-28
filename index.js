@@ -1,7 +1,7 @@
 'use strict';
 
 const Jovo = require('./lib/jovo').Jovo;
-const FilePersistence = require('./lib/integrations/db/filePersistence').FilePersistence;
+const FilePersistence = require('./lib/integrations/db/filePersistenceV2').FilePersistence;
 const DynamoDb = require('./lib/integrations/db/dynamoDb').DynamoDb;
 const WebhookTest = require('./lib/tools/webhookTest').WebhookTest;
 const RequestBuilderAlexaSkill = require('./lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
