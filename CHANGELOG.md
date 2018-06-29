@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.3.2 (June 29, 2018)
+* [#190](https://github.com/jovotech/jovo-framework-nodejs/pull/190) Added CanFulfillIntentRequest - [@omenocal](https://github.com/omenocal)
+
+
 ## 1.3.1 (June 28, 2018)
 * Improved Jovo Debugger plugin
 
