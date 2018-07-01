@@ -173,7 +173,7 @@ nodemon | Monitor changes and automatically restart the server | [📝](./docs/0
 
 ### Missing
 
-The following features are not implemented yet. We appreciate any kind of help and are also happy to help you, if you have any questions. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
+The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
 
 Platform | Feature | Docs
 :--- | :--- | :---
