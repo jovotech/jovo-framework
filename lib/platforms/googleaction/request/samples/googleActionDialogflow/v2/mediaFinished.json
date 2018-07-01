@@ -1,0 +1,97 @@
+{
+  "responseId": "9c8e4722-2c9b-46b6-8fcf-db73a801feb9",
+  "queryResult": {
+    "queryText": "actions_intent_MEDIA_STATUS",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/agent/agent/sessions/1530084942177/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent/agent/sessions/1530084942177/contexts/google_assistant_input_type_voice"
+      },
+      {
+        "name": "projects/agent/agent/sessions/1530084942177/contexts/actions_intent_media_status",
+        "parameters": {
+          "MEDIA_STATUS": {
+            "@type": "type.googleapis.com/google.actions.v2.MediaStatus",
+            "status": "FINISHED"
+          }
+        }
+      },
+      {
+        "name": "projects/agent/agent/sessions/1530084942177/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent/agent/intents/03e13b63-a9ea-4bb7-9b2e-1c621103d85b",
+      "displayName": "Default Fallback Intent"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "inputType": "VOICE"
+            }
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.v2.MediaStatus",
+                "status": "FINISHED"
+              },
+              "name": "MEDIA_STATUS"
+            }
+          ],
+          "intent": "actions.intent.MEDIA_STATUS"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-06-27T07:22:40Z",
+        "locale": "en-US",
+        "userId": "ABwppHGPZMFGdPiINQJmLusNATfPZNwgfWoABYBodhmfQL74rFhc6e7B9LtVRBRZjLMsnYpYSBMmgjJ4dw"
+      },
+      "conversation": {
+        "conversationId": "1530084942177",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent/agent/sessions/1530084942177"
+}

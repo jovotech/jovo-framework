@@ -31,5 +31,5 @@ For more detailed feedback and feature suggestions, we also appreciate email. Yo
 
 <!--[metadata]: {"title": "Support", 
 		"description": "Questions about developing an Alexa Skill or Google Action? Jovo is here to help!", 
-		"activeSections": ["support"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Support": "" }, "commentsID": "framework/docs/support", "route": "docs/support" }-->
+		"activeSections": ["support"], "expandedSections": "integrations", "inSections": "support", "breadCrumbs": {"Docs": "docs/", "Support": "" }, "commentsID": "framework/docs/support", "route": "docs/support" }-->
 

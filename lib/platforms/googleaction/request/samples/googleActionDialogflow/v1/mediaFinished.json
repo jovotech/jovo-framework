@@ -1,0 +1,133 @@
+{
+  "originalRequest": {
+    "source": "google",
+    "version": "2",
+    "data": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "inputType": "VOICE"
+            }
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.v2.MediaStatus",
+                "status": "FINISHED"
+              },
+              "name": "MEDIA_STATUS"
+            }
+          ],
+          "intent": "actions.intent.MEDIA_STATUS"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-06-27T09:27:01Z",
+        "locale": "en-US",
+        "userId": "ABwppHGPZMFGdPiINQJmLusNFTfPZNwgfWoABYBodhmfQL74rFhc6e7B9LtVRBRZjLMsnYpYSBMmgjJ4dw"
+      },
+      "conversation": {
+        "conversationId": "1530091761527",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "id": "93231f85-89a6-4c59-8b01-74a65e8423f2",
+  "timestamp": "2018-06-27T09:29:48.969Z",
+  "lang": "en-us",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "actions_intent_MEDIA_STATUS",
+    "speech": "",
+    "action": "",
+    "actionIncomplete": false,
+    "parameters": {},
+    "contexts": [
+      {
+        "name": "actions_capability_screen_output",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_audio_output",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "google_assistant_input_type_voice",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_intent_media_status",
+        "parameters": {
+          "MEDIA_STATUS": {
+            "@type": "type.googleapis.com/google.actions.v2.MediaStatus",
+            "status": "FINISHED"
+          }
+        },
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_media_response_audio",
+        "parameters": {},
+        "lifespan": 0
+      },
+      {
+        "name": "actions_capability_web_browser",
+        "parameters": {},
+        "lifespan": 0
+      }
+    ],
+    "metadata": {
+      "intentId": "03e13b63-a9ea-4bb7-9b2e-1c621103d85b",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "nluResponseTime": 1,
+      "intentName": "Default Fallback Intent"
+    },
+    "fulfillment": {
+      "speech": ""
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "1530091761527"
+}
