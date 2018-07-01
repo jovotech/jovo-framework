@@ -154,6 +154,8 @@ For the local development, it automatically grabs the user's Jovo Webhook url by
 
 For the `dev` stage, an AWS Lambda ARN is used as `endpoint`. Additionally to a different `skillId`, the `company` profile is used for deployment to the Amazon Developer Portal. Also, this stage specifies a new `db` config that differs from the default FileDB and uses a table name referenced in the environment variables in Lambda: `${process.env.TABLE_NAME}`.
 
+You can find even more examples in our [knowledge base article](../knowledge-base/staging-examples.md).
+
 ## Plugins
 
 Plugins allow you to easily extend the Jovo Framework without having to mess with its core code and architecture.
