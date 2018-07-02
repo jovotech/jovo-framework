@@ -51,7 +51,6 @@ The main features of the Jovo ecosystem are:
   * [General](#general)
   * [Platform Specific Features](#platform-specific-features)
   * [Integrations](#integrations)
-  * [Missing](#missing)
 * [Getting Started](./docs/01_getting-started)
   * [Jovo CLI](./docs/01_getting-started#getting-started)
   * [Jovo Framework](./docs/01_getting-started#jovo-framework-npm-package)
@@ -140,6 +139,21 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 Location | Access your user's location data | [📝](./docs/05_platform-specifics/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/05_platform-specifics/google-assistant/media-response.md)
 
+
+#### Missing
+
+The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
+
+Platform | Feature | Docs
+:--- | :--- | :---
+**Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
+&nbsp; | GameEngine Interface | [📝](https://developer.amazon.com/docs/custom-skills/game-engine-interface-reference.html)
+&nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
+**Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
+&nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
+&nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)
+&nbsp; | Android Link | [📝](https://developers.google.com/actions/assistant/helpers#android_link)
+
 ### Integrations
 
 #### Database Integrations
@@ -170,19 +184,6 @@ Name | Description | Docs
 bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](./docs/02_cli#bst-proxy)
 nodemon | Monitor changes and automatically restart the server | [📝](./docs/02_cli#watch)
 
-### Missing
-
-The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
-
-Platform | Feature | Docs
-:--- | :--- | :---
-**Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
-&nbsp; | GameEngine Interface | [📝](https://developer.amazon.com/docs/custom-skills/game-engine-interface-reference.html)
-&nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
-**Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
-&nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
-&nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)
-&nbsp; | Android Link | [📝](https://developers.google.com/actions/assistant/helpers#android_link)
 
 ## Tutorials
 
