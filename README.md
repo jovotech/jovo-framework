@@ -58,7 +58,6 @@ The main features of the Jovo ecosystem are:
   * [Jovo Sample App](./docs/01_getting-started#jovo-sample-voice-app)
 * [Tutorials](#tutorials)
 * [Contributing](#contributing)
-* [Development Roadmap](#development-roadmap)
 
 
 ## Installation
