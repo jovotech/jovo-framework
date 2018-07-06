@@ -9,7 +9,7 @@ This page offers a selection of examples to learn how to deploy your Alexa Skill
 
 Watch the video here:
 
-[![Video: Change your Invocation Name for different stages](../img/videos/jovo-staging-invocation.jpg "video")](https://www.youtube.com/watch?v=H1T9-H2RZWk)
+[![Video: Change your Invocation Name for different stages](../img/jovo-staging-invocation.jpg "video")](https://www.youtube.com/watch?v=H1T9-H2RZWk)
 
 ## Introduction
 
