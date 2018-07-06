@@ -7,6 +7,10 @@ This page offers a selection of examples to learn how to deploy your Alexa Skill
 * [Build and Deploy to Alexa](#build-and-deploy-to-alexa)
 * [Additional Options](#additional-options)
 
+Watch the video here:
+
+[![Video: Change your Invocation Name for different stages](../img/videos/jovo-staging-invocation.jpg "video")](https://www.youtube.com/watch?v=H1T9-H2RZWk)
+
 ## Introduction
 
 Jovo allows you to deploy your Alexa Skills and Google Actions to different environments, for example `local` (for local development), `dev`, and `prod` (both hosted on AWS Lambda). To learn more about the essentials of different stages, take a look at [App Configuration > app.json](../03_app-configuration/app-json.md '../app-json'), [Advanced Features > Staging](../07_advanced#staging '../advanced#staging'), and the [Staging Examples](./staging-examples.md './staging-examples') in the Jovo Knowledge Base.
@@ -87,10 +91,10 @@ You can also use the following shortcut for both:
 
 ```sh
 # Build and deploy to all platforms
-$ jovo deploy --stage dev --deploy
+$ jovo build --stage dev --deploy
 
 # Only build and deploy Alexa files
-$ jovo deploy -p alexaSkill --stage dev --deploy
+$ jovo build -p alexaSkill --stage dev --deploy
 ```
 
 ## Additional Options
