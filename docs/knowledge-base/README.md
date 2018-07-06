@@ -5,7 +5,7 @@ This Knowledge Base offers a growing list of practical examples to help you solv
 * [Create a StopIntent for Google Assistant with Dialogflow](./stopintent-dialogflow.md './kb/stopintent-dialogflow')
 * [Deploy a Dialogflow Agent with the Jovo CLI](./deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent')
 * [Staging Examples](./staging-examples.md './kb/staging-examples')
-
+* [Staging: Change Invocation Names for Different Environments](./staging-invocation-names.md './kb/staging-invocation-names')
 
 <!--[metadata]: {"title": "Jovo Knowledge Base", 
                 "description": "Practical examples for voice app development with Jovo",
