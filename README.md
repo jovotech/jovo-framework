@@ -36,10 +36,11 @@ app.setHandler({
 Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities.
 
 The main features of the Jovo ecosystem are:
-* Maintain only one code base for both Amazon Alexa and Google Assistant using the [**Jovo Framework**](https://github.com/jovotech/jovo-framework-nodejs#features)
-* Maintain only one language model using the [**Jovo Language Model**](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-configuration#models---language-model)
-* Develop voice applications locally using the [**Jovo Webhook**](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-configuration/02_server/webhook.md#jovo-webhook)
-* Create and maintan different development environments using the [**Jovo CLI's Staging capabilities**](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/07_advanced#staging)
+* [**Jovo Framework**](https://github.com/jovotech/jovo-framework-nodejs#features): Build voice apps for both Amazon Alexa and Google Assistant
+* [**Jovo CLI**](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/02_cli): Create, build, and deploy Jovo projects (including [staging](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/07_advanced#stagin))
+* [**Jovo Webhook**](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-configuration/02_server/webhook.md#jovo-webhook): Develop and debug voice apps on your local computer
+* [**Jovo Debugger**](https://www.jovo.tech/debugger): Test and debug voice apps in your browser
+* [**Jovo Language Model**](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-configuration#models---language-model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
 
 > 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
 
