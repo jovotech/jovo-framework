@@ -9,7 +9,7 @@ Learn how to use the Jovo CLI to deploy your Alexa Skill and Google Action to AW
 
 Watch the video here:
 
-[![Video: Upload your voice app to AWS Lambda](../img/video-jovo-lambda.jpg "video")](https://www.youtube.com/watch?v=Q5T2II8XIbg)
+[![Video: Upload your voice app to AWS Lambda](../img/video-jovo-lambda.jpg "youtube-video")](https://www.youtube.com/watch?v=Q5T2II8XIbg)
 
 ## Introduction
 

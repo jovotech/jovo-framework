@@ -11,7 +11,7 @@ Learn how to use DynamoDB for certain development environments to store user dat
 
 Watch the video here:
 
-[![Video: Use DynamoDB to Store User Data in your Voice Apps](../img/video-dynamodb-dev.jpg "video")](https://www.youtube.com/watch?v=AevYJhAVQzg)
+[![Video: Use DynamoDB to Store User Data in your Voice Apps](../img/video-dynamodb-dev.jpg "youtube-video")](https://www.youtube.com/watch?v=AevYJhAVQzg)
 
 ## Introduction
 

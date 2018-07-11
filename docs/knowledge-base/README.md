@@ -6,6 +6,7 @@ This Knowledge Base offers a growing list of practical examples to help you solv
 * [Create a StopIntent for Google Assistant with Dialogflow](./stopintent-dialogflow.md './kb/stopintent-dialogflow')
 * [Deploy a Dialogflow Agent with the Jovo CLI](./deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent')
 * [Deploy your Voice App to AWS Lambda with the Jovo CLI](./deploy-lambda-cli.md './kb/deploy-lambda-cli')
+* [Environment Variables in your app.json](./environment-variables-app-json.md './kb/environment-variables-app-json')
 * [Staging Examples](./staging-examples.md './kb/staging-examples')
 * [Staging: Change Invocation Names for Different Environments](./staging-invocation-names.md './kb/staging-invocation-names')
 
