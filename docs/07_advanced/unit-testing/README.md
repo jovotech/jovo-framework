@@ -28,6 +28,12 @@ The Jovo TestSuite allows you to create unit tests for your Alexa Skills and Goo
 
 > Use the [Jovo Unit Testing Template](https://www.jovo.tech/templates/unit-testing) to get started with some first tests.
 
+Here's everything you need to know to get started:
+* [Dependencies](#dependencies)
+* [TestSuite Modules](#testsuite-modules)
+* [A First Test](a-first-test)
+* [Run Test Script](run-test-script)
+
 ### Dependencies
 
 The Jovo TestSuite builds on top of [Mocha](https://mochajs.org/), a popular Javascript testing framework, and [Chai](http://www.chaijs.com/), a helpful assertion library.
