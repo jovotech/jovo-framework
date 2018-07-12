@@ -33,7 +33,14 @@ app.setHandler({
 });
 ```
 
-Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities. [Check out our features below.](#features)
+Jovo is the first open source framework that lets you build voice apps for both Amazon Alexa and Google Assistant with only one code base. Besides cross-platform development, Jovo also offers a variety of integrations and easy prototyping capabilities.
+
+The main features of the Jovo ecosystem are:
+* [**Jovo Framework**](https://github.com/jovotech/jovo-framework-nodejs#features): Build voice apps for both Amazon Alexa and Google Assistant
+* [**Jovo CLI**](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/02_cli): Create, build, and deploy Jovo projects (including [staging](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/07_advanced#stagin))
+* [**Jovo Webhook**](https://github.com/jovotech/jovo-framework-nodejs/blob/master/docs/03_app-configuration/02_server/webhook.md#jovo-webhook): Develop and debug voice apps on your local computer
+* [**Jovo Debugger**](https://www.jovo.tech/debugger): Test and debug voice apps in your browser
+* [**Jovo Language Model**](https://github.com/jovotech/jovo-framework-nodejs/tree/master/docs/03_app-configuration#models---language-model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
 
 > 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
 
@@ -51,8 +58,6 @@ Jovo is the first open source framework that lets you build voice apps for both 
   * [Jovo Sample App](./docs/01_getting-started#jovo-sample-voice-app)
 * [Tutorials](#tutorials)
 * [Contributing](#contributing)
-* [Community Projects](#community-projects)
-* [Development Roadmap](#development-roadmap)
 
 
 ## Installation
@@ -135,6 +140,21 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 Location | Access your user's location data | [📝](./docs/05_platform-specifics/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/05_platform-specifics/google-assistant/media-response.md)
 
+
+#### Missing
+
+The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
+
+Platform | Feature | Docs
+:--- | :--- | :---
+**Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
+&nbsp; | GameEngine Interface | [📝](https://developer.amazon.com/docs/custom-skills/game-engine-interface-reference.html)
+&nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
+**Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
+&nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
+&nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)
+&nbsp; | Android Link | [📝](https://developers.google.com/actions/assistant/helpers#android_link)
+
 ### Integrations
 
 #### Database Integrations
@@ -169,36 +189,27 @@ nodemon | Monitor changes and automatically restart the server | [📝](./docs/0
 ## Tutorials
 
 Find a quickstart guide and comprehensive tutorials here:
-
-* [Build a cross-platform voice app in 5 simple steps](https://www.jovo.tech/get-started)
-* [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
-* [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
+* General:
+    * [Build a cross-platform voice app in 5 simple steps](https://www.jovo.tech/get-started)
+    * [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
+    * [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
+* Account Linking:
+    * [Amazon Alexa with Auth0](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+    * [Google Action with Auth0](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+    * [Login with Amazon](https://www.jovo.tech/blog/alexa-login-with-amazon-email/)
+* Amazon Alexa:
+    * [Skill Events](https://www.jovo.tech/blog/alexa-skill-events/)
+* Google Action:
+    * [Suggestion Chips](https://www.jovo.tech/blog/google-assistant-suggestion-chips/)
 
 
 ## Contributing
 <a href="https://www.codetriage.com/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework-nodejs/badges/users.svg"></a>
 
 We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
-* [CONTRIBUTING.md](./CONTRIBUTING.md)
+* [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
 * Take a look at our [issues](https://github.com/jovotech/jovo-framework-nodejs/issues)
 * Add your project to [jovotech/builtwithjovo](https://github.com/jovotech/builtwithjovo)
-
-## Community Projects
-
-Name | Description | Repository
------------- | ------------- | -------------
-ASK CLI Jovo Starter Template | Alexa Skill starter template using ASK CLI and Jovo Framework | [rmtuckerphx/ask-cli-jovo-starter](https://github.com/rmtuckerphx/ask-cli-jovo-starter)
-Advanced Sample Voice App | Advanced folder structure and improvements for more complex voice applications | [tjbenton/jovo-sample-voice-app-nodejs](https://github.com/tjbenton/jovo-sample-voice-app-nodejs)
-Jovo Babel Project | An example project using Jovo Framework alongside JavaScript ES6. | [Cawfree/jovo-babel-project](https://github.com/Cawfree/jovo-babel-project)
-
-
-## Development Roadmap
-
-We still consider this a beta-version of the Jovo framework: We give it our all to make it as complete as possible (and it supports most of the Alexa and Google Assistant functions), but there are certain features that are currently in development.
-
-What we're currently working on:
-* Adding more DB integrations
-* Extending the User class
 
 
 ## We need your help

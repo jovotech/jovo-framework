@@ -9,9 +9,13 @@ The `app.json` is an essential file that stores a lot of important information t
    * [nlu](#nlu)
 * [App](#app)
    * [Config Overrides](#config-overrides)
+* [Language Model](#language-model)
+   * [Override the Invocation Name](#override-the-invocation-name)
+   * [Add Intents and Inputs](#add-intents-and-inputs)
 * [Deployment](#deployment)
    * [Stages](#stages)
    * [Host](#host)
+
 
 ## Introduction
 
@@ -100,7 +104,9 @@ The following elements can be added to the `alexaSkill` object:
 
 In the deployment process with the Jovo CLI ([`jovo deploy`](../02_cli#jovo-deploy './cli#jovo-deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `app.json` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
 
-You can also add information to go into the `skill.json`. You can basically add any element that you can find in the skill manifest:
+#### skill.json Overrides
+
+You can also add information to go into the `skill.json`. You can basically add or override any element that you can find in the skill manifest:
 
 ```javascript
 {
@@ -236,6 +242,51 @@ This is especially helpful if you want to use different configurations for diffe
     }
 }
 ```
+
+## Language Model
+
+In the `app.json`, you can also add or override specific elements of your language model in the `models` folder. [Learn more about the Jovo Language Model here](./01_models './model').
+
+### Override the Invocation Name
+
+Changing the invocation name is especially useful for different stages if you want to make sure you know which version of your voice app you're currently talking to.
+
+For example, you can override the language model for the `en-US` locale like thos:
+
+```javascript
+"languageModel": {
+			"en-US": {
+				"invocation": "my test app dev",
+			}
+		}
+```
+
+*NOTE*: Currently, the invocation name can only be specified in the `models` folder for Alexa Skills. For Google Actions, you need to change them in the Actions on Google Console.
+
+
+### Add Intents and Inputs
+
+You can also add whole intents and inputs and any element that you can find in your e.g. `en-US.json` in the Jovo `models` folder. 
+
+For example, you can add an intent to specific stages like so:
+
+```javascript
+"languageModel": {
+			"en-US": {
+				"intents": [
+          				{
+            					"name": "WhatEnvIntent",
+            					"samples": [
+						      "what's the stage",
+						      "what is the environment",
+						      "what environment is this deployed to"
+            					]
+          				}
+        			]
+			}
+		}
+```
+
 
 ## Deployment
 
