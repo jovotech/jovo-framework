@@ -7,6 +7,7 @@ This Knowledge Base offers a growing list of practical examples to help you solv
 * [Deploy a Dialogflow Agent with the Jovo CLI](./deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent')
 * [Deploy your Voice App to AWS Lambda with the Jovo CLI](./deploy-lambda-cli.md './kb/deploy-lambda-cli')
 * [Environment Variables in your app.json](./environment-variables-app-json.md './kb/environment-variables-app-json')
+* [How to Extend Built-in Slots with the Jovo Language Model](.extend-built-in-slots.md './kb/extend-built-in-slots')
 * [Staging Examples](./staging-examples.md './kb/staging-examples')
 * [Staging: Change Invocation Names for Different Environments](./staging-invocation-names.md './kb/staging-invocation-names')
 
