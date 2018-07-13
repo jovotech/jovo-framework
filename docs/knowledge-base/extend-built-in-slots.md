@@ -146,5 +146,5 @@ $ jovo build
 				"Knowledge Base": "docs/kb"
                                 },
 		"commentsID": "framework/docs/kb/exend-built-in-slots",
-		"route": "docs/kb/exend-built-in-slots"
+		"route": "docs/kb/extend-built-in-slots"
                 }-->
