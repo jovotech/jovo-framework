@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.3.4 (July 16, 2018)
+* Fixed merge errors
+
 ## 1.3.3 (July 12, 2018)
 * Fixed routing bugs
 
