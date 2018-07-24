@@ -91,7 +91,7 @@ You can find out more about the Jovo project structure in [App Configuration](..
 
 Before building out the logic of your voice application, you need to create a language model (also called interaction model) on the voice platform(s) you want to interact with.
 
-If you're new to how the voice platforms and language models work, take a look at [Voice App Basics](voice-app-basics.md './voice-app-basics').
+If you're new to how the voice platforms and language models work, take a look at [Voice App Basics](./voice-app-basics.md './voice-app-basics').
 
 There are several ways how to do that:
 * Create the language models manually for each platform in the respective developer console
