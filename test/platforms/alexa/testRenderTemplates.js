@@ -329,7 +329,7 @@ describe('Tests for render templates', function() {
                     },
                 }
             );
-            expect(bodyTemplate6.image).to.deep.include({
+            expect(bodyTemplate6.backgroundImage).to.deep.include({
                 sources: [
                     {
                         url: 'https://www.example.com/image.jpg',
