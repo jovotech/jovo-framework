@@ -1,5 +1,7 @@
 # Jovo Framework Changelog
 
+## 1.3.6 (July 31, 2018)
+* Fixed merge errors
 
 ## 1.3.5 (July 31, 2018)
 * [#205](https://github.com/jovotech/jovo-framework-nodejs/pull/205) Fixed setFullscreenImage in BodyTemplate6 - [@vitaliidanchul](https://github.com/vitaliidanchul)
