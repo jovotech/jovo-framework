@@ -11,6 +11,7 @@ const StandardCard = require('../../index').AlexaSkill.StandardCard;
 const LinkAccountCard = require('../../index').AlexaSkill.LinkAccountCard;
 const AskForListPermissionsCard = require('../../index').AlexaSkill.AskForListPermissionsCard;
 const AskForLocationPermissionsCard = require('../../index').AlexaSkill.AskForLocationPermissionsCard;
+const AskForContactPermissionsCard = require('../../index').AlexaSkill.AskForContactPermissionsCard;
 
 const config = {
     logging: true,
@@ -102,6 +103,15 @@ app.setHandler({
                 .addReadPermission()
                 .addWritePermission());
         this.tell('This is a card that asks for lists permissions.');
+    },
+    'AskForContactPermissionCardIntent': function() {
+        this.alexaSkill().showAskForContactPermissionCard(['name', 'email', 'mobile_number']);
+
+        // or
+        this.alexaSkill().showCard(
+            new AskForContactPermissionsCard()
+                .setAskForContactPermission(['name', 'email', 'mobile_number']));
+        this.tell('This is a card that asks for contact data permissions.');
     },
 });
 
