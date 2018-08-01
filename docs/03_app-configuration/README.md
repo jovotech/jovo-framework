@@ -12,7 +12,7 @@ In this section, you will learn more about the essential configurations of a Jov
 
 
 ## Jovo App Structure
-A Jovo voice app is divided into four main building blocks: `index.js` ([server configuration](./02_server './server')), `app.json` ([project configuration](./app-json.md './app-json')), `/app` (app configuration and [logic](../04_app-logic './logic')), and `models` ([Jovo Language Model](./01_models './model')).
+A Jovo voice app is divided into four main building blocks: `index.js` ([server configuration](./02_server './server')), `app.json` ([project configuration](./app-json.md './app-json')), `/app` (app configuration and [logic](../04_app-logic './logic')), and `/models` ([Jovo Language Model](./01_models './model')).
 
 
 ![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
