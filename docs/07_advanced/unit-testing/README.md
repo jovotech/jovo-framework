@@ -225,6 +225,13 @@ send(rb.intent());
 ```
 This sends a default intentRequest with the intentName 'HelpIntent'. You can specify the intentName by passing it into `intent('intentName')` as the first parameter or by calling `intent().setIntentName('intentName')`. Slots/Parameters can be added as well by passing them as an object as the second parameter in `intent('intentName', {key: 'value'})` or by using the method `intent().addInput('key', 'value')`.
 
+### Access Token
+
+```javascript
+send(rb.intent().setAccessToken(YourTestTokenValue));
+```
+If you have account linking set up and need to pass in an access token to interact with your intents, you can use this method to attach the `accessToken` property with the value you pass in to `setAccessToken(Value)` to the `user` property in the request.
+
 #### Session Attributes
 Although session attributes are applied automatically, you may want to go straight to a specific intent without calling the whole conversation flow before. For this situation, you can call `rb.intent().setSessionAttribute('key', 'value')` to specify session attributes. As a shortcut for only setting a specific state, you have the option to use `setState('stateName')`. If you want to add multiple session attributes at once, you can pass them as an object:
 
