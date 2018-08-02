@@ -1,5 +1,10 @@
 # Jovo Framework Changelog
 
+## 1.4.0 (August 02, 2018)
+* [#204](https://github.com/jovotech/jovo-framework-nodejs/pull/204) Added Alexa Gadgets API - [@omenocal](https://github.com/omenocal)
+* Added Alexa 'Request Customer Contact Information' Card+API call
+* Added language model tester
+
 ## 1.3.6 (July 31, 2018)
 * Fixed merge errors
 
