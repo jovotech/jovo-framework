@@ -183,6 +183,22 @@ In the upper part of the example above, for the `name` input, we distinguish bet
 
 In the lower part, we reference a new input type called `myCityInputType`, which we need to define outside the `intents` array of the overall model.
 
+You also can manage your `input` as a list by specifying the parameter `isList` for the dialogflow platform. It is not necessary to add this parameter if your `input` is not a list.
+
+```javascript
+"inputs": [
+    {
+        "name": "any",
+        "type": {
+            "dialogflow": "@sys.any"
+        },
+	"dialogflow": {
+	    "isList": true
+	}
+    }
+]
+```
+
 ### Input Types
 
 The `inputTypes` array is the place where you can define your own input types and provide a `name`, `values`, and `synonyms` (optional).
