@@ -37,6 +37,15 @@ this.googleAction().showSuggestionChips(['Chip 1', 'Chip 2']);
 this.ask('Enjoy the song');
 ```
 
+### Set Track Metadata
+
+The function `play` has an optional value, you can add some information as description, image, alt... according to [Google Media Response](https://developers.google.com/actions/assistant/responses#media_responses).
+
+```javascript
+this.googleAction().audioPlayer().play('https://www.url.to/file.mp3', 'song one', {"description": "A description", "icon": {"url": "https://www.somewhere.com/image.png", "alt": "A accessibility text"}});
+```
+
+
 ## Directive
 
 The callback after the audio playback is finished will be mapped to the `GoogleAction.Finished` intent, which has to be placed in either the `'MEDIARESPONSE'` or the `'AUDIOPLAYER'` directive of your handler.
