@@ -2,14 +2,16 @@
 
 Learn more about how to use Skill Events with the Jovo Framework.
 
-* [Introduction to Skill Events](#introduction-to-skill-events)
-* [Requirements](#requirements)
-* [Events](#events)
-  * [Skill Enabled](#skill-enabled)
-  * [Skill Disabled](#skill-disabled)
-  * [Account Linked](#account-linked)
-  * [Skill Permission Accepted](#skill-permission-accepted)
-  * [Skill Permission Changed](#skill-permission-changed)
+- [Platform Specific Features > Amazon Alexa > Skill Events](#platform-specific-features--amazon-alexa--skill-events)
+	- [Introduction to Skill Events](#introduction-to-skill-events)
+	- [Requirements](#requirements)
+	- [Events](#events)
+		- [Skill Enabled](#skill-enabled)
+		- [Skill Disabled](#skill-disabled)
+		- [Account Linked](#account-linked)
+		- [Skill Permission Accepted](#skill-permission-accepted)
+		- [Skill Permission Changed](#skill-permission-changed)
+	- [Staging](#staging)
 
 ## Introduction to Skill Events
 
@@ -110,7 +112,7 @@ To use the Skill Events you have to add the `events` object, which contains an e
 
 ## Events
 
-As described earlier, your Skill get's notified in form of request. To map that request to one of your handlers you have to add the following `state`:
+As described earlier, your Skill gets notified in form of request. To map that request to one of your handlers you have to add the following `state`:
 ```javascript
 'ON_EVENT': {
 
@@ -121,14 +123,14 @@ Inside that state you can define the intents, which will be mapped to one of the
 ```javascript
 'ON_EVENT': {
     'AlexaSkillEvent.SkillEnabled': function() {
-        console.log('AlexaSkillEvent.SkillEnabled');
+		console.log('AlexaSkillEvent.SkillEnabled');		
     },
 }
 ```
 
 ### Skill Enabled
 
-This Skill Event get's triggered the moment your Skill get's enabled by the user.
+This Skill Event gets triggered the moment your Skill gets enabled by the user.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -141,7 +143,8 @@ And adding the `AlexaSkillEvent.SkillEnabled` inside your `ON_EVENT` state:
 ```javascript
 'ON_EVENT': {
     'AlexaSkillEvent.SkillEnabled': function() {
-        console.log('AlexaSkillEvent.SkillEnabled');
+		console.log('AlexaSkillEvent.SkillEnabled');
+		console.log(`UserId: ${this.getUserId()}`);		
     },
 }
 ```
@@ -149,7 +152,7 @@ And adding the `AlexaSkillEvent.SkillEnabled` inside your `ON_EVENT` state:
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-enabled-event)
 ### Skill Disabled
 
-This Skill Event get's triggered the moment your Skill get's disabled by the user.
+This Skill Event gets triggered the moment your Skill gets disabled by the user. If you are using Database Integrations to store user specific data, then you should delete the user data. Otherwise you will have orphaned records in your database. The userId will not be re-used if the user re-enables the skill later: they will get a new userId.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -163,6 +166,11 @@ And adding the `AlexaSkillEvent.SkillDisabled` inside your `ON_EVENT` state:
 'ON_EVENT': {
     'AlexaSkillEvent.SkillDisabled': function() {
         console.log('AlexaSkillEvent.SkillDisabled');
+		console.log(`UserId: ${this.getUserId()}`);
+		
+		// remove user from the database when the skill is disabled
+		// if the user re-enables the skill, they will have a new userId anyway
+		this.user().delete();
     },
 }
 ```
@@ -170,7 +178,7 @@ And adding the `AlexaSkillEvent.SkillDisabled` inside your `ON_EVENT` state:
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-disabled-event)
 ### Account Linked
 
-This Skill Event get's triggered, if the user links their account using the companion app/website. The incoming request will also contain the access token, which you can access using `this.getAccessToken()`.
+This Skill Event gets triggered, if the user links their account using the companion app/website. The incoming request will also contain the access token, which you can access using `this.getAccessToken()`.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -184,6 +192,7 @@ And adding the `AlexaSkillEvent.SkillAccountLinked` inside your `ON_EVENT` state
 'ON_EVENT': {
     'AlexaSkillEvent.SkillAccountLinked': function() {
         console.log('AlexaSkillEvent.SkillAccountLinked');
+		console.log(`UserId: ${this.getUserId()}`);		
     },
 }
 ```
@@ -191,7 +200,7 @@ And adding the `AlexaSkillEvent.SkillAccountLinked` inside your `ON_EVENT` state
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#account-linked-event)
 ### Skill Permission Accepted
 
-This Skill Event get's triggered, if your user grants permissions for the first time or if they grant them after they were revoked. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event) to get a feeling for the JSON structure.
+This Skill Event gets triggered, if your user grants permissions for the first time or if they grant them after they were revoked. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event) to get a feeling for the JSON structure.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -205,14 +214,16 @@ And adding the `AlexaSkillEvent.SkillPermissionAccepted` inside your `ON_EVENT` 
 'ON_EVENT': {
     'AlexaSkillEvent.SkillPermissionAccepted': function() {
         console.log('AlexaSkillEvent.SkillPermissionAccepted');
-    },
+		console.log(`UserId: ${this.getUserId()}`);		
+		console.log(`Permissions: ${JSON.stringify(this.alexaSkill().getSkillEventBody().acceptedPermissions)}`);	
+	},
 }
 ```
 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event)
 ### Skill Permission Changed
 
-This Skill Event get's triggered, if your user grants your Skill additional permission or revokes existing ones. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event) to get a feeling for the JSON structure.
+This Skill Event gets triggered, if your user grants your Skill additional permission or revokes existing ones. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event) to get a feeling for the JSON structure.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -226,11 +237,73 @@ And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` s
 'ON_EVENT': {
     'AlexaSkillEvent.SkillPermissionChanged': function() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
+		console.log(`UserId: ${this.getUserId()}`);		
+		console.log(`Permissions: ${JSON.stringify(this.alexaSkill().getSkillEventBody().acceptedPermissions)}`);	
     },
 }
 ```
 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event)
+
+## Staging
+
+With staging, you can define multiple staging environments like `dev`, `test`, and `prod` in your `app.json`. You can also override values in the `skill.json` file that relate to skill events and the endpoint that will handle them.
+
+For example, if you want the same lambda function to handle all events for your skill (including skill events), then you can add the following to the `app.json` for each stage:
+
+```javascript
+{
+    "stages": {
+        "dev": {
+            "endpoint": "arn:aws:lambda:us-east-1:XXX",
+            "alexaSkill": {
+                "skillId": "amzn1.ask.skill.XXX",
+                "askProfile": "company",
+                "manifest": {
+                    "events": {
+                        "endpoint": {
+                            "uri": "arn:aws:lambda:us-east-1:XXX"
+                        },
+                        "subscriptions": [
+                            {
+                                "eventName": "SKILL_ENABLED"
+                            },
+                            {
+                                "eventName": "SKILL_DISABLED"
+                            },
+                            {
+                                "eventName": "SKILL_PERMISSION_ACCEPTED"
+                            },
+                            {
+                                "eventName": "SKILL_PERMISSION_CHANGED"
+                            },
+                            {
+                                "eventName": "SKILL_ACCOUNT_LINKED"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Notice how the exact same Lambda ARN is used for both endpoints.
+
+You then build and deploy the `dev` stage using the JOVO CLI:
+
+```sh
+# Uses dev stage
+$ jovo build --stage dev
+
+# Then: Deploy to platform
+$ jovo deploy
+```
+
+This will update the `skill.json` file to include the skill events and the endpoint that will handle them.
+
+
 
 <!--[metadata]: {"title": "Alexa Skill Events", 
 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], 
