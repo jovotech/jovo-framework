@@ -4,10 +4,12 @@ For voice apps in prototyping stage, we recommend using a local webserver and a 
 
 * [Webhook Configuration](#webhook-configuration)
 * [Run the Webhook Locally](#run-the-webhook-locally)
-  * [jovo webhook](#jovo-webhook)
-  * [bst proxy](#bst-proxy)
-  * [ngrok](#ngrok)
+   * [jovo webhook](#jovo-webhook)
+   * [bst proxy](#bst-proxy)
+   * [ngrok](#ngrok)
 * [Deploy to a Server](#deploy-to-a-server)
+   * [Verification](#verification)
+   * [Run Server](#run-server)
 
 
 ## Webhook Configuration
@@ -43,7 +45,7 @@ You can use either of the following commands to run the server locally:
 $ jovo run
 
 # Alternative
-$ node index.js
+$ node index.js --webhook
 ```
 
 Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. Find more information on the `jovo run` command here: [CLI: jovo run](../../02_cli#jovo-run '../cli#jovo-run').
@@ -119,6 +121,10 @@ It should display something similar to this:
 
 ## Deploy to a Server
 
+> The `jovo webhook` URL is only meant for prototyping purposes and can't be used in production. Follow the steps here to find out how to deploy your voice app to a production server.
+
+### Verification
+
 When you want to deploy your code to a webserver other than AWS Lambda, you need to verify that Alexa Skill requests are actually coming from Amazon.
 
 For this, Jovo uses a package called [alexa-verifier-middleware](https://github.com/alexa-js/alexa-verifier-middleware), which can be accessed by switching one line of the configuration in `index.js`:
@@ -135,6 +141,14 @@ To make use of it, please install it like so:
 
 ```sh
 $ npm install alexa-verifier-middleware
+```
+
+### Run Server
+
+To run the server, use the following command:
+
+```sh
+$ node index.js --webhook
 ```
 
 
