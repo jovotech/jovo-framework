@@ -129,6 +129,7 @@ Alexa Dialog Interface | Use Alexa's Dialog Directives for multi-turn conversati
 Echo Show Render Templates | Display visual elements on Echo Show | [📝](./docs/05_platform-specifics/amazon-alexa/visual.md#display-templates)
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](./docs/05_platform-specifics/amazon-alexa#progressive-responses)
 Skill Events | Get notified when an event (e.g. Skill enabled/disabled) occurs | [📝](./docs/05_platform-specifics/amazon-alexa/skillevents.md)
+CanFulfillIntentRequest | Add name-free interaction to your skill and increase your skill's discoverability | [📝](./docs/05_platform-specifics/amazon-alexa/canfulfill.md)
 
 
 #### Google Assistant
@@ -148,7 +149,6 @@ The following features are **not** implemented yet. We appreciate any kind of he
 Platform | Feature | Docs
 :--- | :--- | :---
 **Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
-&nbsp; | GameEngine Interface | [📝](https://developer.amazon.com/docs/custom-skills/game-engine-interface-reference.html)
 &nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
 **Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
 &nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
