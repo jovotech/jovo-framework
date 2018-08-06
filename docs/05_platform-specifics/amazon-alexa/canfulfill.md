@@ -72,7 +72,7 @@ this.cannotFulfillRequest();
 this.mayFulfillRequest();
 ```
 
-I would recommend you to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.
+It's recommended to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.
 
 <!--[metadata]: {"title": "Alexa Canfulfill", 
 "description": "Learn how to implement CanFulfillRequests in your Jovo project", "activeSections": ["platforms", "alexa", "alexa_index"], 
