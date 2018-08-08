@@ -13,6 +13,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
   * [Visual Output](#visual-output)
 * [AudioPlayer Skills](#audioplayer-skills)
 * [Skill Events](#skill-events)
+* [CanFulfillIntentRequest](#canfulfillintentrequest)
 
 ## Introduction to Alexa Specific Features
 
@@ -73,7 +74,11 @@ You can find more about Jovo Audioplayer support here: [Platform specifics > Ama
 
 ## Skill Events
 
-Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skillevents')
+Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skill-events')
+
+## CanFulfillIntentRequest
+
+Learn how to implement the CanFulfillIntentRequests in your Jovo project here: [Platform specifics > Amazon Alexa > CanFulfillIntentRequest](./canfulfill.md './amazon-alexa/canfulfill')
 
 <!--[metadata]: {"title": "Amazon Alexa Specific Features", 
                  "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 

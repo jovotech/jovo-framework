@@ -296,12 +296,22 @@ You can add options to Jovo intents like this:
         "say hello world"
     ],
     "dialogflow": {
-        "priority": 1,
+        "priority": 500000,
         "webhookForSlotFilling": true
     }
 },
 ```
 In the above example, you can see that you can add specific elements like a `priority` to an intent.
+
+The `priority` can have the following value :
+
+| Definition | Value   | Color  |
+| ---------- |:-------:|:------:|
+| Highest    | 1000000 | Red    |
+| High       | 750000  | Orange |
+| Normal     | 500000  | Blue   | 
+| Low        | 250000  | Green  |
+| Ignore     | 0       | Grey  |
 
 Similar to the [`alexa`](#alexa) element, you can also add `dialogflow` specific intents and entities to the language model. 
 
