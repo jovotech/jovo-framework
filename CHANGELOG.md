@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.4.1 (August 08, 2018)
+* Accept contact properties as string in AskForContactPermissionCard
+
+
 ## 1.4.0 (August 02, 2018)
 * [#204](https://github.com/jovotech/jovo-framework-nodejs/pull/204) Added Alexa Gadgets API - [@omenocal](https://github.com/omenocal)
 * Added Alexa 'Request Customer Contact Information' Card+API call
