@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.4.2 (August 09, 2018)
+* Added database data to Jovo Debugger
+* Added Google Action voice match helper
+
 ## 1.4.1 (August 08, 2018)
 * Accept contact properties as string in AskForContactPermissionCard
 
