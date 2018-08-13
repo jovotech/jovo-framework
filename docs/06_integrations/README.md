@@ -14,7 +14,7 @@ Find everything here: [Integrations > Databases](./databases './databases').
 
 
 ## Analytics
-Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot, and Bespoken.
+Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot, Bespoken and Botanalytics.
 
 Find detailed documentation here: [Integrations > Analytics](./analytics './analytics')
 

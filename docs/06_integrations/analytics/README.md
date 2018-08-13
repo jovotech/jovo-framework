@@ -280,69 +280,65 @@ Test you voice app. It can take up to 6 hours until all the data can be seen on 
 
 To use Botanalytics for your voice app, you need to complete the following steps:
 
-1. Create a Bot
-2. Enable Dashbot Anaytics in your voice app
-3. Download the dashbot npm package
-4. Test your app
+1. Add a New Bot
+2. Enable Bot in Your Voice App
+3. Download the 'botanalytics' npm Package
+4. Check Your App
 
-### Create a Bot
+### Add a New Bot
 
 1. Create a Botanalytics account or log in at https://www.botanalytics.co.
 
-2. Click "Add a Bot" in the Admin panel:
+2. Click "Add a New Bot":
 
-![Dashbot Add a Bot](../../img/dashbot-add-bot.jpg)
-![Dashbot Add a Bot Step 2](../../img/dashbot-add-bot2.jpg)
+![Botanalytics Add a New Bot](../../img/botanalytics_1.png)
+![Botanalytics Add a New Bot Step 2](../../img/botanalytics_2.png)
 
-3. Select the right Platform: Alexa for Alexa Skills, or GoogleAssistant for Google Actions (if you are developing for both Amazon Alexa and Google Assistant, please create 2 distinct Bots):
+3. Copy API Key
 
-![Dashbot Select Platform](../../img/dashbot-select-platform.jpg)
+![Botnalytics Copy API Key](../../img/botanalytics_3.png)
 
-4. Copy API Key
+### Enable Botanalytics
 
-![Dashbot Copy API Key](../../img/dashbot-api-key.jpg)
-
-### Enable Dashbot Analytics
-
-Dashbot Analytics can be added to your voice app using the config or with the following commands:
+Botanalytics can be added to your voice app using the config or with the following commands:
 
 ```javascript
-// config
+// Jovo app configuration
 const config = {
     /**
      * other settings
      */
     analytics: {
         services: {
-            DashbotAlexa: {
-                key: '<key>',
+            BotannalyticsAlexa: {
+                key: '<token>',
             },
-            DashbotGoogleAction: {
-                key: '<key>',
+            BotanalyticsGoogleAction: {
+                key: '<token>',
             },
         },
     },
 };
-// For Dashbot Alexa Bot
-app.addDashbotAlexa(key);
+// For Botanalytics Alexa Bot
+app.addBotanalyticsAlexa(token);
 
-// For Dashbot Google Bot
-app.addDashbotGoogleAction(key);
+// For Botanalytics Google Bot
+app.addBotanalyticsGoogleAction(token);
 ```
 
-### Download the Dashbot Package
+### Download the Botanalytics Package
 
 In your terminal, use the following command to download the package via npm:
 
+```bash
+ npm install botanalytics
 ```
-$ npm install dashbot
-```
 
-### Test Dashbot
+### Check Your App
 
-Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
+Test your voice app, after sending couple of messages, click to 'Check connection' button
 
-![Dashbot Test](../../img/dashbot-test.jpg)
+![Botanalytics Test](../../img/botanalytics_4.png)
 
 
 <!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics",
