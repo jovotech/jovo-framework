@@ -7,6 +7,7 @@ Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
   * [Play a File](#play-a-file)
   * [Enqueue](#enqueue)
   * [Stop](#stop)
+  * [Set Track Metadata](#set-track-metadata)
 * [AudioPlayer Directives](#audioplayer-directives)
 
 ## Introduction to AudioPlayer Skills
@@ -45,13 +46,23 @@ this.alexaSkill().audioPlayer().stop();
 ```
 
 ### Set Track Metadata
+
+You can set track metadata that is used to show additional information for Alexa devices with a screen. Learn more about Audioplayer displays in the [official reference by Amazon](https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#audioplayer-display).
+
 ```javascript
 this.alexaSkill().audioPlayer()
-    .setTitle("First Track")
-    .setSubtitle("A simple subtitle")
-    .addArtwork("https://www.somewhere.com/image.png")
-    .addBackgroundImage("https://www.somewhere.com/background.jpg")
+    .setTitle('First Track')
+    .setSubtitle('A simple subtitle')
+    .addArtwork('https://www.somewhere.com/image.png')
+    .addBackgroundImage('https://www.somewhere.com/background.jpg')
+    // The above method calls need to be before play()
+    .play(url, token);
 ```
+
+For more information about the album artwork and the background image, refer to the official [image guidelines by Amazon](https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#images). Here are the recommended minimum sizes:
+
+* Artwork: 480 x 480 pixels
+* Background image: 1024 x 640 pixels
 
 
 ## AudioPlayer Directives
