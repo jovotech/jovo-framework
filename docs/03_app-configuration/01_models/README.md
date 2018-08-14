@@ -236,6 +236,32 @@ Sometimes different words have the same meaning. In the example above, we have a
 
 To learn more about how these input values and synonyms can be accessed, take a look at [App Logic > Data](../../04_app-logic/02_data './data').
 
+#### Allow automated expansion
+
+On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow automated expansion](https://dialogflow.com/docs/entities#allow_automated_expansion) like :
+
+```javascript
+"inputTypes": [
+    {
+        "name": "myCityInputType",
+	"dialogflow": {
+        	"automatedExpansion": true
+      	},
+        "values": [
+            {
+                "value": "Berlin"
+            },
+            {
+                "value": "New York",
+                "synonyms": [
+                    "New York City"
+                ]
+            }
+        ]
+    }
+],
+```
+
 
 ## Platform Specific Elements
 
