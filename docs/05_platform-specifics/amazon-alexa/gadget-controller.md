@@ -1,4 +1,12 @@
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Gadget Controller
+
 The `GadgetController` interface allows you to controle the user's Echo Buttons.
+
+- [Overview](#overview)
+- [Enable the Interface](#enable-the-interface)
+- [Set Light](#set-light)
+  - [Animation](#animation)
+    - [Sequence](#sequence)
 
 ## Overview
 
