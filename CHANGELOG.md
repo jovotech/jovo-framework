@@ -1,12 +1,17 @@
 # Jovo Framework Changelog
 
+## 1.4.3 (August 14, 2018)
+* [#227](https://github.com/jovotech/jovo-framework-nodejs/pull/227) Alexa - AudioPlayer - add PlaybackController events - [@kouz75](https://github.com/kouz75)
+* [#223](https://github.com/jovotech/jovo-framework-nodejs/pull/223) Added Botanalytics integration - [@BeyhanEsen](https://github.com/BeyhanEsen)
+* Added routing of unknown requests to `Unhandled`-Handler
+
+
 ## 1.4.2 (August 09, 2018)
 * Added database data to Jovo Debugger
 * Added Google Action voice match helper
 
 ## 1.4.1 (August 08, 2018)
 * Accept contact properties as string in AskForContactPermissionCard
-
 
 ## 1.4.0 (August 02, 2018)
 * [#204](https://github.com/jovotech/jovo-framework-nodejs/pull/204) Added Alexa Gadgets API - [@omenocal](https://github.com/omenocal)
