@@ -225,6 +225,7 @@ The `StartInputHandler` directive is the starting point at which you define the 
 ```
 
 The directive has the following four parameters, which are all required besides `proxies`:
+
 Name | Description | Value
 :--- | :--- | :---
 `timeout` | Maximum run time of the *Input Handler* in milliseconds | `Number` min: 0, max: 90000
