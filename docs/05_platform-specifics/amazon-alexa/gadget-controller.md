@@ -64,9 +64,7 @@ The directive has the following parameters you have to set:
 Name | Description | Value | Required
 :--- | :--- | :--- | :---
 `targetGadgets` | Specify the gadget IDs to which the animation should be applied. If you don't specify the target gadgets, every single one will receive the animation | `String[]` with gadget IDs | no
-`
-
-
+`triggerEventTimeMs` | The amount of time to wait after the trigger event before playing the animation | `Number` min: 0, max: 65535 | yes
 
 
 ### Animation

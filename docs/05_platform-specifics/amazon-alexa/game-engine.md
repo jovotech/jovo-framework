@@ -16,11 +16,11 @@ The `GameEngine` interface provides the toolset to receive Echo Button events us
 
 ## Overview
 
-To get a better understanding how the `GameEngine` interface works you should go for a bottom up approach since everything is built in top of each other. Therefore we will start with the `Recognizers` first proceed with the `Events`, go over the `Start-` and `StopInputHandler` directive and finish with the `InputHandlerEvents` you will receive.
+To get a better understanding how the `GameEngine` interface works you should go for a bottom up approach since everything is built in top of each other. Therefore we will start with the `Recognizers` first proceed with the `Events`, go over the `Start-` and `StopInputHandler` directive and finish with the `InputHandlerEvents`.
 
 ## Enable the Interface
 
-But first you have to enable the `GameEngine` interface either in your `app.json` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or in the Alexa Developer Console in the `Interfaces` tab.
+But first you have to enable the `GameEngine` interface either in your `app.json` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or on the Alexa Developer Console in the `Interfaces` tab.
 
 To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `app.json`:
 ```
@@ -40,13 +40,14 @@ Don't forget to build and deploy your project after you've added the interface.
 
 ## Recognizers
 
-The primary use case of recognizers is to track Echo Button inputs to look for patterns, which were defined at the creation of the respective recognizer. The y are called `PatternRecognizer`.
+The primary use case of recognizers is to track Echo Button inputs to look for patterns, which were defined at the creation of the respective recognizer. These are called `PatternRecognizer`.
+
 There are also two varations, which can either track the progress of another recognizer or check if the user has deviated from an expected pattern, called `ProgressRecognizer` and `DeviationRecognizer` respectively.
 
 Recognizers are either `true` or `false` at any point of time.
 Examples:
 * The user has not reached the defined progress of your `ProgressRecognizer`, which means the recognizer is currently `false`.
-* The user has deviated from the pattern you specified in the DeviationRecognizer, which means the recognizer is currently `true`.
+* The user has deviated from the pattern you specified in the `DeviationRecognizer`, which means the recognizer is currently `true`.
 
 ### Pattern Recognizer
 
@@ -110,7 +111,7 @@ let patternOne = {
     "FF0000"
   ]
 };
-let testRecognizer = testBuilder
+testBuilder
   .anchorStart()
   .fuzzy(true)
   .pattern([pattern]);
@@ -128,7 +129,7 @@ The deviation recognizer is used to check if the player has deviated from an exp
 
 Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
-`recognizer` | Name of the recognizer, where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
+`recognizer` | Name of the recognizer where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
  
 #### Code
 
@@ -136,10 +137,9 @@ To create a `DeviationRecognizer` you need the `DeviationRecognizerBuilder`:
 ```javascript
 let deviationBuilder = this.alexaSkill().gameEngine().getDeviationRecognizerBuilder('recognizerName');
 ```
-With the builder you can use the methods described above:
+With the builder you can use the method described above:
 ```javascript
-let deviationRecognizer = deviationBuilder
-  .recognizer('myPatternRecognizer');
+deviationBuilder.recognizer('myPatternRecognizer');
 ```
 
 ### Progress Recognizer
@@ -156,7 +156,7 @@ The progress recognizer is used to monitor how close the user is to completing t
 
 Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
-`recognizer` | Name of the recognizer, where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
+`recognizer` | Name of the recognizer where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
 `completion` | The point from which on the recognizer is `true` | `completion(completion)` | `Number` (e.g `50` = `50%`) | yes
 
 #### Code
@@ -167,7 +167,7 @@ let progressBuilder = this.alexaSkill().gameEngine().getProgressRecognizerBuilde
 ```
 With the builder you can use the methods described above:
 ```javascript
-let progressRecognizer = progressBuilder
+progressBuilder
   .recognizer('myPatternRecognizer')
   .completion(75);
 ```
@@ -219,10 +219,37 @@ The `StartInputHandler` directive is the starting point at which you define the 
 ```javascript
 {
   "type": "GameEngine.StartInputHandler",
-  "timeout": 5000,
-  "proxies": [],
-  "recognizers": {},
-  "events": {}
+  "timeout": 10000,
+  "proxies": [ "one", "two" ],
+  "recognizers": {
+    "bothPressed": {
+      "type": "match",
+      "fuzzy": true,
+      "anchor": "start",
+      "pattern": [
+        {
+          "gadgetIds": [ "one" ],
+          "action": "down"
+        },
+        {
+          "gadgetIds": [ "two" ],
+          "action": "down"
+        }
+      ]
+    }
+  },
+  "events": {
+    "allIn": {
+      "meets": [ "bothPressed" ],
+      "reports": "matches",
+      "shouldEndInputHandler": true
+    },
+    "timeout": {
+      "meets": [ "timed out" ],
+      "reports": "history",
+      "shouldEndInputHandler": true
+    }
+  }
 }
 ```
 
@@ -231,9 +258,9 @@ The directive has the following four parameters, which are all required besides 
 Name | Description | Value
 :--- | :--- | :---
 `timeout` | Maximum run time of the *Input Handler* in milliseconds | `Number` min: 0, max: 90000
-`proxies` | Temporary identifiers to assign to gadgets which your skill hasn’t yet discovered | `String[]`
-`recognizers` | Recognizers track Echo Button inputs to look for patterns, which were defined at the creation of the respective recognizer. Detailed explanation here (LINK) | `Object` min: 0, max: 20
-`events` | Events use `recognizers` to determine whether your skill should be notified or not. Detailed explanation here (LINK) | `Object` min: 1, max: 32
+`proxies` | Temporary identifiers to assign to gadgets which your skill hasn’t yet discovered. You can use these *proxies* at places where you would normally use actual gadget IDs  | `String[]`
+`recognizers` | Recognizers track Echo Button inputs to look for patterns, which were defined at the creation of the respective recognizer | `Object` min: 0, max: 20
+`events` | Events use `recognizers` to determine whether your skill should be notified or not | `Object` min: 1, max: 32
 
 After you've set up your recognizers and events you have to 
 
