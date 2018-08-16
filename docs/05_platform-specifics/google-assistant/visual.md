@@ -78,8 +78,8 @@ Method | Description
 `setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
 `addRow(cellsText, dividerAfter)` | Add data for a single [row](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
 `addRows(rowsText) ` | Add data for multiple [rows](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
-`addColumn(header, horizontalAlignment)` | Add data for a single [column](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardcolumnproperties.html)
-`addColumns(columnHeaders)` | Add data for multiple [columns](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardcolumnproperties.html)
+`addColumn(header, horizontalAlignment)` | Add data for a single column. Choose the [horizontal alignment](https://developers.google.com/actions/reference/rest/Shared.Types/HorizontalAlignment)
+`addColumns(columnHeaders)` | Add data for multiple columns. Choose the [horizontal alignment](https://developers.google.com/actions/reference/rest/Shared.Types/HorizontalAlignment)
 `addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
 
 ```javascript
