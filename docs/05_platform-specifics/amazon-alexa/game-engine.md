@@ -186,7 +186,7 @@ Events are used to define the conditions under which your skill will be notified
 }
 ```
 
-Name | Description | Method | Value | Required
+Name | Description &nbsp; &nbsp; | Method | Value | Required
 :--- | :------- | :--- | :--- | :---
 `meets` | When all the recognizers you specified here are true, your skill will be notified | `meets(meets)` | `String[]` | yes
 `fails` | If any of recognizers specified here are true, your skill won't receive a notification | `fails(fails)` | `String[]` | no
