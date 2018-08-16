@@ -186,14 +186,14 @@ Events are used to define the conditions under which your skill will be notified
 }
 ```
 
-Name | Description &nbsp; &nbsp; | Method | Value | Required
+Name | Description | Method | Value | Required
 :--- | :------- | :--- | :--- | :---
 `meets` | When all the recognizers you specified here are true, your skill will be notified | `meets(meets)` | `String[]` | yes
 `fails` | If any of recognizers specified here are true, your skill won't receive a notification | `fails(fails)` | `String[]` | no
 `reports` | Specify which raw button events should be sent with the notification. Either `history` (all button events since the *Input Handler* was started), `matches` (all button events that contributed to this event) or `nothing` (no button events. **Default**) | `reports(report)` | `String` | no
-`shouldEndInputHandler` | Specify if the *Input Handler* should end after receiving the event | `shouldEndInputHandler(shouldEndInputHandler)` | `boolean` | yes
-`maximumInvocations` | Number of times the event can be sent to your skill | `maximumInvocation(maximumInvocations)` | `Number` min & default: 1, max: 2048 | no
-`triggerTimeMilliseconds` | Specify how many milliseconds have to have passed before the event can be sent out | `triggerTimeMilliseconds(triggerTimeMilliseconds)` | `Number` min: 0, max: 300000 | no
+`shouldEndInputHandler` | Specify if the *Input Handler* should end after receiving the event | `shouldEndInputHandler(shouldEnd)` | `boolean` | yes
+`maximumInvocations` | Number of times the event can be sent to your skill | `maximumInvocation(maxInvocations)` | `Number` min & default: 1, max: 2048 | no
+`triggerTimeMilliseconds` | Specify how many milliseconds have to have passed before the event can be sent out | `triggerTimeMilliseconds(triggerTime)` | `Number` min: 0, max: 300000 | no
 
 ### Code
 
