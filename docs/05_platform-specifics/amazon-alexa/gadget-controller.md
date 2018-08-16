@@ -64,8 +64,18 @@ The directive has the following parameters you have to set:
 Name | Description | Value | Required
 :--- | :--- | :--- | :---
 `targetGadgets` | Specify the gadget IDs to which the animation should be applied. If you don't specify the target gadgets, every single one will receive the animation | `String[]` with gadget IDs | no
+`triggerEvent` | Specify the action that triggers the animation. Either `buttonDown` (button pressed), `buttonUp` (button released) or `none` (trigger animation as soon as the directive arrives) | `String` | yes
 `triggerEventTimeMs` | The amount of time to wait after the trigger event before playing the animation | `Number` min: 0, max: 65535 | yes
+`animations` | Array of animations you want to use | `Object[]` | yes
 
+```javascript
+this.alexaSkill().gadgetController().setLight(
+  [],
+  'buttonDown',
+  0,
+  [animationOne, animationTwo, animationThree]
+);
+```
 
 ### Animation
 
@@ -90,6 +100,12 @@ Name | Description | Method | Value | Required
 `targetLights` | Array of Strings representing the lights on the device. Since the Echo Button only has one **you have to use `['1']`** | `targetLights(targetLights)` | `String[]` | yes
 `sequence` | Array of objects, which define the animation. The array has to be in chronological order | `sequence(sequence)` | `Object[]` | yes
 
+```javascript
+const animationOne = this.alexaSkill().gadgetController().getAnimationsBuilder();
+
+animationOne.repeat(3).targetLights(['1']).sequence(sequence);
+```
+
 #### Sequence
 
 A `sequence` is simply an array of steps, which can each have a different color, duration, etc.. Every sequence can only have a set amount of steps, which depends on the number of gadgets that sequence has to be applied to. Amazon provides a formula to calculate the number of steps allowed: `maxStepsPerSequence = 38 - numberOfTargetGadgetsSpecified * 3`.
@@ -111,4 +127,10 @@ Name | Description | Method | Value | Required
 `durationMs` | The duration of the step in milliseconds | `duration(duration)` | `Number` in milliseconds | yes
 `color` | The desired color | `color(color)` | `String` in RGB hexadecimal notation | yes
 `blend` | Choose if you want the previous color to smoothly change to this step's one | `blend(blend)` | `boolean` | yes
+
+```javascript
+const sequence = this.alexaSkill().gadgetController().getSequenceBuilder();
+
+sequence.duration(2).color('FFFFFF');
+```
 

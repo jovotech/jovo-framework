@@ -23,7 +23,7 @@ To get a better understanding how the `GameEngine` interface works you should go
 But first you have to enable the `GameEngine` interface either in your `app.json` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or on the Alexa Developer Console in the `Interfaces` tab.
 
 To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `app.json`:
-```
+```javascript
 "manifest": {
   "apis": {
     "custom": {
@@ -71,7 +71,7 @@ As described earlier, the `PatternRecognizer` tracks the raw Echo Button events 
 ```
 Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
-`anchor` | Define where the pattern has to appear in raw Echo Button event history. Either at the **start** (first event in the pattern must be the first event in the history), at the **end** (last event in the pattern must be last event in the history) or **anywhere** (the pattern can appear anywhere in the history) | `anchorStart()` , `anchorEnd()` or `anchorAnywhere()` | - | no
+`anchor` | Define where the pattern has to appear in raw Echo Button event history. Either at the `start` (first event in the pattern must be the first event in the history), at the `end` (last event in the pattern must be last event in the history) or `anywhere` (the pattern can appear anywhere in the history) | `patternAnchor(anchor)` | `String` | no
 `fuzzy` | Decide how strict the pattern match is. While true it will recognize the pattern even if there are extra events in between. Here's an example from Amazon: "Consider a pattern that requires three down events while the button is colored red. If the player presses the button four times with the pattern "red, red, green, red," then fuzzy matching would accept the overall match, while non-fuzzy matching would reject the match." | `fuzzy(fuzzy)` | `boolean` | no
 `gadgetIds` | Specify which gadgets should be tracked for the pattern using their respective gadgetIds | `gadgetIds(gadgetIds)` | `String[]` | no
 `actions` | Specify the actions to consider for this pattern. `down` (button is pressed), `up` (button is released), `silence` (no action) | `actions(actions)` | `String[]` | no
@@ -100,7 +100,7 @@ let testPattern = {
 
 To create a `PatternRecognizer` you need the `PatternRecognizerBuilder`:
 ```javascript
-let testBuilder = this.alexaSkill().gameEngine().getPatternRecognizerBuilder('recognizerName');
+let patternRecognizer = this.alexaSkill().gameEngine().getPatternRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the methods described above:
 ```javascript
@@ -111,8 +111,8 @@ let patternOne = {
     "FF0000"
   ]
 };
-testBuilder
-  .anchorStart()
+patternRecognizer
+  .patternAnchor('end')
   .fuzzy(true)
   .pattern([pattern]);
 ```
@@ -135,11 +135,11 @@ Name | Description | Method | Value | Required
 
 To create a `DeviationRecognizer` you need the `DeviationRecognizerBuilder`:
 ```javascript
-let deviationBuilder = this.alexaSkill().gameEngine().getDeviationRecognizerBuilder('recognizerName');
+let deviationRecognizer = this.alexaSkill().gameEngine().getDeviationRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the method described above:
 ```javascript
-deviationBuilder.recognizer('myPatternRecognizer');
+deviationRecognizer.recognizer('myPatternRecognizer');
 ```
 
 ### Progress Recognizer
@@ -163,11 +163,11 @@ Name | Description | Method | Value | Required
 
 To create a `ProgressRecognizer` you need the `ProgressRecognizerBuilder`:
 ```javascript
-let progressBuilder = this.alexaSkill().gameEngine().getProgressRecognizerBuilder('recognizerName');
+let progressRecognizer = this.alexaSkill().gameEngine().getProgressRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the methods described above:
 ```javascript
-progressBuilder
+progressRecognizer
   .recognizer('myPatternRecognizer')
   .completion(75);
 ```
@@ -190,7 +190,7 @@ Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
 `meets` | When all the recognizers you specified here are true, your skill will be notified | `meets(meets)` | `String[]` | yes
 `fails` | If any of recognizers specified here are true, your skill won't receive a notification | `fails(fails)` | `String[]` | no
-`reports` | Specify which raw button events should be sent with the notification. Either `history` (all button events since the *Input Handler* was started), `matches` (all button events that contributed to this event) or `nothing` (no button events. **Default**) | `reportsHistory()`, `reportsMatches()` or `reportsNothing()` | - | no
+`reports` | Specify which raw button events should be sent with the notification. Either `history` (all button events since the *Input Handler* was started), `matches` (all button events that contributed to this event) or `nothing` (no button events. **Default**) | `reports(report)` | `String` | no
 `shouldEndInputHandler` | Specify if the *Input Handler* should end after receiving the event | `shouldEndInputHandler(shouldEndInputHandler)` | `boolean` | yes
 `maximumInvocations` | Number of times the event can be sent to your skill | `maximumInvocation(maximumInvocations)` | `Number` min & default: 1, max: 2048 | no
 `triggerTimeMilliseconds` | Specify how many milliseconds have to have passed before the event can be sent out | `triggerTimeMilliseconds(triggerTimeMilliseconds)` | `Number` min: 0, max: 300000 | no
@@ -199,18 +199,17 @@ Name | Description | Method | Value | Required
 
 To create an `Event` you need the `EventBuilder`:
 ```javascript
-const eventBuilder = this.alexaSkill().gameEngine().getEventsBuilder('eventName');
+const eventOne = this.alexaSkill().gameEngine().getEventsBuilder('eventName');
 ```
 With the builder you can use the methods described above:
 ```javascript
-const deviationEvent = eventBuilder
+eventOne
   .meets(['progressRecognizerName'])
   .fails(['deviationRecognizerName'])
-  .reportsMatches()
+  .reports('history')
   .shouldEndInputHandler(false)
   .maximumInvocation(3)
   .triggerTimeMilliseconds(5000)
-  .build();
 ```
 
 ## StartInputHandler
@@ -262,7 +261,14 @@ Name | Description | Value
 `recognizers` | Recognizers track Echo Button inputs to look for patterns, which were defined at the creation of the respective recognizer | `Object` min: 0, max: 20
 `events` | Events use `recognizers` to determine whether your skill should be notified or not | `Object` min: 1, max: 32
 
-After you've set up your recognizers and events you have to 
+```javascript
+this.alexaSkill().gameEngine().startInputHandler(
+  25000,
+  ['one', 'two', 'three'],
+  [patternRecognizerOne, patternRecognizerTwo, deviationRecognizer],
+  [eventOne, eventTwo]
+);
+```
 
 ## StopInputHandler
 
