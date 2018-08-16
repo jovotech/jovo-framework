@@ -5,7 +5,7 @@ The `GadgetController` interface allows you to controle the user's Echo Buttons.
 - [Overview](#overview)
 - [Enable the Interface](#enable-the-interface)
 - [Set Light](#set-light)
-  - [Animation](#animation)
+  - [Animations](#animations)
     - [Sequence](#sequence)
 
 ## Overview
@@ -77,7 +77,9 @@ this.alexaSkill().gadgetController().setLight(
 );
 ```
 
-### Animation
+### Animations
+
+The `animations` object contains the animation steps in chronological order as well as the number of repetitions.
 
 ```javascript
 "animations": [
@@ -122,6 +124,7 @@ You can also have a zero-step animation that will clear the current animation se
 ```
 
 A sequence has the following parameter:
+
 Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
 `durationMs` | The duration of the step in milliseconds | `duration(duration)` | `Number` in milliseconds | yes
