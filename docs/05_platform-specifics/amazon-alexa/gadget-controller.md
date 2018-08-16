@@ -17,7 +17,7 @@ With the `GadgetController` interface you can create animations for the light bu
 But first you have to enable the `GadgetController` interface either in your `app.json` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or in the Alexa Developer Console in the `Interfaces` tab.
 
 To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `app.json`:
-```
+```javascript
 "manifest": {
   "apis": {
     "custom": {
