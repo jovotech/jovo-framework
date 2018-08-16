@@ -80,6 +80,14 @@ Learn how to implement Alexa Skill Events in your Jovo project here: [Platform s
 
 Learn how to implement the CanFulfillIntentRequests in your Jovo project here: [Platform specifics > Amazon Alexa > CanFulfillIntentRequest](./canfulfill.md './amazon-alexa/canfulfill')
 
+## GameEngine Interface
+
+You can find more about Jovo GameEngine support here: [Platform specifics > Amazon Alexa > GameEngine](./game-engine.md './amazon-alexa/game-engine')
+
+## GadgetController Interface
+
+Learn how to implement the GadgetController Interface in your Jovo project here: [Platform specifics > Amazon Alexa > GadgetController](./gadget-controller.md './amazon-alexa/gadget-controller')
+
 <!--[metadata]: {"title": "Amazon Alexa Specific Features", 
                  "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
                  "expandedSections": "platforms", "inSections": "platforms", 
