@@ -53,7 +53,7 @@ this.googleAction().askForName(speech);
 Get access to the user's [location](https://developers.google.com/actions/reference/v1/conversation#Device).
 Depending on the device the request comes from and the permission you have, you can get access to different data. 
 
-If it's a phone, you can only access the `latitue` and `longitute` with the `DEVICE_PRECISE_LOCATION` permission.
+If it's a phone, you can only access the `latitude` and `longitude` with the `DEVICE_PRECISE_LOCATION` permission.
 
 On a voice-enabled speaker you can access all of the data, depending on the permission you have.
 
