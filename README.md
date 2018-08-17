@@ -130,6 +130,8 @@ Echo Show Render Templates | Display visual elements on Echo Show | [📝](./doc
 Progressive Responses | Keep your users engaged while processing a longer request | [📝](./docs/05_platform-specifics/amazon-alexa#progressive-responses)
 Skill Events | Get notified when an event (e.g. Skill enabled/disabled) occurs | [📝](./docs/05_platform-specifics/amazon-alexa/skillevents.md)
 CanFulfillIntentRequest | Add name-free interaction to your skill and increase your skill's discoverability | [📝](./docs/05_platform-specifics/amazon-alexa/canfulfill.md)
+Game Engine | Provides the toolset to receive Echo Button events | [📝](./docs/05_platform-specifics/amazon-alexa/game-engine.md)
+Gadget Controller | Allows you to control the user's Echo Buttons | [📝](./docs/05_platform-specifics/amazon-alexa/gadget-controller.md)
 
 
 #### Google Assistant
