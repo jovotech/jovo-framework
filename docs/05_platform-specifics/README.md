@@ -62,6 +62,7 @@ You can find the following Alexa specific features on the page [Platform Specifi
 * Shopping and To Do Lists
 * Account Linking
 * User location
+* Contact information
 
 
 ## Google Assistant
