@@ -8,6 +8,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [Data](#data)
   * [Shopping and To Do Lists](#shopping-and-to-do-lists)
   * [Location](#location)
+  * [Contact information](#contact-information)
 * [Output](#output)
   * [Progressive Responses](#progressive-responses)
   * [Visual Output](#visual-output)
@@ -45,6 +46,10 @@ You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](
 ### Location
 
 Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location './amazon-alexa/data#location').
+
+### Contact information
+
+Learn how to access your user's contact information data here: [Platform specifics > Amazon Alexa > Contact information](./data.md#contact-information './amazon-alexa/data#contact-information').
 
 ## Output
 
