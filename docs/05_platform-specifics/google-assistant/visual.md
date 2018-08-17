@@ -67,6 +67,45 @@ this.googleAction().showBasicCard(basicCard);
 
 [Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L44)
 
+## Table Card
+
+[Table Cards](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#tablecard) are used for the display of tabular data. They can be used to display a table of text, images and a button in addition to the speech output.
+
+Method | Description
+:--- | :---
+`setTitle(title)` | Title of the card
+`setSubtitle(subtitle)` | Subtitle of the card
+`setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
+`addRow(cellsText, dividerAfter)` | Add data for a single [row](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
+`addRows(rowsText) ` | Add data for multiple [rows](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
+`addColumn(header, horizontalAlignment)` | Add data for a single column. Choose the [horizontal alignment](https://developers.google.com/actions/reference/rest/Shared.Types/HorizontalAlignment)
+`addColumns(columnHeaders)` | Add data for multiple columns.
+`addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
+
+```javascript
+// Basic
+this.googleAction().showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
+
+// Advanced
+const {GoogleAction} = require('jovo-framework');
+
+let tableCard = new GoogleAction.Table()
+  .setTitle('Jovo')
+  .setImage('http://via.placeholder.com/150x150?text=Table', 'Jovo Card', '150', '150')
+  .addColumn('header 1','CENTER')
+  .addColumn('header 2','LEADING')
+  .addColumn('header 3','TRAILING')
+  .addRow(['row 1 item 1', 'row 1 item 2', 'row 1 item 3'], false)
+  .addRow(['row 2 item 1', 'row 2 item 2', 'row 2 item 3'], true)
+  .addRow(['row 3 item 3', 'row 3 item 2', 'row 3 item 3'])
+  .addButton('Jovo website', 'https://www.jovo.tech/');
+
+this.googleAction().showTable(tableCard);
+```
+[Official Documentation](https://developers.google.com/actions/assistant/responses#table_card)
+
+[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L55)
+
 ## Option Item
 
 Option Items are cards combined with an [OptionInfo](https://developers.google.com/actions/reference/rest/Shared.Types/OptionInfo), which is used to track the user's choice. They are used with the List and Carousel Selector.
@@ -115,7 +154,7 @@ this.googleAction().showList(list);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#list_selector)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L61)
+[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L77)
 
 ### Carousel Selector
 
@@ -136,7 +175,7 @@ this.googleAction().showCarousel(carousel);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#carousel_selector)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L82)
+[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L104)
 
 ### ON_ELEMENT_SELECTED
 
@@ -152,7 +191,7 @@ There you can use `this.getSelectedElementId()` to get the `key` of the selected
   }
 },
 ```
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L107)
+[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L129)
 
 ## Suggestion Chips
 
