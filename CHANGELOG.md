@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.4.4 (August 20, 2018)
+* [#233](https://github.com/jovotech/jovo-framework-nodejs/pull/233) Added Table Card to Google Actions  - [@donth77](https://github.com/donth77)
+
+
 ## 1.4.3 (August 14, 2018)
 * [#227](https://github.com/jovotech/jovo-framework-nodejs/pull/227) Alexa - AudioPlayer - add PlaybackController events - [@kouz75](https://github.com/kouz75)
 * [#223](https://github.com/jovotech/jovo-framework-nodejs/pull/223) Added Botanalytics integration - [@BeyhanEsen](https://github.com/BeyhanEsen)
