@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.4.5 (August 22, 2018)
+* Added Alexa Settings API integration (Timezone, Distance Measurement Unit, Temperature Measurement Unit)
+
 ## 1.4.4 (August 20, 2018)
 * [#233](https://github.com/jovotech/jovo-framework-nodejs/pull/233) Added Table Card to Google Actions  - [@donth77](https://github.com/donth77)
 
