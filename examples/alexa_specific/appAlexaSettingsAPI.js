@@ -19,17 +19,17 @@ const app = new App(config);
 
 app.setHandler({
     'LAUNCH': function() {
-        this.toIntent('GetFullNameIntent');
+        this.toIntent('GetTimezoneIntent');
     },
 
-    'GetTimezone': function() {
+    'GetTimezoneIntent': function() {
         this.user().getTimezone().then((timezone) => {
             this.tell(`Your timezone is ${timezone}`);
         }).catch((error) => {
         });
     },
 
-    'GetDistanceUnit': function() {
+    'GetDistanceUnitIntent': function() {
         this.user().getDistanceUnit().then((distanceUnit) => {
             this.tell(`Your distance measurement unit is ${distanceUnit}`);
         }).catch((error) => {
