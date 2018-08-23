@@ -55,7 +55,7 @@ const config = {
      */
     analytics: {
         services: {
-            BotannalyticsAlexa: {
+            BotanalyticsAlexa: {
                 key: '<token>',
             },
             BotanalyticsGoogleAction: {
