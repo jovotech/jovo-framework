@@ -1,19 +1,21 @@
 # [Integrations](../) > Analytics
 
-Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot, and Bespoken.
+Jovo offers easy analytics integrations and enhancements for Dashbot, Bespoken, Chatbase, and Botanalytics.
 
 * [Jovo Analytics Layer](#jovo-analytics-layer)
-  * [Turn Analytics On and Off](#turn-analytics-on-and-off)
-  * [Skip Intents](#skip-intents)
-  * [Skip Users](#skip-users)
+   * [Add Analytics Integrations](#add-analytics-integrations)
+   * [Turn Analytics On and Off](#turn-analytics-on-and-off)
+   * [Skip Intents](#skip-intents)
+   * [Skip Users](#skip-users)
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [Chatbase](#chatbase)
-* [VoiceLabs](#voicelabs) (shut down)
 * [Botanalytics](#botanalytics)
 
 
 ## Jovo Analytics Layer
+
+Jovo offers an abstraction layer for analytics integrations that allows you to add multiple analytics providers, and even to use additional features, like skipping certain intents or users that you don't want to track.
 
 
 ### Add Analytics Integrations
@@ -21,7 +23,7 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
 ```javascript
-// config
+// Jovo app config
 const config = {
     /**
      * Other settings
@@ -44,9 +46,8 @@ app.addDashbotGoogleAction(key);
 // Bespoken integration
 app.addBespokenAnalytics(key);
 
-// VoiceLabs integration (shutting down)
-app.addVoiceLabsAlexa(key);
-app.addVoiceLabsGoogleAction(key);
+// Bespoken integration
+app.addChatbaseAnalytics(key);
 
 // Botanalytics integration
 app.addBotanalyticsAlexa(key);
@@ -58,10 +59,13 @@ More detailed step-by-step guides can be found here:
 * [Dashbot](#dashbot)
 * [Bespoken](#bespoken)
 * [Chatbase](#chatbase)
-* [VoiceLabs](#voicelabs) (shut down)
 * [Botanalytics](#botanalytics)
 
-The Jovo Analytics class offers several enhancements to the vendor tracking, which can be found in the following sections.
+The Jovo Analytics class offers several enhancements to the vendor tracking. Learn more in the following sections:
+
+* [Turn Analytics On and Off](#turn-analytics-on-and-off)
+* [Skip Intents](#skip-intents)
+* [Skip Users](#skip-users)
 
 ### Turn Analytics On and Off
 
@@ -93,252 +97,28 @@ app.analytics().skipUsers(userIds);
 
 ## Dashbot
 
-To use Dashbot Analytics for your voice app, you need to complete the following steps:
+![Dashbot Website](../../img/dashbot-home.jpg)
 
-1. Create a Dashbot Bot
-2. Enable Dashbot Anaytics in your voice app
-3. Download the dashbot npm package
-4. Test your app
-
-### Create a Dashbot Bot
-
-1. Create a Dashbot account or log in at https://www.dashbot.io.
-
-2. Click "Add a Bot" in the Admin panel:
-
-![Dashbot Add a Bot](../../img/dashbot-add-bot.jpg)
-![Dashbot Add a Bot Step 2](../../img/dashbot-add-bot2.jpg)
-
-3. Select the right Platform: Alexa for Alexa Skills, or Google for Google Actions (if you are developing for both Amazon Alexa and Google Assistant, please create 2 distinct Dashbot Bots):
-
-![Dashbot Select Platform](../../img/dashbot-select-platform.jpg)
-
-4. Copy API Key
-
-![Dashbot Copy API Key](../../img/dashbot-api-key.jpg)
-
-### Enable Dashbot Analytics
-
-Dashbot Analytics can be added to your voice app using the config or with the following commands:
-
-```javascript
-// config
-const config = {
-    /**
-     * other settings
-     */
-    analytics: {
-        services: {
-            DashbotAlexa: {
-                key: '<key>',
-            },
-            DashbotGoogleAction: {
-                key: '<key>',
-            },
-        },
-    },
-};
-// For Dashbot Alexa Bot
-app.addDashbotAlexa(key);
-
-// For Dashbot Google Bot
-app.addDashbotGoogleAction(key);
-```
-
-### Download the Dashbot Package
-
-In your terminal, use the following command to download the package via npm:
-
-```
-$ npm install dashbot
-```
-
-### Test Dashbot
-
-Test your voice app, after a bit your session should appear in the Report section (data is updated hourly):
-
-![Dashbot Test](../../img/dashbot-test.jpg)
-
+[Learn more about the Jovo Dashbot integration here.](./dashbot.md './analytics/dashbot')
 
 
 ## Bespoken
 
-To use Bespoken Analytics for your voice app, you need to complete the following steps:
+![Bespoken Website](../../img/bespoken-home.jpg)
 
-1. Create a Bespoken Dashboard account
-2. Enable Bespoken Analytics in your voice app
-3. Test your app
-
-### Create a Bespoken Dashboard Account
-
-1. Create a Bespoken account or log in at https://apps.bespoken.io/dashboard/.
-
-2. Click the plus sign on the Home page:
-
-![Bespoken Add a Source](../../img/bespoken-dashboard.png)
-
-3. Set the name for your source and click on "Create Source"
-![Bespoken Set source name](../../img/bespoken-dashboard-create.png)
-
-4. On your source main page, you can see your secret key for that source in the top right corner by clicking "Show"
-![Bespoken Source Main Page](../../img/bespoken-dashboard-main.png)
-
-5. Copy the Secret Key
-
-### Enable Bespoken Analytics
-
-Bespoken Analytics can be added to your voice app using the config or with the following command:
-
-```javascript
-// config
-const config = {
-    /**
-     * other settings
-     */
-    analytics: {
-        services: {
-            BespokenAlexa: {
-                key: '<key>',
-            },
-            BespokenGoogleAction: {
-                key: '<key>',
-            },
-        },
-    },
-};
-// command
-app.addBespokenAnalytics(key);
-```
-
-### Test Bespoken
-
-Test your voice app, after a bit your session should appear in the created skill.
-
-
-## VoiceLabs
-
-> IMPORTANT: VoiceLabs shut down down its service on March 29, 2018. [Read more here](http://voicelabs.co/2018/01/29/voicelabs-exits-analytics-business/).
+[Learn more about the Jovo Bespoken integration here.](./bespoken.md './analytics/bespoken')
 
 ## Chatbase
 
-To use Chatbase Analytics for your voice app, you need to complete the following steps:
+![Chatbase Website](../../img/chatbase-home.jpg)
 
-1. Create a Chatbase Bot
-2. Enable Chatbase Anaytics in your voice app
-3. Test your app
-
-### Create a Chatbase Account
-
-1. Create a Chatbase account or log in at https://chatbase.com/
-
-2. Create a new bot
-
-![Create Chatbase Bot](../../img/chatbase_01.png)
-
-3. Choose your bot's name and region
-
-![Chatbase Bot Name](../../img/chatbase_02.png)
-
-4. Copy API Key
-
-![API Key](../../img/chatbase_03.png)
-
-### Enable Chatbase Analytics
-
-Chatbase Analytics can be enabled in your Jovo app's config. Note: You can use the same API key for both platforms:
-
-```javascript
-// config
-const config = {
-    /**
-     * other settings
-     */
-    analytics: {
-        services: {
-            ChatbaseAlexa: {
-                key: '<key>',
-                version: 'version',
-            },
-            ChatbaseGoogleAction: {
-                key: '<key>',
-                version: 'version',
-            },
-        },
-    },
-};
-// command
-app.addChatbaseAnalytics(key, version);
-```
-
-### Test Chatbase
-
-Test you voice app. It can take up to 6 hours until all the data can be seen on the Chatbase dashboard.
-
-![Chatbase Dashboard](../../img/chatbase_04.png)
+[Learn more about the Jovo Chatbase integration here.](./chatbase.md './analytics/chatbase')
 
 ## Botanalytics
 
-To use Botanalytics for your voice app, you need to complete the following steps:
+![Botanalytics Website](../../img/botanalytics-home.jpg)
 
-1. Add a New Bot
-2. Enable Bot in Your Voice App
-3. Download the 'botanalytics' npm Package
-4. Check Your App
-
-### Add a New Bot
-
-1. Create a Botanalytics account or log in at https://www.botanalytics.co.
-
-2. Click "Add a New Bot":
-
-![Botanalytics Add a New Bot](../../img/botanalytics_1.png)
-![Botanalytics Add a New Bot Step 2](../../img/botanalytics_2.png)
-
-3. Copy API Key
-
-![Botnalytics Copy API Key](../../img/botanalytics_3.png)
-
-### Enable Botanalytics
-
-Botanalytics can be added to your voice app using the config or with the following commands:
-
-```javascript
-// Jovo app configuration
-const config = {
-    /**
-     * other settings
-     */
-    analytics: {
-        services: {
-            BotannalyticsAlexa: {
-                key: '<token>',
-            },
-            BotanalyticsGoogleAction: {
-                key: '<token>',
-            },
-        },
-    },
-};
-// For Botanalytics Alexa Bot
-app.addBotanalyticsAlexa(token);
-
-// For Botanalytics Google Bot
-app.addBotanalyticsGoogleAction(token);
-```
-
-### Download the Botanalytics Package
-
-In your terminal, use the following command to download the package via npm:
-
-```bash
- npm install botanalytics
-```
-
-### Check Your App
-
-Test your voice app, after sending couple of messages, click to 'Check connection' button
-
-![Botanalytics Test](../../img/botanalytics_4.png)
+[Learn more about the Jovo Botanalytics integration here.](./botanalytics.md './analytics/botanalytics')
 
 
 <!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics",
