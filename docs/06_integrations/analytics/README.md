@@ -97,26 +97,26 @@ app.analytics().skipUsers(userIds);
 
 ## Dashbot
 
-![Dashbot Website](../../img/dashbot-home.jpg)
+[![Dashbot Website](../../img/dashbot-home.jpg)](./dashbot.md './analytics/dashbot')
 
 [Learn more about the Jovo Dashbot integration here.](./dashbot.md './analytics/dashbot')
 
 
 ## Bespoken
 
-![Bespoken Website](../../img/bespoken-home.jpg)
+[![Bespoken Website](../../img/bespoken-home.jpg)](./bespoken.md './analytics/bespoken')
 
 [Learn more about the Jovo Bespoken integration here.](./bespoken.md './analytics/bespoken')
 
 ## Chatbase
 
-![Chatbase Website](../../img/chatbase-home.jpg)
+[![Chatbase Website](../../img/chatbase-home.jpg)](./chatbase.md './analytics/chatbase')
 
 [Learn more about the Jovo Chatbase integration here.](./chatbase.md './analytics/chatbase')
 
 ## Botanalytics
 
-![Botanalytics Website](../../img/botanalytics-home.jpg)
+[![Botanalytics Website](../../img/botanalytics-home.jpg)](./botanalytics.md './analytics/botanalytics')
 
 [Learn more about the Jovo Botanalytics integration here.](./botanalytics.md './analytics/botanalytics')
 
