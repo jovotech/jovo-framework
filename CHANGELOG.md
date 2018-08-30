@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.4.6 (August 30, 2018)
+* Added Display Template Preview to Jovo Debugger plugin
+
+
 ## 1.4.5 (August 22, 2018)
 * Added Alexa Settings API integration (Timezone, Distance Measurement Unit, Temperature Measurement Unit)
 
