@@ -294,7 +294,7 @@ $ jovo build [-p | --platform <platform>] [-r | --reverse] [-l | --locale <local
 ```
 **Options**
 
-`--platform`, `-p`: If you want to update your platform folders, you can leave it out and it will update the ones listed in `app.json`. If you want to update a specific platform foler you can parse the platform name as an argument: `alexaSkill` or `googleAction`. If you haven't  initialized a platform yet, this will trigger the [`jovo init`](#jovo-init) command.
+`--platform`, `-p`: If you want to update your platform folders, you can leave it out and it will update the ones listed in `app.json`. If you want to update a specific platform folder you can parse the platform name as an argument: `alexaSkill` or `googleAction`. If you haven't  initialized a platform yet, this will trigger the [`jovo init`](#jovo-init) command.
 
 `--reverse`, `-r`: In this reverse process, you can create a [Jovo Language Model](../03_app-configuration/01_models './model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](#jovo-get).
 

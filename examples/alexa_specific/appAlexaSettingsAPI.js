@@ -5,6 +5,7 @@
 // =================================================================================
 
 const {App} = require('jovo-framework');
+const moment = require('moment-timezone');
 
 const config = {
     logging: true,
@@ -25,6 +26,16 @@ app.setHandler({
     'GetTimezoneIntent': function() {
         this.user().getTimezone().then((timezone) => {
             this.tell(`Your timezone is ${timezone}`);
+        }).catch((error) => {
+        });
+    },
+
+    'GetLocalTimeIntent': function() {
+        this.user().getTimezone().then((timezone) => {
+            const now = moment.utc();
+            const localTime = now.tz(timezone).format('ddd, MMM D, YYYY [at] h:mma');
+
+            this.tell(`Your local time is ${localTime}`);
         }).catch((error) => {
         });
     },
