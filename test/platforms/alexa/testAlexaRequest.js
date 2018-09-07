@@ -272,12 +272,6 @@ describe('Tests for AlexaRequest Class', function() {
         expect(sessionEndedRequest.getSessionId()).to.be.equal('amzn1.echo-api.session.0000000-0000-0000-0000-00000000000');
         expect(sessionEndedRequest.getApplicationId()).to.be.equal('amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe');
         expect(sessionEndedRequest.getUserId()).to.be.equal('amzn1.account.AM3B00000000000000000000000');
-        expect(sessionEndedRequest.getSessionAttributes()).to.deep.equal({
-            'supportedHoroscopePeriods': {
-                'daily': true,
-                'weekly': false,
-                'monthly': false,
-            }});
 
         // context
         expect(sessionEndedRequest.getSupportedInterfaces()).to.deep.equal({'AudioPlayer': {}});
