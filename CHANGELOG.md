@@ -1,5 +1,11 @@
 # Jovo Framework Changelog
 
+
+## 1.4.7 (September 07, 2018)
+* Added Jovo Debugger config file integration (Beta)
+* Fixed async functionality in handleLambda() method 
+
+
 ## 1.4.6 (August 30, 2018)
 * Added Display Template Preview to Jovo Debugger plugin
 
