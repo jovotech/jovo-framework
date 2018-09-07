@@ -7,11 +7,6 @@
       "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
     },
     "attributes": {
-      "supportedHoroscopePeriods": {
-        "daily": true,
-        "weekly": false,
-        "monthly": false
-      }
     },
     "user": {
       "userId": "amzn1.account.AM3B00000000000000000000000"
