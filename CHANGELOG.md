@@ -1,5 +1,7 @@
 # Jovo Framework Changelog
 
+## 1.4.8 (September 11, 2018)
+* Fixed bug in handler (Intents were called after tell/ask in NEW_SESSION, NEW_USER, ON_REQUEST )
 
 ## 1.4.7 (September 07, 2018)
 * Added Jovo Debugger config file integration (Beta)
