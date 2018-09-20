@@ -1,4 +1,4 @@
-﻿# [App Logic](../) > Output
+# [App Logic](../) > Output
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
