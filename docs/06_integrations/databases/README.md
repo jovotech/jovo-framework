@@ -1,4 +1,4 @@
-﻿# [Integrations](../) > Databases
+# [Integrations](../) > Databases
 
 Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
