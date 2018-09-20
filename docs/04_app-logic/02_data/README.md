@@ -1,4 +1,4 @@
-﻿# [App Logic](../) > Data
+# [App Logic](../) > Data
 
 In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
 
