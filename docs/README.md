@@ -15,7 +15,7 @@ CLI | [Overview](./02_cli) | &nbsp;
 &nbsp; | [Workflows](../02_cli/workflows.md) | &nbsp;
 App Configuration | [Overview](./03_app-configuration) | &nbsp;
 &nbsp; | [Language Models](./03_app-configuration/01_models)  | [Platforms](./03_app-configuration/01_models/platforms)
-&nbsp; | [Server Configuration](./03_app-configuration/02_server) | [Webhook](./03_app-configuration/server/webhook.md), [AWS Lambda](./03_app-configuration/server/aws-lambda.md)
+&nbsp; | [Server Configuration](./03_app-configuration/02_server) | [Webhook](./03_app-configuration/02_server/webhook.md), [AWS Lambda](./03_app-configuration/02_server/aws-lambda.md), [Azure Functions](./03_app-configuration/02_server/azure-functions.md)
 App Logic | [Overview](./04_app-logic) | &nbsp;
 &nbsp; | [Routing](./04_app-logic/01_routing) | &nbsp;
 &nbsp; | [Data](./04_app-logic/02_data) | [User](./04_app-logic/02_data/user.md)
