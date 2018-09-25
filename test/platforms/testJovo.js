@@ -10,6 +10,7 @@ chai.should();
 
 // let should = chai.should;
 const App = require('../../lib/app').App;
+const Jovo = require('../../lib/jovo').Jovo;
 
 const RequestBuilderAlexaSkill = require('../../lib/platforms/alexaSkill/request/util/requestBuilder').RequestBuilder;
 
@@ -18,7 +19,12 @@ let response = JSON.parse(webhookAlexaIntentRequestResponseJSON);
 
 const util = require('../../lib/util');
 // workaround
-response.json = function(json) {};
+response.json = function(json) {
+    response.jsonResponse = json;
+};
+response.status = function(statusCode) {
+    response.statusCode = statusCode;
+};
 
 
 describe('getIntentName', function() {
@@ -350,4 +356,32 @@ describe('getSortedArgumentsInput', function() {
     });
 });
 
+describe('execute', function() {
+    it('should set error response when exception thrown during webhook request', function() {
+        let app = new App();
+        let request = RequestBuilderAlexaSkill
+            .intentRequest()
+            .setIntentName('HelloWorldIntent');
 
+        // add an intent that simply throws an exception
+        app.setHandler({
+            'HelloWorldIntent': function() {
+                throw new Error('intent-exception');
+            },
+        });
+
+        let jovo = new Jovo(app);
+
+        // verify that the exception is caught and a proper HTTP response is sent
+        return jovo.handleRequest(request.buildHttpRequest(), response)
+            .execute()
+            .then(() => {
+                assert.fail(0, 1, 'Promise should have been rejected');
+            })
+            .catch(() => {
+                assert.isTrue(jovo.responseSent);
+                assert.equal(jovo.response.statusCode, 400);
+                assert.equal(jovo.response.jsonResponse.msg, 'Error: intent-exception');
+            });
+    });
+});
