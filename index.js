@@ -193,7 +193,7 @@ module.exports.Plugin = require('./lib/integrations/plugin').Plugin;
 module.exports.FilePersistence = FilePersistence;
 module.exports.DynamoDb = DynamoDb;
 module.exports.JovoClazz = Jovo;
-
+module.exports.SpeechBuilder = require('./lib/platforms/speechBuilder').SpeechBuilder;
 module.exports.TestSuite = require('./lib/tools/testSuite');
 
 module.exports.util = require('./lib/util');
