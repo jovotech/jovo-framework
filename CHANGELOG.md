@@ -1,5 +1,10 @@
 # Jovo Framework Changelog
 
+## 1.4.10 (September 26, 2018)
+* [#254](https://github.com/jovotech/jovo-framework-nodejs/pull/254) Fix for webhook exception handling during unit tests  - [@IGx89](https://github.com/IGx89)
+* Added SpeechBuilder export
+* Fixed Alexa ContactAPI (temperatureUnit)
+
 ## 1.4.9 (September 14, 2018)
 * [#248](https://github.com/jovotech/jovo-framework-nodejs/pull/248) Added context to askForSignIn()  - [@kouz75](https://github.com/kouz75)
 * [#247](https://github.com/jovotech/jovo-framework-nodejs/pull/247) Added Azure Functions error handling fixes  - [@IGx89](https://github.com/IGx89)
