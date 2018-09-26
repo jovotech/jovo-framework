@@ -1,4 +1,4 @@
-﻿# [App Logic](../) > [Output](./README.md) > Visual Outpu
+# [App Logic](../) > [Output](./README.md) > Visual Output
 
 In this section, you will learn about the different ways to add visual output to your voice application.
 

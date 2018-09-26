@@ -451,7 +451,7 @@ let intentMap = {
 As mentioned above, the platforms offer different types of built-in intents.
 
 * Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
-* Google Assistant: Currently no documentation of built-in intents on Dialogflow
+* Google Assistant: [Built-in Intents (Developer Preview)](https://developers.google.com/actions/discovery/built-in-intents)
 
 
 ## States

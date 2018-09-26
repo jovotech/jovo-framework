@@ -96,7 +96,7 @@ let testPattern = {
 }
 ```
 
-#### Code
+#### Code Example for Pattern Object
 
 To create a `PatternRecognizer` you need the `PatternRecognizerBuilder`:
 ```javascript
@@ -131,7 +131,7 @@ Name | Description | Method | Value | Required
 :--- | :--- | :--- | :--- | :---
 `recognizer` | Name of the recognizer where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
  
-#### Code
+#### Code Example for Deviation Recognizer
 
 To create a `DeviationRecognizer` you need the `DeviationRecognizerBuilder`:
 ```javascript
@@ -159,7 +159,7 @@ Name | Description | Method | Value | Required
 `recognizer` | Name of the recognizer where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
 `completion` | The point from which on the recognizer is `true` | `completion(completion)` | `Number` (e.g `50` = `50%`) | yes
 
-#### Code
+#### Code Example for Progress Recognizer
 
 To create a `ProgressRecognizer` you need the `ProgressRecognizerBuilder`:
 ```javascript
@@ -195,7 +195,7 @@ Name | Description | Method | Value | Required
 `maximumInvocations` | Number of times the event can be sent to your skill | `maximumInvocation(maxInvocations)` | `Number` min & default: 1, max: 2048 | no
 `triggerTimeMilliseconds` | Specify how many milliseconds have to have passed before the event can be sent out | `triggerTimeMilliseconds(triggerTime)` | `Number` min: 0, max: 300000 | no
 
-### Code
+### Code Example for Events
 
 To create an `Event` you need the `EventBuilder`:
 ```javascript

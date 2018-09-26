@@ -1,4 +1,4 @@
-﻿# [App Logic](../) > [Output](./README.md) > SpeechBuilder
+# [App Logic](../) > [Output](./README.md) > SpeechBuilder
 
 In this section, you will learn how to use the Jovo SpeechBuilder, a helper class that makes it easier to build speech responses and add variety to your voice app.
 

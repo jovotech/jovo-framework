@@ -102,9 +102,10 @@ There are several ways how to do that:
 
 ### 4. Run and Test the Code
 
-For your first "Hello World!", you need to run the software on either
-* a local development server with `$ jovo run` (recommended), as described in [App Configuration > Server Configuration > Webhook](../03_app-configuration/server/webhook.md './server/webhook')
-* or on AWS Lambda, as described in [App Configuration > Server Configuration > AWS Lambda](../03_app-configuration/server/aws-lambda.md './server/aws-lambda')
+For your first "Hello World!", you need to run the software on
+* a local development server with `$ jovo run` (recommended), as described in [App Configuration > Server Configuration > Webhook](../03_app-configuration/02_server/webhook.md './server/webhook')
+* AWS Lambda, as described in [App Configuration > Server Configuration > AWS Lambda](../03_app-configuration/02_server/aws-lambda.md './server/aws-lambda')
+* or Azure Functions, as described in [App Configuration > Server Configuration > Azure Functions](../03_app-configuration/02_server/azure-functions.md './server/azure-functions')
 
 You can find a full step-by-step course for both Amazon Alexa and Google Assistant here: [Voice App Project 1: Hello World](https://www.jovo.tech/blog/project-1-hello-world/). 
 
