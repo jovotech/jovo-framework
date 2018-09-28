@@ -84,7 +84,7 @@ this.db().deleteUser(function(err) {
 
 ## FilePersistence
 
-> This is the default database integration.
+> Note: This is the default database integration.
 
 The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
 
@@ -120,6 +120,8 @@ And this is an example how the file structure looks like, with the `userID` as a
 
 
 ## DynamoDB
+
+> Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
 
 The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. Learn more about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
 
