@@ -80,6 +80,7 @@ Name | Description | Method | Value | Required
 #### Pattern Object
 
 A `pattern` object has three values, namely `gadgetIds`, `colors` and `action`. None of the values are required, but if they are left out, they will be handled as *wildcards*, i.e. everything works.
+
 Name | Description | Value
 :--- | :--- | :---
 `gadgetIds` | Specify which gadgets should be eligible for this match | `String[]`
