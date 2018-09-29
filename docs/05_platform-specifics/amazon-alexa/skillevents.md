@@ -306,7 +306,7 @@ This will update the `skill.json` file to include the skill events and the endpo
 
 
 <!--[metadata]: {"title": "Alexa Skill Events", 
-"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_index"], 
+"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_skillevents"], 
 "expandedSections": "platforms", "inSections": "platforms", 
 "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
 "Amazon Alexa": "" }, 
