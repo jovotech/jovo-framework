@@ -2,22 +2,22 @@
 
 Learn more about how to use Skill Events with the Jovo Framework.
 
-- [Platform Specific Features > Amazon Alexa > Skill Events](#platform-specific-features--amazon-alexa--skill-events)
-	- [Introduction to Skill Events](#introduction-to-skill-events)
-	- [Requirements](#requirements)
-	- [Events](#events)
-		- [Skill Enabled](#skill-enabled)
-		- [Skill Disabled](#skill-disabled)
-		- [Account Linked](#account-linked)
-		- [Skill Permission Accepted](#skill-permission-accepted)
-		- [Skill Permission Changed](#skill-permission-changed)
-	- [Staging](#staging)
+* [Introduction to Skill Events](#introduction-to-skill-events)
+* [Requirements](#requirements)
+   * [Events](#events)
+      * [Skill Enabled](#skill-enabled)
+      * [Skill Disabled](#skill-disabled)
+      * [Account Linked](#account-linked)
+      * [Skill Permission Accepted](#skill-permission-accepted)
+      * [Skill Permission Changed](#skill-permission-changed)
+   * [Staging](#staging)
 
 ## Introduction to Skill Events
 
 Skill Events can be used to notify you if a certain event occurs, which range from the customer disabling your Skill to them linking their account using the Alexa app. The notification comes in form of a request to your Skill. 
 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html)
+
 ## Requirements
 
 To enable the Skill Events you have to make changes to the `skill.json` file, which you can find under `/platforms/alexaSkill/` in your Jovo project. 
