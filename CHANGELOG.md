@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.4.11 (October 2, 2018)
+* Fixed handler merging and GadgetController
+
 ## 1.4.10 (September 26, 2018)
 * [#254](https://github.com/jovotech/jovo-framework-nodejs/pull/254) Fix for webhook exception handling during unit tests  - [@IGx89](https://github.com/IGx89)
 * Added SpeechBuilder export
