@@ -1,5 +1,9 @@
 # Jovo Framework Changelog
 
+## 1.4.12 (October 7, 2018)
+* [#261](https://github.com/jovotech/jovo-framework-nodejs/pull/261) Added Alexa ApiEndpoint fallback [@shmatul](https://github.com/shmatul)
+* [#259](https://github.com/jovotech/jovo-framework-nodejs/pull/259) Added addAskForNotificationPermission for GoogleAction [@gwythyr](https://github.com/gwythyr)
+
 ## 1.4.11 (October 2, 2018)
 * Fixed handler merging and GadgetController
 
