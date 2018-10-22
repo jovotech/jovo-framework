@@ -12,9 +12,10 @@ Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
 ## Introduction to AudioPlayer Skills
 
-AudioPlayer Skills can be used to stream long-form audio files like music. Here is the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
+AudioPlayer Skills can be used to stream long-form audio files like music or podcasts. The audio file must be hosted at an Internet-accessible HTTPS endpoint. The supported formats for the audio file include AAC/MP4, MP3, and HLS. Bitrates: 16kbps to 384 kbps. More information can be found here at the [official reference by Amazon](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/custom-audioplayer-interface-reference).
 
-You can get started by creating a new Jovo project with the [`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/02_alexa-audioplayer) template:
+Get started by creating a new Jovo project with the [`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer)
+ template:
 
 ```sh
 $ jovo new <directory> --template alexa-audioplayer
@@ -24,15 +25,28 @@ $ jovo new <directory> --template alexa-audioplayer
 
 ### Play a File
 
-```javascript
 play(url, token, playBehavior)
+
+```javascript
 
 // Start playing a file from the beginning
 this.alexaSkill().audioPlayer().setOffsetInMilliseconds(0)
     .play(url, token)
     .tell(speech);
-```
 
+// or for example playing with an offset.
+var offset = 3000;
+this.alexaSkill().audioPlayer().setOffsetInMilliseconds(offset)
+    .play(url, token)
+    .tell(speech);
+```
+play has the following paramaters.
+
+| Name         | Description                                                                                                                                                                                                                                                                                                                                                                           | Value  | Required                     |   |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|---|
+| url          | Specify the url source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                    | String |                              |   |
+| token        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.                                                                                                                                                                                                                                                                                           | String |                              |   |
+| PlayBehavior | Describes playback behavior. Accepted values: REPLACE_ALL: Immediately begin playback of the specified stream, and replace current and enqueued streams. ENQUEUE: Add the specified stream to the end of the current queue. This does not impact the currently playing stream. REPLACE_ENQUEUED: Replace all streams in the queue. This does not impact the currently playing stream. | String | No - Defaults to REPLACE_ALL |   |
 ### Enqueue
 
 ```javascript
@@ -77,31 +91,31 @@ app.setHandler({
     'AUDIOPLAYER': {
         'AudioPlayer.PlaybackStarted': function() {
             console.log('AudioPlayer.PlaybackStarted');
-            
+
             // Do something
-            
+
             this.endSession();
         },
 
         'AudioPlayer.PlaybackNearlyFinished': function() {
             console.log('AudioPlayer.PlaybackNearlyFinished');
-            
+
             // Do something
-            
+
             this.endSession();
         },
 
         'AudioPlayer.PlaybackFinished': function() {
             console.log('AudioPlayer.PlaybackFinished');
-            
+
             // Do something
-            
+
             this.endSession();
         },
 
         'AudioPlayer.PlaybackStopped': function() {
             console.log('AudioPlayer.PlaybackStopped');
-            
+
             // Do something
 
             this.endSession();
