@@ -26,5 +26,6 @@ Platform-specific Features | [Overview](./05_platform-specifics) | &nbsp;
 &nbsp; Integrations | [Overview](./06_integrations) | &nbsp;
 &nbsp; | [Databases](./06_integrations/databases) | &nbsp;
 &nbsp; | [Analytics](./06_integrations/analytics) | &nbsp;
-Advanced Features | [Overview](./07_advanced) | &nbsp;
-Support | [Overview](./08_support) | &nbsp;
+Advanced Features | [Overview](./07_advanced) | [Unit Testing](./07_advanced/unit-testing)
+Jovo Debugger | [Overview](./08_advanced) | &nbsp;
+Support | [Overview](./09_support) | &nbsp;
