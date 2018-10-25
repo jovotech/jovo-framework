@@ -53,7 +53,7 @@ Play has the following parameters.
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
 | `url`          | Specify the URL source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                              | String |         YES                     |
 | `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.                                                                                                                                                                                                                                                                                                     | String |       YES                      |
-| `PlayBehavior` | Describes playback behavior. Accepted values:  `REPLACE_ALL`: Immediately begin playback of the specified stream, and replace current and enqueued streams. `ENQUEUE`: Add the specified stream to the end of the current queue. This does not impact the currently playing stream. `REPLACE_ENQUEUED`: Replace all streams in the queue. This does not impact the currently playing stream. | String | NO - Defaults to REPLACE_ALL |### Enqueue
+| `PlayBehavior` | Describes playback behavior. Accepted values:  `REPLACE_ALL`: Immediately begin playback of the specified stream, and replace current and enqueued streams.<br/> `ENQUEUE`: Add the specified stream to the end of the current queue. This does not impact the currently playing stream. <br/>`REPLACE_ENQUEUED`: Replace all streams in the queue. This does not impact the currently playing stream. | String | NO - Defaults to REPLACE_ALL |### Enqueue
 
 ### Enqueue
 
@@ -63,8 +63,8 @@ this.alexaSkill().audioPlayer().enqueue(url, token)
 ```
 | Name           | Description                                                                                                                                                                                                                                                                                                                                                                                     | Value  | Required                     |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
-| `url`          | Specify the URL source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                              | String |         YES                     |
-| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.      
+| `url`          | Specify the URL source of your audio must be HTTPS     | String |  YES |
+| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.  | String |   YES  |    
 
 ### Stop
 Stops the current file from playing.
@@ -73,11 +73,34 @@ Stops the current file from playing.
 this.alexaSkill().audioPlayer().stop();
 ```
 
+### Start Over
 
+Starts the file specified by the url from the beginning.
 
+```javascript
+this.alexaSkill().audioPlayer().startOver(url, token);
+
+```
+| Value  | Required                     |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
+| `url`          | Specify the URL source of your audio must be HTTPS     | String |  YES |
+| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.  | String |   YES  |    
 ### Set Track Metadata
 
 You can set track metadata that is used to show additional information for Alexa devices with a screen. Learn more about Audioplayer displays in the [official reference by Amazon](https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#audioplayer-display).
+
+### Clear Queue
+
+Use to clear all the queue or just the enqueue files.
+
+```javascript
+this.alexaSkill().audioPlayer().clearQueue('CLEAR_ALL');
+
+```
+| Value  | Required                     |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
+| `clearBehavior`          | 'CLEAR_ALL' - to clear everything <br/>  'CLEAR_ENQUEUED'- to clear just the queue.   | String |  YES |
+
 
 ```javascript
 this.alexaSkill().audioPlayer()
