@@ -89,10 +89,6 @@ this.alexaSkill().audioPlayer().startOver(url, token);
 | `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.  | String |   YES  |    
 
 
-### Set Track Metadata
-
-You can set track metadata that is used to show additional information for Alexa devices with a screen. Learn more about Audioplayer displays in the [official reference by Amazon](https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#audioplayer-display).
-
 ### Clear Queue
 
 Use to clear all the queue or just the enqueue files.
@@ -107,6 +103,9 @@ this.alexaSkill().audioPlayer().clearQueue('CLEAR_ALL');
 
 
 ### Set Track Metadata
+
+You can set track metadata that is used to show additional information for Alexa devices with a screen. Learn more about Audioplayer displays in the [official reference by Amazon](https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#audioplayer-display).
+
 
 ```javascript
 this.alexaSkill().audioPlayer()
