@@ -101,7 +101,7 @@ this.alexaSkill().audioPlayer().clearQueue('CLEAR_ALL');
 ```
 | Name           | Description  | Value  | Required  |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
-| `clearBehavior`          | 'CLEAR_ALL' - to clear everything <br/>  'CLEAR_ENQUEUED'- to clear just the queue.   | String |  YES |
+| `clearBehavior`          | `CLEAR_ALL` - to clear everything <br/>  `CLEAR_ENQUEUED`- to clear just the queue.   | String |  YES |
 
 
 ```javascript
