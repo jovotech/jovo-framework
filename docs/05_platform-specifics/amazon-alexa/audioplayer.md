@@ -7,6 +7,8 @@ Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
   * [Play a File](#play-a-file)
   * [Enqueue](#enqueue)
   * [Stop](#stop)
+  * [Start Over](#start-over)
+  * [Clear Queue](#clear-queue)
   * [Set Track Metadata](#set-track-metadata)
 * [AudioPlayer Directives](#audioplayer-directives)
 
@@ -103,6 +105,8 @@ this.alexaSkill().audioPlayer().clearQueue('CLEAR_ALL');
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
 | `clearBehavior`          | `CLEAR_ALL` - to clear everything <br/>  `CLEAR_ENQUEUED`- to clear just the queue.   | String |  YES |
 
+
+### Set Track Metadata
 
 ```javascript
 this.alexaSkill().audioPlayer()
