@@ -23,7 +23,9 @@ $ jovo new <directory> --template alexa-audioplayer
 
 ## Features
 
-### Play a File
+### Play
+Play a file.
+Speech will take place before the file begins to play.
 
 play(url, token, playBehavior)
 
@@ -39,24 +41,39 @@ var offset = 3000;
 this.alexaSkill().audioPlayer().setOffsetInMilliseconds(offset)
     .play(url, token)
     .tell(speech);
+
+// or specify PlayBehavior
+this.alexaSkill().audioPlayer().setOffsetInMilliseconds(0)
+.play(url,token,'ENQUEUE')
+.tell(speech)
 ```
-play has the following parameters.
+Play has the following parameters.
 
 | Name           | Description                                                                                                                                                                                                                                                                                                                                                                                     | Value  | Required                     |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
-| `url`          | Specify the URL source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                              | String |                              |
-| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.                                                                                                                                                                                                                                                                                                     | String |                              |
-| `PlayBehavior` | Describes playback behavior. Accepted values:  `REPLACE_ALL`: Immediately begin playback of the specified stream, and replace current and enqueued streams. `ENQUEUE`: Add the specified stream to the end of the current queue. This does not impact the currently playing stream. `REPLACE_ENQUEUED`: Replace all streams in the queue. This does not impact the currently playing stream. | String | No - Defaults to REPLACE_ALL |### Enqueue
+| `url`          | Specify the URL source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                              | String |         YES                     |
+| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.                                                                                                                                                                                                                                                                                                     | String |       YES                      |
+| `PlayBehavior` | Describes playback behavior. Accepted values:  `REPLACE_ALL`: Immediately begin playback of the specified stream, and replace current and enqueued streams. `ENQUEUE`: Add the specified stream to the end of the current queue. This does not impact the currently playing stream. `REPLACE_ENQUEUED`: Replace all streams in the queue. This does not impact the currently playing stream. | String | NO - Defaults to REPLACE_ALL |### Enqueue
+
 ### Enqueue
+
+Adds sepcified file to the play queue. remember that the URL must be HTTPS.
 ```javascript
 this.alexaSkill().audioPlayer().enqueue(url, token)
 ```
+| Name           | Description                                                                                                                                                                                                                                                                                                                                                                                     | Value  | Required                     |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
+| `url`          | Specify the URL source of your audio must be HTTPS                                                                                                                                                                                                                                                                                                                                              | String |         YES                     |
+| `token`        | An opaque token that represents the audio stream. This token cannot exceed 1024 characters.      
 
 ### Stop
+Stops the current file from playing.
 
 ```javascript
 this.alexaSkill().audioPlayer().stop();
 ```
+
+
 
 ### Set Track Metadata
 
