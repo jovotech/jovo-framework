@@ -1,5 +1,14 @@
 # Jovo Framework Changelog
 
+## 1.4.14 (November 02, 2018)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/264) Fixed handle requests without session attributes [@theBenForce](https://github.com/theBenForce)
+
+
+## 1.4.13 (October 11, 2018)
+* [#261](https://github.com/jovotech/jovo-framework-nodejs/pull/265) Fixed SequenceBuilder being added multiple times [@theBenForce](https://github.com/theBenForce)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/264) Fixed handle requests without session attributes [@theBenForce](https://github.com/theBenForce)
+
+
 ## 1.4.12 (October 7, 2018)
 * [#261](https://github.com/jovotech/jovo-framework-nodejs/pull/261) Added Alexa ApiEndpoint fallback [@shmatul](https://github.com/shmatul)
 * [#259](https://github.com/jovotech/jovo-framework-nodejs/pull/259) Added addAskForNotificationPermission for GoogleAction [@gwythyr](https://github.com/gwythyr)
