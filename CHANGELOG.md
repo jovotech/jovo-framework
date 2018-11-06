@@ -1,8 +1,11 @@
 # Jovo Framework Changelog
 
+## 1.4.16 (November 06, 2018)
+* Fixed Nested State Metadata Conflicts issue #275
+
+
 ## 1.4.15 (November 02, 2018)
 * Added [Alexa Reminders](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html)
-
 
 ## 1.4.14 (November 02, 2018)
 * [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/264) Fixed handle requests without session attributes [@theBenForce](https://github.com/theBenForce)
