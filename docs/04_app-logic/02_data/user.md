@@ -20,7 +20,7 @@ The `User` object offers helpful features to build contextual, user specific exp
 You can access the user object like this:
 
 ```javascript
-let user = this.user();
+let user = this.$user;
 ```
 
 ### Configuration
@@ -63,10 +63,10 @@ With our Jovo Persistence Layer, you can store user specific data easily to eith
 Just specify a key and a value, and you're good to go: 
 
 ```javascript
-this.user().data.key = value;
+this.$user.data.key = value;
 
 // Example
-this.user().data.score = 300;
+this.$user.data.score = 300;
 ```
 
 For more information on data persistence, take a look here: [Integrations > Databases](../../06_integrations/databases './databases').
@@ -78,9 +78,9 @@ The user object meta data is the first step towards building more contextual exp
 
 Meta Data | Usage | Description
 :--- | :--- | :---
-createdAt | `this.user().metaData.createdAt` | Timestamp: When the user first used your app
-lastUsedAt | `this.user().metaData.lastUsedAt` | Timestamp: The last time your user interacted with your app
-sessionsCount | `this.user().metaData.sessionsCount` | Timestamp: How often your user engaged with your app
+createdAt | `this.$user.metaData.createdAt` | Timestamp: When the user first used your app
+lastUsedAt | `this.$user.metaData.lastUsedAt` | Timestamp: The last time your user interacted with your app
+sessionsCount | `this.$user.metaData.sessionsCount` | Timestamp: How often your user engaged with your app
 
 
 You can change the type of meta data to store with the Jovo app constructor. This is the default configuration for it:
@@ -102,19 +102,19 @@ const config = {
 
 The user context is used to automatically store data from past interaction pairs (request and response) inside an array. To be able to use this feature, a database integration is required (data is stored in the FilePersistence `db.json` by default, but for e.g. AWS Lambda it is important to set up DynamoDB.
 
-This works like pagination. The most recent request and response pair are stored at `this.user().context.prev[0]` and the least recent at `this.user().context.prev[this.config.userContext.prev.size - 1]`.
+This works like pagination. The most recent request and response pair are stored at `this.$user.context.prev[0]` and the least recent at `this.$user.context.prev[this.config.userContext.prev.size - 1]`.
 
 Right now, the following data can be accessed (with index `i`):
 
 Category | Data | Usage |  | Description
 :--- | :--- | :--- | :--- | :----
-Request | intent | `this.user().context.prev[i].request.intent` | `this.user().getPrevIntent(i)` | String: Intent name
-&nbsp; | state | `this.user().context.prev[i].request.state` | `this.user().getPrevRequestState(i)` | String: State name
-&nbsp; | timestamp | `this.user().context.prev[i].request.timestamp` | `this.user().getPrevTimestamp(i)` | String: Timestamp of request
-&nbsp; | inputs | `this.user().context.prev[i].request.inputs` | `this.user().getPrevInputs(i)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.user().getPrevInputs(i).city.value`.
-Response | speech | `this.user().context.prev[i].response.speech` |  `this.user().getPrevSpeech(i)` | String: Primary speech element
-&nbsp; | reprompt | `this.user().context.prev[i].response.reprompt` | `this.user().getPrevReprompt(i)` | String: Reprompt element
-&nbsp; | state | `this.user().context.prev[i].response.state` | `this.user().getPrevResponseState(i)` | String: State name
+Request | intent | `this.$user.context.prev[i].request.intent` | `this.$user.getPrevIntent(i)` | String: Intent name
+&nbsp; | state | `this.$user.context.prev[i].request.state` | `this.$user.getPrevRequestState(i)` | String: State name
+&nbsp; | timestamp | `this.$user.context.prev[i].request.timestamp` | `this.$user.getPrevTimestamp(i)` | String: Timestamp of request
+&nbsp; | inputs | `this.$user.context.prev[i].request.inputs` | `this.$user.getPrevInputs(i)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.$user.getPrevInputs(i).city.value`.
+Response | speech | `this.$user.context.prev[i].response.speech` |  `this.$user.getPrevSpeech(i)` | String: Primary speech element
+&nbsp; | reprompt | `this.$user.context.prev[i].response.reprompt` | `this.$user.getPrevReprompt(i)` | String: Reprompt element
+&nbsp; | state | `this.$user.context.prev[i].response.state` | `this.$user.getPrevResponseState(i)` | String: State name
 
 By default, only the last interaction pair is stored. You can freely adjust how many of these pairs should be saved by changing the array `size` in your app's config to an Integer equal to or bigger than 0.
 
@@ -172,7 +172,7 @@ const config = {
 Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
 
 ```javascript
-this.user().getId();
+this.$user.getId();
 
 // Alternatively, you can also use this
 this.getUserId();
@@ -193,7 +193,7 @@ ARke43GoJIqbF8g1vfyDdqL_Sffh
 Returns the platform's locale:
 
 ```javascript
-this.user().getLocale();
+this.$user.getLocale();
 
 // Alternatively, you can also use this
 this.getLocale();
@@ -206,10 +206,10 @@ To implement Account Linking in your voice application, you need two core method
 The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
 ```javascript
 // Alexa Skill:
-this.alexaSkill().showAccountLinkingCard();
+this.$alexaSkill.showAccountLinkingCard();
 
 // Google Actions:
-this.googleAction().askForSignIn();
+this.$googleAction.askForSignIn();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:

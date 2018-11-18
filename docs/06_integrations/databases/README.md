@@ -41,10 +41,10 @@ This will save data with your user's `userID` as a mainKey, and a `key` and a `v
 The easiest way to do so is to use the [user object](../../04_app-logic/02_data/user.md './data/user') for this:
 
 ```javascript
-this.user().data.key = value;
+this.$user.data.key = value;
 
 // Example
-this.user().data.score = 300;
+this.$user.data.score = 300;
 ```
 
 
@@ -55,7 +55,7 @@ After you saved data, you can use a `key` to retrieve a `value` from the databas
 Again, you can use the [user object](../../04_app-logic/02_data/user.md './data/user') for this:
 
 ```javascript
-let data = this.user().data.key;
+let data = this.$user.data.key;
 ```
 
 ### Delete Data
@@ -97,7 +97,7 @@ db/
 // Other files
 ```
 
-And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.user().data.someKey = 'someValue';`:
+And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.data.someKey = 'someValue';`:
 
 ```js
 // Example for Amazon Alexa

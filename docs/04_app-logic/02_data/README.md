@@ -27,7 +27,7 @@ We call user input any additional information your user provides besides an `int
 
  > With the update to Jovo v1.0, we changed the way you can access input values. Please read more below, or take a look at our [migration document](https://www.jovo.tech/blog/v1-migration-guide/).
 
-There are two ways to get the inputs provided by a user: either by [adding parameters](#input-as-parameter) to  your `handlers` intent functions, or by using the [`getInput`](#getinput) method.
+There are two ways to get the inputs provided by a user: either using `this.$inputs`, or by using the [`getInput`](#getinput) method.
 
 Each input is an object which looks like this:
 
@@ -43,26 +43,20 @@ For example, if we want to access the value of an input `name` provided by the u
 Other parameters (like `id` or platform specific elements) can be found in the object as well.
 
 
-### Input as Parameter
-You can access input by adding parameters directly to your intent.
+### $inputs
 
-For example, the sample voice app does it like this: 
+You can access the inputs using the `$inputs` object, which will store all the inputs of the requested intent:
 
 ```javascript
 app.setHandler({
 
     // Other Intents and States
 
-     'MyNameIsIntent': function(name) {
-        this.tell('Hey ' + name.value + ', nice to meet you!');
+    SomeIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', I like ' + this.$inputs.city.value + ' too!);
     },
 });
 ```
-
-Two important things to consider when using this option:
-* The parameter names need to be the same as the slot/entity names on the respective developer consoles at Amazon and Dialogflow
-* The incoming names are matched to `camelCase`, for example `given-name` can be accessed with a `givenName` parameter.
-
 
 ### getInput
 
@@ -73,7 +67,7 @@ app.setHandler({
 
     // Other Intents and States
 
-    'SomeIntent': function() {
+    SomeIntent() {
         // Get all inputs
         let inputs = this.getInputs();
 
@@ -116,15 +110,15 @@ const config = {
 };
 ```
 
-With this, you can use `name` as a parameter in your intent function:
+With this, you can use `name` to get the input with both Alexa and Google requests:
 
 ```javascript
 app.setHandler({
 
     // Other Intents and States
 
-    'MyNameIsIntent': function(name) {
-        this.tell('Hello ' + name.value + '!');
+    MyNameIsIntent() {
+        this.tell('Hello ' + this.$inputs.name.value + '!');
     }
 
     // Other Intents and States
@@ -140,7 +134,7 @@ For retrieving and storing this type of information, the Jovo [`User Class`](./u
 The user object can be accessed like this:
 
 ```javascript
-let user = this.user();
+let user = this.$user;
 ```
 
 You can find more information here: [App Logic > Data > User](./user.md './data/user').
@@ -352,11 +346,11 @@ The first allows you to prompt the user to link their account, by showing a card
 
 ```javascript
 // Alexa Skill: Account Linking Card added to the response, need to add other output
-this.alexaSkill().showAccountLinkingCard();
+this.$alexaSkill.showAccountLinkingCard();
 this.tell('Please link your account');
 
 // Google Actions: Standalone! Don't add any other output.
-this.googleAction().showAccountLinkingCard();
+this.$googleAction.showAccountLinkingCard();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:

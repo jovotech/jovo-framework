@@ -101,7 +101,7 @@ let testPattern = {
 
 To create a `PatternRecognizer` you need the `PatternRecognizerBuilder`:
 ```javascript
-let patternRecognizer = this.alexaSkill().gameEngine().getPatternRecognizerBuilder('recognizerName');
+let patternRecognizer = this.$alexaSkill.gameEngine().getPatternRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the methods described above:
 ```javascript
@@ -136,7 +136,7 @@ Name | Description | Method | Value | Required
 
 To create a `DeviationRecognizer` you need the `DeviationRecognizerBuilder`:
 ```javascript
-let deviationRecognizer = this.alexaSkill().gameEngine().getDeviationRecognizerBuilder('recognizerName');
+let deviationRecognizer = this.$alexaSkill.gameEngine().getDeviationRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the method described above:
 ```javascript
@@ -164,7 +164,7 @@ Name | Description | Method | Value | Required
 
 To create a `ProgressRecognizer` you need the `ProgressRecognizerBuilder`:
 ```javascript
-let progressRecognizer = this.alexaSkill().gameEngine().getProgressRecognizerBuilder('recognizerName');
+let progressRecognizer = this.$alexaSkill.gameEngine().getProgressRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the methods described above:
 ```javascript
@@ -200,7 +200,7 @@ Name | Description | Method | Value | Required
 
 To create an `Event` you need the `EventBuilder`:
 ```javascript
-const eventOne = this.alexaSkill().gameEngine().getEventsBuilder('eventName');
+const eventOne = this.$alexaSkill.gameEngine().getEventsBuilder('eventName');
 ```
 With the builder you can use the methods described above:
 ```javascript
@@ -263,7 +263,7 @@ Name | Description | Value
 `events` | Events use `recognizers` to determine whether your skill should be notified or not | `Object` min: 1, max: 32
 
 ```javascript
-this.alexaSkill().gameEngine().startInputHandler(
+this.$alexaSkill.gameEngine().startInputHandler(
   25000,
   ['one', 'two', 'three'],
   [patternRecognizerOne, patternRecognizerTwo, deviationRecognizer],
@@ -275,7 +275,7 @@ this.alexaSkill().gameEngine().startInputHandler(
 
 You can at any point in time stop receiving Echo Button events using by stopping the *Input Handler*:
 ```javascript
-this.alexaSkill().gameEngine().stopInputHandler()
+this.$alexaSkill.gameEngine().stopInputHandler()
 ```
 
 ## Input Handler Events
