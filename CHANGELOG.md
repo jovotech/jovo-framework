@@ -1,5 +1,8 @@
 # Jovo Framework Changelog
 
+## 1.4.17 (November 19, 2018)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/278) Added support for APL-based touch [@jose-torres-marin](https://github.com/jose-torres-marin)
+
 ## 1.4.16 (November 06, 2018)
 * Fixed Nested State Metadata Conflicts issue #275
 
