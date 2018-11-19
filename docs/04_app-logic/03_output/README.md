@@ -73,7 +73,7 @@ It is recommended to use a `'RepeatIntent'` (e.g. the `'AMAZON.RepeatIntent'`) t
 this.repeat();
 
 // Example
-'RepeatIntent': function() {
+RepeatIntent() {
     this.repeat();
 }
 ```
@@ -128,10 +128,10 @@ If you prefer to return some specific responses in a raw JSON format, you can do
 
 ```javascript
 // Set a Raw JSON Response for Alexa
-this.alexaSkill().setResponseObject(obj);
+this.$alexaSkill.setResponseObject(obj);
 
 // Set a Raw JSON Response for Google Assistant
-this.googleAction().setResponseObject(obj);
+this.$googleAction.setResponseObject(obj);
 ```
 
 > Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics './platforms').

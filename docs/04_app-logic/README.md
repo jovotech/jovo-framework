@@ -28,27 +28,27 @@ The `handler` is the main building block of your voice app. This is where the lo
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello World!');
     },
 });
 ```
 
-You can also define seperate handlers for each platform to overwrite specific intents and states for platform specific app logic.
+You can also define separate handlers for each platform to overwrite specific intents and states for platform specific app logic.
 
 ```javascript
 app.setAlexaHandler({
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Alexa user');
     }
 });
 
 app.setGoogleActionHandler({
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Google user');
     }
 });

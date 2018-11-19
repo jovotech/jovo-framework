@@ -101,26 +101,26 @@ Here is an example language model you can for purchasing and refunding products.
 In general, you can access the in-skill purchasing features like this:
 
 ```javascript
-this.alexaSkill().inSkillPurchase()
+this.$alexaSkill.inSkillPurchase()
 ```
 
 To make purchases, both the reference name and the product ID are important. As you can see in the example below, you need to first make an API call to Alexa (done with `getProductByReferenceName`) and then use the information (especially the `productId`) to purchase the product with the `buy` method:
 
 ```javascript
-this.alexaSkill().inSkillPurchase()
+this.$alexaSkill.inSkillPurchase()
     .getProductByReferenceName('reference_name', (error, product) => {
 
             // Include checks for previous purchases here
 
-            this.alexaSkill().inSkillPurchase().buy(product.productId);
+            this.$alexaSkill.inSkillPurchase().buy(product.productId);
     });
 ```
 It is recommended to check if the product has already been purchased, which you can see in the example below.
 
 ```javascript
-'BuySkillItemIntent': function(productName) {
+BuySkillItemIntent(productName) {
     let productReferenceName = productName.id;
-    this.alexaSkill()
+    this.$alexaSkill
         .inSkillPurchase()
         .getProductByReferenceName(productReferenceName, (error, product) => {
         if (product.entitled === 'ENTITLED') {
@@ -128,12 +128,12 @@ It is recommended to check if the product has already been purchased, which you 
             return;
         }
 
-        this.alexaSkill().inSkillPurchase().buy(product.productId);
+        this.$alexaSkill.inSkillPurchase().buy(product.productId);
     });
 },
 ```
 
-Similar to `buy`, you can also refund a product by using `this.alexaSkill().inSkillPurchase().cancel    (product.productId);`
+Similar to `buy`, you can also refund a product by using `this.$alexaSkill.inSkillPurchase().cancel    (product.productId);`
 
 After successfully going through the process of purchasing or refunding a product, the session will go into the `'ON_PURCHASE'` handler:
 
@@ -142,7 +142,7 @@ app.setHandler({
 
     // Other intents
 
-    'ON_PURCHASE': function() {
+    ON_PURCHASE() {
         // Do something
     },
 });
@@ -154,9 +154,9 @@ app.setHandler({
 
     // Other intents
 
-    'ON_PURCHASE': function() {
-        console.log(this.alexaSkill().inSkillPurchase().getPayloads()));
-        this.tell(this.alexaSkill().inSkillPurchase().getPurchaseResult());
+    ON_PURCHASE() {
+        console.log(this.$alexaSkill.inSkillPurchase().getPayloads()));
+        this.tell(this.$alexaSkill.inSkillPurchase().getPurchaseResult());
     },
 });
 ```
