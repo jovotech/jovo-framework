@@ -95,35 +95,7 @@ ON_PERMISSION() {
 
 ## Account Linking
 
-The account linking card is used to prompt the user to connect their Google account to an account on your service.
-
-```javascript
-this.showAccountLinkingCard();
-```
-
-The user will be routed to the `ON_SIGN_IN` intent after they answered the account linking request.
-
-```javascript
-ON_SIGN_IN() {
-  if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
-    this.tell('Please sign in.');
-  } else if (this.$googleAction.getSignInStatus() === 'OK') {
-    this.tell('You are signed in now.');
-  } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
-    this.tell('There was an error');
-  }
-},
-```
-
-To check, if the user has already signed in, you can use the `getSignInStatus()` method. It will either return `OK`, `CANCELLED` or `ERROR`.
-
-```javascript
-this.$googleAction.getSignInStatus();
-```
-[Official Documentation](https://developers.google.com/actions/identity/account-linking#request_the_signin_helper)
-
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appAskForSignIn.js)
-
+You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
 
 <!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data",

@@ -335,27 +335,36 @@ For information that is only needed across multiple requests during one session,
 
 ### Database Integrations
 
-For information that is needed across sessions, you can use our user class together with our database integrations. Learn more here: [App Logic > Data > User](./user.md './data/user'), [Integrations > Databases](../../06_integrations/databases './databases').
-
+For information that is needed across sessions, you can use the [Jovo Persistence Layer](./user.md './data/user').
 
 ## Account Linking
 
 To implement Account Linking in your voice application, you need two core methods.
 
-The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
+The first allows you to prompt the user to link their account, by adding an `AccountLinkingCard` to your response, which will be shown respective companion app:
 
 ```javascript
-// Alexa Skill: Account Linking Card added to the response, need to add other output
-this.$alexaSkill.showAccountLinkingCard();
-this.tell('Please link your account');
-
-// Google Actions: Standalone! Don't add any other output.
-this.$googleAction.showAccountLinkingCard();
+this.showAccountLinkingCard();
 ```
 
 The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
+
 ```javascript
-this.getAccessToken();
+this.$request.getAccessToken();
+```
+
+On Google Action, after the user has responded to your account linking request, you will receive a request to notify you about the result, which will be mapped to the Jovo built-in `ON_SIGN_IN` intent. Using the `getSignInStatus()` method you can get the result:
+
+```javascript
+ON_SIGN_IN() {
+  if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
+    this.tell('Please sign in.');
+  } else if (this.$googleAction.getSignInStatus() === 'OK') {
+    this.tell('You are signed in now.');
+  } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
+    this.tell('There was an error');
+  }
+},
 ```
 
 For more information on Account Linking, check out our blogposts:

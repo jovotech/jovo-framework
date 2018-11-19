@@ -149,17 +149,7 @@ this.$user.getMobileNumber()
 
 ## Account Linking
 
-The Account Linking card is used to prompt the user to connect their account by providing the authorization url you defined in the configuration of your Skill in the Amazon developer console.
-
-```javascript
-this.$alexaSkill.showAccountLinkingCard();
-// or
-const {AlexaSkill} = require('jovo-framework');
-
-this.$alexaSkill.showCard(new AlexaSkill.LinkAccountCard());
-```
-
-
+You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
 <!--[metadata]: {"title": "Alexa Data", "description": "Learn how to get user specific data from your Alexa Skill users with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
 "Amazon Alexa": "docs/amazon-alexa", "Data": "" }, "commentsID": "framework/docs/amazon-alexa/data",
