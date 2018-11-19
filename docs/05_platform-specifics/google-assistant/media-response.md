@@ -42,7 +42,17 @@ this.ask('Enjoy the song');
 The function `play` has an optional value, you can add some information as description, image, alt... according to [Google Media Response](https://developers.google.com/actions/assistant/responses#media_responses).
 
 ```javascript
-this.$googleAction.audioPlayer().play('https://www.url.to/file.mp3', 'song one', {"description": "A description", "icon": {"url": "https://www.somewhere.com/image.png", "alt": "A accessibility text"}});
+this.$googleAction.audioPlayer().play(
+  'https://www.url.to/file.mp3', 
+  'song one', 
+  {
+    "description": "A description",
+    "icon": {
+      "url": "https://www.somewhere.com/image.png", 
+      "alt": "A accessibility text"
+    }
+  }
+);
 ```
 
 
