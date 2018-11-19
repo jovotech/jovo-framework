@@ -2,16 +2,17 @@
 
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
-* [Introduction](#introduction-to-the-user-class)
-  * [Configuration](#configuration)
-* [User Data](#user-data)
-  * [Data Persistence](#data-persistence)
-  * [Meta Data](#meta-data)
-  * [Context](#context)
-  * [User ID](#user-id)
-  * [Locale](#locale)
-  * [Account Linking](#account-linking)
-
+* [Introduction to the User Class](#introduction-to-the-user-class)
+    * [Configuration](#configuration)
+* [Jovo Persistence Layer](#jovo-persistence-layer)
+    * [Save Data](#save-data)
+    * [Load Data](#load-data)
+    * [Delete Data](#delete-data)
+    * [Delete a User](#delete-a-user)
+* [Meta Data](#meta-data)
+* [Context](#context)
+* [User ID](#user-id)
+* [Locale](#locale)
 
 ## Introduction to the User Class
 
@@ -33,9 +34,9 @@ const config = {
     saveUserOnResponseEnabled: true,
     userDataCol: 'userData',
     userMetaData: {
-        lastUsedAt: true,
-        sessionsCount: true,
-        createdAt: true,
+        lastUsedAt: false,
+        sessionsCount: false,
+        createdAt: false,
         requestHistorySize: 0,
         devices: false,
     },
@@ -48,19 +49,13 @@ const config = {
 
 `userMetaData`: Specifies what and how meta data is saved. [Learn more about meta data here](#meta-data).
 
+## Jovo Persistence Layer
 
-## User Data
+This is an abstraction layer for persisting data across sessions. By default, the [file-based system](../../06_integrations/databases/README.md#filepersistence './databases#filepersistence') will be used so you can start right away when prototyping locally, but you can learn how to switch to any of the other integrations [here](../../06_integrations/databases/README.md './databases').
 
-The User object offers the capability to store and retrieve user specific data, including [meta data](#meta-data).
+### Save Data
 
-Data is stored using our [database integrations](../../06_integrations/databases './databases'), with a file-based `db.json` structure enabled by default.
-
-
-### Data Persistence
-
-With our Jovo Persistence Layer, you can store user specific data easily to either a database or a local JSON file.
-
-Just specify a key and a value, and you're good to go: 
+This will save data with your user's `userID` as a mainKey, and a `key` and a `value` specified by you.
 
 ```javascript
 this.$user.data.key = value;
@@ -69,12 +64,41 @@ this.$user.data.key = value;
 this.$user.data.score = 300;
 ```
 
-For more information on data persistence, take a look here: [Integrations > Databases](../../06_integrations/databases './databases').
+### Load Data
 
+After you saved data, you can use a `key` to retrieve a `value` from the database.
 
-### Meta Data
+```javascript
+let data = this.$user.data.key;
+```
 
-The user object meta data is the first step towards building more contextual experiences with the Jovo Framework. Right now, the following data is automatically stored (by default on the FilePersistence `db.json`, or DynamoDB if you enable it):
+### Delete Data
+
+This will delete a data point from the database, specified by a key.
+
+```javascript
+deleteData(key, callback)
+
+this.db().deleteData(key, function(err) {
+    // Do something
+});
+```
+
+### Delete a User
+
+This will delete your whole user's data (the `mainKey`) from the database.
+
+```javascript
+deleteUser(callback)
+
+this.db().deleteUser(function(err) {
+    // Do something
+});
+```
+
+## Meta Data
+
+The user object meta data is the first step towards building more contextual experiences with the Jovo Framework. If the feature is enabled, the following data is automatically stored inside your database:
 
 Meta Data | Usage | Description
 :--- | :--- | :---
@@ -88,17 +112,45 @@ You can change the type of meta data to store with the Jovo app constructor. Thi
 ```javascript
 const config = {
     userMetaData: {
+        enabled: false,
         lastUsedAt: true,
         sessionsCount: true,
         createdAt: true,
-        requestHistorySize: 0,
-        devices: false,
-    }
+        requestHistorySize: 4,
+        devices: true,
+    },
     // Other configurations
 };
 ```
 
-### Context
+As you can see, the feature is disabled by default. To enable it, you have to flip `enabled` to true in your app's configuration:
+
+```javascript
+const config = {
+    userMetaData: {
+        enabled: true
+    },
+    // Other configurations
+}
+```
+
+You can also freely adjust the `requestHistorySize` or what should be saved inside your app's configuration: 
+
+```javascript
+const config = {
+    userMetaData: {
+        enabled: true,
+        lastUsedAt: true,
+        sessionsCount: false,
+        createdAt: true,
+        requestHistorySize: 50,
+        devices: false,
+    },
+    // Other configurations
+};
+```
+
+## Context
 
 The user context is used to automatically store data from past interaction pairs (request and response) inside an array. To be able to use this feature, a database integration is required (data is stored in the FilePersistence `db.json` by default, but for e.g. AWS Lambda it is important to set up DynamoDB.
 
@@ -116,7 +168,44 @@ Response | speech | `this.$user.context.prev[i].response.speech` |  `this.$user.
 &nbsp; | reprompt | `this.$user.context.prev[i].response.reprompt` | `this.$user.getPrevReprompt(i)` | String: Reprompt element
 &nbsp; | state | `this.$user.context.prev[i].response.state` | `this.$user.getPrevResponseState(i)` | String: State name
 
-By default, only the last interaction pair is stored. You can freely adjust how many of these pairs should be saved by changing the array `size` in your app's config to an Integer equal to or bigger than 0.
+The default configuration looks like this:
+
+```javascript
+const config = {
+    userContext: {
+        enabled: false,
+        prev: {
+            size: 1,
+            request: {
+                intent: true,
+                state: true,
+                inputs: true,
+                timestamp: true,
+            },
+            response: {
+                speech: true,
+                reprompt: true,
+                state: true,
+                output: true,
+            },
+        },
+    },
+    // Other configurations
+}
+```
+
+As you can see, the feature is disabled by default. To enable it, you have to flip `enabled` to true in your app's configuration:
+
+```javascript
+const config = {
+    userContext: {
+        enabled: true
+    },
+    // Other configurations
+}
+```
+
+You can also freely adjust how many of these request-response pairs should be saved by changing the array `size` in your app's config to an Integer equal to or bigger than 0.
 
 ```javascript
 const config = {
@@ -125,6 +214,7 @@ const config = {
             size: 3,
         },
     },
+    // Other configurations
 };
 ```
 
@@ -142,32 +232,11 @@ const config = {
             },
         },
     },
+    // Other configurations
 };
 ```
 
-The default configuration looks like this:
-```javascript
-const config = {
-    userContext: {
-        prev: {
-            size: 1,
-            request: {
-                intent: true,
-                state: true,
-                inputs: true,
-                timestamp: true,
-            },
-            response: {
-                speech: true,
-                reprompt: true,
-                state: true,
-            },
-        },
-    },
-}
-```
-
-### User ID
+## User ID
 
 Returns user ID on the particular platform, either Alexa Skill User ID or Google Actions User ID:
 
@@ -188,7 +257,7 @@ amzn1.ask.account.AGJCMQPNU2XQWLNJXU2K23R3RWVTWCA6OX7YK7W57E7HVZJSLH4F5U2JOLYELR
 ARke43GoJIqbF8g1vfyDdqL_Sffh
 ```
 
-### Locale
+## Locale
 
 Returns the platform's locale:
 
@@ -198,28 +267,6 @@ this.$user.getLocale();
 // Alternatively, you can also use this
 this.getLocale();
 ```
-
-### Account Linking
-
-To implement Account Linking in your voice application, you need two core methods.
-
-The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
-```javascript
-// Alexa Skill:
-this.$alexaSkill.showAccountLinkingCard();
-
-// Google Actions:
-this.$googleAction.askForSignIn();
-```
-
-The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
-```javascript
-this.getAccessToken();
-```
-
-For more information on Account Linking, check out our blogposts:
-* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
-* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
 
 <!--[metadata]: {"title": "User Class", 
                 "description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
