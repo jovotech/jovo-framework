@@ -53,7 +53,7 @@ app.setHandler({
     // Other Intents and States
 
     SomeIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', I like ' + this.$inputs.city.value + ' too!);
+        this.tell('Hey ' + this.$inputs.name.value + ', I like ' + this.$inputs.city.value + ' too!');
     },
 });
 ```
