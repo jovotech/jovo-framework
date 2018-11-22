@@ -6,7 +6,10 @@ Learn more about how to let your users do In-Skill Purchases (ISP) with your Ale
 * [Manage Products with ASK CLI](#manage-products-with-ask-cli)
 * [Update the Language Model](#update-the-language-model)
 * [Implement Purchasing with Jovo](#implement-purchasing-with-jovo)
-
+	* [Upsell](#upsell)
+	* [Purchase Request](#purchase-request)
+	* [Refund](#refund)
+	* [ON_PURCHASE](#onpurchase)
 
 ## Introduction to In-Skill Purchases
 
@@ -209,7 +212,7 @@ this.$alexaSkill
     });
 ```
 
-## Upsell
+### Upsell
 
 The `upsell()` method is used to proactively offer the user your products. To send out the request, you need three things:
 
@@ -240,7 +243,7 @@ UpsellIntent() {
 },
 ```
 
-## Purchase Request
+### Purchase Request
 
 The `buy()` method is used to start the transaction after the user requested the purchase.
 
@@ -269,7 +272,7 @@ BuySkillItemIntent() {
 ```
 
 
-## Refund
+### Refund
 
 The `cancel()` method is used to start the refund process after the user asked for it.
 
@@ -279,7 +282,7 @@ Name | Description | Value | Required
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
 ```javascript
-'RefundSkillItemIntent': function() {
+RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     this.alexaSkill()
         .inSkillPurchase()
@@ -297,7 +300,7 @@ Name | Description | Value | Required
 },
 ```
 
-## ON_PURCHASE
+### ON_PURCHASE
 
 After successfully going through the process of purchasing or refunding a product, your Skill will receive a request notifying you about the result:
 
