@@ -218,7 +218,7 @@ this.alexaSkill()
 The `upsell()` method is used to proactively offer the user your products. To send out the request, you need three things:
 
 Name | Description | Value | Required
-:--- | :--- | :--- | :--- | :---
+:--- | :--- | :--- | :---
 `productId` | ID used to determine the correct product | `String` | Yes
 `prompt` | Prompt Alexa will read to ask the user whether they are interested | `String` | Yes
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
@@ -249,7 +249,7 @@ Name | Description | Value | Required
 The `buy()` method is used to start the transaction after the user requested the purchase.
 
 Name | Description | Value | Required
-:--- | :--- | :--- | :--- | :---
+:--- | :--- | :--- | :---
 `productId` | ID used to determine the correct product | `String` | Yes
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
@@ -278,7 +278,7 @@ Name | Description | Value | Required
 The `cancel()` method is used to start the refund process after the user asked for it.
 
 Name | Description | Value | Required
-:--- | :--- | :--- | :--- | :---
+:--- | :--- | :--- | :---
 `productId` | ID used to determine the correct product | `String` | Yes
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
