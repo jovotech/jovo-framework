@@ -1,4 +1,4 @@
-# [App Logic](../) > Output
+# Output
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
@@ -73,7 +73,7 @@ It is recommended to use a `'RepeatIntent'` (e.g. the `'AMAZON.RepeatIntent'`) t
 this.repeat();
 
 // Example
-RepeatIntent() {
+'RepeatIntent': function() {
     this.repeat();
 }
 ```
@@ -128,10 +128,10 @@ If you prefer to return some specific responses in a raw JSON format, you can do
 
 ```javascript
 // Set a Raw JSON Response for Alexa
-this.$alexaSkill.setResponseObject(obj);
+this.alexaSkill().setResponseObject(obj);
 
 // Set a Raw JSON Response for Google Assistant
-this.$googleAction.setResponseObject(obj);
+this.googleAction().setResponseObject(obj);
 ```
 
 > Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics './platforms').
@@ -153,15 +153,5 @@ this.endSession();
 ```
 
 
-<!--[metadata]: {"title": "Output: Creating a Response", 
-                "description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",
-                "activeSections": ["logic", "output", "output_index"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-				"Output": ""
-                                },
-		"commentsID": "framework/docs/output",
-		"route": "docs/output"
-                }-->
+<!--[metadata]: {"description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",
+		        "route": "output"}-->

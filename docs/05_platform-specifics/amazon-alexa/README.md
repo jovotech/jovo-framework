@@ -1,20 +1,24 @@
-# [Platform Specific Features](../) > Amazon Alexa
+# Amazon Alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
 * [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
 * [Routing](#routing)
-  * [Dialog Interface](#dialog-interface)
+    * [Dialog Interface](#dialog-interface)
 * [Data](#data)
-  * [Shopping and To Do Lists](#shopping-and-to-do-lists)
-  * [Location](#location)
-  * [Contact information](#contact-information)
+    * [Shopping and To Do Lists](#shopping-and-to-do-lists)
+    * [Location](#location)
+    * [Contact information](#contact-information)
 * [Output](#output)
-  * [Progressive Responses](#progressive-responses)
-  * [Visual Output](#visual-output)
+    * [Progressive Responses](#progressive-responses)
+    * [Visual Output](#visual-output)
 * [AudioPlayer Skills](#audioplayer-skills)
 * [Skill Events](#skill-events)
 * [CanFulfillIntentRequest](#canfulfillintentrequest)
+* [GameEngine Interface](#gameengine-interface)
+* [GadgetController Interface](#gadgetcontroller-interface)
+* [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
+* [Reminders API](#reminders-api)
 
 ## Introduction to Alexa Specific Features
 
@@ -23,7 +27,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = this.$alexaSkill;
+let alexa = this.alexaSkill();
 ```
 
 
@@ -62,7 +66,7 @@ For responses that require long processing times, you can use progressive respon
 Here is the official reference by Amazon: [Send the User a Progressive Response](https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html).
 
 ```javascript
-this.$alexaSkill.progressiveResponse(speech);
+this.alexaSkill().progressiveResponse(speech);
 ```
 
 Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/appProgressiveResponse.js).
@@ -93,12 +97,17 @@ You can find more about Jovo GameEngine support here: [Platform specifics > Amaz
 
 Learn how to implement the GadgetController Interface in your Jovo project here: [Platform specifics > Amazon Alexa > GadgetController](./gadget-controller.md './amazon-alexa/gadget-controller')
 
-<!--[metadata]: {"title": "Amazon Alexa Specific Features", 
-                 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
-                 "expandedSections": "platforms", "inSections": "platforms", 
-                 "breadCrumbs": {"Docs": "docs/", 
-                                 "Platforms": "docs/platforms",
-                                 "Amazon Alexa": "" }, 
-                 "commentsID": "framework/docs/amazon-alexa", 
-                 "route": "docs/amazon-alexa" 
-}-->
+## In-Skill-Purchasing (ISP)
+
+Find out more about In-Skill-Purchasing here: [Platform specifics > Amazon Alexa > In-Skill-Purchasing](./in-skill-purchases.md './amazon-alexa/in-skill-purchases')
+
+## Reminders API
+
+Learn how to use the Reminders API to set reminders for your user: [Platform specifics > Amazon Alexa > Reminders API](./reminders.md './amazon-alexa/reminders')
+
+## Settings API
+
+You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
+
+<!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
+                "route": "amazon-alexa"}-->

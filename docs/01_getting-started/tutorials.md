@@ -1,4 +1,4 @@
-# [Getting Started](../) > Tutorials
+# Tutorials
 
 > Other pages in this category: [Installation](./), [Voice App Basics](./voice-app-basics.md).
 
@@ -46,3 +46,5 @@ Account Linking | [How to set up Account Linking for Alexa with Auth0 and Jovo](
 ## Suggest a Tutorial
 
 Anything particular where you need some additional help? Please fill out the following form and we're happy to look into it and work on a step-by-step guide: [Suggest a Tutorial](https://jovo.typeform.com/to/qqD2t6).
+
+<!--[metadata]: {"description": "Comprehensive tutorials on how to build Alexa Skills and Apps for Google Assistant.", "route": "tutorials"}-->

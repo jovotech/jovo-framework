@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Lists
+# Lists
 This section shows how to access shopping lists and to-do lists when building Alexa Skills with the Jovo Framework.
 
 * [Introduction to Lists](#introduction-to-lists)
@@ -68,13 +68,13 @@ If your users haven't granted your Skill the permission access lists yet (for ex
 This is mostly used after the error code `'NO_USER_PERMISSION'` is returned. Here is an example:
 
 ```javascript
-this.$user.getShoppingList('active')
+this.user().getShoppingList('active')
     .then((data) => {
         // Success! Now do something with the data
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read'])
+            this.alexaSkill().showAskForListPermissionCard(['read'])
                 .tell('Please grant the permission to access your lists.');
         } else {
             this.tell(error.message);
@@ -85,7 +85,7 @@ this.$user.getShoppingList('active')
 You can ask for both `read` and `write` access with the Permission Card:
 
 ```javascript
-this.$alexaSkill.showAskforListPermissionCard(['read', 'write'])
+this.alexaSkill().showAskforListPermissionCard(['read', 'write'])
     .tell('Please grant the permission to access your lists.');
 ```
 
@@ -103,10 +103,10 @@ Users can then update the permissions in the Skill's settings:
 Get the user's shopping list:
 
 ```javascript
-this.$user.getShoppingList(status);
+this.user().getShoppingList(status);
 
 // Example
-this.$user.getShoppingList('active')
+this.user().getShoppingList('active')
     .then((data) => {
         for (let obj of data.items) {
             this.speech.addSentence(obj.value);
@@ -115,7 +115,7 @@ this.$user.getShoppingList('active')
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read']);
+            this.alexaSkill().showAskForListPermissionCard(['read']);
             this.tell('Please grant the permission.');
         }
     })
@@ -124,16 +124,16 @@ this.$user.getShoppingList('active')
 Add an item to the shopping list:
 
 ```javascript
-this.$user.addToShoppingList(value, status);
+this.user().addToShoppingList(value, status);
 
 // Example
-this.$user.addToShoppingList('milk', 'active')
+this.user().addToShoppingList('milk', 'active')
     .then((data) => {
         this.tell('Added the item to the list.');
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write']
+            this.alexaSkill().showAskForListPermissionCard(['read', 'write']
                 .tell('Please grant the permission.');
         }
     })
@@ -142,16 +142,16 @@ this.$user.addToShoppingList('milk', 'active')
 Update the shopping list:
 
 ```javascript
-this.$user.updateShoppingList(oldValue, newValue, newStatus);
+this.user().updateShoppingList(oldValue, newValue, newStatus);
 
 // Example
-this.$user.updateShoppingList('milk', 'almond milk', 'active')
+this.user().updateShoppingList('milk', 'almond milk', 'active')
     .then((data) => {
         this.tell('Updated the list');
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
+            this.alexaSkill().showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission.');
         }
         if (error.code === 'ITEM_NOT_FOUND') {
@@ -165,10 +165,10 @@ this.$user.updateShoppingList('milk', 'almond milk', 'active')
 Get the user's to-do list:
 
 ```javascript
-this.$user.getToDoList(status);
+this.user().getToDoList(status);
 
 // Example
-this.$user.getToDoList('active')
+this.user().getToDoList('active')
     .then((data) => {
         for (let obj of data.items) {
             this.speech.addSentence(obj.value);
@@ -177,7 +177,7 @@ this.$user.getToDoList('active')
     })
     .catch((error) => {
        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
+            this.alexaSkill().showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission to access your lists.');
         } 
     });
@@ -186,16 +186,16 @@ this.$user.getToDoList('active')
 Add an item to the to-do list:
 
 ```javascript
-this.$user.addToDoList(value, status);
+this.user().addToDoList(value, status);
 
 // Example
-this.$user.addToTodoList('Sleep', 'active')
+this.user().addToTodoList('Sleep', 'active')
     .then((data) => {
         this.tell('Item added.');
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
+            this.alexaSkill().showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission to access your lists');
         }
     });
@@ -204,16 +204,16 @@ this.$user.addToTodoList('Sleep', 'active')
 Update the to-do list:
 
 ```javascript
-this.$user.updateToDoList(oldValue, newValue, newStatus);
+this.user().updateToDoList(oldValue, newValue, newStatus);
 
 // Example
-this.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
+this.user().updateToDoList('Pay bills', 'Go Shopping', 'active')
     .then((data) => {
         this.tell('Item updated.');
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
+            this.alexaSkill().showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission to access your lists.');
         }
         if (error.code === 'ITEM_NOT_FOUND') {
@@ -225,6 +225,5 @@ this.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
 
 
 
-<!--[metadata]: {"title": "Alexa Lists", "description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_lists"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Lists": "" }, "commentsID": "framework/docs/amazon-alexa/lists",
-"route": "docs/amazon-alexa/lists" }-->
+<!--[metadata]: {"description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework",
+"route": "amazon-alexa/lists" }-->

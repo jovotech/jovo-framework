@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > In-Skill Purchases
+# In-Skill Purchases
 
 Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill. You can also use the following template to get started: [Jovo Template for Alexa ISP](https://github.com/jovotech/jovo-templates/tree/master/alexa/isp).
 
@@ -6,6 +6,10 @@ Learn more about how to let your users do In-Skill Purchases (ISP) with your Ale
 * [Manage Products with ASK CLI](#manage-products-with-ask-cli)
 * [Update the Language Model](#update-the-language-model)
 * [Implement Purchasing with Jovo](#implement-purchasing-with-jovo)
+	* [Upsell](#upsell)
+	* [Purchase Request](#purchase-request)
+	* [Refund](#refund)
+	* [ON_PURCHASE](#onpurchase)
 
 
 ## Introduction to In-Skill Purchases
@@ -33,16 +37,78 @@ If you're using the common Jovo project structure, go into your `platforms/alexa
 # Go into alexaSkill folder
 $ cd platforms/alexaSkill
 
-# Use ASK CLI to add a product
-$ ask add isp 
+$ ask add isp
+
+? List of in-skill product types you can choose (Use arrow keys)
+❯ Entitlement 
+  Subscription 
+
+? List of in-skill product templates you can choose (Use arrow keys)
+> Entitlement_Template
+
+? Please type in your new in-skill product name:
+ frozen_sword
+In-skill product frozen_sword.json is saved to ./isps/entitlement/frozen_sword.json
 ```
 
-To learn more about the process, read the [official reference by Amazon: Use the ASK CLI to Manage In-Skill Products](https://developer.amazon.com/docs/in-skill-purchase/use-the-cli-to-manage-in-skill-products.html).
+After that, there should be a `frozen_sword.json` file in your `alexaSkill/isps` folder. The content of that `json` file is used to define the price, release date, description as well as the prompts Alexa will use when she handles the transaction and much much more. You can find examples and a small description for each field [here](https://developer.amazon.com/docs/smapi/isp-schemas.html).
 
-After adding a product, there are two values that are important for the later implementation with Jovo:
+Here's how our product's file looks like:
 
-* Reference name: `cave_quest` in the example from Amazon
-* Product ID: `amzn1.adg.product.0dc13545-bb0c-111-11` in the example from Amazon
+```javascript
+{
+  "version": "1.0",
+  "type": "ENTITLEMENT",
+  "referenceName": "frozen_sword",
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "Frozen Sword",
+        "smallIconUri": "https://s3.amazonaws.com/jovocards/logo108.png",
+        "largeIconUri": "https://s3.amazonaws.com/jovocards/logo512.png",
+        "summary": "A sword once used by Arthas.",
+        "description": "Use the overpowered Frozen Sword",
+        "examplePhrases": [
+          "Alexa, buy the frozen sword"
+        ],
+        "keywords": [
+          "frozen sword",
+          "sword",
+          "frozen"
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "Do you want to buy the Frozen Sword?",
+          "boughtCardDescription": "Congrats. You successfully purchased the Frozen Sword!"
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2018-05-14",
+        "defaultPriceListing": {
+          "price": 0.99,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "https://www.yourcompany.com/privacy-policy"
+      }
+    }
+  },
+  "testingInstructions": "This is an example product.",
+  "purchasableState": "PURCHASABLE"
+}
+```
 
 ## Update the Language Model
 
@@ -88,8 +154,8 @@ Here is an example language model you can for purchasing and refunding products.
 			"name": "LIST_OF_PRODUCT_NAMES",
 			"values": [
 				{
-					"value": "Cave Quest",
-					"id": "cave_quest"
+					"value": "Frozen Sword",
+					"id": "frozen_sword"
 				}
 			]
 		}
@@ -98,69 +164,191 @@ Here is an example language model you can for purchasing and refunding products.
 
 ## Implement Purchasing with Jovo
 
-In general, you can access the in-skill purchasing features like this:
+In general, you can access the in-skill purchasing interface like this:
 
 ```javascript
-this.$alexaSkill.inSkillPurchase()
+this.alexaSkill().inSkillPurchase()
 ```
 
-To make purchases, both the reference name and the product ID are important. As you can see in the example below, you need to first make an API call to Alexa (done with `getProductByReferenceName`) and then use the information (especially the `productId`) to purchase the product with the `buy` method:
+Before you start any kind of transaction or refund process, always retrieve the product first:
 
 ```javascript
-this.$alexaSkill.inSkillPurchase()
-    .getProductByReferenceName('reference_name', (error, product) => {
+let productReferenceName = 'frozen_sword'; 
+this.alexaSkill()
+    .inSkillPurchase()
+    .getProductByReferenceName(productReferenceName, (error, product) => {
 
-            // Include checks for previous purchases here
-
-            this.$alexaSkill.inSkillPurchase().buy(product.productId);
     });
 ```
-It is recommended to check if the product has already been purchased, which you can see in the example below.
+
+The data you get looks like this:
+```javascript
+{ productId: 'amzn1.adg.product.994e8ec0-2f73-4130-837a-0bb06abe1ded',
+  referenceName: 'frozen_sword',
+  type: 'ENTITLEMENT',
+  name: 'Frozen Sword',
+  summary: 'A sword once used by Arthas.',
+  entitled: 'NOT_ENTITLED',
+  entitlementReason: 'NOT_PURCHASED',
+  purchasable: 'PURCHASABLE',
+  activeEntitlementCount: 0,
+  purchaseMode: 'TEST' 
+}
+```
+
+Using that data we can check if the user already owns the product:
 
 ```javascript
-BuySkillItemIntent(productName) {
-    let productReferenceName = productName.id;
-    this.$alexaSkill
-        .inSkillPurchase()
-        .getProductByReferenceName(productReferenceName, (error, product) => {
-        if (product.entitled === 'ENTITLED') {
-            this.tell('You own it already');
-            return;
+this.alexaSkill()
+    .inSkillPurchase()
+    .getProductByReferenceName(productReferenceName, (error, product) => {
+        if (error) {
+            console.log(error);
         }
+        if (product.entitled === 'ENTITLED') {
+            // user already owns it
+        } else {
+            // user does not own it
+        }
+    });
+```
 
-        this.$alexaSkill.inSkillPurchase().buy(product.productId);
+### Upsell
+
+The `upsell()` method is used to proactively offer the user your products. To send out the request, you need three things:
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`productId` | ID used to determine the correct product | `String` | Yes
+`prompt` | Prompt Alexa will read to ask the user whether they are interested | `String` | Yes
+`token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
+
+```javascript
+'UpsellIntent': function() {
+    let productReferenceName = 'frozen_sword';
+    this.alexaSkill()
+    .inSkillPurchase()
+    .getProductByReferenceName(productReferenceName, (error, product) => {
+        if (error) {
+            console.log(error);
+        }
+        if (product.entitled === 'ENTITLED') {
+            this.tell('You have already bought this item.');
+            return;
+        } else {
+            let prompt = 'The frozen sword will help you on your journey. Are you interested?';
+            let token = 'testToken';
+            this.alexaSkill().inSkillPurchase().upsell(product.productId, prompt, token);
+        }
     });
 },
 ```
 
-Similar to `buy`, you can also refund a product by using `this.$alexaSkill.inSkillPurchase().cancel    (product.productId);`
+### Purchase Request
 
-After successfully going through the process of purchasing or refunding a product, the session will go into the `'ON_PURCHASE'` handler:
+The `buy()` method is used to start the transaction after the user requested the purchase.
 
-```javascript
-app.setHandler({
-
-    // Other intents
-
-    ON_PURCHASE() {
-        // Do something
-    },
-});
-```
-In there, you can access certain features like `getPayload` or `getPurchaseResult`:
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`productId` | ID used to determine the correct product | `String` | Yes
+`token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
 ```javascript
-app.setHandler({
-
-    // Other intents
-
-    ON_PURCHASE() {
-        console.log(this.$alexaSkill.inSkillPurchase().getPayloads()));
-        this.tell(this.$alexaSkill.inSkillPurchase().getPurchaseResult());
-    },
-});
+'BuySkillItemIntent': function() {
+    let productReferenceName = this.$inputs.productName.id;
+    this.alexaSkill()
+        .inSkillPurchase()
+        .getProductByReferenceName(productReferenceName, (error, product) => {
+            if (error) {
+                console.log(error);
+            }
+            if (product.entitled === 'ENTITLED') {
+                this.tell('You have already bought this item.');
+                return;
+            }
+            let token = 'testToken';
+            this.alexaSkill().inSkillPurchase().buy(product.productId, token);
+        });
+},
 ```
 
-<!--[metadata]: {"title": " In-Skill Purchases", "description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.", "activeSections": ["platforms", "alexa", "alexa_isp"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "In-Skill Purchases": "" }, "commentsID": "framework/docs/amazon-alexa/in-skill-purchases",
-"route": "docs/amazon-alexa/in-skill-purchases" }-->
+
+### Refund
+
+The `cancel()` method is used to start the refund process after the user asked for it.
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`productId` | ID used to determine the correct product | `String` | Yes
+`token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
+
+```javascript
+'RefundSkillItemIntent': function() {
+    let productReferenceName = this.$inputs.productName.id;
+    this.alexaSkill()
+        .inSkillPurchase()
+        .getProductByReferenceName(productReferenceName, (error, product) => {
+            if (error) {
+                console.log(error);
+                // Continue, where you left off
+            }
+            if (product.entitled !== 'ENTITLED') {
+                this.tell('You have not bought this item yet.');
+            }
+            let token = 'testToken';
+            this.alexaSkill().inSkillPurchase().cancel(product.productId, token);
+        });
+},
+```
+
+### ON_PURCHASE
+
+After successfully going through the process of purchasing or refunding a product, your Skill will receive a request notifying you about the result:
+
+```javascript
+{
+    "type": "Connections.Response",
+    "requestId": "string",
+    "timestamp": "string",
+    "name": "Upsell",
+    "status": {
+        "code": "string",
+        "message": "string"  
+    },
+    "payload": {
+        "purchaseResult":"ACCEPTED",    
+        "productId":"string",   
+        "message":"optional additional message"
+    },
+    "token": "string"
+}
+```
+
+The important parts of that request are:
+
+Name | Description
+:--- | :---
+`name` | Either `Upsell`, `Buy` or `Refund`. Used to determine which kind of transaction took place
+`payload.purchaseResult` | Either `ACCEPTED`, `DECLINED`, `ALREADY_PURCHASED` or `ERROR`. Used to determine the outcome of the transaction
+`payload.productId` | The product in question
+`token` | The token used to resume the skill where it left off
+
+That request will be mapped to the built-in `ON_PURCHASE` intent:
+
+```javascript
+'ON_PURCHASE': function(){
+    const name = this.$request.name;
+    const productId = this.alexaSkill().inSkillPurchase().getProductId();
+    const purchaseResult = this.alexaSkill().inSkillPurchase().getPurchaseResult();
+    const token = this.$request.token;
+
+    if (purchaseResult === 'ACCEPTED') {
+        this.tell('Great! Let\'s use your new item');
+    } else {
+        this.tell('Okay. Let\'s continue where you left off.');
+    }
+},
+```
+
+<!--[metadata]: {"description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.",
+"route": "amazon-alexa/in-skill-purchases" }-->
