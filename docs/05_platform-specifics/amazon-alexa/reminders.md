@@ -104,5 +104,5 @@ this.user().getAllReminders().then((data) => {
 ```
 
 
-<!--[metadata]: {"description": "Learn more about how to set reminders for your user with your Alexa Skill."
+<!--[metadata]: {"description": "Learn more about how to set reminders for your user with your Alexa Skill.",
 "route": "amazon-alexa/reminders" }-->
