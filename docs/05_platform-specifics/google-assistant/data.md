@@ -18,7 +18,7 @@ User information is mainly used to offer a more personalized experience, but you
 After the user has answered your request, they will be redirected to the `ON_PERMISSION` intent, if availabe, where you can access and store the data.
 
 ```javascript
-'ON_PERMISSION': function() {
+ON_PERMISSION() {
   
 }
 ```
@@ -29,12 +29,12 @@ You can get access to the user's [`given name`, `family name` and `display name`
 
 ```javascript
 // Ask for permission
-this.googleAction().askForName(speech);
+this.$googleAction.askForName(speech);
 ```
 ```javascript
-'ON_PERMISSION': function() {
-  if (this.googleAction().isPermissionGranted()) {
-    let user = this.googleAction().getRequest().getUser();
+ON_PERMISSION() {
+  if (this.$googleAction.isPermissionGranted()) {
+    let user = this.$googleAction.getRequest().getUser();
 
     // Check, if you have the necessary permission
     if (user.permissions.indexOf('NAME') > -1) {
@@ -58,24 +58,24 @@ If it's a phone, you can only access the `latitude` and `longitude` with the `DE
 On a voice-enabled speaker you can access all of the data, depending on the permission you have.
 
 ```javascript
-this.googleAction().askForPreciseLocation(speech);
+this.$googleAction.askForPreciseLocation(speech);
 
-this.googleAction().askForZipCodeAndCity(speech);
+this.$googleAction.askForZipCodeAndCity(speech);
 ```
 ```javascript
-'ON_PERMISSION': function() {
-  if (this.googleAction().isPermissionGranted()) {
-    let user = this.googleAction().getRequest().getUser();
+ON_PERMISSION() {
+  if (this.$googleAction.isPermissionGranted()) {
+    let user = this.$googleAction.getRequest().getUser();
 
     if (user.permissions.indexOf('DEVICE_COARSE_LOCATION') > -1) {
-      let device = this.googleAction().getRequest().getDevice();
+      let device = this.$googleAction.getRequest().getDevice();
       /*
         device.location.city
         device.location.zipCode
       */
     }
     if (user.permissions.indexOf('DEVICE_PRECISE_LOCATION') > -1) {
-      let device = this.googleAction().getRequest().getDevice();
+      let device = this.$googleAction.getRequest().getDevice();
       /*
         device.location.coordinates.latitude
         device.location.coordinates.longitude
@@ -95,35 +95,7 @@ this.googleAction().askForZipCodeAndCity(speech);
 
 ## Account Linking
 
-The account linking card is used to prompt the user to connect their Google account to an account on your service.
-
-```javascript
-this.showAccountLinkingCard();
-```
-
-The user will be routed to the `ON_SIGN_IN` intent after they answered the account linking request.
-
-```javascript
-'ON_SIGN_IN': function() {
-  if (this.googleAction().getSignInStatus() === 'CANCELLED') {
-    this.tell('Please sign in.');
-  } else if (this.googleAction().getSignInStatus() === 'OK') {
-    this.tell('You are signed in now.');
-  } else if (this.googleAction().getSignInStatus() === 'ERROR') {
-    this.tell('There was an error');
-  }
-},
-```
-
-To check, if the user has already signed in, you can use the `getSignInStatus()` method. It will either return `OK`, `CANCELLED` or `ERROR`.
-
-```javascript
-this.googleAction().getSignInStatus();
-```
-[Official Documentation](https://developers.google.com/actions/identity/account-linking#request_the_signin_helper)
-
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appAskForSignIn.js)
-
+You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
 
 <!--[metadata]: {"description": "Learn more about how to use data with the Google Assistant",

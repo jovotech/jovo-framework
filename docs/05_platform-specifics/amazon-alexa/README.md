@@ -27,7 +27,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = this.alexaSkill();
+let alexa = this.$alexaSkill;
 ```
 
 
@@ -66,7 +66,7 @@ For responses that require long processing times, you can use progressive respon
 Here is the official reference by Amazon: [Send the User a Progressive Response](https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html).
 
 ```javascript
-this.alexaSkill().progressiveResponse(speech);
+this.$alexaSkill.progressiveResponse(speech);
 ```
 
 Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/appProgressiveResponse.js).

@@ -86,12 +86,12 @@ The `stateless.js` file could look like this:
 
 ```javascript
 module.exports = {
-    'LAUNCH': function() {
+    LAUNCH() {
         this.followUpState('FirstState')
             .ask('Do you want to get started?');
     },
 
-    'Unhandled': function() {
+    Unhandled() {
         this.toIntent('LAUNCH');
     },
 };
@@ -108,19 +108,19 @@ Here is an example that offers different output for the two platforms:
 
 ```javascript
 const handlers = {
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 };
 
 const alexaHandlers = {
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Alexa User');
     },
 };
 
 const googleActionHandlers = {
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Google User');
     },
 };
@@ -138,12 +138,12 @@ Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_
 
 ```javascript
 app.setHandler({
-    'LAUNCH': function () {
+    LAUNCH() {
         // Triggered when people open the voice app without a specific query
         this.tell('Hello World!');
     },
 
-    'YourFirstIntent': function () {
+    YourFirstIntent() {
       // Do something here
 
     },
@@ -158,14 +158,14 @@ For this, Jovo offers standard, built-in intents, `'LAUNCH'` and `'END'`, to mak
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         // Triggered when people open the voice app without a specific query
         // Groups LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow)
     },
 
     // Add more intents here
 
-    'END': function() {
+    END() {
         // Triggered when the session ends
         // Currently supporting AMAZON.StopIntent and reprompt timeouts
     }
@@ -189,7 +189,7 @@ You can learn more about Jovo standard intents in the following sections:
 The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just "open skill" or "talk to app" on the respective platforms). If you don't have `'NEW_SESSION'` defined, this intent is necessary to run your voice app.
 
 ```javascript
-'LAUNCH': function() {
+LAUNCH() {
     // Triggered when a user opens your app without a specific query
  },
 ```
@@ -201,7 +201,7 @@ Usually, you would need to map the requests from Alexa and Google (as they have 
 You can use the `'NEW_SESSION'` intent instead of the `'LAUNCH'` intent if you want to always map new session requests to one intent. This means that any request, even deep invocations, will be mapped to the `'NEW_SESSION'` intent. Either `'LAUNCH'` or `'NEW_SESSION'`are required.
 
 ```javascript
-'NEW_SESSION': function() {
+NEW_SESSION() {
     // Always triggered when a user opens your app, no matter the query (new session)
  },
 ```
@@ -210,7 +210,7 @@ This is helpful if you have some work to do, like collect data (timestamps), bef
 This could look like this:
 
 ```javascript
-'NEW_SESSION': function() {
+NEW_SESSION() {
     // Do some work here
 
     this.toIntent(this.getIntentName());
@@ -223,24 +223,24 @@ This could look like this:
 Additionally to the other intents above, you can use the `'NEW_USER'` to direct a new user to this intent and do some initial work before proceeding to the interaction:
 
 ```javascript
-'NEW_USER': function() {
+NEW_USER() {
     // Triggered when a user opens your app for the first time
  },
 ```
-For example, this saves you some time calling `if (this.user().isNewUser()) { }` in every intent where you require the access to user data.
+For example, this saves you some time calling `if (this.$user.isNewUser()) { }` in every intent where you require the access to user data.
 
 #### 'ON_REQUEST' Intent
 
 The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent. If you make any async calls in the `'ON_REQUEST'` intent, use a callback method, otherwise the intent will simply route the user to the desired intent, while the call is still running.
 
 ```javascript
-'ON_REQUEST': function() {
+ON_REQUEST() {
     // Triggered with every request
 },
 
 // Example
-'ON_REQUEST': function() {
-    this.audioPlayer = this.alexaSkill().audioPlayer();
+ON_REQUEST() {
+    this.audioPlayer = this.$alexaSkill.audioPlayer();
 },
 ```
 
@@ -250,7 +250,7 @@ The `'ON_REQUEST'` intent can be used to map every incoming request to a single 
 A session could end due to various reasons. For example, a user could call "stop," there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `'END'` to match those reasons for you to "clean up" (for example, to get the reason why the session ended, or save something to the database).
 
 ```javascript
-'END': function() {
+END() {
     // Triggered when a session ends abrupty or with AMAZON.StopIntent
  },
 ```
@@ -267,7 +267,7 @@ this.endSession();
 It is helpful to find out why a session ended. Use getEndReason inside the `'END'` intent to receive more information. This currently only works for Amazon Alexa.
 
 ```javascript
-'END': function() {
+END() {
     let reason = this.getEndReason();
 
     // For example, log
@@ -283,7 +283,7 @@ It is helpful to find out why a session ended. Use getEndReason inside the `'END
 Sometimes, an incoming intent might not be found either inside a state or among the global intents in the `handlers` variable. For this, `'Unhandled'` intents can be used to match those calls:
 
 ```javascript
-'Unhandled': function() {
+Unhandled() {
     // Triggered when the requested intent could not be found in the handlers variable
  },
 ```
@@ -297,13 +297,13 @@ In the below example all intents that aren't found, are automatically calling th
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         this.tell('Hello World!');
     },
 
     // Add more intents here
 
-    'Unhandled': function() {
+    Unhandled() {
         this.toIntent('LAUNCH');
     }
 });
@@ -320,7 +320,7 @@ See this example:
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         let speech = 'Do you want to play a game?';
         let reprompt = 'Please answer with yes or no.';
         this.followUpState('PlayGameState')
@@ -328,15 +328,15 @@ app.setHandler({
     },
 
     'PlayGameState': {
-        'YesIntent': function() {
+        YesIntent() {
             // Do something
         },
 
-        'NoIntent': function() {
+        NoIntent() {
             // Do something
         },
 
-        'Unhandled': function() {
+        Unhandled() {
             let speech = 'You need to answer with yes, to play a game.';
             let reprompt = 'Please answer with yes or no.';
             this.ask(speech, reprompt);
@@ -378,7 +378,7 @@ In the below example, if a person answers to the first question with "Help," it 
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         let speech = 'Do you want to play a game?';
         let reprompt = 'Please answer with yes or no.';
         this.followUpState('PlayGameState')
@@ -386,22 +386,22 @@ app.setHandler({
     },
 
     'PlayGameState': {
-        'YesIntent': function() {
+        YesIntent() {
             // Do something
         },
 
-        'NoIntent': function() {
+        NoIntent() {
             // Do something
         },
 
-        'Unhandled': function() {
+        Unhandled() {
             let speech = 'You need to answer with yes, to play a game.';
             let reprompt = 'Please answer with yes or no.';
             this.ask(speech, reprompt);
         },
     },
 
-    'HelpIntent': function() {
+    HelpIntent() {
         // Do something
     },
 
@@ -643,7 +643,7 @@ app.setHandler({
 
         // Other intents
 
-        'SomeIntent': function() {
+        SomeIntent() {
             this.followUpState('State1.State2')
                 .ask('Do you want to proceed?');
         },
@@ -684,11 +684,11 @@ Jovo offers the ability to redirect incoming intents to others. For example, the
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 });
@@ -720,12 +720,12 @@ To make use of the passed data, add a parameter to your intent handler:
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         let data = 'data';
         this.toIntent('HelloWorldIntent', data);
     },
 
-    'HelloWorldIntent': function(data) {
+    HelloWorldIntent(data) {
         this.tell('Hello World' + data + '!');
     }
 });

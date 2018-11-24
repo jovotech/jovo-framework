@@ -40,7 +40,7 @@ After that run `jovo build --deploy` to rebuild and deploy your project.
 
 Incoming `CanFulfillIntentRequests` will be mapped to the Jovo built in `CAN_FULFILL_INTENT`.
 ```javascript
-'CAN_FULFILL_INTENT': function() {
+CAN_FULFILL_INTENT() {
 
 },
 ```

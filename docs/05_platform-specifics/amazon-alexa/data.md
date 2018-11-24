@@ -19,24 +19,24 @@ You can use the user's address data to provide location specific features, but y
 
 ```javascript
 // Country and Postal Code
-this.alexaSkill().showAskForCountryAndPostalCodeCard();
+this.$alexaSkill.showAskForCountryAndPostalCodeCard();
 
 // Device Address
-this.alexaSkill().showAskForAddressCard();
+this.$alexaSkill.showAskForAddressCard();
 ```
 
 Get the country and postal code:
 
 ```javascript
-this.alexaSkill().getCountryAndPostalCode();
+this.$alexaSkill.getCountryAndPostalCode();
 
 // example
-this.user().getCountryAndPostalCode()
+this.$user.getCountryAndPostalCode()
     .then((data) => {
         this.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForCountryAndPostalCodeCard()
+            this.$alexaSkill.showAskForCountryAndPostalCodeCard()
                 .tell('Please grant access to your address');
         }
     });
@@ -45,15 +45,15 @@ this.user().getCountryAndPostalCode()
 Get the address:
 
 ```javascript
-this.user().getDeviceAddress();
+this.$user.getDeviceAddress();
 
 // example
-this.user().getDeviceAddress()
+this.$user.getDeviceAddress()
     .then((data) => {
         this.tell('I got your address');
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForAddressCard()
+            this.$alexaSkill.showAskForAddressCard()
                 .tell('Please grant access to your address');
         }
     });
@@ -66,30 +66,30 @@ You can use contact information (name, email address, mobile number) to provide 
 
 ```javascript
 // Full name
-this.alexaSkill().showAskForContactPermissionCard('name');
+this.$alexaSkill.showAskForContactPermissionCard('name');
 
 // Given name
-this.alexaSkill().showAskForContactPermissionCard('given-name');
+this.$alexaSkill.showAskForContactPermissionCard('given-name');
 
 // E-Mail
-this.alexaSkill().showAskForContactPermissionCard('email');
+this.$alexaSkill.showAskForContactPermissionCard('email');
 
 // Mobile number
-this.alexaSkill().showAskForContactPermissionCard('mobile_number');
+this.$alexaSkill.showAskForContactPermissionCard('mobile_number');
 ```
 
 Get the full name:
 
 ```javascript
-this.user().getName();
+this.$user.getName();
 
 // Example
-this.user().getName()
+this.$user.getName()
     .then((name) => {
         this.tell(`Hello ${name}`);
     }).catch((error) => {
     if (error.code === 'NO_USER_PERMISSION') {
-        this.alexaSkill().showAskForContactPermissionCard('name')
+        this.$alexaSkill.showAskForContactPermissionCard('name')
             .tell(`Please grant access to your full name.`);
         }
     });
@@ -98,15 +98,15 @@ this.user().getName()
 Get the given name:
 
 ```javascript
-this.user().getGivenName();
+this.$user.getGivenName();
 
 // Example
-this.user().getGivenName()
+this.$user.getGivenName()
     .then((givenName) => {
         this.tell(`Hello ${givenName}`);
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForContactPermissionCard('given-name')
+            this.$alexaSkill.showAskForContactPermissionCard('given-name')
                 .tell(`Please grant access to your given name.`);
         }
     });
@@ -115,15 +115,15 @@ this.user().getGivenName()
 Get the email address:
 
 ```javascript
-this.user().getEmail();
+this.$user.getEmail();
 
 // Example
-this.user().getEmail()
+this.$user.getEmail()
     .then((email) => {
     this.tell(`Your email is ${email}`);
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForContactPermissionCard('email')
+            this.$alexaSkill.showAskForContactPermissionCard('email')
                 .tell(`Please grant access to your email address.`);
         }
     });
@@ -132,15 +132,15 @@ this.user().getEmail()
 Get the mobile number:
 
 ```javascript
-this.user().getMobileNumber();
+this.$user.getMobileNumber();
 
 // Example
-this.user().getMobileNumber()
+this.$user.getMobileNumber()
     .then((mobileNumber) => {
         this.tell(`Your number is ${mobileNumber.countryCode} ${mobileNumber.phoneNumber}`);
     }).catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.alexaSkill().showAskForContactPermissionCard('mobile_number')
+            this.$alexaSkill.showAskForContactPermissionCard('mobile_number')
                 .tell(`Please grant access to your mobile number.`);
         }
     });
@@ -149,17 +149,7 @@ this.user().getMobileNumber()
 
 ## Account Linking
 
-The Account Linking card is used to prompt the user to connect their account by providing the authorization url you defined in the configuration of your Skill in the Amazon developer console.
-
-```javascript
-this.alexaSkill().showAccountLinkingCard();
-// or
-const {AlexaSkill} = require('jovo-framework');
-
-this.alexaSkill().showCard(new AlexaSkill.LinkAccountCard());
-```
-
-
+You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
 <!--[metadata]: {"description": "Learn how to get user specific data from your Alexa Skill users with the Jovo Framework",
 "route": "amazon-alexa/data" }-->

@@ -167,7 +167,7 @@ Here is an example language model you can for purchasing and refunding products.
 In general, you can access the in-skill purchasing interface like this:
 
 ```javascript
-this.alexaSkill().inSkillPurchase()
+this.$alexaSkill.inSkillPurchase()
 ```
 
 Before you start any kind of transaction or refund process, always retrieve the product first:
@@ -180,6 +180,7 @@ this.alexaSkill()
 
     });
 ```
+
 
 The data you get looks like this:
 ```javascript
@@ -247,6 +248,7 @@ Name | Description | Value | Required
 ### Purchase Request
 
 The `buy()` method is used to start the transaction after the user requested the purchase.
+
 
 Name | Description | Value | Required
 :--- | :--- | :--- | :---
