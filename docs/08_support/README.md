@@ -1,4 +1,4 @@
-# Support Hello World
+# Support
 
 Any questions with the framework? Just let us know, we're happy to help!
 
