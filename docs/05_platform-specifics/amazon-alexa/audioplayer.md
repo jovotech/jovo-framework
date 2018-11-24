@@ -173,7 +173,31 @@ app.setHandler({
 
 Note that it's important to have an `emit` at the end of the functions to be able to e.g. save user data. In the example above, we're using `endSession` for this.
 
+## Playback Controller
 
+`PlaybackController` requests are used to notify you about user interactions with audio player controls, e.g. touch controls on Alexa-enabled devices.
+
+All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER` state. You can respond to them with `AudioPlayer` directives, e.g. `play`, `pause`, etc.
+
+```javascript
+'PLAYBACKCONTROLLER': {
+    'PlaybackController.PlayCommandIssued': function () {
+        console.log('PlaybackController.PlayCommandIssued');
+    },
+
+    'PlaybackController.NextCommandIssued': function () {
+        console.log('PlaybackController.NextCommandIssued');
+    },
+
+    'PlaybackController.PreviousCommandIssued': function () {
+        console.log('PlaybackController.PreviousCommandIssued');
+    },
+
+    'PlaybackController.PauseCommandIssued': function () {
+        console.log('PlaybackController.PauseCommandIssued');
+    }
+},
+```
 
 <!--[metadata]: {"title": " AudioPlayer Skills", "description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_audioplayer"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
 "Amazon Alexa": "docs/amazon-alexa", "AudioPlayer": "" }, "commentsID": "framework/docs/amazon-alexa/audioplayer",
