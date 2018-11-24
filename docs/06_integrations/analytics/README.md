@@ -1,4 +1,4 @@
-# [Integrations](../) > Analytics
+# Analytics
 
 Jovo offers easy analytics integrations and enhancements for Dashbot, Bespoken, Chatbase, and Botanalytics.
 
@@ -121,5 +121,5 @@ app.analytics().skipUsers(userIds);
 [Learn more about the Jovo Botanalytics integration here.](./botanalytics.md './analytics/botanalytics')
 
 
-<!--[metadata]: {"title": "Analytics Integrations", "description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "" }, "commentsID": "framework/docs/analytics",
-"route": "docs/analytics" }-->
+<!--[metadata]: {"description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations",
+"route": "analytics" }-->

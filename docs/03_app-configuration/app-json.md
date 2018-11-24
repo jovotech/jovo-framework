@@ -1,4 +1,4 @@
-# [App Configuration](./README.md) > app.json
+# app.json - Project Configuration
 
 The `app.json` is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.
 
@@ -349,15 +349,4 @@ You can add a `host` object to specify where the code is hosted. Right now, `lam
 Note: If you're only building an Alexa Skill, der is no need to specify a host with the same information that is already in the `endpoint`. This is mostly important if you also want to host your Google Action on AWS Lambda and make it accessible through an API Gateway.
 
 
-<!--[metadata]: {"title": "app.json - Project Configuration", 
-                "description": "The app.json is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.",
-                "activeSections": ["configuration", "appjson"],
-                "expandedSections": "configuration",
-                "inSections": "configuration",
-                "breadCrumbs": {"Docs": "docs/",
-                                "App Configuration": "docs/configuration",
-                                "app.json": ""
-                                },
-		"commentsID": "framework/docs/app-json",
-		"route": "docs/app-json"
-                }-->
+<!--[metadata]: {"description": "The app.json is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.", "route": "app-json"}-->

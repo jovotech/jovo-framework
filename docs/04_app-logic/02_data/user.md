@@ -1,4 +1,4 @@
-# [App Logic](../) > [Data](./README.md) > User
+# User
 
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
@@ -221,16 +221,5 @@ For more information on Account Linking, check out our blogposts:
 * [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
 * [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
 
-<!--[metadata]: {"title": "User Class", 
-                "description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
-                "activeSections": ["logic", "data", "user"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-                                "Data": "docs/data",
-				"User": ""
-                                },
-		"commentsID": "framework/docs/data/user",
-		"route": "docs/data/user"
-                }-->
+<!--[metadata]: {"description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
+		        "route": "data/user"}-->

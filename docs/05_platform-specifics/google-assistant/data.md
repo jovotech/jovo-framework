@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Google Assistant](./README.md) > Data
+# Data
 
 Learn more about how to get access to user information.
 
@@ -126,5 +126,5 @@ this.googleAction().getSignInStatus();
 
 
 
-<!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data",
-"route": "docs/google-assistant/data" }-->
+<!--[metadata]: {"description": "Learn more about how to use data with the Google Assistant",
+"route": "google-assistant/data" }-->
