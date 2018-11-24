@@ -1,0 +1,216 @@
+{
+    "Getting Started": [
+        {
+            "title": "Installation",
+            "route": "installation"
+        },
+        {
+            "title": "Voice App Basics",
+            "route": "voice-app-basics"
+        }
+    ],
+    "CLI": [
+        {
+            "title": "Overview",
+            "route": "cli"
+        },
+        {
+            "title": "Workflows",
+            "route": "cli/workflows"
+        }
+    ],
+    "App Configuration": [
+        {
+            "title": "Overview",
+            "route": "configuration"
+        },
+        {
+            "title": "app.json",
+            "route": "app-json"
+        },
+        {
+            "Jovo Language Model": [
+                {
+                    "title": "Overview",
+                    "route": "model"
+                },
+                {
+                    "title": "Platforms",
+                    "route": "model/platforms"
+                }
+            ]
+        },
+        {
+            "Server Configuration": [
+                {
+                    "title": "Overview",
+                    "route": "server"
+                },
+                {
+                    "title": "Webhook",
+                    "route": "server/webhook"
+                },
+                {
+                    "title": "AWS Lambda",
+                    "route": "server/aws-lambda"
+                },
+                {
+                    "title": "Azure Functions",
+                    "route": "server/azure-functions"
+                }
+            ]
+        }
+    ],
+    "App Logic": [
+        {
+            "title": "Overview",
+            "route": "logic"
+        },
+        {
+            "Routing": [
+                {
+                    "title": "Overview",
+                    "route": "routing"
+                },
+                {
+                    "title": "Event Listeners",
+                    "route": "routing/event-listeners"
+                }
+            ]
+        },
+        {
+            "Data": [
+                {
+                    "title": "Overview",
+                    "route": "data"
+                },
+                {
+                    "title": "User",
+                    "route": "data/user"
+                }
+            ]
+        },
+        {
+            "Output": [
+                {
+                    "title": "Overview",
+                    "route": "output"
+                },
+                {
+                    "title": "SpeechBuilder",
+                    "route": "output/speechbuilder"
+                },
+                {
+                    "title": "i18n",
+                    "route": "output/i18n"
+                },
+                {
+                    "title": "Visual Output",
+                    "route": "visual-output"
+                }
+            ]
+        }
+    ],
+    "Platforms": [
+        {
+            "title": "Overview",
+            "route": "platforms"
+        },
+        {
+            "Amazon Alexa": [
+                {
+                    "title": "Overview",
+                    "route": "amazon-alexa"
+                },
+                {
+                    "title": "Data",
+                    "route": "amazon-alexa/data"
+                },
+                {
+                    "title": "Dialog Interface",
+                    "route": "amazon-alexa/dialog-interface"
+                },
+                {
+                    "title": "Visual Output",
+                    "route": "amazon-alexa/visual-output"
+                },
+                {
+                    "title": "Audioplayer Skills",
+                    "route": "amazon-alexa/audioplayer"
+                },
+                {
+                    "title": "Lists",
+                    "route": "amazon-alexa/lists"
+                },
+                {
+                    "title": "Settings",
+                    "route": "amazon-alexa/settings"
+                },
+                {
+                    "title": "Reminders",
+                    "route": "amazon-alexa/reminders"
+                },
+                {
+                    "title": "Skill Events",
+                    "route": "amazon-alexa/skill-events"
+                },
+                {
+                    "title": "CanFulfillIntentRequest",
+                    "route": "amazon-alexa/canfulfill"
+                },
+                {
+                    "title": "Game Engine",
+                    "route": "amazon-alexa/game-engine"
+                },
+                {
+                    "title": "Gadget Controller",
+                    "route": "amazon-alexa/gadget-controller"
+                }
+            ]
+        },
+        {
+            "Google Assistant": [
+                {
+                    "title": "Overview",
+                    "route": "google-assistant"
+                },
+                {
+                    "title": "Data",
+                    "route": "google-assistant/data"
+                },
+                {
+                    "title": "Visual Output",
+                    "route": "google-assistant/visual-output"
+                },
+                {
+                    "title": "Media Response",
+                    "route": "google-assistant/media-response"
+                }
+            ]
+        }
+    ],
+    "Integrations": [
+        {
+            "title": "Overview",
+            "route": "integrations"
+        },
+        {
+            "title": "Databases",
+            "route": "databases"
+        },
+        {
+            "title": "Analytics",
+            "route": "analytics"
+        }
+    ],
+    "Advanced": [
+        {
+            "title": "Overview",
+            "route": "advanced"
+        },
+        {
+            "title": "Unit Testing",
+            "route": "unit-testing"
+        }
+    ]
+}
