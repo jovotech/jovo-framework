@@ -105,6 +105,10 @@ Find out more about In-Skill-Purchasing here: [Platform specifics > Amazon Alexa
 
 Learn how to use the Reminders API to set reminders for your user: [Platform specifics > Amazon Alexa > Reminders API](./reminders.md './amazon-alexa/reminders')
 
+## Settings API
+
+You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
+
 <!--[metadata]: {"title": "Amazon Alexa Specific Features", 
                  "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
                  "expandedSections": "platforms", "inSections": "platforms", 
