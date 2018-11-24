@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Audioplayer
+# Audioplayer
 
 Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
@@ -199,6 +199,5 @@ All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER
 },
 ```
 
-<!--[metadata]: {"title": " AudioPlayer Skills", "description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_audioplayer"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "AudioPlayer": "" }, "commentsID": "framework/docs/amazon-alexa/audioplayer",
-"route": "docs/amazon-alexa/audioplayer" }-->
+<!--[metadata]: {"description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework",
+                "route": "amazon-alexa/audioplayer" }-->

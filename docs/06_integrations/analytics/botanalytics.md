@@ -1,4 +1,4 @@
-# [Integrations](../) > [Analytics](./README.md) > Botanalytics
+# Botanalytics
 
 Learn how to use Botanalytics for your Alexa Skills and Google Actions built with Jovo.
 
@@ -85,5 +85,5 @@ Test your voice app, after sending couple of messages, click the 'Check connecti
 ![Botanalytics Test](../../img/botanalytics-result.png)
 
 
-<!--[metadata]: {"title": "Botanalytics Integration", "description": "Add Botanalytics to your Alexa Skills and Google Actions with Jovo", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "docs/analytics", "Botanalytics": "" }, "commentsID": "docs/analytics/botanalytics",
-"route": "docs/analytics/botanalytics" }-->
+<!--[metadata]: {"description": "Add Botanalytics to your Alexa Skills and Google Actions with Jovo",
+"route": "analytics/botanalytics" }-->

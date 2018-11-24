@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Reminders API
+# Reminders API
 
 Learn more about how to set reminders for your user with your Alexa Skill.
 
@@ -104,6 +104,5 @@ this.user().getAllReminders().then((data) => {
 ```
 
 
-<!--[metadata]: {"title": "Reminders API", "description": "Learn more about how to set reminders for your user with your Alexa Skill.", "activeSections": ["platforms", "alexa", "alexa_reminders"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Reminders API": "" }, "commentsID": "framework/docs/amazon-alexa/reminders.md",
-"route": "docs/amazon-alexa/reminders" }-->
+<!--[metadata]: {"description": "Learn more about how to set reminders for your user with your Alexa Skill."
+"route": "amazon-alexa/reminders" }-->

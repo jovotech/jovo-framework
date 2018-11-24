@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Game Engine
+# Game Engine
 
 The `GameEngine` interface provides the toolset to receive Echo Button events using the *Input Handler*. 
 
@@ -341,6 +341,5 @@ Responding to GameEngine requests is optional. If you do respond Alexa handles t
 }
 ```
 
-<!--[metadata]: {"title": " Game Engine", "description": "Learn more about the Alexa Game Engine interface", "activeSections": ["platforms", "alexa", "alexa_game-engine"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Game Engine": "" }, "commentsID": "framework/docs/amazon-alexa/game-engine",
-"route": "docs/amazon-alexa/game-engine" }-->
+<!--[metadata]: {"description": "Learn more about the Alexa Game Engine interface",
+"route": "amazon-alexa/game-engine" }-->

@@ -377,15 +377,5 @@ If you don't have this object in your language model, the [`jovo init`](../../02
 The `dialogflow` object contains the agent data in its original syntax. For example, you export your Dialoglow Agent, look at the filex, and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
 
-<!--[metadata]: {"title": "Jovo Language Model", 
-                "description": " Learn more about the Jovo Language Model, a consolidated model for your Alexa Skill and Google Action.",
-                "activeSections": ["configuration", "model", "model_index"],
-                "expandedSections": "configuration",
-                "inSections": "configuration",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Configuration": "docs/configuration",
-                                "Model": ""
-                                },
-		"commentsID": "framework/docs/model",
-		"route": "docs/model"
-                }-->
+<!--[metadata]: {"description": " Learn more about the Jovo Language Model, a consolidated model for your Alexa Skill and Google Action.",
+		        "route": "model"}-->

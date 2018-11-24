@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > In-Skill Purchases
+# In-Skill Purchases
 
 Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill. You can also use the following template to get started: [Jovo Template for Alexa ISP](https://github.com/jovotech/jovo-templates/tree/master/alexa/isp).
 
@@ -350,6 +350,5 @@ That request will be mapped to the built-in `ON_PURCHASE` intent:
 },
 ```
 
-<!--[metadata]: {"title": " In-Skill Purchases", "description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.", "activeSections": ["platforms", "alexa", "alexa_isp"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "In-Skill Purchases": "" }, "commentsID": "framework/docs/amazon-alexa/in-skill-purchases",
-"route": "docs/amazon-alexa/in-skill-purchases" }-->
+<!--[metadata]: {"description": "Learn more about how to let your users do In-Skill Purchases (ISP) with your Alexa Skill.",
+"route": "amazon-alexa/in-skill-purchases" }-->

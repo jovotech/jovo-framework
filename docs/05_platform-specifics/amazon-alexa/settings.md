@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Settings API
+# Settings API
 
 Learn more about how to obtain your user's settings information.
 
@@ -42,6 +42,5 @@ this.user().getTemperatureUnit().then((temperatureUnit) => {
 ```
 
 
-<!--[metadata]: {"title": "Settings API", "description": "Learn how to get your user's settings information.", "activeSections": ["platforms", "alexa", "alexa_settings"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Settings API": "" }, "commentsID": "framework/docs/amazon-alexa/settings.md",
-"route": "docs/amazon-alexa/settings" }-->
+<!--[metadata]: {"description": "Learn how to get your user's settings information."
+"route": "amazon-alexa/settings" }-->

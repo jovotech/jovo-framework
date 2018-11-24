@@ -1,4 +1,4 @@
-# [App Configuration](../) > [Server](README.md) > Azure Functions
+# Azure Functions
 
 [Azure Functions](https://azure.microsoft.com/en-us/services/functions/) is a serverless compute service by Microsoft. Find the [official documentation here](https://docs.microsoft.com/en-us/azure/azure-functions/).
 
@@ -81,17 +81,5 @@ The [FilePersistence](../../06_integrations/databases/#filepersistence '../datab
 
 [Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) would be the ideal database integration, but no one's written one for it yet. Contributions appreciated!
 
-<!--[metadata]: {"title": "Azure Functions Configuration", 
-                "description": "Deploy your Alexa Skills and Google Actions on Azure Functions with the Jovo Framework",
-                "activeSections": ["configuration", "server", "function"],
-                "expandedSections": "configuration",
-                "inSections": "configuration",
-                "breadCrumbs": {
-                    "Docs": "docs/",
-                    "App Configuration": "docs/configuration",
-                    "Server": "docs/server",
-                    "Azure Functions": ""
-                },
-		        "commentsID": "framework/docs/server/azure-functions",
-		        "route": "docs/server/azure-functions"
-                }-->
+<!--[metadata]: {"description": "Deploy your Alexa Skills and Google Actions on Azure Functions with the Jovo Framework",
+		            "route": "server/azure-functions"}-->
