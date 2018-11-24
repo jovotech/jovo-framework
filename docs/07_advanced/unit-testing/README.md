@@ -409,7 +409,15 @@ send(rb.intent(require('./recordings/HelloWorld/GoogleAction/03_req_HelpIntent')
 
 
 
-<!--[metadata]: {
+<!--[metadata]: {"title": "Unit Testing for Voice Apps", 
                 "description": "Learn how to write unit tests for Alexa Skills and Google Actions with the Jovo Framework.",
-		        "route": "unit-testing"
+                "activeSections": ["advanced", "advanced_testing"],
+                "expandedSections": "advanced",
+                "inSections": "advanced",
+                "breadCrumbs": {"Docs": "docs/",
+				"Advanced Features": "docs/advanced",
+                "Unit Testing": ""
+                                },
+		"commentsID": "framework/docs/unit-testing",
+		"route": "docs/unit-testing"
                 }-->

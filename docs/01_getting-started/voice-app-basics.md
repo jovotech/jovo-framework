@@ -1,4 +1,4 @@
-# Voice App Basics
+# [Getting Started](../) > Voice App Basics
 
 This section provides an overview of how voice applications work, and the differences between voice platforms. Currently, Jovo supports [Amazon Alexa](#amazon-alexa) and [Google Assistant](#google-assistant).
 
@@ -93,5 +93,15 @@ To build a voice app for Google Assistant and Google Home, you need to create a 
 Here are some helpful guides to get started with Google Actions: [Overview](https://developers.google.com/actions/) and a [tutorial for Dialogflow](https://developers.google.com/actions/dialogflow/).
 
 
-<!--[metadata]: {"description": "Learn the essentials of voice apps like Amazon Alexa and Google Assistant on Google Home.",
-		"route": "voice-app-basics"}-->
+<!--[metadata]: {"title": "Voice App Basics", 
+                "description": "Learn the essentials of voice apps like Amazon Alexa and Google Assistant on Google Home.",
+                "activeSections": ["voice-app-basics", "gettingstarted"],
+                "expandedSections": "gettingstarted",
+                "inSections": "gettingstarted",
+                "breadCrumbs": {"Docs": "docs/",
+				"Getting Started": "docs/",
+                                "Voice App Basics": ""
+                                },
+		"commentsID": "framework/docs/voice-app-basics",
+		"route": "docs/voice-app-basics"
+                }-->

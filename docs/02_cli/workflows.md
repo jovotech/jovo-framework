@@ -1,4 +1,4 @@
-# Workflows
+# [Jovo CLI](./) > Workflows
 
 This section shows workflows and step by step guides that can be used with the Jovo CLI to create and update projects.
 
@@ -58,5 +58,15 @@ After this, you can start updating the files in the `/models` folder and use the
 
 
 
-<!--[metadata]: {"description": "Learn more about workflows you can use with the Jovo CLI for Alexa Skills and Google Actions.",
-		            "route": "cli/workflows"}-->
+<!--[metadata]: {"title": "Jovo CLI Workflows", 
+                "description": "Learn more about workflows you can use with the Jovo CLI for Alexa Skills and Google Actions.",
+                "activeSections": ["cli", "cli_workflows"],
+                "expandedSections": "cli",
+                "inSections": "cli",
+                "breadCrumbs": {"Docs": "docs",
+				"CLI": "docs/cli",
+                                "Workflows": ""
+                                },
+		"commentsID": "framework/docs/cli/workflows",
+		"route": "docs/cli/workflows"
+                }-->

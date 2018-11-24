@@ -246,6 +246,17 @@ If you have defined input types, you will find the `entities` in separate folder
 
 This includes some agent specific information. We recommend to not change this file unless you know what you're doing.
 
-<!--[metadata]: {"description": "Convert your Jovo Language Model to both Amazon Alexa and Dialogflow (for Google Assistant).",
-				"route": "model/platforms"}-->
+<!--[metadata]: {"title": "Platform Language Models", 
+                "description": "Convert your Jovo Language Model to both Amazon Alexa and Dialogflow (for Google Assistant).",
+                "activeSections": ["configuration", "model", "model_platforms"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Jovo Language Model": "docs/model",
+                                "Platforms": ""
+                                },
+		"commentsID": "framework/docs/model/platforms",
+		"route": "docs/model/platforms"
+                }-->
 

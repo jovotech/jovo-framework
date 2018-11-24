@@ -21,7 +21,7 @@ These emit methods can also be accessed directly with the platform specific obje
 
 ```javascript
 // Example
-let alexa = this.alexaSkill();
+let alexa = this.$alexaSkill;
 alexa.tell('Hello World!');
 ```
 
@@ -51,7 +51,7 @@ GoogleAction
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = this.alexaSkill();
+let alexa = this.$alexaSkill;
 ```
 
 You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa './amazon-alexa'):
@@ -72,7 +72,7 @@ You can find the following Alexa specific features on the page [Platform Specifi
 You can access the `googleAction` object like this:
 
 ```javascript
-let google = this.googleAction();
+let google = this.$googleAction;
 ```
 
 You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant './google-assistant'):
@@ -85,5 +85,14 @@ You can find the following Google Assistant specific features on the page [Platf
 
 
 
-<!--[metadata]: {"description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
-		"route": "platforms"}-->
+<!--[metadata]: {"title": "Platforms", 
+                "description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
+                "activeSections": ["platforms", "platforms_index"],
+                "expandedSections": "platforms",
+                "inSections": "platforms",
+                "breadCrumbs": {"Docs": "docs/",
+				"Platforms": ""
+                                },
+		"commentsID": "framework/docs/platforms",
+		"route": "docs/platforms"
+                }-->

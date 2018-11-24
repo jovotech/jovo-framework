@@ -18,5 +18,5 @@ Jovo offers easy analytics integrations and enhancements for VoiceLabs, Dashbot,
 
 Find detailed documentation here: [Integrations > Analytics](./analytics './analytics')
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "integrations" }-->
+<!--[metadata]: {"title": "Integrations", "description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo", "activeSections": ["integrations", "integrations_index"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "" }, "commentsID": "framework/docs/integrations",
+"route": "docs/integrations" }-->

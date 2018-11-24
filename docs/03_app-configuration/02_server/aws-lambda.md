@@ -1,4 +1,4 @@
-# AWS Lambda
+# [App Configuration](../) > [Server](README.md) > AWS Lambda
 
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
@@ -40,5 +40,16 @@ If your `tell` or `ask` responses aren't firing inside callbacks or promises on 
 context.callbackWaitsForEmptyEventLoop = false;
 ```
 
-<!--[metadata]: {"description": "Deploy your Alexa Skills and Google Actions on AWS Lambda with the Jovo Framework",
-		        "route": "server/aws-lambda"}-->
+<!--[metadata]: {"title": "AWS Lambda Configuration", 
+                "description": "Deploy your Alexa Skills and Google Actions on AWS Lambda with the Jovo Framework",
+                "activeSections": ["configuration", "server", "lambda"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Server": "docs/server",
+                                "AWS Lambda": ""
+                                },
+		"commentsID": "framework/docs/server/aws-lambda",
+		"route": "docs/server/aws-lambda"
+                }-->

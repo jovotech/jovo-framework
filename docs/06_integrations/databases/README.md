@@ -1,4 +1,4 @@
-# Databases
+# [Integrations](../) > Databases
 
 Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
@@ -33,58 +33,9 @@ const config = {
 }
 ```
 
-
-### Save Data
-
-This will save data with your user's `userID` as a mainKey, and a `key` and a `value` specified by you.
-
-The easiest way to do so is to use the [user object](../../04_app-logic/02_data/user.md './data/user') for this:
-
-```javascript
-this.user().data.key = value;
-
-// Example
-this.user().data.score = 300;
-```
-
-
-### Load Data
-
-After you saved data, you can use a `key` to retrieve a `value` from the database.
-
-Again, you can use the [user object](../../04_app-logic/02_data/user.md './data/user') for this:
-
-```javascript
-let data = this.user().data.key;
-```
-
-### Delete Data
-
-This will delete a data point from the database, specified by a key.
-
-```javascript
-deleteData(key, callback)
-
-this.db().deleteData(key, function(err) {
-    // Do something
-});
-```
-
-### Delete a User
-
-This will delete your whole user's data (the `mainKey`) from the database.
-
-```javascript
-deleteUser(callback)
-
-this.db().deleteUser(function(err) {
-    // Do something
-});
-```
-
 ## FilePersistence
 
-> Note: This is the default database integration.
+> Note: This is the default database integration. 
 
 The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
 
@@ -97,7 +48,7 @@ db/
 // Other files
 ```
 
-And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.user().data.someKey = 'someValue';`:
+And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.data.someKey = 'someValue';`:
 
 ```js
 // Example for Amazon Alexa
@@ -118,6 +69,7 @@ And this is an example how the file structure looks like, with the `userID` as a
 ]
 ```
 
+> Note: The FilePersistence integration should only be used for local development as it won't work while hosting your app on a cloud service, e.g. AWS Lambda
 
 ## DynamoDB
 
@@ -179,5 +131,5 @@ You can find a detailed guide by Amazon about setting up your DynamoDB for progr
 Here are a few things you need to consider when switching from a different database to DynamoDB
 * DynamoDB does not allow empty strings (`""`) as values: If you use them, please switch to `null` or a different value
 
-<!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",
-"route": "databases" }-->
+<!--[metadata]: {"title": "Database Integrations", "description": "Learn how to store user specific data to different types of databases with the Jovo Framework", "activeSections": ["integrations", "databases"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Databases": "" }, "commentsID": "framework/docs/databases",
+"route": "docs/databases" }-->

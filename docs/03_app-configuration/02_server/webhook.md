@@ -1,4 +1,4 @@
-# Webhook
+# [App Configuration](../) > [Server](README.md) > Webhook
 
 For voice apps in prototyping stage, we recommend using a local webserver and a service like [jovo webhook](#jovo-webhook) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md './aws-lambda') every time.
 
@@ -152,5 +152,16 @@ $ node index.js --webhook
 ```
 
 
-<!--[metadata]: {"description": "Find out how to create a webhook for Alexa Skills and Google Actions with the Jovo Framework",
-		        "route": "server/webhook"}-->
+<!--[metadata]: {"title": "Webhook Configuration", 
+                "description": "Find out how to create a webhook for Alexa Skills and Google Actions with the Jovo Framework",
+                "activeSections": ["configuration", "server", "webhook"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Configuration": "docs/configuration",
+				"Server": "docs/server",
+                                "Webhook": ""
+                                },
+		"commentsID": "framework/docs/server/webhook",
+		"route": "docs/server/webhook"
+                }-->

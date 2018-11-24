@@ -132,9 +132,6 @@ Skill Events | Get notified when an event (e.g. Skill enabled/disabled) occurs |
 CanFulfillIntentRequest | Add name-free interaction to your skill and increase your skill's discoverability | [📝](./docs/05_platform-specifics/amazon-alexa/canfulfill.md)
 Game Engine | Provides the toolset to receive Echo Button events | [📝](./docs/05_platform-specifics/amazon-alexa/game-engine.md)
 Gadget Controller | Allows you to control the user's Echo Buttons | [📝](./docs/05_platform-specifics/amazon-alexa/gadget-controller.md)
-In-Skill-Purchasing (ISP) | Allows you to sell premium content | [📝](./docs/05_platform-specifics/amazon-alexa/in-skill-purchases.md)
-Reminders API | Allows you to set reminders for your user | [📝](./docs/05_platform-specifics/amazon-alexa/reminders.md)
-Settings API | Allows you to get your user's settings information | [📝](./docs/05_platform-specifics/amazon-alexa/settings.md)
 
 
 #### Google Assistant
@@ -153,7 +150,8 @@ The following features are **not** implemented yet. We appreciate any kind of he
 
 Platform | Feature | Docs
 :--- | :--- | :---
-**Amazon Alexa** | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
+**Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
+&nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
 **Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
 &nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
 &nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)

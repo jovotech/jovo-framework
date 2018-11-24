@@ -1,4 +1,4 @@
-# Dashbot
+# [Integrations](../) > [Analytics](./README.md) > Dashbot
 
 Learn how to use Dashbot Analytics for your Alexa Skills and Google Actions built with Jovo.
 
@@ -91,5 +91,5 @@ Test your voice app, after a bit your session should appear in the Report sectio
 
 
 
-<!--[metadata]: {"description": "Add Dashbot Analytics to your Alexa Skills and Google Actions with Jovo",
-"route": "analytics/dashbot" }-->
+<!--[metadata]: {"title": "Dashbot Analytics Integration", "description": "Add Dashbot Analytics to your Alexa Skills and Google Actions with Jovo", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "docs/analytics", "Dashbot": "" }, "commentsID": "docs/analytics/dashbot",
+"route": "docs/analytics/dashbot" }-->

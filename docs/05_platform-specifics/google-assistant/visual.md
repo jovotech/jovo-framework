@@ -1,4 +1,4 @@
-# Visual Output
+# [Platform Specific Features](../) > [Google Assistant](./README.md) > Visual Output
 
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
@@ -21,12 +21,12 @@ Visual output is used to describe or enhance the voice interaction.
 This will display an alternative text instead of the written speech output on your screen surface, e.g. the Google Assistant mobile phone app.
 
 ```javascript
-this.googleAction().displayText(text);
+this.$googleAction.displayText(text);
 
 // Example
 let speech = 'Hello World!';
 let text = 'Hello Phone!';
-this.googleAction().displayText(text)
+this.$googleAction.displayText(text)
     .tell(speech);
 ```
 
@@ -47,9 +47,9 @@ Method | Description
 
 ```javascript
 // Basic
-this.googleAction().showSimpleCard('Title', 'Content');
+this.$googleAction.showSimpleCard('Title', 'Content');
 
-this.googleAction().showImageCard('Title', 'Content', 'imageURL');
+this.$googleAction.showImageCard('Title', 'Content', 'imageURL');
 
 // Advanced
 const {GoogleAction} = require('jovo-framework');
@@ -61,7 +61,7 @@ let basicCard = new GoogleAction.BasicCard()
   .setImageDisplay('WHITE') 
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
-this.googleAction().showBasicCard(basicCard);
+this.$googleAction.showBasicCard(basicCard);
 ```
 [Official Documentation](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard)
 
@@ -84,7 +84,7 @@ Method | Description
 
 ```javascript
 // Basic
-this.googleAction().showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
+this.$googleAction.showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
 
 // Advanced
 const {GoogleAction} = require('jovo-framework');
@@ -100,7 +100,7 @@ let tableCard = new GoogleAction.Table()
   .addRow(['row 3 item 3', 'row 3 item 2', 'row 3 item 3'])
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
-this.googleAction().showTable(tableCard);
+this.$googleAction.showTable(tableCard);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#table_card)
 
@@ -150,7 +150,7 @@ list.setTitle('Title');
 // Add Items
 list.addItem(itemOne);
 
-this.googleAction().showList(list);
+this.$googleAction.showList(list);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#list_selector)
 
@@ -171,7 +171,7 @@ let carousel = new GoogleAction.Carousel();
 
 carousel.addItem(itemOne);
 
-this.googleAction().showCarousel(carousel);
+this.$googleAction.showCarousel(carousel);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#carousel_selector)
 
@@ -184,7 +184,7 @@ After the user selects one of the items in your list or carousel, they will be r
 There you can use `this.getSelectedElementId()` to get the `key` of the selected item
 
 ```javascript
-'ON_ELEMENT_SELECTED': function() {
+ON_ELEMENT_SELECTED() {
   let selectedElement = this.getSelectedElementId();
   if (selectedElement === 'ItemOneKey') {
     this.tell('You chose item one');
@@ -203,13 +203,13 @@ Method | Description
 `showLinkOutSuggestion(name, url)` | Add a [LinkOutSuggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#linkoutsuggestion), which leads to an app or site.
 
 ```javascript
-this.googleAction().showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
+this.$googleAction.showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
 
-this.googleAction().showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
+this.$googleAction.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
 ```
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)
 
-<!--[metadata]: {"description": "Learn more about how to implement visual output into your voice driven application.",
-"route": "google-assistant/visual-output" }
+<!--[metadata]: {"title": "Google Assistant Visual Output", "description": "Learn more about how to implement visual output into your voice driven application.", "activeSections": ["platforms", "assistant", "assistant_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/visual",
+"route": "docs/google-assistant/visual-output" }
 -->
