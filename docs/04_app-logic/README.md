@@ -28,27 +28,27 @@ The `handler` is the main building block of your voice app. This is where the lo
 ```javascript
 app.setHandler({
 
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello World!');
     },
 });
 ```
 
-You can also define seperate handlers for each platform to overwrite specific intents and states for platform specific app logic.
+You can also define separate handlers for each platform to overwrite specific intents and states for platform specific app logic.
 
 ```javascript
 app.setAlexaHandler({
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Alexa user');
     }
 });
 
 app.setGoogleActionHandler({
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.tell('Hello Google user');
     }
 });
@@ -69,5 +69,14 @@ In section [App Logic > Data](./02_data, './data'), user input (slots and parame
 In section [App Logic > Output](./03_output './output'), you can learn more about how to craft speech, audio, and visual responses.
 
 
-<!--[metadata]: {"description": "Find out how to build voice app logic with the Jovo Framework",
-		        "route": "logic"}-->
+<!--[metadata]: {"title": "App Logic", 
+                "description": "Find out how to build voice app logic with the Jovo Framework",
+                "activeSections": ["logic", "logic_index"],
+                "expandedSections": "logic",
+                "inSections": "logic",
+                "breadCrumbs": {"Docs": "docs/",
+				"App Logic": ""
+                                },
+		"commentsID": "framework/docs/app-logic",
+		"route": "docs/logic"
+                }-->

@@ -1,4 +1,4 @@
-# Gadget Controller
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Gadget Controller
 
 The `GadgetController` interface allows you to control the user's Echo Buttons.
 
@@ -69,7 +69,7 @@ Name | Description | Value | Required
 `animations` | Array of animations you want to use | `Object[]` | yes
 
 ```javascript
-this.alexaSkill().gadgetController().setLight(
+this.$alexaSkill.gadgetController().setLight(
   [],
   0,
   'buttonDown',
@@ -103,7 +103,7 @@ Name | Description | Method | Value | Required
 `sequence` | Array of objects, which define the animation. The array has to be in chronological order | `sequence(sequence)` | `Object[]` | yes
 
 ```javascript
-const animationOne = this.alexaSkill().gadgetController().getAnimationsBuilder();
+const animationOne = this.$alexaSkill.gadgetController().getAnimationsBuilder();
 
 animationOne.repeat(3).targetLights(['1']).sequence(sequence);
 ```
@@ -132,10 +132,11 @@ Name | Description | Method | Value | Required
 `blend` | Choose if you want the previous color to smoothly change to this step's one | `blend(blend)` | `boolean` | yes
 
 ```javascript
-const sequence = this.alexaSkill().gadgetController().getSequenceBuilder();
+const sequence = this.$alexaSkill.gadgetController().getSequenceBuilder();
 
 sequence.duration(2).color('FFFFFF');
 ```
 
-<!--[metadata]: {"description": "Learn more about the Alexa Gadget Controller interface",
-"route": "amazon-alexa/gadget-controller" }-->
+<!--[metadata]: {"title": " Gadget Controller", "description": "Learn more about the Alexa Gadget Controller interface", "activeSections": ["platforms", "alexa", "alexa_gadget-controller"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "Gadget Controller": "" }, "commentsID": "framework/docs/amazon-alexa/gadget-controller",
+"route": "docs/amazon-alexa/gadget-controller" }-->

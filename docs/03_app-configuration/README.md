@@ -64,7 +64,7 @@ The `/app` folder, and specifically `app.js` is used for the logic of your voice
 // App Configuration
 // =================================================================================
 
-const {App} = require('jovo-framework');
+const {App, Alexa, GoogleAssistant, Jovo} = require('jovo-framework');
 
 const config = {
     logging: true,
@@ -72,22 +72,27 @@ const config = {
 
 const app = new App(config);
 
+app.use(
+    new GoogleAssistant(),
+    new Alexa()
+);
+
 
 // =================================================================================
 // App Logic
 // =================================================================================
 
 app.setHandler({
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 
-    'MyNameIsIntent': function(name) {
-        this.tell('Hey ' + name + ', nice to meet you!');
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
     },
 });
 
@@ -269,5 +274,14 @@ Integrations | [Databases](../06_integrations/databases './databases') | Switch 
  | | [Analytics](../06_integrations/analytics './analytics') | Enable analytics integrations
 
 
-<!--[metadata]: {"description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant",
-		        "route": "configuration"}-->
+<!--[metadata]: {"title": "App Configuration", 
+                "description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant",
+                "activeSections": ["configuration", "configuration_index"],
+                "expandedSections": "configuration",
+                "inSections": "configuration",
+                "breadCrumbs": {"Docs": "docs/",
+                                "App Configuration": ""
+                                },
+		"commentsID": "framework/docs/app-configuration",
+		"route": "docs/configuration"
+                }-->

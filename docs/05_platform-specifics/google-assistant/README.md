@@ -1,4 +1,4 @@
-# Google Assistant
+# [Platform Specific Features](../) > Google Assistant
 
 Learn more about Google Assistant specific features that can be used with the Jovo Framework.
 
@@ -17,7 +17,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 You can access the `googleAction` object like this:
 
 ```javascript
-let google = this.googleAction();
+let google = this.$googleAction;
 ```
 
 ## Output
@@ -50,6 +50,6 @@ You can find out more about your Google Action user's data here: [Platform speci
 
 
 
-<!--[metadata]: {"description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here",
-"route": "google-assistant" }
+<!--[metadata]: {"title": "Google Assistant Specific Features", "description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here", "activeSections": ["platforms", "assistant", "assistant_index"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant",
+"route": "docs/google-assistant" }
 -->

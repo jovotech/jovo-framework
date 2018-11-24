@@ -1,4 +1,4 @@
-# Audioplayer
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Audioplayer
 
 Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
@@ -34,18 +34,18 @@ play(url, token, playBehavior)
 ```javascript
 
 // Start playing a file from the beginning
-this.alexaSkill().audioPlayer().setOffsetInMilliseconds(0)
+this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(0)
     .play(url, token)
     .tell(speech);
 
 // or for example playing with an offset.
 var offset = 3000;
-this.alexaSkill().audioPlayer().setOffsetInMilliseconds(offset)
+this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(offset)
     .play(url, token)
     .tell(speech);
 
 // or specify PlayBehavior
-this.alexaSkill().audioPlayer().setOffsetInMilliseconds(0)
+this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(0)
 .play(url,token,'ENQUEUE')
 .tell(speech)
 ```
@@ -61,7 +61,7 @@ Play has the following parameters.
 
 Adds sepcified file to the play queue. remember that the URL must be HTTPS.
 ```javascript
-this.alexaSkill().audioPlayer().enqueue(url, token)
+this.$alexaSkill.audioPlayer().enqueue(url, token)
 ```
 | Name           | Description  | Value  | Required  |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------|
@@ -72,7 +72,7 @@ this.alexaSkill().audioPlayer().enqueue(url, token)
 Stops the current file from playing.
 
 ```javascript
-this.alexaSkill().audioPlayer().stop();
+this.$alexaSkill.audioPlayer().stop();
 ```
 
 ### Start Over
@@ -80,7 +80,7 @@ this.alexaSkill().audioPlayer().stop();
 Starts the file specified by the url from the beginning.
 
 ```javascript
-this.alexaSkill().audioPlayer().startOver(url, token);
+this.$alexaSkill.audioPlayer().startOver(url, token);
 
 ```
 | Name           | Description  | Value  | Required  |
@@ -94,7 +94,7 @@ this.alexaSkill().audioPlayer().startOver(url, token);
 Use to clear all the queue or just the enqueue files.
 
 ```javascript
-this.alexaSkill().audioPlayer().clearQueue('CLEAR_ALL');
+this.$alexaSkill.audioPlayer().clearQueue('CLEAR_ALL');
 
 ```
 | Name           | Description  | Value  | Required  |
@@ -108,7 +108,7 @@ You can set track metadata that is used to show additional information for Alexa
 
 
 ```javascript
-this.alexaSkill().audioPlayer()
+this.$alexaSkill.audioPlayer()
     .setTitle('First Track')
     .setSubtitle('A simple subtitle')
     .addArtwork('https://www.somewhere.com/image.png')
@@ -173,31 +173,8 @@ app.setHandler({
 
 Note that it's important to have an `emit` at the end of the functions to be able to e.g. save user data. In the example above, we're using `endSession` for this.
 
-## Playback Controller
 
-`PlaybackController` requests are used to notify you about user interactions with audio player controls, e.g. touch controls on Alexa-enabled devices.
 
-All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER` state. You can respond to them with `AudioPlayer` directives, e.g. `play`, `pause`, etc.
-
-```javascript
-'PLAYBACKCONTROLLER': {
-    'PlaybackController.PlayCommandIssued': function () {
-        console.log('PlaybackController.PlayCommandIssued');
-    },
-
-    'PlaybackController.NextCommandIssued': function () {
-        console.log('PlaybackController.NextCommandIssued');
-    },
-
-    'PlaybackController.PreviousCommandIssued': function () {
-        console.log('PlaybackController.PreviousCommandIssued');
-    },
-
-    'PlaybackController.PauseCommandIssued': function () {
-        console.log('PlaybackController.PauseCommandIssued');
-    }
-},
-```
-
-<!--[metadata]: {"description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework",
-                "route": "amazon-alexa/audioplayer" }-->
+<!--[metadata]: {"title": " AudioPlayer Skills", "description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_audioplayer"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "docs/amazon-alexa", "AudioPlayer": "" }, "commentsID": "framework/docs/amazon-alexa/audioplayer",
+"route": "docs/amazon-alexa/audioplayer" }-->

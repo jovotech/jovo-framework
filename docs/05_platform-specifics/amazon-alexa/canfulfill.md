@@ -1,4 +1,4 @@
-# CanFulfillIntentRequest
+# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > CanFulfillIntentRequest
 
 Learn more about how to implement the `CanFulfillIntentRequest` feature in your Jovo project
 
@@ -40,7 +40,7 @@ After that run `jovo build --deploy` to rebuild and deploy your project.
 
 Incoming `CanFulfillIntentRequests` will be mapped to the Jovo built in `CAN_FULFILL_INTENT`.
 ```javascript
-'CAN_FULFILL_INTENT': function() {
+CAN_FULFILL_INTENT() {
 
 },
 ```
@@ -74,6 +74,11 @@ this.mayFulfillRequest();
 
 It's recommended to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.
 
-<!--[metadata]: {"description": "Learn how to implement CanFulfillRequests in your Jovo project",
-"route": "amazon-alexa/canfulfill" 
+<!--[metadata]: {"title": "Alexa CanFulfillIntentRequest", 
+"description": "Learn how to implement CanFulfillRequests in your Jovo project", "activeSections": ["platforms", "alexa", "alexa_canfulfill"], 
+"expandedSections": "platforms", "inSections": "platforms", 
+"breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
+"Amazon Alexa": "" }, 
+"commentsID": "framework/docs/canfulfill", 
+"route": "docs/amazon-alexa/canfulfill" 
 }-->

@@ -274,7 +274,14 @@ for (let rb of getPlatformRequestBuilder('AlexaSkill', 'GoogleActionDialogFlow')
 Unit Testing is a feature that is currently in `beta`. For a sample project that uses testing, take a look at this GitHub repository: [milksnatcher/DefaultTests](https://github.com/Milksnatcher/DefaultTests).
 
 
-<!--[metadata]: {
+<!--[metadata]: {"title": "Advanced Features", 
                 "description": "Learn more about features for advanced voice applications with the Jovo Framework.",
-		        "route": "advanced"
+                "activeSections": ["advanced", "advanced_index"],
+                "expandedSections": "advanced",
+                "inSections": "advanced",
+                "breadCrumbs": {"Docs": "docs/",
+				"Advanced Features": ""
+                                },
+		"commentsID": "framework/docs/advanced",
+		"route": "docs/advanced"
                 }-->

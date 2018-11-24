@@ -1,4 +1,4 @@
-# Installation
+# Getting Started > Installation
 
 * [Introduction](#introduction)
   * [Technical Requirements](#technical-requirements)
@@ -153,4 +153,15 @@ To get started building voice apps with Jovo, take a look at the list of tutoria
 New to developing for voice platforms like Amazon Alexa and Google Assistant? Go to [ Voice App Basics](./voice-app-basics.md './voice-app-basics') to get an introduction to voice and language models.
 
 
-<!--[metadata]: {"description": "Learn how to install the Jovo Framework and Jovo CLI to develop Cross-Platform Voice Apps for Alexa and Google Assistant", "route": "installation"}-->
+<!--[metadata]: {"title": "Installation", 
+                "description": "Learn how to install the Jovo Framework and Jovo CLI to develop Cross-Platform Voice Apps for Alexa and Google Assistant",
+                "activeSections": ["gettingstarted", "installation"],
+                "expandedSections": "installation",
+                "inSections": "gettingstarted",
+                "breadCrumbs": {"Docs": "docs/",
+                "Getting Started": "docs",
+                                "Installation": ""
+                                },
+"commentsID": "framework/docs/getting-started",
+"route": "docs/installation"
+                }-->

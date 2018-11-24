@@ -1,4 +1,4 @@
-# Bespoken
+# [Integrations](../) > [Analytics](./README.md) > Bespoken
 
 Learn how to use Bespoken Analytics for your Alexa Skills and Google Actions built with Jovo.
 
@@ -80,5 +80,5 @@ Test your voice app, after a bit your session should appear in the created skill
 
 
 
-<!--[metadata]: {"description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo",
-"route": "analytics/bespoken" }-->
+<!--[metadata]: {"title": "Bespoken Analytics Integration", "description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "docs/analytics", "Bespoken": "" }, "commentsID": "docs/analytics/bespoken",
+"route": "docs/analytics/bespoken" }-->

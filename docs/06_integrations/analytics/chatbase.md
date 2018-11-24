@@ -1,4 +1,4 @@
-# Chatbase
+# [Integrations](../) > [Analytics](./README.md) > Chatbase
 
 Learn how to use Chatbase Analytics for your Alexa Skills and Google Actions built with Jovo.
 
@@ -80,5 +80,5 @@ Test you voice app. It can take up to 6 hours until all the data can be seen in 
 ![Chatbase Dashboard](../../img/chatbase-result.png)
 
 
-<!--[metadata]: {"description": "Add Chatbase Analytics to your Alexa Skills and Google Actions with Jovo",
-"route": "analytics/chatbase" }-->
+<!--[metadata]: {"title": "Chatbase Analytics Integration", "description": "Add Chatbase Analytics to your Alexa Skills and Google Actions with Jovo", "activeSections": ["integrations", "analytics"], "expandedSections": "integrations", "inSections": "integrations", "breadCrumbs": {"Docs": "docs/", "Integrations": "docs/integrations", "Analytics": "docs/analytics", "Chatbase": "" }, "commentsID": "docs/analytics/chatbase",
+"route": "docs/analytics/chatbase" }-->
