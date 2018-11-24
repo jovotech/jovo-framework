@@ -17,7 +17,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 You can access the `googleAction` object like this:
 
 ```javascript
-let google = this.$googleAction;
+let google = this.googleAction();
 ```
 
 ## Output

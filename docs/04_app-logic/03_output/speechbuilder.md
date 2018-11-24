@@ -68,8 +68,8 @@ addText(text, condition)
 
 // Example
 let speech = this.speechBuilder()
-                 .addText('Welcome new user!', this.$user.isNewUser())
-                 .addText('Welcome back!', !this.$user.isNewUser());
+                 .addText('Welcome new user!', this.user().isNewUser())
+                 .addText('Welcome back!', !this.user().isNewUser());
 
 this.tell(speech);
 ```

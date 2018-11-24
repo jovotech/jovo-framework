@@ -64,7 +64,7 @@ The `/app` folder, and specifically `app.js` is used for the logic of your voice
 // App Configuration
 // =================================================================================
 
-const {App, Alexa, GoogleAssistant, Jovo} = require('jovo-framework');
+const {App} = require('jovo-framework');
 
 const config = {
     logging: true,
@@ -72,27 +72,22 @@ const config = {
 
 const app = new App(config);
 
-app.use(
-    new GoogleAssistant(),
-    new Alexa()
-);
-
 
 // =================================================================================
 // App Logic
 // =================================================================================
 
 app.setHandler({
-    LAUNCH() {
+    'LAUNCH': function() {
         this.toIntent('HelloWorldIntent');
     },
 
-    HelloWorldIntent() {
+    'HelloWorldIntent': function() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    'MyNameIsIntent': function(name) {
+        this.tell('Hey ' + name + ', nice to meet you!');
     },
 });
 

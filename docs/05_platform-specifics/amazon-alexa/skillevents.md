@@ -170,7 +170,7 @@ And adding the `AlexaSkillEvent.SkillDisabled` inside your `ON_EVENT` state:
 		
 		// remove user from the database when the skill is disabled
 		// if the user re-enables the skill, they will have a new userId anyway
-		this.$user.delete();
+		this.user().delete();
     },
 }
 ```
@@ -200,7 +200,7 @@ And adding the `AlexaSkillEvent.SkillAccountLinked` inside your `ON_EVENT` state
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#account-linked-event)
 ### Skill Permission Accepted
 
-This Skill Event gets triggered, if your user grants permissions for the first time or if they grant them after they were revoked. The request will include the most recently accepted permissions. You can access the body of the request using the `this.$alexaSkill.getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event) to get a feeling for the JSON structure.
+This Skill Event gets triggered, if your user grants permissions for the first time or if they grant them after they were revoked. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event) to get a feeling for the JSON structure.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -215,7 +215,7 @@ And adding the `AlexaSkillEvent.SkillPermissionAccepted` inside your `ON_EVENT` 
     'AlexaSkillEvent.SkillPermissionAccepted': function() {
         console.log('AlexaSkillEvent.SkillPermissionAccepted');
 		console.log(`UserId: ${this.getUserId()}`);		
-		console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+		console.log(`Permissions: ${JSON.stringify(this.alexaSkill().getSkillEventBody().acceptedPermissions)}`);	
 	},
 }
 ```
@@ -223,7 +223,7 @@ And adding the `AlexaSkillEvent.SkillPermissionAccepted` inside your `ON_EVENT` 
 [Official Documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event)
 ### Skill Permission Changed
 
-This Skill Event gets triggered, if your user grants your Skill additional permission or revokes existing ones. The request will include the most recently accepted permissions. You can access the body of the request using the `this.$alexaSkill.getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event) to get a feeling for the JSON structure.
+This Skill Event gets triggered, if your user grants your Skill additional permission or revokes existing ones. The request will include the most recently accepted permissions. You can access the body of the request using the `this.alexaSkill().getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event) to get a feeling for the JSON structure.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `skill.json`:
 ```javascript
@@ -238,7 +238,7 @@ And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` s
     'AlexaSkillEvent.SkillPermissionChanged': function() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
 		console.log(`UserId: ${this.getUserId()}`);		
-		console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+		console.log(`Permissions: ${JSON.stringify(this.alexaSkill().getSkillEventBody().acceptedPermissions)}`);	
     },
 }
 ```
