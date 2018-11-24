@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Gadget Controller
+# Gadget Controller
 
 The `GadgetController` interface allows you to control the user's Echo Buttons.
 
@@ -137,6 +137,5 @@ const sequence = this.$alexaSkill.gadgetController().getSequenceBuilder();
 sequence.duration(2).color('FFFFFF');
 ```
 
-<!--[metadata]: {"title": " Gadget Controller", "description": "Learn more about the Alexa Gadget Controller interface", "activeSections": ["platforms", "alexa", "alexa_gadget-controller"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Gadget Controller": "" }, "commentsID": "framework/docs/amazon-alexa/gadget-controller",
-"route": "docs/amazon-alexa/gadget-controller" }-->
+<!--[metadata]: {"description": "Learn more about the Alexa Gadget Controller interface",
+"route": "amazon-alexa/gadget-controller" }-->

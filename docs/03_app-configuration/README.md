@@ -274,14 +274,5 @@ Integrations | [Databases](../06_integrations/databases './databases') | Switch 
  | | [Analytics](../06_integrations/analytics './analytics') | Enable analytics integrations
 
 
-<!--[metadata]: {"title": "App Configuration", 
-                "description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant",
-                "activeSections": ["configuration", "configuration_index"],
-                "expandedSections": "configuration",
-                "inSections": "configuration",
-                "breadCrumbs": {"Docs": "docs/",
-                                "App Configuration": ""
-                                },
-		"commentsID": "framework/docs/app-configuration",
-		"route": "docs/configuration"
-                }-->
+<!--[metadata]: {"description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant",
+		        "route": "configuration"}-->

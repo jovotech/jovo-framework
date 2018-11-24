@@ -1,4 +1,4 @@
-# [App Logic](../) > [Data](./README.md) > User
+# User
 
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
@@ -268,16 +268,27 @@ this.$user.getLocale();
 this.getLocale();
 ```
 
-<!--[metadata]: {"title": "User Class", 
-                "description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
-                "activeSections": ["logic", "data", "user"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-                                "Data": "docs/data",
-				"User": ""
-                                },
-		"commentsID": "framework/docs/data/user",
-		"route": "docs/data/user"
-                }-->
+### Account Linking
+
+To implement Account Linking in your voice application, you need two core methods.
+
+The first allows you to prompt the user to link their account, by showing a card in the respective companion app:
+```javascript
+// Alexa Skill:
+this.$alexaSkill.showAccountLinkingCard();
+
+// Google Actions:
+this.$googleAction.askForSignIn();
+```
+
+The other method returns you the access token, which will be added to every request your skill gets, after the user linked their account:
+```javascript
+this.getAccessToken();
+```
+
+For more information on Account Linking, check out our blogposts:
+* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
+* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+
+<!--[metadata]: {"description": "Learn how to use the Jovo User class for contextual voice experiences in your Alexa Skills and Google Actions.",
+		        "route": "data/user"}-->

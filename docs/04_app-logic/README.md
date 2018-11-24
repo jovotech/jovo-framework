@@ -69,14 +69,5 @@ In section [App Logic > Data](./02_data, './data'), user input (slots and parame
 In section [App Logic > Output](./03_output './output'), you can learn more about how to craft speech, audio, and visual responses.
 
 
-<!--[metadata]: {"title": "App Logic", 
-                "description": "Find out how to build voice app logic with the Jovo Framework",
-                "activeSections": ["logic", "logic_index"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": ""
-                                },
-		"commentsID": "framework/docs/app-logic",
-		"route": "docs/logic"
-                }-->
+<!--[metadata]: {"description": "Find out how to build voice app logic with the Jovo Framework",
+		        "route": "logic"}-->

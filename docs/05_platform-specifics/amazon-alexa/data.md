@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Data
+# Data
 
 Learn more about how to get access to user information.
 
@@ -151,6 +151,5 @@ this.$user.getMobileNumber()
 
 You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
-<!--[metadata]: {"title": "Alexa Data", "description": "Learn how to get user specific data from your Alexa Skill users with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Data": "" }, "commentsID": "framework/docs/amazon-alexa/data",
-"route": "docs/amazon-alexa/data" }-->
+<!--[metadata]: {"description": "Learn how to get user specific data from your Alexa Skill users with the Jovo Framework",
+"route": "amazon-alexa/data" }-->

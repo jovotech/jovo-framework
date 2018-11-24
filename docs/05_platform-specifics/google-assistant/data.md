@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Google Assistant](./README.md) > Data
+# Data
 
 Learn more about how to get access to user information.
 
@@ -98,5 +98,5 @@ ON_PERMISSION() {
 You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
 
 
-<!--[metadata]: {"title": "Google Assistant Data", "description": "Learn more about how to use data with the Google Assistant", "activeSections": ["platforms", "assistant", "assistant_data"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms", "Google Assistant": "" }, "commentsID": "framework/docs/google-assistant/data",
-"route": "docs/google-assistant/data" }-->
+<!--[metadata]: {"description": "Learn more about how to use data with the Google Assistant",
+"route": "google-assistant/data" }-->

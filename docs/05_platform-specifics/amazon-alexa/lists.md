@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Lists
+# Lists
 This section shows how to access shopping lists and to-do lists when building Alexa Skills with the Jovo Framework.
 
 * [Introduction to Lists](#introduction-to-lists)
@@ -225,6 +225,5 @@ this.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
 
 
 
-<!--[metadata]: {"title": "Alexa Lists", "description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_lists"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Lists": "" }, "commentsID": "framework/docs/amazon-alexa/lists",
-"route": "docs/amazon-alexa/lists" }-->
+<!--[metadata]: {"description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework",
+"route": "amazon-alexa/lists" }-->

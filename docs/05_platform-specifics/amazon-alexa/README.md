@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > Amazon Alexa
+# Amazon Alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
@@ -105,12 +105,5 @@ Learn how to use the Reminders API to set reminders for your user: [Platform spe
 
 You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
 
-<!--[metadata]: {"title": "Amazon Alexa Specific Features", 
-                 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
-                 "expandedSections": "platforms", "inSections": "platforms", 
-                 "breadCrumbs": {"Docs": "docs/", 
-                                 "Platforms": "docs/platforms",
-                                 "Amazon Alexa": "" }, 
-                 "commentsID": "framework/docs/amazon-alexa", 
-                 "route": "docs/amazon-alexa" 
-}-->
+<!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
+                "route": "amazon-alexa"}-->

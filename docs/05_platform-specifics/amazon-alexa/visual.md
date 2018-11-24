@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Visual Output
+# Visual Output
 
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
@@ -212,6 +212,5 @@ this.$alexaSkill.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Sub
 Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).
 
 
-<!--[metadata]: {"title": "Alexa Visual Output", "description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_visual"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "Visual Output": "" }, "commentsID": "framework/docs/amazon-alexa",
-"route": "docs/amazon-alexa/visual-output" }-->
+<!--[metadata]: {"description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework",
+"route": "amazon-alexa/visual-output" }-->

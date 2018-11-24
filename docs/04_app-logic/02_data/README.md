@@ -1,4 +1,4 @@
-# [App Logic](../) > Data
+# Data
 
 In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
 
@@ -371,15 +371,5 @@ For more information on Account Linking, check out our blogposts:
 * [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
 * [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
 
-<!--[metadata]: {"title": "Data: Handling User Input", 
-                "description": "Learn how to deal with user input and data when using the Jovo Framework.",
-                "activeSections": ["logic", "data", "data_index"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-                                "Data": ""
-                                },
-		"commentsID": "framework/docs/data",
-		"route": "docs/data"
-                }-->
+<!--[metadata]: {"description": "Learn how to deal with user input and data when using the Jovo Framework.",
+		            "route": "data"}-->
