@@ -1,5 +1,23 @@
 # Jovo Framework Changelog
 
+## 1.4.17 (November 19, 2018)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/278) Added support for APL-based touch [@jose-torres-marin](https://github.com/jose-torres-marin)
+
+## 1.4.16 (November 06, 2018)
+* Fixed Nested State Metadata Conflicts issue #275
+
+
+## 1.4.15 (November 02, 2018)
+* Added [Alexa Reminders](https://developer.amazon.com/docs/smapi/alexa-reminders-overview.html)
+
+## 1.4.14 (November 02, 2018)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/264) Fixed handle requests without session attributes [@theBenForce](https://github.com/theBenForce)
+
+## 1.4.13 (October 11, 2018)
+* [#261](https://github.com/jovotech/jovo-framework-nodejs/pull/265) Fixed SequenceBuilder being added multiple times [@theBenForce](https://github.com/theBenForce)
+* [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/264) Fixed handle requests without session attributes [@theBenForce](https://github.com/theBenForce)
+
+
 ## 1.4.12 (October 7, 2018)
 * [#261](https://github.com/jovotech/jovo-framework-nodejs/pull/261) Added Alexa ApiEndpoint fallback [@shmatul](https://github.com/shmatul)
 * [#259](https://github.com/jovotech/jovo-framework-nodejs/pull/259) Added addAskForNotificationPermission for GoogleAction [@gwythyr](https://github.com/gwythyr)

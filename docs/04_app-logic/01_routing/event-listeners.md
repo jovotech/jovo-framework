@@ -1,4 +1,4 @@
-# [App Logic](../) > [Routing](./README.md) > Event Listeners
+# Event Listeners
 
 Learn more about how to use Event Listeners with Jovo.
 
@@ -47,14 +47,5 @@ app.onResponse(function(jovo) {
 });
 ```
 
-<!--[metadata]: {"title": "Event Listeners", 
-                "description": "Find out how to use event listeners with the Jovo Framework",
-                "activeSections": ["logic", "routing", "eventlisteners"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-                                "App Logic": ""
-                                },
-		"commentsID": "framework/docs/event-listeners",
-		"route": "docs/routing/event-listeners"
-                }-->
+<!--[metadata]: {"description": "Find out how to use event listeners with the Jovo Framework",
+		        "route": "routing/event-listeners"}-->

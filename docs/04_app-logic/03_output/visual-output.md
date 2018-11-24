@@ -1,4 +1,4 @@
-# [App Logic](../) > [Output](./README.md) > Visual Output
+# Visual Output
 
 In this section, you will learn about the different ways to add visual output to your voice application.
 
@@ -95,16 +95,5 @@ You can find out more about Alexa specific cards and render templates for Amazon
 
 You can find out more about Google Assistant specific cards and suggestion chips here: [Platform Specifics > Google Assistant](../../05_platform-specifics/google-assistant  './google-assistant').
 
-<!--[metadata]: {"title": "Visual Output", 
-                "description": "Learn how to create visual output for Alexa Skills and Google Actions with the Jovo Framework",
-                "activeSections": ["logic", "output", "visual"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-				"Output": "docs/output",
-				"Visual Output": ""
-                                },
-		"commentsID": "framework/docs/output/visual-output",
-		"route": "docs/output/visual-output"
-                }-->
+<!--[metadata]: {"description": "Learn how to create visual output for Alexa Skills and Google Actions with the Jovo Framework",
+		        "route": "output/visual-output"}-->
