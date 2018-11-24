@@ -42,5 +42,5 @@ this.user().getTemperatureUnit().then((temperatureUnit) => {
 ```
 
 
-<!--[metadata]: {"description": "Learn how to get your user's settings information."
+<!--[metadata]: {"description": "Learn how to get your user's settings information.",
 "route": "amazon-alexa/settings" }-->
