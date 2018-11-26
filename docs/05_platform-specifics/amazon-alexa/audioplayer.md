@@ -185,11 +185,6 @@ app.setHandler({
 
 Note that it's important to have an `emit` at the end of the functions to be able to e.g. save user data. In the example above, we're using `endSession` for this.
 
-<<<<<<< HEAD
-<!--[metadata]: {"title": " AudioPlayer Skills", "description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework", "activeSections": ["platforms", "alexa", "alexa_audioplayer"], "expandedSections": "platforms", "inSections": "platforms", "breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "docs/amazon-alexa", "AudioPlayer": "" }, "commentsID": "framework/docs/amazon-alexa/audioplayer",
-"route": "docs/amazon-alexa/audioplayer" }-->
-=======
 ## Playback Controller
 
 `PlaybackController` requests are used to notify you about user interactions with audio player controls, e.g. touch controls on Alexa-enabled devices.
@@ -218,4 +213,3 @@ All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER
 
 <!--[metadata]: {"description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework",
                 "route": "amazon-alexa/audioplayer" }-->
->>>>>>> 106e2ef38916c95414a1c1fa297b2047912926e5
