@@ -1,0 +1,254 @@
+{
+    "categories": [
+        {
+            "title": "Getting Started",
+            "content": [
+                {
+                    "title": "Installation",
+                    "route": "installation"
+                },
+                {
+                    "title": "Voice App Basics",
+                    "route": "voice-app-basics"
+                }
+            ]
+        },
+        {
+            "title": "CLI",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "cli"
+                },
+                {
+                    "title": "Workflows",
+                    "route": "cli/workflows"
+                }
+            ]
+        },
+        {
+            "title": "App Configuration",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "configuration"
+                },
+                {
+                    "title": "app.json",
+                    "route": "app-json"
+                },
+                {
+                    "title": "Jovo Language Model",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "model"
+                        },
+                        {
+                            "title": "Platforms",
+                            "route": "model/platforms"
+                        }
+                    ]
+                },
+                {
+                    "title": "Server Configuration",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "server"
+                        },
+                        {
+                            "title": "Webhook",
+                            "route": "server/webhook"
+                        },
+                        {
+                            "title": "AWS Lambda",
+                            "route": "server/aws-lambda"
+                        },
+                        {
+                            "title": "Azure Functions",
+                            "route": "server/azure-functions"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "App Logic",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "logic"
+                },
+                {
+                    "title": "Routing",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "routing"
+                        },
+                        {
+                            "title": "Event Listeners",
+                            "route": "routing/event-listeners"
+                        }
+                    ]
+                },
+                {
+                    "title": "Data",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "data"
+                        },
+                        {
+                            "title": "User",
+                            "route": "data/user"
+                        }
+                    ]
+                },
+                {
+                    "title": "Output",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "output"
+                        },
+                        {
+                            "title": "SpeechBuilder",
+                            "route": "output/speechbuilder"
+                        },
+                        {
+                            "title": "i18n",
+                            "route": "output/i18n"
+                        },
+                        {
+                            "title": "Visual Output",
+                            "route": "output/visual-output"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Platforms",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "platforms"
+                },
+                {
+                    "title": "Amazon Alexa",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "amazon-alexa"
+                        },
+                        {
+                            "title": "Data",
+                            "route": "amazon-alexa/data"
+                        },
+                        {
+                            "title": "Dialog Interface",
+                            "route": "amazon-alexa/dialog-interface"
+                        },
+                        {
+                            "title": "Visual Output",
+                            "route": "amazon-alexa/visual-output"
+                        },
+                        {
+                            "title": "Audioplayer Skills",
+                            "route": "amazon-alexa/audioplayer"
+                        },
+                        {
+                            "title": "Lists",
+                            "route": "amazon-alexa/lists"
+                        },
+                        {
+                            "title": "Settings",
+                            "route": "amazon-alexa/settings"
+                        },
+                        {
+                            "title": "Reminders",
+                            "route": "amazon-alexa/reminders"
+                        },
+                        {
+                            "title": "Skill Events",
+                            "route": "amazon-alexa/skill-events"
+                        },
+                        {
+                            "title": "CanFulfillIntentRequest",
+                            "route": "amazon-alexa/canfulfill"
+                        },
+                        {
+                            "title": "Game Engine",
+                            "route": "amazon-alexa/game-engine"
+                        },
+                        {
+                            "title": "Gadget Controller",
+                            "route": "amazon-alexa/gadget-controller"
+                        }
+                    ]
+                },
+                {
+                    "title": "Google Assistant",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "google-assistant"
+                        },
+                        {
+                            "title": "Data",
+                            "route": "google-assistant/data"
+                        },
+                        {
+                            "title": "Visual Output",
+                            "route": "google-assistant/visual-output"
+                        },
+                        {
+                            "title": "Media Response",
+                            "route": "google-assistant/media-response"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Integrations",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "integrations"
+                },
+                {
+                    "title": "Databases",
+                    "route": "databases"
+                },
+                {
+                    "title": "CMS",
+                    "route": "cms"
+                },
+                {
+                    "title": "Analytics",
+                    "route": "analytics"
+                }
+            ]
+        },
+        {
+            "title": "Testing",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "testing"
+                },
+                {
+                    "title": "Jovo Debugger",
+                    "route": "debugge"
+                },
+                {
+                    "title": "Unit Testing",
+                    "route": "unit-testing"
+                }
+            ]
+        }
+    ]
+}
