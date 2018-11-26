@@ -19,6 +19,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [GadgetController Interface](#gadgetcontroller-interface)
 * [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
 * [Reminders API](#reminders-api)
+* [Playback Controller](#playback-controller)
 
 ## Introduction to Alexa Specific Features
 
@@ -108,6 +109,10 @@ Learn how to use the Reminders API to set reminders for your user: [Platform spe
 ## Settings API
 
 You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
+
+## Playback Controller
+
+Learn how to use the Playback Controller interface with Jovo here: [Platform specifics > Amazon Alexa > Audioplayer > Playback Controller](./audioplayer.md#playback-controller './amazon-alexa/audioplayer#playback-controller')
 
 <!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
                 "route": "amazon-alexa"}-->
