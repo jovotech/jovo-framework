@@ -135,7 +135,7 @@ Gadget Controller | Allows you to control the user's Echo Buttons | [📝](./doc
 In-Skill-Purchasing (ISP) | Allows you to sell premium content | [📝](./docs/05_platform-specifics/amazon-alexa/in-skill-purchases.md)
 Reminders API | Allows you to set reminders for your user | [📝](./docs/05_platform-specifics/amazon-alexa/reminders.md)
 Settings API | Allows you to get your user's settings information | [📝](./docs/05_platform-specifics/amazon-alexa/settings.md)
-
+Playback Controller | Process audio player requests coming from, for example, touch controls on Alexa-enabled devices | [📝](./docs/05_platform-specifics/amazon-alexa/audioplayer.md#playback-controller)
 
 #### Google Assistant
 

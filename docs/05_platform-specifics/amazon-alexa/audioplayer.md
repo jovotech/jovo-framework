@@ -4,13 +4,14 @@ Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
 * [Introduction to AudioPlayer Skills](#introduction-to-audioplayer-skills)
 * [Features](#features)
-  * [Play a File](#play-a-file)
-  * [Enqueue](#enqueue)
-  * [Stop](#stop)
-  * [Start Over](#start-over)
-  * [Clear Queue](#clear-queue)
-  * [Set Track Metadata](#set-track-metadata)
+    * [Play](#play)
+    * [Enqueue](#enqueue)
+    * [Stop](#stop)
+    * [Start Over](#start-over)
+    * [Clear Queue](#clear-queue)
+    * [Set Track Metadata](#set-track-metadata)
 * [AudioPlayer Directives](#audioplayer-directives)
+* [Playback Controller](#playback-controller)
 
 ## Introduction to AudioPlayer Skills
 
