@@ -124,7 +124,7 @@ Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to s
 Here's the detailed documentation for it: [App Logic > Output > i18n](./i18n.md  './output/i18n'). 
 
 ### Raw JSON Responses
-If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `alexaSkill().setResponseObject` and `googleAction().setResponseObject`.
+If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `$alexaSkill.setResponseObject` and `$googleAction.setResponseObject`.
 
 ```javascript
 // Set a Raw JSON Response for Alexa

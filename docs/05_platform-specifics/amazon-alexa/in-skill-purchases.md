@@ -284,7 +284,7 @@ Name | Description | Value | Required
 ```javascript
 RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
-    this.alexaSkill()
+    this.$alexaSkill
         .inSkillPurchase()
         .getProductByReferenceName(productReferenceName, (error, product) => {
             if (error) {
@@ -295,7 +295,7 @@ RefundSkillItemIntent() {
                 this.tell('You have not bought this item yet.');
             }
             let token = 'testToken';
-            this.alexaSkill().inSkillPurchase().cancel(product.productId, token);
+            this.$alexaSkill.inSkillPurchase().cancel(product.productId, token);
         });
 },
 ```

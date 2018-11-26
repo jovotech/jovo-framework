@@ -14,7 +14,7 @@ The Alexa Settings API allows you to access the time zone, distance measurement 
 ## Time Zone
 
 ```javascript
-this.user().getTimezone().then((timezone) => {
+this.$user.getTimezone().then((timezone) => {
     this.tell(`Your timezone is ${timezone}`);
 }).catch((error) => {
     console.log(error);
@@ -24,7 +24,7 @@ this.user().getTimezone().then((timezone) => {
 ## Distance Measurement Unit
 
 ```javascript
-this.user().getDistanceUnit().then((distanceUnit) => {
+this.$user.getDistanceUnit().then((distanceUnit) => {
     this.tell(`Your distance measurement unit is ${distanceUnit}`);
 }).catch((error) => {
     console.log(error);
@@ -34,7 +34,7 @@ this.user().getDistanceUnit().then((distanceUnit) => {
 ## Temperature Measurement Unit
 
 ```javascript
-this.user().getTemperatureUnit().then((temperatureUnit) => {
+this.$user.getTemperatureUnit().then((temperatureUnit) => {
     this.tell(`Your temperature measurement unit is ${distanceUnit}`);
 }).catch((error) => {
     console.log(error);
