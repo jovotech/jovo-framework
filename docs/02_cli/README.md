@@ -409,14 +409,5 @@ $ jovo deploy --platform <platform> [--project-id <project ID>] [-l | --locale <
 
 `--ask-profile`: Specifies which profile set up in [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) should be used to deploy. Default: `default`.
 
-<!--[metadata]: {"title": "Jovo CLI", 
-                "description": "Learn how to use the Jovo CLI to create, prototype, test, and deploy your voice app quickly.",
-                "activeSections": ["cli", "cli_index"],
-                "expandedSections": "cli",
-                "inSections": "cli",
-                "breadCrumbs": {"Docs": "docs/",
-                                "CLI": ""
-                                },
-		"commentsID": "framework/docs/cli",
-		"route": "docs/cli"
-                }-->
+<!--[metadata]: {"description": "Learn how to use the Jovo CLI to create, prototype, test, and deploy your voice app quickly.",
+                "route": "cli"}-->

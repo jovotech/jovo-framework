@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > Amazon Alexa
+# Amazon Alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
@@ -93,12 +93,17 @@ You can find more about Jovo GameEngine support here: [Platform specifics > Amaz
 
 Learn how to implement the GadgetController Interface in your Jovo project here: [Platform specifics > Amazon Alexa > GadgetController](./gadget-controller.md './amazon-alexa/gadget-controller')
 
-<!--[metadata]: {"title": "Amazon Alexa Specific Features", 
-                 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",                              "activeSections": ["platforms", "alexa", "alexa_index"], 
-                 "expandedSections": "platforms", "inSections": "platforms", 
-                 "breadCrumbs": {"Docs": "docs/", 
-                                 "Platforms": "docs/platforms",
-                                 "Amazon Alexa": "" }, 
-                 "commentsID": "framework/docs/amazon-alexa", 
-                 "route": "docs/amazon-alexa" 
-}-->
+## In-Skill-Purchasing (ISP)
+
+Find out more about In-Skill-Purchasing here: [Platform specifics > Amazon Alexa > In-Skill-Purchasing](./in-skill-purchases.md './amazon-alexa/in-skill-purchases')
+
+## Reminders API
+
+Learn how to use the Reminders API to set reminders for your user: [Platform specifics > Amazon Alexa > Reminders API](./reminders.md './amazon-alexa/reminders')
+
+## Settings API
+
+You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
+
+<!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
+                "route": "amazon-alexa"}-->

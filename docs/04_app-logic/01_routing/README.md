@@ -1,4 +1,4 @@
-# [App Logic](../) > Routing
+# Routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
@@ -801,15 +801,6 @@ let score = this.getSessionAttribute('score');
 Have a look at [App Logic > Data](../02_data './data') to learn more about how to persist data across sessions.
 
 
-<!--[metadata]: {"title": "Routing: Handling Intents & States", 
-                "description": "Learn how to route through your voice app logic with Jovo.",
-                "activeSections": ["logic", "routing", "routing_index"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-                                "Routing": ""
-                                },
-		"commentsID": "framework/docs/routing",
-		"route": "docs/routing"
+<!--[metadata]: { "description": "Learn how to route through your voice app logic with Jovo.",
+		"route": "routing"
                 }-->

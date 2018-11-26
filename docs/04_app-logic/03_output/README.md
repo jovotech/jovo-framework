@@ -1,4 +1,4 @@
-# [App Logic](../) > Output
+# Output
 
 In this section, you will learn how to use Jovo to craft a response to your users.
 
@@ -153,15 +153,5 @@ this.endSession();
 ```
 
 
-<!--[metadata]: {"title": "Output: Creating a Response", 
-                "description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",
-                "activeSections": ["logic", "output", "output_index"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-				"Output": ""
-                                },
-		"commentsID": "framework/docs/output",
-		"route": "docs/output"
-                }-->
+<!--[metadata]: {"description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",
+		        "route": "output"}-->

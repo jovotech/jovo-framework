@@ -1,4 +1,4 @@
-# [App Configuration](../) > Server
+# Server
 
 In this section, you can learn more about different types of server configurations to run your voice app.
 
@@ -58,15 +58,5 @@ module.exports = (context, req) => {
 };
 ```
 
-<!--[metadata]: {"title": "Server Configuration", 
-                "description": "Host your Alexa Skill and Google Action on AWS Lambda, Azure Functions, or a Webserver with Jovo.",
-                "activeSections": ["configuration", "server", "server_index"],
-                "expandedSections": "configuration",
-                "inSections": "configuration",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Configuration": "docs/configuration",
-                                "Server": ""
-                                },
-		"commentsID": "framework/docs/server",
-		"route": "docs/server"
-                }-->
+<!--[metadata]: {"description": "Host your Alexa Skill and Google Action on AWS Lambda, Azure Functions, or a Webserver with Jovo.",
+		        "route": "server"}-->

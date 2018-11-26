@@ -1,4 +1,4 @@
-# Support Hello World
+# Support
 
 Any questions with the framework? Just let us know, we're happy to help!
 
@@ -29,7 +29,6 @@ For more detailed feedback and feature suggestions, we also appreciate email. Yo
 * Create a comment [here](https://www.jovo.tech/framework/docs/support#comments-and-questions)
 * Tweet at us [@jovotech](https://twitter.com/jovotech)
 
-<!--[metadata]: {"title": "Support", 
-		"description": "Questions about developing an Alexa Skill or Google Action? Jovo is here to help!", 
-		"activeSections": ["support"], "expandedSections": "integrations", "inSections": "support", "breadCrumbs": {"Docs": "docs/", "Support": "" }, "commentsID": "framework/docs/support", "route": "docs/support" }-->
+<!--[metadata]: {"description": "Questions about developing an Alexa Skill or Google Action? Jovo is here to help!",
+                "route": "support" }-->
 

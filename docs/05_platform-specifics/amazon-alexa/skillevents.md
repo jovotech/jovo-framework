@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Amazon Alexa](./README.md) > Skill Events
+# Skill Events
 
 Learn more about how to use Skill Events with the Jovo Framework.
 
@@ -305,11 +305,7 @@ This will update the `skill.json` file to include the skill events and the endpo
 
 
 
-<!--[metadata]: {"title": "Alexa Skill Events", 
-"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here", "activeSections": ["platforms", "alexa", "alexa_skillevents"], 
-"expandedSections": "platforms", "inSections": "platforms", 
-"breadCrumbs": {"Docs": "docs/", "Platforms": "docs/platforms",
-"Amazon Alexa": "" }, 
-"commentsID": "framework/docs/skill-events", 
-"route": "docs/amazon-alexa/skill-events" 
+<!--[metadata]: {
+"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
+"route": "amazon-alexa/skill-events" 
 }-->
