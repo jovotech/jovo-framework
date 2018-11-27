@@ -49,27 +49,6 @@
                             "route": "model/platforms"
                         }
                     ]
-                },
-                {
-                    "title": "Server Configuration",
-                    "content": [
-                        {
-                            "title": "Overview",
-                            "route": "server"
-                        },
-                        {
-                            "title": "Webhook",
-                            "route": "server/webhook"
-                        },
-                        {
-                            "title": "AWS Lambda",
-                            "route": "server/aws-lambda"
-                        },
-                        {
-                            "title": "Azure Functions",
-                            "route": "server/azure-functions"
-                        }
-                    ]
                 }
             ]
         },
@@ -212,6 +191,27 @@
                 }
             ]
         },
+        {
+                    "title": "Hosting",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "server"
+                        },
+                        {
+                            "title": "ExpressJS",
+                            "route": "server/webhook"
+                        },
+                        {
+                            "title": "AWS Lambda",
+                            "route": "server/aws-lambda"
+                        },
+                        {
+                            "title": "Azure Functions",
+                            "route": "server/azure-functions"
+                        }
+                    ]
+                },
         {
             "title": "Integrations",
             "content": [
