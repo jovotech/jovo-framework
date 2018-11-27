@@ -4,25 +4,45 @@
             "title": "Getting Started",
             "content": [
                 {
+                    "title": "Quickstart",
+                    "route": "quickstart"
+                },
+                {
                     "title": "Installation",
                     "route": "installation"
                 },
                 {
-                    "title": "Voice App Basics",
-                    "route": "voice-app-basics"
+                    "title": "Project Lifecycle",
+                    "route": "project-lifecycle"
+                },
+                {
+                    "title": "Courses",
+                    "route": "../../courses"
+                },
+                {
+                    "title": "Migration",
+                    "route": "migration-guide"
                 }
             ]
         },
         {
-            "title": "CLI",
+            "title": "Basic Concepts",
             "content": [
                 {
-                    "title": "Overview",
+                    "title": "Requests and Responses",
+                    "route": "requests-responses"
+                },
+                {
+                    "title": "Routing",
+                    "route": "routing"
+                },
+                {
+                    "title": "CLI",
                     "route": "cli"
                 },
                 {
-                    "title": "Workflows",
-                    "route": "cli/workflows"
+                    "title": "Jovo Language Model",
+                    "route": "model"
                 }
             ]
         },
@@ -34,21 +54,8 @@
                     "route": "configuration"
                 },
                 {
-                    "title": "app.json",
-                    "route": "app-json"
-                },
-                {
-                    "title": "Jovo Language Model",
-                    "content": [
-                        {
-                            "title": "Overview",
-                            "route": "model"
-                        },
-                        {
-                            "title": "Platforms",
-                            "route": "model/platforms"
-                        }
-                    ]
+                    "title": "project.js",
+                    "route": "project-js"
                 }
             ]
         },
@@ -58,19 +65,6 @@
                 {
                     "title": "Overview",
                     "route": "logic"
-                },
-                {
-                    "title": "Routing",
-                    "content": [
-                        {
-                            "title": "Overview",
-                            "route": "routing"
-                        },
-                        {
-                            "title": "Event Listeners",
-                            "route": "routing/event-listeners"
-                        }
-                    ]
                 },
                 {
                     "title": "Data",

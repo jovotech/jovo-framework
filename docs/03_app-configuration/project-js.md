@@ -1,14 +1,12 @@
-# app.json - Project Configuration
+# project.js - Project Configuration
 
-The `app.json` is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.
+The `project.js` is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.
 
 * [Introduction](#introduction)
 * [Platforms](#platforms)
    * [alexaSkill](#alexaskill)
    * [googleAction](#googleaction)
    * [nlu](#nlu)
-* [App](#app)
-   * [Config Overrides](#config-overrides)
 * [Language Model](#language-model)
    * [Override the Invocation Name](#override-the-invocation-name)
    * [Add Intents and Inputs](#add-intents-and-inputs)
@@ -19,23 +17,21 @@ The `app.json` is an essential file that stores a lot of important information t
 
 ## Introduction
 
-The `app.json` is used by many features of Jovo, for example to build platform specific project files with the [Jovo CLI](../02_cli './cli'), or to add different stages for more convenient deployment.
+The `project.js` is used by many features of Jovo, for example to build platform specific project files with the [Jovo CLI](../02_cli './cli'), or to add different stages for more convenient deployment.
 
-Here is a list of all elements that can be added to the `app.json`:
+Here is a list of all elements that can be added to the `project.js`:
 
 Category | Name | Description
 :--- | :--- | :---
 [Platforms](#platforms) | [`alexaSkill`](#alexaSkill) | Alexa Skill project config
  | | [`googleAction`](#googleAction) | Google Action project config
  | | [`nlu`](#nlu) | Includes natural language understanding tools like `dialogflow`
-[App](#app) | `src` | References the location of the source code of the app/`index.js` (if not in the root directory)
- | | [`config`](#config-overrides) | Overrides app configurations from `app/app.js`
 [Deployment](#deployment) | `endpoint` | Endpoint for the voice platforms to reach your app. Default: Jovo Webhook.
  | | `host` | Deployment information (e.g. if hosted on Lambda, but endpoint is API Gateway)
  | | [`stages`](#stages) | Different deployment stages  
  | | `defaultStage` | Default stage to use if not defined differently in the environment variables
 
-For example, the following Jovo CLI commands create the `app.json` and add both `alexaSkill` and `googleAction` as platform projects:
+For example, the following Jovo CLI commands create the `project.js` and add both `alexaSkill` and `googleAction` as platform projects:
 
 ```sh
 # Create Jovo project
@@ -47,7 +43,7 @@ $ jovo init alexaSkill
 $ jovo init googleAction
 ```
 
-This is what the resulting `app.json` looks like:
+This is what the resulting `project.js` looks like:
 
 ```javascript
 {
@@ -84,7 +80,7 @@ These environment variables are usually stored in a `.env` file or in your cloud
 
 With the Jovo CLI, you can create and deploy project files (e.g. [language models](../03_app-configuration/02_models './model')) that are specific to each voice platform. 
 
-The [introduction](#introduction) already shows how a freshly created `app.json` looks like after initializing both platforms [`alexaSkill`](#alexaskill) and [`googleAction`](#googleaction). In the following section, you will learn about additional configurations to the voice platform projects.
+The [introduction](#introduction) already shows how a freshly created `project.js` looks like after initializing both platforms [`alexaSkill`](#alexaskill) and [`googleAction`](#googleaction). In the following section, you will learn about additional configurations to the voice platform projects.
 
 ### alexaSkill
 
@@ -102,7 +98,7 @@ The following elements can be added to the `alexaSkill` object:
 }
 ```
 
-In the deployment process with the Jovo CLI ([`jovo deploy`](../02_cli#jovo-deploy './cli#jovo-deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `app.json` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
+In the deployment process with the Jovo CLI ([`jovo deploy`](../02_cli#jovo-deploy './cli#jovo-deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `project.js` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
 
 #### skill.json Overrides
 
@@ -218,34 +214,10 @@ In the above example, the object specifies the following process for the [`jovo 
 * Access an existing Jovo Language Model file `en.json` in the `/models` folder
 * Convert it into an Alexa Interaction Model `en-US.json` in the `/platforms/alexaSkill/models` folder
 
-## App
-
-### Config Overrides
-
-You may already know the [App Configuration](./README.md './configuration') that is done in `app/app.js` in the `config` variable.
-
-With the `app.json`, you can override some of the configurations made in the Jovo app, by adding the `config` block:
-
-```javascript
-"config": {
-    // Add config in the same way as in your app.js file
-}
-```
-
-This is especially helpful if you want to use different configurations for different [stages](#stages). For example, it is common to add different types of databases to different environments, like in the example below:
-
-```javascript
-"config": {
-    "db": {
-        "type": "dynamodb",
-        "tableName": "<your-table-name>"
-    }
-}
-```
 
 ## Language Model
 
-In the `app.json`, you can also add or override specific elements of your language model in the `models` folder. [Learn more about the Jovo Language Model here](./01_models './model').
+In the `project.js`, you can also add or override specific elements of your language model in the `models` folder. [Learn more about the Jovo Language Model here](./01_models './model').
 
 ### Override the Invocation Name
 
@@ -292,7 +264,7 @@ For example, you can add an intent to specific stages like so:
 
 ### Stages
 
-Jovo allows you to define multiple staging environments like `dev`, `test`, and `prod` in your `app.json`:
+Jovo allows you to define multiple staging environments like `dev`, `test`, and `prod` in your `project.js`:
 
 ```javascript
 {
@@ -349,4 +321,4 @@ You can add a `host` object to specify where the code is hosted. Right now, `lam
 Note: If you're only building an Alexa Skill, der is no need to specify a host with the same information that is already in the `endpoint`. This is mostly important if you also want to host your Google Action on AWS Lambda and make it accessible through an API Gateway.
 
 
-<!--[metadata]: {"description": "The app.json is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.", "route": "app-json"}-->
+<!--[metadata]: {"description": "The project.js is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.", "route": "project-js"}-->
