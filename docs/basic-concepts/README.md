@@ -3,11 +3,10 @@
 In this section, you will learn more about the essentials of building the logic of your Jovo Voice App.
 
 * [Overview](#overview)
-* [Basic Concepts](#basic-concepts)
-  * [Handler](#handler)
-  * [Routing](#routing)
-  * [Data](#data)
-  * [Output](#output)
+* [Handler](#handler)
+* [Routing](#routing)
+* [Data](#data)
+* [Output](#output)
 
 ## Overview
 
@@ -17,11 +16,7 @@ The `/app` folder contains all the logic necessary for your voice application. T
 
 You can find out more about the basic concepts below.
 
-## Basic Concepts
-
-In the following sections, you will learn about [handling](#handler) and [routing](#routing) through intents and states, accessing [user input and data](#data), and crafting speech and visual [output](#output). 
-
-### Handler
+## Handler
 
 The `handler` is the main building block of your voice app. This is where the logic happens.
 
@@ -54,17 +49,17 @@ app.setGoogleActionHandler({
 });
 ```
 
-### Routing
+## Routing
 
 In section [App Logic > Routing](./01_routing './routing'), the concepts of intents and states are introduced, and how to route through them in the app's flow.
 
 
-### Data
+## Data
 
 In section [App Logic > Data](./02_data, './data'), user input (slots and parameters) and user specific data are covered.
 
 
-### Output
+## Output
 
 In section [App Logic > Output](./03_output './output'), you can learn more about how to craft speech, audio, and visual responses.
 
