@@ -1,5 +1,5 @@
 import {Extensible, ExtensibleConfig} from "./Extensible";
-import {Db, HandleRequest, Host, Platform} from "./interfaces";
+import {Db, HandleRequest, Host, Platform} from "./Interfaces";
 import {ActionSet} from "./ActionSet";
 
 
