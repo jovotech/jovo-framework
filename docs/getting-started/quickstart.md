@@ -1,5 +1,7 @@
 # Jovo Quickstart Guide
 
+Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms.
+
 * [Introduction](#introduction)
 
 

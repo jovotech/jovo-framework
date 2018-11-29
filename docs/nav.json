@@ -49,11 +49,11 @@
                     "title": "Language Model",
                     "content": [
                         {
-                            "title": "Jovo Language Model",
+                            "title": "Language Model",
                             "route": "model"
                         },
                         {
-                            "title": "Platform Language Models",
+                            "title": "Platforms",
                             "route": "model/platforms"
                         }
                     ]
