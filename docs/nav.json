@@ -4,24 +4,33 @@
             "title": "Getting Started",
             "content": [
                 {
+                    "title": "Getting Started",
+                    "route": "getting-started"
+                },
+                {
                     "title": "Quickstart",
                     "route": "quickstart"
                 },
                 {
                     "title": "Installation",
-                    "route": "installation"
+                    "content": [
+                        {
+                            "title": "Installing Jovo",
+                            "route": "installation"
+                        },
+                        {
+                            "title": "Upgrading",
+                            "route": "installation/upgrading"
+                        },
+                        {
+                            "title": "Migrating from v1",
+                            "route": "installation/v1-migration"
+                        }
+                    ]
                 },
                 {
-                    "title": "Project Lifecycle",
-                    "route": "project-lifecycle"
-                },
-                {
-                    "title": "Courses",
-                    "route": "../../courses"
-                },
-                {
-                    "title": "Migration",
-                    "route": "migration-guide"
+                    "title": "Next Steps",
+                    "route": "next-steps"
                 }
             ]
         },
@@ -29,42 +38,20 @@
             "title": "Basic Concepts",
             "content": [
                 {
-                    "title": "Requests and Responses",
+                    "title": "Basic Concepts",
+                    "route": "basic-concepts"
+                },
+                {
+                    "title": "Requests & Responses",
                     "route": "requests-responses"
+                },
+                {
+                    "title": "Language Model",
+                    "route": "model"
                 },
                 {
                     "title": "Routing",
                     "route": "routing"
-                },
-                {
-                    "title": "CLI",
-                    "route": "cli"
-                },
-                {
-                    "title": "Jovo Language Model",
-                    "route": "model"
-                }
-            ]
-        },
-        {
-            "title": "App Configuration",
-            "content": [
-                {
-                    "title": "Overview",
-                    "route": "configuration"
-                },
-                {
-                    "title": "project.js",
-                    "route": "project-js"
-                }
-            ]
-        },
-        {
-            "title": "App Logic",
-            "content": [
-                {
-                    "title": "Overview",
-                    "route": "logic"
                 },
                 {
                     "title": "Data",
@@ -97,6 +84,90 @@
                         {
                             "title": "Visual Output",
                             "route": "output/visual-output"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Workflows",
+            "content": [
+                {
+                    "title": "Workflows",
+                    "route": "workflows"
+                },
+                {
+                    "title": "Project Lifecycle",
+                    "route": "project-lifecycle"
+                },
+                {
+                    "title": "CLI Commands",
+                    "content": [
+                        {
+                            "title": "Jovo CLI",
+                            "route": "cli"
+                        },
+                        {
+                            "title": "new",
+                            "route": "cli/new"
+                        },
+                        {
+                            "title": "run",
+                            "route": "cli/run"
+                        },
+                        {
+                            "title": "build",
+                            "route": "cli/build"
+                        },
+                        {
+                            "title": "deploy",
+                            "route": "cli/deploy"
+                        },
+                        {
+                            "title": "get",
+                            "route": "cli/get"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Configuration",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "configuration"
+                },
+                {
+                    "title": "app.js",
+                    "route": "app-js"
+                },
+                {
+                    "title": "config.js",
+                    "route": "config-js"
+                },
+                {
+                    "title": "project.js",
+                    "route": "project-js"
+                },
+                {
+                    "title": "Hosting",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "server"
+                        },
+                        {
+                            "title": "ExpressJS",
+                            "route": "server/webhook"
+                        },
+                        {
+                            "title": "AWS Lambda",
+                            "route": "server/aws-lambda"
+                        },
+                        {
+                            "title": "Azure Functions",
+                            "route": "server/azure-functions"
                         }
                     ]
                 }
@@ -186,27 +257,6 @@
             ]
         },
         {
-                    "title": "Hosting",
-                    "content": [
-                        {
-                            "title": "Overview",
-                            "route": "server"
-                        },
-                        {
-                            "title": "ExpressJS",
-                            "route": "server/webhook"
-                        },
-                        {
-                            "title": "AWS Lambda",
-                            "route": "server/aws-lambda"
-                        },
-                        {
-                            "title": "Azure Functions",
-                            "route": "server/azure-functions"
-                        }
-                    ]
-                },
-        {
             "title": "Integrations",
             "content": [
                 {
@@ -215,15 +265,62 @@
                 },
                 {
                     "title": "Databases",
-                    "route": "databases"
+                    "content": [
+                        {
+                            "title": "Database Integrations",
+                            "route": "databases"
+                        },
+                        {
+                            "title": "DynamoDB",
+                            "route": "databases/dynamodb"
+                        },
+                        {
+                            "title": "Google DataStore",
+                            "route": "databases/google-datastore"
+                        }
+                    ]
                 },
                 {
                     "title": "CMS",
-                    "route": "cms"
+                    "content": [
+                        {
+                            "title": "CMS Integrations",
+                            "route": "cms"
+                        },
+                        {
+                            "title": "Google Sheets",
+                            "route": "cms/google-sheets"
+                        },
+                        {
+                            "title": "Airtable",
+                            "route": "cms/airtable"
+                        }
+                    ]
                 },
                 {
                     "title": "Analytics",
-                    "route": "analytics"
+                    "content": [
+                        {
+                            "title": "Analytics Integrations",
+                            "route": "analytics"
+                        },
+                        {
+                            "title": "Dashbot",
+                            "route": "analytics/dashbot"
+                        },
+                        {
+                            "title": "Bespoken",
+                            "route": "analytics/bespoken"
+                        },
+                        {
+                            "title": "Chatbase",
+                            "route": "analytics/chatbase"
+                        },
+                        {
+                            "title": "Botanalytics",
+                            "route": "analytics/botanalytics"
+                        }
+                    ]
                 }
             ]
         },
@@ -241,6 +338,27 @@
                 {
                     "title": "Unit Testing",
                     "route": "unit-testing"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Concepts",
+            "content": [
+                {
+                    "title": "Advanced Concepts",
+                    "route": "advanced-concepts"
+                },
+                {
+                    "title": "Framework Architecture",
+                    "route": "architecture"
+                },
+                {
+                    "title": "Plugins",
+                    "route": "plugins"
+                },
+                {
+                    "title": "Customization",
+                    "route": "customization"
                 }
             ]
         }
