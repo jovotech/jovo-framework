@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
-    "init": "lerna bootstrap --hoist",
+    "init": "lerna bootstrap",
     "tsc": "lerna exec npm run tsc --ignore jovo-examples-*",
     "tslint": "lerna exec npm run tslint --ignore jovo-examples-*",
     "test": "lerna exec npm test --ignore jovo-examples-*",

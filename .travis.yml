@@ -1,7 +1,7 @@
 language: node_js
 install:
   - "npm ci"
-  - "npm run bootstrap"
+  - "npm run init"
   - "npm run tsc"
   - "npm run tslint"
   - "npm run test"
