@@ -8,7 +8,7 @@
     "tslint": "lerna exec npm run tslint --ignore jovo-examples-*",
     "test": "lerna exec npm test --ignore jovo-examples-*",
     "clean": "lerna clean",
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap --hoist --no-ci",
     "typedoc": "npm run lerna exec npm run typedoc",
     "changelog": "lerna-changelog",
     "publish": "lerna publish --registry http://localhost:4873 --no-push"
