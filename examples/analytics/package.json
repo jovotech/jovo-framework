@@ -1,0 +1,23 @@
+{
+  "name": "jovo-examples-analytics",
+  "version": "2.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jovo-analytics-dashbot": "^2.0.0",
+    "jovo-framework": "^2.0.0",
+    "jovo-platform-alexa": "^2.0.0",
+    "jovo-platform-googleassistant": "^2.0.0"
+  },
+  "devDependencies": {
+    "jovo-plugin-debugger": "^2.0.0"
+  }
+}

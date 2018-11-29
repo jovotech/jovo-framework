@@ -1,0 +1,91 @@
+{
+  "responseId": "ba004821-5bbc-4bf9-8fa0-9c83bfb248e6",
+  "queryResult": {
+    "queryText": "GOOGLE_ASSISTANT_WELCOME",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/google_assistant_welcome"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/newagent-904be/agent/intents/2c0f131a-8b4e-4cd7-8902-f618a1315895",
+      "displayName": "Default Welcome Intent"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "Talk to my test app",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "intent": "actions.intent.MAIN"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-05-15T19:46:52Z",
+        "locale": "en-US",
+        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+      },
+      "conversation": {
+        "conversationId": "1526414104011",
+        "type": "NEW"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/newagent-904be/agent/sessions/1526414104011"
+}

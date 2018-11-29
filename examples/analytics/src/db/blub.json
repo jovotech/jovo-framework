@@ -1,0 +1,66 @@
+[
+	{
+		"userId": "console_debugger_user-alexaskill-208da9279a15ecda1d0bbd873f31545f",
+		"userData": {
+			"data": {},
+			"metaData": {
+				"createdAt": "2018-11-21T23:19:51.876Z",
+				"lastUsedAt": "2018-11-22T09:19:33.720Z",
+				"sessionsCount": 0,
+				"requests": {
+					"HelloWorldIntent": {
+						"count": 30,
+						"log": [
+							"2018-11-22T00:15:04.476Z",
+							"2018-11-22T00:15:26.037Z",
+							"2018-11-22T00:27:26.003Z",
+							"2018-11-22T00:28:37.838Z"
+						]
+					},
+					"MyNameIsIntent": {
+						"count": 1,
+						"log": [
+							"2018-11-22T09:19:33.721Z"
+						]
+					}
+				},
+				"devices": {
+					"amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA": {
+						"hasAudioInterface": true,
+						"hasScreenInterface": false,
+						"hasVideoInterface": false
+					}
+				}
+			}
+		}
+	},
+	{
+		"userId": "console_debugger_user-googleassistant-208da9279a15ecda1d0bbd873f31545f",
+		"userData": {
+			"data": {},
+			"metaData": {
+				"createdAt": "2018-11-22T09:29:49.789Z",
+				"lastUsedAt": "2018-11-22T09:31:43.175Z",
+				"sessionsCount": 5,
+				"requests": {
+					"MyNameIsIntent": {
+						"count": 5,
+						"log": [
+							"2018-11-22T09:30:38.470Z",
+							"2018-11-22T09:30:55.489Z",
+							"2018-11-22T09:31:18.322Z",
+							"2018-11-22T09:31:43.175Z"
+						]
+					}
+				},
+				"devices": {
+					"no-device-id": {
+						"hasAudioInterface": true,
+						"hasScreenInterface": true,
+						"hasVideoInterface": false
+					}
+				}
+			}
+		}
+	}
+]

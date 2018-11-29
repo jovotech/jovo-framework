@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "context": {
+    "AudioPlayer": {
+      "playerActivity": "IDLE"
+    },
+    "Display": {
+      "token": "token"
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+      },
+      "user": {
+        "userId": "amzn1.account.AM3B00000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA",
+        "supportedInterfaces": {
+          "AudioPlayer": {},
+          "Display": {
+            "templateVersion": "1.0",
+            "markupVersion": "1.0"
+          },
+          "VideoApp": {}
+        }
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com",
+      "apiAccessToken": "c2NUNUWERZIn19.IoWUqTiJI2QeHmyE46FVg309vtFgjcIZZ4OqglienvmAdSw7E2B7oUpsRF-pgFGCzTluGHbGoUkA4OMoDf6ijsB_y3FakfmF5luVRM-2J6jjm-asCFD_n65D8UngwUzqTlG2_9i4JSAspJP1JwCK5VQEgkjUD94ookcyt9yKmS2CLHtOAr0ELY7YXkBR3p4-pIZwNA-BuOO793FKfMXRhEJ_ieKXUKf4iPuhvvDLNC6tGAEB6VAL-2BSzrlHHys-IAwwlNRtS9KkbZ6aenNoiciEAsaam5_p5QcH_0ciuH_lC0_P3WrX2RLnCQ9Nb5ByXMdNuGli7RrVxObbhzMyKg"
+    }
+  },
+  "request": {
+    "type": "Display.ElementSelected",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2018-04-25T09:32:25Z",
+    "locale": "de-DE",
+    "token": "token"
+  }
+}

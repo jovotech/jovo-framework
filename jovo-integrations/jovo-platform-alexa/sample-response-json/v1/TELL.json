@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {},
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Simple Tell</speak>"
+    },
+    "shouldEndSession": true
+  }
+}

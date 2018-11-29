@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "context": {
+    "AudioPlayer": {
+      "offsetInMilliseconds": 0,
+      "token": "silence",
+      "playerActivity": "PLAYING"
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+      },
+      "user": {
+        "userId": "amzn1.account.AM3B00000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA",
+        "supportedInterfaces": {
+          "AudioPlayer": {}
+        }
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com"
+    }
+  },
+  "request": {
+    "type": "AudioPlayer.PlaybackStarted",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2017-10-30T20:17:48Z",
+    "locale": "de-DE",
+    "token": "silence",
+    "offsetInMilliseconds": 0
+  }
+}

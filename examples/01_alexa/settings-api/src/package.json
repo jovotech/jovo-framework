@@ -1,0 +1,19 @@
+{
+  "name": "jovo-examples-alexa-settings-api",
+  "version": "2.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jovo-framework": "^2.0.0",
+    "jovo-platform-alexa": "^2.0.0",
+    "moment-timezone": "^0.5.23"
+  }
+}

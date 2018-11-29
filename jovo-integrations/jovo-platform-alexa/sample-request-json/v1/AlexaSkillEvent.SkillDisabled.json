@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+      },
+      "user": {
+        "userId": "amzn1.account.AM3B00000000000000000000000"
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com",
+      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLmUyNTdjYmRjLTZjYWMtNDA3My05YTg2LTEyNWY4YTIwOTU5YiIsImV4cCI6MTUyNDU4OTg0MSwiaWF0IjoxNTI0NTg2MjQxLCJuYmYiOjE1MjQ1ODYyNDEsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjpudWxsLCJ1c2VySWQiOiJhbXpuMS5hc2suYWNjb3VudC5BR05JSUk3S0lJNTdTTTUyQURITkNFNVhHQ0Q1UlVYNE82SllZWUNESlhJWTNPUEZJT1MyWlpCS1o1R0FRT0czWEczQU5BQVoyU0xFV0tXVUVMTUMySkNZUEhQVEJKVUJQUlAyRFg0U1ZVU0paVVdINzdHNUxEVFA1WTRIWURZUjI0S0tSQTdKSkFCSVRPRVREWkQyT1VXM0pDQkE0NENBV01LUks3MzdSSTJSQ0ZWR1c1TkpHMzNPWU9NMkRaVUZHN0VKUFcyS0VMNE9PSUkifX0.CNcf5MFMuih_DVCufg78bD0jSHu455fUvm58GiBe8GqSY4vJu67i0WzZEUksc4G9w8hzBXKVvCiETjzHcMtNZXeHUwLM-a7htYfrAzX2VlvuDCMb0NC-nN-792qTFvlBE_KIk0qO6a8nKDHhIkq4C_XI-ZyA9-zrdIx4UapiY8UcBQLIGQONaa1Kvls9gPNsK_4dTqKQhA0BsJ5dfLapCvSeRS89g2cN5kQ8u6W2VCSDoSLqIWZ0CAzBkcjvZNCn66CzJWwke-r_2xC_weJBzEKPPJ6OUiH_kNB2MRtGsC5Byia9zR9rNVhoAmCgghxOMEFqhx431T0TrkXMxJS80Q"
+    }
+  },
+  "request": {
+    "type": "AlexaSkillEvent.SkillDisabled",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2018-04-24T16:10:41Z",
+    "eventCreationTime": "2018-04-24T16:10:41Z",
+    "eventPublishingTime": "2018-04-24T16:10:41Z"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "context": {
+    "AudioPlayer": {
+      "offsetInMilliseconds": 0,
+      "token": "silence",
+      "playerActivity": "PLAYING"
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+      },
+      "user": {
+        "userId": "amzn1.account.AM3B00000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.XXXXXA6LX6BOBJF6XNWQM2ZO4NVVGZRFFEL6PMXKWLOHI36IY3B4XCSZKZPR42RAWCBSQEDNGS746OCC2PKR5KDIVAUY6F2DX5GV2SQAXPD7GMKQRWLG4LFKXFPVLVTXHFGLCQKHB7ZNBKLHQU4SJG6NNGA",
+        "supportedInterfaces": {
+          "AudioPlayer": {}
+        }
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com"
+    }
+  },
+  "request": {
+    "type": "System.ExceptionEncountered",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2017-10-30T20:21:01Z",
+    "locale": "de-DE",
+    "error": {
+      "type": "INVALID_RESPONSE",
+      "message": "An exception occurred while dispatching the request to the skill."
+    },
+    "cause": {
+      "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000"
+    }
+  }
+}

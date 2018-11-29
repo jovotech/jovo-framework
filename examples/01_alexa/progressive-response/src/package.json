@@ -1,0 +1,17 @@
+{
+  "name": "jovo-examples-progressive-response",
+  "version": "2.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jovo-framework": "^2.0.0"
+  }
+}
