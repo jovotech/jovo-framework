@@ -47,17 +47,35 @@
                 },
                 {
                     "title": "Language Model",
-                    "route": "model"
+                    "content": [
+                        {
+                            "title": "Jovo Language Model",
+                            "route": "model"
+                        },
+                        {
+                            "title": "Platform Language Models",
+                            "route": "model/platforms"
+                        }
+                    ]
                 },
                 {
                     "title": "Routing",
-                    "route": "routing"
+                    "content": [
+                        {
+                            "title": "Routing",
+                            "route": "routing"
+                        },
+                        {
+                            "title": "Event Listeners",
+                            "route": "routing/event-listeners"
+                        }
+                    ]
                 },
                 {
                     "title": "Data",
                     "content": [
                         {
-                            "title": "Overview",
+                            "title": "Data",
                             "route": "data"
                         },
                         {
@@ -324,7 +342,7 @@
                 }
             ]
         },
-        {
+        {       
             "title": "Testing",
             "content": [
                 {
@@ -333,7 +351,7 @@
                 },
                 {
                     "title": "Jovo Debugger",
-                    "route": "debugge"
+                    "route": "debugger"
                 },
                 {
                     "title": "Unit Testing",
