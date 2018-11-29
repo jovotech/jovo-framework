@@ -12,16 +12,8 @@
                     "route": "installation"
                 },
                 {
-                    "title": "Project Lifecycle",
-                    "route": "project-lifecycle"
-                },
-                {
-                    "title": "Courses",
-                    "route": "../../courses"
-                },
-                {
-                    "title": "Migration",
-                    "route": "migration-guide"
+                    "title": "Next Steps",
+                    "route": "next-steps"
                 }
             ]
         },
@@ -43,7 +35,11 @@
                 {
                     "title": "Jovo Language Model",
                     "route": "model"
-                }
+                },
+                {
+                    "title": "Project Lifecycle",
+                    "route": "project-lifecycle"
+                },
             ]
         },
         {
