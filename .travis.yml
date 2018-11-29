@@ -1,6 +1,6 @@
 language: node_js
 install:
-  - "npm ci"
+  - "npm install"
   - "npm run init"
   - "npm run tsc"
   - "npm run tslint"
