@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-hello-world",
-  "version": "2.0.1-alpha.0",
+  "version": "2.0.1-alpha.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,12 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jovo-framework": "^2.0.1-alpha.0",
-    "jovo-platform-alexa": "^2.0.1-alpha.0",
-    "jovo-platform-googleassistant": "^2.0.1-alpha.0"
+    "jovo-framework": "^2.0.1-alpha.1",
+    "jovo-platform-alexa": "^2.0.1-alpha.1",
+    "jovo-platform-googleassistant": "^2.0.1-alpha.1"
   },
   "devDependencies": {
-    "jovo-db-filedb": "^2.0.1-alpha.0",
-    "jovo-plugin-debugger": "^2.0.1-alpha.0"
+    "jovo-db-filedb": "^2.0.1-alpha.1",
+    "jovo-plugin-debugger": "^2.0.1-alpha.1"
   }
 }
