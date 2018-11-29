@@ -34,9 +34,7 @@ export abstract class Jovo extends EventEmitter {
     $speech?: SpeechBuilder;
     $reprompt?: SpeechBuilder;
 
-
     $requestSessionAttributes: SessionAttributes = {};
-
 
     constructor(app: BaseApp, host: Host) {
         super();
