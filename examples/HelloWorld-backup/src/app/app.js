@@ -27,8 +27,8 @@ app.use(new Alexa());
 
 
 let awsConfig = {
-    accessKeyId: 'AKIAJVHKF7NCTN3ZBC7Q',
-    secretAccessKey: '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',
+    accessKeyId: '',
+    secretAccessKey: '',
     region:  'us-east-1',
 };
 //
