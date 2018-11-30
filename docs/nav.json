@@ -66,6 +66,10 @@
                             "route": "routing"
                         },
                         {
+                            "title": "User Input",
+                            "route": "routing/user-input"
+                        },
+                        {
                             "title": "Event Listeners",
                             "route": "routing/event-listeners"
                         }
@@ -81,6 +85,10 @@
                         {
                             "title": "User",
                             "route": "data/user"
+                        },
+                        {
+                            "title": "Logging",
+                            "route": "data/logging"
                         }
                     ]
                 },
