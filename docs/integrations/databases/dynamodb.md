@@ -2,76 +2,10 @@
 
 Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
-* [Jovo Persistence Layer](#jovo-persistence-layer)
-  * [Configuration](#configuration)
-  * [Save Data](#save-data)
-  * [Load Data](#load-data)
-  * [Delete Data](#delete-data)
-  * [Delete a User](#delete-a-user)
-* [FilePersistence](#filepersistence)
-* [DynamoDB](#dynamodb)
-  * [DynamoDB for Apps Hosted on AWS Lambda](#dynamodb-for-apps-hosted-on-aws-lambda)
-  * [DynamoDB for Apps Not Hosted on AWS Lambda](#dynamodb-for-apps-not-hosted-on-aws-lambda)
-  * [DynamoDB Troubleshooting](#dynamodb-troubleshooting)
+* [Introduction](#introduction)
 
 
-## Jovo Persistence Layer
-
-This is an abstraction layer for persisting data across sessions. By default, the [file-based system](#filepersistence) will be used so you can start right away when prototyping locally.
-
-### Configuration
-
-You can add different database integrations in the Jovo app constructor. This is the default configuration:
-
-```js
-const config = {
-    db: {
-        type: 'file',
-        localDbFilename: 'db',
-    },
-    // Other configurations
-}
-```
-
-## FilePersistence
-
-> Note: This is the default database integration. 
-
-The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
-
-This sort of data persistence is enabled by default. The `db.json` can be found in the the following folder:
-
-```javascript
-index.js
-db/
-  -- db.json
-// Other files
-```
-
-And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.data.someKey = 'someValue';`:
-
-```js
-// Example for Amazon Alexa
-[
-	{
-		"userId": "amzn1.ask.account.[some_user_id]",
-		"userData": {
-			"data": {
-				"someKey": "someValue"
-			},
-			"metaData": {
-				"createdAt": "2017-11-13T13:46:37.421Z",
-				"lastUsedAt": "2017-11-13T14:12:05.738Z",
-				"sessionsCount": 9
-			}
-		}
-	}
-]
-```
-
-> Note: The FilePersistence integration should only be used for local development as it won't work while hosting your app on a cloud service, e.g. AWS Lambda
-
-## DynamoDB
+## Introduction
 
 > Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
 
