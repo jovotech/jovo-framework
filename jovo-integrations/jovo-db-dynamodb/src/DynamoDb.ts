@@ -2,6 +2,8 @@ import {Db, BaseApp, PluginConfig} from 'jovo-core';
 import * as _ from "lodash";
 import * as AWS from 'aws-sdk';
 import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
+import {Error} from "tslint/lib/error";
+import {GetItemOutput} from 'aws-sdk/clients/dynamodb';
 
 export interface Config extends PluginConfig {
     tableName?: string;
@@ -14,6 +16,7 @@ export interface Config extends PluginConfig {
 
 export class DynamoDb implements Db {
     config: Config = {
+        tableName: undefined,
         createTableOnInit: true,
         primaryKeyColumn: 'userId',
         documentClientConfig: {
@@ -22,24 +25,32 @@ export class DynamoDb implements Db {
         dynamoDbConfig: {},
     };
     needsWriteFileAccess = false;
-    dynamoClient: AWS.DynamoDB;
-    docClient: AWS.DynamoDB.DocumentClient;
+    dynamoClient?: AWS.DynamoDB;
+    docClient?: AWS.DynamoDB.DocumentClient;
     isCreating = false;
 
     constructor(config?: Config) {
-
         if (config) {
             this.config = _.merge(this.config, config);
         }
         if (this.config.awsConfig) {
             this.config.dynamoDbConfig = _.merge(this.config.dynamoDbConfig, this.config.awsConfig);
+            this.config.documentClientConfig = _.merge(this.config.documentClientConfig, this.config.awsConfig);
+
         }
-        this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
-        this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
     }
 
     install(app: BaseApp) {
-        app.$db = this;
+        this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
+        this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
+
+        if (_.get(app.config, 'db.default')) {
+            if (_.get(app.config, 'db.default') === 'DynamoDb') {
+                app.$db = this;
+            }
+        } else {
+            app.$db = this;
+        }
     }
 
     uninstall(app: BaseApp) {
@@ -51,9 +62,12 @@ export class DynamoDb implements Db {
      * @param {string} primaryKey
      * @return {Promise<any>}
      */
-    async load(primaryKey: string): Promise<object> {
+    async load(primaryKey: string): Promise<any> {
         if (!this.config.tableName) {
-            throw new Error(`Couldn't use DynamoDB. tableName has to be set.`);
+            throw new Error(`Couldn't use DynamoDb. tableName has to be set.`);
+        }
+        if (!this.docClient) {
+            throw new Error(`Couldn't use DynamoDb. DocClient is not initialized.`);
         }
 
         const getDataMapParams: DocumentClient.GetItemInput = {
@@ -65,9 +79,10 @@ export class DynamoDb implements Db {
         };
 
         try {
-            const result = await this.docClient.get(getDataMapParams).promise();
+            const result: GetItemOutput = await this.docClient.get(getDataMapParams).promise();
             this.isCreating = false;
-            return result;
+
+            return result.Item;
         } catch (err) {
             if (err.code === 'ResourceNotFoundException') {
                 if (this.config.createTableOnInit) {
@@ -91,7 +106,9 @@ export class DynamoDb implements Db {
             throw new Error(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`);
 
         }
-
+        if (!this.docClient) {
+            throw new Error(`Couldn't use DynamoDb. DocClient is not initialized.`);
+        }
         const getDataMapParams: DocumentClient.PutItemInput = {
             TableName: this.config.tableName,
             Item: {
@@ -116,7 +133,9 @@ export class DynamoDb implements Db {
             throw new Error(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`);
 
         }
-
+        if (!this.dynamoClient) {
+            throw new Error(`Couldn't use DynamoDb. DynamoClient is not initialized.`);
+        }
         const newTableParams: AWS.DynamoDB.Types.CreateTableInput = {
             TableName: this.config.tableName,
             AttributeDefinitions: [
