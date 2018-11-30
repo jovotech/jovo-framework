@@ -30,7 +30,17 @@
                 },
                 {
                     "title": "Next Steps",
-                    "route": "next-steps"
+                    "content": [
+                        {
+                            "title": "Next Steps",
+                            "route": "next-steps"
+                        },
+                        {
+                            "title": "Voice App Basics",
+                            "route": "voice-app-basics"
+                        }
+                    ]
+                    
                 }
             ]
         },
