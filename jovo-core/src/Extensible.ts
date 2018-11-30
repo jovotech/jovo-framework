@@ -42,8 +42,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             if (plugin.config) {
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
-                const pluginDefaultConfig = JSON.parse(JSON.stringify(emptyDefaultPluginObject.config));
-                const appConfig = JSON.parse(JSON.stringify(this.config));
+                const pluginDefaultConfig = _.cloneDeep(emptyDefaultPluginObject.config);
+                const appConfig = _.cloneDeep(this.config);
+
                 const pluginAppConfig: any = {}; // tslint:disable-line
 
                 Object.keys(pluginDefaultConfig).forEach((item: string) => {
@@ -51,7 +52,6 @@ export abstract class Extensible extends EventEmitter implements Plugin {
                 });
 
                 const pluginConstructorConfig: any = {}; // tslint:disable-line
-
                 const constructorConfig = difference(plugin.config, pluginDefaultConfig);
                 Object.keys(pluginDefaultConfig).forEach((item: string) => {
                     pluginConstructorConfig[item] = _.get(constructorConfig, `${item}`);
@@ -66,6 +66,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             }
 
             this.plugins.set(name, plugin);
+
             // this.config.plugin[name] = plugin.config;
             plugin.install(this);
         });
