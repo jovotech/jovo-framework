@@ -67,7 +67,7 @@
                         },
                         {
                             "title": "Intents & States",
-                            "route": "intents-states"
+                            "route": "routing/intents-states"
                         },
                         {
                             "title": "User Input",
