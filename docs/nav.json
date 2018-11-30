@@ -5,7 +5,7 @@
             "content": [
                 {
                     "title": "Getting Started",
-                    "route": "getting-started"
+                    "route": "quickstart"
                 },
                 {
                     "title": "Quickstart",
