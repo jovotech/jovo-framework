@@ -222,16 +222,20 @@
                             "route": "amazon-alexa/data"
                         },
                         {
+                            "title": "Audioplayer Skills",
+                            "route": "amazon-alexa/audioplayer"
+                        },
+                        {
+                            "title": "In-Skill Purchases",
+                            "route": "amazon-alexa/in-skill-purchases"
+                        },
+                        {
                             "title": "Dialog Interface",
                             "route": "amazon-alexa/dialog-interface"
                         },
                         {
                             "title": "Visual Output",
                             "route": "amazon-alexa/visual-output"
-                        },
-                        {
-                            "title": "Audioplayer Skills",
-                            "route": "amazon-alexa/audioplayer"
                         },
                         {
                             "title": "Lists",
