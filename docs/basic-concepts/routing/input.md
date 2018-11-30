@@ -1,4 +1,4 @@
-# User Input
+# Input
 
 In this section, you will learn how to deal with entities and slot values provided by your users.
 
@@ -119,4 +119,4 @@ app.setHandler({
 
 
 <!--[metadata]: {"description": "Learn how to deal with entities and slot values provided by your users.",
-		            "route": "routing/user-input"}-->
+		            "route": "routing/input"}-->

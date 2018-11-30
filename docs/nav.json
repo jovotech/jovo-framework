@@ -70,8 +70,8 @@
                             "route": "routing/intents-states"
                         },
                         {
-                            "title": "User Input",
-                            "route": "routing/user-input"
+                            "title": "Input",
+                            "route": "routing/input"
                         },
                         {
                             "title": "Event Listeners",
