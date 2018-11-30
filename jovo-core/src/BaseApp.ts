@@ -1,5 +1,5 @@
 import {Extensible, ExtensibleConfig} from "./Extensible";
-import {Db, HandleRequest, Host, Platform} from "./Interfaces";
+import {AppData, Db, HandleRequest, Host, Platform} from "./Interfaces";
 import {ActionSet} from "./ActionSet";
 
 
@@ -25,7 +25,7 @@ export class BaseApp extends Extensible {
     $db!: Db; // TODO: MAP?
     $cms: any; // tslint:disable-line
 
-    $data: any; // tslint:disable-line
+    $data: AppData = {};
 
     actionSet: ActionSet;
 
