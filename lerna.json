@@ -1,0 +1,15 @@
+{
+  "packages": [
+    "jovo-framework",
+    "jovo-core",
+    "jovo-integrations/*",
+    "examples/**"
+  ],
+  "ignoreChanges": [
+    "*.md",
+    "*.json",
+    "*.txt",
+    "test/**"
+  ],
+  "version": "independent"
+}

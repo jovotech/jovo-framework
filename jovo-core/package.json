@@ -1,0 +1,48 @@
+{
+  "name": "jovo-core",
+  "version": "2.0.1-alpha.0",
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "tsc": "tsc",
+    "tscw": "tscw --watch",
+    "typedoc": "typedoc --out ./docs ./ --mode file",
+    "test": "jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/jest": "^23.3.1",
+    "@types/lodash": "^4.14.109",
+    "@types/node": "^10.3.1",
+    "jest": "^23.4.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^23.1.3",
+    "tslint": "^5.10.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.1.6"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/dist/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  },
+  "gitHead": "6c9bdaf75965133d640e3e1f93d25cc0dd2f23bd"
+}
