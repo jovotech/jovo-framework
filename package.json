@@ -28,7 +28,7 @@
     "typescript": "^3.1.6"
   },
   "changelog": {
-    "repo": "jovotech/jovo-framework-v2",
+    "repo": "jovotech/jovo-framework-nodejs",
     "labels": {
       "tag: new feature": ":rocket: New Feature",
       "tag: breaking change": ":boom: Breaking Change",
