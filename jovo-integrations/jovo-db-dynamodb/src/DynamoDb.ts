@@ -62,7 +62,7 @@ export class DynamoDb implements Db {
      * @param {string} primaryKey
      * @return {Promise<any>}
      */
-    async load(primaryKey: string): Promise<any> {
+    async load(primaryKey: string): Promise<any> { // tslint:disable-line
         if (!this.config.tableName) {
             throw new Error(`Couldn't use DynamoDb. tableName has to be set.`);
         }
