@@ -1,6 +1,7 @@
 {
   "name": "jovo-examples-ts-hello-world",
   "version": "2.0.1-alpha.2",
+  "private": true,
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
