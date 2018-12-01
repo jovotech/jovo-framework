@@ -78,7 +78,7 @@ export class AudioPlayer {
             audioItem.metadata = this.metaData;
         }
 
-        _.set(this.alexaSkill.$output, 'AlexaSkill.AudioPlayer',
+        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerPlayDirective(playBehavior, audioItem)
         );
         return this.alexaSkill; // TODO: return JOVO or AUDIOPLAYER?
@@ -90,7 +90,7 @@ export class AudioPlayer {
      * @return {Jovo}
      */
     stop() {
-        _.set(this.alexaSkill.$output, 'AlexaSkill.AudioPlayer',
+        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerStopDirective()
         );
         return this.alexaSkill;
@@ -102,7 +102,7 @@ export class AudioPlayer {
      * @return {Jovo}
      */
     clearQueue(clearBehavior = AudioPlayerClearQueueDirective.CLEARBEHAVIOR_CLEAR_ALL) {
-        _.set(this.alexaSkill.$output, 'AlexaSkill.AudioPlayer',
+        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerClearQueueDirective(clearBehavior)
         );
         return this.alexaSkill;

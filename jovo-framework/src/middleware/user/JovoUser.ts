@@ -241,6 +241,7 @@ export class JovoUser implements Plugin {
         }
 
         const data = await handleRequest.app.$db.load(handleRequest.jovo.$user.getId());
+
         if (!data) {
             Object.assign(handleRequest.jovo.$user, {
                 $context: {},
@@ -308,22 +309,21 @@ export class JovoUser implements Plugin {
             throw new Error('User object is not initialized');
         }
         if (_.get(this.config, 'userMetaData.createdAt')) {
-            if (!_.get(handleRequest.jovo.$user, 'metaData.createdAt')) {
-                _.set(handleRequest.jovo.$user, 'metaData.createdAt', new Date().toISOString());
+            if (!_.get(handleRequest.jovo.$user, '$metaData.createdAt')) {
+                _.set(handleRequest.jovo.$user, '$metaData.createdAt', new Date().toISOString());
             }
         }
 
         if (_.get(this.config, 'userMetaData.lastUsedAt')) {
-            _.set(handleRequest.jovo.$user, 'metaData.lastUsedAt', new Date().toISOString());
+            _.set(handleRequest.jovo.$user, '$metaData.lastUsedAt', new Date().toISOString());
         }
 
         if (_.get(this.config, 'userMetaData.sessionsCount')) {
-            let sessionsCount = _.get(handleRequest.jovo.$user, 'metaData.sessionsCount') || 0;
-
+            let sessionsCount = _.get(handleRequest.jovo.$user, '$metaData.sessionsCount') || 0;
             if (handleRequest.jovo.isNewSession()) {
                 sessionsCount += 1;
             }
-            _.set(handleRequest.jovo.$user, 'metaData.sessionsCount', sessionsCount);
+            _.set(handleRequest.jovo.$user, '$metaData.sessionsCount', sessionsCount);
         }
 
         if (_.get(this.config, 'userMetaData.requestHistorySize') > 0) {
@@ -350,14 +350,14 @@ export class JovoUser implements Plugin {
         }
 
         if (_.get(this.config, 'userMetaData.devices')) {
-            if (!_.get(handleRequest.jovo.$user, 'metadata.devices["'+handleRequest.jovo.getDeviceId()+'"]')) {
+            if (!_.get(handleRequest.jovo.$user, '$metadata.devices["'+handleRequest.jovo.getDeviceId()+'"]')) {
                 const device = {
                     hasAudioInterface: handleRequest.jovo.hasAudioInterface(),
                     hasScreenInterface: handleRequest.jovo.hasScreenInterface(),
                     hasVideoInterface: handleRequest.jovo.hasVideoInterface(),
                 };
                 _.set(handleRequest.jovo.$user,
-                    'metaData.devices["'+handleRequest.jovo.getDeviceId()+'"]',
+                    '$metaData.devices["'+handleRequest.jovo.getDeviceId()+'"]',
                     device);
             }
         }

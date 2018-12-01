@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.0.1-alpha.0",
+  "version": "2.0.1-alpha.2",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "i18next": "^11.6.0",
-    "jovo-core": "^2.0.1-alpha.0"
+    "jovo-core": "^2.0.1-alpha.2"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
@@ -48,5 +48,5 @@
       "json"
     ]
   },
-  "gitHead": "3390ebb5907cd94b4ac1e64e5626bd9ef0199529"
+  "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
 }

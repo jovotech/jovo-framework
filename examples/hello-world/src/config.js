@@ -9,14 +9,10 @@ module.exports = {
    // },
    //
     db: {
+        default: 'DynamoDb',
         FileDb: {
             pathToFile: './db/db.json'
         }
     },
-    // plugin: {
-    //     BasicLogging: {
-    //         logging: true,
-    //     }
-    // }
 
 };

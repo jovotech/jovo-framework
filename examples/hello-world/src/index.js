@@ -1,5 +1,6 @@
 'use strict';
 
+// process.env.NODE_ENV = 'prod';
 const {
     Webhook,
     ExpressJS,
