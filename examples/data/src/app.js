@@ -14,7 +14,7 @@ app.use(
     new FileDb(),
 );
 
-// app.$data.APP_SCOPE = 'APP_SCOPE';
+app.$data.APP_SCOPE = 'APP_SCOPE';
 
 app.setHandler({
     ON_REQUEST() {
@@ -33,7 +33,7 @@ app.setHandler({
     NameState: {
         MyNameIsIntent() {
             this.$user.$data.name = this.$inputs.name.value;
-            // console.log(this.$app.$data.APP_SCOPE);
+            console.log(this.$app.$data.APP_SCOPE);
             console.log(this.$data.REQUEST_SCOPE);
             console.log(this.$user.$data.USER_DB_SCOPE);
             console.log(this.$session.$data.SESSION_SCOPE);

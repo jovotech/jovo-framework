@@ -6,14 +6,28 @@ const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
-Util.consoleLog();
 
 app.use(
     new GoogleAssistant(),
     new Alexa(),
     new JovoDebugger(),
     new FileDb(),
+    // new DynamoDb(),
 );
+
+
+
+// if (process.env.NODE_ENV === 'prod') {
+    const { DynamoDb } = require('jovo-db-dynamodb');
+    app.use(new DynamoDb({
+        tableName: 'testV2Bug',
+        awsConfig: {
+            region: 'us-east-1',
+
+        }
+    }));
+// }
+
 
 app.setHandler({
     async LAUNCH(jovo) {
