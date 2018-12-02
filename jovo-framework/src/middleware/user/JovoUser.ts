@@ -63,7 +63,7 @@ export class JovoUser implements Plugin {
         columnName: 'userData',
         implicitSave: true,
         userMetaData: {
-            enabled: true,
+            enabled: false,
             lastUsedAt: true,
             sessionsCount: true,
             createdAt: true,
@@ -241,7 +241,6 @@ export class JovoUser implements Plugin {
         }
 
         const data = await handleRequest.app.$db.load(handleRequest.jovo.$user.getId());
-
         if (!data) {
             Object.assign(handleRequest.jovo.$user, {
                 $context: {},
