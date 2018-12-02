@@ -160,6 +160,10 @@
                             "route": "amazon-alexa/audioplayer"
                         },
                         {
+                            "title": "In-Skill Purchases",
+                            "route": "amazon-alexa/in-skill-purchases"
+                        },
+                        {
                             "title": "Lists",
                             "route": "amazon-alexa/lists"
                         },
