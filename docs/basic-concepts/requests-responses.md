@@ -1,10 +1,50 @@
-# Request and Response Lifecycle
+# Requests and Responses
 
 Learn more about the general architecture and lifecycle of voice app requests and responses.
 
-* [Introduction](#introduction)
+* [Introduction to Voice Interactions](#introduction-to-voice-interactions)
+    * [Requests](#requests)
+    * [Responses](#responses)
+* [Sessions](#sessions)
 
-## Introduction
+## Introduction to Voice Interactions
+
+Each interaction between a user and a voice application consists of an interaction pair with a `request` and a `response`.
+
+![One Session](../img/session-tell.png)
+
+
+### Requests
+
+The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists information like
+
+* User ID,
+* Intent,
+* Session data, 
+
+and other things that might be relevant to your app. You can access the incoming request with `this.$request`.
+
+### Responses
+
+The `response` is what you send back to the platform after the `request` has been run through your app logic. It includes
+
+* Speech output (text or audio URL)
+* Visual output to display on screens
+* Session data
+
+[Find more information on Output here](./ouput './output').
+
+
+## Sessions
+
+![Two Sessions](../img/session-ask.png)
+
+A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request` and `response` interaction pair, but can have a series of inputs and outputs. A session can end for the following reasons:
+
+* The response includes `shouldEndSession`, which is true for `tell` and `endSession` method calls
+* A user doesn't respond to an ask prompt and the session times out
+* The user asks to end the session by saying "quit" or "exit"
+
 
 <!--[metadata]: {"description": "Learn more about the general architecture and lifecycle of voice app requests and responses.",
 		        "route": "requests-responses"}-->
