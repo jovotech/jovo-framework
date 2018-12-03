@@ -19,8 +19,8 @@ import {
 import {User} from "./User";
 
 export abstract class Jovo extends EventEmitter {
-    readonly $host?: Host;
-    readonly $app?: BaseApp;
+    readonly $host: Host;
+    readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
     $user?: User;

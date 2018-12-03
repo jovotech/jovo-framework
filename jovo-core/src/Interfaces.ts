@@ -148,8 +148,8 @@ export interface SessionAttributes {
 }
 
 export interface JovoResponse {
-    getOutputSpeech(): string;
-    getRepromptSpeech(): string;
+    getOutputSpeech(): string | undefined;
+    getRepromptSpeech(): string | undefined;
 
     getSessionAttributes(): SessionAttributes | undefined;
     setSessionAttributes(sessionAttributes: SessionAttributes): this;
@@ -169,7 +169,7 @@ export interface JovoSession {
 export interface Host {
     hasWriteFileAccess: boolean;
     headers: {[key: string]: string};
-    readonly requestObject: any; // tslint:disable-line
+    $request: any; // tslint:disable-line
     getRequestObject(): any; // tslint:disable-line
     setResponse(obj: any): Promise<any>; // tslint:disable-line
 }
