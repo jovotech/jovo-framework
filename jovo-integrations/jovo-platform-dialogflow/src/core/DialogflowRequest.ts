@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import {JovoRequest, SessionConstants} from "jovo-core";
+import {JovoRequest, SessionConstants, Inputs} from "jovo-core";
 
 interface Intent {
     name: string;
@@ -135,7 +135,7 @@ export class DialogflowRequest implements JovoRequest {
         return this;
     }
 
-    getInputs(): any { // tslint:disable-line
+    getInputs(): Inputs { // tslint:disable-line
         const params = _.get(this, 'queryResult.parameters');
         return _.mapValues(params, (value, name) => {
             return {

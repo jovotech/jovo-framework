@@ -4,6 +4,8 @@ import {EnumRequestType} from "jovo-core";
 import {Dialogflow} from "./Dialogflow";
 import {DialogflowAgent} from "./DialogflowAgent";
 import {DialogflowRequest} from "./core/DialogflowRequest";
+import {DialogflowResponse} from "./core/DialogflowResponse";
+import {Jovo} from "../../../jovo-core/dist/src";
 
 export interface Config extends PluginConfig {
 
@@ -16,15 +18,16 @@ export class DialogflowCore implements Plugin {
         enabled: true,
     };
 
-
     constructor(config?: Config) {
     }
 
     install(dialogFlow: Dialogflow) {
-        dialogFlow.middleware('$request').use(this.request.bind(this));
-        dialogFlow.middleware('$type').use(this.type.bind(this));
-        dialogFlow.middleware('$nlu').use(this.nlu.bind(this));
-        dialogFlow.middleware('$output').use(this.output.bind(this));
+        dialogFlow.middleware('$request')!.use(this.request.bind(this));
+        dialogFlow.middleware('$type')!.use(this.type.bind(this));
+
+        dialogFlow.middleware('$nlu')!.use(this.nlu.bind(this));
+        dialogFlow.middleware('$inputs')!.use(this.inputs.bind(this));
+        dialogFlow.middleware('$output')!.use(this.output.bind(this));
 
     }
     uninstall(app: BaseApp) {
@@ -33,7 +36,7 @@ export class DialogflowCore implements Plugin {
 
 
     request(dialogflowAgent: DialogflowAgent) {
-        dialogflowAgent.$request = DialogflowRequest.fromJSON(dialogflowAgent.$host.getRequestObject()) as DialogflowRequest;
+        dialogflowAgent.$request = DialogflowRequest.fromJSON(dialogflowAgent.$host.$request) as DialogflowRequest;
     }
 
     type(dialogflowAgent: DialogflowAgent) {
@@ -63,19 +66,28 @@ export class DialogflowCore implements Plugin {
             _.set(nluData, 'intent.name', _.get(dialogflowRequest, 'queryResult.intent.displayName'));
         }
         dialogflowAgent.$nlu = nluData;
+    }
 
+    inputs(dialogflowAgent: DialogflowAgent) {
+        const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
+        dialogflowAgent.$inputs = dialogflowRequest.getInputs();
     }
 
     output(dialogflowAgent: DialogflowAgent) {
         const output = dialogflowAgent.$output;
-        if (_.get(output, 'tell')) {
+
+        if (!dialogflowAgent.$response) {
+            dialogflowAgent.$response = new DialogflowResponse();
+        }
+
+        if (output.tell) {
             _.set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
         }
 
-        if (_.get(output, 'ask')) {
+        if (output.ask) {
             _.set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
         }
-
+        console.log(dialogflowAgent.$response);
     }
 
 }
