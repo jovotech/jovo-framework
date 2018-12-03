@@ -275,14 +275,15 @@ export class JovoDebugger implements Plugin {
             return;
         }
 
-        const _privateLog = console.log;
+        // TODO:
+        // const _privateLog = console.log;
 
-        console.log = (message) => {
-            const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
-            socket.emit('console.log', nMessage, (new Error()).stack!.toString());
-            _privateLog.apply(console, arguments); // eslint-disable-line
-        };
-        this.consoleLogOverriden = true;
+        // console.log = (message) => {
+        //     const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
+        //     socket.emit('console.log', nMessage, (new Error()).stack!.toString());
+        //     _privateLog.apply(console, arguments); // eslint-disable-line
+        // };
+        // this.consoleLogOverriden = true;
     }
 
     private afterRouting(handleRequest: HandleRequest) {
@@ -302,12 +303,10 @@ export class JovoDebugger implements Plugin {
             route: handleRequest.jovo.$plugins.Router.route,
         };
 
-        console.log(this.config.database);
         if (this.config.database) {
             // TODO: why does declare module in jovo-framework not work?
             request.database = _.get(handleRequest.jovo.$user, '$data');
         }
-        console.log(request.database);
 
         try {
             request.rawText = handleRequest.jovo.getRawText();
@@ -319,7 +318,6 @@ export class JovoDebugger implements Plugin {
             // request.error = handleRequest.jovo.$request.getError();
         } catch (e) {
         }
-        console.log(request);
         this.socket.emit('requestEmit', request);
     }
     private response(handleRequest: HandleRequest) {
