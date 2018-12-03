@@ -26,7 +26,7 @@ export class GoogleAction extends Jovo {
         return true;
     }
 
-    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string[]) {
+    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string) {
         delete this.$output.tell;
         this.$output.ask = {
             speech,
