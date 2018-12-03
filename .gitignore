@@ -56,3 +56,5 @@ db.json
 jsdoc.json
 ./test/debug
 dist
+
+/examples/00_debug
