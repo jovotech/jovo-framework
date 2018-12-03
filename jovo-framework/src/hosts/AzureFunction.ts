@@ -5,17 +5,17 @@ export class AzureFunction implements Host {
     hasWriteFileAccess = false;
     req: any; // tslint:disable-line
     context: any; // tslint:disable-line
-    requestObject: any; // tslint:disable-line
+    $request: any; // tslint:disable-line
 
     constructor(context: any, req: any) { // tslint:disable-line
         this.req = req;
         this.context = context;
         this.headers = req.headers;
-        this.requestObject = req.body;
+        this.$request = req.body;
     }
 
     getRequestObject() {
-        return this.requestObject;
+        return this.$request;
     }
 
     setResponse(obj: any) { // tslint:disable-line
