@@ -2,7 +2,6 @@ import {Db, BaseApp, PluginConfig} from 'jovo-core';
 import * as _ from "lodash";
 import * as AWS from 'aws-sdk';
 import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
-import {Error} from "tslint/lib/error";
 import {GetItemOutput} from 'aws-sdk/clients/dynamodb';
 
 export interface Config extends PluginConfig {
