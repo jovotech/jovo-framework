@@ -183,8 +183,8 @@
                     "route": "configuration"
                 },
                 {
-                    "title": "app.js",
-                    "route": "app-js"
+                    "title": "Project Structure",
+                    "route": "project-structure"
                 },
                 {
                     "title": "config.js",

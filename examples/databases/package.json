@@ -1,0 +1,24 @@
+{
+  "name": "jovo-examples-databases",
+  "version": "2.0.1-alpha.4",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jovo-db-datastore": "^2.0.1-alpha.4",
+    "jovo-db-dynamodb": "^2.0.1-alpha.4",
+    "jovo-db-filedb": "^2.0.1-alpha.4",
+    "jovo-db-mysql": "^2.0.1-alpha.4",
+    "jovo-framework": "^2.0.1-alpha.4",
+    "jovo-platform-alexa": "^2.0.1-alpha.4",
+    "jovo-platform-googleassistant": "^2.0.1-alpha.4",
+    "jovo-plugin-debugger": "^2.0.1-alpha.4"
+  }
+}

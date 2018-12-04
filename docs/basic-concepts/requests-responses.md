@@ -1,29 +1,49 @@
-# Requests and Response
+# Requests and Responses
 
 Learn more about the general architecture and lifecycle of voice app requests and responses.
 
-* [Introduction](#introduction)
+* [Introduction to Voice Interactions](#introduction-to-voice-interactions)
+    * [Requests](#requests)
+    * [Responses](#responses)
+* [Sessions](#sessions)
 
-## Introduction
+## Introduction to Voice Interactions
+
+Each interaction between a user and a voice application consists of an interaction pair with a `request` and a `response`.
+
+![One Session](../img/session-tell.png)
 
 
+### Requests
 
-A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request`, but can have a series of inputs and outputs. A session can end for the following reasons:
+The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists information like
+
+* User ID,
+* Intent,
+* Session data, 
+
+and other things that might be relevant to your app. You can access the incoming request with `this.$request`.
+
+### Responses
+
+The `response` is what you send back to the platform after the `request` has been run through your app logic. It includes
+
+* Speech output (text or audio URL)
+* Visual output to display on screens
+* Session data
+
+[Find more information on Output here](./ouput './output').
+
+
+## Sessions
+
+![Two Sessions](../img/session-ask.png)
+
+A `session` is an uninterrupted interaction between a user and your application. It consists of at least one `request` and `response` interaction pair, but can have a series of inputs and outputs. A session can end for the following reasons:
 
 * The response includes `shouldEndSession`, which is true for `tell` and `endSession` method calls
 * A user doesn't respond to an ask prompt and the session times out
 * The user asks to end the session by saying "quit" or "exit"
-
-Sessions that contain only a single request with a `tell` response could look like this:
-
-![One Session](../../img/session-tell.png)
-
-
-For more conversational experiences that require back and forth between your app and user, you need to use the `ask` method. Here is what a session with two requests could look like:
-
-![Two Sessions](../../img/session-ask.png)
-
-To save user data in form of attributes across requests during a session, take a look at the [Session Attributes](#session-attributes) section below. The platforms don't offer the ability to store user data across sessions. For this, Jovo offers a [Persistence Layer](../../06_integrations/databases#filepersistence './databases#filepersistence').
 
 
 <!--[metadata]: {"description": "Learn more about the general architecture and lifecycle of voice app requests and responses.",

@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-videoapp",
-  "version": "2.0.1-alpha.2",
+  "version": "2.0.1-alpha.4",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jovo-framework": "^2.0.1-alpha.2",
-    "jovo-platform-alexa": "^2.0.1-alpha.2"
+    "jovo-framework": "^2.0.1-alpha.4",
+    "jovo-platform-alexa": "^2.0.1-alpha.4"
   },
   "devDependencies": {
-    "jovo-plugin-debugger": "^2.0.1-alpha.2"
+    "jovo-plugin-debugger": "^2.0.1-alpha.4"
   }
 }

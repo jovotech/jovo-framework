@@ -6,7 +6,8 @@ export class Lambda implements Host {
     context: any; // tslint:disable-line
     callback: any; // tslint:disable-line
     isApiGateway = false;
-    requestObject: any; // tslint:disable-line
+    $request: any; // tslint:disable-line
+
     hasWriteFileAccess = false;
 
     constructor(event: any, context: any, callback: Function) { // tslint:disable-line
@@ -15,13 +16,13 @@ export class Lambda implements Host {
         this.callback = callback;
         if (event.body) {
             this.isApiGateway = true;
-            this.requestObject = (typeof event.body === 'string') ? JSON.parse(event.body) : event.body;
+            this.$request = (typeof event.body === 'string') ? JSON.parse(event.body) : event.body;
         } else {
-            this.requestObject = event;
+            this.$request = event;
         }
     }
     getRequestObject() {
-        return this.requestObject;
+        return this.$request;
     }
     setResponse(obj: any) { // tslint:disable-line
         return new Promise<void>((resolve) => {

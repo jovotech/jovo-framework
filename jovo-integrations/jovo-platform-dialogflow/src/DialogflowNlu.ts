@@ -146,20 +146,22 @@ export class DialogflowNlu extends Extensible {
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
 
         const sessionId = _.get(dialogflowRequest, 'session');
-        const sessionContext =_.get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
-            return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
-        });
 
-        if (sessionContext) {
-            jovo.$session.$data = sessionContext.parameters;
+        if (_.get(dialogflowRequest, 'queryResult.outputContexts')) {
+            const sessionContext =_.get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
+                return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
+            });
 
-            for (const parameter of Object.keys(_.get(dialogflowRequest, 'queryResult.parameters'))) {
-                delete jovo.$session.$data[parameter];
-                delete jovo.$session.$data[parameter + '.original'];
+            if (sessionContext) {
+                jovo.$session.$data = sessionContext.parameters;
+
+                for (const parameter of Object.keys(_.get(dialogflowRequest, 'queryResult.parameters'))) {
+                    delete jovo.$session.$data[parameter];
+                    delete jovo.$session.$data[parameter + '.original'];
+                }
             }
+            jovo.$requestSessionAttributes = JSON.parse(JSON.stringify(jovo.$session.$data));
         }
-        jovo.$requestSessionAttributes = JSON.parse(JSON.stringify(jovo.$session.$data));
-
     }
 
     output(jovo: Jovo) {
@@ -178,7 +180,7 @@ export class DialogflowNlu extends Extensible {
         const outputContexts = _.get(dialogflowRequest, 'queryResult.outputContexts');
         const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
 
-        if (Object.keys(jovo.$session.$data).length > 0) {
+        if (outputContexts && Object.keys(jovo.$session.$data).length > 0) {
             const sessionContext = outputContexts.find((context: any) => { // tslint:disable-line
                 return context.name === contextName;
             });

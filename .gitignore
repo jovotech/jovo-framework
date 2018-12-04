@@ -56,3 +56,5 @@ db.json
 jsdoc.json
 ./test/debug
 dist
+lerna-debug.log
+/examples/00_debug

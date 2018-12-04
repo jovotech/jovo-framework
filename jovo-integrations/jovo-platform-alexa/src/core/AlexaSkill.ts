@@ -65,17 +65,21 @@ export class AlexaSkill extends Jovo {
     }
 
     getSpeechText() {
-        if (!this.$response!.getOutputSpeech()) {
+        const outputSpeech = this.$response!.getOutputSpeech();
+
+        if (!outputSpeech) {
             return;
         }
-        return this.$response!.getOutputSpeech().replace(/<\/?speak\/?>/g, '');
+        return outputSpeech.replace(/<\/?speak\/?>/g, '');
     }
 
     getRepromptText() {
-        if (!this.$response!.getRepromptSpeech()) {
+        const repromptSpeech = this.$response!.getRepromptSpeech();
+
+        if (!repromptSpeech) {
             return;
         }
-        return this.$response!.getRepromptSpeech().replace(/<\/?speak\/?>/g, '');
+        return repromptSpeech.replace(/<\/?speak\/?>/g, '');
     }
 
     getDeviceId() {

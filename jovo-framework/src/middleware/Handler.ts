@@ -222,7 +222,6 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
-            console.log('FOLLOWUP');
             return this.setState(state);
         };
 

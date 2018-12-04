@@ -2,7 +2,7 @@
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
-* [Introduction to User Sessions](#introduction-to-user-sessions)
+* [Introduction to Routing](#introduction-to-routing)
    * [Intents](#intents)
    * [States](#states)
    * [Input](#input)

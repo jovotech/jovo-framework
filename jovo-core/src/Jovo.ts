@@ -19,8 +19,8 @@ import {
 import {User} from "./User";
 
 export abstract class Jovo extends EventEmitter {
-    readonly $host?: Host;
-    readonly $app?: BaseApp;
+    readonly $host: Host;
+    readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
     $user?: User;
@@ -47,6 +47,7 @@ export abstract class Jovo extends EventEmitter {
         };
         this.$type = {
         };
+        this.$inputs = {};
         this.$output = {};
         this.$request = undefined;
         this.$response = undefined;
@@ -168,8 +169,13 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
-    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder) {
+    ask(speech: string | SpeechBuilder, reprompt?: string | SpeechBuilder) {
         delete this.$output.tell;
+
+        if (!reprompt) {
+            reprompt = speech;
+        }
+
         this.$output.ask = {
             speech: speech.toString(),
             reprompt: reprompt.toString()

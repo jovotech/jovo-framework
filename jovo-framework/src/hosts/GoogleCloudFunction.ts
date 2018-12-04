@@ -5,17 +5,18 @@ export class GoogleCloudFunction implements Host {
     hasWriteFileAccess = false;
     req: any; // tslint:disable-line
     res: any; // tslint:disable-line
-    requestObject: any; // tslint:disable-line
+    $request: any; // tslint:disable-line
+
 
     constructor(req: any, res: any) { // tslint:disable-line
         this.req = req;
         this.res = res;
         this.headers = req.headers;
-        this.requestObject = req.body;
+        this.$request = req.body;
     }
 
     getRequestObject() {
-        return this.requestObject;
+        return this.$request;
     }
 
     setResponse(obj: any) { // tslint:disable-line

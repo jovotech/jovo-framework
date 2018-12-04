@@ -35,6 +35,12 @@ To update to the latest version of the Jovo CLI, use the following command:
 $ npm install -g jovo-cli
 ```
 
+For major updates, consider uninstalling the Jovo CLI globally before you install it again:
+
+```sh
+$ npm uninstall -g jovo-cli
+```
+
 For more information on installation and troubleshooting, take a look at our [Installation Guide](./installation.md './installation').
 
 <!--[metadata]: {"description": "Learn how to upgrade an existing Jovo Framework app.", "route": "installation/upgrading"}-->

@@ -5,13 +5,13 @@ export class ExpressJS implements Host {
     hasWriteFileAccess = true;
     req: any; // tslint:disable-line
     res: any; // tslint:disable-line
-    requestObject: any; // tslint:disable-line
+    $request: any; // tslint:disable-line
 
     constructor(req: any, res: any) { // tslint:disable-line
         this.req = req;
         this.res = res;
         this.headers = req.headers;
-        this.requestObject = req.body;
+        this.$request = req.body;
     }
 
     static dummyRequest(jovoRequest: JovoRequest) {
@@ -26,7 +26,7 @@ export class ExpressJS implements Host {
         return new ExpressJS(req, res);
     }
     getRequestObject() {
-        return this.requestObject;
+        return this.$request;
     }
     setResponse(obj: any) { // tslint:disable-line
         return new Promise<void>((resolve) => {

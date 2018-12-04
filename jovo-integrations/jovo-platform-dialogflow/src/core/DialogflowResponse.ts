@@ -11,9 +11,9 @@ interface Context {
 }
 
 export interface DialogflowResponseJSON {
-    fulfillmentText: string;
+    fulfillmentText?: string;
     outputContexts?: Context[];
-    payload: Payload;
+    payload?: Payload;
 }
 
 /**
@@ -22,13 +22,15 @@ export interface DialogflowResponseJSON {
 
 
 export class DialogflowResponse implements JovoResponse {
-    fulfillmentText: string;
-    payload: Payload;
+    fulfillmentText?: string;
+    payload?: Payload;
 
     getPlatformId() {
-        const keys = Object.keys(this.payload);
-        if (keys.length > 0) {
-            return keys[0];
+        if (this.payload) {
+            const keys = Object.keys(this.payload);
+            if (keys.length > 0) {
+                return keys[0];
+            }
         }
     }
 
@@ -49,38 +51,54 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     hasSessionEnded() {
-        if (typeof _.get(this.payload, `${this.getPlatformId()}.hasSessionEnded`) === 'function') {
-            return this.payload[this.getPlatformId()].hasSessionEnded();
+        const platformId = this.getPlatformId();
+        if (this.payload && platformId) {
+            if (typeof _.get(this.payload, `${platformId}.hasSessionEnded`) === 'function') {
+                return this.payload[platformId].hasSessionEnded();
+            }
         }
+        
         return false;
     }
 
     getOutputSpeech() {
-        if (typeof _.get(this.payload, `${this.getPlatformId()}.getOutputSpeech`) === 'function') {
-            return this.payload[this.getPlatformId()].getOutputSpeech();
+        const platformId = this.getPlatformId();
+        if (this.payload && platformId) {
+            if (typeof _.get(this.payload, `${platformId}.getOutputSpeech`) === 'function') {
+                return this.payload[platformId].getOutputSpeech();
+            }
         }
         return this.fulfillmentText;
     }
 
     getRepromptSpeech() {
-        if (typeof _.get(this.payload, `${this.getPlatformId()}.getRepromptSpeech`) === 'function') {
-            return this.payload[this.getPlatformId()].getRepromptSpeech();
+        const platformId = this.getPlatformId();
+        if (this.payload && platformId) {
+            if (typeof _.get(this.payload, `${platformId}.getRepromptSpeech`) === 'function') {
+                return this.payload[platformId].getRepromptSpeech();
+            }
         }
         return undefined;
     }
 
     isTell(speech?: string | string[]) {
-        if (typeof _.get(this.payload, `${this.getPlatformId()}.isTell`) === 'function') {
-            return this.payload[this.getPlatformId()].isTell(speech);
+        const platformId = this.getPlatformId();
+        if (this.payload && platformId) {
+            if (typeof _.get(this.payload, `${platformId}.isTell`) === 'function') {
+                return this.payload[platformId].isTell(speech);
+            }
         }
-
         return true;
     }
 
     isAsk(speech?: string | string[], reprompt?: string | string[]) {
-        if (typeof _.get(this.payload, `${this.getPlatformId()}.isAsk`) === 'function') {
-            return this.payload[this.getPlatformId()].isAsk(speech, reprompt);
+        const platformId = this.getPlatformId();
+        if (this.payload && platformId) {
+            if (typeof _.get(this.payload, `${platformId}.isAsk`) === 'function') {
+                return this.payload[platformId].isAsk(speech, reprompt);
+            }
         }
+
         return false;
     }
 

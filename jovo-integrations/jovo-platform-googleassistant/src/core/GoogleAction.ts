@@ -26,7 +26,7 @@ export class GoogleAction extends Jovo {
         return true;
     }
 
-    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string[]) {
+    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string) {
         delete this.$output.tell;
         this.$output.ask = {
             speech,
@@ -36,16 +36,25 @@ export class GoogleAction extends Jovo {
     }
 
     hasScreenInterface() {
+        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+            return false;
+        }
         return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.SCREEN_OUTPUT') !== 'undefined';
     }
 
     hasAudioInterface() {
+        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+            return false;
+        }
         return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.AUDIO_OUTPUT') !== 'undefined';
     }
 
     hasMediaResponseInterface() {
+        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+            return false;
+        }
         return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
     }

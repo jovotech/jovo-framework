@@ -23,7 +23,7 @@ export class GoogleAssistantCore implements Plugin {
     }
 
     async init(handleRequest: HandleRequest) {
-        const requestObject = handleRequest.host.getRequestObject();
+        const requestObject = handleRequest.host.$request;
 
         if (requestObject.user &&
             requestObject.conversation &&
