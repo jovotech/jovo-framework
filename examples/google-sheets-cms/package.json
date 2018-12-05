@@ -1,0 +1,25 @@
+{
+  "name": "jovo-examples-google-sheets-cms",
+  "version": "2.0.1-alpha.4",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "bundle": "gulp --cwd ./ --gulpfile ./node_modules/jovo-framework/gulpfile.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jovo-db-dynamodb": "^2.0.1-alpha.4",
+    "jovo-framework": "^2.0.1-alpha.4",
+    "jovo-platform-alexa": "^2.0.1-alpha.4",
+    "jovo-platform-dialogflow": "^2.0.1-alpha.4",
+    "jovo-platform-googleassistant": "^2.0.1-alpha.4",
+    "jovo-cms-googlesheets": "^2.0.1-alpha.4",
+    "jovo-db-filedb": "^2.0.1-alpha.4",
+    "jovo-plugin-debugger": "^2.0.1-alpha.4"
+  }
+}

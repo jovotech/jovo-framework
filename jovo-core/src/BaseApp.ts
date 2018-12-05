@@ -7,6 +7,7 @@ import {ActionSet} from "./ActionSet";
 process.on('unhandledRejection', (reason, p) => {
     console.log('unhandledRejection');
     console.log(reason.stack);
+    console.log(reason);
 });
 export interface BaseAppConfig extends ExtensibleConfig {
     inputMap?: {[key: string]: string};
@@ -23,7 +24,7 @@ export class BaseApp extends Extensible {
     $platform: Map<string, Platform> = new Map();
 
     $db!: Db; // TODO: MAP?
-    $cms: any; // tslint:disable-line
+    $cms: any = {}; // tslint:disable-line
 
     $data: AppData = {};
 

@@ -46,18 +46,12 @@ declare module 'jovo-core/dist/src/Jovo' {
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
-        t(): void;
         repeat(): void;
     }
 }
 
 
-declare module 'jovo-core/dist/src/SpeechBuilder' {
-    export interface SpeechBuilder {
-        t(): void;
-        addT(): void;
-    }
-}
+
 declare module 'jovo-core/dist/src/User' {
     interface User {
         $metaData: UserMetaData;

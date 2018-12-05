@@ -17,6 +17,7 @@ import {
 } from "./Interfaces";
 
 import {User} from "./User";
+import {Cms} from "./Cms";
 
 export abstract class Jovo extends EventEmitter {
     readonly $host: Host;
@@ -33,6 +34,7 @@ export abstract class Jovo extends EventEmitter {
     readonly $plugins?: any; // tslint:disable-line
     $speech?: SpeechBuilder;
     $reprompt?: SpeechBuilder;
+    $cms: Cms; // tslint:disable-line
 
     $requestSessionAttributes: SessionAttributes = {};
 
@@ -52,6 +54,7 @@ export abstract class Jovo extends EventEmitter {
         this.$request = undefined;
         this.$response = undefined;
         this.$plugins = {};
+        this.$cms = new Cms();
     }
 
     abstract isNewSession(): boolean;

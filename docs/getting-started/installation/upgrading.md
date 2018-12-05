@@ -19,7 +19,7 @@ You can do:
 
 ### Minor Updates
 
-To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y` depending on your major version) of the framework, use the following command:
+To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y`) of the framework, use the following command:
 
 ```sh
 $ npm install --save jovo-framework
@@ -39,11 +39,8 @@ To update to the latest version of the Jovo CLI, use the following command:
 
 ```sh
 $ npm install -g jovo-cli
-```
 
-or
-
-```sh
+# Add sudo if you run into permission problems
 $ sudo npm install -g jovo-cli
 ```
 
@@ -51,11 +48,8 @@ For major updates, consider uninstalling the Jovo CLI globally before you instal
 
 ```sh
 $ npm remove -g jovo-cli
-```
 
-or
-
-```sh
+# Add sudo if you run into permission problems
 $ sudo npm remove -g jovo-cli
 ```
 

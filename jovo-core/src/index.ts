@@ -1,6 +1,10 @@
 import {Inputs} from "./Interfaces";
 
-require('source-map-support').install();
+try {
+    require('source-map-support').install();
+} catch(error) {
+
+}
 
 export { BaseApp } from './BaseApp';
 export { ActionSet } from './ActionSet';
@@ -14,6 +18,8 @@ export {TestSuite, RequestBuilder, ResponseBuilder} from './TestSuite';
 export {Conversation, ConversationConfig} from './Conversation';
 export {Extensible} from './Extensible';
 export {ExtensibleConfig} from './Extensible';
+export {Cms} from './Cms';
+export {BaseCmsPlugin} from './BaseCmsPlugin';
 
 export {
     HandleRequest,

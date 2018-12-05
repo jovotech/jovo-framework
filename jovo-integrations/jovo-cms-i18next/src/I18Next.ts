@@ -1,4 +1,4 @@
-import {BaseApp, Jovo, Plugin, PluginConfig, HandleRequest, SpeechBuilder} from 'jovo-core';
+import {Cms, BaseCmsPlugin, BaseApp, Jovo, Plugin, PluginConfig, HandleRequest, SpeechBuilder} from 'jovo-core';
 import * as _ from "lodash";
 import * as fs from "fs";
 import * as util from 'util';
@@ -16,7 +16,7 @@ export interface Config extends PluginConfig {
     resources?: any; // tslint:disable-line
 }
 
-export class I18Next implements Plugin {
+export class I18Next extends BaseCmsPlugin{
     config: Config = {
         filesDir: './i18n',
         load: 'all',
@@ -27,44 +27,55 @@ export class I18Next implements Plugin {
     };
 
     constructor(config?: Config) {
+        super(config);
         if (config) {
             this.config = _.merge(this.config, config);
         }
     }
     install(app: BaseApp): void {
+        super.install(app);
         app.middleware('setup')!.use(this.loadFiles.bind(this));
 
         Jovo.prototype.t = function() {
-            this.$app!.$cms.i18n.changeLanguage(this.getLocale());
-            return this.$app!.$cms.i18n.t.apply(
-                this.$app!.$cms.i18n, arguments
+            this.$app!.$cms.I18Next.i18n.changeLanguage(this.getLocale());
+            return this.$app!.$cms.I18Next.i18n.t.apply(
+                this.$app!.$cms.I18Next.i18n, arguments
             );
         };
 
         SpeechBuilder.prototype.t = function() {
-            this.jovo!.$app!.$cms.i18n.changeLanguage(this.jovo!.getLocale());
-            const translatedText = this.jovo!.$app!.$cms.i18n.t.apply(
-                this.jovo!.$app!.$cms.i18n, arguments
+            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.getLocale());
+            const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
+                this.jovo!.$app!.$cms.I18Next.i18n, arguments
             );
             this.addText(translatedText);
             return this;
         };
         SpeechBuilder.prototype.addT = function() {
-            this.jovo!.$app!.$cms.i18n.changeLanguage(this.jovo!.getLocale());
-            const translatedText = this.jovo!.$app!.$cms.i18n.t.apply(
-                this.jovo!.$app!.$cms.i18n, arguments
+            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.getLocale());
+            const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
+                this.jovo!.$app!.$cms.I18Next.i18n, arguments
             );
             this.addText(translatedText);
             return this;
         };
 
-    }
-    uninstall(app: BaseApp) {
+        Cms.prototype.t = function() {
+            if (!this.$jovo) {
+                return;
+            }
+            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.getLocale());
+            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
+                this.$jovo.$app!.$cms.I18Next.i18n, arguments
+            );
+        };
+
 
     }
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
-        handleRequest.app.$cms.resources = {};
+        handleRequest.app.$cms.I18Next = {};
+        handleRequest.app.$cms.I18Next.resources = {};
 
         const filesDir = this.config.filesDir || '';
 
@@ -74,20 +85,20 @@ export class I18Next implements Plugin {
             dir.forEach((file: string) => {
                 const locale = file.substring(0, file.indexOf('.json'));
 
-                handleRequest.app.$cms.resources[locale] = require(
+                handleRequest.app.$cms.I18Next.resources[locale] = require(
                     path.join(
                         process.cwd(),
                         filesDir,
                         file));
             });
         } else if (this.config.resources) {
-            handleRequest.app.$cms.resources = this.config.resources;
+            handleRequest.app.$cms.I18Next.resources = this.config.resources;
         }
 
-        handleRequest.app.$cms.i18n = i18n
+        handleRequest.app.$cms.I18Next.i18n = i18n
             .init(Object.assign(
                 {
-                    resources: handleRequest.app.$cms.resources
+                    resources: handleRequest.app.$cms.I18Next.resources
                 },
                 this.config));
 

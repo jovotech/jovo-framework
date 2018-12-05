@@ -5,7 +5,7 @@ import * as _ from "lodash";
 
 import {BasicLogging} from "./middleware/logging/BasicLogging";
 import {JovoUser} from "./middleware/user/JovoUser";
-import {I18Next} from "./middleware/cms/I18Next";
+import {I18Next} from "jovo-cms-i18next";
 import {Handler} from "./middleware/Handler";
 import {Router} from "./middleware/Router";
 
@@ -96,7 +96,6 @@ export class App extends BaseApp {
         // TODO: analytics
         _.set(this.config, 'plugin.Alexa', _.get(this.config, 'plugin.Alexa') || _.get(this.config, 'v1.alexSkill'));
         _.set(this.config, 'plugin.GoogleAssistant', _.get(this.config, 'plugin.GoogleAssistant') || _.get(this.config, 'v1.googleAction'));
-
     }
 
     init() {
@@ -108,7 +107,10 @@ export class App extends BaseApp {
             responseLoggingObjects: _.get(this, 'config.plugin.BasicLogging.responseLoggingObjects') || _.get(this, 'config.responseLoggingObjects'),
         }));
 
-        this.use(new JovoUser());
+        this.use(new JovoUser({
+            userMetaData: this.config.userMetaData,
+            userContext: this.config.userContext
+        }));
         this.use(new I18Next());
         this.use(new Router());
         this.use(new Handler());

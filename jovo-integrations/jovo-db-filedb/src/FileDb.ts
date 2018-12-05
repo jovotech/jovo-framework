@@ -12,7 +12,7 @@ export class FileDb implements Db {
     needsWriteFileAccess = true;
 
     config: Config = {
-        pathToFile: './db/db.json',
+        pathToFile: '.././db/db.json',
         primaryKeyColumn: 'userId',
     };
 
@@ -28,18 +28,23 @@ export class FileDb implements Db {
 
         _.set(this, 'config.pathToFile', pathToFile);
         // create file
-        if (!fs.existsSync(path.dirname(pathToFile))) {
-            FileDb.mkDirByPathSync(path.dirname(pathToFile), false);
-        }
-        if (!fs.existsSync(pathToFile)) {
-            fs.writeFileSync(pathToFile, '[]');
-            console.log(`############################################`);
-            console.log(`#  Local FileDB ${pathToFile} created!  #`);
-            console.log(`############################################`);
-            console.log();
+        try {
+            if (!fs.existsSync(path.dirname(pathToFile))) {
+                FileDb.mkDirByPathSync(path.dirname(pathToFile), false);
+            }
+            if (!fs.existsSync(pathToFile)) {
+                fs.writeFileSync(pathToFile, '[]');
+                console.log(`############################################`);
+                console.log(`#  Local FileDB ${pathToFile} created!  #`);
+                console.log(`############################################`);
+                console.log();
+            }
+
+            app.$db = this;
+        } catch (e) {
+
         }
 
-        app.$db = this;
     }
 
     uninstall(app: BaseApp) {

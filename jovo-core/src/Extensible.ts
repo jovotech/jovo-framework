@@ -69,6 +69,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             // this.config.plugin[name] = plugin.config;
             plugin.install(this);
+            this.emit('use', plugin);
         });
         return this;
     }
