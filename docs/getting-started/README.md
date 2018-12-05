@@ -1,6 +1,8 @@
 # Jovo Quickstart Guide
 
-Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms in simple steps. [For the full installation guide, take a look here](./installation './installation').
+Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms in simple steps. 
+
+> [For the full installation guide, take a look here](./installation './installation').
 
 * [Install the Jovo CLI](#introduction)
 * [Create a new Jovo Project](#create-a-new-jovo-project)
@@ -112,7 +114,7 @@ The handler methods that are referenced in the app logic, e.g. `HelloWorldIntent
 
 Voice platforms offer different types of natural language understanding (NLU) services that offer different schemas. The Jovo Language Model can be used as an abstraction layer that can later be converted into platform-specific models.
 
-[Find out more about the Jovo Language Model here](../basic-concepts/model './model').
+> [Find out more about the Jovo Language Model here](../basic-concepts/model './model').
 
 
 
