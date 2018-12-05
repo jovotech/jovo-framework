@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-plugins",
-  "version": "2.0.1-alpha.4",
+  "version": "2.0.1-alpha.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,6 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jovo-framework": "^2.0.1-alpha.4"
+    "jovo-framework": "^2.0.1-alpha.5"
   }
 }
