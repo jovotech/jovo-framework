@@ -2,8 +2,6 @@
 
 Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms in simple steps. 
 
-> [For the full installation guide, take a look here](./installation './installation').
-
 * [Install the Jovo CLI](#introduction)
 * [Create a new Jovo Project](#create-a-new-jovo-project)
 * [Run and Test the Code](#run-and-test-the-code)
@@ -11,7 +9,7 @@ Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant
    * [Language Model](#language-model)
    * [Routing and App Logic](#routing-and-app-logic)
 
-
+> [For the full installation guide, take a look here](./installation './installation').
 
 ## Install the Jovo CLI
 

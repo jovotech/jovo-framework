@@ -2,8 +2,6 @@
 
 Learn about different options to install the Jovo Framework and Jovo CLI.
 
-> For a step-by-step introduction, see our [quickstart guide](../README.md './quickstart').
-
 * [Introduction](#introduction)
 * [Jovo CLI Installation](#jovo-cli-installation)
    * [Create a new Jovo Project](#create-a-new-jovo-project)
@@ -14,6 +12,7 @@ Learn about different options to install the Jovo Framework and Jovo CLI.
 * [Upgrading](#upgrading)
 * [Technical Requirements](#technical-requirements)
 
+> For a step-by-step introduction, see our [quickstart guide](../README.md './quickstart').
 
 ## Introduction
 
@@ -113,6 +112,8 @@ Then go into the directory and install the dependencies:
 ```sh
 $ npm install
 ```
+
+> You can find other examples and templates here: [Jovo Template Directory](https://www.jovo.tech/templates).
 
 
 ## Upgrading

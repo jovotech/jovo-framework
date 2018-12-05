@@ -7,13 +7,19 @@ Learn how to upgrade an existing Jovo Framework app.
    * [Major Updates](#major-updates)
 * [Upgrading the Jovo CLI](#upgrading-the-jovo-cli)
 
+> [For the full v2 migration guide, take a look here](./v1-migration.md './v1-migration').
+
 ## Upgrading the Jovo Framework
 
-You can see the current version of your Jovo Framework installation in your `package-lock.json` file.
+You can find the current version of your Jovo Framework installation in your `package-lock.json` file.
+
+You can do:
+* [Minor Updates](#minor-updates), e.g. from `2.0.x` to `2.1.x` or from `2.0.1` to `2.0.2`
+* [Major Updates](#major-updates), e.g. from `1.x` to `2.x`
 
 ### Minor Updates
 
-To update to the latest minor update (`1.x` or `2.x` depending on your major version) of the framework, use the following command:
+To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y` depending on your major version) of the framework, use the following command:
 
 ```sh
 $ npm install --save jovo-framework
@@ -35,12 +41,24 @@ To update to the latest version of the Jovo CLI, use the following command:
 $ npm install -g jovo-cli
 ```
 
+or
+
+```sh
+$ sudo npm install -g jovo-cli
+```
+
 For major updates, consider uninstalling the Jovo CLI globally before you install it again:
 
 ```sh
-$ npm uninstall -g jovo-cli
+$ npm remove -g jovo-cli
 ```
 
-For more information on installation and troubleshooting, take a look at our [Installation Guide](./installation.md './installation').
+or
+
+```sh
+$ sudo npm remove -g jovo-cli
+```
+
+> For more information on installation and troubleshooting, take a look at our [Installation Guide](./installation.md './installation').
 
 <!--[metadata]: {"description": "Learn how to upgrade an existing Jovo Framework app.", "route": "installation/upgrading"}-->
