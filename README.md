@@ -10,10 +10,11 @@
 
 <p align="center">
 <a href="https://travis-ci.org/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
+<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"> <img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
 <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
+<a href="#backers" alt="sponsors on Open Collective"><img src="https://opencollective.com/jovo-framework-nodejs/backers/badge.svg" /></a> <a href="#sponsors" alt="Sponsors on Open Collective"><img src="https://opencollective.com/jovo-framework-nodejs/sponsors/badge.svg" /></a>
 </p>
 <br/>
 
@@ -221,3 +222,33 @@ We strongly encourage everyone who wants to help the Jovo development take a loo
 ## We need your help
 
 Jovo is a free, open source framework for voice developers. We're improving it every day and appreciate any feedback. How to support us? Just go ahead and build something cool with the framework and let us know at feedback@jovo.tech. Thanks!
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/jovotech/jovo-framework-nodejs/graphs/contributors"><img src="https://opencollective.com/jovo-framework-nodejs/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/jovo-framework-nodejs#backer)]
+
+<a href="https://opencollective.com/jovo-framework-nodejs#backers" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/jovo-framework-nodejs#sponsor)]
+
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/2/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/3/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/4/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/5/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/6/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/7/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/8/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/jovo-framework-nodejs/sponsor/9/website" target="_blank"><img src="https://opencollective.com/jovo-framework-nodejs/sponsor/9/avatar.svg"></a>
+
+
