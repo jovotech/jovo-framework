@@ -229,7 +229,28 @@
                 },
                 {
                     "title": "Analytics",
-                    "route": "analytics"
+                    "content": [
+                        {
+                            "title": "Analytics Integrations",
+                            "route": "analytics"
+                        },
+                        {
+                            "title": "Dashbot",
+                            "route": "analytics/dashbot"
+                        },
+                        {
+                            "title": "Bespoken",
+                            "route": "analytics/bespoken"
+                        },
+                        {
+                            "title": "Chatbase",
+                            "route": "analytics/chatbase"
+                        },
+                        {
+                            "title": "Botanalytics",
+                            "route": "analytics/botanalytics"
+                        }
+                    ]
                 }
             ]
         },
