@@ -46,15 +46,65 @@ Routing in a Jovo project consists of three key concepts:
 
 Each intent from your [Language Model](../model './model') can be added as a function, similarly to `HelloWorldIntent` and `MyNameIsIntent` above.
 
+```javascript
+app.setHandler({
+
+    LAUNCH() {
+        // Triggered when people open the voice app without a specific query
+        this.tell('Hello World!');
+    },
+
+    YourFirstIntent() {
+      // Do something here
+    },
+
+});
+```
+
 > [Learn more about Intents here](./intents.md './routing/intents').
 
 ### States
+
+```javascript
+app.setHandler({
+
+    LAUNCH() {
+        let speech = 'Do you want to order something?';
+        let reprompt = 'Please answer with yes or no.';
+        this.followUpState('OrderState')
+            .ask(speech, reprompt);
+    },
+    
+    // Example: Behave differently for a 'yes' or 'no' answer inside order state
+    OrderState: {
+        
+        YesIntent() {
+           // Do something
+        },
+
+        NoIntent() {
+           // Do something
+        },
+    },
+
+});
+```
 
 > [Learn more about States here](./states.md './routing/states').
 
 ### Input
 
 In the `MyNameIsIntent` above, the user's first name is passed as input, which can be accessed with `this.$inputs.name.value`.
+
+```javascript
+app.setHandler({
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+
+});
+```
 
 > [Learn more about Input here](./input.md './routing/input').
 
@@ -83,7 +133,7 @@ You can use the following methods to redirect intents:
 
 ### toIntent
 
-Use  `toIntent` to jump into a new intent within the same request. 
+Use `toIntent` to jump into a new intent within the same request. 
 
 Sometimes, you may want to pass additional information (like user input) to another intent. You can use the `arg` parameter to do exactly this.
 
