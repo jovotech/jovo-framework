@@ -19,7 +19,7 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
-    "lerna": "^3.0.0-rc.0",
+    "lerna": "^3.5.1",
     "lerna-changelog": "^0.8.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.1.3",
