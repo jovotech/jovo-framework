@@ -3,8 +3,9 @@
 Learn more about the general architecture and lifecycle of voice app requests and responses.
 
 * [Introduction to Voice Interactions](#introduction-to-voice-interactions)
-    * [Requests](#requests)
-    * [Responses](#responses)
+    * [Request](#request)
+    * [Logic](#logic)
+    * [Response](#response)
 * [Sessions](#sessions)
 
 ## Introduction to Voice Interactions
@@ -19,10 +20,23 @@ Each interaction between a user and a voice application consists of an interacti
 The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists information like
 
 * User ID,
-* Intent,
-* Session data, 
+* [Intent](./routing/intents.md './routing/intents'), e.g. `MyNameIsIntent`
+* [Input](./routing/input.md './routing/input'), e.g. `name`
+* Session [data](./data, './data'), e.g. a [state](./routing/states.md './routing/states')
 
 and other things that might be relevant to your app. You can access the incoming request with `this.$request`.
+
+### Logic
+
+The app logic is what happens between an incoming request and sending back a response to the voice platform.
+
+Usually, this includes:
+* [Routing](./routing './routing') through intents, states, and variable user input
+* [Data](./data, './data') input and storage
+* Other things like business logic and API calls
+
+> A great next step to learn more about the Jovo app logic is taking a look at [Routing](./routing './routing').
+
 
 ### Responses
 
@@ -32,7 +46,7 @@ The `response` is what you send back to the platform after the `request` has bee
 * Visual output to display on screens
 * Session data
 
-[Find more information on Output here](./ouput './output').
+> [Find more information on Output here](./ouput './output').
 
 
 ## Sessions
@@ -45,6 +59,7 @@ A `session` is an uninterrupted interaction between a user and your application.
 * A user doesn't respond to an ask prompt and the session times out
 * The user asks to end the session by saying "quit" or "exit"
 
+> [Learn more about how to use data across sessions here](./data './data').
 
 <!--[metadata]: {"description": "Learn more about the general architecture and lifecycle of voice app requests and responses.",
 		        "route": "requests-responses"}-->
