@@ -2,66 +2,35 @@
 
 In this section, you will learn more about the essentials of building the logic of your Jovo Voice App.
 
-* [Overview](#overview)
-* [Handler](#handler)
+* [Requests and Responses](#requests-and-responses)
+* [Language Model](#language-model)
 * [Routing](#routing)
 * [Data](#data)
 * [Output](#output)
 
-## Overview
 
-![Alexa Skill Folder in a Jovo Project](../img/folder-structure-simple.png "Alexa Skill Folder in a Jovo Project" )
+## Requests and Responses
 
-The `/app` folder contains all the logic necessary for your voice application. The `app.js` includes both a part about [App Configuration](../03_app-configuration './app-configuration'), as well as App Logic.
+> Section [Requests and Responses](./requests-responses.md './requests-responses') provides an overview of the typical lifecycle of a voice user interaction.
 
-You can find out more about the basic concepts below.
+## Language Model
 
-## Handler
+> In section [Language Model](./model './model'), you can learn more about how to build language models for the different platforms.
 
-The `handler` is the main building block of your voice app. This is where the logic happens.
-
-```javascript
-app.setHandler({
-
-    LAUNCH() {
-        this.toIntent('HelloWorldIntent');
-    },
-
-    HelloWorldIntent() {
-        this.tell('Hello World!');
-    },
-});
-```
-
-You can also define separate handlers for each platform to overwrite specific intents and states for platform specific app logic.
-
-```javascript
-app.setAlexaHandler({
-    HelloWorldIntent() {
-        this.tell('Hello Alexa user');
-    }
-});
-
-app.setGoogleActionHandler({
-    HelloWorldIntent() {
-        this.tell('Hello Google user');
-    }
-});
-```
 
 ## Routing
 
-In section [App Logic > Routing](./01_routing './routing'), the concepts of intents and states are introduced, and how to route through them in the app's flow.
+> In section [Routing](./routing './routing'), the concepts of intents, states, and input are introduced, and how to route through them in the app's flow.
 
 
 ## Data
 
-In section [App Logic > Data](./02_data, './data'), user input (slots and parameters) and user specific data are covered.
+> In section [Data](./data, './data'), user specific data is covered.
 
 
 ## Output
 
-In section [App Logic > Output](./03_output './output'), you can learn more about how to craft speech, audio, and visual responses.
+> In section [Output](./output './output'), you can learn more about how to craft speech, audio, and visual responses.
 
 
 <!--[metadata]: {"description": "Find out how to build voice app logic with the Jovo Framework",
