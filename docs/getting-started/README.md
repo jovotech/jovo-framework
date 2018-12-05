@@ -1,6 +1,6 @@
 # Jovo Quickstart Guide
 
-Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms.
+Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms in simple steps. 
 
 * [Install the Jovo CLI](#introduction)
 * [Create a new Jovo Project](#create-a-new-jovo-project)
@@ -9,7 +9,7 @@ Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant
    * [Language Model](#language-model)
    * [Routing and App Logic](#routing-and-app-logic)
 
-
+> [For the full installation guide, take a look here](./installation './installation').
 
 ## Install the Jovo CLI
 
@@ -33,7 +33,7 @@ You can check the version number (and compare it to the [jovo-cli npm package](h
 $ jovo -V
 ```
 
-[Find a full list of Jovo CLI Commands here](../workflows/cli './cli').
+> [Find a full list of Jovo CLI Commands here](../workflows/cli './cli').
 
 
 ## Create a new Jovo Project
@@ -58,7 +58,7 @@ models/
 project.js
 ```
 
-[Find out more about the Jovo project structure here](../configuration/project-structure.md './project-structure').
+> [Find out more about the Jovo project structure here](../configuration/project-structure.md './project-structure').
 
 
 ## Run and Test the Code
@@ -77,7 +77,7 @@ This will start the development server on port `3000` and create a Jovo Webhook 
 
 In the Debugger, you can quickly test if the flow of your voice app works. For this example, click on the `LAUNCH` button, and then specify a name on the `MyNameIsIntent` button. The Debugger will create requests and run them agains your local webhook.
  
-[Find out more about requests and responses here](../basic-concepts/requests-responses.md './requests-responses').
+> [Find out more about requests and responses here](../basic-concepts/requests-responses.md './requests-responses').
 
 
 ## Next Steps
@@ -104,7 +104,7 @@ app.setHandler({
 });
 ```
 
-[Find out more about routing here](../basic-concepts/routing './routing').
+> [Find out more about routing here](../basic-concepts/routing './routing').
 
 ### Language Model
 
@@ -112,7 +112,7 @@ The handler methods that are referenced in the app logic, e.g. `HelloWorldIntent
 
 Voice platforms offer different types of natural language understanding (NLU) services that offer different schemas. The Jovo Language Model can be used as an abstraction layer that can later be converted into platform-specific models.
 
-[Find out more about the Jovo Language Model here](../basic-concepts/model './model').
+> [Find out more about the Jovo Language Model here](../basic-concepts/model './model').
 
 
 

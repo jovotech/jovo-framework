@@ -2,7 +2,7 @@
 
 [Take a look at the docs on our website, they're prettier there!](https://www.jovo.tech/framework/docs/)
 
-> 🚀 Join our newsletter for free courses on voice app development: [www.jovo.tech/newsletter](www.jovo.tech/newsletter) 
+> 🚀 Join our newsletter for free courses on voice app development: [www.jovo.tech/newsletter](https://www.jovo.tech/newsletter) 
 
 ## Content
 
