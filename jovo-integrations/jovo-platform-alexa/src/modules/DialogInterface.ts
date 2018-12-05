@@ -163,6 +163,37 @@ export class Dialog {
         return this.alexaSkill;
     }
 
+
+    /**
+     * Returns slot confirmation status
+     * @public
+     * @param {string} slotName
+     * @return {*}
+     */
+    getSlotConfirmationStatus(slotName: string) {
+        return _.get(this.alexaRequest, `request.intent.slots.${slotName}.confirmationStatus`);
+
+    }
+
+    /**
+     * Returns Intent Confirmation status
+     * @public
+     * @return {String}
+     */
+    getIntentConfirmationStatus() {
+        return _.get(this.alexaRequest, 'request.intent.confirmationStatus');
+    }
+
+
+    /**
+     * Returns if slot is confirmed
+     * @public
+     * @param {string} slotName
+     * @return {boolean}
+     */
+    isSlotConfirmed(slotName: string) {
+        return this.getSlotConfirmationStatus(slotName) === 'CONFIRMED';
+    }
 }
 
 // TODO: Optimize me
