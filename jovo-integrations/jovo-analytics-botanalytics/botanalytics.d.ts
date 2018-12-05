@@ -3,15 +3,13 @@ declare module 'botanalytics' {
         log(request: object, response: object): void;
     }
 
-    // export interface AmazonAlexa extends Platform {
-    // }
-
-    export interface Google extends Platform {
+    export interface AmazonAlexa extends Platform {
     }
 
-    interface AmazonAlexa {
-        log(request: object, response: object): void;
+    export interface GoogleAssistant extends Platform {
     }
 
-    // export default function (key: string): { AmazonAlexa: AmazonAlexa, google: Google };
+    export function GoogleAssistant(key: string): GoogleAssistant;
+
+    export function AmazonAlexa(key: string): AmazonAlexa;
 }
