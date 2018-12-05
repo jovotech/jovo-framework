@@ -18,6 +18,7 @@ app.use(
 app.setHandler({
     LAUNCH() {
         // this.$speech.t('WELCOME_ARRAY');
+        // return this.tell(this.$cms.resources);
         this.tell(this.t('WELCOME'));
     },
 });
