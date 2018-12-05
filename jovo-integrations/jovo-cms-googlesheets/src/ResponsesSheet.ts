@@ -1,12 +1,10 @@
 import {Plugin, Extensible, PluginConfig, HandleRequest, Jovo, Cms} from 'jovo-core';
 import * as i18n from 'i18next';
 import * as _ from "lodash";
-import {Config as DefaultSheetConfig, DefaultSheet} from "./DefaultSheet";
+import { DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 
-export interface Config extends DefaultSheetConfig {
-}
 
-export interface Config extends PluginConfig {
+export interface Config extends GoogleSheetsSheet {
     spreadsheetId?: string;
     sheet?: string;
     range?: string;
@@ -44,12 +42,11 @@ export class ResponsesSheet extends DefaultSheet {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.i18Next.changeLanguage( this.$jovo.getLocale());
+            this.$jovo.$app!.$cms.i18Next.changeLanguage( this.$jovo.$request!.getLocale());
             return this.$jovo.$app!.$cms.i18Next.t.apply(
                 this.$jovo.$app!.$cms.i18Next, arguments
             );
         };
-
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
@@ -61,7 +58,13 @@ export class ResponsesSheet extends DefaultSheet {
             const row: string[] = values[i];
             for (let j = 1; j < row.length; j++) {
                 const cell: string = row[j];
-                const locale: string = headers[j];
+                let locale: string = headers[j];
+
+                // workaround
+                if (locale.length === 5) {
+                    locale = locale.substr(0, 2) + '-' + locale.substr(3).toUpperCase();
+                }
+
                 _.set(resources, `${locale}.translation.${row[0]}`, cell);
             }
         }

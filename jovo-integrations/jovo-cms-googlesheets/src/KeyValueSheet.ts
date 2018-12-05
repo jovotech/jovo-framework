@@ -1,9 +1,9 @@
 import * as _ from "lodash";
-import {DefaultSheet, Config as DefaultSheetConfig} from "./DefaultSheet";
+import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 import {HandleRequest} from "jovo-core";
 
 
-export interface Config extends DefaultSheetConfig {
+export interface Config extends GoogleSheetsSheet {
 }
 
 export class KeyValueSheet extends DefaultSheet {

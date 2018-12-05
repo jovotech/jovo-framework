@@ -2,25 +2,23 @@ import {BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig} from
 import * as _ from "lodash";
 const {google, JWT} = require('googleapis');
 import * as util from 'util';
+import * as https from 'https';
+
 import * as fs from 'fs';
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 import {KeyValueSheet} from "./KeyValueSheet";
 import {ResponsesSheet} from "./ResponsesSheet";
-import {DefaultSheet} from "./DefaultSheet";
+import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 
 
-export interface GoogleSheetsSheet {
-    name: string;
-    spreadsheetId?: string;
-    type?: string;
-}
 
 export interface Config extends ExtensibleConfig {
     credentialsFile?: string;
     spreadsheetId?: string;
     sheets?: GoogleSheetsSheet[];
+    visibility?: string;
 }
 
 export class GoogleSheetsCMS extends BaseCmsPlugin {
@@ -28,6 +26,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         enabled: true,
         credentialsFile: './credentials.json',
         spreadsheetId: undefined,
+        visibility: 'private',
         sheets: [],
     };
     jwtClient: any; // tslint:disable-line
@@ -75,8 +74,10 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
 
     private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
         try {
-            this.jwtClient = await this.initializeJWT();
-            this.jwtClient = await this.authorizeJWT(this.jwtClient );
+            if (this.config.credentialsFile) {
+                this.jwtClient = await this.initializeJWT();
+                this.jwtClient = await this.authorizeJWT(this.jwtClient );
+            }
             await this.middleware('retrieve')!.run(handleRequest, true);
 
         } catch (e) {
@@ -84,7 +85,12 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         }
     }
 
-    loadSpreadsheetData (spreadsheetId: string, sheet: string, range: string): Promise<any[]> { // tslint:disable-line
+    async loadPublicSpreadSheetData (spreadsheetId: string, sheetPosition = 1) {
+        const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
+        return await this.getJSON(url);
+    }
+
+    loadPrivateSpreadsheetData (spreadsheetId: string, sheet: string, range: string): Promise<any[]> { // tslint:disable-line
         return new Promise(
             (resolve, reject) => {
                 try {
@@ -157,6 +163,28 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                 }
             }
         );
+    }
+
+    private getJSON(url: string) {
+        return new Promise((resolve, reject) => {
+            https.get(url, (res) => {
+                let body = '';
+
+                res.on('data', (chunk) => {
+                    body += chunk;
+                });
+
+                res.on('end', () => {
+                    try {
+                        resolve(JSON.parse(body));
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+            }).on('error', (e) => {
+                reject(e);
+            });
+        });
     }
 
 }
