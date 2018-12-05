@@ -31,8 +31,7 @@ export class Middleware {
      * @param {any} obj
      * @return {Promise<void>}
      */
-    async run(obj: object) {
-
+    async run(obj: object, concurrent = false) {
         if (!this.parent.config.enabled) {
             return Promise.resolve();
         }
@@ -46,8 +45,19 @@ export class Middleware {
         }
         this.parent.emit(`before.${this.name}`, obj);
 
-        for (const fn of this.fns) {
-            await fn.apply(null, arguments);
+        if (concurrent) {
+            const promiseArr = [];
+            for (const fn of this.fns) {
+                promiseArr.push(new Promise( async (resolve) => {
+                    await fn.apply(null, arguments);
+                    resolve();
+                }));
+            }
+            await Promise.all(promiseArr);
+        } else {
+            for (const fn of this.fns) {
+                await fn.apply(null, arguments);
+            }
         }
 
         this.parent.emit(`${this.name}`, obj);
