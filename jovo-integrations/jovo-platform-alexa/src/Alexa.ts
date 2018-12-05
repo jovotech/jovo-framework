@@ -21,6 +21,7 @@ import {DialogInterface} from "./modules/DialogInterface";
 import {AlexaNLU} from "./modules/AlexaNLU";
 import {AlexaRequestBuilder} from './core/AlexaRequestBuilder';
 import {AlexaResponseBuilder} from "./core/AlexaResponseBuilder";
+import {GadgetControllerPlugin} from "./modules/GadgetControllerPlugin";
 
 export interface Config extends ExtensibleConfig {
     allowedSkillIds: string[];
@@ -75,6 +76,7 @@ export class Alexa extends Extensible implements Platform {
             new GameEnginePlugin(),
             new HouseholdListEvent(),
             new InSkillPurchasePlugin(),
+            new GadgetControllerPlugin(),
             new PlaybackController(),
             new SkillEvent(),
             new Cards(),
