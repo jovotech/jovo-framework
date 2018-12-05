@@ -49,13 +49,13 @@ export class DefaultSheet {
         if (!this.config.range) {
             return Promise.reject('range has to be set.');
         }
-        const values: any[] = await this.cms.loadSpreadsheetData(spreadsheetId, this.config.name, this.config.range);
+        const values: any[] = await this.cms.loadSpreadsheetData(spreadsheetId, this.config.name, this.config.range);  // tslint:disable-line
 
         this.parse(handleRequest, values);
     }
 
 
-    parse(handleRequest: HandleRequest, values: any[]) {
+    parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
         if (!this.config.entity) {
             throw new Error('Entity has to be set.');
         }

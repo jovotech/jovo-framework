@@ -18,7 +18,7 @@ export class KeyValueSheet extends DefaultSheet {
         }
     }
 
-    parse(handleRequest: HandleRequest, values: any[]) {
+    parse(handleRequest: HandleRequest, values: any[]) { // tslint:disable-line
 
         const kv = {};
 
