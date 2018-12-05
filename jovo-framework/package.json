@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.0.1-alpha.5",
+  "version": "2.0.1-alpha.6",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,8 +15,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.0.1-alpha.5",
-    "jovo-core": "^2.0.1-alpha.5"
+    "jovo-cms-i18next": "^2.0.1-alpha.6",
+    "jovo-core": "^2.0.1-alpha.6"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
