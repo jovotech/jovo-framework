@@ -1,4 +1,4 @@
-import { Analytics, PluginConfig, BaseApp, HandleRequest } from "jovo-core";
+import {Analytics, PluginConfig, BaseApp, HandleRequest} from "jovo-core";
 import * as _ from 'lodash';
 
 import {AmazonAlexa} from 'botanalytics';
@@ -22,7 +22,7 @@ export class BotAnalyticsAlexa implements Analytics {
     }
 
     install(app: BaseApp) {
-        this.botanalytics = new AmazonAlexa(this.config.key);
+        this.botanalytics = AmazonAlexa(this.config.key);
         app.on('response', this.track);
     }
 
@@ -35,11 +35,9 @@ export class BotAnalyticsAlexa implements Analytics {
             return;
         }
 
-        if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
-            this.botanalytics.log(
-                handleRequest.host.getRequestObject(),
-                handleRequest.jovo.$response!
-            );
-        }
+        this.botanalytics.log(
+            handleRequest.host.getRequestObject(),
+            handleRequest.jovo.$response!
+        );
     }
 }
