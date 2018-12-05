@@ -13,36 +13,28 @@ export class Cards implements Plugin {
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
         GoogleAction.prototype.showBasicCard = function(basicCard: BasicCard) {
-            this.$output.GoogleAssistant = {
-                card: {
+            this.$output.GoogleAssistant.card = {
                     BasicCard: basicCard
-                }
             };
 
             return this;
         };
 
         GoogleAction.prototype.showSuggestionChips = function(chips: string[]) {
-            this.$output.GoogleAssistant = {
-                SuggestionChips: chips,
-            };
+            this.$output.GoogleAssistant.SuggestionChips = chips;
             return this;
         };
 
         GoogleAction.prototype.showLinkOutSuggestion = function(destinationName: string, url: string) {
-            this.$output.GoogleAssistant = {
-                LinkOutSuggestion: {
+            this.$output.GoogleAssistant.LinkOutSuggestion =  {
                     destinationName,
                     url
-                },
             };
             return this;
         };
 
         GoogleAction.prototype.showCarouselBrowse = function(carouselBrowse: CarouselBrowse) {
-            this.$output.GoogleAssistant = {
-                CarouselBrowse: carouselBrowse,
-            };
+            this.$output.GoogleAssistant.CarouselBrowse = carouselBrowse;
             return this;
         };
 
@@ -58,9 +50,7 @@ export class Cards implements Plugin {
          */
         GoogleAction.prototype.showSimpleTable = function(title: string, subtitle: string, columnHeaders: any[], rowsText: any[]) { // tslint:disable-line
             const table = new Table().setTitle(title).setSubtitle(subtitle).addColumns(columnHeaders).addRows(rowsText);
-            this.$output.GoogleAssistant = {
-                Table: table,
-            };
+            this.$output.GoogleAssistant.Table = table;
             return this;
         };
 
@@ -72,9 +62,7 @@ export class Cards implements Plugin {
          * @return {GoogleAction}
          */
         GoogleAction.prototype.showTable = function(table: Table) {
-            this.$output.GoogleAssistant = {
-                Table: table,
-            };
+            this.$output.GoogleAssistant.Table = table;
             return this;
         };
         /**
@@ -85,9 +73,7 @@ export class Cards implements Plugin {
          * @return {GoogleAction}
          */
         GoogleAction.prototype.showList = function(list: List) {
-            this.$output.GoogleAssistant = {
-                List: list,
-            };
+            this.$output.GoogleAssistant.List = list;
             return this;
         };
 
@@ -171,7 +157,7 @@ export class Cards implements Plugin {
 
 
         const cardBasicCard = _.get(output, 'GoogleAssistant.card.BasicCard');
-
+        console.log(output);
         if (cardBasicCard) {
             const richResponseItems = _.get(googleAction.$response, 'richResponse.items', []);
             richResponseItems.push({
