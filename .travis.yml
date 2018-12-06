@@ -6,7 +6,6 @@ install:
   - "npm run tslint"
   - "npm run test"
 
-
 node_js:
   - "10"
   - "9"

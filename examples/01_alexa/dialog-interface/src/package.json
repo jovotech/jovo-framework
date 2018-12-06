@@ -9,8 +9,8 @@
     "tsc": "node -v",
     "test": "echo \"Error: no test specified\""
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jovotech",
+  "license": "Apache-2.0",
   "dependencies": {
     "jovo-framework": "^2.0.1-alpha.12",
     "jovo-platform-alexa": "^2.0.1-alpha.12"
