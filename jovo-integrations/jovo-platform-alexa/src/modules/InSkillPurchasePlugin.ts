@@ -63,7 +63,7 @@ export class InSkillPurchase {
             upsellMessage
         };
         _.set(this.alexaSkill.$output, 'Alexa.Isp',
-            new IspBuyDirective(token, payload)
+            new IspUpsellDirective(token, payload)
         );
     }
 
