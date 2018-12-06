@@ -75,8 +75,12 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
         try {
             if (this.config.credentialsFile) {
-                this.jwtClient = await this.initializeJWT();
-                this.jwtClient = await this.authorizeJWT(this.jwtClient );
+                const credentialsFileExists = await exists(this.config.credentialsFile);
+
+                if (credentialsFileExists) {
+                    this.jwtClient = await this.initializeJWT();
+                    this.jwtClient = await this.authorizeJWT(this.jwtClient );
+                }
             }
             await this.middleware('retrieve')!.run(handleRequest, true);
 
