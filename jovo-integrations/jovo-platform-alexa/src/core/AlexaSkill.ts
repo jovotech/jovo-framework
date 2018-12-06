@@ -18,6 +18,9 @@ export class AlexaSkill extends Jovo {
         this.$reprompt = new AlexaSpeechBuilder(this);
     }
 
+    speechBuilder(): AlexaSpeechBuilder {
+        return this.getSpeechBuilder();
+    }
     getSpeechBuilder(): AlexaSpeechBuilder {
         return new AlexaSpeechBuilder(this);
     }

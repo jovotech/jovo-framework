@@ -17,8 +17,10 @@ export class GoogleAction extends Jovo {
         this.$speech = new GoogleActionSpeechBuilder(this);
         this.$reprompt = new GoogleActionSpeechBuilder(this);
     }
-
-    getSpeechBuilder() {
+    speechBuilder(): GoogleActionSpeechBuilder {
+        return this.getSpeechBuilder();
+    }
+    getSpeechBuilder(): GoogleActionSpeechBuilder {
         return new GoogleActionSpeechBuilder(this);
     }
 

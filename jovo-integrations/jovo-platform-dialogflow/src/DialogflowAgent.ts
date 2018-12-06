@@ -34,8 +34,12 @@ export class DialogflowAgent extends Jovo {
         return undefined;
     }
 
+
+    speechBuilder(): SpeechBuilder | undefined {
+        return this.getSpeechBuilder();
+    }
     getSpeechBuilder(): SpeechBuilder | undefined {
-        return undefined;
+        return new SpeechBuilder(this);
     }
 
     getSpeechText(): string | undefined {

@@ -63,6 +63,7 @@ export abstract class Jovo extends EventEmitter {
     abstract hasVideoInterface(): boolean;
     abstract getSpeechText(): string | undefined;
     abstract getSpeechBuilder(): SpeechBuilder | undefined;
+    abstract speechBuilder(): SpeechBuilder | undefined;
     abstract getRepromptText(): string | undefined;
     abstract getDeviceId(): string | undefined;
     abstract getRawText(): string | undefined;
