@@ -214,7 +214,7 @@ With `v2` you won't be able to access user inputs by adding them as parameters t
 
 ```javascript
 // Does NOT work:
-'MyNameIsIntent': function(name) {
+MyNameIsIntent(name) {
     this.tell('Hey ' + name.value + ', nice to meet you!');
 },
 ```
@@ -222,11 +222,11 @@ With `v2` you won't be able to access user inputs by adding them as parameters t
 Inputs can now only be accessed either using the `$inputs` object or `getInput()`:
 
 ```javascript
-'MyNameIsIntent': function() {
+MyNameIsIntent() {
     this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 },
 
-'MyNameIsIntent': function() {
+MyNameIsIntent() {
     this.tell('Hey ' + this.getInput('name').value + ', nice to meet you!');
 }
 ```
@@ -243,19 +243,22 @@ this.alexaSkill().audioPlayer().stop();
 this.$alexaSkill.$audioPlayer.stop();
 ```
 
-We've also added 
-
-
+Here's the list of changes:
 
 `v1` | `v2`
 :--- | :---
-
-`alexaSkill()` | `$alexaSkill`
-`googleAction()` | `$googleAction`
+`request()` | `$request`
+`response()` | `$response`
 `user()` | `$user`
-`
-
-$alexaSkill, $googleAction, $user, $user.$data, but also $inSkillPurchase, $dialog, etc.
+ - | `$inputs`
+`alexaSkill()` | `$alexaSkill`
+`alexaSkill().audioPlayer()` | `$alexaSkill.$audioPlayer`
+ - | `$alexaSkill.$dialog`
+`alexaSkill().gadgetController()` | `$alexaSkill.$gadgetController`
+`alexaSkill().gameEngine()` | `$alexaSkill.$gameEngine`
+`alexaSkill().inSkillPurchase()` | `$alexaSkill.$inSkillPurchase`
+`googleAction()` | `$googleAction`
+`googleAction().audioPlayer()` | `$googleAction.$audioPlayer`
 
 ## Responses are sent automatically
 
@@ -283,6 +286,8 @@ As a result, there were also method name changes:
 PLACEHOLDER (intentConfirmationStatus, slotConfirmationStatus)
 
 ## Jovo Persistence Layer
+
+With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
 
 ```javascript
 // v1
