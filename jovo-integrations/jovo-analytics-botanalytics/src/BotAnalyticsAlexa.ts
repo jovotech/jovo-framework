@@ -1,7 +1,7 @@
-import {Analytics, PluginConfig, BaseApp, HandleRequest} from "jovo-core";
+import { Analytics, PluginConfig, BaseApp, HandleRequest } from "jovo-core";
 import * as _ from 'lodash';
 
-import {AmazonAlexa} from 'botanalytics';
+import { AmazonAlexa } from 'botanalytics';
 
 export interface Config extends PluginConfig {
     key: string;
@@ -35,9 +35,11 @@ export class BotAnalyticsAlexa implements Analytics {
             return;
         }
 
-        this.botanalytics.log(
-            handleRequest.host.getRequestObject(),
-            handleRequest.jovo.$response!
-        );
+        if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
+            this.botanalytics.log(
+                handleRequest.jovo.$request!.toJSON(),
+                handleRequest.jovo.$response!
+            );
+        }
     }
 }
