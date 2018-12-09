@@ -199,19 +199,19 @@
                     "content": [
                         {
                             "title": "Overview",
-                            "route": "server"
+                            "route": "hosting"
                         },
                         {
                             "title": "ExpressJS",
-                            "route": "server/webhook"
+                            "route": "hosting/webhook"
                         },
                         {
                             "title": "AWS Lambda",
-                            "route": "server/aws-lambda"
+                            "route": "hosting/aws-lambda"
                         },
                         {
                             "title": "Azure Functions",
-                            "route": "server/azure-functions"
+                            "route": "hosting/azure-functions"
                         }
                     ]
                 }
