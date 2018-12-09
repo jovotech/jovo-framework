@@ -1,13 +1,21 @@
 # CMS Integrations
 
-With third-party integrations, you can add more functionality to your voice apps.
+Learn how to use a CMS for your Alexa Skills and Google Actions with the Jovo CMS integrations.
 
 * [Introduction](#introduction)
+* [Available Integrations](#available-integrations)
+* [Build your own CMS Integration](#build-your-own-cms-integration)
 
 
 ## Introduction
 
 
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+## Available Integrations
+
+
+## Build your own CMS Integration
+
+
+<!--[metadata]: {"description": "Learn how to use a CMS for your Alexa Skills and Google Actions with the Jovo CMS integrations.",
 "route": "cms" }-->
