@@ -52,4 +52,4 @@ db: {
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to a MySQL database.",
-"route": "databases/google-mysql" }-->
+"route": "databases/mysql" }-->

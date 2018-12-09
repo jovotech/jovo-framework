@@ -17,10 +17,10 @@ Here is a list of all available database integrations for Jovo:
 
 Name | Description
 ------------ | -------------
-[File DB](./file-db.md './file-db') | File-based system for local prototyping. Default.
-[DynamoDB](./dynamodb.md './dynamodb') | NoSQL database by AWS
-[Google Cloud Datastore](./google-datastore.md './google-datastore') | NoSQL database by Google Cloud
-[MySQL](./mysql.md './mysql') | The open source relational database
+[File DB](./file-db.md './databases/file-db') | File-based system for local prototyping. Default.
+[DynamoDB](./dynamodb.md './databases/dynamodb') | NoSQL database by AWS
+[Google Cloud Datastore](./google-datastore.md './databases/google-datastore') | NoSQL database by Google Cloud
+[MySQL](./mysql.md './databases/mysql') | The open source relational database
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",
