@@ -210,6 +210,10 @@
                             "route": "hosting/aws-lambda"
                         },
                         {
+                            "title": "Google Cloud",
+                            "route": "hosting/google-cloud-functions"
+                        },
+                        {
                             "title": "Azure Functions",
                             "route": "hosting/azure-functions"
                         }
@@ -317,6 +321,10 @@
                         {
                             "title": "Database Integrations",
                             "route": "databases"
+                        },
+                        {
+                            "title": "FileDB",
+                            "route": "databases/file-db"
                         },
                         {
                             "title": "DynamoDB",

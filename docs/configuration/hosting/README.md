@@ -1,6 +1,6 @@
-# Server
+# Hosting
 
-In this section, you can learn more about different types of server configurations to run your voice app.
+In this section, you can learn more about different types of services that can be used for hosting your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
 * [Available Integrations](#available-integrations)
@@ -19,9 +19,10 @@ Find more information on server integrations here:
 
 Name | Description
 ------------ | -------------
-[Webhook](./webhook.md './server/webhook') | Run an express server as HTTPS endpoint
-[AWS Lambda](./aws-lambda.md './server/aws-lambda') | Run the voice app as AWS Lambda Function
-[Azure Functions](./azure-functions.md './server/azure-functions') | Run the voice app on Azure Functions
+[Webhook](./webhook.md './hosting/webhook') | Run an express server as HTTPS endpoint
+[AWS Lambda](./aws-lambda.md './hosting/aws-lambda') | Run the voice app as AWS Lambda Function
+[Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') | Run the voice app on Google Cloud Functions
+[Azure Functions](./azure-functions.md './hosting/azure-functions') | Run the voice app on Azure Functions
 
 
 ## Code Example
@@ -29,32 +30,29 @@ Name | Description
 ```javascript
 'use strict';
 
-const {Webhook} = require('jovo-framework');
-const {app} = require('./app/app.js');
+const { Webhook, ExpressJS, Lambda } = require('jovo-framework');
+const { app } = require ('./app.js');
 
-// =================================================================================
-// Server Configuration
-// =================================================================================
+// ------------------------------------------------------------------
+// HOST CONFIGURATION
+// ------------------------------------------------------------------
 
-// Used if you run the application on a webhook
-if (app.isWebhook()) {
+// ExpressJS (Jovo Webhook)
+if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.PORT || 3000;
+
     Webhook.listen(port, () => {
-        console.log(`Example server listening on port ${port}!`);
+        console.info(`Local server listening on port ${port}.`);
     });
-    Webhook.post('/webhook', (req, res) => {
-        app.handleWebhook(req, res);
+
+    Webhook.post('/webhook', async (req, res) => {
+        await app.handle(new ExpressJS(req, res));
     });
 }
 
-// Used if you run the application on AWS Lambda
-exports.handler = (event, context, callback) => {
-    app.handleLambda(event, context, callback);
-};
-
-// Used if you run the application on Azure Functions
-module.exports = (context, req) => {
-    app.handleFunction(context, req);
+// AWS Lambda
+exports.handler = async (event, context, callback) => {
+    await app.handle(new Lambda(event, context, callback));
 };
 ```
 
