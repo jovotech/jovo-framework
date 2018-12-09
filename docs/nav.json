@@ -331,8 +331,12 @@
                             "route": "databases/dynamodb"
                         },
                         {
-                            "title": "Google DataStore",
+                            "title": "Google Datastore",
                             "route": "databases/google-datastore"
+                        },
+                        {
+                            "title": "MySQL",
+                            "route": "databases/mysql"
                         }
                     ]
                 },

@@ -1,69 +1,67 @@
 # DynamoDB
 
-Learn how to store user specific data to databases with the Jovo Persistence Layer.
+Learn how to store user specific data of your Alexa Skills and Google Actions to AWS DynamoDB.
 
 * [Introduction](#introduction)
-
-
-## Introduction
+* [Configuration](#configuration)
+* [Troubleshooting](#troubleshooting)
 
 > Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
 
-The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. Learn more about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
+## Introduction
 
-### DynamoDB for Apps Hosted on AWS Lambda
+The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. You can find the official documentation about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
 
-If you're running on Lambda, you can simply integrate a DynamoDB table like this:
+> [Learn more about hosting your application on AWS Lambda](../../configuration/hosting/aws-lambda.md '../hosting/aws-lambda).
 
-```javascript
-// Using the constructor
-const config = {
-    db: {
-        type: 'dynamodb',
-        tableName: 'TableName',
-    },
-    // Other configurations
-};
+## Configuration
 
-// Using the setter
-app.setDynamoDb('TableName');
+Download the package like this:
+
+```sh
+$ npm install --save jovo-db-dynamodb
 ```
 
-This will create a table with a name specified by you, and use this to store and load data. To make it work, you need to give your Lambda Role DynamoDB permissions.
-
-You can find out more in the official documentation by Amazon: [AWS Lambda Permissions Model](http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html). 
-
-### DynamoDB for Apps Not Hosted on AWS Lambda
-
-In case you're hosting your voice app somewhere else, you can add DynamoDB with the following:
+DynamoDB can be enabled in the `src/app.js` file like this:
 
 ```javascript
-let awsConfig = {
-    accessKeyId: 'yourAccessKeyId',
-    secretAccessKey: 'yourSecretAccessKey', 
-    region:  'yourRegion',
-};
+const { DynamoDb } = require('jovo-db-dynamodb');
 
-// Using the constructor
-const config = {
-    db: {
-        type: 'dynamodb',
-        tableName: 'TableName',
-        awsConfig: awsConfig,
-    },
-    // Other configurations
-};
+// Enable DB after app initialization
+app.use(new DynamoDb());
+```
 
-// Using the setter
-app.setDynamoDb('TableName', awsConfig);
+If you're running your code on Lambda, you can simply integrate a DynamoDB table like this in your `config.js` file:
+
+```javascript
+db: {
+    DynamoDb: {
+        tableName: 'yourTableName',
+    }
+}
+```
+
+In case you're hosting your voice app somewhere else, you need to additionally add AWS config:
+
+```javascript
+db: {
+    DynamoDb: {
+        tableName: 'yourTableName',
+        awsConfig: {
+            accessKeyId: 'yourAccessKeyId',
+            secretAccessKey: 'yourSecretAccessKey', 
+            region:  'yourRegion',
+        }
+    }
+}
 ```
 
 You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
 
-### DynamoDB Troubleshooting
+## Troubleshooting
 
-Here are a few things you need to consider when switching from a different database to DynamoDB
+Here are a few things you need to consider when switching from a different database to DynamoDB:
 * DynamoDB does not allow empty strings (`""`) as values: If you use them, please switch to `null` or a different value
 
-<!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",
+<!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to AWS DynamoDB.",
 "route": "databases/dynamodb" }-->
