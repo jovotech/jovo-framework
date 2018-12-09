@@ -1,26 +1,26 @@
 # File DB
 
-Learn how to store user specific data to databases with the Jovo Persistence Layer.
+Learn more about the default database for prototyping with Jovo: A file based system that stores user specific data to a JSON file.
 
 * [Introduction](#introduction)
+* [Configuration](#configuration)
 
 
 ## Introduction
 
-> Note: This is the default database integration. 
+> Note: This database type is not supposed to be used in production. See other [database integrations](./README.md '../') for options when the app is live. 
 
-The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
-
-This sort of data persistence is enabled by default. The `db.json` can be found in the the following folder:
+The FileDB integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a `db.json` file that can be found in a `db` folder:
 
 ```javascript
 db/
-  -- db.json
+  └── db.json
+models/
 src/
-// Other files
+project.js
 ```
 
-And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.$data.someKey = 'someValue';`:
+This is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.$data.someKey = 'someValue';`:
 
 ```js
 // Example for Amazon Alexa
@@ -41,7 +41,33 @@ And this is an example how the file structure looks like, with the `userID` as a
 ]
 ```
 
-> Note: The FilePersistence integration should only be used for local development as it won't work while hosting your app on a cloud service, e.g. AWS Lambda
+## Configuration
+
+Most Jovo templates come with FileDB as default database integration.
+
+It can be enabled in the `src/app.js` file like this:
+
+```javascript
+const {FileDb} = require('jovo-db-filedb');
+
+// Enable DB after app initialization
+app.use(new FileDb());
+```
+
+In your `config.js` file, you can set the `db` configuration like this:
+
+```javascript
+db: {
+	FileDb: {
+		pathToFile: '../db/db.json',
+	}
+},
+```
+
+
+
+
+
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data to a file-based database with the Jovo Framework",

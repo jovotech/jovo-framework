@@ -30,7 +30,7 @@ $ jovo
 You can check the version number (and compare it to the [jovo-cli npm package](https://www.npmjs.com/package/jovo-cli) version) with this command:
 
 ```sh
-$ jovo -V
+$ jovo -v
 ```
 
 > [Find a full list of Jovo CLI Commands here](../workflows/cli './cli').
@@ -49,12 +49,12 @@ This will create a new folder, download the [Jovo "Hello World" template](https:
 This is how a typical Jovo project looks like:
 
 ```javascript
+models/
+  └── en-US.json
 src/
   |── app.js
   |── config.js
   └── index.js
-models/
-  └── en-US.json
 project.js
 ```
 
