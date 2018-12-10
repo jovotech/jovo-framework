@@ -157,7 +157,7 @@ export class GadgetControllerPlugin implements Plugin {
         if (_get(output, 'Alexa.GadgetController')) {
             const directives = _get(response, 'response.directives', []);
             directives.push(_get(output, 'Alexa.GadgetController'));
-            _get(response, 'response.directives', directives);
+            _set(response, 'response.directives', directives);
         }
 
         if (_get(output, 'Alexa.respond')) {

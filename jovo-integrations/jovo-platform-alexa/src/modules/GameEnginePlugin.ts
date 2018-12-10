@@ -172,7 +172,7 @@ export class GameEnginePlugin implements Plugin {
         if (_get(output, 'Alexa.GameEngine')) {
             const directives = _get(response, 'response.directives', []);
             directives.push(_get(output, 'Alexa.GameEngine'));
-            _get(response, 'response.directives', directives);
+            _set(response, 'response.directives', directives);
         }
 
         if (_get(output, 'Alexa.respond')) {
