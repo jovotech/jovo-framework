@@ -17,7 +17,7 @@ In this section, you will learn more about how to use intents to route your user
 
 > [Learn how to add intents to the Jovo Language Model here](../model '../model').
 
-Besides at least one of the the required [`LAUNCH`](#launch-intent) or [`NEW_SESSION`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms like this:
+Besides at least one of the the required [`LAUNCH`](#launch) or [`NEW_SESSION`](#new_session) intents, you can add more intents that you defined at the respective developer platforms like this:
 
 ```javascript
 app.setHandler({
