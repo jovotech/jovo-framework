@@ -2,7 +2,8 @@
 import {Db, PluginConfig} from 'jovo-core';
 import * as path from 'path';
 import * as fs from "fs";
-import * as _ from "lodash";
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
 import {BaseApp} from "jovo-core";
 
 interface Config extends PluginConfig {
@@ -21,7 +22,7 @@ export class FileDb2 implements Db {
     constructor(config?: Config) {
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
     }
@@ -71,11 +72,11 @@ export class FileDb2 implements Db {
         if (fs.existsSync(pathToFile)) {
             const oldDataContent = await this.readFile(pathToFile);
             const oldData = JSON.parse(oldDataContent);
-            _.set(oldData, key, data);
+            _set(oldData, key, data);
             return this.saveFile(pathToFile, oldData);
         } else {
             const newData: any = {}; // tslint:disable-line
-            _.set(newData, key, data);
+            _set(newData, key, data);
             return this.saveFile(pathToFile, newData);
         }
     }

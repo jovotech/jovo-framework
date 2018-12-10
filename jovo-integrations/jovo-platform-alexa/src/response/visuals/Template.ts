@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+
 
 interface ImageSource {
     url: string;
@@ -206,8 +207,8 @@ export class Template {
             return img;
         } else {
             // TODO: there should be a better way
-            if (_.get(image, 'url')) {
-                return Template.makeImage(_.get(image, 'url'), _.get(image, 'description'));
+            if (_get(image, 'url')) {
+                return Template.makeImage(_get(image, 'url'), _get(image, 'description'));
             } else {
                 return image;
             }

@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
 import {Alexa} from "../Alexa";
@@ -50,7 +51,7 @@ export class AudioPlayer {
     constructor(alexaSkill: AlexaSkill) {
         this.alexaSkill = alexaSkill;
 
-        this.offsetInMilliseconds = _.get(alexaSkill.$request, 'context.AudioPlayer.offsetInMilliseconds');
+        this.offsetInMilliseconds = _get(alexaSkill.$request, 'context.AudioPlayer.offsetInMilliseconds');
     }
 
     /**
@@ -78,7 +79,7 @@ export class AudioPlayer {
             audioItem.metadata = this.metaData;
         }
 
-        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
+        _set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerPlayDirective(playBehavior, audioItem)
         );
         return this.alexaSkill; // TODO: return JOVO or AUDIOPLAYER?
@@ -90,7 +91,7 @@ export class AudioPlayer {
      * @return {Jovo}
      */
     stop() {
-        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
+        _set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerStopDirective()
         );
         return this.alexaSkill;
@@ -102,7 +103,7 @@ export class AudioPlayer {
      * @return {Jovo}
      */
     clearQueue(clearBehavior = AudioPlayerClearQueueDirective.CLEARBEHAVIOR_CLEAR_ALL) {
-        _.set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
+        _set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerClearQueueDirective(clearBehavior)
         );
         return this.alexaSkill;
@@ -182,7 +183,7 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     setTitle(title: string) {
-        _.set(this.metaData || {}, 'title', title);
+        _set(this.metaData || {}, 'title', title);
         return this;
     }
 
@@ -193,7 +194,7 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     setSubtitle(subTitle: string) {
-        _.set(this.metaData || {}, 'subTitle', subTitle);
+        _set(this.metaData || {}, 'subTitle', subTitle);
         return this;
     }
 
@@ -204,7 +205,7 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     addArtwork(url: string) {
-        _.set(this.metaData || {}, 'art', {
+        _set(this.metaData || {}, 'art', {
             sources: [url]
         });
         return this;
@@ -217,7 +218,7 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     addBackground(url: string) {
-        _.set(this.metaData || {}, 'backgroundImage', {
+        _set(this.metaData || {}, 'backgroundImage', {
             sources: [url]
         });
         return this;
@@ -243,10 +244,10 @@ export class AudioPlayerPlugin implements Plugin {
 
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type').substring(0, 11) === 'AudioPlayer') {
+        if (_get(alexaRequest, 'request.type').substring(0, 11) === 'AudioPlayer') {
             alexaSkill.$type = {
                 type: EnumRequestType.AUDIOPLAYER,
-                subType: 'AlexaSkill.' + _.get(alexaRequest, 'request.type').substring(12),
+                subType: 'AlexaSkill.' + _get(alexaRequest, 'request.type').substring(12),
             };
         }
         alexaSkill.$audioPlayer = new AudioPlayer(alexaSkill);
@@ -260,9 +261,9 @@ export class AudioPlayerPlugin implements Plugin {
         }
 
         if (alexaSkill.$request!.hasAudioInterface()) {
-            if (_.get(output, 'Alexa.AudioPlayer')) {
-                _.set(alexaSkill.$response, 'response.directives',
-                    [_.get(output, 'Alexa.AudioPlayer')]
+            if (_get(output, 'Alexa.AudioPlayer')) {
+                _set(alexaSkill.$response, 'response.directives',
+                    [_get(output, 'Alexa.AudioPlayer')]
                 );
             }
         }

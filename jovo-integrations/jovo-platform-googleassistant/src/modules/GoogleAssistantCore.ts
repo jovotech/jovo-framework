@@ -1,5 +1,7 @@
 import {Plugin, HandleRequest} from "jovo-core";
-import * as _ from "lodash";
+import _set = require('lodash.set');
+import _get = require('lodash.get');
+
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
@@ -14,7 +16,7 @@ export class GoogleAssistantCore implements Plugin {
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
         GoogleAction.prototype.displayText = function(displayText: string) {
-            _.set(this.$output, 'GoogleAssistant.displayText',
+            _set(this.$output, 'GoogleAssistant.displayText',
                 displayText
             );
             return this;
@@ -40,22 +42,22 @@ export class GoogleAssistantCore implements Plugin {
         if (!googleAction.$response) {
             googleAction.$response = new GoogleActionResponse();
         }
-        const tell = _.get(output, 'GoogleAssistant.tell') || _.get(output, 'tell');
+        const tell = _get(output, 'GoogleAssistant.tell') || _get(output, 'tell');
         if (tell) {
-            _.set(googleAction.$response, 'expectUserResponse', false);
-            _.set(googleAction.$response, 'richResponse.items', [{
+            _set(googleAction.$response, 'expectUserResponse', false);
+            _set(googleAction.$response, 'richResponse.items', [{
                 simpleResponse: {
                     ssml: `<speak>${tell.speech}</speak>`,
                 }
             }]);
         }
-        const ask = _.get(output, 'GoogleAssistant.ask') || _.get(output, 'ask');
+        const ask = _get(output, 'GoogleAssistant.ask') || _get(output, 'ask');
 
         if (ask) {
-            _.set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$response, 'expectUserResponse', true);
 
             // speech
-            _.set(googleAction.$response, 'richResponse.items', [{
+            _set(googleAction.$response, 'richResponse.items', [{
                 simpleResponse: {
                     ssml: `<speak>${ask.speech}</speak>`,
                 }
@@ -75,11 +77,11 @@ export class GoogleAssistantCore implements Plugin {
                     });
                 });
             }
-            _.set(googleAction.$response, 'noInputPrompts', noInputPrompts);
+            _set(googleAction.$response, 'noInputPrompts', noInputPrompts);
         }
 
-        if (_.get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
-            _.set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _.get(output, 'googleAction.displayText'));
+        if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
+            _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'googleAction.displayText'));
         }
 
     }

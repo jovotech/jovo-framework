@@ -1,5 +1,6 @@
 import {BaseApp, Jovo, SpeechBuilder, Host} from "jovo-core";
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+
 import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
@@ -38,26 +39,26 @@ export class GoogleAction extends Jovo {
     }
 
     hasScreenInterface() {
-        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+        if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
         }
-        return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
+        return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.SCREEN_OUTPUT') !== 'undefined';
     }
 
     hasAudioInterface() {
-        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+        if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
         }
-        return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
+        return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.AUDIO_OUTPUT') !== 'undefined';
     }
 
     hasMediaResponseInterface() {
-        if (!_.get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+        if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
         }
-        return typeof _.get(this.$originalRequest || this.$request, 'surface.capabilities')
+        return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
             .find((item: {name:string}) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
     }
 
@@ -69,16 +70,16 @@ export class GoogleAction extends Jovo {
     }
 
     getSpeechText() {
-        if (!_.get(this.$response, 'richResponse.items[0].simpleResponse.ssml')) {
+        if (!_get(this.$response, 'richResponse.items[0].simpleResponse.ssml')) {
             return;
         }
-        return _.get(this.$response, 'richResponse.items[0].simpleResponse.ssml').replace(/<\/?speak\/?>/g, '');
+        return _get(this.$response, 'richResponse.items[0].simpleResponse.ssml').replace(/<\/?speak\/?>/g, '');
     }
     getRepromptText() {
-        if (!_.get(this.$response, 'noInputPrompts[0].ssml')) {
+        if (!_get(this.$response, 'noInputPrompts[0].ssml')) {
             return;
         }
-        return _.get(this.$response, 'noInputPrompts[0].ssml').replace(/<\/?speak\/?>/g, '');
+        return _get(this.$response, 'noInputPrompts[0].ssml').replace(/<\/?speak\/?>/g, '');
     }
     getType() {
         return 'GoogleAction';

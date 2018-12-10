@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
 import {Plugin} from 'jovo-core';
@@ -15,10 +16,10 @@ export class PlaybackController implements Plugin {
     }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type').substring(0, 18) === 'PlaybackController' ) {
+        if (_get(alexaRequest, 'request.type').substring(0, 18) === 'PlaybackController' ) {
             alexaSkill.$type = {
                 type: EnumAlexaRequestType.PLAYBACKCONTROLLER,
-                subType: _.get(alexaRequest, 'request.type').substring(19),
+                subType: _get(alexaRequest, 'request.type').substring(19),
             };
         }
     }

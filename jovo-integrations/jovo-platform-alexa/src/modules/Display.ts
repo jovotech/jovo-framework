@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {EnumRequestType, Plugin} from 'jovo-core';
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
@@ -14,21 +15,21 @@ export class Display implements Plugin {
         alexa.middleware('$output')!.use(this.output.bind(this));
 
         AlexaSkill.prototype.showDisplayTemplate = function(template: Template) {
-            _.set(this.$output, 'Alexa.DisplayTemplate',
+            _set(this.$output, 'Alexa.DisplayTemplate',
                 new DisplayRenderTemplateDirective(template)
             );
             return this;
         };
 
         AlexaSkill.prototype.showHint = function(text: string) {
-            _.set(this.$output, 'Alexa.DisplayHint',
+            _set(this.$output, 'Alexa.DisplayHint',
                 new DisplayHintDirective(text)
             );
             return this;
         };
 
         AlexaSkill.prototype.showVideo = function(url: string, title?: string, subtitle?: string) {
-            _.set(this.$output, 'Alexa.VideoApp',
+            _set(this.$output, 'Alexa.VideoApp',
                 (new VideoAppLaunchDirective()).setData(url, title, subtitle)
             );
             return this;
@@ -39,11 +40,11 @@ export class Display implements Plugin {
     }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type') === 'Display.ElementSelected' ||
-        _.get(alexaRequest, 'request.type') === 'Alexa.Presentation.APL.UserEvent') {
+        if (_get(alexaRequest, 'request.type') === 'Display.ElementSelected' ||
+        _get(alexaRequest, 'request.type') === 'Alexa.Presentation.APL.UserEvent') {
             alexaSkill.$type = {
                 type: EnumRequestType.ON_ELEMENT_SELECTED,
-                subType: _.get(alexaRequest, 'request.token')
+                subType: _get(alexaRequest, 'request.token')
             };
         }
     }
@@ -53,28 +54,28 @@ export class Display implements Plugin {
 
         //TODO:
         // if (alexaSkill.$request.hasScreenInterface()) {
-            if (_.get(output, 'Alexa.DisplayTemplate')) {
+            if (_get(output, 'Alexa.DisplayTemplate')) {
 
-                _.set(response, 'response.directives',
-                    [_.get(output, 'Alexa.DisplayTemplate')]
+                _set(response, 'response.directives',
+                    [_get(output, 'Alexa.DisplayTemplate')]
                 );
             }
 
-        if (_.get(output, 'Alexa.DisplayHint')) {
-            if (!_.get(response, 'response.directives')) {
-                _.set(response, 'response.directives',
-                    [_.get(output, 'Alexa.DisplayHint')]);
+        if (_get(output, 'Alexa.DisplayHint')) {
+            if (!_get(response, 'response.directives')) {
+                _set(response, 'response.directives',
+                    [_get(output, 'Alexa.DisplayHint')]);
             } else {
-                _.get(response, 'response.directives').push(_.get(output, 'Alexa.DisplayHint'));
+                _get(response, 'response.directives').push(_get(output, 'Alexa.DisplayHint'));
             }
         }
 
-        if (_.get(output, 'Alexa.VideoApp')) {
+        if (_get(output, 'Alexa.VideoApp')) {
                 //TODO: doesn't work with ask
-            _.set(response, 'response.directives',
-                [_.get(output, 'Alexa.VideoApp')]
+            _set(response, 'response.directives',
+                [_get(output, 'Alexa.VideoApp')]
             );
-            if (_.get(response, 'response.shouldEndSession')) {
+            if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
         }

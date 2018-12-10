@@ -1,8 +1,10 @@
 import {EventEmitter} from "events";
-import * as _ from 'lodash';
 import {BaseApp} from "./BaseApp";
 import {SessionConstants} from "./enums";
 import {SpeechBuilder} from "./SpeechBuilder";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+
 import {
     AppConfig,
     Host,
@@ -101,7 +103,7 @@ export abstract class Jovo extends EventEmitter {
      */
     getSessionAttribute(path: string): any { // tslint:disable-line
         if (this.$session) {
-            return _.get(this.$session.$data, path);
+            return _get(this.$session.$data, path);
         }
         return;
     }
@@ -125,7 +127,7 @@ export abstract class Jovo extends EventEmitter {
      */
     setSessionAttribute(path: string, value: any): Jovo { // tslint:disable-line
         if (this.$session) {
-            _.set(this.$session.$data, path, value);
+            _set(this.$session.$data, path, value);
         }
         return this;
     }
@@ -207,7 +209,7 @@ export abstract class Jovo extends EventEmitter {
     }
 
     getInput(key: string) {
-        return _.get(this.$inputs, key);
+        return _get(this.$inputs, key);
     }
 
     output(obj: Output) {

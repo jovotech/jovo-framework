@@ -1,7 +1,6 @@
-import {Extensible, HandleRequest, PluginConfig} from "jovo-core";
+import {Extensible, HandleRequest, PluginConfig, Plugin} from "jovo-core";
 import {GoogleSheetsCMS} from "./GoogleSheetsCMS";
-import * as _ from "lodash";
-
+import _merge = require('lodash.merge');
 
 export interface GoogleSheetsSheet extends PluginConfig {
     name?: string;
@@ -14,7 +13,7 @@ export interface GoogleSheetsSheet extends PluginConfig {
 
 }
 
-export class DefaultSheet {
+export class DefaultSheet  implements Plugin {
 
     config: GoogleSheetsSheet = {
         enabled: true,
@@ -27,7 +26,7 @@ export class DefaultSheet {
 
     constructor(config?: GoogleSheetsSheet) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.config.entity = this.config.entity || this.config.name;
     }

@@ -1,6 +1,7 @@
-import * as _ from 'lodash';
 import {BaseApp, Plugin, EnumRequestType, AppConfig, HandleRequest, PluginConfig} from 'jovo-core';
-
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 export interface Config extends PluginConfig {
     intentMap: { [key: string]: string; };
 
@@ -21,7 +22,7 @@ export class Router implements Plugin {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -60,7 +61,7 @@ export class Router implements Plugin {
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
-            if(typeof _.get(handleRequest.app.config,`handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
+            if(typeof _get(handleRequest.app.config,`handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
                 route.path = EnumRequestType.ON_ELEMENT_SELECTED;
             }
         } else if (route.type === EnumRequestType.AUDIOPLAYER) {
@@ -70,11 +71,11 @@ export class Router implements Plugin {
             route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), EnumRequestType.ON_ELEMENT_SELECTED);
             route.type = EnumRequestType.ON_ELEMENT_SELECTED;
 
-            if (typeof _.get((handleRequest.app.config as AppConfig).handlers, route.path) === 'object') {
+            if (typeof _get((handleRequest.app.config as AppConfig).handlers, route.path) === 'object') {
                 route.path += '.' + handleRequest.jovo.$type.subType;
             }
         }
-        _.set(handleRequest.jovo.$plugins, 'Router.route', route);
+        _set(handleRequest.jovo.$plugins, 'Router.route', route);
 
     }
 
@@ -90,7 +91,7 @@ export class Router implements Plugin {
             path = state ? state : '';
             path += '["' + _intent + '"]';
         }
-        if (_.get(appConfig.handlers, path)) {
+        if (_get(appConfig.handlers, path)) {
             return {
                 path,
                 state,
@@ -102,7 +103,7 @@ export class Router implements Plugin {
         if (_state) {
             while (_state !== '') {
                 // State 'unhandled' is available and intent is not in intentsToSkipUnhandled
-                if (_.get(appConfig.handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
+                if (_get(appConfig.handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
                     if (appConfig.intentsToSkipUnhandled && appConfig.intentsToSkipUnhandled.indexOf(_intent) === -1) {
                         path = _state + '.' + EnumRequestType.UNHANDLED;
                         return {
@@ -114,7 +115,7 @@ export class Router implements Plugin {
                 }
 
                 }
-                if (_.get(appConfig.handlers, _state + '["' + _intent + '"]')) {
+                if (_get(appConfig.handlers, _state + '["' + _intent + '"]')) {
                     path = _state + '["' + _intent + '"]';
                     return {
                         path,
@@ -126,7 +127,7 @@ export class Router implements Plugin {
                 _state = Router.getLastLevel(_state);
             }
             // is intent in global?
-            if (_.get(appConfig.handlers, _intent)) {
+            if (_get(appConfig.handlers, _intent)) {
                 return {
                     path: _intent,
                     state,
@@ -137,7 +138,7 @@ export class Router implements Plugin {
         }
         const pathToUnhandled = _state ? _state + '.' + EnumRequestType.UNHANDLED : EnumRequestType.UNHANDLED;
 
-        if (_.get(appConfig.handlers, pathToUnhandled)) {
+        if (_get(appConfig.handlers, pathToUnhandled)) {
             path = pathToUnhandled;
         }
 

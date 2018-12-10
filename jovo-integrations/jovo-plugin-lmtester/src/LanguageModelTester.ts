@@ -1,5 +1,6 @@
 import {Plugin, PluginConfig, BaseApp, HandleRequest, EnumRequestType} from 'jovo-core';
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 
 interface Config extends PluginConfig {
     startText: string;
@@ -13,7 +14,7 @@ export class LanguageModelTester implements Plugin {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
     }
@@ -43,7 +44,7 @@ export class LanguageModelTester implements Plugin {
         } else if (handleRequest.jovo.$type.type === EnumRequestType.INTENT) {
 
             // skip END requests
-            if (_.get(handleRequest.jovo.$plugins, 'Router.route.path') === 'END') {
+            if (_get(handleRequest.jovo.$plugins, 'Router.route.path') === 'END') {
                 return;
             }
 
@@ -63,9 +64,9 @@ export class LanguageModelTester implements Plugin {
                         if (input) {
                             let out = `${key}: ${input.value ? input.value : ''}`;
 
-                            if (_.get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code') &&
-                                _.get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code') !== 'ER_SUCCESS_MATCH') {
-                                out += ` (${_.get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code')})`;
+                            if (_get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code') &&
+                                _get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code') !== 'ER_SUCCESS_MATCH') {
+                                out += ` (${_get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code')})`;
                             }
 
                             console.log('  ' + out);

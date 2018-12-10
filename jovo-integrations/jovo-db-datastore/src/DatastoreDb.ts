@@ -1,5 +1,6 @@
 import {Db, BaseApp, PluginConfig} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import Datastore = require("@google-cloud/datastore");
 
 export interface Config extends PluginConfig {
@@ -22,7 +23,7 @@ export class DatastoreDb implements Db {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -89,7 +90,7 @@ export class DatastoreDb implements Db {
         // Don't confuse with the "data" key form the "save" method, actually this is
         // the data node necessary for datastore, whereas in the "save" method we add a second data
         // node for storing our own data.
-        _.set(entity, 'data.' + key, data);
+        _set(entity, 'data.' + key, data);
 
         const dataStoreDataObject = {
             key: entityKey,

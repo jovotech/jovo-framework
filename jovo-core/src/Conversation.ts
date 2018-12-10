@@ -1,6 +1,8 @@
 import * as http from 'http';
 import * as fs from 'fs';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
+
 import * as util from "util";
 import * as path from 'path';
 import {TestSuite} from "./TestSuite";
@@ -45,7 +47,7 @@ export class Conversation {
         this.testSuite = testSuite;
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
     }
@@ -110,7 +112,7 @@ export class Conversation {
                     resolve(result);
                 });
             }).on('error', (e: Error) => {
-                if (_.get(e, 'code') === 'ECONNREFUSED') {
+                if (_get(e, 'code') === 'ECONNREFUSED') {
                                 console.log();
                                 console.log('Your server must be running for your tests to work.');
                                 console.log();

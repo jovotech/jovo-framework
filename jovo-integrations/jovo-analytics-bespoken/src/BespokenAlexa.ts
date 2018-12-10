@@ -1,7 +1,7 @@
 import {Analytics, PluginConfig, BaseApp, HandleRequest} from "jovo-core";
-import * as _ from 'lodash';
 import * as uuid from 'uuid';
 import * as https from 'https';
+import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
     key: string;
@@ -14,7 +14,7 @@ export class BespokenAlexa implements Analytics {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.track = this.track.bind(this);
     }

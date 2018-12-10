@@ -1,5 +1,5 @@
 import {BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
 const {google, JWT} = require('googleapis');
 import * as util from 'util';
 import * as https from 'https';
@@ -35,7 +35,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.actionSet = new ActionSet([
             'retrieve',

@@ -1,4 +1,7 @@
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
+
 import {
     BaseApp,
     Extensible,
@@ -43,7 +46,7 @@ export class Alexa extends Extensible implements Platform {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
         this.actionSet = new ActionSet([
@@ -122,7 +125,7 @@ export class Alexa extends Extensible implements Platform {
 
 
         if (this.config.handlers) {
-             _.set(handleRequest.app, 'config.handlers', _.merge( _.get(handleRequest.app, 'config.handlers'), this.config.handlers));
+             _set(handleRequest.app, 'config.handlers', _merge( _get(handleRequest.app, 'config.handlers'), this.config.handlers));
         }
     }
 

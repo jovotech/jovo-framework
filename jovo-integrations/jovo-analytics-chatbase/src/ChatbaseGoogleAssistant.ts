@@ -1,7 +1,6 @@
 import { Analytics, PluginConfig, BaseApp, HandleRequest, Jovo } from "jovo-core";
 import * as https from 'https';
-import * as _ from 'lodash';
-
+import _merge = require('lodash.merge');
 export interface Config extends PluginConfig {
     key: string;
     appVersion: string;
@@ -16,7 +15,7 @@ export class ChatbaseGoogleAssistant implements Analytics {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.track = this.track.bind(this);
     }

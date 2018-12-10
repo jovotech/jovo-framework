@@ -1,5 +1,5 @@
 import {Cms, BaseCmsPlugin, BaseApp, Jovo, Plugin, PluginConfig, HandleRequest, SpeechBuilder} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
 import * as fs from "fs";
 import * as util from 'util';
 import * as path from 'path';
@@ -29,7 +29,7 @@ export class I18Next extends BaseCmsPlugin{
     constructor(config?: Config) {
         super(config);
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
     install(app: BaseApp): void {

@@ -1,4 +1,8 @@
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
+import _mapValues = require('lodash.mapvalues');
+
 import {
     Extensible,
     HandleRequest, Jovo, Platform
@@ -44,7 +48,7 @@ export class DialogflowNlu extends Extensible {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -89,26 +93,26 @@ export class DialogflowNlu extends Extensible {
             requestObject.session) {
 
             handleRequest.jovo = new handleRequest.platformClazz(handleRequest.app, handleRequest.host);
-            _.set(handleRequest.jovo.$plugins, 'DialogflowNlu.dialogflow', new Dialogflow(handleRequest.jovo));
+            _set(handleRequest.jovo.$plugins, 'DialogflowNlu.dialogflow', new Dialogflow(handleRequest.jovo));
         }
     }
 
     request(jovo: Jovo) {
-        jovo.$originalRequest = _.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'originalDetectIntentRequest.payload');
+        jovo.$originalRequest = _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'originalDetectIntentRequest.payload');
         jovo.$request = jovo.$plugins.DialogflowNlu.dialogflow.$request;
         (jovo.$request as DialogflowRequest).originalDetectIntentRequest.payload = this.config.platformRequestClazz.fromJSON(jovo.$originalRequest );
-        // _.set(jovo.$request, 'originalDetectIntentRequest.payload', jovo.platformRequest.fromJSON(jovo.$originalRequest ));
+        // _set(jovo.$request, 'originalDetectIntentRequest.payload', jovo.platformRequest.fromJSON(jovo.$originalRequest ));
     }
 
     type(jovo: Jovo) {
-        if (_.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent')) {
-            if (_.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
+        if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent')) {
+            if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
                 jovo.$type = {
                     type: EnumRequestType.LAUNCH
                 };
-            } else if (_.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === false) {
+            } else if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === false) {
 
-                if (_.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Fallback Intent' &&
+                if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Fallback Intent' &&
                     jovo.$type) {
 
                 } else {
@@ -125,14 +129,14 @@ export class DialogflowNlu extends Extensible {
 
         };
         if (jovo.$type.type === EnumRequestType.INTENT) {
-            _.set(nluData, 'intent.name', _.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName'));
+            _set(nluData, 'intent.name', _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName'));
         }
         jovo.$nlu = nluData;
     }
 
     inputs(jovo: Jovo) {
-        const params = _.get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.parameters');
-        jovo.$inputs = _.mapValues(params, (value, name) => {
+        const params = _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.parameters');
+        jovo.$inputs = _mapValues(params, (value, name) => {
             return {
                 name,
                 value,
@@ -145,17 +149,17 @@ export class DialogflowNlu extends Extensible {
     async session(jovo: Jovo) {
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
 
-        const sessionId = _.get(dialogflowRequest, 'session');
+        const sessionId = _get(dialogflowRequest, 'session');
 
-        if (_.get(dialogflowRequest, 'queryResult.outputContexts')) {
-            const sessionContext =_.get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
+        if (_get(dialogflowRequest, 'queryResult.outputContexts')) {
+            const sessionContext =_get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
                 return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
             });
 
             if (sessionContext) {
                 jovo.$session.$data = sessionContext.parameters;
 
-                for (const parameter of Object.keys(_.get(dialogflowRequest, 'queryResult.parameters'))) {
+                for (const parameter of Object.keys(_get(dialogflowRequest, 'queryResult.parameters'))) {
                     delete jovo.$session.$data[parameter];
                     delete jovo.$session.$data[parameter + '.original'];
                 }
@@ -168,16 +172,16 @@ export class DialogflowNlu extends Extensible {
         const output = jovo.$output;
         const dialogflowResponse = jovo.$plugins.DialogflowNlu.dialogflow.$response;
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
-        const sessionId = _.get(dialogflowRequest, 'session');
+        const sessionId = _get(dialogflowRequest, 'session');
 
-        if (_.get(output, 'tell')) {
-            _.set(dialogflowResponse, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
+        if (_get(output, 'tell')) {
+            _set(dialogflowResponse, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
         }
-        if (_.get(output, 'ask')) {
-            _.set(dialogflowResponse, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
+        if (_get(output, 'ask')) {
+            _set(dialogflowResponse, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
         }
 
-        const outputContexts = _.get(dialogflowRequest, 'queryResult.outputContexts');
+        const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
         const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
 
         if (outputContexts && Object.keys(jovo.$session.$data).length > 0) {
@@ -199,7 +203,7 @@ export class DialogflowNlu extends Extensible {
                 });
             }
         }
-        _.set(dialogflowResponse, 'outputContexts', _.get(dialogflowRequest, 'queryResult.outputContexts'));
+        _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
     }
 
 
@@ -207,7 +211,7 @@ export class DialogflowNlu extends Extensible {
         (jovo.$plugins.DialogflowNlu.dialogflow.$response as DialogflowResponse).payload = {
             [this.config.platformId]: this.config.platformResponseClazz.fromJSON(jovo.$response )
         };
-        // _.set(jovo.$plugins.DialogflowNlu.dialogflow.$response, `payload.${jovo.$plugins.DialogflowNlu.dialogflow.platform}`, jovo.$response);
+        // _set(jovo.$plugins.DialogflowNlu.dialogflow.$response, `payload.${jovo.$plugins.DialogflowNlu.dialogflow.platform}`, jovo.$response);
         jovo.$response = jovo.$plugins.DialogflowNlu.dialogflow.$response;
     }
 

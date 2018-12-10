@@ -1,5 +1,6 @@
 import {NLUData, Plugin, BaseApp, PluginConfig} from "jovo-core";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {EnumRequestType} from "jovo-core";
 import {Dialogflow} from "./Dialogflow";
 import {DialogflowAgent} from "./DialogflowAgent";
@@ -42,9 +43,9 @@ export class DialogflowCore implements Plugin {
     type(dialogflowAgent: DialogflowAgent) {
         const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
 
-        if (_.get(dialogflowRequest, 'queryResult.intent')) {
+        if (_get(dialogflowRequest, 'queryResult.intent')) {
 
-            if (_.get(dialogflowRequest, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
+            if (_get(dialogflowRequest, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
                 dialogflowAgent.$type = {
                     type: EnumRequestType.LAUNCH
                 };
@@ -63,7 +64,7 @@ export class DialogflowCore implements Plugin {
 
         };
         if (dialogflowAgent.$type.type === EnumRequestType.INTENT) {
-            _.set(nluData, 'intent.name', _.get(dialogflowRequest, 'queryResult.intent.displayName'));
+            _set(nluData, 'intent.name', _get(dialogflowRequest, 'queryResult.intent.displayName'));
         }
         dialogflowAgent.$nlu = nluData;
     }
@@ -81,11 +82,11 @@ export class DialogflowCore implements Plugin {
         }
 
         if (output.tell) {
-            _.set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
+            _set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
         }
 
         if (output.ask) {
-            _.set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
+            _set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
         }
         console.log(dialogflowAgent.$response);
     }

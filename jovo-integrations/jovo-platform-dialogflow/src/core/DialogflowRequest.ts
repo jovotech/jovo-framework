@@ -1,4 +1,7 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _mapValues = require('lodash.mapValues');
+
 import {JovoRequest, SessionConstants, Inputs} from "jovo-core";
 
 interface Intent {
@@ -44,13 +47,13 @@ export class DialogflowRequest implements JovoRequest {
     session?: string;
 
     getAccessToken() {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.getAccessToken') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.getAccessToken') === 'function') {
             return this.originalDetectIntentRequest.payload.getAccessToken();
         }
         return 'DIALOGFLOW-DEFAULT-ACCESS-TOKEN';
     }
     getLocale() {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.getLocale') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.getLocale') === 'function') {
             return this.originalDetectIntentRequest.payload.getLocale();
         }
         return this.queryResult.languageCode;
@@ -61,14 +64,14 @@ export class DialogflowRequest implements JovoRequest {
     }
 
     getUserId() {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.getUserId') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.getUserId') === 'function') {
             return this.originalDetectIntentRequest.payload.getUserId();
         }
         return 'DIALOGFLOW-DEFAULT-USER-ID';
     }
 
     isNewSession() {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.isNewSession') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.isNewSession') === 'function') {
             return this.originalDetectIntentRequest.payload.isNewSession();
         }
         return true;
@@ -77,7 +80,7 @@ export class DialogflowRequest implements JovoRequest {
 
 
     setUserId(userId: string) {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setUserId') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setUserId') === 'function') {
             this.originalDetectIntentRequest.payload.setUserId(userId);
         }
         return this;
@@ -115,8 +118,8 @@ export class DialogflowRequest implements JovoRequest {
     }
 
     addSessionAttribute(key: string, value: any): this { // tslint:disable-line
-        const sessionId = _.get(this, 'session');
-        const sessionContext: Context =_.get(this, 'queryResult.outputContexts').find((context: Context) => {
+        const sessionId = _get(this, 'session');
+        const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
             return context.name === `${sessionId}/contexts/session`;
         });
 
@@ -136,8 +139,8 @@ export class DialogflowRequest implements JovoRequest {
     }
 
     getInputs(): Inputs { // tslint:disable-line
-        const params = _.get(this, 'queryResult.parameters');
-        return _.mapValues(params, (value, name) => {
+        const params = _get(this, 'queryResult.parameters');
+        return _mapValues(params, (value: string, name: string) => {
             return {
                 name,
                 value,
@@ -149,16 +152,16 @@ export class DialogflowRequest implements JovoRequest {
 
     getSessionAttributes(): any { // tslint:disable-line
 
-        const sessionId = _.get(this, 'session');
+        const sessionId = _get(this, 'session');
         let sessionAttributes: any = {}; // tslint:disable-line
-        const sessionContext =_.get(this, 'queryResult.outputContexts').find((context: Context) => {
+        const sessionContext =_get(this, 'queryResult.outputContexts').find((context: Context) => {
             return context.name === `${sessionId}/contexts/session`;
         });
 
         if (sessionContext) {
             sessionAttributes = sessionContext.parameters;
 
-            for (const parameter of Object.keys(_.get(this, 'queryResult.parameters'))) {
+            for (const parameter of Object.keys(_get(this, 'queryResult.parameters'))) {
                 delete sessionAttributes[parameter];
                 delete sessionAttributes[parameter + '.original'];
             }
@@ -167,8 +170,8 @@ export class DialogflowRequest implements JovoRequest {
     }
 
     setSessionAttributes(attributes: any): this { // tslint:disable-line
-        const sessionId = _.get(this, 'session');
-        const sessionContext: Context =_.get(this, 'queryResult.outputContexts').find((context: Context) => {
+        const sessionId = _get(this, 'session');
+        const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
             return context.name === `${sessionId}/contexts/session`;
         });
 
@@ -187,71 +190,71 @@ export class DialogflowRequest implements JovoRequest {
 
 
     hasAudioInterface(): boolean {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.hasAudioInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.hasAudioInterface') === 'function') {
             return this.originalDetectIntentRequest.payload.hasAudioInterface();
         }
         return true;
     }
 
     hasScreenInterface(): boolean {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.hasScreenInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.hasScreenInterface') === 'function') {
             return this.originalDetectIntentRequest.payload.hasScreenInterface();
         }
         return true;
     }
 
     hasVideoInterface(): boolean {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.hasScreenInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.hasScreenInterface') === 'function') {
             return this.originalDetectIntentRequest.payload.hasVideoInterface();
         }
         return false;
     }
 
     setAccessToken(accessToken: string): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setAccessToken') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setAccessToken') === 'function') {
             this.originalDetectIntentRequest.payload.setAccessToken(accessToken);
         }
         return this;
     }
 
     setAudioInterface(): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setAudioInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setAudioInterface') === 'function') {
             this.originalDetectIntentRequest.payload.setAudioInterface();
         }
         return this;
     }
 
     setLocale(locale: string): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setLocale') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setLocale') === 'function') {
             this.originalDetectIntentRequest.payload.setLocale(locale);
         }
-        _.set(this, 'queryResult.languageCode', locale);
+        _set(this, 'queryResult.languageCode', locale);
         return this;
     }
 
     setNewSession(isNew: boolean): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setNewSession') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setNewSession') === 'function') {
             this.originalDetectIntentRequest.payload.setNewSession(isNew);
         }
         return this;
     }
 
     setScreenInterface(): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setScreenInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setScreenInterface') === 'function') {
             this.originalDetectIntentRequest.payload.setScreenInterface();
         }
         return this;
     }
     setVideoInterface(): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setVideoInterface') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setVideoInterface') === 'function') {
             this.originalDetectIntentRequest.payload.setVideoInterface();
         }
         return this;
     }
 
     setState(state: string): this {
-        const sessionId = _.get(this, 'session');
-        const sessionContext: Context =_.get(this, 'queryResult.outputContexts').find((context: Context) => {
+        const sessionId = _get(this, 'session');
+        const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
             return context.name === `${sessionId}/contexts/session`;
         });
 
@@ -271,7 +274,7 @@ export class DialogflowRequest implements JovoRequest {
     }
 
     setTimestamp(timestamp: string): this {
-        if (typeof _.get(this.originalDetectIntentRequest, 'payload.setTimestamp') === 'function') {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.setTimestamp') === 'function') {
             this.originalDetectIntentRequest.payload.setTimestamp(timestamp);
         }
         return this;

@@ -1,5 +1,5 @@
 import {JovoResponse, SpeechBuilder} from "jovo-core";
-import * as _ from 'lodash';
+import _get = require('lodash.get');
 
 export interface RichResponseItem {
     simpleResponse: {
@@ -33,11 +33,11 @@ export class GoogleActionResponse implements JovoResponse {
     noInputPrompts?: NoInputPrompt[];
 
     getOutputSpeech() {
-        return _.get(this, 'richResponse.items[0].simpleResponse.ssml');
+        return _get(this, 'richResponse.items[0].simpleResponse.ssml');
     }
 
     getRepromptSpeech() {
-        return _.get(this, 'noInputPrompts[0].ssml');
+        return _get(this, 'noInputPrompts[0].ssml');
     }
 
     getSessionAttributes(): any { // tslint:disable-line
