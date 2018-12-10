@@ -5,7 +5,7 @@ Learn more about different data types that can be used in a Jovo project.
 * [Introduction](#introduction)
 * [Request Data](#request-data)
 * [Session Data](#request-data)
-* [User Data](#persisting-data)
+* [User Data](#user-data)
 * [App Data](#app-data)
 * [Account Linking](#account-linking)
 
