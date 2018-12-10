@@ -1,9 +1,10 @@
-import {BaseApp, ExtensibleConfig} from "jovo-core";
+import {BaseApp, ExtensibleConfig, Host} from "jovo-core";
 import * as fs from 'fs';
 import * as path from "path";
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import {FileDb2} from "jovo-db-filedb";
 
 import {BasicLogging} from "./middleware/logging/BasicLogging";
 import {JovoUser} from "./middleware/user/JovoUser";
@@ -118,7 +119,15 @@ export class App extends BaseApp {
         this.use(new Handler());
     }
 
-
+    async handle(hostwrapper: Host) {
+        // TODO:
+        if (hostwrapper.headers['jovo-test']) {
+            this.use(new FileDb2({
+                path: './../db/tests'
+            }));
+        }
+        super.handle(hostwrapper);
+    }
     /**
      * TODO:
      * @deprecated

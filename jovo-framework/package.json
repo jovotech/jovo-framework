@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "jovo-cms-i18next": "^2.0.1-alpha.12",
+    "jovo-db-filedb": "^2.0.1-alpha.12",
     "jovo-core": "^2.0.1-alpha.12",
     "lodash.get": "^4.4.2"
   },

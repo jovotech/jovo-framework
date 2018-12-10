@@ -14,7 +14,7 @@ export class FileDb implements Db {
     needsWriteFileAccess = true;
 
     config: Config = {
-        pathToFile: '.././db/db.json',
+        pathToFile: './../db/db.json',
         primaryKeyColumn: 'userId',
     };
 

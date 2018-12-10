@@ -15,7 +15,7 @@ export class FileDb2 implements Db {
 
     needsWriteFileAccess = true;
     config: Config = {
-        path: './db/',
+        path: './../db/',
         primaryKeyColumn: 'userId',
     };
 

@@ -1,5 +1,7 @@
 'use strict';
-const {App, Alexa, GoogleAssistant} = require('jovo-framework');
+const { App, Util } = require('jovo-framework');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { Alexa } = require('jovo-platform-alexa');
 jest.setTimeout(500);
 
 for (const p of [new Alexa()]) {
@@ -30,7 +32,7 @@ for (const p of [new Alexa()]) {
             expect(
                 responseIntentRequest.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')
             ).toBe(true);
-            conversation.clearDb();
+            await conversation.clearDb();
 
         });
 
@@ -44,7 +46,7 @@ for (const p of [new Alexa()]) {
             expect(
                 responseIntentRequest.isTell('Hey Joe, nice to meet you!')
             ).toBe(true);
-            conversation.clearDb();
+            await conversation.clearDb();
 
         });
     });
