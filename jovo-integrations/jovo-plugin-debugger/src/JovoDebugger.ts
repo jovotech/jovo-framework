@@ -118,7 +118,6 @@ export class JovoDebugger implements Plugin {
             throw new Error(`Couldn't send request. App object is not initialized.`);
         }
 
-
         const platformMap: {[key: string]: string} = {
             'AlexaSkill': 'Alexa',
             'GoogleAction': 'GoogleAction'
@@ -278,15 +277,14 @@ export class JovoDebugger implements Plugin {
             return;
         }
 
-        // TODO:
-        // const _privateLog = console.log;
+        const _privateLog = console.log;
 
-        // console.log = (message) => {
-        //     const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
-        //     socket.emit('console.log', nMessage, (new Error()).stack!.toString());
-        //     _privateLog.apply(console, arguments); // eslint-disable-line
-        // };
-        // this.consoleLogOverriden = true;
+        console.log = function(message) { // tslint:disable-line
+            const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
+            socket.emit('console.log', nMessage, (new Error()).stack!.toString());
+            _privateLog.apply(console, arguments); // eslint-disable-line
+        };
+        this.consoleLogOverriden = true;
     }
 
     private afterRouting(handleRequest: HandleRequest) {
