@@ -120,7 +120,6 @@ export class App extends BaseApp {
     }
 
     async handle(hostwrapper: Host) {
-        // TODO:
         if (hostwrapper.headers['jovo-test']) {
             this.use(new FileDb2({
                 path: './../db/tests'
