@@ -26,9 +26,7 @@ Jovo's basic output options offer simple methods for interacting with users thro
 
 ### tell
 
-The tell method is used to have Alexa or Google Home say something to your users. You can either use plain text or [SSML](#ssml) (Speech Synthesis Markup Language).
-
-Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. [Learn more about sessions here](../01_routing#introduction-to-user-sessions  './routing#introduction-to-user-sessions').
+The tell method is used to have Alexa or Google Home say something to your users. You can either use plain text, [SSML](#ssml) (Speech Synthesis Markup Language), or a [speechBuilder](#speechbuilder) object (`this.$speech`)).
 
 ```javascript
 this.tell(speech);
@@ -40,12 +38,15 @@ this.tell('Hello World!');
 this.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>');
 ```
 
+Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. 
+
+> [Learn more about sessions here](../requests-responses.md  './requests-responses').
 
 ### ask
 
 Whenever you want to make the experience more interactive and get some user input, the `ask` method is the way to go.
 
-This method keeps the mic open ([learn more about sessions here](../01_routing/README.md#introduction-to-user-sessions  './routing#introduction-to-user-sessions')), meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
+This method keeps the mic open, meaning the speech element is used initially to ask the user for some input. If there is no response, the reprompt is used to ask again.
 
 ```javascript
 this.ask(speech, reprompt);
@@ -53,7 +54,7 @@ this.ask(speech, reprompt);
 this.ask('How old are you?', 'Please tell me your age');
 ```
 
-You can also use [SSML](#ssml) for your speech and reprompt elements.
+You can also use [SSML](#ssml) or [speechBuilder](#speechbuilder) objects (`this.$speech` and `this.$reprompt`) for your speech and reprompt elements.
 
 #### Multiple Reprompts
 
@@ -63,11 +64,11 @@ Google Assistant offers the functionality to use multiple reprompts.
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
-You can find more detail about this feature here: [Platform Specific Features > Google Assistant > Multiple Reprompts](../../05_platform-specifics/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
+> You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
 
 ### repeat
 
-It is recommended to use a `'RepeatIntent'` (e.g. the `'AMAZON.RepeatIntent'`) that allows users to ask your app to repeat the previous output if they missed it.
+It is recommended to use a `RepeatIntent` (e.g. the `AMAZON.RepeatIntent`) that allows users to ask your app to repeat the previous output if they missed it.
 
 ```javascript
 this.repeat();
@@ -78,7 +79,7 @@ RepeatIntent() {
 }
 ```
 
-This feature makes use of the [Jovo User Context](../02_data/user.md#context './data/user#context'). To be able to use it, please make sure that you have a database integration set up and an have not set the `userContext.prev.size` element to 0 (default is 1) in your config.
+This feature makes use of the [Jovo User Context](../data/user.md#context './data/user#context'). To be able to use it, please make sure that you have a database integration set up and the Jovo User Context enabled.
 
 
 ## Advanced Output
@@ -107,21 +108,25 @@ But isn't that a little inconvenient? Let's take a look at the Jovo [speechBuild
 With the `speechBuilder`, you can assemble a speech element by adding different types of input:
 
 ```javascript
-let speech = this.speechBuilder()
-                .addText('Welcome to this Pizza Skill.')
-                .addBreak('300ms')
-                .addAudio('https://www.jovo.tech/downloads/pizza.mp3');
+this.$speech.addText('Welcome to this Pizza Skill.')
+        .addBreak('300ms')
+        .addAudio('https://www.jovo.tech/downloads/pizza.mp3');
 
-this.tell(speech);
+this.tell(this.$speech);
 ```
 
-You can find everything about the SpeechBuilder here: [App Logic > Output > SpeechBuilder](./speechbuilder.md  './output/speechbuilder').
+> [You can find everything about the SpeechBuilder here](./speechbuilder.md  './output/speechbuilder').
 
 ### i18n
 
 Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to support multilanguage voice apps.
 
-Here's the detailed documentation for it: [App Logic > Output > i18n](./i18n.md  './output/i18n'). 
+```javascript
+let speech = this.t('WELCOME');
+```
+
+> [Learn more about i18n responses here](./i18n.md  './output/i18n'). 
+
 
 ### Raw JSON Responses
 If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `$alexaSkill.setResponseObject` and `$googleAction.setResponseObject`.
@@ -134,14 +139,14 @@ this.$alexaSkill.setResponseObject(obj);
 this.$googleAction.setResponseObject(obj);
 ```
 
-> Learn more about platform-specific features and resonses here: [Platform Specifics](../../05_platform-specifics './platforms').
+> Learn more about platform-specific features and resonses here: [Platforms](../../platforms './platforms').
 
 
 ## Visual Output
 
 The Jovo framework, besides sound and voice output, can also be used for visual output.
 
-Learn more about visual output here: [App Logic > Output > Visual Output](./visual-output.md './output/visual-output'). 
+> [Learn more about visual output here](./visual-output.md './output/visual-output'). 
 
 
 ## No Speech Output
