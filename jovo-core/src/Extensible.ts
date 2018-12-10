@@ -97,7 +97,13 @@ export abstract class Extensible extends EventEmitter implements Plugin {
      */
     middleware(name: string): Middleware | undefined {
         if (!this.actionSet.get(name)) {
-            return this.actionSet.create(name, this);
+            if (name.startsWith('before.')) {
+                return this.actionSet.create(name.substr(7), this);
+            } else if (name.startsWith('after.')) {
+                return this.actionSet.create(name.substr(6), this);
+            } else {
+                return this.actionSet.create(name, this);
+            }
         }
         return this.actionSet.get(name);
     }
