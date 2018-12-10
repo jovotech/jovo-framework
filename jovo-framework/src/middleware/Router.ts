@@ -57,7 +57,6 @@ export class Router implements Plugin {
 
             const intent = Router.mapIntentName(handleRequest.app.config.plugin.Router, handleRequest.jovo.$nlu.intent.name);
             route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), intent);
-            console.log(route);
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
