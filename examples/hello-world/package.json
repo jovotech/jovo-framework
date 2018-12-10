@@ -16,9 +16,7 @@
     "jovo-framework": "^2.0.1-alpha.12",
     "jovo-platform-alexa": "^2.0.1-alpha.12",
     "jovo-platform-dialogflow": "^2.0.1-alpha.12",
-    "jovo-platform-googleassistant": "^2.0.1-alpha.12"
-  },
-  "devDependencies": {
+    "jovo-platform-googleassistant": "^2.0.1-alpha.12",
     "jovo-db-filedb": "^2.0.1-alpha.12",
     "jovo-plugin-debugger": "^2.0.1-alpha.12"
   }
