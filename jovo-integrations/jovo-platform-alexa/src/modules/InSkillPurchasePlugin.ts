@@ -8,6 +8,7 @@ import {AlexaRequest} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 import {EnumAlexaRequestType} from "../core/alexa-enums";
 import {AlexaResponse} from "..";
+import {GameEngine} from "./GameEnginePlugin";
 
 
 export class InSkillPurchase {
@@ -213,7 +214,7 @@ export class InSkillPurchasePlugin implements Plugin {
 
 
     install(alexa: Alexa) {
-
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
         AlexaSkill.prototype.$inSkillPurchase = undefined;
@@ -223,10 +224,11 @@ export class InSkillPurchasePlugin implements Plugin {
     }
     uninstall(alexa: Alexa) {
     }
-
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
+    }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
 
         if (_get(alexaRequest, 'request.type') === 'Connections.Response') {
             alexaSkill.$type = {

@@ -6,21 +6,24 @@ import {AlexaRequest, Intent} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaSpeechBuilder} from "../core/AlexaSpeechBuilder";
 import {AlexaResponse} from "..";
+import {AudioPlayer} from "./AudioPlayerPlugin";
 
 export class DialogInterface implements Plugin {
     install(alexa: Alexa) {
-
-        alexa.middleware('$request')!.use(this.request.bind(this));
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
+        AlexaSkill.prototype.$dialog = undefined;
+
         AlexaSkill.prototype.dialog = function() {
-            return this.$plugins.DialogInterface.dialog;
+            return this.$dialog;
         };
     }
     uninstall(alexa: Alexa) {
     }
-    private request(alexaSkill: AlexaSkill) {
-        _set(alexaSkill.$plugins, 'DialogInterface.dialog', new Dialog(alexaSkill));
+
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$dialog = new Dialog(alexaSkill);
     }
 
     private output(alexaSkill: AlexaSkill) {

@@ -148,13 +148,19 @@ export class GameEngine {
 export class GameEnginePlugin implements Plugin {
 
     install(alexa: Alexa) {
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
+        AlexaSkill.prototype.$gameEngine = undefined;
         AlexaSkill.prototype.gameEngine = function() {
             return new GameEngine(this);
         };
     }
     uninstall(alexa: Alexa) {
+    }
+
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$gameEngine = new GameEngine(alexaSkill);
     }
     type(alexaSkill: AlexaSkill) {
         alexaSkill.$gameEngine = new GameEngine(alexaSkill);

@@ -5,6 +5,7 @@ import {AlexaRequest} from "../core/AlexaRequest";
 import {Alexa} from "../Alexa";
 import {EnumRequestType, Plugin} from 'jovo-core';
 import {AlexaResponse} from "..";
+import {GameEngine} from "./GameEnginePlugin";
 
 export interface ImageSource {
     url: string;
@@ -229,19 +230,23 @@ export class AudioPlayer {
 export class AudioPlayerPlugin implements Plugin {
 
     install(alexa: Alexa) {
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
         AlexaSkill.prototype.$audioPlayer = undefined;
 
         AlexaSkill.prototype.audioPlayer = function() {
-            return new AudioPlayer(this);
+            return this.$audioPlayer;
         };
     }
     uninstall(alexa: Alexa) {
 
     }
 
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$audioPlayer = new AudioPlayer(alexaSkill);
+    }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
         if (_get(alexaRequest, 'request.type').substring(0, 11) === 'AudioPlayer') {
@@ -250,7 +255,7 @@ export class AudioPlayerPlugin implements Plugin {
                 subType: 'AlexaSkill.' + _get(alexaRequest, 'request.type').substring(12),
             };
         }
-        alexaSkill.$audioPlayer = new AudioPlayer(alexaSkill);
+
     }
 
     output(alexaSkill: AlexaSkill) {
