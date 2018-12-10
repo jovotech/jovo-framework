@@ -18,7 +18,7 @@ export interface Config extends ExtensibleConfig {
     credentialsFile?: string;
     spreadsheetId?: string;
     sheets?: GoogleSheetsSheet[];
-    visibility?: string;
+    access?: string;
 }
 
 export class GoogleSheetsCMS extends BaseCmsPlugin {
@@ -26,7 +26,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         enabled: true,
         credentialsFile: './credentials.json',
         spreadsheetId: undefined,
-        visibility: 'private',
+        access: 'private',
         sheets: [],
     };
     jwtClient: any; // tslint:disable-line
@@ -57,13 +57,13 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
             this.config.sheets.forEach((sheet: GoogleSheetsSheet) => {
                 let type = undefined;
                 if (!sheet.type) {
-                    type = 'DefaultSheet';
+                    type = 'Default';
                 }
                 if (sheet.type && defaultSheetMap[sheet.type]) {
                     type = sheet.type;
                 }
                 if (type) {
-                    this.use(new defaultSheetMap[type](sheet));
+                    this.use(new defaultSheetMap[type.toLowerCase()](sheet));
                 }
             });
         }
@@ -73,6 +73,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     }
 
     private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
+
         try {
             if (this.config.credentialsFile) {
                 const credentialsFileExists = await exists(this.config.credentialsFile);
@@ -82,10 +83,11 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                     this.jwtClient = await this.authorizeJWT(this.jwtClient );
                 }
             }
+
             await this.middleware('retrieve')!.run(handleRequest, true);
 
         } catch (e) {
-                console.log(e);
+            console.log(e);
         }
     }
 

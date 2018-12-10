@@ -41,7 +41,6 @@ export class DefaultSheet  implements Plugin {
     }
 
     async retrieve(handleRequest: HandleRequest) {
-
         if (!this.cms) {
             return Promise.reject('No cms initialized.');
         }
@@ -57,9 +56,12 @@ export class DefaultSheet  implements Plugin {
             return Promise.reject('range has to be set.');
         }
         let values: any[] = []; // tslint:disable-line
-        if (!this.config.access && this.config.access === 'private') {
+
+
+        const access = this.config.access || this.cms.config.access || 'private';
+        if (access === 'private') {
             values = await this.cms.loadPrivateSpreadsheetData(spreadsheetId, this.config.name, this.config.range);  // tslint:disable-line
-        } else if (this.config.access === 'public') {
+        } else if (access === 'public') {
             const publicValues = await this.cms.loadPublicSpreadSheetData(spreadsheetId, this.config.position);  // tslint:disable-line
             values = this.parsePublicToPrivate(publicValues);
         }
