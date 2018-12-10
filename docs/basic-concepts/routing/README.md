@@ -55,7 +55,7 @@ app.setHandler({
     },
 
     YourFirstIntent() {
-      // Do something here
+        // Do something here
     },
 
 });
@@ -64,6 +64,8 @@ app.setHandler({
 > [Learn more about Intents here](./intents.md './routing/intents').
 
 ### States
+
+Jovo comes with built-in state handling that allows you to react to intents differently based on the context a user is currently in:
 
 ```javascript
 app.setHandler({
@@ -94,7 +96,7 @@ app.setHandler({
 
 ### Input
 
-In the `MyNameIsIntent` above, the user's first name is passed as input, which can be accessed with `this.$inputs.name.value`.
+In the `MyNameIsIntent` of the example above, the user's first name is passed as input, which can be accessed with `this.$inputs.name.value`.
 
 ```javascript
 app.setHandler({
@@ -111,7 +113,7 @@ app.setHandler({
 
 ## Intent Redirects
 
-Jovo offers the ability to redirect incoming intents to others. For example, the  sample voice app uses this to go from `'LaunchIntent'` to `'HelloWorldIntent'`:
+Jovo offers the ability to redirect incoming intents to others. For example, the  sample voice app uses this to go from `LAUNCH` to `HelloWorldIntent`:
 
 ```javascript
 app.setHandler({
@@ -131,36 +133,17 @@ You can use the following methods to redirect intents:
 * [toStateIntent](#tostateintent)
 * [toStatelessIntent](#tostatelessintent)
 
+> [Learn how to pass data between intents](../data './data').
+
 ### toIntent
 
 Use `toIntent` to jump into a new intent within the same request. 
 
-Sometimes, you may want to pass additional information (like user input) to another intent. You can use the `arg` parameter to do exactly this.
-
 ```javascript
-this.toIntent(intent[, arg]);
+this.toIntent(intent);
 
 // Go to PizzaIntent
 this.toIntent('PizzaIntent');
-
-// Go to PizzaIntent and pass more data
-this.toIntent('PizzaIntent', moreData);
-```
-
-To make use of the passed data, add a parameter to your intent handler:
-
-```javascript
-app.setHandler({
-
-    LAUNCH() {
-        let data = 'data';
-        this.toIntent('HelloWorldIntent', data);
-    },
-
-    HelloWorldIntent(data) {
-        this.tell('Hello World' + data + '!');
-    }
-});
 ```
 
 
@@ -171,13 +154,10 @@ Similar to [`toIntent`](#tointent), you can use `toStateIntent` to redirect to a
 The routing will look for an intent within the given state, and go there if available. If not, it will go to the fallback option outside your defined states.
 
 ```javascript
-this.toStateIntent(state, intent[, arg]);
+this.toStateIntent(state, intent);
 
 // Go to PizzaIntent in state Onboarding
 this.toStateIntent('OnboardingState', 'PizzaIntent');
-
-// Go to PizzaIntent in state Onboarding and pass more data
-this.toStateIntent('OnboardingState', 'PizzaIntent', moreData);
 ```
 
 
@@ -186,14 +166,14 @@ this.toStateIntent('OnboardingState', 'PizzaIntent', moreData);
 If you're inside a state and want to go to a global intent, you can use `toStatelessIntent` to do exactly this:
 
 ```javascript
-this.toStatelessIntent(intent[, arg]);
+this.toStatelessIntent(intent);
 
 // Go to global PizzaIntent
 this.toStatelessIntent('PizzaIntent');
-
-// Go to global PizzaIntent and pass more data
-this.toStatelessIntent('PizzaIntent', moreData);
 ```
+
+> Note: Calling this method will remove the current state from the response.
+
 
 ## Advanced Routing
 
@@ -252,8 +232,6 @@ module.exports = {
 };
 ```
 
-For a full example of separating handlers into different files, take a look at this GitHub repository: [jankoenig/jovo-separate-handlers](https://github.com/jankoenig/jovo-separate-handlers).
-
 
 ### Platform Handlers
 
@@ -270,13 +248,13 @@ const handlers = {
 
 const alexaHandlers = {
     HelloWorldIntent() {
-        this.tell('Hello Alexa User');
+        this.tell('Hello Alexa User.');
     },
 };
 
 const googleActionHandlers = {
     HelloWorldIntent() {
-        this.tell('Hello Google User');
+        this.tell('Hello Google User.');
     },
 };
 
@@ -288,7 +266,13 @@ app.setGoogleActionHandler(googleActionHandlers);
 
 ### Event Listeners
 
-Event Listeners offer a way for you to react on certain events like `onRequest` and `onResponse`. 
+Event Listeners offer a way for you to react on certain events like `onRequest` and `onResponse`.
+
+```javascript
+app.onRequest(function(jovo) {
+    // ...
+}
+```
 
 > [Find out more about Event Listeners here](./event-listeners.md './routing/event-listeners').
 
