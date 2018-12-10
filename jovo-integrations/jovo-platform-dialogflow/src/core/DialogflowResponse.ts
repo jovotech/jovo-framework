@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {JovoResponse, SessionConstants} from "jovo-core";
 
 export interface Payload {
@@ -35,7 +36,7 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     getSessionAttributes() {
-        const sessionContext =_.get(this, 'outputContexts').find((context: Context) => {
+        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/session') > -1;
         });
 
@@ -53,18 +54,18 @@ export class DialogflowResponse implements JovoResponse {
     hasSessionEnded() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _.get(this.payload, `${platformId}.hasSessionEnded`) === 'function') {
+            if (typeof _get(this.payload, `${platformId}.hasSessionEnded`) === 'function') {
                 return this.payload[platformId].hasSessionEnded();
             }
         }
-        
+
         return false;
     }
 
     getOutputSpeech() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _.get(this.payload, `${platformId}.getOutputSpeech`) === 'function') {
+            if (typeof _get(this.payload, `${platformId}.getOutputSpeech`) === 'function') {
                 return this.payload[platformId].getOutputSpeech();
             }
         }
@@ -74,7 +75,7 @@ export class DialogflowResponse implements JovoResponse {
     getRepromptSpeech() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _.get(this.payload, `${platformId}.getRepromptSpeech`) === 'function') {
+            if (typeof _get(this.payload, `${platformId}.getRepromptSpeech`) === 'function') {
                 return this.payload[platformId].getRepromptSpeech();
             }
         }
@@ -84,7 +85,7 @@ export class DialogflowResponse implements JovoResponse {
     isTell(speech?: string | string[]) {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _.get(this.payload, `${platformId}.isTell`) === 'function') {
+            if (typeof _get(this.payload, `${platformId}.isTell`) === 'function') {
                 return this.payload[platformId].isTell(speech);
             }
         }
@@ -94,7 +95,7 @@ export class DialogflowResponse implements JovoResponse {
     isAsk(speech?: string | string[], reprompt?: string | string[]) {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _.get(this.payload, `${platformId}.isAsk`) === 'function') {
+            if (typeof _get(this.payload, `${platformId}.isAsk`) === 'function') {
                 return this.payload[platformId].isAsk(speech, reprompt);
             }
         }
@@ -103,24 +104,24 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     hasState(state: string) {
-        const sessionContext =_.get(this, 'outputContexts').find((context: Context) => {
+        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/session') > -1;
         });
 
         if (sessionContext) {
-            return _.get(sessionContext, `parameters.${SessionConstants.STATE}`) === state ;
+            return _get(sessionContext, `parameters.${SessionConstants.STATE}`) === state ;
         }
 
         return false;
     }
 
     hasSessionAttribute(name: string, value?: any) { // tslint:disable-line
-        const sessionContext =_.get(this, 'outputContexts').find((context: Context) => {
+        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/session') > -1;
         });
 
         if (sessionContext) {
-            return typeof _.get(sessionContext, `parameters.${name}`) !== 'undefined' ;
+            return typeof _get(sessionContext, `parameters.${name}`) !== 'undefined' ;
         }
 
         return false;

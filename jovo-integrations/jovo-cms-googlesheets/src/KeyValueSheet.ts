@@ -1,4 +1,6 @@
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
+
 import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 import {HandleRequest} from "jovo-core";
 
@@ -14,7 +16,7 @@ export class KeyValueSheet extends DefaultSheet {
     constructor(config?: Config) {
         super(config);
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -26,7 +28,7 @@ export class KeyValueSheet extends DefaultSheet {
             const row: string[] = values[i];
             for (let j = 1; j < row.length; j++) {
                 const cell: string = row[j];
-                _.set(kv, `${row[0]}`, cell);
+                _set(kv, `${row[0]}`, cell);
             }
         }
         const entity = this.config.entity || this.config.name;

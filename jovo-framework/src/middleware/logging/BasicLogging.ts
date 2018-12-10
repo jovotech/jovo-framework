@@ -1,5 +1,7 @@
-import * as _ from "lodash";
 import {BaseApp, HandleRequest, Plugin, PluginConfig} from "jovo-core";
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+
 
 export interface Config extends PluginConfig {
     logging?: boolean;
@@ -25,7 +27,7 @@ export class BasicLogging implements Plugin {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.requestLogger = this.requestLogger.bind(this);
         this.responseLogger = this.responseLogger.bind(this);
@@ -63,7 +65,7 @@ export class BasicLogging implements Plugin {
                 }
                 console.log(
                     JSON.stringify(
-                        _.get(handleRequest.jovo.$request, path), null, this.config.space));
+                        _get(handleRequest.jovo.$request, path), null, this.config.space));
             });
         } else {
             console.log(JSON.stringify(handleRequest.jovo.$request, null, this.config.space));
@@ -84,7 +86,7 @@ export class BasicLogging implements Plugin {
                 }
                 console.log(
                     JSON.stringify(
-                        _.get(handleRequest.jovo.$response, path), null, this.config.space));
+                        _get(handleRequest.jovo.$response, path), null, this.config.space));
             });
         } else {
             console.log(this.style(JSON.stringify(handleRequest.jovo.$response, null, this.config.space)));

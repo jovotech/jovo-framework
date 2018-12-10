@@ -1,7 +1,7 @@
 import {ApiError} from "./ApiError";
-import * as _ from "lodash";
+import _camelCase = require('lodash.camelcase');
+
 import {AlexaAPI, ApiCallOptions} from "./AlexaAPI";
-import {AlexaAPIResponse} from "./AlexaAPIResponse";
 
 
 export class AlexaContact {
@@ -28,7 +28,7 @@ export class AlexaContact {
 
         const options: ApiCallOptions = {
             endpoint: apiEndpoint,
-            path: `/v2/accounts/~current/settings/Profile.${_.camelCase(property)}`,
+            path: `/v2/accounts/~current/settings/Profile.${_camelCase(property)}`,
             permissionToken,
         };
         try {

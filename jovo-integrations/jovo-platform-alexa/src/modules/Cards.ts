@@ -1,6 +1,7 @@
 import {Plugin} from 'jovo-core';
 import {Alexa} from "../Alexa";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {AlexaSkill} from "../core/AlexaSkill";
 import {SimpleCard} from "../response/visuals/SimpleCard";
 import {StandardCard} from "../response/visuals/StandardCard";
@@ -20,7 +21,7 @@ export class Cards implements Plugin {
         alexa.middleware('$output')!.use(this.output.bind(this));
 
         AlexaSkill.prototype.showStandardCard = function(title: string, text: string, image: {smallImageUrl: string, largeImageUrl: string}) {
-            _.set(this.$output, 'Alexa.StandardCard',
+            _set(this.$output, 'Alexa.StandardCard',
                 new StandardCard()
                     .setTitle(title)
                     .setText(text)
@@ -30,7 +31,7 @@ export class Cards implements Plugin {
             return this;
         };
         AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
-            _.set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
                     .setAskForCountryAndPostalCodePermission()
             );
@@ -38,7 +39,7 @@ export class Cards implements Plugin {
         };
 
         AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
-            _.set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
                     .setAskForAddressPermission()
             );
@@ -46,20 +47,20 @@ export class Cards implements Plugin {
         };
 
         AlexaSkill.prototype.showAskForListPermissionCard = function(types: string[]) {
-            _.set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForListPermissionsCard(types)
             );
             return this;
         };
 
         AlexaSkill.prototype.showAskForContactPermissionCard = function(contactProperties: string[]) {
-            _.set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForContactPermissionsCard(contactProperties)
             );
             return this;
         };
         AlexaSkill.prototype.showCard = function(card: Card) {
-            _.set(this.$output, `Alexa.${card.constructor.name}`,
+            _set(this.$output, `Alexa.${card.constructor.name}`,
                 card
             );
             return this;
@@ -75,55 +76,55 @@ export class Cards implements Plugin {
         if (!alexaSkill.$response) {
             alexaSkill.$response = new AlexaResponse();
         }
-        const cardSimpleCard = _.get(output, 'Alexa.card.SimpleCard') || _.get(output, 'card.SimpleCard');
+        const cardSimpleCard = _get(output, 'Alexa.card.SimpleCard') || _get(output, 'card.SimpleCard');
         if (cardSimpleCard) {
-            _.set(alexaSkill.$response, 'response.card',
+            _set(alexaSkill.$response, 'response.card',
                 new SimpleCard()
-                    .setTitle(_.get(cardSimpleCard, 'title'))
-                    .setContent(_.get(cardSimpleCard, 'text'))
+                    .setTitle(_get(cardSimpleCard, 'title'))
+                    .setContent(_get(cardSimpleCard, 'text'))
             );
         }
-        const cardImageCard = _.get(output, 'Alexa.card.ImageCard') || _.get(output, 'card.ImageCard');
+        const cardImageCard = _get(output, 'Alexa.card.ImageCard') || _get(output, 'card.ImageCard');
         if (cardImageCard) {
-            _.set(alexaSkill.$response, 'response.card',
+            _set(alexaSkill.$response, 'response.card',
                 new StandardCard()
-                    .setTitle(_.get(cardImageCard, 'title'))
-                    .setText(_.get(cardImageCard, 'text'))
-                    .setSmallImageUrl(_.get(cardImageCard, 'imageUrl'))
-                    .setLargeImageUrl(_.get(cardImageCard, 'imageUrl'))
+                    .setTitle(_get(cardImageCard, 'title'))
+                    .setText(_get(cardImageCard, 'text'))
+                    .setSmallImageUrl(_get(cardImageCard, 'imageUrl'))
+                    .setLargeImageUrl(_get(cardImageCard, 'imageUrl'))
             );
         }
 
-        if (_.get(output, 'card.AccountLinkingCard')) {
-            _.set(alexaSkill.$response, 'response.card',
+        if (_get(output, 'card.AccountLinkingCard')) {
+            _set(alexaSkill.$response, 'response.card',
                 new LinkAccountCard()
             );
         }
 
 
         // alexa specific
-        if (_.get(output, 'Alexa.SimpleCard')) {
-            _.set(alexaSkill.$response, 'response.card',
-                _.get(output, 'Alexa.SimpleCard')
+        if (_get(output, 'Alexa.SimpleCard')) {
+            _set(alexaSkill.$response, 'response.card',
+                _get(output, 'Alexa.SimpleCard')
             );
         }
 
-        if (_.get(output, 'Alexa.StandardCard')) {
-            _.set(alexaSkill.$response, 'response.card',
-                _.get(output, 'Alexa.StandardCard')
+        if (_get(output, 'Alexa.StandardCard')) {
+            _set(alexaSkill.$response, 'response.card',
+                _get(output, 'Alexa.StandardCard')
             );
         }
 
-        if (_.get(output, 'Alexa.LinkAccountCard')) {
-            _.set(alexaSkill.$response, 'response.card',
+        if (_get(output, 'Alexa.LinkAccountCard')) {
+            _set(alexaSkill.$response, 'response.card',
                 new LinkAccountCard()
             );
         }
 
 
-        if (_.get(output, 'Alexa.AskForPermissionsConsentCard')) {
-            _.set(alexaSkill.$response, 'response.card',
-                _.get(output, 'Alexa.AskForPermissionsConsentCard')
+        if (_get(output, 'Alexa.AskForPermissionsConsentCard')) {
+            _set(alexaSkill.$response, 'response.card',
+                _get(output, 'Alexa.AskForPermissionsConsentCard')
             );
         }
 

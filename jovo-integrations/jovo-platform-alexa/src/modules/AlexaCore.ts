@@ -1,6 +1,7 @@
 import {Plugin} from "jovo-core";
 import {Alexa} from "../Alexa";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {EnumRequestType, HandleRequest} from "jovo-core";
 import {AlexaRequest} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
@@ -43,30 +44,30 @@ export class AlexaCore implements Plugin {
 
     async type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type') === 'LaunchRequest') {
+        if (_get(alexaRequest, 'request.type') === 'LaunchRequest') {
             alexaSkill.$type = {
                 type: EnumRequestType.LAUNCH
             };
         }
 
-        if (_.get(alexaRequest, 'request.type') === 'IntentRequest') {
+        if (_get(alexaRequest, 'request.type') === 'IntentRequest') {
             alexaSkill.$type = {
                 type: EnumRequestType.INTENT
             };
         }
 
-        if (_.get(alexaRequest, 'request.type') === 'SessionEndedRequest') {
+        if (_get(alexaRequest, 'request.type') === 'SessionEndedRequest') {
             alexaSkill.$type = {
                 type: EnumRequestType.END
             };
 
-            if (_.get(alexaRequest, 'request.reason')) {
-                alexaSkill.$type.subType = _.get(alexaRequest, 'request.reason');
+            if (_get(alexaRequest, 'request.reason')) {
+                alexaSkill.$type.subType = _get(alexaRequest, 'request.reason');
             }
 
         }
 
-        if (_.get(alexaRequest, 'request.type') === 'System.ExceptionEncountered') {
+        if (_get(alexaRequest, 'request.type') === 'System.ExceptionEncountered') {
             alexaSkill.$type = {
                 type: EnumRequestType.ON_ERROR
             };
@@ -94,33 +95,33 @@ export class AlexaCore implements Plugin {
         if (Object.keys(output).length === 0) {
             return;
         }
-        const tell = _.get(output, 'Alexa.tell') || _.get(output, 'tell');
+        const tell = _get(output, 'Alexa.tell') || _get(output, 'tell');
         if (tell) {
-            _.set(alexaSkill.$response, 'response.shouldEndSession', true);
-            _.set(alexaSkill.$response, 'response.outputSpeech', {
+            _set(alexaSkill.$response, 'response.shouldEndSession', true);
+            _set(alexaSkill.$response, 'response.outputSpeech', {
                 type: 'SSML',
                 ssml: AlexaSpeechBuilder.toSSML(tell.speech),
             });
         }
-        const ask = _.get(output, 'Alexa.ask') || _.get(output, 'ask');
+        const ask = _get(output, 'Alexa.ask') || _get(output, 'ask');
 
         if (ask) {
-            _.set(alexaSkill.$response, 'response.shouldEndSession', false);
-            _.set(alexaSkill.$response, 'response.outputSpeech', {
+            _set(alexaSkill.$response, 'response.shouldEndSession', false);
+            _set(alexaSkill.$response, 'response.outputSpeech', {
                 type: 'SSML',
                 ssml: AlexaSpeechBuilder.toSSML(ask.speech),
             });
-            _.set(alexaSkill.$response, 'response.reprompt.outputSpeech', {
+            _set(alexaSkill.$response, 'response.reprompt.outputSpeech', {
                 type: 'SSML',
                 ssml: AlexaSpeechBuilder.toSSML(ask.reprompt),
             });
         }
 
 
-        if (_.get(alexaSkill.$response, 'response.shouldEndSession') === false) {
+        if (_get(alexaSkill.$response, 'response.shouldEndSession') === false) {
             // set sessionAttributes
             if (alexaSkill.$session && alexaSkill.$session.$data) {
-                _.set(alexaSkill.$response, 'sessionAttributes', alexaSkill.$session.$data);
+                _set(alexaSkill.$response, 'sessionAttributes', alexaSkill.$session.$data);
             }
 
         }

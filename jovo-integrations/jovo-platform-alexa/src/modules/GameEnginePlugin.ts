@@ -1,4 +1,7 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
+
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
 import {Plugin} from 'jovo-core';
@@ -25,11 +28,11 @@ export class GameEngine {
     setEvents(eventArray: any[]) { // tslint:disable-line
         this.events = this.events || {};
 
-        _.forEach(eventArray, (event) => {
+        eventArray.forEach((event) => {
             if (event instanceof EventsBuilder) {
-                this.events = _.merge(this.events, event.build());
+                this.events = _merge(this.events, event.build());
             } else {
-                this.events = _.merge(this.events, event);
+                this.events = _merge(this.events, event);
             }
         });
 
@@ -44,11 +47,11 @@ export class GameEngine {
     setRecognizers(recognizerArray: any[]) { // tslint:disable-line
         this.recognizers = this.recognizers || {};
 
-        _.forEach(recognizerArray, (recognizer) => {
+        recognizerArray.forEach((recognizer) => {
             if (recognizer instanceof RecognizerBuilder) {
-                this.recognizers = _.merge(this.recognizers, recognizer.build());
+                this.recognizers = _merge(this.recognizers, recognizer.build());
             } else {
-                this.recognizers = _.merge(this.recognizers, recognizer);
+                this.recognizers = _merge(this.recognizers, recognizer);
             }
         });
 
@@ -103,7 +106,7 @@ export class GameEngine {
             this.setRecognizers(recognizers).setEvents(events);
         }
 
-        _.set(this.alexaSkill.$output, 'Alexa.GameEngine',
+        _set(this.alexaSkill.$output, 'Alexa.GameEngine',
             new GameEngineStartInputHandlerDirective(timeout, proxies, this.recognizers, this.events)
         );
         return this.alexaSkill;
@@ -115,9 +118,9 @@ export class GameEngine {
     stopInputHandler() {
         const alexaRequest = this.alexaSkill.$request as AlexaRequest;
 
-        const originatingRequestId = _.get(alexaRequest, 'request.originatingRequestId');
+        const originatingRequestId = _get(alexaRequest, 'request.originatingRequestId');
 
-        _.set(this.alexaSkill.$output, 'Alexa.GameEngine',
+        _set(this.alexaSkill.$output, 'Alexa.GameEngine',
             new GameEngineStopInputHandlerDirective(originatingRequestId)
         );
 
@@ -130,11 +133,11 @@ export class GameEngine {
      */
     respond(speech: string | AlexaSpeechBuilder) {
 
-        if (_.get(speech, 'constructor.name') === 'String') {
-            _.set(this.alexaSkill.$output, 'Alexa.respond', {speech});
+        if (_get(speech, 'constructor.name') === 'String') {
+            _set(this.alexaSkill.$output, 'Alexa.respond', {speech});
 
-        } else if (_.get(speech, 'constructor.name') === 'AlexaSpeechBuilder') {
-            _.set(this.alexaSkill.$output, 'Alexa.respond', {speech: speech.toString()});
+        } else if (_get(speech, 'constructor.name') === 'AlexaSpeechBuilder') {
+            _set(this.alexaSkill.$output, 'Alexa.respond', {speech: speech.toString()});
         }
     }
 
@@ -145,18 +148,24 @@ export class GameEngine {
 export class GameEnginePlugin implements Plugin {
 
     install(alexa: Alexa) {
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
+        AlexaSkill.prototype.$gameEngine = undefined;
         AlexaSkill.prototype.gameEngine = function() {
             return new GameEngine(this);
         };
     }
     uninstall(alexa: Alexa) {
     }
+
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$gameEngine = new GameEngine(alexaSkill);
+    }
     type(alexaSkill: AlexaSkill) {
         alexaSkill.$gameEngine = new GameEngine(alexaSkill);
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type') === 'GameEngine.InputHandlerEvent') {
+        if (_get(alexaRequest, 'request.type') === 'GameEngine.InputHandlerEvent') {
             return {
                 type: EnumAlexaRequestType.ON_GAME_ENGINE_INPUT_HANDLER_EVENT,
             };
@@ -166,19 +175,19 @@ export class GameEnginePlugin implements Plugin {
     output(alexaSkill: AlexaSkill) {
         const output = alexaSkill.$output;
         const response = alexaSkill.$response as AlexaResponse;
-        if (_.get(output, 'Alexa.GameEngine')) {
-            _.set(response, 'response.directives',
-                [_.get(output, 'Alexa.GameEngine')]
-            );
+        if (_get(output, 'Alexa.GameEngine')) {
+            const directives = _get(response, 'response.directives', []);
+            directives.push(_get(output, 'Alexa.GameEngine'));
+            _set(response, 'response.directives', directives);
         }
 
-        if (_.get(output, 'Alexa.respond')) {
-            _.set(response, 'response.outputSpeech', {
+        if (_get(output, 'Alexa.respond')) {
+            _set(response, 'response.outputSpeech', {
                 type: 'SSML',
-                ssml: AlexaSpeechBuilder.toSSML(_.get(output, 'Alexa.respond.speech')),
+                ssml: AlexaSpeechBuilder.toSSML(_get(output, 'Alexa.respond.speech')),
             });
 
-            if (_.get(response, 'response.shouldEndSession')) {
+            if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
         }
@@ -200,7 +209,7 @@ class RecognizerBuilder {
      */
     constructor(name: string, type: string) {
         this.name = name;
-        _.set(this, `recognizers.${name}.type`, type);
+        _set(this, `recognizers.${name}.type`, type);
     }
 
     /**
@@ -210,7 +219,7 @@ class RecognizerBuilder {
      * @return {RecognizerBuilder}
      */
     setProperty(key: string, value: any) { // tslint:disable-line
-        _.set(this, `recognizers.${this.name}.${key}`, value);
+        _set(this, `recognizers.${this.name}.${key}`, value);
         return this;
     }
 
@@ -399,7 +408,7 @@ class EventsBuilder {
      * @return {EventsBuilder}
      */
     setProperty(key: string, value: any ) {  // tslint:disable-line
-        _.set(this, `events.${this.name}.${key}`, value);
+        _set(this, `events.${this.name}.${key}`, value);
         return this;
     }
 

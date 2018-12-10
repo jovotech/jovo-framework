@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-google-sheets-cms",
-  "version": "2.0.1-alpha.11",
+  "version": "2.0.1-alpha.12",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -10,16 +10,16 @@
     "test": "echo \"Error: no test specified\"",
     "bundle": "gulp --cwd ./ --gulpfile ./node_modules/jovo-framework/gulpfile.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jovotech",
+  "license": "Apache-2.0",
   "dependencies": {
-    "jovo-cms-googlesheets": "^2.0.1-alpha.11",
-    "jovo-db-dynamodb": "^2.0.1-alpha.11",
-    "jovo-db-filedb": "^2.0.1-alpha.11",
-    "jovo-framework": "^2.0.1-alpha.11",
-    "jovo-platform-alexa": "^2.0.1-alpha.11",
-    "jovo-platform-dialogflow": "^2.0.1-alpha.11",
-    "jovo-platform-googleassistant": "^2.0.1-alpha.11",
-    "jovo-plugin-debugger": "^2.0.1-alpha.11"
+    "jovo-cms-googlesheets": "^2.0.1-alpha.12",
+    "jovo-db-dynamodb": "^2.0.1-alpha.12",
+    "jovo-db-filedb": "^2.0.1-alpha.12",
+    "jovo-framework": "^2.0.1-alpha.12",
+    "jovo-platform-alexa": "^2.0.1-alpha.12",
+    "jovo-platform-dialogflow": "^2.0.1-alpha.12",
+    "jovo-platform-googleassistant": "^2.0.1-alpha.12",
+    "jovo-plugin-debugger": "^2.0.1-alpha.12"
   }
 }

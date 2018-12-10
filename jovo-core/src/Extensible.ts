@@ -1,8 +1,13 @@
 import * as EventEmitter from "events";
-import * as _ from "lodash";
 import {Plugin, PluginConfig} from "./Interfaces";
 import {ActionSet} from "./ActionSet";
 import {Middleware} from "./Middleware";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
+import _isEqual = require('lodash.isequal');
+import _cloneDeep = require('lodash.clonedeep');
+import _transform = require('lodash.transform');
+
 
 export interface ExtensibleConfig extends PluginConfig {
     plugin?: any; // tslint:disable-line
@@ -22,7 +27,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
     constructor(config?: ExtensibleConfig) {
         super();
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.actionSet = new ActionSet([], this);
     }
@@ -42,21 +47,21 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             if (plugin.config) {
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
-                const pluginDefaultConfig = _.cloneDeep(emptyDefaultPluginObject.config);
-                const appConfig = _.cloneDeep(this.config);
+                const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
+                const appConfig = _cloneDeep(this.config);
 
                 const pluginAppConfig: any = {}; // tslint:disable-line
 
                 Object.keys(pluginDefaultConfig).forEach((item: string) => {
-                    pluginAppConfig[item] = _.get(appConfig, `plugin.${name}.${item}`);
+                    pluginAppConfig[item] = _get(appConfig, `plugin.${name}.${item}`);
                 });
 
                 const pluginConstructorConfig: any = {}; // tslint:disable-line
                 const constructorConfig = difference(plugin.config, pluginDefaultConfig);
                 Object.keys(pluginDefaultConfig).forEach((item: string) => {
-                    pluginConstructorConfig[item] = _.get(constructorConfig, `${item}`);
+                    pluginConstructorConfig[item] = _get(constructorConfig, `${item}`);
                 });
-                plugin.config = _.merge(pluginDefaultConfig, pluginAppConfig, constructorConfig );
+                plugin.config = _merge(pluginDefaultConfig, pluginAppConfig, constructorConfig );
 
             }
 
@@ -92,7 +97,13 @@ export abstract class Extensible extends EventEmitter implements Plugin {
      */
     middleware(name: string): Middleware | undefined {
         if (!this.actionSet.get(name)) {
-            return this.actionSet.create(name, this);
+            if (name.startsWith('before.')) {
+                return this.middleware(name.substr(7));
+            } else if (name.startsWith('after.')) {
+                return this.middleware(name.substr(6));
+            } else {
+                return this.actionSet.create(name, this);
+            }
         }
         return this.actionSet.get(name);
     }
@@ -121,9 +132,9 @@ function difference(object: any, base: any) {
     // tslint:disable-next-line
     function changes(object: any, base: any) {
         // tslint:disable-next-line
-        return _.transform(object, (result: any, value: any, key: any) => {
-            if (!_.isEqual(value, base[key])) {
-                result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+        return _transform(object, (result: any, value: any, key: any) => {
+            if (!_isEqual(value, base[key])) {
+                result[key] = (typeof value === 'object' && typeof base[key] === 'object') ? changes(value, base[key]) : value;
             }
         });
     }

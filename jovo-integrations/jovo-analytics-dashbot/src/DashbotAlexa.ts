@@ -1,6 +1,5 @@
 import { Analytics, PluginConfig, BaseApp, HandleRequest } from "jovo-core";
-import * as _ from 'lodash';
-
+import _merge = require('lodash.merge');
 import dashbot, {AmazonAlexa} from 'dashbot';
 
 export interface Config extends PluginConfig {
@@ -16,7 +15,7 @@ export class DashbotAlexa implements Analytics {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.track = this.track.bind(this);
     }

@@ -1,4 +1,6 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _map = require('lodash.map');
 import {Plugin} from 'jovo-core';
 import {AlexaSkill} from "../core/AlexaSkill";
 import {Alexa} from "../Alexa";
@@ -20,7 +22,7 @@ export class GadgetController {
      * @return {GadgetController}
      */
     setAnimations(animationArray: any[]) { // tslint:disable-line
-        _.forEach(animationArray, (animation) => {
+        animationArray.forEach((animation) => {
             this.animations = this.animations || [];
             if (animation instanceof AnimationsBuilder) {
                 this.animations.push(animation.build());
@@ -107,7 +109,7 @@ export class GadgetController {
             animations: this.animations,
         };
 
-        _.set(this.alexaSkill.$output, 'Alexa.GadgetController',
+        _set(this.alexaSkill.$output, 'Alexa.GadgetController',
             new GadgetControllerSetLightDirective(1, targetGadgets, parameters)
         );
     }
@@ -118,11 +120,11 @@ export class GadgetController {
      */
     respond(speech: string | AlexaSpeechBuilder) {
 
-        if (_.get(speech, 'constructor.name') === 'String') {
-            _.set(this.alexaSkill.$output, 'Alexa.respond', {speech});
+        if (_get(speech, 'constructor.name') === 'String') {
+            _set(this.alexaSkill.$output, 'Alexa.respond', {speech});
 
-        } else if (_.get(speech, 'constructor.name') === 'AlexaSpeechBuilder') {
-            _.set(this.alexaSkill.$output, 'Alexa.respond', {speech: speech.toString()});
+        } else if (_get(speech, 'constructor.name') === 'AlexaSpeechBuilder') {
+            _set(this.alexaSkill.$output, 'Alexa.respond', {speech: speech.toString()});
         }
     }
 
@@ -152,18 +154,18 @@ export class GadgetControllerPlugin implements Plugin {
         const output = alexaSkill.$output;
         const response = alexaSkill.$response as AlexaResponse;
 
-        if (_.get(output, 'Alexa.GadgetController')) {
-            _.set(response, 'response.directives',
-                [_.get(output, 'Alexa.GadgetController')]
-            );
+        if (_get(output, 'Alexa.GadgetController')) {
+            const directives = _get(response, 'response.directives', []);
+            directives.push(_get(output, 'Alexa.GadgetController'));
+            _set(response, 'response.directives', directives);
         }
 
-        if (_.get(output, 'Alexa.respond')) {
-            _.set(response, 'response.outputSpeech', {
+        if (_get(output, 'Alexa.respond')) {
+            _set(response, 'response.outputSpeech', {
                 type: 'SSML',
-                ssml: AlexaSpeechBuilder.toSSML(_.get(output, 'Alexa.respond.speech')),
+                ssml: AlexaSpeechBuilder.toSSML(_get(output, 'Alexa.respond.speech')),
             });
-            if (_.get(response, 'response.shouldEndSession')) {
+            if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
         }
@@ -209,12 +211,12 @@ class AnimationsBuilder {
     sequence(sequence: any[]) { // tslint:disable-line
         this.animation.sequence = this.animation.sequence || [];
 
-        _.map(sequence, (item) => {
+        _map(sequence, (item: any) => { // tslint:disable-line
             if (item instanceof SequenceBuilder) {
                 this.animation.sequence.push(item.build());
+            } else {
+                this.animation.sequence.push(item);
             }
-
-            this.animation.sequence.push(item);
         });
 
         return this;

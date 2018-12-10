@@ -1,6 +1,9 @@
 import * as http from 'http';
 import * as fs from 'fs';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
+import * as crypto from "crypto";
+
 import * as util from "util";
 import * as path from 'path';
 import {TestSuite} from "./TestSuite";
@@ -43,9 +46,8 @@ export class Conversation {
 
     constructor(testSuite: TestSuite, config?: ConversationConfig) {
         this.testSuite = testSuite;
-
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
     }
@@ -90,7 +92,6 @@ export class Conversation {
     async clearDb() {
         const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId + '.json');
         const exists = await fsexists(pathToDb);
-
         if (!exists) {
             throw new Error(`Can't find ${pathToDb}`);
         }
@@ -110,7 +111,7 @@ export class Conversation {
                     resolve(result);
                 });
             }).on('error', (e: Error) => {
-                if (_.get(e, 'code') === 'ECONNREFUSED') {
+                if (_get(e, 'code') === 'ECONNREFUSED') {
                                 console.log();
                                 console.log('Your server must be running for your tests to work.');
                                 console.log();
@@ -128,4 +129,8 @@ export class Conversation {
 
 function randomUserId(): string {
     return Math.random().toString(36).substring(7);
+}
+
+function projectUserId(): string {
+    return `testuser-${crypto.createHash('md5').update(__dirname).digest("hex")}`;
 }

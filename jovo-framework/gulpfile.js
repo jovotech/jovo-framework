@@ -22,7 +22,7 @@ gulp.task('prepareProject', function () {
 
 gulp.task('build', ['prepareProject'], function () {
     return gulp.src(config.destinationFolder + '/**/*')
-        .pipe(zip('project.zip'))
+        .pipe(zip('bundle.zip'))
         .pipe(gulp.dest('.'))
 });
 

@@ -23,7 +23,5 @@ export class ActionSet {
         this.middleware.set(middlewareName, middleware);
         return middleware;
     }
-
-
 }
 

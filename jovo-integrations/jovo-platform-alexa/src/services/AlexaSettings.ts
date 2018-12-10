@@ -1,5 +1,4 @@
 import {ApiError} from "./ApiError";
-import * as _ from "lodash";
 import {AlexaAPI} from "./AlexaAPI";
 
 

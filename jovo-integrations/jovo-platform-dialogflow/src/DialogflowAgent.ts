@@ -1,5 +1,4 @@
-import {BaseApp, Jovo, JovoRequest, Platform, Host, JovoResponse, SpeechBuilder} from "jovo-core";
-import * as _ from 'lodash';
+import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
 import {DialogflowUser} from "./DialogflowUser";
 
 export class DialogflowAgent extends Jovo {
@@ -34,8 +33,12 @@ export class DialogflowAgent extends Jovo {
         return undefined;
     }
 
+
+    speechBuilder(): SpeechBuilder | undefined {
+        return this.getSpeechBuilder();
+    }
     getSpeechBuilder(): SpeechBuilder | undefined {
-        return undefined;
+        return new SpeechBuilder(this);
     }
 
     getSpeechText(): string | undefined {

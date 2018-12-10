@@ -1,6 +1,7 @@
-import {Plugin, Extensible, PluginConfig, HandleRequest, Jovo, Cms} from 'jovo-core';
+import {Extensible, HandleRequest, Cms} from 'jovo-core';
 import * as i18n from 'i18next';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import { DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 
 
@@ -32,7 +33,7 @@ export class ResponsesSheet extends DefaultSheet {
     constructor(config?: Config) {
         super(config);
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -65,7 +66,7 @@ export class ResponsesSheet extends DefaultSheet {
                     locale = locale.substr(0, 2) + '-' + locale.substr(3).toUpperCase();
                 }
 
-                _.set(resources, `${locale}.translation.${row[0]}`, cell);
+                _set(resources, `${locale}.translation.${row[0]}`, cell);
             }
         }
         const entity = this.config.entity || this.config.name;

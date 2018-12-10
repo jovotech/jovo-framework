@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _merge = require('lodash.merge');
 import {
     BaseApp,
     Extensible,
@@ -10,7 +10,6 @@ import {DialogflowAgent} from "./DialogflowAgent";
 import {DialogflowCore} from "./DialogflowCore";
 import {DialogflowRequestBuilder} from "./core/DialogflowRequestBuilder";
 import {DialogflowResponseBuilder} from "./core/DialogflowResponseBuilder";
-import {Jovo} from "../../../jovo-core/dist/src";
 
 export interface DialogflowConfig extends ExtensibleConfig {
 }
@@ -28,7 +27,7 @@ export class Dialogflow extends Extensible implements Platform {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
         this.actionSet = new ActionSet([

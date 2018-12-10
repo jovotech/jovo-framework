@@ -19,7 +19,8 @@ app.use(
 
 app.setHandler({
     async LAUNCH(jovo) {
-        return this.tell(this.$cms.t('WELCOME') + ' ' + this.$cms.config.foo + " - " + this.$cms.config2.bla);
+        this.$speech.addText(this.$cms.t('WELCOME'));
+        return this.tell(this.$speech);
     },
 });
 

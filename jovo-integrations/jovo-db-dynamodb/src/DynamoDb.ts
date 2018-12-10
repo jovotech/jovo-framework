@@ -1,5 +1,6 @@
 import {Db, BaseApp, PluginConfig} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
 import * as AWS from 'aws-sdk';
 import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
 import {GetItemOutput} from 'aws-sdk/clients/dynamodb';
@@ -30,11 +31,11 @@ export class DynamoDb implements Db {
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         if (this.config.awsConfig) {
-            this.config.dynamoDbConfig = _.merge(this.config.dynamoDbConfig, this.config.awsConfig);
-            this.config.documentClientConfig = _.merge(this.config.documentClientConfig, this.config.awsConfig);
+            this.config.dynamoDbConfig = _merge(this.config.dynamoDbConfig, this.config.awsConfig);
+            this.config.documentClientConfig = _merge(this.config.documentClientConfig, this.config.awsConfig);
 
         }
     }
@@ -43,8 +44,8 @@ export class DynamoDb implements Db {
         this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
         this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
 
-        if (_.get(app.config, 'db.default')) {
-            if (_.get(app.config, 'db.default') === 'DynamoDb') {
+        if (_get(app.config, 'db.default')) {
+            if (_get(app.config, 'db.default') === 'DynamoDb') {
                 app.$db = this;
             }
         } else {
@@ -158,7 +159,7 @@ export class DynamoDb implements Db {
         try {
             const result = await this.dynamoClient.createTable(newTableParams).promise();
 
-            if (_.get(result, 'TableDescription.TableStatus') === 'CREATING') {
+            if (_get(result, 'TableDescription.TableStatus') === 'CREATING') {
                 console.info(`#  `);
                 console.info(`#  Creating DynamoDB table '${this.config.tableName}'...`);
                 console.info(`#  `);

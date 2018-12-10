@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import _merge = require('lodash.merge');
+
 
 export interface BasicCardImage {
     url: string;
@@ -31,7 +32,7 @@ export class BasicCard {
      */
     constructor(basicCard?: BasicCard) {
        if (basicCard) {
-           _.merge(this, basicCard);
+           _merge(this, basicCard);
        }
     }
 

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [ "es7" ],
+    "lib": [ "es2017" ],
     "module": "commonjs",
     "declaration": true,
     "noImplicitAny": true,
@@ -12,11 +12,13 @@
     "sourceMap": true
   },
   "include": [
+    "**/*.d.ts",
     "src/**/*",
     "test/**/*"
   ],
   "exclude": [
-    "node_modules",
+    "dist/**/*",
+    "node_modules/**/*",
     "**/*.spec.ts"
   ]
 }

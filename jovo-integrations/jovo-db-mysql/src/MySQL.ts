@@ -1,6 +1,6 @@
 
 import {Db, BaseApp, PluginConfig} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
 import * as mysql from 'mysql';
 import {Connection, ConnectionConfig, MysqlError} from "mysql";
 
@@ -23,7 +23,7 @@ export class MySQL implements Db {
     constructor(config?: Config) {
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
 

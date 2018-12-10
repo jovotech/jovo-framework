@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-bespoken",
-  "version": "2.0.1-alpha.11",
+  "version": "2.0.1-alpha.12",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -13,12 +13,16 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.0.1-alpha.11"
+    "jovo-core": "^2.0.1-alpha.12",
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
+    "lodash.set": "^4.3.2"
   },
   "devDependencies": {
-    "@types/es6-promise": "^3.3.0",
     "@types/jest": "^23.3.1",
-    "@types/lodash": "^4.14.109",
+    "@types/lodash.get": "^4.4.4",
+    "@types/lodash.set": "^4.3.4",
+    "@types/lodash.merge": "^4.6.4",
     "@types/mysql": "^2.15.5",
     "@types/node": "^10.3.1",
     "@types/uuid": "^3.4.4",

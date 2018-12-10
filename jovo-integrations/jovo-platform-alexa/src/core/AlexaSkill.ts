@@ -1,6 +1,6 @@
 import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
 import {AlexaRequest} from "./AlexaRequest";
-import * as _ from 'lodash';
+import _get = require('lodash.get');
 import {AlexaResponse} from "./AlexaResponse";
 import {AlexaAPI} from "../services/AlexaAPI";
 import {AmazonProfileAPI} from "../services/AmazonProfileAPI";
@@ -18,6 +18,9 @@ export class AlexaSkill extends Jovo {
         this.$reprompt = new AlexaSpeechBuilder(this);
     }
 
+    speechBuilder(): AlexaSpeechBuilder {
+        return this.getSpeechBuilder();
+    }
     getSpeechBuilder(): AlexaSpeechBuilder {
         return new AlexaSpeechBuilder(this);
     }
@@ -35,7 +38,7 @@ export class AlexaSkill extends Jovo {
     }
 
     getUserId(): string {
-        return _.get(this.$request, 'session.user.userId') || _.get(this.$request, 'context.user.userId') ;
+        return _get(this.$request, 'session.user.userId') || _get(this.$request, 'context.user.userId') ;
     }
 
     progressiveResponse(speech: string | SpeechBuilder, callback?: Function) {
@@ -83,7 +86,7 @@ export class AlexaSkill extends Jovo {
     }
 
     getDeviceId() {
-        return _.get(this.$request, 'context.System.device.deviceId');
+        return _get(this.$request, 'context.System.device.deviceId');
     }
 
     hasAudioInterface() {
@@ -103,7 +106,7 @@ export class AlexaSkill extends Jovo {
     }
 
     getSelectedElementId() {
-        return _.get(this.$request, 'request.token');
+        return _get(this.$request, 'request.token');
     }
 
     /**
@@ -115,6 +118,6 @@ export class AlexaSkill extends Jovo {
         if (!this.$inputs || this.$inputs.catchAll) {
             throw new Error('Only available with catchAll slot');
         }
-        return _.get(this, '$inputs.catchAll.value');
+        return _get(this, '$inputs.catchAll.value');
     }
 }

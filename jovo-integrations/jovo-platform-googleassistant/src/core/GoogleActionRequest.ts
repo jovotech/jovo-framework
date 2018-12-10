@@ -3,8 +3,8 @@
  * Base class of a request from alexa
  */
 import {JovoRequest} from "jovo-core";
-import * as _ from 'lodash';
-
+import _set = require('lodash.set');
+import _get = require('lodash.get');
 
 interface User {
     userId: string;
@@ -73,7 +73,7 @@ export class GoogleActionRequest implements JovoRequest {
     availableSurfaces?: Surface;
 
     setUserId(userId: string) {
-        _.set(this, 'user.userId', userId);
+        _set(this, 'user.userId', userId);
         return this;
     }
 
@@ -114,7 +114,7 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     getAccessToken(): string {
-        return _.get(this, 'user.accessToken');
+        return _get(this, 'user.accessToken');
     }
 
     getInputs(): any { // tslint:disable-line
@@ -122,7 +122,7 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     getLocale(): string {
-        return _.get(this, 'user.locale');
+        return _get(this, 'user.locale');
     }
 
     getSessionAttributes(): any { // tslint:disable-line
@@ -134,17 +134,17 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     getUserId(): string {
-        return _.get(this, 'user.userId');
+        return _get(this, 'user.userId');
     }
 
     hasAudioInterface(): boolean {
-        const audioCapability = _.get(this, 'surface.capabilities')
+        const audioCapability = _get(this, 'surface.capabilities')
             .capabilities.find((item: Capability) => item.name === 'AUDIO_OUTPUT');
         return typeof audioCapability !== 'undefined';
     }
 
     hasScreenInterface(): boolean {
-        const screenCapability = _.get(this, 'surface.capabilities')
+        const screenCapability = _get(this, 'surface.capabilities')
             .capabilities.find((item: Capability) => item.name === 'SCREEN_OUTPUT');
         return typeof screenCapability !== 'undefined';
     }
@@ -154,11 +154,11 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     isNewSession(): boolean {
-        return _.get(this, 'conversation.type') !== 'ACTIVE';
+        return _get(this, 'conversation.type') !== 'ACTIVE';
     }
 
     setAccessToken(accessToken: string): this {
-        _.set(this, `user.accessToken`, accessToken);
+        _set(this, `user.accessToken`, accessToken);
         return this;
     }
 
@@ -177,13 +177,13 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     setLocale(locale: string): this {
-        _.set(this, `user.locale`, locale);
+        _set(this, `user.locale`, locale);
         return this;
     }
 
     setNewSession(isNew: boolean): this {
         const conversationType = isNew ? 'NEW': 'ACTIVE';
-        _.set(this, `conversation.type`, conversationType);
+        _set(this, `conversation.type`, conversationType);
 
         return this;
     }

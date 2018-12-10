@@ -1,6 +1,7 @@
 import {Alexa} from "../Alexa";
 import {Plugin, EnumRequestType} from "jovo-core";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {AlexaRequest} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 
@@ -43,9 +44,9 @@ export class AlexaNLU implements Plugin {
                     input.key = slot.value;
                 }
 
-                if (_.get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]')) {
-                    input.key = _.get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]').value.name;
-                    input.id = _.get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]').value.id;
+                if (_get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]')) {
+                    input.key = _get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]').value.name;
+                    input.id = _get(slot, 'resolutions.resolutionsPerAuthority[0].values[0]').value.id;
                 }
                 input.alexaSkill = slot;
 

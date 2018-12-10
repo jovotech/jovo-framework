@@ -1,6 +1,6 @@
 'use strict';
 import {Jovo} from "./Jovo";
-import * as _ from 'lodash';
+const _sample = require('lodash.sample');
 
 /** Class SpeechBuilder */
 export class SpeechBuilder {
@@ -25,8 +25,8 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addSentence(text: string | string[], condition?: boolean, probability?: number): this {
-        if (_.isArray(text)) {
-            return this.addText('<s>' + _.sample(text) + '</s>', condition, probability);
+        if (Array.isArray(text)) {
+            return this.addText('<s>' + _sample(text) + '</s>', condition, probability);
         }
         return this.addText('<s>' + text + '</s>', condition, probability);
     }
@@ -39,8 +39,8 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addSayAsCardinal(n: number | number[], condition?: boolean, probability?: number): this {
-        if (_.isArray(n)) {
-            return this.addText('<say-as interpret-as="cardinal">'+ _.sample(n) +'</say-as>', condition, probability);
+        if (Array.isArray(n)) {
+            return this.addText('<say-as interpret-as="cardinal">'+ _sample(n) +'</say-as>', condition, probability);
         }
         return this.addText('<say-as interpret-as="cardinal">'+n+'</say-as>', condition, probability);
     }
@@ -64,8 +64,8 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addSayAsOrdinal(n: number | number[], condition?: boolean, probability?: number): this {
-        if (_.isArray(n)) {
-            return this.addText('<say-as interpret-as="ordinal">'+ _.sample(n) +'</say-as>', condition, probability);
+        if (Array.isArray(n)) {
+            return this.addText('<say-as interpret-as="ordinal">'+ _sample(n) +'</say-as>', condition, probability);
         }
         return this.addText('<say-as interpret-as="ordinal">'+n+'</say-as>', condition, probability);
     }
@@ -89,8 +89,8 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addSayAsCharacters(characters: string | string[], condition?: boolean, probability?: number): this {
-        if (_.isArray(characters)) {
-            return this.addText('<say-as interpret-as="characters">'+_.sample(characters)+'</say-as>', condition, probability);
+        if (Array.isArray(characters)) {
+            return this.addText('<say-as interpret-as="characters">'+_sample(characters)+'</say-as>', condition, probability);
         }
         return this.addText('<say-as interpret-as="characters">'+characters+'</say-as>', condition, probability);
     }
@@ -116,7 +116,7 @@ export class SpeechBuilder {
      */
     addBreak(time: string | string[], condition?: boolean, probability?: number): this {
         const strengthValues = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
-        const breakTime = _.isArray(time) ? _.sample(time) : time;
+        const breakTime = Array.isArray(time) ? _sample(time) : time;
 
         if (strengthValues.indexOf(breakTime!) > -1) {
             return this.addText('<break strength="' + time + '"/>', condition, probability);
@@ -133,10 +133,10 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addText(text: string | string[], condition?: boolean, probability?: number): this {
-        if (_.isBoolean(condition) && condition === false) {
+        if (typeof condition === "boolean" && condition === false) {
             return this;
         }
-        if (_.isNumber(probability)) {
+        if (typeof probability === "number") {
             if (Math.random() >= probability) {
                 return this;
             }
@@ -145,7 +145,7 @@ export class SpeechBuilder {
             this.speech += ' ';
         }
 
-        this.speech += _.isArray(text) ? _.sample(text) : text;
+        this.speech += Array.isArray(text) ? _sample(text) : text;
         return this;
     }
 

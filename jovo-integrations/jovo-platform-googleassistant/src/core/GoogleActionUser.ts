@@ -1,5 +1,6 @@
 import {User} from 'jovo-core';
-import * as _ from "lodash";
+import _get = require('lodash.get');
+
 import {GoogleAction} from "./GoogleAction";
 
 export interface UserProfile {
@@ -21,6 +22,6 @@ export class GoogleActionUser extends User {
     }
 
     getProfile(): UserProfile {
-        return _.get(this.googleAction.$originalRequest, 'user.profile');
+        return _get(this.googleAction.$originalRequest, 'user.profile');
     }
 }

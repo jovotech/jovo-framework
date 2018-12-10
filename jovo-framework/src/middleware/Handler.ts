@@ -1,6 +1,5 @@
-import * as _ from 'lodash';
 import {AppConfig, Jovo, Plugin, EnumRequestType, HandleRequest} from "jovo-core";
-
+import _get = require('lodash.get');
 import {BaseApp} from 'jovo-core';
 import {Route, Router} from "./Router";
 
@@ -37,7 +36,7 @@ export class Handler implements Plugin {
         if (!jovo.$user || !jovo.$user.isNew()) {
             return Promise.resolve();
         }
-        return Handler.handleOnPromise(jovo, _.get(config.handlers, EnumRequestType.NEW_USER));
+        return Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.NEW_USER));
     }
 
     /**
@@ -47,7 +46,7 @@ export class Handler implements Plugin {
      * @returns {Promise<any>}
      */
     static handleOnRequest(jovo: Jovo, config: AppConfig) {
-        return Handler.handleOnPromise(jovo, _.get(config.handlers, EnumRequestType.ON_REQUEST));
+        return Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.ON_REQUEST));
     }
 
     /**
@@ -60,7 +59,7 @@ export class Handler implements Plugin {
         if (!jovo.isNewSession()) {
             return Promise.resolve();
         }
-        return Handler.handleOnPromise(jovo, _.get(config.handlers, EnumRequestType.NEW_SESSION));
+        return Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.NEW_SESSION));
     }
 
     /**
@@ -130,15 +129,15 @@ export class Handler implements Plugin {
         if ((route.type === EnumRequestType.END || // RequestType is END
             route.type === EnumRequestType.INTENT && // Mapped Intent to END
             route.intent === EnumRequestType.END) &&
-            !_.get(config.handlers, route.path)) {
+            !_get(config.handlers, route.path)) {
             return Promise.resolve();
         }
 
-        if (route.type === EnumRequestType.AUDIOPLAYER && !_.get(config.handlers, route.path)) {
+        if (route.type === EnumRequestType.AUDIOPLAYER && !_get(config.handlers, route.path)) {
             // @deprecated
             // TODO: Test me
             const v1AudioPlayerPath = route.path.replace('AlexaSkill', 'AudioPlayer');
-            if (_.get(config.handlers, v1AudioPlayerPath)) {
+            if (_get(config.handlers, v1AudioPlayerPath)) {
                 route.path = v1AudioPlayerPath;
                 console.log('AudioPlayer.* is deprecated since v2. Please use AlexaSkill.*');
             } else {
@@ -147,19 +146,19 @@ export class Handler implements Plugin {
         }
 
         // // throw error if no handler and no UNHANDLED on same level
-        if (!_.has(config.handlers, route.path)) {
+        if (!_get(config.handlers, route.path)) {
             return Promise.reject(
                 new Error(`Could not find the route "${route.path}" in your handler function.`)); // eslint-disable-line
         }
-        Object.assign(Jovo.prototype, _.get(config, 'handlers'));
-        await _.get(config.handlers, route.path).apply(jovo, [jovo]);
+        Object.assign(Jovo.prototype, _get(config, 'handlers'));
+        await _get(config.handlers, route.path).apply(jovo, [jovo]);
     }
 
     async error(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
             throw new Error(`Could't access jovo object`);
         }
-        if (_.get((handleRequest.app.config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
+        if (_get((handleRequest.app.config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
             const route = {
                 type: EnumRequestType.ON_ERROR,
                 path: EnumRequestType.ON_ERROR,

@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
 import {Alexa} from "../Alexa";
@@ -45,7 +46,7 @@ export class CanFulfillIntent implements Plugin {
             if (!CanFulfillIntent.VALID_VALUES.includes(canFulfillRequest)) {
                 throw new Error('canFulfill must be one the following values: YES | NO | MAYBE');
             }
-            _.set(this.$output, 'Alexa.CanFulFillRequest', canFulfillRequest);
+            _set(this.$output, 'Alexa.CanFulFillRequest', canFulfillRequest);
             return this;
         };
 
@@ -64,7 +65,7 @@ export class CanFulfillIntent implements Plugin {
             if (canFulfillSlot !== 'YES' && canFulfillSlot !== 'NO') {
                 throw new Error('canFulfill must be one the following values: YES | NO');
             }
-            _.set(this.$output, 'Alexa.CanFulFillSlot', {
+            _set(this.$output, 'Alexa.CanFulFillSlot', {
                 slotName, canUnderstandSlot, canFulfillSlot
             });
             return this;
@@ -76,7 +77,7 @@ export class CanFulfillIntent implements Plugin {
     }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_.get(alexaRequest, 'request.type') === 'CanFulfillIntentRequest') {
+        if (_get(alexaRequest, 'request.type') === 'CanFulfillIntentRequest') {
             alexaSkill.$type = {
                 type: EnumAlexaRequestType.CAN_FULFILL_INTENT,
             };
@@ -91,28 +92,28 @@ export class CanFulfillIntent implements Plugin {
 
         const response = alexaSkill.$response as AlexaResponse;
 
-        if (_.get(output, 'Alexa.CanFulFillRequest')) {
-            if (_.get(response, 'response.shouldEndSession')) {
+        if (_get(output, 'Alexa.CanFulFillRequest')) {
+            if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
 
-            if (_.get(alexaSkill.$response, 'sessionAttributes')) {
+            if (_get(alexaSkill.$response, 'sessionAttributes')) {
                 delete response.sessionAttributes;
             }
-            _.set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _.get(output, 'alexaSkill.CanFulFillRequest'));
+            _set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _get(output, 'alexaSkill.CanFulFillRequest'));
 
         }
 
-        if (_.get(output, 'Alexa.CanFulFillSlot')) {
-            if (_.get(alexaSkill.$response, 'response.shouldEndSession')) {
+        if (_get(output, 'Alexa.CanFulFillSlot')) {
+            if (_get(alexaSkill.$response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
 
-            if (_.get(alexaSkill.$response, 'sessionAttributes')) {
+            if (_get(alexaSkill.$response, 'sessionAttributes')) {
                 delete response.sessionAttributes;
             }
-            _.set(alexaSkill.$response, 'response.canFulfillIntent.slots',
-                _.get(output, 'Alexa.CanFulFillSlot'));
+            _set(alexaSkill.$response, 'response.canFulfillIntent.slots',
+                _get(output, 'Alexa.CanFulFillSlot'));
         }
     }
 

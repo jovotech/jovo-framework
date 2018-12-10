@@ -1,5 +1,5 @@
 import {BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig} from 'jovo-core';
-import * as _ from "lodash";
+import _merge = require('lodash.merge');
 const {google, JWT} = require('googleapis');
 import * as util from 'util';
 import * as https from 'https';
@@ -18,7 +18,7 @@ export interface Config extends ExtensibleConfig {
     credentialsFile?: string;
     spreadsheetId?: string;
     sheets?: GoogleSheetsSheet[];
-    visibility?: string;
+    access?: string;
 }
 
 export class GoogleSheetsCMS extends BaseCmsPlugin {
@@ -26,7 +26,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         enabled: true,
         credentialsFile: './credentials.json',
         spreadsheetId: undefined,
-        visibility: 'private',
+        access: 'private',
         sheets: [],
     };
     jwtClient: any; // tslint:disable-line
@@ -35,7 +35,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.actionSet = new ActionSet([
             'retrieve',
@@ -57,13 +57,13 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
             this.config.sheets.forEach((sheet: GoogleSheetsSheet) => {
                 let type = undefined;
                 if (!sheet.type) {
-                    type = 'DefaultSheet';
+                    type = 'Default';
                 }
                 if (sheet.type && defaultSheetMap[sheet.type]) {
                     type = sheet.type;
                 }
                 if (type) {
-                    this.use(new defaultSheetMap[type](sheet));
+                    this.use(new defaultSheetMap[type.toLowerCase()](sheet));
                 }
             });
         }
@@ -73,6 +73,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     }
 
     private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
+
         try {
             if (this.config.credentialsFile) {
                 const credentialsFileExists = await exists(this.config.credentialsFile);
@@ -82,10 +83,11 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                     this.jwtClient = await this.authorizeJWT(this.jwtClient );
                 }
             }
+
             await this.middleware('retrieve')!.run(handleRequest, true);
 
         } catch (e) {
-                console.log(e);
+            console.log(e);
         }
     }
 

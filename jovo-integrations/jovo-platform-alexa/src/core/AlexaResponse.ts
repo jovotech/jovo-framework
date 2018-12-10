@@ -1,5 +1,6 @@
 import {JovoResponse, SpeechBuilder, SessionConstants} from "jovo-core";
-import * as _ from 'lodash';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export interface SessionAttributes {
     [key: string]: any; //tslint:disable-line
@@ -35,23 +36,23 @@ export class AlexaResponse implements JovoResponse {
     }
 
     getSessionAttributes() {
-        return _.get(this, 'sessionAttributes');
+        return _get(this, 'sessionAttributes');
     }
 
     setSessionAttributes(sessionAttributes: SessionAttributes) {
-        _.set(this, 'sessionAttributes', sessionAttributes);
+        _set(this, 'sessionAttributes', sessionAttributes);
         return this;
     }
 
     getOutputSpeech() {
-        return _.get(this, 'response.outputSpeech.ssml');
+        return _get(this, 'response.outputSpeech.ssml');
     }
     getRepromptSpeech() {
-        return _.get(this, 'response.reprompt.outputSpeech.ssml');
+        return _get(this, 'response.reprompt.outputSpeech.ssml');
     }
 
     getSessionAttribute(name: string) {
-        return _.get(this, `sessionAttributes.${name}`);
+        return _get(this, `sessionAttributes.${name}`);
     }
 
     /**
@@ -80,7 +81,7 @@ export class AlexaResponse implements JovoResponse {
     }
 
     hasSessionEnded() {
-        return _.get(this, 'response.shouldEndSession');
+        return _get(this, 'response.shouldEndSession');
     }
 
     /**
@@ -89,11 +90,11 @@ export class AlexaResponse implements JovoResponse {
      * @return {boolean}
      */
     isTell(speechText?: string | string[]): boolean {
-        if (_.get(this, 'response.shouldEndSession') === false) {
+        if (_get(this, 'response.shouldEndSession') === false) {
             return false;
         }
         if (speechText) {
-            const ssml:string =  _.get(this, 'response.outputSpeech.ssml');
+            const ssml:string =  _get(this, 'response.outputSpeech.ssml');
 
             if (Array.isArray(speechText)) {
                 for (const speechTextElement of speechText) {
@@ -110,11 +111,11 @@ export class AlexaResponse implements JovoResponse {
     }
 
     isAsk(speechText?: string | string[], repromptText?: string | string[]): boolean {
-        if (_.get(this, 'response.shouldEndSession') === true) {
+        if (_get(this, 'response.shouldEndSession') === true) {
             return false;
         }
         if (speechText) {
-            const ssml:string =  _.get(this, 'response.outputSpeech.ssml');
+            const ssml:string =  _get(this, 'response.outputSpeech.ssml');
 
             if (Array.isArray(speechText)) {
                 for (const speechTextElement of speechText) {
@@ -129,7 +130,7 @@ export class AlexaResponse implements JovoResponse {
         }
 
         if (repromptText) {
-            const ssml:string =  _.get(this, 'response.reprompt.outputSpeech.ssml');
+            const ssml:string =  _get(this, 'response.reprompt.outputSpeech.ssml');
 
             if (Array.isArray(repromptText)) {
                 for (const speechTextElement of repromptText) {
@@ -143,12 +144,12 @@ export class AlexaResponse implements JovoResponse {
             }
         }
 
-        if (!_.get(this, 'response.outputSpeech.ssml') ||
-            !_.get(this, 'response.outputSpeech.type')) {
+        if (!_get(this, 'response.outputSpeech.ssml') ||
+            !_get(this, 'response.outputSpeech.type')) {
             return false;
         }
-        if (!_.get(this, 'response.reprompt.outputSpeech.ssml') ||
-            !_.get(this, 'response.reprompt.outputSpeech.type')) {
+        if (!_get(this, 'response.reprompt.outputSpeech.ssml') ||
+            !_get(this, 'response.reprompt.outputSpeech.type')) {
             return false;
         }
         return true;

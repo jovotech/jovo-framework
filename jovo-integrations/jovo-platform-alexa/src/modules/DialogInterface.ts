@@ -1,25 +1,29 @@
 import {Plugin} from 'jovo-core';
 import {Alexa} from "../Alexa";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {AlexaRequest, Intent} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaSpeechBuilder} from "../core/AlexaSpeechBuilder";
 import {AlexaResponse} from "..";
+import {AudioPlayer} from "./AudioPlayerPlugin";
 
 export class DialogInterface implements Plugin {
     install(alexa: Alexa) {
-
-        alexa.middleware('$request')!.use(this.request.bind(this));
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
+        AlexaSkill.prototype.$dialog = undefined;
+
         AlexaSkill.prototype.dialog = function() {
-            return this.$plugins.DialogInterface.dialog;
+            return this.$dialog;
         };
     }
     uninstall(alexa: Alexa) {
     }
-    private request(alexaSkill: AlexaSkill) {
-        _.set(alexaSkill.$plugins, 'DialogInterface.dialog', new Dialog(alexaSkill));
+
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$dialog = new Dialog(alexaSkill);
     }
 
     private output(alexaSkill: AlexaSkill) {
@@ -27,10 +31,10 @@ export class DialogInterface implements Plugin {
         if (!alexaSkill.$response) {
             alexaSkill.$response = new AlexaResponse();
         }
-        if (_.get(output, 'Alexa.Dialog')) {
-            _.set(alexaSkill.$response, 'response.shouldEndSession', false);
-            _.set(alexaSkill.$response, 'response.directives',
-                [_.get(output, 'Alexa.Dialog')]
+        if (_get(output, 'Alexa.Dialog')) {
+            _set(alexaSkill.$response, 'response.shouldEndSession', false);
+            _set(alexaSkill.$response, 'response.directives',
+                [_get(output, 'Alexa.Dialog')]
             );
         }
     }
@@ -52,7 +56,7 @@ export class Dialog {
      * @return {BaseApp.DIALOGSTATE_ENUM}
      */
     getState() {
-        return _.get(this.alexaRequest, 'request.dialogState');
+        return _get(this.alexaRequest, 'request.dialogState');
     }
 
 
@@ -101,7 +105,7 @@ export class Dialog {
      * @return {AlexaResponse}
      */
     delegate(updatedIntent?: Intent) {
-        _.set(this.alexaSkill.$output, 'Alexa.Dialog',
+        _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogDelegateDirective(updatedIntent)
         );
         return this.alexaSkill;
@@ -116,11 +120,11 @@ export class Dialog {
      * @param {object} updatedIntent
      */
     elicitSlot(slotToElicit: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _.set(this.alexaSkill.$output, 'ask',{
+        _set(this.alexaSkill.$output, 'ask',{
             speech,
             reprompt
         });
-        _.set(this.alexaSkill.$output, 'Alexa.Dialog',
+        _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogElicitSlotDirective(slotToElicit, updatedIntent)
         );
         return this.alexaSkill;
@@ -135,11 +139,11 @@ export class Dialog {
      * @param {object} updatedIntent
      */
     confirmSlot(slotToConfirm: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _.set(this.alexaSkill.$output, 'ask',{
+        _set(this.alexaSkill.$output, 'ask',{
             speech,
             reprompt
         });
-        _.set(this.alexaSkill.$output, 'Alexa.Dialog',
+        _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogConfirmSlotDirective(slotToConfirm, updatedIntent)
         );
         return this.alexaSkill;
@@ -153,11 +157,11 @@ export class Dialog {
      * @param {object} updatedIntent
      */
     confirmIntent(speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _.set(this.alexaSkill.$output, 'ask',{
+        _set(this.alexaSkill.$output, 'ask',{
             speech,
             reprompt
         });
-        _.set(this.alexaSkill.$output, 'Alexa.Dialog',
+        _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogConfirmIntentDirective(updatedIntent)
         );
         return this.alexaSkill;
@@ -171,7 +175,7 @@ export class Dialog {
      * @return {*}
      */
     getSlotConfirmationStatus(slotName: string) {
-        return _.get(this.alexaRequest, `request.intent.slots.${slotName}.confirmationStatus`);
+        return _get(this.alexaRequest, `request.intent.slots.${slotName}.confirmationStatus`);
 
     }
 
@@ -181,7 +185,7 @@ export class Dialog {
      * @return {String}
      */
     getIntentConfirmationStatus() {
-        return _.get(this.alexaRequest, 'request.intent.confirmationStatus');
+        return _get(this.alexaRequest, 'request.intent.confirmationStatus');
     }
 
 

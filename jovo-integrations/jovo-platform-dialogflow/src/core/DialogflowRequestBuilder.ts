@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import _set = require('lodash.set');
 import {RequestBuilder, JovoRequest} from "jovo-core";
 import {DialogflowRequest} from "./DialogflowRequest";
 
@@ -24,7 +24,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
     async intent(obj: any, inputs?: any): Promise<DialogflowRequest> { // tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
-            _.set(req, `queryResult.intent.displayName`, obj);
+            _set(req, `queryResult.intent.displayName`, obj);
             if (inputs) {
                 for (const parameter in inputs) {
                     if (inputs.hasOwnProperty(parameter)) {

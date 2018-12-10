@@ -1,11 +1,14 @@
 import {Plugin} from 'jovo-core';
 import {Alexa} from "../Alexa";
 import * as https from "https";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+
 import {AlexaRequest} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 import {EnumAlexaRequestType} from "../core/alexa-enums";
 import {AlexaResponse} from "..";
+import {GameEngine} from "./GameEnginePlugin";
 
 
 export class InSkillPurchase {
@@ -26,7 +29,7 @@ export class InSkillPurchase {
             'en-US': 'https://api.amazonalexa.com',
         };
         const locale = alexaRequest.getLocale();
-        const endpoint = _.get(alexaRequest, 'context.System.apiEndpoint', 'https://api.amazonalexa.com');
+        const endpoint = _get(alexaRequest, 'context.System.apiEndpoint', 'https://api.amazonalexa.com');
 
         return ALLOWED_ISP_ENDPOINTS[locale] === endpoint;
     }
@@ -43,7 +46,7 @@ export class InSkillPurchase {
                 productId
             },
         };
-        _.set(this.alexaSkill.$output, 'Alexa.Isp',
+        _set(this.alexaSkill.$output, 'Alexa.Isp',
             new IspBuyDirective(token, payload)
         );
     }
@@ -62,7 +65,7 @@ export class InSkillPurchase {
             },
             upsellMessage
         };
-        _.set(this.alexaSkill.$output, 'Alexa.Isp',
+        _set(this.alexaSkill.$output, 'Alexa.Isp',
             new IspUpsellDirective(token, payload)
         );
     }
@@ -78,7 +81,7 @@ export class InSkillPurchase {
                 productId
             }
         };
-        _.set(this.alexaSkill.$output, 'Alexa.Isp',
+        _set(this.alexaSkill.$output, 'Alexa.Isp',
             new IspCancelDirective(token, payload)
         );
     }
@@ -89,7 +92,7 @@ export class InSkillPurchase {
      */
     getPayload() {
         const alexaRequest = this.alexaSkill.$request as AlexaRequest;
-        return _.get(alexaRequest, 'request.payload');
+        return _get(alexaRequest, 'request.payload');
     }
 
     /**
@@ -98,7 +101,7 @@ export class InSkillPurchase {
      */
     getPurchaseResult() {
         const alexaRequest = this.alexaSkill.$request as AlexaRequest;
-        return _.get(alexaRequest, 'request.payload.purchaseResult');
+        return _get(alexaRequest, 'request.payload.purchaseResult');
     }
 
     /**
@@ -107,7 +110,7 @@ export class InSkillPurchase {
      */
     getProductId() {
         const alexaRequest = this.alexaSkill.$request as AlexaRequest;
-        return _.get(alexaRequest, 'request.payload.productId');
+        return _get(alexaRequest, 'request.payload.productId');
     }
 
     /**
@@ -167,7 +170,7 @@ export class InSkillPurchase {
 
         return new Promise((resolve, reject) => {
             const options = {
-                hostname: _.get(alexaRequest, 'context.System.apiEndpoint', 'https://api.amazonalexa.com').substr(8),
+                hostname: _get(alexaRequest, 'context.System.apiEndpoint', 'https://api.amazonalexa.com').substr(8),
                 port: 443,
                 path: '/v1/users/~current/skills/~current/inSkillProducts',
                 method: 'GET',
@@ -211,7 +214,7 @@ export class InSkillPurchasePlugin implements Plugin {
 
 
     install(alexa: Alexa) {
-
+        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
         AlexaSkill.prototype.$inSkillPurchase = undefined;
@@ -221,12 +224,13 @@ export class InSkillPurchasePlugin implements Plugin {
     }
     uninstall(alexa: Alexa) {
     }
-
+    init(alexaSkill: AlexaSkill) {
+        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
+    }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
 
-        if (_.get(alexaRequest, 'request.type') === 'Connections.Response') {
+        if (_get(alexaRequest, 'request.type') === 'Connections.Response') {
             alexaSkill.$type = {
                 type: EnumAlexaRequestType.ON_PURCHASE,
             };
@@ -238,9 +242,9 @@ export class InSkillPurchasePlugin implements Plugin {
         if (!alexaSkill.$response) {
             alexaSkill.$response = new AlexaResponse();
         }
-        if (_.get(output, 'Alexa.Isp')) {
-            _.set(alexaSkill.$response, 'response.directives',
-                [_.get(output, 'Alexa.Isp')]
+        if (_get(output, 'Alexa.Isp')) {
+            _set(alexaSkill.$response, 'response.directives',
+                [_get(output, 'Alexa.Isp')]
             );
         }
     }

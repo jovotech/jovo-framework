@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _sample = require('lodash.sample');
 import {SpeechBuilder} from "jovo-core";
 import {AlexaSkill} from "./AlexaSkill";
 
@@ -16,8 +16,8 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addAudio(url: string | string[], condition?: boolean, probability?: number) {
-        if (_.isArray(url)) {
-            return this.addText('<audio src="' + _.sample(url)  + '"/>', condition, probability);
+        if (Array.isArray(url)) {
+            return this.addText('<audio src="' + _sample(url)  + '"/>', condition, probability);
         }
         return this.addText('<audio src="' + url  + '"/>', condition, probability);
     }
@@ -31,8 +31,8 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @returns {SpeechBuilder}
      */
     addLangText(language: string, text: string | string[], condition?: boolean, probability?: number) {
-        if (_.isArray(text)) {
-            return this.addText(`<lang xml:lang="${language}">${text}</lang>`, condition, probability);
+        if (Array.isArray(text)) {
+            return this.addText(`<lang xml:lang="${language}">${_sample(text)}</lang>`, condition, probability);
         }
         return this.addText(`<lang xml:lang="${language}">${text}</lang>`, condition, probability);
     }
@@ -46,8 +46,8 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @returns {SpeechBuilder}
      */
     addTextWithPolly(pollyName: string, text: string | string[], condition?: boolean, probability?: number) {
-        if (_.isArray(text)) {
-            return this.addText(`<voice name="${pollyName}">${text}</voice>`, condition, probability);
+        if (Array.isArray(text)) {
+            return this.addText(`<voice name="${pollyName}">${_sample(text)}</voice>`, condition, probability);
         }
         return this.addText(`<voice name="${pollyName}">${text}</voice>`, condition, probability);
     }

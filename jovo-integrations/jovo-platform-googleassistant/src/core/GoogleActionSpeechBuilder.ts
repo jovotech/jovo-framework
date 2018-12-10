@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+
 import {SpeechBuilder} from "jovo-core";
 import {GoogleAction} from "./GoogleAction";
 
@@ -18,7 +18,7 @@ export class GoogleActionSpeechBuilder extends SpeechBuilder {
     addAudio(url: string, text: string, condition: boolean, probability: number) {
         // gets random element from array if url
         // is of type array
-        if (_.isArray(url)) {
+        if (Array.isArray(url)) {
             const rand = Math.floor(Math.random() * url.length);
             url = url[rand];
             // takes the same index from the text array

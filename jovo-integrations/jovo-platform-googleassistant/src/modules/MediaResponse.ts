@@ -1,5 +1,7 @@
-import {EnumRequestType, Plugin, SpeechBuilder} from "jovo-core";
-import * as _ from "lodash";
+import {EnumRequestType, Plugin} from "jovo-core";
+import _set = require('lodash.set');
+import _get = require('lodash.get');
+
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
@@ -26,19 +28,19 @@ export class MediaResponse {
             contentUrl: url,
         };
 
-        if (_.get(options, 'description')) {
-            mediaObject.description = _.get(options, 'description');
+        if (_get(options, 'description')) {
+            mediaObject.description = _get(options, 'description');
         }
 
-        if (_.get(options, 'largeImage')) {
-            mediaObject.largeImage = _.get(options, 'largeImage');
+        if (_get(options, 'largeImage')) {
+            mediaObject.largeImage = _get(options, 'largeImage');
         }
 
-        if (_.get(options, 'icon')) {
-            mediaObject.icon = _.get(options, 'icon');
+        if (_get(options, 'icon')) {
+            mediaObject.icon = _get(options, 'icon');
         }
 
-        _.set(this.googleAction.$output, 'GoogleAssistant.MediaResponse',
+        _set(this.googleAction.$output, 'GoogleAssistant.MediaResponse',
             mediaObject
         );
         return this.googleAction;
@@ -63,22 +65,22 @@ export class MediaResponsePlugin implements Plugin {
         };
 
         GoogleAction.prototype.mediaResponse = function() {
-            if (!_.get(this.$plugins, 'MediaResponsePlugin.mediaResponse')) {
-                _.set(this.$plugins, 'MediaResponsePlugin.mediaResponse', new MediaResponse(this));
+            if (!_get(this.$plugins, 'MediaResponsePlugin.mediaResponse')) {
+                _set(this.$plugins, 'MediaResponsePlugin.mediaResponse', new MediaResponse(this));
             }
-            return _.get(this.$plugins, 'MediaResponsePlugin.mediaResponse');
+            return _get(this.$plugins, 'MediaResponsePlugin.mediaResponse');
         };
     }
 
     type(googleAction: GoogleAction) {
-        if (_.get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.MEDIA_STATUS') {
-            _.set(googleAction.$type, 'type', EnumRequestType.AUDIOPLAYER);
-            for (const argument of _.get(googleAction.$originalRequest || googleAction.$request, 'inputs[0]["arguments"]', [])) {
+        if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.MEDIA_STATUS') {
+            _set(googleAction.$type, 'type', EnumRequestType.AUDIOPLAYER);
+            for (const argument of _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0]["arguments"]', [])) {
                 if (argument.name === 'MEDIA_STATUS') {
                     let status = argument.extension.status.toLowerCase();
                     status = status.charAt(0).toUpperCase() + status.slice(1);
 
-                    _.set(googleAction.$type, 'subType', `GoogleAction.${status}`);
+                    _set(googleAction.$type, 'subType', `GoogleAction.${status}`);
                 }
             }
 
@@ -95,15 +97,15 @@ export class MediaResponsePlugin implements Plugin {
         }
         const output = googleAction.$output;
 
-        if (_.get(output, 'GoogleAssistant.MediaResponse')) {
-            const richResponseItems = _.get(googleAction.$response, 'richResponse.items', []);
+        if (_get(output, 'GoogleAssistant.MediaResponse')) {
+            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
             richResponseItems.push({
                 mediaResponse: {
                     mediaType: 'AUDIO',
-                    mediaObjects: [_.get(output, 'GoogleAssistant.MediaResponse')]
+                    mediaObjects: [_get(output, 'GoogleAssistant.MediaResponse')]
                 }
             });
-            _.set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$response, 'richResponse.items', richResponseItems);
         }
     }
     uninstall(googleAssistant: GoogleAssistant) {

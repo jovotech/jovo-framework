@@ -1,6 +1,9 @@
 
 import {Plugin, BaseApp, SessionData, JovoRequest, PluginConfig, HandleRequest, SessionConstants} from 'jovo-core';
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
+
 import * as path from 'path';
 import * as fs from 'fs';
 import * as io from 'socket.io-client';
@@ -67,7 +70,7 @@ export class JovoDebugger implements Plugin {
     constructor(config?: Config) {
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -115,7 +118,6 @@ export class JovoDebugger implements Plugin {
             throw new Error(`Couldn't send request. App object is not initialized.`);
         }
 
-
         const platformMap: {[key: string]: string} = {
             'AlexaSkill': 'Alexa',
             'GoogleAction': 'GoogleAction'
@@ -126,7 +128,7 @@ export class JovoDebugger implements Plugin {
         const platform = this.app.getPlatformByName(obj.platform ) || this.app.$platform.values().next().value;
         const test = platform.makeTestSuite();
 
-        conv = _.get(this, `conversations.${userId}`) ||
+        conv = _get(this, `conversations.${userId}`) ||
                 test.conversation({
                     userId,
                 });
@@ -155,8 +157,8 @@ export class JovoDebugger implements Plugin {
                         started: 'AudioPlayer.PlaybackStarted',
                     };
                     req = await test.requestBuilder.audioPlayerRequest();
-                    _.set(req, 'request.type', types[obj.options.type] || '');
-                    _.set(req, 'request.offsetInMilliseconds', offsetInMilliSeconds);
+                    _set(req, 'request.type', types[obj.options.type] || '');
+                    _set(req, 'request.offsetInMilliseconds', offsetInMilliSeconds);
 
                 } else if (obj.platform === 'GoogleAction') {
                     if (obj.options.type === 'finnished') {
@@ -182,12 +184,12 @@ export class JovoDebugger implements Plugin {
 
             // TODO: needs refactoring
             try {
-                if (_.get(obj, 'device') === 'AlexaSkill.display') {
+                if (_get(obj, 'device') === 'AlexaSkill.display') {
                     req.setScreenInterface();
                 }
-                if (_.get(obj, 'device') === 'GoogleActionDialogFlow.phone') {
+                if (_get(obj, 'device') === 'GoogleActionDialogFlow.phone') {
                     req.setScreenInterface();
-                } else if (_.get(obj, 'device') === 'GoogleActionDialogFlow.speaker') {
+                } else if (_get(obj, 'device') === 'GoogleActionDialogFlow.speaker') {
                     req.setAudioInterface();
                 }
             } catch (e) {
@@ -198,7 +200,7 @@ export class JovoDebugger implements Plugin {
         const response = await conv.send(req);
         delete conv.config.httpOptions.headers['jovo-test'];
 
-        _.set(this, `conversations.${userId}`, conv);
+        _set(this, `conversations.${userId}`, conv);
 
         // conv.clearDb();
     }
@@ -234,7 +236,7 @@ export class JovoDebugger implements Plugin {
         const files = await fsreaddir(this.config.languageModelDir);
 
         for (const file of files) {
-            if (!_.endsWith(file, '.json')) {
+            if (!file.endsWith('.json')) {
                 continue;
             }
             const locale = file.substring(0, file.indexOf('.json'));
@@ -275,15 +277,14 @@ export class JovoDebugger implements Plugin {
             return;
         }
 
-        // TODO:
-        // const _privateLog = console.log;
+        const _privateLog = console.log;
 
-        // console.log = (message) => {
-        //     const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
-        //     socket.emit('console.log', nMessage, (new Error()).stack!.toString());
-        //     _privateLog.apply(console, arguments); // eslint-disable-line
-        // };
-        // this.consoleLogOverriden = true;
+        console.log = function(message) { // tslint:disable-line
+            const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
+            socket.emit('console.log', nMessage, (new Error()).stack!.toString());
+            _privateLog.apply(console, arguments); // eslint-disable-line
+        };
+        this.consoleLogOverriden = true;
     }
 
     private afterRouting(handleRequest: HandleRequest) {
@@ -305,7 +306,7 @@ export class JovoDebugger implements Plugin {
 
         if (this.config.database) {
             // TODO: why does declare module in jovo-framework not work?
-            request.database = _.get(handleRequest.jovo.$user, '$data');
+            request.database = _get(handleRequest.jovo.$user, '$data');
         }
 
         try {
@@ -335,13 +336,13 @@ export class JovoDebugger implements Plugin {
             sessionEnded: handleRequest.jovo.$response!.hasSessionEnded(),
             inputs: handleRequest.jovo.$inputs,
             requestSessionAttributes: handleRequest.jovo.$requestSessionAttributes,
-            responseSessionAttributes: _.get(handleRequest.jovo, '$session.$data'),
+            responseSessionAttributes: _get(handleRequest.jovo, '$session.$data'),
             speech: handleRequest.jovo.getSpeechText(),
         };
 
         if (this.config.database) {
             // TODO: why does declare module in jovo-framework not work?
-            response.database = _.get(handleRequest.jovo.$user, '$data');
+            response.database = _get(handleRequest.jovo.$user, '$data');
         }
 
         try {
@@ -351,7 +352,7 @@ export class JovoDebugger implements Plugin {
 
         // TODO: audioplayer
         try {
-            response.audioplayer = _.get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.AudioPlayer`) || _.get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.MediaResponse`);
+            response.audioplayer = _get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.AudioPlayer`) || _get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.MediaResponse`);
         } catch (e) {
         }
 

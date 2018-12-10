@@ -1,6 +1,9 @@
 import { DialogflowNlu } from 'jovo-platform-dialogflow';
 
-import * as _ from 'lodash';
+import _set = require('lodash.set');
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+
 import {
     BaseApp,
     Extensible,
@@ -39,7 +42,7 @@ export class GoogleAssistant extends Extensible implements Platform {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
 
         this.actionSet = new ActionSet([
@@ -114,7 +117,7 @@ export class GoogleAssistant extends Extensible implements Platform {
 
         await this.middleware('$session')!.run(handleRequest.jovo);
         if (this.config.handlers) {
-            _.set(handleRequest.app, 'config.handlers', _.merge( _.get(handleRequest.app, 'config.handlers'), this.config.handlers));
+            _set(handleRequest.app, 'config.handlers', _merge( _get(handleRequest.app, 'config.handlers'), this.config.handlers));
         }
 
     }

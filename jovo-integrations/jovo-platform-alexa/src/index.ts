@@ -74,7 +74,7 @@ declare module './core/AlexaSkill' {
 
     interface AlexaSkill {
         $audioPlayer?: AudioPlayer;
-        audioPlayer(): AudioPlayer;
+        audioPlayer(): AudioPlayer | undefined;
     }
 }
 
@@ -95,14 +95,14 @@ declare module './core/AlexaSkill' {
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
         $dialog?: Dialog;
-        dialog(): Dialog;
+        dialog(): Dialog | undefined;
     }
 }
 // GadgetController
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
         $gadgetController?: GadgetController;
-        gadgetController(): GadgetController;
+        gadgetController(): GadgetController | undefined;
     }
 }
 
@@ -110,14 +110,14 @@ declare module './core/AlexaSkill' {
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
         $gameEngine?: GameEngine;
-        gameEngine(): GameEngine;
+        gameEngine(): GameEngine | undefined;
     }
 }
 // InSkillPurchase
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
         $inSkillPurchase?: InSkillPurchase;
-        inSkillPurchase(): InSkillPurchase;
+        inSkillPurchase(): InSkillPurchase | undefined;
     }
 }
 

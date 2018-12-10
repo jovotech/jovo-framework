@@ -1,7 +1,6 @@
-import {Extensible, HandleRequest, PluginConfig} from "jovo-core";
+import {Extensible, HandleRequest, PluginConfig, Plugin} from "jovo-core";
 import {GoogleSheetsCMS} from "./GoogleSheetsCMS";
-import * as _ from "lodash";
-
+import _merge = require('lodash.merge');
 
 export interface GoogleSheetsSheet extends PluginConfig {
     name?: string;
@@ -14,7 +13,7 @@ export interface GoogleSheetsSheet extends PluginConfig {
 
 }
 
-export class DefaultSheet {
+export class DefaultSheet  implements Plugin {
 
     config: GoogleSheetsSheet = {
         enabled: true,
@@ -27,7 +26,7 @@ export class DefaultSheet {
 
     constructor(config?: GoogleSheetsSheet) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
         this.config.entity = this.config.entity || this.config.name;
     }
@@ -42,7 +41,6 @@ export class DefaultSheet {
     }
 
     async retrieve(handleRequest: HandleRequest) {
-
         if (!this.cms) {
             return Promise.reject('No cms initialized.');
         }
@@ -58,9 +56,12 @@ export class DefaultSheet {
             return Promise.reject('range has to be set.');
         }
         let values: any[] = []; // tslint:disable-line
-        if (!this.config.access && this.config.access === 'private') {
+
+
+        const access = this.config.access || this.cms.config.access || 'private';
+        if (access === 'private') {
             values = await this.cms.loadPrivateSpreadsheetData(spreadsheetId, this.config.name, this.config.range);  // tslint:disable-line
-        } else if (this.config.access === 'public') {
+        } else if (access === 'public') {
             const publicValues = await this.cms.loadPublicSpreadSheetData(spreadsheetId, this.config.position);  // tslint:disable-line
             values = this.parsePublicToPrivate(publicValues);
         }

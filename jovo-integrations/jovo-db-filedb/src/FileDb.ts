@@ -1,7 +1,9 @@
 import {Db, PluginConfig, BaseApp} from 'jovo-core';
 import * as path from 'path';
 import * as fs from "fs";
-import * as _ from "lodash";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
+import _merge = require('lodash.merge');
 
 interface Config extends PluginConfig {
     pathToFile: string;
@@ -12,13 +14,13 @@ export class FileDb implements Db {
     needsWriteFileAccess = true;
 
     config: Config = {
-        pathToFile: '.././db/db.json',
+        pathToFile: './../db/db.json',
         primaryKeyColumn: 'userId',
     };
 
     constructor(config?: Config) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -26,7 +28,7 @@ export class FileDb implements Db {
         const pathToFile: string = this.config.pathToFile;
         FileDb.validatePathToFile(this.config);
 
-        _.set(this, 'config.pathToFile', pathToFile);
+        _set(this, 'config.pathToFile', pathToFile);
         // create file
         try {
             if (!fs.existsSync(path.dirname(pathToFile))) {
@@ -58,7 +60,7 @@ export class FileDb implements Db {
     async load(primaryKey: string) {
         const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
         const users = data.length > 0 ? JSON.parse(data) : [];
-        const userData = _.find(users, (o) => {
+        const userData = users.find((o:any) => { // tslint:disable-line
             return o[this.config.primaryKeyColumn] === primaryKey;
         });
 
@@ -70,16 +72,16 @@ export class FileDb implements Db {
         const users = oldData.length > 0 ? JSON.parse(oldData) : [];
 
         // find data for user with this primaryKey
-        const userData = _.find(users, (o) => {
+        const userData = users.find((o:any) => { // tslint:disable-line
             return o[this.config.primaryKeyColumn] === primaryKey;
         });
 
         if(userData) {
-            _.set(userData, key, data);
+            _set(userData, key, data);
         } else {
             const newData: any = {}; // tslint:disable-line
             newData[this.config.primaryKeyColumn] = primaryKey;
-            _.set(newData, key, data);
+            _set(newData, key, data);
             users.push(newData);
         }
         return this.saveFile(this.config.pathToFile, users);
@@ -123,7 +125,7 @@ export class FileDb implements Db {
     }
 
     private static validatePathToFile(config: any) { // tslint:disable-line
-        if (!_.get(config, 'pathToFile')) {
+        if (!_get(config, 'pathToFile')) {
             throw Error('InitializationError: pathToFile not set');
         }
 

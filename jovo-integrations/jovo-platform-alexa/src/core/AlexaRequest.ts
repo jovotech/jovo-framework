@@ -1,5 +1,6 @@
-import * as _ from 'lodash';
 import {Input, JovoRequest} from "jovo-core";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export interface SessionAttributes {
     [key: string]: any; //tslint:disable-line
@@ -128,7 +129,7 @@ export class AlexaRequest implements JovoRequest {
     // JovoRequest implementation
 
     getAccessToken() {
-        return _.get(this, 'context.System.user.accessToken');
+        return _get(this, 'context.System.user.accessToken');
     }
 
     getInputs(): AlexaInput[] {
@@ -147,9 +148,9 @@ export class AlexaRequest implements JovoRequest {
                 input.value = slots[slot].value;
                 input.key = slots[slot].value;
             }
-            if (_.get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]')) {
-                input.key = _.get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.name;
-                input.id = _.get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.id;
+            if (_get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]')) {
+                input.key = _get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.name;
+                input.id = _get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.id;
             }
             inputs[slot] = input;
         });
@@ -158,20 +159,20 @@ export class AlexaRequest implements JovoRequest {
     }
 
     getLocale() {
-        return _.get(this, 'request.locale');
+        return _get(this, 'request.locale');
     }
 
     getSessionAttributes() {
-        return _.get(this, 'session.attributes');
+        return _get(this, 'session.attributes');
     }
 
     getTimestamp() {
-        return _.get(this, 'request.timestamp');
+        return _get(this, 'request.timestamp');
     }
 
     getUserId() {
-        return _.get(this, 'session.user.userId') ||
-            _.get(this, 'context.System.user.userId');
+        return _get(this, 'session.user.userId') ||
+            _get(this, 'context.System.user.userId');
     }
 
     /**
@@ -180,7 +181,7 @@ export class AlexaRequest implements JovoRequest {
      */
     hasAudioInterface() {
         return this.hasScreenInterface() ||
-            typeof _.get(this.getSupportedInterfaces(), 'AudioPlayer') !== 'undefined';
+            typeof _get(this.getSupportedInterfaces(), 'AudioPlayer') !== 'undefined';
     }
 
     /**
@@ -188,7 +189,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {boolean}
      */
     hasScreenInterface() {
-        return typeof _.get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
+        return typeof _get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
     }
 
     /**
@@ -196,18 +197,18 @@ export class AlexaRequest implements JovoRequest {
      * @return {boolean}
      */
     hasVideoInterface() {
-        return typeof _.get(this.getSupportedInterfaces(), 'VideoApp') !== 'undefined';
+        return typeof _get(this.getSupportedInterfaces(), 'VideoApp') !== 'undefined';
     }
 
     isNewSession() {
-        return _.get(this, 'session.new', true);
+        return _get(this, 'session.new', true);
     }
 
 
 
     setLocale(locale: string) {
-        if (_.get(this, `request.locale`)) {
-            _.set(this, 'request.locale', locale);
+        if (_get(this, `request.locale`)) {
+            _set(this, 'request.locale', locale);
         }
         return this;
     }
@@ -216,8 +217,8 @@ export class AlexaRequest implements JovoRequest {
 
 
     setScreenInterface() {
-        if (_.get(this, 'context.System.device.supportedInterfaces')) {
-            _.set(this, 'context.System.device.supportedInterfaces', {
+        if (_get(this, 'context.System.device.supportedInterfaces')) {
+            _set(this, 'context.System.device.supportedInterfaces', {
                 'AudioPlayer': {},
                 'Display': {
                     'templateVersion': '1.0',
@@ -230,8 +231,8 @@ export class AlexaRequest implements JovoRequest {
     }
 
     setVideoInterface() {
-        if (_.get(this, 'context.System.device.supportedInterfaces')) {
-            _.set(this, 'context.System.device.supportedInterfaces', {
+        if (_get(this, 'context.System.device.supportedInterfaces')) {
+            _set(this, 'context.System.device.supportedInterfaces', {
                 'AudioPlayer': {},
                 'Display': {
                     'templateVersion': '1.0',
@@ -244,49 +245,49 @@ export class AlexaRequest implements JovoRequest {
     }
     setSessionAttributes(attributes: SessionAttributes): this {
         if (this.getSessionAttributes()) {
-            _.set(this, 'session.attributes', attributes);
+            _set(this, 'session.attributes', attributes);
         }
         return this;
     }
 
     addSessionAttribute(key: string, value: any) { // tslint:disable-line
         if (this.getSessionAttributes()) {
-            _.set(this, `session.attributes.${key}`, value);
+            _set(this, `session.attributes.${key}`, value);
         }
         return this;
     }
 
 
     setUserId(userId: string) {
-        _.set(this, 'session.user.userId', userId);
-        _.set(this, 'context.System.user.userId', userId);
+        _set(this, 'session.user.userId', userId);
+        _set(this, 'context.System.user.userId', userId);
         return this;
     }
 
     setAccessToken(accessToken: string) {
-        _.set(this, 'context.System.user.accessToken', accessToken);
+        _set(this, 'context.System.user.accessToken', accessToken);
         return this;
     }
 
 
     setNewSession(isNew: boolean) {
-        if (typeof _.get(this, 'session.new') !== 'undefined') {
-            _.set(this, 'session.new', isNew);
+        if (typeof _get(this, 'session.new') !== 'undefined') {
+            _set(this, 'session.new', isNew);
         }
         return this;
     }
 
     setTimestamp(timestamp: string) {
-        if (_.get(this, `request.timestamp`)) {
-            _.set(this, 'request.timestamp', timestamp);
+        if (_get(this, `request.timestamp`)) {
+            _set(this, 'request.timestamp', timestamp);
         }
         return this;
     }
 
 
     setAudioInterface() {
-        if (_.get(this, 'context.System.device.supportedInterfaces')) {
-            _.set(this, 'context.System.device.supportedInterfaces', {
+        if (_get(this, 'context.System.device.supportedInterfaces')) {
+            _set(this, 'context.System.device.supportedInterfaces', {
                 'AudioPlayer': {},
             });
         }
@@ -294,20 +295,20 @@ export class AlexaRequest implements JovoRequest {
     }
 
     setState(state: string) {
-        if (_.get(this, 'session.attributes')) {
-            _.set(this, 'session.attributes._JOVO_STATE_', state);
+        if (_get(this, 'session.attributes')) {
+            _set(this, 'session.attributes._JOVO_STATE_', state);
         }
         return this;
     }
 
     addInput(key: string, value: string | object) {
         if ( typeof value === 'string') {
-            _.set(this, `request.intent.slots.${key}`, {
+            _set(this, `request.intent.slots.${key}`, {
                 name: key,
                 value
             });
         } else {
-            _.set(this, `request.intent.slots.${key}`, value);
+            _set(this, `request.intent.slots.${key}`, value);
         }
 
         return this;
@@ -325,7 +326,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {String} endpoint url
      */
     getApiEndpoint() {
-        return _.get(this, 'context.System.apiEndpoint');
+        return _get(this, 'context.System.apiEndpoint');
     }
 
     /**
@@ -333,7 +334,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {String} endpoint url
      */
     getApiAccessToken() {
-        return _.get(this, 'context.System.apiAccessToken');
+        return _get(this, 'context.System.apiAccessToken');
     }
 
     /**
@@ -341,7 +342,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {string} constent token
      */
     getConsentToken() {
-        return _.get(this, 'context.System.user.permissions.consentToken');
+        return _get(this, 'context.System.user.permissions.consentToken');
     }
 
 
@@ -350,7 +351,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {string} device id
      */
     getDeviceId() {
-        return _.get(this, 'context.System.device.deviceId');
+        return _get(this, 'context.System.device.deviceId');
     }
 
 
@@ -359,12 +360,12 @@ export class AlexaRequest implements JovoRequest {
      * @return {string}
      */
     getAudioPlayerToken() {
-        return _.get(this, 'context.AudioPlayer.token',
-            _.get(this, 'request.token'));
+        return _get(this, 'context.AudioPlayer.token',
+            _get(this, 'request.token'));
     }
 
     getRequestId() {
-        return _.get(this, 'request.requestId');
+        return _get(this, 'request.requestId');
     }
 
     /**
@@ -373,7 +374,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {string} supportedInterfaces
      */
     getSupportedInterfaces() {
-        return _.get(this, 'context.System.device.supportedInterfaces');
+        return _get(this, 'context.System.device.supportedInterfaces');
     }
 
     /**
@@ -382,7 +383,7 @@ export class AlexaRequest implements JovoRequest {
      */
     hasAudioPlayerInterface() {
         return this.hasScreenInterface() ||
-            typeof _.get(this.getSupportedInterfaces(), 'AudioPlayer') !== 'undefined';
+            typeof _get(this.getSupportedInterfaces(), 'AudioPlayer') !== 'undefined';
     }
 
     /**
@@ -390,28 +391,28 @@ export class AlexaRequest implements JovoRequest {
      * @return {boolean}
      */
     hasDisplayInterface() {
-        return typeof _.get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
+        return typeof _get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
     }
 
     getIntentName() {
-        return _.get(this, 'request.intent.name');
+        return _get(this, 'request.intent.name');
     }
 
     getSlots() {
-        return _.get(this, 'request.intent.slots');
+        return _get(this, 'request.intent.slots');
     }
 
     getSlot(name: string): Slot {
-        return _.get(this, `request.intent.slots.${name}`);
+        return _get(this, `request.intent.slots.${name}`);
     }
 
     setSlots(slots: any) { // tslint:disable-line
-        _.set(this, `request.intent.slots`, slots);
+        _set(this, `request.intent.slots`, slots);
         return this;
     }
 
     setSlot(name: string, value: string) {
-        _.set(this, `request.intent.slots.${name}`, {
+        _set(this, `request.intent.slots.${name}`, {
             name,
             value
         });
@@ -420,7 +421,7 @@ export class AlexaRequest implements JovoRequest {
 
     setIntentName(intentName: string) {
         if (this.getIntentName()) {
-            _.set(this, 'request.intent.name', intentName);
+            _set(this, 'request.intent.name', intentName);
         }
         return this;
     }
