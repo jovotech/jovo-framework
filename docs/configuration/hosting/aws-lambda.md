@@ -14,10 +14,11 @@ Here is how the part of `index.js`, which is used to run the app on AWS Lambda, 
 ```javascript
 'use strict';
 
-const {app} = require('./app/app.js');
+const { Lambda } = require('jovo-framework');
+const { app } = require('./app/app.js');
 
-exports.handler = (event, context, callback) => {
-    app.handleLambda(event, context, callback);
+exports.handler = async (event, context, callback) => {
+    await app.handle(new Lambda(event, context, callback));
 };
 ```
 
@@ -25,12 +26,12 @@ exports.handler = (event, context, callback) => {
 
 While for Alexa, the process of hosting a Skill on Lambda is straightforward, for a Google Action there are additional steps that need to be taken to create an API Gateway. To learn more about how to run your voice app on Lambda, please take a look at our step-by-step tutorials:
 
-* [Run your Alexa Skill on Lambda](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#aws-lambda)
-* [Run your Google Action on Lambda with an API Gateway](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#aws-lambda)
+* [Run your Alexa Skill on Lambda](https://www.jovo.tech/tutorials/alexa-skill-tutorial-nodejs/#aws-lambda)
+* [Run your Google Action on Lambda with an API Gateway](https://www.jovo.tech/tutorials/host-google-action-on-lambda)
 
 ## Things to Consider
 
-The [FilePersistence](../../06_integrations/databases/#filepersistence '../databases#filepersistence') database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../06_integrations/databases/#dynamodb '../databases#dynamodb') before uploading to Lambda.
+The [FilePersistence](../../integrations/databases/#filepersistence '../databases#filepersistence') database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../06_integrations/databases/#dynamodb '../databases#dynamodb') before uploading to Lambda.
 
 ## Troubleshooting
 

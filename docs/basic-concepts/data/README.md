@@ -1,32 +1,68 @@
 # Data
 
-In this section, you will learn how to deal with entities and slot values provided by your users, and also store and retrieve user specific data with the User class.
+Learn more about different data types that can be used in a Jovo project.
 
-* [Introduction to Data](#introduction-to-data)
-   * [Data Types](#data-types)
-   * [Request Data](#request-data)
-   * [Session Data](#request-data)
-   * [User Data](#persisting-data)
+* [Introduction](#introduction)
+* [Request Data](#request-data)
+* [Session Data](#request-data)
+* [User Data](#user-data)
 * [App Data](#app-data)
 * [Account Linking](#account-linking)
 
-## Introduction to Data
+## Introduction
 
-> If you're new to voice applications, you can learn more about general principles like slots and entities here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics').
+> [Learn more about sessions and the request & response lifecycle here](../requests-responses.md './requests-responses').
 
-We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
+The Jovo Framework uses different concepts of data:
+
+* [Request Data](#request-data): Only stored for this specific request.
+* [Session Data](#request-data): Only stored for this session, across requests.
+* [User Data](#persisting-data): Stored in a database, across sessions.
+* [App Data](#app-data): Stored as long as the code is running.
 
 ## Request Data
 
+Request data is written into the Jovo object (`this`) and only stored for a specific request. This can be helpful if data is used across different methods (e.g. if [Intent Redirects](../routing#intent-redirects './routing#intent-redirects') are used).
+
+We recommend the following practice to store data in the Jovo object:
+
+```javascript
+this.$data.key = value;
+```
+
 ## Session Data
+
+Session data (also called session attributes) stores data in the JSON response back to the platform, which can then be accessed in the next request (as long as the session stays active).
+
+You can store elements into the session data like this:
+
+```javascript
+this.$session.$data.key = value;
+```
+
+[States](../routing/states.md './routing/states') are also stored as session data/attributes.
 
 ## User Data
 
-> Learn more about Sessions here: [App Logic > Routing > Introduction to User Sessions](../01_routing/#introduction-to-user-sessions './routing#introduction-to-user-sessions').
+The [Jovo User](./user.md './data/user') object uses [database integrations](../../integrations/databases './databases') to persist user specific data across sessions.
 
-If you want to store user input to use later, there is an important distinction to be made: Should the information only be available during a session, or be persisted for use in later sessions?
+The data can be stored like this:
+
+```javascript
+this.$user.$data.key = value;
+```
+
+> [Learn more about the Jovo User object here](./user.md './data/user').
 
 ## App Data
+
+App data is a special data type that stores data into the `app` object, which exists as long as the server is running:
+
+```javascript
+this.$app.$data.key = value;
+```
+
+For example, this can be used for non-user-specific information that needs an API call that is not necessary to be executed at every request. By saving data into the `app` object, the API call only needs to be done once while the server is running or the function is warm.
 
 ## Account Linking
 
@@ -59,8 +95,7 @@ ON_SIGN_IN() {
 ```
 
 For more information on Account Linking, check out our blogposts:
-* [Alexa Skill Account Linking](https://www.jovo.tech/blog/alexa-account-linking-auth0/)
-* [Google Actions Account Linking](https://www.jovo.tech/blog/google-action-account-linking-auth0/)
+* [Alexa Skill Account Linking](https://www.jovo.tech/tutorials/alexa-account-linking-auth0/)
+* [Google Actions Account Linking](https://www.jovo.tech/tutorials/google-action-account-linking-auth0/)
 
-<!--[metadata]: {"description": "Learn how to deal with data when using the Jovo Framework.",
-		            "route": "data"}-->
+<!--[metadata]: {"description": "Learn more about different data types that can be used in a Jovo project.", "route": "data"}-->

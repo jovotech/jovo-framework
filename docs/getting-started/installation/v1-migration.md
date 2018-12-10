@@ -21,7 +21,7 @@ With the update to `v2` we've have completely refactored the code base of both t
 
 The code base now has a plugin architecture, where each platform (e.g. Amazon Alexa, Google Assistant), integration (e.g. DynamoDb, Dashbot) and tool (e.g. Jovo Debugger) was outsourced as a plugin.
 
-Although most of these changes were under the hood and don't directly effect the usage of the framework, we used the chance to make quality of life changes to the project structure and increased the consistency of the framework's interfaces.
+Although most of these changes were under the hood and don't directly affect the usage of the framework, we used the chance to make quality of life changes to the project structure and increased the consistency of the framework's interfaces.
 
 ## Project Structure
 

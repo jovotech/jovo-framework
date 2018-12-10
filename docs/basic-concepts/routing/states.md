@@ -1,6 +1,6 @@
 # States
 
-In this section, you will learn more about how to use intents and states to route your users through your voice app.
+Learn how to use states in your Alexa Skills and Google Actions built with the Jovo Framework.
 
 * [Introduction](#introduction)
 * [followUpState](#followupstate)
@@ -15,25 +15,25 @@ For simple voice apps, the structure to handle the logic is quite simple:
 ```javascript
 app.setHandler({
 
-    'LAUNCH' : function() {
+    LAUNCH() {
         // Do something
     },
 
-    'YesIntent' : function() {
+    YesIntent() {
         // Do something
     },
 
-    'NoIntent' : function() {
+    NoIntent() {
         // Do something
     },
 
-    'END' : function() {
+    END() {
         // Do something
     }
 });
 ```
 
-This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `'YesIntent'` or `'NoIntent'`. As a developer need to figure out yourself which question they just answered with "Yes."
+This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `YesIntent` or `NoIntent`. As a developer need to figure out yourself which question they just answered with "Yes."
 
 This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially "Yes" and "No" as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes's and No's.
 
@@ -42,7 +42,7 @@ With Jovo, you can include states like this:
 ```javascript
 app.setHandler({
 
-    'LAUNCH' : function() {
+    LAUNCH() {
         let speech = 'Do you want to order something?';
         let reprompt = 'Please answer with yes or no.';
         this.followUpState('OrderState')
@@ -50,13 +50,13 @@ app.setHandler({
     },
     
     // Example: Behave differently for a 'yes' or 'no' answer inside order state
-    'OrderState' : {
+    OrderState: {
         
-        'YesIntent' : function() {
+        YesIntent() {
            // Do something
         },
 
-        'NoIntent' : function() {
+        NoIntent() {
            // Do something
         },
     },
@@ -70,65 +70,63 @@ When a user is in a certain state and calls an intent, Jovo will first look if t
 ```javascript
 app.setHandler({
 
-    'LAUNCH' : function() {
+    LAUNCH() {
         // do something
     },
     
-    // Example: behave differently for a 'yes' or 'no' answer inside order state
-    'OrderState' : {
-        
-        'YesIntent' : function() {
-           // do something
+    // Example: Behave differently for a 'yes' or 'no' answer inside order state
+    OrderState: {
+
+        YesIntent() {
+           // Do something
         },
 
-        'NoIntent' : function() {
-           // do something
+        NoIntent() {
+           // Do something
         },
-
     },
 
-    'YesIntent' : function() {
-        // do something
+    YesIntent() {
+        // Do something
     },
 
-    'NoIntent' : function() {
-        // do something
+    NoIntent() {
+        // Do something
     },
 
-    'END' : function() {
-        // do something
+    END() {
+        // Do something
     }
 
 });
 ```
 
-Alternatively, you can also use an [`Unhandled`](#unhandled-intent) intent as described in the section above:
+Alternatively, you can also use an [`Unhandled`](./intents.md#unhandled './intents#unhandled') intent:
 
 ```javascript
 app.setHandler({
 
-    'LAUNCH' : function() {
+    LAUNCH() {
         // do something
     },
     
-    // Example: behave differently for a 'yes' or 'no' answer inside order state
-    'OrderState' : {
-        
-        'YesIntent' : function() {
-           // do something
-        },
+    // Example: Behave differently for a 'yes' or 'no' answer inside order state
+    OrderState: {
 
-        'NoIntent' : function() {
+        YesIntent() {
            // Do something
         },
 
+        NoIntent() {
+           // Do something
+        },
     },
 
-    'Unhandled' : function() {
+    Unhandled() {
         // Do something
     },
 
-    'END' : function() {
+    END() {
         // Do something
     }
 
@@ -150,7 +148,7 @@ This way, the voice app will first look if the response-intent is available in t
 
 app.setHandler({
 
-    'LAUNCH' : function() {
+    LAUNCH() {
         // Ask for a yes-no-question and route to order state
         let speech = 'Do you want to order something?';
         let reprompt = 'Please answer with yes or no.';
@@ -158,26 +156,25 @@ app.setHandler({
             .ask(speech, reprompt);
     },
     
-    // Example: behave differently for a 'yes' or 'no' answer inside order state
-    'OrderState' : {
-        
-        'YesIntent' : function() {
-           // do something
+    // Example: Behave differently for a 'yes' or 'no' answer inside order state
+    OrderState: {
+
+        YesIntent() {
+           // Do something
         },
 
-        'NoIntent' : function() {
-           // do something
+        NoIntent() {
+           // Do something
         },
-
     },
 
     // Default intents without states below
 
-    'Unhandled' : function() {
+    Unhandled() {
         // Do something
     },
 
-    'END' : function() {
+    END() {
         // do something
     }
 
@@ -193,7 +190,7 @@ app.setHandler({
 
     // Other intents
 
-    'State1' : {
+    State1: {
 
         // Other intents
 
@@ -202,18 +199,18 @@ app.setHandler({
                 .ask('Do you want to proceed?');
         },
 
-        'State2': {
-            // Add intents here
+        State2: {
+            SomeIntent() {
+                // Do something
+            }
         },
-
-
 
     },
 
 });
 ```
 
-You can nest as many states as you want. As they are objects, you reach them with the `.` separator. You can also use `getState()` to access the current state:
+You can nest as many states as you want. As they are objects, you reach them with the `.` separator. You can also use `this.getState()` to access the current state:
 
 ```javascript
 this.followUpState(this.getState() + '.State2')
@@ -231,6 +228,4 @@ this.followUpState(null);
 ```
 
 
-<!--[metadata]: { "description": "Learn more about how to use states with the Jovo Framework.",
-		"route": "routing/states"
-                }-->
+<!--[metadata]: { "description": "Learn how to use states in your Alexa Skills and Google Actions built with the Jovo Framework.", "route": "routing/states" }-->

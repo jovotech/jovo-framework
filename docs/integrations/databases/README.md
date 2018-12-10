@@ -1,135 +1,27 @@
-# Databases
+# Database Integrations
 
 Learn how to store user specific data to databases with the Jovo Persistence Layer.
 
-* [Jovo Persistence Layer](#jovo-persistence-layer)
-  * [Configuration](#configuration)
-  * [Save Data](#save-data)
-  * [Load Data](#load-data)
-  * [Delete Data](#delete-data)
-  * [Delete a User](#delete-a-user)
-* [FilePersistence](#filepersistence)
-* [DynamoDB](#dynamodb)
-  * [DynamoDB for Apps Hosted on AWS Lambda](#dynamodb-for-apps-hosted-on-aws-lambda)
-  * [DynamoDB for Apps Not Hosted on AWS Lambda](#dynamodb-for-apps-not-hosted-on-aws-lambda)
-  * [DynamoDB Troubleshooting](#dynamodb-troubleshooting)
+* [Introduction](#introduction)
+* [Available Integrations](#available-integrations)
 
 
-## Jovo Persistence Layer
+## Introduction
 
-This is an abstraction layer for persisting data across sessions. By default, the [file-based system](#filepersistence) will be used so you can start right away when prototyping locally.
+The Jovo Database Inteerface is an abstraction layer for persisting data across sessions. By default, the file-based system [File DB](./file-db.md './file-db') will be used so you can start right away when prototyping locally.
 
-### Configuration
 
-You can add different database integrations in the Jovo app constructor. This is the default configuration:
+## Available Integrations
 
-```js
-const config = {
-    db: {
-        type: 'file',
-        localDbFilename: 'db',
-    },
-    // Other configurations
-}
-```
+Here is a list of all available database integrations for Jovo:
 
-## FilePersistence
+Name | Description
+------------ | -------------
+[File DB](./file-db.md './databases/file-db') | File-based system for local prototyping. Default.
+[DynamoDB](./dynamodb.md './databases/dynamodb') | NoSQL database by AWS
+[Google Cloud Datastore](./google-datastore.md './databases/google-datastore') | NoSQL database by Google Cloud
+[MySQL](./mysql.md './databases/mysql') | The open source relational database
 
-> Note: This is the default database integration. 
-
-The FilePersistence integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a db.json file by default.
-
-This sort of data persistence is enabled by default. The `db.json` can be found in the the following folder:
-
-```javascript
-index.js
-db/
-  -- db.json
-// Other files
-```
-
-And this is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.data.someKey = 'someValue';`:
-
-```js
-// Example for Amazon Alexa
-[
-	{
-		"userId": "amzn1.ask.account.[some_user_id]",
-		"userData": {
-			"data": {
-				"someKey": "someValue"
-			},
-			"metaData": {
-				"createdAt": "2017-11-13T13:46:37.421Z",
-				"lastUsedAt": "2017-11-13T14:12:05.738Z",
-				"sessionsCount": 9
-			}
-		}
-	}
-]
-```
-
-> Note: The FilePersistence integration should only be used for local development as it won't work while hosting your app on a cloud service, e.g. AWS Lambda
-
-## DynamoDB
-
-> Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
-
-The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. Learn more about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
-
-### DynamoDB for Apps Hosted on AWS Lambda
-
-If you're running on Lambda, you can simply integrate a DynamoDB table like this:
-
-```javascript
-// Using the constructor
-const config = {
-    db: {
-        type: 'dynamodb',
-        tableName: 'TableName',
-    },
-    // Other configurations
-};
-
-// Using the setter
-app.setDynamoDb('TableName');
-```
-
-This will create a table with a name specified by you, and use this to store and load data. To make it work, you need to give your Lambda Role DynamoDB permissions.
-
-You can find out more in the official documentation by Amazon: [AWS Lambda Permissions Model](http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html). 
-
-### DynamoDB for Apps Not Hosted on AWS Lambda
-
-In case you're hosting your voice app somewhere else, you can add DynamoDB with the following:
-
-```javascript
-let awsConfig = {
-    accessKeyId: 'yourAccessKeyId',
-    secretAccessKey: 'yourSecretAccessKey', 
-    region:  'yourRegion',
-};
-
-// Using the constructor
-const config = {
-    db: {
-        type: 'dynamodb',
-        tableName: 'TableName',
-        awsConfig: awsConfig,
-    },
-    // Other configurations
-};
-
-// Using the setter
-app.setDynamoDb('TableName', awsConfig);
-```
-
-You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-### DynamoDB Troubleshooting
-
-Here are a few things you need to consider when switching from a different database to DynamoDB
-* DynamoDB does not allow empty strings (`""`) as values: If you use them, please switch to `null` or a different value
 
 <!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",
 "route": "databases" }-->

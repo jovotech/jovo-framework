@@ -2,12 +2,14 @@
 
 In this section, you will learn how to log certain data in your Jovo app.
 
-* [Introduction to Logging](#introduction-to-logging)
+* [Introduction](#introduction)
+* [Log Requests](#log-requests)
+* [Log Responses](#log-responses)
 
 
 ## Introduction to Logging
 
-When you're using a local webhook (see [`jovo webhook`](../../03_app-configuration/02_server/webhook.md#jovo-webhook './server/webhook#jovo-webhook')), it's easy to use logging for debugging, like this:
+When you're using a local webhook, it's easy to use logging for debugging, like this:
 
 ```javascript
 console.log('This is going to appear in the logs');
@@ -18,33 +20,20 @@ For voice app specific debugging, Jovo offers some handy functions for logging i
 You can enable logging by using the following:
 
 ```javascript
-// Using the constructor
-const config = {
-  logging: true,
-  // Other configurations
-};
-
-// Using the setter
-app.enableLogging();
-
+// config.js file
+logging: true,
 ```
 
 This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be  enabled separately. For this, see the sections below.
 
 
-### Log Requests
+## Log Requests
 
 You can log the incoming JSON requests by adding the following configuration:
 
 ```javascript
-// Using the constructor
-const config = {
-  requestLogging: true,
-  // Other configurations
-};
-
-// Using the setter
-app.enableRequestLogging();
+// config.js file
+requestLogging: true,
 ```
 
 The result looks like this (data changed):
@@ -96,24 +85,17 @@ The result looks like this (data changed):
 }
 ```
 
-#### Request Logging Objects
-
 As you can see above, the logs of a request are quite long and impractical, if you only need certain information. With `requestLoggingObjects`, you can limit the log output to specific objects.
 
 ```javascript
-let myRequestLoggingObjects(['request']);
-
-// Using the constructor
-const config = {
-  requestLoggingObjects: myRequestLoggingObjects,
-  // Other configurations
-
-// Using the setter
-app.setRequestLoggingObjects(myRequestLoggingObjects);
-};
+// config.js file
+requestLoggingObjects: [
+  'request',
+  'context.System.user'
+],
 ```
 
-The example above will reduce the log output to this:
+The example for `request` above will reduce the log output to this:
 
 ```javascript
 // Amazon Alexa Request Example
@@ -127,19 +109,13 @@ The example above will reduce the log output to this:
 }
 ```
 
-### Log Responses
+## Log Responses
 
 You can log the outgoing JSON responses by adding the following configuration:
 
 ```javascript
-// Using the constructor
-const config = {
-  responseLogging: true,
-  // Other configurations
-};
-
-// Using the setter
-app.enableResponseLogging();
+// config.js file
+responseLogging: true,
 ```
 
 The result looks like this:
@@ -160,21 +136,13 @@ The result looks like this:
 ```
 
 
-#### Response Logging Objects
-
-Similar to [`requestLoggingObjects`](#request-logging-objects), you can limit the response logging output to specific objects, as well.
+Similar to `requestLoggingObjects`, you can limit the response logging output to specific objects, as well.
 
 ```javascript
-let myResponseLoggingObjects(['response']);
-
-// Using the constructor
-const config = {
-  responseLoggingObjects: myResponseLoggingObjects,
-  // Other configurations
-};
-
-// Using the setter
-app.setResponseLoggingObjects(myResponseLoggingObjects);
+// config.js file
+responseLoggingObjects: [
+  'response'
+],
 ```
 
 The example above will reduce the log output to this:
@@ -190,5 +158,4 @@ The example above will reduce the log output to this:
 
 
 
-<!--[metadata]: {"description": "Learn how to log certain data in your Jovo app.",
-		            "route": "data/logging"}-->
+<!--[metadata]: {"description": "Learn how to log certain data in your Jovo app.", "route": "data/logging"}-->

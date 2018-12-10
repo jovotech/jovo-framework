@@ -1,23 +1,23 @@
 # Intents
 
-In this section, you will learn more about how to use intents and states to route your users through your voice app.
+In this section, you will learn more about how to use intents to route your users through your voice app.
 
 * [Introduction](#introduction)
 * [Standard Intents](#standard-intents)
-    * [LAUNCH](#launch-intent)
-    * [NEW_SESSION](#new_session-intent)
-    * [NEW_USER](#new_user-intent)
-    * [ON_REQUEST](#on_request-intent)
-    * [END](#end-intent)
-    * [Unhandled](#unhandled-intent)
+    * [LAUNCH](#launch)
+    * [NEW_SESSION](#new_session)
+    * [NEW_USER](#new_user)
+    * [ON_REQUEST](#on_request)
+    * [END](#end)
+    * [Unhandled](#unhandled)
 * [Built-in Intents](#built-in-intents)
 * [intentMap](#intentmap)
 
 ## Introduction
 
-If you're new to voice applications, you can learn more general info about principles like intents here: [Getting Started > Voice App Basics](../../01_getting-started/voice-app-basics.md './voice-app-basics').
+> [Learn how to add intents to the Jovo Language Model here](../model '../model').
 
-Besides at least one of the the required [`'LAUNCH'`](#launch-intent) or [`'NEW_SESSION'`](#new-session-intent) intents, you can add more intents that you defined at the respective developer platforms (see how to create an intent for [Amazon Alexa](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/#helloworldintent) and [Google Assistant](https://www.jovo.tech/blog/google-action-tutorial-nodejs/#helloworldintent) in our beginner tutorials) like this:
+Besides at least one of the the required [`LAUNCH`](#launch) or [`NEW_SESSION`](#new_session) intents, you can add more intents that you defined at the respective developer platforms like this:
 
 ```javascript
 app.setHandler({
@@ -27,7 +27,7 @@ app.setHandler({
     },
 
     YourFirstIntent() {
-      // Do something here
+        // Do something here
 
     },
 
@@ -36,7 +36,7 @@ app.setHandler({
 
 Whenever your application gets a request from one of the voice platforms, this will either be accompanied with an intent (which you need to add), or the signal to start or end the session.
 
-For this, Jovo offers standard, built-in intents, `'LAUNCH'` and `'END'`, to make cross-platform intent handling easier:
+For this, Jovo offers standard, built-in intents, `LAUNCH` and `END`, to make cross-platform intent handling easier:
 
 ```javascript
 app.setHandler({
@@ -60,16 +60,16 @@ app.setHandler({
 
 You can learn more about Jovo standard intents in the following sections:
 
-* ['LAUNCH' Intent](#launch-intent)
-* ['NEW_SESSION' Intent](#new_session-intent)
-* ['NEW_USER' Intent](#new_user-intent)
-* ['ON_REQUEST' Intent](#on_request-intent)
-* ['END' Intent](#end-intent)
-* ['Unhandled' Intent](#unhandled-intent)
+* [LAUNCH Intent](#launch-intent)
+* [NEW_SESSION Intent](#new_session-intent)
+* [NEW_USER Intent](#new_user-intent)
+* [ON_REQUEST Intent](#on_request-intent)
+* [END Intent](#end-intent)
+* [Unhandled Intent](#unhandled-intent)
 
-### 'LAUNCH' Intent
+### LAUNCH
 
-The `'LAUNCH'` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just "open skill" or "talk to app" on the respective platforms). If you don't have `'NEW_SESSION'` defined, this intent is necessary to run your voice app.
+The `LAUNCH` intent is the first one your users will be directed to when they open your voice app without a specific question (no deep invocations, just "open skill" or "talk to app" on the respective platforms). If you don't have `NEW_SESSION` defined, this intent is necessary to run your voice app.
 
 ```javascript
 LAUNCH() {
@@ -79,58 +79,69 @@ LAUNCH() {
 
 Usually, you would need to map the requests from Alexa and Google (as they have different names) to handle both in one intent block, but Jovo helps you there with a standard intent.
 
-### 'NEW_SESSION' Intent
+### NEW_SESSION
 
-You can use the `'NEW_SESSION'` intent instead of the `'LAUNCH'` intent if you want to always map new session requests to one intent. This means that any request, even deep invocations, will be mapped to the `'NEW_SESSION'` intent. Either `'LAUNCH'` or `'NEW_SESSION'`are required.
+You can use the `NEW_SESSION` intent instead of the `LAUNCH` intent if you want to always map new session requests to one intent. This means that any request, even deep invocations, will be mapped to the `NEW_SESSION` intent. Either `LAUNCH` or `NEW_SESSION` are required.
 
 ```javascript
 NEW_SESSION() {
     // Always triggered when a user opens your app, no matter the query (new session)
  },
 ```
-This is helpful if you have some work to do, like collect data (timestamps), before you route the users to the intent they wanted with the `toIntent` method.
 
-This could look like this:
+This is helpful if you have some work to do, like collect data (timestamps). After all data collection is done, Jovo automatically goes to the intent of the request.
+
+If there are asynchronous calls that need to be executed before the original intent is entered, use the following:
 
 ```javascript
-NEW_SESSION() {
-    // Do some work here
-
-    this.toIntent(this.getIntentName());
+async NEW_SESSION() {
+    this.$session.$data.someData = await collectSomeData();
 },
 ```
 
 
-### 'NEW_USER' Intent
+### NEW_USER
 
-Additionally to the other intents above, you can use the `'NEW_USER'` to direct a new user to this intent and do some initial work before proceeding to the interaction:
+Additionally to the other intents above, you can use the `NEW_USER` to direct a new user to this intent and do some initial work before proceeding to the interaction:
 
 ```javascript
 NEW_USER() {
     // Triggered when a user opens your app for the first time
  },
 ```
-For example, this saves you some time calling `if (this.$user.isNewUser()) { }` in every intent where you require the access to user data.
 
-### 'ON_REQUEST' Intent
+For example, this saves you some time calling `if (this.$user.isNew()) { }` in every intent where you require the access to user data.
 
-The `'ON_REQUEST'` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent. If you make any async calls in the `'ON_REQUEST'` intent, use a callback method, otherwise the intent will simply route the user to the desired intent, while the call is still running.
+If there are asynchronous calls that need to be executed before the original intent is entered, use the following:
+
+```javascript
+async NEW_USER() {
+    this.$user.$data.someData = await collectSomeData();
+},
+```
+
+### ON_REQUEST
+
+The `ON_REQUEST` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent.
 
 ```javascript
 ON_REQUEST() {
     // Triggered with every request
 },
+```
 
-// Example
-ON_REQUEST() {
-    this.audioPlayer = this.$alexaSkill.audioPlayer();
+If you make any async calls in the `ON_REQUEST` intent, it is recommended to store data like this:
+
+```javascript
+async ON_REQUEST() {
+    this.$data.someData = await collectSomeData();
 },
 ```
 
 
-### 'END' Intent
+### END
 
-A session could end due to various reasons. For example, a user could call "stop," there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `'END'` to match those reasons for you to "clean up" (for example, to get the reason why the session ended, or save something to the database).
+A session could end due to various reasons. For example, a user could call "stop," there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `END` to match those reasons for you to "clean up" (for example, to get the reason why the session ended, or save something to the database).
 
 ```javascript
 END() {
@@ -161,9 +172,9 @@ END() {
 ```
 
 
-### 'Unhandled' Intent
+### Unhandled
 
-Sometimes, an incoming intent might not be found either inside a state or among the global intents in the `handlers` variable. For this, `'Unhandled'` intents can be used to match those calls:
+Sometimes, an incoming intent might not be found either inside a state or among the global intents in the `handlers` variable. For this, `Unhandled` intents can be used to match those calls:
 
 ```javascript
 Unhandled() {
@@ -171,11 +182,13 @@ Unhandled() {
  },
 ```
 
-#### Global 'Unhandled' Intent
+> Tutorial: [How the Unhandled Intent works](https://www.jovo.tech/tutorials/unhandled-intent).
 
-One `'Unhandled'` intent may be used outside a state to match all incoming requests that can't be found globally.
+#### Global Unhandled Intent
 
-In the below example all intents that aren't found, are automatically calling the `'Unhandled'` intent, which redirects to `'LAUNCH'`:
+One `Unhandled` intent may be used outside a state to match all incoming requests that can't be found globally.
+
+In the below example all intents that aren't found, are automatically calling the `Unhandled` intent, which redirects to `LAUNCH`:
 
 ```javascript
 app.setHandler({
@@ -192,11 +205,11 @@ app.setHandler({
 });
 ```
 
-#### State 'Unhandled' Intents
+#### State Unhandled Intents
 
 Usually, when an intent is not found inside a state, the routing jumps outside the state and looks for the intent globally.
 
-Sometimes though, you may want to stay inside that state, and try to capture only a few intents (for example, a yes-no-answer). For this, `'Unhandled'` intents can also be added to states.
+Sometimes though, you may want to stay inside that state, and try to capture only a few intents (for example, a yes-no-answer). For this, `Unhandled` intents can also be added to states.
 
 See this example:
 
@@ -233,30 +246,21 @@ app.setHandler({
 
 This helps you to make sure that certain steps are really taken in the user flow.
 
-However, for some intents (for example, a `'CancelIntent'`), it might make sense to always route to a global intent instead of `'Unhandled'`. This can be done with [intentsToSkipUnhandled](#intentsToSkipUnhandled).
+However, for some intents (for example, a `CancelIntent`), it might make sense to always route to a global intent instead of `Unhandled`. This can be done with [intentsToSkipUnhandled](#intentsToSkipUnhandled).
 
 
 #### intentsToSkipUnhandled
 
-With `intentsToSkipUnhandled`, you can define intents that aren't matched to an `'Unhandled'` intent, if not found in a state. This way, you can make sure that they are always captured globally.
+With `intentsToSkipUnhandled`, you can define intents that aren't matched to an `Unhandled` intent, if not found in a state. This way, you can make sure that they are always captured globally.
 
 ```javascript
-let myIntentsToSkipUnhandled = [
-    'CancelIntent',
-    'HelpIntent',
-];
-
-// Use constructor
-const config = {
-    intentsToSkipUnhandled: myIntentsToSkipUnhandled,
-    // Other configurations
-};
-
-// Use the setter
-app.setIntentsToSkipUnhandled(myIntentsToSkipUnhandled);
+// config.js file
+intentsToSkipUnhandled: [
+    'END'
+] 
 ```
 
-In the below example, if a person answers to the first question with "Help," it is not going to `'Unhandled'`, but to the global `'HelpIntent'`:
+In the below example, if a person answers the first question with "Stop," it is not going to `Unhandled`, but to the global `END`:
 
 ```javascript
 app.setHandler({
@@ -284,7 +288,7 @@ app.setHandler({
         },
     },
 
-    HelpIntent() {
+    END() {
         // Do something
     },
 
@@ -306,40 +310,28 @@ As mentioned above, the platforms offer different types of built-in intents.
 In cases where the names of certain intents differ across platforms, Jovo offers a simple mapping function for intents. You can add this to the configuration section of your voice app:
 
 ```javascript
-let myIntentMap = {
-    'incomingIntentName' : 'mappedIntentName'
-};
-
-// Use constructor
-const config = {
-    intentMap: myIntentMap,
-    // Other configurations
-};
-
-// Use setter
-app.setIntentMap(myIntentMap);
+// config.js file
+intentMap: {
+		'AMAZON.StopIntent': 'END',
+},
 ```
 
 This is useful especially for platform-specific, built-in intents. One example could be Amazon's standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
 
 ```javascript
-let intentMap = {
+intentMap: {
     'AMAZON.HelpIntent' : 'HelpIntent'
-};
+},
 ```
 
 This can also be used if you have different naming conventions on both platforms and want to match both intents to a new name. In the below example, the `AMAZON.HelpIntent` and an intent called `help-intent` on Dialogflow are matched to a Jovo intent called `HelpIntent`.
 
 ```javascript
-let intentMap = {
+intentMap: {
     'AMAZON.HelpIntent' : 'HelpIntent',
     'help-intent' : 'HelpIntent'
-};
+},
 ```
 
 
-
-
-<!--[metadata]: { "description": "Learn more about how to use intents with the Jovo Framework.",
-		"route": "routing/intents"
-                }-->
+<!--[metadata]: { "description": "Learn more about how to use intents with the Jovo Framework.", "route": "routing/intents" }-->
