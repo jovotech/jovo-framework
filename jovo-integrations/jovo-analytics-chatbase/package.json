@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-chatbase",
-  "version": "2.0.1-alpha.12",
+  "version": "2.0.1-alpha.13",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -13,17 +13,17 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "jovo-core": "^2.0.1-alpha.13",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
-    "lodash.set": "^4.3.2",
-    "jovo-core": "^2.0.1-alpha.12"
+    "lodash.set": "^4.3.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
-    "@types/node": "^10.3.1",
     "@types/lodash.get": "^4.4.4",
-    "@types/lodash.set": "^4.3.4",
     "@types/lodash.merge": "^4.6.4",
+    "@types/lodash.set": "^4.3.4",
+    "@types/node": "^10.3.1",
     "jest": "^23.4.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.1.3",
