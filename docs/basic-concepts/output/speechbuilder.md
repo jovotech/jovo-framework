@@ -11,7 +11,19 @@ In this section, you will learn how to use the Jovo SpeechBuilder, a helper clas
 
 ## Introduction to the SpeechBuilder
 
-With the `speechBuilder`, you can assemble a speech element by adding different types of input:
+With the `speechBuilder`, you can assemble a speech element by adding different types of input. Factory-like methods allow you to add your output subsequently. 
+
+```javascript
+this.$speech.addText('Welcome to this Pizza Skill.')
+            .addBreak('300ms')
+            .addAudio('https://www.jovo.tech/downloads/pizza.mp3');
+
+this.tell(this.$speech);
+```
+
+The Jovo object (`this`) consists of two pre-configured speechBuilder elements: `this.$speech` and `this.$reprompt`.
+
+Alternatively, you can initialize a new speechBuilder object by using `this.speechBuilder()`. 
 
 ```javascript
 let speech = this.speechBuilder()
@@ -22,7 +34,7 @@ let speech = this.speechBuilder()
 this.tell(speech);
 ```
 
-As you can see above, you can initialize a new speechBuilder object by using `this.speechBuilder()`. Factory-like methods allow you to add your output subsequently. You can see all the [features below](#features).
+You can see all the [features below](#features).
 
 ## Features
 
@@ -53,10 +65,9 @@ You can also use speechBuilder to add variety to your speech output. Here are a 
 For any of the speechBuilder methods, you can add an array of elements. The voice app will then pick a random item:
 
 ```javascript
-let speech = this.speechBuilder()
-                 .addText(['Hey there!', 'Welcome back!', 'Hi!']);
+this.$speech.addText(['Hey there!', 'Welcome back!', 'Hi!']);
 
-this.tell(speech);
+this.tell(this.$speech);
 ```
 
 ### Conditions
@@ -67,11 +78,10 @@ You can also add a condition as a parameter to any speechBuilder method. The out
 addText(text, condition)
 
 // Example
-let speech = this.speechBuilder()
-                 .addText('Welcome new user!', this.$user.isNewUser())
-                 .addText('Welcome back!', !this.$user.isNewUser());
+this.$speech.addText('Welcome new user!', this.$user.isNewUser())
+            .addText('Welcome back!', !this.$user.isNewUser());
 
-this.tell(speech);
+this.tell(this.$speech);
 ```
 
 ### Probabilities
@@ -82,11 +92,10 @@ Similar to conditions, you can also add probabilities to speechBuilder methods. 
 addText(text, probability)
 
 // Example
-let speech = this.speechBuilder()
-                 .addText('Welcome!')
+this.$speech.addText('Welcome!')
                  .addText('What a beautiful day.', 0.3);
 
-this.tell(speech);
+this.tell(this.$speech);
 ```
 
 
