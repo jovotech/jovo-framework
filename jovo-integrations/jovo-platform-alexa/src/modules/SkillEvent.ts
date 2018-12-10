@@ -28,5 +28,4 @@ export class SkillEvent implements Plugin {
             };
         }
     }
-
 }
