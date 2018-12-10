@@ -1,6 +1,6 @@
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import _mapValues = require('lodash.mapValues');
+import _mapValues = require('lodash.mapvalues');
 
 import {JovoRequest, SessionConstants, Inputs} from "jovo-core";
 
