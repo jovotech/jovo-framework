@@ -126,9 +126,21 @@ $ jovo deploy
 
 > [Learn more about hosting providers here](../configuration/hosting './hosting').
 
+If you have an Lambda endpoint defined in your `project.js` file, the `jovo deploy` command will also bundle and upload your source code to AWS Lambda:
+
 ```sh
-# Create a deployment package
+# Deploy platform projects and source code
+$ jovo deploy
+```
+
+You can also just bundle the files and then upload the resulting `bundle.zip` file manually:
+
+```sh
+# Bundle files
 $ jovo deploy --target zip
+
+# Alternative
+$ npm run bundle
 ```
 
 

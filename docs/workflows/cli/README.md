@@ -60,8 +60,7 @@ Jovo CLI commands can be divided into [basic commands](#basic-commands) (to crea
 ------------ | ------------ | ------------- 
 [Basic Commands](#basic-commands) | [`jovo new`](#jovo-new) | Creates a new Jovo project 
 | | [`jovo run`](#jovo-run) | Runs a local development server (webhook)
-[Platform Commands](#platform-commands) | [`jovo init`](#jovo-init) | Initializes platform-specific projects in `app.json`
-| | [`jovo build`](#jovo-build) | Builds platform-specific language model files into `/platforms` based on  `/models` folder
+[Platform Commands](#platform-commands) | [`jovo build`](#jovo-build) | Builds platform-specific language model files into `/platforms` based on  `/models` folder
 | | [`jovo get`](#jovo-get) | Downloads an existing platform project into the `/platforms` folder
 | | [`jovo deploy`](#jovo-deploy) | Deploys the `/platforms` project files to the voice platforms
 
@@ -81,6 +80,8 @@ You can create a Jovo project into a new directory with the following command:
 $ jovo new <directory>
 ```
 
+> Learn more about this command here: [cli/new](./new.md './cli/new').
+
 #### jovo run
 
 ![jovo run command](../img/jovo-run.png "jovo run command")
@@ -93,6 +94,9 @@ Learn more here: [Configuration > Hosting](../configuration/hosting './Hosting')
 # Default
 $ jovo run
 ```
+
+> Learn more about this command here: [cli/run](./run.md './cli/run').
+
 
 ### Platform Commands
 
@@ -119,6 +123,9 @@ After the initial [`init`](#jovo-init) process, you can either run `build`  sepa
 $ jovo build
 ```
 
+> Learn more about this command here: [cli/build](./build.md './cli/build').
+
+
 
 #### jovo get
 
@@ -133,6 +140,9 @@ To get the Skill from the Amazon developer console, you have to set up [ASK CLI]
 $ jovo get <alexaSkill|googleAction>
 ```
 
+> Learn more about this command here: [cli/get](./get.md './cli/get').
+
+
 #### jovo deploy
 
 ![jovo deploy command](../img/jovo-deploy.png "jovo deploy command")
@@ -143,6 +153,9 @@ $ jovo get <alexaSkill|googleAction>
 # Default
 $ jovo deploy
 ```
+
+> Learn more about this command here: [cli/deploy](./deploy.md './cli/deploy').
+
 
 
 <!--[metadata]: {"description": "Learn how to use the Jovo CLI to create, prototype, test, and deploy your voice app quickly.",

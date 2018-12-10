@@ -14,9 +14,15 @@ Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
 
 ## Introduction
 
+![GoogleSheets CMS for Alexa and Google Assistant](../../img/cms-sample-google-sheets.jpg)
 
+> You can use this Spreadsheet as a starter template: ID [1vgz5oZca1J7a37qV_nkwWK2ryYSCyh8008SsjLf5-Sk](https://docs.google.com/spreadsheets/d/1vgz5oZca1J7a37qV_nkwWK2ryYSCyh8008SsjLf5-Sk/)
 
 ## Configuration
+
+```sh
+$ npm install --save jovo-cms-googlesheets
+```
 
 `const { GoogleSheetsCMS } = require('jovo-cms-googlesheets');`
 
