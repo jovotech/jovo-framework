@@ -24,7 +24,7 @@ export class SkillEvent implements Plugin {
         if (_get(alexaRequest, 'request.type').substring(0, 15) === 'AlexaSkillEvent') {
             alexaSkill.$type =  {
                 type: EnumRequestType.ON_EVENT,
-                subType: _get(alexaRequest, 'request.type').substring(16)
+                subType: _get(alexaRequest, 'request.type')
             };
         }
     }
