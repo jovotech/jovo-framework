@@ -20,11 +20,12 @@ const verifiedServer: express.Application = express();
 verifiedServer.listen = function() {
     try {
         const verifier = require('alexa-verifier-middleware');
-        const router = express.Router(); //eslint-disable-line
 
+        const router = express.Router();
         verifiedServer.use(router);
-        router.use(verifier);
-        router.use(bodyParser.json());
+        router.use('/webhook_alexa', verifier);
+        router.use('/webhook_alexa', bodyParser.json());
+        router.use('/webhook', bodyParser.json());
 
         const server = http.createServer(this);
         return server.listen.apply(server, arguments); // eslint-disable-line
@@ -39,6 +40,5 @@ verifiedServer.listen = function() {
         }
     }
 };
-
 
 export {server, verifiedServer};
