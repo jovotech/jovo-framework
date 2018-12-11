@@ -117,11 +117,10 @@ export class SpeechBuilder {
     addBreak(time: string | string[], condition?: boolean, probability?: number): this {
         const strengthValues = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
         const breakTime = Array.isArray(time) ? _sample(time) : time;
-
-        if (strengthValues.indexOf(breakTime!) > -1) {
-            return this.addText('<break strength="' + time + '"/>', condition, probability);
+        if (strengthValues.indexOf(breakTime) > -1) {
+            return this.addText('<break strength="' + breakTime + '"/>', condition, probability);
         } else {
-            return this.addText('<break time="' + time + '"/>', condition, probability);
+            return this.addText('<break time="' + breakTime + '"/>', condition, probability);
         }
     }
     /**
