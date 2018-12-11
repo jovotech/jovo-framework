@@ -237,7 +237,7 @@ And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` s
 'ON_EVENT': {
     'AlexaSkillEvent.SkillPermissionChanged': function() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
-		console.log(`UserId: ${this.getUserId()}`);		
+		console.log(`UserId: ${this.$user.Id()}`);		
 		console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
     },
 }
