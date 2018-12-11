@@ -15,16 +15,18 @@ Jovo uses the [`express`](https://expressjs.com/) framework for running a server
 ```javascript
 'use strict';
 
-const {Webhook} = require('jovo-framework');
-const {app} = require('./app/app.js');
+const { Webhook, ExpressJS } = require('jovo-framework');
+const {app} = require('./app.js');
 
-if (app.isWebhook()) {
+if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.PORT || 3000;
+
     Webhook.listen(port, () => {
-        console.log(`Example server listening on port ${port}!`);
+        console.info(`Local server listening on port ${port}.`);
     });
-    Webhook.post('/webhook', (req, res) => {
-        app.handleWebhook(req, res);
+
+    Webhook.post('/webhook', async (req, res) => {
+        await app.handle(new ExpressJS(req, res));
     });
 }
 ```
@@ -43,10 +45,10 @@ For this, Jovo uses a package called [alexa-verifier-middleware](https://github.
 
 ```javascript
 // Use this
-const Webhook = require('jovo-framework').WebhookVerified;
+const { WebhookVerified, ExpressJS } = require('jovo-framework');
 
 // Instead of this
-const {Webhook} = require('jovo-framework');
+const { Webhook, ExpressJS } = require('jovo-framework');
 ```
 
 To make use of it, please install it like so:
