@@ -34,6 +34,7 @@ app.use(new DynamoDb());
 If you're running your code on Lambda, you can simply integrate a DynamoDB table like this in your `config.js` file:
 
 ```javascript
+// config.js file
 db: {
     DynamoDb: {
         tableName: 'yourTableName',

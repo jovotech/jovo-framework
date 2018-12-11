@@ -23,35 +23,12 @@ Jovo offers an abstraction layer for analytics integrations that allows you to a
 Analytics for your voice app can be added with one line of code for each analytics vendor and voice platform.
 
 ```javascript
-// Jovo app config
-const config = {
-    /**
-     * Other settings
-     */
-    analytics: {
-        services: {
-            // Add services here
-        },
+// config.js file
+analytics: {
+    services: {
+        // Add services here
     },
-};
-```
-
-You can also use a dedicated method for each analytics vendor and platform:
-```javascript
-
-// Dashbot integration
-app.addDashbotAlexa(key);
-app.addDashbotGoogleAction(key);
-
-// Bespoken integration
-app.addBespokenAnalytics(key);
-
-// Bespoken integration
-app.addChatbaseAnalytics(key);
-
-// Botanalytics integration
-app.addBotanalyticsAlexa(key);
-app.addBotanalyticsGoogleAction(key);
+},
 ```
 
 More detailed step-by-step guides can be found here:
@@ -72,13 +49,13 @@ The Jovo Analytics class offers several enhancements to the vendor tracking. Lea
 After adding analytics to your voice app, tracking is enabled by default. You can disable it with the following method:
 
 ```javascript
-app.analytics().disable();
+app.$analytics.disable();
 ```
 
 Also, you can enable analytics with this method:
 
 ```javascript
-app.analytics().enable();
+app.$analytics.enable();
 ```
 
 ### Skip Intents
@@ -86,13 +63,13 @@ app.analytics().enable();
 You can disable tracking for specific intents by adding them as an array like this:
 
 ```javascript
-app.analytics().skipIntents(intents);
+app.$analytics.skipIntents(intents);
 ```
 
 ### Skip Users
 
 ```javascript
-app.analytics().skipUsers(userIds);
+app.$analytics.skipUsers(userIds);
 ```
 
 ## Dashbot
