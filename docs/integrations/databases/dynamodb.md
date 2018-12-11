@@ -12,7 +12,7 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 
 The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. You can find the official documentation about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
 
-> [Learn more about hosting your application on AWS Lambda](../../configuration/hosting/aws-lambda.md '../hosting/aws-lambda).
+> [Learn more about hosting your application on AWS Lambda](../../configuration/hosting/aws-lambda.md '../hosting/aws-lambda').
 
 ## Configuration
 
