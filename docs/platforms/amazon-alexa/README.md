@@ -24,7 +24,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = this.$alexaSkill;
+this.$alexaSkill
 ```
 
 
