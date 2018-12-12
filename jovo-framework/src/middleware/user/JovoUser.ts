@@ -5,7 +5,7 @@ import _set = require('lodash.set');
 export interface Config extends PluginConfig {
     columnName?: string;
     implicitSave?: boolean;
-    userMetaData?: {
+    metaData?: {
         enabled?: boolean;
         lastUsedAt?: boolean,
         sessionsCount?: boolean,
@@ -13,7 +13,7 @@ export interface Config extends PluginConfig {
         requestHistorySize?: number,
         devices?: boolean,
     };
-    userContext?: {
+    context?: {
         enabled?: boolean;
         prev?: {
             size?: number,
@@ -64,7 +64,7 @@ export class JovoUser implements Plugin {
     config: Config = {
         columnName: 'userData',
         implicitSave: true,
-        userMetaData: {
+        metaData: {
             enabled: false,
             lastUsedAt: true,
             sessionsCount: true,
@@ -72,7 +72,7 @@ export class JovoUser implements Plugin {
             requestHistorySize: 4,
             devices: true,
         },
-        userContext: {
+        context: {
             enabled: false,
             prev: {
                 size: 1,
@@ -218,9 +218,6 @@ export class JovoUser implements Plugin {
             }
         };
     }
-    uninstall(app: BaseApp) {
-
-    }
     async loadDb(handleRequest: HandleRequest, force = false) {
         // no database
         if (!handleRequest.app.$db) {
@@ -285,12 +282,12 @@ export class JovoUser implements Plugin {
             data: _get(handleRequest.jovo.$user, '$data')
         };
 
-        if (this.config.userMetaData && this.config.userMetaData.enabled) {
+        if (this.config.metaData && this.config.metaData.enabled) {
             this.updateMetaData(handleRequest);
             userData.metaData = _get(handleRequest.jovo.$user, '$metaData');
         }
 
-        if (this.config.userContext && this.config.userContext.enabled) {
+        if (this.config.context && this.config.context.enabled) {
             this.updateContextData(handleRequest);
             userData.context = _get(handleRequest.jovo.$user, '$context');
         }
@@ -309,17 +306,17 @@ export class JovoUser implements Plugin {
         if (!handleRequest.jovo.$user) {
             throw new Error('User object is not initialized');
         }
-        if (_get(this.config, 'userMetaData.createdAt')) {
+        if (_get(this.config, 'metaData.createdAt')) {
             if (!_get(handleRequest.jovo.$user, '$metaData.createdAt')) {
                 _set(handleRequest.jovo.$user, '$metaData.createdAt', new Date().toISOString());
             }
         }
 
-        if (_get(this.config, 'userMetaData.lastUsedAt')) {
+        if (_get(this.config, 'metaData.lastUsedAt')) {
             _set(handleRequest.jovo.$user, '$metaData.lastUsedAt', new Date().toISOString());
         }
 
-        if (_get(this.config, 'userMetaData.sessionsCount')) {
+        if (_get(this.config, 'metaData.sessionsCount')) {
             let sessionsCount = _get(handleRequest.jovo.$user, '$metaData.sessionsCount') || 0;
             if (handleRequest.jovo.isNewSession()) {
                 sessionsCount += 1;
@@ -327,7 +324,7 @@ export class JovoUser implements Plugin {
             _set(handleRequest.jovo.$user, '$metaData.sessionsCount', sessionsCount);
         }
 
-        if (_get(this.config, 'userMetaData.requestHistorySize') > 0) {
+        if (_get(this.config, 'metaData.requestHistorySize') > 0) {
             if (!handleRequest.jovo.$user.$metaData.requests) {
                 handleRequest.jovo.$user.$metaData.requests = {};
             }
@@ -345,12 +342,12 @@ export class JovoUser implements Plugin {
             requestItem.count += 1;
             requestItem.log.push(new Date().toISOString());
 
-            if (requestItem.log.length > _get(this.config, 'userMetaData.requestHistorySize')) {
+            if (requestItem.log.length > _get(this.config, 'metaData.requestHistorySize')) {
                 requestItem.log = requestItem.log.slice(1, requestItem.log.length);
             }
         }
 
-        if (_get(this.config, 'userMetaData.devices')) {
+        if (_get(this.config, 'metaData.devices')) {
             if (!_get(handleRequest.jovo.$user, '$metadata.devices["'+handleRequest.jovo.getDeviceId()+'"]')) {
                 const device = {
                     hasAudioInterface: handleRequest.jovo.hasAudioInterface(),
@@ -371,7 +368,7 @@ export class JovoUser implements Plugin {
         if (!handleRequest.jovo.$user) {
             throw new Error('User object is not initialized');
         }
-        if (_get(this.config, 'userContext.prev.size') < 1) {
+        if (_get(this.config, 'context.prev.size') < 1) {
             return;
         }
         if (!_get(handleRequest.jovo.$user, '$context.prev')) {
@@ -379,25 +376,25 @@ export class JovoUser implements Plugin {
         }
 
 
-        if (_get(this.config, 'userMetaData.createdAt')) {
+        if (_get(this.config, 'metaData.createdAt')) {
             if (!_get(handleRequest.jovo.$user, '$metaData.createdAt')) {
                 _set(handleRequest.jovo.$user, '$metaData.createdAt', new Date().toISOString());
             }
         }
         const prevObject: ContextPrevObject = {};
 
-        if (_get(this.config, 'userContext.prev.response.speech')) {
+        if (_get(this.config, 'context.prev.response.speech')) {
             if (handleRequest.jovo.getSpeechText()) {
                 _set(prevObject, 'response.speech', handleRequest.jovo.getSpeechText());
             }
         }
-        if (_get(this.config, 'userContext.prev.response.reprompt')) {
+        if (_get(this.config, 'context.prev.response.reprompt')) {
             if (handleRequest.jovo.getRepromptText()) {
                 _set(prevObject, 'response.reprompt', handleRequest.jovo.getRepromptText());
             }
         }
 
-        if (_get(this.config, 'userContext.prev.response.state')) {
+        if (_get(this.config, 'context.prev.response.state')) {
                 // prevObject.response.state = handleRequest.jovo.getState();
             if (handleRequest.jovo.$session &&
                 handleRequest.jovo.$session.$data &&
@@ -407,29 +404,29 @@ export class JovoUser implements Plugin {
             }
         }
 
-        if (_get(this.config, 'userContext.prev.request.timestamp')) {
+        if (_get(this.config, 'context.prev.request.timestamp')) {
             _set(prevObject, 'request.timestamp', handleRequest.jovo.$request!.getTimestamp());
         }
-        if (_get(this.config, 'userContext.prev.request.state')) {
+        if (_get(this.config, 'context.prev.request.state')) {
             if (_get(handleRequest.jovo.$requestSessionAttributes, SessionConstants.STATE)) {
                 _set(prevObject, 'request.state', handleRequest.jovo.$requestSessionAttributes[SessionConstants.STATE]);
             }
         }
 
-        if (_get(this.config, 'userContext.prev.request.inputs')) {
+        if (_get(this.config, 'context.prev.request.inputs')) {
             if (handleRequest.jovo.$inputs) {
                 _set(prevObject, 'request.inputs', handleRequest.jovo.$inputs);
             }
         }
 
-        if (_get(this.config, 'userContext.prev.request.intent')) {
+        if (_get(this.config, 'context.prev.request.intent')) {
             if (handleRequest.jovo.$type!.type === EnumRequestType.INTENT) {
                 _set(prevObject, 'request.intent', handleRequest.jovo.$plugins.Router.route.intent);
             } else {
                 _set(prevObject, 'request.intent', handleRequest.jovo.$plugins.Router.route.path);
             }
         }
-        if (_get(this.config, 'userContext.prev.response.output')) {
+        if (_get(this.config, 'context.prev.response.output')) {
             if (handleRequest.jovo.$output) {
                 _set(prevObject, 'request.output', handleRequest.jovo.$output);
             }
@@ -438,9 +435,11 @@ export class JovoUser implements Plugin {
             if (handleRequest.jovo.$user.$context.prev) {
                 // Prevents storing empty object
                 handleRequest.jovo.$user.$context.prev.unshift(prevObject);
-                handleRequest.jovo.$user.$context.prev = handleRequest.jovo.$user.$context.prev.slice(0, _get(this.config, 'userContext.prev.size')); // add new prevObject to the beginning
+                handleRequest.jovo.$user.$context.prev = handleRequest.jovo.$user.$context.prev.slice(0, _get(this.config, 'context.prev.size')); // add new prevObject to the beginning
             }
         }
     }
+    uninstall(app: BaseApp) {
 
+    }
 }

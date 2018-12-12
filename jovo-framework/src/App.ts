@@ -90,9 +90,10 @@ export class App extends BaseApp {
             _set(this.config, 'plugin.DynamoDb.awsConfig', _get(this.config, 'plugin.DynamoDb.awsConfig') || _get(this.config, 'v1.db.awsConfig'));
         }
         // TODO: google datastore
-
-        this.config.userMetaData = this.config.userMetaData || _get(this.config, 'v1.userMetaData');
-        this.config.userContext = this.config.userContext || _get(this.config, 'v1.userContext');
+        if (this.config.user) {
+            this.config.user.metaData = this.config.user.metaData || _get(this.config, 'v1.userMetaData');
+            this.config.user.context = this.config.user.context || _get(this.config, 'v1.userContext');
+        }
 
         _set(this.config, 'plugin.I18Next', _get(this.config, 'i18n') || _get(this.config, 'v1.i18n'));
 
@@ -110,9 +111,13 @@ export class App extends BaseApp {
             responseLoggingObjects: _get(this, 'config.plugin.BasicLogging.responseLoggingObjects') || _get(this, 'config.responseLoggingObjects'),
         }));
 
+
         this.use(new JovoUser({
-            userMetaData: this.config.userMetaData,
-            userContext: this.config.userContext
+            enabled: _get(this.config, 'user.enabled'),
+            columnName: _get(this.config, 'user.columnName'),
+            implicitSave: _get(this.config, 'user.implicitSave'),
+            metaData: _get(this.config, 'user.metaData'),
+            context: _get(this.config, 'user.context')
         }));
         this.use(new I18Next());
         this.use(new Router());
@@ -142,9 +147,9 @@ export class App extends BaseApp {
      */
     enableLogging(val = true) {
         this.config.logging = val;
-        if (this.plugins.get('BasicLogging')) {
-            (this.plugins.get('BasicLogging') as BasicLogging).config.logging = val;
-            _set(this.config, 'plugins.BasicLogging.logging', val);
+        if (this.$plugins.get('BasicLogging')) {
+            (this.$plugins.get('BasicLogging') as BasicLogging).config.logging = val;
+            _set(this.config, 'plugin.BasicLogging.logging', val);
         }
         this.enableRequestLogging(val);
         this.enableResponseLogging(val);
@@ -155,9 +160,9 @@ export class App extends BaseApp {
      * @param {boolean} val
      */
     enableRequestLogging(val = true) {
-        if (this.plugins.get('BasicLogging')) {
-            (this.plugins.get('BasicLogging') as BasicLogging).config.requestLogging = val;
-            _set(this.config, 'plugins.BasicLogging.requestLogging', val);
+        if (this.$plugins.get('BasicLogging')) {
+            (this.$plugins.get('BasicLogging') as BasicLogging).config.requestLogging = val;
+            _set(this.config, 'plugin.BasicLogging.requestLogging', val);
         }
         this.config.requestLogging = val;
     }
@@ -167,9 +172,9 @@ export class App extends BaseApp {
      * @param {boolean} val
      */
     enableResponseLogging(val = true) {
-        if (this.plugins.get('BasicLogging')) {
-            (this.plugins.get('BasicLogging') as BasicLogging).config.responseLogging = val;
-            _set(this.config, 'plugins.BasicLogging.responseLogging', val);
+        if (this.$plugins.get('BasicLogging')) {
+            (this.$plugins.get('BasicLogging') as BasicLogging).config.responseLogging = val;
+            _set(this.config, 'plugin.BasicLogging.responseLogging', val);
         }
         this.config.responseLogging = val;
     }
@@ -185,9 +190,9 @@ export class App extends BaseApp {
             this.config.requestLoggingObjects = path;
         }
 
-        if (this.plugins.get('BasicLogging')) {
-            (this.plugins.get('BasicLogging') as BasicLogging).config.requestLoggingObjects = this.config.requestLoggingObjects;
-            _set(this.config, 'plugins.BasicLogging.logging', this.config.requestLoggingObjects);
+        if (this.$plugins.get('BasicLogging')) {
+            (this.$plugins.get('BasicLogging') as BasicLogging).config.requestLoggingObjects = this.config.requestLoggingObjects;
+            _set(this.config, 'plugin.BasicLogging.logging', this.config.requestLoggingObjects);
         }
 
     }
@@ -203,9 +208,9 @@ export class App extends BaseApp {
             this.config.responseLoggingObjects = path;
         }
 
-        if (this.plugins.get('BasicLogging')) {
-            (this.plugins.get('BasicLogging') as BasicLogging).config.responseLoggingObjects = this.config.responseLoggingObjects;
-            _set(this.config, 'plugins.BasicLogging.logging', this.config.responseLoggingObjects);
+        if (this.$plugins.get('BasicLogging')) {
+            (this.$plugins.get('BasicLogging') as BasicLogging).config.responseLoggingObjects = this.config.responseLoggingObjects;
+            _set(this.config, 'plugin.BasicLogging.logging', this.config.responseLoggingObjects);
         }
     }
 
@@ -223,7 +228,10 @@ export class App extends BaseApp {
      * @param {UserMetaDataConfig} userMetaData
      */
     setUserMetaData(userMetaData: UserMetaDataConfig) {
-        this.config.userMetaData = userMetaData;
+        if (!this.config.user) {
+            this.config.user = {};
+        }
+        this.config.user.metaData = userMetaData;
     }
 
     /**
@@ -231,7 +239,10 @@ export class App extends BaseApp {
      * @param {UserContextConfig} userContext
      */
     setUserContext(userContext: UserContextConfig) {
-        this.config.userContext = userContext;
+        if (!this.config.user) {
+            this.config.user = {};
+        }
+        this.config.user.context = userContext;
     }
 
     /**
@@ -240,9 +251,9 @@ export class App extends BaseApp {
      */
     setIntentMap(intentMap: {[key: string]: string}) {
         this.config.intentMap = intentMap;
-        if (this.plugins.get('Router')) {
-            (this.plugins.get('Router') as Router).config.intentMap = this.config.intentMap;
-            _set(this.config, 'plugins.Router.intentMap', this.config.intentMap);
+        if (this.$plugins.get('Router')) {
+            (this.$plugins.get('Router') as Router).config.intentMap = this.config.intentMap;
+            _set(this.config, 'plugin.Router.intentMap', this.config.intentMap);
         }
     }
 
@@ -251,9 +262,9 @@ export class App extends BaseApp {
      * @param {string[]} intentsToSkipUnhandled
      */
     setIntentsToSkipUnhandled(intentsToSkipUnhandled: string[]) {
-        if (this.plugins.get('Router')) {
-            (this.plugins.get('Router') as Router).config.intentsToSkipUnhandled = intentsToSkipUnhandled;
-            _set(this.config, 'plugins.Router.intentsToSkipUnhandled', intentsToSkipUnhandled);
+        if (this.$plugins.get('Router')) {
+            (this.$plugins.get('Router') as Router).config.intentsToSkipUnhandled = intentsToSkipUnhandled;
+            _set(this.config, 'plugin.Router.intentsToSkipUnhandled', intentsToSkipUnhandled);
         }
     }
 
@@ -262,9 +273,9 @@ export class App extends BaseApp {
      * @param i18n
      */
     setI18n(i18n: any) { // tslint:disable-line
-        if (this.plugins.get('I18Next')) {
-            (this.plugins.get('I18Next') as I18Next).config = i18n;
-            _set(this.config, 'plugins.I18Next', i18n);
+        if (this.$plugins.get('I18Next')) {
+            (this.$plugins.get('I18Next') as I18Next).config = i18n;
+            _set(this.config, 'plugin.I18Next', i18n);
         }
     }
 
@@ -273,8 +284,8 @@ export class App extends BaseApp {
      * @param alexaSkillConfig
      */
     setAlexaSkill(alexaSkillConfig: any) { // tslint:disable-line
-        if (this.plugins.get('Alexa')) {
-            _set(this.plugins.get('Alexa')!, 'config', alexaSkillConfig);
+        if (this.$plugins.get('Alexa')) {
+            _set(this.$plugins.get('Alexa')!, 'config', alexaSkillConfig);
         }
     }
 
@@ -283,8 +294,8 @@ export class App extends BaseApp {
      * @param googleActionConfig
      */
     setGoogleAction(googleActionConfig: any) { // tslint:disable-line
-        if (this.plugins.get('GoogleAssistant')) {
-            _set(this.plugins.get('GoogleAssistant')!, 'config', googleActionConfig);
+        if (this.$plugins.get('GoogleAssistant')) {
+            _set(this.$plugins.get('GoogleAssistant')!, 'config', googleActionConfig);
         }
     }
 
@@ -442,8 +453,10 @@ export interface AppConfig extends ExtensibleConfig {
     intentMap?: {[key: string]: string};
     inputMap?: {[key: string]: string};
 
-    userMetaData?: UserMetaDataConfig;
-    userContext?: UserContextConfig;
+    user?: {
+        metaData?: UserMetaDataConfig;
+        context?: UserContextConfig;
+    };
 
     db?: {[key: string]: any}; // tslint:disable-line
     analytics?: {[key: string]: any}; // tslint:disable-line
