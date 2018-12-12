@@ -2,9 +2,12 @@
 
 Learn more about different types of voice app testing with the Jovo Framework.
 
-* [Introduction](#introduction)
+* [Overview](#overview)
 
-## Introduction
+## Overview
+
+* [Jovo Debugger](./debugger.md './debugger') for manual testing
+* [Unit Testing](./unit-testing.md './unit-testing')
 
 
 
