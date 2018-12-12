@@ -289,8 +289,6 @@ As a result, there were also method name changes:
 `isDialogInProgress()` | `isInProgress()`
 `isDialogStarted()` | `isStarted()`
 
-PLACEHOLDER (intentConfirmationStatus, slotConfirmationStatus)
-
 ## Jovo Persistence Layer
 
 With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
