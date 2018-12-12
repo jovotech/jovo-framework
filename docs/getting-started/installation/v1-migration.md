@@ -15,6 +15,12 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 * [Jovo Persistence Layer](#jovo-persistence-layer)
 * [Examples](#examples)
 
+## ToDo
+
+// Go to PizzaIntent and pass more data
+this.toIntent('PizzaIntent', moreData);
+
+
 ## Introduction
 
 With the update to `v2` we've have completely refactored the code base of both the framework and the CLI to make it easier for us and you as well to maintain everything going forward. 
