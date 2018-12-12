@@ -9,7 +9,7 @@ export interface Config extends PluginConfig {
 }
 
 
-export class BotAnalyticsGoogleAssistant implements Analytics {
+export class BotanalyticsGoogleAssistant implements Analytics {
     config: Config = {
         key: '',
     };

@@ -8,7 +8,7 @@ export interface Config extends PluginConfig {
 }
 
 
-export class BotAnalyticsAlexa implements Analytics {
+export class BotanalyticsAlexa implements Analytics {
     config: Config = {
         key: '',
     };
