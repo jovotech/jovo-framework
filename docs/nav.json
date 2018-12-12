@@ -415,10 +415,6 @@
                 {
                     "title": "Plugins",
                     "route": "plugins"
-                },
-                {
-                    "title": "Customization",
-                    "route": "customization"
                 }
             ]
         }
