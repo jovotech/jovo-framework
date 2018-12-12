@@ -42,35 +42,46 @@ To use Chatbase Analytics for your voice app, you need to complete the following
 
 ### Enable Chatbase Analytics in Jovo
 
-You have to options to add Chatbase Analytics to your voice app:
+To add Chatbase Analytics to your voice app, do the following:
 
-* Use the Jovo app config
-* Use the add commands
+* Download the npm package
+* Enable the plugin in `app.js`
+* Add configurations in `config.js`
 
-Below is an example for both. Note: You can use the same API key for both platforms:
+First, download the npm package:
+
+```sh
+$ npm install --save jovo-analytics-chatbase
+```
+
+Enable the plugin like this:
 
 ```javascript
-// Option 1: Use the Jovo app config
-const config = {
-    /**
-     * Other settings
-     */
-    analytics: {
-        services: {
-            ChatbaseAlexa: {
-                key: '<key>',
-                version: 'version', // Optional
-            },
-            ChatbaseGoogleAction: {
-                key: '<key>',
-                version: 'version', // Optional
-            },
-        },
-    },
-};
+// app.js file
 
-// Option 2: Use the add command (version is optional)
-app.addChatbaseAnalytics('<key>', 'version');
+const { ChatbaseAlexa, ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
+
+app.use(
+    new ChatbaseAlexa(),
+    new ChatbaseGoogleAssistant()
+)
+```
+
+Add configurations like this:
+
+```javascript
+// config.js file
+
+analytics: {
+    ChatbaseAlexa: {
+        key: '<key>',
+        version: '<version>', // Optional
+    },
+    ChatbaseGoogleAssistant: {
+        key: '<key>',
+        version: '<version>', // Optional
+    },
+}
 ```
 
 ### Test Chatbase

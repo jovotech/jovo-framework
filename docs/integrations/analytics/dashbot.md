@@ -6,7 +6,6 @@ Learn how to use Dashbot Analytics for your Alexa Skills and Google Actions buil
 * [Installation](#installation)
    * [Create a Dashbot Bot](#create-a-dashbot-bot)
    * [Enable Dashbot in Jovo](#enable-dashbot-in-jovo)
-   * [Download the Dashbot Package](#download-the-dashbot-package)
 
 
 ## About Dashbot
@@ -45,42 +44,44 @@ To use Dashbot Analytics for your voice app, you need to complete the following 
 
 ### Enable Dashbot in Jovo
 
-You have to options to add Dashbot Analytics to your voice app:
+To add Dashbot Analytics to your voice app, do the following:
 
-* Use the Jovo app config
-* Use the add commands
+* Download the npm package
+* Enable the plugin in `app.js`
+* Add configurations in `config.js`
 
-Below is an example for both:
-
-```javascript
-// Option 1: Use the Jovo app config
-const config = {
-    /**
-     * Other settings
-     */
-    analytics: {
-        services: {
-            DashbotAlexa: {
-                key: '<key>',
-            },
-            DashbotGoogleAction: {
-                key: '<key>',
-            },
-        },
-    },
-};
-
-// Option 2: Use the add commands
-app.addDashbotAlexa('<key>');
-app.addDashbotGoogleAction('<key>');
-```
-
-### Download the Dashbot Package
-
-In your terminal, use the following command to download the package via npm:
+First, download the npm package:
 
 ```sh
-$ npm install dashbot --save
+$ npm install --save jovo-analytics-dashbot
+```
+
+Enable the plugin like this:
+
+```javascript
+// app.js file
+
+const { DashbotAlexa, DashbotGoogleAssistant } = require('jovo-analytics-dashbot');
+
+app.use(
+    new DashbotAlexa(),
+    new DashbotGoogleAssistant()
+)
+```
+
+Add configurations like this:
+
+```javascript
+// config.js file
+
+analytics: {
+    DashbotAlexa: {
+        key: '<key>',
+    },
+    DashbotGoogleAssistant: {
+        key: '<key>',
+    },
+}
 ```
 
 ### Test Dashbot

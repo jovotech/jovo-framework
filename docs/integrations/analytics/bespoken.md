@@ -45,33 +45,44 @@ To use Bespoken Analytics for your voice app, you need to complete the following
 
 ### Enable Bespoken Analytics
 
-You have to options to add Bespoken Analytics to your voice app:
+To add Bespoken Analytics to your voice app, do the following:
 
-* Use the Jovo app config
-* Use the add commands
+* Download the npm package
+* Enable the plugin in `app.js`
+* Add configurations in `config.js`
 
-Below is an example for both:
+First, download the npm package:
+
+```sh
+$ npm install --save jovo-analytics-bespoken
+```
+
+Enable the plugin like this:
 
 ```javascript
-// Option 1: Use the Jovo app config
-const config = {
-    /**
-     * Other settings
-     */
-    analytics: {
-        services: {
-            BespokenAlexa: {
-                key: '<key>',
-            },
-            BespokenGoogleAction: {
-                key: '<key>',
-            },
-        },
-    },
-};
+// app.js file
 
-// Option 2: Use the add command
-app.addBespokenAnalytics(key);
+const { BespokenAlexa, BespokenGoogleAssistant } = require('jovo-analytics-bespoken');
+
+app.use(
+    new BespokenAlexa(),
+    new BespokenGoogleAssistant()
+)
+```
+
+Add configurations like this:
+
+```javascript
+// config.js file
+
+analytics: {
+    BespokenAlexa: {
+        key: '<key>',
+    },
+    BespokenGoogleAssistant: {
+        key: '<key>',
+    },
+}
 ```
 
 ### Test Bespoken
