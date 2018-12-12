@@ -11,10 +11,7 @@ Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
 `const { AirtableCMS } = require('jovo-cms-airtable');`
 
 ```javascript
-app.use(
-    // Other modules
-    new AirtableCMS()
-);
+app.use( new AirtableCMS());
 ```
 
 <!--[metadata]: {"description": "Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.",
