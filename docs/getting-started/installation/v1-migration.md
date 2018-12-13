@@ -216,10 +216,10 @@ Here's the list of changes:
 `request()` | `$request`
 `response()` | `$response`
 `user()` | `$user`
- - | `$inputs`
+`getInputs()` | `$inputs`
 `alexaSkill()` | `$alexaSkill`
 `alexaSkill().audioPlayer()` | `$alexaSkill.$audioPlayer`
- - | `$alexaSkill.$dialog`
+ `alexaSkill().dialogInterface()` | `$alexaSkill.$dialog`
 `alexaSkill().gadgetController()` | `$alexaSkill.$gadgetController`
 `alexaSkill().gameEngine()` | `$alexaSkill.$gameEngine`
 `alexaSkill().inSkillPurchase()` | `$alexaSkill.$inSkillPurchase`
@@ -249,6 +249,9 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 
 
 ## Breaking Changes
+
+* [Inputs](#inputs)
+* [Alexa Dialog Interface](#alexa-dialog-interface)
 
 ### Inputs
 
