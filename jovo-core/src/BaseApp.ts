@@ -2,8 +2,6 @@ import {Extensible, ExtensibleConfig} from "./Extensible";
 import {AppData, Db, HandleRequest, Host, Platform} from "./Interfaces";
 import {ActionSet} from "./ActionSet";
 
-
-// TODO: remove
 process.on('unhandledRejection', (reason, p) => {
     console.log('unhandledRejection');
     console.log(p);
@@ -39,15 +37,13 @@ export class BaseApp extends Extensible {
             'platform.init',
             'platform.nlu',
             'nlu',
-            'initialize.user',
-            'initialize.cms',
-            'logic.router',
-            'logic.handler',
-            'output',
-            'finalize.user',
+            'user.load',
+            'router',
+            'handler',
+            'platform.output',
+            'user.save',
             'response',
-            'sendresponse',
-            'handleerror'
+            'fail'
         ], this);
 
         if (process.env.NODE_ENV !== 'UNIT_TEST') {
@@ -71,7 +67,7 @@ export class BaseApp extends Extensible {
     }
 
     /**
-     * Is calld on exit
+     * Is called on exit
      * IMPORTANT: Must have synchronous code only
      * @param {Function} callback
      */
@@ -108,28 +104,29 @@ export class BaseApp extends Extensible {
             if (!handleRequest.jovo) {
                 throw new Error(`Can't handle request object.`);
             }
-
             await this.middleware('platform.nlu')!.run(handleRequest);
             await this.middleware('nlu')!.run(handleRequest);
-            await this.middleware('initialize.user')!.run(handleRequest);
-
-            await this.middleware('initialize.cms')!.run(handleRequest);
-            await this.middleware('logic.router')!.run(handleRequest);
-
-            await this.middleware('logic.handler')!.run(handleRequest);
-            await this.middleware('output')!.run(handleRequest);
+            await this.middleware('user.load')!.run(handleRequest);
+            await this.middleware('router')!.run(handleRequest);
+            await this.middleware('handler')!.run(handleRequest);
             await this.middleware('finalize.user')!.run(handleRequest);
+            await this.middleware('platform.output')!.run(handleRequest);
             await this.middleware('response')!.run(handleRequest);
-            await this.middleware('sendresponse')!.run(handleRequest);
         } catch (e) {
             console.log(e);
             handleRequest.error = e;
-            await this.middleware('handleerror')!.run(handleRequest);
+            await this.middleware('fail')!.run(handleRequest);
         }
     }
 
     onError(callback: Function) {
-        this.on('handleerror', (handleRequest: HandleRequest) => {
+        this.on('fail', (handleRequest: HandleRequest) => {
+            callback(handleRequest);
+        });
+    }
+
+    onFail(callback: Function) {
+        this.on('fail', (handleRequest: HandleRequest) => {
             callback(handleRequest);
         });
     }

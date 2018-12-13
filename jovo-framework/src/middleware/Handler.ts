@@ -5,8 +5,8 @@ import {Route, Router} from "./Router";
 
 export class Handler implements Plugin {
     install(app: BaseApp) {
-        app.middleware('logic.handler')!.use(this.handle);
-        app.middleware('handleerror')!.use(this.error);
+        app.middleware('handler')!.use(this.handle);
+        app.middleware('fail')!.use(this.error);
 
         this.mixin(app);
     }

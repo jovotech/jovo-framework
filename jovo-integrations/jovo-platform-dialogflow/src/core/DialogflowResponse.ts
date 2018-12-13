@@ -116,6 +116,7 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     hasSessionAttribute(name: string, value?: any) { // tslint:disable-line
+
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/session') > -1;
         });

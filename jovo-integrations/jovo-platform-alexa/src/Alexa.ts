@@ -67,7 +67,7 @@ export class Alexa extends Extensible implements Platform {
         app.$platform.set(this.constructor.name, this);
         app.middleware('platform.init')!.use(this.initialize.bind(this));
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
-        app.middleware('output')!.use(this.output.bind(this));
+        app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
 
         this.use(

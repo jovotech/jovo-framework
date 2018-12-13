@@ -21,11 +21,10 @@ export class LanguageModelTester implements Plugin {
 
     install(app: BaseApp) {
         if (process.argv.indexOf('--model-test') > -1 ) {
-            app.middleware('after.logic.router')!.use(this.testModel.bind(this));
-            app.middleware('initialize.user')!.skip();
-            app.middleware('initialize.cms')!.skip();
-            app.middleware('logic.handler')!.skip();
-            app.middleware('finalize.user')!.skip();
+            app.middleware('after.router')!.use(this.testModel.bind(this));
+            app.middleware('user.load')!.skip();
+            app.middleware('handler')!.skip();
+            app.middleware('user.save')!.skip();
         }
     }
 

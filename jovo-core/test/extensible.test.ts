@@ -44,7 +44,7 @@ class PluginA implements Plugin {
         }
     }
 
-    install(parent: any) {
+    install(parent: any) { // tslint:disable-line
 
     }
     uninstall() {
@@ -53,7 +53,7 @@ class PluginA implements Plugin {
 }
 
 class PluginB implements Plugin {
-    install(parent: any) {
+    install(parent: any) { // tslint:disable-line
 
     }
     uninstall() {
@@ -64,7 +64,7 @@ class PluginB implements Plugin {
 
 interface ConfigExtensiblePlugin extends ExtensibleConfig {
     key?:string;
-    plugins?: any;
+    plugins?: any; // tslint:disable-line
 }
 
 class ExtensiblePlugin extends Extensible implements Plugin {
@@ -80,7 +80,7 @@ class ExtensiblePlugin extends Extensible implements Plugin {
         }
     }
 
-    install(parent: any) {
+    install(parent: any) { // tslint:disable-line
 
     }
     uninstall() {

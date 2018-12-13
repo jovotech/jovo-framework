@@ -27,7 +27,7 @@ export class Router implements Plugin {
     }
 
     install(app: BaseApp) {
-        app.middleware('logic.router')!.use(this.router.bind(this));
+        app.middleware('router')!.use(this.router.bind(this));
     }
     uninstall(app: BaseApp) {
 

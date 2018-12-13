@@ -50,6 +50,14 @@ export class DialogflowNlu extends Extensible {
         if (config) {
             this.config = _merge(this.config, config);
         }
+        this.init = this.init.bind(this);
+        this.request = this.request.bind(this);
+        this.type = this.type.bind(this);
+        this.nlu = this.nlu.bind(this);
+        this.inputs = this.inputs.bind(this);
+        this.output = this.output.bind(this);
+        this.session = this.session.bind(this);
+        this.response = this.response.bind(this);
     }
 
     install(platform: Extensible) {
@@ -67,19 +75,18 @@ export class DialogflowNlu extends Extensible {
         // @ts-ignore
         platform.responseBuilder.platformResponseClazz = this.config.platformResponseClazz;
 
-
-        platform.middleware('$init')!.use(this.init.bind(this));
+        platform.middleware('$init')!.use(this.init);
 
         // // Register to Platform middleware
-        platform.middleware('$request')!.use(this.request.bind(this));
-        platform.middleware('$type')!.use(this.type.bind(this));
-        platform.middleware('$nlu')!.use(this.nlu.bind(this));
-        platform.middleware('$inputs')!.use(this.inputs.bind(this));
+        platform.middleware('$request')!.use(this.request);
+        platform.middleware('$type')!.use(this.type);
+        platform.middleware('$nlu')!.use(this.nlu);
+        platform.middleware('$inputs')!.use(this.inputs);
 
-        platform.middleware('$output')!.use(this.output.bind(this));
-        platform.middleware('$session')!.use(this.session.bind(this));
+        platform.middleware('$output')!.use(this.output);
+        platform.middleware('$session')!.use(this.session);
 
-        platform.middleware('$response')!.use(this.response.bind(this));
+        platform.middleware('$response')!.use(this.response);
         Object.assign(Jovo.prototype, {
             dialogflow() {
                 return this.$plugins.DialogflowNlu.dialogflow;
@@ -87,10 +94,21 @@ export class DialogflowNlu extends Extensible {
         });
     }
     uninstall(platform: Extensible) {
+        platform.middleware('$init')!.remove(this.init);
 
+        // // Register to Platform middleware
+        platform.middleware('$request')!.remove(this.request);
+        platform.middleware('$type')!.remove(this.type);
+        platform.middleware('$nlu')!.remove(this.nlu);
+        platform.middleware('$inputs')!.remove(this.inputs);
+
+        platform.middleware('$output')!.remove(this.output);
+        platform.middleware('$session')!.remove(this.session);
+
+        platform.middleware('$response')!.remove(this.response);
     }
 
-    async init(handleRequest: HandleRequest) {
+    init = async (handleRequest: HandleRequest) => {
         const requestObject = handleRequest.host.getRequestObject();
         if (requestObject.queryResult &&
             requestObject.originalDetectIntentRequest &&
@@ -99,16 +117,16 @@ export class DialogflowNlu extends Extensible {
             handleRequest.jovo = new handleRequest.platformClazz(handleRequest.app, handleRequest.host);
             _set(handleRequest.jovo.$plugins, 'DialogflowNlu.dialogflow', new Dialogflow(handleRequest.jovo));
         }
-    }
+    };
 
-    request(jovo: Jovo) {
+    request = (jovo: Jovo) => {
         jovo.$originalRequest = _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'originalDetectIntentRequest.payload');
         jovo.$request = jovo.$plugins.DialogflowNlu.dialogflow.$request;
         (jovo.$request as DialogflowRequest).originalDetectIntentRequest.payload = this.config.platformRequestClazz.fromJSON(jovo.$originalRequest );
         // _set(jovo.$request, 'originalDetectIntentRequest.payload', jovo.platformRequest.fromJSON(jovo.$originalRequest ));
-    }
+    };
 
-    type(jovo: Jovo) {
+    type = (jovo: Jovo) => {
         if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent')) {
             if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
                 jovo.$type = {
@@ -126,9 +144,9 @@ export class DialogflowNlu extends Extensible {
                 }
             }
         }
-    }
+    };
 
-    nlu(jovo: Jovo) {
+    nlu = (jovo: Jovo) => {
         const nluData: NLUData = {
 
         };
@@ -136,9 +154,9 @@ export class DialogflowNlu extends Extensible {
             _set(nluData, 'intent.name', _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName'));
         }
         jovo.$nlu = nluData;
-    }
+    };
 
-    inputs(jovo: Jovo) {
+    inputs = (jovo: Jovo) => {
         const params = _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.parameters');
         jovo.$inputs = _mapValues(params, (value, name) => {
             return {
@@ -148,9 +166,9 @@ export class DialogflowNlu extends Extensible {
                 id: value, // Added for cross platform consistency
             };
         });
-    }
+    };
 
-    async session(jovo: Jovo) {
+    session = async (jovo: Jovo) => {
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
 
         const sessionId = _get(dialogflowRequest, 'session');
@@ -170,9 +188,9 @@ export class DialogflowNlu extends Extensible {
             }
             jovo.$requestSessionAttributes = JSON.parse(JSON.stringify(jovo.$session.$data));
         }
-    }
+    };
 
-    output(jovo: Jovo) {
+    output = (jovo: Jovo) => {
         const output = jovo.$output;
         const dialogflowResponse = jovo.$plugins.DialogflowNlu.dialogflow.$response;
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
@@ -208,15 +226,14 @@ export class DialogflowNlu extends Extensible {
             }
         }
         _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
-    }
+    };
 
 
-    async response(jovo: Jovo) {
+    response = async (jovo: Jovo) => {
         (jovo.$plugins.DialogflowNlu.dialogflow.$response as DialogflowResponse).payload = {
             [this.config.platformId]: this.config.platformResponseClazz.fromJSON(jovo.$response )
         };
-        // _set(jovo.$plugins.DialogflowNlu.dialogflow.$response, `payload.${jovo.$plugins.DialogflowNlu.dialogflow.platform}`, jovo.$response);
         jovo.$response = jovo.$plugins.DialogflowNlu.dialogflow.$response;
-    }
+    };
 
 }

@@ -65,7 +65,7 @@ export class GoogleAssistant extends Extensible implements Platform {
         app.$platform.set(this.constructor.name, this);
         app.middleware('platform.init')!.use(this.initialize.bind(this));
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
-        app.middleware('output')!.use(this.output.bind(this));
+        app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
         this.use(
             new GoogleAssistantCore(),
@@ -98,6 +98,7 @@ export class GoogleAssistant extends Extensible implements Platform {
     }
 
     makeTestSuite() {
+        this.remove('DialogflowNlu');
         this.initDialogflow();
         return new TestSuite(this.requestBuilder, this.responseBuilder);
     }
@@ -148,6 +149,7 @@ export class GoogleAssistant extends Extensible implements Platform {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'GoogleAction') {
             return Promise.resolve();
         }
+
         await this.middleware('$response')!.run(handleRequest.jovo);
         handleRequest.host.setResponse(handleRequest.jovo.$response);
     }

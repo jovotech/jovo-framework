@@ -103,8 +103,8 @@ export class JovoUser implements Plugin {
     }
 
     install(app: BaseApp): void {
-        app.middleware('initialize.user')!.use(this.loadDb);
-        app.middleware('finalize.user')!.use(this.saveDb);
+        app.middleware('user.load')!.use(this.loadDb);
+        app.middleware('user.save')!.use(this.saveDb);
 
         const loadDb = this.loadDb;
         const saveDb = this.saveDb;

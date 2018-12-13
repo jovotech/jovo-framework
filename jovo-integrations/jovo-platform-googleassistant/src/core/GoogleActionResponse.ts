@@ -67,7 +67,6 @@ export class GoogleActionResponse implements JovoResponse {
         if (this.expectUserResponse === true) {
             return false;
         }
-
         if (speech) {
             if (Array.isArray(speech)) {
 
