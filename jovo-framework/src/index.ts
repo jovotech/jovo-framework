@@ -1,6 +1,7 @@
 import {App} from "./App";
-import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
 
+import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
+import {Jovo} from 'jovo-core';
 export { App } from './App';
 export { server as Webhook } from './server';
 export { verifiedServer as WebhookVerified } from './server';
@@ -14,6 +15,7 @@ export { Router } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util } from './Util';
 
+
 declare module 'jovo-core/dist/src/Interfaces' {
     interface AppConfig {
         handlers?: any; // tslint:disable-line
@@ -26,9 +28,19 @@ declare module 'express' {
     }
 }
 
+
+
+type HandlerReturnType = Function | Promise<Function> | Promise<Jovo> | Promise<void> | void;
+type JovoFunction = (this: Jovo, done?: Function) => HandlerReturnType;
+
+
+interface Handler {
+    [key: string]: JovoFunction | Handler | Function;
+}
+
 declare module 'jovo-core/dist/src/BaseApp' {
     export interface BaseApp {
-        setHandler(...handler: any[]): this; // tslint:disable-line
+        setHandler(...handler: Handler[]): this;
     }
 }
 
@@ -36,10 +48,10 @@ declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
         triggeredToIntent: boolean;
         getHandlerPath(): string;
-        toIntent(intent: string): void;
-        toStateIntent(state: string | undefined, intent: string): void;
-        toStatelessIntent(intent: string): void;
-        followUpState(state: string): void;
+        toIntent(intent: string): Promise<void>;
+        toStateIntent(state: string | undefined, intent: string): Promise<void>;
+        toStatelessIntent(intent: string): Promise<void>;
+        followUpState(state: string): this;
         getHandlerPath(): string;
     }
 }
@@ -49,8 +61,6 @@ declare module 'jovo-core/dist/src/Jovo' {
         repeat(): void;
     }
 }
-
-
 
 declare module 'jovo-core/dist/src/User' {
     interface User {
