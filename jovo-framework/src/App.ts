@@ -63,9 +63,6 @@ export class App extends BaseApp {
         this.config.requestLoggingObjects = this.config.requestLoggingObjects || _get(this.config, 'v1.requestLoggingObjects');
         this.config.responseLoggingObjects = this.config.responseLoggingObjects || _get(this.config, 'v1.responseLoggingObjects');
 
-        // _set(this.config, 'plugin.BasicLogging.logging', this.config.logging);
-
-
 
         _set(this.config, 'plugin.JovoUser.implicitSave', _get(this.config, 'plugin.JovoUser.implicitSave') || _get(this.config, 'v1.saveUserOnResponseEnabled'));
         _set(this.config, 'plugin.JovoUser.columnName', _get(this.config, 'plugin.JovoUser.columnName') || _get(this.config, 'v1.userDataCol'));
@@ -138,6 +135,10 @@ export class App extends BaseApp {
      * @param config
      */
     setConfig(config: AppConfig) {
+        this.config = _merge(this.config, config);
+        this.mergePluginConfiguration();
+        this.v1ConfigMigration();
+        this.init();
     }
 
 
