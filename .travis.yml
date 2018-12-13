@@ -2,8 +2,8 @@ language: node_js
 install:
   - "npm install"
   - "npm run bootstrap"
-  - "npm run test"
   - "npm run tsc"
+  - "npm run test"
   - "npm run tslint"
 
 
