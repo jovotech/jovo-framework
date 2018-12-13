@@ -2,14 +2,14 @@
 
 Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 
-* [Getting Stated with v2](#getting-started-with-v2)
+* [Getting Started with v2](#getting-started-with-v2)
     * [Installation](#installation)
     * [Project Structure](#project-structure)
 * [New Concepts](#new-concepts)
     * [Plugins](#plugins)
     * [Jovo Objects](#jovo-variables)
     * [Integrations](#integrations)
-    * [Responses are sent automatically](#responses-are-sent-automatically)
+    * [Response Execution](#response-execution)
 * [Breaking Changes](#breaking-changes)
     * [Inputs](#inputs)
     * [Alexa Dialog Interface](#alexa-dialog-interface)
@@ -18,7 +18,7 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 * [Examples](#examples)
 
 
-## Getting Stated with v2
+## Getting Started with v2
 
 With the update to `v2` we've have completely refactored the code base of both the Jovo Framework and the Jovo CLI to make it more modular and easier to extend.
 
@@ -33,7 +33,7 @@ To get started with the new Jovo `v2`, install the Jovo CLI:
 ```sh
 $ npm install -g jovo-cli@beta
 
-# Sudo may be required
+# sudo may be required
 $ sudo npm install -g jovo-cli@beta
 
 # If you run into problems, uninstall v1 versions first
@@ -54,19 +54,17 @@ New Jovo projects have an updated folder structure.
 ![New Jovo v2 Project Structure](../../img/jovo-v2-project-structure.png)
 
 There are several changes that are important:
-* [`project.js`](#projectjs) is the new file for project configuration (previously `app.json`)
-* [`src`] contains all the files for fulfillment (previously it was `index.js` in the root + the `app` folder with `app.js`)
-* The `src` folder now contains a [`config.js`](#configjs) file for app configuration
+* [`project.js`](#projectjs) (previously `app.json`)
+* `src` (including `index.js` and `app.js`)
+* [`config.js`](#configjs)
 
 #### project.js
 
 > [Find everything about `project.js` here](../../configuration/project-js.md '../project-js').
 
-The `project.js` file is the equivalent to the `app.json` file with small tweaks here and there.
+The `project.js` file is the equivalent to the `app.json` file with small tweaks here and there. It stores all project related configurations and is only used for the build and deploy processes. 
 
-First of all, it is a `js` file now instead of a `json`, simply to allow you to comment stuff out.
-
-Secondly, the `project.js` file will be only used for the build and deploy processes, instead of being a jack of all trades like the `app.json`. That means, overriding certain parts of your config using the `project.js` file won't be possible anymore. That's now done with the [`config.js`](#config.js).
+That means overriding certain parts of your app config using (like different databases for different stages) the `project.js` file won't be possible anymore. That's now done with the [`config.js`](#config.js).
 
 Besides that, everything works the same as with `v1`.
 
@@ -93,14 +91,22 @@ module.exports = {
 The `config.js` file is the equivalent to the configuration part at the top of the `app.js` file in the default project structure.
 
 ```javascript
-// config.js
+// ------------------------------------------------------------------
+// APP CONFIGURATION
+// ------------------------------------------------------------------
 
 module.exports = {
-    logging: true,
+   logging: true,
 
-    intentMap: {
+   intentMap: {
       'AMAZON.StopIntent': 'END',
-    }
+   },
+
+   db: {
+        FileDb: {
+            pathToFile: '../db/db.json',
+        }
+    },
 };
 ```
 
@@ -109,30 +115,25 @@ To override certain configurations in different stages we use individual config 
 For example we could disable `logging` in our `prod` stage using the `config.prod.js` file:
 
 ```javascript
-// config.prod.js
+// config.prod.js file
+
 module.exports = {
     logging: false,
 }
 ```
 
-The framework will merge the default config with the stage's config file, which means in the `prod` stage our actual configuration will look like this:
-
-```javascript
-// prod configuration
-
-module.exports = {
-    logging: false,
-
-    intentMap: {
-      'AMAZON.StopIntent': 'END',
-    }
-};
-```
-
-
 ## New Concepts
 
+The Jovo architecture has a few new concepts:
+
+* [Plugins](#plugins)
+* [Jovo Objects](#jovo-variables)
+* [Integrations](#integrations)
+* [Response Execution](#response-execution)
+
 ### Plugins
+
+> [Find everything about plugins here](../../advanced-concepts/plugins.md '../plugins').
 
 With the new plugin architecture of the framework, the core `jovo-framework` npm package does not contain all the features anymore. Each platform, integration and tool has to be imported, configured and initialized individually.
 
@@ -147,20 +148,20 @@ npm install --save-dev jovo-db-filedb
 After that we go our `app.js` file, which is now located in the `src` folder and import as well as initialize the plugin:
 
 ```javascript
-// ./src/app.js
+// src/app.js file
 
 const {App} = require('jovo-framework');
 const {FileDb} = require('jovo-db-filedb');
-// other plugins
+// Other plugins
 
 const app = new App();
 
 app.use(
-    // other plugins
+    // Other plugins
     new FileDb()
 );
 
-// rest of the app.js file
+// Rest of the app.js file
 ```
 
 The same procedure has to be done for each plugin. 
@@ -193,6 +194,117 @@ Google Assistant | Allows you to build Actions for the Google Assistant | `jovo-
 Debugger | Allows you to use the [Jovo Debugger](../../testing/debugger.md './testing/debugger') | `jovo-plugin-debugger`
 FileDb | Local database inside `JSON` file for local development | `jovo-db-filedb`
 MySQL | 
+
+
+
+### Jovo Objects
+
+For `v2` we've updated the way interfaces are called to make it easily distinguishable from actual method calls:
+
+```javascript
+// v1:
+this.alexaSkill().audioPlayer().stop();
+
+// v2:
+this.$alexaSkill.$audioPlayer.stop();
+```
+
+Here's the list of changes:
+
+`v1` | `v2`
+:--- | :---
+`request()` | `$request`
+`response()` | `$response`
+`user()` | `$user`
+ - | `$inputs`
+`alexaSkill()` | `$alexaSkill`
+`alexaSkill().audioPlayer()` | `$alexaSkill.$audioPlayer`
+ - | `$alexaSkill.$dialog`
+`alexaSkill().gadgetController()` | `$alexaSkill.$gadgetController`
+`alexaSkill().gameEngine()` | `$alexaSkill.$gameEngine`
+`alexaSkill().inSkillPurchase()` | `$alexaSkill.$inSkillPurchase`
+`googleAction()` | `$googleAction`
+`googleAction().audioPlayer()` | `$googleAction.$audioPlayer`
+
+
+
+## Integrations
+
+With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
+
+```javascript
+// v1
+this.user().data.key = value;
+
+// v2
+this.$user.$data.key = value;
+```
+
+
+## Response Execution
+
+Intents run through and send out a response at the end automatically, which means `this.endSession()` is obsolete.
+
+Besides that, you now have to handle asynchronous tasks appropriately, otherwise the response will be sent out, before you, for example, fetched the data from the API. The most convenient way is using [`async` functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
+
+
+## Breaking Changes
+
+### Inputs
+
+With `v2` you won't be able to access user inputs by adding them as parameters to your intent anymore:
+
+```javascript
+// Does NOT work:
+MyNameIsIntent(name) {
+    this.tell('Hey ' + name.value + ', nice to meet you!');
+},
+```
+
+Inputs can now only be accessed either using the `$inputs` object or `getInput()`:
+
+```javascript
+MyNameIsIntent() {
+    this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+},
+
+MyNameIsIntent() {
+    this.tell('Hey ' + this.getInput('name').value + ', nice to meet you!');
+}
+```
+
+Also, you won't be able to pass additional data in redirects anymore:
+
+```javascript
+// Old: Go to PizzaIntent and pass more data
+this.toIntent('PizzaIntent', moreData);
+
+// Recommended
+this.$data.moreData = 'someData';
+this.toIntent('PizzaIntent');
+```
+
+
+## Alexa Dialog Interface
+
+To increase consistency, the dialog feature of Alexa has its own interface now, `this.$alexaSkill.$dialog`, instead of being directly accessibly through the `$alexaSkill` interface.
+
+As a result, there were also method name changes:
+
+`v1` | `v2`
+:--- | :---
+`dialogDelegate()` | `delegate()`
+`dialogElicitSlot()` | `elicitSlot()`
+`dialogConfirmSlot()` | `confirmSlot()`
+`dialogConfirmIntent()` | `confirmIntent()`
+`getDialogState()` | `getState()`
+`isDialogCompleted()` | `isCompleted()`
+`isDialogInProgress()` | `isInProgress()`
+`isDialogStarted()` | `isStarted()`
+
+
+
+## Optional Changes
 
 ### Intent Syntax
 
@@ -235,103 +347,7 @@ app.setHandler({
 })
 ```
 
-### Inputs
 
-With `v2` you won't be able to access user inputs by adding them as parameters to your intent anymore:
-
-```javascript
-// Does NOT work:
-MyNameIsIntent(name) {
-    this.tell('Hey ' + name.value + ', nice to meet you!');
-},
-```
-
-Inputs can now only be accessed either using the `$inputs` object or `getInput()`:
-
-```javascript
-MyNameIsIntent() {
-    this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-},
-
-MyNameIsIntent() {
-    this.tell('Hey ' + this.getInput('name').value + ', nice to meet you!');
-}
-```
-
-Also, you won't be able to pass additional data in redirects anymore:
-
-```javascript
-// Old: Go to PizzaIntent and pass more data
-this.toIntent('PizzaIntent', moreData);
-
-// Recommended
-this.$data.moreData = 'someData';
-this.toIntent('PizzaIntent');
-```
-
-### Jovo Objects
-
-For `v2` we've updated the way interfaces are called to make it easily distinguishable from actual method calls:
-
-```javascript
-// v1:
-this.alexaSkill().audioPlayer().stop();
-
-// v2:
-this.$alexaSkill.$audioPlayer.stop();
-```
-
-Here's the list of changes:
-
-`v1` | `v2`
-:--- | :---
-`request()` | `$request`
-`response()` | `$response`
-`user()` | `$user`
- - | `$inputs`
-`alexaSkill()` | `$alexaSkill`
-`alexaSkill().audioPlayer()` | `$alexaSkill.$audioPlayer`
- - | `$alexaSkill.$dialog`
-`alexaSkill().gadgetController()` | `$alexaSkill.$gadgetController`
-`alexaSkill().gameEngine()` | `$alexaSkill.$gameEngine`
-`alexaSkill().inSkillPurchase()` | `$alexaSkill.$inSkillPurchase`
-`googleAction()` | `$googleAction`
-`googleAction().audioPlayer()` | `$googleAction.$audioPlayer`
-
-## Responses are sent automatically
-
-Intents run through and send out a response at the end automatically, which means `this.endSession()` is obsolete.
-
-Besides that, you now have to handle asynchronous tasks appropriately, otherwise the response will be sent out, before you, for example, fetched the data from the API. The most convenient way is using [`async` functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
-
-## Alexa Dialog Interface
-
-To increase consistency, the dialog feature of Alexa has its own interface now, `this.$alexaSkill.$dialog`, instead of being directly accessibly through the `$alexaSkill` interface.
-
-As a result, there were also method name changes:
-
-`v1` | `v2`
-:--- | :---
-`dialogDelegate()` | `delegate()`
-`dialogElicitSlot()` | `elicitSlot()`
-`dialogConfirmSlot()` | `confirmSlot()`
-`dialogConfirmIntent()` | `confirmIntent()`
-`getDialogState()` | `getState()`
-`isDialogCompleted()` | `isCompleted()`
-`isDialogInProgress()` | `isInProgress()`
-`isDialogStarted()` | `isStarted()`
-
-## Jovo Persistence Layer
-
-With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
-
-```javascript
-// v1
-this.user().data.key = value;
-
-// v2
-this.$user.$data.key = value;
-```
 
 ## Examples
 
