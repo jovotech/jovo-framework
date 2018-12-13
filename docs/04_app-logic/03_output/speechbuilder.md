@@ -1,4 +1,4 @@
-# [App Logic](../) > [Output](./README.md) > SpeechBuilder
+# SpeechBuilder
 
 In this section, you will learn how to use the Jovo SpeechBuilder, a helper class that makes it easier to build speech responses and add variety to your voice app.
 
@@ -90,16 +90,5 @@ this.tell(speech);
 ```
 
 
-<!--[metadata]: {"title": "SpeechBuilder", 
-                "description": "Learn how to use the Jovo SpeechBuilder to add variety to your Alexa Skill and Google Action",
-                "activeSections": ["logic", "output", "speechbuilder"],
-                "expandedSections": "logic",
-                "inSections": "logic",
-                "breadCrumbs": {"Docs": "docs/",
-				"App Logic": "docs/logic",
-				"Output": "docs/output",
-				"Speechbuilder": ""
-                                },
-		"commentsID": "framework/docs/output/speechbuilder",
-		"route": "docs/output/speechbuilder"
-                }-->
+<!--[metadata]: {"description": "Learn how to use the Jovo SpeechBuilder to add variety to your Alexa Skill and Google Action",
+		"route": "output/speechbuilder"}-->

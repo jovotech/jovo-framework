@@ -1,4 +1,4 @@
-# [Platform Specific Features](../) > [Google Assistant](./README.md) > Media Response
+# Media Response
 
 Learn how to use the Google Action Media Response with Jovo.
 
@@ -68,16 +68,5 @@ You can also use the `'AUDIOPLAYER'` directive for cross-platform compatibility 
 },
 ```
 
-<!--[metadata]: {"title": "Google Assistant Media Response", 
-                "description": "Learn how to use the Google Action Media Response with Jovo.",
-                "activeSections": ["platforms", "assistant", "assistant_media-response"],
-                "expandedSections": "platforms",
-                "inSections": "platforms",
-                "breadCrumbs": {
-                  "Docs": "docs/", 
-				          "Platforms": "docs/platforms",
-                  "Google Assistant": ""
-                },
-		            "commentsID": "framework/docs/google-assistant/media-response",
-		"route": "docs/google-assistant/media-response"
-                }-->
+<!--[metadata]: {"description": "Learn how to use the Google Action Media Response with Jovo.",
+		            "route": "google-assistant/media-response"}-->

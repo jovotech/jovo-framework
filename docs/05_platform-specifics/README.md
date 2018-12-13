@@ -85,14 +85,5 @@ You can find the following Google Assistant specific features on the page [Platf
 
 
 
-<!--[metadata]: {"title": "Platforms", 
-                "description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
-                "activeSections": ["platforms", "platforms_index"],
-                "expandedSections": "platforms",
-                "inSections": "platforms",
-                "breadCrumbs": {"Docs": "docs/",
-				"Platforms": ""
-                                },
-		"commentsID": "framework/docs/platforms",
-		"route": "docs/platforms"
-                }-->
+<!--[metadata]: {"description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
+		"route": "platforms"}-->
