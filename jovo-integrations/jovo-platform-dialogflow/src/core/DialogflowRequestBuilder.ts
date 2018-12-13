@@ -110,7 +110,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
     }
 }
 function getJsonFilePath(key: string, platform = 'google'): string {
-    let folder = './../../../';
+    const folder = './../../../';
 
     if (process.env.NODE_ENV === 'UNIT_TEST') {
         // folder = './../../';
