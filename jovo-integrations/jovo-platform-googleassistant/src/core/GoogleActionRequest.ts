@@ -17,6 +17,7 @@ interface User {
         givenName: string;
         familyName: string;
     };
+    userStorage?: any; // tslint:disable-line
 }
 interface Conversation {
     conversationId: string;
@@ -137,6 +138,10 @@ export class GoogleActionRequest implements JovoRequest {
         return _get(this, 'user.userId');
     }
 
+    getUserStorage(): string {
+        return _get(this, 'user.userStorage');
+    }
+
     hasAudioInterface(): boolean {
         const audioCapability = _get(this, 'surface.capabilities')
             .capabilities.find((item: Capability) => item.name === 'AUDIO_OUTPUT');
@@ -182,9 +187,8 @@ export class GoogleActionRequest implements JovoRequest {
     }
 
     setNewSession(isNew: boolean): this {
-        const conversationType = isNew ? 'NEW': 'ACTIVE';
+        const conversationType = isNew ? 'NEW' : 'ACTIVE';
         _set(this, `conversation.type`, conversationType);
-
         return this;
     }
 

@@ -19,6 +19,8 @@ export interface NoInputPrompt {
 export interface GoogleActionResponseJSON {
     expectUserResponse?: boolean;
     noInputPrompts?: NoInputPrompt[];
+    richResponse?: RichResponse;
+    userStorage?: string;
 }
 
 
@@ -107,7 +109,6 @@ export class GoogleActionResponse implements JovoResponse {
                 }
             }
         }
-
         if (reprompt) {
             if (Array.isArray(reprompt)) {
 
