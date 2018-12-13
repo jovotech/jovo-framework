@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-googlesheets",
-  "version": "2.0.2-beta.2",
+  "version": "2.0.2-beta.3",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "dependencies": {
     "googleapis": "^35.0.0",
     "i18next": "^12.1.0",
-    "jovo-core": "^2.0.2-beta.2"
+    "jovo-core": "^2.0.2-beta.3"
   },
   "devDependencies": {
     "@types/i18next": "^12.1.0",
