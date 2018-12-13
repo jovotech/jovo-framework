@@ -6,6 +6,7 @@ import {ActionSet} from "./ActionSet";
 // TODO: remove
 process.on('unhandledRejection', (reason, p) => {
     console.log('unhandledRejection');
+    console.log(p);
     console.log(reason.stack);
     console.log(reason);
 });
@@ -49,14 +50,16 @@ export class BaseApp extends Extensible {
             'handleerror'
         ], this);
 
-        process.on('exit',  () => {
-            this.emit('exit');
-        });
+        if (process.env.NODE_ENV !== 'UNIT_TEST') {
+            process.on('exit',  () => {
+                this.emit('exit');
+            });
 
-        // catch ctrl+c event and exit normally
-        process.on('SIGINT', () => {
-            process.exit(2);
-        });
+            // catch ctrl+c event and exit normally
+            process.on('SIGINT', () => {
+                process.exit(2);
+            });
+        }
     }
 
     /**
