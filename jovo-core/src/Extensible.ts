@@ -47,6 +47,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             };
 
             if (plugin.config) {
+
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
                 const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
                 const appConfig = _cloneDeep(this.config);
