@@ -21,11 +21,12 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         enabled: true,
         plugin: {},
     };
-    plugins: Map<string, Plugin> = new Map();
+    $plugins: Map<string, Plugin> = new Map();
     actionSet: ActionSet;
 
     constructor(config?: ExtensibleConfig) {
         super();
+        this.setMaxListeners(0);
         if (config) {
             this.config = _merge(this.config, config);
         }
@@ -66,11 +67,11 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             }
 
             // remove existing plugin with the same name
-            if (this.plugins.get(name)) {
-                this.plugins.get(name)!.uninstall(this);
+            if (this.$plugins.get(name)) {
+                this.$plugins.get(name)!.uninstall(this);
             }
 
-            this.plugins.set(name, plugin);
+            this.$plugins.set(name, plugin);
 
             // this.config.plugin[name] = plugin.config;
             plugin.install(this);
@@ -79,14 +80,21 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         return this;
     }
 
+    removeAll() {
+        this.$plugins.forEach((entry: Plugin) => {
+            entry.uninstall(this);
+        });
+        this.$plugins.clear();
+    }
+
     /**
      * Removes plugin from plugins
      * @param {string} name
      */
     remove(name: string) {
-        if (this.plugins.get(name)) {
-            this.plugins.get(name)!.uninstall(this);
-            this.plugins.delete(name);
+        if (this.$plugins.get(name)) {
+            this.$plugins.get(name)!.uninstall(this);
+            this.$plugins.delete(name);
         }
     }
 
