@@ -34,11 +34,11 @@ export class Router implements Plugin {
     }
     async router(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error(`Could't access jovo object`);
+            throw new Error(`Couldn't access jovo object`);
         }
 
         if (!handleRequest.jovo.$type || !handleRequest.jovo.$type.type) {
-            throw new Error(`Could't access request type`);
+            throw new Error(`Couldn't access request type`);
         }
 
         let route: Route = {
@@ -48,7 +48,7 @@ export class Router implements Plugin {
         if (handleRequest.jovo.$type.type && handleRequest.jovo.$type.subType) {
             route.path = `${handleRequest.jovo.$type.type}["${handleRequest.jovo.$type.subType}"]`;
         }
-
+        console.log(route);
         if (route.type === EnumRequestType.INTENT) {
             // do intent stuff
             if (!handleRequest.jovo.$nlu || !handleRequest.jovo.$nlu.intent) {

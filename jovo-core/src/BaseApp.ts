@@ -51,6 +51,7 @@ export class BaseApp extends Extensible {
                 this.emit('exit');
             });
 
+
             // catch ctrl+c event and exit normally
             process.on('SIGINT', () => {
                 process.exit(2);

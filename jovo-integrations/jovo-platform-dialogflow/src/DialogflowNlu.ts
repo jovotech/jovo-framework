@@ -133,15 +133,17 @@ export class DialogflowNlu extends Extensible {
                     type: EnumRequestType.LAUNCH
                 };
             } else if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === false) {
-
                 if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Fallback Intent' &&
                     jovo.$type) {
-
                 } else {
                     jovo.$type = {
                         type: EnumRequestType.INTENT
                     };
                 }
+            } else if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === true) {
+                jovo.$type = {
+                    type: EnumRequestType.INTENT
+                };
             }
         }
     };
