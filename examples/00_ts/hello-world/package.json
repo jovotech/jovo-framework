@@ -19,11 +19,9 @@
     "jovo-platform-googleassistant": "^2.0.1-alpha.13"
   },
   "devDependencies": {
-    "@types/es6-promise": "^3.3.0",
     "@types/jest": "^23.3.1",
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
-    "@types/socket.io-client": "^1.4.32",
     "jest": "^23.4.2",
     "jovo-db-filedb": "^2.0.1-alpha.13",
     "jovo-plugin-debugger": "^2.0.1-alpha.13",
