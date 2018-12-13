@@ -2,7 +2,6 @@
 import {Handler} from './../src/middleware/Handler';
 import {App} from './../src/App';
 import {AppConfig, EnumRequestType, HandleRequest, Jovo, JovoRequest} from "jovo-core";
-import {ExpressJS} from "../src";
 require('source-map-support').install();
 process.env.NODE_ENV = 'TEST';
 let app: App;

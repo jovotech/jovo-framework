@@ -90,7 +90,7 @@ export class AlexaRequestBuilder implements RequestBuilder {
 function getJsonFilePath(key: string, version = 'v1'): string {
     let folder = './../../../';
 
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV === 'UNIT_TEST') {
         folder = './../../';
     }
 
