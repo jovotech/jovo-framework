@@ -97,14 +97,17 @@ export class JovoUser implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
+
+        this.loadDb = this.loadDb.bind(this);
+        this.saveDb = this.saveDb.bind(this);
     }
 
     install(app: BaseApp): void {
-        app.middleware('initialize.user')!.use(this.loadDb.bind(this));
-        app.middleware('finalize.user')!.use(this.saveDb.bind(this));
+        app.middleware('initialize.user')!.use(this.loadDb);
+        app.middleware('finalize.user')!.use(this.saveDb);
 
-        const loadDb = this.loadDb.bind(this);
-        const saveDb = this.saveDb.bind(this);
+        const loadDb = this.loadDb;
+        const saveDb = this.saveDb;
         User.prototype.$context = {};
         User.prototype.$data = {};
         User.prototype.$metaData = {};
@@ -218,7 +221,7 @@ export class JovoUser implements Plugin {
             }
         };
     }
-    async loadDb(handleRequest: HandleRequest, force = false) {
+    loadDb = async (handleRequest: HandleRequest, force = false) => {
         // no database
         if (!handleRequest.app.$db) {
             return Promise.resolve();
@@ -256,9 +259,9 @@ export class JovoUser implements Plugin {
             _set(handleRequest.jovo.$user, '$context',
                 _get(data, `${this.config.columnName}.context`, {}));
         }
-    }
+    };
 
-    async saveDb(handleRequest: HandleRequest, force = false) {
+    saveDb = async (handleRequest: HandleRequest, force = false) => {
         // no database
         if (!handleRequest.app.$db) {
             return Promise.resolve();
@@ -296,7 +299,7 @@ export class JovoUser implements Plugin {
             handleRequest.jovo.$user.getId(),
             this.config.columnName || 'userData',
             userData);
-    }
+    };
 
     private updateMetaData(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
