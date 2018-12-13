@@ -24,37 +24,39 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
-let alexa = this.$alexaSkill;
+this.$alexaSkill
 ```
 
 
 ## Routing
 
-This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [App Logic > Routing](../../04_app-logic/01_routing './routing').
+This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [Basic Concepts > Routing](../../basic-concepts/routing './routing').
 
 ### Dialog Interface
 
-You can find more about dialog interface here: [Platform specifics > Amazon Alexa > Dialog Mode](./dialog.md './amazon-alexa/dialog-interface').
+> [You can find more about Dialog Interface here](./dialog.md './amazon-alexa/dialog-interface').
 
 ## Data
 
-This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [App Logic > Data](../../04_app-logic/02_data './amazon-alexa/data').
+This section provides an overview of Alexa specific features for user data. For the basic concept, take a look here: [Basic Concepts > Data](../../basic-concepts/data './data').
+
+> [You can find more about Alexa Data here](./data.md './amazon-alexa/data').
 
 ### Shopping and To Do Lists
 
-You can find more about lists here: [Platform specifics > Amazon Alexa > Lists](./lists.md './amazon-alexa/lists').
+> [You can find more about lists here](./lists.md './amazon-alexa/lists').
 
 ### Location
 
-Learn how to access your user's location data here: [Platform specifics > Amazon Alexa > Data](./data.md#location './amazon-alexa/data#location').
+> [Learn how to access your user's location data here](./data.md#location './amazon-alexa/data#location').
 
 ### Contact information
 
-Learn how to access your user's contact information data here: [Platform specifics > Amazon Alexa > Contact information](./data.md#contact-information './amazon-alexa/data#contact-information').
+> [Learn how to access your user's contact information data here](./data.md#contact-information './amazon-alexa/data#contact-information').
 
 ## Output
 
-This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [App Logic > Output](../../04_app-logic/03_output './output').
+This section provides an overview of Alexa specific features for output. For the basic concept, take a look here: [Basic Concepts > Output](../../basic-concepts/output './output').
 
 ### Progressive Responses
 
@@ -64,51 +66,58 @@ Here is the official reference by Amazon: [Send the User a Progressive Response]
 
 ```javascript
 this.$alexaSkill.progressiveResponse(speech);
+
+// Example
+this.$alexaSkill.progressiveResponse('Processing')
+    .then(() => this.$alexaSkill.progressiveResponse('Still processing'));
+await dummyApiCall(2000);
+
+this.tell('Text after API call');
 ```
 
-Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/alexa_specific/appProgressiveResponse.js).
+> Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/examples/01_alexa/progressive-response/src).
 
 ### Visual Output
 
-You can find out more about visual output here: [Platform specifics > Amazon Alexa > Visual](./visual.md './amazon-alexa/visual').
+> [You can find out more about visual output here](./visual.md './amazon-alexa/visual').
 
 
 ## AudioPlayer Skills
 
-You can find more about Jovo Audioplayer support here: [Platform specifics > Amazon Alexa > Audioplayer](./audioplayer.md './amazon-alexa/audioplayer').
+> [You can find more about Jovo Audioplayer support here](./audioplayer.md './amazon-alexa/audioplayer').
 
 
 ## Skill Events
 
-Learn how to implement Alexa Skill Events in your Jovo project here: [Platform specifics > Amazon Alexa > Skill Events](./skillevents.md './amazon-alexa/skill-events')
+> [Learn how to implement Alexa Skill Events in your Jovo project here](./skillevents.md './amazon-alexa/skill-events')
 
 ## CanFulfillIntentRequest
 
-Learn how to implement the CanFulfillIntentRequests in your Jovo project here: [Platform specifics > Amazon Alexa > CanFulfillIntentRequest](./canfulfill.md './amazon-alexa/canfulfill')
+> [Learn how to implement the CanFulfillIntentRequests in your Jovo project here](./canfulfill.md './amazon-alexa/canfulfill')
 
 ## GameEngine Interface
 
-You can find more about Jovo GameEngine support here: [Platform specifics > Amazon Alexa > GameEngine](./game-engine.md './amazon-alexa/game-engine')
+> [You can find more about Jovo GameEngine support here](./game-engine.md './amazon-alexa/game-engine')
 
 ## GadgetController Interface
 
-Learn how to implement the GadgetController Interface in your Jovo project here: [Platform specifics > Amazon Alexa > GadgetController](./gadget-controller.md './amazon-alexa/gadget-controller')
+> [Learn how to implement the GadgetController Interface in your Jovo project here](./gadget-controller.md './amazon-alexa/gadget-controller')
 
 ## In-Skill-Purchasing (ISP)
 
-Find out more about In-Skill-Purchasing here: [Platform specifics > Amazon Alexa > In-Skill-Purchasing](./in-skill-purchases.md './amazon-alexa/in-skill-purchases')
+> [Find out more about In-Skill-Purchasing here](./in-skill-purchases.md './amazon-alexa/in-skill-purchases')
 
 ## Reminders API
 
-Learn how to use the Reminders API to set reminders for your user: [Platform specifics > Amazon Alexa > Reminders API](./reminders.md './amazon-alexa/reminders')
+> [Learn how to use the Reminders API to set reminders for your user](./reminders.md './amazon-alexa/reminders')
 
 ## Settings API
 
-You can find out more about the Settings API here: [Platform specifics > Amazon Alexa > Settings API](./settings.md './amazon-alexa/settings')
+> [You can find out more about the Settings API here](./settings.md './amazon-alexa/settings')
 
 ## Playback Controller
 
-Learn how to use the Playback Controller interface with Jovo here: [Platform specifics > Amazon Alexa > Audioplayer > Playback Controller](./audioplayer.md#playback-controller './amazon-alexa/audioplayer#playback-controller')
+> [Learn how to use the Playback Controller interface with Jovo here](./audioplayer.md#playback-controller './amazon-alexa/audioplayer#playback-controller')
 
 
 <!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",

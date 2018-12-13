@@ -2,11 +2,11 @@
 
 Learn more about features for advanced voice applications.
 
-* [Introduction](#introduction)
+* [Overview](#overview)
 
-## Introduction
+## Overview
 
-<!--[metadata]: {
-                "description": "Learn more about features for advanced voice applications.",
-		        "route": "advanced-concepts"
-                }-->
+* [Framework Architecture](./architecture.md './architecture')
+* [Plugins](./plugins.md './plugins')
+
+<!--[metadata]: { "description": "Learn more about features for advanced voice applications.", "route": "advanced-concepts" }-->

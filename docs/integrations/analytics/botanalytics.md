@@ -6,7 +6,6 @@ Learn how to use Botanalytics for your Alexa Skills and Google Actions built wit
 * [Installation](#installation)
    * [Add a New Bot](#add-a-new-bot)
    * [Enable Botanalytics in Jovo](#enable-botanalytics-in-jovo)
-   * [Download the Botanalytics Package](#download-the-botanalytics-package)
    * [Check Your App](#check-your-app)
 
 ## About Botanalytics
@@ -40,42 +39,44 @@ To use Botanalytics for your voice app, you need to complete the following steps
 
 ### Enable Botanalytics in Jovo
 
-You have to options to add Botanalytics to your voice app:
+To add Botanalytics to your voice app, do the following:
 
-* Use the Jovo app config
-* Use the add commands
+* Download the npm package
+* Enable the plugin in `app.js`
+* Add configurations in `config.js`
 
-Below is an example for both:
+First, download the npm package:
 
-```javascript
-// Option 1: Use the Jovo app config
-const config = {
-    /**
-     * Other settings
-     */
-    analytics: {
-        services: {
-            BotanalyticsAlexa: {
-                key: '<token>',
-            },
-            BotanalyticsGoogleAction: {
-                key: '<token>',
-            },
-        },
-    },
-};
-
-// Option 2: Use the add commands
-app.addBotanalyticsAlexa('<token>');
-app.addBotanalyticsGoogleAction('<token>');
+```sh
+$ npm install --save jovo-analytics-botanalytics
 ```
 
-### Download the Botanalytics Package
+Enable the plugin like this:
 
-In your terminal, use the following command to download the package via npm:
+```javascript
+// app.js file
 
-```bash
- npm install botanalytics --save
+const { BotanalyticsAlexa, BotanalyticsAssistant } = require('jovo-analytics-botanalytics');
+
+app.use(
+    new BotanalyticsAlexa(),
+    new BotanalyticsGoogleAssistant()
+)
+```
+
+Add configurations like this:
+
+```javascript
+// config.js file
+
+analytics: {
+    BotanalyticsAlexa: {
+        key: '<key>',
+    },
+    BotanalyticsGoogleAssistant: {
+        key: '<key>',
+    },
+}
 ```
 
 ### Check Your App

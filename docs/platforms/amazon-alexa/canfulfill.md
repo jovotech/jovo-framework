@@ -39,6 +39,7 @@ After that run `jovo build --deploy` to rebuild and deploy your project.
 ## Code Implementation
 
 Incoming `CanFulfillIntentRequests` will be mapped to the Jovo built in `CAN_FULFILL_INTENT`.
+
 ```javascript
 CAN_FULFILL_INTENT() {
 
@@ -56,7 +57,7 @@ The first step should be to check if the incoming intent is one, that your skill
 
 You also have to go over every slot in the request and decide if you can **understand** (`YES`, `NO` or `MAYBE`) and **fulfill** (`YES` or `NO`) the slot.
 
-Use `this.getInputs()` to get an object containing every slot. Iterate over the object and decide for each slot if you can understand it or not using: 
+Use `this.$inputs` to get an object containing every slot. Iterate over the object and decide for each slot if you can understand it or not using: 
 ```javascript
 this.canFulfillSlot(slotName, canUnderstandSlot, canFulfillSlot);
 ```

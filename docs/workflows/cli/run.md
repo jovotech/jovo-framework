@@ -3,15 +3,16 @@
 Learn how to use the `jovo run` command of the Jovo CLI to test your code locally.
 
 * [Introduction](#introduction)
-
+* [Options](#options)
+* [Integrations](#integrations)
+   * [bst proxy](#bst-proxy)
+   * [nodemon](#nodemon)
 
 ## Introduction
 
 ![jovo run command](../img/jovo-run.png "jovo run command")
 
-You can use the `jovo run` command to start the development server in your `index.js` file, and then add the [Jovo Webhook](../03_app-configuration/02_server/webhook#jovo-webhook './server/webhook#jovo-webhook') as an endpoint to the respective developer consoles.
-
-Learn more here: [App Configuration > Server Configuration](../03_app-configuration/server './server').
+You can use the `jovo run` command to start the development server in your `index.js` file (default is port `3000`), and then point the Jovo Webhook to it.
 
 ```sh
 # Default
@@ -23,19 +24,19 @@ $ jovo run [-b | --bst-proxy] [-w | --watch] [-p, --port <port>] [--inspect] [--
 ```
 
 You can also specify the file you want to run:
+
 ```sh
 $ jovo run <file>
 
 # Example
-$ jovo run index.js
+$ jovo run src/index.js
 
 # Alternative
-$ node index.js --webhook
+$ node src/index.js --webhook
 ```
 
-You can also use other tools like [bst proxy](#bst-proxy) to tunnel to your local server.
 
-**Options**
+## Options
 
 `--port`, `-p`: Defines the port that will be used to run the local development server. Default: `3000`.
 
@@ -54,7 +55,7 @@ You can also use other tools like [bst proxy](#bst-proxy) to tunnel to your loca
 `--record`, `-r`: Can be used to record requests and responses of your Jovo app for testing purposes.
 
 
-**Integrations**
+## Integrations
 
 > If you want to see another integration, please feel free to [submit an issue](https://github.com/jovotech/jovo-cli/issues). Thanks!
 
@@ -66,7 +67,7 @@ Command | Description
 [`--watch`](#watch) | Uses `nodemon` to monitor changes and automatically restart the server
 
 
-##### bst proxy
+### bst proxy
 
 You can use the bst proxy to create a webhook URL easily:
 
@@ -80,7 +81,7 @@ The result should look like this:
 
 The URL also comes with logging and analytics capabilities for prototyping and testing.
 
-##### watch
+### nodemons
 
 With this integration, you don't have to manually restart your server with every change you make to the application:
 

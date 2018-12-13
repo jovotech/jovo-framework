@@ -166,7 +166,7 @@ Here is an example language model you can for purchasing and refunding products.
 In general, you can access the in-skill purchasing interface like this:
 
 ```javascript
-this.$alexaSkill.inSkillPurchase()
+this.$alexaSkill.$inSkillPurchase
 ```
 
 Before you start any kind of transaction or refund process, always retrieve the product first:
@@ -174,7 +174,7 @@ Before you start any kind of transaction or refund process, always retrieve the 
 ```javascript
 let productReferenceName = 'frozen_sword'; 
 this.$alexaSkill
-    .inSkillPurchase()
+    .$inSkillPurchase
     .getProductByReferenceName(productReferenceName, (error, product) => {
 
     });
@@ -199,7 +199,7 @@ Using that data we can check if the user already owns the product:
 
 ```javascript
 this.$alexaSkill
-    .inSkillPurchase()
+    .$inSkillPurchase
     .getProductByReferenceName(productReferenceName, (error, product) => {
         if (error) {
             console.log(error);
@@ -226,7 +226,7 @@ Name | Description | Value | Required
 UpsellIntent() {
     let productReferenceName = 'frozen_sword';
     this.$alexaSkill
-    .inSkillPurchase()
+    .$inSkillPurchase
     .getProductByReferenceName(productReferenceName, (error, product) => {
         if (error) {
             console.log(error);
@@ -237,7 +237,7 @@ UpsellIntent() {
         } else {
             let prompt = 'The frozen sword will help you on your journey. Are you interested?';
             let token = 'testToken';
-            this.$alexaSkill.inSkillPurchase().upsell(product.productId, prompt, token);
+            this.$alexaSkill.$inSkillPurchase.upsell(product.productId, prompt, token);
         }
     });
 },
@@ -256,7 +256,7 @@ Name | Description | Value | Required
 BuySkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     this.$alexaSkill
-        .inSkillPurchase()
+        .$inSkillPurchase
         .getProductByReferenceName(productReferenceName, (error, product) => {
             if (error) {
                 console.log(error);
@@ -266,7 +266,7 @@ BuySkillItemIntent() {
                 return;
             }
             let token = 'testToken';
-            this.$alexaSkill.inSkillPurchase().buy(product.productId, token);
+            this.$alexaSkill.$inSkillPurchase.buy(product.productId, token);
         });
 },
 ```
@@ -285,7 +285,7 @@ Name | Description | Value | Required
 RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     this.$alexaSkill
-        .inSkillPurchase()
+        .$inSkillPurchase
         .getProductByReferenceName(productReferenceName, (error, product) => {
             if (error) {
                 console.log(error);
@@ -295,7 +295,7 @@ RefundSkillItemIntent() {
                 this.tell('You have not bought this item yet.');
             }
             let token = 'testToken';
-            this.$alexaSkill.inSkillPurchase().cancel(product.productId, token);
+            this.$alexaSkill.$inSkillPurchase.cancel(product.productId, token);
         });
 },
 ```
@@ -337,8 +337,8 @@ That request will be mapped to the built-in `ON_PURCHASE` intent:
 ```javascript
 ON_PURCHASE() {
     const name = this.$request.name;
-    const productId = this.$alexaSkill.inSkillPurchase().getProductId();
-    const purchaseResult = this.$alexaSkill.inSkillPurchase().getPurchaseResult();
+    const productId = this.$alexaSkill.$inSkillPurchase.getProductId();
+    const purchaseResult = this.$alexaSkill.$inSkillPurchase.getPurchaseResult();
     const token = this.$request.token;
 
     if (purchaseResult === 'ACCEPTED') {

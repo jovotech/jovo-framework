@@ -15,6 +15,7 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 * [Jovo Persistence Layer](#jovo-persistence-layer)
 * [Examples](#examples)
 
+
 ## Introduction
 
 With the update to `v2` we've have completely refactored the code base of both the framework and the CLI to make it easier for us and you as well to maintain everything going forward. 
@@ -231,6 +232,17 @@ MyNameIsIntent() {
 }
 ```
 
+Also, you won't be able to pass additional data in redirects anymore:
+
+```javascript
+// Old: Go to PizzaIntent and pass more data
+this.toIntent('PizzaIntent', moreData);
+
+// Recommended
+this.$data.moreData = 'someData';
+this.toIntent('PizzaIntent');
+```
+
 ## Jovo Objects
 
 For `v2` we've updated the way interfaces are called to make it easily distinguishable from actual method calls:
@@ -282,8 +294,6 @@ As a result, there were also method name changes:
 `isDialogCompleted()` | `isCompleted()`
 `isDialogInProgress()` | `isInProgress()`
 `isDialogStarted()` | `isStarted()`
-
-PLACEHOLDER (intentConfirmationStatus, slotConfirmationStatus)
 
 ## Jovo Persistence Layer
 

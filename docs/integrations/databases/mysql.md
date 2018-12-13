@@ -31,6 +31,7 @@ app.use(new MySQL());
 In your `config.js` file, you can set the `db` configuration like this:
 
 ```javascript
+// config.js file
 db: {
     MySQL: {
         tableName: 'yourTableName',
@@ -41,6 +42,7 @@ db: {
 This is the default configuration for MySQL, if not specified otherwise:
 
 ```javascript
+// config.js file
 db: {
     MySQL: {
         tableName: 'users',

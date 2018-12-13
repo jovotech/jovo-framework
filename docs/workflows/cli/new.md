@@ -3,7 +3,7 @@
 Learn how to create a new Jovo Project with the `jovo new` command of the Jovo CLI.
 
 * [Introduction](#introduction)
-
+* [Options](#options)
 
 ## Introduction
 
@@ -20,7 +20,8 @@ $ jovo new <directory> [-t | --template <template-name>] [-l | --locale <locale>
   [-i | --init <platform>] [-b | --build] [-d | --deploy] [--ff <platform>] [--skip-npminstall]
   [--ask-profile <profileName>] [--endpoint <endpoint>]
 ```
-**Options**
+
+## Options
 
 `--template`, `-t`: Used to specify which template should be used. Get a list of all the templates below, or on GitHub: [jovotech/jovo-templates](https://github.com/jovotech/jovo-templates). Default: `helloworld`.
 

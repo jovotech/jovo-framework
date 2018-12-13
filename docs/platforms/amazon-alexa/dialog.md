@@ -34,20 +34,20 @@ When the intent is invoked for the first time, `dialogState` will be set to `STA
 
 To check the dialog state, use: 
 ```javascript
-this.$alexaSkill.getDialogState()
+this.$alexaSkill.$dialog.getState()
 ```
 
 Jovo also allows you to check for a specific state:
 
 ```javascript
 // STARTED
-this.$alexaSkill.isDialogStarted()
+this.$alexaSkill.$dialog.isStarted()
 
 // IN PROGRESS
-this.$alexaSkill.isDialogInProgress()
+this.$alexaSkill.$dialog.isInProgress()
 
 // COMPLETED
-this.$alexaSkill.isDialogCompleted()
+this.$alexaSkill.$dialog.isCompleted()
 ```
 
 ## Features
@@ -60,7 +60,7 @@ If you decide to delegate the conversation, Alexa will use the prompts you defin
 
 To delegate the conversation, use:
 ```javascript
-this.$alexaSkill.dialogDelegate()
+this.$alexaSkill.$dialog.delegate()
 ```
 
 ### Control the Dialog in Your Code
@@ -85,30 +85,30 @@ this.$alexaSkill.hasSlotValue('name');
 
 If you want the user to fill a slot, use:
 ```javascript
-this.$alexaSkill.dialogElicitSlot(slotName, speechText[, repromptText, updatedIntent])
+this.$alexaSkill.$dialog.elicitSlot(slotName, speechText[, repromptText, updatedIntent])
 
 // Example
-this.$alexaSkill.dialogElicitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
+this.$alexaSkill.$dialog.elicitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
 ```
 
 #### Confirm Slot
 
 To confirm a slot use:
 ```javascript
-this.$alexaSkill.dialogConfirmSlot(slotname, speechText[, repromptText, updatedIntent])
+this.$alexaSkill.$dialog.confirmSlot(slotname, speechText[, repromptText, updatedIntent])
 
 // Example
-this.$alexaSkill.dialogConfirmSlot('name', 'Your name is ' + this.getInput('name').value + ', right?');
+this.$alexaSkill.$dialog.confirmSlot('name', 'Your name is ' + this.getInput('name').value + ', right?');
 ```
 
 #### Confirm Intent
 
 To confirm the whole intent, use:
 ```javascript
-this.$alexaSkill.dialogConfirmIntent(speechText[, repromptText, updatedIntent])
+this.$alexaSkill.$dialog.confirmIntent(speechText[, repromptText, updatedIntent])
 
 // Example
-this.$alexaSkill.dialogConfirmIntent('Your name is ' + this.getInput('name') + ' and you are from ' + this.getInput('city') + ', correct?');
+this.$alexaSkill.$dialog.confirmIntent('Your name is ' + this.$inputs.name.value + ' and you are from ' + this.$inputs.city.value + ', correct?');
 ```
 #### Update Intent
 
@@ -133,7 +133,7 @@ let updatedIntent = {
 };
 // You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
-this.$alexaSkill.dialogElicitSlot('city', 'Which city are you living in?', updatedIntent);
+this.$alexaSkill.$dialog.elicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```
 
 ## Jovo Language Model
