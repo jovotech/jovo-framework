@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-plugins",
-  "version": "2.0.2-beta.0",
+  "version": "2.0.2-beta.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,6 +12,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.2-beta.0"
+    "jovo-framework": "^2.0.2-beta.1"
   }
 }
