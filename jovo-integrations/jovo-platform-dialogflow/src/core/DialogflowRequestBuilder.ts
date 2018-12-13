@@ -1,13 +1,14 @@
 import _set = require('lodash.set');
 import {RequestBuilder, JovoRequest} from "jovo-core";
 import {DialogflowRequest} from "./DialogflowRequest";
+import * as path from "path";
 
 const samples: {[key: string]: {[key: string]: string} | string} = {
     'google': {
-        'DefaultWelcomeIntent': './../../../sample-request-json/v2/google/DefaultWelcomeIntent.json',
-        'HelpIntent': './../../../sample-request-json/v2/google/HelpIntent.json',
-        'MediaFinished': './../../../sample-request-json/v2/google/MediaFinished.json',
-        'Cancel': './../../../sample-request-json/v2/google/Cancel.json',
+        'DefaultWelcomeIntent': 'DefaultWelcomeIntent.json',
+        'HelpIntent': 'HelpIntent.json',
+        'MediaFinished': 'MediaFinished.json',
+        'Cancel': 'Cancel.json',
     }
 };
 
@@ -43,7 +44,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
             return DialogflowRequest.fromJSON(json);
         } else {
             // @ts-ignore
-            const reqObj: any = this.platform ? samples[this.platform]['DefaultWelcomeIntent'] : samples['DefaultWelcomeIntent']; // tslint:disable-line
+            const reqObj: any = this.platform ? getJsonFilePath('DefaultWelcomeIntent', this.platform) : getJsonFilePath('DefaultWelcomeIntent'); // tslint:disable-line
             const request = JSON.stringify(require(reqObj));
 
             const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
@@ -58,7 +59,8 @@ export class DialogflowRequestBuilder implements RequestBuilder {
             return DialogflowRequest.fromJSON(json);
         } else {
             // @ts-ignore
-            const reqObj: string = this.platform ? samples[this.platform]['HelpIntent'] : samples['HelpIntent'];
+            const reqObj: any = this.platform ? getJsonFilePath('HelpIntent', this.platform) : getJsonFilePath('HelpIntent'); // tslint:disable-line
+
             const request = JSON.stringify(require(reqObj));
 
 
@@ -75,7 +77,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
 
     async rawRequestByKey(key: string): Promise<DialogflowRequest> {
         // @ts-ignore
-        const reqObj = this.platform ? samples[this.platform][key] : samples[key];
+        const reqObj: any = this.platform ? getJsonFilePath(key, this.platform) : getJsonFilePath(key); // tslint:disable-line
         const request = JSON.stringify(require(reqObj));
 
         const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
@@ -88,7 +90,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
             return DialogflowRequest.fromJSON(json);
         } else {
             // @ts-ignore
-            const reqObj = this.platform ? samples[this.platform]['MediaFinished'] : samples['MediaFinished'];
+            const reqObj: any = this.platform ? getJsonFilePath('MediaFinished', this.platform) : getJsonFilePath('MediaFinished'); // tslint:disable-line
             const request = JSON.stringify(require(reqObj));
 
             const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
@@ -101,10 +103,30 @@ export class DialogflowRequestBuilder implements RequestBuilder {
         if (json) {
             return DialogflowRequest.fromJSON(json);
         } else {
-            // const request = await fsreadFile(samples['LAUNCH'], 'utf8');
             // @ts-ignore
             const request = JSON.stringify(require(samples['SessionEndedRequest']));
             return DialogflowRequest.fromJSON(JSON.parse(request));
         }
     }
+}
+function getJsonFilePath(key: string, platform = 'google'): string {
+    let folder = './../../../';
+
+    if (process.env.NODE_ENV === 'UNIT_TEST') {
+        folder = './../../';
+    }
+
+    // @ts-ignore
+    const fileName = samples[platform][key];
+
+    if (!fileName) {
+        throw new Error(`Can't find file.`);
+    }
+
+    return path.join(
+        folder,
+        'sample-request-json',
+        'v2',
+        platform,
+        fileName);
 }

@@ -26,14 +26,19 @@ export class GoogleAction extends Jovo {
     }
 
     isNewSession(): boolean {
-        return true;
+        return this.$request!.isNewSession();
     }
 
     ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string) {
         delete this.$output.tell;
+
+        if (!reprompt) {
+            reprompt = speech;
+        }
+
         this.$output.ask = {
-            speech,
-            reprompt
+            speech: speech.toString(),
+            reprompt: reprompt.toString()
         };
         return this;
     }

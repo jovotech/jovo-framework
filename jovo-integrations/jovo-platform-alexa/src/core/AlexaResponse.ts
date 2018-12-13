@@ -125,7 +125,9 @@ export class AlexaResponse implements JovoResponse {
                 }
                 return false;
             } else {
-                return ssml === SpeechBuilder.toSSML(speechText);
+                if (ssml !== SpeechBuilder.toSSML(speechText)) {
+                    return false;
+                }
             }
         }
 
@@ -140,7 +142,9 @@ export class AlexaResponse implements JovoResponse {
                 }
                 return false;
             } else {
-                return ssml === SpeechBuilder.toSSML(repromptText);
+                if (ssml !== SpeechBuilder.toSSML(repromptText)) {
+                    return false;
+                }
             }
         }
 

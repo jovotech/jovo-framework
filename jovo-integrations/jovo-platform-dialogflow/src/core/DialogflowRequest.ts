@@ -111,10 +111,13 @@ export class DialogflowRequest implements JovoRequest {
         return key === "" ? DialogflowRequest.fromJSON(value) : value;
     }
 
-    // TODO:
     addInput(key: string, value: string): this {
         this.queryResult.parameters[key] = value;
         return this;
+    }
+
+    setIntentName(intentName: string) {
+        this.queryResult.intent.displayName = intentName;
     }
 
     addSessionAttribute(key: string, value: any): this { // tslint:disable-line
@@ -260,13 +263,13 @@ export class DialogflowRequest implements JovoRequest {
 
         if (sessionContext) {
             sessionContext.lifespanCount = 999;
-            sessionContext.parameters[SessionConstants.STATE] = sessionId;
+            sessionContext.parameters[SessionConstants.STATE] = state;
         } else {
             this.queryResult.outputContexts.push({
                 lifespanCount: 999,
                 name: `${sessionId}/contexts/session`,
                 parameters: {
-                    [SessionConstants.STATE]: sessionId
+                    [SessionConstants.STATE]: state
                 },
             });
         }

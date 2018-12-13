@@ -98,7 +98,7 @@ export class Alexa extends Extensible implements Platform {
         };
 
         BaseApp.prototype.setAlexaHandler = function(...handler: any[]) { // tslint:disable-line
-            if (this.plugins.get('Alexa')!.config) {
+            if (this.$plugins.get('Alexa')!.config) {
                 // TODO
                 // (this.plugins.get('Alexa')!.config as Config).handler = handler;
             }

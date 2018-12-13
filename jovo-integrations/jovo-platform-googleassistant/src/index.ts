@@ -35,6 +35,7 @@ declare module 'jovo-core/dist/src/BaseApp' {
 declare module './core/GoogleAction' {
 
     interface GoogleAction {
+
         askForName(optContext: string): this;
         askForZipCodeAndCity(optContext: string): this;
         askForNamePermission(optContext: string): this;

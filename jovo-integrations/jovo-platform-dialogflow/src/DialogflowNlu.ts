@@ -62,6 +62,10 @@ export class DialogflowNlu extends Extensible {
         platform.requestBuilder.platformRequestClazz = this.config.platformRequestClazz;
         // @ts-ignore
         platform.responseBuilder = new DialogflowResponseBuilder();
+        // @ts-ignore
+        platform.responseBuilder.platform = 'google';
+        // @ts-ignore
+        platform.responseBuilder.platformResponseClazz = this.config.platformResponseClazz;
 
 
         platform.middleware('$init')!.use(this.init.bind(this));

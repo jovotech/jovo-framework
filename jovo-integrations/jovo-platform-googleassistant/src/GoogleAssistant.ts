@@ -86,13 +86,23 @@ export class GoogleAssistant extends Extensible implements Platform {
         };
 
         BaseApp.prototype.setGoogleAssistantHandler = function(...handler: any[]) { // tslint:disable-line
-            if (this.plugins.get('GoogleAssistant')!.config) {
+            if (this.$plugins.get('GoogleAssistant')!.config) {
                 // TODO
                 // (this.plugins.get('Alexa')!.config as Config).handler = handler;
             }
             return this;
         };
 
+        this.initDialogflow();
+
+    }
+
+    makeTestSuite() {
+        this.initDialogflow();
+        return new TestSuite(this.requestBuilder, this.responseBuilder);
+    }
+
+    initDialogflow() {
         // @ts-ignore //TODO:
         this.use(new DialogflowNlu({
             platformRequestClazz: GoogleActionRequest,
@@ -100,10 +110,6 @@ export class GoogleAssistant extends Extensible implements Platform {
             platformResponseClazz: GoogleActionResponse,
             platformId: 'google'
         }));
-    }
-
-    makeTestSuite() {
-        return new TestSuite(this.requestBuilder, this.responseBuilder);
     }
 
     async initialize(handleRequest: HandleRequest) {
