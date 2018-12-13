@@ -88,7 +88,6 @@ export class DialogflowCore implements Plugin {
         if (output.ask) {
             _set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
         }
-        console.log(dialogflowAgent.$response);
     }
 
 }
