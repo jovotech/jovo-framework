@@ -1,4 +1,4 @@
-import {AppConfig, Jovo, Plugin, EnumRequestType, HandleRequest} from "jovo-core";
+import {AppConfig, Jovo, Plugin, Inputs, EnumRequestType, HandleRequest} from "jovo-core";
 import _get = require('lodash.get');
 import {BaseApp} from 'jovo-core';
 import {Route, Router} from "./Router";
@@ -7,8 +7,6 @@ export class Handler implements Plugin {
     install(app: BaseApp) {
         app.middleware('logic.handler')!.use(this.handle);
         app.middleware('handleerror')!.use(this.error);
-
-
 
         this.mixin(app);
     }
@@ -19,6 +17,7 @@ export class Handler implements Plugin {
         if (!handleRequest.jovo) {
             throw new Error(`Couldn't access jovo object`);
         }
+        handleRequest.jovo.mapInputs(handleRequest.app.config.inputMap || {});
         const route = handleRequest.jovo.$plugins.Router.route;
         await Handler.handleOnNewUser(handleRequest.jovo, handleRequest.app.config as AppConfig);
         await Handler.handleOnNewSession(handleRequest.jovo, handleRequest.app.config as AppConfig);
@@ -151,7 +150,7 @@ export class Handler implements Plugin {
                 new Error(`Could not find the route "${route.path}" in your handler function.`)); // eslint-disable-line
         }
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
-        await _get(config.handlers, route.path).apply(jovo, [jovo]);
+        return await _get(config.handlers, route.path).apply(jovo, [jovo]);
     }
 
     async error(handleRequest: HandleRequest) {
@@ -182,7 +181,6 @@ export class Handler implements Plugin {
             return this;
         };
 
-
         Jovo.prototype.triggeredToIntent = false;
 
         Jovo.prototype.toIntent = async function (intent: string) {
@@ -193,8 +191,7 @@ export class Handler implements Plugin {
                 this.getState(),
                 intent
             );
-            await Handler.applyHandle(this, route, this.$app!.config, true);
-            return this;
+            return await Handler.applyHandle(this, route, this.$app!.config, true);
         };
 
 
@@ -206,7 +203,7 @@ export class Handler implements Plugin {
                 state,
                 intent
             );
-            await Handler.applyHandle(this, route, this.$app!.config, true);
+            return await Handler.applyHandle(this, route, this.$app!.config, true);
         };
 
         Jovo.prototype.toStatelessIntent = async function (intent: string) {
@@ -248,6 +245,8 @@ export class Handler implements Plugin {
         };
 
     }
+
+
 }
 
 function getParamNames(func: Function) {
