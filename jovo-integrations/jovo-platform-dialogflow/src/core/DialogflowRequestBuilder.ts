@@ -113,7 +113,7 @@ function getJsonFilePath(key: string, platform = 'google'): string {
     let folder = './../../../';
 
     if (process.env.NODE_ENV === 'UNIT_TEST') {
-        folder = './../../';
+        // folder = './../../';
     }
 
     // @ts-ignore
