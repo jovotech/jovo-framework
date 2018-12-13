@@ -59,3 +59,4 @@ dist
 lerna-debug.log
 .env
 db/tests/*.json
+coverage
