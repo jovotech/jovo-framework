@@ -10,6 +10,10 @@ Learn more about the general architecture and lifecycle of voice app requests an
 
 ## Introduction to Voice Interactions
 
+The request and response lifecycle of a voice application has two key concepts:
+* Session
+* Interaction
+
 Each interaction between a user and a voice application consists of an interaction pair with a `request` and a `response`.
 
 ![One Session](../img/session-tell.png)

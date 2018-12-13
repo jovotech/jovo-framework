@@ -2,44 +2,65 @@
 
 Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 
-* [Introduction](#introduction)
-* [Project Structure](#project-structure)
-    * [project.js](#projectjs)
-    * [config.js](#configjs)
-* [Plugins](#plugins)
-* [Intent Syntax](#intent-syntax)
-* [Inputs](#inputs)
-* [Jovo Variables](#jovo-variables)
-* [Responses are sent automatically](#responses-are-sent-automatically)
-* [Alexa Dialog Interface](#alexa-dialog-interface)
-* [Jovo Persistence Layer](#jovo-persistence-layer)
+* [Getting Stated with v2](#getting-started-with-v2)
+    * [Installation](#installation)
+    * [Project Structure](#project-structure)
+* [New Concepts](#new-concepts)
+    * [Plugins](#plugins)
+    * [Jovo Objects](#jovo-variables)
+    * [Integrations](#integrations)
+    * [Responses are sent automatically](#responses-are-sent-automatically)
+* [Breaking Changes](#breaking-changes)
+    * [Inputs](#inputs)
+    * [Alexa Dialog Interface](#alexa-dialog-interface)
+* [Optional Changes](#optional-changes)
+    * [Intent Syntax](#intent-syntax)
 * [Examples](#examples)
 
 
-## Introduction
+## Getting Stated with v2
 
-With the update to `v2` we've have completely refactored the code base of both the framework and the CLI to make it easier for us and you as well to maintain everything going forward. 
+With the update to `v2` we've have completely refactored the code base of both the Jovo Framework and the Jovo CLI to make it more modular and easier to extend.
 
-The code base now has a plugin architecture, where each platform (e.g. Amazon Alexa, Google Assistant), integration (e.g. DynamoDb, Dashbot) and tool (e.g. Jovo Debugger) was outsourced as a plugin.
+The code base now has a plugin architecture, where each platform (e.g. Amazon Alexa, Google Assistant), integration (e.g. DynamoDb, Dashbot) and tool (e.g. Jovo Debugger) can be added and removed as a plugin.
 
 Although most of these changes were under the hood and don't directly affect the usage of the framework, we used the chance to make quality of life changes to the project structure and increased the consistency of the framework's interfaces.
 
-## Project Structure
+### Installation
 
-```javascript
-// old                              new
-app/                                src/                  
-  └── app.js                          |── app.js  
-models/                               |── config.js
-  └── en-US.json                      └── index.js
-app.json                            models/
-index.js                              └── en-US.json
-                                    project.js
+To get started with the new Jovo `v2`, install the Jovo CLI:
+
+```sh
+$ npm install -g jovo-cli@beta
+
+# Sudo may be required
+$ sudo npm install -g jovo-cli@beta
+
+# If you run into problems, uninstall v1 versions first
+$ npm uninstall -g jovo-cli
 ```
 
-We've moved the files needed for the fulfillment to the `src` folder
+Then, create a new Jovo project with:
 
-### project.js
+```sh
+$ jovo new <directory>
+```
+
+
+### Project Structure
+
+New Jovo projects have an updated folder structure.
+
+![New Jovo v2 Project Structure](../../img/jovo-v2-project-structure.png)
+
+There are several changes that are important:
+* [`project.js`](#projectjs) is the new file for project configuration (previously `app.json`)
+* [`src`] contains all the files for fulfillment (previously it was `index.js` in the root + the `app` folder with `app.js`)
+* The `src` folder now contains a [`config.js`](#configjs) file for app configuration
+
+#### project.js
+
+> [Find everything about `project.js` here](../../configuration/project-js.md '../project-js').
 
 The `project.js` file is the equivalent to the `app.json` file with small tweaks here and there.
 
@@ -65,7 +86,9 @@ module.exports = {
 };
 ```
 
-### config.js
+#### config.js
+
+> [Find everything about `config.js` here](../../configuration/config-js.md '../config-js').
 
 The `config.js` file is the equivalent to the configuration part at the top of the `app.js` file in the default project structure.
 
@@ -106,7 +129,10 @@ module.exports = {
 };
 ```
 
-## Plugins
+
+## New Concepts
+
+### Plugins
 
 With the new plugin architecture of the framework, the core `jovo-framework` npm package does not contain all the features anymore. Each platform, integration and tool has to be imported, configured and initialized individually.
 
@@ -168,7 +194,7 @@ Debugger | Allows you to use the [Jovo Debugger](../../testing/debugger.md './te
 FileDb | Local database inside `JSON` file for local development | `jovo-db-filedb`
 MySQL | 
 
-## Intent Syntax
+### Intent Syntax
 
 In `v2` we use the method syntax introduced with ES6:
 
@@ -209,7 +235,7 @@ app.setHandler({
 })
 ```
 
-## Inputs
+### Inputs
 
 With `v2` you won't be able to access user inputs by adding them as parameters to your intent anymore:
 
@@ -243,7 +269,7 @@ this.$data.moreData = 'someData';
 this.toIntent('PizzaIntent');
 ```
 
-## Jovo Objects
+### Jovo Objects
 
 For `v2` we've updated the way interfaces are called to make it easily distinguishable from actual method calls:
 
@@ -309,7 +335,7 @@ this.$user.$data.key = value;
 
 ## Examples
 
-For more examples how all of these changes look in action, we've updated both the [`examples` folder](PLACEHOLDER) and the [templates repository](https://github.com/jovotech/jovo-templates) 
+For more examples how all of these changes look in action, we've updated both the [`examples` folder](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/examples) and the [templates repository](https://github.com/jovotech/jovo-templates/tree/v2) 
 
 
 <!--[metadata]: {"description": "Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.", "route": "installation/v1-migration"}-->

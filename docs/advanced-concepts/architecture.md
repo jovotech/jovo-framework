@@ -16,20 +16,18 @@ With every [request and response](../basic-concepts/requests-responses.md './req
 
 Middleware | Description
 --- | --- 
-`setup` | First initialization with incoming request
-`request` | Request gets processed
-`platform.init` | Platform (e.g. AlexaSkill) gets initialized
-`platform.nlu'` | NLU information gets extracted for built-in NLUs (e.g. Alexa)
-`nlu` | Request gets routed through external NLU (e.g. Dialogflow standalone)
-`initialize.user` | Uber object is initialized
-`initialize.cms` | CMS is initialized
-`logic.router` | Request and NLU data is passed to router
-`logic.handler` | Handler logic
-`output` | Output object is created from handler logic
-`finalize.user` | User gets finalized, DB operations
-`response` | Response gets created from output object
-`sendresponse` | Response gets sent back to platform
-`handleerror` | Errors get handled if applicable
+`setup` | First initialization of `app` object with first incoming request. Is executed once as long as `app` is alive
+`request` | Raw JSON request from platform gets processed. Can be used for authentication middlewares.
+`platform.init` | Determines which platform (e.g. `Alexa`, `GoogleAssistant`) sent the request. Initialization of abstracted `jovo` (`this`) object.
+`platform.nlu'` | Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. `Alexa`). Intents and inputs are set.
+`nlu` | Request gets routed through external NLU (e.g. `Dialogflow` standalone). Intents and inputs are set.
+`user.load` | Initialization of user object. User data is retrieved from database.
+`router` | Request and NLU data (intent, input, state) is passed to router. intentMap and inputMap are executed. Handler path is generated. 
+`handler` | Handler logic is executed. Output object is created and finalized.
+`user.save` | User gets finalized, DB operations.
+`platform.output` | Platform response JSON gets created from output object.
+`response` | Response gets sent back to platform.
+`fail` | Errors get handled if applicable.
 
 
 ## Packages
