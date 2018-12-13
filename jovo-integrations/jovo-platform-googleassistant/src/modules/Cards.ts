@@ -15,6 +15,10 @@ export class Cards implements Plugin {
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
         GoogleAction.prototype.showBasicCard = function(basicCard: BasicCard) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.card = {
                     BasicCard: basicCard
             };
@@ -23,11 +27,19 @@ export class Cards implements Plugin {
         };
 
         GoogleAction.prototype.showSuggestionChips = function(chips: string[]) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.SuggestionChips = chips;
             return this;
         };
 
         GoogleAction.prototype.showLinkOutSuggestion = function(destinationName: string, url: string) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.LinkOutSuggestion =  {
                     destinationName,
                     url
@@ -36,6 +48,10 @@ export class Cards implements Plugin {
         };
 
         GoogleAction.prototype.showCarouselBrowse = function(carouselBrowse: CarouselBrowse) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.CarouselBrowse = carouselBrowse;
             return this;
         };
@@ -51,6 +67,10 @@ export class Cards implements Plugin {
          * @return {GoogleAction} this
          */
         GoogleAction.prototype.showSimpleTable = function(title: string, subtitle: string, columnHeaders: any[], rowsText: any[]) { // tslint:disable-line
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             const table = new Table().setTitle(title).setSubtitle(subtitle).addColumns(columnHeaders).addRows(rowsText);
             this.$output.GoogleAssistant.Table = table;
             return this;
@@ -64,6 +84,10 @@ export class Cards implements Plugin {
          * @return {GoogleAction}
          */
         GoogleAction.prototype.showTable = function(table: Table) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.Table = table;
             return this;
         };
@@ -75,6 +99,10 @@ export class Cards implements Plugin {
          * @return {GoogleAction}
          */
         GoogleAction.prototype.showList = function(list: List) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
             this.$output.GoogleAssistant.List = list;
             return this;
         };
@@ -159,7 +187,6 @@ export class Cards implements Plugin {
 
 
         const cardBasicCard = _get(output, 'GoogleAssistant.card.BasicCard');
-        console.log(output);
         if (cardBasicCard) {
             const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
             richResponseItems.push({
