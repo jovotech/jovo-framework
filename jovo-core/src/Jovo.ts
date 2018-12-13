@@ -28,21 +28,21 @@ export abstract class Jovo extends EventEmitter {
     $type: RequestType;
     $user?: User;
     $nlu?: NLUData;
-    $inputs?: Inputs;
+    $inputs: Inputs;
     readonly $output: Output;
     $request?: JovoRequest;
     $response?: JovoResponse;
-    $session?: JovoSession;
+    $session: JovoSession;
     readonly $plugins?: any; // tslint:disable-line
-    $speech?: SpeechBuilder;
-    $reprompt?: SpeechBuilder;
+    $speech: SpeechBuilder = new SpeechBuilder();
+    $reprompt: SpeechBuilder = new SpeechBuilder();
     $cms: Cms; // tslint:disable-line
 
     $requestSessionAttributes: SessionAttributes = {};
 
     constructor(app: BaseApp, host: Host) {
         super();
-
+        this.setMaxListeners(0);
         this.$host = host;
         this.$app = app;
         this.$data = {};
@@ -191,22 +191,37 @@ export abstract class Jovo extends EventEmitter {
     }
 
     // TODO: move to Handler.ts?
-    private mapInputs(inputs: Inputs): Inputs {
+    // private mapInputs(inputs: Inputs): Inputs {
+    //     const mappedInputs: Inputs = {};
+    //     const config = this.$app!.config;
+    //
+    //     if (config) {
+    //         Object.keys(inputs).forEach((inputKey: string) => {
+    //             if (config.inputMap && config.inputMap[inputKey]) {
+    //                 mappedInputs[config.inputMap[inputKey]] = inputs[inputKey];
+    //             } else {
+    //                 mappedInputs[inputKey] = inputs[inputKey];
+    //             }
+    //
+    //         });
+    //     }
+    //     return mappedInputs;
+    // }
+
+    mapInputs(inputMap: {[key: string]: string}): void {
         const mappedInputs: Inputs = {};
-        const config = this.$app!.config;
 
-        if (config) {
-            Object.keys(inputs).forEach((inputKey: string) => {
-                if (config.inputMap && config.inputMap[inputKey]) {
-                    mappedInputs[config.inputMap[inputKey]] = inputs[inputKey];
-                } else {
-                    mappedInputs[inputKey] = inputs[inputKey];
-                }
+        Object.keys(this.$inputs).forEach((inputKey: string) => {
+            if (inputMap[inputKey]) {
+                mappedInputs[inputMap[inputKey]] = this.$inputs[inputKey];
+            } else {
+                mappedInputs[inputKey] = this.$inputs[inputKey];
+            }
 
-            });
-        }
-        return mappedInputs;
+        });
+        this.$inputs = mappedInputs;
     }
+
 
     getInput(key: string) {
         return _get(this.$inputs, key);

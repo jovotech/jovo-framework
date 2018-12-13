@@ -27,7 +27,7 @@ export interface Plugin {
     name?: string;
     config?: PluginConfig;
     install(parent: object): void;
-    uninstall(parent: object): void;
+    uninstall(parent?: any): void; // tslint:disable-line
 }
 
 export interface PluginConfig {
