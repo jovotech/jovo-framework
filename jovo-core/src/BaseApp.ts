@@ -22,7 +22,7 @@ export class BaseApp extends Extensible {
 
     $platform: Map<string, Platform> = new Map();
 
-    $db!: Db; // TODO: MAP?
+    $db!: Db;
     $cms: any = {}; // tslint:disable-line
 
     $data: AppData = {};
