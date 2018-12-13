@@ -19,17 +19,21 @@ app.use(
 
 app.setHandler({
     async LAUNCH() {
-
-        this.$speech.addText('Hello');
-        return this.tell(this.$speech);
+        this.$speech!.addText('Hello');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
-    MyNameIsIntent(): Promise<any> {
-        this.$user.data.name = this.$inputs.name.value;
-        return this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    }
+    MyNameIsIntent() {
+        this.$user!.$data.name = this.$inputs!.name.value;
+        this.tell('Hey ' + this.$inputs!.name.value + ', nice to meet you!');
+    },
+    State: {
+        MyNameIsIntent() {
+            this.tell('Hello');
+        }
+    },
 });
 
 
