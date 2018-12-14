@@ -105,7 +105,7 @@ export class JovoDebugger implements Plugin {
         this.socket.on('askForLanguageModelEmit', this.askForLanguageModelEmit.bind(this));
         this.socket.on('sendRequest', this.sendRequest.bind(this));
 
-        app.on('after.logic.router', this.afterRouting.bind(this));
+        app.on('after.router', this.afterRouting.bind(this));
         app.on('response', this.response.bind(this));
 
     }
