@@ -5,7 +5,7 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 * [Getting Started with v2](#getting-started-with-v2)
     * [Installation](#installation)
     * [Project Structure](#project-structure)
-* [New Concepts](#new-concepts)
+* [Updated Concepts](#updated-concepts)
     * [Plugins](#plugins)
     * [Jovo Objects](#jovo-variables)
     * [Integrations](#integrations)
@@ -122,7 +122,7 @@ module.exports = {
 }
 ```
 
-## New Concepts
+## Updated Concepts
 
 The Jovo architecture has a few new concepts:
 
@@ -228,7 +228,7 @@ Here's the list of changes:
 
 
 
-## Integrations
+### Integrations
 
 With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
 
@@ -241,7 +241,7 @@ this.$user.$data.key = value;
 ```
 
 
-## Response Execution
+### Response Execution
 
 Intents run through and send out a response at the end automatically, which means `this.endSession()` is obsolete.
 
@@ -288,7 +288,7 @@ this.toIntent('PizzaIntent');
 ```
 
 
-## Alexa Dialog Interface
+### Alexa Dialog Interface
 
 To increase consistency, the dialog feature of Alexa has its own interface now, `this.$alexaSkill.$dialog`, instead of being directly accessibly through the `$alexaSkill` interface.
 
@@ -296,14 +296,14 @@ As a result, there were also method name changes:
 
 `v1` | `v2`
 :--- | :---
-`dialogDelegate()` | `delegate()`
-`dialogElicitSlot()` | `elicitSlot()`
-`dialogConfirmSlot()` | `confirmSlot()`
-`dialogConfirmIntent()` | `confirmIntent()`
-`getDialogState()` | `getState()`
-`isDialogCompleted()` | `isCompleted()`
-`isDialogInProgress()` | `isInProgress()`
-`isDialogStarted()` | `isStarted()`
+`dialogDelegate()` | `$dialog.delegate()`
+`dialogElicitSlot()` | `$dialog.elicitSlot()`
+`dialogConfirmSlot()` | `$dialog.confirmSlot()`
+`dialogConfirmIntent()` | `$dialog.confirmIntent()`
+`getDialogState()` | `$dialog.getState()`
+`isDialogCompleted()` | `$dialog.isCompleted()`
+`isDialogInProgress()` | `$dialog.isInProgress()`
+`isDialogStarted()` | `$dialog.isStarted()`
 
 
 
