@@ -59,8 +59,8 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                 if (!sheet.type) {
                     type = 'Default';
                 }
-                if (sheet.type && defaultSheetMap[sheet.type]) {
-                    type = sheet.type;
+                if (sheet.type && defaultSheetMap[sheet.type.toLowerCase()]) {
+                    type = sheet.type.toLowerCase();
                 }
                 if (type) {
                     this.use(new defaultSheetMap[type.toLowerCase()](sheet));
