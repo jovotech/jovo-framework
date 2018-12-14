@@ -19,7 +19,7 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
 * [Examples](#examples)
 
 
-![Video: Jovo v2 Migration Guide](../../img/video-jovo-v2-migration.jpg 'youtube-video')
+[![Video: Jovo v2 Migration Guide](../../img/video-jovo-v2-migration.jpg 'youtube-video')](https://www.youtube.com/watch?v=yP39wuZAwXo)
 
 ## Getting Started with v2
 
