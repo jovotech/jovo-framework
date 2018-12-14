@@ -44,10 +44,10 @@ export class AlexaResponse implements JovoResponse {
         return this;
     }
 
-    getOutputSpeech() {
+    getSpeech() {
         return _get(this, 'response.outputSpeech.ssml');
     }
-    getRepromptSpeech() {
+    getReprompt() {
         return _get(this, 'response.reprompt.outputSpeech.ssml');
     }
 

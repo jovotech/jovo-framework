@@ -68,7 +68,7 @@ export class AlexaSkill extends Jovo {
     }
 
     getSpeechText() {
-        const outputSpeech = this.$response!.getOutputSpeech();
+        const outputSpeech = this.$response!.getSpeech();
 
         if (!outputSpeech) {
             return;
@@ -77,7 +77,7 @@ export class AlexaSkill extends Jovo {
     }
 
     getRepromptText() {
-        const repromptSpeech = this.$response!.getRepromptSpeech();
+        const repromptSpeech = this.$response!.getReprompt();
 
         if (!repromptSpeech) {
             return;

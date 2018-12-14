@@ -346,7 +346,7 @@ export class JovoDebugger implements Plugin {
         }
 
         try {
-            response.speech = handleRequest.jovo.$response!.getOutputSpeech();
+            response.speech = handleRequest.jovo.$response!.getSpeech();
         } catch (e) {
         }
 

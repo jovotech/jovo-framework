@@ -62,21 +62,21 @@ export class DialogflowResponse implements JovoResponse {
         return false;
     }
 
-    getOutputSpeech() {
+    getSpeech() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _get(this.payload, `${platformId}.getOutputSpeech`) === 'function') {
-                return this.payload[platformId].getOutputSpeech();
+            if (typeof _get(this.payload, `${platformId}.getSpeech`) === 'function') {
+                return this.payload[platformId].getSpeech();
             }
         }
         return this.fulfillmentText;
     }
 
-    getRepromptSpeech() {
+    getReprompt() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
-            if (typeof _get(this.payload, `${platformId}.getRepromptSpeech`) === 'function') {
-                return this.payload[platformId].getRepromptSpeech();
+            if (typeof _get(this.payload, `${platformId}.getReprompt`) === 'function') {
+                return this.payload[platformId].getReprompt();
             }
         }
         return undefined;

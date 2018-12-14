@@ -34,11 +34,11 @@ export class GoogleActionResponse implements JovoResponse {
     richResponse?: RichResponse;
     noInputPrompts?: NoInputPrompt[];
 
-    getOutputSpeech() {
+    getSpeech() {
         return _get(this, 'richResponse.items[0].simpleResponse.ssml');
     }
 
-    getRepromptSpeech() {
+    getReprompt() {
         return _get(this, 'noInputPrompts[0].ssml');
     }
 
@@ -71,14 +71,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getOutputSpeech();
+                    return SpeechBuilder.toSSML(text) === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getOutputSpeech()) {
+                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -96,14 +96,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getOutputSpeech();
+                    return SpeechBuilder.toSSML(text) === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getOutputSpeech()) {
+                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -112,14 +112,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(reprompt)) {
 
                 const results = reprompt.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getRepromptSpeech();
+                    return SpeechBuilder.toSSML(text) === this.getReprompt();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(reprompt.toString()) !== this.getRepromptSpeech()) {
+                if (SpeechBuilder.toSSML(reprompt.toString()) !== this.getReprompt()) {
                     return false;
                 }
             }

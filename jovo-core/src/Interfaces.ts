@@ -148,8 +148,8 @@ export interface SessionAttributes {
 }
 
 export interface JovoResponse {
-    getOutputSpeech(): string | undefined;
-    getRepromptSpeech(): string | undefined;
+    getSpeech(): string | undefined;
+    getReprompt(): string | undefined;
 
     getSessionAttributes(): SessionAttributes | undefined;
     setSessionAttributes(sessionAttributes: SessionAttributes): this;
