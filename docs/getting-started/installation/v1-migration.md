@@ -12,11 +12,14 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
     * [Response Execution](#response-execution)
 * [Breaking Changes](#breaking-changes)
     * [Inputs](#inputs)
+    * [Unit Testing](#unit-testing)
     * [Alexa Dialog Interface](#alexa-dialog-interface)
 * [Optional Changes](#optional-changes)
     * [Intent Syntax](#intent-syntax)
 * [Examples](#examples)
 
+
+![Video: Jovo v2 Migration Guide](../../img/video-jovo-v2-migration.jpg 'youtube-video')
 
 ## Getting Started with v2
 
@@ -264,29 +267,36 @@ MyNameIsIntent(name) {
 },
 ```
 
-Inputs can now only be accessed either using the `$inputs` object or `getInput()`:
+Inputs can now be accessed by using a new `$inputs` object:
 
 ```javascript
+// Recommended
 MyNameIsIntent() {
     this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 },
 
+// Still works
 MyNameIsIntent() {
     this.tell('Hey ' + this.getInput('name').value + ', nice to meet you!');
 }
 ```
 
-Also, you won't be able to pass additional data in redirects anymore:
+Also, you won't be able to pass additional data in redirects anymore. Here is our recommended (more consistent) way to pass interaction specific data:
 
 ```javascript
-// Old: Go to PizzaIntent and pass more data
-this.toIntent('PizzaIntent', moreData);
-
-// Recommended
 this.$data.moreData = 'someData';
 this.toIntent('PizzaIntent');
+
+
+// Old: Go to PizzaIntent and pass more data
+this.toIntent('PizzaIntent', moreData);
 ```
 
+### Unit Testing
+
+In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
+
+> [Learn more about unit testing here](../../testing/unit-testing.md '../unit-testing').
 
 ### Alexa Dialog Interface
 
