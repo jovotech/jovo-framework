@@ -1,6 +1,6 @@
 # Jovo CLI
 
-The Jovo Command Line Tools offer the ability to create, prototype, test, and deploy your voice app quickly.
+The Jovo Command Line Tools offer the ability to create, prototype, test, and deploy your voice app quickly. Learn more about all the commands here.
 
 * [Introduction](#introduction)
 * [Installation](#installation)
@@ -25,7 +25,7 @@ The Jovo CLI (GitHub Repository: [jovotech/jovo-cli](https://github.com/jovotech
 To make best use of the Jovo CLI, install it globally via npm:
 
 ```sh
-$ npm install -g jovo-cli
+$ npm install -g jovo-cli@beta
 ```
 
 After successful installation, you should be able to see the jovo menu by just typing the following into your command line:

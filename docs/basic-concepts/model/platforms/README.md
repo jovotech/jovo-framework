@@ -1,6 +1,6 @@
 # Platforms
 
-Learn more about the `platforms` folder, which is represents the voice platform projects, including information and language models.
+Learn more about the `platforms` folder, which is represents the voice platform projects, including information and language models. Usually, this folder is just used for deployment.
 
 * [Introduction](#introduction)
 * [Alexa Skill](#alexa-skill)

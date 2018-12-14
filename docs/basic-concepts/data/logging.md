@@ -33,7 +33,9 @@ You can log the incoming JSON requests by adding the following configuration:
 
 ```javascript
 // config.js file
-requestLogging: true,
+logging: {
+    request: true,
+},
 ```
 
 The result looks like this (data changed):
@@ -85,14 +87,17 @@ The result looks like this (data changed):
 }
 ```
 
-As you can see above, the logs of a request are quite long and impractical, if you only need certain information. With `requestLoggingObjects`, you can limit the log output to specific objects.
+As you can see above, the logs of a request are quite long and impractical, if you only need certain information. With `requestObjects`, you can limit the log output to specific objects.
 
 ```javascript
 // config.js file
-requestLoggingObjects: [
-  'request',
-  'context.System.user'
-],
+logging: {
+    request: true,
+    requestObjects: [
+      'request',
+      'context.System.user'
+    ],
+},
 ```
 
 The example for `request` above will reduce the log output to this:
@@ -113,9 +118,12 @@ The example for `request` above will reduce the log output to this:
 
 You can log the outgoing JSON responses by adding the following configuration:
 
+
 ```javascript
 // config.js file
-responseLogging: true,
+logging: {
+    response: true,
+},
 ```
 
 The result looks like this:
@@ -140,9 +148,12 @@ Similar to `requestLoggingObjects`, you can limit the response logging output to
 
 ```javascript
 // config.js file
-responseLoggingObjects: [
-  'response'
-],
+logging: {
+    response: true,
+    responseObjects: [
+      'response'
+    ],
+},
 ```
 
 The example above will reduce the log output to this:
