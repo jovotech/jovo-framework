@@ -48,9 +48,9 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
 
         const defaultSheetMap: {[key: string]: any}= { // tslint:disable-line
-            'KeyValue': KeyValueSheet,
-            'Responses': ResponsesSheet,
-            'Default': DefaultSheet
+            'keyvalue': KeyValueSheet,
+            'responses': ResponsesSheet,
+            'default': DefaultSheet
         };
 
         if ( this.config.sheets) {
