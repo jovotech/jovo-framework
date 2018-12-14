@@ -40,8 +40,8 @@ export class BaseApp extends Extensible {
             'user.load',
             'router',
             'handler',
-            'platform.output',
             'user.save',
+            'platform.output',
             'response',
             'fail'
         ], this);
@@ -110,7 +110,7 @@ export class BaseApp extends Extensible {
             await this.middleware('user.load')!.run(handleRequest);
             await this.middleware('router')!.run(handleRequest);
             await this.middleware('handler')!.run(handleRequest);
-            await this.middleware('finalize.user')!.run(handleRequest);
+            await this.middleware('user.save')!.run(handleRequest);
             await this.middleware('platform.output')!.run(handleRequest);
             await this.middleware('response')!.run(handleRequest);
         } catch (e) {
