@@ -83,6 +83,7 @@ export class BaseApp extends Extensible {
         return this.$platform.get(name);
     }
 
+
     initWebhook() {
         this.emit('init-webhook');
     }
