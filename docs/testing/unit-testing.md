@@ -8,6 +8,11 @@ To make sure your Alexa Skills and Google Actions are robust, we highly recommen
     * [Create Test File](#create-test-file)
     * [Run Test Script](#run-test-script)
 * [Basic Concepts](#basic-concepts)
+    * [Conversation](#conversation)
+    * [Request](#request)
+    * [Response](#response)
+    * [Check](#response)
+    * [Data](#data)
 
 
 ## Introduction to Unit Testing
@@ -39,7 +44,11 @@ $ npm install jest --save-dev
 
 ### Create Test File
 
-Unit tests are usually located in a `test` folder of your Jovo project. This is how a sample `test.js` file with a single test for both Amazon Alexa and Google Assistant could look like:
+> [You can find an example test project here](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/examples/unit-testing).
+
+Unit tests are usually located in a `test` folder of your Jovo project. Naming conventions are `<name>.test.js`.
+
+This is how a sample `sample.test.js` file with a single test for both Amazon Alexa and Google Assistant could look like:
 
 ```javascript
 'use strict';
@@ -109,6 +118,84 @@ describe(`GROUP` , () => {
     });
 });
 ```
+
+### Conversation
+
+Each test starts with a conversation:
+
+```javascript
+// Initialize Conversation
+const conversation = testSuite.conversation();
+```
+
+
+### Request
+
+You can use the request builder of the `testSuite` to build a request. Several request types are supported:
+
+* `launch`
+* `intent`
+
+```javascript
+// Example: Create a launch request
+const launchRequest = await testSuite.requestBuilder.launch();
+
+// Example: Create and build a HelloWorldIntent request
+const helloWorldIntentRequest = await testSuite.requestBuilder.intent();
+helloWorldIntentRequest.setIntentName('HelloWorldIntent');
+helloWorldIntentRequest.setNewSession(true); // For deep invocations
+```
+
+
+### Response
+
+The previously created [requests](#request) can be sent to the [conversation](#conversation). This will then return a `response`:
+
+```javascript
+const response = await conversation.send(request);
+
+// Example: Send previously created launchRequest to conversation 
+const responseToLaunchRequest = await conversation.send(launchRequest);
+
+// Example: Send previously created helloWorldIntentRequest to conversation
+const responseToHelloWorldIntentRequest = await conversation.send(helloWorldIntentRequest);
+```
+
+* `isAsk`
+* `isTell`
+* `hasSessionData`
+* `hasSessionEnded`
+* `getSpeech`
+* `getReprompt`
+
+### Check
+
+> [Learn more about Jest Expect here](https://jestjs.io/docs/en/expect).
+
+```javascript
+expect(value).toBe(value);
+
+// Example: Launch Request should return ask
+expect(
+    responseToLaunchRequest.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')
+        ).toBe(true);
+
+// Example: Launch Request should return right speech
+expect(
+    responseToLaunchRequest.getSpeech('Hello World! What\'s your name?')
+        ).toBe(true);
+```
+
+
+### Data
+
+Delete the database for this user with the following method:
+
+```javascript
+await conversation.clearDb();
+```
+
+
 
 
 <!--[metadata]: { "description": "Learn how to write unit tests for Alexa Skills and Google Actions with the Jovo Framework.", "route": "unit-testing" }-->
