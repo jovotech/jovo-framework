@@ -12,6 +12,7 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
     * [Response Execution](#response-execution)
 * [Breaking Changes](#breaking-changes)
     * [Inputs](#inputs)
+    * [State Management](#state-management)
     * [Unit Testing](#unit-testing)
     * [Alexa Dialog Interface](#alexa-dialog-interface)
 * [Optional Changes](#optional-changes)
@@ -254,6 +255,8 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 ## Breaking Changes
 
 * [Inputs](#inputs)
+* [State Management](#state-management)
+* [Unit Testing](#unit-testing)
 * [Alexa Dialog Interface](#alexa-dialog-interface)
 
 ### Inputs
@@ -290,6 +293,18 @@ this.toIntent('PizzaIntent');
 
 // Old: Go to PizzaIntent and pass more data
 this.toIntent('PizzaIntent', moreData);
+```
+
+### State Management
+
+Previously, a state was saved in a session attribute called `STATE`. To make sure this does not interfere with the own data you save in sessions, we renamed it to `_JOVO_STATE_`.
+
+```javascript
+// Typical notation for saving a state into the session data
+this.followUpState('OrderState');
+
+// This does the same as followUpState above
+this.$session.$data._JOVO_STATE_ = 'OrderState';
 ```
 
 ### Unit Testing
