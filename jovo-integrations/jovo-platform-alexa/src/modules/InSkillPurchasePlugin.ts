@@ -214,7 +214,6 @@ export class InSkillPurchasePlugin implements Plugin {
 
 
     install(alexa: Alexa) {
-        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
         AlexaSkill.prototype.$inSkillPurchase = undefined;
@@ -224,9 +223,6 @@ export class InSkillPurchasePlugin implements Plugin {
     }
     uninstall(alexa: Alexa) {
     }
-    init(alexaSkill: AlexaSkill) {
-        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
-    }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
 
@@ -235,6 +231,8 @@ export class InSkillPurchasePlugin implements Plugin {
                 type: EnumAlexaRequestType.ON_PURCHASE,
             };
         }
+        alexaSkill.$inSkillPurchase = new InSkillPurchase(alexaSkill);
+
     }
 
     output(alexaSkill: AlexaSkill) {

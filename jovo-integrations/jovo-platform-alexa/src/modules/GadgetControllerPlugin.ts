@@ -135,18 +135,18 @@ export class GadgetController {
 export class GadgetControllerPlugin implements Plugin {
 
     install(alexa: Alexa) {
-        alexa.middleware('$init')!.use(this.init.bind(this));
+        alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
         AlexaSkill.prototype.$gadgetController = undefined;
         AlexaSkill.prototype.gadgetController = function() {
-            return new GadgetController(this);
+            return this.$gadgetController;
         };
     }
     uninstall(alexa: Alexa) {
     }
 
-    init(alexaSkill: AlexaSkill) {
+    type(alexaSkill: AlexaSkill) {
         alexaSkill.$gadgetController = new GadgetController(alexaSkill);
     }
 

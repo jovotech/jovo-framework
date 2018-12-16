@@ -10,7 +10,7 @@ import {AudioPlayer} from "./AudioPlayerPlugin";
 
 export class DialogInterface implements Plugin {
     install(alexa: Alexa) {
-        alexa.middleware('$init')!.use(this.init.bind(this));
+        alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
         AlexaSkill.prototype.$dialog = undefined;
@@ -22,7 +22,7 @@ export class DialogInterface implements Plugin {
     uninstall(alexa: Alexa) {
     }
 
-    init(alexaSkill: AlexaSkill) {
+    type(alexaSkill: AlexaSkill) {
         alexaSkill.$dialog = new Dialog(alexaSkill);
     }
 

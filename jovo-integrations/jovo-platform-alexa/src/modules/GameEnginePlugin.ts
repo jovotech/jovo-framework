@@ -148,28 +148,26 @@ export class GameEngine {
 export class GameEnginePlugin implements Plugin {
 
     install(alexa: Alexa) {
-        alexa.middleware('$init')!.use(this.init.bind(this));
         alexa.middleware('$type')!.use(this.type.bind(this));
+
         alexa.middleware('$output')!.use(this.output.bind(this));
         AlexaSkill.prototype.$gameEngine = undefined;
         AlexaSkill.prototype.gameEngine = function() {
-            return new GameEngine(this);
+            return this.$gameEngine;
         };
     }
     uninstall(alexa: Alexa) {
     }
 
-    init(alexaSkill: AlexaSkill) {
-        alexaSkill.$gameEngine = new GameEngine(alexaSkill);
-    }
     type(alexaSkill: AlexaSkill) {
-        alexaSkill.$gameEngine = new GameEngine(alexaSkill);
         const alexaRequest = alexaSkill.$request as AlexaRequest;
         if (_get(alexaRequest, 'request.type') === 'GameEngine.InputHandlerEvent') {
             return {
                 type: EnumAlexaRequestType.ON_GAME_ENGINE_INPUT_HANDLER_EVENT,
             };
         }
+        alexaSkill.$gameEngine = new GameEngine(alexaSkill);
+
     }
 
     output(alexaSkill: AlexaSkill) {
