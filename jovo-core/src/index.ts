@@ -1,7 +1,10 @@
 import {Inputs} from "./Interfaces";
 
 try {
-    require('source-map-support').install();
+    // do not use source map support with jest.
+    if (process.env.JEST_WORKER_ID === undefined) {
+        require('source-map-support').install();
+    }
 } catch(error) {
 
 }
