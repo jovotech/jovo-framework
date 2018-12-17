@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite, SessionConstants, EnumRequestType} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "../src";
 
@@ -16,6 +16,56 @@ beforeEach(() => {
     app.use(alexa);
     t = alexa.makeTestSuite();
 });
+
+describe('test request types', () => {
+    test('test launch', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.LAUNCH);
+            done();
+        });
+    });
+
+    test('test intent', async (done) => {
+        app.setHandler({
+            HelloWorldIntent() {
+            },
+        });
+
+        const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.INTENT);
+            done();
+        });
+    });
+
+    test('test end', async (done) => {
+        app.setHandler({
+            END() {
+            },
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.END);
+            done();
+        });
+    });
+
+
+});
+
 
 describe('test tell', () => {
     test('tell plain text', async (done) => {

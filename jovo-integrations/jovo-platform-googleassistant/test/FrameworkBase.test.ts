@@ -1,6 +1,7 @@
 import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
+import {EnumRequestType} from "../../../jovo-core/dist/src";
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -16,6 +17,55 @@ beforeEach(() => {
     app.use(ga);
     t = ga.makeTestSuite();
 });
+
+describe('test request types', () => {
+    test('test launch', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.LAUNCH);
+            done();
+        });
+    });
+
+    test('test intent', async (done) => {
+        app.setHandler({
+            HelloWorldIntent() {
+            },
+        });
+
+        const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.INTENT);
+            done();
+        });
+    });
+
+    test('test end', async (done) => {
+        app.setHandler({
+            END() {
+            },
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        app.handle(ExpressJS.dummyRequest(request));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.END);
+            done();
+        });
+    });
+
+
+});
+
 
 describe('test tell', () => {
     test('tell plain text', async (done) => {
@@ -204,11 +254,10 @@ describe('test $data', () => {
                 this.$app.$data.appData = 'appData';
                 this.$data.thisData = 'thisData';
                 this.$session!.$data.sessionData = 'sessionData';
-
-                return this.toIntent('HelloWorldIntent');
+                this.toIntent('HelloWorldIntent');
             },
-            async HelloWorldIntent() {
-                    this.ask('foo', 'bar');
+            HelloWorldIntent() {
+                this.ask('foo', 'bar');
             }
         });
 
