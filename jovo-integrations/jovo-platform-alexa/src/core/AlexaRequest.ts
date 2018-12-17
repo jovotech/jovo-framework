@@ -1,4 +1,4 @@
-import {Input, JovoRequest} from "jovo-core";
+import {Input, JovoRequest, SessionData} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -162,6 +162,16 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'request.locale');
     }
 
+    getSessionData() {
+        return this.getSessionAttributes();
+    }
+    setSessionData(sessionData: SessionData): this {
+        return this.setSessionAttributes(sessionData);
+    }
+    addSessionData(key: string, value: any): this { // tslint:disable-line
+        return this.addSessionAttribute(key, value);
+    }
+
     getSessionAttributes() {
         return _get(this, 'session.attributes');
     }
@@ -243,12 +253,15 @@ export class AlexaRequest implements JovoRequest {
         }
         return this;
     }
-    setSessionAttributes(attributes: SessionAttributes): this {
+
+
+    setSessionAttributes(attributes: SessionData): this {
         if (this.getSessionAttributes()) {
             _set(this, 'session.attributes', attributes);
         }
         return this;
     }
+
 
     addSessionAttribute(key: string, value: any) { // tslint:disable-line
         if (this.getSessionAttributes()) {

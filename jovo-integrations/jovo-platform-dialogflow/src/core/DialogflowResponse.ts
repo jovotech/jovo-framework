@@ -1,6 +1,7 @@
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import {JovoResponse, SessionConstants} from "jovo-core";
+import {SessionData} from "../../../../jovo-core/dist/src";
 
 export interface Payload {
     [key: string]: JovoResponse;
@@ -35,6 +36,23 @@ export class DialogflowResponse implements JovoResponse {
         }
     }
 
+    getSessionData(path?: string) {
+        if (path) {
+            return this.getSessionAttribute(path);
+        } else {
+            return this.getSessionAttributes();
+        }
+    }
+
+    hasSessionData(name: string, value?: any): boolean { // tslint:disable-line
+        return this.hasSessionAttribute(name, value);
+    }
+
+    setSessionData(sessionData: SessionData) {
+        return this.setSessionAttributes(sessionData);
+    }
+
+
     getSessionAttributes() {
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/session') > -1;
@@ -46,8 +64,13 @@ export class DialogflowResponse implements JovoResponse {
         return {};
     }
 
+    getSessionAttribute(path: string) {
+        const sessionData = this.getSessionAttributes();
+        return _get(sessionData, path);
+    }
+
     // TODO:
-    setSessionAttributes() {
+    setSessionAttributes(sessionData: SessionData) {
         return this;
     }
 

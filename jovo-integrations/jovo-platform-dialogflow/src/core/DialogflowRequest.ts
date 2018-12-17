@@ -2,7 +2,7 @@ import _get = require('lodash.get');
 import _set = require('lodash.set');
 import _mapValues = require('lodash.mapvalues');
 
-import {JovoRequest, SessionConstants, Inputs} from "jovo-core";
+import {JovoRequest, SessionConstants, Inputs, SessionData} from "jovo-core";
 
 interface Intent {
     name: string;
@@ -45,6 +45,16 @@ export class DialogflowRequest implements JovoRequest {
     queryResult?: QueryResult;
     originalDetectIntentRequest?: OriginalDetectIntentRequest;
     session?: string;
+
+    getSessionData() {
+        return this.getSessionAttributes();
+    }
+    setSessionData(sessionData: SessionData): this {
+        return this.setSessionAttributes(sessionData);
+    }
+    addSessionData(key: string, value: any): this { // tslint:disable-line
+        return this.addSessionAttribute(key, value);
+    }
 
     getAccessToken() {
         if (typeof _get(this.originalDetectIntentRequest, 'payload.getAccessToken') === 'function') {

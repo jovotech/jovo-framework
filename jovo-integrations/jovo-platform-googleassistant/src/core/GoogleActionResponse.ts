@@ -1,5 +1,6 @@
 import {JovoResponse, SpeechBuilder} from "jovo-core";
 import _get = require('lodash.get');
+import {SessionData} from "../../../../jovo-core/dist/src";
 
 export interface RichResponseItem {
     simpleResponse: {
@@ -34,6 +35,19 @@ export class GoogleActionResponse implements JovoResponse {
     richResponse?: RichResponse;
     noInputPrompts?: NoInputPrompt[];
 
+    getSessionData(path?: string) {
+        return undefined;
+    }
+
+    hasSessionData(name: string, value?: any): boolean { // tslint:disable-line
+        return this.hasSessionAttribute(name, value);
+
+    }
+
+    setSessionData(sessionData: SessionData) {
+        return this;
+    }
+
     getSpeech() {
         return _get(this, 'richResponse.items[0].simpleResponse.ssml');
     }
@@ -50,7 +64,7 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
-    hasSessionAttribute(): any { // tslint:disable-line
+    hasSessionAttribute(name: string, value?: any): any { // tslint:disable-line
         return undefined;
     }
 

@@ -115,8 +115,11 @@ export interface JovoRequest {
     hasScreenInterface(): boolean;
     hasVideoInterface(): boolean;
 
-    getSessionAttributes(): SessionAttributes;
+    getSessionAttributes(): SessionData;
     addSessionAttribute(key: string, value: any): this; // tslint:disable-line
+
+    getSessionData(): SessionData;
+    addSessionData(key: string, value: any): this; // tslint:disable-line
 
     setTimestamp(timestamp: string): this;
     setLocale(locale: string): this;
@@ -126,7 +129,8 @@ export interface JovoRequest {
     setAudioInterface(): this;
     setScreenInterface(): this;
     setVideoInterface(): this;
-    setSessionAttributes(attributes: SessionAttributes): this;
+    setSessionAttributes(attributes: SessionData): this;
+    setSessionData(sessionData: SessionData): this;
     setState(state: string): this;
 
     getInputs(): any; // tslint:disable-line
@@ -151,13 +155,18 @@ export interface JovoResponse {
     getSpeech(): string | undefined;
     getReprompt(): string | undefined;
 
-    getSessionAttributes(): SessionAttributes | undefined;
-    setSessionAttributes(sessionAttributes: SessionAttributes): this;
+    getSessionAttributes(): SessionData | undefined;
+    setSessionAttributes(sessionAttributes: SessionData): this;
+
+    getSessionData(): SessionData | undefined;
+    setSessionData(sessionData: SessionData): this;
 
     isTell(speechText?: string | string[]): boolean;
     isAsk(speechText?: string | string[], repromptText?: string | string[]): boolean;
     hasState(state: string): boolean | undefined;
     hasSessionAttribute(name: string, value?: any): boolean; // tslint:disable-line
+    hasSessionData(name: string, value?: any): boolean; // tslint:disable-line
+
     hasSessionEnded(): boolean;
 }
 

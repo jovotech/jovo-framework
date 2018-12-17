@@ -96,6 +96,19 @@ export abstract class Jovo extends EventEmitter {
             delete this.$session.$data[SessionConstants.STATE];
         }
     }
+
+    /**
+     * Returns session data value for given path
+     * @param {string=} path
+     * @return {any}
+     */
+    getSessionData(path?: string) {
+        if (path) {
+            return this.getSessionAttribute(path);
+        } else {
+            return this.getSessionAttributes();
+        }
+    }
     /**
      * Returns session attribute value for given path
      * @param {string} path
@@ -119,17 +132,30 @@ export abstract class Jovo extends EventEmitter {
         return;
     }
 
+    setSessionData(obj: SessionData): this;
+    setSessionData(path: string, value: any): this; // tslint:disable-line
+    setSessionData(objOrPath: string | SessionData, value?: any) { // tslint:disable-line
+        if (typeof objOrPath === 'string') {
+            return this.setSessionAttribute(objOrPath, value);
+        } else {
+            return this.setSessionAttributes(objOrPath);
+        }
+    }
     /**
      * Sets session attribute for given path
      * @param {string} path
      * @param {any} value
      * @return {Jovo} this
      */
-    setSessionAttribute(path: string, value: any): Jovo { // tslint:disable-line
+    setSessionAttribute(path: string, value: any): this { // tslint:disable-line
         if (this.$session) {
             _set(this.$session.$data, path, value);
         }
         return this;
+    }
+
+    addSessionData(path: string, value: any): this { // tslint:disable-line
+        return this.setSessionAttribute(path, value);
     }
 
     /**
@@ -138,18 +164,18 @@ export abstract class Jovo extends EventEmitter {
      * @param {any} value
      * @return {Jovo} this
      */
-    addSessionAttribute(path: string, value: any): Jovo { // tslint:disable-line
+    addSessionAttribute(path: string, value: any): this { // tslint:disable-line
         return this.setSessionAttribute(path, value);
     }
     /**
      * Sets full session attributes obj
      * @public
-     * @param {any} sessionAttributes
+     * @param {any} sessionData
      * @return {Jovo} this
      */
-    setSessionAttributes(sessionAttributes: SessionAttributes) {
+    setSessionAttributes(sessionData: SessionData) {
         if (this.$session) {
-            this.$session.$data = sessionAttributes;
+            this.$session.$data = sessionData;
         }
         return this;
     }

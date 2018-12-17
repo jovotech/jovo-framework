@@ -5,6 +5,7 @@
 import {JovoRequest} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import {SessionData} from "../../../../jovo-core/dist/src";
 
 interface User {
     userId: string;
@@ -72,6 +73,16 @@ export class GoogleActionRequest implements JovoRequest {
     surface?: Surface;
     isInSandbox?: boolean;
     availableSurfaces?: Surface;
+
+    getSessionData() {
+        return this.getSessionAttributes();
+    }
+    setSessionData(sessionData: SessionData): this {
+        return this.setSessionAttributes(sessionData);
+    }
+    addSessionData(key: string, value: any): this { // tslint:disable-line
+        return this.addSessionAttribute(key, value);
+    }
 
     setUserId(userId: string) {
         _set(this, 'user.userId', userId);

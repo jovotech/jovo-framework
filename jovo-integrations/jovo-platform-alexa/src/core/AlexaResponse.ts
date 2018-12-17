@@ -1,4 +1,4 @@
-import {JovoResponse, SpeechBuilder, SessionConstants} from "jovo-core";
+import {JovoResponse, SpeechBuilder, SessionConstants, SessionData} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -35,12 +35,30 @@ export class AlexaResponse implements JovoResponse {
         this.sessionAttributes = {};
     }
 
+    getSessionData(path?: string) {
+        if (path) {
+            return this.getSessionAttribute(path);
+        } else {
+            return this.getSessionAttributes();
+        }
+    }
+
+    hasSessionData(name: string, value?: any): boolean { // tslint:disable-line
+        return this.hasSessionAttribute(name, value);
+    }
+
+    setSessionData(sessionData: SessionData) {
+        return this.setSessionAttributes(sessionData);
+    }
+
     getSessionAttributes() {
         return _get(this, 'sessionAttributes');
     }
 
-    setSessionAttributes(sessionAttributes: SessionAttributes) {
-        _set(this, 'sessionAttributes', sessionAttributes);
+
+
+    setSessionAttributes(sessionData: SessionData) {
+        _set(this, 'sessionAttributes', sessionData);
         return this;
     }
 
