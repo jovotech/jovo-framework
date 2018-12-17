@@ -37,5 +37,8 @@
       "tag: documentation": ":memo: Documentation"
     },
     "cacheDir": ".changelog"
+  },
+  "dependencies": {
+    "@types/mongodb": "^3.1.17"
   }
 }
