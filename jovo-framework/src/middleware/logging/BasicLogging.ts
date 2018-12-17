@@ -5,10 +5,10 @@ import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
     logging?: boolean;
-    requestLogging?: boolean;
-    responseLogging?: boolean;
-    requestLoggingObjects?: string[];
-    responseLoggingObjects?: string[];
+    request?: boolean;
+    response?: boolean;
+    requestObjects?: string[];
+    responseObjects?: string[];
     space?: string;
     styling?: boolean;
 }
@@ -16,11 +16,11 @@ export interface Config extends PluginConfig {
 export class BasicLogging implements Plugin {
     config: Config = {
         enabled: true,
-        logging: false,
-        requestLogging: false,
-        responseLogging: false,
-        requestLoggingObjects: [],
-        responseLoggingObjects: [],
+        logging: undefined,
+        request: false,
+        response: false,
+        requestObjects: [],
+        responseObjects: [],
         space: '\t',
         styling: false,
     };
@@ -29,16 +29,17 @@ export class BasicLogging implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
+
         this.requestLogger = this.requestLogger.bind(this);
         this.responseLogger = this.responseLogger.bind(this);
     }
     install(app: BaseApp) {
         if (this.config.logging === true) {
-            this.config.requestLogging = true;
-            this.config.responseLogging = true;
-        } else {
-            this.config.requestLogging = false;
-            this.config.responseLogging = false;
+            this.config.request = true;
+            this.config.response = true;
+        } else if (this.config.logging === false) {
+            this.config.request = false;
+            this.config.response = false;
         }
 
         app.on('after.platform.init', this.requestLogger);
@@ -51,15 +52,15 @@ export class BasicLogging implements Plugin {
     }
 
     requestLogger = (handleRequest: HandleRequest) => {
-        if (!this.config.requestLogging) {
+        if (!this.config.request) {
             return;
         }
         if (!handleRequest.jovo) {
             return;
         }
 
-        if (this.config.requestLoggingObjects && this.config.requestLoggingObjects.length > 0) {
-            this.config.requestLoggingObjects.forEach((path: string) => {
+        if (this.config.requestObjects && this.config.requestObjects.length > 0) {
+            this.config.requestObjects.forEach((path: string) => {
                 if (!handleRequest.jovo) {
                     return;
                 }
@@ -73,14 +74,14 @@ export class BasicLogging implements Plugin {
     };
 
     responseLogger = (handleRequest: HandleRequest) => {
-        if (!this.config.responseLogging) {
+        if (!this.config.response) {
             return;
         }
         if (!handleRequest.jovo) {
             return;
         }
-        if (this.config.responseLoggingObjects && this.config.responseLoggingObjects.length > 0) {
-            this.config.responseLoggingObjects.forEach((path) => {
+        if (this.config.responseObjects && this.config.responseObjects.length > 0) {
+            this.config.responseObjects.forEach((path: string) => {
                 if (!handleRequest.jovo) {
                     return;
                 }
