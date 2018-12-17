@@ -60,11 +60,15 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
                 const pluginConstructorConfig: any = {}; // tslint:disable-line
                 const constructorConfig = difference(plugin.config, pluginDefaultConfig);
+
                 Object.keys(pluginDefaultConfig).forEach((item: string) => {
                     pluginConstructorConfig[item] = _get(constructorConfig, `${item}`);
                 });
-                plugin.config = _merge(pluginDefaultConfig, pluginAppConfig, constructorConfig );
 
+                plugin.config = _merge(pluginDefaultConfig, pluginAppConfig, constructorConfig );
+                if (this.config.plugin && this.config.plugin[name]) {
+                    this.config.plugin[name] = plugin.config;
+                }
             }
 
             // remove existing plugin with the same name

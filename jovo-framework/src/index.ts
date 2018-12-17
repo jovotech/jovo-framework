@@ -17,10 +17,10 @@ export { Util } from './Util';
 
 
 declare module 'jovo-core/dist/src/Interfaces' {
-    interface AppConfig {
-        handlers?: any; // tslint:disable-line
-        intentsToSkipUnhandled?: string[];
-    }
+    // interface AppConfig {
+        // handlers?: any; // tslint:disable-line
+        // intentsToSkipUnhandled?: string[];
+    // }
 }
 declare module 'express' {
     interface Application {
@@ -43,6 +43,9 @@ declare module 'jovo-core/dist/src/BaseApp' {
         setHandler(...handler: Handler[]): this;
     }
 }
+
+
+
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
@@ -83,3 +86,24 @@ declare module 'jovo-core/dist/src/User' {
 
     }
 }
+
+// Basiclogging
+
+import {Config as BasicLoggingConfig} from './middleware/logging/BasicLogging';
+declare module 'jovo-core/dist/src/Interfaces' {
+    // interface AppConfig {
+        // plugin: {
+        //     BasicLogging: BasicLoggingConfig
+        // };
+    // }
+}
+import {Config as JovoUserConfig} from './middleware/user/JovoUser';
+declare module 'jovo-core/dist/src/Interfaces' {
+    // interface AppConfig {
+        // plugin: {
+        //     JovoUser: JovoUserConfig
+        // };
+    // }
+}
+
+

@@ -1,11 +1,11 @@
-import {BaseApp, Plugin, EnumRequestType, AppConfig, HandleRequest, PluginConfig} from 'jovo-core';
+import {BaseApp, Plugin, EnumRequestType, HandleRequest, PluginConfig} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import {App, Config as AppConfig} from "../App";
 export interface Config extends PluginConfig {
-    intentMap: { [key: string]: string; };
-
-    intentsToSkipUnhandled: string[];
+    intentMap?: { [key: string]: string; };
+    intentsToSkipUnhandled?: string[];
 }
 
 export interface Route {
@@ -69,7 +69,7 @@ export class Router implements Plugin {
             route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), EnumRequestType.ON_ELEMENT_SELECTED);
             route.type = EnumRequestType.ON_ELEMENT_SELECTED;
 
-            if (typeof _get((handleRequest.app.config as AppConfig).handlers, route.path) === 'object') {
+            if (typeof _get((handleRequest.app as App).config.handlers, route.path) === 'object') {
                 route.path += '.' + handleRequest.jovo.$type.subType;
             }
         }

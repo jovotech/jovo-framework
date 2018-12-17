@@ -5,30 +5,34 @@ import _set = require('lodash.set');
 export interface Config extends PluginConfig {
     columnName?: string;
     implicitSave?: boolean;
-    metaData?: {
-        enabled?: boolean;
-        lastUsedAt?: boolean,
-        sessionsCount?: boolean,
-        createdAt?: boolean,
-        requestHistorySize?: number,
-        devices?: boolean,
-    };
-    context?: {
-        enabled?: boolean;
-        prev?: {
-            size?: number,
-            request?: {
-                intent?: boolean,
-                state?: boolean,
-                inputs?: boolean,
-                timestamp?: boolean,
-            },
-            response?: {
-                speech?: boolean,
-                reprompt?: boolean,
-                state?: boolean,
-                output?: boolean,
-            },
+    metaData?: MetaDataConfig;
+    context?: ContextConfig;
+}
+
+export interface MetaDataConfig {
+    enabled?: boolean;
+    lastUsedAt?: boolean;
+    sessionsCount?: boolean;
+    createdAt?: boolean;
+    requestHistorySize?: number;
+    devices?: boolean;
+}
+
+export interface ContextConfig {
+    enabled?: boolean;
+    prev?: {
+        size?: number;
+        request?: {
+            intent?: boolean;
+            state?: boolean;
+            inputs?: boolean;
+            timestamp?: boolean;
+        },
+        response?: {
+            speech?: boolean;
+            reprompt?: boolean;
+            state?: boolean;
+            output?: boolean;
         },
     };
 }
@@ -97,12 +101,12 @@ export class JovoUser implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
-
         this.loadDb = this.loadDb.bind(this);
         this.saveDb = this.saveDb.bind(this);
     }
 
     install(app: BaseApp): void {
+
         app.middleware('user.load')!.use(this.loadDb);
         app.middleware('user.save')!.use(this.saveDb);
 
@@ -216,8 +220,8 @@ export class JovoUser implements Plugin {
         };
 
         Jovo.prototype.repeat = async function() {
-            if (_get(this.$user, 'context.prev[0].response.output')) {
-                this.output(_get(this.$user, 'context.prev[0].response.output'));
+            if (_get(this.$user, '$context.prev[0].response.output')) {
+                this.output(_get(this.$user, '$context.prev[0].response.output'));
             }
         };
     }
@@ -285,14 +289,16 @@ export class JovoUser implements Plugin {
             data: _get(handleRequest.jovo.$user, '$data')
         };
 
-        if (this.config.metaData && this.config.metaData.enabled) {
-            this.updateMetaData(handleRequest);
-            userData.metaData = _get(handleRequest.jovo.$user, '$metaData');
-        }
-
-        if (this.config.context && this.config.context.enabled) {
+        if (this.config.context &&
+            this.config.context.enabled) {
             this.updateContextData(handleRequest);
             userData.context = _get(handleRequest.jovo.$user, '$context');
+        }
+
+        if (this.config.metaData &&
+            this.config.metaData.enabled) {
+            this.updateMetaData(handleRequest);
+            userData.metaData = _get(handleRequest.jovo.$user, '$metaData');
         }
 
         await handleRequest.app.$db.save(
@@ -431,7 +437,7 @@ export class JovoUser implements Plugin {
         }
         if (_get(this.config, 'context.prev.response.output')) {
             if (handleRequest.jovo.$output) {
-                _set(prevObject, 'request.output', handleRequest.jovo.$output);
+                _set(prevObject, 'response.output', handleRequest.jovo.$output);
             }
         }
         if (_get(prevObject, 'request') || _get(prevObject, 'response')) {

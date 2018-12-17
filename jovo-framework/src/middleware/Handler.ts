@@ -1,7 +1,8 @@
-import {AppConfig, Jovo, Plugin, Inputs, EnumRequestType, HandleRequest} from "jovo-core";
+import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest} from "jovo-core";
 import _get = require('lodash.get');
 import {BaseApp} from 'jovo-core';
 import {Route, Router} from "./Router";
+import {Config as AppConfig} from './../App';
 
 export class Handler implements Plugin {
     install(app: BaseApp) {
