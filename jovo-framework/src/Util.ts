@@ -1,7 +1,9 @@
 import * as path from 'path';
 
+const debugLog: any = {}; // tslint:disable-line
 
 export class Util {
+
     static consoleLog(pathDepth = 1) {
         const _privateLog:Function = console.log;
         console.log = (...msgs: any[]) => { // tslint:disable-line
@@ -32,4 +34,17 @@ export class Util {
             _privateLog.apply(console, newMessages); // eslint-disable-line
         };
     }
+
+    // static debug(label: string) {
+    //     debugLog[label] = new Date().getTime();
+    // }
+    //
+    // static debugEnd(label: string) {
+    //     const end = new Date().getTime();
+    //     const start = debugLog[label];
+    //
+    //     console.log(`${label} - ${end-start} ms`);
+    // }
+
+
 }
