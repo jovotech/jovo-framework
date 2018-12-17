@@ -109,9 +109,10 @@ export class GadgetController {
             animations: this.animations,
         };
 
-        _set(this.alexaSkill.$output, 'Alexa.GadgetController',
-            new GadgetControllerSetLightDirective(1, targetGadgets, parameters)
-        );
+        const gadgetControllerDirectives = _get(this.alexaSkill.$output, 'Alexa.GadgetController', []);
+        gadgetControllerDirectives.push(new GadgetControllerSetLightDirective(1, targetGadgets, parameters));
+        _set(this.alexaSkill.$output, 'Alexa.GadgetController', gadgetControllerDirectives);
+
     }
 
     /**
@@ -153,10 +154,15 @@ export class GadgetControllerPlugin implements Plugin {
     output(alexaSkill: AlexaSkill) {
         const output = alexaSkill.$output;
         const response = alexaSkill.$response as AlexaResponse;
-
+console.log(output);
         if (_get(output, 'Alexa.GadgetController')) {
-            const directives = _get(response, 'response.directives', []);
-            directives.push(_get(output, 'Alexa.GadgetController'));
+            let directives = _get(response, 'response.directives', []);
+
+            if (Array.isArray(_get(output, 'Alexa.GadgetController'))) {
+                directives = directives.concat(_get(output, 'Alexa.GadgetController'));
+            } else {
+                directives.push(_get(output, 'Alexa.GadgetController'));
+            }
             _set(response, 'response.directives', directives);
         }
 

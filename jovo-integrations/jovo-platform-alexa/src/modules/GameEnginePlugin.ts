@@ -106,9 +106,10 @@ export class GameEngine {
             this.setRecognizers(recognizers).setEvents(events);
         }
 
-        _set(this.alexaSkill.$output, 'Alexa.GameEngine',
-            new GameEngineStartInputHandlerDirective(timeout, proxies, this.recognizers, this.events)
-        );
+        const gameEngineDirectives = _get(this.alexaSkill.$output, 'Alexa.GameEngine', []);
+        gameEngineDirectives.push(new GameEngineStartInputHandlerDirective(timeout, proxies, this.recognizers, this.events));
+        _set(this.alexaSkill.$output, 'Alexa.GameEngine', gameEngineDirectives);
+
         return this.alexaSkill;
     }
 
@@ -120,9 +121,9 @@ export class GameEngine {
 
         const originatingRequestId = _get(alexaRequest, 'request.originatingRequestId');
 
-        _set(this.alexaSkill.$output, 'Alexa.GameEngine',
-            new GameEngineStopInputHandlerDirective(originatingRequestId)
-        );
+        const gameEngineDirectives = _get(this.alexaSkill.$output, 'Alexa.GameEngine', []);
+        gameEngineDirectives.push(new GameEngineStopInputHandlerDirective(originatingRequestId));
+        _set(this.alexaSkill.$output, 'Alexa.GameEngine', gameEngineDirectives);
 
         return this.alexaSkill;
     }
@@ -174,8 +175,13 @@ export class GameEnginePlugin implements Plugin {
         const output = alexaSkill.$output;
         const response = alexaSkill.$response as AlexaResponse;
         if (_get(output, 'Alexa.GameEngine')) {
-            const directives = _get(response, 'response.directives', []);
-            directives.push(_get(output, 'Alexa.GameEngine'));
+            let directives = _get(response, 'response.directives', []);
+
+            if (Array.isArray(_get(output, 'Alexa.GameEngine'))) {
+                directives = directives.concat(_get(output, 'Alexa.GameEngine'));
+            } else {
+                directives.push(_get(output, 'Alexa.GameEngine'));
+            }
             _set(response, 'response.directives', directives);
         }
 

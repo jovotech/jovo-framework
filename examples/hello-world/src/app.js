@@ -10,8 +10,8 @@ const app = new App();
 Util.consoleLog();
 
 app.use(
-    // new GoogleAssistant(),
-    new Dialogflow(),
+    new GoogleAssistant(),
+    // new Dialogflow(),
     new Alexa(),
     new JovoDebugger(),
     new FileDb(),
@@ -21,7 +21,7 @@ app.setHandler({
     async LAUNCH(jovo) {
         this.$speech.addText('Hello');
 
-        // return this.tell('Hello');
+        return this.tell(this.t('HELLO'));
          // return this.tell(this.$speech);
         // await this.$user.load();
         this.toIntent('HelloWorldIntent');
