@@ -1,6 +1,6 @@
 
 import {Router} from './../src/middleware/Router';
-import {AppConfig} from "jovo-core";
+import {Config as AppConfig} from "./../src/App";
 
 
 test('test intentRoute', () => {
