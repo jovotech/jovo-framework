@@ -186,7 +186,25 @@ export abstract class Jovo extends EventEmitter {
      * @returns {string}
      */
     getLocale() {
-        // return this.$request.getLocale();
+        return this.$request!.getLocale();
+    }
+
+    /**
+     * Returns access token
+     * @deprecated use this.$request.getAccessToken() instead
+     * @returns {string}
+     */
+    getAccessToken() {
+        return this.$request!.getAccessToken();
+    }
+
+    /**
+     * Returns request intent name
+     * @deprecated use this.$request.getIntentName() instead
+     * @returns {string}
+     */
+    getIntentName() {
+        return this.$request!.getIntentName();
     }
 
     /**
@@ -215,24 +233,6 @@ export abstract class Jovo extends EventEmitter {
 
         return this;
     }
-
-    // TODO: move to Handler.ts?
-    // private mapInputs(inputs: Inputs): Inputs {
-    //     const mappedInputs: Inputs = {};
-    //     const config = this.$app!.config;
-    //
-    //     if (config) {
-    //         Object.keys(inputs).forEach((inputKey: string) => {
-    //             if (config.inputMap && config.inputMap[inputKey]) {
-    //                 mappedInputs[config.inputMap[inputKey]] = inputs[inputKey];
-    //             } else {
-    //                 mappedInputs[inputKey] = inputs[inputKey];
-    //             }
-    //
-    //         });
-    //     }
-    //     return mappedInputs;
-    // }
 
     mapInputs(inputMap: {[key: string]: string}): void {
         const mappedInputs: Inputs = {};
