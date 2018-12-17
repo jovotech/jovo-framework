@@ -11,7 +11,7 @@ Util.consoleLog();
 app.use(
     new GoogleAssistant(),
     new Alexa(),
-    new JovoDebugger(),
+    // new JovoDebugger(),
     new FileDb(),
 );
 
@@ -173,14 +173,14 @@ app.setHandler({
             .addAudio('https://s3.amazonaws.com/ask-soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_intro_01.mp3')
             .addText('Hello there! Show me your sweet buttons!');
 
-        this.tell(this.$speech);
+        this.$alexaSkill.$gameEngine.respond(this.$speech);
     },
     ON_GAME_ENGINE_INPUT_HANDLER_EVENT() {
         console.log('ON_GAME_ENGINE_INPUT_HANDLER_EVENT()');
         // This will be one of our configured events 'buttonDownEvent' or 'timeout'
         // In theory, there can be more than one event in one input handler event,
         // but in practice you'll be fine focussing on the first one
-        const inputEvent = this.$request.getEvents()[0];
+        const inputEvent = this.$request.request.events[0];
         const eventName = inputEvent.name;
         console.log(`Event name: ${eventName}`);
 
@@ -195,15 +195,15 @@ app.setHandler({
             // Here we check whether this gadget API request ID matches the one that
             // started the input handler. In fully developed Button Skill, mismatches
             // should be ignored
-            const originatingRequestId = this.request().request.originatingRequestId;
+            const originatingRequestId = this.$request.request.originatingRequestId;
             console.log(`Matching request ID? ${
-            this.user().data.currentInputHandlerId === originatingRequestId
+            this.$user.$data.currentInputHandlerId === originatingRequestId
                 }`);
 
             // Now we're checking if this button is already known
             const buttonId = inputEvent.inputEvents[0].gadgetId;
             console.log(`Button ID: ${buttonId}`);
-            let knownButtons = this.user().data.knownButtons;
+            let knownButtons = this.$user.$data.knownButtons;
             console.log(`Known buttons: ${
                 JSON.stringify(knownButtons, null, 4)
                 }`);
@@ -216,17 +216,17 @@ app.setHandler({
             } else {
                 // This is a new button, so we add a greeting and change its animation
                 knownButtons.push(buttonId);
-                this.user().data.knownButtons = knownButtons;
+                this.$user.$data.knownButtons = knownButtons;
                 // In our case, the button number is one-indexed
                 const buttonNumber = knownButtons.length;
-                this.user().data.buttonCount = knownButtons.length;
-                this.speech
+                this.$user.$data.buttonCount = knownButtons.length;
+                this.$speech
                     .addAudio(
                         `https://s3.amazonaws.com/ask-soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_player${buttonNumber}_01.mp3` // eslint-disable-line
                     )
                     .addText(`Welcome, button ${buttonNumber}!`);
 
-                this.alexaSkill().gadgetController()
+                this.$alexaSkill.$gadgetController
                     .setNoneTriggerEvent()
                     .setAnimations(
                         [
@@ -255,8 +255,8 @@ app.setHandler({
                     );
             }
 
-            this.alexaSkill().gadgetController().respond(
-                this.speech
+            this.$alexaSkill.$gadgetController.respond(
+                this.$speech
             );
         }
     },

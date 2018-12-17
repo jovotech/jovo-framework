@@ -163,7 +163,7 @@ export class GameEnginePlugin implements Plugin {
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
         if (_get(alexaRequest, 'request.type') === 'GameEngine.InputHandlerEvent') {
-            return {
+            alexaSkill.$type = {
                 type: EnumAlexaRequestType.ON_GAME_ENGINE_INPUT_HANDLER_EVENT,
             };
         }

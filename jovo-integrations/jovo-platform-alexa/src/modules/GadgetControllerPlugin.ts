@@ -23,7 +23,7 @@ export class GadgetController {
      */
     setAnimations(animationArray: any[]) { // tslint:disable-line
         animationArray.forEach((animation) => {
-            this.animations = this.animations || [];
+            this.animations = [];
             if (animation instanceof AnimationsBuilder) {
                 this.animations.push(animation.build());
             } else {
