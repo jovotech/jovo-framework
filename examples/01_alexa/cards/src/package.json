@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-cards",
-  "version": "2.0.2-beta.5",
+  "version": "2.0.2-beta.6",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.2-beta.5",
-    "jovo-platform-alexa": "^2.0.2-beta.5"
+    "jovo-framework": "^2.0.2-beta.6",
+    "jovo-platform-alexa": "^2.0.2-beta.6"
   }
 }

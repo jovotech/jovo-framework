@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-mysql",
-  "version": "2.0.2-beta.5",
+  "version": "2.0.2-beta.6",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.0.2-beta.5",
+    "jovo-core": "^2.0.2-beta.6",
     "mysql": "^2.16.0"
   },
   "devDependencies": {
