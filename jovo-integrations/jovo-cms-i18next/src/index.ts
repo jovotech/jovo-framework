@@ -1,4 +1,4 @@
-export {I18Next} from './I18Next';
+export {I18Next, Config} from './I18Next';
 declare module 'jovo-core/dist/src/Cms' {
     interface Cms {
         t(): string;

@@ -16,7 +16,7 @@ export interface Config extends PluginConfig {
     resources?: any; // tslint:disable-line
 }
 
-export class I18Next extends BaseCmsPlugin{
+export class I18Next extends BaseCmsPlugin {
     config: Config = {
         filesDir: './i18n',
         load: 'all',
@@ -24,6 +24,7 @@ export class I18Next extends BaseCmsPlugin{
         interpolation: {
             escapeValue: false, // do not escape ssml tags
         },
+        resources: undefined,
     };
 
     constructor(config?: Config) {
