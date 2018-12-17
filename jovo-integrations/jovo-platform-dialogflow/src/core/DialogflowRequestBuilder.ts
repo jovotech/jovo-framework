@@ -104,7 +104,7 @@ export class DialogflowRequestBuilder implements RequestBuilder {
             return DialogflowRequest.fromJSON(json);
         } else {
             // @ts-ignore
-            const request = JSON.stringify(require(samples['SessionEndedRequest']));
+            const request = JSON.stringify(require(getJsonFilePath('Cancel')));
             return DialogflowRequest.fromJSON(JSON.parse(request));
         }
     }

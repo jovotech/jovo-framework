@@ -1,4 +1,4 @@
-import {Plugin, HandleRequest} from "jovo-core";
+import {Plugin, HandleRequest, EnumRequestType} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
@@ -14,6 +14,8 @@ export class GoogleAssistantCore implements Plugin {
 
     install(googleAssistant: GoogleAssistant) {
         googleAssistant.middleware('$init')!.use(this.init.bind(this));
+        googleAssistant.middleware('$type')!.use(this.type.bind(this));
+
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
         googleAssistant.middleware('after.$output')!.use(this.userStorage.bind(this));
 
@@ -37,7 +39,11 @@ export class GoogleAssistantCore implements Plugin {
         }
     }
 
-
+    type(googleAction: GoogleAction) {
+        if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.CANCEL') {
+            _set(googleAction.$type, 'type', EnumRequestType.END);
+        }
+    }
 
     async output(googleAction: GoogleAction) {
         const output = googleAction.$output;
