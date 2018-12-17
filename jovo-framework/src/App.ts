@@ -15,7 +15,6 @@ import {JovoUser} from "./middleware/user/JovoUser";
 import {I18Next, Config as I18NextConfig} from "jovo-cms-i18next";
 import {Handler} from "./middleware/Handler";
 import {Router, Config as RouterConfig} from "./middleware/Router";
-import {UserContextConfig} from "../dist/jovo-framework/src/App";
 
 export class App extends BaseApp {
     config: Config = {
@@ -116,7 +115,6 @@ export class App extends BaseApp {
                 }
             }
 
-            console.log(this.config.plugin.JovoUser);
         }
 
         // inputMap
@@ -197,6 +195,7 @@ export class App extends BaseApp {
     setConfig(config: Config) {
         this.config = _merge(this.config, config);
         this.mergePluginConfiguration();
+        this.initConfig();
         this.v1ConfigMigration();
         this.init();
     }
@@ -299,7 +298,7 @@ export class App extends BaseApp {
      * @deprecated
      * @param {UserContextConfig} userContext
      */
-    setUserContext(userContext: UserContextConfig) {
+    setUserContext(userContext: ContextConfig) {
         if (!this.config.user) {
             this.config.user = {};
         }

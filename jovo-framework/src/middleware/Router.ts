@@ -54,7 +54,7 @@ export class Router implements Plugin {
                 throw new Error(`Couldn't get route for intent request.`);
             }
 
-            const intent = Router.mapIntentName(handleRequest.app.config.plugin.Router, handleRequest.jovo.$nlu.intent.name);
+            const intent = Router.mapIntentName(this.config, handleRequest.jovo.$nlu.intent.name);
             route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), intent);
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
