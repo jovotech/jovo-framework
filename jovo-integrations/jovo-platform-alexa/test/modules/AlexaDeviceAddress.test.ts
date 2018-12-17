@@ -4,7 +4,7 @@ import {AlexaAPI} from "../../src/services/AlexaAPI";
 import {AlexaAPIResponse} from "../../src/services/AlexaAPIResponse";
 import {ApiError} from "../../src/services/ApiError";
 import {AlexaDeviceAddress} from "../../src/services/AlexaDeviceAddress";
-jest.mock('../src/services/AlexaAPI');
+jest.mock('../../src/services/AlexaAPI');
 
 process.env.NODE_ENV = 'TEST';
 

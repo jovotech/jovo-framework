@@ -70,7 +70,6 @@ test('test user', () => {
             metaData: true,
         }
     });
-    console.log(app.config.plugin.JovoUser.context);
     expect(app.config.plugin.JovoUser.context.enabled).toBe(true);
     expect(app.config.plugin.JovoUser.metaData.enabled).toBe(true);
 
