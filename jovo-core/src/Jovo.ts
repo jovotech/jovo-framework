@@ -228,7 +228,7 @@ export abstract class Jovo extends EventEmitter {
     }
 
     output(obj: Output) {
-        Object.assign(this.output, obj);
+        Object.assign(this.$output, obj);
         return this;
     }
 
