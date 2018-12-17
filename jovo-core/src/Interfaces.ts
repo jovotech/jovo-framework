@@ -134,7 +134,7 @@ export interface JovoRequest {
     setState(state: string): this;
 
 
-    getIntentName(): string;
+    getIntentName(): string | undefined;
     getInputs(): any; // tslint:disable-line
     addInput(key: string, value: string): this;
 }

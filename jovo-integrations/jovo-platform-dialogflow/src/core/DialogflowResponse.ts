@@ -1,7 +1,5 @@
 import _get = require('lodash.get');
-import _set = require('lodash.set');
-import {JovoResponse, SessionConstants} from "jovo-core";
-import {SessionData} from "../../../../jovo-core/dist/src";
+import {JovoResponse, SessionConstants, SessionData} from "jovo-core";
 
 export interface Payload {
     [key: string]: JovoResponse;

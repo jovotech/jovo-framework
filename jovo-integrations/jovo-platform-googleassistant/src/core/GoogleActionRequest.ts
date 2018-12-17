@@ -2,10 +2,9 @@
 /**
  * Base class of a request from alexa
  */
-import {JovoRequest} from "jovo-core";
+import {JovoRequest, SessionData} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
-import {SessionData} from "../../../../jovo-core/dist/src";
 
 interface User {
     userId: string;
