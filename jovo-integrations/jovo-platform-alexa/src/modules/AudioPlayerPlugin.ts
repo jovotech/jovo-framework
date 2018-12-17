@@ -53,6 +53,8 @@ export class AudioPlayer {
         this.alexaSkill = alexaSkill;
 
         this.offsetInMilliseconds = _get(alexaSkill.$request, 'context.AudioPlayer.offsetInMilliseconds');
+        this.token = _get(alexaSkill.$request, 'context.AudioPlayer.token') || _get(alexaSkill.$request, 'request.token');
+
     }
 
     /**
