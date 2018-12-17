@@ -25,6 +25,9 @@ export class GoogleActionUser extends User {
         }
     }
 
+    getAccessToken() {
+        return this.googleAction.$request!.getAccessToken();
+    }
     getId(): string {
         const userId = this.$storage.userId ||
             this.googleAction.$request!.getUserId() ||

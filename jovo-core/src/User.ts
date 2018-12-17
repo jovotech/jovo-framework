@@ -4,6 +4,8 @@ export abstract class User {
     new = true;
     jovo: Jovo;
 
+
+
     constructor(jovo: Jovo) {
         this.jovo = jovo;
     }
@@ -13,4 +15,7 @@ export abstract class User {
     isNew(): boolean {
         return this.new;
     }
+
+
+    abstract getAccessToken(): string;
 }

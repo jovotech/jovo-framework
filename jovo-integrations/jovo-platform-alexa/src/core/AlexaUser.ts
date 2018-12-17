@@ -38,6 +38,10 @@ export class AlexaUser extends User {
         );
     }
 
+    getAccessToken() {
+        return this.alexaSkill.$request!.getAccessToken();
+    }
+
     getId(): string {
         return this.alexaSkill.$request!.getUserId();
     }
