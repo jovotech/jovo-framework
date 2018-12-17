@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-hello-world",
-  "version": "2.0.2-beta.4",
+  "version": "2.0.2-beta.5",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -14,17 +14,17 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.2-beta.4",
-    "jovo-platform-alexa": "^2.0.2-beta.4",
-    "jovo-platform-googleassistant": "^2.0.2-beta.4"
+    "jovo-framework": "^2.0.2-beta.5",
+    "jovo-platform-alexa": "^2.0.2-beta.5",
+    "jovo-platform-googleassistant": "^2.0.2-beta.5"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
-    "jovo-db-filedb": "^2.0.2-beta.4",
-    "jovo-plugin-debugger": "^2.0.2-beta.4",
+    "jovo-db-filedb": "^2.0.2-beta.5",
+    "jovo-plugin-debugger": "^2.0.2-beta.5",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
