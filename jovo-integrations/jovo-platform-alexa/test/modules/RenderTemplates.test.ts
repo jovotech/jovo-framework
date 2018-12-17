@@ -1,13 +1,13 @@
 
-import {BodyTemplate1} from "../src/response/visuals/BodyTemplate1";
-import {Template} from "../src/response/visuals/Template";
-import {BodyTemplate2} from "../src/response/visuals/BodyTemplate2";
-import {BodyTemplate3} from "../src/response/visuals/BodyTemplate3";
-import {BodyTemplate6} from "../src/response/visuals/BodyTemplate6";
-import {BodyTemplate7} from "../src/response/visuals/BodyTemplate7";
-import {ListItem, ListTemplate1} from "../src/response/visuals/ListTemplate1";
-import {ListTemplate2} from "../src/response/visuals/ListTemplate2";
-import {ListTemplate3} from "../src/response/visuals/ListTemplate3";
+import {BodyTemplate1} from "../../src/response/visuals/BodyTemplate1";
+import {Template} from "../../src/response/visuals/Template";
+import {BodyTemplate2} from "../../src/response/visuals/BodyTemplate2";
+import {BodyTemplate3} from "../../src/response/visuals/BodyTemplate3";
+import {BodyTemplate6} from "../../src/response/visuals/BodyTemplate6";
+import {BodyTemplate7} from "../../src/response/visuals/BodyTemplate7";
+import {ListItem, ListTemplate1} from "../../src/response/visuals/ListTemplate1";
+import {ListTemplate2} from "../../src/response/visuals/ListTemplate2";
+import {ListTemplate3} from "../../src/response/visuals/ListTemplate3";
 
 process.env.NODE_ENV = 'TEST';
 

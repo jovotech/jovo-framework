@@ -1,8 +1,8 @@
-import {AlexaContact} from "../src/services/AlexaContact";
+import {AlexaContact} from "../../src/services/AlexaContact";
 
-import {AlexaAPI} from "../src/services/AlexaAPI";
-import {AlexaAPIResponse} from "../src/services/AlexaAPIResponse";
-import {ApiError} from "../src/services/ApiError";
+import {AlexaAPI} from "../../src/services/AlexaAPI";
+import {AlexaAPIResponse} from "../../src/services/AlexaAPIResponse";
+import {ApiError} from "../../src/services/ApiError";
 jest.mock('../src/services/AlexaAPI');
 
 process.env.NODE_ENV = 'TEST';

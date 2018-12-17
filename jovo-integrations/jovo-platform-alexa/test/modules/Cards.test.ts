@@ -1,13 +1,13 @@
 
 
-import {Card} from "../src/response/visuals/Card";
-import {SimpleCard} from "../src/response/visuals/SimpleCard";
-import {StandardCard} from "../src/response/visuals/StandardCard";
-import {LinkAccountCard} from "../src/response/visuals/LinkAccountCard";
-import {AskForPermissionConsentCard} from "../src/response/visuals/AskForPermissionConsentCard";
-import {AskForListPermissionsCard} from "../src/response/visuals/AskForListPermissionsCard";
-import {AskForLocationPermissionsCard} from "../src/response/visuals/AskForLocationPermissionsCard";
-import {AskForContactPermissionsCard} from "../src/response/visuals/AskForContactPermissionsCard";
+import {Card} from "../../src/response/visuals/Card";
+import {SimpleCard} from "../../src/response/visuals/SimpleCard";
+import {StandardCard} from "../../src/response/visuals/StandardCard";
+import {LinkAccountCard} from "../../src/response/visuals/LinkAccountCard";
+import {AskForPermissionConsentCard} from "../../src/response/visuals/AskForPermissionConsentCard";
+import {AskForListPermissionsCard} from "../../src/response/visuals/AskForListPermissionsCard";
+import {AskForLocationPermissionsCard} from "../../src/response/visuals/AskForLocationPermissionsCard";
+import {AskForContactPermissionsCard} from "../../src/response/visuals/AskForContactPermissionsCard";
 
 process.env.NODE_ENV = 'TEST';
 
