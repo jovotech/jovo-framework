@@ -1,0 +1,23 @@
+{
+  "name": "jovo-examples-analytics",
+  "version": "2.0.2-beta.5",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-analytics-botanalytics": "^2.0.2-beta.5",
+    "jovo-framework": "^2.0.2-beta.5",
+    "jovo-platform-alexa": "^2.0.2-beta.5",
+    "jovo-platform-googleassistant": "^2.0.2-beta.5"
+  },
+  "devDependencies": {
+    "jovo-plugin-debugger": "^2.0.2-beta.5"
+  }
+}

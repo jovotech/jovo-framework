@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {},
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Simple Ask</speak>"
+    },
+    "reprompt": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>Simple Ask Reprompt</speak>"
+      }
+    },
+    "shouldEndSession": false
+  }
+}

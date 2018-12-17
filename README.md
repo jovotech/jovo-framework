@@ -10,7 +10,7 @@
 
 <p align="center">
 <a href="https://travis-ci.org/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
+<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://img.shields.io/npm/v/jovo-framework/beta.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
 <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
@@ -19,16 +19,16 @@
 
 ```javascript
 app.setHandler({
-    'LAUNCH': function() {
+    LAUNCH() {
         this.toIntent('HelloWorldIntent');
     },
 
-    'HelloWorldIntent': function() {
+    HelloWorldIntent() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 
-    'MyNameIsIntent': function(name) {
-        this.tell('Hey ' + name.value + ', nice to meet you!');
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
     },
 });
 ```
@@ -132,7 +132,10 @@ Skill Events | Get notified when an event (e.g. Skill enabled/disabled) occurs |
 CanFulfillIntentRequest | Add name-free interaction to your skill and increase your skill's discoverability | [📝](./docs/05_platform-specifics/amazon-alexa/canfulfill.md)
 Game Engine | Provides the toolset to receive Echo Button events | [📝](./docs/05_platform-specifics/amazon-alexa/game-engine.md)
 Gadget Controller | Allows you to control the user's Echo Buttons | [📝](./docs/05_platform-specifics/amazon-alexa/gadget-controller.md)
-
+In-Skill-Purchasing (ISP) | Allows you to sell premium content | [📝](./docs/05_platform-specifics/amazon-alexa/in-skill-purchases.md)
+Reminders API | Allows you to set reminders for your user | [📝](./docs/05_platform-specifics/amazon-alexa/reminders.md)
+Settings API | Allows you to get your user's settings information | [📝](./docs/05_platform-specifics/amazon-alexa/settings.md)
+Playback Controller | Process audio player requests coming from, for example, touch controls on Alexa-enabled devices | [📝](./docs/05_platform-specifics/amazon-alexa/audioplayer.md#playback-controller)
 
 #### Google Assistant
 
@@ -150,8 +153,7 @@ The following features are **not** implemented yet. We appreciate any kind of he
 
 Platform | Feature | Docs
 :--- | :--- | :---
-**Amazon Alexa** | PlaybackController Interface | [📝](https://developer.amazon.com/docs/custom-skills/playback-controller-interface-reference.html)
-&nbsp; | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
+**Amazon Alexa** | Notifications | [📝](https://developer.amazon.com/docs/alexa-voice-service/notifications-overview.html)
 **Google Action** | Table Card | [📝](https://developers.google.com/actions/assistant/responses#table_card)
 &nbsp; | Transactions | [📝](https://developers.google.com/actions/transactions/)
 &nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)
