@@ -74,6 +74,10 @@ export class GoogleActionRequest implements JovoRequest {
     isInSandbox?: boolean;
     availableSurfaces?: Surface;
 
+
+    getIntentName() {
+        return undefined;
+    }
     getSessionData() {
         return this.getSessionAttributes();
     }

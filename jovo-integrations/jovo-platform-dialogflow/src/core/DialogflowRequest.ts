@@ -87,7 +87,9 @@ export class DialogflowRequest implements JovoRequest {
         return true;
     }
 
-
+    getIntentName() {
+        return this.queryResult.intent.displayName;
+    }
 
     setUserId(userId: string) {
         if (typeof _get(this.originalDetectIntentRequest, 'payload.setUserId') === 'function') {
