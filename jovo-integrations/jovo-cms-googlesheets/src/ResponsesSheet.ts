@@ -2,6 +2,8 @@ import {Extensible, HandleRequest, Cms} from 'jovo-core';
 import * as i18n from 'i18next';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
+import _get = require('lodash.get');
+
 import { DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
 
 
@@ -54,10 +56,9 @@ export class ResponsesSheet extends DefaultSheet {
 
         const headers: string[] = values[0];
         const resources = {};
-
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
-            for (let j = 1; j < row.length; j++) {
+            for (let j = 1; j < headers.length; j++) {
                 const cell: string = row[j];
                 let locale: string = headers[j];
 
@@ -66,7 +67,16 @@ export class ResponsesSheet extends DefaultSheet {
                     locale = locale.substr(0, 2) + '-' + locale.substr(3).toUpperCase();
                 }
 
-                _set(resources, `${locale}.translation.${row[0]}`, cell);
+                // match locale
+                // thx to https://stackoverflow.com/a/48300605/10204142
+                if (!locale.match(/^[A-Za-z]{2,4}([_-]([A-Za-z]{4}|[0-9]{3}))?([_-]([A-Za-z]{2}|[0-9]{3}))?$/)) {
+                    continue;
+                }
+
+                const valueArray = _get(resources, `${locale}.translation.${row[0]}`, []);
+                valueArray.push(cell);
+
+                _set(resources, `${locale}.translation.${row[0]}`, valueArray);
             }
         }
         const entity = this.config.entity || this.config.name;
