@@ -10,12 +10,12 @@ if (process.argv.indexOf('--webhook') > -1) {
         console.info(`Local server listening on port ${port}!`);
     });
 
-    Webhook.post('/webhook', async (req: any, res: any) => {
+    Webhook.post('/webhook', async (req: any, res: any) => { // tslint:disable-line
         await app.handle(new ExpressJS(req, res));
     });
 }
 
 // AWS Lambda
-exports.handler = async (event: any, context: any, callback: Function) => {
+exports.handler = async (event: any, context: any, callback: Function) => { // tslint:disable-line
     await app.handle(new Lambda(event, context, callback));
 };
