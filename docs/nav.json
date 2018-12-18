@@ -341,6 +341,10 @@
                         {
                             "title": "MySQL",
                             "route": "databases/mysql"
+                        },
+                        {
+                            "title": "MongoDB",
+                            "route": "databases/mongodb"
                         }
                     ]
                 },
