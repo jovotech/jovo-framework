@@ -17,5 +17,5 @@ export abstract class User {
     }
 
 
-    abstract getAccessToken(): string;
+    abstract getAccessToken(): string | undefined;
 }

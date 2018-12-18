@@ -6,6 +6,10 @@ export class DialogflowUser extends User {
         super(jovo);
     }
 
+    getAccessToken(): string | undefined {
+        return undefined;
+    }
+
     getId(): string {
         return 'TemporaryDialogflowUserId';
     }
