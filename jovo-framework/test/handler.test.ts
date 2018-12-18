@@ -67,6 +67,31 @@ test('test throw exception on non existing route', (done) => {
     });
 });
 
+test('test skip exception on non existing route', async (done) => {
+    const appConfig: AppConfig = {
+        handlers: {
+            ON_REQUEST() {
+
+            },
+            IntentA() {
+
+            },
+            Unhandled() {
+                console.log('unhandled');
+            },
+        }
+    };
+
+    // @ts-ignore
+    await Handler.applyHandle(null, {
+        path: 'NonExistingPath',
+        type: EnumRequestType.INTENT,
+    }, appConfig);
+
+    done();
+});
+
+
 test('test handleOnRequest', () => {
     const appConfig: AppConfig = {
         handlers: {
@@ -81,3 +106,4 @@ test('test handleOnRequest', () => {
     Handler.handleOnRequest(null, appConfig);
     expect(spy).toBeCalled();
 });
+

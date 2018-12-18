@@ -146,12 +146,22 @@ export class Handler implements Plugin {
         }
 
         // // throw error if no handler and no UNHANDLED on same level
-        if (!_get(config.handlers, route.path)) {
+        if (
+            !(
+            _get(config.handlers, EnumRequestType.NEW_SESSION) ||
+            _get(config.handlers, EnumRequestType.NEW_USER) ||
+            _get(config.handlers, EnumRequestType.ON_REQUEST)
+            ) &&
+
+            !_get(config.handlers, route.path)) {
             return Promise.reject(
                 new Error(`Could not find the route "${route.path}" in your handler function.`)); // eslint-disable-line
         }
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
-        return await _get(config.handlers, route.path).apply(jovo, [jovo]);
+
+        if (_get(config.handlers, route.path)) {
+            return await _get(config.handlers, route.path).apply(jovo, [jovo]);
+        }
     }
 
     async error(handleRequest: HandleRequest) {
