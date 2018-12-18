@@ -45,12 +45,14 @@ export class Router implements Plugin {
             type: handleRequest.jovo.$type.type,
             path: handleRequest.jovo.$type.type,
         };
-        if (handleRequest.jovo.$type.type && handleRequest.jovo.$type.subType) {
+        if (handleRequest.jovo.$type.type &&
+            handleRequest.jovo.$type.subType) {
             route.path = `${handleRequest.jovo.$type.type}["${handleRequest.jovo.$type.subType}"]`;
         }
         if (route.type === EnumRequestType.INTENT) {
             // do intent stuff
-            if (!handleRequest.jovo.$nlu || !handleRequest.jovo.$nlu.intent) {
+            if (!handleRequest.jovo.$nlu ||
+                !handleRequest.jovo.$nlu.intent) {
                 throw new Error(`Couldn't get route for intent request.`);
             }
 
@@ -58,6 +60,10 @@ export class Router implements Plugin {
             route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), intent);
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
+            if(typeof _get(handleRequest.app.config,`handlers.${EnumRequestType.END}`) === 'function') {
+                route.path = EnumRequestType.END;
+            }
+
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
             if(typeof _get(handleRequest.app.config,`handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
                 route.path = EnumRequestType.ON_ELEMENT_SELECTED;

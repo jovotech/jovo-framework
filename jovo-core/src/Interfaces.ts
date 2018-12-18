@@ -140,6 +140,7 @@ export interface JovoRequest {
 }
 
 export interface Input {
+    name?: string;
     key?: string;
     value?: string;
     id?: string;

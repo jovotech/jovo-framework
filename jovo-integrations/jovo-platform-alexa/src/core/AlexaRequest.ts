@@ -1,4 +1,4 @@
-import {Input, JovoRequest, SessionData} from "jovo-core";
+import {Input, JovoRequest, SessionData, Inputs} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -100,7 +100,12 @@ export interface Request {
 }
 
 export interface AlexaInput extends Input {
-    alexaSkill?: any; //tslint:disable-line
+    alexaSkill: {
+        name?: string;
+        value?: string;
+        confirmationStatus?: string;
+        source?: string;
+    };
 }
 
 
@@ -112,6 +117,7 @@ export interface AlexaRequestJSON {
     context?: Context;
     session?: Session;
     request?: Request;
+    resolutions?: any; // tslint:disable-line
 }
 
 
@@ -132,8 +138,8 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'context.System.user.accessToken');
     }
 
-    getInputs(): AlexaInput[] {
-        const inputs: any = {}; //tslint:disable-line
+    getInputs(): Inputs {
+        const inputs: Inputs = {};
         const slots = this.getSlots();
         if (!slots) {
             return inputs;
@@ -142,6 +148,7 @@ export class AlexaRequest implements JovoRequest {
         Object.keys(slots).forEach((slot) => {
 
             const input: AlexaInput = {
+                name: slot,
                 alexaSkill: slots[slot],
             };
             if (slots[slot].value) {

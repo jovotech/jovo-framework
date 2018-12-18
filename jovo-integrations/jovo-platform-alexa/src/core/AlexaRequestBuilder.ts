@@ -5,9 +5,12 @@ import * as path from 'path';
 const samples: {[key: string]: string} = {
     'LaunchRequest': 'LaunchRequest.json',
     'IntentRequest1': 'IntentRequest1.json',
+    'IntentRequestWithSlot': 'IntentRequestWithSlot.json',
+    'IntentRequestWithSlotResolution': 'IntentRequestWithSlotResolution.json',
     'Connections.Response': 'Connections.Response.json',
     'AudioPlayer.PlaybackStarted': 'AudioPlayer.PlaybackStarted.json',
     'SessionEndedRequest': 'SessionEndedRequest.json',
+    'System.ExceptionEncountered': 'System.ExceptionEncountered.json',
 };
 
 export class AlexaRequestBuilder implements RequestBuilder {
@@ -29,7 +32,6 @@ export class AlexaRequestBuilder implements RequestBuilder {
                     }
                 }
             }
-
             return req;
         } else {
             return await this.intentRequest(obj);

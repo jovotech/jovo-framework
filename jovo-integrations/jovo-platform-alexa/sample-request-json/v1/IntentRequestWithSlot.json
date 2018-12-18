@@ -1,0 +1,58 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.27e37d8e-3485-4f89-aa8a-4776b7a83ce9",
+    "application": {
+      "applicationId": "amzn1.ask.skill.5023bec0-da4f-4bfd-b17f-2df8826fce08"
+    },
+    "attributes": {
+      "_JOVO_STATE_": "NameState"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.AEPN2D5SW3O36NGIVE3JKCTOX2B63G3ISBQIY4ZDSE",
+      "permissions": {
+        "consentToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIs"
+      }
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.5023bec0-da4f-4bfd-b17f-2df8826fce08"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AEPN2D5SW3O36NGIVE3J",
+        "permissions": {
+          "consentToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUz"
+        }
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.AHENPV7J5ITROUGLIB73OVK6UMDYMO3FD7AEGJD2",
+        "supportedInterfaces": {
+          "Geolocation": {}
+        }
+      },
+      "apiEndpoint": "https://api.eu.amazonalexa.com",
+      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.ey"
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.9b73f060-c894-460d-9b63-0cb858885156",
+    "timestamp": "2018-12-18T09:47:45Z",
+    "locale": "de-DE",
+    "intent": {
+      "name": "MyNameIsIntent",
+      "confirmationStatus": "NONE",
+      "slots": {
+        "name": {
+          "name": "name",
+          "value": "jeff",
+          "confirmationStatus": "NONE",
+          "source": "USER"
+        }
+      }
+    }
+  }
+}
