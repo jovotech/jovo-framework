@@ -105,6 +105,10 @@ export class AlexaSkill extends Jovo {
         return (this.$request! as AlexaRequest).hasAPLInterface();
     }
 
+    hasGeoLocationInterface() {
+        return (this.$request! as AlexaRequest).hasGeoLocationInterface();
+    }
+
     getType() {
         return 'AlexaSkill';
     }
