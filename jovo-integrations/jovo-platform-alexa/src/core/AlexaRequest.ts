@@ -407,6 +407,10 @@ export class AlexaRequest implements JovoRequest {
         return typeof _get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
     }
 
+    hasAPLInterface() {
+        return typeof _get(this.getSupportedInterfaces(), 'Alexa.Presentation.APL') !== 'undefined';
+    }
+
     getIntentName() {
         return _get(this, 'request.intent.name');
     }

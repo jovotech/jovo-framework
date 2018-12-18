@@ -101,6 +101,10 @@ export class AlexaSkill extends Jovo {
         return this.$request!.hasVideoInterface();
     }
 
+    hasAPLInterface() {
+        return (this.$request! as AlexaRequest).hasAPLInterface();
+    }
+
     getType() {
         return 'AlexaSkill';
     }
