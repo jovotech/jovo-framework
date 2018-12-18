@@ -1,4 +1,4 @@
-import { Analytics, PluginConfig, BaseApp, HandleRequest, Jovo } from "jovo-core";
+import { Analytics, PluginConfig, BaseApp, HandleRequest, Jovo, Inputs } from "jovo-core";
 import * as https from 'https';
 import _merge = require('lodash.merge');
 
@@ -53,54 +53,95 @@ export class ChatbaseAlexa implements Analytics {
         );
     }
 
-    buildMessages(jovo: Jovo, timeStamp: number, sessionId: string, responseMessage: string) {
-        const slots = [];
+    buildMessages(
+        jovo: Jovo,
+        timeStamp: number,
+        sessionId: string,
+        responseMessage: string
+    ) {
+        const userId = jovo.$request!.getUserId();
+
+        return {
+            messages: [
+                this.buildUserMessage(jovo, userId, timeStamp, sessionId),
+                this.buildAgentMessage(userId, responseMessage, sessionId),
+            ],
+        };
+    }
+
+    buildAgentMessage(userId: string, message: string, sessionId: string) {
+        return {
+            api_key: this.config.key,
+            type: 'agent',
+            user_id: userId,
+            time_stamp: Date.now(),
+            platform: 'Alexa',
+            message,
+            version: this.config.appVersion,
+            session_id: sessionId,
+        };
+    }
+
+    buildUserMessage(
+        jovo: Jovo,
+        userId: string,
+        timeStamp: number,
+        sessionId: string
+    ) {
+        const unhandledRx = /Unhandled$/;
         const intentSlots = jovo.$inputs;
         let intentName = '';
-        const userId = jovo.$request!.getUserId();
         let message = '';
 
-        if(jovo.$type.type === 'INTENT') {
-            if(intentSlots) {
-                for(const name in intentSlots) {
-                    if(intentSlots[name] && intentSlots[name].value) {
-                        const value = intentSlots[name].value;
-                        slots.push(`${name}: ${value}`);
-                    }
-                }
-                intentName = jovo.$request!.toJSON().request.intent.name;
-                message = intentName + '\n' + slots.join('\n');
-            }
+        const notHandled = unhandledRx.test(jovo.$plugins.Router.route.path);
+
+        if (jovo.$type.type === 'INTENT') {
+            intentName = notHandled
+                ? jovo.$request!.toJSON().request.intent.name
+                : jovo.$plugins.Router.route.path;
+
+            message = this.buildMessage(intentName, intentSlots);
         } else {
             intentName = jovo.$type.type!;
         }
 
         return {
-            messages: [
-                {
-                    api_key: this.config.key,
-                    type: 'user',
-                    user_id: userId,
-                    time_stamp: timeStamp,
-                    platform: 'Alexa',
-                    intent: intentName,
-                    message,
-                    not_handled: jovo.$plugins.Router.route.path, // TODO substring with path
-                    version: this.config.appVersion,
-                    session_id: sessionId,
-                },
-                {
-                    api_key: this.config.key,
-                    type: 'agent',
-                    user_id: userId,
-                    time_stamp: Date.now(),
-                    platform: 'Alexa',
-                    responseMessage,
-                    version: this.config.appVersion,
-                    session_id: sessionId,
-                }
-            ]
+            api_key: this.config.key,
+            type: 'user',
+            user_id: userId,
+            time_stamp: timeStamp,
+            platform: 'Alexa',
+            intent: intentName,
+            message,
+            not_handled: notHandled,
+            version: this.config.appVersion,
+            session_id: sessionId,
         };
+    }
+
+    buildMessage(intentName: string, intentSlots: Inputs) {
+        const messageElements = [intentName];
+        if (intentSlots) {
+            const slots = this.buildMessageSlotString(intentSlots);
+            if (slots.length) {
+                messageElements.push(slots);
+            }
+        }
+        return messageElements.join('\n');
+    }
+
+    /**
+     * Takes an Inputs object, and converts it into a readable string for analtyics
+     * @param intentSlots All of the slots passed to the intent
+     */
+    buildMessageSlotString(intentSlots: Inputs): string {
+        const slots = [];
+        for (const name in intentSlots) {
+            if (intentSlots[name] !== undefined) {
+                slots.push(`${name}: ${intentSlots[name]}`);
+            }
+        }
+        return slots.join('\n').trim();
     }
 
     sendDataToChatbase(data: string) {
