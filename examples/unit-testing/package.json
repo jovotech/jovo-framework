@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-unittesting",
-  "version": "2.0.2-beta.6",
+  "version": "2.0.2-beta.7",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,11 +12,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.0.2-beta.6",
-    "jovo-framework": "^2.0.2-beta.6",
-    "jovo-platform-alexa": "^2.0.2-beta.6",
-    "jovo-platform-googleassistant": "^2.0.2-beta.6",
-    "jovo-plugin-debugger": "^2.0.2-beta.6"
+    "jovo-db-filedb": "^2.0.2-beta.7",
+    "jovo-framework": "^2.0.2-beta.7",
+    "jovo-platform-alexa": "^2.0.2-beta.7",
+    "jovo-platform-googleassistant": "^2.0.2-beta.7",
+    "jovo-plugin-debugger": "^2.0.2-beta.7"
   },
   "devDependencies": {
     "jest": "^23.4.2"
