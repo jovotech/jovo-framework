@@ -5,6 +5,7 @@ import _get = require('lodash.get');
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
+import {AudioPlayer} from "../../../jovo-platform-alexa/src/modules/AudioPlayerPlugin";
 
 export interface MediaObject {
     name: string;
@@ -61,14 +62,11 @@ export class MediaResponsePlugin implements Plugin {
 
 
         GoogleAction.prototype.audioPlayer = function() {
-            return this.mediaResponse();
+            return this.$mediaResponse;
         };
 
         GoogleAction.prototype.mediaResponse = function() {
-            if (!_get(this.$plugins, 'MediaResponsePlugin.mediaResponse')) {
-                _set(this.$plugins, 'MediaResponsePlugin.mediaResponse', new MediaResponse(this));
-            }
-            return _get(this.$plugins, 'MediaResponsePlugin.mediaResponse');
+            return this.$mediaResponse;
         };
     }
 
@@ -83,8 +81,10 @@ export class MediaResponsePlugin implements Plugin {
                     _set(googleAction.$type, 'subType', `GoogleAction.${status}`);
                 }
             }
-
         }
+
+        googleAction.$mediaResponse = new MediaResponse(googleAction);
+        googleAction.$audioPlayer = googleAction.$mediaResponse;
     }
 
     output(googleAction: GoogleAction) {

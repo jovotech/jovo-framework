@@ -308,8 +308,8 @@ declare module './core/GoogleAction' {
         $audioPlayer?: MediaResponse;
         $mediaResponse?: MediaResponse;
 
-        audioPlayer(): MediaResponse;
-        mediaResponse(): MediaResponse;
+        audioPlayer(): MediaResponse | undefined;
+        mediaResponse(): MediaResponse | undefined;
     }
 }
 
