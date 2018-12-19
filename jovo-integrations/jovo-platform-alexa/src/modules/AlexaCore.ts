@@ -123,8 +123,13 @@ export class AlexaCore implements Plugin {
             if (alexaSkill.$session && alexaSkill.$session.$data) {
                 _set(alexaSkill.$response, 'sessionAttributes', alexaSkill.$session.$data);
             }
+        }
+
+        if (_get(output, 'Alexa.Directives')) {
+            _set(alexaSkill.$response, 'directives', _get(output, 'Alexa.Directives'));
 
         }
+
     }
 
 }

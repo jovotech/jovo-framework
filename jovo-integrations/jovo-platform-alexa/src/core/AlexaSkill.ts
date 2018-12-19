@@ -1,11 +1,14 @@
 import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
 import {AlexaRequest} from "./AlexaRequest";
 import _get = require('lodash.get');
+import _set = require('lodash.set');
+
 import {AlexaResponse} from "./AlexaResponse";
 import {AlexaAPI} from "../services/AlexaAPI";
 import {AmazonProfileAPI} from "../services/AmazonProfileAPI";
 import {AlexaSpeechBuilder} from "./AlexaSpeechBuilder";
 import {AlexaUser} from "./AlexaUser";
+import {AskForListPermissionsCard} from "../response/visuals/AskForListPermissionsCard";
 
 export class AlexaSkill extends Jovo {
     $alexaSkill: AlexaSkill;
@@ -191,6 +194,17 @@ export class AlexaSkill extends Jovo {
      */
     getType() {
         return 'AlexaSkill';
+    }
+
+
+    /**
+     * Adds raw json directive to output object
+     * @param directive
+     */
+    addDirective(directive: any) { // tslint:disable-line
+        const directives = _get(this.$output, 'Alexa.Directives', []);
+        directives.push(directive);
+        _set(this.$output, 'Alexa.Directives',directives);
     }
 
 
