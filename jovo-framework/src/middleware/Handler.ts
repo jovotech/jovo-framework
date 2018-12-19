@@ -85,7 +85,7 @@ export class Handler implements Plugin {
             const params = getParamNames(func);
 
             // no callback 'done' parameter
-            if (params.length === 0) {
+            if (params.length < 2) {
                 const result = func.apply(jovo);
 
                 if (!result) {
@@ -98,7 +98,7 @@ export class Handler implements Plugin {
             const callback = () => {
                 resolve();
             };
-            return func.apply(jovo, [callback]);
+            return func.apply(jovo, [jovo, callback]);
         });
     }
 
@@ -113,6 +113,8 @@ export class Handler implements Plugin {
      * @return {Promise<any>}
      */
     static async applyHandle(jovo: Jovo, route: Route, config: AppConfig, fromIntent?: boolean) {
+        // return new Promise((resolve, reject) => {
+
 
         // resolve if toIntent was triggered before
         if (jovo && jovo.triggeredToIntent && !fromIntent) {
@@ -160,8 +162,29 @@ export class Handler implements Plugin {
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
 
         if (_get(config.handlers, route.path)) {
-            return await _get(config.handlers, route.path).apply(jovo, [jovo]);
+
+            return await new Promise((resolve) => {
+                const func:Function = _get(config.handlers, route.path);
+                const params = getParamNames(func);
+
+                // no callback 'done' parameter
+                if (params.length < 2) {
+                    const result = func.apply(jovo);
+
+                    if (!result) {
+                        return resolve();
+                    } else {
+                        return result.then(resolve);
+                    }
+                }
+
+                const callback = () => {
+                    resolve();
+                };
+                return func.apply(jovo, [jovo, callback]);
+            });
         }
+
     }
 
     async error(handleRequest: HandleRequest) {
@@ -194,7 +217,13 @@ export class Handler implements Plugin {
 
         Jovo.prototype.triggeredToIntent = false;
 
-        Jovo.prototype.toIntent = async function (intent: string) {
+
+        /**
+         * Jumps to an intent in the order state > global > unhandled > error
+         * @public
+         * @param {string} intent name of intent
+         */
+        Jovo.prototype.toIntent = async function (intent: string): Promise<any> { // tslint:disable-line
             this.triggeredToIntent = true;
 
             const route = Router.intentRoute(
@@ -206,7 +235,13 @@ export class Handler implements Plugin {
         };
 
 
-        Jovo.prototype.toStateIntent = async function(state: string | undefined, intent: string) {
+        /**
+         * Jumps to state intent in the order state > unhandled > error
+         * @public
+         * @param {string} state name of state
+         * @param {string} intent name of intent
+         */
+        Jovo.prototype.toStateIntent = async function(state: string | undefined, intent: string): Promise<any> { // tslint:disable-line
             this.triggeredToIntent = true;
             this.setState(state);
             const route = Router.intentRoute(
@@ -217,11 +252,18 @@ export class Handler implements Plugin {
             return await Handler.applyHandle(this, route, this.$app!.config, true);
         };
 
+
+        /**
+         * Jumps from the inside of a state to a global intent
+         * @public
+         * @param {string} intent name of intent
+         */
         Jovo.prototype.toStatelessIntent = async function (intent: string) {
             this.triggeredToIntent = true;
             this.removeState();
             return this.toStateIntent(undefined, intent);
         };
+
 
         /**
          * Adds state to session attributes
@@ -232,6 +274,15 @@ export class Handler implements Plugin {
             return this.setState(state);
         };
 
+
+        /**
+         * Returns path to function inside the handler
+         * Examples
+         * LAUNCH = Launch function
+         * State1:IntentA => IntentA in state 'State1'
+         * @public
+         * @return {string}
+         */
         Jovo.prototype.getHandlerPath = function (): string {
             if (!this.$type || !this.$type.type) {
                 return 'No type';

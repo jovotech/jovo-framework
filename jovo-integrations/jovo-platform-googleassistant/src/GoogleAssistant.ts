@@ -9,6 +9,7 @@ import {
     Extensible,
     Platform,
     Jovo,
+    Handler,
     HandleRequest, ActionSet, TestSuite,ExtensibleConfig
 } from "jovo-core";
 
@@ -75,21 +76,37 @@ export class GoogleAssistant extends Extensible implements Platform {
         );
 
         Jovo.prototype.$googleAction = undefined;
+
+        /**
+         * Returns googleAction instance
+         * @returns {GoogleAction}
+         */
         Jovo.prototype.googleAction = function() {
             if (this.constructor.name !== 'GoogleAction') {
                 throw Error(`Can't handle request. Please use this.isGoogleAction()`);
             }
             return this as GoogleAction;
         };
+
+        /**
+         * Type of platform is Google Action
+         * @public
+         * @return {boolean} isGoogleAction
+         */
         Jovo.prototype.isGoogleAction = function() {
             return this.constructor.name === 'GoogleAction';
         };
 
-        BaseApp.prototype.setGoogleAssistantHandler = function(...handler: any[]) { // tslint:disable-line
-            if (this.$plugins.get('GoogleAssistant')!.config) {
+        /**
+         * Sets alexa handlers
+         * @public
+         * @param {*} handler
+         */
+        BaseApp.prototype.setGoogleAssistantHandler = function(...handler: Handler[]) { // tslint:disable-line
+            // if (this.$plugins.get('GoogleAssistant')!.config) {
                 // TODO
                 // (this.plugins.get('Alexa')!.config as Config).handler = handler;
-            }
+            // }
             return this;
         };
 

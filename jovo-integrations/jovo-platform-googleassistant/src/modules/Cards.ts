@@ -14,6 +14,14 @@ export class Cards implements Plugin {
         googleAssistant.middleware('$type')!.use(this.type.bind(this));
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
+
+        /**
+         * Adds basic card to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {BasicCard} basicCard
+         * @return {GoogleAction}
+         */
         GoogleAction.prototype.showBasicCard = function(basicCard: BasicCard) {
             if (!this.$output.GoogleAssistant) {
                 this.$output.GoogleAssistant = {};
@@ -26,6 +34,14 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Adds suggestion chips to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Array<String>} chips
+         * @return {GoogleAction}
+         */
         GoogleAction.prototype.showSuggestionChips = function(chips: string[]) {
             if (!this.$output.GoogleAssistant) {
                 this.$output.GoogleAssistant = {};
@@ -35,6 +51,13 @@ export class Cards implements Plugin {
             return this;
         };
 
+        /**
+         * Adds link out suggestion chip to response
+         * @public
+         * @param {string} destinationName
+         * @param {string} url
+         * @return {GoogleAction}
+         */
         GoogleAction.prototype.showLinkOutSuggestion = function(destinationName: string, url: string) {
             if (!this.$output.GoogleAssistant) {
                 this.$output.GoogleAssistant = {};
@@ -47,6 +70,31 @@ export class Cards implements Plugin {
             return this;
         };
 
+        /**
+         * Adds carousel element to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Carousel} carousel
+         * @return {GoogleAction}
+         */
+        GoogleAction.prototype.showCarousel = function(carousel: Carousel) {
+            if (!this.$output.GoogleAssistant) {
+                this.$output.GoogleAssistant = {};
+            }
+
+            this.$output.GoogleAssistant.Carousel = carousel;
+            return this;
+        };
+
+
+
+        /**
+         * Adds carousel browse element to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Carousel} carouselBrowse
+         * @return {GoogleAction}
+         */
         GoogleAction.prototype.showCarouselBrowse = function(carouselBrowse: CarouselBrowse) {
             if (!this.$output.GoogleAssistant) {
                 this.$output.GoogleAssistant = {};
@@ -70,9 +118,7 @@ export class Cards implements Plugin {
             if (!this.$output.GoogleAssistant) {
                 this.$output.GoogleAssistant = {};
             }
-
-            const table = new Table().setTitle(title).setSubtitle(subtitle).addColumns(columnHeaders).addRows(rowsText);
-            this.$output.GoogleAssistant.Table = table;
+            this.$output.GoogleAssistant.Table = new Table().setTitle(title).setSubtitle(subtitle).addColumns(columnHeaders).addRows(rowsText);
             return this;
         };
 
@@ -107,6 +153,13 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Returns token of the request
+         * (Touched/Selected Element )
+         * @public
+         * @return {*}
+         */
         GoogleAction.prototype.getSelectedElementId = function() {
             for (const argument of _get(this.$originalRequest || this.$request, 'inputs[0]["arguments"]', [])) {
                 if (argument.name === 'OPTION') {

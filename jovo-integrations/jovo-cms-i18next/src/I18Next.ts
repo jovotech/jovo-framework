@@ -38,14 +38,15 @@ export class I18Next extends BaseCmsPlugin {
         app.middleware('setup')!.use(this.loadFiles.bind(this));
 
         Jovo.prototype.t = function() {
-            this.$app!.$cms.I18Next.i18n.changeLanguage(this.getLocale());
+
+            this.$app!.$cms.I18Next.i18n.changeLanguage(this.$request!.getLocale());
             return this.$app!.$cms.I18Next.i18n.t.apply(
                 this.$app!.$cms.I18Next.i18n, arguments
             );
         };
 
         SpeechBuilder.prototype.t = function() {
-            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.getLocale());
+            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.$request!.getLocale());
             const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
                 this.jovo!.$app!.$cms.I18Next.i18n, arguments
             );
@@ -53,7 +54,7 @@ export class I18Next extends BaseCmsPlugin {
             return this;
         };
         SpeechBuilder.prototype.addT = function() {
-            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.getLocale());
+            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.$request!.getLocale());
             const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
                 this.jovo!.$app!.$cms.I18Next.i18n, arguments
             );
@@ -65,7 +66,7 @@ export class I18Next extends BaseCmsPlugin {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.getLocale());
+            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.$request!.getLocale());
             return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
                 this.$jovo.$app!.$cms.I18Next.i18n, arguments
             );
@@ -97,7 +98,7 @@ export class I18Next extends BaseCmsPlugin {
         }
 
         handleRequest.app.$cms.I18Next.i18n = i18n
-            .init(Object.assign(
+            .init(_merge(
                 {
                     resources: handleRequest.app.$cms.I18Next.resources
                 },

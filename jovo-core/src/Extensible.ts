@@ -78,13 +78,16 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             this.$plugins.set(name, plugin);
 
-            // this.config.plugin[name] = plugin.config;
             plugin.install(this);
             this.emit('use', plugin);
         });
         return this;
     }
 
+    /**
+     * Removes all plugins from extensible object
+     * Calls plugin's uninstall() method
+     */
     removeAll() {
         this.$plugins.forEach((entry: Plugin) => {
             entry.uninstall(this);

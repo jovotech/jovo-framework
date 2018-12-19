@@ -13,11 +13,23 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.0.2-beta.6"
+    "jovo-core": "^2.0.2-beta.6",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "lodash.sample": "^4.2.1",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.merge": "^4.6.1",
+    "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.3.1",
+    "@types/lodash.get": "^4.4.4",
+    "@types/lodash.set": "^4.3.4",
+    "@types/lodash.camelcase": "^4.3.4",
+    "@types/lodash.sample": "^4.2.4",
+    "@types/lodash.merge": "^4.6.4",
+    "@types/lodash.clonedeep": "^4.5.4",
     "jest": "^23.4.2",
     "jovo-framework": "^2.0.2-beta.6",
     "lodash.clonedeep": "^4.5.0",

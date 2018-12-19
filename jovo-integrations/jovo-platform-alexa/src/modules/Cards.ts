@@ -20,6 +20,16 @@ export class Cards implements Plugin {
 
         alexa.middleware('$output')!.use(this.output.bind(this));
 
+
+        /**
+         * Implementation of standard card
+         * Show a standard card with a card to the response object
+         * @public
+         * @param {string} title
+         * @param {string} text
+         * @param {*} image object with secured image url
+         * @return {AlexaSkill} this
+         */
         AlexaSkill.prototype.showStandardCard = function(title: string, text: string, image: {smallImageUrl: string, largeImageUrl: string}) {
             _set(this.$output, 'Alexa.StandardCard',
                 new StandardCard()
@@ -30,6 +40,13 @@ export class Cards implements Plugin {
             );
             return this;
         };
+
+
+        /**
+         * Shows ask for country and postal code card
+         * @public
+         * @return {AlexaSkill}
+         */
         AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
@@ -38,6 +55,12 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows ask for address card
+         * @public
+         * @return {Jovo}
+         */
         AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
@@ -46,6 +69,13 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows ask for list permission card
+         * @public
+         * @param {Array} types 'write' or 'read'
+         * @return {Jovo}
+         */
         AlexaSkill.prototype.showAskForListPermissionCard = function(types: string[]) {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForListPermissionsCard(types)
@@ -53,12 +83,26 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows ask for list permission card
+         * @public
+         * @param {Array} contactProperties name|given_name|email|mobile_number
+         * @return {Jovo}
+         */
         AlexaSkill.prototype.showAskForContactPermissionCard = function(contactProperties: string[]) {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForContactPermissionsCard(contactProperties)
             );
             return this;
         };
+
+
+        /**
+         * Adds card to response object
+         * @public
+         * @param {Card} card
+         */
         AlexaSkill.prototype.showCard = function(card: Card) {
             _set(this.$output, `Alexa.${card.constructor.name}`,
                 card

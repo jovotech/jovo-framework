@@ -18,17 +18,63 @@ export class GoogleAction extends Jovo {
         this.$speech = new GoogleActionSpeechBuilder(this);
         this.$reprompt = new GoogleActionSpeechBuilder(this);
     }
+
+
+    /**
+     * Returns locale of the request
+     * @deprecated use this.$request.getLocale() instead
+     * @return {string}
+     */
+    getLocale(): string {
+        return this.$request!.getLocale();
+    }
+
+    /**
+     * Returns timestamp of a user's request
+     * @return {string | undefined}
+     */
+    getTimestamp() {
+        return this.$request!.getTimestamp();
+    }
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     speechBuilder(): GoogleActionSpeechBuilder {
         return this.getSpeechBuilder();
     }
+
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     getSpeechBuilder(): GoogleActionSpeechBuilder {
         return new GoogleActionSpeechBuilder(this);
     }
 
+
+    /**
+     * Returns boolean if request is part of new session
+     * @public
+     * @return {boolean}
+     */
     isNewSession(): boolean {
         return this.$request!.isNewSession();
     }
 
+
+    /**
+     * Says speech and waits for answer from user.
+     * Reprompt when user input fails.
+     * Keeps session open.
+     * @public
+     * @param {string|SpeechBuilder} speech
+     * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
+     */
     ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string) {
         delete this.$output.tell;
 
@@ -38,11 +84,17 @@ export class GoogleAction extends Jovo {
 
         this.$output.ask = {
             speech: speech.toString(),
-            reprompt: reprompt.toString()
+            reprompt: reprompt.toString() // TODO: Array should work as well
         };
         return this;
     }
 
+
+    /**
+     * Returns screen capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasScreenInterface() {
         if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
@@ -51,6 +103,12 @@ export class GoogleAction extends Jovo {
             .find((item: {name:string}) => item.name === 'actions.capability.SCREEN_OUTPUT') !== 'undefined';
     }
 
+
+    /**
+     * Returns audio capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasAudioInterface() {
         if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
@@ -59,6 +117,12 @@ export class GoogleAction extends Jovo {
             .find((item: {name:string}) => item.name === 'actions.capability.AUDIO_OUTPUT') !== 'undefined';
     }
 
+
+    /**
+     * Returns media response capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasMediaResponseInterface() {
         if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
             return false;
@@ -67,31 +131,66 @@ export class GoogleAction extends Jovo {
             .find((item: {name:string}) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
     }
 
+
+    /**
+     * Returns video capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasVideoInterface() {
         return false;
     }
+
+
+    /**
+     * Google Assistant doesn't return a device id
+     * @return {string | undefined}
+     */
     getDeviceId() {
-        return 'no-device-id';
+        return undefined;
     }
 
-    getSpeechText() {
-        if (!_get(this.$response, 'richResponse.items[0].simpleResponse.ssml')) {
-            return;
-        }
-        return _get(this.$response, 'richResponse.items[0].simpleResponse.ssml').replace(/<\/?speak\/?>/g, '');
-    }
-    getRepromptText() {
-        if (!_get(this.$response, 'noInputPrompts[0].ssml')) {
-            return;
-        }
-        return _get(this.$response, 'noInputPrompts[0].ssml').replace(/<\/?speak\/?>/g, '');
-    }
+    // getSpeechText() {
+    //     if (!_get(this.$response, 'richResponse.items[0].simpleResponse.ssml')) {
+    //         return;
+    //     }
+    //     return _get(this.$response, 'richResponse.items[0].simpleResponse.ssml').replace(/<\/?speak\/?>/g, '');
+    // }
+    // getRepromptText() {
+    //     if (!_get(this.$response, 'noInputPrompts[0].ssml')) {
+    //         return;
+    //     }
+    //     return _get(this.$response, 'noInputPrompts[0].ssml').replace(/<\/?speak\/?>/g, '');
+    // }
+
+
+    /**
+     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * @public
+     * @return {string}
+     */
     getType() {
         return 'GoogleAction';
     }
 
+
+    /**
+     * Returns raw text of request.
+     * @return {string | undefined}
+     */
     getRawText() {
-        return '';
+        return _get(this.$originalRequest || this.$request, 'inputs[0].arguments[0].rawText') ||
+            _get(this.$originalRequest || this.$request, 'inputs[0].rawInputs[0].query');
     }
+
+    /**
+     * Returns true if user is not voice matched
+     * @return {string}
+     */
+    isVoiceMatchedUser() {
+        // TODO
+        // return _.isNumber(parseInt(this.getUserId()));
+    }
+
 
 }

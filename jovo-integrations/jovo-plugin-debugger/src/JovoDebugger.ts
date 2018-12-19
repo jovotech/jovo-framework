@@ -75,7 +75,7 @@ export class JovoDebugger implements Plugin {
     }
 
     async install(app: BaseApp) {
-        app.on('init-webhook', async () => {
+        app.on('webhook.init', async () => {
             if (['--intent', '--launch', '--file', '--template'].some(r => process.argv.includes(r))) {
                 handleConsoleRequest(app);
             }
@@ -300,7 +300,7 @@ export class JovoDebugger implements Plugin {
             platformType: handleRequest.jovo.constructor.name,
             requestSessionAttributes: handleRequest.jovo.$requestSessionAttributes,
             inputs: handleRequest.jovo.$inputs,
-            userId: handleRequest.jovo.$user!.getId(),
+            userId: handleRequest.jovo.$user.getId() || '',
             route: handleRequest.jovo.$plugins.Router.route,
         };
 
@@ -331,13 +331,13 @@ export class JovoDebugger implements Plugin {
         const response: JovoDebuggerResponse = {
             json: handleRequest.jovo.$response,
             platformType: handleRequest.jovo.constructor.name === 'GoogleAction' ? 'GoogleActionDialogFlowV2' : handleRequest.jovo.constructor.name, // TODO: TEMP
-            userId: handleRequest.jovo.$user!.getId(),
+            userId: handleRequest.jovo.$user!.getId() || '',
             route: handleRequest.jovo.$plugins.Router.route,
             sessionEnded: handleRequest.jovo.$response!.hasSessionEnded(),
             inputs: handleRequest.jovo.$inputs,
             requestSessionAttributes: handleRequest.jovo.$requestSessionAttributes,
             responseSessionAttributes: _get(handleRequest.jovo, '$session.$data'),
-            speech: handleRequest.jovo.getSpeechText(),
+            speech: handleRequest.jovo.$response!.getSpeech(),
         };
 
         if (this.config.database) {

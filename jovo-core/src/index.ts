@@ -29,7 +29,6 @@ export {
     Plugin,
     PluginConfig,
     Output,
-    AppConfig,
     JovoRequest,
     RequestType,
     Platform,
@@ -42,7 +41,12 @@ export {
     Host,
     AppData,
     JovoData,
-    SessionData
+    SessionData,
+    Data,
+    JovoFunction,
+    HandlerReturnType,
+    Handler
+
 } from './Interfaces';
 
 

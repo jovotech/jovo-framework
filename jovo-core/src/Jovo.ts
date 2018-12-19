@@ -6,7 +6,6 @@ import _get = require('lodash.get');
 import _set = require('lodash.set');
 
 import {
-    AppConfig,
     Host,
     Inputs,
     JovoData,
@@ -26,7 +25,8 @@ export abstract class Jovo extends EventEmitter {
     readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
-    $user?: User;
+    $jovo: Jovo;
+    $user: User;
     $nlu?: NLUData;
     $inputs: Inputs;
     readonly $output: Output;
@@ -43,6 +43,7 @@ export abstract class Jovo extends EventEmitter {
     constructor(app: BaseApp, host: Host) {
         super();
         this.setMaxListeners(0);
+        this.$jovo = this;
         this.$host = host;
         this.$app = app;
         this.$data = {};
@@ -56,19 +57,107 @@ export abstract class Jovo extends EventEmitter {
         this.$request = undefined;
         this.$response = undefined;
         this.$plugins = {};
+        this.$user = new User(this);
         this.$cms = new Cms();
     }
 
+    /**
+     * Returns boolean if request is part of new session
+     * @public
+     * @return {boolean}
+     */
     abstract isNewSession(): boolean;
+
+    /**
+     * Returns audio capability of request device
+     * @public
+     * @return {boolean}
+     */
     abstract hasAudioInterface(): boolean;
+
+    /**
+     * Returns screen capability of request device
+     * @public
+     * @return {boolean}
+     */
     abstract hasScreenInterface(): boolean;
+
+    /**
+     * Returns screen capability of request device
+     * @public
+     * @return {boolean}
+     */
     abstract hasVideoInterface(): boolean;
-    abstract getSpeechText(): string | undefined;
+
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     abstract getSpeechBuilder(): SpeechBuilder | undefined;
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     abstract speechBuilder(): SpeechBuilder | undefined;
-    abstract getRepromptText(): string | undefined;
+
+
+    /**
+     * Returns device id. Doesn't work with all platforms.
+     * @returns {string | undefined}
+     */
     abstract getDeviceId(): string | undefined;
+
+    /**
+     * Returns raw text of request. Doesn't work with all platforms.
+     * @returns {string | undefined}
+     */
     abstract getRawText(): string | undefined;
+
+    /**
+     * Returns timestamp of a user's request
+     * @returns {string | undefined}
+     */
+    abstract getTimestamp(): string | undefined;
+
+
+    /**
+     * Returns locale of the request
+     * @deprecated use this.$request.getLocale() instead
+     * @returns {string}
+     */
+    abstract getLocale(): string | undefined;
+
+
+
+    /**
+     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * @public
+     * @return {string}
+     */
+    abstract getType(): string | undefined;
+
+
+    /**
+     * Returs id of the touched/selected item
+     * @public
+     * @return {*}
+     */
+    abstract getSelectedElementId(): string | undefined;
+
+    /**
+     * Returns UserID
+     * @deprecated Use this.$user.getId() instead.
+     * @public
+     * @return {string}
+     */
+    getUserId() {
+        return this.$user.getId();
+    }
+
 
     /**
      * Returns state value stored in the request session
@@ -78,9 +167,11 @@ export abstract class Jovo extends EventEmitter {
         return this.getSessionAttribute(SessionConstants.STATE);
     }
 
+
     /**
      * Saves state to sessionAttributes
      * @param {String} state
+     * @return {Jovo}
      */
     setState(state: string | undefined) {
         if (typeof state === 'undefined') {
@@ -91,11 +182,18 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Removes state from session
+     * @return {Jovo}
+     */
     removeState() {
         if (this.$session && this.$session.$data[SessionConstants.STATE]) {
             delete this.$session.$data[SessionConstants.STATE];
         }
+        return this;
     }
+
 
     /**
      * Returns session data value for given path
@@ -109,6 +207,8 @@ export abstract class Jovo extends EventEmitter {
             return this.getSessionAttributes();
         }
     }
+
+
     /**
      * Returns session attribute value for given path
      * @param {string} path
@@ -121,6 +221,7 @@ export abstract class Jovo extends EventEmitter {
         return;
     }
 
+
     /**
      * Returns full session attributes obj
      * @return {any}
@@ -132,6 +233,12 @@ export abstract class Jovo extends EventEmitter {
         return;
     }
 
+
+    /**
+     * Sets session data for given path
+     * @param {SessionData} obj
+     * @returns {this}
+     */
     setSessionData(obj: SessionData): this;
     setSessionData(path: string, value: any): this; // tslint:disable-line
     setSessionData(objOrPath: string | SessionData, value?: any) { // tslint:disable-line
@@ -141,6 +248,8 @@ export abstract class Jovo extends EventEmitter {
             return this.setSessionAttributes(objOrPath);
         }
     }
+
+
     /**
      * Sets session attribute for given path
      * @param {string} path
@@ -154,9 +263,17 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Adds session data object for given path
+     * @param {string} path
+     * @param {any} value
+     * @return {Jovo} this
+     */
     addSessionData(path: string, value: any): this { // tslint:disable-line
         return this.setSessionAttribute(path, value);
     }
+
 
     /**
      * Adds session attribute for given path
@@ -167,6 +284,8 @@ export abstract class Jovo extends EventEmitter {
     addSessionAttribute(path: string, value: any): this { // tslint:disable-line
         return this.setSessionAttribute(path, value);
     }
+
+
     /**
      * Sets full session attributes obj
      * @public
@@ -180,23 +299,16 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
-    /**
-     * Returns locale
-     * @deprecated use this.$request.getLocale() instead
-     * @returns {string}
-     */
-    getLocale() {
-        return this.$request!.getLocale();
-    }
 
     /**
      * Returns access token
      * @deprecated use this.$request.getAccessToken() instead
      * @returns {string}
      */
-    getAccessToken() {
+    getAccessToken(): string | undefined {
         return this.$request!.getAccessToken();
     }
+
 
     /**
      * Returns request intent name
@@ -207,9 +319,12 @@ export abstract class Jovo extends EventEmitter {
         return this.$request!.getIntentName();
     }
 
+
     /**
-     * @param {string | SpeechBuilder} speech
-     * @returns {Jovo}
+     * Responds with the given text and ends session
+     * Transforms plaintext to SSML
+     * @public
+     * @param {string|SpeechBuilder} speech Plaintext or SSML
      */
     tell(speech: string | SpeechBuilder): Jovo {
         delete this.$output.ask;
@@ -219,6 +334,15 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Says speech and waits for answer from user.
+     * Reprompt when user input fails.
+     * Keeps session open.
+     * @public
+     * @param {string|SpeechBuilder} speech
+     * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
+     */
     ask(speech: string | SpeechBuilder, reprompt?: string | SpeechBuilder) {
         delete this.$output.tell;
 
@@ -234,6 +358,12 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Maps incoming request input key names with
+     * keys from the inputMap
+     * @param {*} inputMap
+     */
     mapInputs(inputMap: {[key: string]: string}): void {
         const mappedInputs: Inputs = {};
 
@@ -249,15 +379,36 @@ export abstract class Jovo extends EventEmitter {
     }
 
 
+    /**
+     * Get input object by name
+     * @public
+     * @param {string} key
+     * @return {*}
+     */
     getInput(key: string) {
         return _get(this.$inputs, key);
     }
 
+
+    /**
+     * Sets output object
+     * @public
+     * @param {Output} obj
+     * @return {Jovo}
+     */
     output(obj: Output) {
         Object.assign(this.$output, obj);
         return this;
     }
 
+
+    /**
+     * Shows simple card to response
+     * @public
+     * @param {string} title
+     * @param {string} content
+     * @return {Jovo}
+     */
     showSimpleCard(title: string, content: string) {
         this.$output.card = {
             SimpleCard: {
@@ -268,6 +419,15 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Shows image card to response
+     * @public
+     * @param {string} title
+     * @param {string} content
+     * @param {string} imageUrl secure url
+     * @return {Jovo}
+     */
     showImageCard(title: string, content: string, imageUrl: string) {
         this.$output.card = {
             ImageCard: {
@@ -279,6 +439,12 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Shows account linking card to response
+     * @public
+     * @return {Jovo}
+     */
     showAccountLinkingCard() {
         this.$output.card = {
             AccountLinkingCard: {
@@ -287,6 +453,12 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
+
+    /**
+     * Fires respond event and ends session.
+     * @deprecated
+     * @public
+     */
     endSession() {
         console.log('endSession() is obsolete in v2');
     }

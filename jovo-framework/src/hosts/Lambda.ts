@@ -1,6 +1,7 @@
 import {Host} from "jovo-core";
 
 export class Lambda implements Host {
+    //TODO: get headers
     headers: any; // tslint:disable-line
     event: any; // tslint:disable-line
     context: any; // tslint:disable-line

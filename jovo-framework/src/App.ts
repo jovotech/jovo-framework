@@ -179,13 +179,13 @@ export class App extends BaseApp {
         this.use(new Handler());
     }
 
-    async handle(hostwrapper: Host) {
-        if (hostwrapper.headers['jovo-test']) {
+    async handle(host: Host) {
+        if (host.headers && host.headers['jovo-test']) {
             this.use(new FileDb2({
                 path: './../db/tests'
             }));
         }
-        super.handle(hostwrapper);
+        super.handle(host);
     }
     /**
      * TODO:
@@ -456,8 +456,6 @@ export class App extends BaseApp {
     }
 
 }
-
-
 
 
 export interface LoggingConfig {

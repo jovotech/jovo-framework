@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
 import {EnumRequestType} from "../../../jovo-core/dist/src";
@@ -680,9 +680,9 @@ describe('test handleOnRequest', () => {
     test('ON_REQUEST asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            ON_REQUEST(d: Function) {
+            ON_REQUEST(jovo: Jovo, d: Function) {
                 setTimeout(() => {
-                    this.$data.foo = 'bar3';
+                    jovo.$data.foo = 'bar3';
                     d();
                 }, 10);
             },
@@ -776,7 +776,7 @@ describe('test handleOnNewSession', () => {
     test('NEW_SESSION asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            NEW_SESSION(d: Function) {
+            NEW_SESSION(jovo: Jovo, d: Function) {
                 setTimeout(() => {
                     this.$data.foo = 'bar3';
                     d();
@@ -877,7 +877,7 @@ describe('test handleOnNewUser', () => {
     test('NEW_USER asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            NEW_USER(d: Function) {
+            NEW_USER(jovo: Jovo, d: Function) {
                 setTimeout(() => {
                     this.$data.foo = 'bar3';
                     d();

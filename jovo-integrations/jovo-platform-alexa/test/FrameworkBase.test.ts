@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants, EnumRequestType} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite, SessionConstants, EnumRequestType, Jovo} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "../src";
 
@@ -680,7 +680,7 @@ describe('test handleOnRequest', () => {
     test('ON_REQUEST asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            ON_REQUEST(d: Function) {
+            ON_REQUEST(jovo: Jovo, d: Function) {
                 setTimeout(() => {
                     this.$data.foo = 'bar3';
                     d();
@@ -776,7 +776,7 @@ describe('test handleOnNewSession', () => {
     test('NEW_SESSION asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            NEW_SESSION(d: Function) {
+            NEW_SESSION(jovo: Jovo, d: Function) {
                 setTimeout(() => {
                     this.$data.foo = 'bar3';
                     d();
@@ -877,7 +877,7 @@ describe('test handleOnNewUser', () => {
     test('NEW_USER asynchronous with callback parameter', async (done) => {
 
         app.setHandler({
-            NEW_USER(d: Function) {
+            NEW_USER(jovo: Jovo, d: Function) {
                 setTimeout(() => {
                     this.$data.foo = 'bar3';
                     d();
@@ -950,6 +950,24 @@ describe('test NEW_USER + NEW_SESSION + ON_REQUEST', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
     });
 });
+
+describe('test handleOnNewSession', () => {
+    test('no NEW_SESSION', async (done) => {
+
+        app.setHandler({
+            'LAUNCH'() {
+                expect(this.$data.foo).toBe(undefined);
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            done();
+        });
+    });
+});
 describe('test removeState', () => {
     test('test add followUpstate to session attributes', async (done) => {
         app.setHandler({
@@ -991,6 +1009,6 @@ describe('test followUpState', () => {
         });
     });
 });
-function randomUserId() {
+const randomUserId = () => {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);
-}
+};

@@ -5,10 +5,12 @@ import {AlexaResponse} from "./AlexaResponse";
 import {AlexaAPI} from "../services/AlexaAPI";
 import {AmazonProfileAPI} from "../services/AmazonProfileAPI";
 import {AlexaSpeechBuilder} from "./AlexaSpeechBuilder";
+import {AlexaUser} from "./AlexaUser";
 
 export class AlexaSkill extends Jovo {
-    // $user: AlexaUser;
     $alexaSkill: AlexaSkill;
+    // @ts-ignore
+    $user: AlexaUser;
 
     constructor(app: BaseApp, host: Host) {
         super(app, host);
@@ -18,25 +20,62 @@ export class AlexaSkill extends Jovo {
         this.$reprompt = new AlexaSpeechBuilder(this);
     }
 
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     speechBuilder(): AlexaSpeechBuilder {
         return this.getSpeechBuilder();
     }
+
+
+    /**
+     * Returns Speechbuilder object initialized for the platform
+     * @public
+     * @return {SpeechBuilder}
+     */
     getSpeechBuilder(): AlexaSpeechBuilder {
         return new AlexaSpeechBuilder(this);
     }
 
+
+    /**
+     * Returns boolean if request is part of new session
+     * @public
+     * @return {boolean}
+     */
     isNewSession(): boolean {
         return this.$request!.isNewSession();
     }
 
+
     /**
-     * @deprecated in 3.0
+     * Returns timestamp of a user's request
+     * @returns {string | undefined}
+     */
+    getTimestamp() {
+        return this.$request!.getTimestamp();
+    }
+
+
+    /**
+     * Returns locale of the request
+     * @deprecated use this.$request.getLocale() instead
      * @returns {string}
      */
     getLocale(): string {
         return this.$request!.getLocale();
     }
 
+
+    /**
+     * Returns UserID
+     * @deprecated Use this.$user.getId() instead.
+     * @public
+     * @return {string}
+     */
     getUserId(): string {
         return _get(this.$request, 'session.user.userId') || _get(this.$request, 'context.user.userId') ;
     }
@@ -66,53 +105,100 @@ export class AlexaSkill extends Jovo {
             return AmazonProfileAPI.requestAmazonProfile(alexaRequest.getAccessToken());
         }
     }
+    //
+    // getSpeechText() {
+    //     const outputSpeech = this.$response!.getSpeech();
+    //
+    //     if (!outputSpeech) {
+    //         return;
+    //     }
+    //     return outputSpeech.replace(/<\/?speak\/?>/g, '');
+    // }
+    //
+    // getRepromptText() {
+    //     const repromptSpeech = this.$response!.getReprompt();
+    //
+    //     if (!repromptSpeech) {
+    //         return;
+    //     }
+    //     return repromptSpeech.replace(/<\/?speak\/?>/g, '');
+    // }
 
-    getSpeechText() {
-        const outputSpeech = this.$response!.getSpeech();
 
-        if (!outputSpeech) {
-            return;
-        }
-        return outputSpeech.replace(/<\/?speak\/?>/g, '');
-    }
-
-    getRepromptText() {
-        const repromptSpeech = this.$response!.getReprompt();
-
-        if (!repromptSpeech) {
-            return;
-        }
-        return repromptSpeech.replace(/<\/?speak\/?>/g, '');
-    }
-
+    /**
+     * Returns device id
+     * @returns {string | undefined}
+     */
     getDeviceId() {
         return _get(this.$request, 'context.System.device.deviceId');
     }
 
+
+    /**
+     * Returns audio capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasAudioInterface() {
         return this.$request!.hasAudioInterface();
     }
 
+
+    /**
+     * Returns screen capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasScreenInterface() {
         return this.$request!.hasScreenInterface();
     }
 
+
+    /**
+     * Returns screen capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasVideoInterface() {
         return this.$request!.hasVideoInterface();
     }
 
+
+    /**
+     * Returns APL capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasAPLInterface() {
         return (this.$request! as AlexaRequest).hasAPLInterface();
     }
 
+
+    /**
+     * Returns geo location capability of request device
+     * @public
+     * @return {boolean}
+     */
     hasGeoLocationInterface() {
         return (this.$request! as AlexaRequest).hasGeoLocationInterface();
     }
 
+
+    /**
+     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * @public
+     * @return {string}
+     */
     getType() {
         return 'AlexaSkill';
     }
 
+
+    /**
+     * Returns id of the touched/selected item
+     * @public
+     * @return {*}
+     */
     getSelectedElementId() {
         return _get(this.$request, 'request.token');
     }

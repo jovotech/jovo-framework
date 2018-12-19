@@ -16,18 +16,36 @@ import {List} from "./response/List";
 import {MediaObject, MediaResponse} from "./modules/MediaResponse";
 
 import {GoogleAction} from "./core/GoogleAction";
+import {Handler} from "jovo-core";
 
 declare module 'jovo-core/dist/src/Jovo' {
     interface Jovo {
         $googleAction?: GoogleAction;
+
+        /**
+         * Returns googleAction instance
+         * @returns {GoogleAction}
+         */
         googleAction(): GoogleAction;
+
+        /**
+         * Type of platform is Google Action
+         * @public
+         * @return {boolean} isGoogleAction
+         */
         isGoogleAction(): boolean;
     }
 }
 
 declare module 'jovo-core/dist/src/BaseApp' {
+
+    /**
+     * Sets alexa handlers
+     * @public
+     * @param {*} handler
+     */
     interface BaseApp {
-        setGoogleAssistantHandler(...handler: any): this; // tslint:disable-line
+        setGoogleAssistantHandler(...handler: Handler[]): this;
     }
 }
 
@@ -36,42 +54,244 @@ declare module './core/GoogleAction' {
 
     interface GoogleAction {
 
+        /**
+         * Ask for name
+         * @public
+         * @param {string} optContext
+         */
         askForName(optContext: string): this;
+
+
+        /**
+         * Ask for zipcode and city
+         * @public
+         * @param {string} optContext
+         */
         askForZipCodeAndCity(optContext: string): this;
+
+        /**
+         * Ask for name permission
+         * @public
+         * @param {string} optContext
+         */
         askForNamePermission(optContext: string): this;
+
+
+        /**
+         * Ask for coarse location permission
+         * @public
+         * @param {string} optContext
+         */
         askForCoarseLocation(optContext: string): this;
+
+
+        /**
+         * Ask for precise permissions
+         * @public
+         * @param {string} optContext
+         */
         askForPreciseLocation(optContext: string): this;
+
+
+        /**
+         * Ask for update permission
+         * @public
+         * @param {string} optContext
+         */
         askForUpdate(optContext: string): this;
+
+        /**
+         * Ask for permissions
+         * @public
+         * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
+         * @param {string} optContext
+         */
         askForPermission(permissions: string[], optContext: string): this;
+
+
+        /**
+         * Returns true if permission granted
+         * @return {boolean}
+         */
         isPermissionGranted(): boolean;
+
+        /**
+         * Ask form sign in
+         * @public
+         * @param {string} optContext
+         */
         askForSignIn(optContext: string): this;
+
+        /**
+         * Returns sign in status after sign in
+         * @public
+         * @return {boolean}
+         */
         getSignInStatus(): string;
+
+
+        /**
+         * Returns sign in cancelled
+         * @public
+         * @return {boolean}
+         */
         isSignInCancelled(): boolean;
+
+
+        /**
+         * Returns sign in denied
+         * @public
+         * @return {boolean}
+         */
         isSignInDenied(): boolean;
+
+        /**
+         * Returns sign in ok
+         * @public
+         * @return {null|string}
+         */
         isSignInOk(): boolean;
+
+
+        /**
+         * Ask for date time
+         * @public
+         * @param {*} questions
+         */
         askForDateTime(questions: {
             requestDatetimeText: string;
             requestDateText: string
             requestTimeText: string
         }): this;
+
+
+        /**
+         * Return date time confirmation value
+         * @returns {string}
+         */
         getDateTime(): string;
+
+        /**
+         * Ask for confirmation
+         * @public
+         * @param {*} text
+         */
         askForConfirmation(text: string): this;
+
+        /**
+         * Return confirmation status
+         * @returns {boolean}
+         */
         isConfirmed(): boolean;
+
+
+        /**
+         *  Ask for place
+         * @param {string} requestPrompt
+         * @param {string} permissionContext
+         * @returns {this}
+         */
         askForPlace(requestPrompt: string, permissionContext: string): this;
+
+        /**
+         * Return device object
+         * @returns {Device}
+         */
         getDevice(): Device;
     }
 }
 declare module './core/GoogleAction' {
     interface GoogleAction {
+
+
+        /**
+         * Adds basic card to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {BasicCard} basicCard
+         * @return {GoogleAction}
+         */
         showBasicCard(basicCard: BasicCard): this;
+
+        /**
+         * Adds suggestion chips to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Array<String>} chips
+         * @return {GoogleAction}
+         */
         showSuggestionChips(chips: string[]): this;
+
+
+        /**
+         * Adds link out suggestion chip to response
+         * @public
+         * @param {string} destinationName
+         * @param {string} url
+         * @return {GoogleAction}
+         */
         showLinkOutSuggestion(destinationName: string, url: string): this;
+
+
+        /**
+         * Adds carousel element to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Carousel} carousel
+         * @return {GoogleAction}
+         */
         showCarousel(carousel: Carousel): this;
+
+
+        /**
+         * Adds carousel browse element to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Carousel} carouselBrowse
+         * @return {GoogleAction}
+         */
         showCarouselBrowse(carouselBrowse: CarouselBrowse): this;
-        showCarouselBrowse(carouselBrowse: CarouselBrowse): this;
+
+
+        /**
+         * Implementation of generic withSimpleTable
+         * Shows a simple table card to the response object
+         * @public
+         * @param {string} title
+         * @param {string} subtitle
+         * @param {array} columnHeaders
+         * @param {array} rowsText
+         * @return {GoogleAction} this
+         */
         showSimpleTable(title: string, subtitle: string, columnHeaders: any[], rowsText: any[]): this; // tslint:disable-line
+
+
+        /**
+         * Adds table to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {Table} table
+         * @return {GoogleAction}
+         */
         showTable(table: Table): this;
+
+
+        /**
+         * Adds list element to response
+         * Works only with SCREEN_OUTPUT devices
+         * @public
+         * @param {List} list
+         * @return {GoogleAction}
+         */
         showList(list: List): this;
+
+
+        /**
+         * Returns token of the request
+         * (Touched/Selected Element )
+         * @public
+         * @return {*}
+         */
         getSelectedElementId(): string;
     }
 }
@@ -128,6 +348,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 url: string,
             }
             CarouselBrowse?: CarouselBrowse;
+            Carousel?: Carousel;
+
             Table?: Table;
             List?: List;
             MediaResponse?: MediaObject;

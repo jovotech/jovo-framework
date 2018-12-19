@@ -187,15 +187,30 @@ export class JovoUser implements Plugin {
         };
 
 
+        /**
+         * Explicit user deletion
+         * @returns {Promise<void>}
+         */
         User.prototype.delete = async function() {
+            const userId = this.getId();
+
+            if (typeof userId === 'undefined') {
+                throw new Error(`Can't delete user with undefined userId`);
+            }
+
             if (this.jovo.$app!.$db) {
-                await this.jovo.$app!.$db.delete(this.getId());
+                await this.jovo.$app!.$db.delete(userId);
                 this.isDeleted = true;
             } else {
                 throw new Error('No database configurated.');
             }
         };
 
+
+        /**
+         * Load user from db
+         * @returns {Promise<any>}
+         */
         User.prototype.loadData = async function() {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
@@ -207,6 +222,11 @@ export class JovoUser implements Plugin {
             }, true);
 
         };
+
+        /**
+         * Save user to db
+         * @returns {Promise<any>}
+         */
         User.prototype.saveData = async function() {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
@@ -219,6 +239,16 @@ export class JovoUser implements Plugin {
 
         };
 
+
+        /**
+         * Repeats last speech & reprompt
+         * Gets the info from the database.
+         *
+         * Context saving has to be set.
+         * user: {
+         *      context: true
+         * }
+         */
         Jovo.prototype.repeat = async function() {
             if (_get(this.$user, '$context.prev[0].response.output')) {
                 this.output(_get(this.$user, '$context.prev[0].response.output'));
@@ -245,8 +275,14 @@ export class JovoUser implements Plugin {
         if (!handleRequest.jovo.$user) {
             throw new Error('User object is not initialized');
         }
+        const userId = handleRequest.jovo.$user.getId();
 
-        const data = await handleRequest.app.$db.load(handleRequest.jovo.$user.getId());
+        if (typeof userId === 'undefined') {
+            throw new Error(`Can't load user with undefined userId`);
+        }
+
+
+        const data = await handleRequest.app.$db.load(userId);
         if (!data) {
             Object.assign(handleRequest.jovo.$user, {
                 $context: {},
@@ -301,8 +337,14 @@ export class JovoUser implements Plugin {
             userData.metaData = _get(handleRequest.jovo.$user, '$metaData');
         }
 
+        const userId = handleRequest.jovo.$user.getId();
+
+        if (typeof userId === 'undefined') {
+            throw new Error(`Can't save user with undefined userId`);
+        }
+
         await handleRequest.app.$db.save(
-            handleRequest.jovo.$user.getId(),
+            userId,
             this.config.columnName || 'userData',
             userData);
     };
@@ -393,13 +435,17 @@ export class JovoUser implements Plugin {
         const prevObject: ContextPrevObject = {};
 
         if (_get(this.config, 'context.prev.response.speech')) {
-            if (handleRequest.jovo.getSpeechText()) {
-                _set(prevObject, 'response.speech', handleRequest.jovo.getSpeechText());
+            if (handleRequest.jovo.$output.tell) {
+                _set(prevObject, 'response.speech', handleRequest.jovo.$output.tell.speech);
+            }
+
+            if (handleRequest.jovo.$output.ask) {
+                _set(prevObject, 'response.speech', handleRequest.jovo.$output.ask.speech);
             }
         }
         if (_get(this.config, 'context.prev.response.reprompt')) {
-            if (handleRequest.jovo.getRepromptText()) {
-                _set(prevObject, 'response.reprompt', handleRequest.jovo.getRepromptText());
+            if (handleRequest.jovo.$output.ask) {
+                _set(prevObject, 'response.reprompt', handleRequest.jovo.$output.ask.reprompt);
             }
         }
 

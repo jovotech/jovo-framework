@@ -14,6 +14,13 @@ export class Display implements Plugin {
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
 
+
+        /**
+         * Shows template on Echo Show
+         * @public
+         * @param {*} template
+         * @return {AlexaSkill}
+         */
         AlexaSkill.prototype.showDisplayTemplate = function(template: Template) {
             _set(this.$output, 'Alexa.DisplayTemplate',
                 new DisplayRenderTemplateDirective(template)
@@ -21,6 +28,13 @@ export class Display implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows hint on Echo Show
+         * @public
+         * @param {*} text
+         * @return {AlexaSkill}
+         */
         AlexaSkill.prototype.showHint = function(text: string) {
             _set(this.$output, 'Alexa.DisplayHint',
                 new DisplayHintDirective(text)
@@ -28,6 +42,14 @@ export class Display implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows video on Echo Show
+         * @public
+         * @param {string} url
+         * @param {string} title
+         * @param {string} subtitle
+         */
         AlexaSkill.prototype.showVideo = function(url: string, title?: string, subtitle?: string) {
             _set(this.$output, 'Alexa.VideoApp',
                 (new VideoAppLaunchDirective()).setData(url, title, subtitle)

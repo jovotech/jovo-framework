@@ -33,6 +33,9 @@ import {GameEngine} from "./modules/GameEnginePlugin";
 import {InSkillPurchase} from "./modules/InSkillPurchasePlugin";
 import {Template} from "./response/visuals/Template";
 
+import {Handler} from "jovo-core";
+
+
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
         $alexaSkill?: AlexaSkill;
@@ -42,31 +45,54 @@ declare module 'jovo-core/dist/src/Jovo' {
 }
 
 declare module 'jovo-core/dist/src/BaseApp' {
+
     interface BaseApp {
-        setAlexaHandler(...handler: any): this; // tslint:disable-line
+
+        /**
+         * Sets alexa handlers
+         * @public
+         * @param {*} handler
+         */
+        setAlexaHandler(...handler: Handler[]): this; // tslint:disable-line
     }
 }
 
 // CanFulFill
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
+
+        /**
+         * Sets negative can fulfill request values.
+         * @public
+         */
         cannotFulfillRequest(): this;
+
+
+        /**
+         * Sets possible can fulfill request values.
+         * @public
+         */
         mayFulfillRequest(): this;
+
+
+        /**
+         * Sets can fulfill request values.
+         * @public
+         * @param {string} canFulfillRequest
+         */
         canFulfillRequest(canFulfillRequest: string): this;
+
+        /**
+         * Sets can fulfill request values.
+         * @public
+         * @param {string} slotName
+         * @param {string} canUnderstandSlot
+         * @param {string} canFulfillSlot
+         */
         canFulfillSlot(slotName: string, canUnderstandSlot: string, canFulfillSlot: string): this;
     }
 }
 
-
-// CanFulFill
-declare module './core/AlexaSkill' {
-    interface AlexaSkill {
-        cannotFulfillRequest(): this;
-        mayFulfillRequest(): this;
-        canFulfillRequest(canFulfillRequest: string): this;
-        canFulfillSlot(slotName: string, canUnderstandSlot: string, canFulfillSlot: string): this;
-    }
-}
 
 
 // AudioPlayer
@@ -82,11 +108,58 @@ declare module './core/AlexaSkill' {
 // AudioPlayer
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
+
+        /**
+         * Implementation of standard card
+         * Show a standard card with a card to the response object
+         * @public
+         * @param {string} title
+         * @param {string} text
+         * @param {*} image object with secured image url
+         * @return {AlexaSkill} this
+         */
         showStandardCard(title: string, text: string, image: {smallImageUrl: string, largeImageUrl: string}): this;
+
+
+        /**
+         * Shows ask for country and postal code card
+         * @public
+         * @return {AlexaSkill}
+         */
         showAskForCountryAndPostalCodeCard(): this;
+
+
+        /**
+         * Shows ask for address card
+         * @public
+         * @return {AlexaSkill}
+         */
         showAskForAddressCard(): this;
+
+
+        /**
+         * Shows ask for list permission card
+         * @public
+         * @param {Array} types 'write' or 'read'
+         * @return {Jovo}
+         */
         showAskForListPermissionCard(types: string[]): this;
+
+
+        /**
+         * Shows ask for list permission card
+         * @public
+         * @param {Array} contactProperties name|given_name|email|mobile_number
+         * @return {Jovo}
+         */
         showAskForContactPermissionCard(contactProperties: string[]): this;
+
+
+        /**
+         * Adds card to response object
+         * @public
+         * @param {Card} card
+         */
         showCard(card: Card): this;
     }
 }
@@ -132,8 +205,32 @@ declare module './core/AlexaSkill' {
 // Display
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
+
+        /**
+         * Shows template on Echo Show
+         * @public
+         * @param {*} template
+         * @return {AlexaSkill}
+         */
         showDisplayTemplate(template: Template): this;
+
+
+        /**
+         * Shows hint on Echo Show
+         * @public
+         * @param {*} text
+         * @return {AlexaSkill}
+         */
         showHint(text: string): this;
+
+
+        /**
+         * Shows video on Echo Show
+         * @public
+         * @param {string} url
+         * @param {string} title
+         * @param {string} subtitle
+         */
         showVideo(url: string, title?: string, subtitle?: string): this;
     }
 }

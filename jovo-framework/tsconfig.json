@@ -4,7 +4,7 @@
     "module": "commonjs",
     "declaration": true,
     "noImplicitAny": true,
-    "removeComments": true,
+    "removeComments": false,
     "preserveConstEnums": true,
     "strict": true,
     "outDir": "./dist/",

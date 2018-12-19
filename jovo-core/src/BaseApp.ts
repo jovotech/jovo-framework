@@ -85,7 +85,7 @@ export class BaseApp extends Extensible {
 
 
     initWebhook() {
-        this.emit('init-webhook');
+        this.emit('webhook.init');
     }
 
     async handle(host: Host) {

@@ -23,6 +23,10 @@ export class Middleware {
         return this;
     }
 
+    /**
+     * Removes function from functions array
+     * @param {Function} fn
+     */
     remove(fn: Function) {
         this.fns = this.fns.filter((fnItem: Function) => {
             return fnItem !== fn;
@@ -79,10 +83,17 @@ export class Middleware {
 
     }
 
+
+    /**
+     * Disables middleware
+     */
     disable() {
         this.enabled = false;
     }
 
+    /**
+     * Disables middleware
+     */
     skip() {
         this.enabled = false;
     }

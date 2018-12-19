@@ -3,7 +3,7 @@
     "lib": [ "es2017" ],
     "module": "commonjs",
     "noImplicitAny": true,
-    "removeComments": true,
+    "removeComments": false,
     "strict": true,
     "preserveConstEnums": true,
     "declaration": true,
