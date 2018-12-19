@@ -128,9 +128,13 @@ export class JovoDebugger implements Plugin {
         const platform = this.app.getPlatformByName(obj.platform ) || this.app.$platform.values().next().value;
         const test = platform.makeTestSuite();
 
+
+        const fileDbPath = _get(this.app.$plugins.get('FileDb'), 'config.pathToFile');
+
         conv = _get(this, `conversations.${userId}`) ||
                 test.conversation({
                     userId,
+                    defaultDbDirectory: fileDbPath
                 });
         let req: JovoRequest = await test.requestBuilder.launch();
 
@@ -197,8 +201,8 @@ export class JovoDebugger implements Plugin {
             }
         }
 
-        const response = await conv.send(req);
         delete conv.config.httpOptions.headers['jovo-test'];
+        const response = await conv.send(req);
 
         _set(this, `conversations.${userId}`, conv);
 
