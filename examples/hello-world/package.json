@@ -5,9 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js --webhook",
     "tsc": "node -v",
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
