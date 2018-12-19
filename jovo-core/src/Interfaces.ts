@@ -384,7 +384,7 @@ export interface JovoResponse {
     /**
      * Sets session data objects
      * @param {SessionData} sessionAttributes
-     * @return {this}
+     * @return {JovoResponse}
      */
     setSessionAttributes(sessionAttributes: SessionData): this;
 
@@ -399,7 +399,7 @@ export interface JovoResponse {
     /**
      * Sets session data objects
      * @param {SessionData} sessionData
-     * @return {this}
+     * @return {JovoResponse}
      */
     setSessionData(sessionData: SessionData): this;
 
