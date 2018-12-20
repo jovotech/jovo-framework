@@ -1,5 +1,14 @@
 # Jovo Framework Changelog
 
+
+## 1.4.18 (December 20, 2018)
+* [#300](https://github.com/jovotech/jovo-framework-nodejs/pull/300) Added hasAPLInterface function for knowing if APL interface is supporte [@omogollon](https://github.com/omogollon)
+* [#299](https://github.com/jovotech/jovo-framework-nodejs/pull/299) Enhancement/chatbase [@theBenForce](https://github.com/theBenForce)
+* [#296](https://github.com/jovotech/jovo-framework-nodejs/pull/296) Removing "undefined" on phone [@JordanMontel](https://github.com/JordanMontel)
+* [#294](https://github.com/jovotech/jovo-framework-nodejs/pull/294) Added return statement after some reject(error) [@omenocal](https://github.com/omenocal)
+* [#287](https://github.com/jovotech/jovo-framework-nodejs/pull/287) Reminders Fix [@hanllo](https://github.com/hanllo)
+
+
 ## 1.4.17 (November 19, 2018)
 * [#264](https://github.com/jovotech/jovo-framework-nodejs/pull/278) Added support for APL-based touch [@jose-torres-marin](https://github.com/jose-torres-marin)
 
