@@ -163,18 +163,19 @@ export class Handler implements Plugin {
 
         if (_get(config.handlers, route.path)) {
 
-            return await new Promise((resolve) => {
+            return new Promise(async (resolve) => {
                 const func:Function = _get(config.handlers, route.path);
                 const params = getParamNames(func);
 
                 // no callback 'done' parameter
                 if (params.length < 2) {
-                    const result = func.apply(jovo);
-
-                    if (!result) {
+                    const result = await func.apply(jovo, [jovo]);
+                    if (typeof result === 'undefined') {
                         return resolve();
-                    } else {
+                    } else if(result.constructor.name === 'Promise') {
                         return result.then(resolve);
+                    } else {
+                        return resolve();
                     }
                 }
 

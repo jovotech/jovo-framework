@@ -185,7 +185,7 @@ export class App extends BaseApp {
                 path: './../db/tests'
             }));
         }
-        super.handle(host);
+        await super.handle(host);
     }
     /**
      * TODO:
