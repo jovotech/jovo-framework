@@ -166,9 +166,10 @@ export class GoogleAssistant extends Extensible implements Platform {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'GoogleAction') {
             return Promise.resolve();
         }
-
         await this.middleware('$response')!.run(handleRequest.jovo);
-        handleRequest.host.setResponse(handleRequest.jovo.$response);
+        handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson ?
+            this.responseBuilder.create(handleRequest.jovo.$rawResponseJson) : handleRequest.jovo.$response;
+        await handleRequest.host.setResponse(handleRequest.jovo.$response);
     }
 
     uninstall(app: BaseApp) {

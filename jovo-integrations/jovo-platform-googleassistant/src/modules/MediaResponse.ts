@@ -5,7 +5,6 @@ import _get = require('lodash.get');
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
-import {AudioPlayer} from "../../../jovo-platform-alexa/src/modules/AudioPlayerPlugin";
 
 export interface MediaObject {
     name: string;
