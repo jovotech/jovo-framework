@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-mediaresponse",
-  "version": "2.0.2-beta.7",
+  "version": "2.0.2-beta.8",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,10 +12,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.2-beta.7",
-    "jovo-platform-googleassistant": "^2.0.2-beta.7"
+    "jovo-framework": "^2.0.2-beta.8",
+    "jovo-platform-googleassistant": "^2.0.2-beta.8"
   },
   "devDependencies": {
-    "jovo-plugin-debugger": "^2.0.2-beta.7"
+    "jovo-plugin-debugger": "^2.0.2-beta.8"
   }
 }
