@@ -145,6 +145,10 @@
                     "route": "project-lifecycle"
                 },
                 {
+                    "title": "Jovo Webhook",
+                    "route": "jovo-webhook"
+                },
+                {
                     "title": "CLI Commands",
                     "content": [
                         {

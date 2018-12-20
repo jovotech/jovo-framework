@@ -30,7 +30,7 @@ You can use either of the following commands to run the server locally:
 $ jovo run
 
 # Alternative
-$ npm run
+$ npm run start
 ```
 
 Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. You can also use the `nodemon` Jovo CLI integration. 
