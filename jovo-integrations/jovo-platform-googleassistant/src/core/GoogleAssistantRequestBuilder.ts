@@ -19,14 +19,6 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder {
     async intent(obj: any, inputs?: any): Promise<GoogleActionRequest> { //tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
-            // req.setIntentName(obj);
-            // if (inputs) {
-            //     for (const slot in inputs) {
-            //         if (inputs.hasOwnProperty(slot)) {
-            //             req.setSlot(slot, inputs[slot]);
-            //         }
-            //     }
-            // }
 
             return req;
         } else {
