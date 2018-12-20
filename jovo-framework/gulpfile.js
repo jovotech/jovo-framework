@@ -29,11 +29,10 @@ gulp.task('prepare-project', function () {
 });
 
 gulp.task('build', ['prepare-project'], function () {
-    return gulp.src(config.destinationFolder + '/**/*')
+    return gulp.src(config.destinationFolder + '/**/*', { nodir: true })
         .pipe(zip('bundle.zip'))
         .pipe(gulp.dest('.'));
 });
-
 
 gulp.task('default', ['build']);
 
@@ -62,7 +61,7 @@ gulp.task('prepare-project-ts', ['compile-ts'], function () {
 });
 
 gulp.task('create-ts-bundle', ['prepare-project-ts'], function () {
-    return gulp.src(config.destinationFolder + '/**/*')
+    return gulp.src(config.destinationFolder + '/**/*', { nodir: true })
         .pipe(zip('bundle.zip'))
         .pipe(gulp.dest('.'));
 });
