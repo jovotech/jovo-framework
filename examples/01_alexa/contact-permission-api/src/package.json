@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-contact-permission-api",
-  "version": "2.0.2-beta.8",
+  "version": "2.0.2-beta.9",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.2-beta.8",
-    "jovo-platform-alexa": "^2.0.2-beta.8"
+    "jovo-framework": "^2.0.2-beta.9",
+    "jovo-platform-alexa": "^2.0.2-beta.9"
   }
 }
