@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-gadgets-api",
-  "version": "2.0.2-beta.9",
+  "version": "2.0.2-beta.10",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -12,11 +12,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.0.2-beta.9",
-    "jovo-framework": "^2.0.2-beta.9",
-    "jovo-platform-alexa": "^2.0.2-beta.9",
-    "jovo-platform-dialogflow": "^2.0.2-beta.9",
-    "jovo-platform-googleassistant": "^2.0.2-beta.9",
-    "jovo-plugin-debugger": "^2.0.2-beta.9"
+    "jovo-db-filedb": "^2.0.2-beta.10",
+    "jovo-framework": "^2.0.2-beta.10",
+    "jovo-platform-alexa": "^2.0.2-beta.10",
+    "jovo-platform-dialogflow": "^2.0.2-beta.10",
+    "jovo-platform-googleassistant": "^2.0.2-beta.10",
+    "jovo-plugin-debugger": "^2.0.2-beta.10"
   }
 }
