@@ -54,7 +54,6 @@ The main features of the Jovo ecosystem are:
   * [Integrations](#integrations)
 * [Tutorials](#tutorials)
 * [Contributing](#contributing)
-* [We need your help](#we-need-your-help)
 
 ## Installation
 
