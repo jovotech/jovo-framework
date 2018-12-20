@@ -214,10 +214,10 @@ For example, you can override the language model for the `en-US` locale like tho
 
 ```javascript
 languageModel: {
-			'en-US': {
-				invocation: 'my test app dev',
-			}
-		}
+	'en-US': {
+		invocation: 'my test app dev',
+	}
+}
 ```
 
 *NOTE*: Currently, the invocation name can only be specified in the `models` folder for Alexa Skills. For Google Actions, you need to change them in the Actions on Google Console.
@@ -231,19 +231,19 @@ For example, you can add an intent to specific stages like so:
 
 ```javascript
 languageModel: {
-			'en-US': {
-				intents: [
-          				{
-            					name: 'WhatEnvIntent',
-            					samples: [
-						      'what\'s the stage',
-						      'what is the environment',
-						      'what environment is this deployed to',
-            					]
-          				}
-        			]
-			}
-		}
+	'en-US': {
+		intents: [
+          	{
+            	name: 'WhatEnvIntent',
+            	samples: [
+					'what\'s the stage',
+					'what is the environment',
+					'what environment is this deployed to'
+            	]
+          	}
+        ]
+	}
+}
 ```
 
 
