@@ -2,11 +2,6 @@
 
 Learn more about how to set reminders for your user with your Alexa Skill.
 
-* [Introduction](#introduction)
-* [Add Reminder](#add-reminder)
-* [Update Reminder](#update-reminder)
-* [Delete Reminder](#delete-reminder)
-
 ## Introduction
 
 To create a reminder you simply send a `JSON` object to Amazon's API endpoint. You can find out what that these `JSON` objects look like [here](https://developer.amazon.com/docs/smapi/alexa-reminders-api-reference.html#reminder-object)
