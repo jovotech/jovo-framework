@@ -3,7 +3,7 @@ const gulp = require('gulp');
 const install = require('gulp-install');
 const run = require('gulp-run-command').default;
 const zip = require('gulp-zip');
-const tsConfig = require('./tsconfig.json');
+const path = require('path');
 
 const config = {
     projectFolder: './src',
@@ -42,6 +42,8 @@ gulp.task('default', ['build']);
 // ------------------------------------------------------
 
 gulp.task('create-temp-tsconfig', function (done) {
+
+    const tsConfig = require(path.join(process.cwd(), 'tsconfig.json'));
     tsConfig.exclude.push('test/**/*')
     fs.writeFileSync('./.tsconfig-build.json', JSON.stringify(tsConfig, null, 2));
     done();
