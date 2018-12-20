@@ -41,5 +41,8 @@
       "json"
     ]
   },
+  "files": [
+    "dist/src/**/*"
+  ],
   "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
 }
