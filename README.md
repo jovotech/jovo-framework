@@ -10,7 +10,7 @@
 
 <p align="center">
 <a href="https://travis-ci.org/jovotech/jovo-framework-nodejs" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework-nodejs.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://img.shields.io/npm/v/jovo-framework/beta.svg"></a>
+<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
 <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
 <a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework-nodejs/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
@@ -19,16 +19,16 @@
 
 ```javascript
 app.setHandler({
-    LAUNCH() {
+    'LAUNCH': function() {
         this.toIntent('HelloWorldIntent');
     },
 
-    HelloWorldIntent() {
+    'HelloWorldIntent': function() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    'MyNameIsIntent': function(name) {
+        this.tell('Hey ' + name.value + ', nice to meet you!');
     },
 });
 ```
@@ -136,6 +136,7 @@ In-Skill-Purchasing (ISP) | Allows you to sell premium content | [📝](./docs/0
 Reminders API | Allows you to set reminders for your user | [📝](./docs/05_platform-specifics/amazon-alexa/reminders.md)
 Settings API | Allows you to get your user's settings information | [📝](./docs/05_platform-specifics/amazon-alexa/settings.md)
 Playback Controller | Process audio player requests coming from, for example, touch controls on Alexa-enabled devices | [📝](./docs/05_platform-specifics/amazon-alexa/audioplayer.md#playback-controller)
+
 
 #### Google Assistant
 

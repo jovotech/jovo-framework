@@ -4,62 +4,44 @@
             "title": "Getting Started",
             "content": [
                 {
-                    "title": "Getting Started",
-                    "route": "quickstart"
-                },
-                {
-                    "title": "Quickstart",
-                    "route": "quickstart"
-                },
-                {
                     "title": "Installation",
-                    "content": [
-                        {
-                            "title": "Installing Jovo",
-                            "route": "installation"
-                        },
-                        {
-                            "title": "Upgrading",
-                            "route": "installation/upgrading"
-                        },
-                        {
-                            "title": "Migrating from v1",
-                            "route": "installation/v1-migration"
-                        }
-                    ]
+                    "route": "installation"
                 },
                 {
-                    "title": "Next Steps",
-                    "content": [
-                        {
-                            "title": "Next Steps",
-                            "route": "next-steps"
-                        },
-                        {
-                            "title": "Voice App Basics",
-                            "route": "voice-app-basics"
-                        }
-                    ]
-                    
+                    "title": "Voice App Basics",
+                    "route": "voice-app-basics"
                 }
             ]
         },
         {
-            "title": "Basic Concepts",
+            "title": "CLI",
             "content": [
                 {
-                    "title": "Basic Concepts",
-                    "route": "basic-concepts"
+                    "title": "Overview",
+                    "route": "cli"
                 },
                 {
-                    "title": "Requests & Responses",
-                    "route": "requests-responses"
+                    "title": "Workflows",
+                    "route": "cli/workflows"
+                }
+            ]
+        },
+        {
+            "title": "App Configuration",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "configuration"
                 },
                 {
-                    "title": "Language Model",
+                    "title": "app.json",
+                    "route": "app-json"
+                },
+                {
+                    "title": "Jovo Language Model",
                     "content": [
                         {
-                            "title": "Language Model",
+                            "title": "Overview",
                             "route": "model"
                         },
                         {
@@ -69,23 +51,41 @@
                     ]
                 },
                 {
+                    "title": "Server Configuration",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "server"
+                        },
+                        {
+                            "title": "Webhook",
+                            "route": "server/webhook"
+                        },
+                        {
+                            "title": "AWS Lambda",
+                            "route": "server/aws-lambda"
+                        },
+                        {
+                            "title": "Azure Functions",
+                            "route": "server/azure-functions"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "App Logic",
+            "content": [
+                {
+                    "title": "Overview",
+                    "route": "logic"
+                },
+                {
                     "title": "Routing",
                     "content": [
                         {
-                            "title": "Routing",
+                            "title": "Overview",
                             "route": "routing"
-                        },
-                        {
-                            "title": "Intents",
-                            "route": "routing/intents"
-                        },
-                        {
-                            "title": "States",
-                            "route": "routing/states"
-                        },
-                        {
-                            "title": "Input",
-                            "route": "routing/input"
                         },
                         {
                             "title": "Event Listeners",
@@ -97,16 +97,12 @@
                     "title": "Data",
                     "content": [
                         {
-                            "title": "Data",
+                            "title": "Overview",
                             "route": "data"
                         },
                         {
                             "title": "User",
                             "route": "data/user"
-                        },
-                        {
-                            "title": "Logging",
-                            "route": "data/logging"
                         }
                     ]
                 },
@@ -134,102 +130,6 @@
             ]
         },
         {
-            "title": "Workflows",
-            "content": [
-                {
-                    "title": "Workflows",
-                    "route": "workflows"
-                },
-                {
-                    "title": "Project Lifecycle",
-                    "route": "project-lifecycle"
-                },
-                {
-                    "title": "Jovo Webhook",
-                    "route": "jovo-webhook"
-                },
-                {
-                    "title": "CLI Commands",
-                    "content": [
-                        {
-                            "title": "Jovo CLI",
-                            "route": "cli"
-                        },
-                        {
-                            "title": "new",
-                            "route": "cli/new"
-                        },
-                        {
-                            "title": "run",
-                            "route": "cli/run"
-                        },
-                        {
-                            "title": "build",
-                            "route": "cli/build"
-                        },
-                        {
-                            "title": "deploy",
-                            "route": "cli/deploy"
-                        },
-                        {
-                            "title": "get",
-                            "route": "cli/get"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Configuration",
-            "content": [
-                {
-                    "title": "Overview",
-                    "route": "configuration"
-                },
-                {
-                    "title": "Project Structure",
-                    "route": "project-structure"
-                },
-                {
-                    "title": "app.js",
-                    "route": "app-js"
-                },
-                {
-                    "title": "config.js",
-                    "route": "config-js"
-                },
-                {
-                    "title": "project.js",
-                    "route": "project-js"
-                },
-                {
-                    "title": "Hosting",
-                    "content": [
-                        {
-                            "title": "Overview",
-                            "route": "hosting"
-                        },
-                        {
-                            "title": "ExpressJS",
-                            "route": "hosting/express-js"
-                        },
-                        {
-                            "title": "AWS Lambda",
-                            "route": "hosting/aws-lambda"
-                        },
-                        {
-                            "title": "Google Cloud",
-                            "route": "hosting/google-cloud-functions"
-                        },
-                        {
-                            "title": "Azure Functions",
-                            "route": "hosting/azure-functions"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "title": "Platforms",
             "content": [
                 {
@@ -248,20 +148,16 @@
                             "route": "amazon-alexa/data"
                         },
                         {
-                            "title": "Audioplayer Skills",
-                            "route": "amazon-alexa/audioplayer"
-                        },
-                        {
-                            "title": "In-Skill Purchases",
-                            "route": "amazon-alexa/in-skill-purchases"
-                        },
-                        {
                             "title": "Dialog Interface",
                             "route": "amazon-alexa/dialog-interface"
                         },
                         {
                             "title": "Visual Output",
                             "route": "amazon-alexa/visual-output"
+                        },
+                        {
+                            "title": "Audioplayer Skills",
+                            "route": "amazon-alexa/audioplayer"
                         },
                         {
                             "title": "Lists",
@@ -325,104 +221,24 @@
                 },
                 {
                     "title": "Databases",
-                    "content": [
-                        {
-                            "title": "Database Integrations",
-                            "route": "databases"
-                        },
-                        {
-                            "title": "FileDB",
-                            "route": "databases/file-db"
-                        },
-                        {
-                            "title": "DynamoDB",
-                            "route": "databases/dynamodb"
-                        },
-                        {
-                            "title": "Google Datastore",
-                            "route": "databases/google-datastore"
-                        },
-                        {
-                            "title": "MySQL",
-                            "route": "databases/mysql"
-                        },
-                        {
-                            "title": "MongoDB",
-                            "route": "databases/mongodb"
-                        }
-                    ]
-                },
-                {
-                    "title": "CMS",
-                    "content": [
-                        {
-                            "title": "CMS Integrations",
-                            "route": "cms"
-                        },
-                        {
-                            "title": "Google Sheets",
-                            "route": "cms/google-sheets"
-                        }
-                    ]
+                    "route": "databases"
                 },
                 {
                     "title": "Analytics",
-                    "content": [
-                        {
-                            "title": "Analytics Integrations",
-                            "route": "analytics"
-                        },
-                        {
-                            "title": "Dashbot",
-                            "route": "analytics/dashbot"
-                        },
-                        {
-                            "title": "Bespoken",
-                            "route": "analytics/bespoken"
-                        },
-                        {
-                            "title": "Chatbase",
-                            "route": "analytics/chatbase"
-                        },
-                        {
-                            "title": "Botanalytics",
-                            "route": "analytics/botanalytics"
-                        }
-                    ]
-                }
-            ]
-        },
-        {       
-            "title": "Testing",
-            "content": [
-                {
-                    "title": "Overview",
-                    "route": "testing"
-                },
-                {
-                    "title": "Jovo Debugger",
-                    "route": "debugger"
-                },
-                {
-                    "title": "Unit Testing",
-                    "route": "unit-testing"
+                    "route": "analytics"
                 }
             ]
         },
         {
-            "title": "Advanced Concepts",
+            "title": "Advanced",
             "content": [
                 {
-                    "title": "Advanced Concepts",
-                    "route": "advanced-concepts"
+                    "title": "Overview",
+                    "route": "advanced"
                 },
                 {
-                    "title": "Framework Architecture",
-                    "route": "architecture"
-                },
-                {
-                    "title": "Plugins",
-                    "route": "plugins"
+                    "title": "Unit Testing",
+                    "route": "unit-testing"
                 }
             ]
         }
