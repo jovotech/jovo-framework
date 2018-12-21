@@ -23,6 +23,7 @@ export class DynamoDb implements Db {
             convertEmptyValues: true,
         },
         dynamoDbConfig: {},
+        awsConfig: undefined,
     };
     needsWriteFileAccess = false;
     dynamoClient?: AWS.DynamoDB;
@@ -30,17 +31,17 @@ export class DynamoDb implements Db {
     isCreating = false;
 
     constructor(config?: Config) {
+
         if (config) {
             this.config = _merge(this.config, config);
         }
+    }
+    install(app: BaseApp) {
+
         if (this.config.awsConfig) {
             this.config.dynamoDbConfig = _merge(this.config.dynamoDbConfig, this.config.awsConfig);
             this.config.documentClientConfig = _merge(this.config.documentClientConfig, this.config.awsConfig);
-
         }
-    }
-
-    install(app: BaseApp) {
         this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
         this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
 
