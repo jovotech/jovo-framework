@@ -31,7 +31,7 @@ There are several ways how you can install Jovo:
 To use Jovo in the best and most efficient way, install the Jovo CLI globally with:
 
 ```sh
-$ npm install -g jovo-cli@beta
+$ npm install -g jovo-cli
 ```
 
 After successful installation, you should be able to see the Jovo CLI menu by just typing the following into your command line:

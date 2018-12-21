@@ -38,10 +38,10 @@ Although most of these changes were under the hood and don't directly affect the
 To get started with the new Jovo `v2`, install the Jovo CLI:
 
 ```sh
-$ npm install -g jovo-cli@beta
+$ npm install -g jovo-cli
 
 # sudo may be required
-$ sudo npm install -g jovo-cli@beta
+$ sudo npm install -g jovo-cli
 
 # If you run into problems, uninstall v1 versions first
 $ npm uninstall -g jovo-cli
