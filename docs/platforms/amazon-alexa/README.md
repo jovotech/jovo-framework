@@ -26,8 +26,6 @@ You can access the `alexaSkill` object like this:
 ```javascript
 this.$alexaSkill
 ```
-
-
 ## Routing
 
 This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [Basic Concepts > Routing](../../basic-concepts/routing './routing').
