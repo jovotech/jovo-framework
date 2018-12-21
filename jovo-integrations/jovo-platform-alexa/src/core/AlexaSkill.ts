@@ -8,7 +8,15 @@ import {AlexaAPI} from "../services/AlexaAPI";
 import {AmazonProfileAPI} from "../services/AmazonProfileAPI";
 import {AlexaSpeechBuilder} from "./AlexaSpeechBuilder";
 import {AlexaUser} from "./AlexaUser";
-import {AskForListPermissionsCard} from "../response/visuals/AskForListPermissionsCard";
+import {
+    BodyTemplate1, BodyTemplate2,
+    BodyTemplate3,
+    BodyTemplate6,
+    BodyTemplate7,
+    ListTemplate1,
+    ListTemplate2,
+    ListTemplate3
+} from "..";
 
 export class AlexaSkill extends Jovo {
     $alexaSkill: AlexaSkill;
@@ -227,5 +235,38 @@ export class AlexaSkill extends Jovo {
             throw new Error('Only available with catchAll slot');
         }
         return _get(this, '$inputs.catchAll.value');
+    }
+
+    /**
+     * Returns template builder by type
+     * @public
+     * @param {string} type
+     * @return {*}
+     */
+    templateBuilder(type: string) {
+        if (type === 'BodyTemplate1') {
+            return new BodyTemplate1();
+        }
+        if (type === 'BodyTemplate2') {
+            return new BodyTemplate2();
+        }
+        if (type === 'BodyTemplate3') {
+            return new BodyTemplate3();
+        }
+        if (type === 'BodyTemplate6') {
+            return new BodyTemplate6();
+        }
+        if (type === 'BodyTemplate7') {
+            return new BodyTemplate7();
+        }
+        if (type === 'ListTemplate1') {
+            return new ListTemplate1();
+        }
+        if (type === 'ListTemplate2') {
+            return new ListTemplate2();
+        }
+        if (type === 'ListTemplate3') {
+            return new ListTemplate3();
+        }
     }
 }
