@@ -14,15 +14,18 @@ Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
     * [Inputs](#inputs)
     * [State Management](#state-management)
     * [Unit Testing](#unit-testing)
-    * [Alexa Dialog Interface](#alexa-dialog-interface)
 * [Optional Changes](#optional-changes)
     * [Intent Syntax](#intent-syntax)
+    * [Data Management](#data-management)
+    * [Alexa Dialog Interface](#alexa-dialog-interface)
 * [Examples](#examples)
 
 
 [![Video: Jovo v2 Migration Guide](../../img/video-jovo-v2-migration.jpg 'youtube-video')](https://www.youtube.com/watch?v=yP39wuZAwXo)
 
 ## Getting Started with v2
+
+> New to Jovo? [Check out our Quickstart guide](../README.md '../quickstart').
 
 With the update to `v2` we've have completely refactored the code base of both the Jovo Framework and the Jovo CLI to make it more modular and easier to extend.
 
@@ -257,7 +260,7 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 * [Inputs](#inputs)
 * [State Management](#state-management)
 * [Unit Testing](#unit-testing)
-* [Alexa Dialog Interface](#alexa-dialog-interface)
+
 
 ### Inputs
 
@@ -309,30 +312,17 @@ this.$session.$data._JOVO_STATE_ = 'OrderState';
 
 ### Unit Testing
 
-In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
-
 > [Learn more about unit testing here](../../testing/unit-testing.md '../unit-testing').
 
-### Alexa Dialog Interface
-
-To increase consistency, the dialog feature of Alexa has its own interface now, `this.$alexaSkill.$dialog`, instead of being directly accessibly through the `$alexaSkill` interface.
-
-As a result, there were also method name changes:
-
-`v1` | `v2`
-:--- | :---
-`dialogDelegate()` | `$dialog.delegate()`
-`dialogElicitSlot()` | `$dialog.elicitSlot()`
-`dialogConfirmSlot()` | `$dialog.confirmSlot()`
-`dialogConfirmIntent()` | `$dialog.confirmIntent()`
-`getDialogState()` | `$dialog.getState()`
-`isDialogCompleted()` | `$dialog.isCompleted()`
-`isDialogInProgress()` | `$dialog.isInProgress()`
-`isDialogStarted()` | `$dialog.isStarted()`
+In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
 
 
 
 ## Optional Changes
+
+* [Intent Syntax](#intent-syntax) 
+* [Data Management](#data-management) 
+* [Alexa Dialog Interface](#alexa-dialog-interface)
 
 ### Intent Syntax
 
@@ -375,11 +365,51 @@ app.setHandler({
 })
 ```
 
+### Data Management
+
+> [Learn more about Data Management here](../../basic-concepts/data '../data').
+
+We changed the naming of how you can access data to provide a more consistent experience:
+
+```javascript
+// Interaction Data: Only relevant for current interaction (request - response)
+this.$data.key = value;
+
+// Session Data: Only relevant for current session ("session attributes")
+this.$session.$data.key = value; // recommended
+this.setSessionAttribute(key, value); // still works
+
+// User Data: Relevant across sessions (database integrations)
+this.$user.$data.key = value;
+
+// App Data: Special type of data, stored into app object on startup
+this.$app.$data.key = value;
+```
+
+
+### Alexa Dialog Interface
+
+To increase consistency, the dialog feature of Alexa has its own interface now, `this.$alexaSkill.$dialog`, instead of being directly accessibly through the `$alexaSkill` interface.
+
+As a result, there were also method name changes:
+
+`v1` | `v2`
+:--- | :---
+`dialogDelegate()` | `$dialog.delegate()`
+`dialogElicitSlot()` | `$dialog.elicitSlot()`
+`dialogConfirmSlot()` | `$dialog.confirmSlot()`
+`dialogConfirmIntent()` | `$dialog.confirmIntent()`
+`getDialogState()` | `$dialog.getState()`
+`isDialogCompleted()` | `$dialog.isCompleted()`
+`isDialogInProgress()` | `$dialog.isInProgress()`
+`isDialogStarted()` | `$dialog.isStarted()`
+
+While we recommend to use the new naming conventions, the old ones still work (deprecated).
 
 
 ## Examples
 
-For more examples how all of these changes look in action, we've updated both the [`examples` folder](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/examples) and the [templates repository](https://github.com/jovotech/jovo-templates/tree/v2) 
+For more examples how all of these changes look in action, we've updated both the [`examples` folder](https://github.com/jovotech/jovo-framework/tree/master/examples) and the [templates repository](https://github.com/jovotech/jovo-templates).
 
 
 <!--[metadata]: {"description": "Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.", "route": "installation/v1-migration"}-->
