@@ -1,6 +1,6 @@
-# Migrating to v2 from Jovo v1
+# Jovo v2 Migration Guide
 
-Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework.
+We just released a huge update to the Jovo Framework: Version 2! Learn how to migrate from a Jovo v1 project to the new v2 of the Jovo Framework, or [check out our Quickstart guide](../README.md '../quickstart').
 
 * [Getting Started with v2](#getting-started-with-v2)
     * [Installation](#installation)
@@ -44,7 +44,7 @@ $ npm install -g jovo-cli
 $ sudo npm install -g jovo-cli
 
 # If you run into problems, uninstall v1 versions first
-$ npm uninstall -g jovo-cli
+$ sudo npm uninstall -g jovo-cli
 ```
 
 Then, create a new Jovo project with:
@@ -87,7 +87,7 @@ module.exports = {
     googleAction: {
         nlu: 'dialogflow',
     },
-    endpoint: `${JOVO_WEBHOOK_URL}`,
+    endpoint: '${JOVO_WEBHOOK_URL}',
 };
 ```
 
@@ -146,10 +146,10 @@ With the new plugin architecture of the framework, the core `jovo-framework` npm
 
 Let's go over the process by integrating the `FileDb` plugin, which allows us to use a `JSON` file as a local database for development:
 
-We first install the plugin and save it as `devDependency` as we don't need in production:
+We first install the plugin:
 
 ```text
-npm install --save-dev jovo-db-filedb
+npm install --save jovo-db-filedb
 ```
 
 After that we go our `app.js` file, which is now located in the `src` folder and import as well as initialize the plugin:
@@ -157,8 +157,8 @@ After that we go our `app.js` file, which is now located in the `src` folder and
 ```javascript
 // src/app.js file
 
-const {App} = require('jovo-framework');
-const {FileDb} = require('jovo-db-filedb');
+const { App } = require('jovo-framework');
+const { FileDb } = require('jovo-db-filedb');
 // Other plugins
 
 const app = new App();
@@ -173,36 +173,26 @@ app.use(
 
 The same procedure has to be done for each plugin. 
 
-By default, a new `v2` project comes with the `Alexa`, `GoogleAssistant` and `JovoDebugger` plugin:
+By default, a new `v2` project comes with the `Alexa`, `GoogleAssistant`, `FileDb`, and `JovoDebugger` plugins:
 
 ```javascript
 // src/app.js
 
-const {App} = require('jovo-framework');
-const {Alexa} = require('jovo-platform-alexa');
-const {GoogleAssistant} = require('jovo-platform-googleassistant');
-const {JovoDebugger} = require('jovo-plugin-debugger');
+const { App } = require('jovo-framework');
+const { Alexa } = require('jovo-platform-alexa');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { FileDb } = require('jovo-plugin-filedb');
+const { JovoDebugger } = require('jovo-plugin-debugger');
 
 const app = new App();
 
 app.use(
     new Alexa(),
     new GoogleAssistant(),
+    new FileDb(),
     new JovoDebugger()
 );
 ```
-
-Here's a full list of plugins:
-
-Name | Description | Package Name
-:--- | :--- | :---
-Alexa | Allows you to build Skills for Amazon Alexa | `jovo-platform-alexa`
-Google Assistant | Allows you to build Actions for the Google Assistant | `jovo-platform-googleassistant`
-Debugger | Allows you to use the [Jovo Debugger](../../testing/debugger.md './testing/debugger') | `jovo-plugin-debugger`
-FileDb | Local database inside `JSON` file for local development | `jovo-db-filedb`
-MySQL | 
-
-
 
 ### Jovo Objects
 
@@ -223,7 +213,10 @@ Here's the list of changes:
 `request()` | `$request`
 `response()` | `$response`
 `user()` | `$user`
+`user().data` | `$user.$data`
 `getInputs()` | `$inputs`
+`speech` | `$speech`
+`reprompt` | `$reprompt`
 `alexaSkill()` | `$alexaSkill`
 `alexaSkill().audioPlayer()` | `$alexaSkill.$audioPlayer`
  `alexaSkill().dialogInterface()` | `$alexaSkill.$dialog`
@@ -237,16 +230,10 @@ Here's the list of changes:
 
 ### Integrations
 
-With the new interface naming convention there is also a slight change to the Jovo Persistence Layer syntax:
-
-```javascript
-// v1
-this.user().data.key = value;
-
-// v2
-this.$user.$data.key = value;
-```
-
+We updated existing integration layers and added new interfaces. Take a look here to learn more about our:
+* [Database Integrations](../../integrations/databases '../databases')
+* [CMS Integrations](../../integrations/cms '../cms')
+* [Analytics Integrations](../../integrations/analytics '../analytics')
 
 ### Response Execution
 
@@ -264,16 +251,7 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 
 ### Inputs
 
-With `v2` you won't be able to access user inputs by adding them as parameters to your intent anymore:
-
-```javascript
-// Does NOT work:
-MyNameIsIntent(name) {
-    this.tell('Hey ' + name.value + ', nice to meet you!');
-},
-```
-
-Inputs can now be accessed by using a new `$inputs` object:
+With `v2` you won't be able to access user inputs by adding them as parameters to your intent anymore. Inputs can now be accessed by using a new `$inputs` object:
 
 ```javascript
 // Recommended
@@ -284,7 +262,12 @@ MyNameIsIntent() {
 // Still works
 MyNameIsIntent() {
     this.tell('Hey ' + this.getInput('name').value + ', nice to meet you!');
-}
+},
+
+// Does not work anymore
+MyNameIsIntent(name) {
+    this.tell('Hey ' + name.value + ', nice to meet you!');
+},
 ```
 
 Also, you won't be able to pass additional data in redirects anymore. Here is our recommended (more consistent) way to pass interaction specific data:
