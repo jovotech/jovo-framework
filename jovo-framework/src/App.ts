@@ -58,7 +58,6 @@ export class App extends BaseApp {
     }
 
     mergePluginConfiguration() {
-        this.config.plugin = {};
         _merge(this.config.plugin, this.config.platform);
         _merge(this.config.plugin, this.config.db);
         _merge(this.config.plugin, this.config.cms);
