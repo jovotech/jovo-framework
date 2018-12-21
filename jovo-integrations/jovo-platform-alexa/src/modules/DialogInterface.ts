@@ -18,6 +18,140 @@ export class DialogInterface implements Plugin {
         AlexaSkill.prototype.dialog = function() {
             return this.$dialog;
         };
+
+
+        // backwards compatibility deprecated methods
+
+
+        /**
+         * Returns Intent Confirmation status
+         * @deprecated Please use this.$alexaSkill.$dialog.getIntentConfirmationStatus();
+         * @return {String}
+         */
+        AlexaSkill.prototype.getIntentConfirmationStatus = function() {
+            return this.$dialog!.getIntentConfirmationStatus();
+        };
+
+        /**
+         * Returns slot confirmation status
+         * @public
+         * @param {string} slotName
+         * @return {*}
+         */
+        AlexaSkill.prototype.getSlotConfirmationStatus = function(slotName: string) {
+            return this.$dialog!.getSlotConfirmationStatus(slotName);
+        };
+
+        /**
+         * Returns state of dialog
+         * @deprecated Please use this.$alexaSkill.$dialog.getState();
+         * @return {String}
+         */
+        AlexaSkill.prototype.getDialogState = function() {
+            return this.$dialog!.getState();
+        };
+
+        /**
+         * Returns true if dialog is in state COMPLETED
+         * @deprecated Please use this.$alexaSkill.$dialog.isCompleted();
+         * @return {boolean}
+         */
+        AlexaSkill.prototype.isDialogCompleted = function() {
+            return this.$dialog!.isCompleted();
+        };
+
+        /**
+         * Returns true if dialog is in state IN_PROGRESS
+         * @deprecated Please use this.$alexaSkill.$dialog.isInProgress();
+         * @return {boolean}
+         */
+        AlexaSkill.prototype.isDialogInProgress = function() {
+            return this.$dialog!.isInProgress();
+        };
+
+
+        /**
+         * Returns true if dialog is in state STARTED
+         * @deprecated Please use this.$alexaSkill.$dialog.isStarted();
+         * @return {boolean}
+         */
+        AlexaSkill.prototype.isDialogStarted = function() {
+            return this.$dialog!.hasStarted();
+        };
+
+
+        /**
+         * Returns if slot is confirmed
+         * @deprecated Please use this.$alexaSkill.$dialog.isSlotConfirmed();
+         * @return {boolean}
+         */
+        AlexaSkill.prototype.isSlotConfirmed = function(slotName: string) {
+            return this.$dialog!.isSlotConfirmed(slotName);
+        };
+
+
+        /**
+         * Returns if slot is confirmed
+         * @deprecated Please use this.$alexaSkill.$dialog.hasSlotValue(slotName);
+         * @return {boolean}
+         */
+        AlexaSkill.prototype.hasSlotValue = function(slotName: string) {
+            return this.$dialog!.hasSlotValue(slotName);
+        };
+
+
+        /**
+         * Creates delegate directive. Alexa handles next dialog
+         * step
+         * @deprecated Please use this.$alexaSkill.$dialog.delegate(updatedIntent);
+         * @param {Intent} updatedIntent
+         * @return {AlexaResponse}
+         */
+        AlexaSkill.prototype.dialogDelegate = function(updatedIntent?: Intent) {
+            return this.$dialog!.delegate(updatedIntent);
+        };
+
+
+        /**
+         * Let alexa ask user for the value of a specific slot
+         * @deprecated Please use this.$alexaSkill.$dialog.elicitSlot(slotToElicit, speech, reprompt, updatedIntent);
+         * @param {string} slotToElicit name of the slot
+         * @param {string} speech
+         * @param {string} reprompt
+         * @param {Intent} updatedIntent
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.dialogElicitSlot = function(slotToElicit: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
+            return this.$dialog!.elicitSlot(slotToElicit, speech, reprompt, updatedIntent);
+        };
+
+
+        /**
+         * Let alexa ask user to confirm slot with yes or no
+         * @deprecated Please use this.$alexaSkill.$dialog.confirmSlot(slotToConfirm, speech, reprompt, updatedIntent);
+         * @param {string} slotToConfirm name of the slot
+         * @param {string} speech
+         * @param {string} reprompt
+         * @param {Intent} updatedIntent
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.dialogConfirmSlot = function(slotToConfirm: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
+            return this.$dialog!.confirmSlot(slotToConfirm, speech, reprompt, updatedIntent);
+        };
+
+
+        /**
+         * Asks for intent confirmation
+         * @deprecated Please use this.$alexaSkill.$dialog.confirmIntent(speech, reprompt, updatedIntent);
+         * @param {string} speech
+         * @param {string} reprompt
+         * @param {Intent} updatedIntent
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.dialogConfirmIntent = function(speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
+            return this.$dialog!.confirmIntent(speech, reprompt, updatedIntent);
+        };
+
     }
     uninstall(alexa: Alexa) {
     }
@@ -53,7 +187,7 @@ export class Dialog {
     /**
      * Returns state of dialog
      * @public
-     * @return {BaseApp.DIALOGSTATE_ENUM}
+     * @return {string}
      */
     getState() {
         return _get(this.alexaRequest, 'request.dialogState');
@@ -100,9 +234,9 @@ export class Dialog {
 
     /**
      * Creates delegate directive. Alexa handles next dialog
-     * step by her(?)self.
-     * @param {object} updatedIntent
-     * @return {AlexaResponse}
+     * step
+     * @param {Intent} updatedIntent
+     * @return {AlexaSkill}
      */
     delegate(updatedIntent?: Intent) {
         _set(this.alexaSkill.$output, 'Alexa.Dialog',
@@ -117,7 +251,8 @@ export class Dialog {
      * @param {string} slotToElicit name of the slot
      * @param {string} speech
      * @param {string} reprompt
-     * @param {object} updatedIntent
+     * @param {Intent} updatedIntent
+     * @return {AlexaSkill}
      */
     elicitSlot(slotToElicit: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
         _set(this.alexaSkill.$output, 'ask',{
@@ -136,7 +271,8 @@ export class Dialog {
      * @param {string} slotToConfirm name of the slot
      * @param {string} speech
      * @param {string} reprompt
-     * @param {object} updatedIntent
+     * @param {Intent} updatedIntent
+     * @return {AlexaSkill}
      */
     confirmSlot(slotToConfirm: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
         _set(this.alexaSkill.$output, 'ask',{
@@ -154,7 +290,8 @@ export class Dialog {
      * @public
      * @param {string} speech
      * @param {string} reprompt
-     * @param {object} updatedIntent
+     * @param {Intent} updatedIntent
+     * @return {AlexaSkill}
      */
     confirmIntent(speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
         _set(this.alexaSkill.$output, 'ask',{
@@ -184,7 +321,7 @@ export class Dialog {
      * @public
      * @return {String}
      */
-    getIntentConfirmationStatus() {
+    getIntentConfirmationStatus(): string {
         return _get(this.alexaRequest, 'request.intent.confirmationStatus');
     }
 
@@ -195,9 +332,20 @@ export class Dialog {
      * @param {string} slotName
      * @return {boolean}
      */
-    isSlotConfirmed(slotName: string) {
+    isSlotConfirmed(slotName: string): boolean {
         return this.getSlotConfirmationStatus(slotName) === 'CONFIRMED';
     }
+
+
+    /**
+     * Checks if slot has value
+     * @public
+     * @return {boolean}
+     */
+    hasSlotValue(slotName: string) {
+        return _get(this.alexaRequest.getSlot(slotName), 'value') !== 'undefined';
+    }
+
 }
 
 // TODO: Optimize me
