@@ -7,13 +7,14 @@ We just released a huge update to the Jovo Framework: Version 2! Learn how to mi
     * [Project Structure](#project-structure)
 * [Updated Concepts](#updated-concepts)
     * [Plugins](#plugins)
-    * [Jovo Objects](#jovo-variables)
+    * [Jovo Objects](#jovo-objects)
     * [Integrations](#integrations)
     * [Response Execution](#response-execution)
 * [Breaking Changes](#breaking-changes)
     * [Inputs](#inputs)
     * [State Management](#state-management)
     * [Unit Testing](#unit-testing)
+    * [Changes to the User Object](#changes-to-the-user-object)
 * [Optional Changes](#optional-changes)
     * [Intent Syntax](#intent-syntax)
     * [Data Management](#data-management)
@@ -247,6 +248,7 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 * [Inputs](#inputs)
 * [State Management](#state-management)
 * [Unit Testing](#unit-testing)
+* [Changes to the User Object](#changes-to-the-user-object)
 
 
 ### Inputs
@@ -299,6 +301,36 @@ this.$session.$data._JOVO_STATE_ = 'OrderState';
 
 In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
 
+### Changes to the User Object
+
+#### User ID
+
+```javascript
+// Old
+this.user().isNewUser()
+
+// New
+this.$user.isNew()
+```
+
+#### Alexa User Methods
+
+To keep platform specific user methods more organized, it is now necessary to use the platform's user object (`this.$alexaSkill.$user`) to call features from e.g. the [Alexa Settings API](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings'):
+
+```javascript
+// Old
+this.user().getTimezone()
+
+// New
+this.$alexaSkill.$user.getTimezone()
+```
+
+Learn more by taking a look at the following docs:
+
+* [Alexa Data](../../platforms/amazon-alexa/data.md '../amazon-alexa/data')
+* [Alexa Lists](../../platforms/amazon-alexa/lists.md '../amazon-alexa/lists')
+* [Alexa Settings](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings')
+* [Alexa Reminders](../../platforms/amazon-alexa/reminders.md '../amazon-alexa/reminders')
 
 
 ## Optional Changes
