@@ -77,7 +77,6 @@ To be able to use display templates for devices like Echo Show, you need to enab
 ![Alexa Console: Enable Display Interface](../../img/alexa-enable-display-interface.jpg)
 
 
-
 ### Body Templates
 
 Body templates are only capable of displaying images and text. There are multiple body templates, each having a different composition.
