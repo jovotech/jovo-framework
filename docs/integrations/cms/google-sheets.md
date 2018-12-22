@@ -101,7 +101,7 @@ cms: {
     GoogleSheetsCMS: {
         spreadsheetId: '<YourSpreadsheetId>',
         access: 'private',
-        credentials: './path/to/credentials.json',
+        credentialsFile: './path/to/credentials.json',
         sheets: [
             {
                 name: 'responses',
@@ -112,7 +112,7 @@ cms: {
 },
 ```
 
-To make private spreadsheets work, you need to create a service account and security credentials. These can be downloaded as a JSON file and then referenced in the `credentials` element.
+To make private spreadsheets work, you need to create a service account and security credentials. These can be downloaded as a JSON file and then referenced in the `credentialsFile` element (default is `./credentials.json`).
 
 
 ## Default Sheet Types
