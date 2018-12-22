@@ -2,6 +2,12 @@
 
 Learn more about how to set reminders for your user with your Alexa Skill.
 
+* [Introduction](#introduction)
+* [Add Reminder](#add-reminder)
+* [Update Reminder](#update-reminder)
+* [Delete Reminder](#delete-reminder)
+* [Get Reminder](#get-reminder)
+
 ## Introduction
 
 To create a reminder you simply send a `JSON` object to Amazon's API endpoint. You can find out what that these `JSON` objects look like [here](https://developer.amazon.com/docs/smapi/alexa-reminders-api-reference.html#reminder-object)
@@ -12,9 +18,9 @@ To add a reminder you use the `setReminder()` method, which takes in the `JSON` 
 
 ```javascript
 let reminder = {
-    // your reminder
+    // Your reminder
 };
-this.$user.setReminder(reminder).then((data) => {
+this.$alexaSkill.$user.setReminder(reminder).then((data) => {
     console.log(data);
     this.tell('Done');
 }).catch((error) => {
@@ -55,7 +61,7 @@ const updatedReminder = {
     // your reminder
 };
 
-this.$user.updateReminder(alertToken, updatedReminder).then((data) => {
+this.$alexaSkill.$user.updateReminder(alertToken, updatedReminder).then((data) => {
     console.log(data);
     this.tell('Reminder has been updated.');
 }).catch((error) => {
@@ -72,7 +78,7 @@ To delete an active reminder you need the `deleteReminder()` method which takes 
 ```javascript
 const alertToken = '<REMINDER TOKEN>';
 
-this.$user.deleteReminder(alertToken).then(() => {
+this.$alexaSkill.$user.deleteReminder(alertToken).then(() => {
     this.tell('Reminder has been deleted.');
 }).catch((err) => {
     console.log(err);
@@ -86,7 +92,7 @@ You can also send out a request to get a reminder using its `alertToken`:
 ```javascript
 const alertToken = '<REMINDER TOKEN>';
 
-this.$user.getReminder(alertToken).then((data) => {
+this.$alexaSkill.$user.getReminder(alertToken).then((data) => {
         console.log(data);
 }).catch((err) => {
     console.log(err);
@@ -96,7 +102,7 @@ this.$user.getReminder(alertToken).then((data) => {
 There is also the possibility to get all your reminders at once:
 
 ```javascript
-this.$user.getAllReminders().then((data) => {
+this.$alexaSkill.$user.getAllReminders().then((data) => {
         console.log(data);
 }).catch((err) => {
     console.log(err);
