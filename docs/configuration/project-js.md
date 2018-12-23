@@ -44,7 +44,7 @@ This is what the default `project.js` looks like:
 			name: 'dialogflow',
 		}
 	},
-	endpoint: `${JOVO_WEBHOOK_URL}`,
+	endpoint: '${JOVO_WEBHOOK_URL}',
 }
 ```
 
