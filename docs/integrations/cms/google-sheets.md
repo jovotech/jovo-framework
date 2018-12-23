@@ -65,6 +65,8 @@ Additional configuration might differ depending if you want to use a publicly ac
 
 ### Public Spreadsheets
 
+> [Tutorial: Use Google Sheets as CMS for your Voice App](https://www.jovo.tech/tutorials/google-sheets-cms)
+
 Public spreadsheets allow you to get started quickly whithout having to care about credentials. We recommend setting up a public spreadsheet first and then turning to [private spreadsheets](#private-spreadsheets) later.
 
 For public spreadsheets, you need to add the following to your `config.js` file:
@@ -90,6 +92,8 @@ The additional information you need to add for public spreadsheets is the `posit
 
 
 ### Private Spreadsheets
+
+> [Tutorial: Use Private Google Spreadsheets as a CMS](https://www.jovo.tech/tutorials/google-spreadsheet-private-cms)
 
 With private spreadsheets, you can control who has access to your content. This comes with the price of a few more extra steps to set it up.
 
