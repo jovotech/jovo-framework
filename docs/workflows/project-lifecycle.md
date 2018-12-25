@@ -3,23 +3,69 @@
 Learn more about the different steps of a Jovo project.
 
 * [Introduction](#introduction)
-* [Local Development](#local-development)
-   * [Jovo Webhook](#jovo-webhook)
-   * [Alternatives](#alternatives)
-* [Deployment](#deployment)
+* [Creating a Jovo Project](#creating-a-jovo-project)
+* [Code](#code)
+   * [Local Development](#local-development)
+   * [Hosting](#hosting)
+* [Platform Projects](#platform-projects)
+   * [Build Platform Files](#build-platform-files)
    * [Deploy Platform Projects](#deploy-platform-projects)
-   * [Deploy Source Code](#deploy-source-code)
-
 
 ## Introduction
 
-Jovo offers different tools for different phases of the application development process.
+![Jovo Project Lifecycle](../img/project-lifecycle.png)
 
-* [Local Development](#local-development)
-* [Deployment](#deployment)
+There are two main elements of a Jovo project:
+* `src` folder: The actual code of your app that is later hosted somewhere
+* Platform project related files, including `project.js`, `models` and `platforms` folders
+
+The two elements are connected by an `endpoint` that is used by the platform to send requests and receive responses ([learn more about Requests and Responses here](../basic-concepts/requests-responses.md './requests-responses')). This endpoint is where your app logic is executed with code.
+
+![Two elements of a Jovo project: Platform Project and Code](../img/project-lifecycle-elements.png)
+
+Learn more about the different elements of a Jovo project in the following sections:
+
+* [Creating a Jovo Project](#creating-a-jovo-project)
+* [Code](#code)
+   * [Local Development](#local-development)
+   * [Hosting](#hosting)
+* [Platform Projects](#platform-projects)
+   * [Build Platform Files](#build-platform-files)
+   * [Deploy Platform Projects](#deploy-platform-projects)
 
 
-## Local Development
+## Creating a Jovo Project
+
+> [Learn more in our Quickstart Guide](../getting-started './quickstart').
+
+You can create a new Jovo project by using the Jovo CLI:
+
+```sh
+# Install Jovo CLI
+$ npm install -g jovo-cli
+
+# Create new Jovo Project
+$ jovo new <directory>
+$ cd <directory>
+```
+
+For alternatives, see our [Installation Guide](../getting-started/installation './installation').
+
+
+## Code
+
+![Jovo Project Code](../img/project-lifecycle-code.png)
+
+The source code in the `src` folder is where your app logic is run. The folder typically includes the following files:
+
+* `app.js`: [App Instantiation and Logic](../configuration/app-js.md './app-js')
+* `config.js`: [App Configuration](../configuration/config-js.md './config-js')
+* `index.js`: [Host Configuration](../configuration/hosting './hosting')
+
+For faster debugging and development, Jovo comes with [Local Development](#local-development) capabilities by using the `jovo run` command. After local debugging, the code can then be deployed to various [Hosting](#hosting) providers.
+
+
+### Local Development
 
 Jovo offers a development server based on ExpressJS for local testing and debugging.
 
@@ -53,7 +99,9 @@ Here are all the services that can point to your local development server:
    * [ngrok](#ngrok)
 
 
-### Jovo Webhook
+#### Jovo Webhook
+
+> [Learn more about the Jovo Webhook here](./jovo-webhook.md './jovo-webhook').
 
 The Jovo Webhook is a free service that creates a link to your local webserver. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time.
 
@@ -68,9 +116,9 @@ This link simply makes it easier for you to prototype locally by being able to s
 You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../workflows/cli/deploy '../cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
 
 
-### Alternatives
+#### Alternatives
 
-#### bst proxy
+##### bst proxy
 
 With the bst proxy by [Bespoken](https://bespoken.io/), you can create a link similar to the [Jovo Webhook](#jovo-webhook), but with additional features like logging.
 
@@ -83,11 +131,9 @@ This is what the result looks like:
 
 ![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
 
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../integrations/analytics/bespoken.md './analytics/bespoken') for powerful logging capabilities:
+Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../integrations/analytics/bespoken.md './analytics/bespoken').
 
-![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/bespoken-logging.jpg)
-
-#### ngrok
+##### ngrok
 
 [Ngrok](https://ngrok.com/) is a tunneling service that makes your localhost accessible to outside APIs.
 
@@ -101,39 +147,14 @@ $ npm install ngrok -g
 $ ngrok http 3000
 ```
 
-It should display something similar to this:
 
-![ngrok window](https://www.jovo.tech/img/docs/building-a-voice-app/webhook-url.jpg)
+### Hosting
 
+> [Learn more about hosting here](../configuration/hosting './hosting').
 
-## Deployment
+For testing and running your app in production, you need to deploy the code to various [hosting providers](../configuration/hosting './hosting') Jovo offers integrations for.
 
-### Deploy Platform Projects
-
-```sh
-# Build platforms based on project.js
-$ jovo build
-
-# Deploy platform projects
-$ jovo deploy
-```
-
-> [Learn more about the project.js configuration here](../configuration/project-js.md './project-js').
-
-
-
-### Deploy Source Code
-
-> [Learn more about hosting providers here](../configuration/hosting './hosting').
-
-If you have an Lambda endpoint defined in your `project.js` file, the `jovo deploy` command will also bundle and upload your source code to AWS Lambda:
-
-```sh
-# Deploy platform projects and source code
-$ jovo deploy
-```
-
-You can also just bundle the files and then upload the resulting `bundle.zip` file manually:
+You can create a ready-to-deploy `bundle.zip` file with either of the following commands:
 
 ```sh
 # Bundle files
@@ -142,6 +163,57 @@ $ jovo deploy --target zip
 # Alternative
 $ npm run bundle
 ```
+
+This will copy the `src` files into a `dist` folder and run a production-only npm install.
+
+If you have a Lambda endpoint defined in your `project.js` file, the `jovo deploy` command will not only [deploy platform projects](#deploy-platform-projects), but also bundle and upload your source code to AWS Lambda:
+
+```sh
+# Deploy platform projects and source code
+$ jovo deploy
+```
+
+
+## Platform Projects
+
+![Jovo Platform Project](../img/project-lifecycle-platform.png)
+
+Besides the code in the `src` folder, there is also a number of project-related configurations and files that are mostly used to create and manage platform specific projects.
+
+The following files are used:
+* `project.js`: [Project Configuration](../configuration/project-js.md './project-js')
+* `models` folder: [Jovo Language Model](../basic-concepts/model './model') files
+* `platforms` folder: Platform specific files
+
+### Build Platform Files
+
+> [Learn more about the project.js configuration here](../configuration/project-js.md './project-js').
+
+To create platform projects for e.g. Amazon Alexa or Google Assistant (Dialogflow), we first need to create platform specific files that are later deployed to each platform.
+
+For this, the Jovo CLI uses the information in the `project.js` file and the `models` folder to create platform specific language models:
+
+```sh
+# Build platforms folder files based on project.js config
+$ jovo build
+```
+
+These files can then be deployed to the platforms.
+
+### Deploy Platform Projects
+
+> [Learn more about the jovo deploy command here](./cli/deploy './cli/deploy').
+
+This command will deploy the files in the `platforms` folder to the platforms, for example Amazon Alexa or Dialogflow:
+
+```sh
+# Deploy platform projects
+$ jovo deploy
+```
+
+
+
+
 
 
 <!--[metadata]: {"description": "Learn more about the different steps of a Jovo project.", "route": "project-lifecycle"}-->
