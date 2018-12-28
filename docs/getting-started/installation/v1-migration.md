@@ -330,6 +330,20 @@ In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`
 
 ### Changes to the User Object
 
+> [Learn more about the User Object here](../../basic-concepts/data/user.md '../data/user').
+
+#### User Data
+
+> [Learn more about Data Management here](../../basic-concepts/data '../data').
+
+```javascript
+// Old
+this.user().data.key = value;
+
+// New
+this.$user.$data.key = value;
+```
+
 #### User ID
 
 ```javascript
@@ -341,6 +355,8 @@ this.$user.isNew()
 ```
 
 #### Alexa User Methods
+
+> [Learn more about Alexa specific features here](../../platforms/amazon-alexa '../amazon-alexa').
 
 To keep platform specific user methods more organized, it is now necessary to use the platform's user object (`this.$alexaSkill.$user`) to call features from e.g. the [Alexa Settings API](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings'):
 
