@@ -164,7 +164,7 @@ $ jovo deploy --target zip
 $ npm run bundle
 ```
 
-This will copy the `src` files into a `dist` folder and run a production-only npm install.
+This will copy the `src` files into a `bundle` folder, run a production-only npm install, and then zip it.
 
 If you have a Lambda endpoint defined in your `project.js` file, the `jovo deploy` command will not only [deploy platform projects](#deploy-platform-projects), but also bundle and upload your source code to AWS Lambda:
 

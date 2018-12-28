@@ -65,6 +65,7 @@ There are several changes that are important:
 * [`project.js`](#projectjs) (previously `app.json`)
 * `src` (including `index.js` and `app.js`)
 * [`config.js`](#configjs)
+* [Deployment](#deployment)
 
 #### project.js
 
@@ -128,6 +129,32 @@ For example we could disable `logging` in our `prod` stage using the `config.pro
 module.exports = {
     logging: false,
 }
+```
+
+#### Deployment
+
+Since the project structure is different (the `index.js` is now in `src` as opposed to the root directory), there is a slight update to the deployment process.
+
+Instead of zipping the complete project folder (which was quite large anyways), you can create an optimized `bundle.zip` file with either of the following commands:
+
+```sh
+# Bundle files
+$ jovo deploy --target zip
+
+# Alternative
+$ npm run bundle
+```
+
+This will copy the `src` files into a `bundle` folder, run a production-only npm install, and then zip it.
+
+You can then use this file and upload it to the hosting provider of your choice.
+
+To be able to run this command, you need the following script in your `package.json`(default for fresh new projects):
+
+```js
+"scripts": {
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./",
+  },
 ```
 
 ## Updated Concepts

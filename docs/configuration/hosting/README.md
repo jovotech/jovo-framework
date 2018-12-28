@@ -3,6 +3,7 @@
 In this section, you can learn more about different types of services that can be used for hosting your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
+* [Deployment](#deployment)
 * [Available Integrations](#available-integrations)
 * [Code Example](#code-example)
 
@@ -12,6 +13,23 @@ In this section, you can learn more about different types of services that can b
 Jovo comes with off-the-shelf host integrations that make it easier for you to deploy your voice app to the provider of your choice. The hosting providers can be configured in the `index.js` file.
 
 Jovo currently supports an [ExpressJS Webhook](./express-js.md './hosting/express-js') (which we recommend for local prototyping), [AWS Lambda](./aws-lambda.md './hosting/aws-lambda'), [Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') and [Azure Functions](./azure-functions.md './hosting/azure-functions'). 
+
+## Deployment
+
+You can create a ready-to-deploy `bundle.zip` file with either of the following commands:
+
+```sh
+# Bundle files
+$ jovo deploy --target zip
+
+# Alternative
+$ npm run bundle
+```
+
+This will copy the `src` files into a `bundle` folder, run a production-only npm install, and then zip it.
+
+You can then use this file and upload it to the hosting provider of your choice.
+
 
 ## Available Integrations
 
