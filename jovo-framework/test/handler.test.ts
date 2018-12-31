@@ -91,6 +91,117 @@ test('test skip exception on non existing route', async (done) => {
     done();
 });
 
+test('test applyHandle on route that returns rejected promise', async () => {
+    const rejectionReason = 'rejection reason';
+
+    expect.assertions(1);
+
+    const appConfig: AppConfig = {
+        handlers: {
+            IntentA() {
+                return Promise.reject(rejectionReason);
+            }
+        }
+    };
+
+    try {
+        // @ts-ignore
+        await Handler.applyHandle(null, {
+            path: 'IntentA',
+            type: EnumRequestType.INTENT,
+        }, appConfig);
+    } catch (e) {
+        expect(e).toEqual(rejectionReason);
+    }
+});
+
+test('test applyHandle on route that immediately throws exception', async () => {
+    const errorMessage = 'an error';
+
+    expect.assertions(1);
+
+    const appConfig: AppConfig = {
+        handlers: {
+            IntentA() {
+                throw new Error(errorMessage);
+            }
+        }
+    };
+
+    try {
+        // @ts-ignore
+        await Handler.applyHandle(null, {
+            path: 'IntentA',
+            type: EnumRequestType.INTENT,
+        }, appConfig);
+    } catch (e) {
+        expect(e).toEqual(new Error(errorMessage));
+    }
+});
+
+test('test applyHandle on route with callback', async () => {
+    const appConfig: AppConfig = {
+        handlers: {
+            IntentA(jovo: Jovo, callback: () => void) {
+                callback();
+            }
+        }
+    };
+
+    // @ts-ignore
+    await Handler.applyHandle(null, {
+        path: 'IntentA',
+        type: EnumRequestType.INTENT,
+    }, appConfig);
+});
+
+test('test applyHandle on route with callback that immediately throws exception', async () => {
+    const errorMessage = 'an error';
+
+    expect.assertions(1);
+
+    const appConfig: AppConfig = {
+        handlers: {
+            IntentA(callback: () => {}) {
+                throw new Error(errorMessage);
+            }
+        }
+    };
+
+    try {
+        // @ts-ignore
+        await Handler.applyHandle(null, {
+            path: 'IntentA',
+            type: EnumRequestType.INTENT,
+        }, appConfig);
+    } catch (e) {
+        expect(e).toEqual(new Error(errorMessage));
+    }
+});
+
+
+test('test applyHandle on route that returns a promise wrapped in a promise', async () => {
+    let executed = false;
+
+    const appConfig: AppConfig = {
+        handlers: {
+            async IntentA() {
+                return new Promise((resolve) => {
+                    executed = true;
+                    resolve();
+                });
+            }
+        }
+    };
+
+    // @ts-ignore
+    await Handler.applyHandle(null, {
+        path: 'IntentA',
+        type: EnumRequestType.INTENT,
+    }, appConfig);
+
+    expect(executed).toBeTruthy();
+});
 
 test('test handleOnRequest', () => {
     const appConfig: AppConfig = {
