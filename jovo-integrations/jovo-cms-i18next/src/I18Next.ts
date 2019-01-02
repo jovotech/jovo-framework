@@ -85,13 +85,16 @@ export class I18Next extends BaseCmsPlugin {
             const dir = await readdir(filesDir);
 
             dir.forEach((file: string) => {
-                const locale = file.substring(0, file.indexOf('.json'));
-
-                handleRequest.app.$cms.I18Next.resources[locale] = require(
-                    path.join(
-                        process.cwd(),
-                        filesDir,
-                        file));
+                const ext = file.split('.')[1];
+                const validExtensions = ['js', 'json'];
+                if (validExtensions.includes(ext)) {
+                    const locale = file.split('.')[0];
+                    handleRequest.app.$cms.I18Next.resources[locale] = require(
+                        path.join(
+                            process.cwd(),
+                            filesDir,
+                            file));
+                }
             });
         } else if (this.config.resources) {
             handleRequest.app.$cms.I18Next.resources = this.config.resources;
