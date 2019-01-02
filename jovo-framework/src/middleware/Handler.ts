@@ -118,7 +118,7 @@ export class Handler implements Plugin {
 
         // resolve if toIntent was triggered before
         if (jovo && jovo.triggeredToIntent && !fromIntent) {
-            return Promise.resolve();
+            return;
         }
         if (!route || typeof route.type === 'undefined') {
             route = {
@@ -132,7 +132,7 @@ export class Handler implements Plugin {
             route.type === EnumRequestType.INTENT && // Mapped Intent to END
             route.intent === EnumRequestType.END) &&
             !_get(config.handlers, route.path)) {
-            return Promise.resolve();
+            return;
         }
 
         if (route.type === EnumRequestType.AUDIOPLAYER && !_get(config.handlers, route.path)) {
@@ -143,7 +143,7 @@ export class Handler implements Plugin {
                 route.path = v1AudioPlayerPath;
                 console.log('AudioPlayer.* is deprecated since v2. Please use AlexaSkill.*');
             } else {
-                return Promise.resolve();
+                return;
             }
         }
 
@@ -156,34 +156,31 @@ export class Handler implements Plugin {
             ) &&
 
             !_get(config.handlers, route.path)) {
-            return Promise.reject(
-                new Error(`Could not find the route "${route.path}" in your handler function.`)); // eslint-disable-line
+            throw new Error(`Could not find the route "${route.path}" in your handler function.`);
         }
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
 
         if (_get(config.handlers, route.path)) {
+            const func:Function = _get(config.handlers, route.path);
+            const params = getParamNames(func);
 
-            return new Promise(async (resolve) => {
-                const func:Function = _get(config.handlers, route.path);
-                const params = getParamNames(func);
-
-                // no callback 'done' parameter
-                if (params.length < 2) {
-                    const result = await func.apply(jovo, [jovo]);
-                    if (typeof result === 'undefined') {
-                        return resolve();
-                    } else if(result.constructor.name === 'Promise') {
-                        return result.then(resolve);
-                    } else {
-                        return resolve();
-                    }
+            // no callback 'done' parameter
+            if (params.length < 2) {
+                const result = await func.apply(jovo, [jovo]);
+                if (typeof result === 'undefined') {
+                    return;
                 }
-
-                const callback = () => {
-                    resolve();
-                };
-                return func.apply(jovo, [jovo, callback]);
-            });
+                else if (result.constructor.name === 'Promise') {
+                    return await result;
+                }
+                else {
+                    return;
+                }
+            } else {
+                return new Promise((resolve) => {
+                    func.apply(jovo, [jovo, resolve]);
+                });
+            }
         }
 
     }

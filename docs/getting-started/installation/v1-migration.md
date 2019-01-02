@@ -7,13 +7,14 @@ We just released a huge update to the Jovo Framework: Version 2! Learn how to mi
     * [Project Structure](#project-structure)
 * [Updated Concepts](#updated-concepts)
     * [Plugins](#plugins)
-    * [Jovo Objects](#jovo-variables)
+    * [Jovo Objects](#jovo-objects)
     * [Integrations](#integrations)
     * [Response Execution](#response-execution)
 * [Breaking Changes](#breaking-changes)
     * [Inputs](#inputs)
     * [State Management](#state-management)
     * [Unit Testing](#unit-testing)
+    * [Changes to the User Object](#changes-to-the-user-object)
 * [Optional Changes](#optional-changes)
     * [Intent Syntax](#intent-syntax)
     * [Data Management](#data-management)
@@ -64,6 +65,7 @@ There are several changes that are important:
 * [`project.js`](#projectjs) (previously `app.json`)
 * `src` (including `index.js` and `app.js`)
 * [`config.js`](#configjs)
+* [Deployment](#deployment)
 
 #### project.js
 
@@ -127,6 +129,32 @@ For example we could disable `logging` in our `prod` stage using the `config.pro
 module.exports = {
     logging: false,
 }
+```
+
+#### Deployment
+
+Since the project structure is different (the `index.js` is now in `src` as opposed to the root directory), there is a slight update to the deployment process.
+
+Instead of zipping the complete project folder (which was quite large anyways), you can create an optimized `bundle.zip` file with either of the following commands:
+
+```sh
+# Bundle files
+$ jovo deploy --target zip
+
+# Alternative
+$ npm run bundle
+```
+
+This will copy the `src` files into a `bundle` folder, run a production-only npm install, and then zip it.
+
+You can then use this file and upload it to the hosting provider of your choice.
+
+To be able to run this command, you need the following script in your `package.json`(default for fresh new projects):
+
+```js
+"scripts": {
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./",
+  },
 ```
 
 ## Updated Concepts
@@ -247,6 +275,7 @@ Besides that, you now have to handle asynchronous tasks appropriately, otherwise
 * [Inputs](#inputs)
 * [State Management](#state-management)
 * [Unit Testing](#unit-testing)
+* [Changes to the User Object](#changes-to-the-user-object)
 
 
 ### Inputs
@@ -299,6 +328,52 @@ this.$session.$data._JOVO_STATE_ = 'OrderState';
 
 In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
 
+### Changes to the User Object
+
+> [Learn more about the User Object here](../../basic-concepts/data/user.md '../data/user').
+
+#### User Data
+
+> [Learn more about Data Management here](../../basic-concepts/data '../data').
+
+```javascript
+// Old
+this.user().data.key = value;
+
+// New
+this.$user.$data.key = value;
+```
+
+#### User ID
+
+```javascript
+// Old
+this.user().isNewUser()
+
+// New
+this.$user.isNew()
+```
+
+#### Alexa User Methods
+
+> [Learn more about Alexa specific features here](../../platforms/amazon-alexa '../amazon-alexa').
+
+To keep platform specific user methods more organized, it is now necessary to use the platform's user object (`this.$alexaSkill.$user`) to call features from e.g. the [Alexa Settings API](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings'):
+
+```javascript
+// Old
+this.user().getTimezone()
+
+// New
+this.$alexaSkill.$user.getTimezone()
+```
+
+Learn more by taking a look at the following docs:
+
+* [Alexa Data](../../platforms/amazon-alexa/data.md '../amazon-alexa/data')
+* [Alexa Lists](../../platforms/amazon-alexa/lists.md '../amazon-alexa/lists')
+* [Alexa Settings](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings')
+* [Alexa Reminders](../../platforms/amazon-alexa/reminders.md '../amazon-alexa/reminders')
 
 
 ## Optional Changes

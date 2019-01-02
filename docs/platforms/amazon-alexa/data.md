@@ -31,7 +31,7 @@ Get the country and postal code:
 this.$alexaSkill.getCountryAndPostalCode();
 
 // example
-this.$user.getCountryAndPostalCode()
+this.$alexaSkill.$user.getCountryAndPostalCode()
     .then((data) => {
         this.tell('Your address is ' + data.postalCode + ' in ' + data.countryCode);
     }).catch((error) => {
@@ -45,10 +45,10 @@ this.$user.getCountryAndPostalCode()
 Get the address:
 
 ```javascript
-this.$user.getDeviceAddress();
+this.$alexaSkill.$user.getDeviceAddress();
 
 // example
-this.$user.getDeviceAddress()
+this.$alexaSkill.$user.getDeviceAddress()
     .then((data) => {
         this.tell('I got your address');
     }).catch((error) => {
@@ -81,10 +81,10 @@ this.$alexaSkill.showAskForContactPermissionCard('mobile_number');
 Get the full name:
 
 ```javascript
-this.$user.getName();
+this.$alexaSkill.$user.getName();
 
 // Example
-this.$user.getName()
+this.$alexaSkill.$user.getName()
     .then((name) => {
         this.tell(`Hello ${name}`);
     }).catch((error) => {
@@ -98,10 +98,10 @@ this.$user.getName()
 Get the given name:
 
 ```javascript
-this.$user.getGivenName();
+this.$alexaSkill.$user.getGivenName();
 
 // Example
-this.$user.getGivenName()
+this.$alexaSkill.$user.getGivenName()
     .then((givenName) => {
         this.tell(`Hello ${givenName}`);
     }).catch((error) => {
@@ -115,10 +115,10 @@ this.$user.getGivenName()
 Get the email address:
 
 ```javascript
-this.$user.getEmail();
+this.$alexaSkill.$user.getEmail();
 
 // Example
-this.$user.getEmail()
+this.$alexaSkill.$user.getEmail()
     .then((email) => {
     this.tell(`Your email is ${email}`);
     }).catch((error) => {
@@ -132,10 +132,10 @@ this.$user.getEmail()
 Get the mobile number:
 
 ```javascript
-this.$user.getMobileNumber();
+this.$alexaSkill.$user.getMobileNumber();
 
 // Example
-this.$user.getMobileNumber()
+this.$alexaSkill.$user.getMobileNumber()
     .then((mobileNumber) => {
         this.tell(`Your number is ${mobileNumber.countryCode} ${mobileNumber.phoneNumber}`);
     }).catch((error) => {
@@ -149,7 +149,7 @@ this.$user.getMobileNumber()
 
 ## Account Linking
 
-You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
+You can find the documentation about Account Linking here: [App Logic > Data](../../basic-concepts/data/README.md#account-linking, '../data#account-linking')
 
 <!--[metadata]: {"description": "Learn how to get user specific data from your Alexa Skill users with the Jovo Framework",
 "route": "amazon-alexa/data" }-->

@@ -30,8 +30,8 @@ The simple card can only contain plain text, which is split up into a title and 
 
 ```javascript
 this.$alexaSkill.showSimpleCard('Title', 'Content');
+
 // or
-const {AlexaSkill} = require('jovo-framework');
 
 this.$alexaSkill.showCard(
     new AlexaSkill.SimpleCard()
@@ -42,6 +42,7 @@ this.$alexaSkill.showCard(
 
 [Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-basic-home-card-to-display-text).
 
+
 ### Standard Card
 
 The standard card allows you to add an image in addition to the plain text, which has to be provided in two different sizes.
@@ -51,8 +52,8 @@ this.$alexaSkill.showStandardCard('Title', 'Content', {
     smallImageUrl: 'https://via.placeholder.com/720x480',
     largeImageUrl: 'https://via.placeholder.com/1200x800',
 });
+
 // or
-const {AlexaSkill} = require('jovo-framework');
 
 this.$alexaSkill.showCard(
     new AlexaSkill.StandardCard()
@@ -65,6 +66,7 @@ this.$alexaSkill.showCard(
 
 [Official Amazon reference](https://developer.amazon.com/docs/custom-skills/include-a-card-in-your-skills-response.html#creating-a-home-card-to-display-text-and-an-image).
 
+
 ## Display Templates
 
 Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features. You can find the
@@ -72,8 +74,7 @@ Display Templates can be used to include content on the screen of the Echo Show 
 
 To be able to use display templates for devices like Echo Show, you need to enable them in the Interfaces tab in the Amazon Developer Console:
 
-![One Session](../../img/alexa-enable-display-interface.jpg)
-
+![Alexa Console: Enable Display Interface](../../img/alexa-enable-display-interface.jpg)
 
 
 ### Body Templates
@@ -81,10 +82,11 @@ To be able to use display templates for devices like Echo Show, you need to enab
 Body templates are only capable of displaying images and text. There are multiple body templates, each having a different composition.
 
 [BodyTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate1-for-simple-text-and-image-views):
+
 ```javascript
 let bodyTemplate1 = this.$alexaSkill.templateBuilder('BodyTemplate1');
-bodyTemplate1
-  .setToken('token')
+
+bodyTemplate1.setToken('token')
   .setTitle('Title')
   .setTextContent('Primary Text', 'Secondary Test', 'Tertiary Text');
 
@@ -92,10 +94,10 @@ this.$alexaSkill.showDisplayTemplate(bodyTemplate1);
 ```
 
 [BodyTemplate2](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#bodytemplate2-for-image-views-and-limited-centered-text):
+
 ```javascript
 let bodyTemplate2 = this.$alexaSkill.templateBuilder('BodyTemplate2');
-bodyTemplate2
-  .setToken('token')
+bodyTemplate2.setToken('token')
   .setTitle('Title')
   .setTextContent('Primary Text', 'Secondary Test', 'Tertiary Text')
   .setRightImage({
@@ -110,8 +112,8 @@ this.$alexaSkill.showDisplayTemplate(bodyTemplate2);
 
 ```javascript
 let bodyTemplate3 = this.$alexaSkill.templateBuilder('BodyTemplate3');
-bodyTemplate3
-  .setToken('token')
+
+bodyTemplate3.setToken('token')
   .setTitle('Title')
   .setTextContent('Primary Text', 'Secondary Text', 'Tertiary Text')
   .setLeftImage({
@@ -126,8 +128,8 @@ this.$alexaSkill.showDisplayTemplate(bodyTemplate3);
 
 ```javascript
 let bodyTemplate6 = this.$alexaSkill.templateBuilder('BodyTemplate6');
-bodyTemplate6
-  .setToken('token')
+
+bodyTemplate6.setToken('token')
   .setTextContent('Primary Text', 'Secondary Text', 'Tertiary Text')
   .setFullScreenImage({
     description: 'Description',
@@ -145,8 +147,8 @@ The list template is used to display a set of scrollabe and selectable items (te
 
 ```javascript
 let listTemplate1 = this.$alexaSkill.templateBuilder('ListTemplate1');
-listTemplate1
-  .setTitle('Title')
+
+listTemplate1.setTitle('Title')
   .setToken('token')
   .addItem(
     'token',
@@ -172,8 +174,8 @@ this.$alexaSkill.showDisplayTemplate(listTemplate1);
 
 ```javascript
 let listTemplate2 = this.$alexaSkill.templateBuilder('ListTemplate2');
-listTemplate2
-  .setTitle('Title')
+
+listTemplate2.setTitle('Title')
   .setToken('token')
   .addItem(
     'token',

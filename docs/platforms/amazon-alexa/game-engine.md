@@ -20,23 +20,35 @@ To get a better understanding how the `GameEngine` interface works you should go
 
 ## Enable the Interface
 
-But first you have to enable the `GameEngine` interface either in your `app.json` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or on the Alexa Developer Console in the `Interfaces` tab.
+But first you have to enable the `GameEngine` interface either in your `project.js` file, if you're working with the [Jovo CLI](https://github.com/jovotech/jovo-cli), or on the Alexa Developer Console in the `Interfaces` tab.
 
-To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `app.json`:
+To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `project.js`:
+
 ```javascript
-"manifest": {
-  "apis": {
-    "custom": {
-      "interfaces": [
-        {
-          "type": "GAME_ENGINE"
-        },
-      ]
-    }
-  }
+alexaSkill: {
+  manifest: {
+    apis: {
+      custom: {
+        interface: [
+          {
+            type: 'GAME_ENGINE',
+          }
+        ],
+      },
+    },
+  },
 }
 ```
-Don't forget to build and deploy your project after you've added the interface.
+
+Don't forget to build and deploy your project after you've added the interface:
+
+```sh
+# Build platform specific files
+$ jovo build
+
+# Deploy to platforms
+$ jovo deploy
+```
 
 ## Recognizers
 

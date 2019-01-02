@@ -1,4 +1,4 @@
-# Lists
+# Alexa Lists
 This section shows how to access shopping lists and to-do lists when building Alexa Skills with the Jovo Framework.
 
 * [Introduction to Lists](#introduction-to-lists)
@@ -17,7 +17,7 @@ Amazon Alexa offers the ability to its users to add items to a shopping list and
 Users need to grant your Alexa Skill permission for `read` and/or `write` access to their lists. To enable your Alexa Skill to ask for list permissions, you can do either of the following:
 * Configure permissions in the Amazon Developer Portal
 * Update the `skill.json`
-* Update the Jovo `app.json`
+* Update the Jovo `project.js`
 
 In the Amazon Developer Portal, you can do this by checking the following permissions:
 
@@ -36,26 +36,26 @@ The same result is achieved by adding the following to the `manifest` in your `s
 ]
 ```
 
-If you're using the [Jovo Language Model](../../03_app-configuration/01_models/README.md) and don't want to make the changes to the Amazon Developer Portal, you can also add this to the `alexaSkill` object in the `app.json` of your Jovo project. This way, these permissions are written into the `skill.json` with the `jovo build` command.
+If you're using the [Jovo Language Model](../../basic-concepts/model '../model') and don't want to make the changes to the Amazon Developer Portal, you can also add this to the `alexaSkill` object in the `project.js` of your Jovo project. This way, these permissions are written into the `skill.json` with the `jovo build` command.
 
-This is how an example `app.json` could look like:
+This is how an example `project.js` could look like:
 
 ```javascript
 {
-	"alexaSkill": {
-		"nlu": "alexa",
-		"manifest": {
-			"permissions": [
+	alexaSkill: {
+		nlu: 'alexa',
+		manifest: {
+			permissions: [
 				{
-				  "name": "alexa::household:lists:read"
+				  name: 'alexa::household:lists:read',
 				},
 				{
-				  "name": "alexa::household:lists:write"
+				  name: 'alexa::household:lists:write',
 				}
 			]
 		}
 	},
-	"endpoint": "${JOVO_WEBHOOK_URL}"
+	'endpoint': '${JOVO_WEBHOOK_URL}',
 }
 ```
 
@@ -68,7 +68,7 @@ If your users haven't granted your Skill the permission access lists yet (for ex
 This is mostly used after the error code `'NO_USER_PERMISSION'` is returned. Here is an example:
 
 ```javascript
-this.$user.getShoppingList('active')
+this.$alexaSkill.$user.getShoppingList('active')
     .then((data) => {
         // Success! Now do something with the data
     })
@@ -103,15 +103,15 @@ Users can then update the permissions in the Skill's settings:
 Get the user's shopping list:
 
 ```javascript
-this.$user.getShoppingList(status);
+this.$alexaSkill.$user.getShoppingList(status);
 
 // Example
-this.$user.getShoppingList('active')
+this.$alexaSkill.$user.getShoppingList('active')
     .then((data) => {
         for (let obj of data.items) {
-            this.speech.addSentence(obj.value);
+            this.$speech.addSentence(obj.value);
         }
-        this.tell(this.speech);
+        this.tell(this.$speech);
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
@@ -124,16 +124,16 @@ this.$user.getShoppingList('active')
 Add an item to the shopping list:
 
 ```javascript
-this.$user.addToShoppingList(value, status);
+this.$alexaSkill.$user.addToShoppingList(value, status);
 
 // Example
-this.$user.addToShoppingList('milk', 'active')
+this.$alexaSkill.$user.addToShoppingList('milk', 'active')
     .then((data) => {
         this.tell('Added the item to the list.');
     })
     .catch((error) => {
         if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write']
+            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission.');
         }
     })
@@ -142,10 +142,10 @@ this.$user.addToShoppingList('milk', 'active')
 Update the shopping list:
 
 ```javascript
-this.$user.updateShoppingList(oldValue, newValue, newStatus);
+this.$alexaSkill.$user.updateShoppingList(oldValue, newValue, newStatus);
 
 // Example
-this.$user.updateShoppingList('milk', 'almond milk', 'active')
+this.$alexaSkill.$user.updateShoppingList('milk', 'almond milk', 'active')
     .then((data) => {
         this.tell('Updated the list');
     })
@@ -165,15 +165,15 @@ this.$user.updateShoppingList('milk', 'almond milk', 'active')
 Get the user's to-do list:
 
 ```javascript
-this.$user.getToDoList(status);
+this.$alexaSkill.$user.getToDoList(status);
 
 // Example
-this.$user.getToDoList('active')
+this.$alexaSkill.$user.getToDoList('active')
     .then((data) => {
         for (let obj of data.items) {
-            this.speech.addSentence(obj.value);
+            this.$speech.addSentence(obj.value);
         }
-        this.tell(this.speech);
+        this.tell(this.$speech);
     })
     .catch((error) => {
        if (error.code === 'NO_USER_PERMISSION') {
@@ -186,10 +186,10 @@ this.$user.getToDoList('active')
 Add an item to the to-do list:
 
 ```javascript
-this.$user.addToDoList(value, status);
+this.$alexaSkill.$user.addToDoList(value, status);
 
 // Example
-this.$user.addToTodoList('Sleep', 'active')
+this.$alexaSkill.$user.addToTodoList('Sleep', 'active')
     .then((data) => {
         this.tell('Item added.');
     })
@@ -204,10 +204,10 @@ this.$user.addToTodoList('Sleep', 'active')
 Update the to-do list:
 
 ```javascript
-this.$user.updateToDoList(oldValue, newValue, newStatus);
+this.$alexaSkill.$user.updateToDoList(oldValue, newValue, newStatus);
 
 // Example
-this.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
+this.$alexaSkill.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
     .then((data) => {
         this.tell('Item updated.');
     })

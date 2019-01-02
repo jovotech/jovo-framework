@@ -139,52 +139,30 @@ app.setHandler({
 
     // Other intents
 
-    'AUDIOPLAYER': {
+    AUDIOPLAYER: {
         'AudioPlayer.PlaybackStarted'() {
             console.log('AudioPlayer.PlaybackStarted');
-
-            // Do something
-
-            this.endSession();
         },
 
         'AudioPlayer.PlaybackNearlyFinished'() {
             console.log('AudioPlayer.PlaybackNearlyFinished');
-
-            // Do something
-
-            this.endSession();
         },
 
         'AudioPlayer.PlaybackFinished'() {
             console.log('AudioPlayer.PlaybackFinished');
-
-            // Do something
-
-            this.endSession();
         },
 
         'AudioPlayer.PlaybackStopped'() {
             console.log('AudioPlayer.PlaybackStopped');
-
-            // Do something
-
-            this.endSession();
         },
         'AudioPlayer.PlaybackFailed'() {
             console.log('AudioPlayer.PlaybackStopped');
-
-            // Do something
-
-            this.endSession();
         },
 
     },
 
 });
 ```
-
-Note that it's important to have an `emit` at the end of the functions to be able to e.g. save user data. In the example above, we're using `endSession` for this.
 
 ## Playback Controller
 
@@ -193,24 +171,23 @@ Note that it's important to have an `emit` at the end of the functions to be abl
 All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER` state. You can respond to them with `AudioPlayer` directives, e.g. `play`, `pause`, etc.
 
 ```javascript
-'PLAYBACKCONTROLLER': {
-    'PlaybackController.PlayCommandIssued': function () {
+PLAYBACKCONTROLLER: {
+    'PlaybackController.PlayCommandIssued'() {
         console.log('PlaybackController.PlayCommandIssued');
     },
 
-    'PlaybackController.NextCommandIssued': function () {
+    'PlaybackController.NextCommandIssued'() {
         console.log('PlaybackController.NextCommandIssued');
     },
 
-    'PlaybackController.PreviousCommandIssued': function () {
+    'PlaybackController.PreviousCommandIssued'() {
         console.log('PlaybackController.PreviousCommandIssued');
     },
 
-    'PlaybackController.PauseCommandIssued': function () {
+    'PlaybackController.PauseCommandIssued'() {
         console.log('PlaybackController.PauseCommandIssued');
     }
 },
 ```
 
-<!--[metadata]: {"description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework",
-                "route": "amazon-alexa/audioplayer" }-->
+<!--[metadata]: {"description": "Learn how to build Amazon Alexa AudioPlayer Skills with the Jovo Framework", "route": "amazon-alexa/audioplayer" }-->

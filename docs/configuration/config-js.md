@@ -103,7 +103,7 @@ plugin: {
 
 ## Staging
 
-Jovo uses [`node-config`](https://www.npmjs.com/package/config) to allow you to add config overrides for different stages.
+Jovo uses a structure similar to [`node-config`](https://www.npmjs.com/package/config) to allow you to add config overrides for different stages.
 
 For example, you could have several config files for different stages:
 * `config.js`: Default config of the project
