@@ -62,7 +62,7 @@ export class JovoDebugger implements Plugin {
         database: true,
         languageModel: true,
         languageModelDir: './../models',
-        debuggerJsonPath: './debugger.json',
+        debuggerJsonPath: './../debugger.json',
     };
     app?: BaseApp;
     socket?: SocketIOClient.Socket;
