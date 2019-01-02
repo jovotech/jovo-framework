@@ -91,6 +91,12 @@ export class AlexaSkill extends Jovo {
         return _get(this.$request, 'session.user.userId') || _get(this.$request, 'context.user.userId') ;
     }
 
+    /**
+     * Sends an asynchronous speak directive
+     * @param {string | SpeechBuilder} speech
+     * @param {Function} callback
+     * @return {Promise}
+     */
     progressiveResponse(speech: string | SpeechBuilder, callback?: Function) {
         const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
         if (callback) {
@@ -108,6 +114,12 @@ export class AlexaSkill extends Jovo {
         }
     }
 
+
+    /**
+     * Makes a request to the amazon profile api
+     * @public
+     * @param {func} callback
+     */
     requestAmazonProfile(callback?: Function) {
         const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
         if (callback) {
@@ -116,24 +128,6 @@ export class AlexaSkill extends Jovo {
             return AmazonProfileAPI.requestAmazonProfile(alexaRequest.getAccessToken());
         }
     }
-    //
-    // getSpeechText() {
-    //     const outputSpeech = this.$response!.getSpeech();
-    //
-    //     if (!outputSpeech) {
-    //         return;
-    //     }
-    //     return outputSpeech.replace(/<\/?speak\/?>/g, '');
-    // }
-    //
-    // getRepromptText() {
-    //     const repromptSpeech = this.$response!.getReprompt();
-    //
-    //     if (!repromptSpeech) {
-    //         return;
-    //     }
-    //     return repromptSpeech.replace(/<\/?speak\/?>/g, '');
-    // }
 
 
     /**
@@ -225,6 +219,7 @@ export class AlexaSkill extends Jovo {
         return _get(this.$request, 'request.token');
     }
 
+
     /**
      * Returns raw text.
      * Only available with catchAll slots
@@ -236,6 +231,7 @@ export class AlexaSkill extends Jovo {
         }
         return _get(this, '$inputs.catchAll.value');
     }
+
 
     /**
      * Returns template builder by type
@@ -268,5 +264,16 @@ export class AlexaSkill extends Jovo {
         if (type === 'ListTemplate3') {
             return new ListTemplate3();
         }
+    }
+
+
+    /**
+     * Returns reason code for an end of a session
+     *
+     * @public
+     * @return {*}
+     */
+    getEndReason() {
+        return _get(this.$request, 'request.reason');
     }
 }
