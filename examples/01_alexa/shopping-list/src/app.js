@@ -1,4 +1,5 @@
-const {App, Alexa, Jovo, Util} = require('jovo-framework');
+const {App, Util} = require('jovo-framework');
+const { Alexa } = require('jovo-platform-alexa');
 Util.consoleLog(1);
 
 const app = new App();

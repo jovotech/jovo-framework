@@ -12,6 +12,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.3"
+    "jovo-framework": "^2.0.3",
+    "jovo-platform-alexa": "^2.0.3",
+    "jovo-platform-googleassistant": "^2.0.3",
+    "jovo-db-filedb": "^2.0.2",
+    "jovo-plugin-debugger": "^2.0.2"
   }
 }

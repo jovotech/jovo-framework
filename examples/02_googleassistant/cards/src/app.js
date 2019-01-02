@@ -1,5 +1,6 @@
-const {App, GoogleAssistant} = require('jovo-framework');
+const {App} = require('jovo-framework');
 const {
+    GoogleAssistant,
     BasicCard,
     Carousel,
     List,

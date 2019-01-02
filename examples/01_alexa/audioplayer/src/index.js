@@ -1,21 +1,21 @@
 'use strict';
 
 const {
-    webhook,
+    Webhook,
     ExpressJS,
     Lambda
 } = require('jovo-framework');
 
-const {app} = require('./app/app.js');
+const {app} = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.PORT || 3000;
-
-    webhook.listen(port, () => {
+    Webhook.jovoApp = app;
+    Webhook.listen(port, () => {
         console.info(`Local server listening on port ${port}!`);
     });
 
-    webhook.post('/webhook', async (req, res) => {
+    Webhook.post('/webhook', async (req, res) => {
         await app.handle(new ExpressJS(req, res));
     });
 }

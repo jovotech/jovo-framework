@@ -6,12 +6,11 @@ const {
     Lambda
 } = require('jovo-framework');
 
-const {app} = require('./app/app.js');
+const {app} = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.PORT || 3000;
     Webhook.jovoApp = app;
-
     Webhook.listen(port, () => {
         console.info(`Local server listening on port ${port}!`);
     });

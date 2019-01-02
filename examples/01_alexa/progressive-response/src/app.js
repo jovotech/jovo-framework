@@ -1,4 +1,5 @@
-const {App, Alexa} = require('jovo-framework');
+const { App } = require('jovo-framework');
+const { Alexa } = require('jovo-platform-alexa');
 const moment = require('moment-timezone');
 
 const app = new App();

@@ -14,11 +14,11 @@
   "dependencies": {
     "jovo-framework": "^2.0.3",
     "jovo-platform-alexa": "^2.0.3",
-    "jovo-platform-googleassistant": "^2.0.3"
+    "jovo-platform-googleassistant": "^2.0.3",
+    "jovo-db-filedb": "^2.0.2",
+    "jovo-plugin-debugger": "^2.0.2"
   },
   "devDependencies": {
-    "jovo-db-filedb": "^2.0.2",
-    "jovo-plugin-debugger": "^2.0.2",
     "jovo-plugin-lmtester": "^2.0.2"
   }
 }

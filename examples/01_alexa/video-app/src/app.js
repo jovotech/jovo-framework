@@ -1,6 +1,6 @@
-const {App} = require('jovo-framework');
-const {Alexa} = require('jovo-platform-alexa');
-const { JovoDebugger } = require('jovo-plugin-debugger');
+const {App} = require('jovo-framework/dist/src/index');
+const {Alexa} = require('jovo-integrations/jovo-platform-alexa/dist/src/index');
+const { JovoDebugger } = require('jovo-integrations/jovo-plugin-debugger/dist/src/index');
 
 const app = new App();
 
