@@ -108,16 +108,15 @@ export class Router implements Plugin {
             while (_state !== '') {
                 // State 'unhandled' is available and intent is not in intentsToSkipUnhandled
                 if (_get(appConfig.handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
-                    if (appConfig.intentsToSkipUnhandled && appConfig.intentsToSkipUnhandled.indexOf(_intent) === -1) {
+                    if (!appConfig.intentsToSkipUnhandled || appConfig.intentsToSkipUnhandled.indexOf(_intent) === -1) {
                         path = _state + '.' + EnumRequestType.UNHANDLED;
                         return {
-                        path,
-                        state,
-                        intent,
-                        type: EnumRequestType.INTENT,
-                    };
-                }
-
+                            path,
+                            state,
+                            intent,
+                            type: EnumRequestType.INTENT,
+                        };
+                    }
                 }
                 if (_get(appConfig.handlers, _state + '["' + _intent + '"]')) {
                     path = _state + '["' + _intent + '"]';

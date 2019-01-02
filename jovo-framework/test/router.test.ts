@@ -52,7 +52,7 @@ test('test intentRoute', () => {
 });
 
 
-test('test intentRoute() unhandled', () => {
+test('test intentRoute() unhandled global', () => {
     const appConfig: AppConfig = {
         handlers: {
             State1: {
@@ -64,9 +64,9 @@ test('test intentRoute() unhandled', () => {
     };
     const result1 = Router.intentRoute(appConfig, 'State1', 'IntentX');
     expect(result1).toHaveProperty('path', 'Unhandled');
-
+});
+test('test intentRoute() unhandled in state', () => {
     const appConfig2: AppConfig = {
-        intentsToSkipUnhandled: [],
         handlers: {
             State1: {
                 Unhandled() {
@@ -80,10 +80,9 @@ test('test intentRoute() unhandled', () => {
     };
     const result2 = Router.intentRoute(appConfig2, 'State1', 'IntentX');
     expect(result2).toHaveProperty('path', 'State1.Unhandled');
-
-
+});
+test('test intentRoute() unhandled without unhandled in handler ', () => {
     const appConfig3: AppConfig = {
-        intentsToSkipUnhandled: [],
         handlers: {
             State1: {
             },
@@ -92,6 +91,26 @@ test('test intentRoute() unhandled', () => {
     const result3 = Router.intentRoute(appConfig3, 'State1', 'IntentX');
     expect(result3).toHaveProperty('path', 'State1.IntentX');
 });
+
+test('test intentRoute() intentsToSkipUnhandled ', () => {
+    const appConfig3: AppConfig = {
+        intentsToSkipUnhandled: ['SkipIntent'],
+        handlers: {
+            State1: {
+                Unhandled() {
+
+                }
+            },
+            SkipIntent() {
+
+            }
+
+        }
+    };
+    const result3 = Router.intentRoute(appConfig3, 'State1', 'SkipIntent');
+    expect(result3).toHaveProperty('path', 'SkipIntent');
+});
+
 
 test('test intentRoute() Intents with dots', () => {
     const appConfig1: AppConfig = {
