@@ -125,7 +125,7 @@ export class Cards implements Plugin {
             _set(alexaSkill.$response, 'response.card',
                 new SimpleCard()
                     .setTitle(_get(cardSimpleCard, 'title'))
-                    .setContent(_get(cardSimpleCard, 'text'))
+                    .setContent(_get(cardSimpleCard, 'content'))
             );
         }
         const cardImageCard = _get(output, 'Alexa.card.ImageCard') || _get(output, 'card.ImageCard');
