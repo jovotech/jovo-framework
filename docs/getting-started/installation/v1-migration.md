@@ -15,6 +15,7 @@ We just released a huge update to the Jovo Framework: Version 2! Learn how to mi
     * [State Management](#state-management)
     * [Unit Testing](#unit-testing)
     * [Changes to the User Object](#changes-to-the-user-object)
+    * [getEndReason](#getendreason)
 * [Optional Changes](#optional-changes)
     * [Intent Syntax](#intent-syntax)
     * [Data Management](#data-management)
@@ -374,6 +375,21 @@ Learn more by taking a look at the following docs:
 * [Alexa Lists](../../platforms/amazon-alexa/lists.md '../amazon-alexa/lists')
 * [Alexa Settings](../../platforms/amazon-alexa/settings.md '../amazon-alexa/settings')
 * [Alexa Reminders](../../platforms/amazon-alexa/reminders.md '../amazon-alexa/reminders')
+
+### getEndReason
+
+In the `END` handler (for `SessionEndedRequests`), the Alexa specific reason for the ended session could be retrieved.
+
+As this is not a cross-platform feature, it is now moved to the `this.$alexaSkill` element:
+
+```javascript
+// Old
+this.getEndReason()
+
+// New (both work)
+this.$alexaSkill.$request.request.reason;
+this.$alexaSkill.getEndReason();
+```
 
 
 ## Optional Changes
