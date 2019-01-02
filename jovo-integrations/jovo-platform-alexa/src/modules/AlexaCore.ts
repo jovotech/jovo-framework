@@ -126,7 +126,7 @@ export class AlexaCore implements Plugin {
         }
 
         if (_get(output, 'Alexa.Directives')) {
-            _set(alexaSkill.$response, 'directives', _get(output, 'Alexa.Directives'));
+            _set(alexaSkill.$response, 'response.directives', _get(output, 'Alexa.Directives'));
 
         }
 
