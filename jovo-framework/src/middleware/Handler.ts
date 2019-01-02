@@ -196,7 +196,7 @@ export class Handler implements Plugin {
             };
 
             await Handler.applyHandle(handleRequest.jovo, route, handleRequest.app.config as AppConfig, true);
-            await handleRequest.app.middleware('output')!.run(handleRequest);
+            await handleRequest.app.middleware('platform.output')!.run(handleRequest);
             await handleRequest.app.middleware('response')!.run(handleRequest);
         }
     }
