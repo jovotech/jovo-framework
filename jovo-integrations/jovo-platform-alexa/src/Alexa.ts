@@ -143,7 +143,7 @@ export class Alexa extends Extensible implements Platform {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
             return Promise.resolve();
         }
-        this.middleware('$output')!.run(handleRequest.jovo);
+        await this.middleware('$output')!.run(handleRequest.jovo);
     }
     async response(handleRequest: HandleRequest) {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
