@@ -16,8 +16,20 @@ export class User {
         return undefined;
     }
 
+    /**
+     * Returns true if user is new
+     * @return {boolean}
+     */
     isNew(): boolean {
         return this.new;
+    }
+
+    /**
+     * Returns true if user is new
+     * @return {boolean}
+     */
+    isNewUser(): boolean {
+        return this.isNew();
     }
 
     /**
