@@ -67,9 +67,9 @@ export class Dialogflow extends Extensible implements Platform {
 
         handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
 
-        this.middleware('$request')!.run(handleRequest.jovo);
-        this.middleware('$session')!.run(handleRequest.jovo);
-        this.middleware('$type')!.run(handleRequest.jovo);
+        await this.middleware('$request')!.run(handleRequest.jovo);
+        await this.middleware('$session')!.run(handleRequest.jovo);
+        await this.middleware('$type')!.run(handleRequest.jovo);
 
     }
 
@@ -78,8 +78,8 @@ export class Dialogflow extends Extensible implements Platform {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
             return Promise.resolve();
         }
-        this.middleware('$nlu')!.run(handleRequest.jovo);
-        this.middleware('$inputs')!.run(handleRequest.jovo);
+        await this.middleware('$nlu')!.run(handleRequest.jovo);
+        await this.middleware('$inputs')!.run(handleRequest.jovo);
 
     }
 
@@ -88,7 +88,7 @@ export class Dialogflow extends Extensible implements Platform {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
             return Promise.resolve();
         }
-        this.middleware('$output')!.run(handleRequest.jovo);
+        await this.middleware('$output')!.run(handleRequest.jovo);
     }
 
     async response(handleRequest: HandleRequest) {
