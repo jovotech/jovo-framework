@@ -1,0 +1,21 @@
+{
+  "name": "jovo-examples-multihandler",
+  "version": "2.0.4",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --webhook",
+    "tsc": "",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-db-filedb": "^2.0.3",
+    "jovo-framework": "^2.0.4",
+    "jovo-platform-alexa": "^2.0.4",
+    "jovo-platform-googleassistant": "^2.0.4",
+    "jovo-plugin-debugger": "^2.0.3"
+  }
+}
