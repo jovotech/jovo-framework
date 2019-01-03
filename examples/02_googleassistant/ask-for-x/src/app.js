@@ -1,10 +1,12 @@
 const {App} = require('jovo-framework');
 const {GoogleAssistant} = require('jovo-platform-googleassistant');
+const { JovoDebugger } = require('jovo-plugin-debugger');
 
 const app = new App();
 
 app.use(
-    new GoogleAssistant()
+    new GoogleAssistant(),
+    new JovoDebugger(),
 );
 
 
@@ -12,9 +14,9 @@ app.setHandler({
     LAUNCH() {
         // this.toIntent('AskForNameIntent');
         // this.toIntent('AskForPreciseLocationIntent');
-        // this.toIntent('AskForZipCodeAndCityIntent');
+        this.toIntent('AskForZipCodeAndCityIntent');
         // this.toIntent('AskForPermissionIntent');
-        this.toIntent('AskForConfirmationIntent');
+        // this.toIntent('AskForConfirmationIntent');
         // this.toIntent('AskForSignInIntent');
     },
     AskForNameIntent() {
@@ -43,6 +45,8 @@ app.setHandler({
         }
     },
     ON_SIGN_IN() {
+
+        console.log('ON SIGN IN');
         if (this.$googleAction.isSignInOk()) {
             this.tell('Login successful')
         } else {
