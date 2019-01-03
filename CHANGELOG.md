@@ -1,5 +1,16 @@
 # Jovo Framework Changelog
 
+
+## 2.0.5 (January 03, 2019)
+
+* `jovo-platform-alexa` [#315](https://github.com/jovotech/jovo-framework-nodejs/pull/315) Image shouldn't be required for ListTemplate1 [@IGx89](https://github.com/IGx89)
+* `jovo-framework` Fixed examples and declaration files
+* `jovo-platform-alexa` Fixed Multiple directives bug (issue #317)
+* `jovo-platform-alexa` Added getReminder(alertToken) method
+* `jovo-platform-googleassistant` Added $googleAction.$user helper methods
+* `jovo-platform-googleassistant` Added more unit tests
+
+
 ## 2.0.4 (January 02, 2019)
 
 * `jovo-cms-i18next` Added js language resource file compatibility
