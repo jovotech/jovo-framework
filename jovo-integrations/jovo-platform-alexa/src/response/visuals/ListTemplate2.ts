@@ -18,6 +18,9 @@ export class ListTemplate2 extends ListTemplate1 {
     constructor() {
         super();
         this.type = 'ListTemplate2';
+
+        // In ListTemplate1 item images are optional, but in ListTemplate2 they are required
+        this.itemImageRequired = true;
     }
 }
 
