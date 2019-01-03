@@ -95,6 +95,17 @@ export class AlexaUser extends User {
     }
 
     /**
+     * Updates item in to do list
+     * @param {string} oldValue
+     * @param {string} newValue
+     * @param {'active'|'completed'} newStatus
+     * @return {*}
+     */
+    updateToDoListItem(oldValue: string, newValue: string, newStatus = 'active'): Promise<ShoppingListItem> {
+        return this.updateToDoList(oldValue, newValue, newStatus);
+    }
+
+    /**
      * Updates item in shopping list
      * @param {string} oldValue
      * @param {string} newValue
@@ -103,6 +114,17 @@ export class AlexaUser extends User {
      */
     updateShoppingList(oldValue: string, newValue: string, newStatus = 'active'): Promise<ShoppingListItem> {
         return this.alexaList.updateList('Alexa shopping list', oldValue, newValue, newStatus);
+    }
+
+    /**
+     * Updates item in shopping list
+     * @param {string} oldValue
+     * @param {string} newValue
+     * @param {'active'|'completed'} newStatus
+     * @return {*}
+     */
+    updateShoppingListItem(oldValue: string, newValue: string, newStatus = 'active'): Promise<ShoppingListItem> {
+        return this.updateShoppingList(oldValue, newValue, newStatus);
     }
 
     /**
