@@ -43,6 +43,16 @@ AlexaSkill
 GoogleAction
 ```
 
+You can also use the following method calls:
+
+```javascript
+// Returns true for Alexa Skills
+this.isAlexaSkill()
+
+// Returns true for Google Actions
+this.isGoogleAction()
+```
+
 
 ## Amazon Alexa
 

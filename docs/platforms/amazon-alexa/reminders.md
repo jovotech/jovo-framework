@@ -17,15 +17,28 @@ To create a reminder you simply send a `JSON` object to Amazon's API endpoint. Y
 To add a reminder you use the `setReminder()` method, which takes in the `JSON` object as a parameter:
 
 ```javascript
-let reminder = {
-    // Your reminder
-};
-this.$alexaSkill.$user.setReminder(reminder).then((data) => {
-    console.log(data);
-    this.tell('Done');
-}).catch((error) => {
-    console.log(error);
-});
+await this.$alexaSkill.$user.setReminder(reminder);
+
+// Example
+async AddReminderIntent() {
+    const reminder = {
+        // Your reminder
+    };
+
+    try {
+        const result = await this.$alexaSkill.$user.setReminder(reminder);
+
+        this.tell('Reminder has been set.');
+
+    } catch(error) {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.tell('Please grant the permission to set reminders.');
+        } else {
+            console.error(error);
+            // Do something
+        }
+    }
+},
 ```
 
 As a response to the API call you will receive an object containing the following data:
@@ -55,18 +68,29 @@ Name | Description | Value
 To update a reminder you need the `JSON` object to update with as well as the `alertToken` to define which one you want to update and the `updateReminder()` method:
 
 ```javascript
-const alertToken = '<REMINDER TOKEN>';
+await this.$alexaSkill.$user.updateReminder(alertToken, updatedReminder);
 
-const updatedReminder = {
-    // your reminder
-};
+// Example
+async UpdateReminderIntent() {
+    const alertToken = '<REMINDER TOKEN>';
+    const updatedReminder = {
+        // Your reminder
+    };
 
-this.$alexaSkill.$user.updateReminder(alertToken, updatedReminder).then((data) => {
-    console.log(data);
-    this.tell('Reminder has been updated.');
-}).catch((error) => {
-    console.log(error);
-});
+    try {
+        const result = await this.$alexaSkill.$user.updateReminder(alertToken, updatedAbsoluteReminder);
+
+        this.tell('Reminder has been updated.');
+
+    } catch(error) {
+        if (error.code === 'NO_USER_PERMISSION') {
+                this.tell('Please grant the permission to set reminders.');
+        } else {
+            console.error(error);
+            // Do something
+        }
+    }
+},
 ```
 
 You will receive the same response you receive after adding a new reminder.
@@ -76,13 +100,23 @@ You will receive the same response you receive after adding a new reminder.
 To delete an active reminder you need the `deleteReminder()` method which takes in the `alertToken` as a parameter:
 
 ```javascript
-const alertToken = '<REMINDER TOKEN>';
+await this.$alexaSkill.$user.deleteReminder(alertToken);
 
-this.$alexaSkill.$user.deleteReminder(alertToken).then(() => {
-    this.tell('Reminder has been deleted.');
-}).catch((err) => {
-    console.log(err);
-});
+async DeleteReminderIntent() {
+    try {
+        const alertToken = '<REMINDER TOKEN>';
+        const result = await this.$alexaSkill.$user.deleteReminder(alertToken);
+        this.tell('Reminder has been deleted.');
+
+    } catch(error) {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.tell(`Please grant the permission to set reminders.`);
+        } else {
+            console.error(error);
+            // Do something
+        }
+    }
+},
 ```
 
 ## Get Reminder
@@ -90,25 +124,38 @@ this.$alexaSkill.$user.deleteReminder(alertToken).then(() => {
 You can also send out a request to get a reminder using its `alertToken`:
 
 ```javascript
-const alertToken = '<REMINDER TOKEN>';
+await this.$alexaSkill.$user.getReminder(alertToken)
 
-this.$alexaSkill.$user.getReminder(alertToken).then((data) => {
-        console.log(data);
-}).catch((err) => {
-    console.log(err);
-});
+// Example
+async GetReminderIntent() {
+    const alertToken = '<REMINDER TOKEN>';
+
+    try {
+        const result = await this.$alexaSkill.$user.getReminder(alertToken);
+
+    } catch(error) {
+        console.error(error);
+    }
+},
 ```
 
 There is also the possibility to get all your reminders at once:
 
 ```javascript
-this.$alexaSkill.$user.getAllReminders().then((data) => {
-        console.log(data);
-}).catch((err) => {
-    console.log(err);
-});
-```
+await this.$alexaSkill.$user.getAllReminders()
 
+// Example
+async GetAllRemindersIntent() {
+    const alertToken = '<REMINDER TOKEN>';
+
+    try {
+        const result = await this.$alexaSkill.$user.getAllReminders();
+
+    } catch(error) {
+        console.error(error);
+    }
+},
+```
 
 <!--[metadata]: {"description": "Learn more about how to set reminders for your user with your Alexa Skill.",
 "route": "amazon-alexa/reminders" }-->
