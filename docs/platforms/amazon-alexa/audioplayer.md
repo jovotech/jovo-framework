@@ -1,8 +1,9 @@
-# Audioplayer
+# Alexa AudioPlayer Skills
 
 Learn more about how to build Alexa AudioPlayer Skills with the Jovo Framework.
 
 * [Introduction to AudioPlayer Skills](#introduction-to-audioplayer-skills)
+* [Configuration](#configuration)
 * [Features](#features)
     * [Play](#play)
     * [Enqueue](#enqueue)
@@ -22,6 +23,45 @@ Get started by creating a new Jovo project with the [`alexa-audioplayer`](https:
 ```text
 $ jovo new <directory> --template alexa-audioplayer
 ```
+
+## Configuration
+
+To be able to use the Alexa AudioPlayer, you need to enable the AudioPlayer interface for your Alexa Skill Project. 
+
+The [`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer) template already comes with the right configuration in its `project.js` file:
+
+```javascript
+// project.js
+
+alexaSkill: {
+    nlu: 'alexa',
+    manifest: {
+        apis: {
+            custom: {
+                interfaces: [
+                    {
+                        type: 'AUDIO_PLAYER'
+                    }
+                ]
+            }
+        }
+    }
+},
+```
+
+This will write the necessary information into the `skill.json` and deploy it to your Alexa Skill project with the following commands:
+
+```sh
+# Build Alexa specific files into platforms folder
+$ jovo build
+
+# Deploy to Alexa Developer Console
+$ jovo deploy
+```
+
+Alternatively, you can also go to the Alexa Developer Console and enable AudioPlayer in the interfaces tab:
+
+![Alexa Console: Enable Audio Player Interface](../../img/alexa-enable-audioplayer-interface.jpg)
 
 ## Features
 
