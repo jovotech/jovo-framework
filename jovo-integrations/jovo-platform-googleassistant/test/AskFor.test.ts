@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo, EnumRequestType} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
 import {DialogflowResponse} from "jovo-platform-dialogflow";
@@ -219,7 +219,7 @@ describe('test ON_PERMISSION', () => {
                     "intent": "actions.intent.PERMISSION",
                     "inputValueData": {
                         "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-                        "optContext": "Pre precise location text",
+                        "optContext": "AskForZipCodeAndCityContext",
                         "permissions": [
                             "DEVICE_COARSE_LOCATION"
                         ]
