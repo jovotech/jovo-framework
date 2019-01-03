@@ -388,35 +388,58 @@ test('test BodyTemplate7', () => {
 
 
 test('test ListTemplate1', () => {
-   const listTemplate1 = new ListTemplate1();
-   listTemplate1.addItem('token', {contentDescription: 'desc', sources: [{url: 'image_url'}]}, 'primaryText', 'secondaryText', 'tertiaryText');
+    const listTemplate1 = new ListTemplate1();
+    listTemplate1.addItem('token', { contentDescription: 'desc', sources: [{ url: 'image_url' }] }, 'primaryText', 'secondaryText', 'tertiaryText');
 
-   expect(listTemplate1.type).toBe('ListTemplate1');
-   expect(listTemplate1.listItems[0]).toEqual({
-       token: 'token',
-       image: {
-           contentDescription: 'desc',
-           sources: [
-               {
-                   url: 'image_url'
-               }
-           ]
-       },
-       textContent: {
-           primaryText: {
-               type: 'RichText',
-               text: 'primaryText'
-           },
-           secondaryText: {
-               type: 'RichText',
-               text: 'secondaryText'
-           },
-           tertiaryText: {
-               type: 'RichText',
-               text: 'tertiaryText'
-           }
-       }
-   });
+    expect(listTemplate1.type).toBe('ListTemplate1');
+    expect(listTemplate1.listItems[0]).toStrictEqual({
+        token: 'token',
+        image: {
+            contentDescription: 'desc',
+            sources: [
+                {
+                    url: 'image_url'
+                }
+            ]
+        },
+        textContent: {
+            primaryText: {
+                type: 'RichText',
+                text: 'primaryText'
+            },
+            secondaryText: {
+                type: 'RichText',
+                text: 'secondaryText'
+            },
+            tertiaryText: {
+                type: 'RichText',
+                text: 'tertiaryText'
+            }
+        }
+    });
+    listTemplate1.listItems = [];
+
+    // Test addItem with no image
+    listTemplate1.addItem('token', undefined, 'primaryText', 'secondaryText', 'tertiaryText');
+
+    expect(listTemplate1.type).toBe('ListTemplate1');
+    expect(listTemplate1.listItems[0]).toStrictEqual({
+        token: 'token',
+        textContent: {
+            primaryText: {
+                type: 'RichText',
+                text: 'primaryText'
+            },
+            secondaryText: {
+                type: 'RichText',
+                text: 'secondaryText'
+            },
+            tertiaryText: {
+                type: 'RichText',
+                text: 'tertiaryText'
+            }
+        }
+    });
     listTemplate1.listItems = [];
 
     const listItem: ListItem = {
@@ -445,7 +468,7 @@ test('test ListTemplate1', () => {
     };
 
     listTemplate1.addItem(listItem);
-    expect(listTemplate1.listItems[0]).toEqual({
+    expect(listTemplate1.listItems[0]).toStrictEqual({
         token: 'token',
         image: {
             sources: [
@@ -470,33 +493,33 @@ test('test ListTemplate1', () => {
         }
     });
 
-   listTemplate1.listItems = [];
-   // setItems
-   listTemplate1.setItems([{
-       token: 'token',
-       image: {
-           sources: [
-               {
-                   url: 'image_url'
-               }
-           ]
-       },
-       textContent: {
-           primaryText: {
-               type: 'RichText',
-               text: 'primaryText'
-           },
-           secondaryText: {
-               type: 'RichText',
-               text: 'secondaryText'
-           },
-           tertiaryText: {
-               type: 'RichText',
-               text: 'tertiaryText'
-           }
-       }
-   }]);
-    expect(listTemplate1.listItems[0]).toEqual({
+    listTemplate1.listItems = [];
+    // setItems
+    listTemplate1.setItems([{
+        token: 'token',
+        image: {
+            sources: [
+                {
+                    url: 'image_url'
+                }
+            ]
+        },
+        textContent: {
+            primaryText: {
+                type: 'RichText',
+                text: 'primaryText'
+            },
+            secondaryText: {
+                type: 'RichText',
+                text: 'secondaryText'
+            },
+            tertiaryText: {
+                type: 'RichText',
+                text: 'tertiaryText'
+            }
+        }
+    }]);
+    expect(listTemplate1.listItems[0]).toStrictEqual({
         token: 'token',
         image: {
             sources: [
@@ -528,7 +551,7 @@ test('test ListTemplate2', () => {
     listTemplate2.addItem('token', {contentDescription: 'desc', sources: [{url: 'image_url'}]}, 'primaryText', 'secondaryText', 'tertiaryText');
 
     expect(listTemplate2.type).toBe('ListTemplate2');
-    expect(listTemplate2.listItems[0]).toEqual({
+    expect(listTemplate2.listItems[0]).toStrictEqual({
         token: 'token',
         image: {
             contentDescription: 'desc',
@@ -554,6 +577,11 @@ test('test ListTemplate2', () => {
         }
     });
     listTemplate2.listItems = [];
+
+    // ensure an error is thrown if image isn't passed in (it's required for ListTemplate2)
+    expect(() => listTemplate2.addItem('token', undefined, 'primaryText'))
+        .toThrow('Image is needed');
+
     // setItems
     listTemplate2.setItems([{
         token: 'token',
@@ -579,7 +607,7 @@ test('test ListTemplate2', () => {
             }
         }
     }]);
-    expect(listTemplate2.listItems[0]).toEqual({
+    expect(listTemplate2.listItems[0]).toStrictEqual({
         token: 'token',
         image: {
             sources: [
