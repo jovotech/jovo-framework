@@ -265,6 +265,15 @@ export class AlexaUser extends User {
     }
 
     /**
+     * Gets reminder
+     * @param {string} alertToken
+     * @return {Promise<any>}
+     */
+    getReminder(alertToken: string): Promise<ReminderListResponse>  {
+        return this.alexaReminder.getReminder(alertToken);
+    }
+
+    /**
      * Updates reminder
      * @param {string} alertToken
      * @param {*} reminder

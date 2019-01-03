@@ -39,6 +39,33 @@ export class AlexaReminder {
     }
 
     /**
+     * Gets reminder
+     * @param {string} alertToken
+     * @return {Promise<any>}
+     */
+    async getReminder(alertToken: string): Promise<ReminderListResponse> {
+        try {
+            const options = {
+                endpoint: this.apiEndpoint,
+                path: `/v1/alerts/reminders/${alertToken}`,
+                permissionToken: this.apiAccessToken,
+                method: 'GET',
+            };
+            const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
+            if (response.httpStatus === 403) {
+                const apiError = new ApiError(response.data.message, response.data.code);
+                if (response.data.Message === 'Not all permissions are authorized.') {
+                    apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+                }
+                return Promise.reject(apiError);
+            }
+            return Promise.resolve(response.data);
+        } catch (e) {
+            return Promise.reject(new ApiError(e.message || 'Something went wrong.', e.code || ApiError.ERROR));
+        }
+    }
+
+    /**
      * Updates reminder
      * @param {string} alertToken
      * @param {*} reminder
