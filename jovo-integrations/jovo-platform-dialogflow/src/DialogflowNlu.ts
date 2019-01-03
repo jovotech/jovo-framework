@@ -123,33 +123,17 @@ export class DialogflowNlu extends Extensible {
         jovo.$originalRequest = _get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'originalDetectIntentRequest.payload');
         jovo.$request = jovo.$plugins.DialogflowNlu.dialogflow.$request;
         (jovo.$request as DialogflowRequest).originalDetectIntentRequest.payload = this.config.platformRequestClazz.fromJSON(jovo.$originalRequest );
-        // _set(jovo.$request, 'originalDetectIntentRequest.payload', jovo.platformRequest.fromJSON(jovo.$originalRequest ));
     };
 
     type = (jovo: Jovo) => {
-        if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent')) {
-            if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
-                jovo.$type = {
-                    type: EnumRequestType.LAUNCH
-                };
-            } else if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === false) {
-                if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.displayName') === 'Default Fallback Intent' &&
-                    jovo.$type) {
-                } else {
-
-                    if (jovo.$type && jovo.$type.type === EnumRequestType.END) {
-
-                    } else {
-                        jovo.$type = {
-                            type: EnumRequestType.INTENT
-                        };
-                    }
-                }
-            } else if (_get(jovo.$plugins.DialogflowNlu.dialogflow.$request, 'queryResult.intent.isFallback', false) === true) {
-                jovo.$type = {
-                    type: EnumRequestType.INTENT
-                };
-            }
+        if (_get(jovo.$request, 'queryResult.intent.displayName') === 'Default Welcome Intent') {
+            jovo.$type = {
+                type: EnumRequestType.LAUNCH
+            };
+        } else if (!jovo.$type.type) {
+            jovo.$type = {
+                type: EnumRequestType.INTENT
+            };
         }
     };
 
