@@ -41,22 +41,21 @@ If you're using the [Jovo Language Model](../../basic-concepts/model '../model')
 This is how an example `project.js` could look like:
 
 ```javascript
-{
-	alexaSkill: {
-		nlu: 'alexa',
-		manifest: {
-			permissions: [
-				{
-				  name: 'alexa::household:lists:read',
-				},
-				{
-				  name: 'alexa::household:lists:write',
-				}
-			]
-		}
-	},
-	'endpoint': '${JOVO_WEBHOOK_URL}',
-}
+// project.js
+
+alexaSkill: {
+    nlu: 'alexa',
+    manifest: {
+        permissions: [
+            {
+                name: 'alexa::household:lists:read',
+            },
+            {
+                name: 'alexa::household:lists:write',
+            }
+        ]
+    }
+},
 ```
 
 
@@ -68,18 +67,19 @@ If your users haven't granted your Skill the permission access lists yet (for ex
 This is mostly used after the error code `'NO_USER_PERMISSION'` is returned. Here is an example:
 
 ```javascript
-this.$alexaSkill.$user.getShoppingList('active')
-    .then((data) => {
-        // Success! Now do something with the data
-    })
-    .catch((error) => {
+async GetShoppingListIntent() {
+    try {
+        const list = await this.$alexaSkill.$user.getShoppingList();
+
+    } catch(error) {
         if (error.code === 'NO_USER_PERMISSION') {
             this.$alexaSkill.showAskForListPermissionCard(['read'])
                 .tell('Please grant the permission to access your lists.');
         } else {
-            this.tell(error.message);
+            console.error(error);
         }
-    });
+    }
+},
 ```
 
 You can ask for both `read` and `write` access with the Permission Card:
@@ -103,61 +103,79 @@ Users can then update the permissions in the Skill's settings:
 Get the user's shopping list:
 
 ```javascript
-this.$alexaSkill.$user.getShoppingList(status);
+await this.$alexaSkill.$user.getShoppingList();
 
 // Example
-this.$alexaSkill.$user.getShoppingList('active')
-    .then((data) => {
-        for (let obj of data.items) {
-            this.$speech.addSentence(obj.value);
-        }
-        this.tell(this.$speech);
-    })
-    .catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read']);
-            this.tell('Please grant the permission.');
-        }
-    })
+async GetShoppingListIntent() {
+    try {
+        const list = await this.$alexaSkill.$user.getShoppingList();
+
+        console.log(list);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 Add an item to the shopping list:
 
 ```javascript
-this.$alexaSkill.$user.addToShoppingList(value, status);
+await this.$alexaSkill.$user.addToShoppingList(value);
 
 // Example
-this.$alexaSkill.$user.addToShoppingList('milk', 'active')
-    .then((data) => {
-        this.tell('Added the item to the list.');
-    })
-    .catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
-                .tell('Please grant the permission.');
-        }
-    })
+async AddItemToShoppingListIntent() {
+    try {
+        const result = await this.$user.addToShoppingList('Milk')
+
+        console.log(result);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 Update the shopping list:
 
 ```javascript
-this.$alexaSkill.$user.updateShoppingList(oldValue, newValue, newStatus);
+await this.$alexaSkill.$user.updateShoppingListItem(oldValue, newValue);
 
 // Example
-this.$alexaSkill.$user.updateShoppingList('milk', 'almond milk', 'active')
-    .then((data) => {
-        this.tell('Updated the list');
-    })
-    .catch((error) => {
+async UpdateShoppingListItemIntent() {
+    try {
+        const result = await this.alexaSkill.$user.updateShoppingListItem('Milk', 'Almond Milk');
+
+        console.log(result);
+
+    } catch(error) {
         if (error.code === 'NO_USER_PERMISSION') {
             this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
                 .tell('Please grant the permission.');
         }
         if (error.code === 'ITEM_NOT_FOUND') {
             this.tell('Item not found.');
-        }   
-    })
+        }
+    }
+},
+```
+
+Delete an item:
+
+```javascript
+await this.$alexaSkill.$user.deleteShoppingListItem(oldValue, newValue);
+
+// Example
+async DeleteShoppingListItemIntent() {
+    try {
+        const data = await this.$user.deleteShoppingListItem('Milk');
+        console.log('item deleted');
+        console.log(data);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 ## To-Do List
@@ -165,63 +183,74 @@ this.$alexaSkill.$user.updateShoppingList('milk', 'almond milk', 'active')
 Get the user's to-do list:
 
 ```javascript
-this.$alexaSkill.$user.getToDoList(status);
+await this.$alexaSkill.$user.getToDoList();
 
 // Example
-this.$alexaSkill.$user.getToDoList('active')
-    .then((data) => {
-        for (let obj of data.items) {
-            this.$speech.addSentence(obj.value);
-        }
-        this.tell(this.$speech);
-    })
-    .catch((error) => {
-       if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
-                .tell('Please grant the permission to access your lists.');
-        } 
-    });
+async GetTodoListIntent() {
+    try {
+        const list = await this.alexaSkill.$user.getToDoList();
+
+        console.log(list);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 Add an item to the to-do list:
 
 ```javascript
-this.$alexaSkill.$user.addToDoList(value, status);
+await this.$alexaSkill.$user.addToToDoList(value)
 
 // Example
-this.$alexaSkill.$user.addToTodoList('Sleep', 'active')
-    .then((data) => {
-        this.tell('Item added.');
-    })
-    .catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
-                .tell('Please grant the permission to access your lists');
-        }
-    });
+async AddItemToToDoListIntent() {
+    try {
+        const result = await this.$user.addToToDoList('Do Laundry');
+
+        console.log(result);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 Update the to-do list:
 
 ```javascript
-this.$alexaSkill.$user.updateToDoList(oldValue, newValue, newStatus);
+await this.$alexaSkill.$user.updateToDoListItem(oldValue, newValue)
 
 // Example
-this.$alexaSkill.$user.updateToDoList('Pay bills', 'Go Shopping', 'active')
-    .then((data) => {
-        this.tell('Item updated.');
-    })
-    .catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForListPermissionCard(['read', 'write'])
-                .tell('Please grant the permission to access your lists.');
-        }
-        if (error.code === 'ITEM_NOT_FOUND') {
-            this.tell('Item not found.');
-        }
-    });
+async UpdateToDoListItemIntent() {
+    try {
+        const result = await this.$user.updateToDoListItem('Do Laundry', 'Buy Clothes');
+
+        console.log(result);
+
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
+Delete an item from the to-do list:
+
+```javascript
+await this.$alexaSkill.$user.deleteToDoListItem(value)
+
+// Example
+async DeleteToDoListItemIntent() {
+    try {
+        const result = await this.$user.deleteToDoListItem('Buy clothes');
+
+        console.log(result);
+
+    } catch(error) {
+        // Do something
+    }
+},
+```
 
 
 

@@ -13,32 +13,68 @@ The Alexa Settings API allows you to access the time zone, distance measurement 
 
 ## Time Zone
 
+Here is an example how you can get the user's timezone in a `GetTimezoneIntent`:
+
 ```javascript
-this.$alexaSkill.$user.getTimezone().then((timezone) => {
-    this.tell(`Your timezone is ${timezone}`);
-}).catch((error) => {
-    console.log(error);
-});
+async GetTimezoneIntent() {
+    try {
+        const timezone = await this.$alexaSkill.$user.getTimezone();
+        return this.tell(`Your timezone is ${timezone}`);
+    } catch(error) {
+        // Do something
+    }
+},
+```
+
+You can use this information to get the local time of the user. For example, you can use the [moment-timezone](https://momentjs.com/timezone/) package:
+
+```javascript
+// Initialization
+const moment = require('moment-timezone');
+
+// Inside Handler
+async GetLocalTimeIntent() {
+    try {
+        const timezone = await this.$alexaSkill.$user.getTimezone();
+
+        const now = moment.utc();
+        const localTime = now.tz(timezone).format('ddd, MMM D, YYYY [at] h:mma');
+
+        return this.tell(`Your local time is ${localTime}`);
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 ## Distance Measurement Unit
 
+Here is an example how you can get the user's distance measurement unit in a `GetDistanceUnitIntent`:
+
 ```javascript
-this.$alexaSkill.$user.getDistanceUnit().then((distanceUnit) => {
-    this.tell(`Your distance measurement unit is ${distanceUnit}`);
-}).catch((error) => {
-    console.log(error);
-});
+async GetDistanceUnitIntent() {
+    try {
+        const distanceUnit = await this.$alexaSkill.$user.getDistanceUnit();
+        this.tell(`Your distance measurement unit is ${distanceUnit}`);
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 ## Temperature Measurement Unit
 
+Here is an example how you can get the user's temperature measurement unit in a `GetDistanceUnitIntent`:
+
 ```javascript
-this.$alexaSkill.$user.getTemperatureUnit().then((temperatureUnit) => {
-    this.tell(`Your temperature measurement unit is ${distanceUnit}`);
-}).catch((error) => {
-    console.log(error);
-});
+async GetTemperatureUnitIntent() {
+    try {
+        const temperatureUnit = await this.$alexaSkill.$user.getTemperatureUnit();
+        this.tell(`Your temperature unit is ${temperatureUnit}`);
+    } catch(error) {
+        // Do something
+    }
+},
 ```
 
 
