@@ -39,7 +39,7 @@ export class AskFor implements Plugin {
         /**
          * Ask for zipcode and city
          * @public
-         * @param {string} speech
+         * @param {string} optContext
          */
         GoogleAction.prototype.askForZipCodeAndCity = function(optContext = '') {
             return this.askForCoarseLocation(optContext);
@@ -80,7 +80,6 @@ export class AskFor implements Plugin {
         /**
          * Ask for permissions
          * @public
-         * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
          * @param {string} optContext
          */
         GoogleAction.prototype.askForPreciseLocation = function(optContext = '') {
@@ -97,6 +96,7 @@ export class AskFor implements Plugin {
         /**
          * Ask for update permission
          * @public
+         * @param {string} intent
          * @param {string} optContext
          */
         GoogleAction.prototype.askForUpdate = function(intent: string, optContext = '') {
@@ -125,7 +125,6 @@ export class AskFor implements Plugin {
             return this;
         };
 
-
         /**
          * Returns true if permission granted
          * @return {boolean}
@@ -143,7 +142,7 @@ export class AskFor implements Plugin {
         /**
          * Ask form sign in
          * @public
-         * @param {string} context
+         * @param {string} optContext
          */
         GoogleAction.prototype.askForSignIn = function(optContext = '') {
             this.$output.GoogleAssistant = {
@@ -194,7 +193,7 @@ export class AskFor implements Plugin {
          * @return {boolean}
          */
         GoogleAction.prototype.isSignInOk = function() {
-            return this.getSignInStatus() === 'DENIED';
+            return this.getSignInStatus() === 'OK';
         };
 
 
@@ -349,7 +348,7 @@ export class AskFor implements Plugin {
 
             _set(googleAction.$response, 'expectUserResponse', true);
 
-            //TODO: doesn't work
+            //TODO: doesn't work?
             _set(googleAction.$response, 'systemIntent', {
                 intent: 'actions.intent.PERMISSION',
                 data: {

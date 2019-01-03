@@ -59,7 +59,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForName(optContext: string): this;
+        askForName(optContext?: string): this;
 
 
         /**
@@ -67,14 +67,14 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForZipCodeAndCity(optContext: string): this;
+        askForZipCodeAndCity(optContext?: string): this;
 
         /**
          * Ask for name permission
          * @public
          * @param {string} optContext
          */
-        askForNamePermission(optContext: string): this;
+        askForNamePermission(optContext?: string): this;
 
 
         /**
@@ -82,7 +82,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForCoarseLocation(optContext: string): this;
+        askForCoarseLocation(optContext?: string): this;
 
 
         /**
@@ -90,7 +90,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForPreciseLocation(optContext: string): this;
+        askForPreciseLocation(optContext?: string): this;
 
 
         /**
@@ -98,7 +98,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForUpdate(optContext: string): this;
+        askForUpdate(optContext?: string): this;
 
         /**
          * Ask for permissions
@@ -106,7 +106,7 @@ declare module './core/GoogleAction' {
          * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
          * @param {string} optContext
          */
-        askForPermission(permissions: string[], optContext: string): this;
+        askForPermission(permissions: string[], optContext?: string): this;
 
 
         /**
@@ -120,7 +120,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForSignIn(optContext: string): this;
+        askForSignIn(optContext?: string): this;
 
         /**
          * Returns sign in status after sign in
@@ -191,7 +191,7 @@ declare module './core/GoogleAction' {
          * @param {string} permissionContext
          * @returns {this}
          */
-        askForPlace(requestPrompt: string, permissionContext: string): this;
+        askForPlace(requestPrompt: string, permissionContext?: string): this;
 
         /**
          * Return device object
