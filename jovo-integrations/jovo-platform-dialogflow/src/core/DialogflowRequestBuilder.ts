@@ -9,6 +9,10 @@ const samples: {[key: string]: {[key: string]: string} | string} = {
         'HelpIntent': 'HelpIntent.json',
         'MediaFinished': 'MediaFinished.json',
         'Cancel': 'Cancel.json',
+        'SignInCancelled': 'SignInCancelled.json',
+        'SignInOk': 'SignInOk.json',
+        'OnPermissionName': 'OnPermissionName.json',
+        'OnPermissionPreciseLocation': 'OnPermissionPreciseLocation.json'
     }
 };
 

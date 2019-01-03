@@ -1,0 +1,125 @@
+{
+  "responseId": "bcba0020-6cb1-4c85-be92-717e9d54f747",
+  "queryResult": {
+    "queryText": "actions_intent_PERMISSION",
+    "action": "input.unknown",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/actions_intent_permission",
+        "parameters": {
+          "PERMISSION": true,
+          "text": "yes"
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/actions_capability_media_response_audio"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4/contexts/actions_capability_web_browser"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent-XYZ/agent/intents/a41320b5-a725-41a2-9033-c77480046aee",
+      "displayName": "Default Fallback Intent",
+      "isFallback": true
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          }
+        ]
+      },
+      "requestType": "SIMULATOR",
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "yes",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "arguments": [
+            {
+              "textValue": "true",
+              "name": "PERMISSION",
+              "boolValue": true
+            },
+            {
+              "rawText": "yes",
+              "textValue": "yes",
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.PERMISSION"
+        }
+      ],
+      "user": {
+        "userStorage": "{\"userId\":\"ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE\"}",
+        "lastSeen": "2019-01-03T13:48:18Z",
+        "permissions": [
+          "DEVICE_PRECISE_LOCATION"
+        ],
+        "locale": "en-US",
+        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+      },
+      "device": {
+        "location": {
+          "coordinates": {
+            "latitude": 37.4219806,
+            "longitude": -122.0841979
+          }
+        }
+      },
+      "conversation": {
+        "conversationId": "ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent-XYZ/agent/sessions/ABwppHG69JYOSDa3YiL7odSMzd8Zf3H-EfLpHnHJDlODYQsru39xXSV1XAkdeZ1DYYpvXgCrUCvBcmU2ws4"
+}

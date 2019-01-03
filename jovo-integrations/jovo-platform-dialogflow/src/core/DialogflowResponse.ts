@@ -149,6 +149,10 @@ export class DialogflowResponse implements JovoResponse {
         return false;
     }
 
+    getPlatformResponse() {
+        return this.payload[this.getPlatformId()];
+    }
+
     toJSON(): DialogflowResponseJSON {
         // copy all fields from `this` to an empty object and return in
         return Object.assign({}, this);

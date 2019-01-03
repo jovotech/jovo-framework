@@ -1,0 +1,131 @@
+{
+  "responseId": "1b3e06d7-a4e2-474a-acd8-56a62867359d",
+  "queryResult": {
+    "queryText": "actions_intent_PERMISSION",
+    "action": "input.unknown",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "Entschuldige bitte, ich habe deine Frage nicht verstanden.",
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            "Kannst du das noch mal anders formulieren?"
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/actions_intent_permission",
+        "parameters": {
+          "PERMISSION": true,
+          "text": "ja"
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/google_assistant_input_type_voice"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent-XYZ/agent/intents/a41320b5-a725-41a2-9033-c77480046aee",
+      "displayName": "Default Fallback Intent",
+      "isFallback": true
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "de"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "ja",
+              "inputType": "VOICE"
+            }
+          ],
+          "arguments": [
+            {
+              "textValue": "true",
+              "name": "PERMISSION",
+              "boolValue": true
+            },
+            {
+              "rawText": "ja",
+              "textValue": "ja",
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.PERMISSION"
+        }
+      ],
+      "user": {
+        "userStorage": "{\"userId\":\"ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE\"}",
+        "lastSeen": "2019-01-03T09:45:10Z",
+        "permissions": [
+          "NAME"
+        ],
+        "profile": {
+          "displayName": "John Doe",
+          "givenName": "John",
+          "familyName": "Doe"
+        },
+        "locale": "de-DE",
+        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+      },
+      "conversation": {
+        "conversationId": "ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent-XYZ/agent/sessions/ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q"
+}

@@ -1,0 +1,120 @@
+{
+  "responseId": "a9f03a24-7efa-4a87-896d-7d8d1f08b769",
+  "queryResult": {
+    "queryText": "actions_intent_SIGN_IN",
+    "action": "input.unknown",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "Leider kann ich nicht verstehen, was du von mir möchtest.",
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            "Leider kann ich nicht verstehen, was du von mir möchtest."
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg/contexts/actions_intent_sign_in",
+        "parameters": {
+          "SIGN_IN": {
+            "@type": "type.googleapis.com/google.actions.v2.SignInValue",
+            "status": "CANCELLED"
+          },
+          "text": ""
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent-XYZ/agent/intents/a41320b5-a725-41a2-9033-c77480046aee",
+      "displayName": "Default Fallback Intent",
+      "isFallback": true
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "de"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {}
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.v2.SignInValue",
+                "status": "CANCELLED"
+              },
+              "name": "SIGN_IN"
+            },
+            {
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.SIGN_IN"
+        }
+      ],
+      "user": {
+        "userStorage": "{}",
+        "lastSeen": "2019-01-03T08:59:25Z",
+        "locale": "de-DE",
+        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+      },
+      "conversation": {
+        "conversationId": "ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent-XYZ/agent/sessions/ABwppHF6B_ep7zCk43UzspUHF-asd-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg"
+}
