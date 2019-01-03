@@ -266,9 +266,9 @@ export class AudioPlayerPlugin implements Plugin {
 
         if (alexaSkill.$request!.hasAudioInterface()) {
             if (_get(output, 'Alexa.AudioPlayer')) {
-                _set(alexaSkill.$response, 'response.directives',
-                    [_get(output, 'Alexa.AudioPlayer')]
-                );
+                const directives = _get(alexaSkill.$response, 'response.directives', []);
+                directives.push(_get(output, 'Alexa.AudioPlayer'));
+                _set(alexaSkill.$response, 'response.directives', directives);
             }
         }
     }
