@@ -33,7 +33,7 @@ app.setHandler({
 });
 ```
 
-This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `YesIntent` or `NoIntent`. As a developer need to figure out yourself which question they just answered with "Yes."
+This means, no matter how deep into the conversation with your voice app the user is, they will always end up at a specific `YesIntent` or `NoIntent`. As a developer, you need to figure out yourself which question they just answered with "Yes."
 
 This is where `states` can be helpful. For more complex voice apps that include multiple user flows, it is necessary to remember and route through some user states to understand at which position the conversation currently is. For example, especially "Yes" and "No" as answers might show up across your voice app for a various number of questions. For each question, a state would be very helpful to distinct between different Yes's and No's.
 
