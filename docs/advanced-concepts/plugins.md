@@ -1,11 +1,11 @@
 # Plugins
 
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
-
 * [Introduction](#introduction)
 * [Using Plugins](#using-plugins)
 * [Building Plugins](#building-plugins)
-
+  * [Config](#config)
+  * [HandleRequest](#handlerequest)
 
 ## Introduction
 
@@ -64,7 +64,7 @@ plugin: {
 
 The following code examples will all be in TypeScript , which is the language the whole framework is written in, but it's also possible to create plugins using JavaScript, since, at the end of the day, the TypeScript code is simply transcompiled to JavaScript.
 
-```typescript
+```javascript
 // Typescript
 
 import { Plugin, PluginConfig, BaseApp } from 'jovo-core';
@@ -96,7 +96,7 @@ Every plugin has to have an install function, which is used to hook up the plugi
 
 While connecting the plugin to a middleware, you specify a function to be executed as soon as the request execution hits the specified middleware:
 
-```typescript
+```javascript
 install(app: BaseApp) {
     app.middleware('middleware')!.use(this.pluginFunction.bind(this));
 }
@@ -106,11 +106,76 @@ pluginFunction(handleRequest: HandleRequest) {
 }
 ```
 
+### Config
+
+You can specify the configuration options of your plugin inside the `Config` interface.
+
+```javascript
+// Example
+
+export interface Config extends PluginConfig {
+    apiKey: string,
+    baseId: string,
+    options: {
+        color: string
+    }
+}
+```
+
+The default configuration is set inside the `config` object of the plugin class:
+
+```javascript
+// Example
+
+export class PluginName implements Plugin {
+    // default config
+    config: Config = {
+        apiKey: '',
+        baseId: '',
+        options: {
+            color: '#FF0000'
+        }
+    };
+    
+    // Rest of the plugin
+}
+```
+
+Your user can change the configuration using the `config.js` file inside their project using the following syntax:
+
+```javascript
+// config.js
+
+module.exports = {
+    // other configurations
+
+    plugin: {
+        PluginName: {
+            apiKey: '<value>',
+            options: {
+                color: '#000000'
+            }
+        }
+        
+        // other pluginss
+    }
+};
+```
+
+The user's config will be merged with your default config and will be first accessible inside the `install()` function (not the constructor) of your plugin using `this.config`:
+
+```javascript
+install(app: BaseApp) {
+    const apiKey = this.config.apiKey;
+    const color = this.config.options.color;
+}
+```
+
 ### HandleRequest
 
 Your function will receive the `handleRequest` object as input, which has the following properties:
 
-```typescript
+```javascript
 export interface HandleRequest {
 
     /**
@@ -145,7 +210,7 @@ The first property is a reference to the current `app` object. Here's an example
 
 The second property is the `host` object (Lambda, Azure, ExpressJS, etc.), which has the following interface:
 
-```typescript
+```javascript
 export interface Host {
     /**
      * Defines file write access
@@ -191,7 +256,7 @@ Depending on the middleware you use, the object can be `undefined`, since the in
 
 The last one is the `error` property, which wil be `undefined`, except if the plugin is hooked up to the `fail` middleware.
 
-```typescript
+```javascript
 interface Error {
     stack?: string;
 }
