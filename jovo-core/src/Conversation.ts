@@ -7,7 +7,7 @@ import * as crypto from "crypto";
 import * as util from "util";
 import * as path from 'path';
 import {TestSuite} from "./TestSuite";
-import {JovoRequest, JovoResponse, SessionAttributes} from "./Interfaces";
+import {JovoRequest, JovoResponse, SessionData} from "./Interfaces";
 import {RequestOptions} from "http";
 
 const fsunlink = util.promisify(fs.unlink);
@@ -23,7 +23,7 @@ export interface ConversationConfig {
 
 export class Conversation {
     testSuite: TestSuite;
-    sessionAttributes: SessionAttributes = {};
+    sessionData: SessionData = {};
 
     config: ConversationConfig = {
         userId: randomUserId(),
@@ -59,9 +59,9 @@ export class Conversation {
     async send(req: JovoRequest): Promise<JovoResponse> {
         this.applyToRequest(req);
         if (req.isNewSession()) {
-            this.sessionAttributes = {};
-        } else if(Object.keys(this.sessionAttributes).length > 0) {
-            req.setSessionAttributes(this.sessionAttributes);
+            this.sessionData = {};
+        } else if(Object.keys(this.sessionData).length > 0) {
+            req.setSessionData(this.sessionData);
         }
 
         const postData = JSON.stringify(req.toJSON());
@@ -69,7 +69,7 @@ export class Conversation {
         try {
             const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
             const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
-            this.sessionAttributes = jovoResponse.getSessionAttributes() || {};
+            this.sessionData = jovoResponse.getSessionData() || {};
             if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
                 // this.clearDb();
             }
@@ -81,7 +81,7 @@ export class Conversation {
     }
 
     clearSession(): void {
-        this.sessionAttributes = {};
+        this.sessionData = {};
     }
 
     async reset(): Promise<void> {
