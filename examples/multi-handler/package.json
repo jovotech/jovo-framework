@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js --webhook",
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch",
     "tsc": "",
     "test": "echo \"Error: no test specified\""
   },
