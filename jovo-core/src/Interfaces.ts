@@ -328,6 +328,13 @@ export interface JovoRequest {
 
 
     /**
+     * Sets intent name
+     * @param {string} intentName
+     * @returns {this}
+     */
+    setIntentName(intentName: string): this;
+
+    /**
      * Returns inputs
      * @return {Inputs}
      */
