@@ -240,8 +240,8 @@ You can use these cross-platform helper methods:
 | `getReprompt(): string` | Returns reprompt text without "speak" tags. | 
 | `hasSessionData(name: string, value?: any): boolean` | Checks if response has a specific session attribute in it.
 | `getSessionData(): SessionData | undefined` | Returns session data. [Learn more about session data here](../basic-concepts/data#session-data './data#session-data'). | 
-| `isTell(speechText?: string | string[]): boolean` | Checks if response has tell in it. | 
-| `isAsk(speechText?: string | string[], repromptText?: string | string[]): boolean` | Checks if response has ask in it. | 
+| `isTell(speechText?: string): boolean` | Checks if response has tell in it. | 
+| `isAsk(speechText?: string, repromptText?: string): boolean` | Checks if response has ask in it. | 
 | `hasState(state: string): boolean | undefined` | Checks if response has a state in it. | 
 | `hasSessionEnded(): boolean` | Checks if session ended. |
 
