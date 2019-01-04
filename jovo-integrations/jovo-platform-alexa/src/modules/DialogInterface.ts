@@ -255,10 +255,8 @@ export class Dialog {
      * @return {AlexaSkill}
      */
     elicitSlot(slotToElicit: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _set(this.alexaSkill.$output, 'ask',{
-            speech,
-            reprompt
-        });
+        this.alexaSkill.ask(speech, reprompt);
+
         _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogElicitSlotDirective(slotToElicit, updatedIntent)
         );
@@ -275,10 +273,7 @@ export class Dialog {
      * @return {AlexaSkill}
      */
     confirmSlot(slotToConfirm: string, speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _set(this.alexaSkill.$output, 'ask',{
-            speech,
-            reprompt
-        });
+        this.alexaSkill.ask(speech, reprompt);
         _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogConfirmSlotDirective(slotToConfirm, updatedIntent)
         );
@@ -294,10 +289,8 @@ export class Dialog {
      * @return {AlexaSkill}
      */
     confirmIntent(speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent) {
-        _set(this.alexaSkill.$output, 'ask',{
-            speech,
-            reprompt
-        });
+        this.alexaSkill.ask(speech, reprompt);
+
         _set(this.alexaSkill.$output, 'Alexa.Dialog',
             new DialogConfirmIntentDirective(updatedIntent)
         );
