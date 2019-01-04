@@ -133,9 +133,9 @@ googleAction: {
 }
 ```
 
-Updating a Dialogflow Agent through from the Jovo CLI needs an authentication process with a `keyFile`, which can be downloaded and placed in your project directory. For more information, take a look at the example in our [Knowledge Base: Deploy a Dialogflow Agent with the Jovo CLI](../knowledge-base/deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent').
+Updating a Dialogflow Agent through the Jovo CLI needs an authentication process with a `keyFile`, which can be downloaded and placed in your project directory. For more information, take a look at the example in our [Knowledge Base: Deploy a Dialogflow Agent with the Jovo CLI](../knowledge-base/deploy-dialogflow-agent.md './kb/deploy-dialogflow-agent').
 
-Similar to additional elements that go into the `skill.json` for the [`alexaSkill` object](#alexaSkill), you can also add specific elements to a Dialogflow agent by adding the whole like in the the `agent.json` file, like so: 
+Similar to additional elements that go into the `skill.json` for the [`alexaSkill` object](#alexaSkill), you can also add specific elements to a Dialogflow agent by adding the whole in the the `agent.json` file, like so: 
 
 ```javascript
 googleAction: {
