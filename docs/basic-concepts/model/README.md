@@ -173,7 +173,7 @@ This is how the `MyNameIsIntent` from the Jovo "Hello World" sample app looks li
 
 #### Intent Name
 
-The `name` specifies how the intent is called on the platforms. We recommend using a consistent standard. In our examples, we `Intent` to each name, like `MyNameIsIntent`.
+The `name` specifies how the intent is called on the platforms. We recommend using a consistent standard. In our examples, we add `Intent` to each name, like `MyNameIsIntent`.
 
 #### Phrases
 
@@ -329,7 +329,7 @@ This is how it looks like:
 }
 ```
 
-The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder (beta) and copy-paste the stuff that you need into this part of the Jovo Language Model file.
+The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
 ### Dialogflow
 
