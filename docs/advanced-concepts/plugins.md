@@ -1,11 +1,11 @@
 # Plugins
 
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
-
 * [Introduction](#introduction)
 * [Using Plugins](#using-plugins)
 * [Building Plugins](#building-plugins)
-
+  * [Config](#config)
+  * [HandleRequest](#handlerequest)
 
 ## Introduction
 
@@ -103,6 +103,71 @@ install(app: BaseApp) {
 
 pluginFunction(handleRequest: HandleRequest) {
     // do stuff
+}
+```
+
+### Config
+
+You can specify the configuration options of your plugin inside the `Config` interface.
+
+```typescript
+// Example
+
+export interface Config extends PluginConfig {
+    apiKey: string,
+    baseId: string,
+    options: {
+        color: string
+    }
+}
+```
+
+The default configuration is set inside the `config` object of the plugin class:
+
+```typescript
+// Example
+
+export class PluginName implements Plugin {
+    // default config
+    config: Config = {
+        apiKey: '',
+        baseId: '',
+        options: {
+            color: '#FF0000'
+        }
+    };
+    
+    // Rest of the plugin
+}
+```
+
+Your user can change the configuration using the `config.js` file inside their project using the following syntax:
+
+```javascript
+// config.js
+
+module.exports = {
+    // other configurations
+
+    plugin: {
+        PluginName: {
+            apiKey: '<value>',
+            options: {
+                color: '#000000'
+            }
+        }
+        
+        // other pluginss
+    }
+};
+```
+
+The user's config will be merged with your default config and will be first accessible inside the `install()` function (not the constructor) of your plugin using `this.config`:
+
+```typescript
+install(app: BaseApp) {
+    const apiKey = this.config.apiKey;
+    const color = this.config.options.color;
 }
 ```
 
