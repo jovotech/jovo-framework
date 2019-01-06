@@ -19,7 +19,7 @@ Download the package like this:
 $ npm install --save jovo-db-mysql
 ```
 
-Google Cloud Datastore can be enabled in the `src/app.js` file like this:
+MySQL database integration can be enabled in the `src/app.js` file like this:
 
 ```javascript
 const { MySQL } = require('jovo-db-mysql');
