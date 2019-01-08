@@ -46,7 +46,7 @@ describe('test audioplayer functions', () => {
     });
 
 
-    test('test play with artwork', async (done) => {
+    test('test play with setMetaData', async (done) => {
         app.setHandler({
             LAUNCH() {
                 this.$alexaSkill!.$audioPlayer!.setMetaData({
@@ -181,7 +181,7 @@ describe('test audioplayer functions', () => {
         });
     });
 
-    test('test clearQueue (CLEAR_ALL)', async (done) => {
+    test('test clearQueue (CLEAR_ENQUEUED)', async (done) => {
         app.setHandler({
             LAUNCH() {
                 this.$alexaSkill!.$audioPlayer!.clearQueue('CLEAR_ENQUEUED');
@@ -299,4 +299,42 @@ describe('test audioplayer events', () => {
         app.handle(ExpressJS.dummyRequest(audioPlayerRequest));
 
     });
+
+
+    test('test artwork chain methods', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$alexaSkill!.$audioPlayer!
+                    .setTitle('ArtWork Title')
+                    .setSubtitle('ArtWork Subtitle')
+                    .addArtwork('https://www.url.to/image2.jpg')
+                    .addBackground('https://www.url.to/image.jpg');
+                this.$alexaSkill!.$audioPlayer!.play('https://url.to.audio', 'tokenABC');
+            },
+        });
+
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+
+            const response = handleRequest.jovo!.$response;
+            expect(_get(response, 'response.directives[0].type')).toEqual('AudioPlayer.Play');
+            expect(_get(response, 'response.shouldEndSession')).toEqual(true);
+
+            expect(_get(response, 'response.directives[0].playBehavior')).toEqual('REPLACE_ALL');
+            expect(_get(response, 'response.directives[0].audioItem.stream.url')).toEqual('https://url.to.audio');
+            expect(_get(response, 'response.directives[0].audioItem.stream.token')).toEqual('tokenABC');
+            expect(_get(response, 'response.directives[0].audioItem.stream.offsetInMilliseconds')).toEqual(0);
+
+            expect(_get(response, 'response.directives[0].audioItem.metadata.title')).toEqual('ArtWork Title');
+            expect(_get(response, 'response.directives[0].audioItem.metadata.subtitle')).toEqual('ArtWork Subtitle');
+            expect(_get(response, 'response.directives[0].audioItem.metadata.backgroundImage.sources[0].url')).toEqual('https://www.url.to/image.jpg');
+            expect(_get(response, 'response.directives[0].audioItem.metadata.art.sources[0].url')).toEqual('https://www.url.to/image2.jpg');
+
+            done();
+        });
+
+    });
+
 });

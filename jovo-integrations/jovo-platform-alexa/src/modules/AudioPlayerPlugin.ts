@@ -195,14 +195,14 @@ export class AudioPlayer {
 
     /**
      * Adds a track subtitle to be displayed
-     * @param {string} subTitle
+     * @param {string} subtitle
      * @return {AudioPlayerPlugin}
      */
-    setSubtitle(subTitle: string) {
+    setSubtitle(subtitle: string) {
         if (!this.metaData) {
             this.metaData = {};
         }
-        _set(this.metaData, 'subTitle', subTitle);
+        _set(this.metaData, 'subtitle', subtitle);
         return this;
     }
 
@@ -217,7 +217,9 @@ export class AudioPlayer {
             this.metaData = {};
         }
         _set(this.metaData, 'art', {
-            sources: [url]
+            sources: [
+                { url }
+            ]
         });
         return this;
     }
@@ -233,7 +235,9 @@ export class AudioPlayer {
             this.metaData = {};
         }
         _set(this.metaData, 'backgroundImage', {
-            sources: [url]
+            sources: [
+                { url }
+            ]
         });
         return this;
     }
