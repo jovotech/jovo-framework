@@ -22,6 +22,9 @@ Typically, routing in a Jovo app is done in the `app.js` file in the `src` folde
 This is how a simple handler looks like:
 
 ```javascript
+// @language=javascript
+// app.js
+
 app.setHandler({
     LAUNCH() {
         this.toIntent('HelloWorldIntent');
@@ -33,6 +36,23 @@ app.setHandler({
 
     MyNameIsIntent() {
         this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+});
+
+// @language=typescript
+// app.ts
+
+app.setHandler({
+    LAUNCH() {
+        this.toIntent('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs!.name.value + ', nice to meet you!');
     },
 });
 ```
