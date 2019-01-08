@@ -18,43 +18,61 @@ app.setHandler({
         this.toIntent('PlayIntent');
     },
     PlayIntent() {
-        this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(0)
+        this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
             .play(SONG, 'token')
             .tell('Hello World!');
     },
 
     PauseIntent() {
-        this.$alexaSkill.audioPlayer().stop();
+        this.$alexaSkill.$audioPlayer.stop();
 
         // Save offset to database
-        this.$user.data.offset = this.$alexaSkill.audioPlayer().getOffsetInMilliseconds();
+        this.$user.$data.offset = this.$alexaSkill.$audioPlayer.getOffsetInMilliseconds();
 
         this.tell('Paused!');
     },
 
     ResumeIntent() {
-        this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(this.user().data.offset)
+        this.$alexaSkill.audioPlayer().setOffsetInMilliseconds(this.$user.data.offset)
             .play(SONG, 'token')
             .tell('Resuming!');
     },
 
 
-    'AUDIOPLAYER': {
-        'AudioPlayer.PlaybackStarted'() {
+    AUDIOPLAYER: {
+        'AlexaSkill.PlaybackStarted'() {
             console.log('AudioPlayer.PlaybackStarted');
         },
 
-        'AudioPlayer.PlaybackNearlyFinished'() {
+        'AlexaSkill.PlaybackNearlyFinished'() {
             console.log('AudioPlayer.PlaybackNearlyFinished');
         },
 
-        'AudioPlayer.PlaybackFinished'() {
+        'AlexaSkill.PlaybackFinished'() {
             console.log('AudioPlayer.PlaybackFinished');
-            this.$alexaSkill.audioPlayer().stop();
+            this.$alexaSkill.$audioPlayer.stop();
         },
 
-        'AudioPlayer.PlaybackStopped'() {
+        'AlexaSkill.PlaybackStopped'() {
             console.log('AudioPlayer.PlaybackStopped');
+        },
+
+    },
+    PLAYBACKCONTROLLER: {
+        'PlayCommandIssued'() {
+            console.log('PlaybackController.PlayCommandIssued');
+            this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(this.$user.$data.offset)
+                .play(SONG, 'token');
+        },
+        'NextCommandIssued'() {
+            console.log('PlaybackController.NextCommandIssued');
+            this.$alexaSkill.$audioPlayer
+                .startOver(SONG, 'token');
+        },
+        'PreviousCommandIssued'() {
+            console.log('PlaybackController.PreviousCommandIssued');
+            this.$alexaSkill.$audioPlayer
+                .startOver(SONG, 'token');
         },
 
     },
