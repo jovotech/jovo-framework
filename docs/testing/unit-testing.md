@@ -132,6 +132,50 @@ Each test starts with a conversation:
 const conversation = testSuite.conversation();
 ```
 
+#### Conversation Configuration
+
+You can also add certain configurations to the constructor of your `conversation` object.
+
+```javascript
+// Initialize Conversation
+const conversationConfig = {
+    // Overwrite default configurations here
+};
+const conversation = testSuite.conversation(conversationConfig);
+
+// Example: Use different PORT for the Jovo Webhook
+const conversationConfig = {
+    httpOptions: { 
+        port: PORT,
+    },
+};
+const conversation = testSuite.conversation(conversationConfig);
+
+// Example in short
+const conversation = testSuite.conversation({httpOptions: { port: PORT }});
+```
+Here is a list of the default configurations of the `conversation` object:
+
+```javascript
+// Default Config
+
+config: ConversationConfig = {
+    userId: randomUserId(),
+    locale: 'en-US',
+    defaultDbDirectory: './db/tests/',
+    httpOptions: {
+        host: 'localhost',
+        port: 3000,
+        path: '/webhook',
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'content-type': 'application/json',
+            'jovo-test': 'true'
+        },
+    },
+};
+```
 
 ### Request
 
