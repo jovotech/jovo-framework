@@ -82,7 +82,7 @@ export class AudioPlayer {
         _set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
             new AudioPlayerPlayDirective(playBehavior, audioItem)
         );
-        return this.alexaSkill; // TODO: return JOVO or AUDIOPLAYER?
+        return this.alexaSkill;
     }
 
 

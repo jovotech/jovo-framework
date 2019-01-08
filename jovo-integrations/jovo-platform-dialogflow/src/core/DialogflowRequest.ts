@@ -179,7 +179,7 @@ export class DialogflowRequest implements JovoRequest {
         return _get(this.getSessionAttributes(), SessionConstants.STATE);
     }
 
-    getSessionAttributes(): any { // tslint:disable-line
+    getSessionAttributes(): SessionData { // tslint:disable-line
 
         const sessionId = _get(this, 'session');
         let sessionAttributes: any = {}; // tslint:disable-line
@@ -198,7 +198,7 @@ export class DialogflowRequest implements JovoRequest {
         return sessionAttributes;
     }
 
-    setSessionAttributes(attributes: any): this { // tslint:disable-line
+    setSessionAttributes(attributes: SessionData): this { // tslint:disable-line
         const sessionId = _get(this, 'session');
         const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
             return context.name === `${sessionId}/contexts/session`;

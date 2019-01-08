@@ -223,7 +223,6 @@ export class App extends BaseApp {
         await super.handle(host);
     }
     /**
-     * TODO:
      * @deprecated
      * @param config
      */

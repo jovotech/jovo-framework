@@ -106,7 +106,6 @@ export class Display implements Plugin {
 }
 
 
-// TODO: Optimize me
 abstract class DisplayDirective {
     type: string;
 

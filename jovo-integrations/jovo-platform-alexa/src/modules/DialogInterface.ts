@@ -341,7 +341,6 @@ export class Dialog {
 
 }
 
-// TODO: Optimize me
 abstract class DialogDirective {
     type: string;
     updatedIntent?: Intent;
