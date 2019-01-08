@@ -72,7 +72,6 @@ export class AudioPlayer {
                 offsetInMilliseconds: this.offsetInMilliseconds,
             },
         };
-        console.log(this.metaData);
         if (this.expectedPreviousToken) {
             audioItem.stream.expectedPreviousToken = this.expectedPreviousToken;
         }
