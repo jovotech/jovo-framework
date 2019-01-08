@@ -11,6 +11,8 @@ const samples: {[key: string]: string} = {
     'AudioPlayer.PlaybackStarted': 'AudioPlayer.PlaybackStarted.json',
     'SessionEndedRequest': 'SessionEndedRequest.json',
     'System.ExceptionEncountered': 'System.ExceptionEncountered.json',
+    'PlaybackController.PlayCommandIssued': 'PlaybackController.PlayCommandIssued.json',
+    'AlexaSkillEvent.SkillDisabled': 'AlexaSkillEvent.SkillDisabled.json',
 };
 
 export class AlexaRequestBuilder implements RequestBuilder {
