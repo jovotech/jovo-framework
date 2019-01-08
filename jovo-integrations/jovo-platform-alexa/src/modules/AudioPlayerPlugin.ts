@@ -5,7 +5,6 @@ import {AlexaRequest} from "../core/AlexaRequest";
 import {Alexa} from "../Alexa";
 import {EnumRequestType, Plugin} from 'jovo-core';
 import {AlexaResponse} from "..";
-import {GameEngine} from "./GameEnginePlugin";
 
 export interface ImageSource {
     url: string;
