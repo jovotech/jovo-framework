@@ -15,8 +15,8 @@ export interface ImageSource {
 }
 
 export interface MetaData {
-    title: string;
-    subtitle: string;
+    title?: string;
+    subtitle?: string;
     art?: {
         sources: ImageSource[]
     };
@@ -71,9 +71,8 @@ export class AudioPlayer {
                 token,
                 offsetInMilliseconds: this.offsetInMilliseconds,
             },
-            metadata: this.metaData
         };
-
+        console.log(this.metaData);
         if (this.expectedPreviousToken) {
             audioItem.stream.expectedPreviousToken = this.expectedPreviousToken;
         }
@@ -186,7 +185,11 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     setTitle(title: string) {
-        _set(this.metaData || {}, 'title', title);
+        if (!this.metaData) {
+            this.metaData = {};
+        }
+        _set(this.metaData, 'title', title);
+
         return this;
     }
 
@@ -197,7 +200,10 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     setSubtitle(subTitle: string) {
-        _set(this.metaData || {}, 'subTitle', subTitle);
+        if (!this.metaData) {
+            this.metaData = {};
+        }
+        _set(this.metaData, 'subTitle', subTitle);
         return this;
     }
 
@@ -208,7 +214,10 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     addArtwork(url: string) {
-        _set(this.metaData || {}, 'art', {
+        if (!this.metaData) {
+            this.metaData = {};
+        }
+        _set(this.metaData, 'art', {
             sources: [url]
         });
         return this;
@@ -221,7 +230,10 @@ export class AudioPlayer {
      * @return {AudioPlayerPlugin}
      */
     addBackground(url: string) {
-        _set(this.metaData || {}, 'backgroundImage', {
+        if (!this.metaData) {
+            this.metaData = {};
+        }
+        _set(this.metaData, 'backgroundImage', {
             sources: [url]
         });
         return this;
