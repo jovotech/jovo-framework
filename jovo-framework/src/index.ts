@@ -1,7 +1,7 @@
 import {App} from "./App";
 
 import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
-import {Jovo, Data, Handler} from 'jovo-core';
+import {Jovo, Data, Handler, Util, Log, LogLevel} from 'jovo-core';
 export { App } from './App';
 export { server as Webhook } from './server';
 export { verifiedServer as WebhookVerified } from './server';
@@ -14,7 +14,7 @@ export { AzureFunction } from './hosts/AzureFunction';
 export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
-export { Util } from './Util';
+export { Util, Log, LogLevel };
 
 
 declare module 'express' {

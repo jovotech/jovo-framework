@@ -1,4 +1,16 @@
-import {BaseApp, Output, EnumRequestType, HandleRequest, Inputs, Jovo, Plugin, PluginConfig, User, SessionConstants} from "jovo-core";
+import {
+    BaseApp,
+    Output,
+    EnumRequestType,
+    HandleRequest,
+    Inputs,
+    Jovo,
+    Plugin,
+    PluginConfig,
+    User,
+    SessionConstants,
+    Log
+} from "jovo-core";
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
@@ -283,6 +295,10 @@ export class JovoUser implements Plugin {
 
 
         const data = await handleRequest.app.$db.load(userId);
+
+
+        Log.verbose(Log.header('Jovo user (load)', 'framework'));
+        Log.yellow().verbose(`this.$user.getId(): ${userId}`);
         if (!data) {
             Object.assign(handleRequest.jovo.$user, {
                 $context: {},
@@ -299,7 +315,17 @@ export class JovoUser implements Plugin {
             _set(handleRequest.jovo.$user, '$context',
                 _get(data, `${this.config.columnName}.context`, {}));
         }
+
+        Log.yellow().verbose(`this.$user.new = ${handleRequest.jovo.$user.new}`);
+        Log.verbose();
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$context, null, '\t'));
+        Log.yellow().debug('this.$user.$data');
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$data, null, '\t'));
+        Log.yellow().debug('this.$user.$metaData');
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$metaData, null, '\t'));
+
     };
+
 
     saveDb = async (handleRequest: HandleRequest, force = false) => {
         // no database
@@ -347,6 +373,16 @@ export class JovoUser implements Plugin {
             userId,
             this.config.columnName || 'userData',
             userData);
+
+        Log.verbose(Log.header('Jovo user: (save) ', 'framework'));
+        Log.yellow().verbose(` Saved user: ${userId}`);
+        Log.yellow().debug(' this.$user.$context');
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$context, null, '\t'));
+        Log.yellow().debug(' this.$user.$data');
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$data, null, '\t'));
+        Log.yellow().debug(' this.$user.$metaData');
+        Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$metaData, null, '\t'));
+
     };
 
     private updateMetaData(handleRequest: HandleRequest) {

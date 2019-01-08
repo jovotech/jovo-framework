@@ -1,4 +1,4 @@
-import {BaseApp, HandleRequest, Plugin, PluginConfig} from "jovo-core";
+import {BaseApp, HandleRequest, Plugin, PluginConfig, Log, LogLevel} from "jovo-core";
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
@@ -42,38 +42,44 @@ export class BasicLogging implements Plugin {
             this.config.response = false;
         }
 
-        app.on('after.platform.init', this.requestLogger);
-        app.on('response', this.responseLogger);
+        app.on('request', this.requestLogger);
+        app.on('after.response', this.responseLogger);
     }
 
     uninstall(app: BaseApp) {
-        app.removeListener('after.platform.init', this.requestLogger);
-        app.removeListener('response', this.responseLogger);
+        app.removeListener('request', this.requestLogger);
+        app.removeListener('after.response', this.responseLogger);
     }
 
     requestLogger = (handleRequest: HandleRequest) => {
-        if (!this.config.request) {
-            return;
-        }
-        if (!handleRequest.jovo) {
+        if (Log.isLogLevel(LogLevel.VERBOSE)) {
+            Log.verbose(Log.subheader(`Request JSON`));
+            Log.yellow().verbose(JSON.stringify(handleRequest.host.getRequestObject(), null, this.config.space));
             return;
         }
 
+        if (!this.config.request) {
+            return;
+        }
         if (this.config.requestObjects && this.config.requestObjects.length > 0) {
             this.config.requestObjects.forEach((path: string) => {
-                if (!handleRequest.jovo) {
-                    return;
-                }
                 console.log(
                     JSON.stringify(
-                        _get(handleRequest.jovo.$request, path), null, this.config.space));
+                        _get(handleRequest.host.getRequestObject(), path), null, this.config.space));
             });
         } else {
-            console.log(JSON.stringify(handleRequest.jovo.$request, null, this.config.space));
+            console.log(JSON.stringify(handleRequest.host.getRequestObject(), null, this.config.space));
         }
     };
 
     responseLogger = (handleRequest: HandleRequest) => {
+
+        if (Log.isLogLevel(LogLevel.VERBOSE)) {
+            Log.verbose(Log.subheader(`Response JSON`));
+            Log.yellow().verbose(JSON.stringify(handleRequest.jovo!.$response, null, this.config.space));
+            return;
+        }
+
         if (!this.config.response) {
             return;
         }
@@ -92,6 +98,7 @@ export class BasicLogging implements Plugin {
         } else {
             console.log(this.style(JSON.stringify(handleRequest.jovo.$response, null, this.config.space)));
         }
+
     };
 
 

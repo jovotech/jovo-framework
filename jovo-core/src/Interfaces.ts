@@ -348,6 +348,20 @@ export interface JovoRequest {
      * @return {this}
      */
     addInput(key: string, value: string): this;
+
+
+    /**
+     * Returns state from request
+     * @return {string | undefined}
+     */
+    getState(): string | undefined;
+
+
+    /**
+     * Sets inputs
+     * @param {Inputs} inputs
+     */
+    setInputs(inputs: Inputs): this;
 }
 
 export interface Input {

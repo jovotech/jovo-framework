@@ -1,4 +1,4 @@
-import {Db, PluginConfig, BaseApp} from 'jovo-core';
+import {Db, PluginConfig, BaseApp, Log} from 'jovo-core';
 import * as path from 'path';
 import * as fs from "fs";
 import _get = require('lodash.get');
@@ -36,10 +36,9 @@ export class FileDb implements Db {
             }
             if (!fs.existsSync(pathToFile)) {
                 fs.writeFileSync(pathToFile, '[]');
-                console.log(`############################################`);
-                console.log(`#  Local FileDB ${pathToFile} created!  #`);
-                console.log(`############################################`);
-                console.log();
+                Log.info(Log.header('Local FileDb', 'db-filedb'));
+                Log.info(`${pathToFile} created!`);
+                Log.info();
             }
 
             app.$db = this;

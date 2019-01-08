@@ -1,4 +1,4 @@
-import {BaseApp, Plugin, EnumRequestType, HandleRequest, PluginConfig} from 'jovo-core';
+import {BaseApp, Plugin, EnumRequestType, HandleRequest, PluginConfig, Log} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
@@ -33,6 +33,10 @@ export class Router implements Plugin {
 
     }
     async router(handleRequest: HandleRequest) {
+
+        Log.white().verbose(Log.header('Jovo router ', 'framework'));
+
+
         if (!handleRequest.jovo) {
             throw new Error(`Couldn't access jovo object`);
         }
@@ -80,6 +84,8 @@ export class Router implements Plugin {
             }
         }
         _set(handleRequest.jovo.$plugins, 'Router.route', route);
+
+        Log.yellow().verbose(`${JSON.stringify(route, null, '\t')}`);
 
     }
 

@@ -1,4 +1,5 @@
 import {Extensible} from "./Extensible";
+import {Log} from "./Log";
 
 export class Middleware {
 
@@ -38,15 +39,28 @@ export class Middleware {
      * Also checks for a 'before' middleware and calls it.
      * @emits middleware name
      * @param {any} obj
+     * @param {boolean} concurrent
      * @return {Promise<void>}
      */
     async run(obj: object, concurrent = false) {
+
         try {
             if (!this.parent.config.enabled) {
                 return Promise.resolve();
             }
             if (this.enabled === false) {
                 return Promise.resolve();
+            }
+
+
+            // LOGGING
+            if (this.parent.constructor.name === 'App') {
+                if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {
+                    Log.debug(` ##### ${this.name} (start)`);
+
+                    Log.debugStart(` ##### ${this.name}`);
+                    Log.debug('');
+                }
             }
 
             // before middleware available?
@@ -60,6 +74,7 @@ export class Middleware {
                 for (const fn of this.fns) {
                     promiseArr.push(new Promise( async (resolve) => {
                         await fn.apply(null, arguments);
+
                         resolve();
                     }));
                 }
@@ -76,7 +91,19 @@ export class Middleware {
             if (this.parent.hasMiddleware(`after.${this.name}`)) {
                 await this.parent.middleware(`after.${this.name}`)!.run(obj);
             }
+
+
             this.parent.emit(`after.${this.name}`, obj);
+            // LOGGING
+            if (this.parent.constructor.name === 'App') {
+                if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {
+                    Log.debug('');
+                    Log.debugEnd(` ##### ${this.name}`);
+                    Log.debug('');
+                    Log.debug('');
+                }
+            }
+
         } catch (e) {
             return Promise.reject(e);
         }

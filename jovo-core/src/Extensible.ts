@@ -7,6 +7,7 @@ import _get = require('lodash.get');
 import _isEqual = require('lodash.isequal');
 import _cloneDeep = require('lodash.clonedeep');
 import _transform = require('lodash.transform');
+import {Log} from "./Log";
 
 
 export interface ExtensibleConfig extends PluginConfig {
@@ -79,6 +80,12 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             this.$plugins.set(name, plugin);
 
             plugin.install(this);
+
+            if (this.constructor.name === 'App') {
+                Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name})`);
+                Log.debug(`   ${JSON.stringify(plugin.config || {}, null, '\t')}`);
+                Log.debug();
+            }
             this.emit('use', plugin);
         });
         return this;

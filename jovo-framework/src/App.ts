@@ -1,4 +1,4 @@
-import {BaseApp, ExtensibleConfig, Host} from "jovo-core";
+import {BaseApp, ExtensibleConfig, Host, Log, LogLevel} from "jovo-core";
 import * as fs from 'fs';
 import * as path from "path";
 import _merge = require('lodash.merge');
@@ -24,13 +24,16 @@ export class App extends BaseApp {
         intentMap: {},
     };
 
+    $config: Config;
+
     constructor(config?: Config) {
         super(config);
         this.$cms = {};
         if (config) {
             this.config = _merge(this.config, config);
         }
-
+        Log.verbose('');
+        Log.verbose(Log.header(`Verbose information ${new Date().toISOString()}`));
 
         const pathToConfig = path.join(process.cwd(), 'config.js' );
         if (fs.existsSync(pathToConfig)) {
@@ -45,6 +48,35 @@ export class App extends BaseApp {
             stage = process.argv[process.argv.indexOf('--stage') + 1].trim();
         }
 
+        if (stage) {
+            Log.verbose('Stage: ' + stage);
+        }
+
+        if (Log.isLogLevel(LogLevel.VERBOSE)) {
+            const pathToPackageJsonInSrc = path.join(process.cwd(), 'package-lock.json');
+            const pathToPackageJsonInProject = path.join(process.cwd(), '..', 'package-lock.json');
+            let pathToPackageJson = undefined;
+            if (fs.existsSync(pathToPackageJsonInSrc)) {
+                pathToPackageJson = pathToPackageJsonInSrc;
+            }
+            if (fs.existsSync(pathToPackageJsonInProject)) {
+                pathToPackageJson = pathToPackageJsonInProject;
+            }
+
+            try {
+                const packageLockJson: any = require(pathToPackageJson!); // tslint:disable-line
+
+                const dependencies = Object.keys(packageLockJson.dependencies).filter((val) => val.startsWith('jovo-'));
+                Log.verbose(Log.header('Jovo dependencies from package-lock.json', 'framework'));
+                dependencies.forEach((jovoDependency: string) => {
+                    Log.yellow().verbose(` ${jovoDependency}@${packageLockJson.dependencies[jovoDependency].version}`);
+                });
+                // Log.verbose(Log.header());
+            } catch (e) {
+
+            }
+        }
+
         const pathToStageConfig = path.join(process.cwd(), 'config.' + stage + '.js' );
         if (fs.existsSync(pathToStageConfig)) {
             const fileStageConfig = require(pathToStageConfig) || {};
@@ -54,7 +86,11 @@ export class App extends BaseApp {
         this.mergePluginConfiguration();
         this.v1ConfigMigration();
         this.initConfig();
+
+        Log.verbose(Log.header('App object initialized', 'framework'));
+        this.$config = this.config;
         this.init();
+
     }
 
     mergePluginConfiguration() {
