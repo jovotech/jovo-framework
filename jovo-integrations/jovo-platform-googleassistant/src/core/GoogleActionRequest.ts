@@ -2,7 +2,7 @@
 /**
  * Base class of a request from alexa
  */
-import {JovoRequest, SessionData} from "jovo-core";
+import {Inputs, JovoRequest, SessionData} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 import {SessionConstants} from "../../../../jovo-core/dist/src";
@@ -231,22 +231,32 @@ export class GoogleActionRequest implements JovoRequest {
         return this;
     }
 
+    // GoogleActionRequest can't handle states
     setState(state: string): this {
         return this;
     }
 
+    // GoogleActionRequest can't handle states
     getState() {
         return undefined;
     }
 
+    // GoogleActionRequest can't handle inputs
+    setInputs(inputs: Inputs): this {
+        return this;
+    }
+
+    // GoogleActionRequest can't handle timestamps
     setTimestamp(timestamp: string): this {
         return this;
     }
 
+    // GoogleActionRequest can't handle intents
     setIntentName(intentName: string): this {
         return this;
     }
 
+    // GoogleActionRequest can't handle video interfaces
     setVideoInterface(): this {
         return this;
     }
