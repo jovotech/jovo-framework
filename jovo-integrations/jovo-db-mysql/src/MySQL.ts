@@ -150,7 +150,7 @@ export class MySQL implements Db {
                 return reject(new Error('dataColumnName must be set'));
             }
             const sql = `
-                    CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(200) NOT NULL,
+                    CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(255) NOT NULL,
                     ${this.config.dataColumnName} TEXT NULL,
                     PRIMARY KEY (${this.config.primaryKeyColumn}));
             `;
