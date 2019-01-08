@@ -1,5 +1,4 @@
 
-
 import {Card} from "../../src/response/visuals/Card";
 import {SimpleCard} from "../../src/response/visuals/SimpleCard";
 import {StandardCard} from "../../src/response/visuals/StandardCard";
@@ -8,10 +7,18 @@ import {AskForPermissionConsentCard} from "../../src/response/visuals/AskForPerm
 import {AskForListPermissionsCard} from "../../src/response/visuals/AskForListPermissionsCard";
 import {AskForLocationPermissionsCard} from "../../src/response/visuals/AskForLocationPermissionsCard";
 import {AskForContactPermissionsCard} from "../../src/response/visuals/AskForContactPermissionsCard";
+import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
+import {App, ExpressJS} from "jovo-framework";
+import {Alexa} from "./../../src";
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 process.env.NODE_ENV = 'TEST';
 
-
+process.env.NODE_ENV = 'UNIT_TEST';
+let app: App;
+let t: TestSuite;
+jest.setTimeout(550);
 class CardImpl extends Card {
     constructor() {
         super('Card');
@@ -180,4 +187,236 @@ test('test AskForContactPermissionsCard', () => {
 
     expect(() => new AskForContactPermissionsCard('foo')).toThrow('Invalid permission type');
 
+});
+
+
+test('test showSimpleCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.showSimpleCard('title', 'content').tell('Hello');
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('Simple');
+        expect(_get(response, 'response.card.title')).toEqual('title');
+        expect(_get(response, 'response.card.content')).toEqual('content');
+        done();
+    });
+});
+
+
+test('test showImageCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.showImageCard('title', 'content', 'https://url.to/image.jpg').tell('Hello');
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('Standard');
+        expect(_get(response, 'response.card.title')).toEqual('title');
+        expect(_get(response, 'response.card.text')).toEqual('content');
+        expect(_get(response, 'response.card.image.smallImageUrl')).toEqual('https://url.to/image.jpg');
+        expect(_get(response, 'response.card.image.largeImageUrl')).toEqual('https://url.to/image.jpg');
+        done();
+    });
+});
+
+
+
+test('test this.$alexaSkill.showStandardCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showStandardCard('title', 'content', {
+                smallImageUrl: 'https://url.to/image_small.jpg',
+                largeImageUrl: 'https://url.to/image_large.jpg',
+            }).tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('Standard');
+        expect(_get(response, 'response.card.title')).toEqual('title');
+        expect(_get(response, 'response.card.text')).toEqual('content');
+        expect(_get(response, 'response.card.image.smallImageUrl')).toEqual('https://url.to/image_small.jpg');
+        expect(_get(response, 'response.card.image.largeImageUrl')).toEqual('https://url.to/image_large.jpg');
+        done();
+    });
+});
+
+
+
+test('test this.$alexaSkill.showAskForAddressCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForAddressCard();
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('read::alexa:device:all:address');
+
+        done();
+    });
+});
+
+
+test('test showAccountLinkingCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.showAccountLinkingCard();
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('LinkAccount');
+        done();
+    });
+});
+
+
+test('test this.$alexaSkill.showAskForCountryAndPostalCodeCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForCountryAndPostalCodeCard();
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('read::alexa:device:all:address:country_and_postal_code');
+
+        done();
+    });
+});
+
+
+test('test this.$alexaSkill.showAskForListPermissionCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForListPermissionCard(['write', 'read']);
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('write::alexa:household:list');
+        expect(_get(response, 'response.card.permissions[1]')).toEqual('read::alexa:household:list');
+        done();
+    });
+});
+
+test('test this.$alexaSkill.showAskForContactPermissionCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForContactPermissionCard(['given_name', 'email', 'mobile_number']);
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('alexa::profile:given_name:read');
+        expect(_get(response, 'response.card.permissions[1]')).toEqual('alexa::profile:email:read');
+        expect(_get(response, 'response.card.permissions[2]')).toEqual('alexa::profile:mobile_number:read');
+        done();
+    });
 });

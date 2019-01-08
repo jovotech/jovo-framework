@@ -61,7 +61,7 @@ export class Cards implements Plugin {
          * @public
          * @return {Jovo}
          */
-        AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
+        AlexaSkill.prototype.showAskForAddressCard = function() {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
                     .setAskForAddressPermission()
@@ -133,7 +133,7 @@ export class Cards implements Plugin {
             _set(alexaSkill.$response, 'response.card',
                 new StandardCard()
                     .setTitle(_get(cardImageCard, 'title'))
-                    .setText(_get(cardImageCard, 'text'))
+                    .setText(_get(cardImageCard, 'content'))
                     .setSmallImageUrl(_get(cardImageCard, 'imageUrl'))
                     .setLargeImageUrl(_get(cardImageCard, 'imageUrl'))
             );
