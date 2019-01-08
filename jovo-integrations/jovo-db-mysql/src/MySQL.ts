@@ -21,12 +21,9 @@ export class MySQL implements Db {
     needsWriteFileAccess = false;
 
     constructor(config?: Config) {
-
         if (config) {
             this.config = _merge(this.config, config);
         }
-
-
     }
 
     install(app: BaseApp) {
@@ -37,11 +34,9 @@ export class MySQL implements Db {
         this.connection = mysql.createConnection(this.config.connection);
         this.connection.connect();
         app.$db = this;
-        // TODO: disconnect on FINALIZE?
     }
 
     uninstall(app: BaseApp) {
-
     }
 
     /**
@@ -56,7 +51,7 @@ export class MySQL implements Db {
             if (err.code === 'ER_NO_SUCH_TABLE') {
                 await this.createTable();
             } else {
-                console.log(err);
+                throw err;
             }
         }
 
