@@ -7,6 +7,7 @@ In this section, you will learn more about the essential configurations of a Jov
    * [General Configurations](#general-configurations)
    * [Integrations](#integrations)
    * [Plugins](#plugins)
+* [Accessing Configurations](#accessing-configurations)
 * [Staging](#staging)
 
 
@@ -98,6 +99,35 @@ plugin: {
         // Plugin config
     }
 },
+```
+
+## Accessing Configurations
+
+If you want to access elements from your app config, you can do so by using the following object:
+
+```javascript
+this.$app.$config
+```
+
+You can also define your own keys and values in the configuration file. For them to not interfere with Jovo config keys, we recommend using a wrapping element like `custom`:
+
+```javascript
+// config.js
+
+custom: {
+    // Defining values in the config file
+    keyOne: 'valueOne',
+
+    // Referencing environment variables
+    keyTwo: process.env.KEY_TWO,
+}
+```
+
+You can then access them in your app logic with:
+
+```javascript
+const keyOne = this.$app.$config.custom.keyOne;
+const keyTwo = this.$app.$config.custom.keyTwo;
 ```
 
 
