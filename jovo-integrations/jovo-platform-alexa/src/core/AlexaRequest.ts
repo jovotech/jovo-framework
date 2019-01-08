@@ -1,4 +1,4 @@
-import {Input, JovoRequest, SessionData, Inputs} from "jovo-core";
+import {Input, JovoRequest, SessionData, Inputs, SessionConstants} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -59,6 +59,7 @@ export interface Slot {
     name: string;
     confirmationStatus: string;
     value: string;
+    source?: string;
 }
 
 export interface Intent {
@@ -165,6 +166,29 @@ export class AlexaRequest implements JovoRequest {
         return inputs;
     }
 
+    setInputs(inputs: Inputs): this {
+        Object.keys(inputs).forEach((key: string) => {
+            const input: Input = inputs[key];
+            const slot: Slot = {
+                name: input.name!,
+                value: input.value,
+                confirmationStatus: 'NONE'
+            };
+
+            const alexaInput = input as AlexaInput;
+
+            if (alexaInput.alexaSkill) {
+                _set(this, `request.intent.slots[${input.name}]`, alexaInput.alexaSkill);
+            } else {
+                _set(this, `request.intent.slots[${input.name}]`, slot);
+
+            }
+
+        });
+
+        return this;
+    }
+
     getLocale() {
         return _get(this, 'request.locale');
     }
@@ -172,6 +196,11 @@ export class AlexaRequest implements JovoRequest {
     getSessionData() {
         return this.getSessionAttributes();
     }
+
+    getState() {
+        return _get(this.getSessionAttributes(), SessionConstants.STATE);
+    }
+
     setSessionData(sessionData: SessionData): this {
         return this.setSessionAttributes(sessionData);
     }
@@ -316,7 +345,7 @@ export class AlexaRequest implements JovoRequest {
 
     setState(state: string) {
         if (_get(this, 'session.attributes')) {
-            _set(this, 'session.attributes._JOVO_STATE_', state);
+            _set(this, `session.attributes[${SessionConstants.STATE}]`, state);
         }
         return this;
     }

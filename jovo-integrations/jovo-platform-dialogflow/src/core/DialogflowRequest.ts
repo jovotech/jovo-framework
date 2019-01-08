@@ -3,6 +3,7 @@ import _set = require('lodash.set');
 import _mapValues = require('lodash.mapvalues');
 
 import {JovoRequest, SessionConstants, Inputs, SessionData} from "jovo-core";
+import {Input} from "../../../../jovo-core/dist/src";
 
 interface Intent {
     name: string;
@@ -164,6 +165,18 @@ export class DialogflowRequest implements JovoRequest {
                 id: value, // Added for cross platform consistency
             };
         });
+    }
+
+    setInputs(inputs: Inputs): this {
+        Object.keys(inputs).forEach((key: string) => {
+            const input: Input = inputs[key];
+            this.setParameter(key, input.value);
+        });
+        return this;
+    }
+
+    getState() {
+        return _get(this.getSessionAttributes(), SessionConstants.STATE);
     }
 
     getSessionAttributes(): any { // tslint:disable-line

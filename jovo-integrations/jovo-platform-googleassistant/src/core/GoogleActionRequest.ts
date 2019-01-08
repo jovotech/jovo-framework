@@ -5,6 +5,7 @@
 import {JovoRequest, SessionData} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import {SessionConstants} from "../../../../jovo-core/dist/src";
 
 interface User {
     userId: string;
@@ -234,7 +235,15 @@ export class GoogleActionRequest implements JovoRequest {
         return this;
     }
 
+    getState() {
+        return undefined;
+    }
+
     setTimestamp(timestamp: string): this {
+        return this;
+    }
+
+    setIntentName(intentName: string): this {
         return this;
     }
 
