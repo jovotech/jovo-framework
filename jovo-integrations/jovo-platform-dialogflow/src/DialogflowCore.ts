@@ -9,7 +9,7 @@ import {DialogflowResponse} from "./core/DialogflowResponse";
 import {Jovo} from "../../../jovo-core/dist/src";
 
 export interface Config extends PluginConfig {
-
+    sessionContextId?: string;
 }
 
 
@@ -17,6 +17,8 @@ export class DialogflowCore implements Plugin {
 
     config: Config = {
         enabled: true,
+        sessionContextId: 'session',
+
     };
 
     constructor(config?: Config) {
@@ -25,6 +27,7 @@ export class DialogflowCore implements Plugin {
     install(dialogFlow: Dialogflow) {
         dialogFlow.middleware('$request')!.use(this.request.bind(this));
         dialogFlow.middleware('$type')!.use(this.type.bind(this));
+        dialogFlow.middleware('$session')!.use(this.session.bind(this));
 
         dialogFlow.middleware('$nlu')!.use(this.nlu.bind(this));
         dialogFlow.middleware('$inputs')!.use(this.inputs.bind(this));
@@ -74,6 +77,27 @@ export class DialogflowCore implements Plugin {
         dialogflowAgent.$inputs = dialogflowRequest.getInputs();
     }
 
+    session(dialogflowAgent: DialogflowAgent)  {
+        const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
+        const sessionId = _get(dialogflowRequest, 'session');
+
+        if (_get(dialogflowRequest, 'queryResult.outputContexts')) {
+            const sessionContext =_get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
+                return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
+            });
+
+            if (sessionContext) {
+                dialogflowAgent.$session.$data = sessionContext.parameters;
+
+                for (const parameter of Object.keys(_get(dialogflowRequest, 'queryResult.parameters'))) {
+                    delete dialogflowAgent.$session.$data[parameter];
+                    delete dialogflowAgent.$session.$data[parameter + '.original'];
+                }
+            }
+            dialogflowAgent.$requestSessionAttributes = JSON.parse(JSON.stringify(dialogflowAgent.$session.$data));
+        }
+    }
+
     output(dialogflowAgent: DialogflowAgent) {
         const output = dialogflowAgent.$output;
 
@@ -82,12 +106,40 @@ export class DialogflowCore implements Plugin {
         }
 
         if (output.tell) {
-            _set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
+            _set(dialogflowAgent.$response, 'fulfillmentText', `${output.tell.speech}`);
         }
 
         if (output.ask) {
-            _set(dialogflowAgent.$response, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
+            _set(dialogflowAgent.$response, 'fulfillmentText', `${output.ask.speech}`);
         }
+        const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
+
+        const sessionId = _get(dialogflowRequest, 'session');
+
+        const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts', []);
+        const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
+
+        if (Object.keys(dialogflowAgent.$session.$data).length > 0) {
+            const sessionContext = outputContexts.find((context: any) => { // tslint:disable-line
+                return context.name === contextName;
+            });
+
+            if (sessionContext) {
+                outputContexts.forEach((context: any) => { // tslint:disable-line
+                    if (context.name === contextName) {
+                        context.parameters = dialogflowAgent.$session.$data;
+                    }
+                });
+            } else {
+                outputContexts.push({
+                    name: contextName,
+                    lifespanCount: 1000,
+                    parameters: dialogflowAgent.$session.$data
+                });
+            }
+        }
+        _set(dialogflowAgent.$response, 'outputContexts', outputContexts);
+
     }
 
 }

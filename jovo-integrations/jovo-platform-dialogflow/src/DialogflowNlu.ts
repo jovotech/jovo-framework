@@ -185,14 +185,14 @@ export class DialogflowNlu extends Extensible {
         const output = jovo.$output;
         const dialogflowResponse = jovo.$plugins.DialogflowNlu.dialogflow.$response;
         const dialogflowRequest = jovo.$plugins.DialogflowNlu.dialogflow.$request;
-        const sessionId = _get(dialogflowRequest, 'session');
 
         if (_get(output, 'tell')) {
-            _set(dialogflowResponse, 'fulfillmentText', `<speak>${output.tell.speech}</speak>`);
+            _set(dialogflowResponse, 'fulfillmentText', `${output.tell.speech}`);
         }
         if (_get(output, 'ask')) {
-            _set(dialogflowResponse, 'fulfillmentText', `<speak>${output.ask.speech}</speak>`);
+            _set(dialogflowResponse, 'fulfillmentText', `${output.ask.speech}`);
         }
+        const sessionId = _get(dialogflowRequest, 'session');
 
         const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
         const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;

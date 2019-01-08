@@ -130,6 +130,7 @@ export class DialogflowRequest implements JovoRequest {
 
     setIntentName(intentName: string) {
         this.queryResult.intent.displayName = intentName;
+        return this;
     }
 
     addSessionAttribute(key: string, value: any): this { // tslint:disable-line

@@ -69,6 +69,10 @@ export class Dialogflow extends Extensible implements Platform {
 
         await this.middleware('$request')!.run(handleRequest.jovo);
         await this.middleware('$session')!.run(handleRequest.jovo);
+
+        if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
+            return Promise.resolve();
+        }
         await this.middleware('$type')!.run(handleRequest.jovo);
 
     }
