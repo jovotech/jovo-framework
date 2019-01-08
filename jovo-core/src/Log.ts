@@ -169,10 +169,10 @@ export class Log {
     }
 
     static isLogLevel(logLevel: LogLevel) {
-        if (!process.env.JOVO_LOG) {
+        if (!process.env.JOVO_LOG_LEVEL) {
             return false;
         }
-        const jovoLog = Number(process.env.JOVO_LOG);
+        const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
         return logLevel <= jovoLog;
     }
 
