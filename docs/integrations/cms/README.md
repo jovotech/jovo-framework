@@ -23,7 +23,7 @@ Name | Description
 
 ## Build your own CMS Integration
 
-Take a look at the [implementation of the Jovo GoogleSheets CMS](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/jovo-integrations/jovo-cms-googlesheets/src) to get an understanding of how to build your own CMS integration.
+Take a look at the [implementation of the Jovo GoogleSheets CMS](https://github.com/jovotech/jovo-framework-nodejs/tree/master/jovo-integrations/jovo-cms-googlesheets/src) to get an understanding of how to build your own CMS integration.
 
 
 <!--[metadata]: {"description": "Learn how to use a CMS for your Alexa Skills and Google Actions with the Jovo CMS integrations.",
