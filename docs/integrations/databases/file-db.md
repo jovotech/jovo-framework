@@ -66,6 +66,7 @@ db: {
 ```
 
 
+Once the configuration is done, the File DB database integration will create a file in the specified folder (eg. ../db/db.json) on the first read/write attempt. No need for you to put create the file.
 
 
 
