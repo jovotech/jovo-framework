@@ -11,5 +11,10 @@
     "*.txt",
     "test/**"
   ],
+  "command": {
+    "publish": {
+      "message": ":bookmark: Publish %s"
+    }
+  },
   "version": "independent"
 }
