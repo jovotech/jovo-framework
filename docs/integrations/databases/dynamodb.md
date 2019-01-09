@@ -57,7 +57,9 @@ db: {
 }
 ```
 
-You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here: [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
+You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here (In case you're hosting your voice app somewhere else): [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
+
+Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
 
 ## Troubleshooting
 
