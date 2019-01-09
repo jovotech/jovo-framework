@@ -35,6 +35,13 @@ In your `config.js` file, you can set the `db` configuration like this:
 db: {
     MySQL: {
         tableName: 'yourTableName',
+        connection: {
+              host: process.env.MYSQL_ADDR || 'localhost',
+              port:  process.env.MYSQL_PORT || '9000',
+              user: process.env.MYSQL_USER || 'user',
+              password: process.env.MYSQL_PASSWORD || 'password',
+              database: process.env.MYSQL_DATABASE || 'jovoapp'
+            }
     }
 }
 ```
@@ -48,10 +55,12 @@ db: {
         tableName: 'users',
         primaryKeyColumn: 'userId',
         dataColumnName: 'userData',
+        connection: {}
     }
 }
 ```
 
+Once the configuration is done, the MySQL database integration will create a table in your Database on the first read/write attempt. 
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to a MySQL database.",
 "route": "databases/mysql" }-->
