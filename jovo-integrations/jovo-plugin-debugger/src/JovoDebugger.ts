@@ -414,6 +414,7 @@ async function handleConsoleRequest(app: BaseApp) {
     const parameters: string[] = [];
     const sessions: string[] = [];
     program
+        .allowUnknownOption()
         .option('-f, --file [file]', 'path to file')
         .option('--platform [platform]', `Platform 'AlexaSkill'`, 'Alexa')
         .option('-i, --intent [intentName]', 'intent name')

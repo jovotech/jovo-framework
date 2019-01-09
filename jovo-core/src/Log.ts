@@ -17,6 +17,7 @@ export class Log {
     static timeMap: {[key: string]: number} = {};
 
 
+
     static header(header?: string, module?: string) {
         if (!header) {
             header = '';
@@ -172,8 +173,15 @@ export class Log {
         if (!process.env.JOVO_LOG_LEVEL) {
             return false;
         }
-        const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
-        return logLevel <= jovoLog;
+
+        try {
+            const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
+            return logLevel <= jovoLog;
+        } catch (e) {
+            return logLevel <= (Log.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
+        }
+
+
     }
 
     static setTime(obj: any) { // tslint:disable-line
@@ -317,6 +325,19 @@ export class Log {
             obj = '';
         }
         return Log.log(LogLevel.DEBUG, obj);
+    }
+
+    static getLogLevelFromString(logLevelStr: string): LogLevel | undefined {
+        logLevelStr = logLevelStr.toUpperCase();
+
+        switch (logLevelStr) {
+            case 'ERROR': return LogLevel.ERROR;
+            case 'WARN': return LogLevel.WARN;
+            case 'INFO': return LogLevel.INFO;
+            case 'VERBOSE': return LogLevel.VERBOSE;
+            case 'DEBUG': return LogLevel.DEBUG;
+            default: return;
+        }
     }
 
     static consoleLog(pathDepth = 1) {

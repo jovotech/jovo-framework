@@ -32,7 +32,7 @@ export class Conversation {
         deleteDbOnSessionEnded: true,
         httpOptions: {
             host: 'localhost',
-            port: 3000,
+            port: process.env.JOVO_PORT || 3000,
             path: '/webhook',
             method: 'POST',
             headers: {

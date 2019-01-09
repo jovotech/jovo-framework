@@ -16,6 +16,29 @@ import {I18Next, Config as I18NextConfig} from "jovo-cms-i18next";
 import {Handler} from "./middleware/Handler";
 import {Router, Config as RouterConfig} from "./middleware/Router";
 
+if (process.argv.includes('--port')) {
+    process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
+}
+
+if (process.argv.includes('--log-level')) {
+    process.env.JOVO_LOG_LEVEL = Log.getLogLevelFromString(process.argv[process.argv.indexOf('--log-level') + 1].trim()) + '';
+}
+
+if (process.argv.includes('--cwd')) {
+    process.env.JOVO_CWD = process.argv[process.argv.indexOf('--cwd') + 1].trim();
+}
+
+if (process.argv.includes('--config')) {
+    process.env.JOVO_CONFIG = process.argv[process.argv.indexOf('--config') + 1].trim();
+}
+
+if (process.argv.includes('--stage')) {
+    process.env.JOVO_STAGE = process.argv[process.argv.indexOf('--stage') + 1].trim();
+}
+
+
+
+
 export class App extends BaseApp {
     config: Config = {
         enabled: true,
@@ -35,18 +58,19 @@ export class App extends BaseApp {
         Log.verbose('');
         Log.verbose(Log.header(`Verbose information ${new Date().toISOString()}`));
 
-        const pathToConfig = path.join(process.cwd(), 'config.js' );
+        // sets specific cwd
+        if (process.env.JOVO_CWD) {
+            process.chdir(process.env.JOVO_CWD);
+        }
+
+        const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js' );
         if (fs.existsSync(pathToConfig)) {
             const fileConfig = require(pathToConfig) || {};
             // throw new Error (`Could not load default config.js in project directory`);
             this.config = _merge(fileConfig, this.config);
         }
 
-        let stage = process.env.STAGE || process.env.NODE_ENV;
-
-        if (process.argv.indexOf('--stage') > -1) {
-            stage = process.argv[process.argv.indexOf('--stage') + 1].trim();
-        }
+        const stage = process.env.JOVO_STAGE || process.env.STAGE || process.env.NODE_ENV;
 
         if (stage) {
             Log.verbose('Stage: ' + stage);
