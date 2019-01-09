@@ -60,7 +60,7 @@ db: {
 }
 ```
 
-Once the configuration is done, the my MySQL database integration will create a table in your Database on the first read/write attempt. 
+Once the configuration is done, the MySQL database integration will create a table in your Database on the first read/write attempt. 
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to a MySQL database.",
 "route": "databases/mysql" }-->
