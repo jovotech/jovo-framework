@@ -208,7 +208,7 @@ export class Log {
             return;
         }
         process.stdout.write(Log.OFFSET);
-        console.log(msg);
+        process.stdout.write(msg);
         process.stdout.write('\x1b[0m');
         process.stdout.write('');
 

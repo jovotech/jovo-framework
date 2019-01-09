@@ -1,5 +1,7 @@
 
-const { App, Util } = require('jovo-framework');
+const { App, Log, Util } = require('jovo-framework');
+const { Jovo } = require('jovo-core');
+
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
@@ -17,9 +19,25 @@ app.use(
     new FileDb(),
 );
 
+Jovo.prototype.t169 = function(arg) {
+
+
+    let translationString = this.t(arg);
+
+    console.log(translationString + 'bla');
+
+    return translationString;
+    // if (typeof(translationString) === 'Object') {
+    //     return shuffle.pick((translationString));
+    // } else {
+    //     return translationString ;
+    // }
+};
+
+
 app.setHandler({
     async LAUNCH(jovo) {
-        this.$speech.addText('Hello');
+        // this.$speech.addText('Hello');
 
         return this.tell(this.t('HELLO'));
          // return this.tell(this.$speech);
