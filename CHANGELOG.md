@@ -1,5 +1,12 @@
 # Jovo Framework Changelog
 
+## 2.0.6 (January 10, 2019)
+* `jovo-platform-alexa` [#338](https://github.com/jovotech/jovo-framework-nodejs/pull/338) Fixed issue where $gameEngine.respond would drop the session attributes [@IGx89](https://github.com/IGx89)
+* `jovo-db-cosmosdb` [#341](https://github.com/jovotech/jovo-framework-nodejs/pull/341) Added Azure Cosmos DB integration [@KaanKC](https://github.com/KaanKC)
+* `jovo-platform-alexa` [#336](https://github.com/jovotech/jovo-framework-nodejs/pull/336) Wrong response.httpStatus & Typo removed  [@dominik-meissner](https://github.com/dominik-meissner)
+* `jovo-framework` Improved error output (work in progress)
+
+
 ## 2.0.5 (January 08, 2019)
 * `jovo-framework` Added simple `verbose` mode (work in progress)
 * `jovo-platform-alexa` Fixed AudioPlayer metadata bug (issue #328)
