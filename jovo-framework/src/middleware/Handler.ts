@@ -1,4 +1,4 @@
-import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log} from "jovo-core";
+import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log, JovoError} from "jovo-core";
 import _get = require('lodash.get');
 import {Route, Router} from "./Router";
 import {Config as AppConfig} from './../App';
@@ -185,7 +185,11 @@ export class Handler implements Plugin {
             ) &&
 
             !_get(config.handlers, route.path)) {
-            throw new Error(`Could not find the route "${route.path}" in your handler function.`);
+            throw new JovoError(
+                `Could not find the route "${route.path}" in your handler function.`,
+                'ERR_NO_ROUTE',
+                'jovo-framework'
+                );
         }
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
 
