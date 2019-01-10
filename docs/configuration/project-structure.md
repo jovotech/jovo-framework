@@ -188,7 +188,7 @@ module.exports = {
 };
 ```
 
-> [You can find everything related to the `config.js` here](./project-js.md './project-js').
+> [You can find everything related to the `config.js` here](./config-js.md './config-js').
 
 ### index.js - Host Configuration
 
