@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-shopping-list",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.0.5",
-    "jovo-platform-alexa": "^2.0.6"
+    "jovo-framework": "^2.0.6",
+    "jovo-platform-alexa": "^2.0.7"
   }
 }
