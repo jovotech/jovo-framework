@@ -36,9 +36,19 @@ export class FileDb implements Db {
             }
             if (!fs.existsSync(pathToFile)) {
                 fs.writeFileSync(pathToFile, '[]');
-                Log.info(Log.header('Local FileDb', 'db-filedb'));
-                Log.info(`${pathToFile} created!`);
+                Log.info(Log.header('INFO: Local FileDb', 'db-filedb'));
                 Log.info();
+
+                Log.info(`${path.resolve(pathToFile)} created!`);
+                Log.info();
+                Log.info();
+
+                Log.info('More Info: >> https://jovo.tech/docs/filedb');
+                Log.info();
+
+                Log.info(Log.header());
+                Log.info();
+
             }
 
             app.$db = this;
