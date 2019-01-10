@@ -159,6 +159,7 @@ Dynamo DB | Save user specific data in AWS DynamoDB table | [📝](./docs/integr
 MongoDB | Save user specific data in a MongoDB database | [📝](./docs/integrations/databases/mongodb.md)
 MySQL | Save user specific data in a MySQL database | [📝](./docs/integrations/databases/mysql.md)
 Google Datastore | Save user specific data using Google Datastore | [📝](./docs/integrations/databases/google-datastore.md)
+Azure Cosmos DB | Save user specific data using Azure CosmosDB | [📝](./docs/integrations/databases/cosmosdb.md)
 
 #### Analytics Integrations
 
