@@ -27,7 +27,7 @@ export class AlexaReminder {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 401) {
                 const apiError = new ApiError(response.data.message, response.data.code);
-                if (response.data.message === 'Not all permissions are authorized.') {
+                if (response.data.message === 'Request Unauthorized.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }
                 return Promise.reject(apiError);
@@ -54,7 +54,7 @@ export class AlexaReminder {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 401) {
                 const apiError = new ApiError(response.data.message, response.data.code);
-                if (response.data.message === 'Not all permissions are authorized.') {
+                if (response.data.message === 'Request Unauthorized.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }
                 return Promise.reject(apiError);
@@ -83,7 +83,7 @@ export class AlexaReminder {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 401) {
                 const apiError = new ApiError(response.data.message, response.data.code);
-                if (response.data.message === 'Not all permissions are authorized.') {
+                if (response.data.message === 'Request Unauthorized.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }
                 return Promise.reject(apiError);
@@ -110,7 +110,7 @@ export class AlexaReminder {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 401) {
                 const apiError = new ApiError(response.data.message, response.data.code);
-                if (response.data.message === 'Not all permissions are authorized.') {
+                if (response.data.message === 'Request Unauthorized.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }
                 return Promise.reject(apiError);
@@ -135,7 +135,7 @@ export class AlexaReminder {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 401) {
                 const apiError = new ApiError(response.data.message, response.data.code);
-                if (response.data.message === 'Not all permissions are authorized.') {
+                if (response.data.message === 'Request Unauthorized.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }
                 return Promise.reject(apiError);
