@@ -194,6 +194,12 @@ export class GameEnginePlugin implements Plugin {
             if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
+
+            // set sessionAttributes (necessary since AlexaCore's handler runs before us
+            // and skips adding session attributes since it sees shouldEndSession is true)
+            if (alexaSkill.$session && alexaSkill.$session.$data) {
+                _set(response, 'sessionAttributes', alexaSkill.$session.$data);
+            }
         }
     }
 }

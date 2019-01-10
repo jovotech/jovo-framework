@@ -17,6 +17,7 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
+    "lodash.map": "^4.6.0",
     "lodash.merge": "^4.6.1",
     "lodash.sample": "^4.2.1",
     "lodash.set": "^4.3.2"
@@ -26,6 +27,7 @@
     "@types/lodash.camelcase": "^4.3.4",
     "@types/lodash.clonedeep": "^4.5.4",
     "@types/lodash.get": "^4.4.4",
+    "@types/lodash.map": "^4.6.13",
     "@types/lodash.merge": "^4.6.4",
     "@types/lodash.sample": "^4.2.4",
     "@types/lodash.set": "^4.3.4",
@@ -66,5 +68,5 @@
     "sample-request-json",
     "sample-response-json"
   ],
-  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
+  "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
 }

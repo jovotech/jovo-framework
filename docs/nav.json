@@ -343,6 +343,10 @@
                             "route": "databases/google-datastore"
                         },
                         {
+                            "title": "Azure Cosmos DB",
+                            "route": "databases/cosmosdb"
+                        },
+                        {
                             "title": "MySQL",
                             "route": "databases/mysql"
                         },

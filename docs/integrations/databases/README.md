@@ -21,8 +21,8 @@ Name | Description
 [DynamoDB](./dynamodb.md './databases/dynamodb') | NoSQL database by AWS
 [Google Cloud Datastore](./google-datastore.md './databases/google-datastore') | NoSQL database by Google Cloud
 [MySQL](./mysql.md './databases/mysql') | The open source relational database
-[MongoDB](./mongodb.md './databases/mongodb) | widely supported documented-oriented NoSQL-database
-[Cosmos DB](./cosmosdb.md './databases/cosmosdb) | Database service by Azure
+[MongoDB](./mongodb.md './databases/mongodb') | widely supported documented-oriented NoSQL-database
+[Cosmos DB](./cosmosdb.md './databases/cosmosdb') | Database service by Azure
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",
