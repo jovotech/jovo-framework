@@ -17,7 +17,6 @@ export class Log {
     static timeMap: {[key: string]: number} = {};
 
 
-
     static header(header?: string, module?: string) {
         if (!header) {
             header = '';
@@ -208,7 +207,7 @@ export class Log {
             return;
         }
         process.stdout.write(Log.OFFSET);
-        process.stdout.write(msg);
+        process.stdout.write(msg + '\n');
         process.stdout.write('\x1b[0m');
         process.stdout.write('');
 
@@ -278,7 +277,7 @@ export class Log {
 
     static info(obj?: any) { // tslint:disable-line
         if (!obj) {
-            obj = '';
+            obj = '\n';
         }
         Log.log(LogLevel.INFO, obj);
     }

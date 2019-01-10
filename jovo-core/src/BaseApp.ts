@@ -2,6 +2,7 @@ import {Extensible, ExtensibleConfig} from "./Extensible";
 import {AppData, Db, HandleRequest, Host, Platform} from "./Interfaces";
 import {ActionSet} from "./ActionSet";
 import {Log, LogLevel} from "./Log";
+import {JovoError} from "./errors/JovoError";
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('unhandledRejection');
@@ -100,8 +101,6 @@ export class BaseApp extends Extensible {
 
             Log.verbose(Log.header('Start request', 'framework'));
 
-
-
             // initialize on first call only
             if (!this.initialized) {
 
@@ -111,7 +110,12 @@ export class BaseApp extends Extensible {
             await this.middleware('request')!.run(handleRequest);
             await this.middleware('platform.init')!.run(handleRequest);
             if (!handleRequest.jovo) {
-                throw new Error(`Can't handle request object.`);
+                throw new JovoError(
+                    `Can't handle request object.`,
+                    'ERR_NO_MATCHING_PLATFORM',
+                    'jovo-core',
+                    undefined,
+                    'Please add an integration that handles that type of request.');
             }
             Log.verbose(Log.header('After init ', 'framework'));
 
@@ -146,7 +150,42 @@ export class BaseApp extends Extensible {
         } catch (e) {
 
             Log.red().error(Log.header('Error'));
+
+
+            if (e.code) {
+                Log.error('Code:');
+                Log.error(e.code);
+                Log.error();
+            }
+            Log.error('Message:');
+            Log.error(e.message);
+
+            Log.error();
+            Log.error('Stack:');
+            Log.error(e.stack);
+
+            if (e.details) {
+                Log.error();
+                Log.error('Details:');
+                Log.error(e.details);
+            }
+
+            if (e.hint) {
+                Log.error();
+                Log.error('Hint:');
+                Log.error(e.hint);
+            }
+
+            if (e.seeMore) {
+                Log.error();
+                Log.error('See more:');
+                Log.error(e.seeMore);
+            }
+
+
             if (handleRequest.jovo) {
+                Log.error();
+                Log.error('Request details:');
                 Log.error(`this.\$${handleRequest.jovo.constructor.name.substr(0,1).toLowerCase()}${handleRequest.jovo.constructor.name.substr(1)} initialized`);
                 Log.error(`this.$type: ${JSON.stringify(handleRequest.jovo.$type)}`);
                 Log.error(`this.$session.$data : ${JSON.stringify(handleRequest.jovo.$session.$data)}`);
@@ -154,7 +193,6 @@ export class BaseApp extends Extensible {
                 Log.error(`this.$inputs : ${JSON.stringify(handleRequest.jovo.$inputs)}`);
                 Log.error();
             }
-            Log.error(e);
 
             handleRequest.error = e;
             Log.red().error(Log.header());
