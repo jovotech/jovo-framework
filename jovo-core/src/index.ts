@@ -23,6 +23,7 @@ export {Extensible} from './Extensible';
 export {ExtensibleConfig} from './Extensible';
 export {Cms} from './Cms';
 export {BaseCmsPlugin} from './BaseCmsPlugin';
+export {JovoError} from './errors/JovoError';
 
 export {
     HandleRequest,
