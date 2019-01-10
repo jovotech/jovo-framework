@@ -19,45 +19,23 @@ app.use(
     new FileDb(),
 );
 
-Jovo.prototype.t169 = function(arg) {
-
-
-    let translationString = this.t(arg);
-
-    console.log(translationString + 'bla');
-
-    return translationString;
-    // if (typeof(translationString) === 'Object') {
-    //     return shuffle.pick((translationString));
-    // } else {
-    //     return translationString ;
-    // }
-};
-
 
 app.setHandler({
     async LAUNCH(jovo) {
-        // this.$speech.addText('Hello');
-
-        return this.tell(this.t('HELLO'));
-         // return this.tell(this.$speech);
-        // await this.$user.load();
-        this.toIntent('HelloWorldIntent');
-        // this.tell('Hello');
-        // await this.$user.save();
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         this
             .followUpState('NameState')
             .ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
-    // NameState: {
+    NameState: {
         MyNameIsIntent() {
             this.$user.$data.name = this.$inputs.name.value;
             return this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 
         },
-    // }
+    }
 });
 
 
