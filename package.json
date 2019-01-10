@@ -12,7 +12,7 @@
     "bootstrap": "lerna bootstrap --hoist --no-ci",
     "typedoc": "npm run lerna exec npm run typedoc",
     "changelog": "lerna-changelog",
-    "prepare": "npn run tsc && npm run tslint && npm run test",
+    "preparePublish": "npm run tsc && npm run tslint && npm run test",
     "publish": "lerna publish --no-push"
   },
   "devDependencies": {
