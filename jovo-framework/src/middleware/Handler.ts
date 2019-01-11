@@ -15,7 +15,7 @@ export class Handler implements Plugin {
     }
     async handle(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error(`Couldn't access jovo object`);
+            return;
         }
 
         Log.verbose(Log.header('Jovo handler ', 'framework'));
@@ -81,7 +81,6 @@ export class Handler implements Plugin {
         }
 
         Log.verbose(Log.subheader('NEW_SESSION'));
-
         Log.verboseStart(' NEW_SESSION');
         await Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.NEW_SESSION));
         Log.verbose();
@@ -143,11 +142,12 @@ export class Handler implements Plugin {
      */
     static async applyHandle(jovo: Jovo, route: Route, config: AppConfig, fromIntent?: boolean) {
 
-        // resolve if toIntent was triggered before
+        // resolve, if toIntent was triggered before
         if (jovo && jovo.triggeredToIntent && !fromIntent) {
             return;
         }
 
+        // set type and path to Unhandled, if no type was matched
         if (!route || typeof route.type === 'undefined') {
             route = {
                 type: EnumRequestType.UNHANDLED,
@@ -185,12 +185,14 @@ export class Handler implements Plugin {
             ) &&
 
             !_get(config.handlers, route.path)) {
+
             throw new JovoError(
                 `Could not find the route "${route.path}" in your handler function.`,
                 'ERR_NO_ROUTE',
                 'jovo-framework'
                 );
         }
+
         Object.assign(Jovo.prototype, _get(config, 'handlers'));
 
         if (_get(config.handlers, route.path)) {
@@ -221,7 +223,8 @@ export class Handler implements Plugin {
 
     async error(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error(`Could't access jovo object`);
+            Log.warn(`WARN: Jovo instance is not available. ON_ERROR doesn't work here`);
+            return;
         }
         if (_get((handleRequest.app.config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
             const route = {
@@ -278,6 +281,8 @@ export class Handler implements Plugin {
         Jovo.prototype.toStateIntent = async function(state: string | undefined, intent: string): Promise<any> { // tslint:disable-line
             this.triggeredToIntent = true;
             this.setState(state);
+            Log.verbose(` Changing state to: ${state}`);
+
             const route = Router.intentRoute(
                 this.$app!.config,
                 state,
@@ -296,6 +301,7 @@ export class Handler implements Plugin {
         Jovo.prototype.toStatelessIntent = async function (intent: string) {
             this.triggeredToIntent = true;
             this.removeState();
+            Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);
             return this.toStateIntent(undefined, intent);
         };

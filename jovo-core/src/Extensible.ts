@@ -110,6 +110,8 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         if (this.$plugins.get(name)) {
             this.$plugins.get(name)!.uninstall(this);
             this.$plugins.delete(name);
+            Log.verbose(`Removed plugin: ${name}`);
+
         }
     }
 

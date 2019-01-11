@@ -36,9 +36,8 @@ export class Router implements Plugin {
 
         Log.white().verbose(Log.header('Jovo router ', 'framework'));
 
-
         if (!handleRequest.jovo) {
-            throw new Error(`Couldn't access jovo object`);
+            return;
         }
 
         if (!handleRequest.jovo.$type || !handleRequest.jovo.$type.type) {
@@ -49,6 +48,8 @@ export class Router implements Plugin {
             type: handleRequest.jovo.$type.type,
             path: handleRequest.jovo.$type.type,
         };
+
+
         if (handleRequest.jovo.$type.type &&
             handleRequest.jovo.$type.subType) {
             route.path = `${handleRequest.jovo.$type.type}["${handleRequest.jovo.$type.subType}"]`;
@@ -85,6 +86,8 @@ export class Router implements Plugin {
         }
         _set(handleRequest.jovo.$plugins, 'Router.route', route);
 
+
+        Log.yellow().verbose('Route object:');
         Log.yellow().verbose(`${JSON.stringify(route, null, '\t')}`);
 
     }
@@ -172,10 +175,21 @@ export class Router implements Plugin {
         return level;
     }
 
+    /**
+     * Maps given intent by the platform with a map in the config
+     *
+     * {
+     *     'AMAZON.StopIntent': 'StopIntent',
+     * }
+     *
+     * @param {Config} appConfig
+     * @param {string} intentName
+     * @returns {string}
+     */
     static mapIntentName(appConfig: AppConfig, intentName: string): string {
         // use intent mapping if set
-
         if (appConfig.intentMap && appConfig.intentMap[intentName]) {
+            Log.verbose(`Mapping intent from ${intentName} to ${appConfig.intentMap[intentName]}`);
             return appConfig.intentMap[intentName];
         }
         return intentName;

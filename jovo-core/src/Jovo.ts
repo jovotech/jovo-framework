@@ -19,6 +19,7 @@ import {
 
 import {User} from "./User";
 import {Cms} from "./Cms";
+import {Log} from "./Log";
 
 export abstract class Jovo extends EventEmitter {
     readonly $host: Host;
@@ -371,6 +372,7 @@ export abstract class Jovo extends EventEmitter {
 
         Object.keys(this.$inputs).forEach((inputKey: string) => {
             if (inputMap[inputKey]) {
+                Log.verbose(`Mapping input key ${inputKey} to ${inputMap[inputKey]}.`);
                 mappedInputs[inputMap[inputKey]] = this.$inputs[inputKey];
             } else {
                 mappedInputs[inputKey] = this.$inputs[inputKey];

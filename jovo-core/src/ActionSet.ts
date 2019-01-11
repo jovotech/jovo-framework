@@ -14,10 +14,22 @@ export class ActionSet {
         });
     }
 
+    /**
+     * Returns middleware
+     * @param {string} middlewareName
+     * @return {Middleware | undefined}
+     */
     get(middlewareName: string): Middleware | undefined {
         return this.middleware.get(middlewareName);
     }
 
+
+    /**
+     * Creates meiddleware
+     * @param {string} middlewareName
+     * @param {Extensible} parent
+     * @returns {Middleware}
+     */
     create(middlewareName: string, parent: Extensible): Middleware {
         const middleware = new Middleware(middlewareName, parent);
         this.middleware.set(middlewareName, middleware);
