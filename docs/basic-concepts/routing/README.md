@@ -71,7 +71,7 @@ app.setHandler({
 
     LAUNCH() {
         // Triggered when people open the voice app without a specific query
-        return this.tell('Hello World!');
+        this.tell('Hello World!');
     },
 
     YourFirstIntent() {
