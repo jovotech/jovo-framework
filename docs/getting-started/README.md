@@ -95,7 +95,7 @@ Take a look at the `app.js` file in the `src` folder to get an understanding of 
 ```js
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {

@@ -56,7 +56,7 @@ app.middleware('after.platform.init').use( async (handleRequest) => {
 app.setHandler({
 
     async LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         console.log(this.$data.foo);

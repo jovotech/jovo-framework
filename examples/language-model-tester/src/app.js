@@ -19,7 +19,7 @@ app.use(
 
 app.setHandler({
     async LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         this

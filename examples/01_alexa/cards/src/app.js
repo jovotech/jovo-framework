@@ -15,13 +15,13 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        // this.toIntent('SimpleCardIntent');
-        // this.toIntent('StandardCardIntent');
-        // this.toIntent('AccountLinkingCard');
-        // this.toIntent('AskForCountryAndPostalCodeCardIntent');
-        // this.toIntent('AskForAddressCardIntent');
-        // this.toIntent('AskForListPermissionCardIntent');
-        this.toIntent('AskContactPermissionCardIntent');
+        // return this.toIntent('SimpleCardIntent');
+        // return this.toIntent('StandardCardIntent');
+        // return this.toIntent('AccountLinkingCard');
+        // return this.toIntent('AskForCountryAndPostalCodeCardIntent');
+        // return this.toIntent('AskForAddressCardIntent');
+        // return this.toIntent('AskForListPermissionCardIntent');
+        return this.toIntent('AskContactPermissionCardIntent');
     },
     SimpleCardIntent() {
         return this.$alexaSkill

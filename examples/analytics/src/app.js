@@ -18,7 +18,7 @@ app.use(
 app.setHandler({
     async LAUNCH(jovo) {
         // await this.$user.load();
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
         // this.tell('Hello');
         // await this.$user.save();
     },

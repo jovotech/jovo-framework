@@ -20,13 +20,13 @@ app.use(
 app.setHandler({
     LAUNCH() {
         // return this.toIntent('BodyTemplate1Intent');
-        // this.toIntent('BodyTemplate2Intent');
-        // this.toIntent('BodyTemplate3Intent');
-        // this.toIntent('BodyTemplate6Intent');
-        // this.toIntent('BodyTemplate7Intent');
-        this.toIntent('ListTemplate1Intent');
-        // this.toIntent('ListTemplate2Intent');
-        // this.toIntent('ListTemplate3Intent');
+        // return this.toIntent('BodyTemplate2Intent');
+        // return this.toIntent('BodyTemplate3Intent');
+        // return this.toIntent('BodyTemplate6Intent');
+        // return this.toIntent('BodyTemplate7Intent');
+        return this.toIntent('ListTemplate1Intent');
+        // return this.toIntent('ListTemplate2Intent');
+        // return this.toIntent('ListTemplate3Intent');
     },
     BodyTemplate1Intent() {
         return this.$alexaSkill

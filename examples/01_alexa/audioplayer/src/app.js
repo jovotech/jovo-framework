@@ -15,7 +15,7 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('PlayIntent');
+        return this.toIntent('PlayIntent');
     },
     PlayIntent() {
         this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
