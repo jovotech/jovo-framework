@@ -27,7 +27,7 @@ This is how a simple handler looks like:
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
@@ -44,7 +44,7 @@ app.setHandler({
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
