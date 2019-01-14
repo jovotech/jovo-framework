@@ -1,5 +1,14 @@
-const fs = require('fs');
 const gulp = require('gulp');
+if (gulp.series === undefined) {
+    console.error('\nYou are using an outdated version of gulp.');
+    console.error('Please update by running:');
+    console.error(' >> npm install gulp@4.0.0 --save-dev');
+    process.exit(1);
+}
+
+
+const { src, dest, series } = require('gulp');
+const fs = require('fs');
 const install = require('gulp-install');
 const run = require('gulp-run-command').default;
 const zip = require('gulp-zip');
@@ -12,63 +21,86 @@ const config = {
 };
 
 
+
 // ------------------------------------------------------
 // -                  Regular Project                   -
 // ------------------------------------------------------
 
 
-gulp.task('prepare-project', function () {
-    return gulp.src([
+function prepareProject() {
+    return src([
         config.projectFolder + '/**/*',
         'package.json',
     ])
-        .pipe(gulp.dest(config.destinationFolder))
+        .pipe(dest(config.destinationFolder))
         .pipe(install({
             npm: '--production',
         }));
-});
+}
 
-gulp.task('build', ['prepare-project'], function () {
-    return gulp.src(config.destinationFolder + '/**/*', { nodir: true })
+
+function build() {
+    return src(config.destinationFolder + '/**/*', { nodir: true })
         .pipe(zip('bundle.zip'))
-        .pipe(gulp.dest('.'));
-});
+        .pipe(dest('.'));
+}
 
-gulp.task('default', ['build']);
+
+exports.default = series(
+    prepareProject,
+    build,
+);
+exports.build = exports.default;
+
 
 
 // ------------------------------------------------------
 // -                 TypeScript Project                 -
 // ------------------------------------------------------
 
-gulp.task('create-temp-tsconfig', function (done) {
 
+function createTempTsConfig(cb) {
     const tsConfig = require(path.join(process.cwd(), 'tsconfig.json'));
     tsConfig.exclude.push('test/**/*')
     fs.writeFileSync('./.tsconfig-build.json', JSON.stringify(tsConfig, null, 2));
-    done();
-});
+    cb()
+}
 
-gulp.task('compile-ts', ['create-temp-tsconfig'], run('npm run tsc -- --p .tsconfig-build.json'));
 
-gulp.task('prepare-project-ts', ['compile-ts'], function () {
-    return gulp.src([
+function prepareProjectTs() {
+    return src([
         config.projectFolderTypeScript + '/**/*',
         'package.json',
     ])
-        .pipe(gulp.dest(config.destinationFolder))
+        .pipe(dest(config.destinationFolder))
         .pipe(install({
             npm: '--production',
         }));
-});
+}
 
-gulp.task('create-ts-bundle', ['prepare-project-ts'], function () {
-    return gulp.src(config.destinationFolder + '/**/*', { nodir: true })
+
+function createTsBundle() {
+    return src(config.destinationFolder + '/**/*', { nodir: true })
         .pipe(zip('bundle.zip'))
-        .pipe(gulp.dest('.'));
-});
+        .pipe(dest('.'));
+}
 
-gulp.task('build-ts', ['create-ts-bundle'], function (done) {
+
+function compileTs() {
+    return run('npm run tsc -- --p .tsconfig-build.json')();
+};
+
+
+function cleanupTempTsConfig(cb) {
     fs.unlinkSync('./.tsconfig-build.json');
-    done();
-});
+    cb()
+}
+
+
+exports['build-ts'] = series(
+    createTempTsConfig,
+    compileTs,
+    prepareProjectTs,
+    createTsBundle,
+    cleanupTempTsConfig,
+);
