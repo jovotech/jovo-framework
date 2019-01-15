@@ -3,7 +3,7 @@ import {Handler} from './../src/middleware/Handler';
 import {App, Config as AppConfig} from './../src/App';
 import {EnumRequestType, HandleRequest, Jovo, JovoRequest} from "jovo-core";
 require('source-map-support').install();
-process.env.NODE_ENV = 'TEST';
+process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
 jest.setTimeout(250);
 
@@ -46,8 +46,8 @@ test('test setHandler with multiple handlers', () => {
 });
 
 test('test throw exception on non existing route', (done) => {
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             IntentA() {
 
             },
@@ -58,18 +58,18 @@ test('test throw exception on non existing route', (done) => {
     };
 
     // @ts-ignore
-    Handler.applyHandle(null, {
+    Handler.applyHandle(jovo, {
         path: 'NonExistingPath',
         type: EnumRequestType.INTENT,
-    }, appConfig).catch((e: Error) => {
+    }).catch((e: Error) => {
         expect(e.message).toBe('Could not find the route "NonExistingPath" in your handler function.');
         done();
     });
 });
 
 test('test skip exception on non existing route', async (done) => {
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             ON_REQUEST() {
 
             },
@@ -83,10 +83,10 @@ test('test skip exception on non existing route', async (done) => {
     };
 
     // @ts-ignore
-    await Handler.applyHandle(null, {
+    await Handler.applyHandle(jovo, {
         path: 'NonExistingPath',
         type: EnumRequestType.INTENT,
-    }, appConfig);
+    });
 
     done();
 });
@@ -96,8 +96,8 @@ test('test applyHandle on route that returns rejected promise', async () => {
 
     expect.assertions(1);
 
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             IntentA() {
                 return Promise.reject(rejectionReason);
             }
@@ -106,10 +106,10 @@ test('test applyHandle on route that returns rejected promise', async () => {
 
     try {
         // @ts-ignore
-        await Handler.applyHandle(null, {
+        await Handler.applyHandle(jovo, {
             path: 'IntentA',
             type: EnumRequestType.INTENT,
-        }, appConfig);
+        });
     } catch (e) {
         expect(e).toEqual(rejectionReason);
     }
@@ -121,18 +121,18 @@ test('test handleOnPromise on route that returns rejected promise', async () => 
 
     expect.assertions(1);
 
-    const appConfig: AppConfig = {
-        handlers: {
-            ON_REQUEST() {
-                return Promise.reject(rejectionReason);
-            }
-        }
-    };
+
 
     try {
-        const jovo: any = {}; // tslint:disable-line
+        const jovo = {
+            $handlers: {
+                ON_REQUEST() {
+                    return Promise.reject(rejectionReason);
+                }
+            }
+        };
         // @ts-ignore
-        await Handler.handleOnPromise(jovo, appConfig.handlers.ON_REQUEST);
+        await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
     } catch (e) {
         expect(e).toEqual(rejectionReason);
     }
@@ -143,9 +143,8 @@ test('test applyHandle on route that immediately throws exception', async () => 
     const errorMessage = 'an error';
 
     expect.assertions(1);
-
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             IntentA() {
                 throw new Error(errorMessage);
             }
@@ -154,10 +153,10 @@ test('test applyHandle on route that immediately throws exception', async () => 
 
     try {
         // @ts-ignore
-        await Handler.applyHandle(null, {
+        await Handler.applyHandle(jovo, {
             path: 'IntentA',
             type: EnumRequestType.INTENT,
-        }, appConfig);
+        });
     } catch (e) {
         expect(e).toEqual(new Error(errorMessage));
     }
@@ -169,18 +168,16 @@ test('test handleOnPromise on route that immediately throws exception', async ()
 
     expect.assertions(1);
 
-    const appConfig: AppConfig = {
-        handlers: {
-            ON_REQUEST() {
-                throw new Error(errorMessage);
-            }
-        }
-    };
-
     try {
-        const jovo: any = {}; // tslint:disable-line
+        const jovo = {
+            $handlers: {
+                ON_REQUEST() {
+                    throw new Error(errorMessage);
+                }
+            }
+        };
         // @ts-ignore
-        await Handler.handleOnPromise(jovo, appConfig.handlers.ON_REQUEST);
+        await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
 
     } catch (e) {
         expect(e).toEqual(new Error(errorMessage));
@@ -189,8 +186,9 @@ test('test handleOnPromise on route that immediately throws exception', async ()
 
 
 test('test applyHandle on route with callback', async () => {
-    const appConfig: AppConfig = {
-        handlers: {
+
+    const jovo = {
+        $handlers: {
             IntentA(jovo: Jovo, callback: () => void) {
                 callback();
             }
@@ -198,10 +196,10 @@ test('test applyHandle on route with callback', async () => {
     };
 
     // @ts-ignore
-    await Handler.applyHandle(null, {
+    await Handler.applyHandle(jovo, {
         path: 'IntentA',
         type: EnumRequestType.INTENT,
-    }, appConfig);
+    });
 });
 
 test('test applyHandle on route with callback that immediately throws exception', async () => {
@@ -209,8 +207,8 @@ test('test applyHandle on route with callback that immediately throws exception'
 
     expect.assertions(1);
 
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             IntentA(callback: () => {}) {
                 throw new Error(errorMessage);
             }
@@ -219,10 +217,10 @@ test('test applyHandle on route with callback that immediately throws exception'
 
     try {
         // @ts-ignore
-        await Handler.applyHandle(null, {
+        await Handler.applyHandle(jovo, {
             path: 'IntentA',
             type: EnumRequestType.INTENT,
-        }, appConfig);
+        });
     } catch (e) {
         expect(e).toEqual(new Error(errorMessage));
     }
@@ -234,18 +232,17 @@ test('test handleOnPromise on route with callback that immediately throws except
 
     expect.assertions(1);
 
-    const appConfig: AppConfig = {
-        handlers: {
-            ON_REQUEST(jovo: Jovo, callback: () => {}) {
-                throw new Error(errorMessage);
-            }
-        }
-    };
 
     try {
-        const jovo: any = {}; // tslint:disable-line
+        const jovo = {
+            $handlers: {
+                ON_REQUEST(jovo: Jovo, callback: () => {}) {
+                    throw new Error(errorMessage);
+                }
+            }
+        };
         // @ts-ignore
-        await Handler.handleOnPromise(jovo, appConfig.handlers.ON_REQUEST);
+        await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
 
     } catch (e) {
         expect(e).toEqual(new Error(errorMessage));
@@ -256,8 +253,8 @@ test('test handleOnPromise on route with callback that immediately throws except
 test('test applyHandle on route that returns a promise wrapped in a promise', async () => {
     let executed = false;
 
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             async IntentA() {
                 return new Promise((resolve) => {
                     executed = true;
@@ -268,10 +265,10 @@ test('test applyHandle on route that returns a promise wrapped in a promise', as
     };
 
     // @ts-ignore
-    await Handler.applyHandle(null, {
+    await Handler.applyHandle(jovo, {
         path: 'IntentA',
         type: EnumRequestType.INTENT,
-    }, appConfig);
+    });
 
     expect(executed).toBeTruthy();
 });
@@ -279,8 +276,9 @@ test('test applyHandle on route that returns a promise wrapped in a promise', as
 test('test handleOnPromise on route that returns a promise wrapped in a promise', async () => {
     let executed = false;
 
-    const appConfig: AppConfig = {
-        handlers: {
+
+    const jovo = {
+        $handlers: {
             async ON_REQUEST() {
                 return new Promise((resolve) => {
                     executed = true;
@@ -290,9 +288,8 @@ test('test handleOnPromise on route that returns a promise wrapped in a promise'
         }
     };
 
-    const jovo: any = {}; // tslint:disable-line
     // @ts-ignore
-    await Handler.handleOnPromise(jovo, appConfig.handlers.ON_REQUEST);
+    await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
 
 
     expect(executed).toBeTruthy();
@@ -300,37 +297,34 @@ test('test handleOnPromise on route that returns a promise wrapped in a promise'
 
 
 test('test handleOnRequest', () => {
-    const appConfig: AppConfig = {
-        handlers: {
-            'ON_REQUEST'() {
+    const jovo = {
+        $handlers: {
+            ON_REQUEST() {
 
             },
         }
     };
-
-    const spy = jest.spyOn(appConfig.handlers, 'ON_REQUEST');
+    const spy = jest.spyOn(jovo.$handlers, 'ON_REQUEST');
     // @ts-ignore
-    Handler.handleOnRequest(null, appConfig);
+    Handler.handleOnRequest(jovo);
     expect(spy).toBeCalled();
 });
 
 test('test handleOnNewSession (NEW_SESSION=true)', async () => {
     let newSessionVariable = false;
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             NEW_SESSION() {
                 newSessionVariable = true;
             },
-        }
-    };
-
-    const jovo = {
+        },
         isNewSession: () => true
+
     };
 
-    const spy = jest.spyOn(appConfig.handlers, 'NEW_SESSION');
+    const spy = jest.spyOn(jovo.$handlers, 'NEW_SESSION');
     // @ts-ignore
-    await Handler.handleOnNewSession(jovo, appConfig);
+    await Handler.handleOnNewSession(jovo);
     expect(spy).toBeCalled();
     expect(newSessionVariable).toBe(true);
 });
@@ -338,45 +332,41 @@ test('test handleOnNewSession (NEW_SESSION=true)', async () => {
 test('test handleOnNewSession (NEW_SESSION=false)', () => {
     let newSessionVariable = false;
 
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             NEW_SESSION() {
                 newSessionVariable = true;
-
             },
-        }
-    };
-
-    const jovo = {
+        },
         isNewSession: () => false
+
     };
 
-    const spy = jest.spyOn(appConfig.handlers, 'NEW_SESSION');
+    const spy = jest.spyOn(jovo.$handlers, 'NEW_SESSION');
     // @ts-ignore
-    Handler.handleOnNewSession(jovo, appConfig);
+    Handler.handleOnNewSession(jovo);
     expect(newSessionVariable).toBe(false);
 
 });
 
 test('test handleOnNewUser (NEW_USER=true)', async () => {
     let newUserVariable = false;
-    const appConfig: AppConfig = {
-        handlers: {
+
+    const jovo = {
+        $handlers: {
             NEW_USER() {
                 newUserVariable = true;
             },
-        }
-    };
-
-    const jovo = {
+        },
         $user: {
             isNew: () => true
         }
+
     };
 
-    const spy = jest.spyOn(appConfig.handlers, 'NEW_USER');
+    const spy = jest.spyOn(jovo.$handlers, 'NEW_USER');
     // @ts-ignore
-    await Handler.handleOnNewUser(jovo, appConfig);
+    await Handler.handleOnNewUser(jovo);
     expect(spy).toBeCalled();
     expect(newUserVariable).toBe(true);
 });
@@ -384,43 +374,40 @@ test('test handleOnNewUser (NEW_USER=true)', async () => {
 
 test('test handleOnNewUser (NEW_USER=false)', async () => {
     let newUserVariable = false;
-    const appConfig: AppConfig = {
-        handlers: {
+
+
+    const jovo = {
+        $handlers: {
             NEW_USER() {
                 newUserVariable = true;
             },
-        }
-    };
-
-    const jovo = {
+        },
         $user: {
             isNew: () => false
         }
+
     };
 
-    const spy = jest.spyOn(appConfig.handlers, 'NEW_USER');
+    const spy = jest.spyOn(jovo.$handlers, 'NEW_USER');
     // @ts-ignore
-    await Handler.handleOnNewUser(jovo, appConfig);
+    await Handler.handleOnNewUser(jovo);
     expect(newUserVariable).toBe(false);
 });
 
 
 test('test handleOnPromise with triggeredToIntent = true', async () => {
     let executed = false;
-
-    const appConfig: AppConfig = {
-        handlers: {
+    const jovo = {
+        $handlers: {
             async ON_REQUEST() {
                 executed = true;
             }
-        }
-    };
-
-    const jovo: any = { // tslint:disable-line
+        },
         triggeredToIntent: true
+
     };
     // @ts-ignore
-    await Handler.handleOnPromise(jovo, appConfig.handlers.ON_REQUEST);
+    await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
 
 
     expect(executed).toBeFalsy();

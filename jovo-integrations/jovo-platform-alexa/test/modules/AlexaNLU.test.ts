@@ -34,21 +34,23 @@ describe(`test internal 'nlu'`, () => {
 
     test('test intent with slot', async (done) => {
         app.setHandler({
-            MyNameIsIntent() {
-                expect(this.$nlu!.intent!.name).toEqual('MyNameIsIntent');
-                expect(this.$inputs.name.name).toEqual('name');
-                expect(this.$inputs.name.key!.toLowerCase()).toEqual('jeff');
-                expect(this.$inputs.name.value!.toLowerCase()).toEqual('jeff');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.name)
-                    .toEqual('name');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.value!.toLowerCase())
-                    .toEqual('jeff');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.confirmationStatus)
-                    .toEqual('NONE');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.source)
-                    .toEqual('USER');
-                done();
-            },
+            NameState: {
+                MyNameIsIntent() {
+                    expect(this.$nlu!.intent!.name).toEqual('MyNameIsIntent');
+                    expect(this.$inputs.name.name).toEqual('name');
+                    expect(this.$inputs.name.key!.toLowerCase()).toEqual('jeff');
+                    expect(this.$inputs.name.value!.toLowerCase()).toEqual('jeff');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.name)
+                        .toEqual('name');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.value!.toLowerCase())
+                        .toEqual('jeff');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.confirmationStatus)
+                        .toEqual('NONE');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.source)
+                        .toEqual('USER');
+                    done();
+                },
+            }
         });
         const request:JovoRequest = await t.requestBuilder.rawRequestByKey('IntentRequestWithSlot');
         app.handle(ExpressJS.dummyRequest(request));
@@ -56,35 +58,37 @@ describe(`test internal 'nlu'`, () => {
 
     test('test intent with slot resolution', async (done) => {
         app.setHandler({
-            MyNameIsIntent() {
-                expect(this.$nlu!.intent!.name).toEqual('MyNameIsIntent');
-                expect(this.$inputs.name.name).toEqual('name');
-                expect(this.$inputs.name.id!.toLowerCase()).toEqual('jeffid');
+            NameState: {
+                MyNameIsIntent() {
+                    expect(this.$nlu!.intent!.name).toEqual('MyNameIsIntent');
+                    expect(this.$inputs.name.name).toEqual('name');
+                    expect(this.$inputs.name.id!.toLowerCase()).toEqual('jeffid');
 
-                expect(this.$inputs.name.key!.toLowerCase()).toEqual('jeff');
-                expect(this.$inputs.name.value!.toLowerCase()).toEqual('jeff');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.name)
-                    .toEqual('name');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.value!.toLowerCase())
-                    .toEqual('jeff');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.confirmationStatus)
-                    .toEqual('NONE');
-                expect((this.$inputs.name as AlexaInput).alexaSkill.source)
-                    .toEqual('USER');
+                    expect(this.$inputs.name.key!.toLowerCase()).toEqual('jeff');
+                    expect(this.$inputs.name.value!.toLowerCase()).toEqual('jeff');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.name)
+                        .toEqual('name');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.value!.toLowerCase())
+                        .toEqual('jeff');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.confirmationStatus)
+                        .toEqual('NONE');
+                    expect((this.$inputs.name as AlexaInput).alexaSkill.source)
+                        .toEqual('USER');
 
-                expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
-                    'resolutions.resolutionsPerAuthority[0].status.code'))
-                    .toEqual('ER_SUCCESS_MATCH');
+                    expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
+                        'resolutions.resolutionsPerAuthority[0].status.code'))
+                        .toEqual('ER_SUCCESS_MATCH');
 
-                expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
-                    'resolutions.resolutionsPerAuthority[0].values[0].value.name').toLowerCase())
-                    .toEqual('jeff');
+                    expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
+                        'resolutions.resolutionsPerAuthority[0].values[0].value.name').toLowerCase())
+                        .toEqual('jeff');
 
-                expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
-                    'resolutions.resolutionsPerAuthority[0].values[0].value.id').toLowerCase())
-                    .toEqual('jeffid');
-                done();
-            },
+                    expect(_get((this.$inputs.name as AlexaInput).alexaSkill,
+                        'resolutions.resolutionsPerAuthority[0].values[0].value.id').toLowerCase())
+                        .toEqual('jeffid');
+                    done();
+                },
+            }
         });
         const request:JovoRequest = await t.requestBuilder.rawRequestByKey('IntentRequestWithSlotResolution');
         app.handle(ExpressJS.dummyRequest(request));
