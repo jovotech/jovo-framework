@@ -100,6 +100,12 @@ export class Display implements Plugin {
             if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
+
+            // set sessionAttributes (necessary since AlexaCore's handler runs before us
+            // and skips adding session attributes due to shouldEndSession being true at that point)
+            if (alexaSkill.$session && alexaSkill.$session.$data) {
+                _set(response, 'sessionAttributes', alexaSkill.$session.$data);
+            }
         }
         // }
     }
