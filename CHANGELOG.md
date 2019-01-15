@@ -1,5 +1,18 @@
 # Jovo Framework Changelog
 
+## 2.0.8 (January 15, 2019)
+* `jovo-platform-alexa` [#344](https://github.com/jovotech/jovo-framework-nodejs/pull/344) showVideo(...) should not drop session attributes [@IGx89](https://github.com/IGx89)
+* `jovo-core` Refactored handler core to provide a request-specific (Alexa handler, GoogleAssistant handler) handler execution
+* `jovo-core` Fixed log level conversion process.env.JOVO_LOG_LEVEL = 'verbose'
+* `jovo-platform-alexa` Fixed hasSlotValue(key) bug in Alexa dialog interface
+* `jovo-cms-googlesheets` Fixed GoogleSheets multiple responses sheets bug
+* `jovo-framework` Updated gulp file to version 4  [@janober](https://github.com/janober)
+
+
+## 2.0.7 (January 15, 2019)
+* Messed up release, sorry
+
+
 ## 2.0.6 (January 10, 2019)
 * `jovo-platform-alexa` [#338](https://github.com/jovotech/jovo-framework-nodejs/pull/338) Fixed issue where $gameEngine.respond would drop the session attributes [@IGx89](https://github.com/IGx89)
 * `jovo-db-cosmosdb` [#341](https://github.com/jovotech/jovo-framework-nodejs/pull/341) Added Azure Cosmos DB integration [@KaanKC](https://github.com/KaanKC)
