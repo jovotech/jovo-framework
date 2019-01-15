@@ -150,20 +150,6 @@ export class GoogleAction extends Jovo {
         return undefined;
     }
 
-    // getSpeechText() {
-    //     if (!_get(this.$response, 'richResponse.items[0].simpleResponse.ssml')) {
-    //         return;
-    //     }
-    //     return _get(this.$response, 'richResponse.items[0].simpleResponse.ssml').replace(/<\/?speak\/?>/g, '');
-    // }
-    // getRepromptText() {
-    //     if (!_get(this.$response, 'noInputPrompts[0].ssml')) {
-    //         return;
-    //     }
-    //     return _get(this.$response, 'noInputPrompts[0].ssml').replace(/<\/?speak\/?>/g, '');
-    // }
-
-
     /**
      * Returns type of platform ("AlexaSkill","GoogleAction")
      * @public
@@ -173,6 +159,14 @@ export class GoogleAction extends Jovo {
         return 'GoogleAction';
     }
 
+    /**
+     * Returns type of platform type
+     * @public
+     * @return {string}
+     */
+    getPlatformType() {
+        return 'GoogleAssistant';
+    }
 
     /**
      * Returns raw text of request.

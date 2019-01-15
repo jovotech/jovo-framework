@@ -145,6 +145,13 @@ export abstract class Jovo extends EventEmitter {
 
 
     /**
+     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * @public
+     * @return {string}
+     */
+    abstract getPlatformType(): string;
+
+    /**
      * Returs id of the touched/selected item
      * @public
      * @return {*}

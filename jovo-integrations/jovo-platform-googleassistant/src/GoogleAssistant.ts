@@ -102,11 +102,14 @@ export class GoogleAssistant extends Extensible implements Platform {
          * @public
          * @param {*} handler
          */
-        BaseApp.prototype.setGoogleAssistantHandler = function(...handler: Handler[]) { // tslint:disable-line
-            // if (this.$plugins.get('GoogleAssistant')!.config) {
-                // TODO
-                // (this.plugins.get('Alexa')!.config as Config).handler = handler;
-            // }
+        BaseApp.prototype.setGoogleAssistantHandler = function(...handlers: any[]) { // tslint:disable-line
+            for (const obj of handlers) { // eslint-disable-line
+                if (typeof obj !== 'object') {
+                    throw new Error('Handler must be of type object.');
+                }
+                _set(this.config.plugin, 'GoogleAssistant.handlers', obj);
+            }
+
             return this;
         };
 

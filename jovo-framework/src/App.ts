@@ -70,8 +70,10 @@ export class App extends BaseApp {
             const fileConfig = require(pathToConfig) || {};
             this.config = _merge(fileConfig, this.config);
         } else {
-            Log.warn(`WARN: Couldn't find default config.js in your project.`);
-            Log.warn(`WARN: Expected path: ${path.resolve(pathToConfig)}`);
+            if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST') {
+                Log.warn(`WARN: Couldn't find default config.js in your project.`);
+                Log.warn(`WARN: Expected path: ${path.resolve(pathToConfig)}`);
+            }
         }
 
         const stage = process.env.JOVO_STAGE || process.env.STAGE || process.env.NODE_ENV;

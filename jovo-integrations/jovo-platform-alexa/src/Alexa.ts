@@ -40,6 +40,7 @@ export class Alexa extends Extensible implements Platform {
         enabled: true,
         allowedSkillIds: [],
         plugin: {},
+        handlers: undefined,
     };
 
     constructor(config?: Config) {
@@ -97,11 +98,14 @@ export class Alexa extends Extensible implements Platform {
             return this.constructor.name === 'AlexaSkill';
         };
 
-        BaseApp.prototype.setAlexaHandler = function(...handler: any[]) { // tslint:disable-line
-            if (this.$plugins.get('Alexa')!.config) {
-                // TODO
-                // (this.plugins.get('Alexa')!.config as Config).handler = handler;
+        BaseApp.prototype.setAlexaHandler = function(...handlers: any[]) { // tslint:disable-line
+            for (const obj of handlers) { // eslint-disable-line
+                if (typeof obj !== 'object') {
+                    throw new Error('Handler must be of type object.');
+                }
+                _set(this.config.plugin, 'Alexa.handlers', obj);
             }
+
             return this;
         };
 

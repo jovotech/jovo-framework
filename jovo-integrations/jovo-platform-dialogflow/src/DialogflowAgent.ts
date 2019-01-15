@@ -120,6 +120,14 @@ export class DialogflowAgent extends Jovo {
         return 'DialogflowAgent';
     }
 
+    /**
+     * Returns type of platform type
+     * @public
+     * @return {string}
+     */
+    getPlatformType() {
+        return 'Dialogflow';
+    }
 
     /**
      * Returs id of the touched/selected item
