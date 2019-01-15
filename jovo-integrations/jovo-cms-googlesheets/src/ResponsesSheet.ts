@@ -45,9 +45,9 @@ export class ResponsesSheet extends DefaultSheet {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.i18Next.changeLanguage( this.$jovo.$request!.getLocale());
-            return this.$jovo.$app!.$cms.i18Next.t.apply(
-                this.$jovo.$app!.$cms.i18Next, arguments
+            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.$request!.getLocale());
+            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
+                this.$jovo.$app!.$cms.I18Next.i18n, arguments
             );
         };
     }
@@ -55,7 +55,7 @@ export class ResponsesSheet extends DefaultSheet {
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
-        const resources = {};
+        const resources:any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
@@ -84,12 +84,18 @@ export class ResponsesSheet extends DefaultSheet {
         if (!entity) {
             throw new Error('Entity has to be set.');
         }
-        handleRequest.app.$cms.i18Next = i18n.init(
-            Object.assign({
-                    resources
-                },
-                    this.config.i18Next
-            ));
+        if (!handleRequest.app.$cms.I18Next) {
+            handleRequest.app.$cms.I18Next.i18n = i18n.init(Object.assign({
+                resources
+            }, this.config.i18Next));
+        } else {
+            Object.keys(resources).forEach((localeKey) => {
+                const resource = resources[localeKey];
+                Object.keys(resource.translation).forEach((key) => {
+                    handleRequest.app.$cms.I18Next.i18n.addResource(localeKey, 'translation', key, resource.translation[key]);
+                });
+            });
+        }
 
         handleRequest.app.$cms[entity] = resources;
 
