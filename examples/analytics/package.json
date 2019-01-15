@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-analytics",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-analytics-botanalytics": "^2.0.6",
-    "jovo-framework": "^2.0.7",
-    "jovo-platform-alexa": "^2.0.8",
-    "jovo-platform-googleassistant": "^2.0.8"
+    "jovo-analytics-botanalytics": "^2.0.7",
+    "jovo-framework": "^2.0.8",
+    "jovo-platform-alexa": "^2.0.9",
+    "jovo-platform-googleassistant": "^2.0.9"
   }
 }
