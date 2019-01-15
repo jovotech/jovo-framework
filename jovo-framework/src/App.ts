@@ -37,8 +37,6 @@ if (process.argv.includes('--stage')) {
 }
 
 
-
-
 export class App extends BaseApp {
     config: Config = {
         enabled: true,
@@ -51,10 +49,13 @@ export class App extends BaseApp {
 
     constructor(config?: Config) {
         super(config);
+
         this.$cms = {};
+
         if (config) {
             this.config = _merge(this.config, config);
         }
+
         Log.verbose('');
         Log.verbose(Log.header(`Verbose information ${new Date().toISOString()}`));
 
@@ -64,10 +65,15 @@ export class App extends BaseApp {
         }
 
         const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js' );
+
         if (fs.existsSync(pathToConfig)) {
             const fileConfig = require(pathToConfig) || {};
-            // throw new Error (`Could not load default config.js in project directory`);
             this.config = _merge(fileConfig, this.config);
+        } else {
+            if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST') {
+                Log.warn(`WARN: Couldn't find default config.js in your project.`);
+                Log.warn(`WARN: Expected path: ${path.resolve(pathToConfig)}`);
+            }
         }
 
         const stage = process.env.JOVO_STAGE || process.env.STAGE || process.env.NODE_ENV;
@@ -102,9 +108,16 @@ export class App extends BaseApp {
         }
 
         const pathToStageConfig = path.join(process.cwd(), 'config.' + stage + '.js' );
+
         if (fs.existsSync(pathToStageConfig)) {
+
             const fileStageConfig = require(pathToStageConfig) || {};
             _merge(this.config, fileStageConfig);
+            Log.verbose(`Merging stage specific config.js for stage ${stage} `);
+        } else {
+            if (stage) {
+                Log.verbose(`No config file for stage ${stage}. `);
+            }
         }
 
         this.mergePluginConfiguration();

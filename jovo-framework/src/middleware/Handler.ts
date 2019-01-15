@@ -5,6 +5,19 @@ import {Config as AppConfig} from './../App';
 
 export class Handler implements Plugin {
     install(app: BaseApp) {
+        app.middleware('before.router')!.use( (handleRequest: HandleRequest) => {
+            if (!handleRequest.jovo) {
+                return;
+            }
+            handleRequest.jovo.$handlers = Object.assign({}, (handleRequest.app.config as AppConfig).handlers);
+
+            const platform = handleRequest.jovo.getPlatformType();
+            if (handleRequest.app.config.plugin[platform] &&
+                handleRequest.app.config.plugin[platform].handlers) {
+                const platformHandlers = Object.assign({}, handleRequest.app.config.plugin[platform].handlers);
+                Object.assign(handleRequest.jovo.$handlers, platformHandlers);
+            }
+        });
         app.middleware('handler')!.use(this.handle);
         app.middleware('fail')!.use(this.error);
 
@@ -15,7 +28,7 @@ export class Handler implements Plugin {
     }
     async handle(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error(`Couldn't access jovo object`);
+            return;
         }
 
         Log.verbose(Log.header('Jovo handler ', 'framework'));
@@ -23,29 +36,30 @@ export class Handler implements Plugin {
         handleRequest.jovo.mapInputs(handleRequest.app.config.inputMap || {});
         const route = handleRequest.jovo.$plugins.Router.route;
 
-        await Handler.handleOnNewUser(handleRequest.jovo, handleRequest.app.config as AppConfig);
-        await Handler.handleOnNewSession(handleRequest.jovo, handleRequest.app.config as AppConfig);
-        await Handler.handleOnRequest(handleRequest.jovo, handleRequest.app.config as AppConfig);
+
+
+        await Handler.handleOnNewUser(handleRequest.jovo);
+        await Handler.handleOnNewSession(handleRequest.jovo);
+        await Handler.handleOnRequest(handleRequest.jovo);
         Log.verbose(Log.header('Handle ', 'framework'));
         Log.yellow().verbose(route);
-        await Handler.applyHandle(handleRequest.jovo, route, handleRequest.app.config as AppConfig);
+        await Handler.applyHandle(handleRequest.jovo, route);
 
     }
 
     /**
      * Calls 'NEW_USER' if the current user is not in the database
      * @param {Jovo} jovo
-     * @param {Config} config
      * @return {any}
      */
-    static async handleOnNewUser(jovo: Jovo, config: AppConfig) {
+    static async handleOnNewUser(jovo: Jovo) {
         if (!jovo.$user || !jovo.$user.isNew()) {
             return Promise.resolve();
         }
         Log.verbose(Log.subheader('NEW_USER'));
 
         Log.verboseStart(' NEW_USER');
-        await Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.NEW_USER));
+        await Handler.handleOnPromise(jovo, _get(jovo.$handlers, EnumRequestType.NEW_USER));
         Log.verbose();
         Log.verboseEnd(' NEW_USER');
         Log.verbose();
@@ -55,14 +69,13 @@ export class Handler implements Plugin {
     /**
      * Calls 'ON_REQUEST' on every request
      * @param {Jovo} jovo
-     * @param {Config} config
      * @returns {Promise<any>}
      */
-    static async handleOnRequest(jovo: Jovo, config: AppConfig) {
+    static async handleOnRequest(jovo: Jovo) {
 
         Log.verbose(Log.subheader('ON_REQUEST'));
         Log.verboseStart(' ON_REQUEST');
-        await Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.ON_REQUEST));
+        await Handler.handleOnPromise(jovo, _get(jovo.$handlers, EnumRequestType.ON_REQUEST));
         Log.verbose();
         Log.verboseEnd(' ON_REQUEST');
         Log.verbose();
@@ -72,18 +85,16 @@ export class Handler implements Plugin {
     /**
      * Calls 'NEW_SESSION' if the session is new
      * @param {Jovo} jovo
-     * @param {Config} config
      * @return {any}
      */
-    static async handleOnNewSession(jovo: Jovo, config: AppConfig) {
+    static async handleOnNewSession(jovo: Jovo) {
         if (!jovo.isNewSession()) {
             return Promise.resolve();
         }
 
         Log.verbose(Log.subheader('NEW_SESSION'));
-
         Log.verboseStart(' NEW_SESSION');
-        await Handler.handleOnPromise(jovo, _get(config.handlers, EnumRequestType.NEW_SESSION));
+        await Handler.handleOnPromise(jovo, _get(jovo.$handlers, EnumRequestType.NEW_SESSION));
         Log.verbose();
         Log.verboseEnd(' NEW_SESSION');
         Log.verbose();
@@ -141,13 +152,14 @@ export class Handler implements Plugin {
      * @param {boolean} fromIntent
      * @return {Promise<any>}
      */
-    static async applyHandle(jovo: Jovo, route: Route, config: AppConfig, fromIntent?: boolean) {
+    static async applyHandle(jovo: Jovo, route: Route, fromIntent?: boolean) {
 
-        // resolve if toIntent was triggered before
+        // resolve, if toIntent was triggered before
         if (jovo && jovo.triggeredToIntent && !fromIntent) {
             return;
         }
 
+        // set type and path to Unhandled, if no type was matched
         if (!route || typeof route.type === 'undefined') {
             route = {
                 type: EnumRequestType.UNHANDLED,
@@ -159,16 +171,16 @@ export class Handler implements Plugin {
         if ((route.type === EnumRequestType.END || // RequestType is END
             route.type === EnumRequestType.INTENT && // Mapped Intent to END
             route.intent === EnumRequestType.END) &&
-            !_get(config.handlers, route.path)) {
+            !_get(jovo.$handlers, route.path)) {
             Log.verbose('Skip END handler');
             return;
         }
 
-        if (route.type === EnumRequestType.AUDIOPLAYER && !_get(config.handlers, route.path)) {
+        if (route.type === EnumRequestType.AUDIOPLAYER && !_get(jovo.$handlers, route.path)) {
             // @deprecated
             // TODO: Test me
             const v1AudioPlayerPath = route.path.replace('AlexaSkill', 'AudioPlayer');
-            if (_get(config.handlers, v1AudioPlayerPath)) {
+            if (_get(jovo.$handlers, v1AudioPlayerPath)) {
                 route.path = v1AudioPlayerPath;
                 console.log('AudioPlayer.* is deprecated since v2. Please use AlexaSkill.*');
             } else {
@@ -179,22 +191,24 @@ export class Handler implements Plugin {
         // // throw error if no handler and no UNHANDLED on same level
         if (
             !(
-            _get(config.handlers, EnumRequestType.NEW_SESSION) ||
-            _get(config.handlers, EnumRequestType.NEW_USER) ||
-            _get(config.handlers, EnumRequestType.ON_REQUEST)
+            _get(jovo.$handlers, EnumRequestType.NEW_SESSION) ||
+            _get(jovo.$handlers, EnumRequestType.NEW_USER) ||
+            _get(jovo.$handlers, EnumRequestType.ON_REQUEST)
             ) &&
 
-            !_get(config.handlers, route.path)) {
+            !_get(jovo.$handlers, route.path)) {
+
             throw new JovoError(
                 `Could not find the route "${route.path}" in your handler function.`,
                 'ERR_NO_ROUTE',
                 'jovo-framework'
                 );
         }
-        Object.assign(Jovo.prototype, _get(config, 'handlers'));
 
-        if (_get(config.handlers, route.path)) {
-            const func:Function = _get(config.handlers, route.path);
+        // Object.assign(Jovo.prototype, _get(jovo, 'handlers'));
+
+        if (_get(jovo.$handlers, route.path)) {
+            const func:Function = _get(jovo.$handlers, route.path);
             const params = getParamNames(func);
 
             // no callback 'done' parameter
@@ -221,7 +235,8 @@ export class Handler implements Plugin {
 
     async error(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error(`Could't access jovo object`);
+            Log.warn(`WARN: Jovo instance is not available. ON_ERROR doesn't work here`);
+            return;
         }
         if (_get((handleRequest.app.config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
             const route = {
@@ -229,7 +244,7 @@ export class Handler implements Plugin {
                 path: EnumRequestType.ON_ERROR,
             };
 
-            await Handler.applyHandle(handleRequest.jovo, route, handleRequest.app.config as AppConfig, true);
+            await Handler.applyHandle(handleRequest.jovo, route, true);
             await handleRequest.app.middleware('platform.output')!.run(handleRequest);
             await handleRequest.app.middleware('response')!.run(handleRequest);
         }
@@ -259,15 +274,17 @@ export class Handler implements Plugin {
             this.triggeredToIntent = true;
 
             const route = Router.intentRoute(
-                this.$app!.config,
+                this.$handlers,
                 this.getState(),
-                intent
+                intent,
+                (this.$app.config as AppConfig).intentsToSkipUnhandled
             );
             Log.verbose(` toIntent: ${intent}`);
 
-            return await Handler.applyHandle(this, route, this.$app!.config, true);
+            return await Handler.applyHandle(this, route, true);
         };
 
+        Jovo.prototype.$handlers = undefined;
 
         /**
          * Jumps to state intent in the order state > unhandled > error
@@ -278,13 +295,16 @@ export class Handler implements Plugin {
         Jovo.prototype.toStateIntent = async function(state: string | undefined, intent: string): Promise<any> { // tslint:disable-line
             this.triggeredToIntent = true;
             this.setState(state);
+            Log.verbose(` Changing state to: ${state}`);
+
             const route = Router.intentRoute(
-                this.$app!.config,
+                this.$handlers,
                 state,
-                intent
+                intent,
+                (this.$app.config as AppConfig).intentsToSkipUnhandled
             );
             Log.verbose(` toStateIntent: ${state}.${intent}`);
-            return await Handler.applyHandle(this, route, this.$app!.config, true);
+            return await Handler.applyHandle(this, route, true);
         };
 
 
@@ -296,6 +316,7 @@ export class Handler implements Plugin {
         Jovo.prototype.toStatelessIntent = async function (intent: string) {
             this.triggeredToIntent = true;
             this.removeState();
+            Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);
             return this.toStateIntent(undefined, intent);
         };

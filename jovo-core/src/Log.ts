@@ -173,14 +173,14 @@ export class Log {
             return false;
         }
 
-        try {
-            const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
+        const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
+
+        if (!isNaN(jovoLog)) {
             return logLevel <= jovoLog;
-        } catch (e) {
+
+        } else {
             return logLevel <= (Log.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
         }
-
-
     }
 
     static setTime(obj: any) { // tslint:disable-line

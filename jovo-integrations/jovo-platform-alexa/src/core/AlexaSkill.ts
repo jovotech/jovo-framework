@@ -190,7 +190,7 @@ export class AlexaSkill extends Jovo {
 
 
     /**
-     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * Returns type of platform jovo implementation
      * @public
      * @return {string}
      */
@@ -198,6 +198,14 @@ export class AlexaSkill extends Jovo {
         return 'AlexaSkill';
     }
 
+    /**
+     * Returns type of platform type
+     * @public
+     * @return {string}
+     */
+    getPlatformType() {
+        return 'Alexa';
+    }
 
     /**
      * Adds raw json directive to output object

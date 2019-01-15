@@ -36,9 +36,8 @@ export class Router implements Plugin {
 
         Log.white().verbose(Log.header('Jovo router ', 'framework'));
 
-
         if (!handleRequest.jovo) {
-            throw new Error(`Couldn't access jovo object`);
+            return;
         }
 
         if (!handleRequest.jovo.$type || !handleRequest.jovo.$type.type) {
@@ -49,6 +48,8 @@ export class Router implements Plugin {
             type: handleRequest.jovo.$type.type,
             path: handleRequest.jovo.$type.type,
         };
+
+
         if (handleRequest.jovo.$type.type &&
             handleRequest.jovo.$type.subType) {
             route.path = `${handleRequest.jovo.$type.type}["${handleRequest.jovo.$type.subType}"]`;
@@ -61,7 +62,7 @@ export class Router implements Plugin {
             }
 
             const intent = Router.mapIntentName(this.config, handleRequest.jovo.$nlu.intent.name);
-            route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), intent);
+            route = Router.intentRoute(handleRequest.jovo.$handlers, handleRequest.jovo.getState(), intent, (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled);
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
             if(typeof _get(handleRequest.app.config,`handlers.${EnumRequestType.END}`) === 'function') {
@@ -69,27 +70,29 @@ export class Router implements Plugin {
             }
 
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
-            if(typeof _get(handleRequest.app.config,`handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
+            if(typeof _get(handleRequest.jovo,`$handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
                 route.path = EnumRequestType.ON_ELEMENT_SELECTED;
             }
         } else if (route.type === EnumRequestType.AUDIOPLAYER) {
             route.path = `${EnumRequestType.AUDIOPLAYER}["${handleRequest.jovo.$type.subType}"]`;
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
             // workaround
-            route = Router.intentRoute(handleRequest.app.config, handleRequest.jovo.getState(), EnumRequestType.ON_ELEMENT_SELECTED);
+            route = Router.intentRoute(handleRequest.jovo.$handlers, handleRequest.jovo.getState(), EnumRequestType.ON_ELEMENT_SELECTED, (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled);
             route.type = EnumRequestType.ON_ELEMENT_SELECTED;
 
-            if (typeof _get((handleRequest.app as App).config.handlers, route.path) === 'object') {
+            if (typeof _get(handleRequest.jovo.$handlers, route.path) === 'object') {
                 route.path += '.' + handleRequest.jovo.$type.subType;
             }
         }
         _set(handleRequest.jovo.$plugins, 'Router.route', route);
 
+
+        Log.yellow().verbose('Route object:');
         Log.yellow().verbose(`${JSON.stringify(route, null, '\t')}`);
 
     }
 
-    static intentRoute(appConfig: AppConfig, state: string | undefined, intent: string) {
+    static intentRoute(handlers: any,  state: string | undefined, intent: string, intentsToSkipUnhandled?: string[]) { // tslint:disable-line
         let _state = state + '';
         const _intent = intent + '';
         let path = state ?
@@ -101,7 +104,7 @@ export class Router implements Plugin {
             path = state ? state : '';
             path += '["' + _intent + '"]';
         }
-        if (_get(appConfig.handlers, path)) {
+        if (_get(handlers, path)) {
             return {
                 path,
                 state,
@@ -113,8 +116,8 @@ export class Router implements Plugin {
         if (_state) {
             while (_state !== '') {
                 // State 'unhandled' is available and intent is not in intentsToSkipUnhandled
-                if (_get(appConfig.handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
-                    if (!appConfig.intentsToSkipUnhandled || appConfig.intentsToSkipUnhandled.indexOf(_intent) === -1) {
+                if (_get(handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
+                    if (!intentsToSkipUnhandled || intentsToSkipUnhandled.indexOf(_intent) === -1) {
                         path = _state + '.' + EnumRequestType.UNHANDLED;
                         return {
                             path,
@@ -124,7 +127,7 @@ export class Router implements Plugin {
                         };
                     }
                 }
-                if (_get(appConfig.handlers, _state + '["' + _intent + '"]')) {
+                if (_get(handlers, _state + '["' + _intent + '"]')) {
                     path = _state + '["' + _intent + '"]';
                     return {
                         path,
@@ -136,7 +139,7 @@ export class Router implements Plugin {
                 _state = Router.getLastLevel(_state);
             }
             // is intent in global?
-            if (_get(appConfig.handlers, _intent)) {
+            if (_get(handlers, _intent)) {
                 return {
                     path: _intent,
                     state,
@@ -147,7 +150,7 @@ export class Router implements Plugin {
         }
         const pathToUnhandled = _state ? _state + '.' + EnumRequestType.UNHANDLED : EnumRequestType.UNHANDLED;
 
-        if (_get(appConfig.handlers, pathToUnhandled)) {
+        if (_get(handlers, pathToUnhandled)) {
             path = pathToUnhandled;
         }
 
@@ -172,10 +175,21 @@ export class Router implements Plugin {
         return level;
     }
 
+    /**
+     * Maps given intent by the platform with a map in the config
+     *
+     * {
+     *     'AMAZON.StopIntent': 'StopIntent',
+     * }
+     *
+     * @param {Config} appConfig
+     * @param {string} intentName
+     * @returns {string}
+     */
     static mapIntentName(appConfig: AppConfig, intentName: string): string {
         // use intent mapping if set
-
         if (appConfig.intentMap && appConfig.intentMap[intentName]) {
+            Log.verbose(`Mapping intent from ${intentName} to ${appConfig.intentMap[intentName]}`);
             return appConfig.intentMap[intentName];
         }
         return intentName;

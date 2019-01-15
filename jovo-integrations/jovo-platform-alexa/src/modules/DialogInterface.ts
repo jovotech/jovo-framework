@@ -336,7 +336,7 @@ export class Dialog {
      * @return {boolean}
      */
     hasSlotValue(slotName: string) {
-        return _get(this.alexaRequest.getSlot(slotName), 'value') !== 'undefined';
+        return typeof _get(this.alexaRequest.getSlot(slotName), 'value') !== 'undefined';
     }
 
 }

@@ -38,6 +38,7 @@ declare module 'jovo-core/dist/src/BaseApp' {
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
+        $handlers: any; // tslint:disable-line
         triggeredToIntent: boolean;
 
         /**

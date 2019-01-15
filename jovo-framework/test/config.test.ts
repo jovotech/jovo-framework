@@ -1,5 +1,7 @@
 import {App} from './../src/App';
 import {BasicLogging} from "../src";
+process.env.NODE_ENV = 'UNIT_TEST';
+
 let app: App;
 jest.setTimeout(250);
 
