@@ -43,7 +43,7 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
@@ -97,7 +97,7 @@ The app logic section is where the [routing](../basic-concepts/routing './routin
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {

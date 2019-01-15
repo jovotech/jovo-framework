@@ -21,13 +21,13 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        // this.toIntent('BasicCardIntent');
-        // this.toIntent('TableIntent');
-        // this.toIntent('SuggestionsIntent');
-        this.toIntent('ListIntent');
-        // this.toIntent('CarouselIntent');
-        // this.toIntent('CarouselBrowseWeblinksIntent');
-        // this.toIntent('CarouselBrowseAmpIntent');
+        // return this.toIntent('BasicCardIntent');
+        // return this.toIntent('TableIntent');
+        // return this.toIntent('SuggestionsIntent');
+        return this.toIntent('ListIntent');
+        // return this.toIntent('CarouselIntent');
+        // return this.toIntent('CarouselBrowseWeblinksIntent');
+        // return this.toIntent('CarouselBrowseAmpIntent');
     },
     BasicCardIntent() {
         const basicCard = new BasicCard()

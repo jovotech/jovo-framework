@@ -27,7 +27,7 @@ This is how a simple handler looks like:
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
@@ -44,7 +44,7 @@ app.setHandler({
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
@@ -139,7 +139,7 @@ Jovo offers the ability to redirect incoming intents to others. For example, the
 app.setHandler({
 
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
@@ -160,10 +160,10 @@ You can use the following methods to redirect intents:
 Use `toIntent` to jump into a new intent within the same request. 
 
 ```javascript
-this.toIntent(intent);
+return this.toIntent(intent);
 
 // Go to PizzaIntent
-this.toIntent('PizzaIntent');
+return this.toIntent('PizzaIntent');
 ```
 
 
@@ -174,10 +174,10 @@ Similar to [`toIntent`](#tointent), you can use `toStateIntent` to redirect to a
 The routing will look for an intent within the given state, and go there if available. If not, it will go to the fallback option outside your defined states.
 
 ```javascript
-this.toStateIntent(state, intent);
+return this.toStateIntent(state, intent);
 
 // Go to PizzaIntent in state Onboarding
-this.toStateIntent('OnboardingState', 'PizzaIntent');
+return this.toStateIntent('OnboardingState', 'PizzaIntent');
 ```
 
 
@@ -186,10 +186,10 @@ this.toStateIntent('OnboardingState', 'PizzaIntent');
 If you're inside a state and want to go to a global intent, you can use `toStatelessIntent` to do exactly this:
 
 ```javascript
-this.toStatelessIntent(intent);
+return this.toStatelessIntent(intent);
 
 // Go to global PizzaIntent
-this.toStatelessIntent('PizzaIntent');
+return this.toStatelessIntent('PizzaIntent');
 ```
 
 > Note: Calling this method will remove the current state from the response.
@@ -262,7 +262,7 @@ Here is an example that offers different output for the two platforms:
 ```javascript
 const handlers = {
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 };
 

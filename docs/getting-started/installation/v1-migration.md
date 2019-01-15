@@ -304,11 +304,11 @@ Also, you won't be able to pass additional data in redirects anymore. Here is ou
 
 ```javascript
 this.$data.moreData = 'someData';
-this.toIntent('PizzaIntent');
+return this.toIntent('PizzaIntent');
 
 
 // Old: Go to PizzaIntent and pass more data
-this.toIntent('PizzaIntent', moreData);
+return this.toIntent('PizzaIntent', moreData);
 ```
 
 ### State Management

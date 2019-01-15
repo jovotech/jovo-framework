@@ -200,7 +200,7 @@ app.setHandler({
     // Add more intents here
 
     Unhandled() {
-        this.toIntent('LAUNCH');
+        return this.toIntent('LAUNCH');
     }
 });
 ```

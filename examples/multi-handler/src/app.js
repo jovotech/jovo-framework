@@ -11,7 +11,7 @@ app.use(
 
 const handlers = {
     'LAUNCH': function() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
 };
 

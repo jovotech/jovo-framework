@@ -12,7 +12,7 @@ const song = 'https://s3.amazonaws.com/jovo-songs/song1.mp3';
 
 app.setHandler({
     async LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         this.$googleAction.mediaResponse().play(song, 'title', 'subtitle');

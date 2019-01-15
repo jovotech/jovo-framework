@@ -21,7 +21,7 @@ app.setHandler({
         this.$data.REQUEST_SCOPE = 'REQUEST_SCOPE';
     },
     async LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         this.$session.$data.SESSION_SCOPE = 'SESSION_SCOPE';

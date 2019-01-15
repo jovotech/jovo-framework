@@ -63,7 +63,7 @@ const delegateUpdateIntent = (jovo) => {
 
 app.setHandler({
     LAUNCH() {
-        this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent');
     },
     HelloWorldIntent() {
         delegate(this);

@@ -12,12 +12,12 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        // this.toIntent('AskForNameIntent');
-        // this.toIntent('AskForPreciseLocationIntent');
-        this.toIntent('AskForZipCodeAndCityIntent');
-        // this.toIntent('AskForPermissionIntent');
-        // this.toIntent('AskForConfirmationIntent');
-        // this.toIntent('AskForSignInIntent');
+        // return this.toIntent('AskForNameIntent');
+        // return this.toIntent('AskForPreciseLocationIntent');
+        return this.toIntent('AskForZipCodeAndCityIntent');
+        // return this.toIntent('AskForPermissionIntent');
+        // return this.toIntent('AskForConfirmationIntent');
+        // return this.toIntent('AskForSignInIntent');
     },
     AskForNameIntent() {
         this.$googleAction.askForName('Pre name text');
