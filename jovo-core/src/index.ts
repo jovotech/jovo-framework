@@ -52,6 +52,4 @@ export {
 
 export {Util} from './Util';
 export {Log, LogLevel} from './Log';
-
-
 export {User} from './User';
