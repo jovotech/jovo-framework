@@ -1,6 +1,4 @@
 import {BaseApp, Host, Jovo, SessionConstants, SpeechBuilder} from "../src";
-import {App} from "../../jovo-framework/dist/src";
-import {Alexa} from "../../jovo-integrations/jovo-platform-alexa/src";
 
 class JovoImpl extends Jovo {
     getDeviceId(): string | undefined {
