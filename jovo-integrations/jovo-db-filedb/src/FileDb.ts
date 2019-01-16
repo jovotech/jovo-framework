@@ -98,7 +98,7 @@ export class FileDb implements Db {
 
     async delete(primaryKey: string) {
         const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
-        const users = data.length > 0 ? JSON.parse(data) : [];
+        let users = data.length > 0 ? JSON.parse(data) : [];
         let rowsAffected = 0;
         for (let i = 0; i < users.length; i++) {
             if (users[i][this.config.primaryKeyColumn] === primaryKey) {
@@ -106,6 +106,8 @@ export class FileDb implements Db {
                 rowsAffected++;
             }
         }
+        users = users.filter((n:object) => n); // remove null
+
         await this.saveFile(this.config.pathToFile, users);
         return Promise.resolve(rowsAffected);
     }
