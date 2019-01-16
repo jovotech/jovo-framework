@@ -248,11 +248,6 @@ test('test skip middleware', async () => {
     let testValue = '';
     parent.actionSet = new ActionSet(['middleware1'], parent);
 
-    const f1 = () => {};
-    const f2 = () => {};
-    const f3 = () => {};
-    const f4 = () => {};
-
     parent.middleware('middleware1')!.use(() => {
         testValue = 'test';
     });
@@ -264,6 +259,62 @@ test('test skip middleware', async () => {
     expect(testValue).toBe('');
 });
 
+test('test disable middleware', async () => {
+    const parent = new Parent();
+    let testValue = '';
+    parent.actionSet = new ActionSet(['middleware1'], parent);
+
+    parent.middleware('middleware1')!.use(() => {
+        testValue = 'test';
+    });
+
+    parent.middleware('middleware1')!.disable();
+    // @ts-ignore
+    await parent.middleware('middleware1')!.run(undefined, true);
+
+    expect(testValue).toBe('');
+});
+
+test('test try/catch in sequential', async (done) => {
+    const parent = new Parent();
+    parent.actionSet = new ActionSet(['middleware1'], parent);
+    expect.assertions(1);
+
+    const f1 = () => {
+        throw new Error('Middleware Error');
+    };
+
+    parent.middleware('middleware1')!.use(f1);
+
+    try {
+        // @ts-ignore
+        await parent.middleware('middleware1')!.run(undefined);
+    } catch (e) {
+        expect(e).toEqual(new Error('Middleware Error'));
+        done();
+    }
+
+});
+test('test try/catch in parallel', async (done) => {
+    const parent = new Parent();
+    parent.actionSet = new ActionSet(['middleware1'], parent);
+    expect.assertions(1);
+
+    const f1 = () => {
+        throw new Error('Middleware Error');
+    };
+
+    parent.middleware('middleware1')!.use(f1);
+
+    try {
+        // @ts-ignore
+        await parent.middleware('middleware1')!.run(undefined, true);
+    } catch (e) {
+        expect(e).toEqual(new Error('Middleware Error'));
+        done();
+    }
+
+});
 
 function delay() {
     return new Promise(resolve => setTimeout(resolve, 250));

@@ -73,10 +73,13 @@ export class Middleware {
             if (concurrent) {
                 const promiseArr = [];
                 for (const fn of this.fns) {
-                    promiseArr.push(new Promise( async (resolve) => {
-                        await fn.apply(null, arguments);
-
-                        resolve();
+                    promiseArr.push(new Promise( async (resolve, reject) => {
+                        try {
+                            await fn.apply(null, arguments);
+                            resolve();
+                        } catch (e) {
+                            reject(e);
+                        }
                     }));
                 }
                 await Promise.all(promiseArr);
