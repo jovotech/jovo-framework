@@ -272,7 +272,7 @@ const alexaHandlers = {
     },
 };
 
-const googleActionHandlers = {
+const googleAssistantHandlers = {
     HelloWorldIntent() {
         this.tell('Hello Google User.');
     },
@@ -280,7 +280,7 @@ const googleActionHandlers = {
 
 app.setHandler(handlers);
 app.setAlexaHandler(alexaHandlers);
-app.setGoogleActionHandler(googleActionHandlers);
+app.setGoogleAssistantHandler(googleAssistantHandlers);
 ```
 
 
