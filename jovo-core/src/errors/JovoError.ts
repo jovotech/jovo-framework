@@ -13,13 +13,13 @@ export class JovoError extends Error {
     hint: string | undefined;
     seeMore: string | undefined;
 
-    constructor(msg: string,
+    constructor(message: string,
                 code: ErrorCode | string = ErrorCode.ERR,
                 module?: string,
                 details?: string,
                 hint?: string,
                 seeMore?: string) {
-        super(msg);
+        super(message);
         this.module = module;
         this.details = details;
         this.hint = hint;
