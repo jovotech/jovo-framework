@@ -13,6 +13,7 @@ const samples: {[key: string]: string} = {
     'System.ExceptionEncountered': 'System.ExceptionEncountered.json',
     'PlaybackController.PlayCommandIssued': 'PlaybackController.PlayCommandIssued.json',
     'AlexaSkillEvent.SkillDisabled': 'AlexaSkillEvent.SkillDisabled.json',
+    'Display.ElementSelected': 'Display.ElementSelected.json',
 };
 
 export class AlexaRequestBuilder implements RequestBuilder {

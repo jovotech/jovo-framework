@@ -46,4 +46,32 @@ describe('test Display functions', () => {
         });
     });
 
+
+    test('test ON_ELEMENT_SELECTED with nested token as function', async (done) => {
+        app.setHandler({
+            ON_ELEMENT_SELECTED: {
+                token() {
+                    done();
+
+                }
+            },
+        });
+
+        const request:JovoRequest = await t.requestBuilder.rawRequestByKey('Display.ElementSelected');
+
+        app.handle(ExpressJS.dummyRequest(request));
+
+    });
+    test('test ON_ELEMENT_SELECTED', async (done) => {
+        app.setHandler({
+            ON_ELEMENT_SELECTED() {
+                done();
+            },
+        });
+
+        const request:JovoRequest = await t.requestBuilder.rawRequestByKey('Display.ElementSelected');
+
+        app.handle(ExpressJS.dummyRequest(request));
+
+    });
 });
