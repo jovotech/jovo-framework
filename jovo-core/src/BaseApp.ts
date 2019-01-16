@@ -29,8 +29,6 @@ export class BaseApp extends Extensible {
 
     $data: AppData = {};
 
-    actionSet: ActionSet;
-
     constructor(config?: BaseAppConfig) {
         super(config);
 
