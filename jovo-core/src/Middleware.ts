@@ -66,8 +66,9 @@ export class Middleware {
             // before middleware available?
             if (this.parent.hasMiddleware(`before.${this.name}`)) {
                 await this.parent.middleware(`before.${this.name}`)!.run(obj);
+            } else {
+                this.parent.emit(`before.${this.name}`, obj);
             }
-            this.parent.emit(`before.${this.name}`, obj);
 
             if (concurrent) {
                 const promiseArr = [];
@@ -90,10 +91,11 @@ export class Middleware {
             // after middleware available?
             if (this.parent.hasMiddleware(`after.${this.name}`)) {
                 await this.parent.middleware(`after.${this.name}`)!.run(obj);
+            } else {
+                this.parent.emit(`after.${this.name}`, obj);
             }
 
 
-            this.parent.emit(`after.${this.name}`, obj);
             // LOGGING
             if (this.parent.constructor.name === 'App') {
                 if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {
@@ -117,6 +119,7 @@ export class Middleware {
     disable() {
         this.enabled = false;
     }
+
 
     /**
      * Disables middleware
