@@ -20,7 +20,7 @@ export class Firestore implements Db {
     firestore?: firebase.firestore.Firestore;
     
     constructor() {
-        this.firebaseAdmin = undefined;
+
     }
 
     install(app: BaseApp) {
