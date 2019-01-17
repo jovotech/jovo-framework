@@ -1,10 +1,10 @@
 import {ResponseBuilder, JovoResponse} from "jovo-core";
 import {DialogflowResponse} from "./DialogflowResponse";
 
-export class DialogflowResponseBuilder implements ResponseBuilder {
+export class DialogflowResponseBuilder implements ResponseBuilder<DialogflowResponse> {
     platform: string;
     platformResponseClazz: JovoResponse;
-    create(json: any) { // tslint:disable-line
+    create(json: any): DialogflowResponse { // tslint:disable-line
         const dialogflowResponse = DialogflowResponse.fromJSON(json) as DialogflowResponse;
         if (dialogflowResponse.payload) {
             // @ts-ignore
