@@ -37,8 +37,8 @@ Inside your `config.js` file you have to set your `credential` and your `databas
 db: {
     Firestore: {
         credential: require('<path-to-credential-json-file>'),
-        databaseURL: 'https://acctest-d7944.firebaseio.com',
-        collectionName: 'UserData'
+        databaseURL: '<databaseURL>',
+        collectionName: '<collectionName>'
     }
 }
 ```
