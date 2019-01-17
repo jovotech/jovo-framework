@@ -229,6 +229,24 @@ export class AudioPlayer {
      * @param {string} url
      * @return {AudioPlayerPlugin}
      */
+    addBackgroundImage(url: string) {
+        if (!this.metaData) {
+            this.metaData = {};
+        }
+        _set(this.metaData, 'backgroundImage', {
+            sources: [
+                { url }
+            ]
+        });
+        return this;
+    }
+
+    /**
+     * Adds an image to be displayed behind the track information
+     * @deprecated Please use addBackgroundImage instead
+     * @param {string} url
+     * @return {AudioPlayerPlugin}
+     */
     addBackground(url: string) {
         if (!this.metaData) {
             this.metaData = {};
