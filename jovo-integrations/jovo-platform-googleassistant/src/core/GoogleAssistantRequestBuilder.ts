@@ -8,7 +8,7 @@ const samples: {[key: string]: string} = {
 
 };
 
-export class GoogleAssistantRequestBuilder implements RequestBuilder {
+export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActionRequest> {
     type = 'GoogleAction';
 
     launch(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
