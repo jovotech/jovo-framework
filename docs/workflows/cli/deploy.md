@@ -56,7 +56,7 @@ You can then deploy your Alexa Skill project with the Jovo CLI:
 $ jovo deploy
 
 # Deploy only to Alexa
-$ jovo deploy --platform AlexaSkill
+$ jovo deploy --platform alexaSkill
 
 # Deploy to specific ASK Profile
 $ jovo deploy --ask-profile <profileName>
