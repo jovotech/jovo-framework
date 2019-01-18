@@ -1,5 +1,12 @@
 # Jovo Framework Changelog
 
+
+## 2.0.9 (January 16, 2019)
+* `jovo-core` Fixed throw Error in parallel execution
+* `jovo-core` Fixed middleware bug issue #346
+* `jovo-db-filedb` Fixed null values in db.json after delete
+
+
 ## 2.0.8 (January 15, 2019)
 * `jovo-platform-alexa` [#344](https://github.com/jovotech/jovo-framework-nodejs/pull/344) showVideo(...) should not drop session attributes [@IGx89](https://github.com/IGx89)
 * `jovo-core` Refactored handler core to provide a request-specific (Alexa handler, GoogleAssistant handler) handler execution
