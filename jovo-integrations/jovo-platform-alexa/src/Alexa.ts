@@ -7,7 +7,7 @@ import {
     Extensible,
     Platform,
     TestSuite,
-    HandleRequest, ActionSet, ExtensibleConfig,Jovo
+    HandleRequest, ActionSet, ExtensibleConfig, Jovo, EnumRequestType
 } from "jovo-core";
 import {AlexaSkill} from "./core/AlexaSkill";
 import {AlexaCore} from "./modules/AlexaCore";
@@ -28,6 +28,7 @@ import {GadgetControllerPlugin} from "./modules/GadgetControllerPlugin";
 
 export interface Config extends ExtensibleConfig {
     allowedSkillIds: string[];
+    defaultResponseOnFail: boolean;
     handlers?: any; //tslint:disable-line
 }
 
@@ -39,6 +40,7 @@ export class Alexa extends Extensible implements Platform {
     config: Config = {
         enabled: true,
         allowedSkillIds: [],
+        defaultResponseOnFail: false,
         plugin: {},
         handlers: undefined,
     };
@@ -70,6 +72,20 @@ export class Alexa extends Extensible implements Platform {
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
         app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
+
+
+        app.middleware('fail')!.use((handleRequest: HandleRequest) => {
+            if (!handleRequest.jovo) {
+                return;
+            }
+
+            if (this.config.defaultResponseOnFail) {
+                if (!_get(handleRequest.jovo.$handlers, EnumRequestType.ON_ERROR)) {
+                    app.middleware('response')!.run(handleRequest);
+                }
+            }
+        });
+
 
         this.use(
             new AlexaCore(),
