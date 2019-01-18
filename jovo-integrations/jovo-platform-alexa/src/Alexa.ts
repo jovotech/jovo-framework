@@ -105,7 +105,7 @@ export class Alexa extends Extensible implements Platform {
 
         Jovo.prototype.$alexaSkill = undefined;
         Jovo.prototype.alexaSkill = function() {
-            if (this.constructor.name !== 'AlexaSkill') {
+            if (this.constructor.name !== 'AlexaSkill'  ) {
                 throw Error(`Can't handle request. Please use this.isAlexaSkill()`);
             }
             return this as AlexaSkill;
