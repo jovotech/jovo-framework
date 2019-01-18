@@ -9,7 +9,7 @@ export { verifiedServer as WebhookVerified } from './server';
 export { ExpressJS } from './hosts/ExpressJS';
 export { Lambda } from './hosts/Lambda';
 export { AzureFunction } from './hosts/AzureFunction';
-
+export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 
 export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router } from './middleware/Router';
