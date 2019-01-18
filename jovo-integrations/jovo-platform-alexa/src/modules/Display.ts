@@ -44,6 +44,21 @@ export class Display implements Plugin {
 
 
         /**
+         * Adds apl directive
+         * @public
+         * @param {*} directive
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.addAplDirective = function(directive: any) { // tslint:disable-line
+            const directives = _get(this.$output, 'Alexa.Apl', []);
+            directives.push(directive);
+            _set(this.$output, 'Alexa.Apl',directive);
+
+            return this;
+        };
+
+
+        /**
          * Shows video on Echo Show
          * @public
          * @param {string} url
@@ -104,6 +119,17 @@ export class Display implements Plugin {
                 // and skips adding session attributes due to shouldEndSession being true at that point)
                 if (alexaSkill.$session && alexaSkill.$session.$data) {
                     _set(response, 'sessionAttributes', alexaSkill.$session.$data);
+                }
+            }
+        }
+
+        if ((alexaSkill.$request! as AlexaRequest).hasAPLInterface()) {
+            if (_get(output, 'Alexa.Apl')) {
+                if (!_get(response, 'response.directives')) {
+                    _set(response, 'response.directives',
+                        [_get(output, 'Alexa.Apl')]);
+                } else {
+                    _get(response, 'response.directives').push(_get(output, 'Alexa.Apl'));
                 }
             }
         }

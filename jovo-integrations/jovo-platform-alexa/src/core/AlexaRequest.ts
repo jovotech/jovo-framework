@@ -235,7 +235,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {boolean}
      */
     hasScreenInterface() {
-        return typeof _get(this.getSupportedInterfaces(), 'Display') !== 'undefined';
+        return this.hasDisplayInterface() || this.hasAPLInterface();
     }
 
     /**
@@ -271,6 +271,11 @@ export class AlexaRequest implements JovoRequest {
                     'markupVersion': '1.0',
                 },
                 'VideoApp': {},
+                'Alexa.Presentation.APL': {
+                    'runtime': {
+                        'maxVersion': '1.0'
+                    }
+                }
             });
         }
         return this;

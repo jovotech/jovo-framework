@@ -329,12 +329,12 @@ declare module './core/AlexaSkill' {
 
 
         /**
-         * Shows hint on Echo Show
+         * Adds apl directive
          * @public
-         * @param {*} text
+         * @param {*} directive
          * @return {AlexaSkill}
          */
-        showHint(text: string): this;
+        addAplDirective(directive: any): this; // tslint:disable-line
 
 
         /**

@@ -1,0 +1,20 @@
+{
+  "name": "jovo-examples-alexa-apl",
+  "version": "2.0.10",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^2.0.9",
+    "jovo-platform-alexa": "^2.0.10",
+    "jovo-plugin-debugger": "^2.0.8"
+  }
+}
