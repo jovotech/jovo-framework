@@ -1,5 +1,12 @@
 # Jovo Framework Changelog
 
+## 2.0.10 (January 18, 2019)
+* `jovo-db-firestore` [#350](https://github.com/jovotech/jovo-framework-nodejs/pull/350) ✨ Adds Google Firestore integration [@KaanKC](https://github.com/IGx89)
+* `jovo-core` [#349](https://github.com/jovotech/jovo-framework-nodejs/pull/349) TestSuite is now generic, with platform-specific interfaces available [@IGx89](https://github.com/IGx89)
+* `jovo-platform-alexa` Fixed hasScreenInterface check in DisplayTemplate requests
+* `jovo-plugin-debugger` Added setAPLInterface to Echo Show/Echo Spot requests
+* `jovo-platform-alexa` Added `addAplDirective()` helper method
+
 
 ## 2.0.9 (January 16, 2019)
 * `jovo-core` Fixed throw Error in parallel execution
