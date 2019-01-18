@@ -74,8 +74,7 @@ export class Display implements Plugin {
         const output = alexaSkill.$output;
         const response = alexaSkill.$response as AlexaResponse;
 
-        //TODO:
-        // if (alexaSkill.$request.hasScreenInterface()) {
+        if (alexaSkill.$request!.hasScreenInterface()) {
             if (_get(output, 'Alexa.DisplayTemplate')) {
 
                 _set(response, 'response.directives',
@@ -83,31 +82,31 @@ export class Display implements Plugin {
                 );
             }
 
-        if (_get(output, 'Alexa.DisplayHint')) {
-            if (!_get(response, 'response.directives')) {
+            if (_get(output, 'Alexa.DisplayHint')) {
+                if (!_get(response, 'response.directives')) {
+                    _set(response, 'response.directives',
+                        [_get(output, 'Alexa.DisplayHint')]);
+                } else {
+                    _get(response, 'response.directives').push(_get(output, 'Alexa.DisplayHint'));
+                }
+            }
+
+            if (_get(output, 'Alexa.VideoApp')) {
+                    //TODO: doesn't work with ask
                 _set(response, 'response.directives',
-                    [_get(output, 'Alexa.DisplayHint')]);
-            } else {
-                _get(response, 'response.directives').push(_get(output, 'Alexa.DisplayHint'));
+                    [_get(output, 'Alexa.VideoApp')]
+                );
+                if (_get(response, 'response.shouldEndSession')) {
+                    delete response.response.shouldEndSession;
+                }
+
+                // set sessionAttributes (necessary since AlexaCore's handler runs before us
+                // and skips adding session attributes due to shouldEndSession being true at that point)
+                if (alexaSkill.$session && alexaSkill.$session.$data) {
+                    _set(response, 'sessionAttributes', alexaSkill.$session.$data);
+                }
             }
         }
-
-        if (_get(output, 'Alexa.VideoApp')) {
-                //TODO: doesn't work with ask
-            _set(response, 'response.directives',
-                [_get(output, 'Alexa.VideoApp')]
-            );
-            if (_get(response, 'response.shouldEndSession')) {
-                delete response.response.shouldEndSession;
-            }
-
-            // set sessionAttributes (necessary since AlexaCore's handler runs before us
-            // and skips adding session attributes due to shouldEndSession being true at that point)
-            if (alexaSkill.$session && alexaSkill.$session.$data) {
-                _set(response, 'sessionAttributes', alexaSkill.$session.$data);
-            }
-        }
-        // }
     }
 }
 
