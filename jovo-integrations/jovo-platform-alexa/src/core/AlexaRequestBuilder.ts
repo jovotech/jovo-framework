@@ -16,7 +16,7 @@ const samples: {[key: string]: string} = {
     'Display.ElementSelected': 'Display.ElementSelected.json',
 };
 
-export class AlexaRequestBuilder implements RequestBuilder {
+export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
      type = 'AlexaSkill';
 
     async launch(json?: any): Promise<AlexaRequest> { // tslint:disable-line

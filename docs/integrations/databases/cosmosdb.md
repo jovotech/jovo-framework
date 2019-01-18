@@ -4,7 +4,6 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 
 * [Introduction](#introduction)
 * [Configuration](#configuration)
-* [Troubleshooting](#troubleshooting)
 
 > Tutorial: [Deploy to Azure](https://www.jovo.tech/tutorials/deploy-to-azure)
 

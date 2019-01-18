@@ -23,6 +23,7 @@ Name | Description
 [MySQL](./mysql.md './databases/mysql') | The open source relational database
 [MongoDB](./mongodb.md './databases/mongodb') | widely supported documented-oriented NoSQL-database
 [Cosmos DB](./cosmosdb.md './databases/cosmosdb') | Database service by Azure
+[Firestore](./firestore.md './databases/firestore') | NoSQL database by Google Firebase
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",

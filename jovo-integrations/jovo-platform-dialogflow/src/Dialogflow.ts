@@ -10,6 +10,7 @@ import {DialogflowAgent} from "./DialogflowAgent";
 import {DialogflowCore} from "./DialogflowCore";
 import {DialogflowRequestBuilder} from "./core/DialogflowRequestBuilder";
 import {DialogflowResponseBuilder} from "./core/DialogflowResponseBuilder";
+import {DialogflowTestSuite} from './core/Interfaces';
 
 export interface DialogflowConfig extends ExtensibleConfig {
 }
@@ -42,7 +43,7 @@ export class Dialogflow extends Extensible implements Platform {
         ], this);
     }
 
-    makeTestSuite() {
+    makeTestSuite(): DialogflowTestSuite {
         return new TestSuite(new DialogflowRequestBuilder(), new DialogflowResponseBuilder());
     }
 

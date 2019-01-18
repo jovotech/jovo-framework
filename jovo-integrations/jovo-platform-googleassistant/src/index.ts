@@ -1,4 +1,5 @@
 export { GoogleAssistant } from './GoogleAssistant';
+export { GoogleAssistantTestSuite } from './core/Interfaces';
 export { BasicCard } from './response/BasicCard';
 export { Carousel } from './response/Carousel';
 export { CarouselItem } from './response/CarouselItem';

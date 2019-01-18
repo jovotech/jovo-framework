@@ -160,6 +160,7 @@ MongoDB | Save user specific data in a MongoDB database | [📝](./docs/integrat
 MySQL | Save user specific data in a MySQL database | [📝](./docs/integrations/databases/mysql.md)
 Google Datastore | Save user specific data using Google Datastore | [📝](./docs/integrations/databases/google-datastore.md)
 Azure Cosmos DB | Save user specific data using Azure CosmosDB | [📝](./docs/integrations/databases/cosmosdb.md)
+Google Firestore | Save user specific data in a NoSQL database by Google Firebase | [📝](./docs/integrations/databases/firestore.md)
 
 #### Analytics Integrations
 

@@ -23,6 +23,7 @@ import {GoogleActionRequest} from "./core/GoogleActionRequest";
 import {GoogleActionResponse} from "./core/GoogleActionResponse";
 import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilder";
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
+import {GoogleAssistantTestSuite} from './core/Interfaces';
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
@@ -117,7 +118,7 @@ export class GoogleAssistant extends Extensible implements Platform {
 
     }
 
-    makeTestSuite() {
+    makeTestSuite(): GoogleAssistantTestSuite {
         this.remove('DialogflowNlu');
         this.initDialogflow();
         return new TestSuite(this.requestBuilder, this.responseBuilder);

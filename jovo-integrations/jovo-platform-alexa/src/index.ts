@@ -3,6 +3,7 @@ import {LinkAccountCard} from "./response/visuals/LinkAccountCard";
 export { AlexaRequestBuilder } from "./core/AlexaRequestBuilder";
 export { Alexa } from './Alexa';
 export { AlexaSkill } from './core/AlexaSkill';
+export { AlexaTestSuite } from './core/Interfaces';
 export { AlexaRequest } from './core/AlexaRequest';
 export { AlexaResponse } from './core/AlexaResponse';
 
