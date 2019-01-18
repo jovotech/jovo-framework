@@ -329,6 +329,15 @@ declare module './core/AlexaSkill' {
 
 
         /**
+         * Shows hint on Echo Show
+         * @public
+         * @param {*} text
+         * @return {AlexaSkill}
+         */
+        showHint(text: string): this;
+
+
+        /**
          * Adds apl directive
          * @public
          * @param {*} directive
