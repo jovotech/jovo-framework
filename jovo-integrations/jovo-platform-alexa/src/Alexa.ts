@@ -10,6 +10,7 @@ import {
     HandleRequest, ActionSet, ExtensibleConfig,Jovo
 } from "jovo-core";
 import {AlexaSkill} from "./core/AlexaSkill";
+import {AlexaTestSuite} from "./core/Interfaces";
 import {AlexaCore} from "./modules/AlexaCore";
 import {AudioPlayerPlugin} from "./modules/AudioPlayerPlugin";
 import {CanFulfillIntent} from "./modules/CanFulfillIntent";
@@ -111,7 +112,7 @@ export class Alexa extends Extensible implements Platform {
 
     }
 
-    makeTestSuite() {
+    makeTestSuite(): AlexaTestSuite {
         return new TestSuite(new AlexaRequestBuilder(), new AlexaResponseBuilder());
     }
 

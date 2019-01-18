@@ -1,3 +1,8 @@
+import { TestSuite } from "jovo-core";
+import { AlexaRequestBuilder } from "./AlexaRequestBuilder";
+import { AlexaResponseBuilder } from "./AlexaResponseBuilder";
+
+export interface AlexaTestSuite extends TestSuite<AlexaRequestBuilder, AlexaResponseBuilder> {}
 
 export interface HouseholdList {
     items: HouseholdListItem[];

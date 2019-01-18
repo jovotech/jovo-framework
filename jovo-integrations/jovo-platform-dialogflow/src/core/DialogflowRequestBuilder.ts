@@ -16,7 +16,7 @@ const samples: {[key: string]: {[key: string]: string} | string} = {
     }
 };
 
-export class DialogflowRequestBuilder implements RequestBuilder {
+export class DialogflowRequestBuilder implements RequestBuilder<DialogflowRequest> {
      type = 'DialogflowAgent';
      platform: string;
      platformRequestClazz: JovoRequest;
