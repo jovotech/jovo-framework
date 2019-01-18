@@ -9,11 +9,13 @@ const {
     ListTemplate1,
     ListTemplate2,
     ListTemplate3} = require('jovo-platform-alexa');
+const { JovoDebugger } = require('jovo-plugin-debugger');
 
 const app = new App();
 
 app.use(
-    new Alexa()
+    new Alexa(),
+    new JovoDebugger(),
 );
 
 
