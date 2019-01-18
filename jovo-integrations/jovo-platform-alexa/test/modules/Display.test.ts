@@ -1,6 +1,6 @@
 import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
-import {Alexa} from "../../src";
+import {Alexa, AlexaRequest} from "../../src";
 import _get = require('lodash.get');
 
 process.env.NODE_ENV = 'UNIT_TEST';
@@ -26,6 +26,9 @@ describe('test Display functions', () => {
         });
 
         const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        (launchRequest as AlexaRequest).setVideoInterface();
+
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('response', (handleRequest: HandleRequest) => {
