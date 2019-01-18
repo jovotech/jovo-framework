@@ -353,6 +353,10 @@
                         {
                             "title": "MongoDB",
                             "route": "databases/mongodb"
+                        },
+                        {
+                            "title": "Google Firestore",
+                            "route": "databases/firestore"
                         }
                     ]
                 },
