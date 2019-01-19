@@ -125,12 +125,14 @@ export class Display implements Plugin {
 
         if ((alexaSkill.$request! as AlexaRequest).hasAPLInterface()) {
             if (_get(output, 'Alexa.Apl')) {
-                if (!_get(response, 'response.directives')) {
-                    _set(response, 'response.directives',
-                        [_get(output, 'Alexa.Apl')]);
+                let directives = _get(response, 'response.directives', []);
+
+                if (Array.isArray(_get(output, 'Alexa.Apl'))) {
+                    directives = directives.concat(_get(output, 'Alexa.Apl'));
                 } else {
-                    _get(response, 'response.directives').push(_get(output, 'Alexa.Apl'));
+                    directives.push(_get(output, 'Alexa.Apl'));
                 }
+                _set(response, 'response.directives', directives);
             }
         }
     }
