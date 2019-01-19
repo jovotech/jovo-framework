@@ -52,7 +52,7 @@ export class Display implements Plugin {
         AlexaSkill.prototype.addAplDirective = function(directive: any) { // tslint:disable-line
             const directives = _get(this.$output, 'Alexa.Apl', []);
             directives.push(directive);
-            _set(this.$output, 'Alexa.Apl',directive);
+            _set(this.$output, 'Alexa.Apl',directives);
 
             return this;
         };
