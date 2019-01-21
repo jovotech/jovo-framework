@@ -81,7 +81,7 @@ This will start the development server on port `3000` and create a Jovo Webhook 
 
 In the Debugger, you can quickly test if the flow of your voice app works. For this example, click on the `LAUNCH` button, and then specify a name on the `MyNameIsIntent` button. The Debugger will create requests and run them agains your local webhook.
  
-> [Find out more about requests and responses here](../basic-concepts/requests-responses.md './requests-responses').
+> [Find out more about requests and responses here](../basic-concepts/requests-responses './requests-responses').
 
 
 ## Next Steps

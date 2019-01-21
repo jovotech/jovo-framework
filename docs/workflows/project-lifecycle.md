@@ -19,7 +19,7 @@ There are two main elements of a Jovo project:
 * `src` folder: The actual code of your app that is later hosted somewhere
 * Platform project related files, including `project.js`, `models` and `platforms` folders
 
-The two elements are connected by an `endpoint` that is used by the platform to send requests and receive responses ([learn more about Requests and Responses here](../basic-concepts/requests-responses.md './requests-responses')). This endpoint is where your app logic is executed with code.
+The two elements are connected by an `endpoint` that is used by the platform to send requests and receive responses ([learn more about Requests and Responses here](../basic-concepts/requests-responses './requests-responses')). This endpoint is where your app logic is executed with code.
 
 ![Two elements of a Jovo project: Platform Project and Code](../img/project-lifecycle-elements.png)
 

@@ -53,7 +53,20 @@
                 },
                 {
                     "title": "Requests & Responses",
-                    "route": "requests-responses"
+                    "content": [
+                        {
+                            "title": "Requests & Responses",
+                            "route": "requests-responses"
+                        },
+                        {
+                            "title": "Request Object",
+                            "route": "requests-responses/request"
+                        },
+                        {
+                            "title": "Response Object",
+                            "route": "requests-responses/response"
+                        }
+                    ]
                 },
                 {
                     "title": "Language Model",

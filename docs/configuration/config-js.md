@@ -57,7 +57,7 @@ Below are references to all the general configurations that can be added to the 
 
 Category | Name | Description
 :--- | :--- | :---
-Routing | [intentMap](../basic-concepts/routing/intents.md#intentmap './logic/intents#intentmap') | Maps incoming intents to specified intent names
+Routing | [intentMap](../basic-concepts/routing/intents.md#intentmap './routing/intents#intentmap') | Maps incoming intents to specified intent names
  | | [intentsToSkipUnhandled](../basic-concepts/routing/intents.md#intentstoskipunhandled './routing/intents#intentstoskipunhandled') | Intents that should not be mapped to 'Unhandled' when not found in a certain state
  | | [inputMap](../basic-concepts/routing/input.md#inputmap './routing/input#inputmap') | Maps incoming input (slots and parameters) to specified input names
  Data | [logging](../basic-concepts/data/logging.md './data/logging') | Logs both requests and responses

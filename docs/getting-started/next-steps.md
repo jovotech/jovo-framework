@@ -11,7 +11,7 @@ After successfully installing your first Jovo project, here's how we recommend y
 You installed your first Jovo voice app and got your first "Hello World." Now is the time to dig a little deeper to understand how everything works.
 
 We recommend the following resources that introduce basic concepts:
-* [Requests and Responses](../basic-concepts/requests-responses.md './requests-responses')
+* [Requests and Responses](../basic-concepts/requests-responses './requests-responses')
 * [Language Model](../basic-concepts/model './model')
 * [Routing](../basic-concepts/routing './routing')
 * [Data](../basic-concepts/data './data')

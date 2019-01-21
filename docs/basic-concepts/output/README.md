@@ -40,7 +40,7 @@ this.tell('<speak>Hello <say-as interpret-as="spell-out">World</say-as></speak>'
 
 Important: The session ends after a `tell` method, this means the mic is off and there is no more interaction between the user and your app until the user invokes it again. 
 
-> [Learn more about sessions here](../requests-responses.md  './requests-responses').
+> [Learn more about sessions here](../requests-responses  './requests-responses').
 
 ### ask
 
@@ -64,7 +64,7 @@ Google Assistant offers the functionality to use multiple reprompts.
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
-> You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
+> You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts '../google-assistant#multiple-reprompts').
 
 ### repeat
 
