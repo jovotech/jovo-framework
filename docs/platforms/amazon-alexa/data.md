@@ -170,22 +170,6 @@ async getMobileNumberIntent() {
 },
 ```
 
-```javascript
-this.$alexaSkill.$user.getMobileNumber();
-
-// Example
-this.$alexaSkill.$user.getMobileNumber()
-    .then((mobileNumber) => {
-        this.tell(`Your number is ${mobileNumber.countryCode} ${mobileNumber.phoneNumber}`);
-    }).catch((error) => {
-        if (error.code === 'NO_USER_PERMISSION') {
-            this.$alexaSkill.showAskForContactPermissionCard('mobile_number')
-                .tell(`Please grant access to your mobile number.`);
-        }
-    });
-
-```
-
 ## Account Linking
 
 You can find the documentation about Account Linking here: [App Logic > Data](../../basic-concepts/data/README.md#account-linking, '../data#account-linking')
