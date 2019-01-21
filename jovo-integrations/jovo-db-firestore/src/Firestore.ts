@@ -18,7 +18,7 @@ export class Firestore implements Db {
     isCreating = false;
     firebaseAdmin?: any; // tslint:disable-line
     firestore?: firebase.firestore.Firestore;
-    
+
     constructor() {
 
     }
@@ -47,6 +47,7 @@ export class Firestore implements Db {
 
     uninstall(app: BaseApp) {
     }
+
 
     /**
      * Throws JovoError if collectionName, credential or databaseURL was not set inside config.js
@@ -86,6 +87,7 @@ export class Firestore implements Db {
         }
     }
 
+
     /**
      * Returns object for given primaryKey
      * @param {string} primaryKey
@@ -98,20 +100,22 @@ export class Firestore implements Db {
 
     }
 
+
     /**
      * Saves object as value for key (default: "userData") inside document (primary key)
-     * @param {string} primaryKey 
-     * @param {string} key 
-     * @param {object} data 
+     * @param {string} primaryKey
+     * @param {string} key
+     * @param {object} data
      */
     async save(primaryKey: string, key: string, data: object): Promise<void> {
         const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.set({ [key]: data }, {merge: true});
     }
 
+
     /**
      * Deletes document referred to by primaryKey
-     * @param {string} primaryKey 
+     * @param {string} primaryKey
      */
     async delete(primaryKey: string): Promise<void> {
         const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
