@@ -13,6 +13,7 @@ const samples: {[key: string]: string} = {
     'System.ExceptionEncountered': 'System.ExceptionEncountered.json',
     'PlaybackController.PlayCommandIssued': 'PlaybackController.PlayCommandIssued.json',
     'AlexaSkillEvent.SkillDisabled': 'AlexaSkillEvent.SkillDisabled.json',
+    'DialogDelegateRequest': 'DialogDelegateRequest.json',
     'Display.ElementSelected': 'Display.ElementSelected.json',
 };
 
