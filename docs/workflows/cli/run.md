@@ -63,7 +63,7 @@ Here is a list of integrations that work with `jovo run`:
 
 Command | Description 
 ------------ | ------------- 
-[`--bst-proxy`](#bst-proxy) | Creates a webhook URL for local testing and integrates with [Bespoken Analytics](../06_integrations/analytics)
+[`--bst-proxy`](#bst-proxy) | Creates a webhook URL for local testing and integrates with [Bespoken Analytics](../../integrations/analytics/bespoken.md '../analytics/bespoken')
 [`--watch`](#watch) | Uses `nodemon` to monitor changes and automatically restart the server
 
 
