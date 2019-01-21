@@ -3,9 +3,9 @@
 Learn more about the general architecture and lifecycle of voice app requests and responses.
 
 * [Introduction to Voice Interactions](#introduction-to-voice-interactions)
-    * [Request](#request)
+    * [Requests](#requests)
     * [Logic](#logic)
-    * [Response](#response)
+    * [Responses](#responses)
 * [Sessions](#sessions)
 
 ## Introduction to Voice Interactions
