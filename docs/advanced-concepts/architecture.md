@@ -12,14 +12,14 @@ Learn more about the modular architecture of the Jovo Framework.
 
 Since `v2`, the Jovo Framework has a flexible and extensible architecture that is split into different modules.
 
-With every [request and response](../basic-concepts/requests-responses.md './requests-responses') interaction pair, the framework runs through the following process:
+With every [request and response](../basic-concepts/requests-responses './requests-responses') interaction pair, the framework runs through the following process:
 
 Middleware | Description
 --- | --- 
 `setup` | First initialization of `app` object with first incoming request. Is executed once as long as `app` is alive
 `request` | Raw JSON request from platform gets processed. Can be used for authentication middlewares.
 `platform.init` | Determines which platform (e.g. `Alexa`, `GoogleAssistant`) sent the request. Initialization of abstracted `jovo` (`this`) object.
-`platform.nlu'` | Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. `Alexa`). Intents and inputs are set.
+`platform.nlu` | Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. `Alexa`). Intents and inputs are set.
 `nlu` | Request gets routed through external NLU (e.g. `Dialogflow` standalone). Intents and inputs are set.
 `user.load` | Initialization of user object. User data is retrieved from database.
 `router` | Request and NLU data (intent, input, state) is passed to router. intentMap and inputMap are executed. Handler path is generated. 

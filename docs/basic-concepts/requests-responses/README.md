@@ -30,6 +30,8 @@ The `request` is the incoming data that the voice platform sends to your app's e
 
 and other things that might be relevant to your app. You can access the incoming request with `this.$request`.
 
+> [Find everything about the `$request` object here](./request.md './request').
+
 ### Logic
 
 The app logic is what happens between an incoming request and sending back a response to the voice platform.
@@ -51,6 +53,10 @@ The `response` is what you send back to the platform after the `request` has bee
 * Session data
 
 > [Find more information on Output here](./ouput './output').
+
+You can access the incoming request with `this.$response`.
+
+> [Find everything about the `$response` object here](./response.md './response').
 
 
 ## Sessions

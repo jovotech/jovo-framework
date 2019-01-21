@@ -11,7 +11,7 @@ In this section, you will learn more about the essentials of building the logic 
 
 ## Requests and Responses
 
-> Section [Requests and Responses](./requests-responses.md './requests-responses') provides an overview of the typical lifecycle of a voice user interaction.
+> Section [Requests and Responses](./requests-responses './requests-responses') provides an overview of the typical lifecycle of a voice user interaction.
 
 ## Language Model
 
