@@ -7,6 +7,8 @@
 * [Deploying to Azure](#deploying-to-azure)
 * [Data Persistence](#data-persistence)
 
+> Tutorial: [Deploy to Azure](https://www.jovo.tech/tutorials/deploy-to-azure)
+
 ## Function Configuration
 
 First, add the following export to your root `index.js`. If there's an existing export there, typically for AWS Lambda, remove it. This function is what gets called by the Azure Functions language worker process when an HTTP request comes in.
