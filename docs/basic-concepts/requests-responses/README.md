@@ -19,7 +19,7 @@ Each interaction between a user and a voice application consists of an interacti
 ![One Session](../img/session-tell.png)
 
 
-### Requests
+### Request
 
 The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists information like
 
@@ -44,7 +44,7 @@ Usually, this includes:
 > A great next step to learn more about the Jovo app logic is taking a look at [Routing](./routing './routing').
 
 
-### Responses
+### Response
 
 The `response` is what you send back to the platform after the `request` has been run through your app logic. It includes
 
