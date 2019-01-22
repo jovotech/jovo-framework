@@ -42,7 +42,7 @@ $ jovo -V
 
 ### Troubleshooting
 
-Find out more about technical requirements here: [Getting Started > Installation](../01_getting-started#technical-requirements './installation#technical-requirements').
+Find out more about technical requirements in our [Installation Guide](../../basic-concepts/installation/README.md#technical-requirements './installation#technical-requirements').
 
 If you had the CLI installed before the release of `v1.0`, and are running into problems after updating it to the newest version, please try to uninstall it globally before you install it again:
 
@@ -86,9 +86,9 @@ $ jovo new <directory>
 
 ![jovo run command](../img/jovo-run.png "jovo run command")
 
-You can use the `jovo run` command to start the development server in your `index.js` file, and then add the [Jovo Webhook](../jovo-webhook.md'../jovo-webhook') as an endpoint to the respective developer consoles.
+You can use the `jovo run` command to start the development server in your `index.js` file, and then add the [Jovo Webhook](../jovo-webhook.md '../jovo-webhook') as an endpoint to the respective developer consoles.
 
-Learn more here: [Configuration > Hosting](../configuration/hosting './Hosting').
+Learn more here: [Configuration > Hosting](../configuration/hosting './hosting').
 
 ```sh
 # Default
