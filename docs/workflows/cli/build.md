@@ -33,7 +33,7 @@ $ jovo build
 
 # Options
 $ jovo build [-p | --platform <platform>] [-r | --reverse] [-l | --locale <locale>] [-d | --deploy]
-  [-t | --target <target>] [-s | --src <src>] [--stage <stage>] [--endpoint <endpoint>] [--ask-profile <profileName>]
+  [-t | --target <target>] [-s | --src <src>] [--stage <stage>] [--endpoint <endpoint>] [--ask-profile <profileName>] [--overwrite]
 ```
 
 ### Reverse Build
@@ -50,13 +50,21 @@ $ jovo build -p alexaSkill --reverse
 $ jovo build -p googleAction --reverse
 ```
 
+This will prompt you if you want to overwrite the existing files or rather create a backup first. You can also skip this step and overwrite the files right away by using the `--overwrite` option:
+
+```sh
+# Alexa Skill with overwrite
+$ jovo build -p alexaSkill --reverse --overwrite
+
+# Google Action with overwrite
+$ jovo build -p googleAction --reverse --overwrite
+```
+
 
 
 ## Options
 
 `--platform`, `-p`: If you want to update all your platforms, you can leave it out and it will update the ones listed in `project.js`. If you want to update a specific platform folder you can pass the platform name as an argument: `alexaSkill` or `googleAction`.
-
-`--reverse`, `-r`: In this reverse process, you can create a [Jovo Language Model](../../basic-concepts/model '../model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
 
 `--locale`, `-l`: Specify the locale, which should be created/updated. Arguments: `en-US`, `de-DE`, et cetera. Default: All files in the `models` folder.
 
@@ -70,6 +78,9 @@ $ jovo build -p googleAction --reverse
 
 `--ask-profile`: Used in combination with `--deploy`. Specifies which profile set up in [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) should be used to deploy. Default: `default`.
 
+`--reverse`, `-r`: In this reverse process, you can create a [Jovo Language Model](../../basic-concepts/model '../model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
+
+`--overwrite`: Can be used together with the `--reverse` command. This ignores the question if the existing files should really be overwritten.
 
 
 <!--[metadata]: {"description": "Learn more about how to translate your Jovo Language Model into an Alexa Skill Interaction Model or a Dialogflow Agent with the jovo build CLI command.",
