@@ -1,6 +1,6 @@
 # Upgrading
 
-Learn how to upgrade an existing Jovo Framework app.
+Learn how to upgrade an existing Jovo Framework app. Also, take a look at our [Installation Guide](./README.md '../installation').
 
 * [Upgrading the Jovo Framework](#upgrading-the-jovo-framework)
    * [Minor Updates](#minor-updates)
@@ -53,6 +53,6 @@ $ npm remove -g jovo-cli
 $ sudo npm remove -g jovo-cli
 ```
 
-> For more information on installation and troubleshooting, take a look at our [Installation Guide](./installation.md './installation').
+> For more information on installation and troubleshooting, take a look at our [Installation Guide](./README.md '../installation').
 
 <!--[metadata]: {"description": "Learn how to upgrade an existing Jovo Framework app.", "route": "installation/upgrading"}-->
