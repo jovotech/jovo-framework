@@ -116,7 +116,7 @@ See the following tutorials for alternative ways to create language models on th
 
 To learn more about Jovo Language Models, take a look at [App Configuration > Models](../03_app-configuration/models './model').
 
-After the initial [`init`](#jovo-init) process, you can either run `build`  separately for each platform, or just let the CLI fetch the right information from the `app.json` file.
+You can either run `build`  separately for each platform, or just let the CLI fetch the right information from the `project.js` file.
 
 ```sh
 # Default
