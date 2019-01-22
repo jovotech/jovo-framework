@@ -8,7 +8,7 @@ Learn how to store user specific data to databases with the Jovo Persistence Lay
 
 ## Introduction
 
-The Jovo Database Interface is an abstraction layer for persisting data across sessions. By default, the file-based system [File DB](./file-db.md './file-db') will be used so you can start right away when prototyping locally.
+The Jovo Database Interface is an abstraction layer for persisting data across sessions. By default, the file-based system [File DB](./file-db.md './databases/file-db') will be used so you can start right away when prototyping locally.
 
 
 ## Available Integrations
