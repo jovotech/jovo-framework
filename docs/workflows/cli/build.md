@@ -17,7 +17,7 @@ Learn more about how to translate your Jovo Language Model into an Alexa Skill I
 $ jovo build
 ```
 
-> To learn more about Jovo Language Models, take a look at [Basic Concepts > Models](../../basic-concepts/model './model').
+> To learn more about Jovo Language Model, take a look at [Basic Concepts > Model](../../basic-concepts/model '../model').
 
 ## Workflow
 
@@ -40,7 +40,7 @@ $ jovo build [-p | --platform <platform>] [-r | --reverse] [-l | --locale <local
 
 ![jovo build reverse converter](../img/jovo-build-reverse.png "jovo build reverse command")
 
-In this reverse process, you can create a [Jovo Language Model](../../model './model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
+In this reverse process, you can create a [Jovo Language Model](../../basic-concepts/model '../model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
 
 ```sh
 # Alexa Skill
@@ -56,7 +56,7 @@ $ jovo build -p googleAction --reverse
 
 `--platform`, `-p`: If you want to update all your platforms, you can leave it out and it will update the ones listed in `project.js`. If you want to update a specific platform folder you can pass the platform name as an argument: `alexaSkill` or `googleAction`.
 
-`--reverse`, `-r`: In this reverse process, you can create a [Jovo Language Model](../../model './model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
+`--reverse`, `-r`: In this reverse process, you can create a [Jovo Language Model](../../basic-concepts/model '../model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
 
 `--locale`, `-l`: Specify the locale, which should be created/updated. Arguments: `en-US`, `de-DE`, et cetera. Default: All files in the `models` folder.
 
