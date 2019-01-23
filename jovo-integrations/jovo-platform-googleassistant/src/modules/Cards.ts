@@ -196,7 +196,7 @@ export class Cards implements Plugin {
             richResponseItems.push({
                 basicCard: new BasicCard()
                     .setTitle(_get(cardSimpleCard, 'title'))
-                    .setFormattedText(_get(cardSimpleCard, 'text'))
+                    .setFormattedText(_get(cardSimpleCard, 'content'))
             });
             _set(googleAction.$response, 'richResponse.items', richResponseItems);
         }
@@ -207,7 +207,7 @@ export class Cards implements Plugin {
             richResponseItems.push({
                 basicCard: new BasicCard()
                     .setTitle(_get(cardImageCard, 'title'))
-                    .setFormattedText(_get(cardImageCard, 'text'))
+                    .setFormattedText(_get(cardImageCard, 'content'))
                     .setImage({
                         url: _get(cardImageCard, 'imageUrl'),
                         accessibilityText: _get(cardImageCard, 'title'),
