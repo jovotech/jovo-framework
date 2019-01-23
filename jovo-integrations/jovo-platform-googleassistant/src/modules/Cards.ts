@@ -196,7 +196,7 @@ export class Cards implements Plugin {
             richResponseItems.push({
                 basicCard: new BasicCard()
                     .setTitle(_get(cardSimpleCard, 'title'))
-                    .setFormattedText(_get(cardSimpleCard, 'text'))
+                    .setFormattedText(_get(cardSimpleCard, 'content'))
             });
             _set(googleAction.$response, 'richResponse.items', richResponseItems);
         }
