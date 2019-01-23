@@ -65,7 +65,7 @@ this.$googleAction.showBasicCard(basicCard);
 ```
 [Official Documentation](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L44)
+[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L32)
 
 ## Table Card
 
@@ -104,7 +104,7 @@ this.$googleAction.showTable(tableCard);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#table_card)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L55)
+[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L46)
 
 ## Option Item
 
@@ -131,6 +131,8 @@ itemOne
 
 ```
 
+[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
+
 ### List Selector
 
 The list selector can be used to display a vertical list of selectable items.
@@ -154,7 +156,7 @@ this.$googleAction.showList(list);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#list_selector)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L77)
+[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
 
 ### Carousel Selector
 
@@ -175,7 +177,7 @@ this.$googleAction.showCarousel(carousel);
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/responses#carousel_selector)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L104)
+[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L126)
 
 ### ON_ELEMENT_SELECTED
 
