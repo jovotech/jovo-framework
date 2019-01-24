@@ -75,7 +75,7 @@ export class GoogleAction extends Jovo {
      * @param {string|SpeechBuilder} speech
      * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
      */
-    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string) {
+    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string[]) {
         delete this.$output.tell;
 
         if (!reprompt) {
@@ -84,7 +84,7 @@ export class GoogleAction extends Jovo {
 
         this.$output.ask = {
             speech: speech.toString(),
-            reprompt: reprompt.toString() // TODO: Array should work as well
+            reprompt: Array.isArray(reprompt) ? reprompt : reprompt.toString(),
         };
         return this;
     }
