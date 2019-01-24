@@ -34,7 +34,7 @@ this.$googleAction.askForName(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.getRequest().getUser();
+    let user = this.$googleAction.$request.getUser();
 
     // Check, if you have the necessary permission
     if (user.permissions.indexOf('NAME') > -1) {
@@ -65,17 +65,17 @@ this.$googleAction.askForZipCodeAndCity(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.getRequest().getUser();
+    let user = this.$googleAction.$request.getUser();
 
     if (user.permissions.indexOf('DEVICE_COARSE_LOCATION') > -1) {
-      let device = this.$googleAction.getRequest().getDevice();
+      let device = this.$googleAction.$request.getDevice();
       /*
         device.location.city
         device.location.zipCode
       */
     }
     if (user.permissions.indexOf('DEVICE_PRECISE_LOCATION') > -1) {
-      let device = this.$googleAction.getRequest().getDevice();
+      let device = this.$googleAction.$request.getDevice();
       /*
         device.location.coordinates.latitude
         device.location.coordinates.longitude
@@ -91,11 +91,11 @@ ON_PERMISSION() {
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/helpers#place_and_location)
 
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appAskForPermission.js)
+[Example](https://github.com/jovotech/jovo-framework/tree/master/examples/02_googleassistant/ask-for-x)
 
 ## Account Linking
 
-You can find the documentation about Account Linking here: [App Logic > Data](../../04_app-logic/02_data/README.md#account-linking, './data#account-linking')
+You can find the documentation about Account Linking here: [App Logic > Data](../../basic-concepts/data/README.md#account-linking, './data#account-linking')
 
 
 <!--[metadata]: {"description": "Learn more about how to use data with the Google Assistant",
