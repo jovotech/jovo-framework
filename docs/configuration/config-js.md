@@ -160,7 +160,7 @@ db: {
 },
 ```
 
-> For project-related staging environments, take a look at [project.js](./project-js.md './project-js.md').
+> For project-related staging environments, take a look at [project.js](./project-js.md './project-js').
 
 
 <!--[metadata]: {"description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant", "route": "config-js"}-->

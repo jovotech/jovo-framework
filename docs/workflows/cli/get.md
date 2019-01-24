@@ -33,7 +33,7 @@ $ jovo get alexaSkill --skill-id <skill ID>
 $ jovo get googleAction --project-id <project ID>
 
 # Options
-$ jovo get alexaSkill [-s | --skill-id <skill ID>] [--project-id <project ID>] [-l | --locale] [--list-skills] [--ask-profile] [-t | --target <target>] [--stage <stage>] [-r | --reverse] [-b | --build]
+$ jovo get alexaSkill [-s | --skill-id <skill ID>] [--project-id <project ID>] [-l | --locale] [--list-skills] [--ask-profile] [-t | --target <target>] [--stage <stage>] [-r | --reverse] [-b | --build] [--overwrite]
 ```
 
 ## Options
@@ -55,6 +55,8 @@ $ jovo get alexaSkill [-s | --skill-id <skill ID>] [--project-id <project ID>] [
 `--reverse`, `-r`: Builds the Jovo language model out of the platform's language model.
 
 `--build`, `-b`: Only works in combination with `--reverse`. Will run `jovo build` after reversing the platform's language model.
+
+`--overwrite`: Forces existing files to be overwritten.
 
 
 <!--[metadata]: {"description": "Learn how to import an existing Alexa Skill or Google Action into Jovo with the jovo get CLI command.",
