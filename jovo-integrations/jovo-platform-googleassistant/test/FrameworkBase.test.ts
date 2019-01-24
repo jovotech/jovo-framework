@@ -1,6 +1,7 @@
 import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo, EnumRequestType} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
+import {LogLevel} from "../../../jovo-core/dist/src";
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -56,6 +57,7 @@ describe('test request types', () => {
 
         const request: JovoRequest = await t.requestBuilder.end();
         app.handle(ExpressJS.dummyRequest(request));
+
         app.on('response', (handleRequest: HandleRequest) => {
             expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.END);
             done();
@@ -681,7 +683,7 @@ describe('test handleOnRequest', () => {
         app.setHandler({
             ON_REQUEST(jovo: Jovo, d: Function) {
                 setTimeout(() => {
-                    jovo.$data.foo = 'bar3';
+                    this.$data.foo = 'bar3';
                     d();
                 }, 10);
             },
@@ -949,6 +951,24 @@ describe('test NEW_USER + NEW_SESSION + ON_REQUEST', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
     });
 });
+
+describe('test handleOnNewSession', () => {
+    test('no NEW_SESSION', async (done) => {
+
+        app.setHandler({
+            'LAUNCH'() {
+                expect(this.$data.foo).toBe(undefined);
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            done();
+        });
+    });
+});
 describe('test removeState', () => {
     test('test add followUpstate to session attributes', async (done) => {
         app.setHandler({
@@ -989,6 +1009,89 @@ describe('test followUpState', () => {
             done();
         });
     });
+});
+
+
+
+describe('test app listener', () => {
+    test('test onRequest', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+            },
+        });
+        app.onRequest((handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo).toBeUndefined();
+            expect(handleRequest.host.$request).toBeDefined();
+
+            done();
+        });
+
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+    test('test onResponse', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.tell('Hello World!');
+            },
+        });
+        app.onResponse((handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+
+    test('test onFail', async (done) => {
+        expect.assertions(1);
+        // @ts-ignore
+        process.env.JOVO_LOG_LEVEL = LogLevel.NONE;
+        app.setHandler({
+            LAUNCH() {
+                throw new Error('Error ABC');
+            },
+        });
+
+        app.onFail((handleRequest: HandleRequest) => {
+            expect(handleRequest.error!.message).toBe('Error ABC');
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+    test('test onError', async (done) => {
+        expect.assertions(1);
+        // @ts-ignore
+        process.env.JOVO_LOG_LEVEL = LogLevel.NONE;
+        app.setHandler({
+            LAUNCH() {
+                throw new Error('Error ABC');
+            },
+        });
+
+        app.onError((handleRequest: HandleRequest) => {
+            expect(handleRequest.error!.message).toBe('Error ABC');
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
 });
 function randomUserId() {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);

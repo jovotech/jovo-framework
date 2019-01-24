@@ -355,5 +355,11 @@ declare module './core/AlexaSkill' {
          * @param {string} subtitle
          */
         showVideo(url: string, title?: string, subtitle?: string): this;
+
+        /**
+         * Deletes shouldEndSession
+         * @public
+         */
+        deleteShouldEndSession(): this;
     }
 }

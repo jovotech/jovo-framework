@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants, EnumRequestType, Jovo} from "jovo-core";
+import {LogLevel, HandleRequest, JovoRequest, TestSuite, SessionConstants, EnumRequestType, Jovo} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "../src";
 
@@ -1009,6 +1009,91 @@ describe('test followUpState', () => {
         });
     });
 });
+
+
+
+describe('test app listener', () => {
+    test('test onRequest', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+            },
+        });
+        app.onRequest((handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo).toBeUndefined();
+            expect(handleRequest.host.$request).toBeDefined();
+
+            done();
+        });
+
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+    test('test onResponse', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.tell('Hello World!');
+            },
+        });
+        app.onResponse((handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+
+    test('test onFail', async (done) => {
+        expect.assertions(1);
+        // @ts-ignore
+        process.env.JOVO_LOG_LEVEL = LogLevel.NONE;
+        app.setHandler({
+            LAUNCH() {
+                throw new Error('Error ABC');
+            },
+        });
+
+        app.onFail((handleRequest: HandleRequest) => {
+            expect(handleRequest.error!.message).toBe('Error ABC');
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+    test('test onError', async (done) => {
+        expect.assertions(1);
+        // @ts-ignore
+        process.env.JOVO_LOG_LEVEL = LogLevel.NONE;
+        app.setHandler({
+            LAUNCH() {
+                throw new Error('Error ABC');
+            },
+        });
+
+        app.onError((handleRequest: HandleRequest) => {
+            expect(handleRequest.error!.message).toBe('Error ABC');
+            done();
+
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    });
+
+});
+
+
 const randomUserId = () => {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);
 };

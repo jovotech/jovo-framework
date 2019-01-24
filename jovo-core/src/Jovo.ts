@@ -353,7 +353,7 @@ export abstract class Jovo extends EventEmitter {
      * @param {string|SpeechBuilder} speech
      * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
      */
-    ask(speech: string | SpeechBuilder, reprompt?: string | SpeechBuilder) {
+    ask(speech: string | SpeechBuilder, reprompt?: string | SpeechBuilder | string[]) {
         delete this.$output.tell;
 
         if (!reprompt) {

@@ -1,16 +1,11 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "./../../src";
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
 let t: TestSuite;
 jest.setTimeout(550);
-const delay = (ms: number) => {
-    return new Promise(r => setTimeout(r, ms));
-};
 
 beforeEach(() => {
     app = new App();
@@ -54,5 +49,45 @@ describe('test requests', () => {
         app.handle(ExpressJS.dummyRequest(request));
     });
 
+    test('test empty response', async (done) => {
+        app.setHandler({
+            END() {
 
+            },
+        });
+        const request:JovoRequest = await t.requestBuilder.end();
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+
+            const response = handleRequest.jovo!.$response;
+            expect(response).toEqual({
+                version: '1.0',
+                response: { shouldEndSession: true },
+                sessionAttributes: {} });
+            done();
+        });
+    });
+
+
+    test('test deleteShouldEndSession', async (done) => {
+        app.setHandler({
+            // not a real case, but enough for the test
+            END() {
+                this.$alexaSkill!.deleteShouldEndSession();
+            },
+        });
+        const request:JovoRequest = await t.requestBuilder.end();
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+
+            const response = handleRequest.jovo!.$response;
+            expect(response).toEqual({
+                version: '1.0',
+                response: { },
+                sessionAttributes: {} });
+            done();
+        });
+    });
 });

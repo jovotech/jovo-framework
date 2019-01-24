@@ -10,10 +10,38 @@ process.on('unhandledRejection', (reason, p) => {
     console.log(reason.stack);
     console.log(reason);
 });
+
+
+process.on('uncaughtException', (err) => {
+
+    Log.red().error(Log.header('Error'));
+
+    Log.error('Message:');
+    Log.error(err.message);
+    Log.error();
+    Log.error('Stack:');
+    Log.error(err.stack);
+    Log.error();
+
+    if (err.message.indexOf('is not a function')) {
+        Log.error('Hint:');
+        Log.error('This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`');
+        Log.error();
+        Log.error('Learn more:');
+        Log.error('https://www.jovo.tech/docs/installation/upgrading');
+        Log.error();
+    }
+
+    Log.red().error(Log.header());
+
+
+});
+
 export interface BaseAppConfig extends ExtensibleConfig {
     inputMap?: {[key: string]: string};
 }
-process.env.JOVO_LOG_LEVEL = LogLevel.INFO+'';
+// @ts-ignore
+process.env.JOVO_LOG_LEVEL = LogLevel.INFO;
 
 export class BaseApp extends Extensible {
     private initialized = false;
@@ -149,6 +177,11 @@ export class BaseApp extends Extensible {
 
             Log.red().error(Log.header('Error'));
 
+            if (e.message.indexOf('is not a function')) {
+                e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
+                e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
+            }
+
 
             if (e.code) {
                 Log.error('Code:');
@@ -176,7 +209,7 @@ export class BaseApp extends Extensible {
 
             if (e.seeMore) {
                 Log.error();
-                Log.error('See more:');
+                Log.error('Learn more:');
                 Log.error(e.seeMore);
             }
 
@@ -196,6 +229,18 @@ export class BaseApp extends Extensible {
             Log.red().error(Log.header());
             await this.middleware('fail')!.run(handleRequest);
         }
+    }
+
+    onRequest(callback: Function) {
+        this.on('request', (handleRequest: HandleRequest) => {
+            callback(handleRequest);
+        });
+    }
+
+    onResponse(callback: Function) {
+        this.on('response', (handleRequest: HandleRequest) => {
+            callback(handleRequest);
+        });
     }
 
     onError(callback: Function) {
