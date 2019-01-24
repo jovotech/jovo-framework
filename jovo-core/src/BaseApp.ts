@@ -198,6 +198,18 @@ export class BaseApp extends Extensible {
         }
     }
 
+    onRequest(callback: Function) {
+        this.on('request', (handleRequest: HandleRequest) => {
+            callback(handleRequest);
+        });
+    }
+
+    onResponse(callback: Function) {
+        this.on('response', (handleRequest: HandleRequest) => {
+            callback(handleRequest);
+        });
+    }
+
     onError(callback: Function) {
         this.on('fail', (handleRequest: HandleRequest) => {
             callback(handleRequest);
