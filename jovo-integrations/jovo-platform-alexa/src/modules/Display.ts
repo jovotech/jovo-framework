@@ -71,6 +71,17 @@ export class Display implements Plugin {
             );
             return this;
         };
+
+
+        /**
+         * Deletes shouldEndSession property
+         * Shows video on Echo Show
+         * @public
+         */
+        AlexaSkill.prototype.deleteShouldEndSession = function() {
+            _set(this.$output, 'Alexa.deleteShouldEndSession', true);
+            return this;
+        };
     }
     uninstall(alexa: Alexa) {
 
@@ -133,6 +144,12 @@ export class Display implements Plugin {
                     directives.push(_get(output, 'Alexa.Apl'));
                 }
                 _set(response, 'response.directives', directives);
+            }
+        }
+
+        if (_get(output, 'Alexa.deleteShouldEndSession')) {
+            if (_get(response, 'response.shouldEndSession')) {
+                delete response.response.shouldEndSession;
             }
         }
     }
