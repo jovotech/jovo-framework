@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-dashbot",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dashbot": "^10.2.1",
-    "jovo-core": "^2.0.9"
+    "jovo-core": "^2.0.10"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
