@@ -1,6 +1,7 @@
 import * as path from "path";
 
 export enum LogLevel {
+    NONE = -1,
     ERROR = 0, // red().bold()
     WARN= 1, // yellow().bold()
     INFO = 2, //

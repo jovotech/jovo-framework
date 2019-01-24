@@ -40,7 +40,8 @@ process.on('uncaughtException', (err) => {
 export interface BaseAppConfig extends ExtensibleConfig {
     inputMap?: {[key: string]: string};
 }
-process.env.JOVO_LOG_LEVEL = LogLevel.INFO+'';
+// @ts-ignore
+process.env.JOVO_LOG_LEVEL = LogLevel.INFO;
 
 export class BaseApp extends Extensible {
     private initialized = false;
