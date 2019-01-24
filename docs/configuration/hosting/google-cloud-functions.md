@@ -4,6 +4,8 @@
 
 * [Google Cloud Functions Configuration](#google-cloud-functions-configuration)
 
+> Tutorial: [Deploy to Google Cloud](https://www.jovo.tech/tutorials/deploy-to-google-cloud)
+
 ## Google Cloud Functions Configuration
 
 To make your app work on Google Cloud Functions, open your `index.js` file in the `src` folder, and add the following: 
@@ -11,7 +13,7 @@ To make your app work on Google Cloud Functions, open your `index.js` file in th
 ```javascript
 const { Webhook, GoogleCloudFunction } = require('jovo-framework');
 
-module.exports = async (req, res) => {
+exports.handler = async (req, res) => {
     await app.handle(new GoogleCloudFunction(req, res));
 };
 ```
