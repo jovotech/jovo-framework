@@ -1,5 +1,25 @@
 # Jovo Framework Changelog
 
+
+## 2.0.12 (2019-01-24)
+
+#### :bug: Bug Fix
+* [#364](https://github.com/jovotech/jovo-framework/pull/364) Bugfixes ([@aswetlow](https://github.com/aswetlow))
+   * `jovo-framework` app.onRequest() and app.onResponse()
+   * `jovo-platform-alexa` Added deleteShouldEndSession() to $alexaSkill
+   * `jovo-platform-googleassistant` Fix multiple reprompts in Google Assistant ask() #359
+
+* `jovo-platform-googleassistant` [#361](https://github.com/jovotech/jovo-framework/pull/361) Typo removed ([@dominik-meissner](https://github.com/dominik-meissner))
+
+#### Committers: 2
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- [@dominik-meissner](https://github.com/dominik-meissner)
+
+
+
+
+=====================
+
 ## 2.0.10 (January 18, 2019)
 * `jovo-db-firestore` [#350](https://github.com/jovotech/jovo-framework-nodejs/pull/350) ✨ Adds Google Firestore integration [@KaanKC](https://github.com/IGx89)
 * `jovo-core` [#349](https://github.com/jovotech/jovo-framework-nodejs/pull/349) TestSuite is now generic, with platform-specific interfaces available [@IGx89](https://github.com/IGx89)
