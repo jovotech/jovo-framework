@@ -19,13 +19,20 @@ You can do:
 
 ### Minor Updates
 
-To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y`) of the framework, use the following command:
+> Important: Updating by just using `$ npm install jovo-framework` can lead to errors. Make sure to use one of the commands provided below.
+
+To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y`) of the framework, use one of the following commands:
 
 ```sh
-$ npm install --save jovo-framework
+# Update only Jovo packages
+$ jovo update
+
+# Update all npm packages
+$ npm update
 ```
 
-This should not only update to the latest minor update, but also save the current version into your `package.json` file.
+These commands are necessary (as opposed to `$ npm install jovo-framework`) because the framework is now split into different modules.
+
 
 ### Major Updates
 

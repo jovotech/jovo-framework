@@ -9,6 +9,7 @@ The Jovo Command Line Tools offer the ability to create, prototype, test, and de
     * [Basic Commands](#basic-commands)
       * [jovo new](#jovo-new)
       * [jovo run](#jovo-run)
+      * [jovo update](#jovo-update)
     * [Platform Commands](#platform-commands)
       * [jovo init](#jovo-init)
       * [jovo build](#jovo-build)
@@ -96,6 +97,21 @@ $ jovo run
 ```
 
 > Learn more about this command here: [cli/run](./run.md './cli/run').
+
+
+#### jovo update
+
+To update to the latest minor version (updating either `x` or `y` in `2.x.y`) of the framework, you can use the following command:
+
+```sh
+# Update all Jovo packages
+$ jovo update
+```
+
+This is are necessary (as opposed to `$ npm install jovo-framework`) because the framework is now split into different modules.
+
+> [Learn more about upgrading Jovo here](../../getting-started/installation/upgrading.md './installation/upgrading').
+
 
 
 ### Platform Commands
