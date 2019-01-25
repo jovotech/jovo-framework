@@ -10,6 +10,7 @@ In this section, you will learn more about how to use intents to route your user
     * [ON_REQUEST](#on_request)
     * [END](#end)
     * [Unhandled](#unhandled)
+* [Intent Hierarchy](#intent-hierarchy)
 * [Built-in Intents](#built-in-intents)
 * [intentMap](#intentmap)
 
@@ -358,6 +359,57 @@ app.setHandler({
 
 });
 ```
+
+## Intent Hierarchy
+
+Jovo intent handling works with promises. This means that the response is returned after the promise is resolved, even if no specific `tell` or `ask` is set. For certain Jovo standard intents it can happen that the handling passes through several intents without you having to use a redirect like `toIntent`.
+
+The Jovo standard intents follow this hierarchy:
+* `NEW_USER`
+* `NEW_SESSION`
+* `ON_REQUEST`
+* `LAUNCH` (other other intent that is called)
+
+For example, this code:
+
+```javascript
+app.setHandler({
+
+    ON_REQUEST() {
+        console.log('ON_REQUEST');
+    },
+
+    NEW_USER() {
+        console.log('NEW_USER');
+    },
+
+    NEW_SESSION() {
+        console.log('NEW_SESSION');
+    },
+
+    LAUNCH() {
+        console.log('LAUNCH');
+    },
+
+});
+```
+
+Would return the following logs for a `LAUNCH` request from a new user:
+
+```
+NEW_USER
+NEW_SESSION
+ON_REQUEST
+LAUNCH
+{
+  "version": "1.0",
+  "response": {
+    "shouldEndSession": true
+  },
+  "sessionAttributes": {}
+}
+```
+After the request has passed through all the intents and no output is set, an empty response is returned.
 
 ## Built-in Intents
 
