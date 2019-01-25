@@ -368,7 +368,7 @@ The Jovo standard intents follow this hierarchy:
 * `NEW_USER`
 * `NEW_SESSION`
 * `ON_REQUEST`
-* `LAUNCH` (other other intent that is called)
+* `LAUNCH` (or other intent that is called)
 
 For example, this code:
 
