@@ -57,6 +57,24 @@ app.setHandler({
 });
 ```
 
+The handlers make use of JavaScript Promises and `async/await`. This means the handler routes through all applicable intents and then returns a response when the handling promise gets resolved. This means that, for asynchronous operations (like API calls), you need to add `async` to your handler functions:
+
+```javascript
+app.setHandler({
+    LAUNCH() {
+        return this.toIntent('QuoteIntent');
+    },
+
+    async QuoteIntent() {
+        const quote = await getRandomQuote();
+
+        this.tell(quote);
+    },
+});
+```
+
+> Tutorial: [Make an API Call with Jovo and async/await](https://www.jovo.tech/tutorials/api-call)
+
 Routing in a Jovo project consists of three key concepts:
 * [Intents](#intents)
 * [States](#states)
