@@ -38,8 +38,8 @@ You can use these cross-platform helper methods:
 
 | Method        | Description        | 
 | ------------- |-------------| 
-| `getSpeech(): string` | Returns speech text without "speak" and tags. | 
-| `getReprompt(): string` | Returns reprompt text without "speak" tags. | 
+| `getSpeech(): string` | Returns speech text including "speak" and tags. | 
+| `getReprompt(): string` | Returns reprompt text including "speak" tags. | 
 | `hasSessionData(name: string, value?: any): boolean` | Checks if response has a specific session attribute in it.
 | `getSessionData(): SessionData | undefined` | Returns session data. [Learn more about session data here](../../basic-concepts/data#session-data '../data#session-data'). | 
 | `hasSessionEnded(): boolean` | Returns `true` if session ended | 
