@@ -23,7 +23,7 @@ process.on('uncaughtException', (err) => {
     Log.error(err.stack);
     Log.error();
 
-    if (err.message.indexOf('is not a function')) {
+    if (err.message.indexOf('is not a function') > -1) {
         Log.error('Hint:');
         Log.error('This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`');
         Log.error();
@@ -177,7 +177,7 @@ export class BaseApp extends Extensible {
 
             Log.red().error(Log.header('Error'));
 
-            if (e.message.indexOf('is not a function')) {
+            if (e.message.indexOf('is not a function')  > -1) {
                 e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
                 e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
             }
