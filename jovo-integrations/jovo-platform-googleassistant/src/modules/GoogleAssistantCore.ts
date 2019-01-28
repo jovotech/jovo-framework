@@ -89,7 +89,7 @@ export class GoogleAssistantCore implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
-            _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'googleAction.displayText'));
+            _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
         }
     }
 
