@@ -1,4 +1,4 @@
-import {Host} from "jovo-core";
+import {Host, Log} from "jovo-core";
 
 export class Lambda implements Host {
     headers: any; // tslint:disable-line
@@ -19,6 +19,9 @@ export class Lambda implements Host {
             this.$request = (typeof event.body === 'string') ? JSON.parse(event.body) : event.body;
         } else {
             this.$request = event;
+        }
+        if (Log.config.appenders['console']) {
+            Log.config.appenders['console'].ignoreFormatting = true;
         }
     }
     getRequestObject() {
