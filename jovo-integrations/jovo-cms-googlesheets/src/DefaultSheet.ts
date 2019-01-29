@@ -1,4 +1,4 @@
-import {Extensible, HandleRequest, PluginConfig, Plugin} from "jovo-core";
+import {Extensible, HandleRequest, PluginConfig, Plugin, Log} from "jovo-core";
 import {GoogleSheetsCMS} from "./GoogleSheetsCMS";
 import _merge = require('lodash.merge');
 
@@ -60,8 +60,17 @@ export class DefaultSheet  implements Plugin {
 
         const access = this.config.access || this.cms.config.access || 'private';
         if (access === 'private') {
+            Log.verbose('Retrieving private spreadsheet');
+            Log.verbose('Spreadsheet ID: ' + spreadsheetId);
+            Log.verbose('Sheet name: ' + this.config.name);
+            Log.verbose('Sheet range: ' + this.config.range);
+
             values = await this.cms.loadPrivateSpreadsheetData(spreadsheetId, this.config.name, this.config.range);  // tslint:disable-line
         } else if (access === 'public') {
+            Log.verbose('Retrieving public spreadsheet');
+            Log.verbose('Spreadsheet ID: ' + spreadsheetId);
+            Log.verbose('Sheet position: ' + this.config.position);
+
             const publicValues = await this.cms.loadPublicSpreadSheetData(spreadsheetId, this.config.position);  // tslint:disable-line
             values = this.parsePublicToPrivate(publicValues);
         }
