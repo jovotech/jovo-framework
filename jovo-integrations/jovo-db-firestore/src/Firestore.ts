@@ -1,5 +1,6 @@
 import {Db, BaseApp, PluginConfig, JovoError} from 'jovo-core';
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import firebase = require('firebase-admin');
 
 export interface Config extends PluginConfig {
@@ -19,8 +20,10 @@ export class Firestore implements Db {
     firebaseAdmin?: any; // tslint:disable-line
     firestore?: firebase.firestore.Firestore;
 
-    constructor() {
-
+    constructor(config?: Config) {
+        if (config) {
+            this.config = _merge(this.config, config);
+        }
     }
 
     install(app: BaseApp) {
