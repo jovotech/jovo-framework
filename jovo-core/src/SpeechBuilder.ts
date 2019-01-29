@@ -211,6 +211,16 @@ export class SpeechBuilder {
         return text;
     }
 
+    static removeSSML(ssml: string): string {
+        let noSSMLText = ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
+        noSSMLText = noSSMLText.replace(/<[^>]*>/g, '');
+        return noSSMLText;
+    }
+
+    static removeSpeakTags(ssml: string): string {
+        return ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
+    }
+
     /**
      * Escapes XML in SSML
      *

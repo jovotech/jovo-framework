@@ -49,12 +49,20 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getSpeech() {
-        return _get(this, 'richResponse.items[0].simpleResponse.ssml');
+        return SpeechBuilder.removeSpeakTags(_get(this, 'richResponse.items[0].simpleResponse.ssml'));
     }
 
     getReprompt() {
-        return _get(this, 'noInputPrompts[0].ssml');
+        return SpeechBuilder.removeSpeakTags(_get(this, 'noInputPrompts[0].ssml'));
     }
+
+    getSpeechPlain() {
+        return SpeechBuilder.removeSSML(this.getSpeech());
+    }
+    getRepromptPlain() {
+        return SpeechBuilder.removeSSML(this.getReprompt());
+    }
+
 
     getSessionAttributes(): any { // tslint:disable-line
         return undefined;

@@ -1,5 +1,5 @@
 import _get = require('lodash.get');
-import {JovoResponse, SessionConstants, SessionData} from "jovo-core";
+import {JovoResponse, SessionConstants, SessionData, SpeechBuilder} from "jovo-core";
 
 export interface Payload {
     [key: string]: JovoResponse;
@@ -87,20 +87,27 @@ export class DialogflowResponse implements JovoResponse {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
             if (typeof _get(this.payload, `${platformId}.getSpeech`) === 'function') {
-                return this.payload[platformId].getSpeech();
+                return SpeechBuilder.removeSpeakTags(this.payload[platformId].getSpeech());
             }
         }
-        return this.fulfillmentText;
+        return SpeechBuilder.removeSpeakTags(this.fulfillmentText);
     }
 
     getReprompt() {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
             if (typeof _get(this.payload, `${platformId}.getReprompt`) === 'function') {
-                return this.payload[platformId].getReprompt();
+                return SpeechBuilder.removeSpeakTags(this.payload[platformId].getReprompt());
             }
         }
         return undefined;
+    }
+
+    getSpeechPlain() {
+        return SpeechBuilder.removeSSML(this.getSpeech());
+    }
+    getRepromptPlain() {
+        return SpeechBuilder.removeSSML(this.getReprompt());
     }
 
     isTell(speech?: string | string[]) {

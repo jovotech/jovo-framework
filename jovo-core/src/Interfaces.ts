@@ -396,6 +396,19 @@ export interface JovoResponse {
 
 
     /**
+     * Returns speech text without ssml
+     * @return {string | undefined}
+     */
+    getSpeechPlain(): string | undefined;
+
+
+    /**
+     * Returns reprompt text without ssml
+     * @return {string | undefined}
+     */
+    getRepromptPlain(): string | undefined;
+
+    /**
      * Returns session data
      * @return {SessionData | undefined}
      */
