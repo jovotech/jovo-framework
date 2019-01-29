@@ -1,4 +1,4 @@
-import {Db, BaseApp, PluginConfig, JovoError} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import firebase = require('firebase-admin');
@@ -57,9 +57,9 @@ export class Firestore implements Db {
         if (!this.config.collectionName) {
             throw new JovoError(
                 `collectionName has to be set`,
-                undefined,
+                ErrorCode.ERR_PLUGIN,
                 'jovo-db-firestore',
-                ' - ',
+                undefined,
                 'Add the collectionName to the Firestore object inside your config.js',
                 'https://www.jovo.tech/docs/databases/firestore'
             );
@@ -68,9 +68,9 @@ export class Firestore implements Db {
         if (!this.config.credential) {
             throw new JovoError(
                 'Service account credential has to be set',
-                undefined,
+                ErrorCode.ERR_PLUGIN,
                 'jovo-db-firestore',
-                ' - ',
+                undefined,
                 'Add the service account credential object to the Firestore object inside your config.js',
                 'https://www.jovo.tech/docs/databases/firestore'
             );
@@ -79,9 +79,9 @@ export class Firestore implements Db {
         if (!this.config.databaseURL) {
             throw new JovoError(
                 'databaseURL has to be set',
-                undefined,
+                ErrorCode.ERR_PLUGIN,
                 'jovo-db-firestore',
-                ' - ',
+                undefined,
                 'Add the databaseURL to the Firestore object inside your config.js',
                 'https://www.jovo.tech/docs/databases/firestore'
             );
