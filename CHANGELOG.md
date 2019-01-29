@@ -1,6 +1,24 @@
 # Jovo Framework Changelog
 
 
+## 2.0.13 (2019-01-29)
+
+#### :rocket: New Feature
+* `jovo-cms-spreadsheets` [#370](https://github.com/jovotech/jovo-framework/pull/370) Added ObjectArray sheet (google-cms-spreadsheets) ([@aswetlow](https://github.com/aswetlow))
+
+#### :bug: Bug Fix
+* `jovo-framework` [#370](https://github.com/jovotech/jovo-framework/pull/370) Fixed setLocale in conversation method ([@aswetlow](https://github.com/aswetlow))
+* `jovo-framework` [#370](https://github.com/jovotech/jovo-framework/pull/370) Fixed special characters in Cloudwatch logs ([@aswetlow](https://github.com/aswetlow))
+* `jovo-core` [#370](https://github.com/jovotech/jovo-framework/pull/370) Updated internal Logging Class ([@aswetlow](https://github.com/aswetlow))
+* `jovo-core` [#370](https://github.com/jovotech/jovo-framework/pull/370) Fixed getSpeech()  ([@aswetlow](https://github.com/aswetlow))
+
+* `jovo-platform-googleassistant` [#368](https://github.com/jovotech/jovo-framework/pull/368) Fix displayText not display ([@kouz75](https://github.com/kouz75))
+
+
+#### Committers: 2
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- scouzinier ([@kouz75](https://github.com/kouz75))
+
 ## 2.0.12 (2019-01-24)
 
 #### :bug: Bug Fix
