@@ -17,8 +17,8 @@
 
 
 
+---
 
-=====================
 
 ## 2.0.10 (January 18, 2019)
 * `jovo-db-firestore` [#350](https://github.com/jovotech/jovo-framework-nodejs/pull/350) ✨ Adds Google Firestore integration [@KaanKC](https://github.com/IGx89)

@@ -87,7 +87,7 @@ $ jovo new <directory>
 
 ![jovo run command](../img/jovo-run.png "jovo run command")
 
-You can use the `jovo run` command to start the development server in your `index.js` file, and then add the [Jovo Webhook](../jovo-webhook.md '../jovo-webhook') as an endpoint to the respective developer consoles.
+You can use the `jovo run` command to start the development server in your `index.js` file, and then add the [Jovo Webhook](../jovo-webhook.md './jovo-webhook') as an endpoint to the respective developer consoles.
 
 Learn more here: [Configuration > Hosting](../configuration/hosting './hosting').
 

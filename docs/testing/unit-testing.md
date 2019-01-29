@@ -234,7 +234,7 @@ You can then used these responses to compare them to expected results (see secti
 response.isTell('Hello World')
 ```
 
-> [Find out more about the helper methods for the Jovo `$response` object here](../basic-concepts/requests-responses/response.md './requests-responses/response).
+> [Find out more about the helper methods for the Jovo `$response` object here](../basic-concepts/requests-responses/response.md './requests-responses/response').
 
 
 ### Check

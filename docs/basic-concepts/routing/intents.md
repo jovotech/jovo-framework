@@ -10,6 +10,7 @@ In this section, you will learn more about how to use intents to route your user
     * [ON_REQUEST](#on_request)
     * [END](#end)
     * [Unhandled](#unhandled)
+* [Intent Hierarchy](#intent-hierarchy)
 * [Built-in Intents](#built-in-intents)
 * [intentMap](#intentmap)
 
@@ -99,6 +100,26 @@ async NEW_SESSION() {
 },
 ```
 
+There is no need to redirect to the next intent. For example, if you define the following handlers:
+
+```javascript
+app.setHandler({
+    NEW_SESSION() {
+        console.log('NEW_SESSION');
+    },
+
+    LAUNCH() {
+        console.log('LAUNCH');
+    },
+);
+```
+
+You receive the following log output for new sessions:
+
+```
+NEW_SESSION
+LAUNCH
+```
 
 ### NEW_USER
 
@@ -120,6 +141,27 @@ async NEW_USER() {
 },
 ```
 
+There is no need to redirect to the next intent. For example, if you define the following handlers:
+
+```javascript
+app.setHandler({
+    NEW_USER() {
+        console.log('NEW_USER');
+    },
+
+    LAUNCH() {
+        console.log('LAUNCH');
+    },
+);
+```
+
+You receive the following log output for new users:
+
+```
+NEW_USER
+LAUNCH
+```
+
 ### ON_REQUEST
 
 The `ON_REQUEST` intent can be used to map every incoming request to a single intent first. This is the first entry point for any request and does not need to redirect to any other intent.
@@ -136,6 +178,27 @@ If you make any async calls in the `ON_REQUEST` intent, it is recommended to sto
 async ON_REQUEST() {
     this.$data.someData = await collectSomeData();
 },
+```
+
+There is no need to redirect to the next intent. For example, if you define the following handlers:
+
+```javascript
+app.setHandler({
+    ON_REQUEST() {
+        console.log('ON_REQUEST');
+    },
+
+    LAUNCH() {
+        console.log('LAUNCH');
+    },
+);
+```
+
+You receive the following log output for new sessions:
+
+```
+ON_REQUEST
+LAUNCH
 ```
 
 
@@ -296,6 +359,57 @@ app.setHandler({
 
 });
 ```
+
+## Intent Hierarchy
+
+Jovo intent handling works with promises. This means that the response is returned after the promise is resolved, even if no specific `tell` or `ask` is set. For certain Jovo standard intents it can happen that the handling passes through several intents without you having to use a redirect like `toIntent`.
+
+The Jovo standard intents follow this hierarchy:
+* `NEW_USER`
+* `NEW_SESSION`
+* `ON_REQUEST`
+* `LAUNCH` (or other intent that is called)
+
+For example, this code:
+
+```javascript
+app.setHandler({
+
+    ON_REQUEST() {
+        console.log('ON_REQUEST');
+    },
+
+    NEW_USER() {
+        console.log('NEW_USER');
+    },
+
+    NEW_SESSION() {
+        console.log('NEW_SESSION');
+    },
+
+    LAUNCH() {
+        console.log('LAUNCH');
+    },
+
+});
+```
+
+Would return the following logs for a `LAUNCH` request from a new user:
+
+```
+NEW_USER
+NEW_SESSION
+ON_REQUEST
+LAUNCH
+{
+  "version": "1.0",
+  "response": {
+    "shouldEndSession": true
+  },
+  "sessionAttributes": {}
+}
+```
+After the request has passed through all the intents and no output is set, an empty response is returned.
 
 ## Built-in Intents
 

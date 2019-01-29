@@ -113,7 +113,7 @@ https://webhook.jovo.cloud/[your-id]
 
 This link simply makes it easier for you to prototype locally by being able to see the logs in your command line, and to make fast changes without uploading your code to AWS Lambda.
 
-You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../workflows/cli/deploy '../cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../workflows/cli/deploy './cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
 
 
 #### Alternatives
