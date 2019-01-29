@@ -1,4 +1,4 @@
-import {BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig} from 'jovo-core';
+import {JovoError, ErrorCode, BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig} from 'jovo-core';
 import _merge = require('lodash.merge');
 const {google, JWT} = require('googleapis');
 import * as util from 'util';
@@ -11,6 +11,7 @@ const exists = util.promisify(fs.exists);
 import {KeyValueSheet} from "./KeyValueSheet";
 import {ResponsesSheet} from "./ResponsesSheet";
 import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
+import {ObjectArraySheet} from "./ObjectArraySheet";
 
 
 
@@ -50,6 +51,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         const defaultSheetMap: {[key: string]: any}= { // tslint:disable-line
             'keyvalue': KeyValueSheet,
             'responses': ResponsesSheet,
+            'objectarray': ObjectArraySheet,
             'default': DefaultSheet
         };
 
@@ -87,7 +89,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
             await this.middleware('retrieve')!.run(handleRequest, true);
 
         } catch (e) {
-            console.log(e);
+            throw new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-cms-googlesheets');
         }
     }
 
