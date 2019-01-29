@@ -35,8 +35,6 @@ export class Firestore implements Db {
             app.$db = this;
         }
 
-        this.errorHandling();
-
         this.firebaseAdmin = require('firebase-admin');
         this.firebaseAdmin!.initializeApp({
             credential: this.firebaseAdmin.credential.cert(this.config.credential),
@@ -97,6 +95,8 @@ export class Firestore implements Db {
      * @return {Promise<object>}
      */
     async load(primaryKey: string): Promise<firebase.firestore.DocumentData | undefined> {
+        this.errorHandling();
+
         const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         const doc = await docRef.get();
         return doc.data();
@@ -111,6 +111,8 @@ export class Firestore implements Db {
      * @param {object} data
      */
     async save(primaryKey: string, key: string, data: object): Promise<void> {
+        this.errorHandling();
+
         const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.set({ [key]: data }, {merge: true});
     }
@@ -121,6 +123,8 @@ export class Firestore implements Db {
      * @param {string} primaryKey
      */
     async delete(primaryKey: string): Promise<void> {
+        this.errorHandling();
+
         const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.delete();
     }
