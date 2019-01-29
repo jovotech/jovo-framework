@@ -1,5 +1,7 @@
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import _merge = require('lodash.merge');
+
 import {EnumRequestType, Plugin} from 'jovo-core';
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
@@ -45,6 +47,7 @@ export class Display implements Plugin {
 
         /**
          * Adds apl directive
+         * @deprecated Please use addAPLDirective()
          * @public
          * @param {*} directive
          * @return {AlexaSkill}
@@ -57,6 +60,39 @@ export class Display implements Plugin {
             return this;
         };
 
+        /**
+         * Adds apl directive
+         * @public
+         * @param {*} directive
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.addAPLDirective = function(directive: any) { // tslint:disable-line
+            const directives = _get(this.$output, 'Alexa.Apl', []);
+            directives.push(directive);
+            _set(this.$output, 'Alexa.Apl',directives);
+
+            return this;
+        };
+
+        /**
+         * Adds apl directive
+         * @public
+         * @param {*} documentDirective
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.addAPLDocument = function(documentDirective: any) { // tslint:disable-line
+            const document = {
+                type: 'Alexa.Presentation.APL.RenderDocument',
+                version: '1.0',
+            };
+            _merge(document, documentDirective);
+
+            const directives = _get(this.$output, 'Alexa.Apl', []);
+            directives.push(document);
+            _set(this.$output, 'Alexa.Apl',directives);
+
+            return this;
+        };
 
         /**
          * Shows video on Echo Show
