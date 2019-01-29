@@ -36,12 +36,36 @@ export class Firestore implements Db {
         }
 
         this.firebaseAdmin = require('firebase-admin');
-        this.firebaseAdmin!.initializeApp({
+        if (!this.firebaseAdmin) {
+            throw new JovoError(
+                'Failed to import the firebase-admin package',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-firestore',
+                'The Jovo Firestore integration depends on the firebase-admin package, ' +
+                    'which could not be imported.',
+                undefined,
+                undefined
+            );
+        }
+
+        this.firebaseAdmin.initializeApp({
             credential: this.firebaseAdmin.credential.cert(this.config.credential),
             databaseURL: this.config.databaseURL
         });
+
         this.firestore = this.firebaseAdmin.firestore();
-        this.firestore!.settings({
+        if (!this.firestore) {
+            throw new JovoError(
+                'Failed to initialize the firestore object',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-firestore',
+                undefined,
+                undefined,
+                undefined
+            );
+        }
+
+        this.firestore.settings({
             timestampsInSnapshots: true
         });
     }
