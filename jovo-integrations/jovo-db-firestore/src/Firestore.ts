@@ -97,10 +97,12 @@ export class Firestore implements Db {
     async load(primaryKey: string): Promise<firebase.firestore.DocumentData | undefined> {
         this.errorHandling();
 
-        const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
-        const doc = await docRef.get();
-        return doc.data();
+        const docRef: firebase.firestore.DocumentReference = this.firestore!
+            .collection(this.config.collectionName)
+            .doc(primaryKey);
 
+        const doc: firebase.firestore.DocumentSnapshot = await docRef.get();
+        return doc.data();
     }
 
 
@@ -113,7 +115,7 @@ export class Firestore implements Db {
     async save(primaryKey: string, key: string, data: object): Promise<void> {
         this.errorHandling();
 
-        const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
+        const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.set({ [key]: data }, {merge: true});
     }
 
@@ -125,7 +127,7 @@ export class Firestore implements Db {
     async delete(primaryKey: string): Promise<void> {
         this.errorHandling();
 
-        const docRef = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
+        const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.delete();
     }
 }
