@@ -1,5 +1,11 @@
 import {Host, Log} from "jovo-core";
 
+if (process.env.LAMBDA_TASK_ROOT && process.env.AWS_EXECUTION_ENV) {
+    if (Log.config.appenders['console']) {
+        Log.config.appenders['console'].ignoreFormatting = true;
+    }
+}
+
 export class Lambda implements Host {
     headers: any; // tslint:disable-line
     event: any; // tslint:disable-line
@@ -19,9 +25,6 @@ export class Lambda implements Host {
             this.$request = (typeof event.body === 'string') ? JSON.parse(event.body) : event.body;
         } else {
             this.$request = event;
-        }
-        if (Log.config.appenders['console']) {
-            Log.config.appenders['console'].ignoreFormatting = true;
         }
     }
     getRequestObject() {
