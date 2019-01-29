@@ -28,7 +28,7 @@ export class Firestore implements Db {
 
     install(app: BaseApp) {
         if (_get(app.config, 'db.default')) {
-            if (_get(app.config, 'db.default') === 'MongoDb') {
+            if (_get(app.config, 'db.default') === 'Firestore') {
                 app.$db = this;
             }
         } else {
