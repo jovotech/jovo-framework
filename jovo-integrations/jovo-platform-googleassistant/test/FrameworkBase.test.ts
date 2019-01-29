@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo, EnumRequestType} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo, EnumRequestType, LogLevel} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
 
