@@ -1,6 +1,5 @@
-import {JovoResponse, SpeechBuilder} from "jovo-core";
+import {JovoResponse, SpeechBuilder, SessionData} from "jovo-core";
 import _get = require('lodash.get');
-import {SessionData} from "../../../../jovo-core/dist/src";
 
 export interface RichResponseItem {
     simpleResponse: {

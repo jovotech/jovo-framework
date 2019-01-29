@@ -1,7 +1,6 @@
 import {HandleRequest, JovoRequest, TestSuite, SessionConstants, Jovo, EnumRequestType} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
-import {LogLevel} from "../../../jovo-core/dist/src";
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
