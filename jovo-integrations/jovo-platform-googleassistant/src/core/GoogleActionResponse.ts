@@ -1,6 +1,5 @@
-import {JovoResponse, SpeechBuilder} from "jovo-core";
+import {JovoResponse, SpeechBuilder, SessionData} from "jovo-core";
 import _get = require('lodash.get');
-import {SessionData} from "../../../../jovo-core/dist/src";
 
 export interface RichResponseItem {
     simpleResponse: {
@@ -49,12 +48,20 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getSpeech() {
-        return _get(this, 'richResponse.items[0].simpleResponse.ssml');
+        return SpeechBuilder.removeSpeakTags(_get(this, 'richResponse.items[0].simpleResponse.ssml'));
     }
 
     getReprompt() {
-        return _get(this, 'noInputPrompts[0].ssml');
+        return SpeechBuilder.removeSpeakTags(_get(this, 'noInputPrompts[0].ssml'));
     }
+
+    getSpeechPlain() {
+        return SpeechBuilder.removeSSML(this.getSpeech());
+    }
+    getRepromptPlain() {
+        return SpeechBuilder.removeSSML(this.getReprompt());
+    }
+
 
     getSessionAttributes(): any { // tslint:disable-line
         return undefined;
@@ -85,14 +92,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getSpeech();
+                    return text === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
+                if (speech.toString() !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -110,14 +117,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getSpeech();
+                    return text === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
+                if (speech.toString() !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -126,14 +133,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(reprompt)) {
 
                 const results = reprompt.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getReprompt();
+                    return text === this.getReprompt();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(reprompt.toString()) !== this.getReprompt()) {
+                if (reprompt.toString() !== this.getReprompt()) {
                     return false;
                 }
             }

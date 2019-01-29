@@ -83,7 +83,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             if (this.constructor.name === 'App') {
                 Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name})`);
-                Log.debug(`   ${JSON.stringify(plugin.config || {}, null, '\t')}`);
+                Log.debug(`${JSON.stringify(plugin.config || {}, null, '\t')}`);
                 Log.debug();
             }
             this.emit('use', plugin);

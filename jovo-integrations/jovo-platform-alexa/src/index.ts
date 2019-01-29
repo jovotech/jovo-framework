@@ -24,6 +24,8 @@ export { AskForContactPermissionsCard } from './response/visuals/AskForContactPe
 export { AskForListPermissionsCard } from './response/visuals/AskForListPermissionsCard';
 export { AskForLocationPermissionsCard } from './response/visuals/AskForLocationPermissionsCard';
 export { AskForPermissionConsentCard } from './response/visuals/AskForPermissionConsentCard';
+export {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
+
 import { AlexaSkill } from './core/AlexaSkill';
 
 import {AudioPlayer} from "./modules/AudioPlayerPlugin";
@@ -345,6 +347,25 @@ declare module './core/AlexaSkill' {
          * @return {AlexaSkill}
          */
         addAplDirective(directive: any): this; // tslint:disable-line
+
+
+        /**
+         * Adds apl directive
+         * @deprecated Please use addAPLDirective()
+         * @public
+         * @param {*} directive
+         * @return {AlexaSkill}
+         */
+        addAPLDirective(directive: any): this; // tslint:disable-line
+
+
+        /**
+         * Adds apl document
+         * @public
+         * @param {*} documentDirective
+         * @return {AlexaSkill}
+         */
+        addAPLDocument(documentDirective: any): this; // tslint:disable-line
 
 
         /**

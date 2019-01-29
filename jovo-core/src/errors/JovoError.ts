@@ -2,6 +2,7 @@
 
 export enum ErrorCode {
     ERR = 'ERR',
+    ERR_PLUGIN = 'ERR_PLUGIN',
 }
 
 

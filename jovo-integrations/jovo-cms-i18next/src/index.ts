@@ -14,7 +14,7 @@ declare module 'jovo-core/dist/src/Jovo' {
 
 declare module 'jovo-core/dist/src/SpeechBuilder' {
     export interface SpeechBuilder {
-        t(key: string, obj?: any): void; // tslint:disable-line
-        addT(key: string, obj?: any): void; // tslint:disable-line
+        t(key: string, obj?: any): this; // tslint:disable-line
+        addT(key: string, obj?: any): this; // tslint:disable-line
     }
 }

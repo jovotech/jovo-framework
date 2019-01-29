@@ -1,4 +1,5 @@
 import {Inputs} from "./Interfaces";
+import {Log} from "./Log";
 
 try {
     // do not use source map support with jest.
@@ -23,7 +24,7 @@ export {Extensible} from './Extensible';
 export {ExtensibleConfig} from './Extensible';
 export {Cms} from './Cms';
 export {BaseCmsPlugin} from './BaseCmsPlugin';
-export {JovoError} from './errors/JovoError';
+export {JovoError, ErrorCode} from './errors/JovoError';
 
 export {
     HandleRequest,
@@ -51,5 +52,5 @@ export {
 } from './Interfaces';
 
 export {Util} from './Util';
-export {Log, LogLevel} from './Log';
+export {LogLevel, Log, Logger} from './Log';
 export {User} from './User';

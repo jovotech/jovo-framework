@@ -25,6 +25,7 @@ export class AlexaCore implements Plugin {
     }
 
     async init(handleRequest: HandleRequest) {
+
         const requestObject = handleRequest.host.getRequestObject();
         if (requestObject.version &&
             requestObject.request) {

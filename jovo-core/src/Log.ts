@@ -1,4 +1,4 @@
-import * as path from "path";
+import _merge = require('lodash.merge');
 
 export enum LogLevel {
     NONE = -1,
@@ -9,166 +9,646 @@ export enum LogLevel {
     DEBUG = 4, // yellow()
 }
 
-export class Log {
+interface Config {
+    appenderLength: number;
+    appenderSymbol: string;
+    appenderOffset: string;
+    ignoreFormatting: boolean;
+    appenders: {[key: string]: Appender};
+}
 
-    static OFFSET = '    ';
-    static APPENDER_LENGTH = 70;
-    static APPENDER_SYMBOL = '-';
+interface Appender {
+    write(msg: any, isFormat?: boolean): void; // tslint:disable-line
+    ignoreFormatting: boolean;
+    logLevel: LogLevel;
+    [key: string]: any; // tslint:disable-line
+}
 
-    static timeMap: {[key: string]: number} = {};
+export class Logger {
+    config: Config = {
+        appenderLength: 70,
+        appenderSymbol: '-',
+        appenderOffset: '  ',
+        ignoreFormatting: false,
+        appenders: {},
+    };
+
+    timeMap: {[key: string]: number} = {};
 
 
-    static header(header?: string, module?: string) {
-        if (!header) {
-            header = '';
+    /**
+     * Adds appender to Log instance
+     * @param {string} name
+     * @param {Appender} appender
+     * @returns {this}
+     */
+    addAppender(name: string, appender: Appender) {
+        this.config.appenders![name] = appender;
+        return this;
+    }
+
+
+    /**
+     * Remove specified appender
+     * @param {string} name
+     */
+    removeAppender(name: string) {
+        if (!this.config.appenders![name]) {
+            throw new Error(`Can't remove non-existing appender.`);
+        }
+        delete this.config.appenders![name];
+    }
+
+
+    /**
+     * Remove all appenders
+     */
+    removeAllAppenders() {
+        this.config.appenders! = {};
+    }
+
+    /**
+     * Adds console appender to Log instance
+     * @param options
+     * @returns {this}
+     */
+    addConsoleAppender(options?: any) { // tslint:disable-line
+        const appender: Appender = {
+            write: (msg: any, isFormat = false) => { // tslint:disable-line
+                msg = msg ? msg : '';
+                if (isFormat) {
+                    process.stdout.write(msg);
+                } else {
+                    process.stdout.write(this.config.appenderOffset);
+                    process.stdout.write(msg.split('\n').join('\n' + this.config.appenderOffset));
+                    process.stdout.write('\n');
+                }
+            },
+            logLevel: LogLevel.DEBUG,
+            ignoreFormatting: false,
+        };
+        _merge(appender, options);
+        return this.addAppender((options && options.name) || 'console', appender);
+
+    }
+
+    /**
+     * Adds file appender to Log instance
+     * @param {string} path
+     * @param options
+     * @returns {this}
+     */
+    addFileAppender(path: string, options?: any) { // tslint:disable-line
+        const appender: Appender = {
+            write: (msg: any, isFormat = false) => { // tslint:disable-line
+                msg = msg ? msg : '';
+
+                if (isFormat) {
+                    this.config.appenders.file.stream.write(msg);
+                } else {
+                    this.config.appenders.file.stream.write(msg);
+                    this.config.appenders.file.stream.write('\n');
+                }
+            },
+            stream: require('fs').createWriteStream(path, {flags : 'a'}),
+            logLevel: LogLevel.DEBUG,
+            ignoreFormatting: true,
+        };
+
+        _merge(appender, options);
+        return this.addAppender((options && options.name) || 'file', appender);
+    }
+
+
+    /**
+     * Adds data to output stream of all appenders.
+     * @param {string} format
+     * @returns {this}
+     */
+    addFormat(format: string) {
+        Object.keys(this.config.appenders).forEach((key) => {
+            const appender = this.config.appenders[key];
+            if(appender.ignoreFormatting === false) {
+                appender.write(format, true);
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * Writes data to output stream of all appenders.
+     * @param msg
+     * @param {LogLevel} logLevel
+     */
+    writeToStreams(msg: any, logLevel: LogLevel) { // tslint:disable-line
+        Object.keys(this.config.appenders).forEach((key) => {
+            const appender = this.config.appenders[key];
+            if (appender.logLevel >= logLevel) {
+                if (typeof msg === 'object') {
+                    msg = JSON.stringify(msg).trim();
+                    msg = '\b\b';
+                }
+                appender.write(msg);
+            }
+        });
+    }
+
+    /**
+     * Main log() method. Checks if the current LogLevel allows to write.
+     * @param {LogLevel} logLevel
+     * @param msg
+     * @returns {this}
+     */
+    log(logLevel: LogLevel, msg: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(logLevel)) {
+            return this.clear();
+        }
+        this.writeToStreams(msg, logLevel);
+        this.clear();
+        return this;
+
+    }
+
+    /**
+     * Print message, if the current LogLevel is ERROR
+     * @param msg
+     * @returns {this}
+     */
+    error(msg?: any) { // tslint:disable-line
+        return this.log(LogLevel.ERROR, msg);
+    }
+
+
+    /**
+     * Start timer for the specified object name.
+     * @param obj
+     * @param {boolean} printStart
+     */
+    errorStart(obj: any, printStart = false) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.ERROR)) {
+            return;
+        }
+        this.setTime(obj);
+        if (printStart) {
+            this.error(obj);
+        }
+    }
+
+    /**
+     * Stop timer and print the duration.
+     * @param obj
+     */
+    errorEnd(obj: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.ERROR)) {
+            return;
+        }
+        const msg = `${obj.toString()} (${this.getTime(obj)} ms)`;
+        this.removeTime(obj);
+        return this.error(msg);
+    }
+
+
+    /**
+     * Print message, if the current LogLevel is WARN
+     * @param msg
+     * @returns {this}
+     */
+    warn(msg?: any) { // tslint:disable-line
+        return this.log(LogLevel.WARN, msg);
+    }
+
+
+    /**
+     * Start timer for the specified object name.
+     * @param obj
+     * @param {boolean} printStart
+     */
+    warnStart(obj: any, printStart = false) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.WARN)) {
+            return;
+        }
+        this.setTime(obj);
+        if (printStart) {
+            this.warn(obj);
+        }
+    }
+
+    /**
+     * Stop timer and print the duration.
+     * @param obj
+     */
+    warnEnd(obj: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.WARN)) {
+            return;
+        }
+        const msg = `${obj.toString()} (${this.getTime(obj)} ms)`;
+        this.removeTime(obj);
+        return this.warn(msg);
+    }
+
+
+    /**
+     * Print message, if the current LogLevel is INFO
+     * @param msg
+     * @returns {this}
+     */
+    info(msg?: any) { // tslint:disable-line
+        return this.log(LogLevel.INFO, msg);
+    }
+
+
+    /**
+     * Start timer for the specified object name.
+     * @param obj
+     * @param {boolean} printStart
+     */
+    infoStart(obj: any, printStart = false) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.INFO)) {
+            return;
+        }
+        this.setTime(obj);
+        if (printStart) {
+            this.info(obj);
+        }
+    }
+
+    /**
+     * Stop timer and print the duration.
+     * @param obj
+     */
+    infoEnd(obj: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.INFO)) {
+            return;
+        }
+        const msg = `${obj.toString()} (${this.getTime(obj)} ms)`;
+        this.removeTime(obj);
+        return this.info(msg);
+    }
+
+
+    /**
+     * Print message, if the current LogLevel is VERBOSE
+     * @param msg
+     * @returns {this}
+     */
+    verbose(msg?: any) { // tslint:disable-line
+        return this.log(LogLevel.VERBOSE, msg);
+    }
+
+
+    /**
+     * Start timer for the specified object name.
+     * @param obj
+     * @param {boolean} printStart
+     */
+    verboseStart(obj: any, printStart = false) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.VERBOSE)) {
+            return;
+        }
+        this.setTime(obj);
+        if (printStart) {
+            this.verbose(obj);
+        }
+    }
+
+
+    /**
+     * Stop timer and print the duration.
+     * @param obj
+     */
+    verboseEnd(obj: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.VERBOSE)) {
+            return;
+        }
+        const msg = `${obj.toString()} (${this.getTime(obj)} ms)`;
+        this.removeTime(obj);
+        return this.verbose(msg);
+    }
+
+
+    /**
+     * Print message, if the current LogLevel is DEBUG
+     * @param msg
+     * @returns {this}
+     */
+    debug(msg?: any) { // tslint:disable-line
+        return this.log(LogLevel.DEBUG, msg);
+    }
+
+
+    /**
+     * Start timer for the specified object name.
+     * @param obj
+     * @param {boolean} printStart
+     */
+    debugStart(obj: any, printStart = false) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.DEBUG)) {
+            return;
+        }
+        this.setTime(obj);
+        if (printStart) {
+            this.debug(obj);
+        }
+    }
+
+
+    /**
+     * Stop timer and print the duration.
+     * @param obj
+     */
+    debugEnd(obj: any) { // tslint:disable-line
+        if (!Logger.isLogLevel(LogLevel.DEBUG)) {
+            return;
+        }
+        const msg = `${obj.toString()} (${this.getTime(obj)} ms)`;
+        this.removeTime(obj);
+        return this.debug(msg);
+    }
+
+    /**
+     * Remove time from temporary object.
+     * @param obj
+     */
+    removeTime(obj: any) { // tslint:disable-line
+        const key = obj.toString();
+        if (this.timeMap[key]) {
+            delete this.timeMap[key];
+        }
+    }
+
+    /**
+     * Set time to instance object
+     * @param obj
+     */
+    setTime(obj: any) { // tslint:disable-line
+        const key = obj.toString();
+        this.timeMap[key] = new Date().getTime();
+    }
+
+    /**
+     * Return time difference between start* and end*
+     * @param obj
+     * @returns {number}
+     */
+    getTime(obj: any): number { // tslint:disable-line
+        const key = obj.toString();
+        const now = new Date().getTime();
+
+        if (!this.timeMap[key]) {
+            console.log('No start for ' + key);
+            return -1;
         }
 
-        if (!module) {
-            module = '';
-        } else {
-            module = ' ('+module+')';
+        return now - this.timeMap[key];
+    }
+
+
+    /**
+     * Header formatting
+     * @param {string} header
+     * @param {string} module
+     * @returns {string}
+     */
+    header(header?: string, module?: string) {
+        header = header ? header : '';
+        module = module ? ' ('+module+')' : '';
+
+        this.bold();
+        let str = header + module + ' ';
+        for (let i = 0; i < this.config.appenderLength - (header.length+module.length); i++) {
+            str += this.config.appenderSymbol;
         }
+        return '\n' + str + '\n';
 
-        let str = Log.OFFSET  + '\x1b[1m' + header + module + ' ';
+    }
 
-        for (let i = 0; i < Log.APPENDER_LENGTH - (header.length+module.length); i++) {
-            str += Log.APPENDER_SYMBOL;
+    /**
+     * Subheader formatting
+     * @param {string} subheader
+     * @param {string} module
+     * @returns {string}
+     */
+    subheader(subheader?: string, module?: string) {
+        subheader = subheader ? subheader : '';
+        module = module ? ' ('+module+')' : '';
+        let str = this.config.appenderOffset  + '-- ' + subheader + module +  ' ';
+        for (let i = 0; i < this.config.appenderLength - (subheader.length+module.length); i++) {
+            str += this.config.appenderSymbol;
         }
-        return '\n\b\b' + str + '\n';
-    }
-
-    static subheader(subheader?: string, module?: string) {
-        if (!subheader) {
-            subheader = '';
-        }
-
-        if (!module) {
-            module = '';
-        } else {
-            module = ' ('+module+')';
-        }
-
-        const str = Log.OFFSET  + '\x1b[1m' + subheader + module + ': ';
-        return '\b\b\b' + str + '\n';
-    }
-
-    static end() {
-        process.stdout.write('\b\b');
-        return Log;
-    }
-
-    static underscore() {
-        process.stdout.write('\x1b[4m');
-        return Log;
-    }
-
-    static bold() {
-        process.stdout.write('\x1b[1m');
-        return Log;
-    }
-
-    static dim() {
-        process.stdout.write('\x1b[2m');
-        return Log;
-    }
-
-    static blink() {
-        process.stdout.write('\x1b[5m');
-        return Log;
-    }
-
-    static reverse() {
-        process.stdout.write('\x1b[7m');
-        return Log;
-    }
-
-    static hidden() {
-        process.stdout.write('\x1b[8m');
-        return Log;
+        return '\n' + str + '\n';
     }
 
 
-    static black() {
-        process.stdout.write('\x1b[30m');
-        return Log;
+    /**
+     * Clear formatting.
+     * @returns {this}
+     */
+    clear() {
+        return this.addFormat('\x1b[0m');
     }
 
-    static red() {
-        process.stdout.write('\x1b[31m');
-        return Log;
+    /**
+     * Add underscore.
+     * @returns {this}
+     */
+    underscore() {
+        return this.addFormat('\x1b[4m');
     }
 
-    static green() {
-        process.stdout.write('\x1b[32m');
-        return Log;
-    }
-
-    static yellow() {
-        process.stdout.write('\x1b[33m');
-        return Log;
-    }
-
-    static blue() {
-        process.stdout.write('\x1b[34m');
-        return Log;
-    }
-
-    static magenta() {
-        process.stdout.write('\x1b[35m');
-        return Log;
-    }
-
-    static cyan() {
-        process.stdout.write('\x1b[36m');
-        return Log;
-    }
-
-    static white() {
-        process.stdout.write('\x1b[37m');
-        return Log;
+    /**
+     * Add bold.
+     * @returns {this}
+     */
+    bold() {
+        return this.addFormat('\x1b[1m');
     }
 
 
-    static blackBackground() {
-        process.stdout.write('\x1b[40m');
-        return Log;
+    /**
+     * Add dim.
+     * @returns {this}
+     */
+    dim() {
+        return this.addFormat('\x1b[2m');
     }
 
-    static redBackground() {
-        process.stdout.write('\x1b[41m');
-        return Log;
+
+    /**
+     * Add blink.
+     * @returns {this}
+     */
+    blink() {
+        return this.addFormat('\x1b[5m');
     }
 
-    static greenBackground() {
-        process.stdout.write('\x1b[42m');
-        return Log;
+
+    /**
+     * Add reverse.
+     * @returns {this}
+     */
+    reverse() {
+        return this.addFormat('\x1b[7m');
     }
 
-    static yellowBackground() {
-        process.stdout.write('\x1b[43m');
-        return Log;
+
+    /**
+     * Add hidden.
+     * @returns {this}
+     */
+    hidden() {
+        return this.addFormat('\x1b[8m');
     }
 
-    static blueBackground() {
-        process.stdout.write('\x1b[44m');
-        return Log;
+    /**
+     * Add black.
+     * @returns {this}
+     */
+    black() {
+        return this.addFormat('\x1b[30m');
     }
 
-    static magentaBackground() {
-        process.stdout.write('\x1b[45m');
-        return Log;
+
+    /**
+     * Add red.
+     * @returns {this}
+     */
+    red() {
+        return this.addFormat('\x1b[31m');
     }
 
-    static cyanBackground() {
-        process.stdout.write('\x1b[46m');
-        return Log;
+
+    /**
+     * Add green.
+     * @returns {this}
+     */
+    green() {
+        return this.addFormat('\x1b[32m');
     }
 
-    static whiteBackground() {
-        process.stdout.write('\x1b[47m');
-        return Log;
+
+    /**
+     * Add yellow.
+     * @returns {this}
+     */
+    yellow() {
+        return this.addFormat('\x1b[33m');
     }
 
+
+    /**
+     * Add blue.
+     * @returns {this}
+     */
+    blue() {
+        return this.addFormat('\x1b[34m');
+    }
+
+
+    /**
+     * Add magenta.
+     * @returns {this}
+     */
+    magenta() {
+        return this.addFormat('\x1b[35m');
+    }
+
+
+    /**
+     * Add cyan.
+     * @returns {this}
+     */
+    cyan() {
+        return this.addFormat('\x1b[36m');
+    }
+
+
+    /**
+     * Add white.
+     * @returns {this}
+     */
+    white() {
+        return this.addFormat('\x1b[37m');
+    }
+
+
+    /**
+     * Add blackBackground.
+     * @returns {this}
+     */
+    blackBackground() {
+        return this.addFormat('\x1b[40m');
+    }
+
+
+    /**
+     * Add redBackground.
+     * @returns {this}
+     */
+    redBackground() {
+        return this.addFormat('\x1b[41m');
+    }
+
+
+    /**
+     * Add greenBackground.
+     * @returns {this}
+     */
+    greenBackground() {
+        return this.addFormat('\x1b[42m');
+    }
+
+
+    /**
+     * Add yellowBackground.
+     * @returns {this}
+     */
+    yellowBackground() {
+        return this.addFormat('\x1b[43m');
+    }
+
+
+    /**
+     * Add blueBackground.
+     * @returns {this}
+     */
+    blueBackground() {
+        return this.addFormat('\x1b[44m');
+    }
+
+
+    /**
+     * Add magentaBackground.
+     * @returns {this}
+     */
+    magentaBackground() {
+        return this.addFormat('\x1b[45m');
+    }
+
+
+    /**
+     * Add cyanBackground.
+     * @returns {this}
+     */
+    cyanBackground() {
+        return this.addFormat('\x1b[46m');
+    }
+
+
+    /**
+     * Add whiteBackground.
+     * @returns {this}
+     */
+    whiteBackground() {
+        return this.addFormat('\x1b[47m');
+    }
+
+
+    /**
+     * Check, if LogLevel matches current LogLevel
+     * @param {LogLevel} logLevel
+     * @returns {boolean}
+     */
     static isLogLevel(logLevel: LogLevel) {
         if (!process.env.JOVO_LOG_LEVEL) {
             return false;
@@ -180,153 +660,15 @@ export class Log {
             return logLevel <= jovoLog;
 
         } else {
-            return logLevel <= (Log.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
+            return logLevel <= (Logger.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
         }
     }
 
-    static setTime(obj: any) { // tslint:disable-line
-        const key = obj.toString();
-        Log.timeMap[key] = new Date().getTime();
-    }
-
-    static getTime(obj: any): number { // tslint:disable-line
-        const key = obj.toString();
-        const now = new Date().getTime();
-
-        if (!Log.timeMap[key]) {
-            console.log('No start for ' + key);
-            return -1;
-        }
-
-        return now - Log.timeMap[key];
-    }
-
-
-    static log(logLevel: LogLevel, msg: any) { // tslint:disable-line
-        if (!Log.isLogLevel(logLevel)) {
-            process.stdout.write('\x1b[0m');
-            return;
-        }
-        process.stdout.write(Log.OFFSET);
-        process.stdout.write(msg + '\n');
-        process.stdout.write('\x1b[0m');
-        process.stdout.write('');
-
-        return Log;
-
-    }
-
-    static errorStart(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.ERROR)) {
-            return;
-        }
-        Log.setTime(obj);
-    }
-
-    static errorEnd(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.ERROR)) {
-            return;
-        }
-        const msg = `${obj.toString()} (${Log.getTime(obj)} ms)`;
-        return Log.error(msg);
-    }
-
-    static error(obj?: any) { // tslint:disable-line
-        if (!obj) {
-            obj = '';
-        }
-        return Log.log(LogLevel.ERROR, obj);
-    }
-
-
-    static warnStart(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.WARN)) {
-            return;
-        }
-        Log.setTime(obj);
-    }
-
-    static warnEnd(obj: any) { // tslint:disable-line
-        if (Log.isLogLevel(LogLevel.WARN)) {
-            return;
-        }
-        const msg = `${obj.toString()} (${Log.getTime(obj)} ms)`;
-        return Log.warn(msg);
-    }
-    static warn(obj?: any) { // tslint:disable-line
-        if (!obj) {
-            obj = '';
-        }
-        return Log.log(LogLevel.WARN, obj);
-    }
-
-
-    static infoStart(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.INFO)) {
-            return;
-        }
-        return Log.setTime(obj);
-    }
-
-    static infoEnd(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.INFO)) {
-            return;
-        }
-        const msg = `${obj.toString()} (${Log.getTime(obj)} ms)`;
-        return Log.info(msg);
-    }
-
-    static info(obj?: any) { // tslint:disable-line
-        if (!obj) {
-            obj = '\n';
-        }
-        Log.log(LogLevel.INFO, obj);
-    }
-
-    static verboseStart(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.VERBOSE)) {
-            return;
-        }
-        Log.setTime(obj);
-    }
-
-    static verboseEnd(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.VERBOSE)) {
-            return;
-        }
-        const msg = `${obj.toString()} (${Log.getTime(obj)} ms)`;
-        return Log.verbose(msg);
-    }
-
-    static verbose(obj?: any) { // tslint:disable-line
-        if (!obj) {
-            obj = '';
-        }
-        return Log.log(LogLevel.VERBOSE, obj);
-    }
-
-
-    static debugStart(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.DEBUG)) {
-            return;
-        }
-        Log.setTime(obj);
-    }
-
-    static debugEnd(obj: any) { // tslint:disable-line
-        if (!Log.isLogLevel(LogLevel.DEBUG)) {
-            return;
-        }
-        const msg = `${obj.toString()} (${Log.getTime(obj)} ms)`;
-        Log.debug(msg);
-    }
-    static debug(obj?: any) { // tslint:disable-line
-        if (!obj) {
-            obj = '';
-        }
-        return Log.log(LogLevel.DEBUG, obj);
-    }
-
+    /**
+     * Convert string LogLevel to enum LogLevel
+     * @param {string} logLevelStr
+     * @returns {LogLevel | undefined}
+     */
     static getLogLevelFromString(logLevelStr: string): LogLevel | undefined {
         logLevelStr = logLevelStr.toUpperCase();
 
@@ -340,35 +682,6 @@ export class Log {
         }
     }
 
-    static consoleLog(pathDepth = 1) {
-        const _privateLog:Function = console.log;
-        console.log = (...msgs: any[]) => { // tslint:disable-line
-            if (pathDepth === -1) {
-                return;
-            }
-            const newMessages: any[] = []; // tslint:disable-line
-            let stack: string = (new Error()).stack!.toString();
-            stack = stack.substring(stack.indexOf('\n', 8) + 2);
-
-            for (const msg of msgs) {
-                stack = stack.substring(0, stack.indexOf('\n'));
-                const matches = /\(([^)]+)\)/.exec(stack);
-
-                if (matches) {
-                    stack = matches[1].substring(matches[1].lastIndexOf(path.sep) + 1);
-                    const filePathArray = matches[1].split(path.sep);
-                    let filePath = '';
-
-                    for (let i = filePathArray.length-pathDepth; i < filePathArray.length; i++) {
-                        filePath += path.sep + filePathArray[i];
-                    }
-
-                    newMessages.push(filePath.substring(1), '\n');
-                    newMessages.push(msg);
-                }
-            }
-            _privateLog.apply(console, newMessages); // eslint-disable-line
-        };
-    }
-
 }
+
+export const Log = new Logger().addConsoleAppender(); // tslint:disable-line

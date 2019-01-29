@@ -112,7 +112,7 @@ describe('test tell', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('response', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$response!.isTell('<speak>Hello <break time="100ms"/></speak>')).toBe(true);
+            expect(handleRequest.jovo!.$response!.isTell('Hello <break time="100ms"/>')).toBe(true);
             done();
         });
     });
@@ -168,7 +168,7 @@ describe('test ask', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('response', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$response!.isAsk('<speak>Hello <break time="100ms"/></speak>', '<speak>Reprompt <break time="100ms"/></speak>')).toBe(true);
+            expect(handleRequest.jovo!.$response!.isAsk('Hello <break time="100ms"/>', 'Reprompt <break time="100ms"/>')).toBe(true);
             done();
         });
     });

@@ -23,6 +23,22 @@ const config = {
 
 
 // ------------------------------------------------------
+// -                      Generic                       -
+// ------------------------------------------------------
+
+
+function changePackageFile(cb) {
+    const packageFilePath = path.join(process.cwd(), config.destinationFolder, 'package.json');
+    const tsConfig = require(packageFilePath);
+    tsConfig.main = './index.js';
+
+    fs.writeFileSync(packageFilePath, JSON.stringify(tsConfig, null, 2));
+    cb()
+}
+
+
+
+// ------------------------------------------------------
 // -                  Regular Project                   -
 // ------------------------------------------------------
 
@@ -48,6 +64,7 @@ function build() {
 
 exports.default = series(
     prepareProject,
+    changePackageFile,
     build,
 );
 exports.build = exports.default;
@@ -101,6 +118,7 @@ exports['build-ts'] = series(
     createTempTsConfig,
     compileTs,
     prepareProjectTs,
+    changePackageFile,
     createTsBundle,
     cleanupTempTsConfig,
 );

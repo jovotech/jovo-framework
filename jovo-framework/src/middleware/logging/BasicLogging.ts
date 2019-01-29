@@ -1,4 +1,4 @@
-import {BaseApp, HandleRequest, Plugin, PluginConfig, Log, LogLevel} from "jovo-core";
+import {BaseApp, HandleRequest, Plugin, PluginConfig, Log, LogLevel, Logger} from "jovo-core";
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
@@ -52,8 +52,8 @@ export class BasicLogging implements Plugin {
     }
 
     requestLogger = (handleRequest: HandleRequest) => {
-        if (Log.isLogLevel(LogLevel.VERBOSE)) {
-            Log.verbose(Log.subheader(`Request JSON`));
+        if (Logger.isLogLevel(LogLevel.VERBOSE)) {
+            Log.verbose(Log.subheader(`Request JSON`, 'jovo-framework'));
             Log.yellow().verbose(JSON.stringify(handleRequest.host.getRequestObject(), null, this.config.space));
             return;
         }
@@ -74,8 +74,8 @@ export class BasicLogging implements Plugin {
 
     responseLogger = (handleRequest: HandleRequest) => {
 
-        if (Log.isLogLevel(LogLevel.VERBOSE)) {
-            Log.verbose(Log.subheader(`Response JSON`));
+        if (Logger.isLogLevel(LogLevel.VERBOSE)) {
+            Log.verbose(Log.subheader(`Response JSON`, 'jovo-framework'));
             Log.yellow().verbose(JSON.stringify(handleRequest.jovo!.$response, null, this.config.space));
             return;
         }

@@ -1,4 +1,4 @@
-import {BaseApp, ExtensibleConfig, Host, Log, LogLevel} from "jovo-core";
+import {BaseApp, ExtensibleConfig, Host, Log, Logger, LogLevel} from "jovo-core";
 import * as fs from 'fs';
 import * as path from "path";
 import _merge = require('lodash.merge');
@@ -21,7 +21,7 @@ if (process.argv.includes('--port')) {
 }
 
 if (process.argv.includes('--log-level')) {
-    process.env.JOVO_LOG_LEVEL = Log.getLogLevelFromString(process.argv[process.argv.indexOf('--log-level') + 1].trim()) + '';
+    process.env.JOVO_LOG_LEVEL = Logger.getLogLevelFromString(process.argv[process.argv.indexOf('--log-level') + 1].trim()) + '';
 }
 
 if (process.argv.includes('--cwd')) {
@@ -56,7 +56,7 @@ export class App extends BaseApp {
             this.config = _merge(this.config, config);
         }
 
-        Log.verbose('');
+        Log.verbose();
         Log.verbose(Log.header(`Verbose information ${new Date().toISOString()}`));
 
         // sets specific cwd
@@ -82,7 +82,7 @@ export class App extends BaseApp {
             Log.verbose('Stage: ' + stage);
         }
 
-        if (Log.isLogLevel(LogLevel.VERBOSE)) {
+        if (Logger.isLogLevel(LogLevel.VERBOSE)) {
             const pathToPackageJsonInSrc = path.join(process.cwd(), 'package-lock.json');
             const pathToPackageJsonInProject = path.join(process.cwd(), '..', 'package-lock.json');
             let pathToPackageJson = undefined;
@@ -97,7 +97,7 @@ export class App extends BaseApp {
                 const packageLockJson: any = require(pathToPackageJson!); // tslint:disable-line
 
                 const dependencies = Object.keys(packageLockJson.dependencies).filter((val) => val.startsWith('jovo-'));
-                Log.verbose(Log.header('Jovo dependencies from package-lock.json', 'framework'));
+                Log.verbose(Log.header('Jovo dependencies from package-lock.json', 'jovo-framework'));
                 dependencies.forEach((jovoDependency: string) => {
                     Log.yellow().verbose(` ${jovoDependency}@${packageLockJson.dependencies[jovoDependency].version}`);
                 });
@@ -124,7 +124,7 @@ export class App extends BaseApp {
         this.v1ConfigMigration();
         this.initConfig();
 
-        Log.verbose(Log.header('App object initialized', 'framework'));
+        Log.verbose(Log.header('App object initialized', 'jovo-framework'));
         this.$config = this.config;
         this.init();
 
