@@ -121,10 +121,7 @@ export class Firestore implements Db {
     async load(primaryKey: string): Promise<firebase.firestore.DocumentData | undefined> {
         this.errorHandling();
 
-        const docRef: firebase.firestore.DocumentReference = this.firestore!
-            .collection(this.config.collectionName)
-            .doc(primaryKey);
-
+        const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         const doc: firebase.firestore.DocumentSnapshot = await docRef.get();
         return doc.data();
     }
