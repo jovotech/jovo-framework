@@ -14,7 +14,7 @@ export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
-export { Util, Log, LogLevel };
+export { Util, LogLevel, Log };
 
 
 declare module 'express' {

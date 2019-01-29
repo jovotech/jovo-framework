@@ -56,10 +56,7 @@ export class Middleware {
             // LOGGING
             if (this.parent.constructor.name === 'App') {
                 if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {
-                    Log.debug(` ##### ${this.name} (start)`);
-
-                    Log.debugStart(` ##### ${this.name}`);
-                    Log.debug('');
+                    Log.debugStart(`-- middleware '${this.name}' done`);
                 }
             }
 
@@ -102,10 +99,8 @@ export class Middleware {
             // LOGGING
             if (this.parent.constructor.name === 'App') {
                 if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {
-                    Log.debug('');
-                    Log.debugEnd(` ##### ${this.name}`);
-                    Log.debug('');
-                    Log.debug('');
+                    Log.debug();
+                    Log.debugEnd(`-- middleware '${this.name}' done`);
                 }
             }
 
