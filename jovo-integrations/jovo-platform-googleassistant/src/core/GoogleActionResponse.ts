@@ -93,14 +93,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getSpeech();
+                    return text === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
+                if (speech.toString() !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -118,14 +118,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(speech)) {
 
                 const results = speech.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getSpeech();
+                    return text === this.getSpeech();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(speech.toString()) !== this.getSpeech()) {
+                if (speech.toString() !== this.getSpeech()) {
                     return false;
                 }
             }
@@ -134,14 +134,14 @@ export class GoogleActionResponse implements JovoResponse {
             if (Array.isArray(reprompt)) {
 
                 const results = reprompt.find((text: string) => {
-                    return SpeechBuilder.toSSML(text) === this.getReprompt();
+                    return text === this.getReprompt();
                 });
 
                 if (results && results.length === 0) {
                     return false;
                 }
             } else {
-                if (SpeechBuilder.toSSML(reprompt.toString()) !== this.getReprompt()) {
+                if (reprompt.toString() !== this.getReprompt()) {
                     return false;
                 }
             }
