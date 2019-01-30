@@ -41,10 +41,7 @@ export class Firestore implements Db {
                 'Failed to import the firebase-admin package',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-db-firestore',
-                'The Jovo Firestore integration depends on the firebase-admin package, ' +
-                    'which could not be imported.',
-                undefined,
-                undefined
+                'The Jovo Firestore integration depends on the firebase-admin package, which could not be imported.'
             );
         }
 
@@ -58,10 +55,7 @@ export class Firestore implements Db {
             throw new JovoError(
                 'Failed to initialize the firestore object',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-db-firestore',
-                undefined,
-                undefined,
-                undefined
+                'jovo-db-firestore'
             );
         }
 
