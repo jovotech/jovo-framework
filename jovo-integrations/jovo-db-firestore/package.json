@@ -15,12 +15,14 @@
   "dependencies": {
     "firebase-admin": "^6.5.0",
     "jovo-core": "^2.0.10",
-    "lodash.get": "^4.4.2"
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
     "@types/jest": "^23.3.1",
     "@types/lodash.get": "^4.4.4",
+    "@types/lodash.merge": "^4.6.4",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
     "source-map-support": "^0.5.8",
