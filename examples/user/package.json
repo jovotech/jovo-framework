@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-user",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -17,6 +17,6 @@
     "jovo-framework": "^2.0.13",
     "jovo-platform-alexa": "^2.0.16",
     "jovo-platform-googleassistant": "^2.0.15",
-    "jovo-plugin-debugger": "^2.0.11"
+    "jovo-plugin-debugger": "^2.0.12"
   }
 }
