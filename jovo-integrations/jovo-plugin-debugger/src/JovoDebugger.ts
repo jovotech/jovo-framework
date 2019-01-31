@@ -127,11 +127,11 @@ export class JovoDebugger implements Plugin {
         obj.platform = platformMap[obj.platform];
         const platform = this.app.getPlatformByName(obj.platform ) || this.app.$platform.values().next().value;
         const test = platform.makeTestSuite();
-
         const fileDbPath = _get(this.app.$plugins.get('FileDb'), 'config.pathToFile');
 
         conv = _get(this, `conversations.${userId}`) ||
                 test.conversation({
+                    locale: obj.locale,
                     userId,
                     defaultDbDirectory: fileDbPath
                 });
