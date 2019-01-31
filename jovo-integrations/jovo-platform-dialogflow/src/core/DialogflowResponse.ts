@@ -87,7 +87,11 @@ export class DialogflowResponse implements JovoResponse {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
             if (typeof _get(this.payload, `${platformId}.getSpeech`) === 'function') {
-                return SpeechBuilder.removeSpeakTags(this.payload[platformId].getSpeech());
+                const speech = this.payload[platformId].getSpeech();
+                if (!speech) {
+                    return;
+                }
+                return SpeechBuilder.removeSpeakTags(speech);
             }
         }
         return SpeechBuilder.removeSpeakTags(this.fulfillmentText);
@@ -97,17 +101,31 @@ export class DialogflowResponse implements JovoResponse {
         const platformId = this.getPlatformId();
         if (this.payload && platformId) {
             if (typeof _get(this.payload, `${platformId}.getReprompt`) === 'function') {
-                return SpeechBuilder.removeSpeakTags(this.payload[platformId].getReprompt());
+                const reprompt = this.payload[platformId].getReprompt();
+                if (!reprompt) {
+                    return;
+                }
+                return SpeechBuilder.removeSpeakTags(reprompt);
             }
         }
         return undefined;
     }
 
     getSpeechPlain() {
-        return SpeechBuilder.removeSSML(this.getSpeech());
+        const speech = this.getSpeech();
+        if (!speech) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(speech);
     }
     getRepromptPlain() {
-        return SpeechBuilder.removeSSML(this.getReprompt());
+        const reprompt = this.getReprompt();
+        if (!reprompt) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(reprompt);
     }
 
     isTell(speech?: string | string[]) {
