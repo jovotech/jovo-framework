@@ -1,4 +1,4 @@
-import {Db, PluginConfig, BaseApp, Log} from 'jovo-core';
+import {Db, PluginConfig, BaseApp, Log, JovoError, ErrorCode} from 'jovo-core';
 import * as path from 'path';
 import * as fs from "fs";
 import _get = require('lodash.get');
@@ -63,6 +63,15 @@ export class FileDb implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string) {
+        if (!fs.existsSync(this.config.pathToFile)) {
+            throw new JovoError(
+                `File db ${this.config.pathToFile} does not exist.`,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-filedb',
+                undefined,
+                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
+        }
+        Log.verbose(`Loading data from: ${this.config.pathToFile}`)
         const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
         const users = data.length > 0 ? JSON.parse(data) : [];
         const userData = users.find((o:any) => { // tslint:disable-line
@@ -73,6 +82,15 @@ export class FileDb implements Db {
     }
 
     async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+        if (!fs.existsSync(this.config.pathToFile)) {
+            throw new JovoError(
+                `File db ${this.config.pathToFile} does not exist.`,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-filedb',
+                undefined,
+                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
+        }
+
         const oldData: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
         const users = oldData.length > 0 ? JSON.parse(oldData) : [];
 
@@ -89,10 +107,21 @@ export class FileDb implements Db {
             _set(newData, key, data);
             users.push(newData);
         }
+        Log.verbose(`Saving data to: ${this.config.pathToFile}`);
+
         return this.saveFile(this.config.pathToFile, users);
     }
 
     async delete(primaryKey: string) {
+        if (!fs.existsSync(this.config.pathToFile)) {
+            throw new JovoError(
+                `File db ${this.config.pathToFile} does not exist.`,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-filedb',
+                undefined,
+                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
+        }
+
         const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
         let users = data.length > 0 ? JSON.parse(data) : [];
         let rowsAffected = 0;
@@ -133,15 +162,15 @@ export class FileDb implements Db {
 
     private static validatePathToFile(config: any) { // tslint:disable-line
         if (!_get(config, 'pathToFile')) {
-            throw Error('InitializationError: pathToFile not set');
+            throw new JovoError('InitializationError: pathToFile not set.', ErrorCode.ERR_PLUGIN, 'jovo-db-filedb');
         }
 
         if ((/[^a-z0-9_/\.:\\-]/gi).test(config.pathToFile)) {
-            throw Error('InitializationError: pathToFile not valid');
+            throw new JovoError('InitializationError: pathToFile not valid.', ErrorCode.ERR_PLUGIN, 'jovo-db-filedb');
         }
 
         if (path.extname(config.pathToFile) !== '.json') {
-            throw Error('InitializationError: Invalid file FileDB extension. Must be .json');
+            throw new JovoError('InitializationError: Invalid file FileDB extension. It must be .json', ErrorCode.ERR_PLUGIN, 'jovo-db-filedb');
         }
     }
 
