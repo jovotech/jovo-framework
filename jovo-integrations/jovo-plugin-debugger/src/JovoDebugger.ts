@@ -131,7 +131,6 @@ export class JovoDebugger implements Plugin {
 
         conv = _get(this, `conversations.${userId}`) ||
                 test.conversation({
-                    locale: obj.locale,
                     userId,
                     defaultDbDirectory: fileDbPath
                 });
@@ -182,6 +181,7 @@ export class JovoDebugger implements Plugin {
             // set locale (not available for every request)
             try {
                 req.setLocale(obj.locale);
+                conv.config.locale = obj.locale;
             } catch (e) {
             }
 
