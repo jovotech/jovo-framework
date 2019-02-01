@@ -63,18 +63,34 @@ export class AlexaResponse implements JovoResponse {
     }
 
     getSpeech() {
+        if (!_get(this, 'response.outputSpeech.ssml')) {
+            return;
+        }
         return SpeechBuilder.removeSpeakTags(_get(this, 'response.outputSpeech.ssml'));
     }
     getReprompt() {
+        if (!_get(this, 'response.outputSpeech.ssml')) {
+            return;
+        }
         return SpeechBuilder.removeSpeakTags(_get(this, 'response.reprompt.outputSpeech.ssml'));
     }
 
 
     getSpeechPlain() {
-        return SpeechBuilder.removeSSML(this.getSpeech());
+        const speech = this.getSpeech();
+        if (!speech) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(speech);
     }
     getRepromptPlain() {
-        return SpeechBuilder.removeSSML(this.getReprompt());
+        const reprompt = this.getReprompt();
+        if (!reprompt) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(reprompt);
     }
 
     getSessionAttribute(name: string) {

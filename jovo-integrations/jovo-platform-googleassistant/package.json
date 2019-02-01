@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-googleassistant",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-core": "^2.0.11",
-    "jovo-platform-dialogflow": "^2.0.12",
+    "jovo-platform-dialogflow": "^2.0.13",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

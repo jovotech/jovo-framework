@@ -45,7 +45,7 @@ For this, Jovo uses a package called [alexa-verifier-middleware](https://github.
 
 ```javascript
 // Use this
-const { WebhookVerified as Webhook, ExpressJS } = require('jovo-framework');
+const { WebhookVerified: Webhook, ExpressJS } = require('jovo-framework');
 
 // Instead of this
 const { Webhook, ExpressJS } = require('jovo-framework');

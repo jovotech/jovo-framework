@@ -213,6 +213,7 @@ export class JovoUser implements Plugin {
             if (this.jovo.$app!.$db) {
                 await this.jovo.$app!.$db.delete(userId);
                 this.isDeleted = true;
+                Log.verbose(`User with id ${userId} has been deleted.`);
             } else {
                 throw new Error('No database configurated.');
             }

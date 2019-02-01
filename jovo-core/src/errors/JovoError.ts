@@ -1,3 +1,4 @@
+import {Log} from "../Log";
 
 
 export enum ErrorCode {
@@ -26,5 +27,50 @@ export class JovoError extends Error {
         this.hint = hint;
         this.code = code;
         this.seeMore = seeMore;
+    }
+
+
+    static printError(e: JovoError) {
+
+        Log.red().error(Log.header('Error'));
+
+        if (e.code) {
+            Log.error('Code:');
+            Log.error(e.code);
+            Log.error();
+        }
+        Log.error('Message:');
+        Log.error(e.message);
+
+        if (e.stack) {
+            Log.error();
+            Log.error('Stack:');
+            Log.error(e.stack);
+        }
+        if (e.message.indexOf('is not a function')  > -1) {
+            e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
+            e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
+        }
+
+        if (e.details) {
+            Log.error();
+            Log.error('Details:');
+            Log.error(e.details);
+        }
+
+        if (e.hint) {
+            Log.error();
+            Log.error('Hint:');
+            Log.error(e.hint);
+        }
+
+        if (e.seeMore) {
+            Log.error();
+            Log.error('Learn more:');
+            Log.error(e.seeMore);
+        }
+
+        Log.red().error(Log.header());
+
     }
 }

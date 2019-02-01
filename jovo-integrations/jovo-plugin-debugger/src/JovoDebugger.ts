@@ -127,7 +127,6 @@ export class JovoDebugger implements Plugin {
         obj.platform = platformMap[obj.platform];
         const platform = this.app.getPlatformByName(obj.platform ) || this.app.$platform.values().next().value;
         const test = platform.makeTestSuite();
-
         const fileDbPath = _get(this.app.$plugins.get('FileDb'), 'config.pathToFile');
 
         conv = _get(this, `conversations.${userId}`) ||
@@ -182,6 +181,7 @@ export class JovoDebugger implements Plugin {
             // set locale (not available for every request)
             try {
                 req.setLocale(obj.locale);
+                conv.config.locale = obj.locale;
             } catch (e) {
             }
 
