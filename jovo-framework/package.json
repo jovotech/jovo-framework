@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,9 +15,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.0.11",
-    "jovo-core": "^2.0.11",
-    "jovo-db-filedb": "^2.0.12",
+    "jovo-cms-i18next": "^2.0.12",
+    "jovo-core": "^2.0.12",
+    "jovo-db-filedb": "^2.0.13",
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {
