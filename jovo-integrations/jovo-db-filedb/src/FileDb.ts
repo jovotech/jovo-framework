@@ -71,7 +71,7 @@ export class FileDb implements Db {
                 undefined,
                 `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
         }
-        Log.verbose(`Loading data from: ${this.config.pathToFile}`)
+        Log.verbose(`Loading data from: ${this.config.pathToFile}`);
         const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
         const users = data.length > 0 ? JSON.parse(data) : [];
         const userData = users.find((o:any) => { // tslint:disable-line
