@@ -41,7 +41,7 @@ export class FileDb implements Db {
                 Log.info(`${path.resolve(pathToFile)} created!`);
                 Log.info();
 
-                Log.info('More Info: >> https://jovo.tech/docs/filedb');
+                Log.info('More Info: >> https://www.jovo.tech/docs/databases/file-db');
 
                 Log.info(Log.header());
 

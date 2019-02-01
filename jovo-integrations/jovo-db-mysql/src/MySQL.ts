@@ -28,9 +28,14 @@ export class MySQL implements Db {
 
     install(app: BaseApp) {
         if (!this.config.connection) {
-            throw new Error('A connection config is needed.');
+            throw new JovoError(
+                'A connection config is needed.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mysql',
+                undefined,
+                'MySQL connection configuration has to be set correctly.',
+                'https://www.jovo.tech/docs/databases/mysql');
         }
-
         this.pool = mysql.createPool(this.config.connection);
         app.$db = this;
     }
@@ -95,10 +100,23 @@ export class MySQL implements Db {
     private insert(primaryKey: string, data: object) {
         return new Promise(async (resolve, reject) => {
             if (!this.config.primaryKeyColumn) {
-                return reject(new Error('PrimaryKeyColumn must be set'));
+                return reject(new JovoError(
+                    'PrimaryKeyColumn must be set.',
+                    ErrorCode.ERR_PLUGIN,
+                    'jovo-db-mysql',
+                    undefined,
+                    undefined,
+                    'https://www.jovo.tech/docs/databases/mysql'));
             }
             if (!this.config.dataColumnName) {
-                return reject(new Error('dataColumnName must be set'));
+
+                return reject(new JovoError(
+                    'dataColumnName must be set.',
+                    ErrorCode.ERR_PLUGIN,
+                    'jovo-db-mysql',
+                    undefined,
+                    undefined,
+                    'https://www.jovo.tech/docs/databases/mysql'));
             }
 
             try {
@@ -143,7 +161,13 @@ export class MySQL implements Db {
                             return reject(error);
                         }
                         if (!this.config.dataColumnName) {
-                            return reject(new Error('dataColumnName must be set'));
+                            return reject(new JovoError(
+                                'dataColumnName must be set.',
+                                ErrorCode.ERR_PLUGIN,
+                                'jovo-db-mysql',
+                                undefined,
+                                undefined,
+                                'https://www.jovo.tech/docs/databases/mysql'));
                         }
 
 
@@ -170,7 +194,13 @@ export class MySQL implements Db {
     private getConnection(): Promise<PoolConnection> {
         return new Promise((resolve, reject) => {
             if (!this.pool) {
-                throw new JovoError('Connection could not be established.', ErrorCode.ERR_PLUGIN, 'jovo-db-mysql');
+                throw new JovoError(
+                    'Connection could not be established.',
+                    ErrorCode.ERR_PLUGIN,
+                    'jovo-db-mysql',
+                    undefined,
+                    undefined,
+                    'https://www.jovo.tech/docs/databases/mysql');
             }
 
             this.pool.getConnection((err, connection) => {
@@ -189,7 +219,13 @@ export class MySQL implements Db {
         return new Promise(async (resolve, reject) => {
 
             if (!this.config.dataColumnName) {
-                return reject(new Error('dataColumnName must be set'));
+                return reject(new JovoError(
+                    'dataColumnName must be set.',
+                    ErrorCode.ERR_PLUGIN,
+                    'jovo-db-mysql',
+                    undefined,
+                    undefined,
+                    'https://www.jovo.tech/docs/databases/mysql'));
             }
 
             try {

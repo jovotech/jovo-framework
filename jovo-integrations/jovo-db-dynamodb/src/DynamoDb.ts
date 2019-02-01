@@ -1,4 +1,4 @@
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, Log, JovoError, ErrorCode} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import * as AWS from 'aws-sdk';
@@ -65,10 +65,10 @@ export class DynamoDb implements Db {
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
         if (!this.config.tableName) {
-            throw new Error(`Couldn't use DynamoDb. tableName has to be set.`);
+            throw new JovoError(`Couldn't use DynamoDB. tableName has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         if (!this.docClient) {
-            throw new Error(`Couldn't use DynamoDb. DocClient is not initialized.`);
+            throw new JovoError(`Couldn't use DynamoDb. DocClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
 
         const getDataMapParams: DocumentClient.GetItemInput = {
@@ -100,15 +100,14 @@ export class DynamoDb implements Db {
 
     async save(primaryKey: string, key: string, data: object) {
         if (!this.config.tableName) {
-            throw new Error(`Couldn't use DynamoDB. tableName has to be set.`);
-
-        }
-        if (!this.config.primaryKeyColumn) {
-            throw new Error(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`);
-
+            throw new JovoError(`Couldn't use DynamoDB. tableName has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         if (!this.docClient) {
-            throw new Error(`Couldn't use DynamoDb. DocClient is not initialized.`);
+            throw new JovoError(`Couldn't use DynamoDb. DocClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
+        }
+
+        if (!this.config.primaryKeyColumn) {
+            throw new JovoError(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         const getDataMapParams: DocumentClient.PutItemInput = {
             TableName: this.config.tableName,
@@ -127,15 +126,13 @@ export class DynamoDb implements Db {
 
     private async createTable() {
         if (!this.config.tableName) {
-            throw new Error(`Couldn't use DynamoDB. tableName has to be set.`);
-
+            throw new JovoError(`Couldn't use DynamoDB. tableName has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         if (!this.config.primaryKeyColumn) {
-            throw new Error(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`);
-
+            throw new JovoError(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         if (!this.dynamoClient) {
-            throw new Error(`Couldn't use DynamoDb. DynamoClient is not initialized.`);
+            throw new JovoError(`Couldn't use DynamoDb. DynamoClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
         const newTableParams: AWS.DynamoDB.Types.CreateTableInput = {
             TableName: this.config.tableName,
@@ -161,9 +158,16 @@ export class DynamoDb implements Db {
             const result = await this.dynamoClient.createTable(newTableParams).promise();
 
             if (_get(result, 'TableDescription.TableStatus') === 'CREATING') {
-                console.info(`#  `);
-                console.info(`#  Creating DynamoDB table '${this.config.tableName}'...`);
-                console.info(`#  `);
+
+                Log.info(Log.header('INFO: DynamoDB', 'jovo-db-dynamodb'));
+                Log.info(`Creating DynamoDB table '${this.config.tableName}'...!`);
+                Log.info();
+                Log.info('Table configuration:');
+                Log.info(JSON.stringify(newTableParams, null, '\t'));
+
+                Log.info('More Info: >> https://www.jovo.tech/docs/databases/dynamodb');
+                Log.info(Log.header());
+
                 this.isCreating = true;
             }
 
