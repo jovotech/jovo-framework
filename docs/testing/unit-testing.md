@@ -210,7 +210,7 @@ request.setUserId('<some-user-id>');
 request.setNewSession(true);
 ```
 
-> [Find out more about the helper methods for the Jovo `$request` object here](../basic-concepts/requests-responses/request.md './requests-responses/request).
+> [Find out more about the helper methods for the Jovo `$request` object here](../basic-concepts/requests-responses/request.md './requests-responses/request').
 
 
 ### Response
