@@ -94,6 +94,14 @@ declare module 'jovo-core/dist/src/Jovo' {
          * @return {*}
          */
         getHandlerPath(): string;
+
+
+        /**
+         * Skips intent handling when called in NEW_USER, NEW_SESSION, ON_REQUEST
+         * @public
+         * @return {*}
+         */
+        skipIntentHandling(): Promise<void>;
     }
 }
 

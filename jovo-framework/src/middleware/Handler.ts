@@ -133,6 +133,7 @@ export class Handler implements Plugin {
                 return await result;
             }
             else {
+                jovo.triggeredToIntent = true;
                 return;
             }
         } else {
@@ -363,6 +364,15 @@ export class Handler implements Plugin {
             return path;
         };
 
+
+        /**
+         * Skips intent handling when called in NEW_USER, NEW_SESSION, ON_REQUEST
+         * @public
+         * @return {*}
+         */
+        Jovo.prototype.skipIntentHandling = async function (): Promise<void> {
+            this.triggeredToIntent = true;
+        };
     }
 
 
