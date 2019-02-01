@@ -19,9 +19,12 @@ process.on('uncaughtException', (err) => {
     Log.error('Message:');
     Log.error(err.message);
     Log.error();
-    Log.error('Stack:');
-    Log.error(err.stack);
-    Log.error();
+
+    if (err.stack) {
+        Log.error('Stack:');
+        Log.error(err.stack);
+        Log.error();
+    }
 
     if (err.message.indexOf('is not a function') > -1) {
         Log.error('Hint:');
@@ -124,7 +127,7 @@ export class BaseApp extends Extensible {
             jovo: undefined
         };
         try {
-
+            Log.setRequestContext(host);
             Log.verbose(Log.header('Start request', 'framework'));
 
             // initialize on first call only
