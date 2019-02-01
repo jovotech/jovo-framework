@@ -1,14 +1,14 @@
 
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, ErrorCode, JovoError, Log} from 'jovo-core';
 import _merge = require('lodash.merge');
 import * as mysql from 'mysql';
-import {Connection, ConnectionConfig, MysqlError} from "mysql";
+import {MysqlError, Pool, PoolConnection, PoolConfig} from "mysql";
 
 export interface Config extends PluginConfig {
     tableName?: string;
     primaryKeyColumn?: string;
     dataColumnName?: string;
-    connection?: string | ConnectionConfig;
+    connection?: string | PoolConfig;
 }
 
 export class MySQL implements Db {
@@ -17,7 +17,7 @@ export class MySQL implements Db {
         primaryKeyColumn: 'userId',
         dataColumnName: 'userData',
     };
-    connection?: Connection;
+    pool?: Pool;
     needsWriteFileAccess = false;
 
     constructor(config?: Config) {
@@ -31,12 +31,16 @@ export class MySQL implements Db {
             throw new Error('A connection config is needed.');
         }
 
-        this.connection = mysql.createConnection(this.config.connection);
-        this.connection.connect();
+        this.pool = mysql.createPool(this.config.connection);
         app.$db = this;
     }
 
     uninstall(app: BaseApp) {
+        if (this.pool) {
+            this.pool.end(() => {
+                Log.verbose('MySQL Connection pool released.');
+            });
+        }
     }
 
     /**
@@ -62,21 +66,25 @@ export class MySQL implements Db {
     }
 
     async delete(primaryKey: string) {
-        return new Promise((resolve, reject) => {
-            // tslint:disable-next-line
-            if (!this.connection) {
-                return reject(new Error('Connection is not established'));
-            }
-            this.connection.query(
-                `DELETE FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
-                [primaryKey],
-                (error: MysqlError | null, results: any) => { // tslint:disable-line
-                    if(error) {
-                        return reject(error);
-                    }
-                    resolve(results);
+        return new Promise(async (resolve, reject) => {
 
-                });
+            try {
+                const connection: PoolConnection = await this.getConnection();
+
+                const query = connection.query(
+                    `DELETE FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
+                    [primaryKey],
+                    (error: MysqlError | null, results: any) => { // tslint:disable-line
+                        if(error) {
+                            return reject(error);
+                        }
+                        resolve(results);
+                        connection.release();
+                    });
+                Log.verbose('SQL STATEMENT: ' + query.sql);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 
@@ -85,7 +93,7 @@ export class MySQL implements Db {
     }
 
     private insert(primaryKey: string, data: object) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (!this.config.primaryKeyColumn) {
                 return reject(new Error('PrimaryKeyColumn must be set'));
             }
@@ -93,76 +101,121 @@ export class MySQL implements Db {
                 return reject(new Error('dataColumnName must be set'));
             }
 
-            if (!this.connection) {
-                return reject(new Error('Connection is not established'));
+            try {
+                const connection: PoolConnection = await this.getConnection();
+
+                // Use the connection
+                const query = connection.query(`INSERT INTO ${this.config.tableName} SET ? ON DUPLICATE KEY UPDATE ${this.config.dataColumnName}=?`,
+                    [{
+                        [this.config.primaryKeyColumn!] : primaryKey,
+                        [this.config.dataColumnName!]: JSON.stringify(data)
+                    },
+                        JSON.stringify(data)],
+                    (error: MysqlError | null, results: any) => { // tslint:disable-line
+
+                        if(error) {
+                            return reject(error);
+                        }
+                        resolve(results);
+                        connection.release();
+
+                    });
+                Log.verbose('SQL STATEMENT: ' + query.sql);
+            } catch (e) {
+                reject(e);
             }
-            // tslint:disable-next-line
-            this.connection.query(`INSERT INTO ${this.config.tableName} SET ? ON DUPLICATE KEY UPDATE ${this.config.dataColumnName}='${JSON.stringify(data)}'`, {[this.config.primaryKeyColumn] : primaryKey, userData: JSON.stringify(data)}, (error: MysqlError | null, results: any) => {
-                if(error) {
-                    return reject(error);
-                }
-                resolve(results);
-            });
         });
     }
 
 
     private select(primaryKey: string) {
+        return new Promise(async (resolve, reject) => {
+
+            try {
+                const connection: PoolConnection = await this.getConnection();
+
+                // Use the connection
+                const query = connection.query(
+                    `SELECT * FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
+                    [primaryKey],
+                    (error: MysqlError | null, results: any) => { // tslint:disable-line
+                        if(error) {
+                            return reject(error);
+                        }
+                        if (!this.config.dataColumnName) {
+                            return reject(new Error('dataColumnName must be set'));
+                        }
+
+
+                        if (results.length === 0) {
+                            return resolve({[this.config.dataColumnName]: {}});
+                        }
+
+                        try {
+                            resolve({ [this.config.dataColumnName]: JSON.parse(results[0][this.config.dataColumnName])});
+                        } catch (e) {
+                            reject(e);
+                        }
+                        connection.release();
+                    });
+
+                Log.verbose('SQL STATEMENT: ' + query.sql);
+            } catch (e) {
+                reject(e);
+            }
+        });
+
+    }
+
+    private getConnection(): Promise<PoolConnection> {
         return new Promise((resolve, reject) => {
-            // tslint:disable-next-line
-            if (!this.connection) {
-                return reject(new Error('Connection is not established'));
+            if (!this.pool) {
+                throw new JovoError('Connection could not be established.', ErrorCode.ERR_PLUGIN, 'jovo-db-mysql');
             }
 
-            this.connection.query(
-                `SELECT * FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
-                [primaryKey],
-                (error: MysqlError | null, results: any) => { // tslint:disable-line
-                if(error) {
-                    return reject(error);
+            this.pool.getConnection((err, connection) => {
+                if (err) {
+                    return reject(new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-db-mysql'));
                 }
-                if (!this.config.dataColumnName) {
-                    return reject(new Error('dataColumnName must be set'));
-                }
-
-
-                if (results.length === 0) {
-                    return resolve({[this.config.dataColumnName]: {}});
-                }
-
-                try {
-                    resolve({ [this.config.dataColumnName]: JSON.parse(results[0][this.config.dataColumnName])});
-                } catch (e) {
-                    reject(e);
-                }
-
+                resolve(connection);
             });
         });
     }
+
+
 
     private create() {
 
-        return new Promise((resolve, reject) => {
-            if (!this.connection) {
-                return reject(new Error('Connection is not established'));
-            }
+        return new Promise(async (resolve, reject) => {
+
             if (!this.config.dataColumnName) {
                 return reject(new Error('dataColumnName must be set'));
             }
-            const sql = `
+
+            try {
+                const connection: PoolConnection = await this.getConnection();
+
+                const sql = `
                     CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(255) NOT NULL,
                     ${this.config.dataColumnName} TEXT NULL,
                     PRIMARY KEY (${this.config.primaryKeyColumn}));
-            `;
-            // tslint:disable-next-line
-            this.connection.query(sql, (error: MysqlError, results: any) => {
-                if(error) {
-                    return reject(error);
-                }
-                resolve(results);
+                    `;
 
-            });
+                const query = connection.query(sql, (error: MysqlError, results: any) => { // tslint:disable-line
+                    if(error) {
+                        return reject(error);
+                    }
+                    resolve(results);
+                    connection.release();
+                });
+                Log.verbose('SQL STATEMENT: ' + query.sql);
+            } catch(e) {
+                reject(e);
+
+            }
         });
     }
+
+
 
 }
