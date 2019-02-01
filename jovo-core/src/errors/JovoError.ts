@@ -42,10 +42,11 @@ export class JovoError extends Error {
         Log.error('Message:');
         Log.error(e.message);
 
-        Log.error();
-        Log.error('Stack:');
-        Log.error(e.stack);
-
+        if (e.stack) {
+            Log.error();
+            Log.error('Stack:');
+            Log.error(e.stack);
+        }
         if (e.message.indexOf('is not a function')  > -1) {
             e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
             e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
