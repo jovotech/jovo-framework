@@ -75,9 +75,15 @@ export interface HandleRequest {
      */
     error?: Error;
 
+    /**
+     * Request data object for plugins.
+     */
+    $data?: any; // tslint:disable-line
+
 
 
     platformClazz?: any; // tslint:disable-line
+
 }
 
 // specialized plugins
