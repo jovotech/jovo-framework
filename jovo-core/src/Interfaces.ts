@@ -524,6 +524,13 @@ export interface Host {
      * @returns {Promise<any>}
      */
     setResponse(obj: any): Promise<any>; // tslint:disable-line
+
+
+    /**
+     * Is called on errors
+     */
+    fail(error: Error): void;
+
 }
 
 export interface NLUData {

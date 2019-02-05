@@ -170,6 +170,7 @@ export class BaseApp extends Extensible {
             handleRequest.error = e;
             Log.red().error(Log.header());
             await this.middleware('fail')!.run(handleRequest);
+            handleRequest.host.fail(e);
         }
     }
 
