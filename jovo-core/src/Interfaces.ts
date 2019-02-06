@@ -75,9 +75,15 @@ export interface HandleRequest {
      */
     error?: Error;
 
+    /**
+     * Request data object for plugins.
+     */
+    $data?: any; // tslint:disable-line
+
 
 
     platformClazz?: any; // tslint:disable-line
+
 }
 
 // specialized plugins
@@ -524,6 +530,13 @@ export interface Host {
      * @returns {Promise<any>}
      */
     setResponse(obj: any): Promise<any>; // tslint:disable-line
+
+
+    /**
+     * Is called on errors
+     */
+    fail(error: Error): void;
+
 }
 
 export interface NLUData {

@@ -45,6 +45,28 @@ export class AzureFunction implements Host {
         });
     }
 
+    fail(error: Error) { // tslint:disable-line
+        if (!this.context.res.statusCode) {
+            const responseObj: any = { // tslint:disable-line
+                code: 500,
+                msg: error.message,
+            };
+
+            if (process.env.NODE_ENV === 'production') {
+                responseObj.stack = error.stack;
+            }
+
+            this.context.res = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                statusCode: 500,
+                body: responseObj
+            };
+            this.context.done();
+        }
+    }
+
     /**
      * Add an appender, if not already added, that writes logs to Azure Function's context.log.
      * The benefit of doing so, vs. just using console.log, is that the logs get associated with the request

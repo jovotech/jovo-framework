@@ -47,4 +47,29 @@ export class Lambda implements Host {
             resolve();
         });
     }
+
+    fail(error: Error) {
+        const responseObj: any = { // tslint:disable-line
+            code: 500,
+            msg: error.message,
+        };
+
+        if (process.env.NODE_ENV === 'production') {
+            responseObj.stack = error.stack;
+        }
+
+        if (this.isApiGateway) {
+            this.callback(error, {
+                statusCode: 500,
+                body: JSON.stringify(responseObj),
+                isBase64Encoded: false,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+            });
+        } else {
+            this.callback(error, responseObj);
+        }
+
+    }
 }

@@ -25,4 +25,19 @@ export class GoogleCloudFunction implements Host {
             resolve();
         });
     }
+
+    fail(error: Error) {
+        if (this.res.headersSent === false) {
+            const responseObj: any = { // tslint:disable-line
+                code: 500,
+                msg: error.message,
+            };
+
+            if (process.env.NODE_ENV === 'production') {
+                responseObj.stack = error.stack;
+            }
+
+            this.res.status(500).json(responseObj);
+        }
+    }
 }
