@@ -46,7 +46,8 @@ export class AzureFunction implements Host {
     }
 
     fail(error: Error) {
-        if (!this.context.res) {
+        // we can safely assume context.res is always defined -- see https://github.com/Azure/azure-functions-nodejs-worker/issues/169
+        if (!this.context.res!.statusCode) {
             const responseObj: any = { // tslint:disable-line
                 code: 500,
                 msg: error.message,
