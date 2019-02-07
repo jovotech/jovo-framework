@@ -1,5 +1,5 @@
 import {Context, HttpRequest} from "@azure/functions";
-import {Host, Log, LogLevel} from "jovo-core";
+import {Host, JovoResponse, Log, LogLevel} from "jovo-core";
 
 const AZURE_FUNCTION_APPENDER_NAME = 'azureFunction';
 
@@ -31,7 +31,7 @@ export class AzureFunction implements Host {
         return this.$request;
     }
 
-    setResponse(obj: any) { // tslint:disable-line
+    setResponse(obj: JovoResponse) {
         return new Promise<void>((resolve) => {
             this.context.res = {
                 headers: {
@@ -45,8 +45,8 @@ export class AzureFunction implements Host {
         });
     }
 
-    fail(error: Error) { // tslint:disable-line
-        if (!this.context.res.statusCode) {
+    fail(error: Error) {
+        if (!this.context.res) {
             const responseObj: any = { // tslint:disable-line
                 code: 500,
                 msg: error.message,
