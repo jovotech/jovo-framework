@@ -76,6 +76,10 @@ class DummyHost implements Host {
         return new Promise((resolve, reject) => {});
     }
 
+    fail(error: Error) {
+
+    }
+
 }
 
 
