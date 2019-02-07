@@ -46,26 +46,9 @@ export class AzureFunction implements Host {
     }
 
     fail(error: Error) {
-        // we can safely assume context.res is always defined -- see https://github.com/Azure/azure-functions-nodejs-worker/issues/169
-        if (!this.context.res!.statusCode) {
-            const responseObj: any = { // tslint:disable-line
-                code: 500,
-                msg: error.message,
-            };
-
-            if (process.env.NODE_ENV === 'production') {
-                responseObj.stack = error.stack;
-            }
-
-            this.context.res = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                statusCode: 500,
-                body: responseObj
-            };
-            this.context.done();
-        }
+        // We must call context.done with the error object and no response body
+        // in order for the request to be recognized as 'Failed' in the Azure Portal.
+        this.context.done(error);
     }
 
     /**
