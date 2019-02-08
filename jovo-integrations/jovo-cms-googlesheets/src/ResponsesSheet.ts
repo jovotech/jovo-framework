@@ -1,5 +1,6 @@
 import {Extensible, HandleRequest, Cms} from 'jovo-core';
-import * as i18n from 'i18next';
+const i18n = require('i18next');
+
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _get = require('lodash.get');
@@ -85,9 +86,10 @@ export class ResponsesSheet extends DefaultSheet {
             throw new Error('Entity has to be set.');
         }
         if (!handleRequest.app.$cms.I18Next) {
-            handleRequest.app.$cms.I18Next.i18n = i18n.init(Object.assign({
+            i18n.init(Object.assign({
                 resources
             }, this.config.i18Next));
+            handleRequest.app.$cms.I18Next.i18n = i18n;
         } else {
             Object.keys(resources).forEach((localeKey) => {
                 const resource = resources[localeKey];

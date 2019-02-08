@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "googleapis": "^35.0.0",
-    "i18next": "^12.1.0",
+    "i18next": "^14.1.1",
     "jovo-core": "^2.0.12"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import _merge = require('lodash.merge');
 import * as fs from "fs";
 import * as util from 'util';
 import * as path from 'path';
-import * as i18n from 'i18next';
+const i18n = require('i18next');
 
 
 export interface Config extends PluginConfig {
@@ -38,7 +38,6 @@ export class I18Next extends BaseCmsPlugin {
         app.middleware('setup')!.use(this.loadFiles.bind(this));
 
         Jovo.prototype.t = function() {
-
             this.$app!.$cms.I18Next.i18n.changeLanguage(this.$request!.getLocale());
             return this.$app!.$cms.I18Next.i18n.t.apply(
                 this.$app!.$cms.I18Next.i18n, arguments
@@ -106,13 +105,13 @@ export class I18Next extends BaseCmsPlugin {
 
         Log.debug(`Adding resources to $cms object:`);
         Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
-
-        handleRequest.app.$cms.I18Next.i18n = i18n
+        i18n
             .init(_merge(
                 {
                     resources: handleRequest.app.$cms.I18Next.resources
                 },
                 this.config));
+        handleRequest.app.$cms.I18Next.i18n = i18n;
 
     }
 }
