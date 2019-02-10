@@ -1,6 +1,9 @@
-import {Plugin} from "jovo-core";
+import { Plugin, ErrorCode } from "jovo-core";
 import { AlexaSkill } from "../core/AlexaSkill";
-import {Alexa} from "../Alexa";
+import { AlexaAPI, ApiCallOptions } from "../services/AlexaAPI";
+import { Alexa } from "../Alexa";
+import { AlexaRequest } from "../core/AlexaRequest";
+import {JovoError} from "jovo-core";
 
 export class ProactiveEvent {
     alexaSkill: AlexaSkill;
@@ -9,41 +12,111 @@ export class ProactiveEvent {
         this.alexaSkill = alexaSkill;
     }
 
-    // interface
+    async getAccessToken(clientId: string, clientSecret: string): Promise<string> {
+        const authObject: AuthorizationResponse = await this.sendAuthRequest(clientId, clientSecret);
+        return authObject.access_token;
+    }
+
+    async sendAuthRequest(clientId: string, clientSecret: string): Promise<AuthorizationResponse> {
+        const authObject: AuthorizationResponse = await AlexaAPI.proactiveEventAuthorization(clientId, clientSecret);
+        return authObject;
+    }
+
+    async sendProactiveEvent(proactiveEvent: ProactiveEventObject, accessToken: string) {
+        if (!accessToken) {
+            throw new JovoError(
+                'Can\'t find accessToken',
+                ErrorCode.ERR,
+                'jovo-platform-alexa',
+                'To send out Proactive Events you have to provide an accessToken',
+                'Try to get an accessToken by calling "this.$alexaSkill.$proactiveEvents.getAccessToken(clientId, clientSecret)"',
+                'TODO: Link to Jovo docs'
+            );
+        }
+        const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
+        const options: ApiCallOptions = {
+            endpoint: alexaRequest.getApiEndpoint(),
+            method: 'POST',
+            path: '/v1/proactiveEvents/stages/development', // TODO live: /v1/proactiveEvents
+            permissionToken: accessToken,
+            json: proactiveEvent
+        }
+        const result = await AlexaAPI.apiCall(options);
+        return result;
+    }
+
+    getWeatherAlertActivatedObject(payload: WeatherAlertActivatedPayload): WeatherAlertActivated {
+        return new WeatherAlertActivated(payload);
+    }
+
+    getSportsEventUpdatedObject(payload: SportsEventUpdatedPayload): SportsEventUpdated {
+        return new SportsEventUpdated(payload);
+    }
+
+    getMessageAlertActivatedObject(payload: MessageAlertActivatedPayload): MessageAlertActivated {
+        return new MessageAlertActivated(payload);
+    }
+
+    getOrderStatusUpdatedObject(payload: OrderStatusUpdatedPayload): OrderStatusUpdated {
+        return new OrderStatusUpdated(payload);
+    }
+
+    getOccasionUpdatedObject(payload: OccasionUpdatedPayload): OccasionUpdated {
+        return new OccasionUpdated(payload);
+    }
+
+    getTrashCollectionAlertActivatedObject(payload: TrashCollectionAlertActivatedPayload): TrashCollectionAlertActivated {
+        return new TrashCollectionAlertActivated(payload);
+    }
+
+    getMediaContentAvailableObject(payload: MediaContentAvailablePayload): MediaContentAvailable {
+        return new MediaContentAvailable(payload);
+    }
+
+    getSocialGameInviteAvailableObject(payload: SocialGameInviteAvailablePayload): SocialGameInviteAvailable {
+        return new SocialGameInviteAvailable(payload);
+    }
 }
 
 export class ProactiveEventPlugin implements Plugin {
 
     install(alexa: Alexa) {
+        alexa.middleware('$type')!.use(this.type.bind(this));
+
         AlexaSkill.prototype.$proactiveEvent = undefined;
         AlexaSkill.prototype.proactiveEvent = function () {
-            return new ProactiveEvent(this);
+            return this.$proactiveEvent;
         }
     }
 
     uninstall(alexa: Alexa) {
 
     }
+    type(alexaSkill: AlexaSkill) {
+        alexaSkill.$proactiveEvent = new ProactiveEvent(alexaSkill);
+    }
 }
 
-/**
- * Two ways to send proactive Event
- * 1. User gets access token themselves and sends out proactiveEvent
- * 2. User sends out proactiveEvent, provides clientId & clientSecret in method call, and the system gets the token before sending out the request
- */
+export interface AuthorizationResponse {
+    access_token: string,
+    expires_in: number,
+    scope: string,
+    token_type: string
+}
+
+type LocalizedAttributes = {
+    locale: string
+}
 
 export interface ProactiveEventObject {
     timestamp: string, // ISO 8601
     referenceId: string,
     expiryTime: string, // ISO 8601
     event: Event,
-    localizedAttributes: [{
-        locale: string,
-        source: string
-    }],
+    localizedAttributes?: LocalizedAttributes[]
     relevantAudience: {
-        type: 'Unicast' | 'Multicast'
-        payload?: { // only used if type = Unicast, i.e. one a specific user is targeted, 
+        type: 'Unicast' | 'Multicast',
+        payload?: { // only used if type = Unicast, i.e. one specific user is targeted 
             user: string // userId
         }
     }
@@ -65,7 +138,7 @@ class WeatherAlertActivated extends Event {
     } 
 }
 
-interface WeatherAlertActivatedPayload {
+export interface WeatherAlertActivatedPayload {
     weatherAlert: {
         source?: string,
         alertType: 'TORNADO' | 'HURRICANE' | 'SNOW_STORM' | 'THUNDER_STORM'
@@ -78,7 +151,7 @@ class SportsEventUpdated extends Event {
     }
 }
 
-interface SportsEventUpdatedPayload {
+export interface SportsEventUpdatedPayload {
     update?: {
         ScoreEarned: number,
         teamName: string
@@ -108,7 +181,7 @@ class MessageAlertActivated extends Event {
     }
 }
 
-interface MessageAlertActivatedPayload {
+export interface MessageAlertActivatedPayload {
     state: {
         status: 'UNREAD' | 'FLAGGED',
         freshness?: 'NEW' | 'OVERDUE'
@@ -128,7 +201,7 @@ class OrderStatusUpdated extends Event {
     }
 }
 
-interface OrderStatusUpdatedPayload {
+export interface OrderStatusUpdatedPayload {
     state: {
         status: 'PREORDER_RECEIVED' | 'ORDER_RECEIVED' | 'ORDER_PREPARING' |
                 'ORDER_SHIPPED' | 'ORDER_OUT_FOR_DELIVERY' | 'ORDER_OUT_FOR_DELIVERY' |
@@ -151,10 +224,9 @@ class OccasionUpdated extends Event {
     }
 }
 
-interface OccasionUpdatedPayload {
+export interface OccasionUpdatedPayload {
     state: {
-        confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' |
-                            'REQUESTED' | 'CREATED' | 'UPDATED'
+        confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' | 'REQUESTED' | 'CREATED' | 'UPDATED'
     },
     occasion: {
         occasionType: 'RESERVATION_REQUEST' | 'RESERVATION' | 'APPOINTMENT_REQUEST' | 'APPOINTMENT',
@@ -179,7 +251,7 @@ type GarbageType = 'BOTTLES' | 'BULKY' | 'BURNABLE' | 'CANS' | 'CLOTHING' | 'COM
                 'GARDEN_WASTE' | 'GLASS' | 'HAZARDOUS' | 'HOME_APPLIANCES' | 'KITCHEN_WASTE' |
                 'LANDFILL' | 'PET_BOTTLES' | 'RECYCLABLE_PLASTICS' | 'WASTE_PAPER';
 
-interface TrashCollectionAlertActivatedPayload {
+export interface TrashCollectionAlertActivatedPayload {
     alert: {
         garbageType: GarbageType[], // Only allows array containing strings from GarbageType
         collectionDayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' |
@@ -193,7 +265,7 @@ class MediaContentAvailable extends Event {
     }
 }
 
-interface MediaContentAvailablePayload {
+export interface MediaContentAvailablePayload {
     availability: {
         startTime: string, // ISO 8601
         provider?: {
@@ -213,7 +285,7 @@ class SocialGameInviteAvailable extends Event {
     }
 }
 
-interface SocialGameInviteAvailablePayload {
+export interface SocialGameInviteAvailablePayload {
     invite: {
         inviter: {
             name: string,

@@ -39,6 +39,7 @@ import {Template} from "./response/visuals/Template";
 import {Handler} from "jovo-core";
 import {Intent} from "./core/AlexaRequest";
 import {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
+import {ProactiveEvent} from "./modules/ProactiveEvent";
 
 
 declare module 'jovo-core/dist/src/Jovo' {
@@ -382,5 +383,13 @@ declare module './core/AlexaSkill' {
          * @public
          */
         deleteShouldEndSession(): this;
+    }
+}
+
+// Proactive Event
+declare module './core/AlexaSkill' {
+    interface AlexaSkill {
+        $proactiveEvent?: ProactiveEvent;
+        proactiveEvent(): ProactiveEvent | undefined;
     }
 }

@@ -26,6 +26,7 @@ import {AlexaNLU} from "./modules/AlexaNLU";
 import {AlexaRequestBuilder} from './core/AlexaRequestBuilder';
 import {AlexaResponseBuilder} from "./core/AlexaResponseBuilder";
 import {GadgetControllerPlugin} from "./modules/GadgetControllerPlugin";
+import {ProactiveEventPlugin} from './modules/ProactiveEvent';
 
 export interface Config extends ExtensibleConfig {
     allowedSkillIds: string[];
@@ -101,7 +102,8 @@ export class Alexa extends Extensible implements Platform {
             new PlaybackController(),
             new SkillEvent(),
             new Cards(),
-            new DialogInterface()
+            new DialogInterface(),
+            new ProactiveEventPlugin()
         );
 
         Jovo.prototype.$alexaSkill = undefined;
