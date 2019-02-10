@@ -3,6 +3,9 @@ import {ApiError} from "./ApiError";
 import {SpeechBuilder} from "jovo-core";
 import {AlexaAPIResponse} from "./AlexaAPIResponse";
 import {RequestOptions} from "https";
+import { Request } from "express-serve-static-core";
+import { X_OK } from "constants";
+import { AuthorizationResponse } from "../modules/ProactiveEvent";
 
 export interface ApiCallOptions {
     endpoint: string;
@@ -113,7 +116,43 @@ export class AlexaAPI {
             req.write(JSON.stringify(json));
             req.end();
         });
+    }
 
+    /**
+     * TODO
+     * Proactive Events Authorization API call
+     */
+    static proactiveEventAuthorization(clientId: string, clientSecret: string): Promise<AuthorizationResponse> {
+        return new Promise((resolve, reject) => {
+
+            const body = `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&scope=alexa::proactive_events`;
+
+            const options: RequestOptions = {
+                hostname: 'api.amazon.com',
+                port: 443,
+                path: '/auth/O2/token',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': body.length
+                }
+            };
+
+            const req = https.request(options, (res) => {
+                let returnData = '';
+                res.setEncoding('utf8');
+                res.on('data', (chunk) => {
+                    returnData += chunk;
+                });
+                res.on('end', () => {
+                    resolve(JSON.parse(returnData));
+                });
+            });
+            req.on('error', (e) => {
+                reject(new ApiError(e.message));
+            });
+            req.write(body);
+            req.end();
+        })
     }
 }
-
