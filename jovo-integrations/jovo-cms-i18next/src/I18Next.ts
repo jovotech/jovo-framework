@@ -13,7 +13,7 @@ export interface Config extends PluginConfig {
     interpolation?: {
         escapeValue: boolean;
     };
-    resources?: any; // tslint:disable-line,
+    resources?: any; // tslint:disable-line
     saveMissing?: boolean;
     missingKeyHandler?: Function;
 }
