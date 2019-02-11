@@ -32,7 +32,7 @@ $ jovo run <file>
 $ jovo run src/index.js
 
 # Alternative
-$ node src/index.js --webhook
+$ node src/index.js --webhook --cwd ./src
 ```
 
 
@@ -53,6 +53,9 @@ $ node src/index.js --webhook
 `--timeout`: Sets timeout in milliseconds.
 
 `--record`, `-r`: Can be used to record requests and responses of your Jovo app for testing purposes.
+
+
+`--cwd`: Changes the current working directory of the source code. Typically, it would be `./src`.
 
 
 ## Integrations
