@@ -1,6 +1,6 @@
-# ExpressJS
+# ExpressJS Server
 
-For voice apps in prototyping stage, we recommend using a local webserver and a service like [jovo webhook](#jovo-webhook) or [bst proxy](#bst-proxy). This way, you can easily update your app without having to upload it to a server or [AWS Lambda](./aws-lambda.md './aws-lambda') every time.
+Learn how to deploy your Alexa Skills and Google Actions to a server using our ExpressJS webhook. You can also use this webhook for local prototyping. Learn more here: [Project Lifecycle > Local Development](../../workflows/project-lifecycle.md#local-development '../project-lifecycle#local-development').
 
 * [Webhook Configuration](#webhook-configuration)
 * [Deploy to a Server](#deploy-to-a-server)
@@ -19,7 +19,8 @@ const { Webhook, ExpressJS } = require('jovo-framework');
 const {app} = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {
-    const port = process.env.PORT || 3000;
+    const port = process.env.JOVO_PORT || 3000;
+    Webhook.jovoApp = app;
 
     Webhook.listen(port, () => {
         console.info(`Local server listening on port ${port}.`);
