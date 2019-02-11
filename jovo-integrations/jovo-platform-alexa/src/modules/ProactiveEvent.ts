@@ -3,7 +3,7 @@ import { AlexaSkill } from "../core/AlexaSkill";
 import { AlexaAPI, ApiCallOptions } from "../services/AlexaAPI";
 import { Alexa } from "../Alexa";
 import { AlexaRequest } from "../core/AlexaRequest";
-import {JovoError} from "jovo-core";
+import { JovoError } from "jovo-core";
 
 export class ProactiveEvent {
     alexaSkill: AlexaSkill;
@@ -43,38 +43,6 @@ export class ProactiveEvent {
         }
         const result = await AlexaAPI.apiCall(options);
         return result;
-    }
-
-    getWeatherAlertActivatedObject(payload: WeatherAlertActivatedPayload): WeatherAlertActivated {
-        return new WeatherAlertActivated(payload);
-    }
-
-    getSportsEventUpdatedObject(payload: SportsEventUpdatedPayload): SportsEventUpdated {
-        return new SportsEventUpdated(payload);
-    }
-
-    getMessageAlertActivatedObject(payload: MessageAlertActivatedPayload): MessageAlertActivated {
-        return new MessageAlertActivated(payload);
-    }
-
-    getOrderStatusUpdatedObject(payload: OrderStatusUpdatedPayload): OrderStatusUpdated {
-        return new OrderStatusUpdated(payload);
-    }
-
-    getOccasionUpdatedObject(payload: OccasionUpdatedPayload): OccasionUpdated {
-        return new OccasionUpdated(payload);
-    }
-
-    getTrashCollectionAlertActivatedObject(payload: TrashCollectionAlertActivatedPayload): TrashCollectionAlertActivated {
-        return new TrashCollectionAlertActivated(payload);
-    }
-
-    getMediaContentAvailableObject(payload: MediaContentAvailablePayload): MediaContentAvailable {
-        return new MediaContentAvailable(payload);
-    }
-
-    getSocialGameInviteAvailableObject(payload: SocialGameInviteAvailablePayload): SocialGameInviteAvailable {
-        return new SocialGameInviteAvailable(payload);
     }
 }
 
@@ -122,128 +90,102 @@ export interface ProactiveEventObject {
     }
 }
 
-abstract class Event {
-    name: string;
-    payload: object;
+export interface Event {
+    name: string,
+    payload: object
+}
 
-    constructor(name: string, payload: object) {
-        this.name = name,
-        this.payload = payload
+export interface WeatherAlertActivatedEvent extends Event {
+    name: 'AMAZON.WeatherAlert.Activated',
+    payload: {
+        weatherAlert: {
+            source?: string,
+            alertType: 'TORNADO' | 'HURRICANE' | 'SNOW_STORM' | 'THUNDER_STORM'
+        }
     }
 }
 
-class WeatherAlertActivated extends Event {
-    constructor(payload: WeatherAlertActivatedPayload) {
-        super('AMAZON.WeatherAlert.Activated', payload);
-    } 
-}
-
-export interface WeatherAlertActivatedPayload {
-    weatherAlert: {
-        source?: string,
-        alertType: 'TORNADO' | 'HURRICANE' | 'SNOW_STORM' | 'THUNDER_STORM'
-    }
-}
-
-class SportsEventUpdated extends Event {
-    constructor(payload: SportsEventUpdatedPayload) {
-        super('AMAZON.SportsEvent.Updated', payload);
-    }
-}
-
-export interface SportsEventUpdatedPayload {
-    update?: {
-        ScoreEarned: number,
-        teamName: string
-    },
-    sportsEvent: {
-        eventLeague: {
-            name: string,
+export interface SportsEventUpdatedEvent extends Event {
+    name: 'AMAZON.SportsEvent.Updated',
+    payload: {
+        update?: {
+            ScoreEarned: number,
+            teamName: string
         },
-        homeTeamStatistic: {
-            team: {
+        sportsEvent: {
+            eventLeague: {
+                name: string,
+            },
+            homeTeamStatistic: {
+                team: {
+                    name: string
+                },
+                score: number
+            },
+            awayTeamStatistic: {
+                team: {
+                    name: string
+                },
+                score: number
+            }
+        }
+    }
+}
+
+export interface MessageAlertActivatedEvent extends Event {
+    name: 'AMAZON.MessageAlert.Activated',
+    payload: {
+        state: {
+            status: 'UNREAD' | 'FLAGGED',
+            freshness?: 'NEW' | 'OVERDUE'
+        },
+        messageGroup: {
+            creator: {
                 name: string
             },
-            score: number
+            count: number,
+            urgency?: 'URGENT'
+        }
+    }
+}
+
+export interface OrderStatusUpdatedEvent extends Event {
+    name: 'AMAZON.OrderStatus.Updated',
+    payload: {
+        state: {
+            status: 'PREORDER_RECEIVED' | 'ORDER_RECEIVED' | 'ORDER_PREPARING' |
+                    'ORDER_SHIPPED' | 'ORDER_OUT_FOR_DELIVERY' | 'ORDER_OUT_FOR_DELIVERY' |
+                    'ORDER_DELIVERED',
+            enterTimeStamp?: string, // ISO 8601
+            deliveryDetails?: {
+                expectedArrival: string // ISO 8601
+            }
         },
-        awayTeamStatistic: {
-            team: {
+        order: {
+            seller: {
+                name: string
+            }
+        }
+    }
+}
+
+export interface OccasionUpdatedEvent extends Event {
+    name: 'AMAZON.Occasion.Updated',
+    payload: {
+        state: {
+            confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' | 'REQUESTED' | 'CREATED' | 'UPDATED'
+        },
+        occasion: {
+            occasionType: 'RESERVATION_REQUEST' | 'RESERVATION' | 'APPOINTMENT_REQUEST' | 'APPOINTMENT',
+            subject: string,
+            provider: {
                 name: string
             },
-            score: number
+            bookingTime: string, // ISO 8601
+            broker?: {
+                name: string
+            }
         }
-    }
-}
-
-class MessageAlertActivated extends Event {
-    constructor(payload: MessageAlertActivatedPayload) {
-        super('AMAZON.MessageAlert.Activated', payload);
-    }
-}
-
-export interface MessageAlertActivatedPayload {
-    state: {
-        status: 'UNREAD' | 'FLAGGED',
-        freshness?: 'NEW' | 'OVERDUE'
-    },
-    messageGroup: {
-        creator: {
-            name: string
-        },
-        count: number,
-        urgency?: 'URGENT'
-    }
-}
-
-class OrderStatusUpdated extends Event {
-    constructor(payload: OrderStatusUpdatedPayload) {
-        super('AMAZON.OrderStatus.Updated', payload);
-    }
-}
-
-export interface OrderStatusUpdatedPayload {
-    state: {
-        status: 'PREORDER_RECEIVED' | 'ORDER_RECEIVED' | 'ORDER_PREPARING' |
-                'ORDER_SHIPPED' | 'ORDER_OUT_FOR_DELIVERY' | 'ORDER_OUT_FOR_DELIVERY' |
-                'ORDER_DELIVERED',
-        enterTimeStamp?: string, // ISO 8601
-        deliveryDetails?: {
-            expectedArrival: string // ISO 8601
-        }
-    },
-    order: {
-        seller: {
-            name: string
-        }
-    }
-}
-
-class OccasionUpdated extends Event {
-    constructor(payload: OccasionUpdatedPayload) {
-        super('AMAZON.Occasion.Updated', payload);
-    }
-}
-
-export interface OccasionUpdatedPayload {
-    state: {
-        confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' | 'REQUESTED' | 'CREATED' | 'UPDATED'
-    },
-    occasion: {
-        occasionType: 'RESERVATION_REQUEST' | 'RESERVATION' | 'APPOINTMENT_REQUEST' | 'APPOINTMENT',
-        subject: string,
-        provider: {
-            name: string
-        },
-        bookingTime: string, // ISO 8601
-        broker?: {
-            name: string
-        }
-    }
-}
-
-class TrashCollectionAlertActivated extends Event {
-    constructor(payload: TrashCollectionAlertActivatedPayload) {
-        super('AMAZON.TrashCollectionAlert.Activated', payload);
     }
 }
 
@@ -251,50 +193,47 @@ type GarbageType = 'BOTTLES' | 'BULKY' | 'BURNABLE' | 'CANS' | 'CLOTHING' | 'COM
                 'GARDEN_WASTE' | 'GLASS' | 'HAZARDOUS' | 'HOME_APPLIANCES' | 'KITCHEN_WASTE' |
                 'LANDFILL' | 'PET_BOTTLES' | 'RECYCLABLE_PLASTICS' | 'WASTE_PAPER';
 
-export interface TrashCollectionAlertActivatedPayload {
-    alert: {
-        garbageType: GarbageType[], // Only allows array containing strings from GarbageType
-        collectionDayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' |
-                            'SATURDAY' | 'SUNDAY'
-    }
-}
-
-class MediaContentAvailable extends Event {
-    constructor(payload: MediaContentAvailablePayload) {
-        super('AMAZON.MediaContent.Available', payload);
-    }
-}
-
-export interface MediaContentAvailablePayload {
-    availability: {
-        startTime: string, // ISO 8601
-        provider?: {
-            name: string
-        },
-        method: 'STREAM' | 'AIR' | 'RELEASE' | 'PREMIERE' | 'DROP'
-    },
-    content: {
-        name: string,
-        contentType: 'BOOK' | 'EPISODE' | 'ALBUM' | 'SINGLE' | 'MOVIE' | 'GAME'
-    }
-}
-
-class SocialGameInviteAvailable extends Event {
-    constructor(payload: SocialGameInviteAvailablePayload) {
-        super('AMAZON.SocialGameInvite.Available', payload);
-    }
-}
-
-export interface SocialGameInviteAvailablePayload {
-    invite: {
-        inviter: {
-            name: string,
-            relationshipToInvitee: 'FRIEND' | 'CONTACT',
-            inviteType: 'CHALLENGE' | 'INVITE'
+export interface TrashCollectionAlertActivatedEvent extends Event {
+    name: 'AMAZON.TrashCollectionAlert.Activated',
+    payload: {
+        alert: {
+            garbageType: GarbageType[], // Only allows array containing strings from GarbageType
+            collectionDayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' |
+                                'SATURDAY' | 'SUNDAY'
         }
     }
-    game: {
-        offer: 'MATCH' | 'REMATCH' | 'GAME',
-        name: string
+}
+
+export interface MediaContentAvailableEvent extends Event {
+    name: 'AMAZON.MediaContent.Available',
+    payload: {
+        availability: {
+            startTime: string, // ISO 8601
+            provider?: {
+                name: string
+            },
+            method: 'STREAM' | 'AIR' | 'RELEASE' | 'PREMIERE' | 'DROP'
+        },
+        content: {
+            name: string,
+            contentType: 'BOOK' | 'EPISODE' | 'ALBUM' | 'SINGLE' | 'MOVIE' | 'GAME'
+        }
+    }
+}
+
+export interface SocialGameInviteAvailableEvent extends Event {
+    name: 'AMAZON.SocialGameInvite.Available',
+    payload: {
+        invite: {
+            inviter: {
+                name: string,
+                relationshipToInvitee: 'FRIEND' | 'CONTACT',
+                inviteType: 'CHALLENGE' | 'INVITE'
+            }
+        }
+        game: {
+            offer: 'MATCH' | 'REMATCH' | 'GAME',
+            name: string
+        }
     }
 }
