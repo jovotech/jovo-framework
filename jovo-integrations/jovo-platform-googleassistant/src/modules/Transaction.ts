@@ -6,14 +6,6 @@ import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
 
-export interface MediaObject {
-    name: string;
-    contentUrl: string;
-    description?: string;
-    largeImage?: any; // tslint:disable-line
-    icon?: any; // tslint:disable-line
-}
-
 export interface PaymentOptions {
     googleProvidedOptions: GoogleProvidedOptions;
 }
