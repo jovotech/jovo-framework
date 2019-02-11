@@ -3,28 +3,61 @@ import _merge = require('lodash.merge');
 import * as fs from "fs";
 import * as util from 'util';
 import * as path from 'path';
+import i18next from "i18next";
 const i18n = require('i18next');
 
-
-export interface Config extends PluginConfig {
+export interface Config extends i18next.InitOptions, PluginConfig {
     filesDir?: string;
-    load?: string;
-    returnObjects?: boolean;
-    interpolation?: {
-        escapeValue: boolean;
-    };
-    resources?: any; // tslint:disable-line
 }
 
 export class I18Next extends BaseCmsPlugin {
     config: Config = {
         filesDir: './i18n',
+
+        // i18next
         load: 'all',
         returnObjects: true,
         interpolation: {
             escapeValue: false, // do not escape ssml tags
         },
         resources: undefined,
+        debug: false,
+        partialBundledLanguages: false,
+        lng: undefined,
+        fallbackLng: 'dev',
+        whitelist: false,
+        nonExplicitWhitelist: false,
+        preload: false,
+        lowerCaseLng: false,
+        ns: 'translation',
+        defaultNS: 'translation',
+        fallbackNS: false,
+        saveMissing: false,
+        updateMissing: false,
+        saveMissingTo: 'fallback',
+        missingKeyHandler: false,
+        parseMissingKeyHandler: undefined,
+        appendNamespaceToMissingKey: false,
+        missingInterpolationHandler: undefined,
+        simplifyPluralSuffix: true,
+        postProcess: false,
+        returnNull: true,
+        returnEmptyString: true,
+        returnedObjectHandler: undefined,
+        joinArrays: false,
+        overloadTranslationOptionHandler: undefined,
+
+        detection: undefined,
+        backend: undefined,
+        cache: undefined,
+        i18nFormat: undefined,
+        initImmediate: true,
+        keySeparator: '.',
+        nsSeparator: ':',
+        pluralSeparator: '_',
+        contextSeparator: '_',
+        appendNamespaceToCIMode: false,
+        compatibilityJSON: 'v3',
     };
 
     constructor(config?: Config) {
@@ -32,6 +65,8 @@ export class I18Next extends BaseCmsPlugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
+
+        console.log(config);
     }
     install(app: BaseApp): void {
         super.install(app);
@@ -70,7 +105,7 @@ export class I18Next extends BaseCmsPlugin {
                 this.$jovo.$app!.$cms.I18Next.i18n, arguments
             );
         };
-
+        console.log(this.config);
 
     }
     async loadFiles(handleRequest: HandleRequest) {
