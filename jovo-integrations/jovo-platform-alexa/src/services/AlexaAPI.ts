@@ -3,9 +3,7 @@ import {ApiError} from "./ApiError";
 import {SpeechBuilder} from "jovo-core";
 import {AlexaAPIResponse} from "./AlexaAPIResponse";
 import {RequestOptions} from "https";
-import { Request } from "express-serve-static-core";
-import { X_OK } from "constants";
-import { AuthorizationResponse } from "../modules/ProactiveEvent";
+import {AuthorizationResponse} from "../modules/ProactiveEvent";
 
 export interface ApiCallOptions {
     endpoint: string;
