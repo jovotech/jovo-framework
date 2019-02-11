@@ -298,7 +298,7 @@ export class Transaction {
      * @returns {boolean}
      */
     isCartChangeRequested(): boolean {
-        return this.getTransactionDecisionResult() === "CART_CHANGE_REQUESTED"
+        return this.getTransactionDecisionResult() === "CART_CHANGE_REQUESTED";
     }
 
 }
