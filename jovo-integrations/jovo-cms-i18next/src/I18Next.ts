@@ -65,8 +65,6 @@ export class I18Next extends BaseCmsPlugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
-
-        console.log(config);
     }
     install(app: BaseApp): void {
         super.install(app);
@@ -105,8 +103,6 @@ export class I18Next extends BaseCmsPlugin {
                 this.$jovo.$app!.$cms.I18Next.i18n, arguments
             );
         };
-        console.log(this.config);
-
     }
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
