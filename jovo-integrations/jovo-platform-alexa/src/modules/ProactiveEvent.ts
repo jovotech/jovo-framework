@@ -22,7 +22,7 @@ export class ProactiveEvent {
         return authObject;
     }
 
-    async sendProactiveEvent(proactiveEvent: ProactiveEventObject, accessToken: string) {
+    async sendProactiveEvent(proactiveEvent: ProactiveEventObject, accessToken: string, live: boolean = false) {
         if (!accessToken) {
             throw new JovoError(
                 'Can\'t find accessToken',
@@ -37,7 +37,7 @@ export class ProactiveEvent {
         const options: ApiCallOptions = {
             endpoint: alexaRequest.getApiEndpoint(),
             method: 'POST',
-            path: '/v1/proactiveEvents/stages/development', // TODO live: /v1/proactiveEvents
+            path: live ? '/v1/proactiveEvents' : '/v1/proactiveEvents/stages/development',
             permissionToken: accessToken,
             json: proactiveEvent
         };
