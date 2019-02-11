@@ -116,12 +116,15 @@ export class GameEngine {
     /**
      * Sends GameEngine.StopInputHandler directive
      */
-    stopInputHandler() {
+    stopInputHandler(originatingRequestId?: string) {
         const alexaRequest = this.alexaSkill.$request as AlexaRequest;
 
-        const originatingRequestId = _get(alexaRequest, 'request.originatingRequestId');
+        if (!originatingRequestId) {
+            originatingRequestId = _get(alexaRequest, 'request.originatingRequestId');
+        }
 
         const gameEngineDirectives = _get(this.alexaSkill.$output, 'Alexa.GameEngine', []);
+        // @ts-ignore
         gameEngineDirectives.push(new GameEngineStopInputHandlerDirective(originatingRequestId));
         _set(this.alexaSkill.$output, 'Alexa.GameEngine', gameEngineDirectives);
 
