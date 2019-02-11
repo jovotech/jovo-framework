@@ -40,7 +40,7 @@ export class ProactiveEvent {
             path: '/v1/proactiveEvents/stages/development', // TODO live: /v1/proactiveEvents
             permissionToken: accessToken,
             json: proactiveEvent
-        }
+        };
         const result = await AlexaAPI.apiCall(options);
         return result;
     }
@@ -54,7 +54,7 @@ export class ProactiveEventPlugin implements Plugin {
         AlexaSkill.prototype.$proactiveEvent = undefined;
         AlexaSkill.prototype.proactiveEvent = function () {
             return this.$proactiveEvent;
-        }
+        };
     }
 
     uninstall(alexa: Alexa) {
@@ -66,127 +66,127 @@ export class ProactiveEventPlugin implements Plugin {
 }
 
 export interface AuthorizationResponse {
-    access_token: string,
-    expires_in: number,
-    scope: string,
-    token_type: string
+    access_token: string;
+    expires_in: number;
+    scope: string;
+    token_type: string;
 }
 
 type LocalizedAttributes = {
-    locale: string
-}
+    locale: string;
+};
 
 export interface ProactiveEventObject {
-    timestamp: string, // ISO 8601
-    referenceId: string,
-    expiryTime: string, // ISO 8601
-    event: Event,
-    localizedAttributes?: LocalizedAttributes[]
+    timestamp: string; // ISO 8601
+    referenceId: string;
+    expiryTime: string; // ISO 8601
+    event: Event;
+    localizedAttributes?: LocalizedAttributes[];
     relevantAudience: {
-        type: 'Unicast' | 'Multicast',
+        type: 'Unicast' | 'Multicast';
         payload?: { // only used if type = Unicast, i.e. one specific user is targeted 
-            user: string // userId
+            user: string; // userId
         }
-    }
+    };
 }
 
 export interface Event {
-    name: string,
-    payload: object
+    name: string;
+    payload: object;
 }
 
 export interface WeatherAlertActivatedEvent extends Event {
-    name: 'AMAZON.WeatherAlert.Activated',
+    name: 'AMAZON.WeatherAlert.Activated';
     payload: {
         weatherAlert: {
-            source?: string,
-            alertType: 'TORNADO' | 'HURRICANE' | 'SNOW_STORM' | 'THUNDER_STORM'
+            source?: string;
+            alertType: 'TORNADO' | 'HURRICANE' | 'SNOW_STORM' | 'THUNDER_STORM';
         }
-    }
+    };
 }
 
 export interface SportsEventUpdatedEvent extends Event {
-    name: 'AMAZON.SportsEvent.Updated',
+    name: 'AMAZON.SportsEvent.Updated';
     payload: {
         update?: {
-            ScoreEarned: number,
-            teamName: string
+            ScoreEarned: number;
+            teamName: string;
         },
         sportsEvent: {
             eventLeague: {
-                name: string,
+                name: string;
             },
             homeTeamStatistic: {
                 team: {
-                    name: string
+                    name: string;
                 },
-                score: number
+                score: number;
             },
             awayTeamStatistic: {
                 team: {
-                    name: string
+                    name: string;
                 },
-                score: number
+                score: number;
             }
         }
-    }
+    };
 }
 
 export interface MessageAlertActivatedEvent extends Event {
-    name: 'AMAZON.MessageAlert.Activated',
+    name: 'AMAZON.MessageAlert.Activated';
     payload: {
         state: {
-            status: 'UNREAD' | 'FLAGGED',
-            freshness?: 'NEW' | 'OVERDUE'
+            status: 'UNREAD' | 'FLAGGED';
+            freshness?: 'NEW' | 'OVERDUE';
         },
         messageGroup: {
             creator: {
-                name: string
+                name: string;
             },
-            count: number,
-            urgency?: 'URGENT'
+            count: number;
+            urgency?: 'URGENT';
         }
-    }
+    };
 }
 
 export interface OrderStatusUpdatedEvent extends Event {
-    name: 'AMAZON.OrderStatus.Updated',
+    name: 'AMAZON.OrderStatus.Updated';
     payload: {
         state: {
             status: 'PREORDER_RECEIVED' | 'ORDER_RECEIVED' | 'ORDER_PREPARING' |
                     'ORDER_SHIPPED' | 'ORDER_OUT_FOR_DELIVERY' | 'ORDER_OUT_FOR_DELIVERY' |
-                    'ORDER_DELIVERED',
-            enterTimeStamp?: string, // ISO 8601
+                    'ORDER_DELIVERED';
+            enterTimeStamp?: string; // ISO 8601
             deliveryDetails?: {
-                expectedArrival: string // ISO 8601
+                expectedArrival: string; // ISO 8601
             }
         },
         order: {
             seller: {
-                name: string
+                name: string;
             }
         }
-    }
+    };
 }
 
 export interface OccasionUpdatedEvent extends Event {
-    name: 'AMAZON.Occasion.Updated',
+    name: 'AMAZON.Occasion.Updated';
     payload: {
         state: {
-            confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' | 'REQUESTED' | 'CREATED' | 'UPDATED'
+            confirmationStatus: 'CONFIRMED' | 'CANCELED' | 'RESCHEDULED' | 'REQUESTED' | 'CREATED' | 'UPDATED';
         },
         occasion: {
-            occasionType: 'RESERVATION_REQUEST' | 'RESERVATION' | 'APPOINTMENT_REQUEST' | 'APPOINTMENT',
-            subject: string,
+            occasionType: 'RESERVATION_REQUEST' | 'RESERVATION' | 'APPOINTMENT_REQUEST' | 'APPOINTMENT';
+            subject: string;
             provider: {
-                name: string
+                name: string;
             },
-            bookingTime: string, // ISO 8601
+            bookingTime: string; // ISO 8601
             broker?: {
-                name: string
+                name: string;
             }
         }
-    }
+    };
 }
 
 type GarbageType = 'BOTTLES' | 'BULKY' | 'BURNABLE' | 'CANS' | 'CLOTHING' | 'COMPOSTABLE' | 'CRUSHABLE' |
@@ -194,46 +194,46 @@ type GarbageType = 'BOTTLES' | 'BULKY' | 'BURNABLE' | 'CANS' | 'CLOTHING' | 'COM
                 'LANDFILL' | 'PET_BOTTLES' | 'RECYCLABLE_PLASTICS' | 'WASTE_PAPER';
 
 export interface TrashCollectionAlertActivatedEvent extends Event {
-    name: 'AMAZON.TrashCollectionAlert.Activated',
+    name: 'AMAZON.TrashCollectionAlert.Activated';
     payload: {
         alert: {
-            garbageType: GarbageType[], // Only allows array containing strings from GarbageType
+            garbageType: GarbageType[]; // Only allows array containing strings from GarbageType
             collectionDayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' |
-                                'SATURDAY' | 'SUNDAY'
+                                'SATURDAY' | 'SUNDAY';
         }
-    }
+    };
 }
 
 export interface MediaContentAvailableEvent extends Event {
-    name: 'AMAZON.MediaContent.Available',
+    name: 'AMAZON.MediaContent.Available';
     payload: {
         availability: {
-            startTime: string, // ISO 8601
+            startTime: string; // ISO 8601
             provider?: {
-                name: string
+                name: string;
             },
-            method: 'STREAM' | 'AIR' | 'RELEASE' | 'PREMIERE' | 'DROP'
+            method: 'STREAM' | 'AIR' | 'RELEASE' | 'PREMIERE' | 'DROP';
         },
         content: {
-            name: string,
-            contentType: 'BOOK' | 'EPISODE' | 'ALBUM' | 'SINGLE' | 'MOVIE' | 'GAME'
+            name: string;
+            contentType: 'BOOK' | 'EPISODE' | 'ALBUM' | 'SINGLE' | 'MOVIE' | 'GAME';
         }
-    }
+    };
 }
 
 export interface SocialGameInviteAvailableEvent extends Event {
-    name: 'AMAZON.SocialGameInvite.Available',
+    name: 'AMAZON.SocialGameInvite.Available';
     payload: {
         invite: {
             inviter: {
-                name: string,
-                relationshipToInvitee: 'FRIEND' | 'CONTACT',
-                inviteType: 'CHALLENGE' | 'INVITE'
+                name: string;
+                relationshipToInvitee: 'FRIEND' | 'CONTACT';
+                inviteType: 'CHALLENGE' | 'INVITE';
             }
         }
         game: {
-            offer: 'MATCH' | 'REMATCH' | 'GAME',
-            name: string
+            offer: 'MATCH' | 'REMATCH' | 'GAME';
+            name: string;
         }
-    }
+    };
 }

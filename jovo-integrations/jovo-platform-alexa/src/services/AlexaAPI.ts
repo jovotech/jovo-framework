@@ -153,6 +153,6 @@ export class AlexaAPI {
             });
             req.write(body);
             req.end();
-        })
+        });
     }
 }
