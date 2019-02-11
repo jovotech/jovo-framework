@@ -17,15 +17,17 @@ export { ListTemplate1 } from './response/visuals/ListTemplate1';
 export { ListTemplate2 } from './response/visuals/ListTemplate2';
 export { ListTemplate3 } from './response/visuals/ListTemplate3';
 
-export { ProactiveEventObject } from './modules/ProactiveEvent';
-export { WeatherAlertActivatedEvent } from './modules/ProactiveEvent';
-export { SportsEventUpdatedEvent } from './modules/ProactiveEvent';
-export { MessageAlertActivatedEvent } from './modules/ProactiveEvent';
-export { OrderStatusUpdatedEvent } from './modules/ProactiveEvent';
-export { OccasionUpdatedEvent } from './modules/ProactiveEvent';
-export { TrashCollectionAlertActivatedEvent } from './modules/ProactiveEvent';
-export { MediaContentAvailableEvent} from './modules/ProactiveEvent';
-export { SocialGameInviteAvailableEvent } from './modules/ProactiveEvent';
+export {
+    ProactiveEventObject,
+    WeatherAlertActivatedEvent,
+    SportsEventUpdatedEvent,
+    MessageAlertActivatedEvent,
+    OrderStatusUpdatedEvent,
+    OccasionUpdatedEvent,
+    TrashCollectionAlertActivatedEvent,
+    MediaContentAvailableEvent,
+    SocialGameInviteAvailableEvent     
+} from './modules/ProactiveEvent';
 
 export { SimpleCard } from './response/visuals/SimpleCard';
 export { StandardCard } from './response/visuals/StandardCard';
