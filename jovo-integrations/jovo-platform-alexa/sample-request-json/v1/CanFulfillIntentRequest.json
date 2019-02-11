@@ -1,0 +1,49 @@
+{
+  "session":{
+    "new": true,
+    "sessionId":"SessionId.[unique-value-here]",
+    "application":{
+      "applicationId":"amzn1.ask.skill.[unique-value-here]"
+    },
+    "attributes":{
+      "key": "string value"
+    },
+    "user":{
+      "userId":"amzn1.ask.account.[unique-value-here]"
+    }
+  },
+  "request":{
+    "type":"CanFulfillIntentRequest",
+    "requestId":"EdwRequestId.[unique-value-here]",
+    "intent":{
+      "name":"MyNameIsIntent",
+      "slots":{
+        "name":{
+          "name":"name",
+          "value":"Jeff"
+        }
+      }
+    },
+    "locale":"en-US",
+    "timestamp":"2017-10-03T22:02:29Z"
+  },
+  "context":{
+    "AudioPlayer":{
+      "playerActivity":"IDLE"
+    },
+    "System":{
+      "application":{
+        "applicationId":"amzn1.ask.skill.[unique-value-here]"
+      },
+      "user":{
+        "userId":"amzn1.ask.account.[unique-value-here]"
+      },
+      "device":{
+        "supportedInterfaces":{
+
+        }
+      }
+    }
+  },
+  "version":"1.0"
+}

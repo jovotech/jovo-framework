@@ -24,6 +24,25 @@ app.setHandler({
     async LAUNCH(jovo) {
         return this.toIntent('HelloWorldIntent');
     },
+
+    State1: {
+        State2: {
+            State3: {
+
+            },
+            // NextIntent() {
+            //     this.tell('State2 NextIntent');
+            // },
+            // Unhandled() {
+            //     this.tell('Unhandled State2')
+            // }
+        },
+
+        NextIntent() {
+            this.tell('State1 NextIntent');
+        }
+    },
+
     HelloWorldIntent() {
         this
             .followUpState('NameState')
@@ -35,7 +54,7 @@ app.setHandler({
             return this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 
         },
-    }
+    },
 });
 
 
