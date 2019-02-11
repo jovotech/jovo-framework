@@ -22,7 +22,7 @@ export class ProactiveEvent {
         return authObject;
     }
 
-    async sendProactiveEvent(proactiveEvent: ProactiveEventObject, accessToken: string, live: boolean = false) {
+    async sendProactiveEvent(proactiveEvent: ProactiveEventObject, accessToken: string, live = false) {
         if (!accessToken) {
             throw new JovoError(
                 'Can\'t find accessToken',
