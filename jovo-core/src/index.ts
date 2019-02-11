@@ -10,6 +10,17 @@ try {
 
 }
 
+declare global {
+
+    interface Console {
+        /**
+         * Prints to console and exits process.
+         * @param {object} obj
+         */
+        dd(obj: object): void;
+    }
+}
+
 export { BaseApp } from './BaseApp';
 export { ActionSet } from './ActionSet';
 
@@ -54,3 +65,5 @@ export {
 export {Util} from './Util';
 export {LogLevel, Log, Logger} from './Log';
 export {User} from './User';
+
+
