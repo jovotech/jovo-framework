@@ -18,7 +18,17 @@ import {MediaObject, MediaResponse} from "./modules/MediaResponse";
 
 import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
+import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
 
+export {
+    Transaction,
+    RequirementsCheckResult,
+    SupportedCardNetworks,
+    PaymentOptions,
+    OrderOptions,
+    GoogleProvidedOptions,
+    OrderUpdate
+} from "./modules/Transaction";
 declare module 'jovo-core/dist/src/Jovo' {
     interface Jovo {
         $googleAction?: GoogleAction;
@@ -314,6 +324,13 @@ declare module './core/GoogleAction' {
     }
 }
 
+declare module './core/GoogleAction' {
+
+    interface GoogleAction {
+        $transaction?: Transaction;
+    }
+}
+
 
 declare module 'jovo-core/dist/src/Interfaces' {
     interface Output {
@@ -355,6 +372,28 @@ declare module 'jovo-core/dist/src/Interfaces' {
             List?: List;
             MediaResponse?: MediaObject;
 
+
+
+            // transactions
+            AskForDeliveryAddress?: {
+                reason: string;
+            },
+
+            TransactionDecision?: {
+                orderOptions?: OrderOptions,
+                paymentOptions: PaymentOptions,
+                proposedOrder: any; // tslint:disable-line
+            }
+
+            TransactionRequirementsCheck?: {
+                orderOptions?: OrderOptions,
+                paymentOptions: PaymentOptions,
+            }
+
+            OrderUpdate?: {
+                orderUpdate: OrderUpdate;
+                speech: string;
+            };
         };
     }
 }
