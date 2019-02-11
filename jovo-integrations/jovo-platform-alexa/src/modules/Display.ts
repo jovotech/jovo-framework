@@ -95,6 +95,35 @@ export class Display implements Plugin {
         };
 
         /**
+         * Adds apl directive
+         * @public
+         * @param {string} token
+         * @param {*} commands
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.addAPLCommands = function(token: string, commands: any[]) { // tslint:disable-line
+            const commandDirective = {
+                type: 'Alexa.Presentation.APL.ExecuteCommands',
+                token,
+                commands,
+            };
+
+            const existingExecuteCommands = _get(this.$output, 'Alexa.Apl', []).filter((directive: any) => { // tslint:disable-line
+                return directive.type === commandDirective.type && directive.token === commandDirective.token;
+            });
+
+            if (existingExecuteCommands[0]) {
+                existingExecuteCommands[0].commands = existingExecuteCommands[0].commands.concat(commands);
+            } else {
+                const directives = _get(this.$output, 'Alexa.Apl', []);
+                directives.push(commandDirective);
+                _set(this.$output, 'Alexa.Apl',directives);
+            }
+
+            return this;
+        };
+
+        /**
          * Shows video on Echo Show
          * @public
          * @param {string} url

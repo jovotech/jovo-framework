@@ -13,28 +13,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 
 process.on('uncaughtException', (err) => {
-
-    Log.red().error(Log.header('Error'));
-
-    Log.error('Message:');
-    Log.error(err.message);
-    Log.error();
-    Log.error('Stack:');
-    Log.error(err.stack);
-    Log.error();
-
-    if (err.message.indexOf('is not a function') > -1) {
-        Log.error('Hint:');
-        Log.error('This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`');
-        Log.error();
-        Log.error('Learn more:');
-        Log.error('https://www.jovo.tech/docs/installation/upgrading');
-        Log.error();
-    }
-
-    Log.red().error(Log.header());
-
-
+    JovoError.printError(err as JovoError);
 });
 
 export interface BaseAppConfig extends ExtensibleConfig {
@@ -175,44 +154,7 @@ export class BaseApp extends Extensible {
             await this.middleware('response')!.run(handleRequest);
         } catch (e) {
 
-            Log.red().error(Log.header('Error'));
-
-            if (e.message.indexOf('is not a function')  > -1) {
-                e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
-                e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
-            }
-
-
-            if (e.code) {
-                Log.error('Code:');
-                Log.error(e.code);
-                Log.error();
-            }
-            Log.error('Message:');
-            Log.error(e.message);
-
-            Log.error();
-            Log.error('Stack:');
-            Log.error(e.stack);
-
-            if (e.details) {
-                Log.error();
-                Log.error('Details:');
-                Log.error(e.details);
-            }
-
-            if (e.hint) {
-                Log.error();
-                Log.error('Hint:');
-                Log.error(e.hint);
-            }
-
-            if (e.seeMore) {
-                Log.error();
-                Log.error('Learn more:');
-                Log.error(e.seeMore);
-            }
-
+            JovoError.printError(e);
 
             if (handleRequest.jovo) {
                 Log.error();
@@ -228,6 +170,7 @@ export class BaseApp extends Extensible {
             handleRequest.error = e;
             Log.red().error(Log.header());
             await this.middleware('fail')!.run(handleRequest);
+            handleRequest.host.fail(e);
         }
     }
 

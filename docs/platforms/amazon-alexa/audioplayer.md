@@ -195,8 +195,9 @@ app.setHandler({
         'AudioPlayer.PlaybackStopped'() {
             console.log('AudioPlayer.PlaybackStopped');
         },
+        
         'AudioPlayer.PlaybackFailed'() {
-            console.log('AudioPlayer.PlaybackStopped');
+            console.log('AudioPlayer.PlaybackFailed');
         },
 
     },

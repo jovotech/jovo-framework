@@ -699,6 +699,49 @@ describe('test handleOnRequest', () => {
         });
     });
 
+    test('ON_REQUEST return and skip intent handling', async (done) => {
+
+        app.setHandler({
+            ON_REQUEST() {
+                return this.tell('ON_REQUEST');
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('ON_REQUEST')).toBeTruthy();
+            done();
+        });
+    });
+
+    test('ON_REQUEST skip intent handling inside of a callback', async (done) => {
+
+        app.setHandler({
+            NEW_SESSION(jovo, callback) {
+                setTimeout(() => {
+                    this.tell('ON_REQUEST').skipIntentHandling();
+                    callback!();
+                }, 5);
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('ON_REQUEST')).toBeTruthy();
+            done();
+        });
+    });
+
 });
 describe('test handleOnNewSession', () => {
     test('no NEW_SESSION', async (done) => {
@@ -816,6 +859,50 @@ describe('test handleOnNewSession', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
     });
+
+    test('NEW_SESSION return and skip intent handling', async (done) => {
+
+        app.setHandler({
+            NEW_SESSION() {
+                return this.tell('NEW_SESSION');
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('NEW_SESSION')).toBeTruthy();
+            done();
+        });
+    });
+
+    test('NEW_SESSION skip intent handling inside of a callback', async (done) => {
+
+        app.setHandler({
+            NEW_SESSION(jovo, callback) {
+                setTimeout(() => {
+                    this.tell('NEW_SESSION').skipIntentHandling();
+                    callback!();
+                }, 5);
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('NEW_SESSION')).toBeTruthy();
+            done();
+        });
+    });
+
 });
 
 describe('test handleOnNewUser', () => {
@@ -917,6 +1004,50 @@ describe('test handleOnNewUser', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
 
     });
+
+    test('NEW_USER return and skip intent handling', async (done) => {
+
+        app.setHandler({
+            NEW_USER() {
+                return this.tell('NEW_USER');
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
+            done();
+        });
+    });
+
+    test('NEW_USER skip intent handling inside of a callback', async (done) => {
+
+        app.setHandler({
+            NEW_USER(jovo, callback) {
+                setTimeout(() => {
+                    this.tell('NEW_USER').skipIntentHandling();
+                    callback!();
+                }, 5);
+            },
+            LAUNCH() {
+                // skip this
+                this.tell('LAUNCH');
+            },
+        });
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+
+        app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
+            done();
+        });
+    });
+
 });
 describe('test NEW_USER + NEW_SESSION + ON_REQUEST', () => {
 

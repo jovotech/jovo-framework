@@ -1,6 +1,24 @@
 # Jovo Framework Changelog
 
 
+## 2.0.14 (2019-02-01)
+
+#### :rocket: New Feature
+* `jovo-framework` Added this.skipIntentHandling() in NEW_SESSION, NEW_USER, ON_REQUEST
+
+#### :bug: Bug Fix
+
+* `jovo-framework` Fixed returns in NEW_SESSION, NEW_USER, ON_REQUEST (skips further intent handling)
+
+#### :nail_care: Enhancement
+
+* `jovo-db-mysql' Refactored MySQL integration (ConnectionPool)
+*  Improved logging in `jovo-cms-i18next`, `jovo-db-filedb`, `jovo-db-mysql`, `jovo-db-dynamodb`
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.0.13 (2019-01-29)
 
 #### :rocket: New Feature

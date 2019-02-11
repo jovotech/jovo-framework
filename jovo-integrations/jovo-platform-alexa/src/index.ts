@@ -378,6 +378,15 @@ declare module './core/AlexaSkill' {
          */
         addAPLDocument(documentDirective: any): this; // tslint:disable-line
 
+        /**
+         * Adds apl command
+         * @public
+         * @param {string} token
+         * @param {*} commands
+         * @return {AlexaSkill}
+         */
+        addAPLCommands(token: string, commands: any[]): this; // tslint:disable-line
+
 
         /**
          * Shows video on Echo Show

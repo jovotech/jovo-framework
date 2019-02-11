@@ -145,7 +145,7 @@ export abstract class Jovo extends EventEmitter {
 
 
     /**
-     * Returns type of platform ("AlexaSkill","GoogleAction")
+     * Returns type of platform e.g. ("Alexa","GoogleAssistant")
      * @public
      * @return {string}
      */

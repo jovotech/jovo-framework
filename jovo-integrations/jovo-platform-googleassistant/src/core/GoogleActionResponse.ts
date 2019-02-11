@@ -48,18 +48,34 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getSpeech() {
+        if (!_get(this, 'richResponse.items[0].simpleResponse.ssml')) {
+            return;
+        }
         return SpeechBuilder.removeSpeakTags(_get(this, 'richResponse.items[0].simpleResponse.ssml'));
     }
 
     getReprompt() {
+        if (!_get(this, 'noInputPrompts[0].ssml')) {
+            return;
+        }
         return SpeechBuilder.removeSpeakTags(_get(this, 'noInputPrompts[0].ssml'));
     }
 
     getSpeechPlain() {
-        return SpeechBuilder.removeSSML(this.getSpeech());
+        const speech = this.getSpeech();
+        if (!speech) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(speech);
     }
     getRepromptPlain() {
-        return SpeechBuilder.removeSSML(this.getReprompt());
+        const reprompt = this.getReprompt();
+        if (!reprompt) {
+            return;
+        }
+
+        return SpeechBuilder.removeSSML(reprompt);
     }
 
 

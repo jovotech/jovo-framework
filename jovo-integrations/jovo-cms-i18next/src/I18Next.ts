@@ -1,4 +1,4 @@
-import {Cms, BaseCmsPlugin, BaseApp, Jovo, Plugin, PluginConfig, HandleRequest, SpeechBuilder} from 'jovo-core';
+import {Cms, BaseCmsPlugin, BaseApp, Jovo, PluginConfig, HandleRequest, SpeechBuilder, Log} from 'jovo-core';
 import _merge = require('lodash.merge');
 import * as fs from "fs";
 import * as util from 'util';
@@ -84,11 +84,15 @@ export class I18Next extends BaseCmsPlugin {
         if (fs.existsSync(filesDir)) {
             const dir = await readdir(filesDir);
 
+            Log.verbose(`Iterating i18n folder: ${filesDir}`);
+
             dir.forEach((file: string) => {
                 const ext = file.split('.')[1];
                 const validExtensions = ['js', 'json'];
                 if (validExtensions.includes(ext)) {
                     const locale = file.split('.')[0];
+                    Log.verbose(`- ${file}`);
+
                     handleRequest.app.$cms.I18Next.resources[locale] = require(
                         path.join(
                             process.cwd(),
@@ -99,6 +103,9 @@ export class I18Next extends BaseCmsPlugin {
         } else if (this.config.resources) {
             handleRequest.app.$cms.I18Next.resources = this.config.resources;
         }
+
+        Log.debug(`Adding resources to $cms object:`);
+        Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
 
         handleRequest.app.$cms.I18Next.i18n = i18n
             .init(_merge(

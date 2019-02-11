@@ -31,4 +31,27 @@ export class AzureFunction implements Host {
             resolve();
         });
     }
+
+
+    fail(error: Error) { // tslint:disable-line
+        if (!this.context.res.statusCode) {
+            const responseObj: any = { // tslint:disable-line
+                code: 500,
+                msg: error.message,
+            };
+
+            if (process.env.NODE_ENV === 'production') {
+                responseObj.stack = error.stack;
+            }
+
+            this.context.res = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                statusCode: 500,
+                body: responseObj
+            };
+            this.context.done();
+        }
+    }
 }
