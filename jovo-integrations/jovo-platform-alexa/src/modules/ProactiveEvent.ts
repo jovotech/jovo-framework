@@ -29,8 +29,7 @@ export class ProactiveEvent {
                 ErrorCode.ERR,
                 'jovo-platform-alexa',
                 'To send out Proactive Events you have to provide an accessToken',
-                'Try to get an accessToken by calling "this.$alexaSkill.$proactiveEvents.getAccessToken(clientId, clientSecret)"',
-                'TODO: Link to Jovo docs'
+                'Try to get an accessToken by calling "this.$alexaSkill.$proactiveEvents.getAccessToken(clientId, clientSecret)"'
             );
         }
         const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
@@ -84,7 +83,7 @@ export interface ProactiveEventObject {
     localizedAttributes?: LocalizedAttributes[];
     relevantAudience: {
         type: 'Unicast' | 'Multicast';
-        payload?: { // only used if type = Unicast, i.e. one specific user is targeted 
+        payload?: { // only used if type = Unicast, i.e. one specific user is targeted
             user: string; // userId
         }
     };
