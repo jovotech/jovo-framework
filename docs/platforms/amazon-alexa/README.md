@@ -15,6 +15,12 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [AudioPlayer Skills](#audioplayer-skills)
 * [Skill Events](#skill-events)
 * [CanFulfillIntentRequest](#canfulfillintentrequest)
+* [GameEngine Interface](#gameengine-interface)
+* [GadgetController Interface](#gadgetcontroller-interface)
+* [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
+* [Reminders API](#reminders-api)
+* [Settings API](#settings-api)
+* [Proactive Events API](#proactive-events-api)
 * [Playback Controller](#playback-controller)
 
 ## Introduction to Alexa Specific Features
@@ -112,6 +118,10 @@ this.tell('Text after API call');
 ## Settings API
 
 > [You can find out more about the Settings API here](./settings.md './amazon-alexa/settings')
+
+## Proactive Events API
+
+> [You can find out more about the Proactive Events API here](./proactive-events.md './amazon-alexa/proactive-events')
 
 ## Playback Controller
 

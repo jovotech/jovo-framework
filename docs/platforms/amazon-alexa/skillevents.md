@@ -47,6 +47,9 @@ alexaSkill: {
 				},
 				{
 					eventName: 'SKILL_ACCOUNT_LINKED',
+				},
+				{
+					eventName: 'SKILL_PROACTIVE_SUBSCRIPTION_CHANGED'
 				}
 			],
 		},
@@ -208,7 +211,9 @@ ON_EVENT: {
 
 [Official Documentation by Amazon](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event).
 
+### Proactive Subscription Changed
 
+Find a detailed description of the `Proactive Subscription Changed` event [here](./proactive-events.md#skill-event---proactivesubscriptionchanged './amazon-alexa/proactive-events#skill-event---proactivesubscriptionchange')
 
 <!--[metadata]: {
 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
