@@ -284,4 +284,13 @@ export class AlexaSkill extends Jovo {
     getEndReason() {
         return _get(this.$request, 'request.reason');
     }
+
+    /**
+     * Returns skill id
+     * @returns {string | undefined}
+     */
+    getSkillId(): string | undefined {
+        return _get(this.$request, 'session.application.applicationId');
+    }
 }
+
