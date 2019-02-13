@@ -10,6 +10,7 @@
     "clean": "lerna clean",
     "list": "lerna list -l",
     "bootstrap": "lerna bootstrap --hoist --no-ci",
+    "devsetup": "npm run bootstrap && npm run tsc",
     "typedoc": "npm run lerna exec npm run typedoc",
     "changelog": "lerna-changelog",
     "preparePublish": "npm run tsc && npm run tslint && npm run test",
