@@ -19,7 +19,7 @@
 * `jovo-cms-i18next` Updated version of i18next module to 14.1.0
 
 
-#### Committers: 1
+#### Committers: 2
 - Alex ([@aswetlow](https://github.com/aswetlow))
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
 
