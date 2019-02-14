@@ -10,7 +10,6 @@ import {Updates} from "../modules/Updates";
 export class GoogleAction extends Jovo {
     $user: GoogleActionUser;
     $originalRequest: any; // tslint:disable-line
-    $updates?: Updates;
     platformRequest: any; // tslint:disable-line
 
     constructor(app: BaseApp, host: Host) {
