@@ -457,13 +457,14 @@ async function handleConsoleRequest(app: BaseApp) {
 
         if (program.locale) {
             request.setLocale(program.locale);
+            conv.config.locale = program.locale;
         }
 
         if (program.state) {
             request.addSessionAttribute(SessionConstants.STATE, program.state);
             request.setNewSession(false);
-
         }
+
         if (parameters.length > 0) {
             for (let i = 0; i < parameters.length; i++) {
                 const parameter = parameters[i].split('=');
@@ -474,6 +475,7 @@ async function handleConsoleRequest(app: BaseApp) {
                 }
             }
         }
+
         if (sessions.length > 0) {
             for (let i = 0; i < sessions.length; i++) {
                 const session = sessions[i].split('=');
@@ -484,6 +486,7 @@ async function handleConsoleRequest(app: BaseApp) {
                 }
             }
         }
+
         if (request) {
             if (conv.config.httpOptions && conv.config.httpOptions.headers) {
                 delete conv.config.httpOptions.headers['jovo-test'];

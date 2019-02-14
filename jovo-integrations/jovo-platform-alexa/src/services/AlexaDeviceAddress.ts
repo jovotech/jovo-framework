@@ -30,6 +30,11 @@ export class AlexaDeviceAddress {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
             if (response.httpStatus === 403) {
                 const apiError = new ApiError(response.data.message, response.data.code);
+
+                if (response.data.message === 'The authentication token is not valid.') {
+                    apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+                }
+
                 if (response.data.message === 'Access to this resource has not yet been requested.') {
                     apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
                 }

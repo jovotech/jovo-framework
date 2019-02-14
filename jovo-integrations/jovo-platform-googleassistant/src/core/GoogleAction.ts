@@ -180,6 +180,11 @@ export class GoogleAction extends Jovo {
             _get(this.$originalRequest || this.$request, 'inputs[0].rawInputs[0].query');
     }
 
+
+    isInSandbox() {
+        return _get(this.$originalRequest || this.$request, 'isInSandbox', false);
+    }
+
     /**
      * Returns true if user is not voice matched
      * @return {string}

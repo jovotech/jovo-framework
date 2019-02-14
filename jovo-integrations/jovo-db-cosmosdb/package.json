@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-cosmosdb",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.0.12",
-    "jovo-db-mongodb": "^2.0.12"
+    "jovo-core": "^2.0.13",
+    "jovo-db-mongodb": "^2.0.13"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -1,6 +1,29 @@
 # Jovo Framework Changelog
 
 
+## 2.0.15 (2019-02-12)
+
+#### :rocket: New Feature
+* `jovo-platform-alexa` [#379](https://github.com/jovotech/jovo-framework/pull/379) Adds Alexa Proactive Event API ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+
+* `jovo-framework` Fixed `Unhandled()` delegation in nested states bug
+* `jovo-framework` Fixed error delegation to host 
+* `jovo-cms-i18next` Added configurable i18next config properties
+* `jovo-platform-alexa` Fixed error code in AlexaDeviceAddress service
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` Added `console.dd(obj)` (dump and die). Logs object and calls process.exit(). (Same as dd() in Laravel)
+* `jovo-cms-i18next` Updated version of i18next module to 14.1.0
+
+
+#### Committers: 2
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+
+
 ## 2.0.14 (2019-02-01)
 
 #### :rocket: New Feature

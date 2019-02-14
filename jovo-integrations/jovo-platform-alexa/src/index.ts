@@ -17,6 +17,18 @@ export { ListTemplate1 } from './response/visuals/ListTemplate1';
 export { ListTemplate2 } from './response/visuals/ListTemplate2';
 export { ListTemplate3 } from './response/visuals/ListTemplate3';
 
+export {
+    ProactiveEventObject,
+    WeatherAlertActivatedEvent,
+    SportsEventUpdatedEvent,
+    MessageAlertActivatedEvent,
+    OrderStatusUpdatedEvent,
+    OccasionUpdatedEvent,
+    TrashCollectionAlertActivatedEvent,
+    MediaContentAvailableEvent,
+    SocialGameInviteAvailableEvent     
+} from './modules/ProactiveEvent';
+
 export { SimpleCard } from './response/visuals/SimpleCard';
 export { StandardCard } from './response/visuals/StandardCard';
 export { LinkAccountCard } from './response/visuals/LinkAccountCard';
@@ -39,6 +51,7 @@ import {Template} from "./response/visuals/Template";
 import {Handler} from "jovo-core";
 import {Intent} from "./core/AlexaRequest";
 import {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
+import {ProactiveEvent} from "./modules/ProactiveEvent";
 
 
 declare module 'jovo-core/dist/src/Jovo' {
@@ -391,5 +404,13 @@ declare module './core/AlexaSkill' {
          * @public
          */
         deleteShouldEndSession(): this;
+    }
+}
+
+// Proactive Event
+declare module './core/AlexaSkill' {
+    interface AlexaSkill {
+        $proactiveEvent?: ProactiveEvent;
+        proactiveEvent(): ProactiveEvent | undefined;
     }
 }

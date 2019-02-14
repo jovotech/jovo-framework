@@ -115,6 +115,16 @@ export class Router implements Plugin {
 
         if (_state) {
             while (_state !== '') {
+                if (_get(handlers, _state + '["' + _intent + '"]')) {
+                    path = _state + '["' + _intent + '"]';
+                    return {
+                        path,
+                        state,
+                        intent,
+                        type: EnumRequestType.INTENT,
+                    };
+                }
+
                 // State 'unhandled' is available and intent is not in intentsToSkipUnhandled
                 if (_get(handlers, _state + '.' + EnumRequestType.UNHANDLED)) {
                     if (!intentsToSkipUnhandled || intentsToSkipUnhandled.indexOf(_intent) === -1) {
@@ -127,15 +137,7 @@ export class Router implements Plugin {
                         };
                     }
                 }
-                if (_get(handlers, _state + '["' + _intent + '"]')) {
-                    path = _state + '["' + _intent + '"]';
-                    return {
-                        path,
-                        state,
-                        intent,
-                        type: EnumRequestType.INTENT,
-                    };
-                }
+
                 _state = Router.getLastLevel(_state);
             }
             // is intent in global?

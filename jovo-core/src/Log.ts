@@ -24,6 +24,15 @@ interface Appender {
     [key: string]: any; // tslint:disable-line
 }
 
+/**
+ * Prints to console and exits process.
+ * @param {object} obj
+ */
+console.dd = (obj: object) => {
+    console.log(obj);
+    process.exit(0);
+};
+
 export class Logger {
     config: Config = {
         appenderLength: 70,
@@ -643,6 +652,14 @@ export class Logger {
         return this.addFormat('\x1b[47m');
     }
 
+    /**
+     * Prints to console and exits process.
+     * @param {object} obj
+     */
+    dd(obj: object) {
+        console.log(obj);
+        process.exit(0);
+    }
 
     /**
      * Check, if LogLevel matches current LogLevel

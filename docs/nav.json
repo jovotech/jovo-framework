@@ -303,6 +303,10 @@
                         {
                             "title": "Gadget Controller",
                             "route": "amazon-alexa/gadget-controller"
+                        },
+                        {
+                            "title": "Proactive Events API",
+                            "route": "amazon-alexa/proactive-events"
                         }
                     ]
                 },
