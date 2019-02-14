@@ -5,7 +5,6 @@ import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
 
-import {Updates} from "../modules/Updates";
 
 export class GoogleAction extends Jovo {
     $user: GoogleActionUser;
