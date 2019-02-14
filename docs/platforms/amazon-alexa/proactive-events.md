@@ -550,4 +550,4 @@ The request will contain a `subscriptions` array, which will contain the events 
 > Learn how to enable Skill Events [here](./skillevents.md './amazon-alexa/skillevents')
 
 <!--[metadata]: {"description": "Learn how to send notifications to your user with the Proactive Events API for Alexa Skills",
-"route": "amazon-alexa/proactive-event" }-->
+"route": "amazon-alexa/proactive-events" }-->
