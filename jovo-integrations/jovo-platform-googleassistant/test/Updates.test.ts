@@ -104,7 +104,6 @@ describe('test register updates', () => {
             ON_REGISTER_UPDATE() {
                 expect(this.$googleAction!.$updates!.isRegisterUpdateOk()).toBe(true);
                 expect(this.$googleAction!.$updates!.getRegisterUpdateStatus()).toBe('OK');
-                //TODO: check for access token
                 done();
             },
         });

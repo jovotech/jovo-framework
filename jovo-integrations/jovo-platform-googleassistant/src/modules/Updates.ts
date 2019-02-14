@@ -18,14 +18,14 @@ export class Updates {
    * @param {string} intent The intent that will be triggered by the update
    * @param {'DAILY'|'ROUTINES'} frequency The update frequency (daily or routines)
    */
-  askForRegisterUpdate(intent: string, frequency: string = 'DAILY') {
+  askForRegisterUpdate(intent: string, frequency = 'DAILY') {
     /* TODO: support to arguments */
     this.googleAction.$output.GoogleAssistant = {
       AskForRegisterUpdate: {
         intent,
         frequency,
       }
-    }
+    };
   }
 
   /**
