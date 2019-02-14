@@ -1,0 +1,118 @@
+{
+  "responseId": "e670cfb4-d883-4639-9101-8e6553f86483",
+  "queryResult": {
+    "queryText": "actions_intent_REGISTER_UPDATE",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/google_assistant_input_type_touch"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/actions_intent_register_update",
+        "parameters": {
+          "REGISTER_UPDATE": {
+            "@type": "type.googleapis.com/google.actions.v2.RegisterUpdateValue",
+            "status": "OK"
+          },
+          "text": "10pm"
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/actions_capability_media_response_audio"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd/contexts/actions_capability_web_browser"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent-XYZ/agent/intents/08a2e106-caed-4253-819f-26d9a17da5e0",
+      "displayName": "Default Fallback Intent",
+      "isFallback": true
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "pt-br"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "requestType": "SIMULATOR",
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "Query handled by Actions on Google",
+              "inputType": "TOUCH"
+            }
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.v2.RegisterUpdateValue",
+                "status": "OK"
+              },
+              "name": "REGISTER_UPDATE"
+            },
+            {
+              "rawText": "10pm",
+              "textValue": "10pm",
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.REGISTER_UPDATE"
+        }
+      ],
+      "user": {
+        "userStorage": "{}",
+        "lastSeen": "2019-02-12T22:49:16Z",
+        "locale": "pt-BR",
+        "userId": "ABwppHGN2ARBzzJaGz1uFQ6szXQNwkt6JMxDm33E10JMahnGbjIZSrpjkPPIEM9P_cIQXvd3HQxr"
+      },
+      "conversation": {
+        "conversationId": "ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent-XYZ/agent/sessions/ABwppHGzogFndNoTy8dchWBXqRzATDyvJgfgVElUlSL2-U5u1efyHrb43O1e5BUA25pxOUoIh1Wd"
+}

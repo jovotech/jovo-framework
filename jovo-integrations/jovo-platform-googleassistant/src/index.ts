@@ -326,6 +326,12 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 intent: string,
                 optContext: string
             };
+
+            AskForRegisterUpdate?: {
+                intent: string;
+                frequency: string;
+            };
+
             AskForSignIn?: {
                 optContext: string;
             };

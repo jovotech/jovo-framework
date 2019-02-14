@@ -18,6 +18,7 @@ import {GoogleAction} from "./core/GoogleAction";
 import {GoogleAssistantCore} from "./modules/GoogleAssistantCore";
 import {Cards} from "./modules/Cards";
 import {AskFor} from "./modules/AskFor";
+import {UpdatesPlugin} from "./modules/Updates";
 import {MediaResponsePlugin} from "./modules/MediaResponse";
 import {GoogleActionRequest} from "./core/GoogleActionRequest";
 import {GoogleActionResponse} from "./core/GoogleActionResponse";
@@ -74,6 +75,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             new Cards(),
             new AskFor(),
             new MediaResponsePlugin(),
+            new UpdatesPlugin(),
         );
 
         Jovo.prototype.$googleAction = undefined;
