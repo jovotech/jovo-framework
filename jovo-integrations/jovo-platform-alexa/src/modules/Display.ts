@@ -166,24 +166,25 @@ export class Display implements Plugin {
         const response = alexaSkill.$response as AlexaResponse;
 
         if (alexaSkill.$request!.hasScreenInterface()) {
-            if (_get(output, 'Alexa.DisplayTemplate')) {
 
-                _set(response, 'response.directives',
-                    [_get(output, 'Alexa.DisplayTemplate')]
-                );
+            if (_get(output, 'Alexa.DisplayTemplate')) {
+                const directives = _get(alexaSkill.$response, 'response.directives', []);
+                directives.push(_get(output, 'Alexa.DisplayTemplate'));
+                _set(response, 'response.directives', directives);
             }
 
             if (_get(output, 'Alexa.DisplayHint')) {
-                if (!_get(response, 'response.directives')) {
-                    _set(response, 'response.directives',
-                        [_get(output, 'Alexa.DisplayHint')]);
-                } else {
-                    _get(response, 'response.directives').push(_get(output, 'Alexa.DisplayHint'));
-                }
+                const directives = _get(alexaSkill.$response, 'response.directives', []);
+                directives.push(_get(output, 'Alexa.DisplayHint'));
+                _set(response, 'response.directives', directives);
             }
 
             if (_get(output, 'Alexa.VideoApp')) {
                     //TODO: doesn't work with ask
+                const directives = _get(alexaSkill.$response, 'response.directives', []);
+                directives.push(_get(output, 'Alexa.VideoApp'));
+                _set(response, 'response.directives', directives);
+
                 _set(response, 'response.directives',
                     [_get(output, 'Alexa.VideoApp')]
                 );
