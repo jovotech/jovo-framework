@@ -18,6 +18,7 @@ export class AlexaCore implements Plugin {
         alexa.middleware('$type')!.use(this.type.bind(this));
         alexa.middleware('$session')!.use(this.session.bind(this));
         alexa.middleware('$output')!.use(this.output.bind(this));
+
     }
 
     uninstall(alexa: Alexa) {
@@ -129,6 +130,24 @@ export class AlexaCore implements Plugin {
         if (_get(output, 'Alexa.Directives')) {
             _set(alexaSkill.$response, 'response.directives', _get(output, 'Alexa.Directives'));
 
+        }
+
+
+        if (_get(output, 'Alexa.deleteShouldEndSession')) {
+            if (_get(alexaSkill.$response, 'response.shouldEndSession')) {
+                delete (alexaSkill.$response as AlexaResponse).response.shouldEndSession;
+            }
+        }
+
+
+        if ((typeof _get(output, 'Alexa.shouldEndSession') && _get(output, 'Alexa.shouldEndSession') === null)) {
+            if (_get(alexaSkill.$response, 'response.shouldEndSession')) {
+                delete (alexaSkill.$response as AlexaResponse).response.shouldEndSession;
+            }
+        }
+
+        if (typeof _get(output, 'Alexa.shouldEndSession') === 'boolean') {
+            (alexaSkill.$response as AlexaResponse).response.shouldEndSession = _get(output, 'Alexa.shouldEndSession');
         }
 
     }

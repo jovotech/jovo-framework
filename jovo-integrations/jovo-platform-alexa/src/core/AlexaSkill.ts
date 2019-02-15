@@ -292,5 +292,23 @@ export class AlexaSkill extends Jovo {
     getSkillId(): string | undefined {
         return _get(this.$request, 'session.application.applicationId');
     }
+
+    /**
+     * Deletes shouldEndSession property
+     * @public
+     */
+    deleteShouldEndSession(value = true) {
+        _set(this.$output, 'Alexa.deleteShouldEndSession', value);
+        return this;
+    }
+
+    /**
+     * Sets value for shouldEndSession. Removes shouldEndSession when null
+     * @public
+     */
+    shouldEndSession(value: boolean | null) {
+        _set(this.$output, 'Alexa.shouldEndSession', value);
+        return this;
+    }
 }
 

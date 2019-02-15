@@ -26,7 +26,7 @@ export {
     OccasionUpdatedEvent,
     TrashCollectionAlertActivatedEvent,
     MediaContentAvailableEvent,
-    SocialGameInviteAvailableEvent     
+    SocialGameInviteAvailableEvent
 } from './modules/ProactiveEvent';
 
 export { SimpleCard } from './response/visuals/SimpleCard';
@@ -399,11 +399,7 @@ declare module './core/AlexaSkill' {
          */
         showVideo(url: string, title?: string, subtitle?: string): this;
 
-        /**
-         * Deletes shouldEndSession
-         * @public
-         */
-        deleteShouldEndSession(): this;
+
     }
 }
 

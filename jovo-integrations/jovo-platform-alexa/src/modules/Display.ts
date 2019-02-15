@@ -137,16 +137,6 @@ export class Display implements Plugin {
             return this;
         };
 
-
-        /**
-         * Deletes shouldEndSession property
-         * Shows video on Echo Show
-         * @public
-         */
-        AlexaSkill.prototype.deleteShouldEndSession = function() {
-            _set(this.$output, 'Alexa.deleteShouldEndSession', true);
-            return this;
-        };
     }
     uninstall(alexa: Alexa) {
 
@@ -180,14 +170,10 @@ export class Display implements Plugin {
             }
 
             if (_get(output, 'Alexa.VideoApp')) {
-                    //TODO: doesn't work with ask
                 const directives = _get(alexaSkill.$response, 'response.directives', []);
                 directives.push(_get(output, 'Alexa.VideoApp'));
                 _set(response, 'response.directives', directives);
 
-                _set(response, 'response.directives',
-                    [_get(output, 'Alexa.VideoApp')]
-                );
                 if (_get(response, 'response.shouldEndSession')) {
                     delete response.response.shouldEndSession;
                 }
