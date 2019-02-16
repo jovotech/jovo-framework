@@ -117,7 +117,7 @@ export class I18Next extends BaseCmsPlugin {
             Log.verbose(`Iterating i18n folder: ${filesDir}`);
 
             dir.forEach((file: string) => {
-                const ext = file.substring(file.lastIndexOf('.'));
+                const ext = file.substring(file.lastIndexOf('.') + 1);
                 const validExtensions = ['js', 'json'];
                 if (validExtensions.includes(ext)) {
                     const locale = file.split('.')[0];
