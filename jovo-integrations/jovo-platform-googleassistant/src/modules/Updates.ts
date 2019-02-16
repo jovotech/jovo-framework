@@ -55,6 +55,19 @@ export class Updates {
   isRegisterUpdateCancelled(): boolean {
     return this.getRegisterUpdateStatus() === 'CANCELLED';
   }
+
+  /* TODO: Needs test */
+  /**
+   * Get configure updates intente parameter UPDATE_INTENT
+   * @returns {string|undefined}
+   */
+  getConfigureUpdatesIntent(): string | undefined {
+    for (const argument of _get(this.googleAction.$originalRequest || this.googleAction.$request, 'inputs[0]["arguments"]', [])) {
+      if (argument.name === 'UPDATE_INTENT') {
+          return argument.extension.status;
+      }
+    }
+  }
 }
 
 export class UpdatesPlugin implements Plugin {
@@ -70,6 +83,11 @@ export class UpdatesPlugin implements Plugin {
 
     if (intentName === 'actions.intent.REGISTER_UPDATE') {
       _set(googleAction.$type, 'type', 'ON_REGISTER_UPDATE');
+    }
+
+    /* TODO: Needs test */
+    if (intentName === 'actions.intent.CONFIGURE_UPDATES') {
+      _set(googleAction.$type, 'type', 'ON_CONFIGURE_UPDATES');
     }
   
     googleAction.$updates = new Updates(googleAction);
