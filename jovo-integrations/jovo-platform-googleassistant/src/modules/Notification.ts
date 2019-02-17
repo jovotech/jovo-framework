@@ -13,7 +13,7 @@ export class Notification {
     }
 
     async getAccessToken(clientEmail: string, privateKey: string) {
-        let jwtClient = new google.auth.JWT(
+        const jwtClient = new google.auth.JWT(
             clientEmail,
             undefined,
             privateKey,
@@ -25,7 +25,7 @@ export class Notification {
         return result.access_token;
     }
 
-    sendNotification(notification: any, accessToken: string) {
+    sendNotification(notification: object, accessToken: string) {
         return GoogleActionAPI.apiCall({
             endpoint: 'https://actions.googleapis.com',
             method: 'POST',
@@ -44,7 +44,7 @@ export class NotificationPlugin implements Plugin {
         GoogleAction.prototype.$notification = undefined;
         GoogleAction.prototype.notification = function() {
             return this.$notification;
-        }
+        };
     }
 
     type(googleAction: GoogleAction) {
@@ -66,5 +66,5 @@ export interface NotificationObject {
             intent: string; // intent which gets executed after user presses on notification
             locale: string;
         },
-    }
+    };
 }

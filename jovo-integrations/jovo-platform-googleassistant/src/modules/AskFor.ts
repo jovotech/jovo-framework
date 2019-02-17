@@ -105,7 +105,7 @@ export class AskFor implements Plugin {
                 AskForUpdatePermission: {
                     intent,
                     arguments: {
-                        name: name,
+                        name,
                         textValue: text
                     }
                 }
