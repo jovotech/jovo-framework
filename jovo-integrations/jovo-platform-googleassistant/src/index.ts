@@ -8,6 +8,7 @@ export { CarouselBrowseTile } from './response/CarouselBrowseTile';
 export { CarouselBrowse } from './response/CarouselBrowse';
 export { Table } from './response/Table';
 export { List } from './response/List';
+export { NotificationObject } from './modules/Notification';
 import {Device} from "./modules/AskFor";
 import {BasicCard} from "./response/BasicCard";
 import {Carousel} from "./response/Carousel";
@@ -19,6 +20,7 @@ import {MediaObject, MediaResponse} from "./modules/MediaResponse";
 import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
 import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
+import {Notification} from './modules/Notification';
 
 export {
     Transaction,
@@ -109,7 +111,7 @@ declare module './core/GoogleAction' {
          * @public
          * @param {string} optContext
          */
-        askForUpdate(optContext?: string): this;
+        askForUpdate(intent: string, name: string, text: string): this;
 
         /**
          * Ask for permissions
@@ -331,6 +333,12 @@ declare module './core/GoogleAction' {
     }
 }
 
+declare module './core/GoogleAction' {
+    interface GoogleAction {
+        $notification?: Notification;
+        notification(): Notification | undefined;
+    }
+}
 
 declare module 'jovo-core/dist/src/Interfaces' {
     interface Output {
@@ -341,7 +349,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
             };
             AskForUpdatePermission?: {
                 intent: string,
-                optContext: string
+                arguments?: object
             };
             AskForSignIn?: {
                 optContext: string;

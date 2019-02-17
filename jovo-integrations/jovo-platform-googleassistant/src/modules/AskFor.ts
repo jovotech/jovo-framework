@@ -97,13 +97,17 @@ export class AskFor implements Plugin {
          * Ask for update permission
          * @public
          * @param {string} intent
-         * @param {string} optContext
+         * @param {string} name
+         * @param {string} text
          */
-        GoogleAction.prototype.askForUpdate = function(intent: string, optContext = '') {
+        GoogleAction.prototype.askForUpdate = function(intent: string, name: string, text: string) {
             this.$output.GoogleAssistant = {
                 AskForUpdatePermission: {
                     intent,
-                    optContext
+                    arguments: {
+                        name: name,
+                        textValue: text
+                    }
                 }
             };
             return this;
@@ -343,20 +347,22 @@ export class AskFor implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.AskForUpdatePermission')) {
-            const optContext = _get(output, 'GoogleAssistant.AskForUpdatePermission.optContext') ||
+
+            const optContext = _get(output, 'GoogleAssistant.AskForPermission.optContext') ||
                 _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech'));
 
             _set(googleAction.$response, 'expectUserResponse', true);
 
-            //TODO: doesn't work?
             _set(googleAction.$response, 'systemIntent', {
                 intent: 'actions.intent.PERMISSION',
-                data: {
+                inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.PermissionValueSpec',
-                    'updatePermissionValueSpec': {
-                        'intent': _get(output, 'GoogleAssistant.AskForUpdatePermission.intent'),
-                    },
-                    permissions: ['UPDATE']
+                    optContext: optContext || '',
+                    permissions: ['UPDATE'],
+                    updatePermissionValueSpec: {
+                        arguments: _get(output, 'GoogleAssistant.AskForUpdatePermission.arguments'),
+                        intent: _get(output, 'GoogleAssistant.AskForUpdatePermission.intent')
+                    }
                 }
             });
         }
