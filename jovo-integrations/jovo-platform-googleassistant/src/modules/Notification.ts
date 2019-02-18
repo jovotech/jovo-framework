@@ -4,6 +4,7 @@ import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionAPI} from "../services/GoogleActionAPI";
 import {google} from "googleapis";
+import {Credentials, JWT} from "google-auth-library";
 
 export class Notification {
     googleAction: GoogleAction;
@@ -12,8 +13,25 @@ export class Notification {
         this.googleAction = googleAction;
     }
 
+    /**
+     * Gets only the access token instead of the whole credentials object
+     * @param {string} clientEmail from service account key
+     * @param {string} privateKey from service account key
+     * @returns {string} access token
+     */
     async getAccessToken(clientEmail: string, privateKey: string) {
-        const jwtClient = new google.auth.JWT(
+        const result: Credentials = await this.sendAuthRequest(clientEmail, privateKey);
+        return result.access_token;
+    }
+
+    /**
+     * Authenticates using googleapis package
+     * @param {string} clientEmail from service account key
+     * @param {string} privateKey from service account key
+     * @returns {Credentials}
+     */
+    async sendAuthRequest(clientEmail: string, privateKey: string) {
+        const jwtClient: JWT = new google.auth.JWT(
             clientEmail,
             undefined,
             privateKey,
@@ -21,11 +39,16 @@ export class Notification {
             undefined
         );
 
-        const result = await jwtClient.authorize();
-        return result.access_token;
+        const result: Credentials = await jwtClient.authorize();
+        return result;
     }
 
-    sendNotification(notification: object, accessToken: string) {
+    /**
+     * 
+     * @param {NotificationObject} notification 
+     * @param {string} accessToken access token from authRequest
+     */
+    sendNotification(notification: NotificationObject, accessToken: string) {
         return GoogleActionAPI.apiCall({
             endpoint: 'https://actions.googleapis.com',
             method: 'POST',
