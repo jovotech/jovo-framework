@@ -107,11 +107,30 @@ declare module './core/GoogleAction' {
 
 
         /**
-         * Ask for update permission
+         * Calls askForNotification(intent, name, text)
+         * 
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * 
+         * Exists to comply with Googles naming conventions
+         * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
-         * @param {string} optContext
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
          */
-        askForUpdate(intent: string, name: string, text: string): this;
+        askForUpdate(intent: string, name?: string, text?: string): this;
+
+        /**
+         * Ask for notification permission
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * @public
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
+         */
+        askForNotification(intent: string, name?: string, text?: string): this;
 
         /**
          * Ask for permissions

@@ -94,15 +94,34 @@ export class AskFor implements Plugin {
 
 
         /**
-         * Ask for update permission
+         * Calls askForNotification()
+         * 
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * 
+         * Exists to comply with Googles naming conventions
+         * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
-         * @param {string} intent
-         * @param {string} name
-         * @param {string} text
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
          */
-        GoogleAction.prototype.askForUpdate = function(intent: string, name: string, text: string) {
+        GoogleAction.prototype.askForUpdate = function(intent: string, name?: string, text?: string) {
+            return this.askForNotification(intent, name, text);
+        };
+        
+        /**
+         * Ask for notification permission
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * @public
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
+         */
+        GoogleAction.prototype.askForNotification = function(intent: string, name?: string, text?: string) {
             this.$output.GoogleAssistant = {
-                AskForUpdatePermission: {
+                AskForUpdatePermission: { // Google calls it UpdatePermission as well
                     intent,
                     arguments: {
                         name,
@@ -111,7 +130,7 @@ export class AskFor implements Plugin {
                 }
             };
             return this;
-        };
+        }
 
         /**
          * Ask for permissions
@@ -198,7 +217,7 @@ export class AskFor implements Plugin {
          */
         GoogleAction.prototype.isSignInOk = function() {
             return this.getSignInStatus() === 'OK';
-        };
+        };  
 
 
         /**
