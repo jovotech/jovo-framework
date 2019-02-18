@@ -1,10 +1,9 @@
-import {Plugin} from "jovo-core";
+import {Plugin, JovoError, ErrorCode} from "jovo-core";
 
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionAPI} from "../services/GoogleActionAPI";
 import {google} from "googleapis";
-import {Credentials} from "google-auth-library";
 
 export class Notification {
     googleAction: GoogleAction;
@@ -20,7 +19,7 @@ export class Notification {
      * @returns {string} access token
      */
     async getAccessToken(clientEmail: string, privateKey: string) {
-        const result: Credentials = await this.sendAuthRequest(clientEmail, privateKey);
+        const result = await this.sendAuthRequest(clientEmail, privateKey);
         return result.access_token;
     }
 
@@ -28,9 +27,19 @@ export class Notification {
      * Authenticates using googleapis package
      * @param {string} clientEmail from service account key
      * @param {string} privateKey from service account key
-     * @returns {Credentials}
      */
     async sendAuthRequest(clientEmail: string, privateKey: string) {
+        if (!clientEmail || !privateKey) {
+            throw new JovoError(
+                'Couldn\'t authenticate. clientEmail and privateKey have to be set',
+                ErrorCode.ERR,
+                'jovo-platform-googleassistant',
+                'To authorize yourself, you have to provide your service account\'s clientEmail and privateKey',
+                undefined,
+                'https://www.jovo.tech/docs/google-assistant/notifications#configuration'
+            )
+        }
+
         const jwtClient = new google.auth.JWT(
             clientEmail,
             undefined,
@@ -39,7 +48,7 @@ export class Notification {
             undefined
         );
 
-        const result: Credentials = await jwtClient.authorize();
+        const result = await jwtClient.authorize();
         return result;
     }
 
@@ -49,6 +58,28 @@ export class Notification {
      * @param {string} accessToken access token from authRequest
      */
     sendNotification(notification: NotificationObject, accessToken: string) {
+        if (!notification) {
+            throw new JovoError(
+                'Couldn\'t send notification. notification has to be set',
+                ErrorCode.ERR,
+                'jovo-platform-googleassistant',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/google-assistant/notifications#notification-object'
+            )
+        }
+
+        if (!accessToken) {
+            throw new JovoError(
+                'Couldn\'t send notification. accessToken has to be set.',
+                ErrorCode.ERR,
+                'jovo-platform-googleassistant',
+                undefined,
+                'Get an access token using `this.$googleAction.$notification.getAccessToken(clientEmail, privateKey)`',
+                'https://www.jovo.tech/docs/google-assistant/notifications#access-token'
+            )
+        }
+
         return GoogleActionAPI.apiCall({
             endpoint: 'https://actions.googleapis.com',
             method: 'POST',
