@@ -1,0 +1,53 @@
+{
+	"invocation": "my test app",
+	"intents": [
+		{
+			"name": "YesIntent",
+			"phrases": [
+				"yes",
+				"sure",
+				"ok",
+				"yes, please"
+			]
+		},
+		{
+			"name": "NoIntent",
+			"phrases": [
+				"no",
+				"not",
+				"don't",
+				"do not"
+			]
+		},
+		{
+			"name": "QuoteIntent",
+			"phrases": [
+				"quote",
+				"show me a quote",
+				"cite Nietzsche",
+				"read a quote",
+				"read some quote"
+			]
+		}
+	],
+	"dialogflow": {
+		"intents": [
+			{
+				"name": "Default Fallback Intent",
+				"auto": true,
+				"webhookUsed": true,
+				"fallbackIntent": true
+			},
+			{
+				"name": "Default Welcome Intent",
+				"auto": true,
+				"webhookUsed": true,
+				"events": [
+					{
+						"name": "WELCOME"
+					}
+				]
+			}
+		]
+	}
+}
