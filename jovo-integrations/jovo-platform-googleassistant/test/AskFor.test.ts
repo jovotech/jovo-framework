@@ -363,4 +363,93 @@ describe('test ON_PERMISSION', () => {
 
     }, 250);
 
+    test('test askForNotification()', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$googleAction!.askForNotification('TestIntent', 'TestName', 'TestText');
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            const dialogflowResponse = handleRequest.jovo!.$response as DialogflowResponse;
+
+            const googleActionResponse = dialogflowResponse.getPlatformResponse() as GoogleActionResponse;
+
+            expect(_get(googleActionResponse, 'expectUserResponse')).toBe(true);
+            expect(_get(googleActionResponse, 'systemIntent')).toEqual(
+                {
+                    "intent": "actions.intent.PERMISSION",
+                    "inputValueData": {
+                        "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+                        "optContext": "",
+                        "permissions": [
+                            "UPDATE"
+                        ],
+                        "updatePermissionValueSpec": {
+                            "arguments": {
+                                "name": "TestName",
+                                "textValue": "TestText"
+                            },
+                            "intent": "TestIntent"
+                        }
+                    }
+                }
+            );
+            done();
+        });
+    }, 250);
+
+    test('test askForNotification() without name and text', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$googleAction!.askForNotification('TestIntent');
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            const dialogflowResponse = handleRequest.jovo!.$response as DialogflowResponse;
+
+            const googleActionResponse = dialogflowResponse.getPlatformResponse() as GoogleActionResponse;
+
+            expect(_get(googleActionResponse, 'expectUserResponse')).toBe(true);
+            expect(_get(googleActionResponse, 'systemIntent')).toEqual(
+                {
+                    "intent": "actions.intent.PERMISSION",
+                    "inputValueData": {
+                        "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+                        "optContext": "",
+                        "permissions": [
+                            "UPDATE"
+                        ],
+                        "updatePermissionValueSpec": {
+                            "arguments": {},
+                            "intent": "TestIntent"
+                        }
+                    }
+                }
+            );
+            done();
+        });
+    }, 250);
+
+    test.only('test askForNotification() correct type', async (done) => {
+        app.setHandler({
+            ON_PERMISSION() {
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.rawRequestByKey('OnPermissionNotification');
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('after.router', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe('ON_PERMISSION');
+            done();
+        });
+    }, 250);
 });
