@@ -5,6 +5,7 @@ import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
 
+
 export class GoogleAction extends Jovo {
     $user: GoogleActionUser;
     $originalRequest: any; // tslint:disable-line
