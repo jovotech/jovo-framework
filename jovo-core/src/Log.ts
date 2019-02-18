@@ -1,4 +1,6 @@
 import _merge = require('lodash.merge');
+import {ContinuationLocalStorage} from 'asyncctx';
+import {Host} from "./Interfaces";
 
 export enum LogLevel {
     NONE = -1,
@@ -15,12 +17,28 @@ interface Config {
     appenderOffset: string;
     ignoreFormatting: boolean;
     appenders: {[key: string]: Appender};
+    /**
+     * Set to true to disable async hooks.
+     * They're used to give certain appenders access to the request object,
+     * and are only enabled if appenders that use them are added.
+     * Activating them incurs a ~10-15% hit to performance, which is why this option
+     * to disable them is given.
+     */
+    disableAsyncHooks: boolean;
+}
+
+interface LogEvent {
+    msg: string;
+    logLevel: LogLevel;
+    isFormat: boolean;
+    requestContext?: Host;
 }
 
 interface Appender {
-    write(msg: any, isFormat?: boolean): void; // tslint:disable-line
+    write(logEvent: LogEvent): void;
     ignoreFormatting: boolean;
     logLevel: LogLevel;
+    trackRequest: boolean;
     [key: string]: any; // tslint:disable-line
 }
 
@@ -40,19 +58,32 @@ export class Logger {
         appenderOffset: '  ',
         ignoreFormatting: false,
         appenders: {},
+        disableAsyncHooks: false,
     };
 
-    timeMap: {[key: string]: number} = {};
+    private timeMap: {[key: string]: number} = {};
 
+    private cls?: ContinuationLocalStorage<Host>;
+
+    /**
+     * Used just by BaseApp to add the request to the context, if request tracking has been enabled.
+     */
+    setRequestContext(request: Host) {
+        if (this.cls) {
+            this.cls.setContext(request);
+        }
+    }
 
     /**
      * Adds appender to Log instance
-     * @param {string} name
-     * @param {Appender} appender
-     * @returns {this}
      */
-    addAppender(name: string, appender: Appender) {
-        this.config.appenders![name] = appender;
+    addAppender(name: string, appender: Appender): this {
+        this.config.appenders[name] = appender;
+
+        if (appender.trackRequest) {
+            this.activateRequestTracking();
+        }
+
         return this;
     }
 
@@ -83,9 +114,9 @@ export class Logger {
      */
     addConsoleAppender(options?: any) { // tslint:disable-line
         const appender: Appender = {
-            write: (msg: any, isFormat = false) => { // tslint:disable-line
-                msg = msg ? msg : '';
-                if (isFormat) {
+            write: (logEvent: LogEvent) => {
+                const msg = logEvent.msg || '';
+                if (logEvent.isFormat) {
                     process.stdout.write(msg);
                 } else {
                     process.stdout.write(this.config.appenderOffset);
@@ -95,10 +126,10 @@ export class Logger {
             },
             logLevel: LogLevel.DEBUG,
             ignoreFormatting: false,
+            trackRequest: false,
         };
         _merge(appender, options);
         return this.addAppender((options && options.name) || 'console', appender);
-
     }
 
     /**
@@ -109,19 +140,16 @@ export class Logger {
      */
     addFileAppender(path: string, options?: any) { // tslint:disable-line
         const appender: Appender = {
-            write: (msg: any, isFormat = false) => { // tslint:disable-line
-                msg = msg ? msg : '';
+            write: (logEvent: LogEvent) => {
+                const msg = logEvent.msg || '';
 
-                if (isFormat) {
-                    this.config.appenders.file.stream.write(msg);
-                } else {
-                    this.config.appenders.file.stream.write(msg);
-                    this.config.appenders.file.stream.write('\n');
-                }
+                this.config.appenders.file.stream.write(msg);
+                this.config.appenders.file.stream.write('\n');
             },
             stream: require('fs').createWriteStream(path, {flags : 'a'}),
             logLevel: LogLevel.DEBUG,
             ignoreFormatting: true,
+            trackRequest: false,
         };
 
         _merge(appender, options);
@@ -138,7 +166,11 @@ export class Logger {
         Object.keys(this.config.appenders).forEach((key) => {
             const appender = this.config.appenders[key];
             if(appender.ignoreFormatting === false) {
-                appender.write(format, true);
+                appender.write({
+                    msg: format,
+                    isFormat: true,
+                    logLevel: LogLevel.NONE
+                });
             }
         });
 
@@ -150,7 +182,7 @@ export class Logger {
      * @param msg
      * @param {LogLevel} logLevel
      */
-    writeToStreams(msg: any, logLevel: LogLevel) { // tslint:disable-line
+    writeToStreams(msg: string | object, logLevel: LogLevel) {
         Object.keys(this.config.appenders).forEach((key) => {
             const appender = this.config.appenders[key];
             if (appender.logLevel >= logLevel) {
@@ -158,7 +190,12 @@ export class Logger {
                     msg = JSON.stringify(msg).trim();
                     msg = '\b\b';
                 }
-                appender.write(msg);
+                appender.write({
+                    msg,
+                    logLevel,
+                    isFormat: false,
+                    requestContext: this.cls ? this.cls.getContext() : undefined
+                });
             }
         });
     }
@@ -169,14 +206,13 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    log(logLevel: LogLevel, msg: any) { // tslint:disable-line
+    log(logLevel: LogLevel, msg: string | object) {
         if (!Logger.isLogLevel(logLevel)) {
             return this.clear();
         }
         this.writeToStreams(msg, logLevel);
         this.clear();
         return this;
-
     }
 
     /**
@@ -184,7 +220,7 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    error(msg?: any) { // tslint:disable-line
+    error(msg: string | object = '') {
         return this.log(LogLevel.ERROR, msg);
     }
 
@@ -194,7 +230,7 @@ export class Logger {
      * @param obj
      * @param {boolean} printStart
      */
-    errorStart(obj: any, printStart = false) { // tslint:disable-line
+    errorStart(obj: string | object, printStart = false) {
         if (!Logger.isLogLevel(LogLevel.ERROR)) {
             return;
         }
@@ -208,7 +244,7 @@ export class Logger {
      * Stop timer and print the duration.
      * @param obj
      */
-    errorEnd(obj: any) { // tslint:disable-line
+    errorEnd(obj: string | object) {
         if (!Logger.isLogLevel(LogLevel.ERROR)) {
             return;
         }
@@ -223,7 +259,7 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    warn(msg?: any) { // tslint:disable-line
+    warn(msg: string | object = '') {
         return this.log(LogLevel.WARN, msg);
     }
 
@@ -233,7 +269,7 @@ export class Logger {
      * @param obj
      * @param {boolean} printStart
      */
-    warnStart(obj: any, printStart = false) { // tslint:disable-line
+    warnStart(obj: string | object, printStart = false) {
         if (!Logger.isLogLevel(LogLevel.WARN)) {
             return;
         }
@@ -247,7 +283,7 @@ export class Logger {
      * Stop timer and print the duration.
      * @param obj
      */
-    warnEnd(obj: any) { // tslint:disable-line
+    warnEnd(obj: string | object) {
         if (!Logger.isLogLevel(LogLevel.WARN)) {
             return;
         }
@@ -262,7 +298,7 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    info(msg?: any) { // tslint:disable-line
+    info(msg: string | object = '') {
         return this.log(LogLevel.INFO, msg);
     }
 
@@ -272,7 +308,7 @@ export class Logger {
      * @param obj
      * @param {boolean} printStart
      */
-    infoStart(obj: any, printStart = false) { // tslint:disable-line
+    infoStart(obj: string | object, printStart = false) {
         if (!Logger.isLogLevel(LogLevel.INFO)) {
             return;
         }
@@ -286,7 +322,7 @@ export class Logger {
      * Stop timer and print the duration.
      * @param obj
      */
-    infoEnd(obj: any) { // tslint:disable-line
+    infoEnd(obj: string | object) {
         if (!Logger.isLogLevel(LogLevel.INFO)) {
             return;
         }
@@ -301,7 +337,7 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    verbose(msg?: any) { // tslint:disable-line
+    verbose(msg: string | object = '') {
         return this.log(LogLevel.VERBOSE, msg);
     }
 
@@ -311,7 +347,7 @@ export class Logger {
      * @param obj
      * @param {boolean} printStart
      */
-    verboseStart(obj: any, printStart = false) { // tslint:disable-line
+    verboseStart(obj: string | object, printStart = false) {
         if (!Logger.isLogLevel(LogLevel.VERBOSE)) {
             return;
         }
@@ -326,7 +362,7 @@ export class Logger {
      * Stop timer and print the duration.
      * @param obj
      */
-    verboseEnd(obj: any) { // tslint:disable-line
+    verboseEnd(obj: string | object) {
         if (!Logger.isLogLevel(LogLevel.VERBOSE)) {
             return;
         }
@@ -341,7 +377,7 @@ export class Logger {
      * @param msg
      * @returns {this}
      */
-    debug(msg?: any) { // tslint:disable-line
+    debug(msg: string | object = '') {
         return this.log(LogLevel.DEBUG, msg);
     }
 
@@ -351,7 +387,7 @@ export class Logger {
      * @param obj
      * @param {boolean} printStart
      */
-    debugStart(obj: any, printStart = false) { // tslint:disable-line
+    debugStart(obj: string | object, printStart = false) {
         if (!Logger.isLogLevel(LogLevel.DEBUG)) {
             return;
         }
@@ -366,7 +402,7 @@ export class Logger {
      * Stop timer and print the duration.
      * @param obj
      */
-    debugEnd(obj: any) { // tslint:disable-line
+    debugEnd(obj: string | object) {
         if (!Logger.isLogLevel(LogLevel.DEBUG)) {
             return;
         }
@@ -379,7 +415,7 @@ export class Logger {
      * Remove time from temporary object.
      * @param obj
      */
-    removeTime(obj: any) { // tslint:disable-line
+    removeTime(obj: string | object) {
         const key = obj.toString();
         if (this.timeMap[key]) {
             delete this.timeMap[key];
@@ -390,7 +426,7 @@ export class Logger {
      * Set time to instance object
      * @param obj
      */
-    setTime(obj: any) { // tslint:disable-line
+    setTime(obj: string | object) {
         const key = obj.toString();
         this.timeMap[key] = new Date().getTime();
     }
@@ -400,7 +436,7 @@ export class Logger {
      * @param obj
      * @returns {number}
      */
-    getTime(obj: any): number { // tslint:disable-line
+    getTime(obj: string | object): number {
         const key = obj.toString();
         const now = new Date().getTime();
 
@@ -698,6 +734,15 @@ export class Logger {
             default: return;
         }
     }
+
+   /**
+    * Activates request tracking, allowing getRequestContext() to be used.
+    */
+   private activateRequestTracking() {
+       if (!this.cls && !this.config.disableAsyncHooks) {
+           this.cls = new ContinuationLocalStorage();
+       }
+   }
 
 }
 
