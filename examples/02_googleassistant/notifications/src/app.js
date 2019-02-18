@@ -23,12 +23,14 @@ app.setHandler({
         // this.toIntent('SendNotificationIntent');
     },
     AskForNotifications() {
+        // You have to show them suggestion chips inviting them to opt-in, 
+        // before you can send the actual permission request
         this.$googleAction.showSuggestionChips(['yes', 'no']);
         this.ask('Notifications?');
     },
 
     YesIntent() {
-        this.$googleAction.askForUpdate('HelloWorldIntent', 'Test name', 'Test Text');
+        this.$googleAction.askForNotification('HelloWorldIntent', 'Test name', 'Test Text');
     },
 
     async SendNotificationIntent() {
