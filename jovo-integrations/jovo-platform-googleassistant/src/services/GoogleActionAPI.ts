@@ -2,6 +2,7 @@ import * as https from "https";
 import {RequestOptions} from "https";
 
 import {GoogleActionAPIResponse} from "./GoogleActionAPIResponse";
+import { GoogleActionAPIError } from "./GoogleActionAPIError";
 
 export interface ApiCallOptions {
     endpoint: string;
@@ -58,7 +59,7 @@ export class GoogleActionAPI {
                             return resolve(new GoogleActionAPIResponse(res.statusCode, parsedData));
                         }
                     } catch (e) {
-                        return reject(e);
+                        return reject(new GoogleActionAPIError(e.message || 'Something went wrong', e.code || GoogleActionAPIError.PARSE_ERROR));
                     }
                     resolve(new GoogleActionAPIResponse(res.statusCode, {}));
                 });
