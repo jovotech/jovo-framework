@@ -46,6 +46,9 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 > [You can find out more about your Google Action user's data here](./data.md './google-assistant/data').
 
+## Push Notifications
+
+> [Find out how to send push notifications to your Google Action's users here](./notifications.md '.google-assistant/notifications')
 
 
 <!--[metadata]: {"description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here",

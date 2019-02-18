@@ -134,7 +134,7 @@ Google Assistant Cards &nbsp; &nbsp; &nbsp; | Create visual Output for the Googl
 Suggestion Chips | Display buttons to allow your users to quickly reply on mobile phones | [📝](./docs/platforms/google-assistant/visual.md#suggestion-chips)
 Location | Access your user's location data | [📝](./docs/platforms/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/platforms/google-assistant/media-response.md)
-
+Push Notifications | Send push notifications to your users | [📝](./docs/platforms/google-assistant/notifications.md)
 
 #### Missing
 
@@ -144,8 +144,6 @@ Platform | Feature | Docs
 :--- | :--- | :---
 **Amazon Alexa** | Location Services | [📝](https://developer.amazon.com/docs/custom-skills/location-services-for-alexa-skills.html)
 **Google Action** | Transactions (WIP) | [📝](https://developers.google.com/actions/transactions/)
-&nbsp; | Push Notifications | [📝](https://developers.google.com/actions/assistant/updates/notifications)
-&nbsp; | Android Link | [📝](https://developers.google.com/actions/assistant/helpers#android_link)
 
 ### Integrations
 
