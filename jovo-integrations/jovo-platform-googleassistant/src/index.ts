@@ -16,6 +16,7 @@ import {CarouselBrowse} from "./response/CarouselBrowse";
 import {Table} from "./response/Table";
 import {List} from "./response/List";
 import {MediaObject, MediaResponse} from "./modules/MediaResponse";
+import {Updates} from "./modules/Updates";
 
 import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
@@ -339,6 +340,7 @@ declare module './core/GoogleAction' {
     interface GoogleAction {
         $audioPlayer?: MediaResponse;
         $mediaResponse?: MediaResponse;
+        $updates?: Updates;
 
         audioPlayer(): MediaResponse | undefined;
         mediaResponse(): MediaResponse | undefined;
@@ -370,6 +372,12 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 intent: string,
                 arguments?: object
             };
+
+            AskForRegisterUpdate?: {
+                intent: string;
+                frequency: string;
+            };
+
             AskForSignIn?: {
                 optContext: string;
             };

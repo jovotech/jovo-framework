@@ -103,7 +103,7 @@ export class BaseApp extends Extensible {
             jovo: undefined
         };
         try {
-
+            Log.setRequestContext(host);
             Log.verbose(Log.header('Start request', 'framework'));
 
             // initialize on first call only
