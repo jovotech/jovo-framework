@@ -4,7 +4,7 @@ import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionAPI} from "../services/GoogleActionAPI";
 import {google} from "googleapis";
-import {Credentials, JWT} from "google-auth-library";
+import {Credentials} from "google-auth-library";
 
 export class Notification {
     googleAction: GoogleAction;
@@ -31,7 +31,7 @@ export class Notification {
      * @returns {Credentials}
      */
     async sendAuthRequest(clientEmail: string, privateKey: string) {
-        const jwtClient: JWT = new google.auth.JWT(
+        const jwtClient = new google.auth.JWT(
             clientEmail,
             undefined,
             privateKey,
