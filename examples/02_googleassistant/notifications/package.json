@@ -13,6 +13,7 @@
     "author": "jovotech",
     "license": "Apache-2.0",
     "dependencies": {
+        "googleapis": "^37.2.0",
         "jovo-framework": "^2.0.15",
         "jovo-platform-googleassistant": "^2.0.17"
     }
