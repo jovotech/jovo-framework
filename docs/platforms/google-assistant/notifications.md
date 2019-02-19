@@ -6,6 +6,7 @@ Learn more about how to send push notifications to your users.
 * [Configuration](#configuration)
 * [User Permission](#user-permission)
 * [Notification Object](#notification-object)
+* [Notification Module](#notification-module)
 * [Access Token](#access-token)
 * [Send the Notification](#send-the-notification)
 
@@ -60,7 +61,7 @@ Now that you got your service account key as well, all the preperation is done
 To ask the user if they want to opt-in to get push notifications for the specified intent, you use the following:
 
 ```javascript
-this.$googleAction.askForUpdate(intent);
+this.$googleAction.askForNotification(intent);
 ```
 
 The response to the question will be mapped to the Jovo built-in `ON_PERMISSION` intent, where you can check wether the permission was granted using `this.$googleAction.isPermissionGranted()`:
@@ -100,6 +101,39 @@ Name | Description | Value | Required
 `userId` | Specifies the user who will receive the notification | `string` | Yes
 `intent` | Specifies the intent which will be executed after the user tapped on the notification | `string` | Yes
 `locale` | Specifies the locale | `string` | Yes
+
+## Notification Module
+
+To access the `$notification` module, which contains the methods needed to send out push notifications you have to first install the `googleapis` package as a dependency:
+
+```sh
+$ npm install --save googleapis
+```
+
+The module itself is also not added automatically to the `google-platform-googleassistant` plugin, you have to add it manually in your `app.js` file:
+
+```javascript
+// src/app.js
+
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+const { App } = require('jovo-framework');
+const { GoogleAssistant, NotificationPlugin } = require('jovo-platform-googleassistant');
+
+const app = new App();
+
+const googleAssistant = new GoogleAssistant();
+
+googleAssistant.use(new NotificationPlugin());
+
+app.use(
+    googleAssistant
+);
+```
+
+After you have done both, you can access the `$notification` module using `this.$googleAction.$notification`.
 
 ## Access Token
 
