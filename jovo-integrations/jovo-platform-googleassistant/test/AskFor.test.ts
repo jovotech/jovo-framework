@@ -438,7 +438,7 @@ describe('test ON_PERMISSION', () => {
         });
     }, 250);
 
-    test.only('test askForNotification() correct type', async (done) => {
+    test('test askForNotification() correct type', async (done) => {
         app.setHandler({
             ON_PERMISSION() {
             },
