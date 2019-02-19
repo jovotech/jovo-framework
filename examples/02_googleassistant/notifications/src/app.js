@@ -5,12 +5,16 @@
 // ------------------------------------------------------------------
 
 const { App } = require('jovo-framework');
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, NotificationPlugin } = require('jovo-platform-googleassistant');
 
 const app = new App();
 
+const googleAssistant = new GoogleAssistant();
+
+googleAssistant.use(new NotificationPlugin());
+
 app.use(
-    new GoogleAssistant()
+    googleAssistant
 );
 
 // ------------------------------------------------------------------
