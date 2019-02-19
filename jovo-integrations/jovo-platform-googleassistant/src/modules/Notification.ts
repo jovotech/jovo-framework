@@ -3,10 +3,10 @@ import {Plugin, JovoError, ErrorCode} from "jovo-core";
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionAPI} from "../services/GoogleActionAPI";
-import {google} from "googleapis";
 
 export class Notification {
     googleAction: GoogleAction;
+    google: any; // tslint:disable-line
 
     constructor(googleAction: GoogleAction) {
         this.googleAction = googleAction;
@@ -37,10 +37,10 @@ export class Notification {
                 'To authorize yourself, you have to provide your service account\'s clientEmail and privateKey',
                 undefined,
                 'https://www.jovo.tech/docs/google-assistant/notifications#configuration'
-            )
+            );
         }
 
-        const jwtClient = new google.auth.JWT(
+        const jwtClient = new this.google.auth.JWT(
             clientEmail,
             undefined,
             privateKey,
@@ -66,7 +66,7 @@ export class Notification {
                 undefined,
                 undefined,
                 'https://www.jovo.tech/docs/google-assistant/notifications#notification-object'
-            )
+            );
         }
 
         if (!accessToken) {
@@ -77,7 +77,7 @@ export class Notification {
                 undefined,
                 'Get an access token using `this.$googleAction.$notification.getAccessToken(clientEmail, privateKey)`',
                 'https://www.jovo.tech/docs/google-assistant/notifications#access-token'
-            )
+            );
         }
 
         return GoogleActionAPI.apiCall({
@@ -91,8 +91,28 @@ export class Notification {
 }
 
 export class NotificationPlugin implements Plugin {
-
+    google: any; // tslint:disable-line
+    
     install(googleAssistant: GoogleAssistant) {
+        /**
+         * Notification.ts needs the googleapis package to function.
+         * To reduce overall package size, googleapis wasn't added as a dependency.
+         * googleapis has to be manually installed
+         */
+        try {
+            this.google = require('googleapis').google;
+        } catch (e) {
+            if (e.message === 'Cannot find module \'googleapis\'') {
+                throw new JovoError(
+                    e.message,
+                    ErrorCode.ERR,
+                    'jovo-platform-googleassistant',
+                    undefined,
+                    'Please run `npm install googleapis`'
+                );
+            }
+        }
+
         googleAssistant.middleware('$type')!.use(this.type.bind(this));
 
         GoogleAction.prototype.$notification = undefined;
@@ -103,8 +123,8 @@ export class NotificationPlugin implements Plugin {
 
     type(googleAction: GoogleAction) {
         googleAction.$notification = new Notification(googleAction);
+        googleAction.$notification.google = this.google;
     }
-
     uninstall(googleAssistant: GoogleAssistant) {
 
     }

@@ -26,7 +26,6 @@ import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilde
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
 import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
-import {NotificationPlugin} from "./modules/Notification";
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
@@ -78,8 +77,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin(),
-            new NotificationPlugin()
+            new TransactionsPlugin()
         );
 
         Jovo.prototype.$googleAction = undefined;

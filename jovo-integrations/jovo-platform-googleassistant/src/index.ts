@@ -8,7 +8,7 @@ export { CarouselBrowseTile } from './response/CarouselBrowseTile';
 export { CarouselBrowse } from './response/CarouselBrowse';
 export { Table } from './response/Table';
 export { List } from './response/List';
-export { NotificationObject } from './modules/Notification';
+export { NotificationObject, NotificationPlugin } from './modules/Notification';
 import {Device} from "./modules/AskFor";
 import {BasicCard} from "./response/BasicCard";
 import {Carousel} from "./response/Carousel";
