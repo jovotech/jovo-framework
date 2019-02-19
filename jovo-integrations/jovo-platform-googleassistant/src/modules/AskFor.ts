@@ -94,16 +94,39 @@ export class AskFor implements Plugin {
 
 
         /**
-         * Ask for update permission
+         * Calls askForNotification()
+         * 
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * 
+         * Exists to comply with Googles naming conventions
+         * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
-         * @param {string} intent
-         * @param {string} optContext
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
          */
-        GoogleAction.prototype.askForUpdate = function(intent: string, optContext = '') {
+        GoogleAction.prototype.askForUpdate = function(intent: string, name?: string, text?: string) {
+            return this.askForNotification(intent, name, text);
+        };
+        
+        /**
+         * Ask for notification permission
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * @public
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
+         */
+        GoogleAction.prototype.askForNotification = function(intent: string, name?: string, text?: string) {
             this.$output.GoogleAssistant = {
-                AskForUpdatePermission: {
+                AskForUpdatePermission: { // Google calls it UpdatePermission as well
                     intent,
-                    optContext
+                    arguments: {
+                        name,
+                        textValue: text
+                    }
                 }
             };
             return this;
@@ -194,7 +217,7 @@ export class AskFor implements Plugin {
          */
         GoogleAction.prototype.isSignInOk = function() {
             return this.getSignInStatus() === 'OK';
-        };
+        };  
 
 
         /**
@@ -343,20 +366,22 @@ export class AskFor implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.AskForUpdatePermission')) {
-            const optContext = _get(output, 'GoogleAssistant.AskForUpdatePermission.optContext') ||
+
+            const optContext = _get(output, 'GoogleAssistant.AskForPermission.optContext') ||
                 _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech'));
 
             _set(googleAction.$response, 'expectUserResponse', true);
 
-            //TODO: doesn't work?
             _set(googleAction.$response, 'systemIntent', {
                 intent: 'actions.intent.PERMISSION',
-                data: {
+                inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.PermissionValueSpec',
-                    'updatePermissionValueSpec': {
-                        'intent': _get(output, 'GoogleAssistant.AskForUpdatePermission.intent'),
-                    },
-                    permissions: ['UPDATE']
+                    optContext: optContext || '',
+                    permissions: ['UPDATE'],
+                    updatePermissionValueSpec: {
+                        arguments: _get(output, 'GoogleAssistant.AskForUpdatePermission.arguments'),
+                        intent: _get(output, 'GoogleAssistant.AskForUpdatePermission.intent')
+                    }
                 }
             });
         }

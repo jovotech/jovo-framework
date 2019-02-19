@@ -1,0 +1,121 @@
+{
+    "responseId": "337f9b5a-342e-487e-bd5b-016b2990f875",
+    "queryResult": {
+        "queryText": "actions_intent_PERMISSION",
+        "action": "input.unknown",
+        "parameters": {},
+        "allRequiredParamsPresent": true,
+        "outputContexts": [
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/actions_capability_screen_output"
+            },
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/actions_intent_permission",
+                "parameters": {
+                    "PERMISSION": true,
+                    "UPDATES_USER_ID": "ABwppHFMJTDBg9gA7wQzqgc4DIzCC_Wa-ZvYUT3hYBgDvN_C80fvbWc51gM_P5IS_kr05r8dF4CKqvhLhg",
+                    "text": "yes"
+                }
+            },
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/actions_capability_audio_output"
+            },
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/google_assistant_input_type_voice"
+            },
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/actions_capability_web_browser"
+            },
+            {
+                "name": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ/contexts/actions_capability_media_response_audio"
+            }
+        ],
+        "intent": {
+            "name": "projects/acctest-d7944/agent/intents/f549eef4-9994-4285-95c0-36580fbfcec4",
+            "displayName": "Default Fallback Intent",
+            "isFallback": true
+        },
+        "intentDetectionConfidence": 1,
+        "languageCode": "en-us"
+    },
+    "originalDetectIntentRequest": {
+        "source": "google",
+        "version": "2",
+        "payload": {
+            "isInSandbox": true,
+            "surface": {
+                "capabilities": [
+                    {
+                        "name": "actions.capability.WEB_BROWSER"
+                    },
+                    {
+                        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+                    },
+                    {
+                        "name": "actions.capability.SCREEN_OUTPUT"
+                    },
+                    {
+                        "name": "actions.capability.AUDIO_OUTPUT"
+                    }
+                ]
+            },
+            "inputs": [
+                {
+                    "rawInputs": [
+                        {
+                            "query": "yes",
+                            "inputType": "VOICE"
+                        }
+                    ],
+                    "arguments": [
+                        {
+                            "textValue": "true",
+                            "name": "PERMISSION",
+                            "boolValue": true
+                        },
+                        {
+                            "rawText": "yes",
+                            "textValue": "yes",
+                            "name": "text"
+                        },
+                        {
+                            "textValue": "ABwppHFMJTDBg9gA7wQzqgc4DIzCC_Wa-ZvYUT3hYBgDvN_C80fvbWc51gM_P5IS_kr05r8dF4CKqvhLhg",
+                            "name": "UPDATES_USER_ID"
+                        }
+                    ],
+                    "intent": "actions.intent.PERMISSION"
+                }
+            ],
+            "user": {
+                "userStorage": "{}",
+                "lastSeen": "2019-02-18T12:53:40Z",
+                "permissions": [
+                    "UPDATE"
+                ],
+                "locale": "en-US",
+                "userId": "ABwppHEQSzwUcHZQ39qIuk2kzopSAoPjK2_BKfvXm89IQ9Q0XPu2FZM6kVQ66v-BEDaWjgq4Vm99Vdlfxw"
+            },
+            "conversation": {
+                "conversationId": "ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ",
+                "type": "ACTIVE",
+                "conversationToken": "[]"
+            },
+            "availableSurfaces": [
+                {
+                    "capabilities": [
+                        {
+                            "name": "actions.capability.WEB_BROWSER"
+                        },
+                        {
+                            "name": "actions.capability.SCREEN_OUTPUT"
+                        },
+                        {
+                            "name": "actions.capability.AUDIO_OUTPUT"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "session": "projects/acctest-d7944/agent/sessions/ABwppHGg-nvHUw2EmSnWaF2-fEkfuvgy0kDQ9LWSdLBSAJa-EzLlzdkhuhkFU4EdTzsyjwFV_9EtHSXhXQ"
+}

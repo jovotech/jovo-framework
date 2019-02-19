@@ -77,7 +77,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin(),
+            new TransactionsPlugin()
         );
 
         Jovo.prototype.$googleAction = undefined;

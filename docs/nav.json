@@ -328,6 +328,10 @@
                         {
                             "title": "Media Response",
                             "route": "google-assistant/media-response"
+                        },
+                        {
+                            "title": "Push Notifications",
+                            "route": "google-assistant/notifications"
                         }
                     ]
                 }
