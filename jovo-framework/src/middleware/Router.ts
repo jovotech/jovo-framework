@@ -94,7 +94,7 @@ export class Router implements Plugin {
 
     static intentRoute(handlers: any,  state: string | undefined, intent: string, intentsToSkipUnhandled?: string[]) { // tslint:disable-line
         let _state = state + '';
-        const _intent = intent + '';
+        let _intent = intent + '';
         let path = state ?
             state + '.' + intent: intent;
 
@@ -115,6 +115,18 @@ export class Router implements Plugin {
 
         if (_state) {
             while (_state !== '') {
+                if (_intent.startsWith('AMAZON.')) {
+                    _intent = _intent.substr('AMAZON.'.length)
+                    if (_get(handlers, _state + '.' + _intent)) {
+                        path = _state + '.' + _intent;
+                        return {
+                            path,
+                            state,
+                            _intent,
+                            type: jovo_core_1.EnumRequestType.INTENT,
+                        };
+                    }
+                }
                 if (_get(handlers, _state + '["' + _intent + '"]')) {
                     path = _state + '["' + _intent + '"]';
                     return {
