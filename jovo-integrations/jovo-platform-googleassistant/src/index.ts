@@ -8,6 +8,7 @@ export { CarouselBrowseTile } from './response/CarouselBrowseTile';
 export { CarouselBrowse } from './response/CarouselBrowse';
 export { Table } from './response/Table';
 export { List } from './response/List';
+export { NotificationObject, NotificationPlugin } from './modules/Notification';
 import {Device} from "./modules/AskFor";
 import {BasicCard} from "./response/BasicCard";
 import {Carousel} from "./response/Carousel";
@@ -20,6 +21,7 @@ import {Updates} from "./modules/Updates";
 import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
 import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
+import {Notification} from './modules/Notification';
 
 export {
     Transaction,
@@ -106,11 +108,30 @@ declare module './core/GoogleAction' {
 
 
         /**
-         * Ask for update permission
+         * Calls askForNotification(intent, name, text)
+         * 
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * 
+         * Exists to comply with Googles naming conventions
+         * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
-         * @param {string} optContext
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
          */
-        askForUpdate(optContext?: string): this;
+        askForUpdate(intent: string, name?: string, text?: string): this;
+
+        /**
+         * Ask for notification permission
+         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
+         * Might have an effect soon.
+         * @public
+         * @param {string} intent // intent for which you want to send notifications
+         * @param {string} name // currently doesn't change anything
+         * @param {string} text // currently doesn't change anything
+         */
+        askForNotification(intent: string, name?: string, text?: string): this;
 
         /**
          * Ask for permissions
@@ -333,6 +354,12 @@ declare module './core/GoogleAction' {
     }
 }
 
+declare module './core/GoogleAction' {
+    interface GoogleAction {
+        $notification?: Notification;
+        notification(): Notification | undefined;
+    }
+}
 
 declare module 'jovo-core/dist/src/Interfaces' {
     interface Output {
@@ -343,7 +370,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
             };
             AskForUpdatePermission?: {
                 intent: string,
-                optContext: string
+                arguments?: object
             };
 
             AskForRegisterUpdate?: {
