@@ -130,7 +130,7 @@ export class AskFor implements Plugin {
                 }
             };
             return this;
-        }
+        };
 
         /**
          * Ask for permissions
