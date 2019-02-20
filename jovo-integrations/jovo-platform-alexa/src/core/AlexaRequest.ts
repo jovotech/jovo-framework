@@ -460,6 +460,14 @@ export class AlexaRequest implements JovoRequest {
     }
 
     /**
+     * Returns the whole geolocation object
+     * @return {Geolocation | undefined}
+     */
+    getGeoLocation(): Geolocation | undefined {
+        return _get(this, 'context.Geolocation')
+    }
+
+    /**
      * Returns geolocation timestamp
      * @return {string | undefined} ISO 8601
      */
