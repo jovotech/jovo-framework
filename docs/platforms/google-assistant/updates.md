@@ -1,11 +1,11 @@
-# Update
+# Google Action Updates
 
 How to keep Google Action users updated with Jovo.
 
 * [Introduction](#introduction)
 * [Daily Updates](#daily-updates)
 * [Routine Suggestions](#routine-suggestions)
-* [How the users can get to this?](#how-the-users-can-get-to-this-)
+* [App Logic](#app-logic)
 * [User Experience](#user-experience)
 
 ## Introduction
@@ -18,7 +18,7 @@ Using Daily Updates, you can manage to trigger updates everyday at scheduled tim
 
 More information [here](https://developers.google.com/actions/assistant/updates/daily) at the official documentation.
 
-### Setup
+### Daily Updates Setup
 
 You need to activate daily updates for at least one of your intents, the official documentation tells to do that this way:
 
@@ -34,7 +34,7 @@ Open the Actions console in a web browser, then:
 
 Google Assistant provides a featured called Routines, which is configured to trigger some intents from a basic routine command like "good morning" or "i'm in home".
 
-### Setup
+### Routine Suggestions Setup
 
 Like daily updates you need to inform Google Actions that your intent can be elegible to be a routine update.
 
@@ -46,7 +46,7 @@ Open the Actions console in a web browser, then do the following:
 4. Enter a **Content title**.
 5. Click **Save**.
 
-## How the users can get to this?
+## App Logic
 
 If you setup an intent to be an update intent, when the user pass through the flow with success Google Assistant suggest to the user to be updated. So, no need for code here. But if you want to trigger the update registering from inside the voice app yourself, you can use Jovo's API in order to do that.
 
