@@ -69,6 +69,18 @@ export class Cards implements Plugin {
             return this;
         };
 
+        /**
+         * Shows ask for geolocation card
+         * @public
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.showAskForGeoLocationCard = function() {
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+                new AskForLocationPermissionsCard()
+                    .setAskForGeoLocationPermission()
+            );
+            return this;
+        }
 
         /**
          * Shows ask for list permission card

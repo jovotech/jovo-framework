@@ -5,7 +5,7 @@ export class AskForLocationPermissionsCard extends AskForPermissionConsentCard {
 
     constructor(type?: string) {
         super();
-        const validTypes = ['address', 'country_and_postal_code'];
+        const validTypes = ['address', 'country_and_postal_code', 'geolocation'];
 
         if (type) {
             if (!validTypes.includes(type)) {
@@ -18,6 +18,10 @@ export class AskForLocationPermissionsCard extends AskForPermissionConsentCard {
 
             if (type === 'country_and_postal_code') {
                 this.setAskForCountryAndPostalCodePermission();
+            }
+
+            if (type === 'geolocation') {
+                this.setAskForGeoLocationPermission();
             }
         }
     }
@@ -36,6 +40,15 @@ export class AskForLocationPermissionsCard extends AskForPermissionConsentCard {
      */
     setAskForCountryAndPostalCodePermission() {
         this.setPermissions(['read::alexa:device:all:address:country_and_postal_code']);
+        return this;
+    }
+
+    /**
+     * Sets ask for geolocation permission
+     * @return {AskForLocationPermissionsCard}
+     */
+    setAskForGeoLocationPermission() {
+        this.setPermissions(['alexa::devices:all:geolocation:read']);
         return this;
     }
 }
