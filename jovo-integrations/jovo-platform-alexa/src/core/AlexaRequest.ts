@@ -21,6 +21,46 @@ export interface Context {
         offsetInMilliseconds: number;
         playerActivity: string;
     };
+    Geolocation?: Geolocation;
+}
+
+export interface Geolocation {
+    // Either "locationServices" or "coordinate" will be present
+    locationServices?: LocationServices;
+    timestamp: string // ISO 8601
+    coordinate?: Coordinate;
+    altitude?: Altitude;
+    heading?: Heading;
+    speed?: Speed;
+}
+
+type LocationServicesAccess = "ENABLED" | "DISABLED";
+type LocationServicesStatus = "RUNNING" | "STOPPED";
+
+export interface LocationServices {
+    access: LocationServicesAccess;
+    status: LocationServicesStatus;
+}
+
+export interface Coordinate {
+    latitudeInDegrees: number; // [-90.0, 90.0]
+    longitudeInDegrees: number; // [-180.0, 190.0]
+    accuracyInMeters: number; // [0, MAX_INTEGER]
+}
+
+export interface Altitude {
+    altitudeInMeters?: number; // [-6350, 18000]
+    accuracyInMeters?: number; // [0, MAX_INTEGER]
+}
+
+export interface Heading {
+    directionInDegrees?: number; // (0, 360.0]
+    accuracyInDegrees?: number; // [0, MAX_INTEGER]
+}
+
+export interface Speed {
+    speedInMetersPerSecond?: number; // [0, 1900] not optional if automotive
+    accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
 export interface System {
@@ -250,7 +290,7 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'session.new', true);
     }
 
-
+    // Jovo Request -- SETTER
 
     setLocale(locale: string) {
         if (_get(this, `request.locale`)) {
@@ -258,9 +298,6 @@ export class AlexaRequest implements JovoRequest {
         }
         return this;
     }
-
-    // Jovo Request -- SETTER
-
 
     setScreenInterface() {
         if (_get(this, 'context.System.device.supportedInterfaces')) {
@@ -422,6 +459,141 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'request.requestId');
     }
 
+    /**
+     * Returns geolocation timestamp
+     * @return {string | undefined} ISO 8601
+     */
+    getGeoLocationTimestamp(): string | undefined {
+        return _get(this, 'context.Geolocation.timestamp');
+    }
+
+    /**
+     * Returns geolocation location services object
+     * @return {LocationServices | undefined}
+     */
+    getLocationServices(): LocationServices | undefined {
+        return _get(this, 'context.Geolocation.locationServices');
+    }
+
+    /**
+     * Returns geolocation location services access
+     * @return {LocationServicesAccess | undefined}
+     */
+    getLocationServicesAccess(): LocationServicesAccess | undefined {
+        return _get(this.getLocationServices(), 'access');
+    }
+
+    /**
+     * Returns geolocation location services status
+     * @return {LocationServicesStatus | undefined}
+     */
+    getLocationServicesStatus(): LocationServicesStatus | undefined {
+        return _get(this.getLocationServices(), 'status');
+    }
+
+    /**
+     * Returns geolocation coordinate object
+     * @return {Coordinate | undefined}
+     */
+    getCoordinate(): Coordinate | undefined {
+        return _get(this, 'context.Geolocation.coordinate');
+    }
+
+    /**
+     * Returns geolocation coordinate latitude in degrees
+     * @return {number | undefined}	[-90.0, 90.0]
+     */
+    getCoordinateLatitudeInDegrees(): number | undefined {
+        return _get(this.getCoordinate(), 'latitudeInDegrees');
+    }
+
+    /**
+     * Returns geolocation coordinate longitude in degrees
+     * @return {number | undefined} [-180.0, 180]
+     */
+    getCoordinateLongitudeInDegrees(): number | undefined {
+        return _get(this.getCoordinate(), 'longitudeInDegrees');
+    }
+
+    /**
+     * Returns geolocation coordinate accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getCoordinateAccuracyInMeters(): number | undefined{
+        return _get(this.getCoordinate(), 'accuracyInMeters');
+    }
+
+    /**
+     * Returns geolocation altitude object
+     * @return {Altitude | undefined}
+     */
+    getAltitude(): Altitude | undefined {
+        return _get(this, 'context.Geolocation.altitude');
+    }
+
+    /**
+     * Returns geolocation altitude in meters
+     * @return {number | undefined} [-6350, 18000]
+     */
+    getAltitudeInMeters(): number | undefined {
+        return _get(this.getAltitude(), 'altitudeInMeters');
+    }
+
+    /**
+     * Returns geolocation altitude accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getAccuracyInMeters(): number | undefined {
+        return _get(this.getAltitude(), 'accuracyInMeters');
+    }
+
+    /**
+     * Returns geolocation heading object
+     * @return {Heading | undefined}
+     */
+    getHeading(): Heading | undefined {
+        return _get(this, 'context.Geolocation.heading');
+    }
+
+    /**
+     * Returns geolocation heading direction in degrees
+     * @return {number | undefined} (0.0, 360.0]
+     */
+    getHeadingDirectionInDegrees(): number | undefined {
+        return _get(this.getHeading(), 'directionInDegrees');
+    }
+
+    /**
+     * Returns geolocation heading accuracy in degrees
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getHeadingAccuracyInDegrees(): number | undefined {
+        return _get(this.getHeading(), 'accuracyInDegrees');
+    }
+
+    /**
+     * Returns geolocation speed object
+     * @return {Speed}
+     */
+    getSpeed(): Speed | undefined {
+        return _get(this, 'context.Geolocation.speed');
+    }
+
+    /**
+     * Returns geolocation speed in meters per second
+     * @return {number | undefined} [0, 1900]
+     */
+    getSpeedInMetersPerSecond(): number | undefined {
+        return _get(this.getSpeed(), 'speedInMetersPerSecond');
+    }
+
+    /**
+     * Returns geolocation speed accuracy in meters per second
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getSpeedAccuracyInMetersPerSecond(): number | undefined {
+        return _get(this.getSpeed(), 'accuracyInMetersPerSecond');
+    }
     /**
      * Returns supported interfaces from device.
      * @public
