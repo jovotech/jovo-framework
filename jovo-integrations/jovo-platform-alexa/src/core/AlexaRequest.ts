@@ -463,7 +463,7 @@ export class AlexaRequest implements JovoRequest {
      * Returns the whole geolocation object
      * @return {Geolocation | undefined}
      */
-    getGeoLocation(): Geolocation | undefined {
+    getGeoLocationObject(): Geolocation | undefined {
         return _get(this, 'context.Geolocation')
     }
 
@@ -472,15 +472,15 @@ export class AlexaRequest implements JovoRequest {
      * @return {string | undefined} ISO 8601
      */
     getGeoLocationTimestamp(): string | undefined {
-        return _get(this, 'context.Geolocation.timestamp');
+        return _get(this.getGeoLocationObject(), 'timestamp');
     }
 
     /**
      * Returns geolocation location services object
      * @return {LocationServices | undefined}
      */
-    getLocationServices(): LocationServices | undefined {
-        return _get(this, 'context.Geolocation.locationServices');
+    getLocationServicesObject(): LocationServices | undefined {
+        return _get(this.getGeoLocationObject(), 'locationServices');
     }
 
     /**
@@ -488,7 +488,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {LocationServicesAccess | undefined}
      */
     getLocationServicesAccess(): LocationServicesAccess | undefined {
-        return _get(this.getLocationServices(), 'access');
+        return _get(this.getLocationServicesObject(), 'access');
     }
 
     /**
@@ -496,111 +496,111 @@ export class AlexaRequest implements JovoRequest {
      * @return {LocationServicesStatus | undefined}
      */
     getLocationServicesStatus(): LocationServicesStatus | undefined {
-        return _get(this.getLocationServices(), 'status');
+        return _get(this.getLocationServicesObject(), 'status');
     }
 
     /**
      * Returns geolocation coordinate object
      * @return {Coordinate | undefined}
      */
-    getCoordinate(): Coordinate | undefined {
-        return _get(this, 'context.Geolocation.coordinate');
+    getCoordinateObject(): Coordinate | undefined {
+        return _get(this.getGeoLocationObject(), 'coordinate');
     }
 
     /**
      * Returns geolocation coordinate latitude in degrees
      * @return {number | undefined}	[-90.0, 90.0]
      */
-    getCoordinateLatitudeInDegrees(): number | undefined {
-        return _get(this.getCoordinate(), 'latitudeInDegrees');
+    getCoordinateLatitude(): number | undefined {
+        return _get(this.getCoordinateObject(), 'latitudeInDegrees');
     }
 
     /**
      * Returns geolocation coordinate longitude in degrees
      * @return {number | undefined} [-180.0, 180]
      */
-    getCoordinateLongitudeInDegrees(): number | undefined {
-        return _get(this.getCoordinate(), 'longitudeInDegrees');
+    getCoordinateLongitude(): number | undefined {
+        return _get(this.getCoordinateObject(), 'longitudeInDegrees');
     }
 
     /**
      * Returns geolocation coordinate accuracy in meters
      * @return {number | undefined} [0, MAX_INTEGER]
      */
-    getCoordinateAccuracyInMeters(): number | undefined{
-        return _get(this.getCoordinate(), 'accuracyInMeters');
+    getCoordinateAccuracy(): number | undefined{
+        return _get(this.getCoordinateObject(), 'accuracyInMeters');
     }
 
     /**
      * Returns geolocation altitude object
      * @return {Altitude | undefined}
      */
-    getAltitude(): Altitude | undefined {
-        return _get(this, 'context.Geolocation.altitude');
+    getAltitudeObject(): Altitude | undefined {
+        return _get(this.getGeoLocationObject(), 'altitude');
     }
 
     /**
      * Returns geolocation altitude in meters
      * @return {number | undefined} [-6350, 18000]
      */
-    getAltitudeInMeters(): number | undefined {
-        return _get(this.getAltitude(), 'altitudeInMeters');
+    getAltitude(): number | undefined {
+        return _get(this.getAltitudeObject(), 'altitudeInMeters');
     }
 
     /**
      * Returns geolocation altitude accuracy in meters
      * @return {number | undefined} [0, MAX_INTEGER]
      */
-    getAccuracyInMeters(): number | undefined {
-        return _get(this.getAltitude(), 'accuracyInMeters');
+    getAltitudeAccuracy(): number | undefined {
+        return _get(this.getAltitudeObject(), 'accuracyInMeters');
     }
 
     /**
      * Returns geolocation heading object
      * @return {Heading | undefined}
      */
-    getHeading(): Heading | undefined {
-        return _get(this, 'context.Geolocation.heading');
+    getHeadingObject(): Heading | undefined {
+        return _get(this.getGeoLocationObject(), 'heading');
     }
 
     /**
      * Returns geolocation heading direction in degrees
      * @return {number | undefined} (0.0, 360.0]
      */
-    getHeadingDirectionInDegrees(): number | undefined {
-        return _get(this.getHeading(), 'directionInDegrees');
+    getHeadingDirection(): number | undefined {
+        return _get(this.getHeadingObject(), 'directionInDegrees');
     }
 
     /**
      * Returns geolocation heading accuracy in degrees
      * @return {number | undefined} [0, MAX_INTEGER]
      */
-    getHeadingAccuracyInDegrees(): number | undefined {
-        return _get(this.getHeading(), 'accuracyInDegrees');
+    getHeadingAccuracy(): number | undefined {
+        return _get(this.getHeadingObject(), 'accuracyInDegrees');
     }
 
     /**
      * Returns geolocation speed object
      * @return {Speed}
      */
-    getSpeed(): Speed | undefined {
-        return _get(this, 'context.Geolocation.speed');
+    getSpeedObject(): Speed | undefined {
+        return _get(this.getGeoLocationObject(), 'speed');
     }
 
     /**
      * Returns geolocation speed in meters per second
      * @return {number | undefined} [0, 1900]
      */
-    getSpeedInMetersPerSecond(): number | undefined {
-        return _get(this.getSpeed(), 'speedInMetersPerSecond');
+    getSpeed(): number | undefined {
+        return _get(this.getSpeedObject(), 'speedInMetersPerSecond');
     }
 
     /**
      * Returns geolocation speed accuracy in meters per second
      * @return {number | undefined} [0, MAX_INTEGER]
      */
-    getSpeedAccuracyInMetersPerSecond(): number | undefined {
-        return _get(this.getSpeed(), 'accuracyInMetersPerSecond');
+    getSpeedAccuracy(): number | undefined {
+        return _get(this.getSpeedObject(), 'accuracyInMetersPerSecond');
     }
     /**
      * Returns supported interfaces from device.
