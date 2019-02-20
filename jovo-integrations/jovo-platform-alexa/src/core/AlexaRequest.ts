@@ -63,6 +63,8 @@ export interface Speed {
     accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
+type GeoLocationPermissionStatus = "GRANTED" | "DENIED";
+
 export interface System {
     application: Application;
     user: User;
@@ -457,6 +459,30 @@ export class AlexaRequest implements JovoRequest {
 
     getRequestId() {
         return _get(this, 'request.requestId');
+    }
+
+    /**
+     * Returns the geolocation permission status
+     * @return {GeoLocationPermissionStatus}
+     */
+    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus {
+        return _get(this, 'context.System.user.permissions.scopes.alexa::devices:all:geolocation:read.status');
+    }
+
+    /**
+     * Returns true if geolocation permission was denied
+     * @return {boolean}
+     */
+    isGeoLocationPermissionDenied(): boolean {
+        return this.getGeoLocationPermissionStatus() === 'DENIED';
+    }
+
+    /**
+     * Returns true if geolocation permission was granted
+     * @return {boolean}
+     */
+    isGeoLocationPermissionGranted() {
+        return this.getGeoLocationPermissionStatus() === 'GRANTED'
     }
 
     /**
