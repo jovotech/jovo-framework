@@ -80,7 +80,7 @@ export class Cards implements Plugin {
                     .setAskForGeoLocationPermission()
             );
             return this;
-        }
+        };
 
         /**
          * Shows ask for list permission card

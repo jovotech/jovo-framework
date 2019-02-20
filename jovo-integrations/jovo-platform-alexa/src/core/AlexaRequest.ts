@@ -27,7 +27,7 @@ export interface Context {
 export interface Geolocation {
     // Either "locationServices" or "coordinate" will be present
     locationServices?: LocationServices;
-    timestamp: string // ISO 8601
+    timestamp: string; // ISO 8601
     coordinate?: Coordinate;
     altitude?: Altitude;
     heading?: Heading;
@@ -482,7 +482,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {boolean}
      */
     isGeoLocationPermissionGranted() {
-        return this.getGeoLocationPermissionStatus() === 'GRANTED'
+        return this.getGeoLocationPermissionStatus() === 'GRANTED';
     }
 
     /**
@@ -490,7 +490,7 @@ export class AlexaRequest implements JovoRequest {
      * @return {Geolocation | undefined}
      */
     getGeoLocationObject(): Geolocation | undefined {
-        return _get(this, 'context.Geolocation')
+        return _get(this, 'context.Geolocation');
     }
 
     /**
