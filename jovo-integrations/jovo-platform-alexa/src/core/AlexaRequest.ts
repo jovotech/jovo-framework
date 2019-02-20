@@ -21,7 +21,49 @@ export interface Context {
         offsetInMilliseconds: number;
         playerActivity: string;
     };
+    Geolocation?: Geolocation;
 }
+
+export interface Geolocation {
+    // Either "locationServices" or "coordinate" will be present
+    locationServices?: LocationServices;
+    timestamp: string; // ISO 8601
+    coordinate?: Coordinate;
+    altitude?: Altitude;
+    heading?: Heading;
+    speed?: Speed;
+}
+
+type LocationServicesAccess = "ENABLED" | "DISABLED";
+type LocationServicesStatus = "RUNNING" | "STOPPED";
+
+export interface LocationServices {
+    access: LocationServicesAccess;
+    status: LocationServicesStatus;
+}
+
+export interface Coordinate {
+    latitudeInDegrees: number; // [-90.0, 90.0]
+    longitudeInDegrees: number; // [-180.0, 190.0]
+    accuracyInMeters: number; // [0, MAX_INTEGER]
+}
+
+export interface Altitude {
+    altitudeInMeters?: number; // [-6350, 18000]
+    accuracyInMeters?: number; // [0, MAX_INTEGER]
+}
+
+export interface Heading {
+    directionInDegrees?: number; // (0, 360.0]
+    accuracyInDegrees?: number; // [0, MAX_INTEGER]
+}
+
+export interface Speed {
+    speedInMetersPerSecond?: number; // [0, 1900] not optional if automotive
+    accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
+}
+
+type GeoLocationPermissionStatus = "GRANTED" | "DENIED";
 
 export interface System {
     application: Application;
@@ -250,7 +292,7 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'session.new', true);
     }
 
-
+    // Jovo Request -- SETTER
 
     setLocale(locale: string) {
         if (_get(this, `request.locale`)) {
@@ -258,9 +300,6 @@ export class AlexaRequest implements JovoRequest {
         }
         return this;
     }
-
-    // Jovo Request -- SETTER
-
 
     setScreenInterface() {
         if (_get(this, 'context.System.device.supportedInterfaces')) {
@@ -422,6 +461,173 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'request.requestId');
     }
 
+    /**
+     * Returns the geolocation permission status
+     * @return {GeoLocationPermissionStatus}
+     */
+    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus {
+        return _get(this, 'context.System.user.permissions.scopes.alexa::devices:all:geolocation:read.status');
+    }
+
+    /**
+     * Returns true if geolocation permission was denied
+     * @return {boolean}
+     */
+    isGeoLocationPermissionDenied(): boolean {
+        return this.getGeoLocationPermissionStatus() === 'DENIED';
+    }
+
+    /**
+     * Returns true if geolocation permission was granted
+     * @return {boolean}
+     */
+    isGeoLocationPermissionGranted() {
+        return this.getGeoLocationPermissionStatus() === 'GRANTED';
+    }
+
+    /**
+     * Returns the whole geolocation object
+     * @return {Geolocation | undefined}
+     */
+    getGeoLocationObject(): Geolocation | undefined {
+        return _get(this, 'context.Geolocation');
+    }
+
+    /**
+     * Returns geolocation timestamp
+     * @return {string | undefined} ISO 8601
+     */
+    getGeoLocationTimestamp(): string | undefined {
+        return _get(this.getGeoLocationObject(), 'timestamp');
+    }
+
+    /**
+     * Returns geolocation location services object
+     * @return {LocationServices | undefined}
+     */
+    getLocationServicesObject(): LocationServices | undefined {
+        return _get(this.getGeoLocationObject(), 'locationServices');
+    }
+
+    /**
+     * Returns geolocation location services access
+     * @return {LocationServicesAccess | undefined}
+     */
+    getLocationServicesAccess(): LocationServicesAccess | undefined {
+        return _get(this.getLocationServicesObject(), 'access');
+    }
+
+    /**
+     * Returns geolocation location services status
+     * @return {LocationServicesStatus | undefined}
+     */
+    getLocationServicesStatus(): LocationServicesStatus | undefined {
+        return _get(this.getLocationServicesObject(), 'status');
+    }
+
+    /**
+     * Returns geolocation coordinate object
+     * @return {Coordinate | undefined}
+     */
+    getCoordinateObject(): Coordinate | undefined {
+        return _get(this.getGeoLocationObject(), 'coordinate');
+    }
+
+    /**
+     * Returns geolocation coordinate latitude in degrees
+     * @return {number | undefined}	[-90.0, 90.0]
+     */
+    getCoordinateLatitude(): number | undefined {
+        return _get(this.getCoordinateObject(), 'latitudeInDegrees');
+    }
+
+    /**
+     * Returns geolocation coordinate longitude in degrees
+     * @return {number | undefined} [-180.0, 180]
+     */
+    getCoordinateLongitude(): number | undefined {
+        return _get(this.getCoordinateObject(), 'longitudeInDegrees');
+    }
+
+    /**
+     * Returns geolocation coordinate accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getCoordinateAccuracy(): number | undefined{
+        return _get(this.getCoordinateObject(), 'accuracyInMeters');
+    }
+
+    /**
+     * Returns geolocation altitude object
+     * @return {Altitude | undefined}
+     */
+    getAltitudeObject(): Altitude | undefined {
+        return _get(this.getGeoLocationObject(), 'altitude');
+    }
+
+    /**
+     * Returns geolocation altitude in meters
+     * @return {number | undefined} [-6350, 18000]
+     */
+    getAltitude(): number | undefined {
+        return _get(this.getAltitudeObject(), 'altitudeInMeters');
+    }
+
+    /**
+     * Returns geolocation altitude accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getAltitudeAccuracy(): number | undefined {
+        return _get(this.getAltitudeObject(), 'accuracyInMeters');
+    }
+
+    /**
+     * Returns geolocation heading object
+     * @return {Heading | undefined}
+     */
+    getHeadingObject(): Heading | undefined {
+        return _get(this.getGeoLocationObject(), 'heading');
+    }
+
+    /**
+     * Returns geolocation heading direction in degrees
+     * @return {number | undefined} (0.0, 360.0]
+     */
+    getHeadingDirection(): number | undefined {
+        return _get(this.getHeadingObject(), 'directionInDegrees');
+    }
+
+    /**
+     * Returns geolocation heading accuracy in degrees
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getHeadingAccuracy(): number | undefined {
+        return _get(this.getHeadingObject(), 'accuracyInDegrees');
+    }
+
+    /**
+     * Returns geolocation speed object
+     * @return {Speed}
+     */
+    getSpeedObject(): Speed | undefined {
+        return _get(this.getGeoLocationObject(), 'speed');
+    }
+
+    /**
+     * Returns geolocation speed in meters per second
+     * @return {number | undefined} [0, 1900]
+     */
+    getSpeed(): number | undefined {
+        return _get(this.getSpeedObject(), 'speedInMetersPerSecond');
+    }
+
+    /**
+     * Returns geolocation speed accuracy in meters per second
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getSpeedAccuracy(): number | undefined {
+        return _get(this.getSpeedObject(), 'accuracyInMetersPerSecond');
+    }
     /**
      * Returns supported interfaces from device.
      * @public
