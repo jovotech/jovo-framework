@@ -1,6 +1,33 @@
 # Jovo Framework Changelog
 
 
+
+## 2.0.16 (2019-02-21)
+
+#### :rocket: New Feature
+* `jovo-platform-googleassistant` [#383](https://github.com/jovotech/jovo-framework/pull/383) Support to daily updates and daily routines ([@renatoalencar](https://github.com/renatoalencar))
+* `jovo-platform-googleassistant` [#383](https://github.com/jovotech/jovo-framework/pull/384) Adds Google Action Push Notifications ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-alexa` [#383](https://github.com/jovotech/jovo-framework/pull/387) Adds Alexa Geolocation support (also known as Location Services) ([@KaanKC](https://github.com/KaanKC))
+
+
+#### :bug: Bug Fix
+
+* `jovo-cms-i18next` Fixed i18n file extension bug (in Typescript projects)
+* `jovo-platform-alexa` Fixed directives override (DisplayTemplates)
+
+
+#### :nail_care: Enhancement
+* `jovo-platform-framework` [#389](https://github.com/jovotech/jovo-framework/pull/389) Improve middleware hooks  ([@aswetlow](https://github.com/aswetlow))
+* `jovo-platform-alexa` Added `shouldEndSession(boolean | null)` to handle the shouldEndSession property explicitly
+* `jovo-platform-alexa` Added `getSkillId()` helper method
+
+#### Committers: 3
+- Renato Alencar ([@renatoalencar](https://github.com/renatoalencar))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 2.0.15 (2019-02-12)
 
 #### :rocket: New Feature
