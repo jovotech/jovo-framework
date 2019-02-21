@@ -6,8 +6,9 @@
 
 #### :rocket: New Feature
 * `jovo-platform-googleassistant` [#383](https://github.com/jovotech/jovo-framework/pull/383) Support to daily updates and daily routines ([@renatoalencar](https://github.com/renatoalencar))
-* `jovo-platform-googleassistant` [#383](https://github.com/jovotech/jovo-framework/pull/384) Adds Google Action Push Notifications ([@KaanKC](https://github.com/KaanKC))
-* `jovo-platform-alexa` [#383](https://github.com/jovotech/jovo-framework/pull/387) Adds Alexa Geolocation support (also known as Location Services) ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` [#384](https://github.com/jovotech/jovo-framework/pull/384) Adds Google Action Push Notifications ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-alexa` [#387](https://github.com/jovotech/jovo-framework/pull/387) Adds Alexa Geolocation support (also known as Location Services) ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#375](https://github.com/jovotech/jovo-framework/pull/375) Implemented Azure Functions context logging ([@IGx89](https://github.com/IGx89))
 
 
 #### :bug: Bug Fix
@@ -23,6 +24,7 @@
 
 #### Committers: 3
 - Renato Alencar ([@renatoalencar](https://github.com/renatoalencar))
+- Matthew Lieder ([@IGx89](https://github.com/IGx89))
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
 - Alex ([@aswetlow](https://github.com/aswetlow))
 
