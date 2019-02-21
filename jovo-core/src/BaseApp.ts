@@ -96,6 +96,21 @@ export class BaseApp extends Extensible {
         this.emit('webhook.init');
     }
 
+
+    hook(name: string, func: Function) {
+        if (!this.middleware(name)) {
+            throw new JovoError(
+                `Can't find hook with name '${name}'`,
+                'jovo-core',
+            );
+        }
+
+        this.middleware(name)!.use(async(handleRequest: HandleRequest) => {
+            await func.call(undefined, handleRequest.error, handleRequest.host, handleRequest.jovo);
+        });
+    }
+
+
     async handle(host: Host) {
         const handleRequest: HandleRequest = {
             app: this,
