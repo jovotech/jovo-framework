@@ -1,4 +1,4 @@
-# Push Notifications
+# Google Action Push Notifications
 
 Learn more about how to send push notifications to your users.
 
