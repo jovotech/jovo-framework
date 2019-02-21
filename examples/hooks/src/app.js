@@ -1,23 +1,44 @@
 
-const { App, Log, Util } = require('jovo-framework');
-const { Jovo } = require('jovo-core');
+const { App } = require('jovo-framework');
 
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
-const { Dialogflow } = require('jovo-platform-dialogflow');
 
 const app = new App();
-Util.consoleLog();
 
 app.use(
     new GoogleAssistant(),
-    // new Dialogflow(),
     new Alexa(),
     new JovoDebugger(),
     new FileDb(),
 );
+
+app.hook('before.platform.output', async (error, host, jovo) => {
+    const pollyName = 'Hans';
+    if (jovo.isAlexaSkill()) {
+        if (jovo.$output.tell) {
+            jovo.$output.tell.speech = `<voice name="${pollyName}">${jovo.$output.tell.speech}</voice>`;
+        }
+
+        if (jovo.$output.ask) {
+            jovo.$output.ask.speech = `<voice name="${pollyName}">${jovo.$output.ask.speech}</voice>`;
+            jovo.$output.ask.reprompt = `<voice name="${pollyName}">${jovo.$output.ask.reprompt}</voice>`;
+        }
+    }
+});
+
+
+// use next() in callbacks
+app.hook('after.request', (error, host, jovo, next) => {
+    setTimeout(() => {
+        // do stuff
+        console.log('setTimeout');
+        next();
+    }, 1000)
+});
+
 
 
 app.setHandler({

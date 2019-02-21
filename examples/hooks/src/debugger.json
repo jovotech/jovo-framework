@@ -1,0 +1,25 @@
+{
+  "requestBuilder": {
+    "selected": ["LAUNCH", "MyNameIsIntent", "HelloWorldIntent", "SimpleSequence", "SimpleSequence2"],
+    "buttons": [
+      {
+        "name": "SimpleSequence",
+        "sequence": [
+          "LAUNCH",
+          "MyNameIsIntent name='Joe' age=33 city=''",
+          "END",
+          "HelpIntent"
+        ]
+      },
+      {
+        "name": "SimpleSequence2",
+        "sequence": [
+          "LAUNCH",
+          "MyNameIsIntent name='Joe'",
+          "END"
+        ]
+      }
+    ]
+  }
+}
+

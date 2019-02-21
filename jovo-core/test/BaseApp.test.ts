@@ -1,5 +1,14 @@
-import {BaseApp} from "../src";
+import {ActionSet, BaseApp, Host, Jovo} from "../src";
+import {Extensible} from "../src/Extensible";
+class Parent extends Extensible {
+    install() {
 
+    }
+
+    uninstall() {
+
+    }
+}
 test('test constructor', async () => {
     const baseApp = new BaseApp();
 
@@ -68,3 +77,81 @@ test('test onFail()', async (done) => {
 
     baseApp.emit('fail');
 });
+
+test('test middleware()', async (done) => {
+
+    const baseApp = new BaseApp();
+    baseApp.config.enabled = true;
+
+    baseApp.middleware('request')!.use(() => {
+        done();
+    });
+    await baseApp.middleware('request')!.run({});
+});
+
+test('test hook()', async (done) => {
+
+    const baseApp = new BaseApp();
+    baseApp.config.enabled = true;
+
+    baseApp.hook('request', (error: Error, host: Host, jovo: Jovo) => {
+        done();
+    });
+
+    await baseApp.middleware('request')!.run({});
+});
+
+test('test hook() with await/async', async (done) => {
+
+    const baseApp = new BaseApp();
+    baseApp.config.enabled = true;
+
+    let variable = 0;
+
+
+    baseApp.hook('request', async (error: Error, host: Host, jovo: Jovo) => {
+        await delay();
+
+        variable = 1;
+    });
+
+    baseApp.hook('request2', (error: Error, host: Host, jovo: Jovo) => {
+        expect(variable).toEqual(1);
+        done();
+    });
+
+    await baseApp.middleware('request')!.run({});
+    await baseApp.middleware('request2')!.run({});
+
+});
+
+
+test('test hook() with callbacks', async (done) => {
+
+    const baseApp = new BaseApp();
+    baseApp.config.enabled = true;
+
+    let variable = 0;
+
+
+    baseApp.hook('request', (error: Error, host: Host, jovo: Jovo, next: Function) => {
+        setTimeout(() => {
+            variable = 1;
+            next();
+        }, 300);
+    });
+
+    baseApp.hook('request2', (error: Error, host: Host, jovo: Jovo) => {
+        expect(variable).toEqual(1);
+        done();
+    });
+
+    await baseApp.middleware('request')!.run({});
+    await baseApp.middleware('request2')!.run({});
+
+});
+
+
+function delay() {
+    return new Promise(resolve => setTimeout(resolve, 250));
+}
