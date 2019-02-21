@@ -22,7 +22,7 @@
 * `jovo-platform-alexa` Added `shouldEndSession(boolean | null)` to handle the shouldEndSession property explicitly
 * `jovo-platform-alexa` Added `getSkillId()` helper method
 
-#### Committers: 3
+#### Committers: 4
 - Renato Alencar ([@renatoalencar](https://github.com/renatoalencar))
 - Matthew Lieder ([@IGx89](https://github.com/IGx89))
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
