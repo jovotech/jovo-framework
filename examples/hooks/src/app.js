@@ -30,6 +30,17 @@ app.hook('before.platform.output', async (error, host, jovo) => {
 });
 
 
+// use next() in callbacks
+app.hook('after.request', (error, host, jovo, next) => {
+    setTimeout(() => {
+        // do stuff
+        console.log('setTimeout');
+        next();
+    }, 1000)
+});
+
+
+
 app.setHandler({
     async LAUNCH(jovo) {
         return this.toIntent('HelloWorldIntent');
