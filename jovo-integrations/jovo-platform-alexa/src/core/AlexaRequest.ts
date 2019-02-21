@@ -34,8 +34,8 @@ export interface Geolocation {
     speed?: Speed;
 }
 
-type LocationServicesAccess = "ENABLED" | "DISABLED";
-type LocationServicesStatus = "RUNNING" | "STOPPED";
+export type LocationServicesAccess = "ENABLED" | "DISABLED";
+export type LocationServicesStatus = "RUNNING" | "STOPPED";
 
 export interface LocationServices {
     access: LocationServicesAccess;
@@ -63,7 +63,7 @@ export interface Speed {
     accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-type GeoLocationPermissionStatus = "GRANTED" | "DENIED";
+export type GeoLocationPermissionStatus = "GRANTED" | "DENIED";
 
 export interface System {
     application: Application;
@@ -463,9 +463,9 @@ export class AlexaRequest implements JovoRequest {
 
     /**
      * Returns the geolocation permission status
-     * @return {GeoLocationPermissionStatus}
+     * @return {GeoLocationPermissionStatus | undefined}
      */
-    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus {
+    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus | undefined {
         return _get(this, 'context.System.user.permissions.scopes.alexa::devices:all:geolocation:read.status');
     }
 
@@ -628,6 +628,7 @@ export class AlexaRequest implements JovoRequest {
     getSpeedAccuracy(): number | undefined {
         return _get(this.getSpeedObject(), 'accuracyInMetersPerSecond');
     }
+    
     /**
      * Returns supported interfaces from device.
      * @public

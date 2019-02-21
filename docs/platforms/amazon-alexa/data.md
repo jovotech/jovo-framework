@@ -106,11 +106,11 @@ module.exports = {
 After you've added it to your skill's permissions, your users can grant or deny you permission to access their geolocation data at any time. You can check the current status the following ways:
 
 ```javascript
-this.$request.getGeoLocationPermissionStatus() // Either `GRANTED` or `DENIED`
+this.$alexaSkill.getGeoLocationPermissionStatus() // Either `GRANTED` or `DENIED`
 
-this.$request.isGeoLocationPermissionGranted() // true or false
+this.$alexaSkill.isGeoLocationPermissionGranted() // true or false
 
-this.$request.isGeoLocationPermissionDenied() // true or false
+this.$alexaSkill.isGeoLocationPermissionDenied() // true or false
 ```
 
 If the permission was denied you can send your user a permission card to ask them to turn it back on:
@@ -126,7 +126,7 @@ After your user has given their consent the incoming requests may contain a `Geo
 To see wether a device supports the geolocation interface or not, you can use the following method:
 
 ```javascript
-this.$request.hasGeoLocationInterface() // true or false
+this.$alexaSkill.hasGeoLocationInterface() // true or false
 ```
 
 #### Geolocation Object
@@ -186,36 +186,36 @@ You can access them the following way:
 
 ```javascript
 // geolocation
-this.$request.getGeoLocationObject() // whole geolocation object
+this.$alexaSkill.getGeoLocationObject() // whole geolocation object
 
 // locationServices
-this.$request.getLocationServicesObject() // whole object
-this.$request.getLocationServicesAccess()
-this.$request.getLocationServicesStatus()
+this.$alexaSkill.getLocationServicesObject() // whole object
+this.$alexaSkill.getLocationServicesAccess()
+this.$alexaSkill.getLocationServicesStatus()
 
 // timestamp
-this.$request.getGeoLocationTimestamp()
+this.$alexaSkill.getGeoLocationTimestamp()
 
 // coordinate
-this.$request.getCoordinateObject() // whole object
-this.$request.getCoordinateLatitude()
-this.$request.getCoordinateLongitude()
-this.$request.getCoordinateAccuracy()
+this.$alexaSkill.getCoordinateObject() // whole object
+this.$alexaSkill.getCoordinateLatitude()
+this.$alexaSkill.getCoordinateLongitude()
+this.$alexaSkill.getCoordinateAccuracy()
 
 // altitude
-this.$request.getAltitudeObject() // whole object
-this.$request.getAltitude()
-this.$request.getAltitudeAccuracy()
+this.$alexaSkill.getAltitudeObject() // whole object
+this.$alexaSkill.getAltitude()
+this.$alexaSkill.getAltitudeAccuracy()
 
 // heading
-this.$request.getHeadingObject() // whole object
-this.$request.getHeadingDirection()
-this.$request.getHeadingAccuracy()
+this.$alexaSkill.getHeadingObject() // whole object
+this.$alexaSkill.getHeadingDirection()
+this.$alexaSkill.getHeadingAccuracy()
 
 // speed
-this.$request.getSpeedObject() // whole object
-this.$request.getSpeed()
-this.$request.getSpeedAccuracy()
+this.$alexaSkill.getSpeedObject() // whole object
+this.$alexaSkill.getSpeed()
+this.$alexaSkill.getSpeedAccuracy()
 ```
 
 ## Contact Information
