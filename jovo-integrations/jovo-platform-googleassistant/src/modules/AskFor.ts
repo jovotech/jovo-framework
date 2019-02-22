@@ -314,6 +314,9 @@ export class AskFor implements Plugin {
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.CONFIRMATION') {
             _set(googleAction.$type, 'type', 'ON_CONFIRMATION');
         }
+        if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.DATETIME') {
+            _set(googleAction.$type, 'type', 'ON_DATETIME');
+        }
     }
     output(googleAction: GoogleAction) {
 
