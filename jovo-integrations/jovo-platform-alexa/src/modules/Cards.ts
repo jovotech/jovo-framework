@@ -93,7 +93,7 @@ export class Cards implements Plugin {
                 new AskForPermissionConsentCard().setPermissions(['payments:autopay_consent'])
             );
             return this;
-        }
+        };
 
         /**
          * Shows ask for list permission card
