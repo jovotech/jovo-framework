@@ -2,7 +2,7 @@ import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
 import {
     AlexaRequest,
     Geolocation,
-    GeoLocationPermissionStatus,
+    PermissionStatus,
     LocationServices,
     LocationServicesAccess,
     LocationServicesStatus,
@@ -189,6 +189,30 @@ export class AlexaSkill extends Jovo {
         return (this.$request! as AlexaRequest).hasAPLInterface();
     }
 
+    /**
+     * Returns the amazon pay permission status
+     * @public
+     * @return {PermissionStatus | undefined}
+     */
+    getAmazonPayPermissionStatus(): PermissionStatus | undefined {
+        return (this.$request! as AlexaRequest).getAmazonPayPermissionStatus();
+    }
+
+    /**
+     * Returns true if the amazon pay permission was granted
+     * @return {boolean}
+     */
+    isAmazonPayPermissionGranted(): boolean {
+        return (this.$request! as AlexaRequest).isAmazonPayPermissionGranted();
+    }
+
+    /**
+     * Returns true if the amazon pay permission was denied
+     * @return {boolean}
+     */
+    isAmazonPayPermissionDenied(): boolean {
+        return (this.$request! as AlexaRequest).isAmazonPayPermissionDenied();
+    }
 
     /**
      * Returns geo location capability of request device
@@ -201,9 +225,9 @@ export class AlexaSkill extends Jovo {
 
     /**
      * Returns the geolocation permission status
-     * @return {GeoLocationPermissionStatus | undefined}
+     * @return {PermissionStatus | undefined}
      */
-    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus | undefined {
+    getGeoLocationPermissionStatus(): PermissionStatus | undefined {
         return (this.$request! as AlexaRequest).getGeoLocationPermissionStatus();
     }
 
