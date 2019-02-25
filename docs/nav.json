@@ -334,8 +334,12 @@
                             "route": "google-assistant/notifications"
                         },
                         {
-                            "title": "Updates",
-                            "route": "google-assistant/updates"
+                            "title": "Routine Suggestion",
+                            "route": "google-assistant/routine-suggestion"
+                        },
+                        {
+                            "title": "Daily Update",
+                            "route": "google-assistant/daily-update"
                         }
                     ]
                 }
