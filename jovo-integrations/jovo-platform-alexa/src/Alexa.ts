@@ -122,9 +122,9 @@ export class Alexa extends Extensible implements Platform {
                 if (typeof obj !== 'object') {
                     throw new Error('Handler must be of type object.');
                 }
-                _set(this.config.plugin, 'Alexa.handlers', obj);
+                const sourceHandler = _get(this.config.plugin,'Alexa.handlers');
+                _set(this.config.plugin, 'Alexa.handlers', _merge(sourceHandler,obj));            
             }
-
             return this;
         };
 
