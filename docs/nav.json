@@ -332,6 +332,14 @@
                         {
                             "title": "Push Notifications",
                             "route": "google-assistant/notifications"
+                        },
+                        {
+                            "title": "Routine Suggestion",
+                            "route": "google-assistant/routine-suggestion"
+                        },
+                        {
+                            "title": "Daily Update",
+                            "route": "google-assistant/daily-update"
                         }
                     ]
                 }

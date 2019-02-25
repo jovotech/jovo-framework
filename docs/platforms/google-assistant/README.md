@@ -8,6 +8,9 @@ Learn more about Google Assistant specific features that can be used with the Jo
   * [Screen Surfaces](#screen-surfaces)
   * [Media Response](#media-response)
 * [Data](#data)
+* [Push Notifications](#push-notifications)
+* [Daily Update](#daily-update)
+* [Routine Suggestion](#routine-suggestion)
 
 
 ## Introduction to Google Assistant Specific Features
@@ -50,6 +53,13 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 > [Find out how to send push notifications to your Google Action's users here](./notifications.md '.google-assistant/notifications')
 
+## Daily Update
+
+> [You can find out more about Google Action routine suggestions here](./daily-update.md '.google-assistant/daily-update')
+
+## Routine Suggestion
+
+> [Find out how to send routine suggestions to your Google Action's users here](./routine-suggestion.md './google-assistant/routine-suggestion')
 
 <!--[metadata]: {"description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here",
 "route": "google-assistant" }

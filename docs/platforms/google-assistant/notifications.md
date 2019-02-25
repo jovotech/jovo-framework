@@ -58,10 +58,19 @@ Now that you got your service account key as well, all the preperation is done
 
 ## User Permission
 
-To ask the user if they want to opt-in to get push notifications for the specified intent, you use the following:
+To ask the user if they want to opt-in to get push notifications for the specified intent, you have to first send the user suggestion chips that invite them to subscribe. If they are interested use the `askForNotification(intent)` function to prompt them to opt-in:
 
 ```javascript
-this.$googleAction.askForNotification(intent);
+AskForNotifications() {
+    // You have to show them suggestion chips inviting them to opt-in, 
+    // before you can send the actual permission request
+    this.$googleAction.showSuggestionChips(['yes', 'no']);
+    this.ask('Would you be interested in receiving notifications for the HelloWorldIntent?');
+},
+
+YesIntent() {
+    this.$googleAction.askForNotification('HelloWorldIntent');
+},
 ```
 
 The response to the question will be mapped to the Jovo built-in `ON_PERMISSION` intent, where you can check wether the permission was granted using `this.$googleAction.isPermissionGranted()`:
