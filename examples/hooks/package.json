@@ -1,0 +1,25 @@
+{
+  "name": "jovo-examples-hooks",
+  "version": "2.0.20",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "jovo-core": "^2.0.14",
+    "jovo-db-filedb": "^2.0.15",
+    "jovo-framework": "^2.0.16",
+    "jovo-platform-alexa": "^2.0.19",
+    "jovo-platform-dialogflow": "^2.0.16",
+    "jovo-platform-googleassistant": "^2.0.18",
+    "jovo-plugin-debugger": "^2.0.15"
+  }
+}

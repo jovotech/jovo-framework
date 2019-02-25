@@ -1,4 +1,4 @@
-# Push Notifications
+# Google Action Push Notifications
 
 Learn more about how to send push notifications to your users.
 
@@ -42,11 +42,11 @@ Select the intent and at the bottom of the tab you will find the `User engagemen
 
 After you've done that, you have to get a service account key for your Google Action as you will need it later on to get the access token needed to send out notifications.
 
-For that, you have to first go the following url (replace the `<your-project-id>` part with your project's id) and enable the `Actions API`: https://console.developers.google.com/apis/api/actions.googleapis.com/overview?project=<your-project-id> 
+For that, you have to first go the following url (replace the `your-project-id` part with your project's id) and enable the `Actions API`: https://console.developers.google.com/apis/api/actions.googleapis.com/overview?project=your-project-id. 
 
 ![Google Actions API](../../img/google-actions-api.png)
 
-Now, go over to https://console.developers.google.com/apis/credentials?project=<your-project-id>, again replace the `your-project-id` part, and create a new service account key:
+Now, go over to https://console.developers.google.com/apis/credentials?project=your-project-id, again replace the `your-project-id` part, and create a new service account key:
 
 ![Google Service Account](../../img/google-service-account.png)
 

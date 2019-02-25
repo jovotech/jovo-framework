@@ -25,24 +25,6 @@ app.setHandler({
         return this.toIntent('HelloWorldIntent');
     },
 
-    State1: {
-        State2: {
-            State3: {
-
-            },
-            // NextIntent() {
-            //     this.tell('State2 NextIntent');
-            // },
-            // Unhandled() {
-            //     this.tell('Unhandled State2')
-            // }
-        },
-
-        NextIntent() {
-            this.tell('State1 NextIntent');
-        }
-    },
-
     HelloWorldIntent() {
         this
             .followUpState('NameState')

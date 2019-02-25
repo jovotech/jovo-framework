@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-firestore",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "firebase-admin": "^6.5.0",
-    "jovo-core": "^2.0.13",
+    "jovo-core": "^2.0.14",
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {

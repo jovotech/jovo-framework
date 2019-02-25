@@ -4,9 +4,12 @@ Learn more about how to get access to user information.
 
 * [Introduction](#introduction)
 * [Location](#location)
+  * [Geolocation](#geolocation)
+    * [Geolocation Permission](#geolocation-permission)
+    * [Geolocation Interface](#geolocation-interface)
+    * [Geolocation Object](#geolocation-object)
 * [Contact Information](#contact-information)
 * [Account Linking](#account-linking)
-
 
 ## Introduction
 
@@ -71,6 +74,149 @@ async GetFullAddressIntent() {
 
 Learn more in the [official documentation by Amazon](https://developer.amazon.com/docs/custom-skills/device-address-api.html).
 
+### Geolocation
+
+The geolocation allows you to access your user's real time location, which the system gets from the alexa enabled mobile device, e.g. their phone.
+
+#### Geolocation Permission
+
+To access the user's geolocation, you have to first add it to your skill's permission. You can do that in your `project.js` file:
+
+```javascript
+// ------------------------------------------------------------------
+// JOVO PROJECT CONFIGURATION
+// ------------------------------------------------------------------
+
+module.exports = {
+   alexaSkill: {
+      nlu: 'alexa',
+      manifest: {
+         permissions: [
+            {
+               "name": "alexa::devices:all:geolocation:read"
+            }
+         ]
+      },
+
+   },
+    // other settings
+};
+```
+
+After you've added it to your skill's permissions, your users can grant or deny you permission to access their geolocation data at any time. You can check the current status the following ways:
+
+```javascript
+this.$alexaSkill.getGeoLocationPermissionStatus() // Either `GRANTED` or `DENIED`
+
+this.$alexaSkill.isGeoLocationPermissionGranted() // true or false
+
+this.$alexaSkill.isGeoLocationPermissionDenied() // true or false
+```
+
+If the permission was denied you can send your user a permission card to ask them to turn it back on:
+
+```javascript
+this.$alexaSkill.showAskForGeoLocationCard()
+```
+
+#### Geolocation Interface
+
+After your user has given their consent the incoming requests may contain a `Geolocation` object, as it depends on the device and its settings.
+
+To see wether a device supports the geolocation interface or not, you can use the following method:
+
+```javascript
+this.$alexaSkill.hasGeoLocationInterface() // true or false
+```
+
+#### Geolocation Object
+
+The incoming `Geolocation` object has the following structure:
+
+```javascript
+"Geolocation":{ 
+    "locationServices": { 
+        "access": "ENABLED",
+        "status": "RUNNING",   
+    },
+    "timestamp": "2018-03-25T00:00:00Z+00:00",
+    "coordinate": {
+        "latitudeInDegrees": 38.2,
+        "longitudeInDegrees": 28.3,
+        "accuracyInMeters": 12.1 
+    },
+    "altitude": {
+        "altitudeInMeters": 120.1,
+        "accuracyInMeters": 30.1
+    },
+    "heading": { 
+        "directionInDegrees": 180.0,
+        "accuracyInDegrees": 5.0  
+    },
+    "speed": { 
+        "speedInMetersPerSecond": 10.0,
+        "accuracyInMetresPerSecond": 1.1
+    }       
+}
+```
+
+Name | Description | Value | Optional
+:--- | :--- | :--- | :---
+`locationServices` | Contains information wether location sharing is turned on | `object` | Yes
+`locationServices.access` | Specifies wether location sharing is enabled or disabled | `enum` - either `ENABLED` or `DISABLED` | No
+`locationServices.status` | Specifies wether location sharing is running or not | `enum` - either `RUNNING` or `STOPPED` | No
+`timestamp` | Timestamp specifying when the location data was retrieved | `string` - ISO 8601 | No
+`coordinate` | Contains information about the coordinates | `object` | No
+`coordinate.latitudeInDegrees` | Specifies the latitude in degrees | `number` - [-90.0, 90.0] | No
+`coordinate.longitudeInDegrees` | Specifies the longitude in degrees | `number` - [-180.0, 180] | No
+`coordinate.accuracyInMeters` | Specifies the uncertainty in the latitude and longitude in meters | `number` - [0, MAX_INTEGER] | No
+`altitude` | Contains information about the altitude | `object` | Yes
+`altitude.altitudeInMeters` | Specifies the altitude in meters | `number` - [-6350, 18000] | Yes
+`altitude.accuracyInMeters` | The uncertainty in the altitude in meters | `number` - [0, MAX_INTEGER] | Yes
+`heading` | Contains information about the direction the device is heading | `object` | Yes
+`heading.directionInDegrees` | The degrees from true north | `number` - (0.0, 360.0] | Yes
+`heading.accuracyInDegrees` | The accuracy of the direction | `number` - [0, MAX_INTEGER] | Yes
+`speed` | Contains information about the speed at which the device is moving | `object` | Yes
+`speed.speedInMetersPerSecond` | The meters per second within GPS limits | `number` - [0, 1900]	| Yes, except for automotive
+`speed.accuracyInMetersPerSecond` | The accuracy of the speed | `number` - [0, MAX_INTEGER]	| Yes
+
+Each of these values can be `undefined`, but either the `locationServices` or `coordinate` object will be defined at all times. 
+
+You can access them the following way:
+
+```javascript
+// geolocation
+this.$alexaSkill.getGeoLocationObject() // whole geolocation object
+
+// locationServices
+this.$alexaSkill.getLocationServicesObject() // whole object
+this.$alexaSkill.getLocationServicesAccess()
+this.$alexaSkill.getLocationServicesStatus()
+
+// timestamp
+this.$alexaSkill.getGeoLocationTimestamp()
+
+// coordinate
+this.$alexaSkill.getCoordinateObject() // whole object
+this.$alexaSkill.getCoordinateLatitude()
+this.$alexaSkill.getCoordinateLongitude()
+this.$alexaSkill.getCoordinateAccuracy()
+
+// altitude
+this.$alexaSkill.getAltitudeObject() // whole object
+this.$alexaSkill.getAltitude()
+this.$alexaSkill.getAltitudeAccuracy()
+
+// heading
+this.$alexaSkill.getHeadingObject() // whole object
+this.$alexaSkill.getHeadingDirection()
+this.$alexaSkill.getHeadingAccuracy()
+
+// speed
+this.$alexaSkill.getSpeedObject() // whole object
+this.$alexaSkill.getSpeed()
+this.$alexaSkill.getSpeedAccuracy()
+```
 
 ## Contact Information
 

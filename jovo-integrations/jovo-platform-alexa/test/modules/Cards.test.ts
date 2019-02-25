@@ -161,6 +161,11 @@ test('test AskForLocationPermissionsCard', () => {
     card3.setAskForCountryAndPostalCodePermission();
     expect(card3.permissions).toEqual(['read::alexa:device:all:address:country_and_postal_code']);
 
+    const card4 = new AskForLocationPermissionsCard('geolocation');
+    expect(card4.permissions).toEqual(['alexa::devices:all:geolocation:read']);
+    card4.permissions = [];
+    card4.setAskForGeoLocationPermission();
+    expect(card4.permissions).toEqual(['alexa::devices:all:geolocation:read']);
 
     expect(() => new AskForLocationPermissionsCard('foo')).toThrow('Invalid permission type');
 

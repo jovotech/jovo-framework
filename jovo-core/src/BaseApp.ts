@@ -96,6 +96,32 @@ export class BaseApp extends Extensible {
         this.emit('webhook.init');
     }
 
+
+    hook(name: string, func: Function) {
+        if (!this.middleware(name)) {
+            throw new JovoError(
+                `Can't find hook with name '${name}'`,
+                'jovo-core',
+            );
+        }
+
+        this.middleware(name)!.use(async(handleRequest: HandleRequest) => {
+
+            const params = getParamNames(func);
+
+            // callback parameter is available, wait before it gets called
+            if (params.length === 4) {
+                await new Promise((resolve) => {
+                    func.apply(undefined, [handleRequest.error, handleRequest.host, handleRequest.jovo, resolve]);
+                });
+            } else {
+                await func.apply(undefined, [handleRequest.error, handleRequest.host, handleRequest.jovo]);
+            }
+
+        });
+    }
+
+
     async handle(host: Host) {
         const handleRequest: HandleRequest = {
             app: this,
@@ -205,4 +231,15 @@ export class BaseApp extends Extensible {
     uninstall(extensible: Extensible) {
 
     }
+}
+
+function getParamNames(func: Function): string[] {
+    const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+    const ARGUMENT_NAMES = /([^\s,]+)/g;
+    const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+    let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+    if (result === null) {
+        result = [];
+    }
+    return result;
 }

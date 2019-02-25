@@ -1,5 +1,16 @@
 import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
-import {AlexaRequest} from "./AlexaRequest";
+import {
+    AlexaRequest,
+    Geolocation,
+    GeoLocationPermissionStatus,
+    LocationServices,
+    LocationServicesAccess,
+    LocationServicesStatus,
+    Coordinate,
+    Altitude,
+    Heading,
+    Speed
+} from "./AlexaRequest";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -188,6 +199,173 @@ export class AlexaSkill extends Jovo {
         return (this.$request! as AlexaRequest).hasGeoLocationInterface();
     }
 
+    /**
+     * Returns the geolocation permission status
+     * @return {GeoLocationPermissionStatus | undefined}
+     */
+    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus | undefined {
+        return (this.$request! as AlexaRequest).getGeoLocationPermissionStatus();
+    }
+
+    /**
+     * Returns true if geolocation permission was denied
+     * @return {boolean}
+     */
+    isGeoLocationPermissionDenied(): boolean {
+        return (this.$request! as AlexaRequest).isGeoLocationPermissionDenied();
+    }
+
+    /**
+     * Returns true if geolocation permission was granted
+     * @return {boolean}
+     */
+    isGeoLocationPermissionGranted() {
+        return (this.$request! as AlexaRequest).isGeoLocationPermissionGranted();    
+    }
+
+    /**
+     * Returns the whole geolocation object
+     * @return {Geolocation | undefined}
+     */
+    getGeoLocationObject(): Geolocation | undefined {
+        return (this.$request! as AlexaRequest).getGeoLocationObject();  
+    }
+
+    /**
+     * Returns geolocation timestamp
+     * @return {string | undefined} ISO 8601
+     */
+    getGeoLocationTimestamp(): string | undefined {
+        return (this.$request! as AlexaRequest).getGeoLocationTimestamp();
+    }
+
+    /**
+     * Returns geolocation location services object
+     * @return {LocationServices | undefined}
+     */
+    getLocationServicesObject(): LocationServices | undefined {
+        return (this.$request! as AlexaRequest).getLocationServicesObject();
+    }
+
+    /**
+     * Returns geolocation location services access
+     * @return {LocationServicesAccess | undefined}
+     */
+    getLocationServicesAccess(): LocationServicesAccess | undefined {
+        return (this.$request! as AlexaRequest).getLocationServicesAccess();
+    }
+
+    /**
+     * Returns geolocation location services status
+     * @return {LocationServicesStatus | undefined}
+     */
+    getLocationServicesStatus(): LocationServicesStatus | undefined {
+        return (this.$request! as AlexaRequest).getLocationServicesStatus();
+    }
+
+    /**
+     * Returns geolocation coordinate object
+     * @return {Coordinate | undefined}
+     */
+    getCoordinateObject(): Coordinate | undefined {
+        return (this.$request! as AlexaRequest).getCoordinateObject();
+    }
+
+    /**
+     * Returns geolocation coordinate latitude in degrees
+     * @return {number | undefined}	[-90.0, 90.0]
+     */
+    getCoordinateLatitude(): number | undefined {
+        return (this.$request! as AlexaRequest).getCoordinateLatitude();
+    }
+
+    /**
+     * Returns geolocation coordinate longitude in degrees
+     * @return {number | undefined} [-180.0, 180]
+     */
+    getCoordinateLongitude(): number | undefined {
+        return (this.$request! as AlexaRequest).getCoordinateLongitude();
+    }
+
+    /**
+     * Returns geolocation coordinate accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getCoordinateAccuracy(): number | undefined{
+        return (this.$request! as AlexaRequest).getCoordinateAccuracy();
+    }
+
+    /**
+     * Returns geolocation altitude object
+     * @return {Altitude | undefined}
+     */
+    getAltitudeObject(): Altitude | undefined {
+        return (this.$request! as AlexaRequest).getAltitudeObject();
+    }
+
+    /**
+     * Returns geolocation altitude in meters
+     * @return {number | undefined} [-6350, 18000]
+     */
+    getAltitude(): number | undefined {
+        return (this.$request! as AlexaRequest).getAltitude();
+    }
+
+    /**
+     * Returns geolocation altitude accuracy in meters
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getAltitudeAccuracy(): number | undefined {
+        return (this.$request! as AlexaRequest).getAltitudeAccuracy();
+    }
+
+    /**
+     * Returns geolocation heading object
+     * @return {Heading | undefined}
+     */
+    getHeadingObject(): Heading | undefined {
+        return (this.$request! as AlexaRequest).getHeadingObject();
+    }
+
+    /**
+     * Returns geolocation heading direction in degrees
+     * @return {number | undefined} (0.0, 360.0]
+     */
+    getHeadingDirection(): number | undefined {
+        return (this.$request! as AlexaRequest).getHeadingDirection();
+    }
+
+    /**
+     * Returns geolocation heading accuracy in degrees
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getHeadingAccuracy(): number | undefined {
+        return (this.$request! as AlexaRequest).getHeadingAccuracy();
+    }
+
+    /**
+     * Returns geolocation speed object
+     * @return {Speed}
+     */
+    getSpeedObject(): Speed | undefined {
+        return (this.$request! as AlexaRequest).getSpeedObject();
+    }
+
+    /**
+     * Returns geolocation speed in meters per second
+     * @return {number | undefined} [0, 1900]
+     */
+    getSpeed(): number | undefined {
+        return (this.$request! as AlexaRequest).getSpeed();
+    }
+
+    /**
+     * Returns geolocation speed accuracy in meters per second
+     * @return {number | undefined} [0, MAX_INTEGER]
+     */
+    getSpeedAccuracy(): number | undefined {
+        return (this.$request! as AlexaRequest).getSpeedAccuracy();
+    }
 
     /**
      * Returns type of platform jovo implementation

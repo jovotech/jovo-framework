@@ -154,6 +154,12 @@ declare module './core/AlexaSkill' {
          */
         showAskForAddressCard(): this;
 
+        /**
+         * Shows ask for geolocation card
+         * @public
+         * @return {AlexaSkill}
+         */
+        showAskForGeoLocationCard(): this;
 
         /**
          * Shows ask for list permission card
