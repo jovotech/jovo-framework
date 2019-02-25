@@ -76,7 +76,7 @@ To deploy a Dialogflow agent you have 2 options:
 $ jovo deploy
 
 # Deploy only to Dialogflow/Google Assistant
-$ jovo deploy --platform GoogleAction
+$ jovo deploy --platform googleAction
 ```
 
 
