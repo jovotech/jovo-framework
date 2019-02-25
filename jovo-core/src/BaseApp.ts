@@ -11,6 +11,8 @@ process.on('unhandledRejection', (reason, p) => {
     console.log(reason);
 });
 
+export type BaseAppMiddleware = 'setup' | 'request' | 'platform.init' | 'platform.nlu' | 'nlu' | 'user.load' | 'router' | 'handler' |
+    'user.save' | 'platform.output' | 'response' | 'fail';
 
 process.on('uncaughtException', (err) => {
     JovoError.printError(err as JovoError);
@@ -21,6 +23,7 @@ export interface BaseAppConfig extends ExtensibleConfig {
 }
 // @ts-ignore
 process.env.JOVO_LOG_LEVEL = LogLevel.INFO;
+
 
 export class BaseApp extends Extensible {
     private initialized = false;
@@ -36,23 +39,25 @@ export class BaseApp extends Extensible {
 
     $data: AppData = {};
 
+    middlewares: BaseAppMiddleware[] = [
+        'setup',
+        'request',
+        'platform.init',
+        'platform.nlu',
+        'nlu',
+        'user.load',
+        'router',
+        'handler',
+        'user.save',
+        'platform.output',
+        'response',
+        'fail'
+    ];
+
     constructor(config?: BaseAppConfig) {
         super(config);
 
-        this.actionSet = new ActionSet([
-            'setup',
-            'request',
-            'platform.init',
-            'platform.nlu',
-            'nlu',
-            'user.load',
-            'router',
-            'handler',
-            'user.save',
-            'platform.output',
-            'response',
-            'fail'
-        ], this);
+        this.actionSet = new ActionSet(this.middlewares, this);
 
         if (process.env.NODE_ENV !== 'UNIT_TEST') {
             process.on('exit',  () => {
@@ -97,7 +102,7 @@ export class BaseApp extends Extensible {
     }
 
 
-    hook(name: string, func: Function) {
+    hook(name: BaseAppMiddleware, func: Function) {
         if (!this.middleware(name)) {
             throw new JovoError(
                 `Can't find hook with name '${name}'`,

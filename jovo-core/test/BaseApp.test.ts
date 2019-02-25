@@ -115,13 +115,13 @@ test('test hook() with await/async', async (done) => {
         variable = 1;
     });
 
-    baseApp.hook('request2', (error: Error, host: Host, jovo: Jovo) => {
+    baseApp.hook('platform.init', (error: Error, host: Host, jovo: Jovo) => {
         expect(variable).toEqual(1);
         done();
     });
 
     await baseApp.middleware('request')!.run({});
-    await baseApp.middleware('request2')!.run({});
+    await baseApp.middleware('platform.init')!.run({});
 
 });
 
@@ -141,13 +141,13 @@ test('test hook() with callbacks', async (done) => {
         }, 300);
     });
 
-    baseApp.hook('request2', (error: Error, host: Host, jovo: Jovo) => {
+    baseApp.hook('platform.init', (error: Error, host: Host, jovo: Jovo) => {
         expect(variable).toEqual(1);
         done();
     });
 
     await baseApp.middleware('request')!.run({});
-    await baseApp.middleware('request2')!.run({});
+    await baseApp.middleware('platform.init')!.run({});
 
 });
 
