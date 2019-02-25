@@ -75,6 +75,15 @@ declare module 'jovo-core/dist/src/BaseApp' {
     }
 }
 
+declare module 'jovo-core/dist/src/SpeechBuilder' {
+
+    interface SpeechBuilder {
+        addAudio(url: string | string[], condition?: boolean, probability?: number): this;
+        addLangText(language: string, text: string | string[], condition?: boolean, probability?: number): this;
+        addTextWithPolly(pollyName: string, text: string | string[], condition?: boolean, probability?: number): this;
+    }
+}
+
 // CanFulFill
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
@@ -416,3 +425,4 @@ declare module './core/AlexaSkill' {
         proactiveEvent(): ProactiveEvent | undefined;
     }
 }
+
