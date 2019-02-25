@@ -3,11 +3,11 @@
 Learn more about how to get access to user information.
 
 * [Introduction](#introduction)
-* [ON_PERMISSION](#on_permission)
+* [ON_PERMISSION](#onpermission)
 * [Name](#name)
 * [Location](#location)
+* [Date and Time](#date-and-time)
 * [Account Linking](#account-linking)
-
 
 ## Introduction
 
@@ -93,10 +93,45 @@ ON_PERMISSION() {
 
 [Example](https://github.com/jovotech/jovo-framework/tree/master/examples/02_googleassistant/ask-for-x)
 
+## Date and Time
+
+You can request the user's date and time using the following helper method:
+
+```javascript
+this.$googleAction.askForDateTime({
+    requestTimeText: 'What time?',
+    requestDateText: 'What day was that?',
+    requestDatetimeText: 'When would you like to schedule the appointment?',
+});
+```
+
+The user's response will be mapped to the `ON_DATETIME` intent, where you can access their response object using `this.$googleAction.getDateTime()`:
+
+```javascript
+ON_DATETIME() {
+    const dateTime =  this.$googleAction.getDateTime();
+}
+```
+
+Here's an example how the `DATETIME` object you receive would look like:
+
+```javascript
+{
+    "date": {
+        "month": 5,
+        "year": 2019,
+        "day": 3
+    },
+    "time": {
+        "hours": 11,
+        "minutes": 30
+    }
+},
+```
+
 ## Account Linking
 
 You can find the documentation about Account Linking here: [App Logic > Data](../../basic-concepts/data/README.md#account-linking, './data#account-linking')
-
 
 <!--[metadata]: {"description": "Learn more about how to use data with the Google Assistant",
 "route": "google-assistant/data" }-->

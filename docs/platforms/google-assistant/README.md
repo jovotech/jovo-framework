@@ -8,7 +8,10 @@ Learn more about Google Assistant specific features that can be used with the Jo
   * [Screen Surfaces](#screen-surfaces)
   * [Media Response](#media-response)
 * [Data](#data)
-
+* [Push Notifications](#push-notifications)
+* [Daily Update](#daily-update)
+* [Routine Suggestion](#routine-suggestion)
+* [Confirmation](#confirmation)
 
 ## Introduction to Google Assistant Specific Features
 
@@ -50,6 +53,38 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 > [Find out how to send push notifications to your Google Action's users here](./notifications.md '.google-assistant/notifications')
 
+## Daily Update
+
+> [You can find out more about Google Action routine suggestions here](./daily-update.md '.google-assistant/daily-update')
+
+## Routine Suggestion
+
+> [Find out how to send routine suggestions to your Google Action's users here](./routine-suggestion.md './google-assistant/routine-suggestion')
+
+## Confirmation
+
+You can ask your user to confirm something using the following method:
+
+```javascript
+this.$googleAction.askForConfirmation(text);
+
+// example
+this.$googleAction.askForConfirmation('Is this correct?');
+```
+
+The question should be one which can be answered with yes or no.
+
+The user's response will be mapped to the `ON_CONFIRMATION` intent, where you can check wether they confirmed or not using `this.$googleAction.isConfirmed()`:
+
+```javascript
+ON_CONFIRMATION() {
+    if (this.$googleAction.isConfirmed()) {
+        this.tell('Confirmed')
+    } else {
+        this.tell('Not confirmed');
+    }
+}
+```
 
 <!--[metadata]: {"description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here",
 "route": "google-assistant" }
