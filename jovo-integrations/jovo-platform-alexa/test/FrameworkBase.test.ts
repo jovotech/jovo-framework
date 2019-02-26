@@ -1224,6 +1224,43 @@ describe('test app listener', () => {
 
 });
 
+describe('test app config', () => {
+    test('test keepSessionDataOnSessionEnded (default = false) ', async(done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$session.$data.foo = 'bar';
+                this.tell('Hello World!');
+            },
+        });
+
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.hasSessionAttribute('foo')).toBe(false);
+            done();
+        });
+    });
+    test('test keepSessionDataOnSessionEnded (true) ', async(done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$session.$data.foo = 'bar';
+                this.tell('Hello World!');
+            },
+        });
+        // @ts-ignore
+        app.config.keepSessionDataOnSessionEnded = true;
+
+        const launchRequest:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.hasSessionAttribute('foo')).toBe(true);
+            done();
+        });
+    });
+});
+
 
 const randomUserId = () => {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);
