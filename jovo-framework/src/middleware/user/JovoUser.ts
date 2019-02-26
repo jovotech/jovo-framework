@@ -124,9 +124,6 @@ export class JovoUser implements Plugin {
 
         const loadDb = this.loadDb;
         const saveDb = this.saveDb;
-        User.prototype.$context = {};
-        User.prototype.$data = {};
-        User.prototype.$metaData = {};
 
         /**
          * Return the intent at the specified index
