@@ -121,6 +121,7 @@ CanFulfillIntentRequest | Add name-free interaction to your skill and increase y
 Game Engine | Provides the toolset to receive Echo Button events | [📝](./docs/platforms/amazon-alexa/game-engine.md)
 Gadget Controller | Allows you to control the user's Echo Buttons | [📝](./docs/platforms/amazon-alexa/gadget-controller.md)
 In-Skill-Purchasing (ISP) | Allows you to sell premium content | [📝](./docs/platforms/amazon-alexa/in-skill-purchases.md)
+Amazon Pay | Sell physical goods and services through Alexa | [📝](./docs/platforms/amazon-alexa/pay.md)
 Reminders API | Allows you to set reminders for your user | [📝](./docs/platforms/amazon-alexa/reminders.md)
 Settings API | Allows you to get your user's settings information | [📝](./docs/platforms/amazon-alexa/settings.md)
 Proactive Events API | Send proactive events,which work as notifications, to your user | [📝](./docs/platforms/amazon-alexa/proactive-events.md)
@@ -142,7 +143,6 @@ The following features are **not** implemented yet. We appreciate any kind of he
 
 Platform | Feature | Docs
 :--- | :--- | :---
-**Amazon Alexa** | Location Services | [📝](https://developer.amazon.com/docs/custom-skills/location-services-for-alexa-skills.html)
 **Google Action** | Transactions (WIP) | [📝](https://developers.google.com/actions/transactions/)
 
 ### Integrations

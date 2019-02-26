@@ -307,6 +307,10 @@
                         {
                             "title": "Proactive Events API",
                             "route": "amazon-alexa/proactive-events"
+                        },
+                        {
+                            "title": "Amazon Pay",
+                            "route": "amazon-alexa/pay"
                         }
                     ]
                 },

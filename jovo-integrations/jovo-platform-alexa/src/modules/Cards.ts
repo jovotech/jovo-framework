@@ -11,6 +11,7 @@ import {AskForListPermissionsCard} from "../response/visuals/AskForListPermissio
 import {AskForContactPermissionsCard} from "../response/visuals/AskForContactPermissionsCard";
 import {Card} from "../response/visuals/Card";
 import {AlexaResponse} from "..";
+import { AskForPermissionConsentCard } from '../response/visuals/AskForPermissionConsentCard';
 
 
 export class Cards implements Plugin {
@@ -78,6 +79,18 @@ export class Cards implements Plugin {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
                 new AskForLocationPermissionsCard()
                     .setAskForGeoLocationPermission()
+            );
+            return this;
+        };
+
+        /**
+         * Shows ask for amazon pay permission card
+         * @public
+         * @return {AlexaSkill}
+         */
+        AlexaSkill.prototype.showAskForAmazonPayPermissionCard = function() {
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+                new AskForPermissionConsentCard().setPermissions(['payments:autopay_consent'])
             );
             return this;
         };
