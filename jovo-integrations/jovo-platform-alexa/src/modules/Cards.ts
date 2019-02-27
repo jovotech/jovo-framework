@@ -177,14 +177,11 @@ export class Cards implements Plugin {
             );
         }
 
-
-        if (_get(output, 'Alexa.AskForPermissionsConsentCard')) {
+        if (_get(output, 'Alexa.AskForPermissionConsentCard')) {
             _set(alexaSkill.$response, 'response.card',
-                _get(output, 'Alexa.AskForPermissionsConsentCard')
+                _get(output, 'Alexa.AskForPermissionConsentCard')
             );
         }
-
-
     }
 
 }
