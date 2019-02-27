@@ -462,6 +462,10 @@
                     "route": "architecture"
                 },
                 {
+                    "title": "Hooks",
+                    "route": "hooks"
+                },
+                {
                     "title": "Plugins",
                     "route": "plugins"
                 }
