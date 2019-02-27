@@ -25,7 +25,7 @@ app.hook('<middleware-name>', (error, host, jovo) => {
 });
 
 // Example: Wrap Alexa Skill output in a Polly voice SSML tag
-// Before the response JSON is create in the platform.output middleware
+// before the response JSON is created in the platform.output middleware
 app.hook('before.platform.output', (error, host, jovo) => {
     const pollyName = 'Hans';
 
