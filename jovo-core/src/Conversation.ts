@@ -12,6 +12,8 @@ import {RequestOptions} from "http";
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
+const fsreadFile = util.promisify(fs.readFile);
+const fswriteFile = util.promisify(fs.writeFile);
 
 export interface ConversationConfig {
     userId?: string;
@@ -25,11 +27,16 @@ export class Conversation {
     testSuite: TestSuite;
     sessionData: SessionData = {};
 
+    $user = {
+        $data: {},
+        $metaData: {},
+    };
+
     config: ConversationConfig = {
         userId: randomUserId(),
         locale: 'en-US',
         defaultDbDirectory: './db/tests/',
-        deleteDbOnSessionEnded: true,
+        deleteDbOnSessionEnded: false,
         httpOptions: {
             host: 'localhost',
             port: process.env.JOVO_PORT || 3000,
@@ -61,10 +68,18 @@ export class Conversation {
 
     }
 
+    /**
+     * Prepares post data, returns response
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
     async send(req: JovoRequest): Promise<JovoResponse> {
+
         this.applyToRequest(req);
+        await this.saveUserData();
+
         if (req.isNewSession()) {
-            this.sessionData = {};
+            this.clearSession();
         } else if(Object.keys(this.sessionData).length > 0) {
             req.setSessionData(this.sessionData);
         }
@@ -75,8 +90,9 @@ export class Conversation {
             const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
             const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
             this.sessionData = jovoResponse.getSessionData() || {};
+            await this.updateUserData();
             if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
-                // this.clearDb();
+                this.clearDb();
             }
             return jovoResponse;
 
@@ -85,15 +101,26 @@ export class Conversation {
         }
     }
 
+    /**
+     * Clears session data for this conversation object
+     */
     clearSession(): void {
         this.sessionData = {};
     }
 
+    /**
+     * Resets conversation. Clears database and session
+     * @returns {Promise<void>}
+     */
     async reset(): Promise<void> {
         this.clearSession();
         await this.clearDb();
     }
 
+    /**
+     * Deletes filedb jsonf ile
+     * @returns {Promise<void>}
+     */
     async clearDb() {
         const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId + '.json');
         const exists = await fsexists(pathToDb);
@@ -104,6 +131,45 @@ export class Conversation {
         await fsunlink(pathToDb);
     }
 
+    /**
+     * Saves conversation.$data and conversation.$metaData to file db json.
+     * @returns {Promise<void>}
+     */
+    private async saveUserData() {
+        if (Object.keys(this.$user.$data).length > 0 || Object.keys(this.$user.$metaData).length > 0) {
+            const userDataObj = {
+                userData: {
+                    data: this.$user.$data,
+                    metaData: this.$user.$metaData
+                }
+            };
+
+            const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId!  + '.json');
+            await fswriteFile(pathToDb, JSON.stringify(userDataObj, null, '\t'));
+        }
+    }
+
+    /**
+     * Updates conversation.$data and conversation.$meta from file db json.
+     * @returns {Promise<void>}
+     */
+    private async updateUserData() {
+        const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId!  + '.json');
+        const dbExists = await fsexists(pathToDb);
+
+        if (dbExists) {
+            const fileContent = await fsreadFile(pathToDb);
+            const parsedContent = JSON.parse(fileContent.toString());
+            this.$user.$data = _get(parsedContent, 'userData.data');
+        }
+    }
+
+    /**
+     * Post request to the separately running jovo voice app instance
+     * @param {string} postData
+     * @param {RequestOptions} options
+     * @returns {Promise<any>}
+     */
     private static httpRequest(postData: string, options: RequestOptions): Promise<any> { //tslint:disable-line
         return new Promise((resolve, reject) => {
             const request = http.request(options, (res) => {
@@ -132,10 +198,18 @@ export class Conversation {
 
 }
 
+/**
+ * Generates random user id
+ * @returns {string}
+ */
 function randomUserId(): string {
     return Math.random().toString(36).substring(7);
 }
 
+/**
+ * Generates projectUserid from the current folder
+ * @returns {string}
+ */
 function projectUserId(): string {
     return `testuser-${crypto.createHash('md5').update(__dirname).digest("hex")}`;
 }
