@@ -72,7 +72,7 @@ Each middleware hook contains of a specified `middleware` and an anonymous funct
 * [jovo](#jovo)
 
 
-#### error
+### error
 
 The `error` is `undefined` unless the `fail` middleware is used.
 
