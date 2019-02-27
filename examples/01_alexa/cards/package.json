@@ -14,6 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-framework": "^2.0.16",
-    "jovo-platform-alexa": "^2.0.19"
+    "jovo-platform-alexa": "^2.0.19",
+    "jovo-plugin-debugger": "^2.0.15"
   }
 }
