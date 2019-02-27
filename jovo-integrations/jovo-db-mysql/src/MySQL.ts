@@ -172,7 +172,7 @@ export class MySQL implements Db {
 
 
                         if (results.length === 0) {
-                            return resolve({[this.config.dataColumnName]: {}});
+                            return resolve();
                         }
 
                         try {
@@ -202,7 +202,6 @@ export class MySQL implements Db {
                     undefined,
                     'https://www.jovo.tech/docs/databases/mysql');
             }
-
             this.pool.getConnection((err, connection) => {
                 if (err) {
                     return reject(new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-db-mysql'));
