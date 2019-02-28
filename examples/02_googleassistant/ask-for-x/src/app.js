@@ -18,6 +18,7 @@ app.setHandler({
         // return this.toIntent('AskForPermissionIntent');
         // return this.toIntent('AskForConfirmationIntent');
         // return this.toIntent('AskForSignInIntent');
+        // return this.toIntent('AskForPlaceIntent');
     },
     AskForNameIntent() {
         this.$googleAction.askForName('Pre name text');
@@ -36,6 +37,9 @@ app.setHandler({
     },
     AskForConfirmationIntent() {
         this.$googleAction.askForConfirmation('Is this correct?');
+    },
+    AskForPlaceIntent() {
+        this.$googleAction.askForPlace('request prompt text', 'permission context');
     },
     ON_CONFIRMATION() {
         if (this.$googleAction.isConfirmed()) {
@@ -63,6 +67,10 @@ app.setHandler({
             this.tell('too bad');
         }
     },
+    ON_PLACE() {
+        console.log('ON_PLACE');
+        const place = this.$googleAction.getPlace(); 
+    }
 });
 
 module.exports.app = app;

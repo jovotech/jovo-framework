@@ -452,4 +452,74 @@ describe('test ON_PERMISSION', () => {
             done();
         });
     }, 250);
+
+    test('test askForPlace()', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                this.$googleAction!.askForPlace('requestPrompt', 'permissionContext');
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            const dialogflowResponse = handleRequest.jovo!.$response as DialogflowResponse;
+
+            const googleActionResponse = dialogflowResponse.getPlatformResponse() as GoogleActionResponse;
+
+            expect(_get(googleActionResponse, 'expectUserResponse')).toBe(true);
+            expect(_get(googleActionResponse, 'systemIntent')).toEqual(
+                {
+                    "intent": "actions.intent.PLACE",
+                    "inputValueData": {
+                        "@type": "type.googleapis.com/google.actions.v2.PlaceValueSpec",
+                        "dialog_spec": {
+                            "extension": {
+                                "@type": "type.googleapis.com/google.actions.v2.PlaceValueSpec.PlaceDialogSpec",
+                                "requestPrompt": "requestPrompt",
+                                "permissionContext": "permissionContext"
+                            }
+                        }
+                    }
+                },
+            );
+            done();
+        });
+    }, 250);
+
+    test('test askForPlace() correct type', async (done) => {
+        app.setHandler({
+            ON_PLACE() {
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.rawRequestByKey('OnPlace');
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+
+        app.on('after.router', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe('ON_PLACE');
+            done();
+        });
+    }, 250);
+
+    test('test getPlace() ', async (done) => {
+        app.setHandler({
+            ON_PLACE() {
+                expect(this.$googleAction!.getPlace()).toEqual({
+                        "formattedAddress": "123 Main Street, Springfield, OR 97477-5319, USA",
+                        "coordinates": {
+                            "latitude": 44.0461033,
+                            "longitude": -123.024248
+                        },
+                        "name": "123 Main St"
+                    });
+                done();
+            },
+        });
+
+        const launchRequest: JovoRequest = await t.requestBuilder.rawRequestByKey('OnPlace');
+        app.handle(ExpressJS.dummyRequest(launchRequest));
+    }, 250);
+
 });

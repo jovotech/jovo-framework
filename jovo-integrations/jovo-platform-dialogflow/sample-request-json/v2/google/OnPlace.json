@@ -1,0 +1,138 @@
+{
+    "responseId": "33617f89-2a1c-4ef2-b322-0365bed276c9",
+    "queryResult": {
+            "queryText": "actions_intent_PLACE",
+            "action": "input.unknown",
+            "parameters": {},
+            "allRequiredParamsPresent": true,
+            "outputContexts": [
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/actions_capability_screen_output"
+                    },
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/actions_capability_audio_output"
+                    },
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/google_assistant_input_type_voice"
+                    },
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/actions_capability_media_response_audio"
+                    },
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/actions_capability_web_browser"
+                    },
+                    {
+                            "name": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg/contexts/actions_intent_place",
+                            "parameters": {
+                                    "text": "123 Main Street Springfield",
+                                    "PLACE": {
+                                            "formattedAddress": "123 Main Street, Springfield, OR 97477-5319, USA",
+                                            "coordinates": {
+                                                    "latitude": 44.0461033,
+                                                    "longitude": -123.024248
+                                            },
+                                            "name": "123 Main St"
+                                    }
+                            }
+                    }
+            ],
+            "intent": {
+                    "name": "projects/acctest-d7944/agent/intents/f549eef4-9994-4285-95c0-36580fbfcec4",
+                    "displayName": "Default Fallback Intent",
+                    "isFallback": true
+            },
+            "intentDetectionConfidence": 1,
+            "languageCode": "en-us"
+    },
+    "originalDetectIntentRequest": {
+            "source": "google",
+            "version": "2",
+            "payload": {
+                    "isInSandbox": true,
+                    "surface": {
+                            "capabilities": [
+                                    {
+                                            "name": "actions.capability.WEB_BROWSER"
+                                    },
+                                    {
+                                            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+                                    },
+                                    {
+                                            "name": "actions.capability.SCREEN_OUTPUT"
+                                    },
+                                    {
+                                            "name": "actions.capability.AUDIO_OUTPUT"
+                                    }
+                            ]
+                    },
+                    "inputs": [
+                            {
+                                    "rawInputs": [
+                                            {
+                                                    "query": "Query handled by Actions on Google",
+                                                    "inputType": "VOICE"
+                                            }
+                                    ],
+                                    "arguments": [
+                                            {
+                                                    "placeValue": {
+                                                            "formattedAddress": "123 Main Street, Springfield, OR 97477-5319, USA",
+                                                            "coordinates": {
+                                                                    "latitude": 44.0461033,
+                                                                    "longitude": -123.024248
+                                                            },
+                                                            "name": "123 Main St"
+                                                    },
+                                                    "name": "PLACE"
+                                            },
+                                            {
+                                                    "rawText": "123 Main Street Springfield",
+                                                    "textValue": "123 Main Street Springfield",
+                                                    "name": "text"
+                                            }
+                                    ],
+                                    "intent": "actions.intent.PLACE"
+                            }
+                    ],
+                    "user": {
+                            "userStorage": "{\"userId\":\"ABwppHEQSzwUcHZQ39qIuk2kzopSAoPjK2_BKfvXm89IQ9Q0XPu2FZM6kVQ66v-BEDaWjgq4Vm99Vdlfxw\"}",
+                            "lastSeen": "2019-02-28T11:33:23Z",
+                            "permissions": [
+                                    "UPDATE",
+                                    "DEVICE_PRECISE_LOCATION"
+                            ],
+                            "locale": "en-US",
+                            "userId": "ABwppHEQSzwUcHZQ39qIuk2kzopSAoPjK2_BKfvXm89IQ9Q0XPu2FZM6kVQ66v-BEDaWjgq4Vm99Vdlfxw"
+                    },
+                    "device": {
+                            "location": {
+                                    "coordinates": {
+                                            "latitude": 41.0586487,
+                                            "longitude": 29.0983411
+                                    }
+                            }
+                    },
+                    "conversation": {
+                            "conversationId": "ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg",
+                            "type": "ACTIVE",
+                            "conversationToken": "[]"
+                    },
+                    "availableSurfaces": [
+                            {
+                                    "capabilities": [
+                                            {
+                                                    "name": "actions.capability.WEB_BROWSER"
+                                            },
+                                            {
+                                                    "name": "actions.capability.SCREEN_OUTPUT"
+                                            },
+                                            {
+                                                    "name": "actions.capability.AUDIO_OUTPUT"
+                                            }
+                                    ]
+                            }
+                    ]
+            }
+    },
+    "session": "projects/acctest-d7944/agent/sessions/ABwppHF1e_3zgQP6TJ4MgyFz61EHuS6qrh3BxFRX3dq9MSBpI745OSXnfh0cZ75dqOxHJZbKmp3Kau7NWg"
+}
