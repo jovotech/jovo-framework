@@ -63,7 +63,7 @@ export interface Speed {
     accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type GeoLocationPermissionStatus = "GRANTED" | "DENIED";
+export type PermissionStatus = "GRANTED" | "DENIED";
 
 export interface System {
     application: Application;
@@ -462,10 +462,35 @@ export class AlexaRequest implements JovoRequest {
     }
 
     /**
-     * Returns the geolocation permission status
-     * @return {GeoLocationPermissionStatus | undefined}
+     * Returns the amazon pay permission status
+     * @public
+     * @return {PermissionStatus | undefined}
      */
-    getGeoLocationPermissionStatus(): GeoLocationPermissionStatus | undefined {
+    getAmazonPayPermissionStatus(): PermissionStatus | undefined {
+        return _get(this, 'context.System.user.permissions.scopes.payments:autopay_consent.status');
+    }
+
+    /**
+     * Returns true if the amazon pay permission was granted
+     * @return {boolean}
+     */
+    isAmazonPayPermissionGranted(): boolean {
+        return this.getAmazonPayPermissionStatus() === 'GRANTED';
+    }
+
+    /**
+     * Returns true if the amazon pay permission was denied
+     * @return {boolean}
+     */
+    isAmazonPayPermissionDenied(): boolean {
+        return this.getAmazonPayPermissionStatus() === 'DENIED';
+    }
+
+    /**
+     * Returns the geolocation permission status
+     * @return {PermissionStatus | undefined}
+     */
+    getGeoLocationPermissionStatus(): PermissionStatus | undefined {
         return _get(this, 'context.System.user.permissions.scopes.alexa::devices:all:geolocation:read.status');
     }
 

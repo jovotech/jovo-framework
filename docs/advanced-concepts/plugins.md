@@ -1,4 +1,4 @@
-# Plugins
+# Jovo Plugins
 
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
 * [Introduction](#introduction)
@@ -18,7 +18,7 @@ Middleware | Description
 `setup` | First initialization of `app` object with first incoming request. Is executed once as long as `app` is alive
 `request` | Raw JSON request from platform gets processed. Can be used for authentication middlewares.
 `platform.init` | Determines which platform (e.g. `Alexa`, `GoogleAssistant`) sent the request. Initialization of abstracted `jovo` (`this`) object.
-`platform.nlu'` | Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. `Alexa`). Intents and inputs are set.
+`platform.nlu` | Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. `Alexa`). Intents and inputs are set.
 `nlu` | Request gets routed through external NLU (e.g. `Dialogflow` standalone). Intents and inputs are set.
 `user.load` | Initialization of user object. User data is retrieved from database.
 `router` | Request and NLU data (intent, input, state) is passed to router. intentMap and inputMap are executed. Handler path is generated. 
@@ -27,6 +27,8 @@ Middleware | Description
 `platform.output` | Platform response JSON gets created from output object.
 `response` | Response gets sent back to platform.
 `fail` | Errors get handled if applicable.
+
+> [Learn more about the Jovo architecture here](./architecture.md './architecture').
 
 
 ## Using Plugins
@@ -248,13 +250,13 @@ export interface Host {
 
 #### jovo
 
-The `jovo` object is the third property, which is the same object, you reference inside your handler using `this`.
+The `jovo` object is the third property, which is the same object you reference inside your handler using `this`.
 
 Depending on the middleware you use, the object can be `undefined`, since the initialization happens inside the `platform.init` middleware.
 
 #### error
 
-The last one is the `error` property, which wil be `undefined`, except if the plugin is hooked up to the `fail` middleware.
+The last one is the `error` property, which wil be `undefined`, unless the plugin is hooked up to the `fail` middleware.
 
 ```javascript
 interface Error {

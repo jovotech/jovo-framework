@@ -51,11 +51,11 @@ The first two messages are usually reprompt messages, the third one is used to s
 
 ## Push Notifications
 
-> [Find out how to send push notifications to your Google Action's users here](./notifications.md '.google-assistant/notifications')
+> [Find out how to send push notifications to your Google Action's users here](./notifications.md './google-assistant/notifications')
 
 ## Daily Update
 
-> [You can find out more about Google Action routine suggestions here](./daily-update.md '.google-assistant/daily-update')
+> [You can find out more about Google Action routine suggestions here](./daily-update.md './google-assistant/daily-update')
 
 ## Routine Suggestion
 
