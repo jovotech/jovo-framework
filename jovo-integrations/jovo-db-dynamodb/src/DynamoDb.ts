@@ -15,6 +15,7 @@ export interface Config extends PluginConfig {
         endpoints?: string[];
         region?: string;
     };
+    awsXray: boolean;
     awsConfig?: AWS.DynamoDB.Types.ClientConfiguration;
 }
 
@@ -27,6 +28,7 @@ export class DynamoDb implements Db {
             convertEmptyValues: true,
         },
         dax: undefined,
+        awsXray: false,
         dynamoDbConfig: {},
         awsConfig: undefined,
     };
@@ -34,12 +36,13 @@ export class DynamoDb implements Db {
     dynamoClient?: AWS.DynamoDB;
     docClient?: AWS.DynamoDB.DocumentClient;
     isCreating = false;
+    aws: any; // tslint:disable-line
 
     constructor(config?: Config) {
-
         if (config) {
             this.config = _merge(this.config, config);
         }
+        this.aws = AWS;
     }
     install(app: BaseApp) {
 
@@ -47,13 +50,41 @@ export class DynamoDb implements Db {
             this.config.dynamoDbConfig = _merge(this.config.dynamoDbConfig, this.config.awsConfig);
             this.config.documentClientConfig = _merge(this.config.documentClientConfig, this.config.awsConfig);
         }
-        this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
+
+
+        if (this.config.awsXray) {
+            try {
+                const AWSXRay = require('aws-xray-sdk-core'); // tslint:disable-line
+                this.aws = AWSXRay.captureAWS(require('aws-sdk'));
+            } catch (e) {
+                if (e.message === 'Cannot find module \'aws-xray-sdk-core\'') {
+                    throw new JovoError(
+                        e.message,
+                        ErrorCode.ERR,
+                        'jovo-db-dynamodb',
+                        undefined,
+                        'Please run `npm install aws-xray-sdk-core`'
+                    );
+                }
+            }
+        }
+
+        this.dynamoClient = new this.aws.DynamoDB(this.config.dynamoDbConfig);
 
         if (this.config.dax) {
+
+            if (this.config.awsXray) {
+                throw new JovoError(
+                    `DynamoDB Accelerator doesn't work with AWS X-Ray`,
+                    ErrorCode.ERR,
+                    'jovo-db-dynamodb',
+                );
+            }
+
             try {
                 const AmazonDaxClient = require('amazon-dax-client'); // tslint:disable-line
                 const dax = new AmazonDaxClient(this.config.dax);
-                this.docClient =  new AWS.DynamoDB.DocumentClient({service: dax});
+                this.docClient =  new this.aws.DynamoDB.DocumentClient({service: dax});
             } catch (e) {
                 if (e.message === 'Cannot find module \'amazon-dax-client\'') {
                     throw new JovoError(
@@ -67,7 +98,7 @@ export class DynamoDb implements Db {
             }
 
         } else {
-            this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
+            this.docClient = new this.aws.DynamoDB.DocumentClient(this.config.documentClientConfig);
         }
 
         if (_get(app.config, 'db.default')) {
