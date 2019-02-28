@@ -11,6 +11,10 @@ export interface Config extends PluginConfig {
     primaryKeyColumn?: string;
     dynamoDbConfig?: AWS.DynamoDB.Types.ClientConfiguration;
     documentClientConfig?: DocumentClient.DocumentClientOptions & AWS.DynamoDB.Types.ClientConfiguration;
+    dax?: {
+        endpoints?: string[];
+        region?: string;
+    };
     awsConfig?: AWS.DynamoDB.Types.ClientConfiguration;
 }
 
@@ -43,7 +47,27 @@ export class DynamoDb implements Db {
             this.config.documentClientConfig = _merge(this.config.documentClientConfig, this.config.awsConfig);
         }
         this.dynamoClient = new AWS.DynamoDB(this.config.dynamoDbConfig);
-        this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
+
+        if (this.config.dax) {
+            try {
+                const AmazonDaxClient = require('amazon-dax-client'); // tslint:disable-line
+                const dax = new AmazonDaxClient(this.config.dax);
+                this.docClient =  new AWS.DynamoDB.DocumentClient({service: dax});
+            } catch (e) {
+                if (e.message === 'Cannot find module \'amazon-dax-client\'') {
+                    throw new JovoError(
+                        e.message,
+                        ErrorCode.ERR,
+                        'jovo-db-dynamodb',
+                        undefined,
+                        'Please run `npm install amazon-dax-client`'
+                    );
+                }
+            }
+
+        } else {
+            this.docClient = new AWS.DynamoDB.DocumentClient(this.config.documentClientConfig);
+        }
 
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'DynamoDb') {
