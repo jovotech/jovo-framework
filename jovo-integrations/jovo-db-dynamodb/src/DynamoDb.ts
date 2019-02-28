@@ -26,6 +26,7 @@ export class DynamoDb implements Db {
         documentClientConfig: {
             convertEmptyValues: true,
         },
+        dax: undefined,
         dynamoDbConfig: {},
         awsConfig: undefined,
     };
