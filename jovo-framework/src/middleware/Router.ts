@@ -11,7 +11,9 @@ export interface Config extends PluginConfig {
 export interface Route {
     path: string;
     type: string;
+    state?: string;
     intent?: string;
+    from?: string;
 }
 
 export class Router implements Plugin {
@@ -92,7 +94,7 @@ export class Router implements Plugin {
 
     }
 
-    static intentRoute(handlers: any,  state: string | undefined, intent: string, intentsToSkipUnhandled?: string[]) { // tslint:disable-line
+    static intentRoute(handlers: any,  state: string | undefined, intent: string, intentsToSkipUnhandled?: string[]): Route { // tslint:disable-line
         let _state = state + '';
         const _intent = intent + '';
         let path = state ?

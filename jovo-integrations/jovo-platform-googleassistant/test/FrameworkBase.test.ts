@@ -1261,7 +1261,97 @@ describe('test app config', () => {
     });
 });
 
+describe('test routing', () => {
+    test('test intentMap', async(done) => {
+        app.setHandler({
+            HelloIntent() {
+                this.tell('Hello!');
+            },
+        });
+        app.config.plugin.Router.intentMap = {
+            'HelloWorldIntent': 'HelloIntent'
+        };
+        const request:JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
+        app.handle(ExpressJS.dummyRequest(request));
 
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('Hello!')).toBeTruthy();
+            done();
+        });
+    });
+
+    test('test getIntentName and getMappedIntentName', async(done) => {
+        app.setHandler({
+            HelloIntent() {
+                expect(this.getIntentName()).toEqual('HelloWorldIntent');
+                expect(this.getMappedIntentName()).toEqual('HelloIntent');
+                done();
+            },
+        });
+        app.config.plugin.Router.intentMap = {
+            'HelloWorldIntent': 'HelloIntent'
+        };
+        const request:JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
+        app.handle(ExpressJS.dummyRequest(request));
+
+    });
+
+    test('test getRoute', async(done) => {
+        app.setHandler({
+            LAUNCH() {
+                const route = this.getRoute();
+                expect(route.type).toEqual('LAUNCH');
+                expect(route.intent).toBeUndefined();
+                done();
+            },
+        });
+        const request:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
+
+    });
+    test('test getRoute with toIntent', async(done) => {
+        app.setHandler({
+            LAUNCH() {
+                return this.toIntent('HelloIntent');
+            },
+            HelloIntent() {
+                const route = this.getRoute();
+
+                expect(route.from).toEqual('LAUNCH');
+                expect(route.type).toEqual('INTENT');
+                expect(route.intent).toEqual('HelloIntent');
+
+                done();
+            },
+        });
+        const request:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
+
+    });
+
+    test('test getRoute with multiple toIntent', async(done) => {
+        app.setHandler({
+            LAUNCH() {
+                return this.toIntent('HelloIntent');
+            },
+            HelloIntent() {
+                return this.toIntent('HelloWorldIntent');
+
+            },
+            HelloWorldIntent() {
+                const route = this.getRoute();
+
+                expect(route.from).toEqual('LAUNCH/HelloIntent');
+                expect(route.type).toEqual('INTENT');
+                expect(route.intent).toEqual('HelloWorldIntent');
+
+                done();
+            },
+        });
+        const request:JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
+    });
+});
 const randomUserId = () => {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);
 };

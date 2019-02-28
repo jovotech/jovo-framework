@@ -2,6 +2,7 @@ import {App} from "./App";
 
 import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
 import {Jovo, Data, Handler, Util, Log, LogLevel} from 'jovo-core';
+import {Route} from "./middleware/Router";
 export { App } from './App';
 export { server as Webhook } from './server';
 export { verifiedServer as WebhookVerified } from './server';
@@ -12,7 +13,7 @@ export { AzureFunction } from './hosts/AzureFunction';
 export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 
 export { BasicLogging } from './middleware/logging/BasicLogging';
-export { Router } from './middleware/Router';
+export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log };
 
@@ -102,6 +103,21 @@ declare module 'jovo-core/dist/src/Jovo' {
          * @return {*}
          */
         skipIntentHandling(): Promise<void>;
+
+        /**
+         * Returns mapped intent name.
+         * @public
+         * @return {*}
+         */
+        getMappedIntentName(): string;
+
+
+        /**
+         * Returns route object.
+         * @public
+         * @return {*}
+         */
+        getRoute(): Route;
     }
 }
 
