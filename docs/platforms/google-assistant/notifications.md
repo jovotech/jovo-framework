@@ -54,7 +54,7 @@ Select `Project Owner` as the role and `JSON` as the key type:
 
 ![Google Create Service Account](../../img/google-create-service-account.png)
 
-Now that you got your service account key as well, all the preperation is done
+Now that you got your service account key as well, all the preparation is done.
 
 ## User Permission
 
