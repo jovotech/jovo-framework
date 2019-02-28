@@ -141,6 +141,10 @@
                         {
                             "title": "Visual Output",
                             "route": "output/visual-output"
+                        },
+                        {
+                            "title": "Output Object",
+                            "route": "output/object"
                         }
                     ]
                 }
