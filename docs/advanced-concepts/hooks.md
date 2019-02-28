@@ -9,6 +9,11 @@ Middleware hooks are the easiest way to extend certain parts of the Jovo Framewo
    * [jovo](#jovo)
 * [Middleware Execution](#middleware-execution)
 
+Watch the video here:
+
+[![Video: Jovo Hooks](../img/video-jovo-hooks.jpg 'youtube-video')](https://www.youtube.com/watch?v=hBrX5srF3yU)
+
+
 ## Introduction
 
 > [Find a full example file here](https://github.com/jovotech/jovo-framework/blob/master/examples/hooks/src/app.js).
