@@ -11,6 +11,8 @@ Middleware hooks are the easiest way to extend certain parts of the Jovo Framewo
 
 ## Introduction
 
+[![Video: Jovo Hooks](../img/video-jovo-hooks.jpg 'youtube-video')](https://www.youtube.com/watch?v=hBrX5srF3yU)
+
 > [Find a full example file here](https://github.com/jovotech/jovo-framework/blob/master/examples/hooks/src/app.js).
 
 Jovo Hooks allow you to "hook" into `middlewares` of the [Jovo Architecture](./architecture.md './architecture'). 
