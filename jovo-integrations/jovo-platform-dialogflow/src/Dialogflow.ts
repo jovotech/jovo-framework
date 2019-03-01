@@ -71,6 +71,8 @@ export class Dialogflow extends Extensible implements Platform {
     async initialize(handleRequest: HandleRequest) {
 
         handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
+
+
         await this.middleware('$request')!.run(handleRequest.jovo);
         await this.middleware('$session')!.run(handleRequest.jovo);
 

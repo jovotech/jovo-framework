@@ -5,6 +5,12 @@ import {DialogflowResponse} from "../../core/DialogflowResponse";
 import {DialogflowAgent} from "../../DialogflowAgent";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import {FacebookMessengerUser} from "./FacebookMessengerUser";
+
+
+export interface DialogflowAgent {
+    isFacebookMessengerBot(): boolean;
+}
 
 export class FacebookMessenger implements Plugin {
     config: Config = {
@@ -18,11 +24,17 @@ export class FacebookMessenger implements Plugin {
     install(dialogFlow: Dialogflow) {
 
         dialogFlow.middleware('$output')!.use(this.output.bind(this));
+        dialogFlow.middleware('$type')!.use(this.type.bind(this));
 
-
+        DialogflowAgent.prototype.isFacebookMessengerBot = function() {
+            return _get(this.$request, 'originalDetectIntentRequest.source') === 'facebook';
+        };
     }
     uninstall(app: BaseApp) {
 
+    }
+    type(dialogflowAgent: DialogflowAgent) {
+        dialogflowAgent.$user = new FacebookMessengerUser(dialogflowAgent);
     }
 
     output(dialogflowAgent: DialogflowAgent) {

@@ -6,6 +6,8 @@ import {DialogflowRequest} from "../../core/DialogflowRequest";
 import {DialogflowAgent} from "../../DialogflowAgent";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import {FacebookMessengerUser} from "../FacebookMessenger/FacebookMessengerUser";
+import {SlackUser} from "./SlackUser";
 
 
 export interface SlackConfig extends Config {
@@ -25,11 +27,20 @@ export class Slack implements Plugin {
     install(dialogFlow: Dialogflow) {
 
         dialogFlow.middleware('$output')!.use(this.output.bind(this));
+        dialogFlow.middleware('$type')!.use(this.type.bind(this));
 
+        const source = this.config.source;
+        DialogflowAgent.prototype.isSlackBot = function() {
+            return _get(this.$request, 'originalDetectIntentRequest.' + source) === 'facebook';
+        };
 
     }
     uninstall(app: BaseApp) {
 
+    }
+
+    type(dialogflowAgent: DialogflowAgent) {
+        dialogflowAgent.$user = new SlackUser(dialogflowAgent);
     }
 
     output(dialogflowAgent: DialogflowAgent) {
