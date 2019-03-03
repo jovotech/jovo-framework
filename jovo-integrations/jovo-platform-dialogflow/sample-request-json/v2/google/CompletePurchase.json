@@ -1,0 +1,120 @@
+{
+  "responseId": "2ad5d87b-f35c-49d6-be89-6bd0bae0c21d",
+  "queryResult": {
+    "queryText": "actions_intent_COMPLETE_PURCHASE",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/google_assistant_input_type_touch"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/actions_intent_complete_purchase",
+        "parameters": {
+          "text": "",
+          "COMPLETE_PURCHASE_VALUE": {
+            "@type": "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValue",
+            "purchaseStatus": "PURCHASE_STATUS_ALREADY_OWNED"
+          }
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/session",
+        "lifespanCount": 9999,
+        "parameters": {
+          "productId": "com.sampleapp.subscription"
+        }
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/actions_capability_media_response_audio"
+      },
+      {
+        "name": "projects/agent-XYZ/agent/sessions/12345678/contexts/actions_capability_web_browser"
+      }
+    ],
+    "intent": {
+      "name": "projects/agent-XYZ/agent/intents/0f35b301-4736-4382-a642-f0d180f73de6",
+      "displayName": "CompletePurchaseIntent"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "pt-br"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      },
+      "requestType": "SIMULATOR",
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "inputType": "TOUCH"
+            }
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValue",
+                "purchaseStatus": "PURCHASE_STATUS_OK"
+              },
+              "name": "COMPLETE_PURCHASE_VALUE"
+            },
+            {
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.COMPLETE_PURCHASE"
+        }
+      ],
+      "user": {
+        "lastSeen": "2019-02-27T20:02:32Z",
+        "locale": "pt-BR",
+        "userId": "098765431"
+      },
+      "conversation": {
+        "conversationId": "12345678",
+        "type": "ACTIVE",
+        "conversationToken": "[\"session\"]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/agent-XYZ/agent/sessions/12345678"
+}

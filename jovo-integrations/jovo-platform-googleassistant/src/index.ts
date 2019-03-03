@@ -350,6 +350,7 @@ declare module './core/GoogleAction' {
 declare module './core/GoogleAction' {
 
     interface GoogleAction {
+        $digitalGoods: any;
         $transaction?: Transaction;
     }
 }
@@ -429,6 +430,10 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 orderUpdate: OrderUpdate;
                 speech: string;
             };
+
+            CompletePurchase?: {
+                skuId: string;
+            }
         };
     }
 }
