@@ -4,12 +4,13 @@ Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
 * [Configuration](#configuration)
-   * [Public Spreadsheets](#public-spreadsheets)
-   * [Private Spreadsheets](#private-spreadsheets)
+  * [Public Spreadsheets](#public-spreadsheets)
+  * [Private Spreadsheets](#private-spreadsheets)
 * [Default Sheet Types](#default-sheet-types)
-   * [Default](#default)
-   * [Responses](#responses)
-   * [KeyValue](#keyvalue)
+  * [Default](#default)
+  * [Responses](#responses)
+  * [KeyValue](#keyvalue)
+  * [ObjectArray](#objectarray)
 * [Defining your own Sheet Type](#defining-your-own-sheet-type)
 
 
@@ -126,6 +127,7 @@ Google Sheets offers flexible ways to structure data. This is why the Jovo CMS i
 * [Default](#default)
 * [Responses](#responses)
 * [KeyValue](#keyvalue)
+* [ObjectArray](#objectarray)
 
 ### Default
 
