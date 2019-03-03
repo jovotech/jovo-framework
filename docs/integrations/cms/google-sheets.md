@@ -166,7 +166,39 @@ For every key, this will return the value as a string:
 this.$cms.sheetName.key
 ```
 
+### ObjectArray
 
+If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys
+
+Here's an example sheet:
+
+Name | Location | Date
+:--- | :--- | :---
+Voice Summit | Newark, New Jersey, USA | 7/22/2019
+SuperBot | San Francisco, California, USA | 4/2/2019
+
+And here's the array of objects you will receive:
+
+```javascript
+[ 
+    { 
+        name: 'Voice Summit',
+        location: 'Newark, New Jersey, USA',
+        date: '7/22/2019' 
+    },
+    {
+        name: 'SuperBot',
+        location: 'San Francisco, California, USA',
+        date: '4/2/2019' 
+    }
+]
+```
+
+Access the array using:
+
+```javascript
+this.$cms.sheetName
+```
 
 ## Defining your own Sheet Type
 
