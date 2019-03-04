@@ -30,6 +30,11 @@ import {DigitalGoodsPlugin} from "./modules/DigitalGoods";
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
+
+    transactions?: {
+        androidAppID?: string,
+        keyFile?: object;
+    };
 }
 
 export class GoogleAssistant extends Extensible implements Platform {
@@ -37,6 +42,7 @@ export class GoogleAssistant extends Extensible implements Platform {
     config: Config = {
         enabled: true,
         plugin: {},
+
     };
 
     requestBuilder = new GoogleAssistantRequestBuilder();
