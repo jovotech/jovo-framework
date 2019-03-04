@@ -1,4 +1,4 @@
-import {Plugin} from "jovo-core";
+import {Plugin, JovoError, ErrorCode} from "jovo-core";
 
 import _set = require('lodash.set');
 import _get = require('lodash.get');
@@ -12,7 +12,7 @@ import {GoogleActionAPIResponse} from "../services/GoogleActionAPIResponse";
 export enum SkuType {
   SKU_TYPE_IN_APP = 'SKU_TYPE_IN_APP',
   SKU_TYPE_SUBSCRIPTION = 'SKU_TYPE_SUBSCRIPTION'
-};
+}
 
 export enum PurchaseStatus {
   PURCHASE_STATUS_OK = 'PURCHASE_STATUS_OK',
@@ -20,7 +20,7 @@ export enum PurchaseStatus {
   PURCHASE_STATUS_USER_CANCELLED = 'PURCHASE_STATUS_USER_CANCELLED',
   PURCHASE_STATUS_ERROR = 'PURCHASE_STATUS_ERROR',
   PURCHASE_STATUS_UNSPECIFIED = 'PURCHASE_STATUS_UNSPECIFIED'
-};
+}
 
 export class DigitalGoods {
   googleAction: GoogleAction;
@@ -31,11 +31,11 @@ export class DigitalGoods {
     this.googleAssistant = googleAssistant;
   }
 
-  getSubscriptions(skus: string[]): Promise<any[]> {
+  getSubscriptions(skus: string[]): Promise<any[]> { // tslint:disable-line
     return this.getSkus(skus, SkuType.SKU_TYPE_SUBSCRIPTION);
   }
-  
-  getConsumables(skus: string[]): Promise<any[]> {
+
+  getConsumables(skus: string[]): Promise<any[]> { // tslint:disable-line
     return this.getSkus(skus, SkuType.SKU_TYPE_IN_APP);
   }
 
@@ -44,9 +44,8 @@ export class DigitalGoods {
       CompletePurchase: {
         skuId,
       }
-    }
+    };
   }
-
   getPurchaseStatus(): PurchaseStatus | undefined {
     for (const argument of _get(this.googleAction.$originalRequest || this.googleAction.$request, 'inputs[0]["arguments"]', [])) {
       if (argument.name === 'COMPLETE_PURCHASE_VALUE') {
@@ -55,14 +54,22 @@ export class DigitalGoods {
     }
   }
 
-  private getSkus(skus: string[], type: SkuType): Promise<any[]> {
+  private getSkus(skus: string[], type: SkuType): Promise<any[]> { // tslint:disable-line
     const conversationId = _get(this.googleAction.$request, 'originalDetectIntentRequest.payload.conversation.conversationId');
+
+    if (!this.googleAssistant.config.transactions || !this.googleAssistant.config.transactions.androidAppID) {
+        throw new JovoError(
+            'getSkus needs the Android App package id',
+            ErrorCode.ERR,
+            'jovo-platform-googleassistant'
+        );
+    }
 
     const promise = this.getGoogleApiAccessToken()
       .then((accessToken: string) => {
         return GoogleActionAPI.apiCall({
           endpoint: 'https://actions.googleapis.com',
-          path: `/v3/packages/${this.googleAssistant.config.plugin.androidAppID}/skus:batchGet`,
+          path: `/v3/packages/${this.googleAssistant.config.transactions!.androidAppID}/skus:batchGet`,
           method: 'POST',
           permissionToken: accessToken,
           json: {
@@ -70,21 +77,48 @@ export class DigitalGoods {
             skuType: type,
             ids: skus
           }
-        }) as Promise<GoogleActionAPIResponse>
+        }) as Promise<GoogleActionAPIResponse>;
       });
-    
+
     return promise.then((response: GoogleActionAPIResponse) => response.data);
   }
 
   private getGoogleApiAccessToken(): Promise<string> {
-    const googleapis = require('googleapis');
+      if (!this.googleAssistant.config.transactions || !this.googleAssistant.config.transactions.keyFile) {
+          throw new JovoError(
+              'Please add a valid keyFile object to the GoogleAssistant transaction config',
+              ErrorCode.ERR,
+              'jovo-platform-googleassistant'
+          );
+      }
+      /**
+       * DigitalGoods.ts needs the googleapis package to function.
+       * To reduce overall package size, googleapis wasn't added as a dependency.
+       * googleapis has to be manually installed
+       */
+      try {
+          const googleapis = require('googleapis').google;
 
-    return googleapis.google.auth.getClient({
-      keyFile: this.googleAssistant.config.plugin.keyFile,
-      scopes: [ 'https://www.googleapis.com/auth/actions.purchases.digital' ]
-    })
-      .then((client: any) => client.authorize())
-      .then((authorization: any) => authorization.access_token as string);
+          return googleapis.google.auth.getClient({
+              keyFile: this.googleAssistant.config.transactions!.keyFile,
+              scopes: [ 'https://www.googleapis.com/auth/actions.purchases.digital' ]
+          })
+              .then((client: any) => client.authorize()) // tslint:disable-line
+              .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
+
+      } catch (e) {
+
+          if (e.message === 'Cannot find module \'googleapis\'') {
+              Promise.reject(new JovoError(
+                  e.message,
+                  ErrorCode.ERR,
+                  'jovo-platform-googleassistant',
+                  undefined,
+                  'Please run `npm install googleapis`'
+              ));
+          }
+      }
+      return Promise.reject(new Error('Could not retrieve Google API access token'));
   }
 }
 
