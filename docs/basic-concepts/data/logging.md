@@ -3,8 +3,11 @@
 In this section, you will learn how to log certain data in your Jovo app.
 
 * [Introduction](#introduction)
-* [Log Requests](#log-requests)
-* [Log Responses](#log-responses)
+* [Basic Logging](#basic-logging)
+   * [Log Requests](#log-requests)
+   * [Log Responses](#log-responses)
+* [Jovo Logger](#jovo-logger)
+* [Logging Helpers](#logging-helpers)
 
 
 ## Introduction to Logging
@@ -15,7 +18,14 @@ When you're using a local webhook, it's easy to use logging for debugging, like 
 console.log('This is going to appear in the logs');
 ```
 
-For voice app specific debugging, Jovo offers some handy functions for logging incoming requests and outgoing responses.
+For voice app specific debugging, Jovo offers some handy functions for logging incoming requests and outgoing responses:
+
+* [Basic Logging](#basic-logging)
+* [Jovo Logger](#jovo-logger)
+* [Logging Helpers](#logging-helpers)
+
+
+## Basic Logging
 
 You can enable logging by using the following:
 
@@ -27,7 +37,7 @@ logging: true,
 This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be  enabled separately. For this, see the sections below.
 
 
-## Log Requests
+### Log Requests
 
 You can log the incoming JSON requests by adding the following configuration:
 
@@ -114,7 +124,7 @@ The example for `request` above will reduce the log output to this:
 }
 ```
 
-## Log Responses
+### Log Responses
 
 You can log the outgoing JSON responses by adding the following configuration:
 
@@ -166,6 +176,41 @@ The example above will reduce the log output to this:
   "ssml": "<speak>Hello World!</speak>"
 }
 ```
+
+
+## Jovo Logger
+
+> Find the source code of the Jovo Logger here: [jovo-core/Log](https://github.com/jovotech/jovo-framework/blob/master/jovo-core/src/Log.ts).
+
+Jovo has an internal logging class that can be used to display certain levels of logs.
+
+You can set the log level by adding an environment variable, for example in your `app.js` file:
+
+```js
+// src/app.js
+
+process.env.JOVO_LOG_LEVEL='VERBOSE';
+```
+
+The following log levels are supported:
+
+* `ERROR`: Only display errors
+* `WARN`: Display warnings and errors
+* `INFO`: Display infos, warnings, and errors (`default`)
+* `VERBOSE`: Display additional information, e.g. when certain middlewares are executed
+* `DEBUG`: Display all information, even configs that might include sensitive data (like API keys). Only recommended to use while debugging
+
+
+
+## Logging Helpers
+
+If you find yourself searching for that one log that is buried somewhere in all the request and response logs, you can use the following helper method:
+
+```js
+console.dd('Log something')
+```
+
+The `dd` is short for "dump and die," which means that the execution ends after this log. This helper is inspired by [Laravel's `dd()`](https://laravel.com/docs/5.7/helpers).
 
 
 
