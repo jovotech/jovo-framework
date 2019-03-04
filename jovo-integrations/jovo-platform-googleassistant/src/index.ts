@@ -22,6 +22,7 @@ import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
 import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
 import {Notification} from './modules/Notification';
+import {DigitalGoods} from "./modules/DigitalGoods";
 
 export {
     Transaction,
@@ -109,10 +110,10 @@ declare module './core/GoogleAction' {
 
         /**
          * Calls askForNotification(intent, name, text)
-         * 
+         *
          * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
          * Might have an effect soon.
-         * 
+         *
          * Exists to comply with Googles naming conventions
          * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
@@ -350,7 +351,7 @@ declare module './core/GoogleAction' {
 declare module './core/GoogleAction' {
 
     interface GoogleAction {
-        $digitalGoods: any;
+        $digitalGoods?: DigitalGoods;
         $transaction?: Transaction;
     }
 }
