@@ -173,6 +173,13 @@ declare module './core/AlexaSkill' {
         showAskForGeoLocationCard(): this;
 
         /**
+         * Shows ask for amazon pay permission card
+         * @public
+         * @return {AlexaSkill}
+         */
+        showAskForAmazonPayPermissionCard(): this;
+
+        /**
          * Shows ask for list permission card
          * @public
          * @param {Array} types 'write' or 'read'

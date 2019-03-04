@@ -141,6 +141,10 @@
                         {
                             "title": "Visual Output",
                             "route": "output/visual-output"
+                        },
+                        {
+                            "title": "Output Object",
+                            "route": "output/object"
                         }
                     ]
                 }
@@ -307,6 +311,10 @@
                         {
                             "title": "Proactive Events API",
                             "route": "amazon-alexa/proactive-events"
+                        },
+                        {
+                            "title": "Amazon Pay",
+                            "route": "amazon-alexa/pay"
                         }
                     ]
                 },
@@ -456,6 +464,10 @@
                 {
                     "title": "Framework Architecture",
                     "route": "architecture"
+                },
+                {
+                    "title": "Hooks",
+                    "route": "hooks"
                 },
                 {
                     "title": "Plugins",

@@ -249,6 +249,17 @@ export class AskFor implements Plugin {
             }
         };
 
+        /**
+         * Return place confirmation value
+         * @return {object | undefined}
+         */
+        GoogleAction.prototype.getPlace = function() {
+            for (const argument of _get(this.$originalRequest || this.$request, 'inputs[0]["arguments"]', [])) {
+                if (argument.name === 'PLACE') {
+                    return argument.placeValue;
+                }
+            }
+        };
 
         /**
          * Return device object
@@ -316,6 +327,9 @@ export class AskFor implements Plugin {
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.DATETIME') {
             _set(googleAction.$type, 'type', 'ON_DATETIME');
+        }
+        if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.PLACE') {
+            _set(googleAction.$type, 'type', 'ON_PLACE');
         }
     }
     output(googleAction: GoogleAction) {
@@ -424,7 +438,7 @@ export class AskFor implements Plugin {
                         extension: {
                             "@type": "type.googleapis.com/google.actions.v2.PlaceValueSpec.PlaceDialogSpec",
                             requestPrompt: _get(output, 'GoogleAssistant.AskForPlace.requestPrompt'),
-                            permissionContext: _get(output, 'GoogleAssistant.AskForPlace.requestPrompt')
+                            permissionContext: _get(output, 'GoogleAssistant.AskForPlace.permissionContext')
                         }
                     }
                 }

@@ -18,6 +18,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [GameEngine Interface](#gameengine-interface)
 * [GadgetController Interface](#gadgetcontroller-interface)
 * [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
+* [Amazon Pay](#amazon-pay)
 * [Reminders API](#reminders-api)
 * [Settings API](#settings-api)
 * [Proactive Events API](#proactive-events-api)
@@ -110,6 +111,10 @@ this.tell('Text after API call');
 ## In-Skill-Purchasing (ISP)
 
 > [Find out more about In-Skill-Purchasing here](./in-skill-purchases.md './amazon-alexa/in-skill-purchases')
+
+## Amazon Pay
+
+> [Find out more about Amazon Pay here](./pay.md './amazon-alexa/pay')
 
 ## Reminders API
 

@@ -65,4 +65,4 @@ ON_REGISTER_UPDATE() {
 
 Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check wether the user accepted your suggestion.
 
-<!--[metadata]: {"description": "Learn how to use routine suggestions with Jovo.", "route": "google-assistant/routine-suggestion"}-->
+<!--[metadata]: {"description": "Learn how to use routine suggestions for Google Assistant with the Jovo Framework.", "route": "google-assistant/routine-suggestion"}-->

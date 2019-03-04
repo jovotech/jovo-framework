@@ -29,7 +29,7 @@ export class ProactiveEvent {
                 ErrorCode.ERR,
                 'jovo-platform-alexa',
                 'To send out Proactive Events you have to provide an accessToken',
-                'Try to get an accessToken by calling "this.$alexaSkill.$proactiveEvents.getAccessToken(clientId, clientSecret)"'
+                'Try to get an accessToken by calling "this.$alexaSkill.$proactiveEvent.getAccessToken(clientId, clientSecret)"'
             );
         }
         const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;

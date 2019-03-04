@@ -116,7 +116,6 @@ test('test AskForPermissionConsentCard', () => {
 
 });
 
-
 test('test AskForListPermissionsCard', () => {
     const card = new AskForListPermissionsCard(['read', 'write']);
 
@@ -452,6 +451,31 @@ test('test this.$alexaSkill.showAskForRemindersPermissionCard', async (done) => 
         const response = handleRequest.jovo!.$response;
         expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
         expect(_get(response, 'response.card.permissions[0]')).toEqual('alexa::alerts:reminders:skill:readwrite');
+        done();
+    });
+});
+
+test('test showAskForAmazonPayPermissionCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForAmazonPayPermissionCard();
+        },
+    });
+
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('payments:autopay_consent');
         done();
     });
 });

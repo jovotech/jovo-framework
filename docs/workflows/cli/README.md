@@ -11,7 +11,6 @@ The Jovo Command Line Tools offer the ability to create, prototype, test, and de
       * [jovo run](#jovo-run)
       * [jovo update](#jovo-update)
     * [Platform Commands](#platform-commands)
-      * [jovo init](#jovo-init)
       * [jovo build](#jovo-build)
       * [jovo get](#jovo-get)
       * [jovo deploy](#jovo-deploy)

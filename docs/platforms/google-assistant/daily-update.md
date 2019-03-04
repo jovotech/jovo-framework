@@ -30,7 +30,7 @@ Select the intent and at the bottom of the tab you will find the `User engagemen
 
 ## Suggest your Intent
 
-To ask the user wether they want to add your intent as a daily update, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent as a daily update using the `askForRegisterUpdate(intent)` method:
+To ask the user whether they want to add your intent as a daily update, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent as a daily update using the `askForRegisterUpdate(intent)` method:
 
 ```javascript
 AskForRoutineSuggestion() {
@@ -63,5 +63,5 @@ ON_REGISTER_UPDATE() {
 
 Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check wether the user accepted your request.
 
-<!--[metadata]: {"description": "Learn how to use daily updates with Jovo.", "route": "google-assistant/daily-update"}-->
+<!--[metadata]: {"description": "Learn how to use daily updates for your Google Action with the Jovo Framework.", "route": "google-assistant/daily-update"}-->
 
