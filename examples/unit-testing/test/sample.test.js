@@ -90,11 +90,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
             expect(
                 responseIntentRequest.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')
             ).toBe(true);
-
         });
-
-
-
     });
 
     describe(`PLATFORM: ${p.constructor.name} DATABASE` , () => {
@@ -115,7 +111,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
                 responseIntentRequest.isTell('Hey Joe, nice to meet you!')
             ).toBe(true);
 
-            expect(conversation.$user.$data.name).toEqual('Joe')
+            expect(conversation.$user.$data.name).toEqual('Joe');
 
         });
         test('should return the name that is stored from the test', async () => {
