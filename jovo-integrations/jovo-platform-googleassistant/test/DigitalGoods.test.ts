@@ -17,7 +17,7 @@ google.auth.getClient.mockReturnValue(Promise.resolve({
     authorize() {
         return Promise.resolve({
             access_token: 'token-abc-123'
-        })
+        });
     }
 }));
 
@@ -58,7 +58,7 @@ describe.skip('test digital goods implementation', () => {
                     .$googleAction!
                     .$digitalGoods!
                     .getSubscriptions(['com.sampleapp'])
-                    .then((subscriptions: Array<any>) => {
+                    .then((subscriptions: any[]) => { // tslint:disable-line
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledTimes(1);
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledWith({
                             endpoint: 'https://actions.googleapis.com',
@@ -115,7 +115,7 @@ describe.skip('test digital goods implementation', () => {
                     .$googleAction!
                     .$digitalGoods!
                     .getConsumables(['com.sampleapp.product1'])
-                    .then((consumable: Array<any>) => {
+                    .then((consumable: any[]) => { // tslint:disable-line
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledTimes(1);
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledWith({
                             endpoint: 'https://actions.googleapis.com',
