@@ -426,7 +426,7 @@ export class AlexaSkill extends Jovo {
      * @return {*}
      */
     getSelectedElementId() {
-        return _get(this.$request, 'request.token');
+        return _get(this.$request, 'request.arguments');
     }
 
 
