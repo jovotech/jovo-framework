@@ -10,7 +10,7 @@ export interface GoogleSheetsSheet extends PluginConfig {
     access?: string;
     entity?: string;
     position?: number;
-
+    notCaching?:boolean;
 }
 
 export class DefaultSheet  implements Plugin {

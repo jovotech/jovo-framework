@@ -67,6 +67,10 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                 if (type) {
                     this.use(new defaultSheetMap[type.toLowerCase()](sheet));
                 }
+
+                if(sheet.notCaching) {
+                    app.middleware('request')!.use(this.retrieveSpreadsheetData.bind(this));
+                }
             });
         }
     }
