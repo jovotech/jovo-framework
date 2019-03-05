@@ -119,7 +119,7 @@ export class GoogleAssistant extends Extensible implements Platform {
                     throw new Error('Handler must be of type object.');
                 }
                const sourceHandler = _get(this.config.plugin,'GoogleAssistant.handlers');
-               _set(this.config.plugin, 'GoogleAssistant.sourceHandler', _merge(handlers,obj));
+               _set(this.config.plugin, 'GoogleAssistant.handlers', _merge(sourceHandler,obj));
             }
             return this;
         };
