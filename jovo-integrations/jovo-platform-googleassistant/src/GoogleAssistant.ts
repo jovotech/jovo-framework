@@ -26,9 +26,15 @@ import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilde
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
 import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
+import {DigitalGoodsPlugin} from "./modules/DigitalGoods";
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
+
+    transactions?: {
+        androidAppID?: string,
+        keyFile?: object;
+    };
 }
 
 export class GoogleAssistant extends Extensible implements Platform {
@@ -36,6 +42,7 @@ export class GoogleAssistant extends Extensible implements Platform {
     config: Config = {
         enabled: true,
         plugin: {},
+
     };
 
     requestBuilder = new GoogleAssistantRequestBuilder();
@@ -77,7 +84,8 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin()
+            new TransactionsPlugin(),
+            new DigitalGoodsPlugin()
         );
 
         Jovo.prototype.$googleAction = undefined;
