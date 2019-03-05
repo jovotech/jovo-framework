@@ -79,7 +79,7 @@ app.setHandler({
                             "parameters": {
                                 "gateway": "stripe",
                                 "stripe:version": "2018-10-31",
-                                "stripe:publishableKey": "pk_test_jwY8IGS8LTtelPubRMbNC8DU"
+                                "stripe:publishableKey": "key"
                             }
                         }
                     },
