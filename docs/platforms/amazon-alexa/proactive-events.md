@@ -340,7 +340,7 @@ Name | Description | Value | Localization Supported | Required
 
 #### AMAZON.TrashCollectionAlert.Activated
 
-Utterance: `The coming <dayOfTheWeek> is <garbageType> collection day`
+Utterance: `The coming <dayOfTheWeek> is <garbageType> garbage collection day`
 
 ```javascript
 {

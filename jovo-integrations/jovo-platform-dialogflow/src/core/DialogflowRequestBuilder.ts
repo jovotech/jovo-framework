@@ -17,6 +17,7 @@ const samples: {[key: string]: {[key: string]: string} | string} = {
         'OnPermissionPreciseLocation': 'OnPermissionPreciseLocation.json',
         'OnPermissionNotification': 'OnPermissionNotification.json',
         'CompletePurchase': 'CompletePurchase.json'
+        'OnPlace': 'OnPlace.json'
     }
 };
 

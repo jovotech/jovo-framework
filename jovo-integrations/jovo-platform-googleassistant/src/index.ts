@@ -206,6 +206,12 @@ declare module './core/GoogleAction' {
         getDateTime(): string;
 
         /**
+         * Return place confirmation value
+         * @return {object}
+         */
+        getPlace(): object | undefined;
+
+        /**
          * Ask for confirmation
          * @public
          * @param {*} text

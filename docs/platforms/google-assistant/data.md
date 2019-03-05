@@ -89,9 +89,38 @@ ON_PERMISSION() {
   }
 },
 ```
-[Official Documentation](https://developers.google.com/actions/assistant/helpers#place_and_location)
+[Official Documentation](https://developers.google.com/actions/assistant/helpers#user_information)
 
 [Example](https://github.com/jovotech/jovo-framework/tree/master/examples/02_googleassistant/ask-for-x)
+
+### Place and Location
+
+You can also prompt the user for their current location using the `askForPlace()` helper:
+
+```javascript
+this.$googleAction.askForPlace('Where would you like to be picked up?', 'To find a place to pick you up');
+```
+
+The user's response will be mapped to the `ON_PLACE` intent, where you can access the user's input using the `getPlace()` method:
+
+```javascript
+ON_PLACE() {
+  const place = this.$googleAction.getPlace();
+}
+```
+
+Here's an example for the place object you will receive:
+
+```javascript
+{
+  "formattedAddress": "123 Main Street, Springfield, OR 97477-5319, USA",
+  "coordinates": {
+          "latitude": 44.0461033,
+          "longitude": -123.024248
+  },
+  "name": "123 Main St"
+},
+```                                               
 
 ## Date and Time
 

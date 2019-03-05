@@ -141,6 +141,10 @@
                         {
                             "title": "Visual Output",
                             "route": "output/visual-output"
+                        },
+                        {
+                            "title": "Output Object",
+                            "route": "output/object"
                         }
                     ]
                 }
@@ -460,6 +464,10 @@
                 {
                     "title": "Framework Architecture",
                     "route": "architecture"
+                },
+                {
+                    "title": "Hooks",
+                    "route": "hooks"
                 },
                 {
                     "title": "Plugins",
