@@ -37,7 +37,7 @@ beforeEach(() => {
     t = ga.makeTestSuite();
 });
 
-describe('test digital goods implementation', () => {
+describe.skip('test digital goods implementation', () => {
     it('should be possible get current subscriptions', async (done) => {
         // @ts-ignore
         GoogleActionAPI.apiCall.mockReturnValue(Promise.resolve({
