@@ -1,5 +1,5 @@
 const {App} = require('jovo-framework');
-const {GoogleAssistant, RequirementsCheckResult} = require('jovo-platform-googleassistant');
+const {GoogleAssistant} = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 
 const app = new App();
@@ -39,7 +39,7 @@ app.setHandler({
                     "parameters": {
                         "gateway": "stripe",
                         "stripe:version": "2018-10-31",
-                        "stripe:publishableKey": "pk_test_jwY8IGS8LTtelPubRMbNC8DU"
+                        "stripe:publishableKey": "key"
                     }
                 }
             },
