@@ -5,15 +5,28 @@ const { JovoDebugger } = require('jovo-plugin-debugger');
 const app = new App();
 
 app.use(
-    new GoogleAssistant(),
+    new GoogleAssistant({
+        transactions: {
+            androidPackageName: 'com.example.app',
+            keyFile: './keyfile.json'
+        }
+    }),
     new JovoDebugger(),
 );
 
 
 app.setHandler({
     LAUNCH() {
-        return this.toIntent('TransactionCheckRequirementsIntent');
+        return this.toIntent('ShowConsumablesIntent');
+        // return this.toIntent('TransactionCheckRequirementsIntent');
     },
+
+    async ShowConsumablesIntent() {
+        const consumables = await this.$googleAction.$transaction.getConsumables(['com.example.app.testproduct1337']);
+        console.log(consumables);
+        this.tell('ok');
+    },
+
     TransactionCheckRequirementsIntent() {
         this.$googleAction.$transaction.checkRequirements({
             requestDeliveryAddress: true,
