@@ -14,6 +14,8 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
+        this.$user.$data.foo = 'bar';
+
         return this.toIntent('HelloWorldIntent');
     },
 
@@ -35,7 +37,23 @@ app.setHandler({
     },
 
     MyNameIsIntent() {
+        this.$user.$data.name = this.$inputs.name.value;
         this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+
+    NameFromDbIntent() {
+        const name = this.$user.$data.name;
+        this.tell('Hey ' + name + ', nice to meet you!');
+    },
+
+    CheckPowerUserIntent() {
+        const sessionsCount = this.$user.$metaData.sessionsCount;
+
+        if (sessionsCount > 10) {
+            this.tell('Hey buddy!');
+        } else {
+            this.tell('Hello sir!')
+        }
     },
 
 });

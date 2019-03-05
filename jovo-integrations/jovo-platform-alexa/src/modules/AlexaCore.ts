@@ -127,6 +127,15 @@ export class AlexaCore implements Plugin {
             }
         }
 
+        // add sessionData to response object explicitly
+        if (_get(alexaSkill.$app.config, 'keepSessionDataOnSessionEnded')) {
+            // set sessionAttributes
+            if (alexaSkill.$session && alexaSkill.$session.$data) {
+                _set(alexaSkill.$response, 'sessionAttributes', alexaSkill.$session.$data);
+            }
+        }
+
+
         if (_get(output, 'Alexa.Directives')) {
             _set(alexaSkill.$response, 'response.directives', _get(output, 'Alexa.Directives'));
 

@@ -3,10 +3,12 @@ import {Card} from "../../src/response/visuals/Card";
 import {SimpleCard} from "../../src/response/visuals/SimpleCard";
 import {StandardCard} from "../../src/response/visuals/StandardCard";
 import {LinkAccountCard} from "../../src/response/visuals/LinkAccountCard";
-import {AskForPermissionConsentCard} from "../../src/response/visuals/AskForPermissionConsentCard";
+import {AskForPermissionsConsentCard} from "../../src/response/visuals/AskForPermissionsConsentCard";
 import {AskForListPermissionsCard} from "../../src/response/visuals/AskForListPermissionsCard";
 import {AskForLocationPermissionsCard} from "../../src/response/visuals/AskForLocationPermissionsCard";
 import {AskForContactPermissionsCard} from "../../src/response/visuals/AskForContactPermissionsCard";
+import {AskForRemindersPermissionsCard} from "../../src/response/visuals/AskForRemindersPermissionsCard";
+
 import {HandleRequest, JovoRequest, TestSuite, SessionConstants} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "./../../src";
@@ -100,7 +102,7 @@ test('test LinkAccountCard', () => {
 
 
 test('test AskForPermissionConsentCard', () => {
-    const card = new AskForPermissionConsentCard();
+    const card = new AskForPermissionsConsentCard();
     card.addPermission('perm1');
     card.addPermission('perm2');
 
@@ -193,7 +195,11 @@ test('test AskForContactPermissionsCard', () => {
 
 });
 
+test('test AskForRemindersPermissionsCard', () => {
+    const card = new AskForRemindersPermissionsCard();
+    expect(card.permissions).toEqual(['alexa::alerts:reminders:skill:readwrite']);
 
+});
 test('test showSimpleCard', async (done) => {
     app = new App();
     const alexa = new Alexa();
@@ -421,6 +427,30 @@ test('test this.$alexaSkill.showAskForContactPermissionCard', async (done) => {
         expect(_get(response, 'response.card.permissions[0]')).toEqual('alexa::profile:given_name:read');
         expect(_get(response, 'response.card.permissions[1]')).toEqual('alexa::profile:email:read');
         expect(_get(response, 'response.card.permissions[2]')).toEqual('alexa::profile:mobile_number:read');
+        done();
+    });
+});
+test('test this.$alexaSkill.showAskForRemindersPermissionCard', async (done) => {
+    app = new App();
+    const alexa = new Alexa();
+    app.use(alexa);
+    t = alexa.makeTestSuite();
+
+    app.setHandler({
+        LAUNCH() {
+            this.$alexaSkill!.showAskForRemindersPermissionCard();
+            this.tell('Hello');
+
+        },
+    });
+
+    const launchRequest:JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+        const response = handleRequest.jovo!.$response;
+        expect(_get(response, 'response.card.type')).toEqual('AskForPermissionsConsent');
+        expect(_get(response, 'response.card.permissions[0]')).toEqual('alexa::alerts:reminders:skill:readwrite');
         done();
     });
 });

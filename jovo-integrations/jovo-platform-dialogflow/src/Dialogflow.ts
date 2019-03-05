@@ -1,5 +1,6 @@
 import _merge = require('lodash.merge');
 import {
+    Jovo,
     BaseApp,
     Extensible,
     Platform,
@@ -59,6 +60,9 @@ export class Dialogflow extends Extensible implements Platform {
         this.use(
             new DialogflowCore()
         );
+
+        Jovo.prototype.$dialogflowAgent = undefined;
+
     }
     uninstall(app: BaseApp) {
 
@@ -67,6 +71,7 @@ export class Dialogflow extends Extensible implements Platform {
     async initialize(handleRequest: HandleRequest) {
 
         handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
+
 
         await this.middleware('$request')!.run(handleRequest.jovo);
         await this.middleware('$session')!.run(handleRequest.jovo);

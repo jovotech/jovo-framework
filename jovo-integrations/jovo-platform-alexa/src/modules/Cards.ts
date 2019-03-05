@@ -10,8 +10,7 @@ import {AskForLocationPermissionsCard} from "../response/visuals/AskForLocationP
 import {AskForListPermissionsCard} from "../response/visuals/AskForListPermissionsCard";
 import {AskForContactPermissionsCard} from "../response/visuals/AskForContactPermissionsCard";
 import {Card} from "../response/visuals/Card";
-import {AlexaResponse} from "..";
-import { AskForPermissionConsentCard } from '../response/visuals/AskForPermissionConsentCard';
+import {AlexaResponse, AskForPermissionsConsentCard, AskForRemindersPermissionsCard} from "..";
 
 
 export class Cards implements Plugin {
@@ -90,7 +89,7 @@ export class Cards implements Plugin {
          */
         AlexaSkill.prototype.showAskForAmazonPayPermissionCard = function() {
             _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
-                new AskForPermissionConsentCard().setPermissions(['payments:autopay_consent'])
+                new AskForPermissionsConsentCard().setPermissions(['payments:autopay_consent'])
             );
             return this;
         };
@@ -122,6 +121,18 @@ export class Cards implements Plugin {
             return this;
         };
 
+
+        /**
+         * Shows ask for reminders permission card
+         * @public
+         * @return {Jovo}
+         */
+        AlexaSkill.prototype.showAskForRemindersPermissionCard = function() {
+            _set(this.$output, 'Alexa.AskForPermissionsConsentCard',
+                new AskForRemindersPermissionsCard()
+            );
+            return this;
+        };
 
         /**
          * Adds card to response object
@@ -190,14 +201,11 @@ export class Cards implements Plugin {
             );
         }
 
-
         if (_get(output, 'Alexa.AskForPermissionsConsentCard')) {
             _set(alexaSkill.$response, 'response.card',
                 _get(output, 'Alexa.AskForPermissionsConsentCard')
             );
         }
-
-
     }
 
 }

@@ -4,6 +4,9 @@ import {AlexaSkill} from "./AlexaSkill";
 
 
 export class AlexaSpeechBuilder extends SpeechBuilder {
+
+    static pollyVoice: string | undefined;
+
     constructor(alexaSkill: AlexaSkill) {
         super(alexaSkill);
     }
@@ -15,7 +18,7 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @param {number} probability
      * @return {SpeechBuilder}
      */
-    addAudio(url: string | string[], condition?: boolean, probability?: number) {
+    addAudio(url: string | string[], condition?: boolean, probability?: number): this {
         if (Array.isArray(url)) {
             return this.addText('<audio src="' + _sample(url)  + '"/>', condition, probability);
         }
@@ -30,7 +33,7 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @param {number} probability
      * @returns {SpeechBuilder}
      */
-    addLangText(language: string, text: string | string[], condition?: boolean, probability?: number) {
+    addLangText(language: string, text: string | string[], condition?: boolean, probability?: number): this {
         if (Array.isArray(text)) {
             return this.addText(`<lang xml:lang="${language}">${_sample(text)}</lang>`, condition, probability);
         }
@@ -45,10 +48,28 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @param {number} probability
      * @returns {SpeechBuilder}
      */
-    addTextWithPolly(pollyName: string, text: string | string[], condition?: boolean, probability?: number) {
+    addTextWithPolly(pollyName: string, text: string | string[], condition?: boolean, probability?: number): this {
         if (Array.isArray(text)) {
             return this.addText(`<voice name="${pollyName}">${_sample(text)}</voice>`, condition, probability);
         }
         return this.addText(`<voice name="${pollyName}">${text}</voice>`, condition, probability);
+    }
+
+    /**
+     * Overrides addText and adds polly voice tags if a polly voice has been set.
+     * @param {string | string[]} text
+     * @param {boolean} condition
+     * @param {number} probability
+     * @returns {this}
+     */
+    addText(text: string | string[], condition?: boolean, probability?: number): this {
+        if (AlexaSpeechBuilder.pollyVoice) {
+            if (Array.isArray(text)) {
+                return super.addText(`<voice name="${AlexaSpeechBuilder.pollyVoice}">${_sample(text)}</voice>`, condition, probability);
+            }
+            return super.addText(`<voice name="${AlexaSpeechBuilder.pollyVoice}">${text}</voice>`, condition, probability);
+        }
+
+        return super.addText(text, condition, probability);
     }
 }

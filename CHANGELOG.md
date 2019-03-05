@@ -1,6 +1,44 @@
 # Jovo Framework Changelog
 
 
+## 2.1.0 (2019-03-05)
+
+#### :rocket: New Feature
+* `jovo-platform-alexa` [#384](https://github.com/jovotech/jovo-framework/pull/384) Adds Amazon Pay helper methods and docs ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` [#406](https://github.com/jovotech/jovo-framework/pull/406) Adds Google Transactions for Digital Goods  ([@renatoalencar](https://github.com/renatoalencar))
+* `jovo-framework` Adds database integration to unit tests (`conversion.$user.$data`)
+* `jovo-platform-dialogflow` Add custom payloads for Dialogflow agents (starting with Facebook Messenger and Slack) - Work in progress
+
+
+#### :bug: Bug Fix
+
+* `jovo-platform-googleassistant` [#393](https://github.com/jovotech/jovo-framework/pull/393) Adds missing ON_DATETIME intent | Adds askForDateTime & askForConfirmation  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#398](https://github.com/jovotech/jovo-framework/pull/398) Fixes setAlexaHandler/setGoogleAssistantHandler with a list of objects. ([@kouz75 ](https://github.com/kouz75 ))
+* `jovo-platform-googleassistant` [#401](https://github.com/jovotech/jovo-framework/pull/401) Fixes askForPlace(), adds helper, tests and docs  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-alexa` [#407](https://github.com/jovotech/jovo-framework/pull/407) Fixes fix missing playerActivity  ([@kouz75](https://github.com/kouz75))
+* `jovo-platform-googleassistant` Fixes GoogleAction user id generation #390
+* `jovo-db-mysql` Fixes NEW_USER bug in MySQL integration
+* `jovo-platform-alexa` Fixes typo in PermissionCard getter
+* `jovo-plugin-debugger` Fixes audioplayer requests in Jovo Debugger
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` Adds DynamoDB DAX support 
+* `jovo-framework` Adds AWS X-Ray #238
+* `jovo-framework` Adds keepSessionDataOnSessionEnded (keeps session data in response object)
+* `jovo-framework` Adds getRoute and getMappedIntentName helpers
+* `jovo-platform-alexa` Adds isDialogX functions #347
+* `jovo-platform-alexa` Adds askFormRemindersPermissionCard
+* `jovo-plugin-debugger` Adds askFormRemindersPermissionCard
+
+
+#### Committers: 4
+- Renato Alencar ([@renatoalencar](https://github.com/renatoalencar))
+- scouzinier ([@kouz75](https://github.com/kouz75))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 
 ## 2.0.16 (2019-02-21)
 

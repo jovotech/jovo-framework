@@ -7,6 +7,7 @@ import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
 import {GoogleActionSpeechBuilder} from "../core/GoogleActionSpeechBuilder";
 
+import uuidv4 = require('uuid/v4');
 
 
 
@@ -16,8 +17,10 @@ export class GoogleAssistantCore implements Plugin {
         googleAssistant.middleware('$init')!.use(this.init.bind(this));
         googleAssistant.middleware('$type')!.use(this.type.bind(this));
 
+        googleAssistant.middleware('after.$type')!.use(this.userStorageGet.bind(this));
+
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
-        googleAssistant.middleware('after.$output')!.use(this.userStorage.bind(this));
+        googleAssistant.middleware('after.$output')!.use(this.userStorageStore.bind(this));
 
         GoogleAction.prototype.displayText = function(displayText: string) {
             _set(this.$output, 'GoogleAssistant.displayText',
@@ -92,8 +95,21 @@ export class GoogleAssistantCore implements Plugin {
             _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
         }
     }
+    async userStorageGet(googleAction: GoogleAction) {
+        try {
+            googleAction.$user.$storage = JSON.parse(_get(
+                googleAction.$originalRequest || googleAction.$request, 'user.userStorage'));
+        } catch (e) {
+        }
 
-    async userStorage(googleAction: GoogleAction) {
+        const userId = googleAction.$user.$storage.userId ||
+            googleAction.$request!.getUserId() ||
+            uuidv4();
+
+        googleAction.$user.$storage.userId = userId;
+
+    }
+    async userStorageStore(googleAction: GoogleAction) {
         const output = googleAction.$output;
         if (!googleAction.$response) {
             googleAction.$response = new GoogleActionResponse();

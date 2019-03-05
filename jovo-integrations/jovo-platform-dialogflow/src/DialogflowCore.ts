@@ -6,7 +6,6 @@ import {Dialogflow} from "./Dialogflow";
 import {DialogflowAgent} from "./DialogflowAgent";
 import {DialogflowRequest} from "./core/DialogflowRequest";
 import {DialogflowResponse} from "./core/DialogflowResponse";
-import {Jovo} from "../../../jovo-core/dist/src";
 
 export interface Config extends PluginConfig {
     sessionContextId?: string;
@@ -140,6 +139,10 @@ export class DialogflowCore implements Plugin {
         }
         _set(dialogflowAgent.$response, 'outputContexts', outputContexts);
 
+
+        if (_get(output, 'Dialogflow.Payload')) {
+            _set(dialogflowAgent.$response, 'payload', _get(output, 'Dialogflow.Payload'));
+        }
     }
 
 }

@@ -280,6 +280,8 @@ export class Handler implements Plugin {
                 intent,
                 (this.$app.config as AppConfig).intentsToSkipUnhandled
             );
+            route.from = this.getRoute().from ? this.getRoute().from + '/' + this.getRoute().path : this.getRoute().path;
+            this.$plugins.Router.route = route;
             Log.verbose(` toIntent: ${intent}`);
 
             return await Handler.applyHandle(this, route, true);
@@ -304,6 +306,8 @@ export class Handler implements Plugin {
                 intent,
                 (this.$app.config as AppConfig).intentsToSkipUnhandled
             );
+            route.from = this.getRoute().from ? this.getRoute().from + '/' + this.getRoute().path : this.getRoute().path;
+            this.$plugins.Router.route = route;
             Log.verbose(` toStateIntent: ${state}.${intent}`);
             return await Handler.applyHandle(this, route, true);
         };
@@ -372,6 +376,24 @@ export class Handler implements Plugin {
          */
         Jovo.prototype.skipIntentHandling = async function (): Promise<void> {
             this.triggeredToIntent = true;
+        };
+
+        /**
+         * Returns mapped intent name.
+         * @public
+         * @return {*}
+         */
+        Jovo.prototype.getMappedIntentName = function (): string {
+            return this.$plugins.Router.route.intent;
+        };
+
+        /**
+         * Returns route object.
+         * @public
+         * @return {*}
+         */
+        Jovo.prototype.getRoute = function (): Route {
+            return this.$plugins.Router.route;
         };
     }
 

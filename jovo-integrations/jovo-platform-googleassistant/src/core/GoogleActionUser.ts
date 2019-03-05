@@ -1,6 +1,5 @@
 import {User} from 'jovo-core';
 import _get = require('lodash.get');
-import uuidv4 = require('uuid/v4');
 import {GoogleAction} from "./GoogleAction";
 
 export interface UserProfile {
@@ -17,26 +16,15 @@ export class GoogleActionUser extends User {
     constructor(googleAction: GoogleAction) {
         super(googleAction);
         this.googleAction = googleAction;
-        try {
-            this.$storage = JSON.parse(_get(
-                googleAction.$originalRequest || googleAction.$request, 'user.userStorage'));
-        } catch (e) {
 
-        }
     }
 
     getAccessToken() {
         return this.googleAction.$request!.getAccessToken();
     }
     getId(): string {
-        const userId = this.$storage.userId ||
-            this.googleAction.$request!.getUserId() ||
-            uuidv4();
-
-        this.$storage.userId = userId;
-        return userId;
+        return this.$storage.userId;
     }
-
 
     /**
      * Returns user profile after askForName permission

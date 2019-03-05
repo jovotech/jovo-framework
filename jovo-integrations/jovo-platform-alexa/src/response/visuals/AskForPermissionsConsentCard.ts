@@ -1,6 +1,6 @@
 import {Card} from "./Card";
 
-export class AskForPermissionConsentCard extends Card {
+export class AskForPermissionsConsentCard extends Card {
     permissions: string[] = [];
     constructor() {
         super('AskForPermissionsConsent');
@@ -9,7 +9,7 @@ export class AskForPermissionConsentCard extends Card {
     /**
      * Adds permission to array
      * @param {*} permission
-     * @return {AskForPermissionConsentCard}
+     * @return {AskForPermissionsConsentCard}
      */
     addPermission(permission: string) {
         this.permissions.push(permission);
@@ -19,7 +19,7 @@ export class AskForPermissionConsentCard extends Card {
     /**
      * Sets permission array
      * @param {array} permissions
-     * @return {AskForPermissionConsentCard}
+     * @return {AskForPermissionsConsentCard}
      */
     setPermissions(permissions: string[]) {
         this.permissions = permissions;
