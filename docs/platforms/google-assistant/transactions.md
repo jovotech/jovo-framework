@@ -8,7 +8,6 @@ Learn how to sell digital and physical goods in your Google Actions by using Goo
    * [Digital Goods Implementation](#digital-goods-implementation)
 * [Physical Goods](#physical-goods)
    * [Physical Goods Configuration](#physical-goods-configuration)
-   (#build-physical-transactions-with-merchant-managed-payments)
    * [Physical Goods Implementation](#physical-goods-implementation)
 
 ## Introduction
