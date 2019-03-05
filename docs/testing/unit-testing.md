@@ -12,7 +12,9 @@ To make sure your Alexa Skills and Google Actions are robust, we highly recommen
     * [Request](#request)
     * [Response](#response)
     * [Check](#response)
-    * [Data](#data)
+* [Advanced Concepts](#advanced-concepts)
+   * [i18n Keys](#i18n-keys)
+   * [User Data](#user-data)
 
 
 ## Introduction to Unit Testing
@@ -122,6 +124,14 @@ describe(`GROUP` , () => {
     // More tests
 });
 ```
+
+Each test contains the following elements:
+
+* [Conversation](#conversation)
+* [Request](#request)
+* [Response](#response)
+* [Check](#response)
+
 
 ### Conversation
 
@@ -256,15 +266,73 @@ expect(
 ```
 
 
-### Data
+## Advanced Concepts
 
-Delete the database for this user with the following method:
+For more thorough testing, you can use the following advanced concepts:
+
+* [i18n Keys](#i18n-keys)
+* [User Data](#user-data)
+
+### i18n Keys
+
+When you're using the Jovo [i18n](../basic-concepts/output/i18n.md './output/i18n') or [CMS integrations](../integrations/cms './cms'), you might not want to make checks with strings like `'Hello World! What\'s your name?'` as in the examples above, as the i18n content could change, use different variations, and languages (locales).
+
+The solution for this is to configure the conversation in a way that the CMS only returns the i18n `keys` instead of strings (`values`), which can later be checked against expected keys.
+
+You can do this by setting the `locale` of the conversation to a random string, for example `keys-only`, in the [conversation configuration](#conversation-configuration):
+
+```js
+const conversation = testSuite.conversation({ locale: 'keys-only' });
+```
+
+For example, if you used `this.t('key')` in your app logic and now set the conversation locale to `keys-only`, the `getSpeech()` method of the unit test would (if correct) return only `key` instead of the string (`value`) stored in the CMS.
+
+You can then use the Jest [`toMatch`](https://jestjs.io/docs/en/expect#tomatchregexporstring) method to match it to an expected key:
+
+```js
+expect(launchResponse.getSpeech())
+    .toMatch(
+            'key'
+            );
+```
+
+If your output uses several chained keys (for example by using the [SpeechBuild `addT` method](../basic-concepts/output/speechbuilder.md#features './output/speechbuilder#features')), you can add them together like this:
+
+```js
+expect(launchResponse.getSpeech())
+    .toMatch(
+            'keyOne ' +
+            'keyTwo'
+            );
+```
+
+
+### User Data
+
+You can use the [conversation](#conversation) to store and retrieve user specific data as well as you would using the [Jovo User object](../basic-concepts/data/user.md#store-data './data/user#store-data'):
+
+```js
+// Store user data
+conversation.$user.$data.key = value;
+
+// Retrieve user data
+let value = conversation.$user.$data.key;
+```
+
+As unit tests are run locally, this will save the data into the default [FileDB](../integrations/databases/file-db.md './databases/file-db') database.
+
+This also allows you to access [User Meta Data](../basic-concepts/data/user.md#meta-data './data/user#meta-data'):
+
+```js
+// Get the full Meta Data object
+conversation.$user.$metaData
+```
+
+You can also delete the database for this user with the following method:
 
 ```javascript
 await conversation.clearDb();
 ```
-
-
 
 
 <!--[metadata]: { "description": "Learn how to write unit tests for Alexa Skills and Google Actions with the Jovo Framework.", "route": "unit-testing" }-->

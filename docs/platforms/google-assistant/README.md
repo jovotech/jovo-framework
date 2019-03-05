@@ -4,10 +4,11 @@ Learn more about Google Assistant specific features that can be used with the Jo
 
 * [Introduction to Google Assistant Specific Features](#introduction-to-google-assistant-specific-features)
 * [Output](#output)
-  * [Multiple Reprompts](#multiple-reprompts)
-  * [Screen Surfaces](#screen-surfaces)
-  * [Media Response](#media-response)
+   * [Multiple Reprompts](#multiple-reprompts)
+   * [Screen Surfaces](#screen-surfaces)
+   * [Media Response](#media-response)
 * [Data](#data)
+   * [User ID](#user-id)
 * [Push Notifications](#push-notifications)
 * [Daily Update](#daily-update)
 * [Routine Suggestion](#routine-suggestion)
@@ -48,6 +49,18 @@ The first two messages are usually reprompt messages, the third one is used to s
 ## Data
 
 > [You can find out more about your Google Action user's data here](./data.md './google-assistant/data').
+
+### User ID
+
+In previous versions of Jovo, the `userId` for Google Actions was taken from the request's user ID. In 2018, Google [deprecated this element of the request JSON](https://developers.google.com/actions/identity/user-info) and recommended [webhook generated user IDs](https://developers.google.com/actions/identity/user-info#migrating_to_webhook-generated_ids) as an alternative way to store user data.
+
+Since Jovo `2.0`, a Google Action `userId` is created in the following process:
+* If there is a `userId` defined in the [userStorage](https://developers.google.com/actions/assistant/save-data), take this
+* If not, use the `userId` from the request (if there is one) and then save it in userStorage
+* If there is no `userId` in the request, generate one using `uuidv4`, and then save it to userStorage
+
+Note: userStorage only works for Google Assistant users who have voice match enabled. [Learn more in the official Google Docs](https://developers.google.com/actions/assistant/save-data#user_storage_expiration).
+
 
 ## Push Notifications
 

@@ -14,6 +14,10 @@ In this section, you will learn more about how to use intents and states to rout
    * [Separate Handlers](#separate-handlers)
    * [Platform Handlers](#platform-handlers) 
    * [Event Listeners](#event-listeners)
+* [Routing Helpers](#routing-helpers)
+   * [getMappedIntentName](#getmappedintentname)
+   * [getRoute](#getroute)
+
 
 ## Introduction to Routing
 
@@ -315,5 +319,24 @@ app.onRequest(function(jovo) {
 > [Find out more about Event Listeners here](./event-listeners.md './routing/event-listeners').
 
 
+## Routing Helpers
+
+Most information that is necessary for routing can be accessed through the [Jovo `$request` object](../requests-responses/request.md './requests-responses/request'). The Jovo context object (`this`) offers some additional helpful methods.
+
+### getMappedIntent
+
+While `this.$request.getIntentName()` only makes it possible to access the intent name as it can be found in the request, this method allows you to access the intent *after* the mapping (see: [intentMap](./intents.md#intentMap './routing/intents#intentMap')) is done:
+
+```javascript
+this.getMappedIntentName()
+```
+
+### getRoute
+
+This method allows you to access additional information about the whole routing:
+
+```javascript
+this.getRoute()
+```
 
 <!--[metadata]: { "description": "Learn how to route through your voice app logic with Jovo.", "route": "routing" }-->
