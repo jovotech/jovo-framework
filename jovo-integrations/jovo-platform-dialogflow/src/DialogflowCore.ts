@@ -104,6 +104,7 @@ export class DialogflowCore implements Plugin {
             dialogflowAgent.$response = new DialogflowResponse();
         }
 
+
         if (output.tell) {
             _set(dialogflowAgent.$response, 'fulfillmentText', `${output.tell.speech}`);
         }
