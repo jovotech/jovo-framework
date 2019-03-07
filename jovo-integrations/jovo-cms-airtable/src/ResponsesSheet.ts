@@ -49,9 +49,7 @@ export class ResponsesSheet extends DefaultSheet {
         };
     }
 
-    parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
-        console.log(values);
-        
+    parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line        
         const headers: string[] = values[0];
         const resources:any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {

@@ -20,9 +20,7 @@ export class ObjectArraySheet extends DefaultSheet {
         }
     }
 
-    parse(handleRequest: HandleRequest, values: any[]) {
-        console.log('ObjectArraySheet parse()');
-        
+    parse(handleRequest: HandleRequest, values: any[]) {        
         const resultArray = [];
         const keys = values[0];
         for (let i = 1; i < values.length; i++) {
