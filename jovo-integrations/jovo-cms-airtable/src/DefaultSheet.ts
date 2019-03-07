@@ -4,7 +4,6 @@ import _merge = require('lodash.merge');
 
 export interface AirtableSheet extends PluginConfig {
     name?: string;
-    range?: string;
     type?: string;
     table?: string;
 }
@@ -12,7 +11,6 @@ export interface AirtableSheet extends PluginConfig {
 export class DefaultSheet implements Plugin {
     config: AirtableSheet = {
         enabled: true,
-        range: 'A:B'
     }
 
     cms?: AirtableCMS;
@@ -42,9 +40,6 @@ export class DefaultSheet implements Plugin {
         if (!this.config.name) {
             return Promise.reject('sheet name has to be set.');
         }
-        // if (!this.config.range) {
-        //     return Promise.reject('range has to be set.');
-        // }
 
         const values = await this.cms.loadSpreadSheetData(this.config.table);
         
