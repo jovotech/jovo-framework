@@ -16,9 +16,10 @@ export interface Config extends ExtensibleConfig {
 }
 
 export class AirtableCMS extends BaseCmsPlugin {
-
     config: Config = {
         enabled: true,
+        apiKey: undefined,
+        base: undefined,
         sheets: []
     };
     base!: Airtable["Base"]["baseFn"];
@@ -61,7 +62,6 @@ export class AirtableCMS extends BaseCmsPlugin {
                 }
             });
         }
-
         if (!this.config.apiKey) {
             throw new JovoError(
                 'Can\'t find api key',
