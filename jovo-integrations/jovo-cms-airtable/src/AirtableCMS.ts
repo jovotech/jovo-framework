@@ -1,12 +1,13 @@
 import { BaseCmsPlugin, ExtensibleConfig, ActionSet, BaseApp, HandleRequest, JovoError, ErrorCode } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
+
 import { DefaultSheet, AirtableSheet } from './DefaultSheet';
 import { ObjectArraySheet } from './ObjectArraySheet';
 import { ResponsesSheet } from './ResponsesSheet';
 import { KeyValueSheet } from './KeyValueSheet';
 
-const Airtable = require('airtable');
+import Airtable = require('airtable');
 
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
@@ -20,8 +21,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         enabled: true,
         sheets: []
     };
-
-    base: any; // TODO type
+    base!: Airtable["Base"]["baseFn"];
 
     constructor(config?: Config) {
         super(config);
@@ -108,14 +108,14 @@ export class AirtableCMS extends BaseCmsPlugin {
                  */ 
 
                 // push keys first as that's the first row of the table and put the last key at the first spot of the array. 
-                const record = _get(records[0], '_rawJson.fields');
+                const record = _get(records[0], 'fields');
                 let keys = Object.keys(record);
                 keys = this.shiftLastItemToFirstIndex(keys);
                 arr.push(keys);
 
                 records.forEach((record: any) => {
                     // push each records values
-                    let values = Object.values(_get(record, '_rawJson.fields'));
+                    let values = Object.values(_get(record, 'fields'));
                     values = this.shiftLastItemToFirstIndex(values);
                     arr.push(values);
                 });
