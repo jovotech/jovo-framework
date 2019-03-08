@@ -11,12 +11,8 @@ export interface AirtableTable extends PluginConfig {
         fields?: string[];
         filterByFormula?: string;
         maxRecords?: number;
-        pageSize?: number;
         sort?: object[]; 
-        view?: string; 
-        cellFormat?: string;
-        timeZone?: string;
-        userLocale?: string;
+        view?: string;
     }
 }
 
