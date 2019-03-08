@@ -4,7 +4,7 @@ Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
 * [Configuration](#configuration)
-* [Default Sheet Types](#default-sheet-types)
+* [Default Table Types](#default-table-types)
   * [Default](#default)
   * [Responses](#responses)
   * [KeyValue](#keyvalue)
@@ -44,20 +44,44 @@ cms: {
     AirtableCMS: {
         apiKey: '<api-key>',
         baseId: '<base-id>',
-        sheets: [
+        tables: [
             {
-                name: '<sheetName>',
+                name: '<name>',
                 table: '<tableName>',
-                type: '<SheetType>'
+                type: '<SheetType>',
+                selectOptions: {
+                    fields: ['UserId', 'Name', 'Location']
+                    sort: [
+                        {
+                            field: "UserId",
+                            direction: "desc"
+                        }
+                    ],
+                }
             },
         ]
     }
 }
 ```
 
-## Default Sheet Types
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`apiKey` | Your Airtable api key | `string` | Yes
+`baseId` | The id of your base | `string` | Yes
+`tables` | Contains information about the tables of your base | `object[]` | Yes
+`tables.name` | The name which you will use to access the table: `this.$cms.name` | `string` | Yes
+`tables.table` | The name you've given the table in your base | `string` | Yes
+`tables.type` | The table type you want to use. Default: `default` | `string` - either `default`, `responses`, `keyvalue` or `objectarray` | Nos
+`tables.selectOptions` | Allows you to specify how the data should be retrieved from your table | `object` | No
+`tables.selectOptions.fields` | Specify the fields (columns) that should be retrieved. If you decide to not retrieve the primary column of your table, keep in mind that in that case the last column of your table will be put in the first place of the array | `string[]` | No
+`tables.selectOptions.filterByFormula` | A [formula](https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference) used to filter records. The formula will be evaluated for each record, and if the result is not `0`, `false`, `""`, `NaN`, `[]`, or `#Error!` the record will be included in the response | `string` | No
+`tables.selectOptions.maxRecords` | The maximum total number of records that will be retrieved | `number` | No
+`tables.selectOptions.sort` | An array of sort objects that specifies how the records will be ordered. Each sort object must have a field key specifying the name of the field to sort on, and an optional direction key that is either "asc" or "desc". The default direction is "asc". | `object[]` | No
 
-Google Sheets offers flexible ways to structure data. This is why the Jovo CMS integration supports several sheet types that are already built in:
+
+## Default Table Types
+
+Table types specify how the data will be transformed and saved.
 
 * [Default](#default)
 * [Responses](#responses)
@@ -66,15 +90,15 @@ Google Sheets offers flexible ways to structure data. This is why the Jovo CMS i
 
 ### Default
 
-If you don't define a sheet type in the `config.js`, you receive an array of arrays that can be accessed like this:
+If you don't define a table type in the `config.js`, you receive an array of arrays that can be accessed like this:
 
 ```javascript
-this.$cms.sheetName
+this.$cms.name
 ```
 
 ### Responses
 
-If you define the sheet type as `Responses`, the integration expects a spreadsheet of at least two columns:
+If you define the table type as `Responses`, the integration expects a spreadsheet of at least two columns:
 * a `key`
 * a locale, e.g. `en`, `en-US`, or `de-DE`
 
@@ -93,19 +117,19 @@ You can add as many locales as you want by adding additional columns for each ke
 
 ### KeyValue
 
-If you define the sheet type as `KeyValue`, the integration expects a spreadsheet of at least two columns:
+If you define the table type as `KeyValue`, the integration expects a spreadsheet of at least two columns:
 * a `key`
 * a `value`
 
 For every key, this will return the value as a string:
 
 ```javascript
-this.$cms.sheetName.key
+this.$cms.name.key
 ```
 
 ### ObjectArray
 
-If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys
+If you define the table type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys
 
 Here's an example sheet:
 
@@ -134,7 +158,7 @@ And here's the array of objects you will receive:
 Access the array using:
 
 ```javascript
-this.$cms.sheetName
+this.$cms.name
 ```
 
 <!--[metadata]: {"description": "Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.",
