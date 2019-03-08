@@ -2,6 +2,7 @@ export { DefaultSheet } from './DefaultSheet';
 export { AirtableCMS } from './AirtableCMS';
 export { ObjectArraySheet } from './ObjectArraySheet';
 export { ResponsesSheet } from './ResponsesSheet';
+export { KeyValueSheet } from './KeyValueSheet';
 
 declare module 'jovo-core/dist/src/Cms' {
     interface Cms {
