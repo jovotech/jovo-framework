@@ -12,7 +12,7 @@ import Airtable = require('airtable');
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
     baseId?: string;
-    sheets: AirtableTable[];
+    tables: AirtableTable[];
 }
 
 export class AirtableCMS extends BaseCmsPlugin {
@@ -20,7 +20,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         enabled: true,
         apiKey: undefined,
         baseId: undefined,
-        sheets: []
+        tables: []
     };
     base!: Airtable["Base"]["baseFn"];
 
@@ -46,17 +46,17 @@ export class AirtableCMS extends BaseCmsPlugin {
             'objectarray': ObjectArrayTable
         };
 
-        if (this.config.sheets) {
-            this.config.sheets.forEach((sheet: AirtableTable) => {
+        if (this.config.tables) {
+            this.config.tables.forEach((table: AirtableTable) => {
                 let type = undefined;
-                if (!sheet.type) {
+                if (!table.type) {
                     type = 'Default';
                 }
-                if (sheet.type && defaultSheetMap[sheet.type.toLowerCase()]) {
-                    type = sheet.type.toLowerCase();
+                if (table.type && defaultSheetMap[table.type.toLowerCase()]) {
+                    type = table.type.toLowerCase();
                 }
                 if (type) {
-                    this.use(new defaultSheetMap[type.toLowerCase()](sheet));
+                    this.use(new defaultSheetMap[type.toLowerCase()](table));
                 }
             });
         }
