@@ -1,16 +1,19 @@
 import {HandleRequest, JovoError, ErrorCode} from "jovo-core";
-import {AirtableSheet, DefaultSheet} from "./DefaultSheet";
+import {AirtableTable, DefaultTable} from "./DefaultTable";
 
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-export interface Config extends AirtableSheet {
+export interface Config extends AirtableTable {
 
 }
 
-export class KeyValueSheet extends DefaultSheet {
+export class KeyValueTable extends DefaultTable {
     config: Config = {
-        enabled: true
+        enabled: true,
+        selectOptions: {
+            view: 'Grid view'
+        }
     };
     constructor(config?: Config) {
         super(config);
@@ -33,7 +36,7 @@ export class KeyValueSheet extends DefaultSheet {
 
         if (!this.config.name) {
             throw new JovoError(
-                'Name has to be set',
+                'name has to be set',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-cms-airtable',
                 'The sheet\'s name has to be defined in your config.js file',

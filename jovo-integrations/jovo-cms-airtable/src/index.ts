@@ -1,8 +1,8 @@
-export { DefaultSheet } from './DefaultSheet';
+export { DefaultTable } from './DefaultTable';
 export { AirtableCMS } from './AirtableCMS';
-export { ObjectArraySheet } from './ObjectArraySheet';
-export { ResponsesSheet } from './ResponsesSheet';
-export { KeyValueSheet } from './KeyValueSheet';
+export { ObjectArrayTable } from './ObjectArrayTable';
+export { ResponsesTable } from './ResponsesTable';
+export { KeyValueTable } from './KeyValueTable';
 
 declare module 'jovo-core/dist/src/Cms' {
     interface Cms {

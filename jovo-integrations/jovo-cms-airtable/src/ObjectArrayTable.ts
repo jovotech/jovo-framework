@@ -1,16 +1,19 @@
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-import { AirtableSheet, DefaultSheet } from "./DefaultSheet";
+import { AirtableTable, DefaultTable } from "./DefaultTable";
 import { HandleRequest, JovoError, ErrorCode } from 'jovo-core';
 
-export interface Config extends AirtableSheet {
+export interface Config extends AirtableTable {
 
 }
 
-export class ObjectArraySheet extends DefaultSheet {
+export class ObjectArrayTable extends DefaultTable {
     config: Config = {
-        enabled: true
+        enabled: true,
+        selectOptions: {
+            view: 'Grid view'
+        }
     };
 
     constructor(config?: Config) {
@@ -20,8 +23,9 @@ export class ObjectArraySheet extends DefaultSheet {
         }
     }
 
-    parse(handleRequest: HandleRequest, values: any[]) {        
+    parse(handleRequest: HandleRequest, values: any[]) {
         const resultArray = [];
+        // TODO: convert keys to lowercase?
         const keys = values[0];
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
@@ -36,7 +40,7 @@ export class ObjectArraySheet extends DefaultSheet {
 
         if (!this.config.name) {
             throw new JovoError(
-                'Name has to be set',
+                'name has to be set',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-cms-airtable',
                 'The sheet\'s name has to be defined in your config.js file',

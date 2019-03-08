@@ -1,5 +1,5 @@
 import {Extensible, HandleRequest, Cms, ErrorCode, JovoError} from 'jovo-core';
-import { AirtableSheet, DefaultSheet } from "./DefaultSheet";
+import { AirtableTable, DefaultTable } from "./DefaultTable";
 
 const i18n = require('i18next');
 
@@ -7,7 +7,7 @@ import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
-export interface Config extends AirtableSheet {
+export interface Config extends AirtableTable {
     i18Next?: {
         load?: string;
         returnObjects?: boolean;
@@ -17,9 +17,12 @@ export interface Config extends AirtableSheet {
     }
 }
 
-export class ResponsesSheet extends DefaultSheet {
+export class ResponsesTable extends DefaultTable {
     config: Config = {
         enabled: true,
+        selectOptions: {
+            view: 'Grid view'
+        },
         i18Next: {
             load: 'all',
             returnObjects: true,
@@ -78,7 +81,7 @@ export class ResponsesSheet extends DefaultSheet {
 
         if (!this.config.name) {
             throw new JovoError(
-                'Name has to be set',
+                'name has to be set',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-cms-airtable',
                 'The sheet\'s name has to be defined in your config.js file',

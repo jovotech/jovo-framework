@@ -2,17 +2,17 @@ import { BaseCmsPlugin, ExtensibleConfig, ActionSet, BaseApp, HandleRequest, Jov
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 
-import { DefaultSheet, AirtableSheet } from './DefaultSheet';
-import { ObjectArraySheet } from './ObjectArraySheet';
-import { ResponsesSheet } from './ResponsesSheet';
-import { KeyValueSheet } from './KeyValueSheet';
+import { DefaultTable, AirtableTable } from './DefaultTable';
+import { ObjectArrayTable } from './ObjectArrayTable';
+import { ResponsesTable } from './ResponsesTable';
+import { KeyValueTable } from './KeyValueTable';
 
 import Airtable = require('airtable');
 
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
     baseId?: string;
-    sheets: AirtableSheet[];
+    sheets: AirtableTable[];
 }
 
 export class AirtableCMS extends BaseCmsPlugin {
@@ -35,21 +35,19 @@ export class AirtableCMS extends BaseCmsPlugin {
         ], this);
     }
 
-    async install(app: BaseApp) {
-        console.log('Airtable install');
-        
+    install(app: BaseApp) {        
         super.install(app);
         app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
 
         const defaultSheetMap: {[key: string]: any} = { // tslint:disable-line
-            'default': DefaultSheet,
-            'responses': ResponsesSheet,
-            'keyvalue': KeyValueSheet,
-            'objectarray': ObjectArraySheet
+            'default': DefaultTable,
+            'responses': ResponsesTable,
+            'keyvalue': KeyValueTable,
+            'objectarray': ObjectArrayTable
         };
 
         if (this.config.sheets) {
-            this.config.sheets.forEach((sheet: AirtableSheet) => {
+            this.config.sheets.forEach((sheet: AirtableTable) => {
                 let type = undefined;
                 if (!sheet.type) {
                     type = 'Default';
@@ -71,7 +69,6 @@ export class AirtableCMS extends BaseCmsPlugin {
                 'You can find your api key on https://airtable.com/api'
             );
         }
-
         if (!this.config.baseId) {
             throw new JovoError(
                 'Can\'t find baseId',
@@ -93,13 +90,11 @@ export class AirtableCMS extends BaseCmsPlugin {
         await this.middleware('retrieve')!.run(handleRequest, true);
     }
 
-    async loadSpreadSheetData(table: string): Promise<{}> {
+    async loadTableData(selectOptions: AirtableTable["selectOptions"], table: string): Promise<{}> {
         return new Promise((resolve, reject) => {
             let arr: object[] = [];
         
-            this.base(table).select({
-                view: 'Grid view'
-            }).eachPage((records: object[], fetchNextPage: any) => { 
+            this.base(table).select(selectOptions).eachPage((records: object[], fetchNextPage: any) => { 
                 /**
                  * This function (`page`) will get called for each page of records.
                  * records is an array of objects where the keys are the first row of the table and the values are the current rows values.
