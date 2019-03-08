@@ -11,7 +11,7 @@ import Airtable = require('airtable');
 
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
-    base?: string;
+    baseId?: string;
     sheets: AirtableSheet[];
 }
 
@@ -19,7 +19,7 @@ export class AirtableCMS extends BaseCmsPlugin {
     config: Config = {
         enabled: true,
         apiKey: undefined,
-        base: undefined,
+        baseId: undefined,
         sheets: []
     };
     base!: Airtable["Base"]["baseFn"];
@@ -72,17 +72,17 @@ export class AirtableCMS extends BaseCmsPlugin {
             );
         }
 
-        if (!this.config.base) {
+        if (!this.config.baseId) {
             throw new JovoError(
-                'Can\'t find base',
+                'Can\'t find baseId',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-cms-airtable',
-                'To use the Airtable integrations you have to provide a base',
-                'You can find your base on https://airtable.com/api'
+                'To use the Airtable integrations you have to provide a baseId',
+                'You can find your baseId on https://airtable.com/api'
             );
         }
 
-        this.base = new Airtable({apiKey: this.config.apiKey}).base(this.config.base);
+        this.base = new Airtable({apiKey: this.config.apiKey}).base(this.config.baseId);
     }
 
     uninstall(app: BaseApp) {
