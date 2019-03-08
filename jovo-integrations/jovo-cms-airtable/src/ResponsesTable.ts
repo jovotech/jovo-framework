@@ -14,7 +14,7 @@ export interface Config extends AirtableTable {
         interpolation?: {
             escapeValue: boolean;
         };
-    }
+    };
 }
 
 export class ResponsesTable extends DefaultTable {
@@ -30,7 +30,7 @@ export class ResponsesTable extends DefaultTable {
                 escapeValue: false, // do not escape ssml tags
             },
         }
-    }
+    };
 
     constructor(config?: Config) {
         super(config);

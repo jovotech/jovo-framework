@@ -92,9 +92,9 @@ export class AirtableCMS extends BaseCmsPlugin {
 
     async loadTableData(selectOptions: AirtableTable["selectOptions"], table: string): Promise<{}> {
         return new Promise((resolve, reject) => {
-            let arr: object[] = [];
+            const arr: object[] = [];
         
-            this.base(table).select(selectOptions).eachPage((records: object[], fetchNextPage: any) => { 
+            this.base(table).select(selectOptions).eachPage((records: object[], fetchNextPage: () => void) => {
                 /**
                  * This function (`page`) will get called for each page of records.
                  * records is an array of objects where the keys are the first row of the table and the values are the current rows values.
@@ -108,7 +108,7 @@ export class AirtableCMS extends BaseCmsPlugin {
                 keys = this.shiftLastItemToFirstIndex(keys);
                 arr.push(keys);
 
-                records.forEach((record: any) => {
+                records.forEach((record: object) => {
                     // push each records values
                     let values = Object.values(_get(record, 'fields'));
                     values = this.shiftLastItemToFirstIndex(values);
@@ -133,7 +133,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         });
     }
 
-    private shiftLastItemToFirstIndex(arr: any[]) {
+    private shiftLastItemToFirstIndex(arr: any[]) { // tslint:disable-line
         const lastItem = arr.pop();
         arr.unshift(lastItem);
         return arr;

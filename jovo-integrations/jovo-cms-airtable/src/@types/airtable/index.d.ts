@@ -21,5 +21,5 @@ declare class Table {
 
 declare class Query {
     constructor(table: Table, params: object); 
-    eachPage(pageCallback: (records: any[], fetchNextPage: any) => void, done: (err: Error) => void): void;
+    eachPage(pageCallback: (records: object[], fetchNextPage: () => void) => void, done: (err: Error) => void): void;
 }

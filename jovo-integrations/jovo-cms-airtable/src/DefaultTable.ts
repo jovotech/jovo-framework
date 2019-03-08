@@ -13,7 +13,7 @@ export interface AirtableTable extends PluginConfig {
         maxRecords?: number;
         sort?: object[]; 
         view?: string;
-    }
+    };
 }
 
 export class DefaultTable implements Plugin {
@@ -22,7 +22,7 @@ export class DefaultTable implements Plugin {
         selectOptions: {
             view: 'Grid view'
         }
-    }
+    };
 
     cms?: AirtableCMS;
 
