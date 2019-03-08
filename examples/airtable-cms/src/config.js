@@ -16,7 +16,10 @@ module.exports = {
                 {
                     name: 'test2',
                     table: 'Table 2',
-                    type: 'ObjectArray'
+                    type: 'ObjectArray',
+                    selectOptions: {
+                        fields: ['Name', 'Location']
+                    }
                 }
             ]
         }
