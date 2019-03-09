@@ -1,0 +1,78 @@
+{
+	"invocation": "my test app",
+	"intents": [
+		{
+			"name": "TShirtIntent",
+			"phrases": [
+				"yes",
+				"Can I order {number} {color} t-shirts?",
+				"Do you have {color} t-shirts?",
+				"I need t-shirts",
+				"I want to buy some t-shirts"
+			],
+			"dialogflow": {
+				"webhookForSlotFilling": true
+			},
+			"inputs": [
+				{
+					"name": "color",
+					"type": {
+						"dialogflow": "@sys.color"
+					},
+					"dialogflow": {
+						"required": true
+					}
+				},
+				{
+					"name": "number",
+					"type": {
+						"dialogflow": "@sys.number-integer"
+					},
+					"dialogflow": {
+						"required": true
+					}
+				}
+			]
+		}
+	],
+	"alexa": {
+		"interactionModel": {
+			"languageModel": {
+				"intents": [
+					{
+						"name": "AMAZON.CancelIntent",
+						"samples": []
+					},
+					{
+						"name": "AMAZON.HelpIntent",
+						"samples": []
+					},
+					{
+						"name": "AMAZON.StopIntent",
+						"samples": []
+					}
+				]
+			}
+		}
+	},
+	"dialogflow": {
+		"intents": [
+			{
+				"name": "Default Fallback Intent",
+				"auto": true,
+				"webhookUsed": true,
+				"fallbackIntent": true
+			},
+			{
+				"name": "Default Welcome Intent",
+				"auto": true,
+				"webhookUsed": true,
+				"events": [
+					{
+						"name": "WELCOME"
+					}
+				]
+			}
+		]
+	}
+}
