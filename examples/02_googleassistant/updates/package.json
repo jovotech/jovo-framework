@@ -1,6 +1,7 @@
 {
   "name": "jovo-examples-googleassistant-updates",
   "version": "2.1.1",
+  "private": true,
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "src/index.js",
   "dependencies": {
