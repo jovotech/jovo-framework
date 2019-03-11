@@ -218,7 +218,7 @@ export class DialogflowNlu extends Extensible {
             } else {
                 outputContexts.push({
                     name: contextName,
-                    lifespanCount: 1000,
+                    lifespanCount: 1,
                     parameters: jovo.$session.$data
                 });
             }
