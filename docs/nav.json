@@ -348,8 +348,16 @@
                         {
                             "title": "Daily Update",
                             "route": "google-assistant/daily-update"
+                        },
+                        {
+                            "title": "Transactions",
+                            "route": "google-assistant/transactions"
                         }
                     ]
+                },
+                {
+                    "title": "Dialogflow Integrations",
+                    "route": "dialogflow-integrations"
                 }
             ]
         },

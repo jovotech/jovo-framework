@@ -52,6 +52,12 @@ export class JovoError extends Error {
             e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
         }
 
+        if (e.module) {
+            Log.error();
+            Log.error('Module:');
+            Log.error(e.module);
+        }
+
         if (e.details) {
             Log.error();
             Log.error('Details:');

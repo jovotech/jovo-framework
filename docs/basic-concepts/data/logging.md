@@ -7,6 +7,9 @@ In this section, you will learn how to log certain data in your Jovo app.
    * [Log Requests](#log-requests)
    * [Log Responses](#log-responses)
 * [Jovo Logger](#jovo-logger)
+   * [Log Levels](#log-levels)
+   * [Using the Jovo Logger in your App](#using-the-jovo-logger-in-your-app)
+   * [Appenders](#appenders)
 * [Logging Helpers](#logging-helpers)
 
 
@@ -184,6 +187,13 @@ The example above will reduce the log output to this:
 
 Jovo has an internal logging class that can be used to display certain levels of logs.
 
+* [Log Levels](#log-levels)
+* [Using the Jovo Logger in your App](#using-the-jovo-logger-in-your-app)
+* [Appenders](#appenders)
+
+
+### Log Levels
+
 You can set the log level by adding an environment variable, for example in your `app.js` file:
 
 ```js
@@ -201,6 +211,98 @@ The following log levels are supported:
 * `DEBUG`: Display all information, even configs that might include sensitive data (like API keys). Only recommended to use while debugging
 
 
+### Using the Jovo Logger in your App
+
+You can use the Jovo `Log` class in your app logic to log certain things for different levels.
+
+First, import the class into your project:
+
+```js
+// src/app.js
+
+const { Log } = require('jovo-core');
+```
+
+You can then use it in your app logic to log things for different levels:
+
+```js
+app.setHandler({
+  
+  SomeIntent() {
+    Log.info('This is an info log');
+    Log.verbose('This is a verbose log');
+  },
+
+  // Other intents
+
+});
+```
+
+You can use the following [log levels](#log-levels) for this:
+* `Log.error`
+* `Log.info`
+* `Log.warn`
+* `Log.verbose`
+* `Log.debug`
+
+
+#### Formatting
+
+You can also use helpers to format the log output, like this:
+
+```js
+app.setHandler({
+  
+  SomeIntent() {
+    Log.green().info('This is a green info log');
+    Log.red().bold().info('This is a red and bold info log');
+  },
+
+  // Other intents
+
+});
+```
+
+The following methods are available:
+
+* Font colors
+   * `black()`
+   * `red()`
+   * `green()`
+   * `yellow()`
+   * `blue()`
+   * `magenta()`
+   * `cyan()`
+   * `white()`
+* Background colors
+   * `blackBackground()`
+   * `redBackground()`
+   * `greenBackground()`
+   * `yellowBackground()`
+   * `magentaBackground()`
+   * `cyanBackground()`
+   * `whiteBackground()`
+* Other formatting
+   * `underscore()`
+   * `bold()`
+   * `dim()`
+   * `blink()`
+   * `reverse()`
+
+
+
+
+### Appenders
+
+You can also define log appenders. For example, the below code imports the `Log` and `LogLevel` classes and then adds a file appender (save logs to a file with a specified name, in this case `errors.log`) for a certain log level (in this case `ERROR`):
+
+```js
+// src/app.js
+
+const { Log, LogLevel } = require('jovo-core');
+
+Log.addFileAppender('errors.log', { logLevel: LogLevel.ERROR })
+```
 
 ## Logging Helpers
 
