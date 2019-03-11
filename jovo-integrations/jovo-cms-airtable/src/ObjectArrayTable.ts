@@ -25,7 +25,6 @@ export class ObjectArrayTable extends DefaultTable {
 
     parse(handleRequest: HandleRequest, values: any[]) { // tslint:disable-line
         const resultArray = [];
-        // TODO: convert keys to lowercase?
         const keys = values[0];
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
