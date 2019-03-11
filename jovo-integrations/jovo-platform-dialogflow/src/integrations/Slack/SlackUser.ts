@@ -13,6 +13,7 @@ export class SlackUser extends DialogflowUser {
     }
 
     getId(): string {
-        return _get(this.jovo.$request, 'originalDetectIntentRequest.payload.data.user');
+        return _get(this.jovo.$request, 'originalDetectIntentRequest.payload.data.user') ||
+            _get(this.jovo.$request, 'originalDetectIntentRequest.payload.data.event.user');
     }
 }

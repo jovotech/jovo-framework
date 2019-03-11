@@ -2,11 +2,9 @@ import {Plugin, BaseApp, Jovo, EnumRequestType} from "jovo-core";
 import {Config} from "../../DialogflowCore";
 import {Dialogflow} from "../../Dialogflow";
 import {DialogflowResponse} from "../../core/DialogflowResponse";
-import {DialogflowRequest} from "../../core/DialogflowRequest";
 import {DialogflowAgent} from "../../DialogflowAgent";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
-import {FacebookMessengerUser} from "../FacebookMessenger/FacebookMessengerUser";
 import {SlackUser} from "./SlackUser";
 
 
@@ -17,7 +15,7 @@ export interface SlackConfig extends Config {
 export class Slack implements Plugin {
     config: SlackConfig = {
         enabled: true,
-        source: 'slack_testbot',
+        source: 'slack',
     };
 
     constructor(config?: Config) {
@@ -31,7 +29,7 @@ export class Slack implements Plugin {
 
         const source = this.config.source;
         DialogflowAgent.prototype.isSlackBot = function() {
-            return _get(this.$request, 'originalDetectIntentRequest.' + source) === 'facebook';
+            return this.getSource() === source;
         };
 
     }
@@ -46,8 +44,7 @@ export class Slack implements Plugin {
     output(dialogflowAgent: DialogflowAgent) {
         const output = dialogflowAgent.$output;
 
-        const isSlackRequest = _get(dialogflowAgent.$request, 'originalDetectIntentRequest.source') === this.config.source;
-
+        const isSlackRequest = dialogflowAgent.getSource() === this.config.source;
         if (!isSlackRequest) {
             return;
         }
