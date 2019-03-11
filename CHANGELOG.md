@@ -1,6 +1,24 @@
 # Jovo Framework Changelog
 
 
+## 2.1.1 (2019-03-11)
+
+#### :rocket: New Feature
+* `jovo-platform-googleassistant`, `jovo-platform-dialogflow` [#413](https://github.com/jovotech/jovo-framework/pull/413) ✨ Adds dialogflow slot filling example ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+* `jovo-cms-googlesheets` [#414](https://github.com/jovotech/jovo-framework/pull/414) ♻️ GoogleSheetsCMS integration should reject JovoError instead of string ([@KaanKC](https://github.com/KaanKC))
+* `jovo-core` [#415](https://github.com/jovotech/jovo-framework/pull/415) 🐛 Fixes: JovoError doesn't print module ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` [#410](https://github.com/jovotech/jovo-framework/pull/410) 🐛 Fixes Google Assistant handler merge #412  ([@kouz75](https://github.com/kouz75))
+* `jovo-platform-alexa` Fixes ContactAPI access token bug
+* `jovo-platform-googleassistant` Fixes lifespan of session context
+
+#### Committers: 3
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- scouzinier ([@kouz75](https://github.com/kouz75))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.1.0 (2019-03-05)
 
 #### :rocket: New Feature
