@@ -35,6 +35,8 @@ export class DefaultTable implements Plugin {
     install(extensible: Extensible) {
         this.cms = extensible as AirtableCMS;
         extensible.middleware('retrieve')!.use(this.retrieve.bind(this));
+
+        this.config.table = this.config.table ? this.config.table : this.config.name;
     }
 
     uninstall(cms: Extensible) {
