@@ -7,7 +7,7 @@ module.exports = {
         AirtableCMS: {
             apiKey: '<api-key>',
             baseId: '<base-id>',
-            sheets: [
+            tables: [
                 {
                     name: 'test',
                     table: 'Table 1',
