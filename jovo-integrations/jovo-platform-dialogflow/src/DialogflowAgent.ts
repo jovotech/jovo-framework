@@ -36,6 +36,14 @@ export class DialogflowAgent extends Jovo {
     //     return this;
     // }
 
+
+    /**
+     * Returns source of request payload
+     */
+    getSource() {
+        return _get(this.$request, 'originalDetectIntentRequest.source');
+    }
+
     /**
      * Returns boolean if request is part of new session
      * @public
