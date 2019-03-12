@@ -415,6 +415,10 @@
                         {
                             "title": "Google Sheets",
                             "route": "cms/google-sheets"
+                        },
+                        {
+                            "title": "Airtable",
+                            "route": "cms/airtable"
                         }
                     ]
                 },
