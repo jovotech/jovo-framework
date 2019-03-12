@@ -73,9 +73,9 @@ export class ResponsesSheet extends DefaultSheet {
                         for (const p of platforms) {
                             if (localeSplit[2] === p.toLowerCase()) {
                                 platform = p;
+                                this.cms!.baseApp.config.platformSpecificResponses = true;
                             }
                         }
-                        this.cms!.baseApp.config.platformSpecificResponses = true;
                     }
                 }
 
@@ -112,9 +112,9 @@ export class ResponsesSheet extends DefaultSheet {
         } else {
             Object.keys(resources).forEach((localeKey) => {
                 const resource = resources[localeKey];
-                for (const p of platforms) {
-                    if (resource[p]) {
-                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, p, resource[p]);
+                for (const platform of platforms) {
+                    if (resource[platform]) {
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform]);
                     }
                 }
 

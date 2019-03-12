@@ -6,7 +6,12 @@
   },
   "AlexaSkill": {
     "translation": {
-      "WELCOME": "Welcome bitch"
+      "WELCOME": ["Hello", "Hi"]
+    }
+  },
+  "GoogleAction": {
+    "translation": {
+      "WELCOME": ["Welcome", "Aloha"]
     }
   }
 }
