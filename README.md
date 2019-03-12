@@ -172,6 +172,13 @@ Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and M
 Chatbase | Voice App Analytics including Usage Metrics, Session Flows and Link Tracking | [📝](./docs/integrations/analytics/chatbase.md)
 Botanalytics | AI powered Chatbot Analytics and Voice Analytics | [📝](./docs/integrations/analytics/botanalytics.md)
 
+#### CMS Integrations
+
+Name | Description | Docs
+:--- | :--- | :---
+Google Sheets | Manage content in a Google Spreadsheet | [📝](./docs/integrations/cms/google-sheets.md)
+Airtable | Manage content using Airtable | [📝](./docs/integrations/cms/airtable.md)
+
 #### CLI Integrations
 
 See the [Jovo CLI Docs](./docs/workflows/cli) for more information on CLI features.
