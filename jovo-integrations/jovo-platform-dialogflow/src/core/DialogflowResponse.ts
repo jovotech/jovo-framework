@@ -94,7 +94,7 @@ export class DialogflowResponse implements JovoResponse {
                 return SpeechBuilder.removeSpeakTags(speech);
             }
         }
-        return SpeechBuilder.removeSpeakTags(this.fulfillmentText);
+        return this.fulfillmentText ? SpeechBuilder.removeSpeakTags(this.fulfillmentText) : '';
     }
 
     getReprompt() {

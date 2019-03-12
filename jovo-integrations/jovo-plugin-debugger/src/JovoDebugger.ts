@@ -135,7 +135,6 @@ export class JovoDebugger implements Plugin {
                     defaultDbDirectory: fileDbPath
                 });
         let req: JovoRequest = await test.requestBuilder.launch();
-
         // raw json request, usually on resend
         if (obj.type === 'RAW') {
             // type of request builder doesn't matter here
@@ -149,7 +148,7 @@ export class JovoDebugger implements Plugin {
                 req = await test.requestBuilder.end();
             } else if (obj.type === 'AUDIOPLAYER') {
                 // TODO: workaround
-                if (obj.platform === 'AlexaSkill') {
+                if (obj.platform === 'AlexaSkill' || obj.platform === 'Alexa') {
                     const offsetInMilliSeconds = Math.round(obj.options.currentTime * 1000);
 
                     const types: {[key: string]: string} = {
@@ -354,9 +353,8 @@ export class JovoDebugger implements Plugin {
         } catch (e) {
         }
 
-        // TODO: audioplayer
         try {
-            response.audioplayer = _get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.AudioPlayer`) || _get(handleRequest.jovo.$output, `${handleRequest.jovo.constructor.name}.MediaResponse`);
+            response.audioplayer = _get(handleRequest.jovo.$output, `Alexa.AudioPlayer`) || _get(handleRequest.jovo.$output, `GoogleAssistant.MediaResponse`);
         } catch (e) {
         }
 

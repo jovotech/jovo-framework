@@ -4,12 +4,16 @@ const {
     SimpleCard,
     StandardCard,
     LinkAccountCard,
-    AskForListPermissionsCard} = require('jovo-platform-alexa');
+    AskForListPermissionsCard,
+    AskForPermissionConsentCard
+} = require('jovo-platform-alexa');
+const { JovoDebugger } = require('jovo-plugin-debugger');
 
 const app = new App();
 
 app.use(
-    new Alexa()
+    new Alexa(),
+    new JovoDebugger(),
 );
 
 
@@ -21,7 +25,9 @@ app.setHandler({
         // return this.toIntent('AskForCountryAndPostalCodeCardIntent');
         // return this.toIntent('AskForAddressCardIntent');
         // return this.toIntent('AskForListPermissionCardIntent');
-        return this.toIntent('AskContactPermissionCardIntent');
+        // return this.toIntent('AskContactPermissionCardIntent');
+        return this.toIntent('AskForPermissionConsentCardIntent');
+
     },
     SimpleCardIntent() {
         return this.$alexaSkill
@@ -70,6 +76,10 @@ app.setHandler({
         this.$alexaSkill.showAskForContactPermissionCard(permissions);
         this.tell('This is a card that asks for contact permissions.');
     },
+    AskForPermissionConsentCardIntent() {
+        this.$alexaSkill.showCard(new AskForPermissionConsentCard().setPermissions(['alexa::alerts:reminders:skill:readwrite']));
+        this.tell('This is a card that asks for contact permissions.');
+    }
 });
 
 

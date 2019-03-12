@@ -1,16 +1,16 @@
 import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
 import {DialogflowUser} from "./DialogflowUser";
 import _get = require('lodash.get');
+import _set = require('lodash.set');
+
+export type SupportedIntegration = 'FacebookMessenger' | 'Slack';
 
 export class DialogflowAgent extends Jovo {
+    $dialogflowAgent: DialogflowAgent;
 
     constructor(app: BaseApp, host: Host) {
         super(app, host);
-        // this.$request = DialogflowRequest.fromJSON(hostwrapper.getRequestObject()) as DialogflowRequest;
-        // this.$request.requestObj = hostwrapper.getRequestObject();
-        // this.$response = new DialogflowResponse();
-        // this.$sessionAttributes = this.$request.getSessionAttributes();
-        // this.$inputs = this.$request.getInputs();
+        this.$dialogflowAgent = this;
         this.$user = new DialogflowUser(this);
     }
 
@@ -35,6 +35,14 @@ export class DialogflowAgent extends Jovo {
     // dialogflowAgent(): DialogflowAgent {
     //     return this;
     // }
+
+
+    /**
+     * Returns source of request payload
+     */
+    getSource() {
+        return _get(this.$request, 'originalDetectIntentRequest.source');
+    }
 
     /**
      * Returns boolean if request is part of new session
@@ -138,4 +146,7 @@ export class DialogflowAgent extends Jovo {
         return undefined;
     }
 
+    setCustomPayload(platform: string, payload: object) {
+        _set(this.$output, 'Dialogflow.Payload.' + platform, payload);
+    }
 }

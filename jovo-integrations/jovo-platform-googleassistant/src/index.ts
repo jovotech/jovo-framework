@@ -22,7 +22,6 @@ import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
 import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
 import {Notification} from './modules/Notification';
-import {DigitalGoods} from "./modules/DigitalGoods";
 
 export {
     Transaction,
@@ -357,7 +356,6 @@ declare module './core/GoogleAction' {
 declare module './core/GoogleAction' {
 
     interface GoogleAction {
-        $digitalGoods?: DigitalGoods;
         $transaction?: Transaction;
     }
 }

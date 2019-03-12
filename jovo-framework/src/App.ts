@@ -69,6 +69,8 @@ export class App extends BaseApp {
         if (fs.existsSync(pathToConfig)) {
             const fileConfig = require(pathToConfig) || {};
             this.config = _merge(fileConfig, this.config);
+            Log.verbose('Using ' + pathToConfig);
+
         } else {
             if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST') {
                 Log.warn(`WARN: Couldn't find default config.js in your project.`);
@@ -551,7 +553,7 @@ export interface Config extends ExtensibleConfig {
         userContext?: ContextConfig;
         i18n: any; // tslint:disable-line
     };
-
+    keepSessionDataOnSessionEnded?: boolean;
     logging?: boolean | LoggingConfig;
 
     inputMap?: {[key: string]: string};

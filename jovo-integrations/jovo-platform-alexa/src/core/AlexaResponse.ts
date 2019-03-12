@@ -6,9 +6,15 @@ export interface SessionAttributes {
     [key: string]: any; //tslint:disable-line
 }
 
+export interface Directive {
+    type: string;
+    updatedIntent?: object;
+    slotToElicit?: string;
+}
 
 export interface Response {
     shouldEndSession?: boolean;
+    directives?: Directive[];
 }
 
 export interface AlexaResponseJSON {
@@ -201,13 +207,132 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
+    /**
+     * Checks if response is a dialog directive response.
+     * @param {'Dialog.Delegate' | 'Dialog.ElicitSlot' |'Dialog.ConfirmIntent' | 'Dialog.ConfirmSlot'} type
+     * @param {object} updatedIntent
+     * @return {boolean}
+     */
+    isDialogDirective(type:
+                          'Dialog.Delegate' |
+                          'Dialog.ElicitSlot' |
+                          'Dialog.ConfirmIntent' |
+                          'Dialog.ConfirmSlot', updatedIntent: object) {
+        if (this.response.shouldEndSession === true) {
+            return false;
+        }
+        if (!this.response.directives) {
+            return false;
+        }
+
+        if (type) { // every time first element?
+            if (this.response.directives[0].type !== type) {
+                return false;
+            }
+        }
+        if (this.response.directives[0].type.substr(0, 6) !== 'Dialog') {
+            return false;
+        }
+
+        if (updatedIntent) {
+            if (JSON.stringify(this.response.directives[0].updatedIntent) ===
+                JSON.stringify(updatedIntent)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if response is a dialog delegate response.
+     * @param {object} updatedIntent
+     * @return {boolean}
+     */
+    isDialogDelegate(updatedIntent: object) {
+        return this.isDialogDirective('Dialog.Delegate', updatedIntent);
+    }
+
+    /**
+     * Checks if response is a dialog elicit slot response.
+     * @param {string} slotToElicit
+     * @param {string} speechText
+     * @param {string} repromptSpeech
+     * @param {object} updatedIntent
+     * @return {boolean}
+     */
+    isDialogElicitSlot(slotToElicit: string, speechText: string, repromptSpeech: string, updatedIntent: object) {
+        if (slotToElicit) {
+            if (_get(this, 'response.directives[0].slotToElicit') !== slotToElicit) {
+                return false;
+            }
+        }
+        if (speechText) {
+            if (speechText !== this.getSpeechPlain()) {
+                return false;
+            }
+        }
+        if (repromptSpeech) {
+            if (repromptSpeech !== this.getRepromptPlain()) {
+                return false;
+            }
+        }
+        return this.isDialogDirective('Dialog.ElicitSlot', updatedIntent);
+    }
+
+    /**
+     * Checks if response is a dialog confirm slot response.
+     * @param {string} slotToConfirm
+     * @param {string} speechText
+     * @param {string} repromptSpeech
+     * @param {object} updatedIntent
+     * @return {boolean}
+     */
+    isDialogConfirmSlot(slotToConfirm: string, speechText: string, repromptSpeech: string, updatedIntent: object) {
+        if (slotToConfirm) {
+            if (_get(this, 'response.directives[0].slotToConfirm') !== slotToConfirm) {
+                return false;
+            }
+        }
+        if (speechText) {
+            if (speechText !== this.getSpeechPlain()) {
+                return false;
+            }
+        }
+        if (repromptSpeech) {
+            if (repromptSpeech !== this.getRepromptPlain()) {
+                return false;
+            }
+        }
+        return this.isDialogDirective('Dialog.ConfirmSlot', updatedIntent);
+    }
+
+    /**
+     * Checks if response is a dialog confirm intent response.
+     * @param {string} speechText
+     * @param {string} repromptSpeech
+     * @param {object} updatedIntent
+     * @return {boolean}
+     */
+    isDialogConfirmIntent(speechText: string, repromptSpeech: string, updatedIntent: object) {
+        if (speechText) {
+            if (speechText !== this.getSpeechPlain()) {
+                return false;
+            }
+        }
+        if (repromptSpeech) {
+            if (repromptSpeech !== this.getRepromptPlain()) {
+                return false;
+            }
+        }
+        return this.isDialogDirective('Dialog.ConfirmIntent', updatedIntent);
+    }
 
     toJSON(): AlexaResponseJSON {
         // copy all fields from `this` to an empty object and return in
         return Object.assign({}, this);
     }
 
-// fromJSON is used to convert an serialized version
+    // fromJSON is used to convert an serialized version
     // of the User to an instance of the class
     static fromJSON(json: AlexaResponseJSON|string) {
         if (typeof json === 'string') {

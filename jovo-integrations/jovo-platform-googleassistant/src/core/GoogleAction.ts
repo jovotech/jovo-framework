@@ -13,11 +13,12 @@ export class GoogleAction extends Jovo {
 
     constructor(app: BaseApp, host: Host) {
         super(app, host);
-        this.$user = new GoogleActionUser(this);
         this.$googleAction = this;
         this.platformRequest = GoogleActionRequest;
         this.$speech = new GoogleActionSpeechBuilder(this);
         this.$reprompt = new GoogleActionSpeechBuilder(this);
+        this.$user = new GoogleActionUser(this);
+
     }
 
 

@@ -29,8 +29,8 @@ let t: TestSuite;
 beforeEach(() => {
     app = new App();
     const ga = new GoogleAssistant({
-        plugin: {
-            androidAppID: 'com.sampleapp'
+        transactions: {
+            androidPackageName: 'com.sampleapp'
         }
     });
     app.use(ga);
@@ -56,7 +56,7 @@ describe.skip('test digital goods implementation', () => {
             LAUNCH() {
                 this
                     .$googleAction!
-                    .$digitalGoods!
+                    .$transaction!
                     .getSubscriptions(['com.sampleapp'])
                     .then((subscriptions: any[]) => { // tslint:disable-line
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledTimes(1);
@@ -113,7 +113,7 @@ describe.skip('test digital goods implementation', () => {
             LAUNCH() {
                 this
                     .$googleAction!
-                    .$digitalGoods!
+                    .$transaction!
                     .getConsumables(['com.sampleapp.product1'])
                     .then((consumable: any[]) => { // tslint:disable-line
                         expect(GoogleActionAPI.apiCall).toHaveBeenCalledTimes(1);
@@ -154,7 +154,7 @@ describe.skip('test digital goods implementation', () => {
 
         app.setHandler({
             LAUNCH() {
-                this.$googleAction!.$digitalGoods!.completePurchase('com.sample.product');
+                this.$googleAction!.$transaction!.completePurchase('com.sample.product');
                 done();
             },
         });
@@ -196,7 +196,7 @@ describe.skip('test digital goods implementation', () => {
 
         app.setHandler({
             ON_COMPLETE_PURCHASE() {
-                expect(this.$googleAction!.$digitalGoods!.getPurchaseStatus() === 'PURCHASE_STATUS_OK');
+                expect(this.$googleAction!.$transaction!.getPurchaseStatus() === 'PURCHASE_STATUS_OK');
             },
         });
 

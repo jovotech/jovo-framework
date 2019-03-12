@@ -1,4 +1,4 @@
-import {Extensible, HandleRequest, PluginConfig, Plugin, Log} from "jovo-core";
+import {Extensible, HandleRequest, PluginConfig, Plugin, Log, JovoError, ErrorCode} from "jovo-core";
 import {GoogleSheetsCMS} from "./GoogleSheetsCMS";
 import _merge = require('lodash.merge');
 
@@ -50,13 +50,34 @@ export class DefaultSheet  implements Plugin {
         const spreadsheetId = this.config.spreadsheetId || this.cms.config.spreadsheetId;
 
         if (!spreadsheetId) {
-            return Promise.reject('SpreadsheetId has to be set.');
+            return Promise.reject(new JovoError(
+                'spreadsheetId has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'the spreadsheetId has to be defined in your config.js file',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            ));
         }
         if (!this.config.name) {
-            return Promise.reject('sheet name has to be set.');
+            return Promise.reject(new JovoError(
+                'sheet name has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'the sheet name has to be defined in your config.js file',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            ));
         }
         if (!this.config.range) {
-            return Promise.reject('range has to be set.');
+            return Promise.reject(new JovoError(
+                'range has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'the range has to be defined in your config.js file',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            ));
         }
         let values: any[] = []; // tslint:disable-line
 

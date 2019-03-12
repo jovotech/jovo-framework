@@ -35,7 +35,9 @@ export { LinkAccountCard } from './response/visuals/LinkAccountCard';
 export { AskForContactPermissionsCard } from './response/visuals/AskForContactPermissionsCard';
 export { AskForListPermissionsCard } from './response/visuals/AskForListPermissionsCard';
 export { AskForLocationPermissionsCard } from './response/visuals/AskForLocationPermissionsCard';
-export { AskForPermissionConsentCard } from './response/visuals/AskForPermissionConsentCard';
+export { AskForPermissionsConsentCard } from './response/visuals/AskForPermissionsConsentCard';
+export { AskForRemindersPermissionsCard } from './response/visuals/AskForRemindersPermissionsCard';
+
 export {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
 
 import { AlexaSkill } from './core/AlexaSkill';
@@ -72,6 +74,15 @@ declare module 'jovo-core/dist/src/BaseApp' {
          * @param {*} handler
          */
         setAlexaHandler(...handler: Handler[]): this; // tslint:disable-line
+    }
+}
+
+declare module 'jovo-core/dist/src/SpeechBuilder' {
+
+    interface SpeechBuilder {
+        addAudio(url: string | string[], condition?: boolean, probability?: number): this;
+        addLangText(language: string, text: string | string[], condition?: boolean, probability?: number): this;
+        addTextWithPolly(pollyName: string, text: string | string[], condition?: boolean, probability?: number): this;
     }
 }
 
@@ -184,6 +195,14 @@ declare module './core/AlexaSkill' {
          * @return {Jovo}
          */
         showAskForContactPermissionCard(contactProperties: string[]): this;
+
+
+        /**
+         * Shows ask for reminders permission card
+         * @public
+         * @return {Jovo}
+         */
+        showAskForRemindersPermissionCard(): this;
 
 
         /**
@@ -423,3 +442,4 @@ declare module './core/AlexaSkill' {
         proactiveEvent(): ProactiveEvent | undefined;
     }
 }
+

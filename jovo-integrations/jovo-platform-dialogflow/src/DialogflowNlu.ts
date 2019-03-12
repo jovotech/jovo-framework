@@ -192,6 +192,13 @@ export class DialogflowNlu extends Extensible {
         if (_get(output, 'ask')) {
             _set(dialogflowResponse, 'fulfillmentText', `${output.ask.speech}`);
         }
+
+        if (this.config.platformResponseClazz.fromJSON(jovo.$response).hasSessionEnded()) {
+            if (!_get(jovo.$app.config, 'keepSessionDataOnSessionEnded')) {
+                _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
+                return;
+            }
+        }
         const sessionId = _get(dialogflowRequest, 'session');
 
         const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
@@ -211,7 +218,7 @@ export class DialogflowNlu extends Extensible {
             } else {
                 outputContexts.push({
                     name: contextName,
-                    lifespanCount: 1000,
+                    lifespanCount: 1,
                     parameters: jovo.$session.$data
                 });
             }
@@ -221,6 +228,7 @@ export class DialogflowNlu extends Extensible {
 
 
     response = async (jovo: Jovo) => {
+        // set platform specific response payload to platform object
         (jovo.$plugins.DialogflowNlu.dialogflow.$response as DialogflowResponse).payload = {
             [this.config.platformId]: this.config.platformResponseClazz.fromJSON(jovo.$response )
         };

@@ -26,13 +26,12 @@ import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilde
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
 import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
-import {DigitalGoodsPlugin} from "./modules/DigitalGoods";
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
 
     transactions?: {
-        androidAppID?: string,
+        androidPackageName?: string,
         keyFile?: object;
     };
 }
@@ -84,8 +83,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin(),
-            new DigitalGoodsPlugin()
+            new TransactionsPlugin()
         );
 
         Jovo.prototype.$googleAction = undefined;
@@ -121,7 +119,7 @@ export class GoogleAssistant extends Extensible implements Platform {
                     throw new Error('Handler must be of type object.');
                 }
                const sourceHandler = _get(this.config.plugin,'GoogleAssistant.handlers');
-               _set(this.config.plugin, 'GoogleAssistant.sourceHandler', _merge(handlers,obj));
+               _set(this.config.plugin, 'GoogleAssistant.handlers', _merge(sourceHandler,obj));
             }
             return this;
         };

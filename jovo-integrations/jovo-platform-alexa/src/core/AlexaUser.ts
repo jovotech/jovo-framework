@@ -185,7 +185,7 @@ export class AlexaUser extends User {
         return AlexaContact.contactAPI(
             AlexaContact.NAME,
             alexaRequest.getApiEndpoint(),
-            alexaRequest.getConsentToken()
+            alexaRequest.getApiAccessToken()
         );
     }
 
@@ -206,7 +206,7 @@ export class AlexaUser extends User {
         return AlexaContact.contactAPI(
             AlexaContact.EMAIL,
             alexaRequest.getApiEndpoint(),
-            alexaRequest.getConsentToken()
+            alexaRequest.getApiAccessToken()
         );
     }
     /**
@@ -218,7 +218,7 @@ export class AlexaUser extends User {
         return AlexaContact.contactAPI(
             AlexaContact.GIVEN_NAME,
             alexaRequest.getApiEndpoint(),
-            alexaRequest.getConsentToken()
+            alexaRequest.getApiAccessToken()
         );
     }
 
@@ -231,7 +231,7 @@ export class AlexaUser extends User {
         return AlexaContact.contactAPI(
             AlexaContact.MOBILE_NUMBER,
             alexaRequest.getApiEndpoint(),
-            alexaRequest.getConsentToken()
+            alexaRequest.getApiAccessToken()
         );
     }
 

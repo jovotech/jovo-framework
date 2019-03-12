@@ -1,7 +1,7 @@
-import {AskForPermissionConsentCard} from "./AskForPermissionConsentCard";
+import {AskForPermissionsConsentCard} from "./AskForPermissionsConsentCard";
 
 
-export class AskForContactPermissionsCard extends AskForPermissionConsentCard {
+export class AskForContactPermissionsCard extends AskForPermissionsConsentCard {
 
     constructor(contactProperties?: string[] | string) {
         super();
