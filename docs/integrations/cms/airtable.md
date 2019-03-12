@@ -12,13 +12,15 @@ Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
 
 ## Introduction
 
-With this Jovo CMS integration, you can manage all the content of your Alexa Skills and Google Actions in a Google Spreadsheet. This makes collaboration easier and enables you update and add content faster.
+Airtable is a popular spreadsheet-meets-database product that is used for all sorts of use cases.
+
+With this Jovo CMS integration, you can manage all the content of your Alexa Skills and Google Actions in Airtable. This makes collaboration easier and enables you update and add content faster.
 
 Here's what a sample table could look like:
 
-![Airtable CMS for Alexa and Google Assistant](TODO)
+![Airtable CMS for Alexa and Google Assistant](../../img/airtable-cms-screenshot.jpg)
 
-> [You can use this as template](TODO)
+> [You can use this Airtable Base as a template to get started](https://airtable.com/universe/expxmfYnpMcqcGUx9/jovo-airtable-cms-integration-tutorial).
 
 ## Configuration
 
@@ -31,6 +33,8 @@ $ npm install --save jovo-cms-airtable
 Add it to your `app.js` file and register it with the `use` command:
 
 ```javascript
+// src/app.js
+
 const { AirtableCMS } = require('jovo-cms-airtable');
 
 app.use( new AirtableCMS());
@@ -39,7 +43,8 @@ app.use( new AirtableCMS());
 Next, add the necessary configurations to your `config.js` file:
 
 ```javascript
-// config.js
+// src/config.js
+
 cms: {
     AirtableCMS: {
         apiKey: '<api-key>',
@@ -48,7 +53,7 @@ cms: {
             {
                 name: '<name>',
                 table: '<tableName>',
-                type: '<SheetType>',
+                type: '<TableType>',
                 selectOptions: {
                     fields: ['UserId', 'Name', 'Location']
                     sort: [
