@@ -1,6 +1,21 @@
 # Jovo Framework Changelog
 
 
+## 2.1.2 (2019-03-12)
+
+#### :rocket: New Feature
+* `jovo-platform-airtable` [#411](https://github.com/jovotech/jovo-framework/pull/411) ✨ Adds Airtable CMS Integration ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes lifespan of session context
+
+#### Committers: 2
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+
 ## 2.1.1 (2019-03-11)
 
 #### :rocket: New Feature
