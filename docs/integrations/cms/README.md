@@ -18,6 +18,7 @@ Here is a list of all available CMS integrations for Jovo:
 Name | Description
 ------------ | -------------
 [Google Sheets](./google-sheets.md './cms/google-sheets') | Manage content in a Google Spreadsheet
+[Airtable](./airtable.md './cms/airtable') | Manage content using Airtable
 
 
 
