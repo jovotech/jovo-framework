@@ -19,6 +19,7 @@ export interface Config extends PluginConfig {
     implicitSave?: boolean;
     metaData?: MetaDataConfig;
     context?: ContextConfig;
+    platformSpecificResponses?: boolean;
 }
 
 export interface MetaDataConfig {

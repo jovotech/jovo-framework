@@ -56,6 +56,7 @@ export class ResponsesSheet extends DefaultSheet {
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
+        const platforms = ['AlexaSkill', 'GoogleAction'];
         const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
@@ -69,7 +70,11 @@ export class ResponsesSheet extends DefaultSheet {
                 if (localeSplit.length >= 2) {
                     locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
                     if (localeSplit.length === 3) {
-                        platform = localeSplit[2];
+                        for (const p of platforms) {
+                            if (localeSplit[2] === p.toLowerCase()) {
+                                platform = p;
+                            }
+                        }
                         this.cms!.baseApp.config.platformSpecificResponses = true;
                     }
                 }
@@ -85,7 +90,7 @@ export class ResponsesSheet extends DefaultSheet {
                     if (!cell || cell === '') {
                         continue;
                     }
-                    key = `${locale}.${platform}.${row[0]}`;
+                    key = `${locale}.${platform}.translation.${row[0]}`;
                 }
 
                 const valueArray = _get(resources, key, []);
@@ -107,14 +112,13 @@ export class ResponsesSheet extends DefaultSheet {
         } else {
             Object.keys(resources).forEach((localeKey) => {
                 const resource = resources[localeKey];
-                if(resource.alexaskill) {
-                    Object.keys(resource.alexaskill).forEach((key) => {
-                        handleRequest.app.$cms.I18Next.i18n.addResource(localeKey, 'alexaskill', key, resource.alexaskill[key]);
-                    });
+                for (const p of platforms) {
+                    if (resource[p]) {
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, p, resource[p]);
+                    }
                 }
-                Object.keys(resource.translation).forEach((key) => {
-                    handleRequest.app.$cms.I18Next.i18n.addResource(localeKey, 'translation', key, resource.translation[key]);
-                });
+
+                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation);
             });
         }
 

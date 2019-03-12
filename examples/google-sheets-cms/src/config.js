@@ -58,7 +58,7 @@ module.exports = {
                     access: 'public',
                     type: 'Responses',
                     position: 1,
-                    // caching: false
+                    caching: false
                 },
                 {
                     spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',

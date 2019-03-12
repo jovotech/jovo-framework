@@ -9,7 +9,7 @@ const { GoogleSheetsCMS, DefaultSheet } = require('jovo-cms-googlesheets');
 const app = new App();
 
 app.use(
-    // new GoogleAssistant(),
+    new GoogleAssistant(),
     new Dialogflow(),
     new Alexa(),
     new JovoDebugger(),
