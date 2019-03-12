@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-user",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,8 +15,8 @@
   "dependencies": {
     "jovo-db-filedb": "^2.1.1",
     "jovo-framework": "^2.1.1",
-    "jovo-platform-alexa": "^2.1.1",
-    "jovo-platform-googleassistant": "^2.1.2",
+    "jovo-platform-alexa": "^2.1.2",
+    "jovo-platform-googleassistant": "^2.1.3",
     "jovo-plugin-debugger": "^2.1.1"
   }
 }
