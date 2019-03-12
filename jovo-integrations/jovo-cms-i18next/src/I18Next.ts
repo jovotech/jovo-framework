@@ -29,7 +29,7 @@ export class I18Next extends BaseCmsPlugin {
         nonExplicitWhitelist: false,
         preload: false,
         lowerCaseLng: false,
-        ns: 'translation',
+        ns: ['translation', 'alexaskill'],
         defaultNS: 'translation',
         fallbackNS: false,
         saveMissing: false,
@@ -79,6 +79,34 @@ export class I18Next extends BaseCmsPlugin {
 
         SpeechBuilder.prototype.t = function() {
             this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.$request!.getLocale());
+            
+            // @ts-ignore
+            if (this.jovo!.$app.config.platformSpecificResponses) {
+                const s = arguments[0];
+                arguments[0] = 'alexaskill' + ':' + arguments[0];
+                console.log(arguments[0]);
+
+                console.log(arguments[0]);
+
+                const keyExists = this.jovo!.$app!.$cms.I18Next.i18n.exists.apply(
+                    this.jovo!.$app!.$cms.I18Next.i18n, arguments
+                );
+
+                console.log(keyExists);
+
+                if(keyExists) {
+                    console.log('Key exists...');
+                    const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
+                        this.jovo!.$app!.$cms.I18Next.i18n, arguments
+                    );
+
+                    return this.addText(translatedText);
+                }
+
+                arguments[0] = s;
+                console.log('Key doesnt exist...');
+            }
+            
             const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
                 this.jovo!.$app!.$cms.I18Next.i18n, arguments
             );

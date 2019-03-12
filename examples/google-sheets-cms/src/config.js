@@ -1,6 +1,6 @@
 
 module.exports = {
-    logging: true,
+    // logging: true,
     // v1: {
     //    logging: true,
     // },
@@ -33,24 +33,41 @@ module.exports = {
             //        type: 'Responses'
             //    },
             // ]
+            // sheets: [
+            //     {
+            //         spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
+            //         name: 'responses',
+            //         access: 'public',
+            //         type: 'Responses',
+            //         position: 1,
+            //         caching: false,
+            //     },
+            //     {
+            //         spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
+            //         name: 'answers',
+            //         access: 'public',
+            //         type: 'KeyValue',
+            //         position: 2,
+            //         caching: true,
+            //     }
+            // ]
             sheets: [
                 {
-                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
-                    name: 'responses',
+                    spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',
+                    name: 'Sheet1',
                     access: 'public',
                     type: 'Responses',
                     position: 1,
-                    caching: false,
+                    // caching: false
                 },
                 {
-                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
-                    name: 'answers',
+                    spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',
+                    name: 'Sheet2',
                     access: 'public',
                     type: 'KeyValue',
                     position: 2,
-                    caching: true,
                 }
-            ]
+            ],
        }
     }
 

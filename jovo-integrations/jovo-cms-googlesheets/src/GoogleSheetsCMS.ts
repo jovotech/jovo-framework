@@ -32,7 +32,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         sheets: [],
     };
     jwtClient: any; // tslint:disable-line
-    baseApp: any;
+    baseApp: any;   // tslint:disable-line
 
     constructor(config?: Config) {
         super(config);
