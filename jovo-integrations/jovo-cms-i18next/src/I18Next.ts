@@ -91,8 +91,8 @@ export class I18Next extends BaseCmsPlugin {
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
         handleRequest.app.$cms.I18Next = {};
-        let resources: Resources = {};
-        // handleRequest.app.$cms.I18Next.resources = {};
+        // let resources: Resources = {};
+        handleRequest.app.$cms.I18Next.resources = {};
 
         const filesDir = this.config.filesDir || '';
 
@@ -108,7 +108,7 @@ export class I18Next extends BaseCmsPlugin {
                     const locale = file.split('.')[0];
                     Log.verbose(`- ${file}`);
 
-                    resources[locale] = require(
+                    handleRequest.app.$cms.I18Next.resources[locale] = require(
                         path.join(
                             process.cwd(),
                             filesDir,
@@ -116,19 +116,20 @@ export class I18Next extends BaseCmsPlugin {
                 }
             });
         } else if (this.config.resources) {
-            resources = this.config.resources;
+            handleRequest.app.$cms.I18Next.resources = this.config.resources;
         }
 
-        Object.keys(resources.locale).forEach((platform) => {
-            if (['AlexaSkill', 'GoogleAction'].indexOf(platform) > -1) {
+        Object.keys(handleRequest.app.$cms.I18Next.resources).forEach((locale) => {
+            const resource = handleRequest.app.$cms.I18Next.resources[locale];
+            if (resource['AlexaSkill'] || resource['GoogleAction']) {
                 // @ts-ignore
                 handleRequest.app.config.platformSpecificResponses = true;
             }
         });
 
+
         Log.debug(`Adding resources to $cms object:`);
-        Log.debug(JSON.stringify(resources, null, '\t'));
-        handleRequest.app.$cms.I18Next.resources = resources;
+        Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
         i18n
             .init(_merge(
                 {
@@ -138,10 +139,6 @@ export class I18Next extends BaseCmsPlugin {
         handleRequest.app.$cms.I18Next.i18n = i18n;
 
     }
-}
-
-interface Resources {
-    [key: string]: any; // tslint:disable-line
 }
 
 function getSpeech(this: any, args: any) {  // tslint:disable-line
@@ -154,7 +151,6 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
 
     jovo.$app!.$cms.I18Next.i18n.changeLanguage(jovo.$request!.getLocale());
 
-    // @ts-ignore
     if (jovo.$app.config.platformSpecificResponses) {
         const platform = jovo.getType();
         const key = args[0];
