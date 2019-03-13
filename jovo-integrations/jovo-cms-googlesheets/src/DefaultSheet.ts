@@ -10,7 +10,7 @@ export interface GoogleSheetsSheet extends PluginConfig {
     access?: string;
     entity?: string;
     position?: number;
-
+    caching?: boolean;
 }
 
 export class DefaultSheet  implements Plugin {
@@ -35,6 +35,9 @@ export class DefaultSheet  implements Plugin {
         this.cms = extensible as GoogleSheetsCMS;
         extensible.middleware('retrieve')!.use(this.retrieve.bind(this));
 
+        if(this.cms.config.caching === false || this.config.caching === false) {
+            this.cms.baseApp.middleware('request').use(this.retrieve.bind(this));
+        }
     }
     uninstall(cms: Extensible) {
 

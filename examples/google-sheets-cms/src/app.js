@@ -3,14 +3,14 @@ const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
-const { Dialogflow } = require('jovo-platform-dialogflow');
+// const { Dialogflow } = require('jovo-platform-dialogflow');
 const { GoogleSheetsCMS, DefaultSheet } = require('jovo-cms-googlesheets');
 
 const app = new App();
 
 app.use(
-    // new GoogleAssistant(),
-    new Dialogflow(),
+    new GoogleAssistant(),
+    // new Dialogflow(),
     new Alexa(),
     new JovoDebugger(),
     new FileDb(),
@@ -19,7 +19,8 @@ app.use(
 
 app.setHandler({
     async LAUNCH(jovo) {
-        this.$speech.addText(this.$cms.t('WELCOME'));
+        // this.$speech.t('WELCOME');
+        this.$speech.addT('WELCOME');
         return this.tell(this.$speech);
     },
 });
