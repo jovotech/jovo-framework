@@ -46,18 +46,15 @@ export class ResponsesSheet extends DefaultSheet {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.$request!.getLocale());
-            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
-                this.$jovo.$app!.$cms.I18Next.i18n, arguments
-            );
+
+            return getSpeech.call(this, arguments);
         };
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
-        const platforms = this.cms!.baseApp.$platform.keys();
-        console.log(platforms);
+        const platforms = ['AlexaSkill', 'GoogleAction'];
         const resources:any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
@@ -125,4 +122,49 @@ export class ResponsesSheet extends DefaultSheet {
         handleRequest.app.$cms[entity] = resources;
 
     }
+}
+
+function getSpeech(this: any, args: any) {  // tslint:disable-line
+    let jovo = this;
+    if (this.jovo!) {
+        jovo = this.jovo!;
+    } else if (this.$jovo) {
+        jovo = this.$jovo;
+    }
+
+    jovo.$app!.$cms.I18Next.i18n.changeLanguage(jovo.$request!.getLocale());
+
+    if (jovo.$app.config.platformSpecificResponses) {
+        const platform = jovo.getType();
+        const key = args[0];
+        args[0] = `${platform}:translation:${key}`;
+
+        const keyExists = jovo.$app!.$cms.I18Next.i18n.exists.apply(
+            jovo.$app!.$cms.I18Next.i18n, args
+        );
+
+        if (keyExists) {
+            let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+                jovo.$app!.$cms.I18Next.i18n, args
+            );
+
+            if (typeof translatedText === 'string' && translatedText === '/') {
+                translatedText = '';
+            } else if (translatedText.constructor === Array) {
+                const i = translatedText.indexOf('/');
+                if (i > -1) {
+                    translatedText[i] = '';
+                }
+            }
+
+            return translatedText;
+        }
+
+        args[0] = key;
+    }
+
+    const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+        jovo.$app!.$cms.I18Next.i18n, args
+    );
+    return translatedText;
 }
