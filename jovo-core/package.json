@@ -1,6 +1,6 @@
 {
   "name": "jovo-core",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -41,12 +41,12 @@
     "@types/lodash.transform": "^4.6.4",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6",
-    "rimraf": "^2.6.2"
+    "typescript": "^3.1.6"
   },
   "jest": {
     "transform": {
