@@ -65,7 +65,7 @@ this.$googleAction.askForZipCodeAndCity(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.$request.getUser();
+    let user = this.$googleAction.$user.getProfile();
 
     if (user.permissions.indexOf('DEVICE_COARSE_LOCATION') > -1) {
       let device = this.$googleAction.getDevice();
