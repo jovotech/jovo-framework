@@ -26,6 +26,12 @@ export class TestSuite<T extends RequestBuilder = RequestBuilder, K extends Resp
         this.requestBuilder = requestBuilder;
         this.responseBuilder = responseBuilder;
     }
+
+    /**
+     * Instantiates conversation object with the given config object.
+     * @param {ConversationConfig} config
+     * @returns {Conversation}
+     */
     conversation(config?: ConversationConfig): Conversation {
         return new Conversation(this,  config);
     }

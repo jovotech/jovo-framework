@@ -7,6 +7,7 @@
   "scripts": {
     "tslint": "node_modules/.bin/tslint -p tsconfig.json -c tslint.json",
     "tsc": "node_modules/.bin/tsc",
+    "rimraf": "rimraf ./dist",
     "test": "jest"
   },
   "author": "jovotech",
@@ -23,7 +24,8 @@
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "rimraf": "^2.6.2"
   },
   "jest": {
     "transform": {
