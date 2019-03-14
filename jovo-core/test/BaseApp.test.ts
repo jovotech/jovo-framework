@@ -151,7 +151,11 @@ test('test hook() with callbacks', async (done) => {
 
 });
 
-
+/**
+ * Helper method
+ * Transforms setTimeout to a Promise object.
+ * @returns {Promise}
+ */
 function delay() {
     return new Promise(resolve => setTimeout(resolve, 250));
 }

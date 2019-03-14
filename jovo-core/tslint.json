@@ -9,6 +9,7 @@
     "rules": {
         "array-type": [true, "array-simple"],
         "arrow-return-shorthand": true,
+        "completed-docs": [true, "functions", "methods"],
         "ban": [true,
             {"name": "parseInt", "message": "tsstyle#type-coercion"},
             {"name": "parseFloat", "message": "tsstyle#type-coercion"},
