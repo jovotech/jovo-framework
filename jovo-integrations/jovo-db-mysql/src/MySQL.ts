@@ -232,7 +232,7 @@ export class MySQL implements Db {
 
                 const sql = `
                     CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(255) NOT NULL,
-                    ${this.config.dataColumnName} TEXT NULL,
+                    ${this.config.dataColumnName} MEDIUMTEXT NULL,
                     PRIMARY KEY (${this.config.primaryKeyColumn}));
                     `;
 
