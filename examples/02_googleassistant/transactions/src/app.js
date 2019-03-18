@@ -17,8 +17,8 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        return this.toIntent('ShowConsumablesIntent');
-        // return this.toIntent('TransactionCheckRequirementsIntent');
+        // return this.toIntent('ShowConsumablesIntent');
+        return this.toIntent('TransactionCheckRequirementsIntent');
     },
 
     async ShowConsumablesIntent() {
@@ -39,7 +39,7 @@ app.setHandler({
                     "parameters": {
                         "gateway": "stripe",
                         "stripe:version": "2018-10-31",
-                        "stripe:publishableKey": "key"
+                        "stripe:publishableKey": "<STRIPE_KEY>"
                     }
                 }
             },
@@ -64,7 +64,7 @@ app.setHandler({
         DELIVERY_ADDRESS() {
             if (this.$googleAction.$transaction.isDeliveryAddressAccepted()) {
                 this.$googleAction.$transaction.transactionDecision({
-                    requestDeliveryAddress: true,
+                    requestDeliveryAddress: false,
                 },
                 {
                     // actionProvidedOptions: {
@@ -79,7 +79,7 @@ app.setHandler({
                             "parameters": {
                                 "gateway": "stripe",
                                 "stripe:version": "2018-10-31",
-                                "stripe:publishableKey": "key"
+                                "stripe:publishableKey": "<STRIPE_KEY>"
                             }
                         }
                     },
@@ -101,30 +101,63 @@ app.setHandler({
                         userVisibleOrderId: "orderID unique-13399"
                     },
                     updateTime: new Date().toISOString(),
-                    // orderManagementActions: [
-                    //     {
-                    //         button: {
-                    //             openUrlAction: {
-                    //                 // Replace the URL with your own customer service page
-                    //                 url: 'http://example.com/customer-service',
-                    //             },
-                    //             title: 'Customer Service',
-                    //         },
-                    //         type: 'CUSTOMER_SERVICE',
-                    //     },
-                    // ],
-                    // userNotification: {
-                    //     text: 'Notification text.',
-                    //     title: 'Notification Title',
-                    // },
+                    orderManagementActions: [
+                        {
+                            button: {
+                                openUrlAction: {
+                                    // Replace the URL with your own customer service page
+                                    url: 'http://example.com/customer-service',
+                                },
+                                title: 'Customer Service',
+                            },
+                            type: 'CUSTOMER_SERVICE',
+                        },
+                    ],
+                    userNotification: {
+                        text: 'Notification text.',
+                        title: 'Notification Title',
+                    },
                 })
             }
         },
+        COMPLETE_PURCHASE() {
+            if (this.$googleAction.$transaction.isOrderAccepted()) {
+                this.$googleAction.$transaction.createOrder('Order created', {
+                    actionOrderId: 'unique-133993',
+                    orderState: {
+                        state: 'CREATED',
+                        label: 'Created'
+                    },
+                    receipt: {
+                        userVisibleOrderId: "orderID unique-133992"
+                    },
+                    updateTime: new Date().toISOString(),
+                    orderManagementActions: [
+                        {
+                            button: {
+                                openUrlAction: {
+                                    // Replace the URL with your own customer service page
+                                    url: 'http://example.com/customer-service',
+                                },
+                                title: 'Customer Service',
+                            },
+                            type: 'CUSTOMER_SERVICE',
+                        },
+                    ],
+                    userNotification: {
+                        text: 'Notification text.',
+                        title: 'Notification Title',
+                    },
+                })
+            }
+        }
     },
 });
 
+
+
 const order = {
-    id: 'unique-13399',
+    id: 'unique-133992',
     cart: {
         merchant: {
             id: 'book_store_1',
