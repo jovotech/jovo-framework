@@ -3,7 +3,8 @@
     "jovo-framework",
     "jovo-core",
     "jovo-integrations/*",
-    "examples/**"
+    "examples/**",
+    "../jovo-framework-playground/**"
   ],
   "ignoreChanges": [
     "*.md",

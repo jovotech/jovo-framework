@@ -29,7 +29,7 @@
     "@types/lodash.merge": "^4.6.4",
     "@types/lodash.set": "^4.3.4",
     "@types/node": "^10.3.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-install": "^1.1.0",
     "gulp-run-command": "0.0.9",
     "gulp-zip": "^4.2.0",
