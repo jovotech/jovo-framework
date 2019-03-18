@@ -1,6 +1,7 @@
-import { BaseApp, JovoError } from "jovo-core"
+import { BaseApp, JovoError } from "jovo-core";
 import { FileDb } from "./../src/FileDb";
 import * as fs from "fs";
+import * as path from 'path';
 import _merge = require('lodash.merge');
 
 describe('test installation', () => {
@@ -8,7 +9,10 @@ describe('test installation', () => {
         const filedb = new FileDb();
         const app = new BaseApp();
         filedb.install(app);
-        expect(fs.existsSync(filedb.config.pathToFile)).toBeTruthy();
+
+        const result = fs.existsSync(filedb.config.pathToFile);
+
+        expect(result).toBeTruthy();
     });
 
     test('test install should throw JovoError if pathToFile is empty string', () => {
@@ -69,9 +73,18 @@ describe('test database operations', () => {
         await fs.writeFileSync(filedb.config.pathToFile, stringifiedData);
     }
 
-    beforeEach(() => {
-        resetDatabase();
+    beforeAll(async () => {
+        await resetDatabase();
     });
+
+    afterEach(async () => {
+        await resetDatabase();
+    });
+
+    afterAll(() => {
+        const folderPath = path.dirname(filedb.config.pathToFile);
+        deleteDatabaseFolder(folderPath);
+    })
 
     describe('test save()', () => {
         test('test should save userData', async () => {
@@ -186,6 +199,20 @@ describe('test database operations', () => {
             const existingArr = [existingObject];
     
             expect(dataArr).toEqual(existingArr);
-        })
+        });
     });
 });
+
+function deleteDatabaseFolder(dirPath: string) {
+    if (fs.existsSync(dirPath)) {
+        fs.readdirSync(dirPath).forEach(function (entry) {
+            var entryPath = path.join(dirPath, entry);
+            if (fs.lstatSync(entryPath).isDirectory()) {
+                deleteDatabaseFolder(entryPath);
+            } else {
+                fs.unlinkSync(entryPath);
+            }
+        });
+        fs.rmdirSync(dirPath);
+    }
+}
