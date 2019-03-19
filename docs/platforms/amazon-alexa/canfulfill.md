@@ -10,7 +10,7 @@ Learn more about how to implement the `CanFulfillIntentRequest` feature in your 
 
 ## Introduction to CanFulfill
 
-The name-free interaction allows Amazon to map user requests, which don't specify a skill and can't be handled by Alexa's built in features, to be mapped to andevelopers skill that can handle it.
+The name-free interaction allows Amazon to map user requests, which don't specify a skill and can't be handled by Alexa's built in features, to be mapped to a developers skill that can handle it.
 
 For example the user might make the following request: **Alexa, play relaxing sounds with crickets**. Alexa's built in features can't handle the request so the system looks for third party skills to fulfill it.
 
