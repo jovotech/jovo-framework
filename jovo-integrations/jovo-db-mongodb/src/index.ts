@@ -1,2 +1,2 @@
 
-export { MongoDb } from './MongoDb';
+export { MongoDb, Config } from './MongoDb';
