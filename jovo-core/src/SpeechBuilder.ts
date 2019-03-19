@@ -200,6 +200,11 @@ export class SpeechBuilder {
         return this.speech;
     }
 
+    /**
+     * Adds <speak> tags to a string. Replaces & with and (v1 compatibility)
+     * @param {string} text
+     * @returns {string}
+     */
     static toSSML(text: string): string {
         text = text.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
         text = '<speak>' + text + '</speak>';
@@ -211,12 +216,22 @@ export class SpeechBuilder {
         return text;
     }
 
+    /**
+     * Removes everything that is surrounded by <>
+     * @param {string} ssml
+     * @returns {string}
+     */
     static removeSSML(ssml: string): string {
         let noSSMLText = ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
         noSSMLText = noSSMLText.replace(/<[^>]*>/g, '');
         return noSSMLText;
     }
 
+    /**
+     * Removes <speak> tags from string
+     * @param {string} ssml
+     * @returns {string}
+     */
     static removeSpeakTags(ssml: string): string {
         return ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
     }

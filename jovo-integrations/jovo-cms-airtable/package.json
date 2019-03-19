@@ -1,12 +1,13 @@
 {
   "name": "jovo-cms-airtable",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
+    "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs ./ --mode file",
     "test": "jest"
   },
@@ -32,7 +33,8 @@
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "rimraf": "^2.6.2"
   },
   "jest": {
     "transform": {

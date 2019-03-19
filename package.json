@@ -8,12 +8,13 @@
     "tslint": "lerna exec npm run tslint --ignore jovo-examples-*",
     "test": "lerna exec npm test --ignore jovo-examples-*",
     "clean": "lerna clean",
+    "rimraf": "lerna exec npm run rimraf --ignore jovo-examples-*",
     "list": "lerna list -l",
     "bootstrap": "lerna bootstrap --hoist --no-ci",
     "devsetup": "npm run bootstrap && npm run tsc",
     "typedoc": "npm run lerna exec npm run typedoc",
     "changelog": "lerna-changelog",
-    "preparePublish": "npm run tsc && npm run tslint && npm run test",
+    "preparePublish": "npm run rimraf && npm run tsc && npm run tslint && npm run test",
     "publish": "lerna publish --no-push"
   },
   "devDependencies": {

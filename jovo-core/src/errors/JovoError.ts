@@ -30,6 +30,10 @@ export class JovoError extends Error {
     }
 
 
+    /**
+     * Prints JovoError instance in an uniformed style.
+     * @param {JovoError} e
+     */
     static printError(e: JovoError) {
 
         Log.red().error(Log.header('Error'));

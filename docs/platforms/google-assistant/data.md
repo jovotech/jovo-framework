@@ -34,7 +34,7 @@ this.$googleAction.askForName(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.$request.getUser();
+    let user = this.$googleAction.$user.getProfile();
 
     // Check, if you have the necessary permission
     if (user.permissions.indexOf('NAME') > -1) {
@@ -65,17 +65,17 @@ this.$googleAction.askForZipCodeAndCity(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.$request.getUser();
+    let user = this.$googleAction.$user.getProfile();
 
     if (user.permissions.indexOf('DEVICE_COARSE_LOCATION') > -1) {
-      let device = this.$googleAction.$request.getDevice();
+      let device = this.$googleAction.getDevice();
       /*
         device.location.city
         device.location.zipCode
       */
     }
     if (user.permissions.indexOf('DEVICE_PRECISE_LOCATION') > -1) {
-      let device = this.$googleAction.$request.getDevice();
+      let device = this.$googleAction.getDevice();
       /*
         device.location.coordinates.latitude
         device.location.coordinates.longitude
