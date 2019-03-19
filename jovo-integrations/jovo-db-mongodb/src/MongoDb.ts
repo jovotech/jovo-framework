@@ -1,4 +1,4 @@
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import {MongoClient} from 'mongodb';
@@ -72,10 +72,15 @@ export class MongoDb implements Db {
             await client.close();
             return doc;
         } catch (e) {
-            console.log('Error while loading from MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
-        return {};
     }
 
     async save(primaryKey: string, key: string, data: object) {
@@ -93,8 +98,14 @@ export class MongoDb implements Db {
             await collection.updateOne({userId: primaryKey}, item, {upsert: true});
             await client.close();
         } catch (e) {
-            console.log('Error while saving to MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 
@@ -107,8 +118,14 @@ export class MongoDb implements Db {
             await collection.deleteOne({userId: primaryKey});
             await client.close();
         } catch (e) {
-            console.log('Error while deleting from MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 }
