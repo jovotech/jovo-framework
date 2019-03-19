@@ -71,10 +71,6 @@ export class Router implements Plugin {
                 route.path = EnumRequestType.END;
             }
 
-        } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
-            if(typeof _get(handleRequest.jovo,`$handlers.${EnumRequestType.ON_ELEMENT_SELECTED}`) === 'function') {
-                route.path = EnumRequestType.ON_ELEMENT_SELECTED;
-            }
         } else if (route.type === EnumRequestType.AUDIOPLAYER) {
             route.path = `${EnumRequestType.AUDIOPLAYER}["${handleRequest.jovo.$type.subType}"]`;
         } else if (route.type === EnumRequestType.ON_ELEMENT_SELECTED) {
