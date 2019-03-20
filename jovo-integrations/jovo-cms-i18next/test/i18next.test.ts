@@ -1,6 +1,7 @@
-import * as i18nData from './i18n/en-US.json';
-import { I18Next } from '../src';
+import { I18Next } from '../src/';
 import { HandleRequest, BaseApp } from 'jovo-core';
+import * as i18nData from './i18n/en-US.json';
+
 
 describe('I18Next.constructor()', () => {
     test('without config', () => {
@@ -17,7 +18,7 @@ describe('I18Next.constructor()', () => {
 describe('I18Next.loadFiles()', () => {
     test('with config.filesDir', async () => {
         const i18Next = new I18Next({
-            filesDir: './test/i18n'
+            filesDir: './test/i18n/'
         });
 
         const mockHR: HandleRequest = {

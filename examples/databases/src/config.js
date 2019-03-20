@@ -1,21 +1,17 @@
 module.exports = {
-    // logging: true,
-    // v1: {
-    //    logging: true,
-    // },
-    //
-    // intentMap: {
-    //    'AMAZON.StopIntent': 'END',
-    // },
-    //
+   logging: true,
+   // v1: {
+   //    logging: true,
+   // },
+   //
+   // intentMap: {
+   //    'AMAZON.StopIntent': 'END',
+   // },
+   //
     db: {
-        default: 'MongoDb',
+        default: 'DynamoDb',
         FileDb: {
             pathToFile: './db/db.json'
-        },
-        MongoDb: {
-            databaseName: 'database',
-            uri: ''
         }
     },
 

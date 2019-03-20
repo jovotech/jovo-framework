@@ -201,7 +201,7 @@ export class DialogflowNlu extends Extensible {
         }
         const sessionId = _get(dialogflowRequest, 'session');
 
-        const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
+        let outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
         const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
 
         if (outputContexts && Object.keys(jovo.$session.$data).length > 0) {
@@ -210,20 +210,20 @@ export class DialogflowNlu extends Extensible {
             });
 
             if (sessionContext) {
-                outputContexts.forEach((context: any) => { // tslint:disable-line
-                    if (context.name === contextName) {
-                        context.parameters = jovo.$session.$data;
-                    }
-                });
-            } else {
-                outputContexts.push({
-                    name: contextName,
-                    lifespanCount: 1,
-                    parameters: jovo.$session.$data
+                outputContexts = outputContexts.filter((context: any) => { // tslint:disable-line
+                    return context.name !== contextName;
                 });
             }
+            outputContexts.push({
+                name: contextName,
+                lifespanCount: 1,
+                parameters: jovo.$session.$data
+            });
+            _set(dialogflowResponse, 'outputContexts', outputContexts);
+
+        } else {
+            _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
         }
-        _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
     };
 
 

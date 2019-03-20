@@ -1,9 +1,9 @@
 import { HandleRequest, JovoRequest, TestSuite, SessionConstants } from 'jovo-core';
 import { App, ExpressJS } from 'jovo-framework';
-import { Alexa } from '../../src/';
+import { GoogleAssistant } from '../src/';
 
 process.env.NODE_ENV = 'UNIT_TEST';
-let p: Alexa;
+let p: GoogleAssistant;
 let t: TestSuite;
 
 const i18NextData = {
@@ -15,12 +15,12 @@ const i18NextData = {
         ],
         DEFAULT: 'Default'
     },
-    AlexaSkill: {
+    GoogleAction: {
         translation: {
-            WELCOME: 'Welcome_Alexa',
+            WELCOME: 'Welcome_GoogleAssistant',
             GOODBYE: [
-                'Goodbye_Alexa_1',
-                'Goodbye_Alexa_2'
+                'Goodbye_GoogleAssistant_1',
+                'Goodbye_GoogleAssistant_2'
             ],
             EMPTY: '/'
         }
@@ -28,7 +28,7 @@ const i18NextData = {
 }
 
 beforeEach(() => {
-    p = new Alexa();
+    p = new GoogleAssistant();
     t = p.makeTestSuite();
 });
 

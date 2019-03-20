@@ -1,7 +1,7 @@
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import { Db, BaseApp, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 export interface Config extends PluginConfig {
     uri?: string;
@@ -30,7 +30,7 @@ export class MongoDb implements Db {
     async install(app: BaseApp) {
         this.errorHandling();
 
-        this.client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
+        this.client = await MongoClient.connect(this.config.uri!, { useNewUrlParser: true });
 
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
@@ -70,7 +70,7 @@ export class MongoDb implements Db {
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
         try {
             const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
-            const doc = await collection.findOne({userId: primaryKey});
+            const doc = await collection.findOne({ userId: primaryKey });
             return doc;
         } catch (e) {
             console.log('Error while loading from MongoDb. Please check the logs below...');
@@ -88,7 +88,7 @@ export class MongoDb implements Db {
                     [key]: data
                 }
             };
-            await collection.updateOne({userId: primaryKey}, item, {upsert: true});
+            await collection.updateOne({ userId: primaryKey }, item, { upsert: true });
         } catch (e) {
             console.log('Error while saving to MongoDb. Please check the logs below...');
             console.log(e);
@@ -98,7 +98,7 @@ export class MongoDb implements Db {
     async delete(primaryKey: string) {
         try {
             const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
-            await collection.deleteOne({userId: primaryKey});
+            await collection.deleteOne({ userId: primaryKey });
         } catch (e) {
             console.log('Error while deleting from MongoDb. Please check the logs below...');
             console.log(e);

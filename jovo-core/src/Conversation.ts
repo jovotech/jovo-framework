@@ -59,6 +59,10 @@ export class Conversation {
 
     }
 
+    /**
+     * Sets userid, timestamp and locale to every request.
+     * @param {JovoRequest} req
+     */
     applyToRequest(req: JovoRequest): void {
         req.setUserId(this.config.userId || randomUserId());
         req.setTimestamp(new Date().toISOString());

@@ -3,6 +3,12 @@ import * as path from "path";
 
 export class Util {
 
+    /**
+     * Console log helper
+     *
+     * Prints the file and line number where it has been called.
+     * @param {number} pathDepth
+     */
     static consoleLog(pathDepth = 1) {
         const _privateLog:Function = console.log;
         console.log = (...msgs: any[]) => { // tslint:disable-line

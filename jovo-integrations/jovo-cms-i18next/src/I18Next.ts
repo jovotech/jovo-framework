@@ -88,12 +88,13 @@ export class I18Next extends BaseCmsPlugin {
             return getSpeech.call(this, arguments);
         };
     }
+
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
         handleRequest.app.$cms.I18Next = {};
         handleRequest.app.$cms.I18Next.resources = {};
 
-        const filesDir = this.config.filesDir!;
+        const filesDir = this.config.filesDir || '';
 
         if (fs.existsSync(filesDir)) {
             const dir = await readdir(filesDir);

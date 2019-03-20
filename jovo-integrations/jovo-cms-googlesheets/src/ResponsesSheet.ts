@@ -120,6 +120,5 @@ export class ResponsesSheet extends DefaultSheet {
         }
 
         handleRequest.app.$cms[entity] = resources;
-
     }
 }

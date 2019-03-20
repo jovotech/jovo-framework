@@ -1,8 +1,11 @@
 {
   "translation": {
-    "WELCOME": "Welcome.",
+    "WELCOME": "Welcome",
     "WELCOME_WITH_PARAMETER": "Welcome {{firstname}} {{lastname}}",
-    "WELCOME_ARRAY": ["Welcome", "Hello"]
+    "WELCOME_ARRAY": [
+      "Welcome",
+      "Hello"
+    ]
   },
   "AlexaSkill": {
     "translation": {
@@ -11,7 +14,10 @@
   },
   "GoogleAction": {
     "translation": {
-      "WELCOME": ["Hi", "Good day!"]
+      "WELCOME": [
+        "Hi",
+        "Good day!"
+      ]
     }
   }
 }

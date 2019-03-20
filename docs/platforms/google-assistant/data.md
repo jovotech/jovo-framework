@@ -15,7 +15,7 @@ User information is mainly used to offer a more personalized experience, but you
 
 ## ON_PERMISSION
 
-After the user has answered your request, they will be redirected to the `ON_PERMISSION` intent, if availabe, where you can access and store the data.
+After the user has answered your request, they will be redirected to the `ON_PERMISSION` intent, if available, where you can access and store the data.
 
 ```javascript
 ON_PERMISSION() {
@@ -34,14 +34,14 @@ this.$googleAction.askForName(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.$request.getUser();
 
     // Check, if you have the necessary permission
-    if (user.permissions.indexOf('NAME') > -1) {
+    if (this.$googleAction.$user.hasPermission('NAME')) {
+      let profile = this.$googleAction.$user.getProfile();
       /* 
-        user.profile.givenName
-        user.profile.familyName
-        user.profile.displayName
+        profile.givenName
+        profile.familyName
+        profile.displayName
       */
     }
   }
@@ -65,17 +65,17 @@ this.$googleAction.askForZipCodeAndCity(speech);
 ```javascript
 ON_PERMISSION() {
   if (this.$googleAction.isPermissionGranted()) {
-    let user = this.$googleAction.$request.getUser();
 
-    if (user.permissions.indexOf('DEVICE_COARSE_LOCATION') > -1) {
-      let device = this.$googleAction.$request.getDevice();
+    // Check, if you have the necessary permission
+    if (this.$googleAction.$user.hasPermission('DEVICE_COARSE_LOCATION')) {
+      let device = this.$googleAction.getDevice();
       /*
         device.location.city
         device.location.zipCode
       */
     }
-    if (user.permissions.indexOf('DEVICE_PRECISE_LOCATION') > -1) {
-      let device = this.$googleAction.$request.getDevice();
+    if (this.$googleAction.$user.hasPermission('DEVICE_PRECISE_LOCATION')) {
+      let device = this.$googleAction.getDevice();
       /*
         device.location.coordinates.latitude
         device.location.coordinates.longitude
