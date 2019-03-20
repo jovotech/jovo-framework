@@ -30,6 +30,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         spreadsheetId: undefined,
         access: 'private',
         sheets: [],
+        caching: true
     };
     jwtClient: any; // tslint:disable-line
     baseApp: any;   // tslint:disable-line

@@ -19,6 +19,7 @@ export class DefaultSheet  implements Plugin {
         enabled: true,
         name: undefined,
         range: 'A:B',
+        caching: true
     };
 
     cms?: GoogleSheetsCMS;
