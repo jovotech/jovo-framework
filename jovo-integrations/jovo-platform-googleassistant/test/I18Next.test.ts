@@ -25,7 +25,7 @@ const i18NextData = {
             EMPTY: '/'
         }
     }
-}
+};
 
 beforeEach(() => {
     p = new GoogleAssistant();
