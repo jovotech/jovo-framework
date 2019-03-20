@@ -91,10 +91,9 @@ export class I18Next extends BaseCmsPlugin {
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
         handleRequest.app.$cms.I18Next = {};
-        // let resources: Resources = {};
         handleRequest.app.$cms.I18Next.resources = {};
 
-        const filesDir = this.config.filesDir || '';
+        const filesDir = this.config.filesDir!;
 
         if (fs.existsSync(filesDir)) {
             const dir = await readdir(filesDir);
@@ -127,7 +126,6 @@ export class I18Next extends BaseCmsPlugin {
             }
         });
 
-
         Log.debug(`Adding resources to $cms object:`);
         Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
         i18n
@@ -137,7 +135,6 @@ export class I18Next extends BaseCmsPlugin {
                 },
                 this.config));
         handleRequest.app.$cms.I18Next.i18n = i18n;
-
     }
 }
 

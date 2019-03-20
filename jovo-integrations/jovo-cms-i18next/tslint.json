@@ -2,7 +2,7 @@
     "linterOptions": {
         "exclude": [
             "node_modules/**/*",
-            "test/i18n/en-US.json"
+            "test/**/*.json"
         ]
     },
     "defaultSeverity": "error",

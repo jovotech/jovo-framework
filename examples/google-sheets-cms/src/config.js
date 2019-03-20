@@ -1,6 +1,6 @@
 
 module.exports = {
-    logging: true,
+    // logging: true,
     // v1: {
     //    logging: true,
     // },
@@ -40,6 +40,7 @@ module.exports = {
                     access: 'public',
                     type: 'Responses',
                     position: 1,
+                    caching: false
                 }
             ]
        }

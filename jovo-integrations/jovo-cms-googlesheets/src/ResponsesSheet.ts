@@ -46,8 +46,8 @@ export class ResponsesSheet extends DefaultSheet {
             if (!this.$jovo) {
                 return;
             }
-
-            return getSpeech.call(this, arguments);
+            // @ts-ignore
+            return this.$jovo.t.apply(this, arguments);
         };
     }
 
@@ -122,49 +122,4 @@ export class ResponsesSheet extends DefaultSheet {
         handleRequest.app.$cms[entity] = resources;
 
     }
-}
-
-function getSpeech(this: any, args: any) {  // tslint:disable-line
-    let jovo = this;
-    if (this.jovo!) {
-        jovo = this.jovo!;
-    } else if (this.$jovo) {
-        jovo = this.$jovo;
-    }
-
-    jovo.$app!.$cms.I18Next.i18n.changeLanguage(jovo.$request!.getLocale());
-
-    if (jovo.$app.config.platformSpecificResponses) {
-        const platform = jovo.getType();
-        const key = args[0];
-        args[0] = `${platform}:translation:${key}`;
-
-        const keyExists = jovo.$app!.$cms.I18Next.i18n.exists.apply(
-            jovo.$app!.$cms.I18Next.i18n, args
-        );
-
-        if (keyExists) {
-            let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
-                jovo.$app!.$cms.I18Next.i18n, args
-            );
-
-            if (typeof translatedText === 'string' && translatedText === '/') {
-                translatedText = '';
-            } else if (translatedText.constructor === Array) {
-                const i = translatedText.indexOf('/');
-                if (i > -1) {
-                    translatedText[i] = '';
-                }
-            }
-
-            return translatedText;
-        }
-
-        args[0] = key;
-    }
-
-    const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
-        jovo.$app!.$cms.I18Next.i18n, args
-    );
-    return translatedText;
 }

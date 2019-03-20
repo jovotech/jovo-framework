@@ -19,6 +19,7 @@ export class MongoDb implements Db {
     };
     needsWriteFileAccess = false;
     isCreating = false;
+    client?: MongoClient;
 
     constructor(config?: Config) {
         if (config) {
@@ -26,7 +27,11 @@ export class MongoDb implements Db {
         }
     }
 
-    install(app: BaseApp) {
+    async install(app: BaseApp) {
+        this.errorHandling();
+
+        this.client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
+
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
                 app.$db = this;
@@ -63,13 +68,9 @@ export class MongoDb implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const doc = await collection.findOne({userId: primaryKey});
-            await client.close();
             return doc;
         } catch (e) {
             console.log('Error while loading from MongoDb. Please check the logs below...');
@@ -79,11 +80,8 @@ export class MongoDb implements Db {
     }
 
     async save(primaryKey: string, key: string, data: object) {
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const item = {
                 $set: {
                     [this.config.primaryKeyColumn!]: primaryKey,
@@ -91,7 +89,6 @@ export class MongoDb implements Db {
                 }
             };
             await collection.updateOne({userId: primaryKey}, item, {upsert: true});
-            await client.close();
         } catch (e) {
             console.log('Error while saving to MongoDb. Please check the logs below...');
             console.log(e);
@@ -99,13 +96,9 @@ export class MongoDb implements Db {
     }
 
     async delete(primaryKey: string) {
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             await collection.deleteOne({userId: primaryKey});
-            await client.close();
         } catch (e) {
             console.log('Error while deleting from MongoDb. Please check the logs below...');
             console.log(e);
