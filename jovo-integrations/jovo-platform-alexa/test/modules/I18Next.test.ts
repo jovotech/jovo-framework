@@ -13,7 +13,10 @@ const i18NextData = {
             'Goodbye_Default_1',
             'Goodbye_Default_2'
         ],
-        DEFAULT: 'Default'
+        DEFAULT: 'Default',
+        OBJECT: {
+            key: 'Value_Default'
+        }
     },
     AlexaSkill: {
         translation: {
@@ -22,7 +25,10 @@ const i18NextData = {
                 'Goodbye_Alexa_1',
                 'Goodbye_Alexa_2'
             ],
-            EMPTY: '/'
+            EMPTY: '/',
+            OBJECT: {
+                key: 'Value_Alexa'
+            }
         }
     }
 };
@@ -80,6 +86,30 @@ describe('Function jovo.t()', () => {
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
 
+        test('for object', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': {
+                            translation: i18NextData.translation
+                        }
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    // @ts-ignore
+                    if (this.t('OBJECT').key === 'Value_Default') {
+                        done();
+                    }
+                }
+            });
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
+
         test('for string array', async (done) => {
             const app = new App({
                 i18n: {
@@ -100,101 +130,123 @@ describe('Function jovo.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
     });
-});
 
-describe('with platform specific responses', () => {
-    test('for string', async (done) => {
-        const app = new App({
-            i18n: {
-                resources: {
-                    'en-US': i18NextData
+    describe('with platform specific responses', () => {
+        test('for string', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
                 }
-            }
-        });
-        app.use(p);
-        app.setHandler({
-            LAUNCH() {
-                if (this.t('WELCOME') === `Welcome_${p.constructor.name}`) {
-                    done();
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    if (this.t('WELCOME') === `Welcome_${p.constructor.name}`) {
+                        done();
+                    }
                 }
-            }
-        });
+            });
 
-        
-        const launchRequest: JovoRequest = await t.requestBuilder.launch();
-        app.handle(ExpressJS.dummyRequest(launchRequest));
-    });
 
-    test('for empty string', async (done) => {
-        const app = new App({
-            i18n: {
-                resources: {
-                    'en-US': i18NextData
-                }
-            }
-        });
-        app.use(p);
-        app.setHandler({
-            LAUNCH() {
-                if (this.t('EMPTY') === '') {
-                    done();
-                }
-            }
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
         });
 
-        
-        const launchRequest: JovoRequest = await t.requestBuilder.launch();
-        app.handle(ExpressJS.dummyRequest(launchRequest));
-    });
+        test('for empty string', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    if (this.t('EMPTY') === '') {
+                        done();
+                    }
+                }
+            });
 
-    test('for undefined key', async (done) => {
-        const app = new App({
-            i18n: {
-                resources: {
-                    'en-US': i18NextData
-                }
-            }
-        });
-        app.use(p);
-        app.setHandler({
-            LAUNCH() {
-                if (this.t('DEFAULT') === 'Default') {
-                    done();
-                }
-            }
-        });
 
-        
-        const launchRequest: JovoRequest = await t.requestBuilder.launch();
-        app.handle(ExpressJS.dummyRequest(launchRequest));
-    });
-
-    test('for string array', async (done) => {
-        const app = new App({
-            i18n: {
-                resources: {
-                    'en-US': i18NextData
-                }
-            }
-        });
-        app.use(p);
-        app.setHandler({
-            LAUNCH() {
-                const speech = this.t('GOODBYE');
-                if (speech.indexOf(`Goodbye_${p.constructor.name}_1`) + speech.indexOf(`Goodbye_${p.constructor.name}_2`) >= 0) {
-                    done();
-                }
-            }
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
         });
 
-        
-        const launchRequest: JovoRequest = await t.requestBuilder.launch();
-        app.handle(ExpressJS.dummyRequest(launchRequest));
+        test('for undefined key', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    if (this.t('DEFAULT') === 'Default') {
+                        done();
+                    }
+                }
+            });
+
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
+
+        test('for object', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    // @ts-ignore
+                    if (this.t('OBJECT').key === 'Value_Alexa') {
+                        done();
+                    }
+                }
+            });
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
+
+        test('for string array', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    const speech = this.t('GOODBYE');
+                    if (speech.indexOf(`Goodbye_${p.constructor.name}_1`) + speech.indexOf(`Goodbye_${p.constructor.name}_2`) >= 0) {
+                        done();
+                    }
+                }
+            });
+
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
     });
 });
 
@@ -219,7 +271,7 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -243,7 +295,31 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
+
+        test('for object', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': {
+                            translation: i18NextData.translation
+                        }
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    // @ts-ignore
+                    if (this.$cms.t('OBJECT').key === 'Value_Default') {
+                        done();
+                    }
+                }
+            });
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -268,7 +344,7 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -292,7 +368,7 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -314,7 +390,7 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -336,7 +412,29 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
+            const launchRequest: JovoRequest = await t.requestBuilder.launch();
+            app.handle(ExpressJS.dummyRequest(launchRequest));
+        });
+
+        test('for object', async (done) => {
+            const app = new App({
+                i18n: {
+                    resources: {
+                        'en-US': i18NextData
+                    }
+                }
+            });
+            app.use(p);
+            app.setHandler({
+                LAUNCH() {
+                    // @ts-ignore
+                    if (this.$cms.t('OBJECT').key === 'Value_Alexa') {
+                        done();
+                    }
+                }
+            });
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -359,7 +457,7 @@ describe('Function $cms.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
         });
@@ -385,7 +483,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -412,7 +510,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -439,7 +537,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -466,7 +564,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -491,7 +589,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -516,7 +614,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -541,7 +639,7 @@ describe('Function $speech.t()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -572,7 +670,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -599,7 +697,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -626,7 +724,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -653,7 +751,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -678,7 +776,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -703,7 +801,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -728,7 +826,7 @@ describe('Function $speech.addT()', () => {
                 }
             });
 
-            
+
             const launchRequest: JovoRequest = await t.requestBuilder.launch();
             app.handle(ExpressJS.dummyRequest(launchRequest));
 
