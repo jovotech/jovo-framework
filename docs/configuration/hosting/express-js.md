@@ -51,7 +51,7 @@ const { WebhookVerified: Webhook, ExpressJS } = require('jovo-framework');
 // Instead of this
 const { Webhook, ExpressJS } = require('jovo-framework');
 ```
-and modify your Express Server Setup like this:
+Modify your Express Server Setup like this:
 
 ```javascript
 // Use this
