@@ -57,7 +57,7 @@ export class DynamoDb implements Db {
                 const AWSXRay = require('aws-xray-sdk-core'); // tslint:disable-line
                 this.aws = AWSXRay.captureAWS(require('aws-sdk'));
             } catch (e) {
-                if (e.message === 'Cannot find module \'aws-xray-sdk-core\'') {
+                if (e.message.includes('Cannot find module \'aws-xray-sdk-core\'')) {
                     throw new JovoError(
                         e.message,
                         ErrorCode.ERR,
@@ -86,7 +86,7 @@ export class DynamoDb implements Db {
                 const dax = new AmazonDaxClient(this.config.dax);
                 this.docClient =  new this.aws.DynamoDB.DocumentClient({service: dax});
             } catch (e) {
-                if (e.message === 'Cannot find module \'amazon-dax-client\'') {
+                if (e.message.includes('Cannot find module \'amazon-dax-client\'')) {
                     throw new JovoError(
                         e.message,
                         ErrorCode.ERR,
