@@ -1,4 +1,4 @@
-import {Cms, BaseCmsPlugin, BaseApp, Jovo, PluginConfig, HandleRequest, SpeechBuilder, Log} from 'jovo-core';
+import { Cms, BaseCmsPlugin, BaseApp, Jovo, PluginConfig, HandleRequest, SpeechBuilder, Log } from 'jovo-core';
 import _merge = require('lodash.merge');
 import * as fs from "fs";
 import * as util from 'util';
@@ -29,7 +29,7 @@ export class I18Next extends BaseCmsPlugin {
         nonExplicitWhitelist: false,
         preload: false,
         lowerCaseLng: false,
-        ns: 'translation',
+        ns: ['translation', 'AlexaSkill', 'GoogleAction'],
         defaultNS: 'translation',
         fallbackNS: false,
         saveMissing: false,
@@ -70,40 +70,25 @@ export class I18Next extends BaseCmsPlugin {
         super.install(app);
         app.middleware('setup')!.use(this.loadFiles.bind(this));
 
-        Jovo.prototype.t = function() {
-            this.$app!.$cms.I18Next.i18n.changeLanguage(this.$request!.getLocale());
-            return this.$app!.$cms.I18Next.i18n.t.apply(
-                this.$app!.$cms.I18Next.i18n, arguments
-            );
+        Jovo.prototype.t = function () {
+            return getSpeech.call(this, arguments);
         };
 
-        SpeechBuilder.prototype.t = function() {
-            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.$request!.getLocale());
-            const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
-                this.jovo!.$app!.$cms.I18Next.i18n, arguments
-            );
-            this.addText(translatedText);
-            return this;
+        SpeechBuilder.prototype.t = function () {
+            return this.addText(getSpeech.call(this, arguments));
         };
-        SpeechBuilder.prototype.addT = function() {
-            this.jovo!.$app!.$cms.I18Next.i18n.changeLanguage(this.jovo!.$request!.getLocale());
-            const translatedText = this.jovo!.$app!.$cms.I18Next.i18n.t.apply(
-                this.jovo!.$app!.$cms.I18Next.i18n, arguments
-            );
-            this.addText(translatedText);
-            return this;
+        SpeechBuilder.prototype.addT = function () {
+            return this.addText(getSpeech.call(this, arguments));
         };
 
-        Cms.prototype.t = function() {
+        Cms.prototype.t = function () {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.$request!.getLocale());
-            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
-                this.$jovo.$app!.$cms.I18Next.i18n, arguments
-            );
+            return getSpeech.call(this, arguments);
         };
     }
+
     async loadFiles(handleRequest: HandleRequest) {
         const readdir = util.promisify(fs.readdir);
         handleRequest.app.$cms.I18Next = {};
@@ -134,6 +119,14 @@ export class I18Next extends BaseCmsPlugin {
             handleRequest.app.$cms.I18Next.resources = this.config.resources;
         }
 
+        Object.keys(handleRequest.app.$cms.I18Next.resources).forEach((locale) => {
+            const resource = handleRequest.app.$cms.I18Next.resources[locale];
+            if (resource['AlexaSkill'] || resource['GoogleAction']) {
+                // @ts-ignore
+                handleRequest.app.config.platformSpecificResponses = true;
+            }
+        });
+
         Log.debug(`Adding resources to $cms object:`);
         Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
         i18n
@@ -143,6 +136,50 @@ export class I18Next extends BaseCmsPlugin {
                 },
                 this.config));
         handleRequest.app.$cms.I18Next.i18n = i18n;
-
     }
+}
+
+function getSpeech(this: any, args: any) {  // tslint:disable-line
+    let jovo = this;
+    if (this.jovo!) {
+        jovo = this.jovo!;
+    } else if (this.$jovo) {
+        jovo = this.$jovo;
+    }
+
+    jovo.$app!.$cms.I18Next.i18n.changeLanguage(jovo.$request!.getLocale());
+
+    if (jovo.$app.config.platformSpecificResponses) {
+        const platform = jovo.getType();
+        const key = args[0];
+        args[0] = `${platform}:translation:${key}`;
+
+        const keyExists = jovo.$app!.$cms.I18Next.i18n.exists.apply(
+            jovo.$app!.$cms.I18Next.i18n, args
+        );
+
+        if (keyExists) {
+            let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+                jovo.$app!.$cms.I18Next.i18n, args
+            );
+
+            if (typeof translatedText === 'string' && translatedText === '/') {
+                translatedText = '';
+            } else if (translatedText.constructor === Array) {
+                const i = translatedText.indexOf('/');
+                if (i > -1) {
+                    translatedText[i] = '';
+                }
+            }
+
+            return translatedText;
+        }
+
+        args[0] = key;
+    }
+
+    const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+        jovo.$app!.$cms.I18Next.i18n, args
+    );
+    return translatedText;
 }

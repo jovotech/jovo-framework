@@ -20,6 +20,7 @@ export interface Config extends ExtensibleConfig {
     spreadsheetId?: string;
     sheets?: GoogleSheetsSheet[];
     access?: string;
+    caching?: boolean;
 }
 
 export class GoogleSheetsCMS extends BaseCmsPlugin {
@@ -29,8 +30,10 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         spreadsheetId: undefined,
         access: 'private',
         sheets: [],
+        caching: true
     };
     jwtClient: any; // tslint:disable-line
+    baseApp: any;   // tslint:disable-line
 
     constructor(config?: Config) {
         super(config);
@@ -46,6 +49,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
 
     async install(app: BaseApp) {
         super.install(app);
+        this.baseApp = app;
         app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
 
         const defaultSheetMap: {[key: string]: any}= { // tslint:disable-line
