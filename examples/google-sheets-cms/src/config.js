@@ -40,6 +40,7 @@ module.exports = {
                     access: 'public',
                     type: 'Responses',
                     position: 1,
+                    caching: false
                 },
                 {
                     spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
