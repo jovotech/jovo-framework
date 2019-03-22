@@ -161,7 +161,7 @@ export class DynamoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: object) {
+    async save(primaryKey: string, key: string, data: any) {
         this.errorHandling();
 
         const getDataMapParams: DocumentClient.PutItemInput = {
@@ -183,7 +183,7 @@ export class DynamoDb implements Db {
         if (!this.dynamoClient) {
             throw new JovoError(`Couldn't use DynamoDb. DynamoClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
-        
+
         const newTableParams: AWS.DynamoDB.Types.CreateTableInput = {
             TableName: this.config.tableName!,
             AttributeDefinitions: [
