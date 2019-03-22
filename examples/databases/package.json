@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-databases",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,12 +14,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-db-datastore": "^2.1.2",
-    "jovo-db-dynamodb": "^2.1.2",
+    "jovo-db-dynamodb": "^2.1.3",
     "jovo-db-filedb": "^2.1.2",
     "jovo-db-mysql": "^2.1.2",
-    "jovo-framework": "^2.1.2",
-    "jovo-platform-alexa": "^2.1.3",
-    "jovo-platform-googleassistant": "^2.1.4",
+    "jovo-framework": "^2.1.3",
+    "jovo-platform-alexa": "^2.1.4",
+    "jovo-platform-googleassistant": "^2.1.5",
     "jovo-plugin-debugger": "^2.1.2"
   }
 }
