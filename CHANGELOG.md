@@ -1,5 +1,19 @@
 # Jovo Framework Changelog
 
+## 2.1.4 (2019-03-22)
+
+#### :rocket: New Feature
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) :sparkles: CMS-Caching, Platform-Specific Responses ([@rubenaeg](https://github.com/rubenaeg))
+
+#### :bug: Bug Fix
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) I18Next Tests ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-db-dynamodb` Fix mandatory config property
+* `jovo-framework` Fix Typescript compilation issues
+
+
+#### Committers: 1
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+
 
 ## 2.1.3 (2019-03-14)
 
