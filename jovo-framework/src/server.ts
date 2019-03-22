@@ -17,10 +17,15 @@ server.listen = function() {
 };
 
 const verifiedServer: express.Application = express();
+verifiedServer.jovoApp = undefined;
+
 verifiedServer.listen = function() {
     try {
         const verifier = require('alexa-verifier-middleware');
 
+        if (verifiedServer.jovoApp) {
+            verifiedServer.jovoApp.initWebhook();
+        }
         const router = express.Router();
         verifiedServer.use(router);
         router.use('/webhook_alexa', verifier);

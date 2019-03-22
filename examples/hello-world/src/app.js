@@ -21,19 +21,27 @@ app.use(
 
 
 app.setHandler({
-    async LAUNCH(jovo) {
-        return this.toIntent('HelloWorldIntent');
+    async LAUNCH() {
+        this.ask('How can I help you?')
+
+    },
+
+    HelpIntent()  {
+        this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
+            .tell('Bla Bla');
     },
 
     HelloWorldIntent() {
-        this
-            .followUpState('NameState')
-            .ask('Hello World! What\'s your name?', 'Please tell me your name.');
+        this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
+            .tell('Bla Bla');
     },
     NameState: {
-        MyNameIsIntent() {
+        GuessMovieIntent() {
             this.$user.$data.name = this.$inputs.name.value;
-            return this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+            this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
+                .tell('Bla Bla', 'Bla Bla');
+
+
 
         },
     },
