@@ -15,7 +15,7 @@ export interface Config extends PluginConfig {
         endpoints?: string[];
         region?: string;
     };
-    awsXray: boolean;
+    awsXray?: boolean;
     awsConfig?: AWS.DynamoDB.Types.ClientConfiguration;
 }
 
