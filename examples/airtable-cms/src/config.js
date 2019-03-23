@@ -5,8 +5,8 @@ module.exports = {
     },
     cms: {
         AirtableCMS: {
-            apiKey: '<api-key>',
-            baseId: '<base-id>',
+            apiKey: 'keyEFgJNdTeUauiFk',
+            baseId: 'lPIL3akWhaw0EZ',
             tables: [
                 {
                     name: 'test',

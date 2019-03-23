@@ -232,6 +232,20 @@ cms: {
 },
 ```
 
+## Advanced Sheet Features
+
+### CMS-Caching
+
+Since Jovo `v2.1.4` we support CMS-Caching, an easy way to allow for faster development with CMS. 
+
+### Platform-specific Responses
+
+Since Jovo `v2.1.4` we support platform-specific responses for i18n, as well as for CMS. This allows you to have isolated output for a specified platform, without altering the default one.
+
+![Platform-specific Responses](../../img/platform-specific-responses.jpg "Platform-specific Responses")
+
+In this example, the value for `GOODBYE` will be overwritten, whenever a response is triggered by an Alexa-Skill. `WELCOME` remains the same for all platforms.
+If you don't want any output for a specific platform, use `/`.
 
 
 <!--[metadata]: {"description": "Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.",

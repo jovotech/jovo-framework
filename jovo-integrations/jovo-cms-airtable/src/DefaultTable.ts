@@ -14,6 +14,7 @@ export interface AirtableTable extends PluginConfig {
         sort?: object[]; 
         view?: string;
     };
+    caching?: boolean;
 }
 
 export class DefaultTable implements Plugin {
@@ -21,7 +22,8 @@ export class DefaultTable implements Plugin {
         enabled: true,
         selectOptions: {
             view: 'Grid view'
-        }
+        },
+        caching: true
     };
 
     cms?: AirtableCMS;
@@ -37,6 +39,10 @@ export class DefaultTable implements Plugin {
         extensible.middleware('retrieve')!.use(this.retrieve.bind(this));
 
         this.config.table = this.config.table ? this.config.table : this.config.name;
+
+        if(this.cms.config.caching === false || this.config.caching === false) {
+            this.cms.baseApp.middleware('request').use(this.retrieve.bind(this));
+        }
     }
 
     uninstall(cms: Extensible) {

@@ -54,16 +54,27 @@ export class ResponsesTable extends DefaultTable {
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line        
         const headers: string[] = values[0];
+        const platforms = ['AlexaSkill', 'GoogleAction'];
         const resources:any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
                 const cell: string = row[j];
                 let locale: string = headers[j];
+                let platform: string | undefined;
 
-                // workaround
-                if (locale.length === 5) {
-                    locale = locale.substr(0, 2) + '-' + locale.substr(3).toUpperCase();
+                const localeSplit: string[] = locale.split('-');
+
+                if(localeSplit.length >= 2) {
+                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
+                    if(localeSplit.length === 3) {
+                        for(const p of platforms) {
+                            if(localeSplit[2] === p.toLowerCase()) {
+                                platform = p;
+                                this.cms!.baseApp.config.platformSpecificResponses = true;
+                            }
+                        } 
+                    }
                 }
 
                 // match locale
@@ -72,10 +83,18 @@ export class ResponsesTable extends DefaultTable {
                     continue;
                 }
 
-                const valueArray = _get(resources, `${locale}.translation.${row[0]}`, []);
+                let key = `${locale}.translation.${row[0]}`;
+                if (platform) {
+                    if (!cell || cell === '') {
+                        continue;
+                    }
+                    key = `${locale}.${platform}.translation.${row[0]}`;
+                }
+
+                const valueArray = _get(resources, key, []);
                 valueArray.push(cell);
 
-                _set(resources, `${locale}.translation.${row[0]}`, valueArray);
+                _set(resources, key, valueArray);
             }
         }        
 
@@ -93,13 +112,18 @@ export class ResponsesTable extends DefaultTable {
             i18n.init(Object.assign({
                 resources
             }, this.config.i18Next));
-            handleRequest.app.$cms.I18Next.i18n = i18n;
+            handleRequest.app.$cms.I18Next = { i18n };
         } else {
             Object.keys(resources).forEach((localeKey) => {
                 const resource = resources[localeKey];
-                Object.keys(resource.translation).forEach((key) => {
-                    handleRequest.app.$cms.I18Next.i18n.addResource(localeKey, 'translation', key, resource.translation[key]);
-                });
+
+                for (const platform of platforms) {
+                    if (resource[platform]) {
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform]);
+                    }
+                }
+
+                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation);
             });
         }
 
