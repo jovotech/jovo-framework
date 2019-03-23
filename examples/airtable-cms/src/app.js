@@ -26,7 +26,7 @@ app.setHandler({
     LAUNCH() {
         this.tell(this.$cms.t('WELCOME'));
         
-        console.log(this.$cms.test2);
+        // console.log(this.$cms.test2);
         
     },
 });
