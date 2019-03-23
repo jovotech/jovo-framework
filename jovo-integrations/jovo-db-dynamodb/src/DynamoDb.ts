@@ -155,7 +155,6 @@ export class DynamoDb implements Db {
         if (!this.docClient) {
             throw new JovoError(`Couldn't use DynamoDb. DocClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
-
         if (!this.config.primaryKeyColumn) {
             throw new JovoError(`Couldn't use DynamoDB. primaryKeyColumn has to be set.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
@@ -177,6 +176,16 @@ export class DynamoDb implements Db {
     }
 
     async delete(primaryKey: string) {
+        this.errorHandling();
+
+        const deleteItemInput: DocumentClient.DeleteItemInput = {
+            TableName: this.config.tableName!,
+            Key: {
+                [this.config.primaryKeyColumn!]: primaryKey
+            }
+        };
+
+        return await this.docClient!.delete(deleteItemInput).promise()
     }
 
     private async createTable() {
