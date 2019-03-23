@@ -65,6 +65,8 @@ export class DynamoDb implements Db {
                         undefined,
                         'Please run `npm install aws-xray-sdk-core`'
                     );
+                } else {
+                    throw e;
                 }
             }
         }
@@ -94,6 +96,8 @@ export class DynamoDb implements Db {
                         undefined,
                         'Please run `npm install amazon-dax-client`'
                     );
+                } else {
+                    throw e;
                 }
             }
 
