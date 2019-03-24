@@ -1,4 +1,4 @@
-import {Extensible, HandleRequest, Cms, ErrorCode, JovoError} from 'jovo-core';
+import { Extensible, HandleRequest, Cms, ErrorCode, JovoError } from 'jovo-core';
 import { AirtableTable, DefaultTable } from "./DefaultTable";
 
 const i18n = require('i18next');
@@ -45,17 +45,15 @@ export class ResponsesTable extends DefaultTable {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage(this.$jovo.$request!.getLocale());
-            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
-                this.$jovo.$app!.$cms.I18Next.i18n, arguments
-            );
+            // @ts-ignore
+            return this.$jovo.t.apply(this, arguments);
         };
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line        
         const headers: string[] = values[0];
         const platforms = ['AlexaSkill', 'GoogleAction'];
-        const resources:any = {}; // tslint:disable-line
+        const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
@@ -65,16 +63,20 @@ export class ResponsesTable extends DefaultTable {
 
                 const localeSplit: string[] = locale.split('-');
 
-                if(localeSplit.length >= 2) {
-                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
-                    if(localeSplit.length === 3) {
-                        for(const p of platforms) {
-                            if(localeSplit[2] === p.toLowerCase()) {
-                                platform = p;
-                                this.cms!.baseApp.config.platformSpecificResponses = true;
-                            }
-                        } 
+                // workaround for locales like en and en-US to work
+                for (const p of platforms) {
+                    const i = localeSplit.indexOf(p);
+                    if (i > -1) {
+                        localeSplit.splice(i, 1);
+                        platform = p;
+                        this.cms!.baseApp.config.platformSpecificResponses = true;
                     }
+                }
+
+                if (localeSplit.length === 2) {
+                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
+                } else {
+                    locale = localeSplit[0];
                 }
 
                 // match locale
@@ -96,7 +98,7 @@ export class ResponsesTable extends DefaultTable {
 
                 _set(resources, key, valueArray);
             }
-        }        
+        }
 
         if (!this.config.name) {
             throw new JovoError(

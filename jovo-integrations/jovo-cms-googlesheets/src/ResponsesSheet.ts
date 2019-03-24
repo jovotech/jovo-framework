@@ -1,11 +1,11 @@
-import {Extensible, HandleRequest, Cms} from 'jovo-core';
+import { Extensible, HandleRequest, Cms } from 'jovo-core';
 const i18n = require('i18next');
 
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
-import { DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
+import { DefaultSheet, GoogleSheetsSheet } from "./DefaultSheet";
 
 
 export interface Config extends GoogleSheetsSheet {
@@ -41,8 +41,8 @@ export class ResponsesSheet extends DefaultSheet {
     }
 
     install(extensible: Extensible) {
-       super.install(extensible);
-        Cms.prototype.t = function() {
+        super.install(extensible);
+        Cms.prototype.t = function () {
             if (!this.$jovo) {
                 return;
             }
@@ -55,7 +55,7 @@ export class ResponsesSheet extends DefaultSheet {
 
         const headers: string[] = values[0];
         const platforms = ['AlexaSkill', 'GoogleAction'];
-        const resources:any = {}; // tslint:disable-line
+        const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
@@ -65,16 +65,20 @@ export class ResponsesSheet extends DefaultSheet {
 
                 const localeSplit: string[] = locale.split('-');
 
-                if(localeSplit.length >= 2) {
-                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
-                    if(localeSplit.length === 3) {
-                        for(const p of platforms) {
-                            if(localeSplit[2] === p.toLowerCase()) {
-                                platform = p;
-                                this.cms!.baseApp.config.platformSpecificResponses = true;
-                            }
-                        } 
+                // workaround for locales like en and en-US to work
+                for (const p of platforms) {
+                    const i = localeSplit.indexOf(p.toLowerCase());
+                    if (i > -1) {
+                        localeSplit.splice(i, 1);
+                        platform = p;
+                        this.cms!.baseApp.config.platformSpecificResponses = true;
                     }
+                }
+
+                if (localeSplit.length === 2) {
+                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
+                } else {
+                    locale = localeSplit[0];
                 }
 
                 // match locale

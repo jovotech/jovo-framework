@@ -1,6 +1,6 @@
 
 module.exports = {
-    logging: true,
+    // logging: true,
     // v1: {
     //    logging: true,
     // },
@@ -35,20 +35,13 @@ module.exports = {
             // ]
             sheets: [
                 {
-                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
+                    spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',
                     name: 'responses',
                     access: 'public',
                     type: 'Responses',
                     position: 1,
                     caching: false
                 },
-                {
-                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
-                    name: 'answers',
-                    access: 'public',
-                    type: 'KeyValue',
-                    position: 2,
-                }
             ]
        }
     }

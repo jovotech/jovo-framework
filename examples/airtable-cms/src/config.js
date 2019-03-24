@@ -1,25 +1,18 @@
 module.exports = {
-    logging: true,
+    // logging: true,
     intentMap: {
         'AMAZON.StopIntent': 'END',
     },
     cms: {
         AirtableCMS: {
-            apiKey: '<api-key>',
-            baseId: '<base-id>',
+            apiKey: 'keyEFgJNdTeUauiFk',
+            baseId: 'appU5zPjXwV5FCy2i',
             tables: [
                 {
                     name: 'test',
-                    table: 'Table 1',
-                    type: 'Responses'
-                },
-                {
-                    name: 'test2',
-                    table: 'Table 2',
-                    type: 'ObjectArray',
-                    selectOptions: {
-                        fields: ['Name', 'Location']
-                    }
+                    table: 'test',
+                    type: 'Responses',
+                    caching: false
                 }
             ]
         }
