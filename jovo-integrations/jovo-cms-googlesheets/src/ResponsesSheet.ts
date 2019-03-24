@@ -54,6 +54,7 @@ export class ResponsesSheet extends DefaultSheet {
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
+        // TODO outsource into generic function
         const platforms = ['AlexaSkill', 'GoogleAction'];
         const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
@@ -65,7 +66,7 @@ export class ResponsesSheet extends DefaultSheet {
 
                 const localeSplit: string[] = locale.split('-');
 
-                // workaround for locales like en and en-US to work
+                // workaround for generic locales like en to work
                 for (const p of platforms) {
                     const i = localeSplit.indexOf(p.toLowerCase());
                     if (i > -1) {

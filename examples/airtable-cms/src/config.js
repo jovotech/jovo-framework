@@ -5,14 +5,21 @@ module.exports = {
     },
     cms: {
         AirtableCMS: {
-            apiKey: 'keyEFgJNdTeUauiFk',
-            baseId: 'appU5zPjXwV5FCy2i',
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
             tables: [
                 {
                     name: 'test',
-                    table: 'test',
-                    type: 'Responses',
-                    caching: false
+                    table: 'Table 1',
+                    type: 'Responses'
+                },
+                {
+                    name: 'test2',
+                    table: 'Table 2',
+                    type: 'ObjectArray',
+                    selectOptions: {
+                        fields: ['Name', 'Location']
+                    }
                 }
             ]
         }
