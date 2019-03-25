@@ -1,4 +1,4 @@
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _get = require('lodash.get');
@@ -44,24 +44,39 @@ export class DatastoreDb implements Db {
 
     }
 
+    errorHandling() {
+        if (!this.datastore) {
+            throw new JovoError(
+                'datastore was not initialized at runtime',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-datastore',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/google-datastore'
+            );
+        }
+
+        if (!this.config.entity) {
+            throw new JovoError(
+                'Couldn\'t use Datastore. entity has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-datastore',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/google-datastore'
+            );
+        }
+    }
+
     /**
      * Returns object for given primaryKey
      * @param {string} primaryKey
      * @return {Promise<any>}
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
-        if (!this.datastore) {
-            throw new Error(`Couldn't use Datastore. It has to be initialized.`);
-        }
+        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
 
-        if (!this.config.entity) {
-            throw new Error(`Couldn't use Datastore. entity has to be set.`);
-        }
-
-
-        const entityKey = this.datastore.key([this.config.entity, primaryKey]);
-
-        const entities: any[] = await this.datastore.get(entityKey); // tslint:disable-line
+        const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
         if (!entities || entities.length === 0) {
             return Promise.reject(new Error('No entities found.'));
         }
@@ -74,17 +89,9 @@ export class DatastoreDb implements Db {
     }
 
     async save(primaryKey: string, key: string, data: object) {
-        if (!this.datastore) {
-            throw new Error(`Couldn't use Datastore. It has to be initialized.`);
-        }
-        if (!this.config.entity) {
-            throw new Error(`Couldn't use Datastore. entity has to be set.`);
-        }
+        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
 
-
-        const entityKey = this.datastore.key([this.config.entity, primaryKey]);
-
-        const entities: any[] = await this.datastore.get(entityKey); // tslint:disable-line
+        const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
 
         let entity = undefined;
         if (!entities || entities.length === 0 || entities[0] === undefined) {
@@ -105,20 +112,14 @@ export class DatastoreDb implements Db {
             key: entityKey,
             data: entity,
         };
-        await this.datastore.save(dataStoreDataObject);
+        await this.datastore!.save(dataStoreDataObject);
 
     }
 
     async delete(primaryKey: string) {
-        if (!this.datastore) {
-            throw new Error(`Couldn't use Datastore. It has to be initialized.`);
-        }
-        if (!this.config.entity) {
-            throw new Error(`Couldn't use Datastore. entity has to be set.`);
-        }
-        const entityKey = this.datastore.key([this.config.entity, primaryKey]);
+        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
 
-        return await this.datastore.delete(entityKey);
+        return await this.datastore!.delete(entityKey);
     }
 
 }
