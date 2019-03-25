@@ -40,7 +40,7 @@ describe('test install()', () => {
 });
 
 describe('test errorHandling() which checks config parameters', () => {
-    test('test should throw an error if uri isn\'t set', () => {
+    test('test should throw a JovoError if uri isn\'t set', () => {
         const config = {
             uri: '',
             databaseName: 'test',
@@ -54,7 +54,7 @@ describe('test errorHandling() which checks config parameters', () => {
         }).toThrow(JovoError);
     });
 
-    test('test should throw an error if databaseName isn\'t set', () => {
+    test('test should throw a JovoError if databaseName isn\'t set', () => {
         const config = {
             uri: 'test',
             database: '',
@@ -68,7 +68,7 @@ describe('test errorHandling() which checks config parameters', () => {
         }).toThrow(JovoError);
     });
 
-    test('test should throw an error if primaryKeyColumn isn\'t set', () => {
+    test('test should throw a JovoError if primaryKeyColumn isn\'t set', () => {
         const config = {
             uri: 'test',
             databaseName: 'test',
@@ -82,7 +82,7 @@ describe('test errorHandling() which checks config parameters', () => {
         }).toThrow(JovoError);
     });
 
-    test('test should throw an error if collectionName isn\'t set', () => {
+    test('test should throw a JovoError if collectionName isn\'t set', () => {
         const config = {
             uri: 'test',
             databaseName: 'test',
@@ -96,7 +96,7 @@ describe('test errorHandling() which checks config parameters', () => {
         }).toThrow(JovoError);
     });
 
-    test('test shouldn\'t throw an error if config is valid', () => {
+    test('test shouldn\'t throw a JovoError if config is valid', () => {
         const config = {
             uri: 'test',
             databaseName: 'test',
