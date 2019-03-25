@@ -1,6 +1,7 @@
 import {Db, BaseApp, PluginConfig} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
+import _get = require('lodash.get');
 import Datastore = require("@google-cloud/datastore");
 
 export interface Config extends PluginConfig {
@@ -29,6 +30,14 @@ export class DatastoreDb implements Db {
 
     install(app: BaseApp) {
         this.datastore = new Datastore(this.config.gCloudConfig);
+
+        if (_get(app.config, 'db.default')) {
+            if (_get(app.config, 'db.default') === 'DatastoreDb') {
+                app.$db = this;
+            }
+        } else {
+            app.$db = this;
+        }
     }
 
     uninstall(app: BaseApp) {
