@@ -1,6 +1,7 @@
 
 import {Db, BaseApp, PluginConfig, ErrorCode, JovoError, Log} from 'jovo-core';
 import _merge = require('lodash.merge');
+import _get = require('lodash.get');
 import * as mysql from 'mysql';
 import {MysqlError, Pool, PoolConnection, PoolConfig} from "mysql";
 
@@ -37,7 +38,14 @@ export class MySQL implements Db {
                 'https://www.jovo.tech/docs/databases/mysql');
         }
         this.pool = mysql.createPool(this.config.connection);
-        app.$db = this;
+
+        if (_get(app.config, 'db.default')) {
+            if (_get(app.config, 'db.default') === 'MySQL') {
+                app.$db = this;
+            }
+        } else {
+            app.$db = this;
+        }
     }
 
     uninstall(app: BaseApp) {
@@ -45,6 +53,41 @@ export class MySQL implements Db {
             this.pool.end(() => {
                 Log.verbose('MySQL Connection pool released.');
             });
+        }
+    }
+
+    errorHandling() {
+        if (!this.config.dataColumnName) {
+            throw new JovoError(
+                'dataColumnName must be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mysql',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mysql'
+            );
+        }
+
+        if (!this.config.primaryKeyColumn) {
+            throw new JovoError(
+                'primaryKeyColumn must be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mysql',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mysql'
+            );
+        }
+
+        if (!this.config.tableName) {
+            throw new JovoError(
+                'tableName must be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mysql',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mysql'
+            );
         }
     }
 
@@ -66,13 +109,44 @@ export class MySQL implements Db {
 
     }
 
-    async save(primaryKey: string, key: string, data: object) {
-        return await this.insert(primaryKey, data);
+    save(primaryKey: string, key: string, data: any) {
+        this.errorHandling();
+
+        return new Promise(async (resolve, reject) => {
+            try {
+                const connection: PoolConnection = await this.getConnection();
+
+                // Use the connection
+                const query = connection.query(
+                    `INSERT INTO ${this.config.tableName} SET ? ON DUPLICATE KEY UPDATE ${this.config.dataColumnName}=?`,
+                    [
+                        {
+                            [this.config.primaryKeyColumn!] : primaryKey,
+                            [this.config.dataColumnName!]: JSON.stringify(data)
+                        },
+                        JSON.stringify(data)
+                    ],
+                    (error: MysqlError | null, results: any) => { // tslint:disable-line
+
+                        if(error) {
+                            return reject(error);
+                        }
+                        resolve(results);
+                        connection.release();
+
+                    }
+                );
+                Log.verbose('SQL STATEMENT: ' + query.sql);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     async delete(primaryKey: string) {
+        this.errorHandling();
+        
         return new Promise(async (resolve, reject) => {
-
             try {
                 const connection: PoolConnection = await this.getConnection();
 
@@ -93,60 +167,37 @@ export class MySQL implements Db {
         });
     }
 
-    private async createTable() {
-        return this.create();
-    }
+    private createTable(): Promise<any> {
+        this.errorHandling();
 
-    private insert(primaryKey: string, data: object) {
         return new Promise(async (resolve, reject) => {
-            if (!this.config.primaryKeyColumn) {
-                return reject(new JovoError(
-                    'PrimaryKeyColumn must be set.',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-db-mysql',
-                    undefined,
-                    undefined,
-                    'https://www.jovo.tech/docs/databases/mysql'));
-            }
-            if (!this.config.dataColumnName) {
-
-                return reject(new JovoError(
-                    'dataColumnName must be set.',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-db-mysql',
-                    undefined,
-                    undefined,
-                    'https://www.jovo.tech/docs/databases/mysql'));
-            }
-
             try {
                 const connection: PoolConnection = await this.getConnection();
 
-                // Use the connection
-                const query = connection.query(`INSERT INTO ${this.config.tableName} SET ? ON DUPLICATE KEY UPDATE ${this.config.dataColumnName}=?`,
-                    [{
-                        [this.config.primaryKeyColumn!] : primaryKey,
-                        [this.config.dataColumnName!]: JSON.stringify(data)
-                    },
-                        JSON.stringify(data)],
-                    (error: MysqlError | null, results: any) => { // tslint:disable-line
+                const sql = `
+                    CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(255) NOT NULL,
+                    ${this.config.dataColumnName} MEDIUMTEXT NULL,
+                    PRIMARY KEY (${this.config.primaryKeyColumn}));
+                    `;
 
-                        if(error) {
-                            return reject(error);
-                        }
-                        resolve(results);
-                        connection.release();
-
-                    });
+                const query = connection.query(sql, (error: MysqlError, results: any) => { // tslint:disable-line
+                    if(error) {
+                        return reject(error);
+                    }
+                    resolve(results);
+                    connection.release();
+                });
                 Log.verbose('SQL STATEMENT: ' + query.sql);
-            } catch (e) {
+            } catch(e) {
                 reject(e);
+
             }
         });
     }
 
-
     private select(primaryKey: string) {
+        this.errorHandling();
+
         return new Promise(async (resolve, reject) => {
 
             try {
@@ -160,23 +211,13 @@ export class MySQL implements Db {
                         if(error) {
                             return reject(error);
                         }
-                        if (!this.config.dataColumnName) {
-                            return reject(new JovoError(
-                                'dataColumnName must be set.',
-                                ErrorCode.ERR_PLUGIN,
-                                'jovo-db-mysql',
-                                undefined,
-                                undefined,
-                                'https://www.jovo.tech/docs/databases/mysql'));
-                        }
-
 
                         if (results.length === 0) {
                             return resolve();
                         }
 
                         try {
-                            resolve({ [this.config.dataColumnName]: JSON.parse(results[0][this.config.dataColumnName])});
+                            resolve({ [this.config.dataColumnName!]: JSON.parse(results[0][this.config.dataColumnName!])});
                         } catch (e) {
                             reject(e);
                         }
@@ -210,47 +251,4 @@ export class MySQL implements Db {
             });
         });
     }
-
-
-
-    private create() {
-
-        return new Promise(async (resolve, reject) => {
-
-            if (!this.config.dataColumnName) {
-                return reject(new JovoError(
-                    'dataColumnName must be set.',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-db-mysql',
-                    undefined,
-                    undefined,
-                    'https://www.jovo.tech/docs/databases/mysql'));
-            }
-
-            try {
-                const connection: PoolConnection = await this.getConnection();
-
-                const sql = `
-                    CREATE TABLE ${this.config.tableName} (${this.config.primaryKeyColumn} VARCHAR(255) NOT NULL,
-                    ${this.config.dataColumnName} MEDIUMTEXT NULL,
-                    PRIMARY KEY (${this.config.primaryKeyColumn}));
-                    `;
-
-                const query = connection.query(sql, (error: MysqlError, results: any) => { // tslint:disable-line
-                    if(error) {
-                        return reject(error);
-                    }
-                    resolve(results);
-                    connection.release();
-                });
-                Log.verbose('SQL STATEMENT: ' + query.sql);
-            } catch(e) {
-                reject(e);
-
-            }
-        });
-    }
-
-
-
 }
