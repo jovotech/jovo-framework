@@ -42,6 +42,7 @@ describe('test install()', () => {
 describe('test errorHandling() which checks config parameters', () => {
     test('test should throw an error if uri isn\'t set', () => {
         const config = {
+            uri: '',
             databaseName: 'test',
             collectionName: 'UserData',
             primaryKeyColumn: 'userId'
@@ -56,6 +57,7 @@ describe('test errorHandling() which checks config parameters', () => {
     test('test should throw an error if databaseName isn\'t set', () => {
         const config = {
             uri: 'test',
+            databaseName: '',
             collectionName: 'UserData',
             primaryKeyColumn: 'userId'
         };
@@ -126,9 +128,7 @@ describe('test database operations', () => {
     });
 
     afterEach(async () => {
-        if (mongoServer) {
-            await mongoServer.stop();
-        }
+        await mongoServer.stop();
     });
 
     async function save(primaryKey: string, key: string, data: any) {
