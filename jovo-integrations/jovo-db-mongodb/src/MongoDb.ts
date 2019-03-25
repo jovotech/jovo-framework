@@ -111,7 +111,7 @@ export class MongoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: object) {
+    async save(primaryKey: string, key: string, data: any) {
         this.errorHandling();
 
         try {
