@@ -41,19 +41,47 @@ export class MongoDb implements Db {
 
     errorHandling() {
         if (!this.config.uri) {
-            throw new Error(`Couldn't use MongoDb. uri has to be set. Please check your config.`);
+            throw new JovoError(
+                'uri has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.primaryKeyColumn) {
-            throw new Error(`Couldn't use MongoDb. primaryKeyColumn has to be set. Please check your config.`);
+            throw new JovoError(
+                'primaryKeyColumn has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.databaseName) {
-            throw new Error(`Couldn't use MongoDb. databaseName has to be set. Please check your config.`);
+            throw new JovoError(
+                'databaseName has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.collectionName) {
-            throw new Error(`Couldn't use MongoDb. collectionName has to be set. Please check your config.`);
+            throw new JovoError(
+                'collectionName has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 
