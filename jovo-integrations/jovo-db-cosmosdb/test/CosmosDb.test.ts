@@ -42,6 +42,7 @@ describe('test install()', () => {
 describe('test errorHandling() which checks config parameters', () => {
     test('test should throw an error if uri isn\'t set', () => {
         const config = {
+            uri: '',
             databaseName: 'test',
             collectionName: 'UserData',
             primaryKeyColumn: 'userId'
@@ -50,12 +51,13 @@ describe('test errorHandling() which checks config parameters', () => {
 
         expect(() => {
             cosmosdb.errorHandling();
-        }).toThrow(Error);
+        }).toThrow(JovoError);
     });
 
     test('test should throw an error if databaseName isn\'t set', () => {
         const config = {
             uri: 'test',
+            database: '',
             collectionName: 'UserData',
             primaryKeyColumn: 'userId'
         };
@@ -63,7 +65,7 @@ describe('test errorHandling() which checks config parameters', () => {
 
         expect(() => {
             cosmosdb.errorHandling();
-        }).toThrow(Error);
+        }).toThrow(JovoError);
     });
 
     test('test should throw an error if primaryKeyColumn isn\'t set', () => {
@@ -77,7 +79,7 @@ describe('test errorHandling() which checks config parameters', () => {
 
         expect(() => {
             cosmosdb.errorHandling();
-        }).toThrow(Error);
+        }).toThrow(JovoError);
     });
 
     test('test should throw an error if collectionName isn\'t set', () => {
@@ -91,7 +93,7 @@ describe('test errorHandling() which checks config parameters', () => {
 
         expect(() => {
             cosmosdb.errorHandling();
-        }).toThrow(Error);
+        }).toThrow(JovoError);
     });
 
     test('test shouldn\'t throw an error if config is valid', () => {
