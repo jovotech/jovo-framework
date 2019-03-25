@@ -1,51 +1,41 @@
+'use strict';
 
-const { App, Log, Util } = require('jovo-framework');
-const { Jovo } = require('jovo-core');
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
 
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { App } = require('jovo-framework');
 const { Alexa } = require('jovo-platform-alexa');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
-const { Dialogflow } = require('jovo-platform-dialogflow');
 
 const app = new App();
-Util.consoleLog();
 
 app.use(
-    new GoogleAssistant(),
-    // new Dialogflow(),
     new Alexa(),
+    new GoogleAssistant(),
     new JovoDebugger(),
-    new FileDb(),
+    new FileDb()
 );
 
 
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
+
 app.setHandler({
-    async LAUNCH() {
-        this.ask('How can I help you?')
-
-    },
-
-    HelpIntent()  {
-        this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
-            .tell('Bla Bla');
+    LAUNCH() {
+        return this.toIntent('HelloWorldIntent');
     },
 
     HelloWorldIntent() {
-        this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
-            .tell('Bla Bla');
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
     },
-    NameState: {
-        GuessMovieIntent() {
-            this.$user.$data.name = this.$inputs.name.value;
-            this.showImageCard('Title', 'Content', 'https://www.icone-png.com/png/18/18221.png')
-                .tell('Bla Bla', 'Bla Bla');
 
-
-
-        },
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
     },
 });
-
 
 module.exports.app = app;
