@@ -100,7 +100,7 @@ export class CanFulfillIntent implements Plugin {
             if (_get(alexaSkill.$response, 'sessionAttributes')) {
                 delete response.sessionAttributes;
             }
-            _set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _get(output, 'alexaSkill.CanFulFillRequest'));
+            _set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _get(output, 'Alexa.CanFulFillRequest'));
 
         }
 
