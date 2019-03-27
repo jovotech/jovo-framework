@@ -1,4 +1,4 @@
-import {BaseApp, JovoError, Jovo} from "jovo-core";
+import {BaseApp, JovoError} from "jovo-core";
 import {MySQL} from "../src/MySQL"; 
 import * as mysql from 'mysql';
 
@@ -128,10 +128,6 @@ describe('test database operations', () => {
         mySQL = new MySQL();
     });
 
-    // afterEach(() => {
-    //     jest.resetAllMocks();
-    // });
-
     describe('test load()', async () => {
         test('should throw error because select() throws error that is not "ER_NO_SUCH_TABLE"', async () => {
             const mockSelect = jest.fn().mockImplementation(() => {
@@ -189,7 +185,7 @@ describe('test database operations', () => {
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
-        test('connection.query() should reject the error parsed to the callback', () => {
+        test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => {
@@ -198,7 +194,7 @@ describe('test database operations', () => {
                 });
             });
 
-            mySQL.save('id', 'key', 'value').catch(e => {
+            await mySQL.save('id', 'key', 'value').catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
@@ -217,12 +213,12 @@ describe('test database operations', () => {
             expect(result).toBe('test');
         });
 
-        test('should catch and reject error thrown while trying to insert the data', () => {
+        test('should catch and reject error thrown while trying to insert the data', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            mySQL.save('id', 'key', 'value').catch(e => {
+            await mySQL.save('id', 'key', 'value').catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         })
@@ -244,7 +240,7 @@ describe('test database operations', () => {
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
-        test('connection.query() should reject the error parsed to the callback', () => {
+        test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => {
@@ -253,7 +249,7 @@ describe('test database operations', () => {
                 });
             });
 
-            mySQL.delete('id').catch(e => {
+            await mySQL.delete('id').catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
@@ -272,12 +268,12 @@ describe('test database operations', () => {
             expect(result).toBe('test');
         });
 
-        test('should catch and reject error thrown while trying to insert the data', () => {
+        test('should catch and reject error thrown while trying to insert the data', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            mySQL.delete('id').catch(e => {
+            await mySQL.delete('id').catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         });
@@ -300,7 +296,7 @@ describe('test database operations', () => {
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
-        test('connection.query() should reject the error parsed to the callback', () => {
+        test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, cb: any) => {
@@ -309,7 +305,7 @@ describe('test database operations', () => {
                 });
             });
 
-            mySQL['createTable']().catch(e => {
+            await mySQL['createTable']().catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
@@ -328,12 +324,12 @@ describe('test database operations', () => {
             expect(result).toBe('test');
         });
 
-        test('should catch and reject error thrown while trying to create the table', () => {
+        test('should catch and reject error thrown while trying to create the table', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            mySQL['createTable']().catch(e => {
+            await mySQL['createTable']().catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         });
@@ -361,7 +357,7 @@ describe('test database operations', () => {
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
-        test('connection.query() should reject the error parsed to the callback', () => {
+        test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => {
@@ -370,7 +366,7 @@ describe('test database operations', () => {
                 });
             });
 
-            mySQL['select']('id').catch(e => {
+            await mySQL['select']('id').catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
@@ -413,17 +409,17 @@ describe('test database operations', () => {
             expect(result).toBe(undefined);
         });
 
-        test('should catch and reject error thrown while trying to select the data', () => {
+        test('should catch and reject error thrown while trying to select the data', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            mySQL['select']('id').catch(e => {
+            await mySQL['select']('id').catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         });
 
-        test('should catch and reject error thrown while trying to JSON.parse() the queried', () => {
+        test('should catch and reject error thrown while trying to JSON.parse() the queried', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => {
@@ -437,7 +433,7 @@ describe('test database operations', () => {
                 });
             });
 
-            mySQL['select']('id').catch(e => {
+            await mySQL['select']('id').catch(e => {
                 expect(e).toBeInstanceOf(Error);
             });
         });
@@ -447,15 +443,15 @@ describe('test database operations', () => {
 describe('test getConnection()', () => {
     let mySQL: MySQL;
 
-    test('should throw JovoError because pool is undefined', () => {
+    test('should throw JovoError because pool is undefined', async () => {
         mySQL = new MySQL();
         _set(mySQL, 'pool', undefined);
 
-        mySQL['getConnection']()
+        await mySQL['getConnection']()
             .catch(e => expect(e).toBeInstanceOf(JovoError));
     });
 
-    test('should reject JovoError because pool.getConnection parses one in the callback', () => {
+    test('should reject JovoError because pool.getConnection parses one in the callback', async () => {
         mySQL = new MySQL();
         const getConnectionMock = jest.fn().mockImplementation((cb) => {
             const error = new Error('test');
@@ -463,7 +459,7 @@ describe('test getConnection()', () => {
         });
         _set(mySQL, 'pool.getConnection', getConnectionMock);
 
-        mySQL['getConnection']().catch(e => {
+        await mySQL['getConnection']().catch(e => {
             // to make sure that pool.getConnection is the one throwing the error,
             // we check whether the mock was called
             expect(getConnectionMock).toHaveBeenCalledTimes(1);
@@ -471,14 +467,14 @@ describe('test getConnection()', () => {
         });
     });
 
-    test('should resolve the value pool.getConnection parses in the callback', () => {
+    test('should resolve the value pool.getConnection parses in the callback', async () => {
         mySQL = new MySQL();
         const getConnectionMock = jest.fn().mockImplementation((cb) => {
             cb(undefined, 'test');
         });
         _set(mySQL, 'pool.getConnection', getConnectionMock);
 
-        mySQL['getConnection']().then(connection => {
+        await mySQL['getConnection']().then(connection => {
             expect(getConnectionMock).toHaveBeenCalledTimes(1);
             expect(connection).toBe('test');
         });
