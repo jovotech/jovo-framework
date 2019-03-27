@@ -47,7 +47,7 @@ This feature uses the [Jovo `i18next` integration](../../basic-concepts/output/i
 
 ### Caching
 
-The content of the CMS interfaces is by default retrieved when the Jovo app is initialized (e.g. when the server starts with `jovo run` or when the Lambda function does a cold start) and then stored into the `app` object ([learn more about `app` data here](../../basic-concepts/data#app-data '../data#app-data')). This is configured with the default configuration `caching: true` for each CMS integration.
+The content of the CMS interfaces is by default retrieved when the Jovo app is initialized (e.g. when the server starts with `jovo run` or when the Lambda function does a cold start) and then stored into the `app` object ([learn more about `app` data here](../../basic-concepts/data#app-data './data#app-data')). This is configured with the default configuration `caching: true` for each CMS integration.
 
 For some use cases (like testing), however, it might make sense to retrieve the CMS with every request. You can enable these instant updates by setting the `caching` option to `false`.
 
