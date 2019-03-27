@@ -121,7 +121,7 @@ export class I18Next extends BaseCmsPlugin {
 
         localeLoop:
         for (const locale in handleRequest.app.$cms.I18Next.resources) {
-            if (!handleRequest.app.$cms.I18Next.resources.hasProperty(locale)) {
+            if (!handleRequest.app.$cms.I18Next.resources.hasOwnProperty(locale)) {
                 continue;
             }
             
