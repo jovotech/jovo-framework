@@ -1,5 +1,23 @@
 # Jovo Framework Changelog
 
+
+## 2.1.5 (2019-03-27)
+
+#### :rocket: New Feature
+* `jovo-cms-airtable` [#432](https://github.com/jovotech/jovo-framework/pull/432) Adds Platform-specific Responses, CMS-Caching for Airtable Integration ([@rubenaeg](https://github.com/rubenaeg))
+
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` Fix session handling in Dialogflow contexts (issue #430)
+* `jovo-platform-alexa` Fix CanFulFillIntent response object (issue #438)
+
+
+#### Committers: 2
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 2.1.4 (2019-03-22)
 
 #### :rocket: New Feature
