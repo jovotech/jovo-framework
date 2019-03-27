@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-dynamodb",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.294.0",
-    "jovo-core": "^2.1.2"
+    "jovo-core": "^2.1.3"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
