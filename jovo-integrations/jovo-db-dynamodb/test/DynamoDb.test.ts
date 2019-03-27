@@ -3,9 +3,6 @@ import {BaseApp, JovoError} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
-import * as AWS from 'aws-sdk';
-
-// const AWSMock = jest.genMockFromModule('aws-sdk');
 jest.mock('aws-sdk');
 
 describe('test install()', () => {
@@ -77,14 +74,16 @@ describe('test install()', () => {
                     }
                 },
                 documentClientConfig: {
-                    convertEmptyValues: false
+                    convertEmptyValues: false,
+                    attrValue: 'S8'
                 }
             };
             const mergedConfig = {
                 params: {
                     key: 'value'
                 },
-                convertEmptyValues: false
+                convertEmptyValues: false,
+                attrValue: 'S8'
             }
             dynamoDb = new DynamoDb(config);
             app = new BaseApp();
@@ -96,7 +95,7 @@ describe('test install()', () => {
         });
     });
 
-    describe('test install() setting up AWSXrax if included in config', () => {
+    describe('test install() setting up AWSXray if included in config', () => {
         test('test should throw Error because aws-xray-sdk-core package isn\'t installed', () => {
             const config = {
                 awsXray: true
@@ -196,36 +195,37 @@ describe('test database operations', () => {
     describe('test save()', () => {
         test('should call errorHandling() once', async () => {
             // mock implementation to not throw error while going through save()
-            AWS.DynamoDB.DocumentClient.prototype.put = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: jest.fn()
-                }
-            });
+            const mockDocClient = {
+                put: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: jest.fn()
+                    }
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            dynamoDb.errorHandling = jest.fn();
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
+            jest.spyOn(dynamoDb, 'errorHandling');
 
             await dynamoDb.save('id', 'key', 'value');
 
             expect(dynamoDb.errorHandling).toBeCalledTimes(1);
         });
 
-        test('test should save key value pair for primaryKey', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.put = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return Promise.resolve({Attributes: params.Item});
+        test('should return value returned by put', async () => {
+            const mockDocClient = {
+                put: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: () => {
+                            return Promise.resolve({Attributes: params.Item});
+                        }
                     }
-                }
-            });
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.save('id', 'key', 'value');
 
-            expect(AWS.DynamoDB.DocumentClient.prototype.put).toBeCalled();
             expect(result!.Attributes).toEqual({
                 [dynamoDb.config.primaryKeyColumn!]: 'id',
                 key: 'value'
@@ -233,30 +233,32 @@ describe('test database operations', () => {
         });
 
         test('should not save anything to database because isCreating is true', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.put = jest.fn();
+            const mockDocClient = {
+                put: jest.fn()
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
             _set(dynamoDb, 'isCreating', true);
 
             await dynamoDb.save('id', 'key', 'value');
 
-            expect(AWS.DynamoDB.DocumentClient.prototype.put).not.toBeCalled();
+            expect(dynamoDb.docClient!.put).not.toBeCalled();
         });
     });
 
     describe('test delete()', () => {
         test('should call errorHandling() once', async () => {
             // mock implementation to not throw error while going through delete()
-            AWS.DynamoDB.DocumentClient.prototype.delete = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: jest.fn()
-                }
-            });
+            const mockDocClient = {
+                delete: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: jest.fn()
+                    }
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            dynamoDb.errorHandling = jest.fn();
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
+            jest.spyOn(dynamoDb, 'errorHandling');
 
             await dynamoDb.delete('id');
 
@@ -264,17 +266,17 @@ describe('test database operations', () => {
         });
 
         test('should return the object docClient.delete() returns', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.delete = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return Promise.resolve({test: 'test'});
+            const mockDocClient = {
+                delete: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: () => {
+                            return Promise.resolve({test: 'test'});
+                        }
                     }
-                }
-            })
-
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.delete('id');
             
@@ -286,55 +288,58 @@ describe('test database operations', () => {
     describe('test load()', () => {
         test('should call errorHandling() once', async () => {
             // mock implementation to not throw error while going through load()
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return {
-                            Item: {userId: 'id', key: 'value'},
-                            ConsumedCapacity: 1
+            const mockDocClient = {
+                get: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: () => {
+                            return {
+                                Item: {userId: 'id', key: 'value'},
+                                ConsumedCapacity: 1
+                            };
                         }
-                    }
-                }
-            });
+                    };
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            dynamoDb.errorHandling = jest.fn();
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
+            jest.spyOn(dynamoDb, 'errorHandling');
 
             await dynamoDb.load('id');
 
             expect(dynamoDb.errorHandling).toBeCalledTimes(1);
         });
 
-        test('test should throw error because get() throws error that is not ResourceNotFoundException', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                const error = new Error();
-                _set(error, 'code', 'xyz');
-
-                throw error;
-            });
+        test('test should throw error because loading process throws error that is not ResourceNotFoundException', async () => {
+            const mockDocClient = {
+                get: jest.fn().mockImplementation((params) => {
+                    const error = new Error();
+                    _set(error, 'code', 'xyz');
+    
+                    throw error;
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
 
             await dynamoDb.load('id')
                 .catch(e => expect(e.code).toBe('xyz'));
         });
 
-        test('test should load user data', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return {
-                            Item: {userId: 'id', key: 'value'},
-                            ConsumedCapacity: 1
+        test('should return user data returned by loading process', async () => {
+            const mockDocClient = {
+                get: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: () => {
+                            return {
+                                Item: {userId: 'id', key: 'value'},
+                                ConsumedCapacity: 1
+                            };
                         }
-                    }
-                }
-            });
+                    };
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.load('id');
         
@@ -344,114 +349,102 @@ describe('test database operations', () => {
             });
         });
 
-        test('test should create DynamoDB Table & return empty object if ResourceNotFoundException error & config.createTableOnInit is true', async () => {
+        test('test call createTable() & return empty object because load threw ResourceNotFoundException error & config.createTableOnInit is true', async () => {
             // config.createTableOnInit is true by default
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                const error = new Error();
-                _set(error, 'code', 'ResourceNotFoundException');
-                throw error;
-            });
-
-            AWS.DynamoDB.prototype.createTable = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return Promise.resolve({
-                            TableDescription: {
-                                TableStatus: 'XYZ'
-                            }
-                        });
-                    }
-                }
-            });
+            const mockDocClient = {
+                get: jest.fn().mockImplementation((params) => {
+                    const error = new Error();
+                    _set(error, 'code', 'ResourceNotFoundException');
+    
+                    throw error;
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
+            const mockCreateTable = jest.fn();
+            _set(dynamoDb, 'createTable', mockCreateTable);
 
             const result = await dynamoDb.load('id');
 
+            expect(mockCreateTable).toHaveBeenCalledTimes(1);
             expect(result).toEqual({});
         });
 
-        test('should create DynamoDB table and log table configuration data', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                const error = new Error();
-                _set(error, 'code', 'ResourceNotFoundException');
-                throw error;
-            });
-
-            AWS.DynamoDB.prototype.createTable = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return Promise.resolve({
-                            TableDescription: {
-                                TableStatus: 'CREATING'
-                            }
-                        });
-                    }
-                }
-            });
-
-            dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
-
-            await dynamoDb.load('id');
-
-            expect(dynamoDb.isCreating).toEqual(true);
-        });
-
-        test('should throw JovoError because AWS.DynamoDB.createTable() throws error', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                const error = new Error();
-                _set(error, 'code', 'ResourceNotFoundException');
-                throw error;
-            });
-
-            AWS.DynamoDB.prototype.createTable = jest.fn().mockImplementation((params) => {
-                throw new Error();
-            });
-
-            dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
-
-            await dynamoDb.load('id')
-                .catch(e => expect(e).toBeInstanceOf(JovoError));
-        });
-
-        test('should throw JovoError because dynamoClient is undefined while we call createTable()', async () => {
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                const error = new Error();
-                _set(error, 'code', 'ResourceNotFoundException');
-                throw error;
-            });
-
-            dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
-
-            _set(dynamoDb, 'dynamoClient', undefined);
-
-            await dynamoDb.load('id')
-                .catch(e => expect(e).toBeInstanceOf(JovoError));
-        })
-
-        test('test should return undefined if there is no data for that user', async() => {
+        test('test should return undefined because there is no data for that user', async() => {
             // If there is not data for the user, get() won't return the Item property
-            AWS.DynamoDB.DocumentClient.prototype.get = jest.fn().mockImplementation((params) => {
-                return {
-                    promise: () => {
-                        return {ConsumedCapacity: 1};
-                    }
-                };                    
-            });
+            const mockDocClient = {
+                get: jest.fn().mockImplementation((params) => {
+                    return {
+                        promise: () => {
+                            return {ConsumedCapacity: 1};
+                        }
+                    };
+                })
+            };
             dynamoDb = new DynamoDb(config);
-            app = new BaseApp();
-            dynamoDb.install(app);
+            _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.load('id');
         
             expect(result).toBeUndefined();
         });
-    })
+    });
+
+    describe('test createTable()', () => {
+        test('should throw JovoError because dynamoClient is undefined', async () => {
+            dynamoDb = new DynamoDb();
+            _set(dynamoDb, 'dynamoClient', undefined);
+
+            await dynamoDb['createTable']().catch(e => expect(e).toBeInstanceOf(JovoError));
+        });
+
+        test('should call dynamoClient.createTable()', async () => {
+            const mockCreateTable = jest.fn();
+            const mockDynamoClient = {
+                createTable: mockCreateTable.mockImplementation(() => {
+                    return {
+                        promise: jest.fn()
+                    };
+                })
+            };
+            dynamoDb = new DynamoDb();
+            _set(dynamoDb, 'dynamoClient', mockDynamoClient);
+
+            await dynamoDb['createTable']();
+
+            expect(mockCreateTable).toHaveBeenCalledTimes(1);
+        });
+
+        test('should throw JovoError if table creation throws an error', async () => {
+            const mockDynamoClient = {
+                createTable: jest.fn().mockImplementation(() => {
+                    throw new Error();
+                })
+            };
+            dynamoDb = new DynamoDb();
+            _set(dynamoDb, 'dynamoClient', mockDynamoClient);
+
+            await dynamoDb['createTable']().catch(e => expect(e).toBeInstanceOf(JovoError));
+        });
+
+        test('should set isCreating to true if the returned TableStatus is "CREATING"', async () => {
+            const mockDynamoClient = {
+                createTable: jest.fn().mockImplementation(() => {
+                    return {
+                        promise: jest.fn().mockResolvedValue({
+                            TableDescription: {
+                                TableStatus: 'CREATING'
+                            }
+                        })
+                    };
+                })
+            };
+            dynamoDb = new DynamoDb();
+            _set(dynamoDb, 'dynamoClient', mockDynamoClient);
+
+            await dynamoDb['createTable']();
+
+            expect(dynamoDb.isCreating).toBe(true);
+        })
+    });
 });
