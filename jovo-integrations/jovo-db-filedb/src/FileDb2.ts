@@ -8,7 +8,6 @@ import {BaseApp} from "jovo-core";
 
 interface Config extends PluginConfig {
     path?: string;
-    primaryKeyColumn?: string;
 }
 
 export class FileDb2 implements Db {
@@ -16,7 +15,6 @@ export class FileDb2 implements Db {
     needsWriteFileAccess = true;
     config: Config = {
         path: './../db/',
-        primaryKeyColumn: 'userId',
     };
 
     constructor(config?: Config) {
