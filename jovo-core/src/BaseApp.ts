@@ -103,10 +103,18 @@ export class BaseApp extends Extensible {
     }
 
 
+    /**
+     * Returns platform type names
+     * Example: ['Alexa', 'GoogleAssistant']
+     */
     getPlatformTypes() {
         return [ ...this.$platform.keys() ];
     }
 
+    /**
+     * Returns platform app type names
+     * Example: ['AlexaSkill', 'GoogleAction']
+     */
     getAppTypes() {
         const appTypes: string[] = [];
 
