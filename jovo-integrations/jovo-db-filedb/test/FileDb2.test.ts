@@ -3,10 +3,17 @@ import { FileDb2 } from "./../src/FileDb2";
 import * as fs from "fs";
 import * as path from 'path';
 import _merge = require('lodash.merge');
+const rimraf = require("rimraf");
 
 describe('test installation', () => {
+    afterAll(() => {
+        deleteDatabaseFolder('./db/');
+    });
+
     test('test should create db folder on install with default config', () => {
-        const filedb2 = new FileDb2();
+        const filedb2 = new FileDb2({
+            path: './db/'
+        });
         const app = new BaseApp();
         filedb2.install(app);
         expect(fs.existsSync(filedb2.config.path!)).toBeTruthy();
@@ -19,9 +26,8 @@ describe('test installation', () => {
         const app = new BaseApp();
         expect(() => {
             filedb2.install(app)
-        }).toThrow(Error);
+        }).toThrow(JovoError);
     });
-
 });
 
 describe('test database operations', () => {
@@ -30,34 +36,37 @@ describe('test database operations', () => {
      * Reset state has an array containing one sample object (`existingObject`)
      */
 
-
-    const filedb2 = new FileDb2();
-    const app = new BaseApp();
-    filedb2.install(app);
+    let filedb2: FileDb2;
+    let app: BaseApp;
 
     const existingUserId = 'idTest';
     const existingObject = {
         key: 'valueTest'
     };
 
-    async function resetDatabase() {
+    function resetDatabase() {
         const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
         const data = existingObject;
         const stringifiedData = JSON.stringify(data, null, '\t');
-        await fs.writeFileSync(pathToFile, stringifiedData);
+        fs.writeFileSync(pathToFile, stringifiedData);
     }
 
-    beforeAll(async () => {
-        await resetDatabase();
+    beforeAll(() => {
+        filedb2 = new FileDb2({
+            path: './db/'
+        });
+        app = new BaseApp();
+        filedb2.install(app);
+        resetDatabase();
     });
 
-    afterEach(async () => {
-        await resetDatabase();
+    afterEach(() => {
+        resetDatabase();
     });
 
     afterAll(() => {
-        deleteDatabaseFolder(filedb2.config.path!);
-    })
+        deleteDatabaseFolder('./db/');
+    });
 
     describe('test save()', () => {
         test('test should save userData in ${userId}.json inside folder specified in path', async () => {
@@ -99,7 +108,7 @@ describe('test database operations', () => {
     
             await filedb2.save(newUserId, 'testKey', newObject.testKey);
 
-            // exisitingUserData still exists
+            // existingUserData still exists
             const pathToExistingData = path.join(filedb2.config.path!, `${existingUserId}.json`);
             const existingDataJson: any = fs.readFileSync(pathToExistingData);
             const existingUserData = JSON.parse(existingDataJson);
@@ -131,51 +140,33 @@ describe('test database operations', () => {
             expect(loadedObject).toEqual(existingObject);
         });
     
-        test.skip('test should return undefined if there is no data for that user', async () => {
-            // TODO FileDb2.load() returns empty array if there is no data for that user. FileDb returns undefined --> inconsistent
-            // FileDb2 should return undefined as well, then this test will run
+        test('test should return undefined because there is no data for that user', async () => {
             const loadedObject = await filedb2.load('xyz');
     
             expect(loadedObject).toBeUndefined();
         });
     });
     
-    describe.skip('test delete()', () => {
-        // TODO FileDb2.delete() is not implemented yet
+    describe('test delete()', () => {
         test('test should delete previously saved data', async () => {
             await filedb2.delete(existingUserId);
     
             // get object from db.json file
             const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
-            const dataJson: any = fs.readFileSync(pathToFile);
-            const userData = JSON.parse(dataJson);
-    
-            expect(userData).toBeUndefined();
+
+            expect(() => {
+                fs.readFileSync(pathToFile);
+            }).toThrowError('ENOENT: no such file or directory');
         });
     
-        test('test should not delete anything if primaryKey (user) doesn\'t exist', async () => {
-            await filedb2.delete('xyz');
-    
-            // get object from db.json file
-            const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
-            const dataJson: any = fs.readFileSync(pathToFile);
-            const userData = JSON.parse(dataJson);
-    
-            expect(userData).toEqual(existingObject);
-        })
+        test('test should throw ENOENT error because there is no file for that user, i.e. no user data exists', async () => {
+            await filedb2.delete('xyz').catch(e => {
+                expect(e.code).toBe('ENOENT');
+            });
+        });
     });
 });
 
 function deleteDatabaseFolder(dirPath: string) {
-    if (fs.existsSync(dirPath)) {
-        fs.readdirSync(dirPath).forEach(function (entry) {
-            var entryPath = path.join(dirPath, entry);
-            if (fs.lstatSync(entryPath).isDirectory()) {
-                deleteDatabaseFolder(entryPath);
-            } else {
-                fs.unlinkSync(entryPath);
-            }
-        });
-        fs.rmdirSync(dirPath);
-    }
+    rimraf.sync(dirPath);
 }

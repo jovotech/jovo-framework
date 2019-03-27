@@ -3,20 +3,26 @@ import { FileDb } from "./../src/FileDb";
 import * as fs from "fs";
 import * as path from 'path';
 import _merge = require('lodash.merge');
+const rimraf = require("rimraf");
 
 describe('test installation', () => {
+
+    afterAll(() => {
+        deleteDatabaseFolder('./../db/');
+    });
+
     test('test should create db.json file on install with default config', () => {
         const filedb = new FileDb();
         const app = new BaseApp();
         filedb.install(app);
 
-        const result = fs.existsSync(filedb.config.pathToFile);
+        const result = fs.existsSync(filedb.config.pathToFile!);
 
         expect(result).toBeTruthy();
     });
 
-    test('test install should throw JovoError if pathToFile is empty string', () => {
-        // it's validatePathToFile() that throws the error, but its a private function, which gets called by install()
+    test('should throw JovoError because pathToFile is falsy', () => {
+        // it's validatePathToFile() that throws the error, but its a static function, which gets called by install()
         const filedb = new FileDb({
             pathToFile: '',
             primaryKeyColumn: 'userId'
@@ -27,8 +33,8 @@ describe('test installation', () => {
         }).toThrow(JovoError);
     });
 
-    test('test install should throw JovoError if pathToFile is not a valid path string', () => {
-        // it's validatePathToFile() that throws the error, but its a private function, which gets called by install()
+    test('should throw JovoError if pathToFile is not a valid path string', () => {
+        // it's validatePathToFile() that throws the error, but its a static function, which gets called by install()
         const filedb = new FileDb({
             pathToFile: '.#/db.json',
             primaryKeyColumn: 'userId'
@@ -39,8 +45,8 @@ describe('test installation', () => {
         }).toThrow(JovoError);
     });
 
-    test('test install should throw JovoError if pathToFile is not json file', () => {
-        // it's validatePathToFile() that throws the error, but its a private function, which gets called by install()
+    test('should throw JovoError if pathToFile is not json file', () => {
+        // it's validatePathToFile() that throws the error, but its a static function, which gets called by install()
         const filedb = new FileDb({
             pathToFile: './../db.js',
             primaryKeyColumn: 'userId'
@@ -58,33 +64,35 @@ describe('test database operations', () => {
      * Reset state has an array containing one sample object (`existingObject`)
      */
 
-    const filedb = new FileDb();
-    const app = new BaseApp();
-    filedb.install(app);
+    let filedb: FileDb;
+    let app: BaseApp;
 
     const existingObject = {
         userId: 'idTest',
         key: 'valueTest'
     };
 
-    async function resetDatabase() {
+    function resetDatabase() {
         const data = [existingObject];
         const stringifiedData = JSON.stringify(data, null, '\t');
-        await fs.writeFileSync(filedb.config.pathToFile, stringifiedData);
+        fs.writeFileSync(filedb.config.pathToFile!, stringifiedData);
     }
 
-    beforeAll(async () => {
-        await resetDatabase();
+    beforeAll(() => {
+        filedb = new FileDb();
+        app = new BaseApp();
+        filedb.install(app);
+        resetDatabase();
     });
 
-    afterEach(async () => {
-        await resetDatabase();
+    afterEach(() => {
+        resetDatabase();
     });
 
     afterAll(() => {
-        const folderPath = path.dirname(filedb.config.pathToFile);
+        const folderPath = path.dirname(filedb.config.pathToFile!);
         deleteDatabaseFolder(folderPath);
-    })
+    });
 
     describe('test save()', () => {
         test('test should save userData', async () => {
@@ -96,10 +104,10 @@ describe('test database operations', () => {
             await filedb.save(objectToBeSaved.userId, 'testKey', objectToBeSaved.testKey);
 
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
             const dataArr = JSON.parse(dataJson);
             const userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === objectToBeSaved.userId;
+                return o[filedb.config.primaryKeyColumn!] === objectToBeSaved.userId;
             });
 
             expect(userData).toEqual(objectToBeSaved);
@@ -113,10 +121,10 @@ describe('test database operations', () => {
             modifiedObject = _merge(modifiedObject, existingObject);
 
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
             const dataArr = JSON.parse(dataJson);
             const userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === existingObject.userId;
+                return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
 
             expect(userData).toEqual(modifiedObject)
@@ -131,18 +139,18 @@ describe('test database operations', () => {
             await filedb.save(objectToBeSaved.userId, 'testKey', objectToBeSaved.testKey);
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
             const dataArr = JSON.parse(dataJson);
 
             // existingObject still exists
             let userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === existingObject.userId;
+                return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
             expect(userData).toEqual(existingObject);;
     
             // objectToBeSaved also exists
             userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === objectToBeSaved.userId;
+                return o[filedb.config.primaryKeyColumn!] === objectToBeSaved.userId;
             });
             expect(userData).toEqual(objectToBeSaved);;
         });
@@ -151,10 +159,10 @@ describe('test database operations', () => {
             await filedb.save(existingObject.userId, 'key', 'newValue'); // same user, new value for `key`
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
             const dataArr = JSON.parse(dataJson);
             const userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === existingObject.userId;
+                return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
     
             expect(userData.key).not.toEqual(existingObject.key);
@@ -180,10 +188,10 @@ describe('test database operations', () => {
             await filedb.delete(existingObject.userId);
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!);
             const dataArr = JSON.parse(dataJson);
             const userData = dataArr.find((o: any) => {
-                return o[filedb.config.primaryKeyColumn] === existingObject.userId;
+                return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
     
             expect(userData).toBeUndefined();
@@ -193,7 +201,7 @@ describe('test database operations', () => {
             await filedb.delete('xyz');
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
             const dataArr = JSON.parse(dataJson);
     
             const existingArr = [existingObject];
@@ -204,15 +212,5 @@ describe('test database operations', () => {
 });
 
 function deleteDatabaseFolder(dirPath: string) {
-    if (fs.existsSync(dirPath)) {
-        fs.readdirSync(dirPath).forEach(function (entry) {
-            var entryPath = path.join(dirPath, entry);
-            if (fs.lstatSync(entryPath).isDirectory()) {
-                deleteDatabaseFolder(entryPath);
-            } else {
-                fs.unlinkSync(entryPath);
-            }
-        });
-        fs.rmdirSync(dirPath);
-    }
+    rimraf.sync(dirPath);
 }
