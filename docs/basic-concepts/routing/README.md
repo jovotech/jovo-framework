@@ -323,7 +323,7 @@ app.onRequest(function(jovo) {
 
 Most information that is necessary for routing can be accessed through the [Jovo `$request` object](../requests-responses/request.md './requests-responses/request'). The Jovo context object (`this`) offers some additional helpful methods.
 
-### getMappedIntent
+### getMappedIntentName
 
 While `this.$request.getIntentName()` only makes it possible to access the intent name as it can be found in the request, this method allows you to access the intent *after* the mapping (see: [intentMap](./intents.md#intentMap './routing/intents#intentMap')) is done:
 
