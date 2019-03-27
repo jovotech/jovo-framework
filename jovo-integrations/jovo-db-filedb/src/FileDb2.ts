@@ -1,5 +1,5 @@
 
-import {Db, PluginConfig} from 'jovo-core';
+import {Db, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
 import * as path from 'path';
 import * as fs from "fs";
 import _set = require('lodash.set');
@@ -28,17 +28,28 @@ export class FileDb2 implements Db {
     install(app: BaseApp) {
         app.$db = this;
 
-        if (!this.config.path) {
-            throw new Error(`Couldn't install FileDb2 plugin. Path is missing`);
-        }
+        this.errorHandling();
 
-        if (!fs.existsSync(path.join(this.config.path))) {
-            FileDb2.mkDirByPathSync(path.join(this.config.path), false);
+        if (!fs.existsSync(path.join(this.config.path!))) {
+            FileDb2.mkDirByPathSync(path.join(this.config.path!), false);
         }
     }
 
     uninstall(app: BaseApp) {
 
+    }
+
+    errorHandling() {
+        if (!this.config.path) {
+            throw new JovoError(
+                `Couldn't use FileDb2 plugin. path is missing`,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-filedb',
+                'config.path has a falsy value',
+                undefined,
+                'https://www.jovo.tech/docs/databases/file-db'
+            );
+        }
     }
 
     /**
@@ -47,13 +58,11 @@ export class FileDb2 implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string) {
-        if (!this.config.path) {
-            throw new Error(`Couldn't use FileDb2 plugin. Path is missing`);
-        }
+        this.errorHandling();
 
-        const pathToFile = path.join(this.config.path, `${primaryKey}.json`);
+        const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
         if (!fs.existsSync(pathToFile)) {
-            return Promise.resolve([]);
+            return Promise.resolve(undefined);
         }
 
         const data: any = await this.readFile(pathToFile); // tslint:disable-line
@@ -62,24 +71,27 @@ export class FileDb2 implements Db {
     }
 
     async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
-        if (!this.config.path) {
-            throw new Error(`Couldn't install FileDb2 plugin. Path is missing`);
-        }
+        this.errorHandling();
 
-        const pathToFile = path.join(this.config.path, `${primaryKey}.json`);
+        const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
         if (fs.existsSync(pathToFile)) {
             const oldDataContent = await this.readFile(pathToFile);
             const oldData = JSON.parse(oldDataContent);
             _set(oldData, key, data);
-            return this.saveFile(pathToFile, oldData);
+            return await this.saveFile(pathToFile, oldData);
         } else {
             const newData: any = {}; // tslint:disable-line
             _set(newData, key, data);
-            return this.saveFile(pathToFile, newData);
+            return await this.saveFile(pathToFile, newData);
         }
     }
 
     async delete(primaryKey: string) {
+        this.errorHandling();
+
+        const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
+
+        return await this.deleteFile(pathToFile);
     }
 
 
@@ -104,6 +116,17 @@ export class FileDb2 implements Db {
                 resolve();
             });
         });
+    }
+
+    private async deleteFile(filename: string) {
+        return new Promise<any>((resolve, reject) => { // tslint:disable-line
+            fs.unlink(filename, (err) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve();
+            })
+        })
     }
 
     /**
