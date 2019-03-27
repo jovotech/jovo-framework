@@ -46,7 +46,7 @@ export class CanFulfillIntent implements Plugin {
             if (!CanFulfillIntent.VALID_VALUES.includes(canFulfillRequest)) {
                 throw new Error('canFulfill must be one the following values: YES | NO | MAYBE');
             }
-            _set(this.$output, 'Alexa.CanFulFillRequest', canFulfillRequest);
+            _set(this.$output, 'Alexa.CanFulfillRequest', canFulfillRequest);
             return this;
         };
 
@@ -65,7 +65,7 @@ export class CanFulfillIntent implements Plugin {
             if (canFulfillSlot !== 'YES' && canFulfillSlot !== 'NO') {
                 throw new Error('canFulfill must be one the following values: YES | NO');
             }
-            _set(this.$output, 'Alexa.CanFulFillSlot', {
+            _set(this.$output, 'Alexa.CanFulfillSlot', {
                 slotName, canUnderstandSlot, canFulfillSlot
             });
             return this;
@@ -92,7 +92,7 @@ export class CanFulfillIntent implements Plugin {
 
         const response = alexaSkill.$response as AlexaResponse;
 
-        if (_get(output, 'Alexa.CanFulFillRequest')) {
+        if (_get(output, 'Alexa.CanFulfillRequest')) {
             if (_get(response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
@@ -100,11 +100,11 @@ export class CanFulfillIntent implements Plugin {
             if (_get(alexaSkill.$response, 'sessionAttributes')) {
                 delete response.sessionAttributes;
             }
-            _set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _get(output, 'Alexa.CanFulFillRequest'));
+            _set(alexaSkill.$response, 'response.canFulfillIntent.canFulfill', _get(output, 'Alexa.CanFulfillRequest'));
 
         }
 
-        if (_get(output, 'Alexa.CanFulFillSlot')) {
+        if (_get(output, 'Alexa.CanFulfillSlot')) {
             if (_get(alexaSkill.$response, 'response.shouldEndSession')) {
                 delete response.response.shouldEndSession;
             }
@@ -113,7 +113,7 @@ export class CanFulfillIntent implements Plugin {
                 delete response.sessionAttributes;
             }
             _set(alexaSkill.$response, 'response.canFulfillIntent.slots',
-                _get(output, 'Alexa.CanFulFillSlot'));
+                _get(output, 'Alexa.CanFulfillSlot'));
         }
     }
 
