@@ -46,6 +46,11 @@ export class DialogflowRequest implements JovoRequest {
     originalDetectIntentRequest?: OriginalDetectIntentRequest;
     session?: string;
 
+
+    getSessionId(): string | undefined {
+        return this.session;
+    }
+
     getSessionData() {
         return this.getSessionAttributes();
     }

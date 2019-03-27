@@ -369,6 +369,11 @@ export interface JovoRequest {
      * @param {Inputs} inputs
      */
     setInputs(inputs: Inputs): this;
+
+    /**
+     * Return session id
+     */
+    getSessionId(): string | undefined;
 }
 
 export interface Input {

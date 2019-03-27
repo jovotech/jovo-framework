@@ -177,6 +177,12 @@ export class AlexaRequest implements JovoRequest {
 
     // JovoRequest implementation
 
+    getSessionId(): string | undefined {
+        if (this.session) {
+            return this.session.sessionId;
+        }
+    }
+
     getAccessToken() {
         return _get(this, 'context.System.user.accessToken');
     }
@@ -653,7 +659,7 @@ export class AlexaRequest implements JovoRequest {
     getSpeedAccuracy(): number | undefined {
         return _get(this.getSpeedObject(), 'accuracyInMetersPerSecond');
     }
-    
+
     /**
      * Returns supported interfaces from device.
      * @public
