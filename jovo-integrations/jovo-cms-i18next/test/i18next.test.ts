@@ -43,7 +43,7 @@ describe('I18Next.loadFiles()', () => {
 
         mockHR.app.getAppTypes = () => {
             return ['AlexaSkill'];
-        }
+        };
 
         await i18Next.loadFiles(mockHR);
 
@@ -83,7 +83,7 @@ describe('I18Next.loadFiles()', () => {
 
         mockHR.app.getAppTypes = () => {
             return ['AlexaSkill'];
-        }
+        };
 
         await i18Next.loadFiles(mockHR);
 
@@ -125,8 +125,8 @@ describe('I18Next.loadFiles()', () => {
 
         mockHR.app.getAppTypes = () => {
             return ['AlexaSkill'];
-        }
-        
+        };
+
         await i18Next.loadFiles(mockHR);
 
         // @ts-ignore
