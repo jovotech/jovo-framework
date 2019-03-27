@@ -2,8 +2,7 @@ import _get = require('lodash.get');
 import _set = require('lodash.set');
 import _mapValues = require('lodash.mapvalues');
 
-import {JovoRequest, SessionConstants, Inputs, SessionData} from "jovo-core";
-import {Input} from "../../../../jovo-core/dist/src";
+import {JovoRequest, SessionConstants, Inputs, SessionData, Input} from "jovo-core";
 
 interface Intent {
     name: string;
@@ -33,7 +32,7 @@ export interface DialogflowRequestJSON {
     originalDetectIntentRequest?: OriginalDetectIntentRequest;
     session?: string;
 }
-interface Context {
+export interface Context {
     name: string;
     lifespanCount?: number;
     parameters?: {[key: string]: any}; // tslint:disable-line
@@ -137,16 +136,16 @@ export class DialogflowRequest implements JovoRequest {
     addSessionAttribute(key: string, value: any): this { // tslint:disable-line
         const sessionId = _get(this, 'session');
         const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
-            return context.name === `${sessionId}/contexts/session`;
+            return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
         });
 
         if (sessionContext) {
-            sessionContext.lifespanCount = 999;
+            sessionContext.lifespanCount = 1;
             sessionContext.parameters[key] = value;
         } else {
             this.queryResult.outputContexts.push({
-                lifespanCount: 999,
-                name: `${sessionId}/contexts/session`,
+                lifespanCount: 1,
+                name: `${sessionId}/contexts/_jovo_session_`,
                 parameters: {
                     [key]: value
                 },
@@ -179,12 +178,13 @@ export class DialogflowRequest implements JovoRequest {
         return _get(this.getSessionAttributes(), SessionConstants.STATE);
     }
 
+
     getSessionAttributes(): SessionData { // tslint:disable-line
 
         const sessionId = _get(this, 'session');
         let sessionAttributes: any = {}; // tslint:disable-line
         const sessionContext =_get(this, 'queryResult.outputContexts').find((context: Context) => {
-            return context.name === `${sessionId}/contexts/session`;
+            return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
         });
 
         if (sessionContext) {
@@ -205,12 +205,12 @@ export class DialogflowRequest implements JovoRequest {
         });
 
         if (sessionContext) {
-            sessionContext.lifespanCount = 999;
+            sessionContext.lifespanCount = 1;
             sessionContext.parameters = attributes;
         } else {
             this.queryResult.outputContexts.push({
-                lifespanCount: 999,
-                name: `${sessionId}/contexts/session`,
+                lifespanCount: 1,
+                name: `${sessionId}/contexts/_jovo_session_${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`,
                 parameters: attributes,
             });
         }
@@ -284,16 +284,16 @@ export class DialogflowRequest implements JovoRequest {
     setState(state: string): this {
         const sessionId = _get(this, 'session');
         const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
-            return context.name === `${sessionId}/contexts/session`;
+            return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
         });
 
         if (sessionContext) {
-            sessionContext.lifespanCount = 999;
+            sessionContext.lifespanCount = 1;
             sessionContext.parameters[SessionConstants.STATE] = state;
         } else {
             this.queryResult.outputContexts.push({
-                lifespanCount: 999,
-                name: `${sessionId}/contexts/session`,
+                lifespanCount: 1,
+                name: `${sessionId}/contexts/_jovo_session_${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`,
                 parameters: {
                     [SessionConstants.STATE]: state
                 },

@@ -4,6 +4,7 @@ import _get = require('lodash.get');
 import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
+import {Context} from "jovo-platform-dialogflow/dist/src/core/DialogflowRequest";
 
 
 export class GoogleAction extends Jovo {
@@ -179,9 +180,40 @@ export class GoogleAction extends Jovo {
             _get(this.$originalRequest || this.$request, 'inputs[0].rawInputs[0].query');
     }
 
-
     isInSandbox() {
         return _get(this.$originalRequest || this.$request, 'isInSandbox', false);
+    }
+
+    /**
+     * Adds additional output context objects
+     * @param name
+     * @param parameters
+     * @param lifespanCount
+     */
+    addOutputContext(name: string, parameters: {[key:string]: any}, lifespanCount = 1) { // tslint:disable-line
+        if (!this.$output.Dialogflow) {
+            this.$output.Dialogflow = {};
+        }
+
+        if (!this.$output.Dialogflow.OutputContexts) {
+            this.$output.Dialogflow.OutputContexts = [];
+        }
+
+        this.$output.Dialogflow.OutputContexts.push({
+            name,
+            parameters,
+            lifespanCount
+        });
+    }
+
+    /**
+     * Returns output context for given name
+     * @param name
+     */
+    getOutputContext(name: string) {
+        return _get( this.$request, 'queryResult.outputContexts', []).find((context: Context) => {
+            return context.name.indexOf(`/contexts/${name}`) > -1;
+        });
     }
 
     /**
@@ -192,6 +224,5 @@ export class GoogleAction extends Jovo {
         // TODO
         // return _.isNumber(parseInt(this.getUserId()));
     }
-
 
 }

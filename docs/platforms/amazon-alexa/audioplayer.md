@@ -180,24 +180,24 @@ app.setHandler({
     // Other intents
 
     AUDIOPLAYER: {
-        'AudioPlayer.PlaybackStarted'() {
-            console.log('AudioPlayer.PlaybackStarted');
+        'AlexaSkill.PlaybackStarted'() {
+            console.log('AlexaSkill.PlaybackStarted');
         },
 
-        'AudioPlayer.PlaybackNearlyFinished'() {
-            console.log('AudioPlayer.PlaybackNearlyFinished');
+        'AlexaSkill.PlaybackNearlyFinished'() {
+            console.log('AlexaSkill.PlaybackNearlyFinished');
         },
 
-        'AudioPlayer.PlaybackFinished'() {
-            console.log('AudioPlayer.PlaybackFinished');
+        'AlexaSkill.PlaybackFinished'() {
+            console.log('AlexaSkill.PlaybackFinished');
         },
 
-        'AudioPlayer.PlaybackStopped'() {
-            console.log('AudioPlayer.PlaybackStopped');
+        'AlexaSkill.PlaybackStopped'() {
+            console.log('AlexaSkill.PlaybackStopped');
         },
         
-        'AudioPlayer.PlaybackFailed'() {
-            console.log('AudioPlayer.PlaybackFailed');
+        'AlexaSkill.PlaybackFailed'() {
+            console.log('AlexaSkill.PlaybackFailed');
         },
 
     },
@@ -213,19 +213,19 @@ All these requests are mapped to built-in intents inside the `PLAYBACKCONTROLLER
 
 ```javascript
 PLAYBACKCONTROLLER: {
-    'PlaybackController.PlayCommandIssued'() {
+    'PlayCommandIssued'() {
         console.log('PlaybackController.PlayCommandIssued');
     },
 
-    'PlaybackController.NextCommandIssued'() {
+    'NextCommandIssued'() {
         console.log('PlaybackController.NextCommandIssued');
     },
 
-    'PlaybackController.PreviousCommandIssued'() {
+    'PreviousCommandIssued'() {
         console.log('PlaybackController.PreviousCommandIssued');
     },
 
-    'PlaybackController.PauseCommandIssued'() {
+    'PauseCommandIssued'() {
         console.log('PlaybackController.PauseCommandIssued');
     }
 },

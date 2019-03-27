@@ -103,6 +103,20 @@ export class BaseApp extends Extensible {
     }
 
 
+    getPlatformTypes() {
+        return [ ...this.$platform.keys() ];
+    }
+
+    getAppTypes() {
+        const appTypes: string[] = [];
+
+        this.$platform.forEach((platform: Platform) => {
+           appTypes.push(platform.getAppType());
+        });
+
+        return appTypes;
+    }
+
     /**
      * Emits webhook.init event.
      */

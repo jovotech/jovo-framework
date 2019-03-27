@@ -98,6 +98,7 @@ export interface Platform extends Plugin {
     requestBuilder: RequestBuilder;
     responseBuilder: ResponseBuilder;
     makeTestSuite(): TestSuite;
+    getAppType(): string;
 }
 
 export interface PlatformConfig extends ExtensibleConfig, PluginConfig {

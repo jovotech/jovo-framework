@@ -7,7 +7,7 @@ import {
     Extensible,
     HandleRequest, Jovo, Platform
 } from "jovo-core";
-import {DialogflowRequest} from "./core/DialogflowRequest";
+import {Context, DialogflowRequest} from "./core/DialogflowRequest";
 import {EnumRequestType, NLUData, ExtensibleConfig} from "jovo-core";
 import {DialogflowResponse} from "./core/DialogflowResponse";
 import {DialogflowRequestBuilder} from "./core/DialogflowRequestBuilder";
@@ -39,8 +39,6 @@ export class DialogflowNlu extends Extensible {
 
     config: DialogflowNluConfig = {
         enabled: true,
-        sessionContextId: 'session',
-
         plugin: {},
     };
 
@@ -166,9 +164,8 @@ export class DialogflowNlu extends Extensible {
 
         if (_get(dialogflowRequest, 'queryResult.outputContexts')) {
             const sessionContext =_get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
-                return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
+                return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
             });
-
             if (sessionContext) {
                 jovo.$session.$data = sessionContext.parameters;
 
@@ -201,29 +198,53 @@ export class DialogflowNlu extends Extensible {
         }
         const sessionId = _get(dialogflowRequest, 'session');
 
-        let outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts');
-        const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
+        const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts', []);
 
-        if (outputContexts && Object.keys(jovo.$session.$data).length > 0) {
-            const sessionContext = outputContexts.find((context: any) => { // tslint:disable-line
-                return context.name === contextName;
-            });
+        const sessionContextPrefix = `${sessionId}/contexts/_jovo_session_`;
 
-            if (sessionContext) {
-                outputContexts = outputContexts.filter((context: any) => { // tslint:disable-line
-                    return context.name !== contextName;
-                });
-            }
-            outputContexts.push({
-                name: contextName,
+        const newOutputContexts = outputContexts.filter((context: Context) => {
+            return !context.name.startsWith(sessionContextPrefix) && context.lifespanCount && context.lifespanCount > 0;
+        });
+
+
+
+
+        if (Object.keys(jovo.$session.$data).length > 0) {
+            newOutputContexts.push({
+                name: `${sessionContextPrefix}${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`,
                 lifespanCount: 1,
                 parameters: jovo.$session.$data
             });
-            _set(dialogflowResponse, 'outputContexts', outputContexts);
-
-        } else {
-            _set(dialogflowResponse, 'outputContexts', _get(dialogflowRequest, 'queryResult.outputContexts'));
         }
+
+        if (jovo.$output.Dialogflow && jovo.$output.Dialogflow.OutputContexts) {
+
+            for (let i = 0; i < jovo.$output.Dialogflow.OutputContexts.length; i++) {
+                const contextObj = jovo.$output.Dialogflow.OutputContexts[i];
+                const outputContextName = `${sessionId}/contexts/${contextObj.name}`;
+
+                let updateCount = 0;
+                for (let j = 0; j < newOutputContexts.length; j++) {
+                    if ((newOutputContexts[j] as Context) &&
+                        (newOutputContexts[j] as Context).name === outputContextName) {
+                        (newOutputContexts[j] as Context).lifespanCount = contextObj.lifespanCount;
+                        (newOutputContexts[j] as Context).parameters = contextObj.parameters;
+                        updateCount++;
+                    }
+                }
+                if (updateCount === 0) {
+                    newOutputContexts.push({
+                        name: outputContextName,
+                        lifespanCount: contextObj.lifespanCount,
+                        parameters: contextObj.parameters
+                    });
+                }
+            }
+        }
+
+
+        _set(dialogflowResponse, 'outputContexts', newOutputContexts);
+
     };
 
 
