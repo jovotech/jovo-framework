@@ -52,7 +52,7 @@ export class ResponsesTable extends DefaultTable {
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line        
         const headers: string[] = values[0];
-        const platforms = ['AlexaSkill', 'GoogleAction'];
+        const platforms = handleRequest.app.getAppTypes();
         const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];

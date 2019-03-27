@@ -119,13 +119,17 @@ export class I18Next extends BaseCmsPlugin {
             handleRequest.app.$cms.I18Next.resources = this.config.resources;
         }
 
-        Object.keys(handleRequest.app.$cms.I18Next.resources).forEach((locale) => {
+        localeLoop:
+        for (const locale in handleRequest.app.$cms.I18Next.resources) {
             const resource = handleRequest.app.$cms.I18Next.resources[locale];
-            if (resource['AlexaSkill'] || resource['GoogleAction']) {
-                // @ts-ignore
-                handleRequest.app.config.platformSpecificResponses = true;
+            for (const platform of handleRequest.app.getAppTypes()) {
+                if (resource[platform]) {
+                    // @ts-ignore
+                    handleRequest.app.config.platformSpecificResponses = true;
+                    break localeLoop;       // Flag has to be set only once
+                }
             }
-        });
+        }
 
         Log.debug(`Adding resources to $cms object:`);
         Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));

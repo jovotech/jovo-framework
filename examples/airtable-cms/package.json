@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-cms-airtable": "file:../../jovo-integrations/jovo-cms-airtable",
+    "jovo-cms-airtable": "^2.1.2",
     "jovo-framework": "^2.1.4",
     "jovo-platform-alexa": "^2.1.5",
     "jovo-plugin-debugger": "^2.1.2"
