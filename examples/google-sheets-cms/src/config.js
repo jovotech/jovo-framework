@@ -1,12 +1,12 @@
 
 module.exports = {
-    logging: true,
+    // logging: true,
     // v1: {
     //    logging: true,
     // },
     //
     intentMap: {
-      'AMAZON.StopIntent': 'END',
+        'AMAZON.StopIntent': 'END',
     },
     db: {
         FileDb: {
@@ -50,7 +50,7 @@ module.exports = {
                     position: 2,
                 }
             ]
-       }
+        }
     }
 
 };
