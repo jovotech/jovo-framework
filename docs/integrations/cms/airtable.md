@@ -9,6 +9,9 @@ Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
   * [Responses](#responses)
   * [KeyValue](#keyvalue)
   * [ObjectArray](#objectarray)
+* [Advanced Features](#advanced-features)
+  * [Caching](#caching)
+  * [Platform-specific Responses](#platform-specific-responses)
 
 ## Introduction
 
@@ -166,11 +169,16 @@ Access the array using:
 this.$cms.name
 ```
 
-## Advanced Sheet Features
+## Advanced Features
 
-### CMS-Caching
+* [Caching](#caching)
+* [Platform-specific Responses](#platform-specific-responses)
 
-Since Jovo `v2.1.4` we support CMS-Caching, an easy way to allow for faster development with CMS. You can choose between disabling caching for all sheets, or just specific ones in your `config.js` file. All sheets will be cached per default.
+### Caching
+
+The content all tables is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) tables with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
+
+You can choose between disabling caching for all tables, or just specific ones in your `config.js` file:
 
 ```javascript
 // config.js file
@@ -186,10 +194,10 @@ cms: {
                 selectOptions: {
                     // ...
                 },
-                caching: false          // disable caching for this sheet
+                caching: false,         // disable caching for this table
             },
         ],
-        caching: false                  // disable caching for all sheets
+        caching: false,                 // disable caching for all table
     }
 }
 ```
