@@ -8,31 +8,39 @@ jest.setTimeout(600000);
 
 describe('test install()', () => {
     describe('test install() setting app.$db', () => {
-        test('test should set app.$db to be MongoDb if no default db was set in config', () => {
+        const mockGetConnectedMongoClient = jest.fn().mockResolvedValue('mock');
+
+        test('test should set app.$db to be MongoDb if no default db was set in config', async () => {
             const mongodb = new MongoDb();
+            _set(mongodb, 'getConnectedMongoClient', mockGetConnectedMongoClient);
+            _set(mongodb, 'errorHandling', jest.fn());
             const app = new BaseApp();
 
-            mongodb.install(app);
+            await mongodb.install(app);
 
             expect(app.$db).toBeInstanceOf(MongoDb);
         });
 
-        test('test app.$db should not be an instance of MongoDb if default db set in config is not MongoDb', () => {
+        test('test app.$db should not be an instance of MongoDb if default db set in config is not MongoDb', async () => {
             const mongodb = new MongoDb();
+            _set(mongodb, 'getConnectedMongoClient', mockGetConnectedMongoClient);
+            _set(mongodb, 'errorHandling', jest.fn());
             const app = new BaseApp();
             _set(app.config, 'db.default', 'test');
 
-            mongodb.install(app);
+            await mongodb.install(app);
 
             expect(app.$db).not.toBeInstanceOf(MongoDb);
         });
 
-        test('test app.$db should be an instance MongoDb if default db is set to MongoDb', () => {
+        test('test app.$db should be an instance MongoDb if default db is set to MongoDb', async () => {
             const mongodb = new MongoDb();
+            _set(mongodb, 'getConnectedMongoClient', mockGetConnectedMongoClient);
+            _set(mongodb, 'errorHandling', jest.fn());
             const app = new BaseApp();
             _set(app.config, 'db.default', 'MongoDb');
 
-            mongodb.install(app);
+            await mongodb.install(app);
 
             expect(app.$db).toBeInstanceOf(MongoDb);
         });
@@ -114,7 +122,8 @@ describe('test errorHandling() which checks config parameters', () => {
 describe('test database operations', () => {
     let mongoServer: MongoMemoryServer;
     let mongodb: MongoDb;
-    const config: any = { // tslint:disable-line
+    const app = new BaseApp();
+    let config: any = { // tslint:disable-line
         databaseName: 'test',
         primaryKeyColumn: 'userId',
         collectionName: 'UserData'
@@ -125,6 +134,7 @@ describe('test database operations', () => {
         const mongoUri = await mongoServer.getConnectionString();
         config.uri = mongoUri;
         mongodb = new MongoDb(config);
+        await mongodb.install(app);
     });
 
     afterEach(async () => {
