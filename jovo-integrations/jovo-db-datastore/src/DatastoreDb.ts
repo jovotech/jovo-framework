@@ -6,9 +6,13 @@ import Datastore = require("@google-cloud/datastore");
 
 export interface Config extends PluginConfig {
     entity?: string;
+    primaryKeyColumn?: string;
     gCloudConfig?: {
-        projectId?: string,
-        apiEndpoint?: string,
+        apiEndpoint?: string;
+        namespace?: string;
+        projectId?: string;
+        keyFilename?: string;
+        credentials?: object;
     };
 }
 
@@ -16,6 +20,7 @@ export class DatastoreDb implements Db {
     datastore?: Datastore;
     config: Config = {
         entity: 'JovoUser',
+        primaryKeyColumn: 'userId',
         gCloudConfig: {},
     };
     isCreating = false;
@@ -66,6 +71,17 @@ export class DatastoreDb implements Db {
                 'https://www.jovo.tech/docs/databases/google-datastore'
             );
         }
+
+        if (!this.config.primaryKeyColumn) {
+            throw new JovoError(
+                'Couldn\'t use Datastore. primaryKeyColumn has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-datastore',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/google-datastore'
+            );
+        }
     }
 
     /**
@@ -74,29 +90,25 @@ export class DatastoreDb implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
+        this.errorHandling();
+
         const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
-
         const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
-        if (!entities || entities.length === 0) {
-            return Promise.reject(new Error('No entities found.'));
-        }
         const entity = entities[0];
-        if (entity === undefined) {
-            throw new Error('No entities found.');
-        }
-        return (entity) ? entity.data : {};
-
+        return entity ? entity.data : {};
     }
 
-    async save(primaryKey: string, key: string, data: object) {
+    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+        this.errorHandling();
+
         const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
 
         const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
 
         let entity = undefined;
-        if (!entities || entities.length === 0 || entities[0] === undefined) {
+        if (entities[0] === undefined) {
             entity = {
-                userId: primaryKey,
+                [this.config.primaryKeyColumn!]: primaryKey,
             };
         } else {
             entity = entities[0];
@@ -117,8 +129,9 @@ export class DatastoreDb implements Db {
     }
 
     async delete(primaryKey: string) {
-        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
+        this.errorHandling();
 
+        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
         return await this.datastore!.delete(entityKey);
     }
 
