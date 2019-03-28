@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.1.1",
+  "version": "2.1.4",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,9 +17,9 @@
   "dependencies": {
     "@azure/functions": "^1.0.1-beta2",
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.1.1",
-    "jovo-core": "^2.1.1",
-    "jovo-db-filedb": "^2.1.1",
+    "jovo-cms-i18next": "^2.1.4",
+    "jovo-core": "^2.1.2",
+    "jovo-db-filedb": "^2.1.2",
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {
@@ -29,17 +29,17 @@
     "@types/lodash.merge": "^4.6.4",
     "@types/lodash.set": "^4.3.4",
     "@types/node": "^10.3.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-install": "^1.1.0",
     "gulp-run-command": "0.0.9",
     "gulp-zip": "^4.2.0",
     "jest": "^23.4.2",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6",
-    "rimraf": "^2.6.2"
+    "typescript": "^3.1.6"
   },
   "jest": {
     "transform": {

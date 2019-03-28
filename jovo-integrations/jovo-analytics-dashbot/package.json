@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-dashbot",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,18 +15,18 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dashbot": "^10.2.1",
-    "jovo-core": "^2.1.1"
+    "jovo-core": "^2.1.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.10.5",
     "tslint": "^5.10.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6",
-    "rimraf": "^2.6.2"
+    "typescript": "^3.1.6"
   },
   "jest": {
     "transform": {

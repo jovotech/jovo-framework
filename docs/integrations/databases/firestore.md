@@ -43,5 +43,15 @@ db: {
 }
 ```
 
+> If you use plan to use the Firestore integration while hosting your project on AWS Lambda you have to add the following post install script to your `package.json`:
+
+```javascript
+"scripts": {
+  "postinstall": "npm install grpc --target=<lambda-function-node-version> --target_arch=x64 --target_platform=linux --target_libc=glibc"
+},
+```
+
+You need the script, because the Firestore integration depends on the `firebase-admin` module, which depends on the `grpc` module. If you simply run `npm install` it will download the `grpc` binary for your node version and operating system combination, which might differ from the one Lambda expects, which is `node-v48-linux-x64-glibc`. The script installs the correct binary for you. Find more about that [here](https://github.com/grpc/grpc/issues/6443).
+
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to Google Firestore.",
 "route": "databases/firestore" }-->

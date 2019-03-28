@@ -9,7 +9,8 @@
     "strict": true,
     "outDir": "./dist/",
     "target": "es2017",
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
   "include": [
     "**/*.d.ts",

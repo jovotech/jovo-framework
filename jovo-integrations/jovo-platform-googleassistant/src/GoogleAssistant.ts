@@ -69,6 +69,10 @@ export class GoogleAssistant extends Extensible implements Platform {
 
     }
 
+    getAppType(): string {
+        return 'GoogleAction';
+    }
+
 
     install(app: BaseApp) {
 

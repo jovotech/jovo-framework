@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-multihandler",
-  "version": "2.1.2",
+  "version": "2.1.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,10 +13,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.1.1",
-    "jovo-framework": "^2.1.1",
-    "jovo-platform-alexa": "^2.1.2",
-    "jovo-platform-googleassistant": "^2.1.3",
-    "jovo-plugin-debugger": "^2.1.1"
+    "jovo-db-filedb": "^2.1.2",
+    "jovo-framework": "^2.1.4",
+    "jovo-platform-alexa": "^2.1.5",
+    "jovo-platform-googleassistant": "^2.1.6",
+    "jovo-plugin-debugger": "^2.1.2"
   }
 }

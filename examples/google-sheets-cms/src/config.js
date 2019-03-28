@@ -1,12 +1,12 @@
 
 module.exports = {
-    logging: true,
+    // logging: true,
     // v1: {
     //    logging: true,
     // },
     //
     intentMap: {
-      'AMAZON.StopIntent': 'END',
+        'AMAZON.StopIntent': 'END',
     },
     db: {
         FileDb: {
@@ -40,6 +40,7 @@ module.exports = {
                     access: 'public',
                     type: 'Responses',
                     position: 1,
+                    caching: false
                 },
                 {
                     spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
@@ -49,7 +50,7 @@ module.exports = {
                     position: 2,
                 }
             ]
-       }
+        }
     }
 
 };

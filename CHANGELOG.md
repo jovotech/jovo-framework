@@ -1,6 +1,50 @@
 # Jovo Framework Changelog
 
 
+## 2.1.5 (2019-03-27)
+
+#### :rocket: New Feature
+* `jovo-cms-airtable` [#432](https://github.com/jovotech/jovo-framework/pull/432) Adds Platform-specific Responses, CMS-Caching for Airtable Integration ([@rubenaeg](https://github.com/rubenaeg))
+
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` Fix session handling in Dialogflow contexts (issue #430)
+* `jovo-platform-alexa` Fix CanFulFillIntent response object (issue #438)
+
+
+#### Committers: 2
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2.1.4 (2019-03-22)
+
+#### :rocket: New Feature
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) :sparkles: CMS-Caching, Platform-Specific Responses ([@rubenaeg](https://github.com/rubenaeg))
+
+#### :bug: Bug Fix
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) I18Next Tests ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-db-dynamodb` Fix mandatory config property
+* `jovo-framework` Fix Typescript compilation issues
+
+
+#### Committers: 1
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+
+
+## 2.1.3 (2019-03-14)
+
+#### :nail_care: Enhancement
+* `jovo-db-mysql` [#419](https://github.com/jovotech/jovo-framework/pull/419) Increased storage to MEDIUMTEXT  ([@dominik-meissner](https://github.com/dominik-meissner))
+* `all` Improve publish process for framework contributions
+
+#### Committers: 2
+- [@dominik-meissner](https://github.com/dominik-meissner)
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 2.1.2 (2019-03-12)
 
 #### :rocket: New Feature
@@ -18,11 +62,9 @@
 
 ## 2.1.1 (2019-03-11)
 
-#### :rocket: New Feature
-* `jovo-platform-googleassistant`, `jovo-platform-dialogflow` [#413](https://github.com/jovotech/jovo-framework/pull/413) ✨ Adds dialogflow slot filling example ([@KaanKC](https://github.com/KaanKC))
 
-#### :bug: Bug Fix
-* `jovo-cms-googlesheets` [#414](https://github.com/jovotech/jovo-framework/pull/414) ♻️ GoogleSheetsCMS integration should reject JovoError instead of string ([@KaanKC](https://github.com/KaanKC))
+:nail_care: Enhancement
+* `jovo-framework` [#414](https://github.com/jovotech/jovo-framework/pull/414) ♻️ GoogleSheetsCMS integration should reject JovoError instead of string ([@KaanKC](https://github.com/KaanKC))
 * `jovo-core` [#415](https://github.com/jovotech/jovo-framework/pull/415) 🐛 Fixes: JovoError doesn't print module ([@KaanKC](https://github.com/KaanKC))
 * `jovo-platform-googleassistant` [#410](https://github.com/jovotech/jovo-framework/pull/410) 🐛 Fixes Google Assistant handler merge #412  ([@kouz75](https://github.com/kouz75))
 * `jovo-platform-alexa` Fixes ContactAPI access token bug

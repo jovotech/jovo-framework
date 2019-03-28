@@ -48,6 +48,10 @@ export class Dialogflow extends Extensible implements Platform {
         return new TestSuite(new DialogflowRequestBuilder(), new DialogflowResponseBuilder());
     }
 
+    getAppType(): string {
+        return 'DialogflowAgent';
+    }
+
     install(app: BaseApp) {
         app.$platform.set(this.constructor.name, this);
 

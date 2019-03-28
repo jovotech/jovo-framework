@@ -24,9 +24,9 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        this.tell(this.$cms.t('WELCOME'));
+        this.tell(this.$speech.t('welcome.speech'));
         
-        console.log(this.$cms.test2);
+        // console.log(this.$cms.test2);
         
     },
 });

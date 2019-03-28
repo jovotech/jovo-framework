@@ -13,6 +13,7 @@ export interface Config extends ExtensibleConfig {
     apiKey?: string;
     baseId?: string;
     tables: AirtableTable[];
+    caching?: boolean;
 }
 
 export class AirtableCMS extends BaseCmsPlugin {
@@ -20,9 +21,11 @@ export class AirtableCMS extends BaseCmsPlugin {
         enabled: true,
         apiKey: undefined,
         baseId: undefined,
-        tables: []
+        tables: [],
+        caching: true,
     };
     base!: Airtable["Base"]["baseFn"];
+    baseApp: any;   // tslint:disable-line
 
     constructor(config?: Config) {
         super(config);
@@ -37,6 +40,7 @@ export class AirtableCMS extends BaseCmsPlugin {
 
     install(app: BaseApp) {        
         super.install(app);
+        this.baseApp = app;
         app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
 
         const defaultSheetMap: {[key: string]: any} = { // tslint:disable-line

@@ -1,11 +1,11 @@
-import {Extensible, HandleRequest, Cms} from 'jovo-core';
+import { Extensible, HandleRequest, Cms } from 'jovo-core';
 const i18n = require('i18next');
 
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
-import { DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
+import { DefaultSheet, GoogleSheetsSheet } from "./DefaultSheet";
 
 
 export interface Config extends GoogleSheetsSheet {
@@ -41,31 +41,45 @@ export class ResponsesSheet extends DefaultSheet {
     }
 
     install(extensible: Extensible) {
-       super.install(extensible);
-        Cms.prototype.t = function() {
+        super.install(extensible);
+        Cms.prototype.t = function () {
             if (!this.$jovo) {
                 return;
             }
-            this.$jovo.$app!.$cms.I18Next.i18n.changeLanguage( this.$jovo.$request!.getLocale());
-            return this.$jovo.$app!.$cms.I18Next.i18n.t.apply(
-                this.$jovo.$app!.$cms.I18Next.i18n, arguments
-            );
+            // @ts-ignore
+            return this.$jovo.t.apply(this, arguments);
         };
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
-        const resources:any = {}; // tslint:disable-line
+        // TODO outsource into generic function
+        const platforms = handleRequest.app.getAppTypes();
+        const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
                 const cell: string = row[j];
                 let locale: string = headers[j];
+                let platform: string | undefined;
 
-                // workaround
-                if (locale.length === 5) {
-                    locale = locale.substr(0, 2) + '-' + locale.substr(3).toUpperCase();
+                const localeSplit: string[] = locale.split('-');
+
+                // workaround for generic locales like en to work
+                for (const p of platforms) {
+                    const i = localeSplit.indexOf(p.toLowerCase());
+                    if (i > -1) {
+                        localeSplit.splice(i, 1);
+                        platform = p;
+                        this.cms!.baseApp.config.platformSpecificResponses = true;
+                    }
+                }
+
+                if (localeSplit.length === 2) {
+                    locale = `${localeSplit[0]}-${localeSplit[1].toUpperCase()}`;
+                } else {
+                    locale = localeSplit[0];
                 }
 
                 // match locale
@@ -74,10 +88,18 @@ export class ResponsesSheet extends DefaultSheet {
                     continue;
                 }
 
-                const valueArray = _get(resources, `${locale}.translation.${row[0]}`, []);
+                let key = `${locale}.translation.${row[0]}`;
+                if (platform) {
+                    if (!cell || cell === '') {
+                        continue;
+                    }
+                    key = `${locale}.${platform}.translation.${row[0]}`;
+                }
+
+                const valueArray = _get(resources, key, []);
                 valueArray.push(cell);
 
-                _set(resources, `${locale}.translation.${row[0]}`, valueArray);
+                _set(resources, key, valueArray);
             }
         }
         const entity = this.config.entity || this.config.name;
@@ -86,20 +108,22 @@ export class ResponsesSheet extends DefaultSheet {
             throw new Error('Entity has to be set.');
         }
         if (!handleRequest.app.$cms.I18Next) {
-            i18n.init(Object.assign({
-                resources
-            }, this.config.i18Next));
-            handleRequest.app.$cms.I18Next.i18n = i18n;
+            i18n.init(Object.assign({ resources }, this.config.i18Next));
+            handleRequest.app.$cms.I18Next = { i18n };
         } else {
             Object.keys(resources).forEach((localeKey) => {
                 const resource = resources[localeKey];
-                Object.keys(resource.translation).forEach((key) => {
-                    handleRequest.app.$cms.I18Next.i18n.addResource(localeKey, 'translation', key, resource.translation[key]);
-                });
+
+                for (const platform of platforms) {
+                    if (resource[platform]) {
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform]);
+                    }
+                }
+
+                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation);
             });
         }
 
         handleRequest.app.$cms[entity] = resources;
-
     }
 }

@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
+=======
+import { Db, BaseApp, PluginConfig } from 'jovo-core';
+>>>>>>> ea955c3a9f455a9a32632b12743c54a3f5d39a57
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 export interface Config extends PluginConfig {
     uri?: string;
@@ -19,6 +23,7 @@ export class MongoDb implements Db {
     };
     needsWriteFileAccess = false;
     isCreating = false;
+    client?: MongoClient;
 
     constructor(config?: Config) {
         if (config) {
@@ -26,7 +31,11 @@ export class MongoDb implements Db {
         }
     }
 
-    install(app: BaseApp) {
+    async install(app: BaseApp) {
+        this.errorHandling();
+
+        this.client = await MongoClient.connect(this.config.uri!, { useNewUrlParser: true });
+
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
                 app.$db = this;
@@ -91,13 +100,9 @@ export class MongoDb implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
-            const doc = await collection.findOne({userId: primaryKey});
-            await client.close();
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const doc = await collection.findOne({ userId: primaryKey });
             return doc;
         } catch (e) {
             throw new JovoError(
@@ -115,16 +120,14 @@ export class MongoDb implements Db {
         this.errorHandling();
 
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const item = {
                 $set: {
                     [this.config.primaryKeyColumn!]: primaryKey,
                     [key]: data
                 }
             };
-            await collection.updateOne({userId: primaryKey}, item, {upsert: true});
-            await client.close();
+            await collection.updateOne({ userId: primaryKey }, item, { upsert: true });
         } catch (e) {
             throw new JovoError(
                 e.message,
@@ -138,13 +141,9 @@ export class MongoDb implements Db {
     }
 
     async delete(primaryKey: string) {
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
-            await collection.deleteOne({userId: primaryKey});
-            await client.close();
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
+            await collection.deleteOne({ userId: primaryKey });
         } catch (e) {
             throw new JovoError(
                 e.message,
