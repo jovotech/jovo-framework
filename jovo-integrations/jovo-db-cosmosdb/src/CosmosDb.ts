@@ -7,7 +7,8 @@ export class CosmosDb extends MongoDb {
         super(config);
     }
 
-    install(app: BaseApp) {
+    async install(app: BaseApp) {
+        await super.install(app);
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'CosmosDb') {
                 app.$db = this;
