@@ -109,7 +109,7 @@ export class MySQL implements Db {
 
     }
 
-    save(primaryKey: string, key: string, data: any) {
+    save(primaryKey: string, key: string, data: any) { // tslint:disable-line
         this.errorHandling();
 
         return new Promise(async (resolve, reject) => {
@@ -167,7 +167,7 @@ export class MySQL implements Db {
         });
     }
 
-    private createTable(): Promise<any> {
+    private createTable(): Promise<any> { // tslint:disable-line
         this.errorHandling();
 
         return new Promise(async (resolve, reject) => {

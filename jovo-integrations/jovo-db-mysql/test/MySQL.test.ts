@@ -131,13 +131,12 @@ describe('test database operations', () => {
     describe('test load()', async () => {
         test('should throw error because select() throws error that is not "ER_NO_SUCH_TABLE"', async () => {
             const mockSelect = jest.fn().mockImplementation(() => {
-                let error: any = new Error();
-                error.code = 'test';
+                const error: Error = new Error();
+                _set(error, 'code', 'test');
                 throw error;
             });
             // hack to access private function
             mySQL['select'] = mockSelect;
-            Object.defineProperty(mySQL, 'select', jest.fn())
 
             await mySQL.load('id')
                 .catch(e => expect(e.code).toBe('test'));
@@ -145,8 +144,8 @@ describe('test database operations', () => {
 
         test('should call createTable() because err.code is "ER_NO_SUCH_TABLE"', async () => {
             const mockSelect = jest.fn().mockImplementation(() => {
-                let error: any = new Error();
-                error.code = 'ER_NO_SUCH_TABLE';
+                const error: Error = new Error();
+                _set(error, 'code', 'ER_NO_SUCH_TABLE');
                 throw error;
             });
             mySQL['select'] = mockSelect;
@@ -173,7 +172,7 @@ describe('test database operations', () => {
         test('should call errorHandling()', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
                     },
                 });
@@ -188,7 +187,7 @@ describe('test database operations', () => {
         test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
                     },
                 });
@@ -202,7 +201,7 @@ describe('test database operations', () => {
         test('connection.query() should resolve the value parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(null, 'test');
                     },
                 });
@@ -221,14 +220,14 @@ describe('test database operations', () => {
             await mySQL.save('id', 'key', 'value').catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
-        })
+        });
     });
 
     describe('test delete()', () => {
         test('should call errorHandling()', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
                     },
                 });
@@ -243,7 +242,7 @@ describe('test database operations', () => {
         test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
                     },
                 });
@@ -257,7 +256,7 @@ describe('test database operations', () => {
         test('connection.query() should resolve the value parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, values: any, cb: any) => {
+                    query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
                     },
                 });
@@ -283,7 +282,7 @@ describe('test database operations', () => {
         test('should call errorHandling()', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, cb: any) => {
+                    query: (options: string, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
                     },
                 });
@@ -299,7 +298,7 @@ describe('test database operations', () => {
         test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, cb: any) => {
+                    query: (options: string, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
                     },
                 });
@@ -313,7 +312,7 @@ describe('test database operations', () => {
         test('connection.query() should resolve the value parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, cb: any) => {
+                    query: (options: string, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
                     },
                 });
@@ -339,12 +338,12 @@ describe('test database operations', () => {
         test('should call errorHandling()', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, value: any, cb: any) => {
+                    query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result = [
                             {
                                 userData: '{"key": "value"}'
                             }
-                        ]
+                        ];
                         cb(undefined, result);
                     },
                 });
@@ -360,7 +359,7 @@ describe('test database operations', () => {
         test('connection.query() should reject the error parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, value: any, cb: any) => {
+                    query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
                     }
                 });
@@ -374,12 +373,12 @@ describe('test database operations', () => {
         test('connection.query() should resolve the value parsed to the callback', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, value: any, cb: any) => {
+                    query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result = [
                             {
                                 userData: '{"key": "value"}'
                             }
-                        ]
+                        ];
                         cb(undefined, result);
                     }
                 });
@@ -397,8 +396,8 @@ describe('test database operations', () => {
         test('connection.query() should resolve undefined as the value parsed is an empty array (i.e. no data found)', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, value: any, cb: any) => {
-                        const result: any[] = [];
+                    query: (options: string, value: any, cb: any) => { // tslint:disable-line
+                        const result: any[] = []; // tslint:disable-line
                         cb(undefined, result); 
                     }
                 });
@@ -422,12 +421,12 @@ describe('test database operations', () => {
         test('should catch and reject error thrown while trying to JSON.parse() the queried', async () => {
             mySQL['getConnection'] = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
-                    query: (options: string, value: any, cb: any) => {
+                    query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result = [
                             {
                                 userData: '{key: "value"}' // invalid JSON
                             }
-                        ]
+                        ];
                         cb(undefined, result);
                     }
                 });
