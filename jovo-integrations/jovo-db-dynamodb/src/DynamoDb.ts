@@ -164,7 +164,7 @@ export class DynamoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: any) {
+    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
         this.errorHandling();
 
         const getDataMapParams: DocumentClient.PutItemInput = {
@@ -189,7 +189,7 @@ export class DynamoDb implements Db {
             }
         };
 
-        return await this.docClient!.delete(deleteItemInput).promise()
+        return await this.docClient!.delete(deleteItemInput).promise();
     }
 
     private async createTable() {

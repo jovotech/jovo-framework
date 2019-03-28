@@ -56,7 +56,7 @@ describe('test install()', () => {
                     key: 'value'
                 },
                 endpoint: 'value'
-            }
+            };
             dynamoDb = new DynamoDb(config);
             app = new BaseApp();
             dynamoDb.install(app);
@@ -84,7 +84,7 @@ describe('test install()', () => {
                 },
                 convertEmptyValues: false,
                 attrValue: 'S8'
-            }
+            };
             dynamoDb = new DynamoDb(config);
             app = new BaseApp();
             dynamoDb.install(app);
@@ -99,12 +99,12 @@ describe('test install()', () => {
         test('test should throw Error because aws-xray-sdk-core package isn\'t installed', () => {
             const config = {
                 awsXray: true
-            }
+            };
             const dynamoDb = new DynamoDb(config);
             const app = new BaseApp();
             
             expect(() => {
-                dynamoDb.install(app)
+                dynamoDb.install(app);
             }).toThrowError(JovoError);
         });
     });
@@ -122,7 +122,7 @@ describe('test install()', () => {
             const app = new BaseApp();
 
             expect(() => {
-                dynamoDb.install(app)
+                dynamoDb.install(app);
             }).toThrowError(JovoError);
         });
 
@@ -132,12 +132,12 @@ describe('test install()', () => {
                     endpoint: ['1', '2'],
                     region: 'one'
                 }
-            }
+            };
             const dynamoDb = new DynamoDb(config);
             const app = new BaseApp();
             
             expect(() => {
-                dynamoDb.install(app)
+                dynamoDb.install(app);
             }).toThrowError(JovoError);
         });
     });
@@ -149,7 +149,7 @@ describe('test errorHandling()', () => {
     let app: BaseApp;
     const config = {
         tableName: 'test'
-    }
+    };
 
     test('test should throw JovoError if tableName is missing in config', async () => {
         dynamoDb = new DynamoDb();
@@ -168,7 +168,7 @@ describe('test errorHandling()', () => {
         _set(dynamoDb, 'docClient', undefined);
 
         await dynamoDb.save('id', 'key', {key: 'value'})
-            .catch(e => expect(e).toBeInstanceOf(JovoError))
+            .catch(e => expect(e).toBeInstanceOf(JovoError));
     });
 
     test('test should throw JovoError if primaryKeyColumn is undefined', async () => {
@@ -179,18 +179,17 @@ describe('test errorHandling()', () => {
         _set(dynamoDb.config, 'primaryKeyColumn', undefined);
 
         await dynamoDb.save('id', 'key', {key: 'value'})
-            .catch(e => expect(e).toBeInstanceOf(JovoError))
+            .catch(e => expect(e).toBeInstanceOf(JovoError));
     });
 });
 
 describe('test database operations', () => {
 
     let dynamoDb: DynamoDb;
-    let app: BaseApp;
 
     const config = {
         tableName: 'test'
-    }
+    };
 
     describe('test save()', () => {
         test('should call errorHandling() once', async () => {
@@ -199,7 +198,7 @@ describe('test database operations', () => {
                 put: jest.fn().mockImplementation((params) => {
                     return {
                         promise: jest.fn()
-                    }
+                    };
                 })
             };
             dynamoDb = new DynamoDb(config);
@@ -218,7 +217,7 @@ describe('test database operations', () => {
                         promise: () => {
                             return Promise.resolve({Attributes: params.Item});
                         }
-                    }
+                    };
                 })
             };
             dynamoDb = new DynamoDb(config);
@@ -253,7 +252,7 @@ describe('test database operations', () => {
                 delete: jest.fn().mockImplementation((params) => {
                     return {
                         promise: jest.fn()
-                    }
+                    };
                 })
             };
             dynamoDb = new DynamoDb(config);
@@ -272,7 +271,7 @@ describe('test database operations', () => {
                         promise: () => {
                             return Promise.resolve({test: 'test'});
                         }
-                    }
+                    };
                 })
             };
             dynamoDb = new DynamoDb(config);
@@ -445,6 +444,6 @@ describe('test database operations', () => {
             await dynamoDb['createTable']();
 
             expect(dynamoDb.isCreating).toBe(true);
-        })
+        });
     });
 });
