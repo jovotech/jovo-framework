@@ -114,7 +114,7 @@ describe('test errorHandling() which checks config parameters', () => {
 describe('test database operations', () => {
     let mongoServer: MongoMemoryServer;
     let mongodb: MongoDb;
-    let config: any = {
+    const config: any = { // tslint:disable-line
         databaseName: 'test',
         primaryKeyColumn: 'userId',
         collectionName: 'UserData'
@@ -131,7 +131,7 @@ describe('test database operations', () => {
         await mongoServer.stop();
     });
 
-    async function save(primaryKey: string, key: string, data: any) {
+    async function save(primaryKey: string, key: string, data: any) { // tslint:disable-line
         const client = await MongoClient.connect(config.uri!, {useNewUrlParser: true});
         const collection = client.db(config.databaseName!).collection(config.collectionName!);
         const item = {
@@ -192,7 +192,7 @@ describe('test database operations', () => {
                 newKey: {
                     key: 'value'
                 }
-            }
+            };
 
             await mongodb.save(primaryKey, 'oldKey', existingObject.oldKey);
             await mongodb.save(primaryKey, 'newKey', newObject.newKey);

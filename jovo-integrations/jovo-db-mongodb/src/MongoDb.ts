@@ -111,7 +111,7 @@ export class MongoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: any) {
+    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
         this.errorHandling();
 
         try {
