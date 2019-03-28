@@ -29,7 +29,7 @@ describe('test installation', () => {
         });
         const app = new BaseApp();
         expect(() => {
-            filedb.install(app)
+            filedb.install(app);
         }).toThrow(JovoError);
     });
 
@@ -41,7 +41,7 @@ describe('test installation', () => {
         });
         const app = new BaseApp();
         expect(() => {
-            filedb.install(app)
+            filedb.install(app);
         }).toThrow(JovoError);
     });
 
@@ -53,7 +53,7 @@ describe('test installation', () => {
         });
         const app = new BaseApp();
         expect(() => {
-            filedb.install(app)
+            filedb.install(app);
         }).toThrow(JovoError);
     });
 });
@@ -104,9 +104,9 @@ describe('test database operations', () => {
             await filedb.save(objectToBeSaved.userId, 'testKey', objectToBeSaved.testKey);
 
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
-            const userData = dataArr.find((o: any) => {
+            const userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === objectToBeSaved.userId;
             });
 
@@ -121,13 +121,13 @@ describe('test database operations', () => {
             modifiedObject = _merge(modifiedObject, existingObject);
 
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
-            const userData = dataArr.find((o: any) => {
+            const userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
 
-            expect(userData).toEqual(modifiedObject)
+            expect(userData).toEqual(modifiedObject);
         });
     
         test('test should add new object for new primaryKey (new user) and keep the existing data', async () => {
@@ -139,29 +139,29 @@ describe('test database operations', () => {
             await filedb.save(objectToBeSaved.userId, 'testKey', objectToBeSaved.testKey);
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
 
             // existingObject still exists
-            let userData = dataArr.find((o: any) => {
+            let userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
-            expect(userData).toEqual(existingObject);;
+            expect(userData).toEqual(existingObject);
     
             // objectToBeSaved also exists
-            userData = dataArr.find((o: any) => {
+            userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === objectToBeSaved.userId;
             });
-            expect(userData).toEqual(objectToBeSaved);;
+            expect(userData).toEqual(objectToBeSaved);
         });
     
         test('test should override user\'s existing data for existing key', async () => {
             await filedb.save(existingObject.userId, 'key', 'newValue'); // same user, new value for `key`
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
-            const userData = dataArr.find((o: any) => {
+            const userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
     
@@ -188,9 +188,9 @@ describe('test database operations', () => {
             await filedb.delete(existingObject.userId);
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!);
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
-            const userData = dataArr.find((o: any) => {
+            const userData = dataArr.find((o: any) => { // tslint:disable-line
                 return o[filedb.config.primaryKeyColumn!] === existingObject.userId;
             });
     
@@ -201,7 +201,7 @@ describe('test database operations', () => {
             await filedb.delete('xyz');
     
             // get object from db.json file
-            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!)
+            const dataJson: any = fs.readFileSync(filedb.config.pathToFile!); // tslint:disable-line
             const dataArr = JSON.parse(dataJson);
     
             const existingArr = [existingObject];

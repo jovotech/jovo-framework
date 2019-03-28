@@ -1,4 +1,4 @@
-import { BaseApp, JovoError } from "jovo-core"
+import { BaseApp, JovoError } from "jovo-core";
 import { FileDb2 } from "./../src/FileDb2";
 import * as fs from "fs";
 import * as path from 'path';
@@ -25,7 +25,7 @@ describe('test installation', () => {
         });
         const app = new BaseApp();
         expect(() => {
-            filedb2.install(app)
+            filedb2.install(app);
         }).toThrow(JovoError);
     });
 });
@@ -79,7 +79,7 @@ describe('test database operations', () => {
 
             // get object from json file
             const pathToFile = path.join(filedb2.config.path!, `${userId}.json`);
-            const dataJson: any = fs.readFileSync(pathToFile);
+            const dataJson: any = fs.readFileSync(pathToFile); // tslint:disable-line
             const userData = JSON.parse(dataJson);
 
             expect(userData).toEqual(objectToBeSaved);
@@ -94,10 +94,10 @@ describe('test database operations', () => {
 
             // get object from db.json file
             const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
-            const dataJson: any = fs.readFileSync(pathToFile);
+            const dataJson: any = fs.readFileSync(pathToFile); // tslint:disable-line
             const userData = JSON.parse(dataJson);
 
-            expect(userData).toEqual(modifiedObject)
+            expect(userData).toEqual(modifiedObject);
         });
     
         test('test should add new object for new primaryKey (new user) and keep the existing data', async () => {
@@ -110,15 +110,15 @@ describe('test database operations', () => {
 
             // existingUserData still exists
             const pathToExistingData = path.join(filedb2.config.path!, `${existingUserId}.json`);
-            const existingDataJson: any = fs.readFileSync(pathToExistingData);
+            const existingDataJson: any = fs.readFileSync(pathToExistingData); // tslint:disable-line
             const existingUserData = JSON.parse(existingDataJson);
-            expect(existingUserData).toEqual(existingObject);;
+            expect(existingUserData).toEqual(existingObject);
     
             // newUserData exists
             const pathToNewData = path.join(filedb2.config.path!, `${newUserId}.json`);
-            const newDataJson: any = fs.readFileSync(pathToNewData);
+            const newDataJson: any = fs.readFileSync(pathToNewData); // tslint:disable-line
             const newUserData = JSON.parse(newDataJson);
-            expect(newUserData).toEqual(newObject);;
+            expect(newUserData).toEqual(newObject);
         });
     
         test('test should override user\'s existing data for existing key', async () => {
@@ -126,7 +126,7 @@ describe('test database operations', () => {
     
             // get object from db.json file
             const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
-            const dataJson: any = fs.readFileSync(pathToFile);
+            const dataJson: any = fs.readFileSync(pathToFile); // tslint:disable-line
             const userData = JSON.parse(dataJson);
     
             expect(userData.key).not.toEqual(existingObject.key);

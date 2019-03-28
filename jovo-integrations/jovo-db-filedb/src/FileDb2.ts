@@ -125,8 +125,8 @@ export class FileDb2 implements Db {
                     return reject(err);
                 }
                 resolve();
-            })
-        })
+            });
+        });
     }
 
     /**
