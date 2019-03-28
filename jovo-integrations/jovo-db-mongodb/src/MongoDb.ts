@@ -30,7 +30,7 @@ export class MongoDb implements Db {
     async install(app: BaseApp) {
         this.errorHandling();
 
-        this.client = await MongoClient.connect(this.config.uri!, { useNewUrlParser: true });
+        this.client = await this.getConnectedMongoClient(this.config.uri!);
 
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
@@ -42,6 +42,10 @@ export class MongoDb implements Db {
     }
 
     uninstall(app: BaseApp) {
+    }
+
+    async getConnectedMongoClient(uri: string): Promise<MongoClient> {
+        return await MongoClient.connect(uri, { useNewUrlParser: true });
     }
 
     errorHandling() {
