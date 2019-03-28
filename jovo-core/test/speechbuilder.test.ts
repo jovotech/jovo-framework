@@ -16,6 +16,16 @@ test('is ssml string without duplicate <speak> tags', () => {
     expect(ssmlString).toBe('<speak>test</speak>');
 });
 
+test('setProsody', () => {
+    const speechBuilder = new SpeechBuilder();
+    speechBuilder.addText('text1').addText('text2').setProsody({rate: 'fast'});
+    expect(speechBuilder.toString()).toBe('<prosody rate="fast">text1 text2</prosody>');
+
+    // order shouldn't matter
+    const speechBuilder2 = new SpeechBuilder();
+    speechBuilder2.setProsody({rate: 'fast'}).addText('text1').addText('text2');
+    expect(speechBuilder2.toString()).toBe('<prosody rate="fast">text1 text2</prosody>');
+});
 
 test('addText', () => {
     const speechBuilder = new SpeechBuilder();
@@ -41,6 +51,26 @@ test('addText', () => {
     expect(speechBuilder4.toString()).toBe('');
     speechBuilder4.addText('text1', true, 1.0);
     expect(speechBuilder4.toString()).toBe('text1');
+
+    const speechBuilder5 = new SpeechBuilder();
+    speechBuilder5.addText('text1', true, 1.0, {
+        prosody: {
+            pitch: '+1st',
+            rate: 'fast'
+        }
+    });
+    expect(speechBuilder5.toString()).toBe('<prosody pitch="+1st" rate="fast">text1</prosody>');
+
+    const speechBuilder6 = new SpeechBuilder();
+    speechBuilder6.addText('text1', true, 1.0, {
+        emphasis: {
+            level: 'moderate'
+        },
+        prosody: {
+            rate: 'fast'
+        }
+    });
+    expect(speechBuilder6.toString()).toBe('<prosody rate="fast"><emphasis level="moderate">text1</emphasis></prosody>');
 });
 
 test('addBreak', () => {
