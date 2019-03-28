@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
-=======
-import { Db, BaseApp, PluginConfig } from 'jovo-core';
->>>>>>> ea955c3a9f455a9a32632b12743c54a3f5d39a57
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import { MongoClient } from 'mongodb';
