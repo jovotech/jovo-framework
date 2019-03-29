@@ -98,7 +98,7 @@ this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(0)
     .tell(speech);
 
 // or for example playing with an offset.
-const offset = 3000;
+const offset:number = 3000;
 this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(offset)
     .play(url, token)
     .tell(speech);
@@ -122,7 +122,13 @@ Name | Description | Value | Required
 Adds specified audio file to the queue. Remember that the URL must be HTTPS.
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$audioPlayer.setExpectedPreviousToken(expectedToken).enqueue(url, token)
+
+// @language=typescript
+
+this.$alexaSkill!.$audioPlayer.setExpectedPreviousToken(expectedToken).enqueue(url, token)
 ```
 
 Name | Description | Value | Required
@@ -135,7 +141,13 @@ Name | Description | Value | Required
 Stops the current file from playing.
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$audioPlayer.stop();
+
+// @language=typescript
+
+this.$alexaSkill!.$audioPlayer.stop();
 ```
 
 ### Start Over
@@ -143,7 +155,13 @@ this.$alexaSkill.$audioPlayer.stop();
 Starts the file specified by the url from the beginning.
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$audioPlayer.startOver(url, token);
+
+// @language=typescript
+
+this.$alexaSkill!.$audioPlayer.startOver(url, token);
 ```
 
 Name | Description | Value | Required
@@ -156,7 +174,13 @@ Name | Description | Value | Required
 Use to clear all the queue or just the enqueue files.
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$audioPlayer.clearQueue('CLEAR_ALL');
+
+// @language=typescript
+
+this.$alexaSkill!.$audioPlayer.clearQueue('CLEAR_ALL');
 ```
 
 Name | Description | Value | Required
@@ -175,7 +199,19 @@ Name | Description | Value | Required
 `background` | URL for the background image to display | `STRING` | NO
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$audioPlayer
+    .setTitle('First Track')
+    .setSubtitle('A simple subtitle')
+    .addArtwork('https://www.somewhere.com/image.png')
+    .addBackgroundImage('https://www.somewhere.com/background.jpg')
+    // The above method calls need to be before play()
+    .play(url, token);
+    
+// @language=typescript
+
+this.$alexaSkill!.$audioPlayer
     .setTitle('First Track')
     .setSubtitle('A simple subtitle')
     .addArtwork('https://www.somewhere.com/image.png')
@@ -195,6 +231,41 @@ For more information about the album artwork and the background image, refer to 
 Add the following to your handlers variable:
 
 ```javascript
+// @language=javascript
+// src/app.js
+
+app.setHandler({
+
+    // Other intents
+
+    AUDIOPLAYER: {
+        'AlexaSkill.PlaybackStarted'() {
+            console.log('AlexaSkill.PlaybackStarted');
+        },
+
+        'AlexaSkill.PlaybackNearlyFinished'() {
+            console.log('AlexaSkill.PlaybackNearlyFinished');
+        },
+
+        'AlexaSkill.PlaybackFinished'() {
+            console.log('AlexaSkill.PlaybackFinished');
+        },
+
+        'AlexaSkill.PlaybackStopped'() {
+            console.log('AlexaSkill.PlaybackStopped');
+        },
+        
+        'AlexaSkill.PlaybackFailed'() {
+            console.log('AlexaSkill.PlaybackFailed');
+        },
+
+    },
+
+});
+
+// @language=typescript
+// src/app.ts
+
 app.setHandler({
 
     // Other intents
