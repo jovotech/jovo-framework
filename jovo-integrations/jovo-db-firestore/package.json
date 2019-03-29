@@ -25,6 +25,7 @@
     "@types/lodash.merge": "^4.6.4",
     "@types/node": "^10.3.1",
     "jest": "^23.4.2",
+    "lodash.set": "^4.3.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^23.10.5",

@@ -35,7 +35,13 @@ export class Firestore implements Db {
             app.$db = this;
         }
 
+        this.initializeFirebaseAdmin();
+        this.initializeFirestore(this.firebaseAdmin);
+    }
+
+    initializeFirebaseAdmin() {
         this.firebaseAdmin = require('firebase-admin');
+
         if (!this.firebaseAdmin) {
             throw new JovoError(
                 'Failed to import the firebase-admin package',
@@ -49,8 +55,10 @@ export class Firestore implements Db {
             credential: this.firebaseAdmin.credential.cert(this.config.credential),
             databaseURL: this.config.databaseURL
         });
+    }
 
-        this.firestore = this.firebaseAdmin.firestore();
+    initializeFirestore(firebaseAdmin: any) { // tslint:disable-line
+        this.firestore = firebaseAdmin.firestore();
         if (!this.firestore) {
             throw new JovoError(
                 'Failed to initialize the firestore object',
@@ -122,12 +130,12 @@ export class Firestore implements Db {
 
 
     /**
-     * Saves object as value for key (default: "userData") inside document (primary key)
+     * Saves data as value for key (default: "userData") inside document (primary key)
      * @param {string} primaryKey
      * @param {string} key
-     * @param {object} data
+     * @param {any} data
      */
-    async save(primaryKey: string, key: string, data: object): Promise<void> {
+    async save(primaryKey: string, key: string, data: any): Promise<void> { // tslint:disable-line
         this.errorHandling();
 
         const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
