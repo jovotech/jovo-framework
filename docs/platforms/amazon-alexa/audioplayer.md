@@ -72,19 +72,39 @@ Speech will take place before the file begins to play.
 play(url, token, playBehavior)
 
 ```javascript
+@language=javascript
+
 // Start playing a file from the beginning
 this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
     .play(url, token)
     .tell(speech);
 
 // or for example playing with an offset.
-var offset = 3000;
+const offset = 3000;
 this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(offset)
     .play(url, token)
     .tell(speech);
 
 // or specify PlayBehavior
 this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
+.play(url,token,'ENQUEUE')
+.tell(speech)
+
+@language=typescript
+
+// Start playing a file from the beginning
+this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(0)
+    .play(url, token)
+    .tell(speech);
+
+// or for example playing with an offset.
+const offset = 3000;
+this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(offset)
+    .play(url, token)
+    .tell(speech);
+
+// or specify PlayBehavior
+this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(0)
 .play(url,token,'ENQUEUE')
 .tell(speech)
 ```
