@@ -72,7 +72,7 @@ Speech will take place before the file begins to play.
 play(url, token, playBehavior)
 
 ```javascript
-@language=javascript
+// @language=javascript
 
 // Start playing a file from the beginning
 this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
@@ -90,7 +90,7 @@ this.$alexaSkill.$audioPlayer.setOffsetInMilliseconds(0)
 .play(url,token,'ENQUEUE')
 .tell(speech)
 
-@language=typescript
+// @language=typescript
 
 // Start playing a file from the beginning
 this.$alexaSkill!.$audioPlayer.setOffsetInMilliseconds(0)
