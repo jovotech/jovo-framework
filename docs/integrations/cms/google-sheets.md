@@ -173,7 +173,28 @@ this.$cms.sheetName.key
 
 ### ObjectArray
 
-If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys
+If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys.
+
+You can define the range (which columns to access) in your config:
+
+
+```javascript
+// config.js file
+cms: {
+    GoogleSheetsCMS: {
+        
+        // ...
+        
+        sheets: [
+            {
+                name: '<YourSheetName>',
+                type: 'ObjectArray',
+                range: 'A:C',
+            },
+        ]
+    }
+},
+```
 
 Here's an example sheet:
 
