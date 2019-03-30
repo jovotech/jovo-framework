@@ -1,7 +1,6 @@
 import { I18Next } from '../src/';
-import { HandleRequest, BaseApp } from 'jovo-core';
+import { HandleRequest, BaseApp, SpeechBuilder } from 'jovo-core';
 import * as i18nData from './i18n/en-US.json';
-
 
 describe('I18Next.constructor()', () => {
     test('without config', () => {
@@ -12,6 +11,21 @@ describe('I18Next.constructor()', () => {
     test('with config', () => {
         const i18n = new I18Next({ filesDir: '../test' });
         expect(i18n.config.filesDir).toEqual('../test');
+    });
+});
+
+describe('I18Next.install()', () => {
+    test.only('new functions', () => {
+        const speech = new SpeechBuilder();
+        expect(speech.t).toBeUndefined();
+        expect(speech.addT).toBeUndefined();
+        const baseApp = new BaseApp();
+        const i18n = new I18Next();
+        i18n.install(baseApp);
+        const s = new SpeechBuilder();
+        console.log(typeof s.t);
+        expect(typeof s.t).toEqual('function');
+        expect(typeof s.addT).toEqual('function');
     });
 });
 
