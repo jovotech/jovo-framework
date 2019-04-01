@@ -327,7 +327,7 @@ The important parts of that request are:
 
 Name | Description
 :--- | :---
-`name` | Either `Upsell`, `Buy` or `Refund`. Used to determine which kind of transaction took place
+`name` | Either `Upsell`, `Buy` or `Cancel`. Used to determine which kind of transaction took place
 `payload.purchaseResult` | Either `ACCEPTED`, `DECLINED`, `ALREADY_PURCHASED` or `ERROR`. Used to determine the outcome of the transaction
 `payload.productId` | The product in question
 `token` | The token used to resume the skill where it left off
