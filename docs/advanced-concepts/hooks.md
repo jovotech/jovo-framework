@@ -23,15 +23,40 @@ Jovo Hooks allow you to "hook" into `middlewares` of the [Jovo Architecture](./a
 Here is how a hook could look like:
 
 ```js
+// @language=javascript
 // src/app.js
 
 app.hook('<middleware-name>', (error, host, jovo) => {
-      // Do stuff
+      // ...
 });
 
 // Example: Wrap Alexa Skill output in a Polly voice SSML tag
 // before the response JSON is created in the platform.output middleware
 app.hook('before.platform.output', (error, host, jovo) => {
+    const pollyName = 'Hans';
+
+    if (jovo.isAlexaSkill()) {
+        if (jovo.$output.tell) {
+            jovo.$output.tell.speech = `<voice name="${pollyName}">${jovo.$output.tell.speech}</voice>`;
+        }
+
+        if (jovo.$output.ask) {
+            jovo.$output.ask.speech = `<voice name="${pollyName}">${jovo.$output.ask.speech}</voice>`;
+            jovo.$output.ask.reprompt = `<voice name="${pollyName}">${jovo.$output.ask.reprompt}</voice>`;
+        }
+    }
+});
+
+// @language=typescript
+// src/app.ts
+
+app.hook('<middleware-name>', (error:Error, host:Host, jovo:Jovo) => {
+      // ...
+});
+
+// Example: Wrap Alexa Skill output in a Polly voice SSML tag
+// before the response JSON is created in the platform.output middleware
+app.hook('before.platform.output', (error:Error, host:Host, jovo:Jovo) => {
     const pollyName = 'Hans';
 
     if (jovo.isAlexaSkill()) {
@@ -82,7 +107,15 @@ Each middleware hook contains of a specified `middleware` and an anonymous funct
 The `error` is `undefined` unless the `fail` middleware is used.
 
 ```javascript
+// @language=javascript
+
 app.hook('fail', (error, host, jovo) => {
+    console.log(error);
+});
+
+// @language=typescript
+
+app.hook('fail', (error:Error, host:Host, jovo:Jovo) => {
     console.log(error);
 });
 ```
@@ -166,10 +199,20 @@ The anonymous function that you pass into the hook is then called when is is rea
 If you need to do API calls and await them in your hooks, use `asnyc/await`:
 
 ```js
+// @language=javascript
+
 app.hook('<middleware-name>', async (error, host, jovo) => {
     let result = await yourApiCall();
 
-    // Do stuff
+    // ...
+});
+
+// @language=typescript
+
+app.hook('<middleware-name>', async (error:Error, host:Host, jovo:Jovo) => {
+    let result = await yourApiCall();
+
+    // ...
 });
 ```
 

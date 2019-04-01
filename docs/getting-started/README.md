@@ -53,12 +53,24 @@ This will create a new folder, download the [Jovo "Hello World" template](https:
 This is how a typical Jovo project looks like:
 
 ```javascript
+// @language=javascript
+
 models/
   └── en-US.json
 src/
   |── app.js
   |── config.js
   └── index.js
+project.js
+
+// @language=typescript
+
+models/
+  └── en-US.json
+src/
+  |── app.ts
+  |── config.ts
+  └── index.ts
 project.js
 ```
 
@@ -72,6 +84,13 @@ To test the logic of your code, you can use the local development server provide
 To get started, use the following command:
 
 ```sh
+// @language=javascript
+
+$ jovo run
+
+// @language=typescript
+
+$ npm run tsc
 $ jovo run
 ```
 
@@ -93,6 +112,28 @@ After getting your first "Hello World," here are the next steps to get started w
 Take a look at the `app.js` file in the `src` folder to get an understanding of how the app logic is built:
 
 ```js
+// @language=javascript
+
+// src/app.js
+
+app.setHandler({
+    LAUNCH() {
+        return this.toIntent('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+});
+
+// @language=typescript
+
+// src/app.ts
+
 app.setHandler({
     LAUNCH() {
         return this.toIntent('HelloWorldIntent');

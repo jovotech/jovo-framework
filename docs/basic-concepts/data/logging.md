@@ -33,8 +33,29 @@ For voice app specific debugging, Jovo offers some handy functions for logging i
 You can enable logging by using the following:
 
 ```javascript
-// config.js file
-logging: true,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    logging: true,
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    logging: true,
+
+    // ...
+
+};
 ```
 
 This will enable both [Request Logging](#log-requests) and [Response Logging](#log-responses), which can also be  enabled separately. For this, see the sections below.
@@ -45,10 +66,33 @@ This will enable both [Request Logging](#log-requests) and [Response Logging](#l
 You can log the incoming JSON requests by adding the following configuration:
 
 ```javascript
-// config.js file
-logging: {
-    request: true,
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    logging: {
+        request: true,
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    logging: {
+        request: true,
+    },
+
+    // ...
+
+};
 ```
 
 The result looks like this (data changed):
@@ -103,14 +147,41 @@ The result looks like this (data changed):
 As you can see above, the logs of a request are quite long and impractical, if you only need certain information. With `requestObjects`, you can limit the log output to specific objects.
 
 ```javascript
-// config.js file
-logging: {
-    request: true,
-    requestObjects: [
-      'request',
-      'context.System.user'
-    ],
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    logging: {
+        request: true,
+        requestObjects: [
+          'request',
+          'context.System.user'
+        ],
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    logging: {
+        request: true,
+        requestObjects: [
+          'request',
+          'context.System.user'
+        ],
+    },
+
+    // ...
+
+};
 ```
 
 The example for `request` above will reduce the log output to this:
@@ -131,12 +202,34 @@ The example for `request` above will reduce the log output to this:
 
 You can log the outgoing JSON responses by adding the following configuration:
 
-
 ```javascript
-// config.js file
-logging: {
-    response: true,
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    logging: {
+        response: true,
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    logging: {
+        response: true,
+    },
+
+    // ...
+
+};
 ```
 
 The result looks like this:
@@ -160,13 +253,39 @@ The result looks like this:
 Similar to `requestLoggingObjects`, you can limit the response logging output to specific objects, as well.
 
 ```javascript
-// config.js file
-logging: {
-    response: true,
-    responseObjects: [
-      'response'
-    ],
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    logging: {
+        response: true,
+        responseObjects: [
+          'response'
+        ],
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    logging: {
+        response: true,
+        responseObjects: [
+          'response'
+        ],
+    },
+
+    // ...
+
+};
 ```
 
 The example above will reduce the log output to this:
@@ -197,7 +316,16 @@ Jovo has an internal logging class that can be used to display certain levels of
 You can set the log level by adding an environment variable, for example in your `app.js` file:
 
 ```js
+// @language=javascript
+
 // src/app.js
+
+process.env.JOVO_LOG_LEVEL='VERBOSE';
+
+
+// @language=typescript
+
+// src/app.ts
 
 process.env.JOVO_LOG_LEVEL='VERBOSE';
 ```
@@ -218,14 +346,24 @@ You can use the Jovo `Log` class in your app logic to log certain things for dif
 First, import the class into your project:
 
 ```js
+// @language=javascript
+
 // src/app.js
 
 const { Log } = require('jovo-core');
+
+// @language=typescript
+
+// src/app.ts
+
+import { Log } from 'jovo-core';
 ```
 
 You can then use it in your app logic to log things for different levels:
 
 ```js
+// @language=javascript
+
 app.setHandler({
   
   SomeIntent() {
@@ -233,7 +371,20 @@ app.setHandler({
     Log.verbose('This is a verbose log');
   },
 
-  // Other intents
+  // ...
+
+});
+
+// @language=typescript
+
+app.setHandler({
+  
+  SomeIntent() {
+    Log.info('This is an info log');
+    Log.verbose('This is a verbose log');
+  },
+
+  // ...
 
 });
 ```
@@ -251,6 +402,8 @@ You can use the following [log levels](#log-levels) for this:
 You can also use helpers to format the log output, like this:
 
 ```js
+// @language=javascript
+
 app.setHandler({
   
   SomeIntent() {
@@ -258,7 +411,20 @@ app.setHandler({
     Log.red().bold().info('This is a red and bold info log');
   },
 
-  // Other intents
+  // ...
+
+});
+
+// @language=typescript
+
+app.setHandler({
+  
+  SomeIntent() {
+    Log.green().info('This is a green info log');
+    Log.red().bold().info('This is a red and bold info log');
+  },
+
+  // ...
 
 });
 ```
@@ -297,11 +463,21 @@ The following methods are available:
 You can also define log appenders. For example, the below code imports the `Log` and `LogLevel` classes and then adds a file appender (save logs to a file with a specified name, in this case `errors.log`) for a certain log level (in this case `ERROR`):
 
 ```js
+// @language=javascript
+
 // src/app.js
 
 const { Log, LogLevel } = require('jovo-core');
 
-Log.addFileAppender('errors.log', { logLevel: LogLevel.ERROR })
+Log.addFileAppender('errors.log', { logLevel: LogLevel.ERROR });
+
+// @language=typescript
+
+// src/app.ts
+
+import { Log, LogLevel } from 'jovo-core';
+
+Log.addFileAppender('errors.log', { logLevel: LogLevel.ERROR });
 ```
 
 ## Logging Helpers

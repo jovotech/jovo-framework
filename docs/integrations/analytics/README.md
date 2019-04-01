@@ -13,12 +13,37 @@ Jovo offers an abstraction layer for analytics integrations that allows you to a
 Analytics for your voice app can be added in your `config.js` file like this:
 
 ```javascript
-// config.js file
-analytics: {
-    ServiceName: {
-        // Add configuration
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        ServiceName: {
+            // Add configuration
+        },
     },
-},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        ServiceName: {
+            // Add configuration
+        },
+    },
+
+    // ...
+
+};
 ```
 
 More detailed step-by-step guides for each service can be found in the [Available Integrations](#available-integrations) section.

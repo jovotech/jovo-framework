@@ -118,6 +118,10 @@ In the `src` folder, you can find the actual code of your Jovo app. This part is
 The `app.js` file is used for the logic of your voice application, which contains handlers, intents, and the configuration of your voice app:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 'use strict';
 
 // ------------------------------------------------------------------
@@ -159,6 +163,51 @@ app.setHandler({
 });
 
 module.exports.app = app;
+
+
+// @language=typescript
+
+// src/app.ts
+
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+import { App } from 'jovo-framework';
+import { Alexa } from 'jovo-platform-alexa';
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { JovoDebugger } from 'jovo-plugin-debugger';
+import { FileDb } = from 'jovo-db-filedb';
+
+const app = new App();
+
+app.use(
+    new Alexa(),
+    new GoogleAssistant(),
+    new JovoDebugger(),
+    new FileDb()
+);
+
+
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
+
+app.setHandler({
+    LAUNCH() {
+        return this.toIntent('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+});
+
+export { app };
 ```
 
 > [You can find everything related to the `app.js` here](./app-js.md './app-js').
@@ -169,6 +218,10 @@ module.exports.app = app;
 The `config.js` file stores all the logic-related configuration:
 
 ```javascript
+// @language=javascript
+
+// src/config.js
+
 // ------------------------------------------------------------------
 // APP CONFIGURATION
 // ------------------------------------------------------------------
@@ -186,6 +239,30 @@ module.exports = {
         }
     },
 };
+
+// @language=typescript
+
+// src/config.ts
+
+// ------------------------------------------------------------------
+// APP CONFIGURATION
+// ------------------------------------------------------------------
+
+const config = {
+   logging: true,
+
+   intentMap: {
+      'AMAZON.StopIntent': 'END',
+   },
+
+   db: {
+        FileDb: {
+            pathToFile: '../db/db.json',
+        }
+    },
+};
+
+export { config };
 ```
 
 > [You can find everything related to the `config.js` here](./config-js.md './config-js').
@@ -195,6 +272,10 @@ module.exports = {
 Everything related to running and hosting your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in `index.js` file: 
 
 ```javascript
+// @language=javascript
+
+// src/index.js
+
 'use strict';
 
 const { Webhook, ExpressJS, Lambda } = require('jovo-framework');
@@ -219,6 +300,36 @@ if (process.argv.indexOf('--webhook') > -1) {
 
 // AWS Lambda
 exports.handler = async (event, context, callback) => {
+    await app.handle(new Lambda(event, context, callback));
+};
+
+// @language=typescript
+
+// src/index.ts
+
+import { Webhook, ExpressJS, Lambda } from 'jovo-framework';
+import { app } = from './app';
+
+// ------------------------------------------------------------------
+// HOST CONFIGURATION
+// ------------------------------------------------------------------
+
+// ExpressJS (Jovo Webhook)
+if (process.argv.indexOf('--webhook') > -1) {
+    const port = process.env.JOVO_PORT || 3000;
+    Webhook.jovoApp = app;
+
+    Webhook.listen(port, () => {
+        console.info(`Local server listening on port ${port}.`);
+    });
+
+    Webhook.post('/webhook', async (req: Express.Request, res: Express.Response) => {
+        await app.handle(new ExpressJS(req, res));
+    });
+}
+
+// AWS Lambda
+exports.handler = async (event: any, context: any, callback: Function) => {
     await app.handle(new Lambda(event, context, callback));
 };
 ```

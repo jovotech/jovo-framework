@@ -43,10 +43,11 @@ With Jovo, you can include states like this:
 app.setHandler({
 
     LAUNCH() {
-        let speech = 'Do you want to order something?';
-        let reprompt = 'Please answer with yes or no.';
+        this.$speech.addText('Do you want to order something?');
+        this.$reprompt.addText('Please answer with yes or no.');
+
         this.followUpState('OrderState')
-            .ask(speech, reprompt);
+            .ask(this.$speech, this.$reprompt);
     },
     
     // Example: Behave differently for a 'yes' or 'no' answer inside order state
@@ -150,10 +151,11 @@ app.setHandler({
 
     LAUNCH() {
         // Ask for a yes-no-question and route to order state
-        let speech = 'Do you want to order something?';
-        let reprompt = 'Please answer with yes or no.';
+        this.$speech.addText('Do you want to order something?');
+        this.$reprompt.addText('Please answer with yes or no.');
+
         this.followUpState('OrderState')
-            .ask(speech, reprompt);
+            .ask(this.$speech, this.$reprompt);
     },
     
     // Example: Behave differently for a 'yes' or 'no' answer inside order state

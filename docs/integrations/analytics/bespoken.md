@@ -60,29 +60,69 @@ $ npm install --save jovo-analytics-bespoken
 Enable the plugin like this:
 
 ```javascript
-// app.js file
+// @language=javascript
+
+// src/app.js
 
 const { BespokenAlexa, BespokenGoogleAssistant } = require('jovo-analytics-bespoken');
 
 app.use(
     new BespokenAlexa(),
     new BespokenGoogleAssistant()
-)
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { BespokenAlexa, BespokenGoogleAssistant } from 'jovo-analytics-bespoken';
+
+app.use(
+    new BespokenAlexa(),
+    new BespokenGoogleAssistant()
+);
 ```
 
 Add configurations like this:
 
 ```javascript
-// config.js file
+// @language=javascript
 
-analytics: {
-    BespokenAlexa: {
-        key: '<key>',
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        BespokenAlexa: {
+            key: '<key>',
+        },
+        BespokenGoogleAssistant: {
+            key: '<key>',
+        },
     },
-    BespokenGoogleAssistant: {
-        key: '<key>',
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        BespokenAlexa: {
+            key: '<key>',
+        },
+        BespokenGoogleAssistant: {
+            key: '<key>',
+        },
     },
-}
+
+    // ...
+
+};
 ```
 
 ### Test Bespoken

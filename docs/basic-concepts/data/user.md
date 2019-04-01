@@ -118,28 +118,84 @@ sessionsCount | `this.$user.$metaData.sessionsCount` | Timestamp: How often your
 You can enable meta data like this:
 
 ```javascript
-// config.js file
-user: {
-    metaData: {
-        enabled: true,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        metaData: {
+            enabled: true,
+        },
     },
-},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        metaData: {
+            enabled: true,
+        },
+    },
+
+    // ...
+
+};
 ```
 
 You can also overwrite any other of the default configurations:
 
+
 ```javascript
-// config.js file
-user: {
-    metaData: {
-        enabled: false,
-        lastUsedAt: true,
-        sessionsCount: true,
-        createdAt: true,
-        requestHistorySize: 4,
-        devices: true,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        metaData: {
+            enabled: false,
+            lastUsedAt: true,
+            sessionsCount: true,
+            createdAt: true,
+            requestHistorySize: 4,
+            devices: true,
+        },
     },
-},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        metaData: {
+            enabled: false,
+            lastUsedAt: true,
+            sessionsCount: true,
+            createdAt: true,
+            requestHistorySize: 4,
+            devices: true,
+        },
+    },
+
+    // ...
+
+};
 ```
 
 
@@ -150,12 +206,37 @@ The user context is used to automatically store data from past interaction pairs
 User context can be enabled like this:
 
 ```javascript
-// config.js file
-user: {
-    context: {
-        enabled: true,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        context: {
+            enabled: true,
+        },
     },
-},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        context: {
+            enabled: true,
+        },
+    },
+
+    // ...
+
+};
 ```
 
 This works like pagination. The most recent request and response pair is stored at `this.$user.$context.prev[0]`.
@@ -175,57 +256,158 @@ Response | speech | `this.$user.$context.prev[i].response.speech` |  `this.$user
 The default configuration looks like this:
 
 ```javascript
-// config.js file
-user: {
-    context: {
-        enabled: false,
-        prev: {
-            size: 1,
-            request: {
-                intent: true,
-                state: true,
-                inputs: true,
-                timestamp: true,
-            },
-            response: {
-                speech: true,
-                reprompt: true,
-                state: true,
-                output: true,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        context: {
+            enabled: false,
+            prev: {
+                size: 1,
+                request: {
+                    intent: true,
+                    state: true,
+                    inputs: true,
+                    timestamp: true,
+                },
+                response: {
+                    speech: true,
+                    reprompt: true,
+                    state: true,
+                    output: true,
+                },
             },
         },
     },
-},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        context: {
+            enabled: false,
+            prev: {
+                size: 1,
+                request: {
+                    intent: true,
+                    state: true,
+                    inputs: true,
+                    timestamp: true,
+                },
+                response: {
+                    speech: true,
+                    reprompt: true,
+                    state: true,
+                    output: true,
+                },
+            },
+        },
+    },
+
+    // ...
+
+};
 ```
 
 You can freely adjust how many of these request-response pairs should be saved by changing the array `size` in your app's config to an Integer equal to or bigger than 0.
 
 ```javascript
-const config = {
-    userContext: {
-        prev: {
-            size: 3,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        context: {
+            prev: {
+                size: 3,
+            },
         },
     },
-    // Other configurations
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        context: {
+            prev: {
+                size: 3,
+            },
+        },
+    },
+
+    // ...
+
 };
 ```
 
 You can also decide what you want to save and what not. Simply change the value of the unwanted data to `false`:
+
 ```javascript
-const config = {
-    userContext: {
-        prev: {
-            size: 1,
-            request: {
-                timestamp: false,
-            },
-            response: {
-                state: false,
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        context: {
+            prev: {
+                size: 1,
+                request: {
+                    timestamp: false,
+                },
+                response: {
+                    state: false,
+                },
             },
         },
     },
-    // Other configurations
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        context: {
+            prev: {
+                size: 1,
+                request: {
+                    timestamp: false,
+                },
+                response: {
+                    state: false,
+                },
+            },
+        },
+    },
+
+    // ...
+
 };
 ```
 

@@ -24,7 +24,20 @@ $ npm install --save jovo-db-cosmosdb
 Cosmos DB can be enabled in the `src/app.js` file like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { CosmosDb } = require('jovo-db-cosmosdb');
+
+// Enable DB after app initialization
+app.use(new CosmosDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { CosmosDb } from 'jovo-db-cosmosdb';
 
 // Enable DB after app initialization
 app.use(new CosmosDb());
@@ -33,17 +46,42 @@ app.use(new CosmosDb());
 Inside your `config.js` file you have to set your `primary connection string` and your database name. You can also optionally set the collection name (default is `UserData`):
 
 ```javascript
-// config.js file
-db: {
-    CosmosDb: {
-        uri: '<primary_connection_string>',
-        databaseName: '<database_name>',
-        collectionName: '<collection_name>'
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        CosmosDb: {
+            uri: '<primary_connection_string>',
+            databaseName: '<database_name>',
+            collectionName: '<collection_name>'
+        }
     }
-}
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        CosmosDb: {
+            uri: '<primary_connection_string>',
+            databaseName: '<database_name>',
+            collectionName: '<collection_name>'
+        }
+    }
+
+    // ...
+
+};
 ```
-
-
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to Azure Cosmos DB.",
