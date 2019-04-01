@@ -55,11 +55,37 @@ Unit tests are usually located in a `test` folder of your Jovo project. Naming c
 This is how a sample `sample.test.js` file with a single test for both Amazon Alexa and Google Assistant could look like:
 
 ```javascript
+// @language=javascript
+
 'use strict';
 
 const { App } = require('jovo-framework');
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { Alexa } = require('jovo-platform-alexa');
+
+for (const p of [new Alexa(), new GoogleAssistant()]) {
+    const testSuite = p.makeTestSuite();
+
+    describe(`PLATFORM: ${p.constructor.name} INTENTS` , () => {
+        test('should return a welcome message and ask for the name at "LAUNCH"', async () => {
+            const conversation = testSuite.conversation();
+
+            const launchRequest = await testSuite.requestBuilder.launch();
+            const responseLaunchRequest = await conversation.send(launchRequest);
+
+            expect(
+                responseLaunchRequest.isAsk('Hello World! What\'s your name?', 'Please tell me your name.')
+            ).toBe(true);
+
+        });
+    });
+}
+
+// @language=typescript
+
+import { App } from 'jovo-framework';
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { Alexa } from 'jovo-platform-alexa';
 
 for (const p of [new Alexa(), new GoogleAssistant()]) {
     const testSuite = p.makeTestSuite();
@@ -93,6 +119,19 @@ After you've defined some first tests, add the following script to your `package
 This way, you can run the tests with `npm test`. Don't forget to first start the Jovo webhook:
 
 ```shell
+// @language=javascript
+
+# Run the development server
+$ jovo run
+
+# Open a new tab (e.g. cmd + t), run the script
+$ npm test
+
+// @language=typescript
+
+# Run compile
+$ npm run tsc
+
 # Run the development server
 $ jovo run
 

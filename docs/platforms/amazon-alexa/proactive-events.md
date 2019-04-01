@@ -76,7 +76,8 @@ module.exports = {
             }
         }
     },
-    // other settings
+
+    // ...
 };
 ```
 
@@ -470,7 +471,7 @@ The `localizedAttribute` array for this particular event would look like this:
         "providerName": "German Provider Name",
         "contentName": "German Content Name"
     }
-    // etc.
+    // ...
 ],
 ```
 
@@ -499,11 +500,21 @@ Name | Description | Value
 To authorize yourself you can either call the `sendAuthRequest()` method, which will return you the whole response object, or the `getAccessToken()`, which will return you only the access token. Both methods need your Alexa Skill's `clientId` and `clientSecret` as parameters:
 
 ```javascript
+// @language=javascript
+
 // Get the whole response object
 const result = this.$alexaSkill.$proactiveEvent.sendAuthRequest(clientId, clientSecret);
 
 // Get only the access token
 const accessToken = this.$alexaSkill.$proactiveEvent.getAccessToken(clientId, clientSecret);
+
+// @language=typescript
+
+// Get the whole response object
+const result = this.$alexaSkill!.$proactiveEvent.sendAuthRequest(clientId, clientSecret);
+
+// Get only the access token
+const accessToken = this.$alexaSkill!.$proactiveEvent.getAccessToken(clientId, clientSecret);
 ```
 
 ## Send the Event
@@ -511,7 +522,13 @@ const accessToken = this.$alexaSkill.$proactiveEvent.getAccessToken(clientId, cl
 After you got your token, you can send the event to your users:
 
 ```javascript
+// @language=javascript
+
 const result = await this.$alexaSkill.$proactiveEvent.sendProactiveEvent(proactiveEvent, accessToken);
+
+// @language=typescript
+
+const result = await this.$alexaSkill!.$proactiveEvent.sendProactiveEvent(proactiveEvent, accessToken);
 ```
 
 ## Skill Event - ProactiveSubscriptionChanged

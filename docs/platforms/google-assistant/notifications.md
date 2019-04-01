@@ -61,6 +61,8 @@ Now that you got your service account key as well, all the preparation is done.
 To ask the user if they want to opt-in to get push notifications for the specified intent, you have to first send the user suggestion chips that invite them to subscribe. If they are interested use the `askForNotification(intent)` function to prompt them to opt-in:
 
 ```javascript
+// @language=javascript
+
 AskForNotifications() {
     // You have to show them suggestion chips inviting them to opt-in, 
     // before you can send the actual permission request
@@ -71,13 +73,38 @@ AskForNotifications() {
 YesIntent() {
     this.$googleAction.askForNotification('HelloWorldIntent');
 },
+
+// @language=typescript
+
+AskForNotifications() {
+    // You have to show them suggestion chips inviting them to opt-in, 
+    // before you can send the actual permission request
+    this.$googleAction!.showSuggestionChips(['yes', 'no']);
+    this.ask('Would you be interested in receiving notifications for the HelloWorldIntent?');
+},
+
+YesIntent() {
+    this.$googleAction!.askForNotification('HelloWorldIntent');
+},
 ```
 
 The response to the question will be mapped to the Jovo built-in `ON_PERMISSION` intent, where you can check wether the permission was granted using `this.$googleAction.isPermissionGranted()`:
 
 ```javascript
+// @language=javascript
+
 ON_PERMISSION() {
     if (this.$googleAction.isPermissionGranted()) {
+        // save user and the intent to db
+    } else {
+        this.tell('Alright, I won\'t send you notifications');
+    }
+}
+
+// @language=typescript
+
+ON_PERMISSION() {
+    if (this.$googleAction!.isPermissionGranted()) {
         // save user and the intent to db
     } else {
         this.tell('Alright, I won\'t send you notifications');
@@ -122,6 +149,8 @@ $ npm install --save googleapis
 The module itself is also not added automatically to the `google-platform-googleassistant` plugin, you have to add it manually in your `app.js` file:
 
 ```javascript
+// @language=javascript
+
 // src/app.js
 
 // ------------------------------------------------------------------
@@ -140,21 +169,63 @@ googleAssistant.use(new NotificationPlugin());
 app.use(
     googleAssistant
 );
+
+// @language=typescript
+
+// src/app.ts
+
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+import { App } from 'jovo-framework';
+import { GoogleAssistant, NotificationPlugin } from 'jovo-platform-googleassistant';
+
+const app = new App();
+
+const googleAssistant = new GoogleAssistant();
+
+googleAssistant.use(new NotificationPlugin());
+
+app.use(
+    googleAssistant
+);
 ```
 
-After you have done both, you can access the `$notification` module using `this.$googleAction.$notification`.
+After you have done both, you can access the `$notification` module like this:
+
+```js
+// @language=javascript
+
+this.$googleAction.$notification
+
+// @language=typescript
+
+this.$googleAction!.$notification
+```
 
 ## Access Token
 
 To get the access token needed to send the notification, you need the service account key you downloaded earlier. Using key's `client_email` and `private_key` attributes you can use `sendAuthRequest(clientEmail, privateKey)`, which will return you an object containing the access token, or you use `getAccessToken(clientEmail, privateKey)` to get only the access token:
 
 ```javascript
-// get credentials object
+// @language=javascript
+
+// Get credentials object
 const credentials = await this.$googleAction.$notification.sendAuthRequest(clientEmail, privateKey);
 const accessToken = credentials.access_token;
 
-// get access token directly
+// Get access token directly
 const accessToken = await this.$googleAction.$notification.getAccessToken(clientEmail, privateKey);
+
+// @language=typescript
+
+// Get credentials object
+const credentials = await this.$googleAction!.$notification.sendAuthRequest(clientEmail: string, privateKey: string);
+const accessToken = credentials.access_token;
+
+// Get access token directly
+const accessToken = await this.$googleAction!.$notification.getAccessToken(clientEmail: string, privateKey: string);
 ```
 
 ## Send the Notification
@@ -162,7 +233,13 @@ const accessToken = await this.$googleAction.$notification.getAccessToken(client
 Using the access token and the notification object you can send the push notification:
 
 ```javascript
+// @language=javascript
+
 const result = await this.$googleAction.$notification.sendNotification(notification, accessToken);
+
+// @language=typescript
+
+const result = await this.$googleAction!.$notification.sendNotification(notification: NotificationObject, accessToken: string);
 ```
 
 <!--[metadata]: {"description": "Learn more about how to send out push notifications with the Google Assistant",

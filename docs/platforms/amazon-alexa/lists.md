@@ -67,6 +67,8 @@ If your users haven't granted your Skill the permission access lists yet (for ex
 This is mostly used after the error code `'NO_USER_PERMISSION'` is returned. Here is an example:
 
 ```javascript
+// @language=javascript
+
 async GetShoppingListIntent() {
     try {
         const list = await this.$alexaSkill.$user.getShoppingList();
@@ -80,12 +82,35 @@ async GetShoppingListIntent() {
         }
     }
 },
+
+// @language=typescript
+
+async GetShoppingListIntent() {
+    try {
+        const list = await this.$alexaSkill!.$user.getShoppingList();
+
+    } catch(error: Error) {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.$alexaSkill!.showAskForListPermissionCard(['read'])
+                .tell('Please grant the permission to access your lists.');
+        } else {
+            console.error(error);
+        }
+    }
+},
 ```
 
 You can ask for both `read` and `write` access with the Permission Card:
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.showAskforListPermissionCard(['read', 'write'])
+    .tell('Please grant the permission to access your lists.');
+
+// @language=typescript
+
+this.$alexaSkill!.showAskforListPermissionCard(['read', 'write'])
     .tell('Please grant the permission to access your lists.');
 ```
 
@@ -103,6 +128,8 @@ Users can then update the permissions in the Skill's settings:
 Get the user's shopping list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.getShoppingList();
 
 // Example
@@ -116,21 +143,55 @@ async GetShoppingListIntent() {
         // Do something
     }
 },
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.getShoppingList();
+
+// Example
+async GetShoppingListIntent() {
+    try {
+        const list = await this.$alexaSkill!.$user.getShoppingList();
+
+        console.log(list);
+
+    } catch(error: Error) {
+        // Do something
+    }
+},
 ```
 
 Add an item to the shopping list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.addToShoppingList(value);
 
 // Example
 async AddItemToShoppingListIntent() {
     try {
-        const result = await this.$user.addToShoppingList('Milk')
+        const result = await this.$alexaSkill.$user.addToShoppingList('Milk')
 
         console.log(result);
 
     } catch(error) {
+        // Do something
+    }
+},
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.addToShoppingList(value);
+
+// Example
+async AddItemToShoppingListIntent() {
+    try {
+        const result = await this.$alexaSkill!.$user.addToShoppingList('Milk')
+
+        console.log(result);
+
+    } catch(error: Error) {
         // Do something
     }
 },
@@ -139,6 +200,8 @@ async AddItemToShoppingListIntent() {
 Update the shopping list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.updateShoppingListItem(oldValue, newValue);
 
 // Example
@@ -158,21 +221,61 @@ async UpdateShoppingListItemIntent() {
         }
     }
 },
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.updateShoppingListItem(oldValue, newValue);
+
+// Example
+async UpdateShoppingListItemIntent() {
+    try {
+        const result = await this.alexaSkill!.$user.updateShoppingListItem('Milk', 'Almond Milk');
+
+        console.log(result);
+
+    } catch(error: Error) {
+        if (error.code === 'NO_USER_PERMISSION') {
+            this.$alexaSkill!.showAskForListPermissionCard(['read', 'write'])
+                .tell('Please grant the permission.');
+        }
+        if (error.code === 'ITEM_NOT_FOUND') {
+            this.tell('Item not found.');
+        }
+    }
+},
 ```
 
 Delete an item:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.deleteShoppingListItem(oldValue, newValue);
 
 // Example
 async DeleteShoppingListItemIntent() {
     try {
-        const data = await this.$user.deleteShoppingListItem('Milk');
+        const data = await this.$alexaSkill.$user.deleteShoppingListItem('Milk');
         console.log('item deleted');
         console.log(data);
 
     } catch(error) {
+        // Do something
+    }
+},
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.deleteShoppingListItem(oldValue, newValue);
+
+// Example
+async DeleteShoppingListItemIntent() {
+    try {
+        const data = await this.$alexaSkill!.$user.deleteShoppingListItem('Milk');
+        console.log('item deleted');
+        console.log(data);
+
+    } catch(error: Error) {
         // Do something
     }
 },
@@ -183,6 +286,8 @@ async DeleteShoppingListItemIntent() {
 Get the user's to-do list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.getToDoList();
 
 // Example
@@ -196,21 +301,55 @@ async GetTodoListIntent() {
         // Do something
     }
 },
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.getToDoList();
+
+// Example
+async GetTodoListIntent() {
+    try {
+        const list = await this.alexaSkill!.$user.getToDoList();
+
+        console.log(list);
+
+    } catch(error: Error) {
+        // Do something
+    }
+},
 ```
 
 Add an item to the to-do list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.addToToDoList(value)
 
 // Example
 async AddItemToToDoListIntent() {
     try {
-        const result = await this.$user.addToToDoList('Do Laundry');
+        const result = await this.$alexaSkill.$user.addToToDoList('Do Laundry');
 
         console.log(result);
 
     } catch(error) {
+        // Do something
+    }
+},
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.addToToDoList(value)
+
+// Example
+async AddItemToToDoListIntent() {
+    try {
+        const result = await this.$alexaSkill!.$user.addToToDoList('Do Laundry');
+
+        console.log(result);
+
+    } catch(error: Error) {
         // Do something
     }
 },
@@ -219,16 +358,34 @@ async AddItemToToDoListIntent() {
 Update the to-do list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.updateToDoListItem(oldValue, newValue)
 
 // Example
 async UpdateToDoListItemIntent() {
     try {
-        const result = await this.$user.updateToDoListItem('Do Laundry', 'Buy Clothes');
+        const result = await this.$alexaSkill.$user.updateToDoListItem('Do Laundry', 'Buy Clothes');
 
         console.log(result);
 
     } catch(error) {
+        // Do something
+    }
+},
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.updateToDoListItem(oldValue, newValue)
+
+// Example
+async UpdateToDoListItemIntent() {
+    try {
+        const result = await this.$alexaSkill!.$user.updateToDoListItem('Do Laundry', 'Buy Clothes');
+
+        console.log(result);
+
+    } catch(error: Error) {
         // Do something
     }
 },
@@ -237,12 +394,14 @@ async UpdateToDoListItemIntent() {
 Delete an item from the to-do list:
 
 ```javascript
+// @language=javascript
+
 await this.$alexaSkill.$user.deleteToDoListItem(value)
 
 // Example
 async DeleteToDoListItemIntent() {
     try {
-        const result = await this.$user.deleteToDoListItem('Buy clothes');
+        const result = await this.$alexaSkill.$user.deleteToDoListItem('Buy clothes');
 
         console.log(result);
 
@@ -250,9 +409,23 @@ async DeleteToDoListItemIntent() {
         // Do something
     }
 },
+
+// @language=typescript
+
+await this.$alexaSkill!.$user.deleteToDoListItem(value)
+
+// Example
+async DeleteToDoListItemIntent() {
+    try {
+        const result = await this.$alexaSkill!.$user.deleteToDoListItem('Buy clothes');
+
+        console.log(result);
+
+    } catch(error: Error) {
+        // Do something
+    }
+},
 ```
-
-
 
 <!--[metadata]: {"description": "Learn how to build Amazon Alexa Skills that use Lists with the Jovo Framework",
 "route": "amazon-alexa/lists" }-->

@@ -30,11 +30,14 @@ Select the intent and at the bottom of the tab you will find the `User engagemen
 
 ![Google Action Action User Engagement](../../img/google-action-action-routines.png)
 
+
 ## Suggest your Intent
 
 To ask the user wether they want to add your intent to their routines, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent to their routines:
 
 ```javascript
+// @language=javascript
+
 AskForRoutineSuggestion() {
     // You have to show them suggestion chips inviting them to opt-in, 
     // before you can send the actual routine suggestions
@@ -48,14 +51,43 @@ YesIntent() {
 
 HelloWorldIntent() {
     this.tell('Hello World');
-}
+},
+
+// @language=typescript
+
+AskForRoutineSuggestion() {
+    // You have to show them suggestion chips inviting them to opt-in, 
+    // before you can send the actual routine suggestions
+    this.$googleAction!.showSuggestionChips(['yes', 'no']);
+    this.ask('Would you be interested in adding the HelloWorldIntent to your routine?');
+},
+
+YesIntent() {
+    this.$googleAction!.$updates.askForRegisterUpdate('HelloWorldIntent', 'ROUTINES');
+},
+
+HelloWorldIntent() {
+    this.tell('Hello World');
+},
 ```
 
 After sending out the routine suggestion the user's response will be mapped to the `ON_REGISTER_UPDATE` intent:
 
 ```javascript
+// @language=javascript
+
 ON_REGISTER_UPDATE() {
     if (this.$googleAction.$updates.isRegisterUpdateOk()) {
+        this.ask("Added to the routine");
+    } else {
+        this.ask("Cancelled by the user");
+    }
+},
+
+// @language=typescript
+
+ON_REGISTER_UPDATE() {
+    if (this.$googleAction!.$updates.isRegisterUpdateOk()) {
         this.ask("Added to the routine");
     } else {
         this.ask("Cancelled by the user");
