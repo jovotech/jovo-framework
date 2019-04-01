@@ -9,7 +9,9 @@ import {
     PluginConfig,
     User,
     SessionConstants,
-    Log
+    Log,
+    JovoError,
+    ErrorCode
 } from "jovo-core";
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
@@ -281,16 +283,28 @@ export class JovoUser implements Plugin {
             return Promise.resolve();
         }
         if (!handleRequest.jovo) {
-            throw new Error('Jovo object is not initialized.');
+            throw new JovoError(
+                'jovo object is not initialized.',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
 
         if (!handleRequest.jovo.$user) {
-            throw new Error('User object is not initialized');
+            throw new JovoError(
+                'user object is not initialized',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
         const userId = handleRequest.jovo.$user.getId();
 
         if (typeof userId === 'undefined') {
-            throw new Error(`Can't load user with undefined userId`);
+            throw new JovoError(
+                `Can't load user with undefined userId`,
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
 
         const data = await handleRequest.app.$db.load(userId);
@@ -346,10 +360,18 @@ export class JovoUser implements Plugin {
             return Promise.resolve();
         }
         if (!handleRequest.jovo) {
-            throw new Error('Jovo object is not initialized.');
+            throw new JovoError(
+                'jovo object is not initialized.',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
         if (!handleRequest.jovo.$user) {
-            throw new Error('User object is not initialized');
+            throw new JovoError(
+                'user object is not initialized',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
         if(handleRequest.jovo.$user.isDeleted) {
             return Promise.resolve();
@@ -376,7 +398,11 @@ export class JovoUser implements Plugin {
         const userId = handleRequest.jovo.$user.getId();
 
         if (typeof userId === 'undefined') {
-            throw new Error(`Can't save user with undefined userId`);
+            throw new JovoError(
+                `Can't save user with undefined userId`,
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
 
         // only save to db if there were changes made.
@@ -425,12 +451,13 @@ export class JovoUser implements Plugin {
 
     private updateMetaData(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error('Jovo object is not initialized.');
+            throw new JovoError(
+                'jovo object is not initialized.',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
 
-        if (!handleRequest.jovo.$user) {
-            throw new Error('User object is not initialized');
-        }
         if (_get(this.config, 'metaData.createdAt')) {
             if (!_get(handleRequest.jovo.$user, '$metaData.createdAt')) {
                 _set(handleRequest.jovo.$user, '$metaData.createdAt', new Date().toISOString());
@@ -488,11 +515,13 @@ export class JovoUser implements Plugin {
 
     private updateContextData(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
-            throw new Error('Jovo object is not initialized.');
+            throw new JovoError(
+                'jovo object is not initialized.',
+                ErrorCode.ERR,
+                'jovo-framework'
+            );
         }
-        if (!handleRequest.jovo.$user) {
-            throw new Error('User object is not initialized');
-        }
+
         if (_get(this.config, 'context.prev.size') < 1) {
             return;
         }
