@@ -3,6 +3,7 @@ import {Jovo} from "./Jovo";
 export class User {
     new = true;
     jovo: Jovo;
+    DB_CACHE_HASH: string | undefined;
 
     constructor(jovo: Jovo) {
         this.jovo = jovo;

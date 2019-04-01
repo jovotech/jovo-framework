@@ -14,6 +14,8 @@ import {
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import crypto = require('crypto');
+
 export interface Config extends PluginConfig {
     columnName?: string;
     implicitSave?: boolean;
@@ -291,28 +293,38 @@ export class JovoUser implements Plugin {
             throw new Error(`Can't load user with undefined userId`);
         }
 
-
         const data = await handleRequest.app.$db.load(userId);
-
 
         Log.verbose(Log.header('Jovo user (load)', 'framework'));
         Log.yellow().verbose(`this.$user.getId(): ${userId}`);
+
         if (!data) {
-            Object.assign(handleRequest.jovo.$user, {
-                $context: {},
-                $data: {},
-                $metaData: {},
-                isDeleted: false,
-            });
+            handleRequest.jovo.$user.isDeleted = false;
         } else {
             handleRequest.jovo.$user.new = false;
-            _set(handleRequest.jovo.$user, '$data',
-                _get(data, `${this.config.columnName}.data`, {}));
+        }
+
+        _set(handleRequest.jovo.$user, '$data',
+            _get(data, `${this.config.columnName}.data`, {}));
+        
+        if (this.config.metaData && this.config.metaData.enabled) {
             _set(handleRequest.jovo.$user, '$metaData',
                 _get(data, `${this.config.columnName}.metaData`, {}));
+        }
+        
+        if (this.config.context && this.config.context.enabled) {
             _set(handleRequest.jovo.$user, '$context',
                 _get(data, `${this.config.columnName}.context`, {}));
         }
+
+        // can't parse $user, so we parse object containing its data
+        const userData = {
+            data: _get(handleRequest.jovo.$user, '$data'),
+            metaData: _get(handleRequest.jovo.$user, '$metaData'),
+            context: _get(handleRequest.jovo.$user, '$context')
+        };
+
+        this.updateDbLastState(handleRequest, userData);
 
         Log.yellow().verbose(`this.$user.new = ${handleRequest.jovo.$user.new}`);
         Log.verbose();
@@ -367,10 +379,14 @@ export class JovoUser implements Plugin {
             throw new Error(`Can't save user with undefined userId`);
         }
 
-        await handleRequest.app.$db.save(
-            userId,
-            this.config.columnName || 'userData',
-            userData);
+        // only save to db if there were changes made.
+        if (!this.userDataIsEqualToLastState(handleRequest, userData)) {
+            await handleRequest.app.$db.save(
+                userId,
+                this.config.columnName || 'userData',
+                userData
+            );
+        }
 
         Log.verbose(Log.header('Jovo user: (save) ', 'framework'));
         Log.yellow().verbose(` Saved user: ${userId}`);
@@ -382,6 +398,30 @@ export class JovoUser implements Plugin {
         Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$metaData, null, '\t'));
 
     };
+
+    /**
+     * Caches the current state of the user data hashed inside the jovo object 
+     * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
+     * @param {object} data user data
+     */
+    private updateDbLastState(handleRequest: HandleRequest, data: object) {
+        const stringifiedData = JSON.stringify(data);
+        const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex');
+        handleRequest.jovo!.$user.DB_CACHE_HASH = hashedUserData;
+    }
+
+    /**
+     * 
+     * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
+     * @param {object} data current user data
+     */
+    private userDataIsEqualToLastState(handleRequest: HandleRequest, data: object): boolean {
+        const stringifiedData = JSON.stringify(data);
+        const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex'); // current user data
+        const cachedHashedUserData = handleRequest.jovo!.$user.DB_CACHE_HASH; // cached user data
+
+        return hashedUserData === cachedHashedUserData;
+    }
 
     private updateMetaData(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
