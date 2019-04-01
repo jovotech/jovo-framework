@@ -39,20 +39,38 @@ Download the plugin:
 $ npm install --save jovo-plugin-name
 ```
 
-Enable it in `app.js`:
+Enable it in your app:
 
 ```javascript
-// app.js file
+// @language=javascript
+// src/app.js
 
 const { PluginName } = require('jovo-plugin-name');
 
 app.use(new PluginName());
+
+// @language=typescript
+// src/app.ts
+
+import { PluginName } from 'jovo-plugin-name';
+
+app.use(new PluginName());
 ```
 
-Add configurations in `config.js`:
+Add configurations:
 
 ```javascript
-// config.js file
+// @language=javascript
+// src/config.js
+
+plugin: {
+    PluginName: {
+        // Plugin config
+    }
+}
+
+// @language=typescript
+// src/config.ts
 
 plugin: {
     PluginName: {
@@ -146,10 +164,13 @@ export class PluginName implements Plugin {
 Your user can change the configuration using the `config.js` file inside their project using the following syntax:
 
 ```javascript
-// config.js
+// @language=javascript
+
+// src/config.js
 
 module.exports = {
-    // other configurations
+    
+    // ...
 
     plugin: {
         PluginName: {
@@ -159,7 +180,27 @@ module.exports = {
             }
         }
         
-        // other pluginss
+        // ...
+    }
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    // ...
+
+    plugin: {
+        PluginName: {
+            apiKey: '<value>',
+            options: {
+                color: '#000000'
+            }
+        }
+        
+        // ...
     }
 };
 ```

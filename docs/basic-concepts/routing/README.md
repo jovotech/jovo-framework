@@ -27,7 +27,7 @@ This is how a simple handler looks like:
 
 ```javascript
 // @language=javascript
-// app.js
+// src/app.js
 
 app.setHandler({
     LAUNCH() {
@@ -44,7 +44,7 @@ app.setHandler({
 });
 
 // @language=typescript
-// app.ts
+// src/app.ts
 
 app.setHandler({
     LAUNCH() {
@@ -56,7 +56,7 @@ app.setHandler({
     },
 
     MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs!.name.value + ', nice to meet you!');
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
     },
 });
 ```
@@ -113,10 +113,11 @@ Jovo comes with built-in state handling that allows you to react to intents diff
 app.setHandler({
 
     LAUNCH() {
-        let speech = 'Do you want to order something?';
-        let reprompt = 'Please answer with yes or no.';
+        this.$speech.addText('Do you want to order something?');
+        this.$reprompt.addText('Please answer with yes or no.');
+
         this.followUpState('OrderState')
-            .ask(speech, reprompt);
+            .ask(this.$speech, this.$reprompt);
     },
     
     // Example: Behave differently for a 'yes' or 'no' answer inside order state
