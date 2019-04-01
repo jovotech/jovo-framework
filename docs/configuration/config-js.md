@@ -18,6 +18,10 @@ The `config.js` file in the `src` folder of a Jovo project is the place where al
 For example, the `config.js` for the "Hello World" Jovo project looks like this:
 
 ```javascript
+// @language=javascript
+
+// src/config.js
+
 // ------------------------------------------------------------------
 // APP CONFIGURATION
 // ------------------------------------------------------------------
@@ -35,6 +39,30 @@ module.exports = {
         }
     },
 };
+
+// @language=typescript
+
+// src/config.ts
+
+// ------------------------------------------------------------------
+// APP CONFIGURATION
+// ------------------------------------------------------------------
+
+const config = {
+   logging: true,
+
+   intentMap: {
+      'AMAZON.StopIntent': 'END',
+   },
+
+   db: {
+        FileDb: {
+            pathToFile: '../db/db.json',
+        }
+    },
+};
+
+export { config };
 ```
 
 The above example shows three different elements:
@@ -76,13 +104,41 @@ Jovo integrations are deeply integrated plugins that ususally implement an inter
 Integration configurations are usually structured like this:
 
 ```javascript
-// Integration type
-db: {
-    // Name of integration class
-    FileDb: {
-        pathToFile: '../db/db.json',
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    // Integration type
+    db: {
+        // Name of integration class
+        FileDb: {
+            pathToFile: '../db/db.json',
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    // Integration type
+    db: {
+        // Name of integration class
+        FileDb: {
+            pathToFile: '../db/db.json',
+        }
+    },
+
+    // ...
+
+};
 ```
 
 > [Learn more about Jovo integrations here](../integrations './integrations').
@@ -90,15 +146,42 @@ db: {
 
 ### Plugins
 
-Plugins can be added like this:
+Plugin configurations can be added like this:
 
 ```javascript
-// General plugin wrapper
-plugin: {
-    PluginName: {
-        // Plugin config
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    // General plugin wrapper
+    plugin: {
+        PluginName: {
+            // Plugin config
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    // General plugin wrapper
+    plugin: {
+        PluginName: {
+            // Plugin config
+        }
+    },
+
+    // ...
+
+};
 ```
 
 ## Accessing Configurations
@@ -112,15 +195,41 @@ this.$app.$config
 You can also define your own keys and values in the configuration file. For them to not interfere with Jovo config keys, we recommend using a wrapping element like `custom`:
 
 ```javascript
-// config.js
+// @language=javascript
 
-custom: {
-    // Defining values in the config file
-    keyOne: 'valueOne',
+// src/config.js
 
-    // Referencing environment variables
-    keyTwo: process.env.KEY_TWO,
-}
+module.exports = {
+    
+    custom: {
+        // Defining values in the config file
+        keyOne: 'valueOne',
+
+        // Referencing environment variables
+        keyTwo: process.env.KEY_TWO,
+    }
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    custom: {
+        // Defining values in the config file
+        keyOne: 'valueOne',
+
+        // Referencing environment variables
+        keyTwo: process.env.KEY_TWO,
+    }
+
+    // ...
+
+};
 ```
 
 You can then access them in your app logic with:
@@ -145,19 +254,67 @@ For the app to discover what environment it is currently in, use `NODE_ENV` or `
 Here is how the `db` parts could differ for different environments:
 
 ```javascript
-// config.js file
-db: {
-    FileDb: {
-        pathToFile: '../db/db.json',
-    }
-},
+// @language=javascript
 
-// config.prod.js files, NODE_ENV=prod
-db: {
-    DynamoDb: {
-        tableName: 'yourTableName',
-    }
-},
+// src/config.js, default config
+
+module.exports = {
+    
+    db: {
+        FileDb: {
+            pathToFile: '../db/db.json',
+        },
+    },
+
+    // ...
+
+};
+
+
+// config.prod.js, config overrides for NODE_ENV=prod
+
+module.exports = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts, default config
+
+const config = {
+    
+    db: {
+        FileDb: {
+            pathToFile: '../db/db.json',
+        },
+    },
+
+    // ...
+
+};
+
+
+// config.prod.ts, config overrides for NODE_ENV=prod
+
+const config = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+        },
+    },
+
+    // ...
+
+};
 ```
 
 > For project-related staging environments, take a look at [project.js](./project-js.md './project-js').
