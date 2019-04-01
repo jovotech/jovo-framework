@@ -65,7 +65,6 @@ export class Conversation {
      */
     applyToRequest(req: JovoRequest): void {
         req.setUserId(this.config.userId || randomUserId());
-        req.setTimestamp(new Date().toISOString());
         if (this.config.locale) {
             req.setLocale(this.config.locale);
         }

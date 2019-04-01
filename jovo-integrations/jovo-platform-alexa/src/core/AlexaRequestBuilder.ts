@@ -48,7 +48,7 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
         } else {
             // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
             const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
     async intentRequest(json?: any): Promise<AlexaRequest> { // tslint:disable-line
@@ -57,7 +57,7 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
         } else {
             // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
             const request = JSON.stringify(require(getJsonFilePath('IntentRequest1')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
 
@@ -74,7 +74,7 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
             return AlexaRequest.fromJSON(json);
         } else {
             const request = JSON.stringify(require(getJsonFilePath('AudioPlayer.PlaybackStarted')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
     /**
@@ -87,7 +87,7 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
             return AlexaRequest.fromJSON(json);
         } else {
             const request = JSON.stringify(require(getJsonFilePath('SessionEndedRequest')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
 }
