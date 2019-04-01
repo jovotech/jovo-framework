@@ -31,7 +31,13 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill
+
+// @language=typescript
+
+this.$alexaSkill!
 ```
 ## Routing
 
