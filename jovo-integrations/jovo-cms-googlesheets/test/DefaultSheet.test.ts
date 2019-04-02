@@ -1,8 +1,8 @@
 import { DefaultSheet, GoogleSheetsCMS } from '../src/';
-import { HandleRequest, BaseApp, JovoError, ErrorCode } from 'jovo-core';
+import { BaseApp, JovoError, ErrorCode } from 'jovo-core';
 import * as feed from './mockObj/feedEntries.json';
 import * as sheetValues from './mockObj/sheetValues.json';
-
+import { MockHandleRequest } from './mockObj/mockHR';
 
 describe('DefaultSheet.constructor()', () => {
     test('without config', () => {
@@ -108,67 +108,27 @@ describe('DefaultSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
-        const app = new BaseApp();
+        const handleRequest = new MockHandleRequest();
+        const app = handleRequest.app;
         googleSheetsCMS.install(app);
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app,
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
-
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-
-        expect(() => defaultSheet.parse(mockHR, []))
+        expect(() => defaultSheet.parse(handleRequest, []))
             .toThrow('Entity has to be set.');
     });
 
-    test('should set values to entity attribute', () => {
+    test.only('should set values to entity attribute', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet({
             name: 'test'
         });
-        const app = new BaseApp();
+        const handleRequest = new MockHandleRequest();        
+        const app = handleRequest.app;
         googleSheetsCMS.install(app);
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app,
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
-
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-
         expect(app.$cms.test).toBeUndefined();
-        defaultSheet.parse(mockHR, []);
+        defaultSheet.parse(handleRequest, []);
         expect(app.$cms.test).toStrictEqual([]);
     });
 });
@@ -177,27 +137,9 @@ describe('DefaultSheet.retrieve()', () => {
     test('should reject Promise if no parent is set', async () => {
         const defaultSheet = new DefaultSheet();
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        }
-
-        await expect(defaultSheet.retrieve(mockHR)).rejects.toMatch('No cms initialized.');
+        await expect(defaultSheet.retrieve(handleRequest)).rejects.toMatch('No cms initialized.');
     });
 
     test('should throw jovo error if spreadsheet id is not set', async () => {
@@ -205,27 +147,9 @@ describe('DefaultSheet.retrieve()', () => {
         const defaultSheet = new DefaultSheet();
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        await expect(defaultSheet.retrieve(mockHR)).rejects.toStrictEqual(
+        await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('spreadsheetId has to be set.', ErrorCode.ERR_PLUGIN)
         );
     });
@@ -237,27 +161,9 @@ describe('DefaultSheet.retrieve()', () => {
         });
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        await expect(defaultSheet.retrieve(mockHR)).rejects.toStrictEqual(
+        await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('sheet name has to be set.', ErrorCode.ERR_PLUGIN)
         );
     });
@@ -270,27 +176,9 @@ describe('DefaultSheet.retrieve()', () => {
         });
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        await expect(defaultSheet.retrieve(mockHR)).rejects.toStrictEqual(
+        await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('range has to be set.', ErrorCode.ERR_PLUGIN)
         );
     });
@@ -308,27 +196,9 @@ describe('DefaultSheet.retrieve()', () => {
         });
         defaultSheet.install(googleSheetsCMS);
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        await defaultSheet.retrieve(mockHR);
-        expect(mockHR.app.$cms.test).toStrictEqual(sheetValues);
+        await defaultSheet.retrieve(handleRequest);
+        expect(handleRequest.app.$cms.test).toStrictEqual(sheetValues);
     });
 })

@@ -1,6 +1,7 @@
 import { ResponsesSheet, GoogleSheetsCMS } from '../src/';
 import { HandleRequest, BaseApp, Cms, ErrorCode } from 'jovo-core';
 import * as sheetValues from './mockObj/sheetValues.json';
+import { MockHandleRequest } from './mockObj/mockHR';
 
 describe('ResponsesSheet.constructor()', () => {
     test('without config', () => {
@@ -31,21 +32,8 @@ describe('ResponsesSheet.install()', () => {
 describe('ResponsesSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const responsesSheet = new ResponsesSheet();
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() { },
-                setResponse() {
-                    return new Promise((res, rej) => { });
-                },
-                fail() { }
-            }
-        };
-
-        expect(() => responsesSheet.parse(mockHR, sheetValues))
+        const handleRequest = new MockHandleRequest();
+        expect(() => responsesSheet.parse(handleRequest, sheetValues))
             .toThrow('Entity has to be set.');
     });
 
@@ -53,61 +41,24 @@ describe('ResponsesSheet.parse()', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.I18Next).toBeUndefined();
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(mockHR, []);
-        expect(mockHR.app.$cms.I18Next.i18n).toBeDefined();
-        expect(mockHR.app.$cms.test).toStrictEqual({});
-        // console.log(mockHR.app.$cms.I18Next.i18n.store.data);
+        expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        responsesSheet.parse(handleRequest, []);
+        expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+        expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
 
     test('without headers', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.I18Next).toBeUndefined();
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(mockHR, [
+        expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        responsesSheet.parse(handleRequest, [
             [
                 'WELCOME',
                 'Welcome_Default'
@@ -117,75 +68,39 @@ describe('ResponsesSheet.parse()', () => {
                 'Goodbye_Default'
             ]
         ]);
-        expect(mockHR.app.$cms.I18Next.i18n).toBeDefined();
-        expect(mockHR.app.$cms.test).toStrictEqual({});
+        expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+        expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
 
     test('without values', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.I18Next).toBeUndefined();
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(mockHR, [
+        expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        responsesSheet.parse(handleRequest, [
             [
                 'key',
                 'en-us'
             ]
         ]);
-        expect(mockHR.app.$cms.I18Next.i18n).toBeDefined();
-        expect(mockHR.app.$cms.test).toStrictEqual({});
+        expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+        expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
 
     test('with valid values', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
+        const handleRequest = new MockHandleRequest();
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.I18Next).toBeUndefined();
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(mockHR, sheetValues);
-        expect(mockHR.app.$cms.I18Next.i18n).toBeDefined();
-        expect(mockHR.app.$cms.test).toStrictEqual({
+        expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        responsesSheet.parse(handleRequest, sheetValues);
+        expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+        expect(handleRequest.app.$cms.test).toStrictEqual({
             'en-US': {
                 translation: {
                     WELCOME: ['Welcome_Default'],
