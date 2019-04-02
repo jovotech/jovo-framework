@@ -10,6 +10,7 @@ In this section, you will learn more about how to use intents to route your user
     * [ON_REQUEST](#on_request)
     * [END](#end)
     * [Unhandled](#unhandled)
+    * [ON_ERROR](#on_error)
 * [Intent Hierarchy](#intent-hierarchy)
 * [Built-in Intents](#built-in-intents)
 * [intentMap](#intentmap)
@@ -248,7 +249,7 @@ It is helpful to find out why a session ended. Use getEndReason inside the `'END
 
 ```javascript
 END() {
-    let reason = this.getEndReason();
+    let reason = this.$alexaSkill.getEndReason();
 
     // For example, log
     console.log(reason);
@@ -408,6 +409,42 @@ app.setHandler({
 
 });
 ```
+
+### ON_ERROR
+
+Jovo uses the standard intent `ON_ERROR` to catch error requests:
+
+```javascript
+ON_ERROR() {
+    // Triggered when there is an error
+ },
+```
+
+With Alexa Skills, you can use the `getError` method:
+
+```js
+// @language=javascript
+
+// Example
+ON_ERROR() {
+    console.log(`Error: ${JSON.stringify(this.$alexaSkill.getError())}`);
+    console.log(`Request: ${JSON.stringify(this.$alexaSkill.$request)}`);
+
+    this.ask('There was an error. Can I help you in any other way?');
+},
+
+// @language=typescript
+
+// Example
+ON_ERROR() {
+    console.log(`Error: ${JSON.stringify(this.$alexaSkill!.getError())}`);
+    console.log(`Request: ${JSON.stringify(this.$alexaSkill!.$request)}`);
+
+    this.ask('There was an error. Can I help you in any other way?');
+},
+```
+
+
 
 ## Intent Hierarchy
 
