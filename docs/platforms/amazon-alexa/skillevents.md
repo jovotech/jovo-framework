@@ -62,15 +62,31 @@ alexaSkill: {
 As described earlier, your Skill gets notified in form of request. To map that request to one of your handlers you have to add the following `state`:
 
 ```javascript
-// app.js
+// @language=javascript
+
+// src/app.js
 
 app.setHandler({
-	// Other intents
+	
+	// ...
 
 	ON_EVENT: {
 
 	}
-})
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+	
+	// ...
+
+	ON_EVENT: {
+
+	}
+});
 ```
 
 Inside that state you can define the intents, which will be mapped to one of the events. Here's an example:
@@ -96,6 +112,7 @@ Enable that event by adding the following to your `subscription` array inside yo
 ```
 
 And adding the `AlexaSkillEvent.SkillEnabled` inside your `ON_EVENT` state:
+
 ```javascript
 ON_EVENT: {
     'AlexaSkillEvent.SkillEnabled'() {
@@ -121,15 +138,16 @@ Enable that event by adding the following to your `subscription` array inside yo
 ```
 
 And adding the `AlexaSkillEvent.SkillDisabled` inside your `ON_EVENT` state:
+
 ```javascript
 ON_EVENT: {
     'AlexaSkillEvent.SkillDisabled'() {
         console.log('AlexaSkillEvent.SkillDisabled');
-		console.log(`UserId: ${this.getUserId()}`);
-		
-		// Remove user from the database when the skill is disabled
-		// if the user re-enables the skill, they will have a new userId anyway
-		this.$user.delete();
+				console.log(`UserId: ${this.getUserId()}`);
+				
+				// Remove user from the database when the skill is disabled
+				// if the user re-enables the skill, they will have a new userId anyway
+				this.$user.delete();
     },
 }
 ```
@@ -150,11 +168,12 @@ Enable that event by adding the following to your `subscription` array inside yo
 ```
 
 And adding the `AlexaSkillEvent.SkillAccountLinked` inside your `ON_EVENT` state:
+
 ```javascript
 ON_EVENT: {
     'AlexaSkillEvent.SkillAccountLinked'() {
         console.log('AlexaSkillEvent.SkillAccountLinked');
-		console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`UserId: ${this.getUserId()}`);		
     },
 }
 ```
@@ -167,6 +186,7 @@ ON_EVENT: {
 This Skill Event gets triggered, if your user grants permissions for the first time or if they grant them after they were revoked. The request will include the most recently accepted permissions. You can access the body of the request using the `this.$alexaSkill.getSkillEventBody()` method, which will contain an array with the permissions. Check out the sample requests in the [official documentation](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-accepted-event) to get a feeling for the JSON structure.
 
 Enable that event by adding the following to your `subscription` array inside your `events` object in your `project.js`:
+
 ```javascript
 {
   eventName: 'SKILL_PERMISSION_ACCEPTED',
@@ -174,12 +194,25 @@ Enable that event by adding the following to your `subscription` array inside yo
 ```
 
 And adding the `AlexaSkillEvent.SkillPermissionAccepted` inside your `ON_EVENT` state:
+
 ```javascript
+// @language=javascript
+
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionAccepted'() {
         console.log('AlexaSkillEvent.SkillPermissionAccepted');
-		console.log(`UserId: ${this.getUserId()}`);		
-		console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+				console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+	},
+}
+
+// @language=typescript
+
+ON_EVENT: {
+    'AlexaSkillEvent.SkillPermissionAccepted'() {
+        console.log('AlexaSkillEvent.SkillPermissionAccepted');
+				console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill!.getSkillEventBody().acceptedPermissions)}`);	
 	},
 }
 ```
@@ -200,16 +233,29 @@ Enable that event by adding the following to your `subscription` array inside yo
 
 And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` state:
 ```javascript
+// @language=javascript
+
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionChanged'() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
-		console.log(`UserId: ${this.$user.Id()}`);		
-		console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+				console.log(`UserId: ${this.$user.Id()}`);		
+				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
+    },
+}
+
+// @language=typescript
+
+ON_EVENT: {
+    'AlexaSkillEvent.SkillPermissionChanged'() {
+        console.log('AlexaSkillEvent.SkillPermissionChanged');
+				console.log(`UserId: ${this.$user.Id()}`);		
+				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill!.getSkillEventBody().acceptedPermissions)}`);	
     },
 }
 ```
 
 [Official Documentation by Amazon](https://developer.amazon.com/docs/smapi/skill-events-in-alexa-skills.html#skill-permission-changed-event).
+
 
 ### Proactive Subscription Changed
 

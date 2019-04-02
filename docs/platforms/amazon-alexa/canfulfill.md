@@ -20,7 +20,7 @@ The system will then send `CanFullIntentRequests` the skills it believes might b
 
 To enable the `CanFulfillIntentRequest` feature you have to enable the interface in your skill's information. You can do that either in the Alexa Developer Console in the `Interfaces` subcategory or you do it with the Jovo CLI.
 
-Simply open your `project.js` file and add the following to your `alexaSkill` object:
+Open your `project.js` file and add the following to your `alexaSkill` object:
 
 ```javascript
 alexaSkill: {

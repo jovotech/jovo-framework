@@ -61,7 +61,13 @@ this.isGoogleAction()
 You can access the `alexaSkill` object like this:
 
 ```javascript
+// @language=javascript
+
 let alexa = this.$alexaSkill;
+
+// @language=typescript
+
+let alexa = this.$alexaSkill!;
 ```
 
 You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa './amazon-alexa'):
@@ -82,7 +88,13 @@ You can find the following Alexa specific features on the page [Platform Specifi
 You can access the `googleAction` object like this:
 
 ```javascript
+// @language=javascript
+
 let google = this.$googleAction;
+
+// @language=typescript
+
+let google = this.$googleAction!;
 ```
 
 You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant './google-assistant'):

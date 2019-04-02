@@ -57,31 +57,73 @@ $ npm install --save jovo-analytics-chatbase
 Enable the plugin like this:
 
 ```javascript
-// app.js file
+// @language=javascript
+
+// src/app.js
 
 const { ChatbaseAlexa, ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
 
 app.use(
     new ChatbaseAlexa(),
     new ChatbaseGoogleAssistant()
-)
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { ChatbaseAlexa, ChatbaseGoogleAssistant } from 'jovo-analytics-chatbase';
+
+app.use(
+    new ChatbaseAlexa(),
+    new ChatbaseGoogleAssistant()
+);
 ```
 
 Add configurations like this:
 
 ```javascript
-// config.js file
+// @language=javascript
 
-analytics: {
-    ChatbaseAlexa: {
-        key: '<key>',
-        version: '<version>', // Optional
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        ChatbaseAlexa: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+        ChatbaseGoogleAssistant: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
     },
-    ChatbaseGoogleAssistant: {
-        key: '<key>',
-        version: '<version>', // Optional
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        ChatbaseAlexa: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+        ChatbaseGoogleAssistant: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
     },
-}
+
+    // ...
+
+};
 ```
 
 ### Test Chatbase

@@ -166,21 +166,39 @@ Here is an example language model you can for purchasing and refunding products.
 In general, you can access the in-skill purchasing interface like this:
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$inSkillPurchase
+
+// @language=typescript
+
+this.$alexaSkill!.$inSkillPurchase
 ```
 
 Before you start any kind of transaction or refund process, always retrieve the product first:
 
 ```javascript
+// @language=javascript
+
 let productReferenceName = 'frozen_sword'; 
 this.$alexaSkill
     .$inSkillPurchase
     .getProductByReferenceName(productReferenceName, (error, product) => {
 
     });
+
+// @language=typescript
+
+let productReferenceName = 'frozen_sword'; 
+this.$alexaSkill!
+    .$inSkillPurchase
+    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
+
+    });
 ```
 
 The data you get looks like this:
+s
 ```javascript
 { productId: 'amzn1.adg.product.994e8ec0-2f73-4130-837a-0bb06abe1ded',
   referenceName: 'frozen_sword',
@@ -198,9 +216,26 @@ The data you get looks like this:
 Using that data we can check if the user already owns the product:
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill
     .$inSkillPurchase
     .getProductByReferenceName(productReferenceName, (error, product) => {
+        if (error) {
+            console.log(error);
+        }
+        if (product.entitled === 'ENTITLED') {
+            // user already owns it
+        } else {
+            // user does not own it
+        }
+    });
+
+// @language=typescript
+
+this.$alexaSkill!
+    .$inSkillPurchase
+    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
         if (error) {
             console.log(error);
         }
@@ -223,6 +258,8 @@ Name | Description | Value | Required
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
 ```javascript
+// @language=javascript
+
 UpsellIntent() {
     let productReferenceName = 'frozen_sword';
     this.$alexaSkill
@@ -241,6 +278,27 @@ UpsellIntent() {
         }
     });
 },
+
+// @language=typescript
+
+UpsellIntent() {
+    let productReferenceName = 'frozen_sword';
+    this.$alexaSkill!
+    .$inSkillPurchase
+    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
+        if (error) {
+            console.log(error);
+        }
+        if (product.entitled === 'ENTITLED') {
+            this.tell('You have already bought this item.');
+            return;
+        } else {
+            let prompt = 'The frozen sword will help you on your journey. Are you interested?';
+            let token = 'testToken';
+            this.$alexaSkill!.$inSkillPurchase.upsell(product.productId, prompt, token);
+        }
+    });
+},
 ```
 
 ### Purchase Request
@@ -253,6 +311,8 @@ Name | Description | Value | Required
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
 ```javascript
+// @language=javascript
+
 BuySkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     this.$alexaSkill
@@ -269,6 +329,25 @@ BuySkillItemIntent() {
             this.$alexaSkill.$inSkillPurchase.buy(product.productId, token);
         });
 },
+
+// @language=typescript
+
+BuySkillItemIntent() {
+    let productReferenceName = this.$inputs.productName.id;
+    this.$alexaSkill!
+        .$inSkillPurchase
+        .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
+            if (error) {
+                console.log(error);
+            }
+            if (product.entitled === 'ENTITLED') {
+                this.tell('You have already bought this item.');
+                return;
+            }
+            let token = 'testToken';
+            this.$alexaSkill!.$inSkillPurchase.buy(product.productId, token);
+        });
+},
 ```
 
 
@@ -282,6 +361,8 @@ Name | Description | Value | Required
 `token` | Token you use to help you resume the Skill after the transaction finished | `String` | Yes
 
 ```javascript
+// @language=javascript
+
 RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     this.$alexaSkill
@@ -296,6 +377,25 @@ RefundSkillItemIntent() {
             }
             let token = 'testToken';
             this.$alexaSkill.$inSkillPurchase.cancel(product.productId, token);
+        });
+},
+
+// @language=typescript
+
+RefundSkillItemIntent() {
+    let productReferenceName = this.$inputs.productName.id;
+    this.$alexaSkill!
+        .$inSkillPurchase
+        .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
+            if (error) {
+                console.log(error);
+                // Continue, where you left off
+            }
+            if (product.entitled !== 'ENTITLED') {
+                this.tell('You have not bought this item yet.');
+            }
+            let token = 'testToken';
+            this.$alexaSkill!.$inSkillPurchase.cancel(product.productId, token);
         });
 },
 ```
@@ -335,10 +435,27 @@ Name | Description
 That request will be mapped to the built-in `ON_PURCHASE` intent:
 
 ```javascript
+// @language=javascript
+
 ON_PURCHASE() {
     const name = this.$request.name;
     const productId = this.$alexaSkill.$inSkillPurchase.getProductId();
     const purchaseResult = this.$alexaSkill.$inSkillPurchase.getPurchaseResult();
+    const token = this.$request.token;
+
+    if (purchaseResult === 'ACCEPTED') {
+        this.tell('Great! Let\'s use your new item');
+    } else {
+        this.tell('Okay. Let\'s continue where you left off.');
+    }
+},
+
+// @language=typescript
+
+ON_PURCHASE() {
+    const name = this.$request.name;
+    const productId = this.$alexaSkill!.$inSkillPurchase.getProductId();
+    const purchaseResult = this.$alexaSkill!.$inSkillPurchase.getPurchaseResult();
     const token = this.$request.token;
 
     if (purchaseResult === 'ACCEPTED') {

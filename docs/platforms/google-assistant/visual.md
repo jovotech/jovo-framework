@@ -21,12 +21,24 @@ Visual output is used to describe or enhance the voice interaction.
 This will display an alternative text instead of the written speech output on your screen surface, e.g. the Google Assistant mobile phone app.
 
 ```javascript
+// @language=javascript
+
 this.$googleAction.displayText(text);
 
 // Example
 let speech = 'Hello World!';
 let text = 'Hello Phone!';
 this.$googleAction.displayText(text)
+    .tell(speech);
+
+// @language=typescript
+
+this.$googleAction!.displayText(text: string);
+
+// Example
+let speech = 'Hello World!';
+let text = 'Hello Phone!';
+this.$googleAction!.displayText(text)
     .tell(speech);
 ```
 
@@ -46,15 +58,17 @@ Method | Description
 `addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
 
 ```javascript
+// @language=javascript
+
 // Basic
 this.$googleAction.showSimpleCard('Title', 'Content');
 
 this.$googleAction.showImageCard('Title', 'Content', 'imageURL');
 
 // Advanced
-const {GoogleAction} = require('jovo-framework');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 
-let basicCard = new GoogleAction.BasicCard()
+let basicCard = new GoogleAssistant.BasicCard()
   .setTitle('Jovo')
   .setFormattedText('Welcome to the documentation of the Jovo framework')
   .setImage('http://via.placeholder.com/350x150?text=Basic+Card', 'Jovo Card', '350', '150')
@@ -62,7 +76,27 @@ let basicCard = new GoogleAction.BasicCard()
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
 this.$googleAction.showBasicCard(basicCard);
+
+// @language=typescript
+
+// Basic
+this.$googleAction!.showSimpleCard('Title', 'Content');
+
+this.$googleAction!.showImageCard('Title', 'Content', 'imageURL');
+
+// Advanced
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+let basicCard = new GoogleAssistant.BasicCard()
+  .setTitle('Jovo')
+  .setFormattedText('Welcome to the documentation of the Jovo framework')
+  .setImage('http://via.placeholder.com/350x150?text=Basic+Card', 'Jovo Card', '350', '150')
+  .setImageDisplay('WHITE') 
+  .addButton('Jovo website', 'https://www.jovo.tech/');
+
+this.$googleAction!.showBasicCard(basicCard);
 ```
+
 [Official Documentation](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard)
 
 [Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L32)
@@ -83,13 +117,15 @@ Method | Description
 `addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
 
 ```javascript
+// @language=javascript
+
 // Basic
 this.$googleAction.showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
 
 // Advanced
-const {GoogleAction} = require('jovo-framework');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 
-let tableCard = new GoogleAction.Table()
+let tableCard = new GoogleAssistant.Table()
   .setTitle('Jovo')
   .setImage('http://via.placeholder.com/150x150?text=Table', 'Jovo Card', '150', '150')
   .addColumn('header 1','CENTER')
@@ -101,7 +137,29 @@ let tableCard = new GoogleAction.Table()
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
 this.$googleAction.showTable(tableCard);
+
+// @language=typescript
+
+// Basic
+this.$googleAction!.showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
+
+// Advanced
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+let tableCard = new GoogleAssistant.Table()
+  .setTitle('Jovo')
+  .setImage('http://via.placeholder.com/150x150?text=Table', 'Jovo Card', '150', '150')
+  .addColumn('header 1','CENTER')
+  .addColumn('header 2','LEADING')
+  .addColumn('header 3','TRAILING')
+  .addRow(['row 1 item 1', 'row 1 item 2', 'row 1 item 3'], false)
+  .addRow(['row 2 item 1', 'row 2 item 2', 'row 2 item 3'], true)
+  .addRow(['row 3 item 3', 'row 3 item 2', 'row 3 item 3'])
+  .addButton('Jovo website', 'https://www.jovo.tech/');
+
+this.$googleAction!.showTable(tableCard);
 ```
+
 [Official Documentation](https://developers.google.com/actions/assistant/responses#table_card)
 
 [Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L46)
@@ -119,7 +177,9 @@ Method | Description
 `addSynonym(synonym)` | Possible synonyms, which can be used to select the card in dialog
 
 ```javascript
-const {GoogleAction} = require('jovo-framework');
+// @language=javascript
+
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 
 let itemOne = new GoogleAction.OptionItem();
 
@@ -129,9 +189,21 @@ itemOne
   .setKey('OptionOne');
   .addSynonym('Option One');
 
+// @language=typescript
+
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+let itemOne = new GoogleAssistant.OptionItem();
+
+itemOne
+  .setTitle('Option 1')
+  .setDescription('Description of option 1')
+  .setKey('OptionOne');
+  .addSynonym('Option One');
 ```
 
 [Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
+
 
 ### List Selector
 
@@ -143,17 +215,33 @@ Method | Description
 `addItem(optionItem)` | Add an [Option Item](#option-item)
 
 ```javascript
-const {GoogleAction} = require('jovo-framework');
+// @language=javascript
+
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 
 // Create a list and name it
-let list = new GoogleAction.List();
+let list = new GoogleAssistant.List();
 list.setTitle('Title');
 
 // Add Items
 list.addItem(itemOne);
 
 this.$googleAction.showList(list);
+
+// @language=typescript
+
+impot { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+// Create a list and name it
+let list = new GoogleAssistant.List();
+list.setTitle('Title');
+
+// Add Items
+list.addItem(itemOne);
+
+this.$googleAction!.showList(list);
 ```
+
 [Official Documentation](https://developers.google.com/actions/assistant/responses#list_selector)
 
 [Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
@@ -167,14 +255,28 @@ Method | Description
 `addItem(optionItem)` | Add an [Option Item](#option-item)
 
 ```javascript
-const {GoogleAction} = require('jovo-framework');
+// @language=javascript
 
-let carousel = new GoogleAction.Carousel();
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+
+let carousel = new GoogleAssistant.Carousel();
 
 carousel.addItem(itemOne);
 
 this.$googleAction.showCarousel(carousel);
+
+// @language=typescript
+
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+let carousel = new GoogleAssistant.Carousel();
+
+carousel.addItem(itemOne);
+
+this.$googleAction!.showCarousel(carousel);
 ```
+
+
 [Official Documentation](https://developers.google.com/actions/assistant/responses#carousel_selector)
 
 [Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L126)
@@ -205,9 +307,17 @@ Method | Description
 `showLinkOutSuggestion(name, url)` | Add a [LinkOutSuggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#linkoutsuggestion), which leads to an app or site.
 
 ```javascript
+// @language=javascript
+
 this.$googleAction.showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
 
 this.$googleAction.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
+
+// @language=typescript
+
+this.$googleAction!.showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
+
+this.$googleAction!.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
 ```
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)

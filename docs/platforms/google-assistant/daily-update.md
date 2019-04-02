@@ -33,27 +33,66 @@ Select the intent and at the bottom of the tab you will find the `User engagemen
 To ask the user whether they want to add your intent as a daily update, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent as a daily update using the `askForRegisterUpdate(intent)` method:
 
 ```javascript
-AskForRoutineSuggestion() {
-    // You have to show them suggestion chips inviting them to opt-in, 
-    // before you can send the actual daily update request
-    this.$googleAction.showSuggestionChips(['yes', 'no']);
-    this.ask('Would you be interested in me sending you the information daily?');
-},
+// @language=javascript
 
-YesIntent() {
-    this.$googleAction.$updates.askForRegisterUpdate('HelloWorldIntent');
-},
+// src/app.js
 
-HelloWorldIntent() {
-    this.tell('Hello World');
-}
+app.setHandler({
+    AskForRoutineSuggestion() {
+        // You have to show them suggestion chips inviting them to opt-in, 
+        // before you can send the actual daily update request
+        this.$googleAction.showSuggestionChips(['yes', 'no']);
+        this.ask('Would you be interested in me sending you the information daily?');
+    },
+
+    YesIntent() {
+        this.$googleAction.$updates.askForRegisterUpdate('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.tell('Hello World');
+    }
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+    AskForRoutineSuggestion() {
+        // You have to show them suggestion chips inviting them to opt-in, 
+        // before you can send the actual daily update request
+        this.$googleAction!.showSuggestionChips(['yes', 'no']);
+        this.ask('Would you be interested in me sending you the information daily?');
+    },
+
+    YesIntent() {
+        this.$googleAction!.$updates.askForRegisterUpdate('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.tell('Hello World');
+    }
+});
 ```
 
 After sending out the daily update request the user's response will be mapped to the `ON_REGISTER_UPDATE` intent:
 
 ```javascript
+// @language=javascript
+
 ON_REGISTER_UPDATE() {
     if (this.$googleAction.$updates.isRegisterUpdateOk()) {
+        this.ask("Added as a daily update");
+    } else {
+        this.ask("Cancelled by the user");
+    }
+},
+
+// @language=typescript
+
+ON_REGISTER_UPDATE() {
+    if (this.$googleAction!.$updates.isRegisterUpdateOk()) {
         this.ask("Added as a daily update");
     } else {
         this.ask("Cancelled by the user");

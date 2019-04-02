@@ -15,6 +15,10 @@ The `app.js` file is the heart of your voice app's logic, and consists of the fo
 * [App Logic](#app-logic)
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 'use strict';
 
 // ------------------------------------------------------------------
@@ -56,6 +60,51 @@ app.setHandler({
 });
 
 module.exports.app = app;
+
+
+// @language=typescript
+
+// src/app.ts
+
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+import { App } from 'jovo-framework';
+import { Alexa } from 'jovo-platform-alexa';
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { JovoDebugger } from 'jovo-plugin-debugger';
+import { FileDb } = from 'jovo-db-filedb';
+
+const app = new App();
+
+app.use(
+    new Alexa(),
+    new GoogleAssistant(),
+    new JovoDebugger(),
+    new FileDb()
+);
+
+
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
+
+app.setHandler({
+    LAUNCH() {
+        return this.toIntent('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+});
+
+export { app };
 ```
 
 ## App Initialization
@@ -63,6 +112,8 @@ module.exports.app = app;
 The app initialization section requires all the modules and plugins that are needed for your voice app to work:
 
 ```javascript
+// @language=javascript
+
 // ------------------------------------------------------------------
 // APP INITIALIZATION
 // ------------------------------------------------------------------
@@ -72,6 +123,27 @@ const { Alexa } = require('jovo-platform-alexa');
 const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
+
+const app = new App();
+
+app.use(
+    new Alexa(),
+    new GoogleAssistant(),
+    new JovoDebugger(),
+    new FileDb()
+);
+
+// @language=typescript
+
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+import { App } from 'jovo-framework';
+import { Alexa } from 'jovo-platform-alexa';
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { JovoDebugger } from 'jovo-plugin-debugger';
+import { FileDb } = from 'jovo-db-filedb';
 
 const app = new App();
 
@@ -91,6 +163,28 @@ With the `use` command, you can register any additional plugins. The configurati
 The app logic section is where the [routing](../basic-concepts/routing './routing') is happening. Small projects may also contain [data](../basic-concepts/data './data') operations and [output](../basic-concepts/output './output'). For larger projects, we recommend keeping the `app.js` organized and splitting up the logic into different files and modules.
 
 ```javascript
+// @language=javascript
+
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
+
+app.setHandler({
+    LAUNCH() {
+        return this.toIntent('HelloWorldIntent');
+    },
+
+    HelloWorldIntent() {
+        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+    },
+
+    MyNameIsIntent() {
+        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+    },
+});
+
+// @language=typescript
+
 // ------------------------------------------------------------------
 // APP LOGIC
 // ------------------------------------------------------------------
