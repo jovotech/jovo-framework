@@ -1,6 +1,6 @@
-import {JovoError, ErrorCode, BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig, Log} from 'jovo-core';
+import { JovoError, ErrorCode, BaseCmsPlugin, BaseApp, ActionSet, HandleRequest, ExtensibleConfig, Log } from 'jovo-core';
 import _merge = require('lodash.merge');
-const {google, JWT} = require('googleapis');
+const { google, JWT } = require('googleapis');
 import * as util from 'util';
 import * as https from 'https';
 
@@ -8,10 +8,10 @@ import * as fs from 'fs';
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
-import {KeyValueSheet} from "./KeyValueSheet";
-import {ResponsesSheet} from "./ResponsesSheet";
-import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
-import {ObjectArraySheet} from "./ObjectArraySheet";
+import { KeyValueSheet } from "./KeyValueSheet";
+import { ResponsesSheet } from "./ResponsesSheet";
+import { DefaultSheet, GoogleSheetsSheet } from "./DefaultSheet";
+import { ObjectArraySheet } from "./ObjectArraySheet";
 
 
 
@@ -52,14 +52,14 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         this.baseApp = app;
         app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
 
-        const defaultSheetMap: {[key: string]: any}= { // tslint:disable-line
+        const defaultSheetMap: { [key: string]: any } = { // tslint:disable-line
             'keyvalue': KeyValueSheet,
             'responses': ResponsesSheet,
             'objectarray': ObjectArraySheet,
             'default': DefaultSheet
         };
 
-        if ( this.config.sheets) {
+        if (this.config.sheets) {
             this.config.sheets.forEach((sheet: GoogleSheetsSheet) => {
                 let type = undefined;
                 if (!sheet.type) {
@@ -79,14 +79,13 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     }
 
     private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
-
         try {
             if (this.config.credentialsFile) {
                 const credentialsFileExists = await exists(this.config.credentialsFile);
 
                 if (credentialsFileExists) {
                     this.jwtClient = await this.initializeJWT();
-                    this.jwtClient = await this.authorizeJWT(this.jwtClient );
+                    this.jwtClient = await this.authorizeJWT(this.jwtClient);
                 }
             }
 
@@ -100,13 +99,13 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         }
     }
 
-    async loadPublicSpreadSheetData (spreadsheetId: string, sheetPosition = 1) {
+    async loadPublicSpreadSheetData(spreadsheetId: string, sheetPosition = 1) {
         const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
         Log.verbose('Accessing public spreadsheet: ' + url);
         return await this.getJSON(url);
     }
 
-    loadPrivateSpreadsheetData (spreadsheetId: string, sheet: string, range: string): Promise<any[]> { // tslint:disable-line
+    loadPrivateSpreadsheetData(spreadsheetId: string, sheet: string, range: string): Promise<any[]> { // tslint:disable-line
         return new Promise(
             (resolve, reject) => {
                 try {
@@ -130,6 +129,22 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         );
     }
 
+    // writePublicSpreadSheetData(range: string, values: any[]) {  // tslint:disable-line
+    //     return new Promise((resolve, reject) => {
+    //         try {
+    //             const sheets = google.sheets('v4');
+    //             sheets.spreadsheets.values.update(
+    //                 {
+    //                     auth: this.jwtClient,
+    //                     spreadsheetId: process.env.VOUCHER_TABLE,
+    //                     range,
+    //                     valueInputOption: "USER_ENTERED",
+    //                     resource: { values }
+    //                 }
+    //             )
+    //         }
+    //     })
+    // }
 
     private initializeJWT(): Promise<any> { // tslint:disable-line
         return new Promise(
@@ -199,7 +214,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
                                 'jovo-cms-spreadsheets',
                                 undefined,
                                 "This might occur when you try to access a private spreadsheet without the permission."
-                                ));
+                            ));
                         }
 
                         if (res.statusCode === 400) {

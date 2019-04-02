@@ -1,5 +1,5 @@
-import {Extensible, HandleRequest, PluginConfig, Plugin, Log, JovoError, ErrorCode} from "jovo-core";
-import {GoogleSheetsCMS} from "./GoogleSheetsCMS";
+import { Extensible, HandleRequest, PluginConfig, Plugin, Log, JovoError, ErrorCode } from "jovo-core";
+import { GoogleSheetsCMS } from "./GoogleSheetsCMS";
 import _merge = require('lodash.merge');
 
 export interface GoogleSheetsSheet extends PluginConfig {
@@ -13,7 +13,7 @@ export interface GoogleSheetsSheet extends PluginConfig {
     caching?: boolean;
 }
 
-export class DefaultSheet  implements Plugin {
+export class DefaultSheet implements Plugin {
 
     config: GoogleSheetsSheet = {
         enabled: true,
@@ -36,7 +36,7 @@ export class DefaultSheet  implements Plugin {
         this.cms = extensible as GoogleSheetsCMS;
         extensible.middleware('retrieve')!.use(this.retrieve.bind(this));
 
-        if(this.cms.config.caching === false || this.config.caching === false) {
+        if (this.cms.config.caching === false || this.config.caching === false) {
             this.cms.baseApp.middleware('request').use(this.retrieve.bind(this));
         }
     }
@@ -140,8 +140,6 @@ export class DefaultSheet  implements Plugin {
                 }
             });
             newValues.push(row);
-
-
         });
 
         return newValues;
