@@ -54,29 +54,69 @@ $ npm install --save jovo-analytics-botanalytics
 Enable the plugin like this:
 
 ```javascript
-// app.js file
+// @language=javascript
+
+// src/app.js
 
 const { BotanalyticsAlexa, BotanalyticsAssistant } = require('jovo-analytics-botanalytics');
 
 app.use(
     new BotanalyticsAlexa(),
     new BotanalyticsGoogleAssistant()
-)
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { BotanalyticsAlexa, BotanalyticsAssistant } from 'jovo-analytics-botanalytics';
+
+app.use(
+    new BotanalyticsAlexa(),
+    new BotanalyticsGoogleAssistant()
+);
 ```
 
 Add configurations like this:
 
 ```javascript
-// config.js file
+// @language=javascript
 
-analytics: {
-    BotanalyticsAlexa: {
-        key: '<key>',
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        BotanalyticsAlexa: {
+            key: '<key>',
+        },
+        BotanalyticsGoogleAssistant: {
+            key: '<key>',
+        },
     },
-    BotanalyticsGoogleAssistant: {
-        key: '<key>',
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        BotanalyticsAlexa: {
+            key: '<key>',
+        },
+        BotanalyticsGoogleAssistant: {
+            key: '<key>',
+        },
     },
-}
+
+    // ...
+
+};
 ```
 
 ### Check Your App

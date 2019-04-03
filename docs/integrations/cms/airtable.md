@@ -36,9 +36,19 @@ $ npm install --save jovo-cms-airtable
 Add it to your `app.js` file and register it with the `use` command:
 
 ```javascript
+// @language=javascript
+
 // src/app.js
 
 const { AirtableCMS } = require('jovo-cms-airtable');
+
+app.use( new AirtableCMS());
+
+// @language=typescript
+
+// src/app.ts
+
+import { AirtableCMS } from 'jovo-cms-airtable';
 
 app.use( new AirtableCMS());
 ```
@@ -46,30 +56,71 @@ app.use( new AirtableCMS());
 Next, add the necessary configurations to your `config.js` file:
 
 ```javascript
+// @language=javascript
+
 // src/config.js
 
-cms: {
-    AirtableCMS: {
-        apiKey: '<api-key>',
-        baseId: '<base-id>',
-        tables: [
-            {
-                name: '<name>',
-                table: '<tableName>',
-                type: '<TableType>',
-                selectOptions: {
-                    fields: ['UserId', 'Name', 'Location']
-                    sort: [
-                        {
-                            field: "UserId",
-                            direction: "desc"
-                        }
-                    ],
-                }
-            },
-        ]
+module.exports = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        fields: ['UserId', 'Name', 'Location']
+                        sort: [
+                            {
+                                field: "UserId",
+                                direction: "desc"
+                            }
+                        ],
+                    }
+                },
+            ]
+        }
     }
-}
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        fields: ['UserId', 'Name', 'Location']
+                        sort: [
+                            {
+                                field: "UserId",
+                                direction: "desc"
+                            }
+                        ],
+                    }
+                },
+            ]
+        }
+    }
+
+    // ...
+
+};
 ```
 
 Name | Description | Value | Required
@@ -181,25 +232,63 @@ The content all tables is cached into the Jovo `app` object by default, which al
 You can choose between disabling caching for all tables, or just specific ones in your `config.js` file:
 
 ```javascript
-// config.js file
-cms: {
-    AirtableCMS: {
-        apiKey: '<api-key>',
-        baseId: '<base-id>',
-        tables: [
-            {
-                name: '<name>',
-                table: '<tableName>',
-                type: '<TableType>',
-                selectOptions: {
-                    // ...
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        // ...
+                    },
+                    caching: false,         // disable caching for this table
                 },
-                caching: false,         // disable caching for this table
-            },
-        ],
-        caching: false,                 // disable caching for all table
+            ],
+            caching: false,                 // disable caching for all table
+        }
     }
-}
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        // ...
+                    },
+                    caching: false,         // disable caching for this table
+                },
+            ],
+            caching: false,                 // disable caching for all table
+        }
+    }
+
+    // ...
+
+};
 ```
 
 ### Platform-specific Responses

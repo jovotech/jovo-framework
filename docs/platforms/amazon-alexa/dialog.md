@@ -34,12 +34,20 @@ When the intent is invoked for the first time, `dialogState` will be set to `STA
 
 To check the dialog state, use: 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$dialog.getState()
+
+// @language=typescript
+
+this.$alexaSkill!.$dialog.getState()
 ```
 
 Jovo also allows you to check for a specific state:
 
 ```javascript
+// @language=javascript
+
 // STARTED
 this.$alexaSkill.$dialog.isStarted()
 
@@ -48,6 +56,17 @@ this.$alexaSkill.$dialog.isInProgress()
 
 // COMPLETED
 this.$alexaSkill.$dialog.isCompleted()
+
+// @language=typescript
+
+// STARTED
+this.$alexaSkill!.$dialog.isStarted()
+
+// IN PROGRESS
+this.$alexaSkill!.$dialog.isInProgress()
+
+// COMPLETED
+this.$alexaSkill!.$dialog.isCompleted()
 ```
 
 ## Features
@@ -59,8 +78,15 @@ When using the Dialog Interface, you can decide between letting Alexa handle the
 If you decide to delegate the conversation, Alexa will use the prompts you defined in your dialog model to fill the required slots. Alexa will also confirm both slots or the whole intent if you selected that in the dialog model.
 
 To delegate the conversation, use:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$dialog.delegate()
+
+// @language=typescript
+
+this.$alexaSkill!.$dialog.delegate()
 ```
 
 ### Control the Dialog in Your Code
@@ -74,48 +100,92 @@ From now on, parameters which are between these `[]` brackets are optional. Thes
 #### Slot Value
 
 To check, whether a slot has a value or not, use:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.hasSlotValue('slotName')
 
 // Example
 this.$alexaSkill.hasSlotValue('name');
+
+// @language=typescript
+
+this.$alexaSkill!.hasSlotValue('slotName')
+
+// Example
+this.$alexaSkill!.hasSlotValue('name');
 ```
 
 #### Elicit Slot
 
 If you want the user to fill a slot, use:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$dialog.elicitSlot(slotName, speechText[, repromptText, updatedIntent])
 
 // Example
 this.$alexaSkill.$dialog.elicitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
+
+// @language=typescript
+
+this.$alexaSkill!.$dialog.elicitSlot(slotName, speechText[, repromptText, updatedIntent])
+
+// Example
+this.$alexaSkill!.$dialog.elicitSlot('name', 'What\'s your name?', 'Can you tell me your name, please?');
 ```
 
 #### Confirm Slot
 
 To confirm a slot use:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$dialog.confirmSlot(slotname, speechText[, repromptText, updatedIntent])
 
 // Example
 this.$alexaSkill.$dialog.confirmSlot('name', 'Your name is ' + this.getInput('name').value + ', right?');
+
+// @language=typescript
+
+this.$alexaSkill!.$dialog.confirmSlot(slotname, speechText[, repromptText, updatedIntent])
+
+// Example
+this.$alexaSkill!.$dialog.confirmSlot('name', 'Your name is ' + this.getInput('name').value + ', right?');
 ```
 
 #### Confirm Intent
 
 To confirm the whole intent, use:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$dialog.confirmIntent(speechText[, repromptText, updatedIntent])
 
 // Example
 this.$alexaSkill.$dialog.confirmIntent('Your name is ' + this.$inputs.name.value + ' and you are from ' + this.$inputs.city.value + ', correct?');
+
+// @language=typescript
+
+this.$alexaSkill!.$dialog.confirmIntent(speechText[, repromptText, updatedIntent])
+
+// Example
+this.$alexaSkill!.$dialog.confirmIntent('Your name is ' + this.$inputs.name.value + ' and you are from ' + this.$inputs.city.value + ', correct?');
 ```
+
 #### Update Intent
 
 Updating an intent gives you the ability to change slot values or the confirmation status for slots or intents. Here's an example:
 
 You already have the user's name stored in the database, so you don't want to ask for it again. Therefor you just update the intent and add the slot value.
+
 ```javascript
+// @language=javascript
+
 let updatedIntent = {
     name: 'TestIntent',
     confirmationStatus: 'NONE',
@@ -134,6 +204,27 @@ let updatedIntent = {
 // You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
 this.$alexaSkill.$dialog.elicitSlot('city', 'Which city are you living in?', updatedIntent);
+
+// @language=typescript
+
+let updatedIntent = {
+    name: 'TestIntent',
+    confirmationStatus: 'NONE',
+    slots: {
+        name:{
+            name: 'name',
+            value: this.$user.data.name,
+            confirmationStatus: 'CONFIRMED',
+        },
+        city:{
+            Name: 'city',
+            confirmationStatus: 'NONE',
+        }
+    }
+};
+// You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
+
+this.$alexaSkill!.$dialog.elicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```
 
 ## Jovo Language Model

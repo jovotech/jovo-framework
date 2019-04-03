@@ -17,7 +17,13 @@ Learn how to sell digital and physical goods in your Google Actions by using Goo
 Transactions for Google Actions allow you to sell both digital and physical goods in your app. The Jovo implementation of Google Transactions can be accessed like this:
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction
+
+// @language=typescript
+
+this.$googleAction!.$transaction
 ```
 
 The two types (digital and physical goods) differ in functionality and configuration, this is why they are addressed as distinct features in this document.
@@ -75,11 +81,21 @@ There are two types of digital goods that can be sold ([take a look at the offic
 Depending on which type you want to use, you can use the following methods to query the Play store with a list of product IDs (SKUs):
 
 ```js
+// @language=javascript
+
 // Consumables (in-app purchases)
 this.$googleAction.$transaction.getConsumables(skus)
 
 // Subscriptions
 this.$googleAction.$transaction.getSubscriptions(skus)
+
+// @language=typescript
+
+// Consumables (in-app purchases)
+this.$googleAction!.$transaction.getConsumables(skus: string[])
+
+// Subscriptions
+this.$googleAction!.$transaction.getSubscriptions(skus: string[])
 ```
 
 #### Build the Order
@@ -92,15 +108,40 @@ This part of the flow prompts the user to select an item. [Learn in the official
 You can use the following method to complete the purchase:
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction.completePurchase(skuId)
+
+// @language=typescript
+
+this.$googleAction!.$transaction.completePurchase(skuId: string)
 ```
 
 The next request will then go into the `COMPLETE_PURCHASE()` inside the `ON_TRANSACTION` object in your handler:
 
 ```js
+// @language=javascript
+
+// src/app.js
+
 app.setHandler({
 
-   // Other intents
+   // ...
+
+   ON_TRANSACTION: {
+      COMPLETE_PURCHASE() {
+         // Check purchase status
+      }
+   }
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+
+   // ...
 
    ON_TRANSACTION: {
       COMPLETE_PURCHASE() {
@@ -116,7 +157,13 @@ app.setHandler({
 Inside the `COMPLETE_PURCHASE()` handler, you can check the purchase status:
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction.getPurchaseStatus()
+
+// @language=typescript
+
+this.$googleAction!.$transaction.getPurchaseStatus()
 ```
 
 The following can be returned:
@@ -172,21 +219,43 @@ There are several steps that need to be taken to create an order with your physi
 #### Check Requirements
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction.checkRequirements(orderOptions, paymentOptions)
+
+// @language=typescript
+
+this.$googleAction!.$transaction.checkRequirements(orderOptions: OrderOptions, paymentOptions: PaymentOptions)
 ```
 
 The `paymentOptions` either need to include `googleProvidedOptions` or `actionProvidedOptions`.
+
 
 #### ON_TRANSACTION
 
 To handle transaction events, add the `ON_TRANSACTION` element to your handler:
 
 ```js
+// @language=javascript
+
 // src/app.js
 
 app.setHandler({
 
-    // Other intents
+    // ...
+
+    ON_TRANSACTION: {
+
+    }
+});
+
+// @language=typescript
+
+// src/app.js
+
+app.setHandler({
+
+    // ...
 
     ON_TRANSACTION: {
 
@@ -212,10 +281,17 @@ There are two helper methods that you can use to query for the requirements in t
 When `isRequirementsCheckOk` is `true`, you can ask for the delivery address:
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction.askForDeliveryAddress(prompt)
+
+// @language=typescript
+
+this.$googleAction!.$transaction.askForDeliveryAddress(prompt: string)
 ```
 
 The next request will go into the `DELIVERY_ADDRESS()` handler.
+
 
 ##### DELIVERY_ADDRESS
 
@@ -223,7 +299,13 @@ After the user acceppted the delivery address (`this.$googleAction.$transaction.
 
 
 ```js
-this.$googleAction.$transaction.transactionDecision(orderOptions, paymentOptions, order)
+// @language=javascript
+
+this.$googleAction.$transaction.transactionDecision(orderOptions, paymentOptions, proposedOrder)
+
+// @language=typescript
+
+this.$googleAction!.$transaction.transactionDecision(orderOptions: OrderOptions, paymentOptions: PaymentOptions, proposedOrder: any)
 ```
 
 The next request will go into the `TRANSACTION_DECISION()` handler.
@@ -233,7 +315,13 @@ The next request will go into the `TRANSACTION_DECISION()` handler.
 If the order is accepted by the user (`this.$googleAction.$transaction.isOrderAccepted()`), you can create the order:
 
 ```js
+// @language=javascript
+
 this.$googleAction.$transaction.createOrder(speech, orderUpdate)
+
+// @language=typescript
+
+this.$googleAction!.$transaction.createOrder(speech: string, orderUpdate: OrderUpdate)
 ```
 
 #### Order Update

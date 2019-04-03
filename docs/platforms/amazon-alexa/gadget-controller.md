@@ -19,19 +19,25 @@ But first you have to enable the `GadgetController` interface either in your `pr
 To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `project.js`:
 
 ```javascript
-alexaSkill: {
-  manifest: {
-    apis: {
-      custom: {
-        interfaces: [
-          {
-            type: 'GADGET_CONTROLLER',
-          }
-        ],
+module.exports = {
+
+  alexaSkill: {
+    manifest: {
+      apis: {
+        custom: {
+          interfaces: [
+            {
+              type: 'GADGET_CONTROLLER',
+            }
+          ],
+        },
       },
     },
-  },
+  }
+
+  // ...
 }
+
 ```
 Don't forget to build and deploy your project after you've added the interface:
 
@@ -80,12 +86,24 @@ Name | Description | Value | Required
 `animations` | Array of animations you want to use | `Object[]` | yes
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$gadgetController.setLight(
   [],
   0,
   'buttonDown',
   [animationOne, animationTwo, animationThree]
 );
+
+// @language=typescript
+
+this.$alexaSkill!.$gadgetController.setLight(
+  [],
+  0,
+  'buttonDown',
+  [animationOne, animationTwo, animationThree]
+);
+
 ```
 
 ### Animations
@@ -114,7 +132,15 @@ Name | Description | Method | Value | Required
 `sequence` | Array of objects, which define the animation. The array has to be in chronological order | `sequence(sequence)` | `Object[]` | yes
 
 ```javascript
+// @language=javascript
+
 const animationOne = this.$alexaSkill.$gadgetController.getAnimationsBuilder();
+
+animationOne.repeat(3).targetLights(['1']).sequence(sequence);
+
+// @language=typescript
+
+const animationOne = this.$alexaSkill!.$gadgetController.getAnimationsBuilder();
 
 animationOne.repeat(3).targetLights(['1']).sequence(sequence);
 ```
@@ -143,7 +169,15 @@ Name | Description | Method | Value | Required
 `blend` | Choose if you want the previous color to smoothly change to this step's one | `blend(blend)` | `boolean` | yes
 
 ```javascript
+// @language=javascript
+
 const sequence = this.$alexaSkill.$gadgetController.getSequenceBuilder();
+
+sequence.duration(2).color('FFFFFF');
+
+// @language=typescript
+
+const sequence = this.$alexaSkill!.$gadgetController.getSequenceBuilder();
 
 sequence.duration(2).color('FFFFFF');
 ```

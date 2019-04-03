@@ -79,7 +79,7 @@ RepeatIntent() {
 }
 ```
 
-This feature makes use of the [Jovo User Context](../data/user.md#context './data/user#context'). To be able to use it, please make sure that you have a database integration set up and the Jovo User Context enabled.
+> This feature makes use of the [Jovo User Context](../data/user.md#context './data/user#context'). To be able to use it, please make sure that you have a database integration set up and the Jovo User Context enabled.
 
 
 ## Advanced Output

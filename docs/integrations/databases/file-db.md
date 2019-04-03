@@ -48,7 +48,20 @@ Most Jovo templates come with FileDB as default database integration.
 It can be enabled in the `src/app.js` file like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { FileDb } = require('jovo-db-filedb');
+
+// Enable DB after app initialization
+app.use(new FileDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { FileDb } from 'jovo-db-filedb';
 
 // Enable DB after app initialization
 app.use(new FileDb());
@@ -57,12 +70,37 @@ app.use(new FileDb());
 In your `config.js` file, you can set the `db` configuration like this:
 
 ```javascript
-// config.js file
-db: {
-	FileDb: {
-		pathToFile: '../db/db.json',
-	}
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
+
+    // ...
+
+};
 ```
 
 

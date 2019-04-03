@@ -19,7 +19,13 @@ Learn more about Google Assistant specific features that can be used with the Jo
 You can access the `googleAction` object like this:
 
 ```javascript
+// @language=javascript
+
 this.$googleAction
+
+// @language=typescript
+
+this.$googleAction!
 ```
 
 ## Output
@@ -79,10 +85,19 @@ Note: userStorage only works for Google Assistant users who have voice match ena
 You can ask your user to confirm something using the following method:
 
 ```javascript
+// @language=javascript
+
 this.$googleAction.askForConfirmation(text);
 
-// example
+// Example
 this.$googleAction.askForConfirmation('Is this correct?');
+
+// @language=typescript
+
+this.$googleAction!.askForConfirmation(text: string);
+
+// Example
+this.$googleAction!.askForConfirmation('Is this correct?');
 ```
 
 The question should be one which can be answered with yes or no.
@@ -90,8 +105,20 @@ The question should be one which can be answered with yes or no.
 The user's response will be mapped to the `ON_CONFIRMATION` intent, where you can check wether they confirmed or not using `this.$googleAction.isConfirmed()`:
 
 ```javascript
+// @language=javascript
+
 ON_CONFIRMATION() {
     if (this.$googleAction.isConfirmed()) {
+        this.tell('Confirmed')
+    } else {
+        this.tell('Not confirmed');
+    }
+}
+
+// @language=typescript
+
+ON_CONFIRMATION() {
+    if (this.$googleAction!.isConfirmed()) {
         this.tell('Confirmed')
     } else {
         this.tell('Not confirmed');

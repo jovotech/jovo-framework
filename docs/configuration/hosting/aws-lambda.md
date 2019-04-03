@@ -14,12 +14,27 @@
 Here is how the part of `index.js`, which is used to run the app on AWS Lambda, looks like: 
 
 ```javascript
+// @language=javascript
+
+// src/index.js
+
 'use strict';
 
 const { Lambda } = require('jovo-framework');
 const { app } = require('./app/app.js');
 
 exports.handler = async (event, context, callback) => {
+    await app.handle(new Lambda(event, context, callback));
+};
+
+// @language=typescript
+
+// src/index.ts
+
+import { Lambda } from 'jovo-framework';
+import { app } from './app';
+
+exports.handler = async (event: any, context: any, callback: Function) => {
     await app.handle(new Lambda(event, context, callback));
 };
 ```

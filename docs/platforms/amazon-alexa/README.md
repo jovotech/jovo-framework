@@ -31,7 +31,13 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 You can access the `alexaSkill` object like this:
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill
+
+// @language=typescript
+
+this.$alexaSkill!
 ```
 ## Routing
 
@@ -70,11 +76,24 @@ For responses that require long processing times, you can use progressive respon
 Here is the official reference by Amazon: [Send the User a Progressive Response](https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html).
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.progressiveResponse(speech);
 
 // Example
 this.$alexaSkill.progressiveResponse('Processing')
     .then(() => this.$alexaSkill.progressiveResponse('Still processing'));
+await dummyApiCall(2000);
+
+this.tell('Text after API call');
+
+// @language=typescript
+
+this.$alexaSkill!.progressiveResponse(speech: string);
+
+// Example
+this.$alexaSkill!.progressiveResponse('Processing')
+    .then(() => this.$alexaSkill!.progressiveResponse('Still processing'));
 await dummyApiCall(2000);
 
 this.tell('Text after API call');

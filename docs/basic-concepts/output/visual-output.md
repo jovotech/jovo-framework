@@ -88,11 +88,11 @@ You can find a troubleshooting guide by Amazon [here](https://developer.amazon.c
 
 ## Alexa Specific Visual Output
 
-> You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [Platforms > Amazon Alexa](../../platforms/amazon-alexa  '../amazon-alexa').
+> You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [Platforms > Amazon Alexa](../../platforms/amazon-alexa/visual.md  '../amazon-alexa/visual-output').
 
 
 ## Google Assistant Specific Visual Output
 
-You can find out more about Google Assistant specific cards and suggestion chips here: [Platforms > Google Assistant](../../platforms/google-assistant  '../google-assistant').
+You can find out more about Google Assistant specific cards and suggestion chips here: [Platforms > Google Assistant](../../platforms/google-assistant/visual.md  '../google-assistant/visual-output').
 
 <!--[metadata]: {"description": "Learn how to create visual output for Alexa Skills and Google Actions with the Jovo Framework", "route": "output/visual-output"}-->
