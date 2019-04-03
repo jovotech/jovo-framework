@@ -1,0 +1,24 @@
+{
+  "name": "jovo-examples-analytics",
+  "version": "2.1.7",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-analytics-botanalytics": "^2.1.3",
+    "jovo-analytics-bespoken": "^2.1.3",
+    "jovo-analytics-chatbase": "^2.1.3",
+    "jovo-analytics-dashbot": "^2.1.3",
+    "jovo-framework": "^2.1.5",
+    "jovo-platform-alexa": "^2.1.6",
+    "jovo-platform-googleassistant": "^2.1.7"
+  }
+}
