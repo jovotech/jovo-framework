@@ -23,7 +23,7 @@ export interface Config extends PluginConfig {
     implicitSave?: boolean;
     metaData?: MetaDataConfig;
     context?: ContextConfig;
-    dataCaching: boolean;
+    dataCaching?: boolean;
 }
 
 export interface MetaDataConfig {
