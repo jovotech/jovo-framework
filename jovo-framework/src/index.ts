@@ -143,6 +143,7 @@ declare module 'jovo-core/dist/src/User' {
         $data: Data;
         $context: UserContext;
         isDeleted: boolean;
+        db_cache_hash?: string;
 
         /**
          * Return the intent at the specified index
