@@ -35,20 +35,20 @@ module.exports = {
             // ]
             sheets: [
                 {
-                    spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',
+                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
                     name: 'responses',
                     access: 'public',
                     type: 'Responses',
                     position: 1,
                     caching: false
                 },
-                // {
-                //     spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
-                //     name: 'answers',
-                //     access: 'public',
-                //     type: 'KeyValue',
-                //     position: 2,
-                // }
+                {
+                    spreadsheetId: '1dSM_4n7zUgZwLevo8QwGS_ZKcWADHk1kvmscI0tEu24',
+                    name: 'answers',
+                    access: 'public',
+                    type: 'KeyValue',
+                    position: 2,
+                }
             ]
         }
     }
