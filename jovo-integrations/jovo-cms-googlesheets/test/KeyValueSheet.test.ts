@@ -1,8 +1,7 @@
-import { KeyValueSheet, GoogleSheetsCMS } from '../src/';
-import { HandleRequest, BaseApp, Cms, ErrorCode } from 'jovo-core';
-import * as sheetValues from './mockObj/sheetValues.json';
+import { KeyValueSheet } from '../src/';
+import { HandleRequest, BaseApp } from 'jovo-core';
 
-describe('KeyValue.constructor()', () => {
+describe('KeyValueSheet.constructor()', () => {
     test('without config', () => {
         const keyValueSheet = new KeyValueSheet();
         expect(keyValueSheet.config.range).toMatch('A:B');
@@ -17,7 +16,6 @@ describe('KeyValue.constructor()', () => {
 });
 
 describe('KeyValueSheet.parse()', () => {
-
     test('should throw error if entity is not set', () => {
         const keyValueSheet = new KeyValueSheet();
         const mockHR: HandleRequest = {

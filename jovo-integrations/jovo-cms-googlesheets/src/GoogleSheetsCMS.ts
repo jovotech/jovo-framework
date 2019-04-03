@@ -129,23 +129,6 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         );
     }
 
-    // writePublicSpreadSheetData(range: string, values: any[]) {  // tslint:disable-line
-    //     return new Promise((resolve, reject) => {
-    //         try {
-    //             const sheets = google.sheets('v4');
-    //             sheets.spreadsheets.values.update(
-    //                 {
-    //                     auth: this.jwtClient,
-    //                     spreadsheetId: process.env.VOUCHER_TABLE,
-    //                     range,
-    //                     valueInputOption: "USER_ENTERED",
-    //                     resource: { values }
-    //                 }
-    //             )
-    //         }
-    //     })
-    // }
-
     private initializeJWT(): Promise<any> { // tslint:disable-line
         return new Promise(
             async (resolve, reject) => {

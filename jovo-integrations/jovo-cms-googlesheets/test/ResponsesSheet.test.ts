@@ -1,7 +1,16 @@
 import { ResponsesSheet, GoogleSheetsCMS } from '../src/';
-import { HandleRequest, BaseApp, Cms, ErrorCode } from 'jovo-core';
-import * as sheetValues from './mockObj/sheetValues.json';
+import { Cms, BaseApp, HandleRequest } from 'jovo-core';
+import * as cSheetValues from './mockObj/sheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
+import _cloneDeep = require('lodash.clonedeep');
+const i18n = require('i18next');
+
+let sheetValues: any[];     // tslint: disable-line
+let handleRequest: HandleRequest;
+beforeEach(() => {
+    handleRequest = new MockHandleRequest();
+    sheetValues = _cloneDeep(cSheetValues);
+});
 
 describe('ResponsesSheet.constructor()', () => {
     test('without config', () => {
@@ -32,7 +41,6 @@ describe('ResponsesSheet.install()', () => {
 describe('ResponsesSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const responsesSheet = new ResponsesSheet();
-        const handleRequest = new MockHandleRequest();
         expect(() => responsesSheet.parse(handleRequest, sheetValues))
             .toThrow('Entity has to be set.');
     });
@@ -41,7 +49,6 @@ describe('ResponsesSheet.parse()', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
@@ -54,7 +61,6 @@ describe('ResponsesSheet.parse()', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
@@ -76,7 +82,6 @@ describe('ResponsesSheet.parse()', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
@@ -94,7 +99,6 @@ describe('ResponsesSheet.parse()', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
@@ -114,5 +118,99 @@ describe('ResponsesSheet.parse()', () => {
                 }
             }
         });
+    });
+
+    test('with valid values and platform-specific responses', () => {
+        const app = new BaseApp();
+        const googleSheetsCMS = new GoogleSheetsCMS();
+        googleSheetsCMS.install(app);
+        const responsesSheet = new ResponsesSheet({
+            name: 'test'
+        });
+        responsesSheet.install(googleSheetsCMS);
+        handleRequest.app.getAppTypes = () => {
+            return ['AlexaSkill'];
+        }
+
+        sheetValues[0].push('en-us-alexaskill');
+        sheetValues[1].push('Welcome_Alexa');
+
+        expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+
+        responsesSheet.parse(handleRequest, sheetValues);
+
+        // @ts-ignore
+        expect(app.config.platformSpecificResponses).toBeTruthy();
+        expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+        expect(handleRequest.app.$cms.test).toStrictEqual({
+            'en-US': {
+                translation: {
+                    WELCOME: ['Welcome_Default'],
+                    GOODBYE: ['Goodbye_Default', 'Bye_Default']
+                },
+                AlexaSkill: {
+                    translation: {
+                        WELCOME: ['Welcome_Alexa']
+                    }
+                }
+            },
+            'de-DE': {
+                translation: {
+                    WELCOME: ['Willkommen_Default'],
+                    GOODBYE: []
+                }
+            }
+        });
+    });
+
+    test('should merge new values in existing i18n object', () => {
+        const responsesSheet = new ResponsesSheet({
+            name: 'test'
+        });
+
+        i18n.init({
+            resources: {
+                'en-US': {
+                    translation: {
+                        WELCOME: ['Welcome']
+                    }
+                }
+            },
+            load: 'all',
+            returnObjects: true,
+            interpolation: {
+                escapeValue: false, // do not escape ssml tags
+            }
+        });
+
+        handleRequest.app.$cms.I18Next = { i18n };
+
+        expect(handleRequest.app.$cms.I18Next.i18n.store.data)
+            .toStrictEqual({
+                'en-US': {
+                    translation: {
+                        WELCOME: ['Welcome']
+                    }
+                }
+            });
+
+        responsesSheet.parse(handleRequest, sheetValues);
+
+        expect(handleRequest.app.$cms.I18Next.i18n.store.data)
+            .toStrictEqual({
+                'en-US': {
+                    translation: {
+                        WELCOME: ['Welcome_Default'],
+                        GOODBYE: ['Goodbye_Default', 'Bye_Default']
+                    }
+                },
+                'de-DE': {
+                    translation: {
+                        WELCOME: ['Willkommen_Default'],
+                        GOODBYE: []
+                    }
+                }
+            });
     });
 })

@@ -8,16 +8,15 @@ describe('DefaultSheet.constructor()', () => {
     test('without config', () => {
         const defaultSheet = new DefaultSheet();
         expect(defaultSheet.config.caching).toBeTruthy();
-        expect(defaultSheet.cms).toBeUndefined();
+        expect(defaultSheet.config.entity).toBeUndefined();
     });
 
     test('with config', () => {
         const defaultSheet = new DefaultSheet({
             caching: false,
-            name: 'responses'
         });
         expect(defaultSheet.config.caching).toBeFalsy();
-        expect(defaultSheet.cms).toBeUndefined();
+        expect(defaultSheet.config.entity).toBeUndefined();
     });
 
     test('set entity with config.entity', () => {
@@ -36,7 +35,7 @@ describe('DefaultSheet.constructor()', () => {
 });
 
 describe('DefaultSheet.install()', () => {
-    test('set cms', () => {
+    test('should set this.cms to parameter extensible', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
         defaultSheet.install(googleSheetsCMS);
@@ -48,17 +47,17 @@ describe('DefaultSheet.install()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
 
-        const arr = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
+        const fnsOld = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(arr.length).toEqual(0);
+        expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
-        const ar = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
+        const fnsNew = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(ar.length).toEqual(1);
+        expect(fnsNew.length).toEqual(1);
     });
 
     test('should register middleware on request with caching on parent', () => {
@@ -69,17 +68,17 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const arr = app.middleware('request')!.fns.map((i) => {
+        const fnsOld = app.middleware('request')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(arr.length).toEqual(0);
+        expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
-        const ar = app.middleware('request')!.fns.map((i) => {
+        const fnsNew = app.middleware('request')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(ar.length).toEqual(1);
+        expect(fnsNew.length).toEqual(1);
     });
 
     test('should register middleware on request with caching', () => {
@@ -90,59 +89,49 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const arr = app.middleware('request')!.fns.map((i) => {
+        const fnsOld = app.middleware('request')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(arr.length).toEqual(0);
+        expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
-        const ar = app.middleware('request')!.fns.map((i) => {
+        const fnsNew = app.middleware('request')!.fns.map((i) => {
             return i.name === 'bound retrieve' ? i : null;
         });
-        expect(ar.length).toEqual(1);
+        expect(fnsNew.length).toEqual(1);
     });
 });
 
 describe('DefaultSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
-        const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
         const handleRequest = new MockHandleRequest();
-        const app = handleRequest.app;
-        googleSheetsCMS.install(app);
-        defaultSheet.install(googleSheetsCMS);
 
         expect(() => defaultSheet.parse(handleRequest, []))
             .toThrow('Entity has to be set.');
     });
 
-    test.only('should set values to entity attribute', () => {
-        const googleSheetsCMS = new GoogleSheetsCMS();
+    test('should set values to entity attribute', () => {
         const defaultSheet = new DefaultSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();        
-        const app = handleRequest.app;
-        googleSheetsCMS.install(app);
-        defaultSheet.install(googleSheetsCMS);
+        const handleRequest = new MockHandleRequest();     
 
-        expect(app.$cms.test).toBeUndefined();
+        expect(handleRequest.app.$cms.test).toBeUndefined();
         defaultSheet.parse(handleRequest, []);
-        expect(app.$cms.test).toStrictEqual([]);
+        expect(handleRequest.app.$cms.test).toStrictEqual([]);
     });
 });
 
 describe('DefaultSheet.retrieve()', () => {
     test('should reject Promise if no parent is set', async () => {
         const defaultSheet = new DefaultSheet();
-
         const handleRequest = new MockHandleRequest();
-
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toMatch('No cms initialized.');
     });
 
-    test('should throw jovo error if spreadsheet id is not set', async () => {
+    test('should reject Promise with JovoError if spreadsheet id is not set', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
         defaultSheet.install(googleSheetsCMS);
@@ -154,7 +143,7 @@ describe('DefaultSheet.retrieve()', () => {
         );
     });
 
-    test('should throw jovo error if no name is set', async () => {
+    test('should reject Promise with JovoError if no name is set', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet({
             spreadsheetId: '123'
@@ -168,7 +157,7 @@ describe('DefaultSheet.retrieve()', () => {
         );
     });
 
-    test.skip('should throw jovo error if no range is set', async () => {
+    test.skip('should reject Promise with JovoError if no range is set', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet({
             spreadsheetId: '123',
@@ -192,7 +181,7 @@ describe('DefaultSheet.retrieve()', () => {
             spreadsheetId: '123',
             name: 'test',
             range: 'A:B',
-            access: 'public'
+            access: 'public'    // this values does not matter for this test, as long as the right method is mocked
         });
         defaultSheet.install(googleSheetsCMS);
 
@@ -201,4 +190,4 @@ describe('DefaultSheet.retrieve()', () => {
         await defaultSheet.retrieve(handleRequest);
         expect(handleRequest.app.$cms.test).toStrictEqual(sheetValues);
     });
-})
+});

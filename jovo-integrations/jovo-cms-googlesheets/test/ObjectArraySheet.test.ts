@@ -1,8 +1,7 @@
-import { ObjectArraySheet, GoogleSheetsCMS } from '../src/';
-import { HandleRequest, BaseApp, Cms, ErrorCode } from 'jovo-core';
-import * as sheetValues from './mockObj/sheetValues.json';
+import { ObjectArraySheet } from '../src';
+import { HandleRequest, BaseApp } from 'jovo-core';
 
-describe('KeyValue.constructor()', () => {
+describe('ObjectArraySheet.constructor()', () => {
     test('without config', () => {
         const objectArraySheet = new ObjectArraySheet();
         expect(objectArraySheet.config.range).toMatch('A:B');
@@ -16,8 +15,7 @@ describe('KeyValue.constructor()', () => {
     });
 });
 
-describe('KeyValueSheet.parse()', () => {
-
+describe('ObjectArraySheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const objectArraySheet = new ObjectArraySheet();
         const mockHR: HandleRequest = {
