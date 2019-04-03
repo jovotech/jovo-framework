@@ -2,7 +2,6 @@ import { I18Next } from '../src/';
 import { HandleRequest, BaseApp } from 'jovo-core';
 import * as i18nData from './i18n/en-US.json';
 
-
 describe('I18Next.constructor()', () => {
     test('without config', () => {
         const i18n = new I18Next();

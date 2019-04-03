@@ -54,7 +54,6 @@ export class ResponsesSheet extends DefaultSheet {
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
 
         const headers: string[] = values[0];
-        // TODO outsource into generic function
         const platforms = handleRequest.app.getAppTypes();
         const resources: any = {}; // tslint:disable-line
         for (let i = 1; i < values.length; i++) {
@@ -97,7 +96,10 @@ export class ResponsesSheet extends DefaultSheet {
                 }
 
                 const valueArray = _get(resources, key, []);
-                valueArray.push(cell);
+
+                if (cell) {
+                    valueArray.push(cell);
+                }
 
                 _set(resources, key, valueArray);
             }
