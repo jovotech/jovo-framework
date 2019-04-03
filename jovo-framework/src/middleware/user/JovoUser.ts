@@ -23,6 +23,7 @@ export interface Config extends PluginConfig {
     implicitSave?: boolean;
     metaData?: MetaDataConfig;
     context?: ContextConfig;
+    dataCaching: boolean;
 }
 
 export interface MetaDataConfig {
@@ -110,6 +111,7 @@ export class JovoUser implements Plugin {
                 },
             },
         },
+        dataCaching: false
     };
 
     constructor(config?: Config) {
@@ -404,8 +406,16 @@ export class JovoUser implements Plugin {
             );
         }
 
-        // only save to db if there were changes made.
-        if (!this.userDataIsEqualToLastState(handleRequest, userData)) {
+        if (this.config.dataCaching) {
+            // only save to db if there were changes made.
+            if (!this.userDataIsEqualToLastState(handleRequest, userData)) {
+                await handleRequest.app.$db.save(
+                    userId,
+                    this.config.columnName || 'userData',
+                    userData
+                );
+            }
+        } else {
             await handleRequest.app.$db.save(
                 userId,
                 this.config.columnName || 'userData',
