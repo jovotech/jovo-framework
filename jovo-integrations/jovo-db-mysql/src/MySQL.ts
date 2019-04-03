@@ -109,7 +109,7 @@ export class MySQL implements Db {
 
     }
 
-    save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         return new Promise(async (resolve, reject) => {

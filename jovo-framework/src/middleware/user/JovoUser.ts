@@ -19,6 +19,7 @@ export interface Config extends PluginConfig {
     implicitSave?: boolean;
     metaData?: MetaDataConfig;
     context?: ContextConfig;
+    updatedAt?: boolean;
 }
 
 export interface MetaDataConfig {
@@ -106,6 +107,7 @@ export class JovoUser implements Plugin {
                 },
             },
         },
+        updatedAt: false
     };
 
     constructor(config?: Config) {
@@ -367,10 +369,14 @@ export class JovoUser implements Plugin {
             throw new Error(`Can't save user with undefined userId`);
         }
 
+        const updatedAt = this.config.updatedAt ? (new Date()).toISOString() : undefined;
+
         await handleRequest.app.$db.save(
             userId,
             this.config.columnName || 'userData',
-            userData);
+            userData,
+            updatedAt
+        );
 
         Log.verbose(Log.header('Jovo user: (save) ', 'framework'));
         Log.yellow().verbose(` Saved user: ${userId}`);

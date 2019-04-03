@@ -135,11 +135,16 @@ export class Firestore implements Db {
      * @param {string} key
      * @param {any} data
      */
-    async save(primaryKey: string, key: string, data: any): Promise<void> { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<void> { // tslint:disable-line
         this.errorHandling();
 
+        const userData = {
+                [key]: data,
+                updatedAt
+        };
+
         const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
-        await docRef.set({ [key]: data }, {merge: true});
+        await docRef.set(userData, {merge: true});
     }
 
 

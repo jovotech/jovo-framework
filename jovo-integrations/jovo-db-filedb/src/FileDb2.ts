@@ -70,7 +70,7 @@ export class FileDb2 implements Db {
         return Promise.resolve(JSON.parse(data));
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
@@ -78,10 +78,13 @@ export class FileDb2 implements Db {
             const oldDataContent = await this.readFile(pathToFile);
             const oldData = JSON.parse(oldDataContent);
             _set(oldData, key, data);
+            _set(oldData, 'updatedAt', updatedAt);
             return await this.saveFile(pathToFile, oldData);
         } else {
-            const newData: any = {}; // tslint:disable-line
-            _set(newData, key, data);
+            const newData = {
+                [key]: data,
+                updatedAt
+            };
             return await this.saveFile(pathToFile, newData);
         }
     }
