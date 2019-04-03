@@ -253,7 +253,6 @@ export class JovoUser implements Plugin {
 
         };
 
-
         /**
          * Repeats last speech & reprompt
          * Gets the info from the database.
@@ -433,7 +432,7 @@ export class JovoUser implements Plugin {
     private updateDbLastState(handleRequest: HandleRequest, data: object) {
         const stringifiedData = JSON.stringify(data);
         const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex');
-        handleRequest.jovo!.$user.DB_CACHE_HASH = hashedUserData;
+        handleRequest.jovo!.$user.db_cache_hash = hashedUserData;
     }
 
     /**
@@ -444,7 +443,7 @@ export class JovoUser implements Plugin {
     private userDataIsEqualToLastState(handleRequest: HandleRequest, data: object): boolean {
         const stringifiedData = JSON.stringify(data);
         const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex'); // current user data
-        const cachedHashedUserData = handleRequest.jovo!.$user.DB_CACHE_HASH; // cached user data
+        const cachedHashedUserData = handleRequest.jovo!.$user.db_cache_hash; // cached user data
 
         return hashedUserData === cachedHashedUserData;
     }
