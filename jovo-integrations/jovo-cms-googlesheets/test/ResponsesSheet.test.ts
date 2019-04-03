@@ -5,7 +5,7 @@ import { MockHandleRequest } from './mockObj/mockHR';
 import _cloneDeep = require('lodash.clonedeep');
 const i18n = require('i18next');
 
-let sheetValues: any[];     // tslint: disable-line
+let sheetValues: any[];     // tslint:disable-line
 let handleRequest: HandleRequest;
 beforeEach(() => {
     handleRequest = new MockHandleRequest();
@@ -130,7 +130,7 @@ describe('ResponsesSheet.parse()', () => {
         responsesSheet.install(googleSheetsCMS);
         handleRequest.app.getAppTypes = () => {
             return ['AlexaSkill'];
-        }
+        };
 
         sheetValues[0].push('en-us-alexaskill');
         sheetValues[1].push('Welcome_Alexa');
@@ -213,4 +213,4 @@ describe('ResponsesSheet.parse()', () => {
                 }
             });
     });
-})
+});

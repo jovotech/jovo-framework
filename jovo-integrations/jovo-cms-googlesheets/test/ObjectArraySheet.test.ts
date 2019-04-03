@@ -1,5 +1,11 @@
 import { ObjectArraySheet } from '../src';
 import { HandleRequest, BaseApp } from 'jovo-core';
+import { MockHandleRequest } from './mockObj/mockHR';
+
+let handleRequest: HandleRequest;
+beforeEach(() => {
+    handleRequest = new MockHandleRequest();
+});
 
 describe('ObjectArraySheet.constructor()', () => {
     test('without config', () => {
@@ -18,21 +24,8 @@ describe('ObjectArraySheet.constructor()', () => {
 describe('ObjectArraySheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const objectArraySheet = new ObjectArraySheet();
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() { },
-                setResponse() {
-                    return new Promise((res, rej) => { });
-                },
-                fail() { }
-            }
-        };
 
-        expect(() => objectArraySheet.parse(mockHR, []))
+        expect(() => objectArraySheet.parse(handleRequest, []))
             .toThrow('Entity has to be set.');
     });
 
@@ -40,29 +33,10 @@ describe('ObjectArraySheet.parse()', () => {
         const objectArraySheet = new ObjectArraySheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        objectArraySheet.parse(mockHR, []);
-        expect(mockHR.app.$cms.test).toStrictEqual([]);
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        objectArraySheet.parse(handleRequest, []);
+        expect(handleRequest.app.$cms.test).toStrictEqual([]);
     });
 
     test('with valid values', () => {
@@ -70,35 +44,16 @@ describe('ObjectArraySheet.parse()', () => {
             name: 'test',
             range: 'A:Z'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        objectArraySheet.parse(mockHR, [
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        objectArraySheet.parse(handleRequest, [
             ['keys', 'values'], ['key1', 'value1']
         ]);
-        expect(mockHR.app.$cms.test).toStrictEqual([
+        expect(handleRequest.app.$cms.test).toStrictEqual([
             {
                 keys: 'key1',
                 values: 'value1'
             }
         ]);
     });
-})
+});

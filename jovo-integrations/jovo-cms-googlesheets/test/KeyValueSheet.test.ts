@@ -1,5 +1,11 @@
 import { KeyValueSheet } from '../src/';
 import { HandleRequest, BaseApp } from 'jovo-core';
+import { MockHandleRequest } from './mockObj/mockHR';
+
+let handleRequest: HandleRequest;
+beforeEach(() => {
+    handleRequest = new MockHandleRequest();
+});
 
 describe('KeyValueSheet.constructor()', () => {
     test('without config', () => {
@@ -18,21 +24,8 @@ describe('KeyValueSheet.constructor()', () => {
 describe('KeyValueSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const keyValueSheet = new KeyValueSheet();
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() { },
-                setResponse() {
-                    return new Promise((res, rej) => { });
-                },
-                fail() { }
-            }
-        };
 
-        expect(() => keyValueSheet.parse(mockHR, []))
+        expect(() => keyValueSheet.parse(handleRequest, []))
             .toThrow('Entity has to be set.');
     });
 
@@ -40,29 +33,10 @@ describe('KeyValueSheet.parse()', () => {
         const keyValueSheet = new KeyValueSheet({
             name: 'test'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        keyValueSheet.parse(mockHR, []);
-        expect(mockHR.app.$cms.test).toStrictEqual({});
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        keyValueSheet.parse(handleRequest, []);
+        expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
 
     test('with valid values', () => {
@@ -70,32 +44,13 @@ describe('KeyValueSheet.parse()', () => {
             name: 'test',
             range: 'A:Z'
         });
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                hasWriteFileAccess: true,
-                headers: {},
-                $request: {},
-                getRequestObject() {
 
-                },
-                setResponse() {
-                    return new Promise((res, rej) => {
-
-                    });
-                },
-                fail() {
-
-                }
-            }
-        };
-
-        expect(mockHR.app.$cms.test).toBeUndefined();
-        keyValueSheet.parse(mockHR, [
+        expect(handleRequest.app.$cms.test).toBeUndefined();
+        keyValueSheet.parse(handleRequest, [
             ['keys', 'values'], ['key1', 'value1']
         ]);
-        expect(mockHR.app.$cms.test).toStrictEqual({
+        expect(handleRequest.app.$cms.test).toStrictEqual({
             key1: 'value1'
         });
     });
-})
+});

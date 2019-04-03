@@ -1,8 +1,13 @@
 import { DefaultSheet, GoogleSheetsCMS } from '../src/';
-import { BaseApp, JovoError, ErrorCode } from 'jovo-core';
+import { BaseApp, JovoError, ErrorCode, HandleRequest } from 'jovo-core';
 import * as feed from './mockObj/feedEntries.json';
 import * as sheetValues from './mockObj/sheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
+
+let handleRequest: HandleRequest;
+beforeEach(() => {
+    handleRequest = new MockHandleRequest();
+});
 
 describe('DefaultSheet.constructor()', () => {
     test('without config', () => {
@@ -106,7 +111,6 @@ describe('DefaultSheet.install()', () => {
 describe('DefaultSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const defaultSheet = new DefaultSheet();
-        const handleRequest = new MockHandleRequest();
 
         expect(() => defaultSheet.parse(handleRequest, []))
             .toThrow('Entity has to be set.');
@@ -116,7 +120,6 @@ describe('DefaultSheet.parse()', () => {
         const defaultSheet = new DefaultSheet({
             name: 'test'
         });
-        const handleRequest = new MockHandleRequest();     
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
         defaultSheet.parse(handleRequest, []);
@@ -127,7 +130,6 @@ describe('DefaultSheet.parse()', () => {
 describe('DefaultSheet.retrieve()', () => {
     test('should reject Promise if no parent is set', async () => {
         const defaultSheet = new DefaultSheet();
-        const handleRequest = new MockHandleRequest();
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toMatch('No cms initialized.');
     });
 
@@ -135,8 +137,6 @@ describe('DefaultSheet.retrieve()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
         defaultSheet.install(googleSheetsCMS);
-
-        const handleRequest = new MockHandleRequest();
 
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('spreadsheetId has to be set.', ErrorCode.ERR_PLUGIN)
@@ -150,8 +150,6 @@ describe('DefaultSheet.retrieve()', () => {
         });
         defaultSheet.install(googleSheetsCMS);
 
-        const handleRequest = new MockHandleRequest();
-
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('sheet name has to be set.', ErrorCode.ERR_PLUGIN)
         );
@@ -164,8 +162,6 @@ describe('DefaultSheet.retrieve()', () => {
             name: 'test'
         });
         defaultSheet.install(googleSheetsCMS);
-
-        const handleRequest = new MockHandleRequest();
 
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('range has to be set.', ErrorCode.ERR_PLUGIN)
@@ -184,8 +180,6 @@ describe('DefaultSheet.retrieve()', () => {
             access: 'public'    // this values does not matter for this test, as long as the right method is mocked
         });
         defaultSheet.install(googleSheetsCMS);
-
-        const handleRequest = new MockHandleRequest();
 
         await defaultSheet.retrieve(handleRequest);
         expect(handleRequest.app.$cms.test).toStrictEqual(sheetValues);

@@ -11,5 +11,5 @@ export class MockHandleRequest {
             return new Promise((res, rej) => {});
         },
         fail() {}
-    }
+    };
 }
