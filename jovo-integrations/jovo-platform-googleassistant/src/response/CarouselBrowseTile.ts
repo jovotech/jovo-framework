@@ -2,8 +2,9 @@
  * CarouselBrowserTile class. CarouselBrowser item
  */
 import {CollectionItem} from "./CollectionItem";
+export type UrlTypeHint = 'URL_TYPE_HINT_UNSPECIFIED' | 'AMP_CONTENT';
 export interface OpenUrlAction {
-    urlTypeHint: string;
+    urlTypeHint: UrlTypeHint;
     url?: string;
 }
 export class CarouselBrowseTile extends CollectionItem {
@@ -64,7 +65,7 @@ export class CarouselBrowseTile extends CollectionItem {
      * Sets url type hint
      * @param {string} urlTypeHint
      */
-    setUrlTypeHint(urlTypeHint: string) {
+    setUrlTypeHint(urlTypeHint: UrlTypeHint) {
 
         if (CarouselBrowseTile.urlTypeHints.includes(urlTypeHint)) {
             throw new Error('Valid type hints are: ' + CarouselBrowseTile.urlTypeHints.join(', '));

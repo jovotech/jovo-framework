@@ -74,7 +74,12 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 
             // remove existing plugin with the same name
             if (this.$plugins.get(name)) {
-                this.$plugins.get(name)!.uninstall(this);
+                const plugin = this.$plugins.get(name);
+
+                if (plugin && plugin.uninstall) {
+                    plugin.uninstall(this);
+                }
+
             }
 
             this.$plugins.set(name, plugin);
@@ -97,7 +102,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
      */
     removeAll() {
         this.$plugins.forEach((entry: Plugin) => {
-            entry.uninstall(this);
+            if (entry && entry.uninstall) {
+                entry.uninstall(this);
+            }
         });
         this.$plugins.clear();
     }
@@ -107,8 +114,12 @@ export abstract class Extensible extends EventEmitter implements Plugin {
      * @param {string} name
      */
     remove(name: string) {
-        if (this.$plugins.get(name)) {
-            this.$plugins.get(name)!.uninstall(this);
+        const plugin = this.$plugins.get(name);
+
+        if (plugin) {
+            if (plugin.uninstall) {
+                plugin.uninstall(this);
+            }
             this.$plugins.delete(name);
             Log.verbose(`Removed plugin: ${name}`);
 
@@ -136,8 +147,20 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         return typeof this.actionSet.get(name) !== 'undefined';
     }
 
+    /**
+     * Install method which is called after use
+     * Must be implemented
+     * @param extensible
+     */
     abstract install(extensible: Extensible): void;
-    abstract uninstall(extensible: Extensible): void;
+
+    /**
+     *
+     * Uninstall method which is called on remove
+     *
+     * @param extensible
+     */
+    uninstall?(extensible: Extensible): void;
 }
 /**
  * @see https://gist.github.com/Yimiprod/7ee176597fef230d1451

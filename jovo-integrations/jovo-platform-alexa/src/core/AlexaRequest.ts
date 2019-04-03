@@ -91,15 +91,11 @@ export interface Application {
     applicationId: string;
 }
 
-export enum ConfirmationStatus {
-    NONE = "NONE",
-    CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
-}
+export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
 
 export interface Slot {
     name: string;
-    confirmationStatus: string;
+    confirmationStatus?: ConfirmationStatus;
     value: string;
     source?: string;
 }

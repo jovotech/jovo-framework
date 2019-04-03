@@ -4,7 +4,9 @@ export { AlexaRequestBuilder } from "./core/AlexaRequestBuilder";
 export { Alexa } from './Alexa';
 export { AlexaSkill } from './core/AlexaSkill';
 export { AlexaTestSuite } from './core/Interfaces';
-export { AlexaRequest } from './core/AlexaRequest';
+export * from './core/AlexaRequest';
+export * from './services/AlexaReminder';
+
 export { AlexaResponse } from './core/AlexaResponse';
 
 export { AudioPlayer } from './modules/AudioPlayerPlugin';

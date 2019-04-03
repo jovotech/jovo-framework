@@ -99,13 +99,13 @@ describe('test database operations', () => {
 
             expect(userData).toEqual(modifiedObject);
         });
-    
+
         test('test should add new object for new primaryKey (new user) and keep the existing data', async () => {
             const newUserId = 'testId';
             const newObject = {
                 testKey: 'testValue'
             };
-    
+
             await filedb2.save(newUserId, 'testKey', newObject.testKey);
 
             // existingUserData still exists
@@ -113,44 +113,44 @@ describe('test database operations', () => {
             const existingDataJson: any = fs.readFileSync(pathToExistingData); // tslint:disable-line
             const existingUserData = JSON.parse(existingDataJson);
             expect(existingUserData).toEqual(existingObject);
-    
+
             // newUserData exists
             const pathToNewData = path.join(filedb2.config.path!, `${newUserId}.json`);
             const newDataJson: any = fs.readFileSync(pathToNewData); // tslint:disable-line
             const newUserData = JSON.parse(newDataJson);
             expect(newUserData).toEqual(newObject);
         });
-    
+
         test('test should override user\'s existing data for existing key', async () => {
             await filedb2.save(existingUserId, 'key', 'newValue'); // same user, new value for `key`
-    
+
             // get object from db.json file
             const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
             const dataJson: any = fs.readFileSync(pathToFile); // tslint:disable-line
             const userData = JSON.parse(dataJson);
-    
+
             expect(userData.key).not.toEqual(existingObject.key);
         });
     });
-    
-    describe('test load()', async () => {
+
+    describe('test load()', () => {
         test('test should load data', async () => {
             const loadedObject = await filedb2.load(existingUserId);
-    
+
             expect(loadedObject).toEqual(existingObject);
         });
-    
+
         test('test should return undefined because there is no data for that user', async () => {
             const loadedObject = await filedb2.load('xyz');
-    
+
             expect(loadedObject).toBeUndefined();
         });
     });
-    
+
     describe('test delete()', () => {
         test('test should delete previously saved data', async () => {
             await filedb2.delete(existingUserId);
-    
+
             // get object from db.json file
             const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
 
@@ -158,7 +158,7 @@ describe('test database operations', () => {
                 fs.readFileSync(pathToFile);
             }).toThrowError('ENOENT: no such file or directory');
         });
-    
+
         test('test should throw ENOENT error because there is no file for that user, i.e. no user data exists', async () => {
             await filedb2.delete('xyz').catch(e => {
                 expect(e.code).toBe('ENOENT');

@@ -29,9 +29,9 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
     async launch(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
         return await this.launchRequest(json);
     }
-    async intent(json: any): Promise<DialogflowRequest>; // tslint:disable-line
-    async intent(name: string, inputs?: any): Promise<DialogflowRequest>; // tslint:disable-line
-    async intent(obj: any, inputs?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async intent(json?: any): Promise<DialogflowRequest>; // tslint:disable-line
+    async intent(name?: string, inputs?: any): Promise<DialogflowRequest>; // tslint:disable-line
+    async intent(obj?: any, inputs?: any): Promise<DialogflowRequest> { // tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
             _set(req, `queryResult.intent.displayName`, obj);

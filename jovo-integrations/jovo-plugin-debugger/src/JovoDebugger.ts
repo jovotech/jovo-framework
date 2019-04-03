@@ -228,7 +228,28 @@ export class JovoDebugger implements Plugin {
         const languageModelDirExists = await fsexists(this.config.languageModelDir);
 
         if (!languageModelDirExists) {
-            console.log(`Can't find models folder`);
+
+            // changes default language model directory when the project is in typescript
+            const DEFAULT_LANGUAGE_MODEL_DIR = './../models';
+            if (this.config.languageModelDir === DEFAULT_LANGUAGE_MODEL_DIR &&
+                process.cwd().indexOf('\\dist\\') > -1 || process.cwd().indexOf('/dist/') > -1) {
+                this.config.languageModelDir = this.config.languageModelDir.replace('./../', './../../');
+            }
+            const tsLanguageModelDirExists = await fsexists(this.config.languageModelDir);
+
+            if (!tsLanguageModelDirExists) {
+                console.log(`Can't find models folder`);
+                console.log('Defaultfolder: /project/models');
+                console.log();
+                console.log('You can set a custom folder:');
+                console.log(`
+                    app.use(
+                        new JovoDebugger({
+                                languageModelDir: '<dir>'
+                            });
+                    )`);
+            }
+
             return;
         }
 
@@ -236,7 +257,6 @@ export class JovoDebugger implements Plugin {
 
 
         const files = await fsreaddir(this.config.languageModelDir);
-
         for (const file of files) {
             if (!file.endsWith('.json')) {
                 continue;
@@ -284,6 +304,7 @@ export class JovoDebugger implements Plugin {
         console.log = function(message) { // tslint:disable-line
             const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
             socket.emit('console.log', nMessage, (new Error()).stack!.toString());
+            // @ts-ignore
             _privateLog.apply(console, arguments); // eslint-disable-line
         };
         this.consoleLogOverriden = true;

@@ -1,8 +1,9 @@
 import {BaseApp, JovoError} from "jovo-core";
-import {MySQL} from "../src/MySQL"; 
+import {MySQL} from "../src/MySQL";
 import * as mysql from 'mysql';
 
 import _set = require('lodash.set');
+
 
 describe('test install()', () => {
     test('should throw JovoError because config.connection is undefined', () => {
@@ -12,14 +13,14 @@ describe('test install()', () => {
 
         expect(() => {
             mySQL.install(app);
-        }).toThrowError(JovoError);   
+        }).toThrowError(JovoError);
     });
 
     test('should call createPool() and parse it config.connection', () => {
         const config = {
             connection: {}
         };
-        jest.spyOn(mysql, 'createPool');        
+        jest.spyOn(mysql, 'createPool');
         const mySQL = new MySQL(config);
         const app = new BaseApp();
 
@@ -27,19 +28,6 @@ describe('test install()', () => {
 
         expect(mysql.createPool).toBeCalledTimes(1);
         expect(mysql.createPool).toBeCalledWith(config.connection);
-    });
-
-    test('should assign the value of mysql.createPool() to this.pool', () => {
-        const config = {
-            connection: {}
-        };
-        jest.spyOn(mysql, 'createPool').mockReturnValue('test');
-        const mySQL = new MySQL(config);
-        const app = new BaseApp();
-
-        mySQL.install(app);
-
-        expect(mySQL.pool).toBe('test');
     });
 
     describe('test install() setting app.$db', () => {
@@ -128,7 +116,7 @@ describe('test database operations', () => {
         mySQL = new MySQL();
     });
 
-    describe('test load()', async () => {
+    describe('test load()', () => {
         test('should throw error because select() throws error that is not "ER_NO_SUCH_TABLE"', async () => {
             const mockSelect = jest.fn().mockImplementation(() => {
                 const error: Error = new Error();
@@ -398,7 +386,7 @@ describe('test database operations', () => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result: any[] = []; // tslint:disable-line
-                        cb(undefined, result); 
+                        cb(undefined, result);
                     }
                 });
             });

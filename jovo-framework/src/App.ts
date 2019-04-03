@@ -255,9 +255,14 @@ export class App extends BaseApp {
 
     async handle(host: Host) {
         if (host.headers && host.headers['jovo-test']) {
-            this.use(new FileDb2({
-                path: './../db/tests'
-            }));
+            if ((this.$db.config! as any).pathToFile) { // tslint:disable-line
+                const dbPath = path.parse((this.$db.config! as any).pathToFile); // tslint:disable-line
+                this.use(new FileDb2({
+                    path: dbPath.dir + '/tests',
+                }));
+            }
+
+
         }
         await super.handle(host);
     }

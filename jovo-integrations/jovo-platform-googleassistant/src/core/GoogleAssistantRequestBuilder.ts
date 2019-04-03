@@ -14,9 +14,9 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
     launch(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
         return this.launchRequest(json);
     }
-    async intent(json: any): Promise<GoogleActionRequest>; //tslint:disable-line
-    async intent(name: string, inputs?: any): Promise<GoogleActionRequest>; //tslint:disable-line
-    async intent(obj: any, inputs?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async intent(json?: any): Promise<GoogleActionRequest>; //tslint:disable-line
+    async intent(name?: string, inputs?: any): Promise<GoogleActionRequest>; //tslint:disable-line
+    async intent(obj?: any, inputs?: any): Promise<GoogleActionRequest> { //tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
 

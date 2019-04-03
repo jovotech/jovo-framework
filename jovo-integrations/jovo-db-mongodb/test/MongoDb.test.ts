@@ -153,7 +153,7 @@ describe('test database operations', () => {
         await collection.updateOne({userId: primaryKey}, item, {upsert: true});
         await client.close();
     }
-    
+
     async function load(primaryKey: string) {
         const client = await MongoClient.connect(config.uri!, {useNewUrlParser: true});
         const collection = client.db(config.databaseName!).collection(config.collectionName!);
@@ -227,7 +227,7 @@ describe('test database operations', () => {
             await mongodb.save(primaryKeyTwo, 'key', object.key);
             const userOneData = await load(primaryKeyOne);
             const userTwoData = await load(primaryKeyTwo);
-            
+
             expect(userOneData.key).toEqual(object.key);
             expect(userTwoData.key).toEqual(object.key);
         });
@@ -235,7 +235,7 @@ describe('test database operations', () => {
         test('test save() should reject JovoError if saving process fails', async () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
-            
+
             await mongodb.save('userId', 'key', {key: 'value'})
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });
@@ -272,13 +272,13 @@ describe('test database operations', () => {
         test('test delete() should reject JovoError if deleting process fails', async () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
-            
+
             await mongodb.delete('userId')
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });
     });
 
-    describe('test load()', async () => {
+    describe('test load()', () => {
         test('test should load data', async () => {
             const primaryKey = 'idTest';
             await save(primaryKey, 'key', {key: 'value'});
@@ -286,17 +286,17 @@ describe('test database operations', () => {
             const data = await mongodb.load(primaryKey);
             expect(data.key).toEqual({key: 'value'});
         });
-    
+
         test('test should return undefined if there is no data for that user', async () => {
             const loadedObject = await mongodb.load('xyz');
-    
+
             expect(loadedObject).toBeNull();
         });
 
         test('test load() should reject JovoError if loading process fails', async () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
-            
+
             await mongodb.load('userId')
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });

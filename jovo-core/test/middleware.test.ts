@@ -4,13 +4,13 @@ import {Extensible, ExtensibleConfig} from "./../src/Extensible";
 import {ActionSet} from "../src";
 
 class Parent extends Extensible {
+    /**
+     * Dummy install implementation
+     */
     install() {
 
     }
 
-    uninstall() {
-
-    }
 }
 test('test Middleware class initialization', () => {
     const middleware = new Middleware('name', new Parent());

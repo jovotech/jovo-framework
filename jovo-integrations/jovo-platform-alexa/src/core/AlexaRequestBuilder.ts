@@ -23,9 +23,9 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
     async launch(json?: any): Promise<AlexaRequest> { // tslint:disable-line
         return await this.launchRequest(json);
     }
-    async intent(json: any): Promise<AlexaRequest>; // tslint:disable-line
-    async intent(name: string, inputs?: any): Promise<AlexaRequest>; // tslint:disable-line
-    async intent(obj: any, inputs?: any): Promise<AlexaRequest> { // tslint:disable-line
+    async intent(json?: any): Promise<AlexaRequest>; // tslint:disable-line
+    async intent(name?: string, inputs?: any): Promise<AlexaRequest>; // tslint:disable-line
+    async intent(obj?: any, inputs?: any): Promise<AlexaRequest> { // tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
             req.setIntentName(obj);
