@@ -32,14 +32,18 @@ describe('GoogleSheetsCMS.install()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
 
         const fnsOld = app.middleware('setup')!.fns.map((i) => {
-            return i.name === 'bound retrieveSpreadsheetData' ? i : null;
+            if (i.name === 'bound retrieveSpreadsheetData') {
+                return i;
+            }
         });
         expect(fnsOld.length).toEqual(0);
 
         await googleSheetsCMS.install(app);
-        
+
         const fnsNew = app.middleware('setup')!.fns.map((i) => {
-            return i.name === 'bound retrieveSpreadsheetData' ? i : null;
+            if (i.name === 'bound retrieveSpreadsheetData') {
+                return i;
+            }
         });
         expect(fnsNew.length).toEqual(1);
     });
@@ -55,14 +59,18 @@ describe('GoogleSheetsCMS.install()', () => {
         });
 
         const fnsOld = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsOld.length).toEqual(0);
 
         await googleSheetsCMS.install(app);
-        
+
         const fnsNew = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsNew.length).toEqual(1);
     });

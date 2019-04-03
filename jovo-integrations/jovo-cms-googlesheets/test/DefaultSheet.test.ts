@@ -53,14 +53,18 @@ describe('DefaultSheet.install()', () => {
         const defaultSheet = new DefaultSheet();
 
         const fnsOld = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
         const fnsNew = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsNew.length).toEqual(1);
     });
@@ -74,14 +78,18 @@ describe('DefaultSheet.install()', () => {
         googleSheetsCMS.install(app);
 
         const fnsOld = app.middleware('request')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
         const fnsNew = app.middleware('request')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsNew.length).toEqual(1);
     });
@@ -95,14 +103,18 @@ describe('DefaultSheet.install()', () => {
         googleSheetsCMS.install(app);
 
         const fnsOld = app.middleware('request')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsOld.length).toEqual(0);
 
         defaultSheet.install(googleSheetsCMS);
 
         const fnsNew = app.middleware('request')!.fns.map((i) => {
-            return i.name === 'bound retrieve' ? i : null;
+            if (i.name === 'bound retrieve') {
+                return i;
+            }
         });
         expect(fnsNew.length).toEqual(1);
     });
