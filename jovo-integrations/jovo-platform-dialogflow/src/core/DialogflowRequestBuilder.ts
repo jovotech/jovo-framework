@@ -26,10 +26,10 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
      platform: string;
      platformRequestClazz: JovoRequest;
 
-    async launch(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async launch(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         return await this.launchRequest(json);
     }
-    async intent(json?: any): Promise<DialogflowRequest>; // tslint:disable-line
+    async intent(json?: object): Promise<DialogflowRequest>; // tslint:disable-line
     async intent(name?: string, inputs?: any): Promise<DialogflowRequest>; // tslint:disable-line
     async intent(obj?: any, inputs?: any): Promise<DialogflowRequest> { // tslint:disable-line
         if (typeof obj === 'string') {
@@ -48,7 +48,7 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
         }
     }
 
-    async launchRequest(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async launchRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
             return DialogflowRequest.fromJSON(json);
         } else {
@@ -63,7 +63,7 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
 
         }
     }
-    async intentRequest(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async intentRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
             return DialogflowRequest.fromJSON(json);
         } else {
@@ -80,7 +80,7 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
         }
     }
 
-    async rawRequest(json: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async rawRequest(json: object): Promise<DialogflowRequest> { // tslint:disable-line
         return DialogflowRequest.fromJSON(json);
     }
 
@@ -94,7 +94,7 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
         dialogflowRequest.originalDetectIntentRequest.payload = this.platformRequestClazz.fromJSON(dialogflowRequest.originalDetectIntentRequest.payload);
         return dialogflowRequest;
     }
-    async audioPlayerRequest(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async audioPlayerRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
             return DialogflowRequest.fromJSON(json);
         } else {
@@ -108,7 +108,7 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
             return dialogflowRequest;
         }
     }
-    async end(json?: any): Promise<DialogflowRequest> { // tslint:disable-line
+    async end(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
             return DialogflowRequest.fromJSON(json);
         } else {
