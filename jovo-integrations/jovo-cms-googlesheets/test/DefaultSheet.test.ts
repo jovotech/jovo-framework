@@ -1,7 +1,7 @@
 import { DefaultSheet, GoogleSheetsCMS } from '../src/';
 import { BaseApp, JovoError, ErrorCode, HandleRequest } from 'jovo-core';
 import * as feed from './mockObj/feedEntries.json';
-import * as sheetValues from './mockObj/sheetValues.json';
+import * as sheetValues from './mockObj/publicSheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
 
 let handleRequest: HandleRequest;
@@ -180,7 +180,7 @@ describe('DefaultSheet.retrieve()', () => {
         );
     });
 
-    test('should set retrieved values from mocked method -> parsePublicToPrivate', async () => {
+    test('should set retrieved values with parsePublicToPrivate() from mocked function parsePublicToPrivate()', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         googleSheetsCMS.loadPublicSpreadSheetData =
             (spreadsheetId: string, sheetPosition = 1) => new Promise((res, rej) => res(feed));
@@ -189,7 +189,7 @@ describe('DefaultSheet.retrieve()', () => {
             spreadsheetId: '123',
             name: 'test',
             range: 'A:B',
-            access: 'public'    // this values does not matter for this test, as long as the right method is mocked
+            access: 'public'
         });
         defaultSheet.install(googleSheetsCMS);
 
