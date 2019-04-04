@@ -63,7 +63,7 @@ export class ResponsesSheet extends DefaultSheet {
                 let locale: string = headers[j];
                 let platform: string | undefined;
 
-                const localeSplit: string[] = locale.split('-');
+                const localeSplit: string[] = locale.toLowerCase().split('-');
 
                 // workaround for generic locales like en to work
                 for (const p of platforms) {
