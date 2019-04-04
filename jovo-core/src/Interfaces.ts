@@ -89,7 +89,7 @@ export interface HandleRequest {
 // specialized plugins
 export interface Db extends Plugin {
     needsWriteFileAccess: boolean;
-    save(primaryKey: string, key: string, data: any): Promise<any>; // tslint:disable-line
+    save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<any>; // tslint:disable-line
     load(primaryKey: string): Promise<any>; // tslint:disable-line
     delete(primaryKey: string): Promise<any>; // tslint:disable-line
 }

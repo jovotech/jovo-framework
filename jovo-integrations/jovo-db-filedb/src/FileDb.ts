@@ -88,7 +88,7 @@ export class FileDb implements Db {
         return Promise.resolve(userData);
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         const oldData: any = await this.readFile(this.config.pathToFile!); // tslint:disable-line
@@ -101,10 +101,13 @@ export class FileDb implements Db {
 
         if(userData) {
             _set(userData, key, data);
+            _set(userData, 'updatedAt', updatedAt);
         } else {
-            const newData: any = {}; // tslint:disable-line
-            newData[this.config.primaryKeyColumn!] = primaryKey;
-            _set(newData, key, data);
+            const newData = {
+                [this.config.primaryKeyColumn!]: primaryKey,
+                [key]: data,
+                updatedAt
+            };
             users.push(newData);
         }
         Log.verbose(`Saving data to: ${this.config.pathToFile}`);

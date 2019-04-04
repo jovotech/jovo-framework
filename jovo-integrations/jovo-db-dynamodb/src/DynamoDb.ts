@@ -164,7 +164,7 @@ export class DynamoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         const getDataMapParams: DocumentClient.PutItemInput = {
@@ -172,6 +172,7 @@ export class DynamoDb implements Db {
             Item: {
                 [this.config.primaryKeyColumn!]: primaryKey,
                 [key]: data,
+                updatedAt
             }
         };
         if (!this.isCreating) {
