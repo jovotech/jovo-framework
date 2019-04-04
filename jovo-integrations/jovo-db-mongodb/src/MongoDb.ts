@@ -116,7 +116,7 @@ export class MongoDb implements Db {
         }
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         try {
@@ -124,7 +124,8 @@ export class MongoDb implements Db {
             const item = {
                 $set: {
                     [this.config.primaryKeyColumn!]: primaryKey,
-                    [key]: data
+                    [key]: data,
+                    updatedAt
                 }
             };
             await collection.updateOne({ userId: primaryKey }, item, { upsert: true });

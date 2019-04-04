@@ -98,7 +98,7 @@ export class DatastoreDb implements Db {
         return entity ? entity.data : {};
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
@@ -114,12 +114,13 @@ export class DatastoreDb implements Db {
             entity = entities[0];
         }
 
+        _set(entity, 'updatedAt', updatedAt);
 
         // Don't confuse with the "data" key form the "save" method, actually this is
         // the data node necessary for datastore, whereas in the "save" method we add a second data
         // node for storing our own data.
         _set(entity, 'data.' + key, data);
-
+        
         const dataStoreDataObject = {
             key: entityKey,
             data: entity,
