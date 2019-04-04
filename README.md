@@ -68,7 +68,11 @@ $ npm install -g jovo-cli
 Create a new Jovo project:
 
 ```sh
+# Default: Create new JavaScript project
 $ jovo new <directory>
+
+# Alternative: Create new TypeScript project
+$ jovo new <directory> --language typescript
 ```
 
 ## Features
