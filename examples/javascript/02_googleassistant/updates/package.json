@@ -1,14 +1,14 @@
 {
   "name": "jovo-examples-googleassistant-updates",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "src/index.js",
   "dependencies": {
     "jovo-db-filedb": "^2.2.0",
-    "jovo-framework": "^2.2.0",
-    "jovo-platform-alexa": "^2.2.0",
-    "jovo-platform-googleassistant": "^2.2.0",
+    "jovo-framework": "^2.2.1",
+    "jovo-platform-alexa": "^2.2.1",
+    "jovo-platform-googleassistant": "^2.2.1",
     "jovo-plugin-debugger": "^2.2.0"
   },
   "devDependencies": {

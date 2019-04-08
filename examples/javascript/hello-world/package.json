@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-hello-world",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -17,10 +17,10 @@
     "jovo-core": "^2.2.0",
     "jovo-db-dynamodb": "^2.2.0",
     "jovo-db-filedb": "^2.2.0",
-    "jovo-framework": "^2.2.0",
-    "jovo-platform-alexa": "^2.2.0",
+    "jovo-framework": "^2.2.1",
+    "jovo-platform-alexa": "^2.2.1",
     "jovo-platform-dialogflow": "^2.2.0",
-    "jovo-platform-googleassistant": "^2.2.0",
+    "jovo-platform-googleassistant": "^2.2.1",
     "jovo-plugin-debugger": "^2.2.0"
   }
 }

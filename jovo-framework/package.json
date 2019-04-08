@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
