@@ -9,6 +9,9 @@ export * from './services/AlexaReminder';
 
 export { AlexaResponse } from './core/AlexaResponse';
 
+export * from './services/AlexaAPI';
+
+
 export { AudioPlayer } from './modules/AudioPlayerPlugin';
 export { BodyTemplate1 } from './response/visuals/BodyTemplate1';
 export { BodyTemplate2 } from './response/visuals/BodyTemplate2';
