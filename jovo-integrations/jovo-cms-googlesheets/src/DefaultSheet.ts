@@ -106,7 +106,14 @@ export class DefaultSheet implements Plugin {
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
         if (!this.config.entity) {
-            throw new Error('Entity has to be set.');
+            throw new JovoError(
+                'entity has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'The sheet\'s name has to be defined in your config.js file.',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            );
         }
         handleRequest.app.$cms[this.config.entity] = values;
     }

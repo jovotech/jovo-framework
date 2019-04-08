@@ -1,0 +1,20 @@
+[
+    [
+        "key",
+        "en-us",
+        "de-de"
+    ],
+    [
+        "WELCOME",
+        "Welcome_Default",
+        "Willkommen_Default"
+    ],
+    [
+        "GOODBYE",
+        "Goodbye_Default"
+    ],
+    [
+        "GOODBYE",
+        "Bye_Default"
+    ]
+]

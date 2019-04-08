@@ -12,7 +12,7 @@ import Airtable = require('airtable');
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
     baseId?: string;
-    tables: AirtableTable[];
+    tables?: AirtableTable[];
     caching?: boolean;
 }
 
@@ -98,7 +98,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         return new Promise((resolve, reject) => {
             const arr: object[] = [];
         
-            this.base(table).select(selectOptions).eachPage((records: object[], fetchNextPage: () => void) => {
+            this.base(table).select(selectOptions!).eachPage((records: object[], fetchNextPage: () => void) => {
                 /**
                  * This function (`page`) will get called for each page of records.
                  * records is an array of objects where the keys are the first row of the table and the values are the current rows values.

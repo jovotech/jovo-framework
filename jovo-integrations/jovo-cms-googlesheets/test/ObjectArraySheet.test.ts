@@ -41,8 +41,7 @@ describe('ObjectArraySheet.parse()', () => {
 
     test('with valid values', () => {
         const objectArraySheet = new ObjectArraySheet({
-            name: 'test',
-            range: 'A:Z'
+            name: 'test'
         });
 
         expect(handleRequest.app.$cms.test).toBeUndefined();

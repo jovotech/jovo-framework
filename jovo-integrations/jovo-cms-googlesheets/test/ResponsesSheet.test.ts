@@ -5,7 +5,7 @@ import * as cPrivateSheetValues from './mockObj/privateSheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
 import * as cI18nModel from './mockObj/i18nModel.json';
 import _cloneDeep = require('lodash.clonedeep');
-const i18n = require('i18next');
+import i18n from 'i18next';
 
 let publicSheetValues: any[];       // tslint:disable-line
 let privateSheetValues: any[];      // tslint:disable-line
@@ -34,7 +34,7 @@ describe('ResponsesSheet.constructor()', () => {
 });
 
 describe('ResponsesSheet.install()', () => {
-    test('t function for cms', () => {
+    test('should register Cms.t()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const responsesSheet = new ResponsesSheet();
 

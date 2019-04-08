@@ -51,6 +51,19 @@ export class ResponsesTable extends DefaultTable {
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line        
+        const name = this.config.name;
+
+        if (!name) {
+            throw new JovoError(
+                'name has to be set',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-airtable',
+                'The sheet\'s name has to be defined in your config.js file',
+                undefined,
+                'https://www.jovo.tech/docs/cms/airtable#configuration'
+            );
+        }
+        
         const headers: string[] = values[0];
         const platforms = handleRequest.app.getAppTypes();
         const resources: any = {}; // tslint:disable-line
@@ -100,16 +113,6 @@ export class ResponsesTable extends DefaultTable {
             }
         }
 
-        if (!this.config.name) {
-            throw new JovoError(
-                'name has to be set',
-                ErrorCode.ERR_PLUGIN,
-                'jovo-cms-airtable',
-                'The sheet\'s name has to be defined in your config.js file',
-                undefined,
-                'https://www.jovo.tech/docs/cms/airtable#configuration'
-            );
-        }
         if (!handleRequest.app.$cms.I18Next) {
             i18n.init(Object.assign({
                 resources
@@ -129,6 +132,6 @@ export class ResponsesTable extends DefaultTable {
             });
         }
 
-        handleRequest.app.$cms[this.config.name!] = resources;
+        handleRequest.app.$cms[name] = resources;
     }
 }

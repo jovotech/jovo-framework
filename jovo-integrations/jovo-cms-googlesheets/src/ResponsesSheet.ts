@@ -1,4 +1,4 @@
-import { Extensible, HandleRequest, Cms } from 'jovo-core';
+import { Extensible, HandleRequest, Cms, JovoError, ErrorCode } from 'jovo-core';
 const i18n = require('i18next');
 
 import _merge = require('lodash.merge');
@@ -52,6 +52,18 @@ export class ResponsesSheet extends DefaultSheet {
     }
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
+        const entity = this.config.entity || this.config.name;
+
+        if (!entity) {
+            throw new JovoError(
+                'entity has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'The sheet\'s name has to be defined in your config.js file.',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            );
+        }
 
         const headers: string[] = values[0];
         const platforms = handleRequest.app.getAppTypes();
@@ -104,11 +116,7 @@ export class ResponsesSheet extends DefaultSheet {
                 _set(resources, key, valueArray);
             }
         }
-        const entity = this.config.entity || this.config.name;
 
-        if (!entity) {
-            throw new Error('Entity has to be set.');
-        }
         if (!handleRequest.app.$cms.I18Next) {
             i18n.init(Object.assign({ resources }, this.config.i18Next));
             handleRequest.app.$cms.I18Next = { i18n };

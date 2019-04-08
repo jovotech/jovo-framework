@@ -52,21 +52,14 @@ describe('DefaultSheet.install()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
 
-        const fnsOld = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = googleSheetsCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = googleSheetsCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 
     test('should register middleware on request with caching on parent', () => {
@@ -77,21 +70,14 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const fnsOld = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 
     test('should register middleware on request with caching', () => {
@@ -102,21 +88,14 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const fnsOld = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 });
 
@@ -134,7 +113,9 @@ describe('DefaultSheet.parse()', () => {
         });
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
+
         defaultSheet.parse(handleRequest, []);
+
         expect(handleRequest.app.$cms.test).toStrictEqual([]);
     });
 });

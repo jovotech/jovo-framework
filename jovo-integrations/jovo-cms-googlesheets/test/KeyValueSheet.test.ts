@@ -41,8 +41,7 @@ describe('KeyValueSheet.parse()', () => {
 
     test('with valid values', () => {
         const keyValueSheet = new KeyValueSheet({
-            name: 'test',
-            range: 'A:Z'
+            name: 'test'
         });
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
