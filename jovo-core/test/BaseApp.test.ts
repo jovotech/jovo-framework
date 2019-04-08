@@ -1,13 +1,14 @@
 import {ActionSet, BaseApp, Host, Jovo} from "../src";
 import {Extensible} from "../src/Extensible";
 class Parent extends Extensible {
+
+    /**
+     * Empty install() implementation
+     */
     install() {
 
     }
 
-    uninstall() {
-
-    }
 }
 test('test constructor', async () => {
     const baseApp = new BaseApp();

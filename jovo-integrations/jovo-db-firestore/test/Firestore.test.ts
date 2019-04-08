@@ -13,11 +13,11 @@ describe('test install()', () => {
         test('should call initializeFirebaseAdmin()', () => {
             const app = new BaseApp();
             const firestore = new Firestore();
-            jest.spyOn(firestore, 'initializeFirebaseAdmin').mockReturnValue('');
+            jest.spyOn(firestore, 'initializeFirebaseAdmin').mockReturnValue();
             firestore.initializeFirestore = jest.fn();
-    
+
             firestore.install(app);
-    
+
             expect(firestore.initializeFirebaseAdmin).toHaveBeenCalledTimes(1);
         });
 
@@ -114,7 +114,7 @@ describe('test install()', () => {
     test('should call initializeFirestore()', () => {
         const app = new BaseApp();
         const firestore = new Firestore();
-        jest.spyOn(firestore, 'initializeFirestore').mockReturnValue('');
+        jest.spyOn(firestore, 'initializeFirestore').mockReturnValue();
         firestore.initializeFirebaseAdmin = jest.fn();
 
         firestore.install(app);
@@ -432,12 +432,12 @@ describe('test database operations', () => {
                 })
             };
             _set(firestore, 'firestore', mockFirestore);
-    
+
             await firestore.delete('id');
-    
+
             expect(mockCollection).toHaveBeenCalledWith(firestore.config.collectionName);
         });
-    
+
         test('should call firestore.collection().doc() with primaryKey', async () => {
             firestore.errorHandling = jest.fn();
             const mockDoc = jest.fn();
@@ -453,12 +453,12 @@ describe('test database operations', () => {
                 })
             };
             _set(firestore, 'firestore', mockFirestore);
-    
+
             await firestore.delete('id');
-    
+
             expect(mockDoc).toHaveBeenCalledWith('id');
         });
-    
+
         test('should call firestore.collection().doc().delete()', async () => {
             firestore.errorHandling = jest.fn();
             const mockDelete = jest.fn();
@@ -474,9 +474,9 @@ describe('test database operations', () => {
                 })
             };
             _set(firestore, 'firestore', mockFirestore);
-    
+
             await firestore.delete('id');
-    
+
             expect(mockDelete).toHaveBeenCalled();
         });
     });

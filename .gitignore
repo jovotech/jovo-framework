@@ -62,3 +62,4 @@ db/tests/*.json
 coverage
 .changelog
 000_debug
+credentials.json

@@ -20,10 +20,10 @@ class BaseClass extends Extensible {
         }
     }
 
+    /**
+     * Dummy install implementation
+     */
     install() {
-
-    }
-    uninstall() {
 
     }
 }
@@ -44,19 +44,19 @@ class PluginA implements Plugin {
         }
     }
 
+    /**
+     * Dummy install implementation
+     */
     install(parent: any) { // tslint:disable-line
-
-    }
-    uninstall() {
 
     }
 }
 
 class PluginB implements Plugin {
+    /**
+     * Dummy install implementation
+     */
     install(parent: any) { // tslint:disable-line
-
-    }
-    uninstall() {
 
     }
 }
@@ -80,10 +80,10 @@ class ExtensiblePlugin extends Extensible implements Plugin {
         }
     }
 
+    /**
+     * Dummy install implementation
+     */
     install(parent: any) { // tslint:disable-line
-
-    }
-    uninstall() {
 
     }
 }

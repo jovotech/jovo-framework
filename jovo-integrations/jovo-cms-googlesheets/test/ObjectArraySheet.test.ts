@@ -10,14 +10,14 @@ beforeEach(() => {
 describe('ObjectArraySheet.constructor()', () => {
     test('without config', () => {
         const objectArraySheet = new ObjectArraySheet();
-        expect(objectArraySheet.config.range).toMatch('A:B');
+        expect(objectArraySheet.config.range).toMatch('A:Z');
     });
 
     test('with config', () => {
         const objectArraySheet = new ObjectArraySheet({
-            range: 'A:Z'
+            range: 'A:F'
         });
-        expect(objectArraySheet.config.range).toMatch('A:Z');
+        expect(objectArraySheet.config.range).toMatch('A:F');
     });
 });
 

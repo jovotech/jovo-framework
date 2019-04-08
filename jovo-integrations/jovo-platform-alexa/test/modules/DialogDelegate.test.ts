@@ -3,8 +3,6 @@ import {App, ExpressJS} from "jovo-framework";
 import {Alexa} from "../../src";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import {ConfirmationStatus} from "../../src/core/AlexaRequest";
-import {AlexaSpeechBuilder} from "../../src/core/AlexaSpeechBuilder";
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -186,7 +184,7 @@ describe('test DialogDelegate functions', () => {
                 TestDelegateIntent() {
                     this.$alexaSkill!.$dialog!.delegate({
                         name: 'TestIntent',
-                        confirmationStatus: ConfirmationStatus.NONE,
+                        confirmationStatus: 'NONE',
                         slots: {
                             key: {
                                 name: 'key',
@@ -206,7 +204,7 @@ describe('test DialogDelegate functions', () => {
                 expect(_get(response, 'response.directives[0].type')).toEqual('Dialog.Delegate');
                 expect(_get(response, 'response.directives[0].updatedIntent')).toStrictEqual({
                     name: 'TestIntent',
-                    confirmationStatus: ConfirmationStatus.NONE,
+                    confirmationStatus: 'NONE',
                     slots: {
                         key: {
                             name: 'key',
@@ -249,7 +247,7 @@ describe('test DialogDelegate functions', () => {
                         'What is the value?',
                         {
                             name: 'TestIntent',
-                            confirmationStatus: ConfirmationStatus.NONE,
+                            confirmationStatus: 'NONE',
                             slots: {
                                 key: {
                                     name: 'key',
@@ -271,7 +269,7 @@ describe('test DialogDelegate functions', () => {
                 expect(_get(response, 'response.directives[0].slotToElicit')).toEqual('key');
                 expect(_get(response, 'response.directives[0].updatedIntent')).toStrictEqual({
                     name: 'TestIntent',
-                    confirmationStatus: ConfirmationStatus.NONE,
+                    confirmationStatus: 'NONE',
                     slots: {
                         key: {
                             name: 'key',
@@ -323,7 +321,7 @@ describe('test DialogDelegate functions', () => {
                         'Key is value?',
                         {
                             name: 'TestIntent',
-                            confirmationStatus: ConfirmationStatus.NONE,
+                            confirmationStatus: 'NONE',
                             slots: {
                                 key: {
                                     name: 'key',
@@ -345,7 +343,7 @@ describe('test DialogDelegate functions', () => {
                 expect(_get(response, 'response.directives[0].slotToConfirm')).toEqual('key');
                 expect(_get(response, 'response.directives[0].updatedIntent')).toStrictEqual({
                     name: 'TestIntent',
-                    confirmationStatus: ConfirmationStatus.NONE,
+                    confirmationStatus: 'NONE',
                     slots: {
                         key: {
                             name: 'key',
@@ -418,7 +416,7 @@ describe('test DialogDelegate functions', () => {
                         'Key is value?',
                         {
                             name: 'TestIntent',
-                            confirmationStatus: ConfirmationStatus.NONE,
+                            confirmationStatus: 'NONE',
                             slots: {
                                 key: {
                                     name: 'key',
@@ -444,7 +442,7 @@ describe('test DialogDelegate functions', () => {
                 ).toBeTruthy();
                 expect(_get(response, 'response.directives[0].updatedIntent')).toStrictEqual({
                     name: 'TestIntent',
-                    confirmationStatus: ConfirmationStatus.NONE,
+                    confirmationStatus: 'NONE',
                     slots: {
                         key: {
                             name: 'key',

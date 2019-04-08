@@ -73,6 +73,7 @@ export interface AuthorizationResponse {
 
 type LocalizedAttributes = {
     locale: string;
+    [key: string]: string;
 };
 
 export interface ProactiveEventObject {

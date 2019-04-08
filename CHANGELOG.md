@@ -1,6 +1,41 @@
 # Jovo Framework Changelog
 
+## 2.2.1 (2019-04-08)
 
+#### :bug: Bug Fix
+* `jovo-framework` Fix unit testing FileDB initialization (issue #455)
+
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2.2.0 (2019-04-04)
+
+#### :rocket: New Feature
+* `jovo-framework` [#446](https://github.com/jovotech/jovo-framework/pull/446) DB save optimization only saves to db if changes were made  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#442](https://github.com/jovotech/jovo-framework/pull/442) Update addText to accept arbitrary SSML wrapping elements  ([@jnthnwn](https://github.com/jnthnwn))
+* `jovo-framework` [#451](https://github.com/jovotech/jovo-framework/pull/451) Adds updatedAt to databases  ([@KaanKC](https://github.com/KaanKC))
+
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` Improved Typescript compatibility (Examples)
+* `jovo-cms-googlesheets` [#450](https://github.com/jovotech/jovo-framework/pull/450) Add Unit Tests for GoogleSheetsCMS integration ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-framework` [#443](https://github.com/jovotech/jovo-framework/pull/443) Tests for db integrations  ([@KaanKC](https://github.com/KaanKC))
+
+
+
+#### Committers: 4
+- Jonathan Wan ([@jnthnwn](https://github.com/jnthnwn))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+jnthnwn
 ## 2.1.5 (2019-03-27)
 
 #### :rocket: New Feature
@@ -48,7 +83,7 @@
 ## 2.1.2 (2019-03-12)
 
 #### :rocket: New Feature
-* `jovo-platform-airtable` [#411](https://github.com/jovotech/jovo-framework/pull/411) ✨ Adds Airtable CMS Integration ([@KaanKC](https://github.com/KaanKC))
+* `jovo-cms-airtable` [#411](https://github.com/jovotech/jovo-framework/pull/411) ✨ Adds Airtable CMS Integration ([@KaanKC](https://github.com/KaanKC))
 
 #### :bug: Bug Fix
 * `jovo-platform-googleassistant` Fixes lifespan of session context

@@ -99,7 +99,7 @@ export class GadgetController {
      * @param {string} triggerEvent Either 'buttonDown', 'buttonUp' or 'none'
      * @param {array} animations one or more animations.
      */
-    setLight(targetGadgets: any[], triggerEventTimeMs: number, triggerEvent: string, animations: any[]) { // tslint:disable-line
+    setLight(targetGadgets: any[], triggerEventTimeMs: number, triggerEvent?: string, animations?: any[]) { // tslint:disable-line
         if (triggerEvent && animations) {
             this.setTriggerEvent(triggerEvent).setAnimations(animations);
         }

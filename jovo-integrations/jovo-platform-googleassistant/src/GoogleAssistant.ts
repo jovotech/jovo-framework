@@ -9,7 +9,6 @@ import {
     Extensible,
     Platform,
     Jovo,
-    Handler,
     HandleRequest, ActionSet, TestSuite,ExtensibleConfig
 } from "jovo-core";
 
@@ -46,7 +45,6 @@ export class GoogleAssistant extends Extensible implements Platform {
 
     requestBuilder = new GoogleAssistantRequestBuilder();
     responseBuilder = new GoogleAssistantResponseBuilder();
-    platformRequestClazz: any; // tslint:disable-line
 
     constructor(config?: Config) {
         super(config);

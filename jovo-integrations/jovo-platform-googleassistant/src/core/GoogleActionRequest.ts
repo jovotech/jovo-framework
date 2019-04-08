@@ -75,6 +75,12 @@ export class GoogleActionRequest implements JovoRequest {
     availableSurfaces?: Surface;
 
 
+    getSessionId(): string | undefined {
+        if (this.conversation) {
+            return this.conversation.conversationId;
+        }
+    }
+
     getIntentName() {
         return undefined;
     }

@@ -1,54 +1,93 @@
 import {BaseApp, Host, Jovo, SessionConstants, SpeechBuilder} from "../src";
 
 class JovoImpl extends Jovo {
+    /**
+     * getDeviceId() dummy implementation
+     */
     getDeviceId(): string | undefined {
         return 'deviceId';
     }
 
+    /**
+     * getLocale() dummy implementation
+     */
     getLocale(): string | undefined {
         return 'locale';
     }
 
+    /**
+     * getPlatformType() dummy implementation
+     */
     getPlatformType(): string {
         return "platformType";
     }
 
+    /**
+     * getRawText() dummy implementation
+     */
     getRawText(): string | undefined {
         return 'rawText';
     }
 
+    /**
+     * getSelectedElementId() dummy implementation
+     */
     getSelectedElementId(): string | undefined {
         return 'selectedElementId';
     }
 
+    /**
+     * getSpeechBuilder() dummy implementation
+     */
     getSpeechBuilder(): SpeechBuilder | undefined {
         return new SpeechBuilder(this);
     }
 
+    /**
+     * getTimestamp() dummy implementation
+     */
     getTimestamp(): string | undefined {
         return new Date().toISOString();
     }
 
+    /**
+     * getType() dummy implementation
+     */
     getType(): string | undefined {
         return 'JovoImpl';
     }
 
+    /**
+     * hasAudioInterface() dummy implementation
+     */
     hasAudioInterface(): boolean {
         return true;
     }
 
+    /**
+     * hasScreenInterface() dummy implementation
+     */
     hasScreenInterface(): boolean {
         return true;
     }
 
+    /**
+     * hasVideoInterface() dummy implementation
+     */
     hasVideoInterface(): boolean {
         return true;
     }
 
+    /**
+     * isNewSession() dummy implementation
+     */
     isNewSession(): boolean {
         return false;
     }
 
+    /**
+     * speechBuilder() dummy implementation
+     */
     speechBuilder(): SpeechBuilder | undefined {
         return new SpeechBuilder(this);
     }
@@ -68,14 +107,23 @@ class DummyHost implements Host {
         };
     }
 
+    /**
+     * Dummy getRequestObject implementation
+     */
     getRequestObject(): any { // tslint:disable-line
         return {};
     }
 
+    /**
+     * Dummy setResponse implementation
+     */
     setResponse(obj: any): Promise<any> { // tslint:disable-line
         return new Promise((resolve, reject) => {});
     }
 
+    /**
+     * Dummy fail implementation
+     */
     fail(error: Error) {
 
     }

@@ -20,7 +20,7 @@ beforeEach(() => {
 test('ask with multiple reprompts', async (done) => {
     app.setHandler({
         LAUNCH() {
-            this.ask('Hello World!', ['Hello? 1', 'Hello? 2', 'Hello? 3']);
+            this.$googleAction!.ask('Hello World!', 'Hello? 1','Hello? 2', 'Hello? 3');
         },
     });
 
