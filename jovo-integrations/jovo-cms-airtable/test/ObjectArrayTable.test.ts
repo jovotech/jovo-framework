@@ -41,9 +41,11 @@ describe('ObjectArrayTable.parse()', () => {
         objectArrayTable.parse(handleRequest, [
             ['keys', 'values'], ['key1', 'value1']
         ]);
-        expect(handleRequest.app.$cms.test).toStrictEqual({
-            keys: 'key1',
-            values: 'value1'
-        });
+        expect(handleRequest.app.$cms.test).toStrictEqual([
+            {
+                keys: 'key1',
+                values: 'value1'
+            }
+        ]);
     });
 });

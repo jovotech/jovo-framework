@@ -26,7 +26,7 @@ describe('ObjectArraySheet.parse()', () => {
         const objectArraySheet = new ObjectArraySheet();
 
         expect(() => objectArraySheet.parse(handleRequest, []))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('with empty array', () => {

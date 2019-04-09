@@ -26,7 +26,7 @@ describe('KeyValueSheet.parse()', () => {
         const keyValueSheet = new KeyValueSheet();
 
         expect(() => keyValueSheet.parse(handleRequest, []))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('with empty array', () => {

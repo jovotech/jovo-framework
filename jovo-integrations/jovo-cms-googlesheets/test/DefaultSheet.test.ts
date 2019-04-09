@@ -104,7 +104,7 @@ describe('DefaultSheet.parse()', () => {
         const defaultSheet = new DefaultSheet();
 
         expect(() => defaultSheet.parse(handleRequest, []))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('should set values to entity attribute', () => {
@@ -145,19 +145,6 @@ describe('DefaultSheet.retrieve()', () => {
 
         await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
             new JovoError('sheet name has to be set.', ErrorCode.ERR_PLUGIN)
-        );
-    });
-
-    test.skip('should reject Promise with JovoError if no range is set', async () => {
-        const googleSheetsCMS = new GoogleSheetsCMS();
-        const defaultSheet = new DefaultSheet({
-            spreadsheetId: '123',
-            name: 'test'
-        });
-        defaultSheet.install(googleSheetsCMS);
-
-        await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
-            new JovoError('range has to be set.', ErrorCode.ERR_PLUGIN)
         );
     });
 

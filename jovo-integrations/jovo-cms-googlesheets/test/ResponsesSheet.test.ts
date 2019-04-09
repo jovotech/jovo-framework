@@ -48,7 +48,7 @@ describe('ResponsesSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const responsesSheet = new ResponsesSheet();
         expect(() => responsesSheet.parse(handleRequest, publicSheetValues))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('without headers and without values', () => {
@@ -179,7 +179,8 @@ describe('ResponsesSheet.parse()', () => {
             privateSheetValues[1].push('Welcome_Alexa');
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
-                    WELCOME: ['Welcome_Alexa']
+                    WELCOME: ['Welcome_Alexa'],
+                    GOODBYE: []
                 }
             };
             responsesSheet.parse(handleRequest, privateSheetValues);
@@ -209,7 +210,8 @@ describe('ResponsesSheet.parse()', () => {
             publicSheetValues[1].push('Welcome_Alexa');
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
-                    WELCOME: ['Welcome_Alexa']
+                    WELCOME: ['Welcome_Alexa'],
+                    GOODBYE: []
                 }
             };
             responsesSheet.parse(handleRequest, publicSheetValues);

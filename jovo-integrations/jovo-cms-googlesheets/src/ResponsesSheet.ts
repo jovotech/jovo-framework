@@ -101,9 +101,6 @@ export class ResponsesSheet extends DefaultSheet {
 
                 let key = `${locale}.translation.${row[0]}`;
                 if (platform) {
-                    if (!cell || cell === '') {
-                        continue;
-                    }
                     key = `${locale}.${platform}.translation.${row[0]}`;
                 }
 

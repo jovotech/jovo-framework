@@ -128,6 +128,15 @@ export class DefaultSheet implements Plugin {
         const entries = values.feed.entry;
         const headers: string[] = [];
 
+        if (!entries) {
+            throw new JovoError(
+                'No spreadsheet values found.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'It seems like your spreadsheet is empty or without values.'
+            )
+        }
+
         entries.forEach((entry: any, index: number) => { // tslint:disable-line
             const row: string[] = [];
             // get headers
