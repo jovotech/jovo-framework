@@ -13,14 +13,14 @@ module.exports = {
 
     cms: {
         GoogleSheetsCMS: {
-            spreadsheetId: '1Ey2kAbmPUnAzRuK1llmhYYuoRbALqfuoVpaobVydytM',
-            access: 'public',
-            // credentialsFile: './credentials.json',
+            spreadsheetId: '1adMWErUl7xrtmKCBiMjEJCfkWWHgmxASId5eeRRVBSc',
+            access: 'private',
+            credentialsFile: './credentials.json',
             sheets: [
                 {
-                    name: 'Sheet1',
+                    name: 'testSheet',
                     range: 'A:Z',
-                    type: 'Responses',
+                    type: 'ObjectArray',
                 },
             ],
         }

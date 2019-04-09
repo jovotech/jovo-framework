@@ -7,8 +7,6 @@ const { GoogleSheetsCMS, DefaultSheet } = require('jovo-cms-googlesheets');
 
 const app = new App();
 
-const util = require('util');
-
 app.use(
     new GoogleAssistant(),
     new Alexa(),
@@ -24,7 +22,6 @@ app.middleware('setup').use((handleRequest) => {
 
 app.setHandler({
     async LAUNCH(jovo) {
-        console.log(util.inspect(this.$cms.Sheet1, {depth: null}));
         this.$speech.addText(this.$cms.t('WELCOME'));
 
         console.log(this.$cms.testSheet);
