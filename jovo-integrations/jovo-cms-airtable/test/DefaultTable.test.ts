@@ -1,6 +1,6 @@
 import { DefaultTable, AirtableCMS } from '../src';
 import { BaseApp, ErrorCode, JovoError } from 'jovo-core';
-import { MockHandleRequest } from './mockObj/mockHR'
+import { MockHandleRequest } from './mockObj/mockHR';
 
 let handleRequest: MockHandleRequest;
 beforeEach(() => {
@@ -138,7 +138,7 @@ describe('DefaultTable.retrieve', () => {
         defaultTable.install(airtableCMS);
 
         airtableCMS.loadTableData =
-            (selectOptions: any, table: string) => new Promise((res, rej) => res({}));
+            (selectOptions: object, table: string) => new Promise((res, rej) => res({}));
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
 

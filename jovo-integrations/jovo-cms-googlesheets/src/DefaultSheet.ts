@@ -134,7 +134,7 @@ export class DefaultSheet implements Plugin {
                 ErrorCode.ERR_PLUGIN,
                 'jovo-cms-googlesheets',
                 'It seems like your spreadsheet is empty or without values.'
-            )
+            );
         }
 
         entries.forEach((entry: any, index: number) => { // tslint:disable-line
