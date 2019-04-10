@@ -45,7 +45,13 @@ $ jovo -v
 You can create a Jovo project into a new directory with the following command:
 
 ```sh
+// @language=javascript
+
 $ jovo new <directory>
+
+// @language=typescript
+
+$ jovo new <directory> --language typescript
 ```
 
 This will create a new folder, download the [Jovo "Hello World" template](https://www.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
@@ -86,11 +92,15 @@ To get started, use the following command:
 ```sh
 // @language=javascript
 
+# Run local development server
 $ jovo run
 
 // @language=typescript
 
+# Run compuler
 $ npm run tsc
+
+# Run local development server
 $ jovo run
 ```
 
