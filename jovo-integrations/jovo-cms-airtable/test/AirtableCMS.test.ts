@@ -47,12 +47,12 @@ describe('AirtableCMS.install()', () => {
         const airtableCMS = new AirtableCMS({ apiKey: '123', baseId: '234' });
 
         let fn;
-        fn = app.middleware('setup')!.fns.find((i) => i.name === 'bound retrieveSpreadsheetData');
+        fn = app.middleware('setup')!.fns.find((i) => i.name === 'bound retrieveAirtableData');
         expect(fn).toBeUndefined();
 
         airtableCMS.install(app);
 
-        fn = app.middleware('setup')!.fns.find((i) => i.name === 'bound retrieveSpreadsheetData');
+        fn = app.middleware('setup')!.fns.find((i) => i.name === 'bound retrieveAirtableData');
         expect(fn).toBeDefined();
     });
 
