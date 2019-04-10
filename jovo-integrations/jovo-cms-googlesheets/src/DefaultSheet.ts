@@ -96,7 +96,7 @@ export class DefaultSheet implements Plugin {
             Log.verbose('Spreadsheet ID: ' + spreadsheetId);
             Log.verbose('Sheet position: ' + this.config.position);
 
-            const publicValues = await this.cms.loadPublicSpreadSheetData(spreadsheetId, this.config.position);  // tslint:disable-line
+            const publicValues = await this.cms.loadPublicSpreadsheetData(spreadsheetId, this.config.position);  // tslint:disable-line
             values = this.parsePublicToPrivate(publicValues);
         }
         if (values) {

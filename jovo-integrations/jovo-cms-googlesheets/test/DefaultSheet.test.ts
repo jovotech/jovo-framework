@@ -120,6 +120,20 @@ describe('DefaultSheet.parse()', () => {
     });
 });
 
+describe('DefaultSheet.parsePublicToPrivate()', () => {
+    test('should throw Jovo Error with empty feed', () => {
+        const defaultSheet = new DefaultSheet();
+        expect(() => defaultSheet['parsePublicToPrivate']({ feed: {} }))
+            .toThrow('No spreadsheet values found.');
+    });
+
+    test('with valid values', () => {
+        const defaultSheet = new DefaultSheet();
+        expect(defaultSheet['parsePublicToPrivate'](feed))
+            .toStrictEqual(sheetValues);
+    });
+});
+
 describe('DefaultSheet.retrieve()', () => {
     test('should reject Promise if no parent is set', async () => {
         const defaultSheet = new DefaultSheet();
@@ -148,9 +162,9 @@ describe('DefaultSheet.retrieve()', () => {
         );
     });
 
-    test('should set retrieved values with parsePublicToPrivate() from mocked function parsePublicToPrivate()', async () => {
+    test('should set retrieved values with parsePublicToPrivate() from mocked function loadPublicSpreadsheetData()', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
-        googleSheetsCMS.loadPublicSpreadSheetData =
+        googleSheetsCMS.loadPublicSpreadsheetData =
             (spreadsheetId: string, sheetPosition = 1) => new Promise((res, rej) => res(feed));
 
         const defaultSheet = new DefaultSheet({

@@ -37,14 +37,14 @@ describe('AirtableCMS.install()', () => {
 
     test('should assign parameter "app" to "this.baseApp"', () => {
         const app = new BaseApp();
-        const airtableCMS = new AirtableCMS({ apiKey: '123', baseId: '1234' });
+        const airtableCMS = new AirtableCMS({ apiKey: '123', baseId: '234' });
         airtableCMS.install(app);
         expect(airtableCMS.baseApp).toStrictEqual(app);
     });
 
     test('should register middleware on setup', () => {
         const app = new BaseApp();
-        const airtableCMS = new AirtableCMS({ apiKey: '123', baseId: '1234' });
+        const airtableCMS = new AirtableCMS({ apiKey: '123', baseId: '234' });
 
         let fn;
         fn = app.middleware('setup')!.fns.find((i) => i.name === 'bound retrieveSpreadsheetData');
@@ -56,7 +56,25 @@ describe('AirtableCMS.install()', () => {
         expect(fn).toBeDefined();
     });
 
-    test.skip('should install default table', () => {
+    test('should install default table', async () => {
+        const app = new BaseApp();
+        const airtableCMS = new AirtableCMS({
+            apiKey: '123',
+            baseId: '234',
+            tables: [
+                {
+                    name: 'test'
+                }
+            ]
+        });
 
+        let fn;
+        fn = airtableCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
+
+        await airtableCMS.install(app);
+
+        fn = airtableCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 });
