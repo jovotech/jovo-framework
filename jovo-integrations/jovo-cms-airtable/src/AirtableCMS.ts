@@ -12,7 +12,7 @@ import Airtable = require('airtable');
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
     baseId?: string;
-    tables: AirtableTable[];
+    tables?: AirtableTable[];
     caching?: boolean;
 }
 
@@ -41,9 +41,9 @@ export class AirtableCMS extends BaseCmsPlugin {
     install(app: BaseApp) {        
         super.install(app);
         this.baseApp = app;
-        app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
+        app.middleware('setup')!.use(this.retrieveAirtableData.bind(this));
 
-        const defaultSheetMap: {[key: string]: any} = { // tslint:disable-line
+        const defaultTableMap: {[key: string]: any} = { // tslint:disable-line
             'default': DefaultTable,
             'responses': ResponsesTable,
             'keyvalue': KeyValueTable,
@@ -56,11 +56,11 @@ export class AirtableCMS extends BaseCmsPlugin {
                 if (!table.type) {
                     type = 'Default';
                 }
-                if (table.type && defaultSheetMap[table.type.toLowerCase()]) {
+                if (table.type && defaultTableMap[table.type.toLowerCase()]) {
                     type = table.type.toLowerCase();
                 }
                 if (type) {
-                    this.use(new defaultSheetMap[type.toLowerCase()](table));
+                    this.use(new defaultTableMap[type.toLowerCase()](table));
                 }
             });
         }
@@ -90,7 +90,7 @@ export class AirtableCMS extends BaseCmsPlugin {
 
     }
 
-    private async retrieveSpreadsheetData(handleRequest: HandleRequest) {
+    private async retrieveAirtableData(handleRequest: HandleRequest) {
         await this.middleware('retrieve')!.run(handleRequest, true);
     }
 
@@ -98,7 +98,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         return new Promise((resolve, reject) => {
             const arr: object[] = [];
         
-            this.base(table).select(selectOptions).eachPage((records: object[], fetchNextPage: () => void) => {
+            this.base(table).select(selectOptions!).eachPage((records: object[], fetchNextPage: () => void) => {
                 /**
                  * This function (`page`) will get called for each page of records.
                  * records is an array of objects where the keys are the first row of the table and the values are the current rows values.

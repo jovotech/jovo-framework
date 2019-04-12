@@ -23,6 +23,18 @@ export class KeyValueTable extends DefaultTable {
     }
 
     parse(handleRequest: HandleRequest, values: any[]) { // tslint:disable-line
+        const name = this.config.name;
+        
+        if (!name) {
+            throw new JovoError(
+                'name has to be set',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-airtable',
+                'The table\'s name has to be defined in your config.js file',
+                undefined,
+                'https://www.jovo.tech/docs/cms/airtable#configuration'
+            );
+        }
 
         const kv = {};
 
@@ -34,17 +46,6 @@ export class KeyValueTable extends DefaultTable {
             }
         }
 
-        if (!this.config.name) {
-            throw new JovoError(
-                'name has to be set',
-                ErrorCode.ERR_PLUGIN,
-                'jovo-cms-airtable',
-                'The sheet\'s name has to be defined in your config.js file',
-                undefined,
-                'https://www.jovo.tech/docs/cms/airtable#configuration'
-            );
-        }
-
-        handleRequest.app.$cms[this.config.name!] = kv;
+        handleRequest.app.$cms[name] = kv;
     }
 }

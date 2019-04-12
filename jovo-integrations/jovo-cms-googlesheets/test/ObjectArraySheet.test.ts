@@ -26,7 +26,7 @@ describe('ObjectArraySheet.parse()', () => {
         const objectArraySheet = new ObjectArraySheet();
 
         expect(() => objectArraySheet.parse(handleRequest, []))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('with empty array', () => {
@@ -41,8 +41,7 @@ describe('ObjectArraySheet.parse()', () => {
 
     test('with valid values', () => {
         const objectArraySheet = new ObjectArraySheet({
-            name: 'test',
-            range: 'A:Z'
+            name: 'test'
         });
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
