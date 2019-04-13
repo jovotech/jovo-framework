@@ -1,5 +1,16 @@
 # Jovo Framework Changelog
 
+## 2.2.1 (2019-04-08)
+
+#### :bug: Bug Fix
+* `jovo-framework` Fix unit testing FileDB initialization (issue #455)
+
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 2.2.0 (2019-04-04)
 
 #### :rocket: New Feature

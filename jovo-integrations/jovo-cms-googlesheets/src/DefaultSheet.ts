@@ -96,7 +96,7 @@ export class DefaultSheet implements Plugin {
             Log.verbose('Spreadsheet ID: ' + spreadsheetId);
             Log.verbose('Sheet position: ' + this.config.position);
 
-            const publicValues = await this.cms.loadPublicSpreadSheetData(spreadsheetId, this.config.position);  // tslint:disable-line
+            const publicValues = await this.cms.loadPublicSpreadsheetData(spreadsheetId, this.config.position);  // tslint:disable-line
             values = this.parsePublicToPrivate(publicValues);
         }
         if (values) {
@@ -106,7 +106,14 @@ export class DefaultSheet implements Plugin {
 
     parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
         if (!this.config.entity) {
-            throw new Error('Entity has to be set.');
+            throw new JovoError(
+                'entity has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'The sheet\'s name has to be defined in your config.js file.',
+                undefined,
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+            );
         }
         handleRequest.app.$cms[this.config.entity] = values;
     }
@@ -120,6 +127,15 @@ export class DefaultSheet implements Plugin {
         const newValues: any[] = []; // tslint:disable-line
         const entries = values.feed.entry;
         const headers: string[] = [];
+
+        if (!entries) {
+            throw new JovoError(
+                'No spreadsheet values found.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-cms-googlesheets',
+                'It seems like your spreadsheet is empty or without values.'
+            );
+        }
 
         entries.forEach((entry: any, index: number) => { // tslint:disable-line
             const row: string[] = [];

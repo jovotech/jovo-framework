@@ -6,7 +6,7 @@ export interface AirtableTable extends PluginConfig {
     name?: string;
     type?: string;
     table?: string;
-    selectOptions: {
+    selectOptions?: {
         // documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
         fields?: string[];
         filterByFormula?: string;
@@ -38,7 +38,7 @@ export class DefaultTable implements Plugin {
         this.cms = extensible as AirtableCMS;
         extensible.middleware('retrieve')!.use(this.retrieve.bind(this));
 
-        this.config.table = this.config.table ? this.config.table : this.config.name;
+        this.config.table = this.config.table || this.config.name;
 
         if(this.cms.config.caching === false || this.config.caching === false) {
             this.cms.baseApp.middleware('request').use(this.retrieve.bind(this));
@@ -49,7 +49,7 @@ export class DefaultTable implements Plugin {
 
     }
 
-    async retrieve(handleRequest: HandleRequest) {        
+    async retrieve(handleRequest: HandleRequest) {   
         if (!this.cms) {
             return Promise.reject(new JovoError(
                 'no cms initialized',
