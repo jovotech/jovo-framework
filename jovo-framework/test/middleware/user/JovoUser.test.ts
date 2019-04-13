@@ -192,7 +192,7 @@ describe('test loadDb() and saveDb()', () => {
             expect(mockHandleRequest.jovo!.$user.new).toBe(false);
         });
     
-        test('should set $user.isDeleted to false because load() didn\'t retrieve data', async () => {;
+        test('should set $user.isDeleted to false because load() didn\'t retrieve data', async () => {
             mockHandleRequest.jovo!.$user.getId = jest.fn().mockReturnValue('userId');
             mockHandleRequest.app.$db.load = jest.fn().mockResolvedValue(undefined);
     
