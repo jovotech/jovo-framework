@@ -6,6 +6,11 @@
       "type": "SSML",
       "ssml": "<speak>Simple Tell</speak>"
     },
+    "card": {
+      "type": "Simple",
+      "title": "Simple Title",
+      "text": "Simple Text"
+    },
     "shouldEndSession": true
   }
 }

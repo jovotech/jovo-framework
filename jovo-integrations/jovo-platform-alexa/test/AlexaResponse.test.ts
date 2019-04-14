@@ -1,9 +1,12 @@
 
 
 import {AlexaResponse} from "../src/core/AlexaResponse";
-const tellJSON = require('./../sample-response-json/v1/TELL.json');
-const askJSON = require('./../sample-response-json/v1/ASK.json');
 import _cloneDeep = require('lodash.clonedeep');
+const askJSON = require('./../sample-response-json/v1/ASK.json');
+const tellJSON = require('./../sample-response-json/v1/TELL.json');
+const simpleCard = require('./../sample-response-json/v1/SimpleCardTell.json');
+const standardCard = require('./../sample-response-json/v1/StandardCardAsk.json');
+
 
 process.env.NODE_ENV = 'TEST';
 
@@ -53,7 +56,7 @@ test('test hasState', () => {
 });
 
 test('test hasSimpleCard', () => {
-    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(simpleCard));
     expect(tellResponse.hasSimpleCard()).toBe(true);
 
     expect(tellResponse.hasSimpleCard('Simple Title')).toBe(true);
@@ -64,7 +67,7 @@ test('test hasSimpleCard', () => {
 });
 
 test('test hasStandardCard', () => {
-    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
     expect(askResponse.hasStandardCard()).toBe(true);
 
     expect(askResponse.hasStandardCard('Standard Title')).toBe(true);

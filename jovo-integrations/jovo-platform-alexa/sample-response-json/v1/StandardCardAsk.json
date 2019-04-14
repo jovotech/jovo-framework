@@ -12,6 +12,15 @@
         "ssml": "<speak>Simple Ask Reprompt</speak>"
       }
     },
+    "card": {
+      "type": "Standard",
+      "image": {
+              "smallImageUrl": "https://via.placeholder.com/720x480",
+              "largeImageUrl": "https://via.placeholder.com/1200x800"
+      },
+      "title": "Standard Title",
+      "text": "Standard Text"
+    },
     "shouldEndSession": false
   }
 }
