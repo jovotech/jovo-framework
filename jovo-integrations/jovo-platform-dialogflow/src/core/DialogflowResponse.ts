@@ -53,7 +53,7 @@ export class DialogflowResponse implements JovoResponse {
 
     getSessionAttributes() {
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/session') > -1;
+            return context.name.indexOf('/contexts/_jovo_session_') > -1;
         });
 
         if (sessionContext) {
@@ -151,7 +151,7 @@ export class DialogflowResponse implements JovoResponse {
 
     hasState(state: string) {
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/session') > -1;
+            return context.name.indexOf('/contexts/_jovo_session_') > -1;
         });
 
         if (sessionContext) {
@@ -162,9 +162,8 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     hasSessionAttribute(name: string, value?: any) { // tslint:disable-line
-
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/session') > -1;
+            return context.name.indexOf('/contexts/_jovo_session_') > -1;
         });
 
         if (sessionContext) {

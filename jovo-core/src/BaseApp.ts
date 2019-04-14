@@ -16,7 +16,7 @@ process.on('uncaughtException', (err) => {
 });
 
 export type BaseAppMiddleware = 'setup' | 'request' | 'platform.init' | 'platform.nlu' | 'nlu' | 'user.load' | 'router' | 'handler' |
-    'user.save' | 'platform.output' | 'response' | 'fail';
+    'user.save' | 'platform.output' | 'response' | 'fail' | string;
 
 export interface BaseAppConfig extends ExtensibleConfig {
     inputMap?: {[key: string]: string};
@@ -102,6 +102,28 @@ export class BaseApp extends Extensible {
         return this.$platform.get(name);
     }
 
+
+    /**
+     * Returns platform type names
+     * Example: ['Alexa', 'GoogleAssistant']
+     */
+    getPlatformTypes() {
+        return [ ...this.$platform.keys() ];
+    }
+
+    /**
+     * Returns platform app type names
+     * Example: ['AlexaSkill', 'GoogleAction']
+     */
+    getAppTypes() {
+        const appTypes: string[] = [];
+
+        this.$platform.forEach((platform: Platform) => {
+           appTypes.push(platform.getAppType());
+        });
+
+        return appTypes;
+    }
 
     /**
      * Emits webhook.init event.
@@ -283,10 +305,18 @@ export class BaseApp extends Extensible {
         });
     }
 
+    /**
+     * BaseApp install method. Nothing to do here
+     * @param extensible
+     */
     install(extensible: Extensible) {
 
     }
 
+    /**
+     * BaseApp uninstall method. Nothing to do here
+     * @param extensible
+     */
     uninstall(extensible: Extensible) {
 
     }

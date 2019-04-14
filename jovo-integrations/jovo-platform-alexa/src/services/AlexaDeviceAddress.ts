@@ -28,6 +28,7 @@ export class AlexaDeviceAddress {
 
         try {
             const response:any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
             if (response.httpStatus === 403) {
                 const apiError = new ApiError(response.data.message, response.data.code);
 
@@ -41,6 +42,14 @@ export class AlexaDeviceAddress {
 
                 if (response.data.message === 'Access to this resource cannot be requested.') {
                     apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
+                }
+
+                if (response.data.code === 'ACCESS_DENIED' && response.data.message === 'Access denied with reason: FORBIDDEN') {
+                    apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
+                }
+
+                if (response.data.code === 'ACCESS_DENIED' && response.data.message === 'Access denied with reason: ACCESS_NOT_REQUESTED') {
+                    apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
                 }
                 return Promise.reject(apiError);
             }

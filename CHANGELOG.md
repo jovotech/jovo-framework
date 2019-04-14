@@ -1,5 +1,115 @@
 # Jovo Framework Changelog
 
+## 2.2.1 (2019-04-08)
+
+#### :bug: Bug Fix
+* `jovo-framework` Fix unit testing FileDB initialization (issue #455)
+
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2.2.0 (2019-04-04)
+
+#### :rocket: New Feature
+* `jovo-framework` [#446](https://github.com/jovotech/jovo-framework/pull/446) DB save optimization only saves to db if changes were made  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#442](https://github.com/jovotech/jovo-framework/pull/442) Update addText to accept arbitrary SSML wrapping elements  ([@jnthnwn](https://github.com/jnthnwn))
+* `jovo-framework` [#451](https://github.com/jovotech/jovo-framework/pull/451) Adds updatedAt to databases  ([@KaanKC](https://github.com/KaanKC))
+
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` Improved Typescript compatibility (Examples)
+* `jovo-cms-googlesheets` [#450](https://github.com/jovotech/jovo-framework/pull/450) Add Unit Tests for GoogleSheetsCMS integration ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-framework` [#443](https://github.com/jovotech/jovo-framework/pull/443) Tests for db integrations  ([@KaanKC](https://github.com/KaanKC))
+
+
+
+#### Committers: 4
+- Jonathan Wan ([@jnthnwn](https://github.com/jnthnwn))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+jnthnwn
+## 2.1.5 (2019-03-27)
+
+#### :rocket: New Feature
+* `jovo-cms-airtable` [#432](https://github.com/jovotech/jovo-framework/pull/432) Adds Platform-specific Responses, CMS-Caching for Airtable Integration ([@rubenaeg](https://github.com/rubenaeg))
+
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` Fix session handling in Dialogflow contexts (issue #430)
+* `jovo-platform-alexa` Fix CanFulFillIntent response object (issue #438)
+
+
+#### Committers: 2
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2.1.4 (2019-03-22)
+
+#### :rocket: New Feature
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) :sparkles: CMS-Caching, Platform-Specific Responses ([@rubenaeg](https://github.com/rubenaeg))
+
+#### :bug: Bug Fix
+* [#428](https://github.com/jovotech/jovo-framework/pull/428) I18Next Tests ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-db-dynamodb` Fix mandatory config property
+* `jovo-framework` Fix Typescript compilation issues
+
+
+#### Committers: 1
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+
+
+## 2.1.3 (2019-03-14)
+
+#### :nail_care: Enhancement
+* `jovo-db-mysql` [#419](https://github.com/jovotech/jovo-framework/pull/419) Increased storage to MEDIUMTEXT  ([@dominik-meissner](https://github.com/dominik-meissner))
+* `all` Improve publish process for framework contributions
+
+#### Committers: 2
+- [@dominik-meissner](https://github.com/dominik-meissner)
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2.1.2 (2019-03-12)
+
+#### :rocket: New Feature
+* `jovo-cms-airtable` [#411](https://github.com/jovotech/jovo-framework/pull/411) ✨ Adds Airtable CMS Integration ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes lifespan of session context
+
+#### Committers: 2
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+
+## 2.1.1 (2019-03-11)
+
+
+:nail_care: Enhancement
+* `jovo-framework` [#414](https://github.com/jovotech/jovo-framework/pull/414) ♻️ GoogleSheetsCMS integration should reject JovoError instead of string ([@KaanKC](https://github.com/KaanKC))
+* `jovo-core` [#415](https://github.com/jovotech/jovo-framework/pull/415) 🐛 Fixes: JovoError doesn't print module ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` [#410](https://github.com/jovotech/jovo-framework/pull/410) 🐛 Fixes Google Assistant handler merge #412  ([@kouz75](https://github.com/kouz75))
+* `jovo-platform-alexa` Fixes ContactAPI access token bug
+* `jovo-platform-googleassistant` Fixes lifespan of session context
+
+#### Committers: 3
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- scouzinier ([@kouz75](https://github.com/kouz75))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
 
 ## 2.1.0 (2019-03-05)
 

@@ -91,15 +91,11 @@ export interface Application {
     applicationId: string;
 }
 
-export enum ConfirmationStatus {
-    NONE = "NONE",
-    CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
-}
+export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
 
 export interface Slot {
     name: string;
-    confirmationStatus: string;
+    confirmationStatus?: ConfirmationStatus;
     value: string;
     source?: string;
 }
@@ -176,6 +172,12 @@ export class AlexaRequest implements JovoRequest {
     request?: Request;
 
     // JovoRequest implementation
+
+    getSessionId(): string | undefined {
+        if (this.session) {
+            return this.session.sessionId;
+        }
+    }
 
     getAccessToken() {
         return _get(this, 'context.System.user.accessToken');
@@ -653,7 +655,7 @@ export class AlexaRequest implements JovoRequest {
     getSpeedAccuracy(): number | undefined {
         return _get(this.getSpeedObject(), 'accuracyInMetersPerSecond');
     }
-    
+
     /**
      * Returns supported interfaces from device.
      * @public

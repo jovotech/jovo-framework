@@ -1,7 +1,0 @@
-{
-  "translation": {
-    "WELCOME": "Welcome",
-    "WELCOME_WITH_PARAMETER": "Welcome {{firstname}} {{lastname}}",
-    "WELCOME_ARRAY": ["Welcome", "Hello"]
-  }
-}

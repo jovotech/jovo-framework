@@ -37,36 +37,101 @@ Other parameters (like `id` or platform specific elements) can be found in the o
 
 Similar to [`intentMap`](./intents.md#intentmap './intents#intentmap'), there are cases where it might be valuable (due to naming conventions on different platforms or built-in input types) to map different input entities to one defined Jovo `inputName`. You can add this to the configuration section of your voice app:
 
+
 ```javascript
-// config.js file
-inputMap: {
-    'incomingInputName' : 'mappedInputName',
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    inputMap: {
+        'incomingInputName' : 'mappedInputName',
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    inputMap: {
+        'incomingInputName' : 'mappedInputName',
+    },
+
+    // ...
+
+};
 ```
 
 Example: You want to ask your users for their name and created a slot called `name` on the Amazon Developer Platform. However, on Dialogflow, you decided to use the pre-defined entity `given-name`. You can now use an inputMap to match incoming inputs from Alexa and Google.
 
+
 ```javascript
-// Map Dialogflow standard parameter given-name with name
-inputMap: {
-    'given-name' : 'name',
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    inputMap: {
+        'given-name' : 'name',
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    inputMap: {
+        'given-name' : 'name',
+    },
+
+    // ...
+
+};
 ```
 
 With this, you can use `name` to get the input with both Alexa and Google requests:
 
 ```javascript
-app.setHandler({
+// @language=javascript
 
-    // Other Intents and States
+// src/app.js
+
+app.setHandler({
 
     MyNameIsIntent() {
         this.tell('Hello ' + this.$inputs.name.value + '!');
     }
 
-    // Other Intents and States
+    // ...
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+
+    MyNameIsIntent() {
+        this.tell('Hello ' + this.$inputs.name.value + '!');
+    }
+
+    // ...
 });
 ```
+
+
 
 
 <!--[metadata]: {"description": "Learn how to deal with entities and slot values provided by your users.", "route": "routing/input"}-->

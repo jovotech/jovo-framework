@@ -4,13 +4,13 @@ import {Extensible, ExtensibleConfig} from "./../src/Extensible";
 import {ActionSet} from "../src";
 
 class Parent extends Extensible {
+    /**
+     * Dummy install implementation
+     */
     install() {
 
     }
 
-    uninstall() {
-
-    }
 }
 test('test Middleware class initialization', () => {
     const middleware = new Middleware('name', new Parent());
@@ -316,6 +316,11 @@ test('test try/catch in parallel', async (done) => {
 
 });
 
+/**
+ * Helper method
+ * Transforms setTimeout to a Promise object.
+ * @returns {Promise}
+ */
 function delay() {
     return new Promise(resolve => setTimeout(resolve, 250));
 }

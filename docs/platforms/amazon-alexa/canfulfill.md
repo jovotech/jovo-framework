@@ -1,6 +1,6 @@
 # CanFulfillIntentRequest
 
-Learn more about how to implement the `CanFulfillIntentRequest` feature in your Jovo project
+Learn more about how to implement the Alexa `CanFulfillIntentRequest` feature in your Jovo project.
 
 - [Introduction to CanFulfill](#introduction-to-canfulfill)
 - [Requirements](#requirements)
@@ -10,9 +10,9 @@ Learn more about how to implement the `CanFulfillIntentRequest` feature in your 
 
 ## Introduction to CanFulfill
 
-The name-free interaction allows Amazon to map user requests, which don't specify a skill and can't be handled by Alexa's built in features, to be mapped to andevelopers skill that can handle it.
+The name-free interaction allows Amazon to map user requests, which don't specify a skill and can't be handled by Alexa's built in features, to be mapped to a developer's skill that can handle it.
 
-For example the user might make the following request: **Alexa, play relaxing sounds with crickets**. Alexa's built in features can't handle the request so the system looks for third party skills to fulfill it.
+For example, the user might make the following request: **Alexa, play relaxing sounds with crickets**. Alexa's built-in features can't handle the request so the system looks for third party skills to fulfill it.
 
 The system will then send `CanFullIntentRequests` the skills it believes might be able to fulfill the request. According to the response to that requests (`yes`, `no` or `maybe`) your skill will receive an `IntentRequest` just as if it the skill was invoked my the customer directly.
 
@@ -20,7 +20,7 @@ The system will then send `CanFullIntentRequests` the skills it believes might b
 
 To enable the `CanFulfillIntentRequest` feature you have to enable the interface in your skill's information. You can do that either in the Alexa Developer Console in the `Interfaces` subcategory or you do it with the Jovo CLI.
 
-Simply open your `project.js` file and add the following to your `alexaSkill` object:
+Open your `project.js` file and add the following to your `alexaSkill` object:
 
 ```javascript
 alexaSkill: {
@@ -84,7 +84,7 @@ this.cannotFulfillRequest();
 this.mayFulfillRequest();
 ```
 
-It's recommended to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.
+It is recommended to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.
 
 <!--[metadata]: {"description": "Learn how to implement CanFulfillRequests in your Jovo project",
 "route": "amazon-alexa/canfulfill" 

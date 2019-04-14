@@ -244,7 +244,7 @@ export class AlexaSkill extends Jovo {
      * @return {boolean}
      */
     isGeoLocationPermissionGranted() {
-        return (this.$request! as AlexaRequest).isGeoLocationPermissionGranted();    
+        return (this.$request! as AlexaRequest).isGeoLocationPermissionGranted();
     }
 
     /**
@@ -252,7 +252,7 @@ export class AlexaSkill extends Jovo {
      * @return {Geolocation | undefined}
      */
     getGeoLocationObject(): Geolocation | undefined {
-        return (this.$request! as AlexaRequest).getGeoLocationObject();  
+        return (this.$request! as AlexaRequest).getGeoLocationObject();
     }
 
     /**
@@ -484,6 +484,16 @@ export class AlexaSkill extends Jovo {
      * @return {*}
      */
     getEndReason() {
+        return _get(this.$request, 'request.reason');
+    }
+
+    /**
+     * Returns reason code for an end of a session
+     *
+     * @public
+     * @return {*}
+     */
+    getError() {
         return _get(this.$request, 'request.reason');
     }
 

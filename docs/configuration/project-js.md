@@ -35,14 +35,16 @@ Category | Name | Description
 This is what the default `project.js` looks like:
 
 ```javascript
+// ------------------------------------------------------------------
+// JOVO PROJECT CONFIGURATION
+// ------------------------------------------------------------------
+
 {
 	alexaSkill: {
 		nlu: 'alexa',
 	},
 	googleAction: {
-		nlu: {
-			name: 'dialogflow',
-		}
+		nlu:  'dialogflow',
 	},
 	endpoint: '${JOVO_WEBHOOK_URL}',
 }

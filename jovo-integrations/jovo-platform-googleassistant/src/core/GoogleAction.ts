@@ -1,10 +1,13 @@
 import {BaseApp, Jovo, SpeechBuilder, Host} from "jovo-core";
 import _get = require('lodash.get');
+const _sample = require('lodash.sample');
 
 import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
+import {Context} from "jovo-platform-dialogflow/dist/src/core/DialogflowRequest";
 
+type reprompt = string | SpeechBuilder;
 
 export class GoogleAction extends Jovo {
     $user: GoogleActionUser;
@@ -76,9 +79,18 @@ export class GoogleAction extends Jovo {
      * @public
      * @param {string|SpeechBuilder} speech
      * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
+     * @param {reprompt[]} reprompts additional reprompts
      */
-    ask(speech: string | SpeechBuilder, reprompt: string | SpeechBuilder | string[]) {
+    ask(speech: string | SpeechBuilder | string[], reprompt: string | SpeechBuilder | string[], ...reprompts: reprompt[]) {
         delete this.$output.tell;
+
+        if (Array.isArray(speech)) {
+            speech = _sample(speech);
+        }
+
+        if (Array.isArray(reprompt)) {
+            reprompt = _sample(reprompt);
+        }
 
         if (!reprompt) {
             reprompt = speech;
@@ -86,8 +98,16 @@ export class GoogleAction extends Jovo {
 
         this.$output.ask = {
             speech: speech.toString(),
-            reprompt: Array.isArray(reprompt) ? reprompt : reprompt.toString(),
+            reprompt: reprompt.toString()
         };
+
+        if (reprompts) {
+            this.$output.ask.reprompt = [reprompt.toString()];
+            reprompts.forEach((repr: string | SpeechBuilder) => {
+                (this.$output.ask!.reprompt as string[]).push(repr.toString());
+            });
+        }
+
         return this;
     }
 
@@ -179,9 +199,40 @@ export class GoogleAction extends Jovo {
             _get(this.$originalRequest || this.$request, 'inputs[0].rawInputs[0].query');
     }
 
-
     isInSandbox() {
         return _get(this.$originalRequest || this.$request, 'isInSandbox', false);
+    }
+
+    /**
+     * Adds additional output context objects
+     * @param name
+     * @param parameters
+     * @param lifespanCount
+     */
+    addOutputContext(name: string, parameters: {[key:string]: any}, lifespanCount = 1) { // tslint:disable-line
+        if (!this.$output.Dialogflow) {
+            this.$output.Dialogflow = {};
+        }
+
+        if (!this.$output.Dialogflow.OutputContexts) {
+            this.$output.Dialogflow.OutputContexts = [];
+        }
+
+        this.$output.Dialogflow.OutputContexts.push({
+            name,
+            parameters,
+            lifespanCount
+        });
+    }
+
+    /**
+     * Returns output context for given name
+     * @param name
+     */
+    getOutputContext(name: string) {
+        return _get( this.$request, 'queryResult.outputContexts', []).find((context: Context) => {
+            return context.name.indexOf(`/contexts/${name}`) > -1;
+        });
     }
 
     /**
@@ -192,6 +243,5 @@ export class GoogleAction extends Jovo {
         // TODO
         // return _.isNumber(parseInt(this.getUserId()));
     }
-
 
 }

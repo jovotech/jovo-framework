@@ -12,6 +12,9 @@ Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
   * [KeyValue](#keyvalue)
   * [ObjectArray](#objectarray)
 * [Defining your own Sheet Type](#defining-your-own-sheet-type)
+* [Advanced Features](#advanced-features)
+  * [Caching](#caching)
+  * [Platform-specific Responses](#platform-specific-responses)
 
 
 ## Introduction
@@ -34,7 +37,19 @@ $ npm install --save jovo-cms-googlesheets
 Add it to your `app.js` file and register it with the `use` command:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { GoogleSheetsCMS } = require('jovo-cms-googlesheets');
+
+app.use(new GoogleSheetsCMS());
+
+// @language=typescript
+
+// src/app.ts
+
+import { GoogleSheetsCMS } from 'jovo-cms-googlesheets';
 
 app.use(new GoogleSheetsCMS());
 ```
@@ -42,20 +57,53 @@ app.use(new GoogleSheetsCMS());
 Next, add configurations like the `spreadsheetId` to your `config.js` file:
 
 ```javascript
-// config.js file
-cms: {
-    GoogleSheetsCMS: {
-        spreadsheetId: '<YourSpreadsheetId>',
-        access: '<public|private>',
-        sheets: [
-            {
-                name: '<sheetName>',
-                type: '<SheetType>',
-            },
-        ]
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: '<SheetType>',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: '<SheetType>',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
 ```
+
 Each sheet can be added as an object that includes both a `name` and a `type`. [Learn more about Sheet Types below](#default-sheet-types).
 
 
@@ -73,20 +121,53 @@ Public spreadsheets allow you to get started quickly whithout having to care abo
 For public spreadsheets, you need to add the following to your `config.js` file:
 
 ```javascript
-// config.js file
-cms: {
-    GoogleSheetsCMS: {
-        spreadsheetId: '<YourSpreadsheetId>',
-        access: 'public',
-        sheets: [
-            {
-                name: '<sheetName>',
-                type: '<SheetType>',
-                position: 1,
-            },
-        ]
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: 'public',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: '<SheetType>',
+                    position: 1,
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: 'public',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: '<SheetType>',
+                    position: 1,
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
 ```
 
 The additional information you need to add for public spreadsheets is the `position` of the sheet. It is the position of the tab the sheet is located in.
@@ -101,20 +182,53 @@ With private spreadsheets, you can control who has access to your content. This 
 For private spreadsheets, you need to add the following to your `config.js` file:
 
 ```javascript
-// config.js file
-cms: {
-    GoogleSheetsCMS: {
-        spreadsheetId: '<YourSpreadsheetId>',
-        access: 'private',
-        credentialsFile: './path/to/credentials.json',
-        sheets: [
-            {
-                name: 'responses',
-                type: 'Responses',
-            },
-        ]
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: 'private',
+            credentialsFile: './path/to/credentials.json',
+            sheets: [
+                {
+                    name: 'responses',
+                    type: 'Responses',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: 'private',
+            credentialsFile: './path/to/credentials.json',
+            sheets: [
+                {
+                    name: 'responses',
+                    type: 'Responses',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
 ```
 
 To make private spreadsheets work, you need to create a service account and security credentials. These can be downloaded as a JSON file and then referenced in the `credentialsFile` element (default is `./credentials.json`).
@@ -170,7 +284,61 @@ this.$cms.sheetName.key
 
 ### ObjectArray
 
-If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys
+If you define the sheet type as `ObjectArray`, you will receive an array of objects where each row is converted to an object with the first row of the spreadsheet specifying the keys.
+
+You can define the range (which columns to access) in your config:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            
+            // ...
+            
+            sheets: [
+                {
+                    name: '<YourSheetName>',
+                    type: 'ObjectArray',
+                    range: 'A:C',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            
+            // ...
+            
+            sheets: [
+                {
+                    name: '<YourSheetName>',
+                    type: 'ObjectArray',
+                    range: 'A:C',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+```
 
 Here's an example sheet:
 
@@ -217,21 +385,124 @@ app.use(
 You can then reference the sheet type by its name in the `config.js` file:
 
 ```javascript
-// config.js file
-cms: {
-    GoogleSheetsCMS: {
-        spreadsheetId: '<YourSpreadsheetId>',
-        access: '<public|private>',
-        sheets: [
-            {
-                name: '<sheetName>',
-                type: 'YourSheetType',
-            },
-        ]
-    }
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: 'YourSheetType',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: 'YourSheetType',
+                },
+            ]
+        }
+    },
+
+    // ...
+
+};
 ```
 
+## Advanced Features
+
+* [Caching](#caching)
+* [Platform-specific Responses](#platform-specific-responses)
+
+### Caching
+
+The content all sheets is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) sheets with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
+
+You can choose between disabling caching for all sheets, or just specific ones in your `config.js` file:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: 'YourSheetType',
+                },
+                caching: false,             // disable caching for this sheet
+            ],
+            caching: false,                 // disable caching for all sheets
+        }
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        GoogleSheetsCMS: {
+            spreadsheetId: '<YourSpreadsheetId>',
+            access: '<public|private>',
+            sheets: [
+                {
+                    name: '<sheetName>',
+                    type: 'YourSheetType',
+                },
+                caching: false,             // disable caching for this sheet
+            ],
+            caching: false,                 // disable caching for all sheets
+        }
+    },
+
+    // ...
+
+};
+```
+
+### Platform-specific Responses
+
+Since Jovo `v2.1.4` we support platform-specific responses for i18n, as well as for CMS. This allows you to have isolated output for a specified platform, without altering the default one.
+
+![Platform-specific Responses](../../img/platform-specific-responses-sheets.jpg "Platform-specific Responses")
+
+In this example, the value for `GOODBYE` will be overwritten, whenever a response is triggered by an Alexa-Skill. `WELCOME` remains the same for all platforms.
+If you don't want any output for a specific platform, use `/`.
 
 
 <!--[metadata]: {"description": "Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.",

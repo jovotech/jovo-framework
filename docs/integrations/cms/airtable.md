@@ -9,6 +9,9 @@ Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
   * [Responses](#responses)
   * [KeyValue](#keyvalue)
   * [ObjectArray](#objectarray)
+* [Advanced Features](#advanced-features)
+  * [Caching](#caching)
+  * [Platform-specific Responses](#platform-specific-responses)
 
 ## Introduction
 
@@ -33,9 +36,19 @@ $ npm install --save jovo-cms-airtable
 Add it to your `app.js` file and register it with the `use` command:
 
 ```javascript
+// @language=javascript
+
 // src/app.js
 
 const { AirtableCMS } = require('jovo-cms-airtable');
+
+app.use( new AirtableCMS());
+
+// @language=typescript
+
+// src/app.ts
+
+import { AirtableCMS } from 'jovo-cms-airtable';
 
 app.use( new AirtableCMS());
 ```
@@ -43,30 +56,71 @@ app.use( new AirtableCMS());
 Next, add the necessary configurations to your `config.js` file:
 
 ```javascript
+// @language=javascript
+
 // src/config.js
 
-cms: {
-    AirtableCMS: {
-        apiKey: '<api-key>',
-        baseId: '<base-id>',
-        tables: [
-            {
-                name: '<name>',
-                table: '<tableName>',
-                type: '<TableType>',
-                selectOptions: {
-                    fields: ['UserId', 'Name', 'Location']
-                    sort: [
-                        {
-                            field: "UserId",
-                            direction: "desc"
-                        }
-                    ],
-                }
-            },
-        ]
+module.exports = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        fields: ['UserId', 'Name', 'Location']
+                        sort: [
+                            {
+                                field: "UserId",
+                                direction: "desc"
+                            }
+                        ],
+                    }
+                },
+            ]
+        }
     }
-}
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        fields: ['UserId', 'Name', 'Location']
+                        sort: [
+                            {
+                                field: "UserId",
+                                direction: "desc"
+                            }
+                        ],
+                    }
+                },
+            ]
+        }
+    }
+
+    // ...
+
+};
 ```
 
 Name | Description | Value | Required
@@ -165,6 +219,86 @@ Access the array using:
 ```javascript
 this.$cms.name
 ```
+
+## Advanced Features
+
+* [Caching](#caching)
+* [Platform-specific Responses](#platform-specific-responses)
+
+### Caching
+
+The content all tables is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) tables with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
+
+You can choose between disabling caching for all tables, or just specific ones in your `config.js` file:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        // ...
+                    },
+                    caching: false,         // disable caching for this table
+                },
+            ],
+            caching: false,                 // disable caching for all table
+        }
+    }
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    cms: {
+        AirtableCMS: {
+            apiKey: '<api-key>',
+            baseId: '<base-id>',
+            tables: [
+                {
+                    name: '<name>',
+                    table: '<tableName>',
+                    type: '<TableType>',
+                    selectOptions: {
+                        // ...
+                    },
+                    caching: false,         // disable caching for this table
+                },
+            ],
+            caching: false,                 // disable caching for all table
+        }
+    }
+
+    // ...
+
+};
+```
+
+### Platform-specific Responses
+
+Since Jovo `v2.1.4` we support platform-specific responses for i18n, as well as for CMS. This allows you to have isolated output for a specified platform, without altering the default one.
+
+![Platform-specific Responses](../../img/platform-specific-responses-air.jpg "Platform-specific Responses")
+
+In this example, the value for `GOODBYE` will be overwritten, whenever a response is triggered by an Alexa-Skill. `WELCOME` remains the same for all platforms.
+If you don't want any output for a specific platform, use `/`.
 
 <!--[metadata]: {"description": "Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.",
 "route": "cms/airtable" }-->

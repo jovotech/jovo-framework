@@ -25,18 +25,22 @@ But first you have to enable the `GameEngine` interface either in your `project.
 To do it with the Jovo CLI simply add the interface to the `alexaSkill` object in your `project.js`:
 
 ```javascript
-alexaSkill: {
-  manifest: {
-    apis: {
-      custom: {
-        interface: [
-          {
-            type: 'GAME_ENGINE',
-          }
-        ],
+module.exports = {
+  alexaSkill: {
+    manifest: {
+      apis: {
+        custom: {
+          interface: [
+            {
+              type: 'GAME_ENGINE',
+            }
+          ],
+        },
       },
     },
   },
+
+  // ...
 }
 ```
 
@@ -112,9 +116,17 @@ let testPattern = {
 #### Code Example for Pattern Object
 
 To create a `PatternRecognizer` you need the `PatternRecognizerBuilder`:
+
 ```javascript
+// @language=javascript
+
 let patternRecognizer = this.$alexaSkill.$gameEngine.getPatternRecognizerBuilder('recognizerName');
+
+// @language=typescript
+
+let patternRecognizer = this.$alexaSkill!.$gameEngine.getPatternRecognizerBuilder('recognizerName');
 ```
+
 With the builder you can use the methods described above:
 ```javascript
 let patternOne = {
@@ -147,10 +159,18 @@ Name | Description | Method | Value | Required
 #### Code Example for Deviation Recognizer
 
 To create a `DeviationRecognizer` you need the `DeviationRecognizerBuilder`:
+
 ```javascript
+// @language=javascript
+
 let deviationRecognizer = this.$alexaSkill.$gameEngine.getDeviationRecognizerBuilder('recognizerName');
+
+// @language=typescript
+
+let deviationRecognizer = this.$alexaSkill!.$gameEngine.getDeviationRecognizerBuilder('recognizerName');
 ```
 With the builder you can use the method described above:
+
 ```javascript
 deviationRecognizer.recognizer('myPatternRecognizer');
 ```
@@ -172,13 +192,24 @@ Name | Description | Method | Value | Required
 `recognizer` | Name of the recognizer where the pattern was defined | `recognizer(nameOfPatternRecognizer)` | `String` | yes
 `completion` | The point from which on the recognizer is `true` | `completion(completion)` | `Number` (e.g `50` = `50%`) | yes
 
+
 #### Code Example for Progress Recognizer
 
 To create a `ProgressRecognizer` you need the `ProgressRecognizerBuilder`:
+
 ```javascript
+// @language=javascript
+
 let progressRecognizer = this.$alexaSkill.$gameEngine.getProgressRecognizerBuilder('recognizerName');
+
+// @language=typescript
+
+let progressRecognizer = this.$alexaSkill!.$gameEngine.getProgressRecognizerBuilder('recognizerName');
 ```
+
+
 With the builder you can use the methods described above:
+
 ```javascript
 progressRecognizer
   .recognizer('myPatternRecognizer')
@@ -211,10 +242,19 @@ Name | Description | Method | Value | Required
 ### Code Example for Events
 
 To create an `Event` you need the `EventBuilder`:
+
 ```javascript
+// @language=javascript
+
 const eventOne = this.$alexaSkill.$gameEngine.getEventsBuilder('eventName');
+
+// @language=typescript
+
+const eventOne = this.$alexaSkill!.$gameEngine.getEventsBuilder('eventName');
 ```
+
 With the builder you can use the methods described above:
+
 ```javascript
 eventOne
   .meets(['progressRecognizerName'])
@@ -275,7 +315,18 @@ Name | Description | Value
 `events` | Events use `recognizers` to determine whether your skill should be notified or not | `Object` min: 1, max: 32
 
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$gameEngine.startInputHandler(
+  25000,
+  ['one', 'two', 'three'],
+  [patternRecognizerOne, patternRecognizerTwo, deviationRecognizer],
+  [eventOne, eventTwo]
+);
+
+// @language=typescript
+
+this.$alexaSkill!.$gameEngine.startInputHandler(
   25000,
   ['one', 'two', 'three'],
   [patternRecognizerOne, patternRecognizerTwo, deviationRecognizer],
@@ -286,8 +337,15 @@ this.$alexaSkill.$gameEngine.startInputHandler(
 ## StopInputHandler
 
 You can at any point in time stop receiving Echo Button events using by stopping the *Input Handler*:
+
 ```javascript
+// @language=javascript
+
 this.$alexaSkill.$gameEngine.stopInputHandler()
+
+// @language=typescript
+
+this.$alexaSkill!.$gameEngine.stopInputHandler()
 ```
 
 ## Input Handler Events
@@ -323,9 +381,10 @@ After you started the *Input Handler* your skill will be able to receive `InputH
 }
 ```
 Jovo maps these requests to the built-in `ON_GAME_ENGINE_INPUT_HANDLER_EVENT` intent, where you can access the events sent with the request:
+
 ```javascript
 ON_GAME_ENGINE_INPUT_HANDLER_EVENT() {
-  const events = this.request().getEvents();
+  const events = this.$request.getEvents();
   // ...
 },
 ```

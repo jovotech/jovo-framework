@@ -35,6 +35,10 @@ interface LogEvent {
 }
 
 interface Appender {
+    /**
+     * Write method for the LogEvent object
+     * @param logEvent
+     */
     write(logEvent: LogEvent): void;
     ignoreFormatting: boolean;
     logLevel: LogLevel;

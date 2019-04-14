@@ -1,0 +1,19 @@
+{
+  "name": "jovo-examples-alexa-device-address-api",
+  "version": "2.2.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^2.2.0",
+    "jovo-platform-alexa": "^2.2.0"
+  }
+}

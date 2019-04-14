@@ -65,7 +65,6 @@ export class App extends BaseApp {
         }
 
         const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js' );
-
         if (fs.existsSync(pathToConfig)) {
             const fileConfig = require(pathToConfig) || {};
             this.config = _merge(fileConfig, this.config);
@@ -255,9 +254,17 @@ export class App extends BaseApp {
 
     async handle(host: Host) {
         if (host.headers && host.headers['jovo-test']) {
+            let fileDb2Path = './../db/tests';
+            if (this.$db &&
+                this.$db.config &&
+                (this.$db.config! as any).pathToFile) { // tslint:disable-line
+                const dbPath = path.parse((this.$db.config! as any).pathToFile); // tslint:disable-line
+                fileDb2Path = dbPath.dir + '/tests';
+            }
             this.use(new FileDb2({
-                path: './../db/tests'
+                path: fileDb2Path,
             }));
+
         }
         await super.handle(host);
     }

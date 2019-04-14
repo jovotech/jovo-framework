@@ -14,11 +14,31 @@
 First, add the following export to your root `index.js`. If there's an existing export there, typically for AWS Lambda, remove it. This function is what gets called by the Azure Functions language worker process when an HTTP request comes in.
 
 ```javascript
+// @language=javascript
+
+// src/index.js
+
+'use strict';
+
 const { AzureFunction } = require('jovo-framework');
+const { app } = require('./app/app.js');
 
 module.exports = async (context, req) => {
     await app.handle(new AzureFunction(context, req));
 };
+
+// @language=typescript
+
+// src/index.ts
+
+import { AzureFunction } from 'jovo-framework';
+import { app } from './app';
+
+const azure = async (context: any, req: any) => {
+    await app.handle(new AzureFunction(context, req));
+};
+
+export { azure };
 ```
 
 Second, create a new file called `host.json` in the same directory as your `index.js` (probably `src`), with the following contents. This indicates to Azure Functions that this is a valid function app and that the [much better v2 runtime](https://azure.microsoft.com/en-us/blog/introducing-azure-functions-2-0/) should be used.
@@ -80,8 +100,9 @@ That's it! When initially setting up your function app in the Azure Portal befor
 
 ## Data Persistence
 
-The [FileDB](../../integrations/databases/file-db.md '../databases/file-db') database integration is strongly discouraged on Azure Functions. It also doesn't work at all when you use [Run From Package](https://docs.microsoft.com/en-us/azure/azure-functions/run-functions-from-deployment-package), which makes the file system read-only (and greatly speeds up the deployment and cold start of your function). It is encouraged to switch to [DynamoDB](../../integrations/databases/dynamodb.md '../databases/dynamodb') or to simply not use any database integration at all. You can do the latter by setting `user: { implicitSave: false }` on your Jovo config object.
+The [FileDB](../../integrations/databases/file-db.md '../databases/file-db') database integration is strongly discouraged on Azure Functions. It also doesn't work at all when you use [Run From Package](https://docs.microsoft.com/en-us/azure/azure-functions/run-functions-from-deployment-package), which makes the file system read-only (and greatly speeds up the deployment and cold start of your function). 
 
-[Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) would be the ideal database integration, but no one's written one for it yet. Contributions appreciated!
+It is encouraged to switch to [Azure CosmosDB](../../integrations/databases/cosmosdb.md '../databases/cosmosdb') or to simply not use any database integration at all. You can do the latter by setting `user: { implicitSave: false }` on your Jovo config object.
+
 
 <!--[metadata]: {"description": "Deploy your Alexa Skills and Google Actions on Azure Functions with the Jovo Framework", "route": "hosting/azure-functions"}-->

@@ -40,7 +40,7 @@ export interface Plugin {
      * Is called when the parent object tries to uninstall the plugin
      * @param parent
      */
-    uninstall(parent?: any): void; // tslint:disable-line
+    uninstall?(parent?: any): void; // tslint:disable-line
 }
 
 export interface PluginConfig {
@@ -89,7 +89,7 @@ export interface HandleRequest {
 // specialized plugins
 export interface Db extends Plugin {
     needsWriteFileAccess: boolean;
-    save(primaryKey: string, key: string, data: any): Promise<any>; // tslint:disable-line
+    save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<any>; // tslint:disable-line
     load(primaryKey: string): Promise<any>; // tslint:disable-line
     delete(primaryKey: string): Promise<any>; // tslint:disable-line
 }
@@ -97,7 +97,17 @@ export interface Db extends Plugin {
 export interface Platform extends Plugin {
     requestBuilder: RequestBuilder;
     responseBuilder: ResponseBuilder;
+
+    /**
+     * Returns the specific TestSuite implementation for this platform
+     */
     makeTestSuite(): TestSuite;
+
+    /**
+     * Returns app type of platform.
+     * E.g. AlexaSkill, GoogleAction
+     */
+    getAppType(): string;
 }
 
 export interface PlatformConfig extends ExtensibleConfig, PluginConfig {
@@ -368,6 +378,11 @@ export interface JovoRequest {
      * @param {Inputs} inputs
      */
     setInputs(inputs: Inputs): this;
+
+    /**
+     * Return session id
+     */
+    getSessionId(): string | undefined;
 }
 
 export interface Input {

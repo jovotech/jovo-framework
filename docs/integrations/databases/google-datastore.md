@@ -23,7 +23,20 @@ $ npm install --save jovo-db-datastore
 Google Cloud Datastore can be enabled in the `src/app.js` file like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { DatastoreDb } = require('jovo-db-datastore');
+
+// Enable DB after app initialization
+app.use(new DatastoreDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { DatastoreDb } from 'jovo-db-datastore';
 
 // Enable DB after app initialization
 app.use(new DatastoreDb());
@@ -32,14 +45,38 @@ app.use(new DatastoreDb());
 In your `config.js` file, you can set the `db` configuration like this:
 
 ```javascript
-// config.js file
-db: {
-    DatastoreDb: {
-        entity: 'yourEntityName',
-    }
-}
-```
+// @language=javascript
 
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DatastoreDb: {
+            entity: 'yourEntityName',
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DatastoreDb: {
+            entity: 'yourEntityName',
+        },
+    },
+
+    // ...
+
+};
+```
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Datastore.",

@@ -6,8 +6,8 @@ import _set = require('lodash.set');
 import _merge = require('lodash.merge');
 
 interface Config extends PluginConfig {
-    pathToFile: string;
-    primaryKeyColumn: string;
+    pathToFile?: string;
+    primaryKeyColumn?: string;
 }
 
 export class FileDb implements Db {
@@ -25,20 +25,20 @@ export class FileDb implements Db {
     }
 
     install(app: BaseApp) {
-        const pathToFile: string = this.config.pathToFile;
+        const pathToFile = this.config.pathToFile;
         FileDb.validatePathToFile(this.config);
 
         _set(this, 'config.pathToFile', pathToFile);
         // create file
         try {
-            if (!fs.existsSync(path.dirname(pathToFile))) {
-                FileDb.mkDirByPathSync(path.dirname(pathToFile), false);
+            if (!fs.existsSync(path.dirname(pathToFile!))) {
+                FileDb.mkDirByPathSync(path.dirname(pathToFile!), false);
             }
-            if (!fs.existsSync(pathToFile)) {
-                fs.writeFileSync(pathToFile, '[]');
+            if (!fs.existsSync(pathToFile!)) {
+                fs.writeFileSync(pathToFile!, '[]');
                 Log.info(Log.header('INFO: Local FileDb', 'db-filedb'));
 
-                Log.info(`${path.resolve(pathToFile)} created!`);
+                Log.info(`${path.resolve(pathToFile!)} created!`);
                 Log.info();
 
                 Log.info('More Info: >> https://www.jovo.tech/docs/databases/file-db');
@@ -57,83 +57,79 @@ export class FileDb implements Db {
     uninstall(app: BaseApp) {
 
     }
+
+    errorHandling() {
+        if (!fs.existsSync(this.config.pathToFile!)) {
+            throw new JovoError(
+                `File db ${this.config.pathToFile} does not exist.`,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-filedb',
+                undefined,
+                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`
+            );
+        }
+    }
+
     /**
      * Returns object for given primaryKey
      * @param {string} primaryKey
      * @return {Promise<any>}
      */
     async load(primaryKey: string) {
-        if (!fs.existsSync(this.config.pathToFile)) {
-            throw new JovoError(
-                `File db ${this.config.pathToFile} does not exist.`,
-                ErrorCode.ERR_PLUGIN,
-                'jovo-db-filedb',
-                undefined,
-                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
-        }
+        this.errorHandling();
+
         Log.verbose(`Loading data from: ${this.config.pathToFile}`);
-        const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
+        const data: any = await this.readFile(this.config.pathToFile!); // tslint:disable-line
         const users = data.length > 0 ? JSON.parse(data) : [];
         const userData = users.find((o:any) => { // tslint:disable-line
-            return o[this.config.primaryKeyColumn] === primaryKey;
+            return o[this.config.primaryKeyColumn!] === primaryKey;
         });
 
         return Promise.resolve(userData);
     }
 
-    async save(primaryKey: string, key: string, data: any) { // tslint:disable-line
-        if (!fs.existsSync(this.config.pathToFile)) {
-            throw new JovoError(
-                `File db ${this.config.pathToFile} does not exist.`,
-                ErrorCode.ERR_PLUGIN,
-                'jovo-db-filedb',
-                undefined,
-                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
-        }
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
+        this.errorHandling();
 
-        const oldData: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
+        const oldData: any = await this.readFile(this.config.pathToFile!); // tslint:disable-line
         const users = oldData.length > 0 ? JSON.parse(oldData) : [];
 
         // find data for user with this primaryKey
         const userData = users.find((o:any) => { // tslint:disable-line
-            return o[this.config.primaryKeyColumn] === primaryKey;
+            return o[this.config.primaryKeyColumn!] === primaryKey;
         });
 
         if(userData) {
             _set(userData, key, data);
+            _set(userData, 'updatedAt', updatedAt);
         } else {
-            const newData: any = {}; // tslint:disable-line
-            newData[this.config.primaryKeyColumn] = primaryKey;
-            _set(newData, key, data);
+            const newData = {
+                [this.config.primaryKeyColumn!]: primaryKey,
+                [key]: data,
+                updatedAt
+            };
             users.push(newData);
         }
         Log.verbose(`Saving data to: ${this.config.pathToFile}`);
 
-        return this.saveFile(this.config.pathToFile, users);
+        return await this.saveFile(this.config.pathToFile!, users);
     }
 
     async delete(primaryKey: string) {
-        if (!fs.existsSync(this.config.pathToFile)) {
-            throw new JovoError(
-                `File db ${this.config.pathToFile} does not exist.`,
-                ErrorCode.ERR_PLUGIN,
-                'jovo-db-filedb',
-                undefined,
-                `Restart the Jovo app. ${this.config.pathToFile} will be created automatically.`);
-        }
+        this.errorHandling();
 
-        const data: any = await this.readFile(this.config.pathToFile); // tslint:disable-line
+        const data: any = await this.readFile(this.config.pathToFile!); // tslint:disable-line
         let users = data.length > 0 ? JSON.parse(data) : [];
         let rowsAffected = 0;
         for (let i = 0; i < users.length; i++) {
-            if (users[i][this.config.primaryKeyColumn] === primaryKey) {
+            if (users[i][this.config.primaryKeyColumn!] === primaryKey) {
                 delete users[i];
                 rowsAffected++;
             }
         }
         users = users.filter((n:object) => n); // remove null
 
-        await this.saveFile(this.config.pathToFile, users);
+        await this.saveFile(this.config.pathToFile!, users);
         return Promise.resolve(rowsAffected);
     }
 

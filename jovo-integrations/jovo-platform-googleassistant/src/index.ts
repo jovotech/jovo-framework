@@ -9,6 +9,8 @@ export { CarouselBrowse } from './response/CarouselBrowse';
 export { Table } from './response/Table';
 export { List } from './response/List';
 export { NotificationObject, NotificationPlugin } from './modules/Notification';
+export { GoogleActionSpeechBuilder } from './core/GoogleActionSpeechBuilder';
+
 import {Device} from "./modules/AskFor";
 import {BasicCard} from "./response/BasicCard";
 import {Carousel} from "./response/Carousel";

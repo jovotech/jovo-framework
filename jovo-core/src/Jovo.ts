@@ -4,6 +4,7 @@ import {SessionConstants} from "./enums";
 import {SpeechBuilder} from "./SpeechBuilder";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+const _sample = require('lodash.sample');
 
 import {
     Host,
@@ -334,9 +335,13 @@ export abstract class Jovo extends EventEmitter {
      * Responds with the given text and ends session
      * Transforms plaintext to SSML
      * @public
-     * @param {string|SpeechBuilder} speech Plaintext or SSML
+     * @param {string|SpeechBuilder|string[]} speech Plaintext or SSML
      */
-    tell(speech: string | SpeechBuilder): Jovo {
+    tell(speech: string | SpeechBuilder | string[]): Jovo {
+        if (Array.isArray(speech)) {
+            speech = _sample(speech);
+        }
+
         delete this.$output.ask;
         this.$output.tell = {
             speech: speech.toString()
@@ -353,8 +358,16 @@ export abstract class Jovo extends EventEmitter {
      * @param {string|SpeechBuilder} speech
      * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
      */
-    ask(speech: string | SpeechBuilder, reprompt?: string | SpeechBuilder | string[]) {
+    ask(speech: string | SpeechBuilder | string[], reprompt?: string | SpeechBuilder | string[]) {
         delete this.$output.tell;
+
+        if (Array.isArray(speech)) {
+            speech = _sample(speech);
+        }
+
+        if (Array.isArray(reprompt)) {
+            reprompt = _sample(reprompt);
+        }
 
         if (!reprompt) {
             reprompt = speech;

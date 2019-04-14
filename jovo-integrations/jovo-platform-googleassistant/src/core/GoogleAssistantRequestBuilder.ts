@@ -11,12 +11,12 @@ const samples: {[key: string]: string} = {
 export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActionRequest> {
     type = 'GoogleAction';
 
-    launch(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    launch(json?: object): Promise<GoogleActionRequest> { //tslint:disable-line
         return this.launchRequest(json);
     }
-    async intent(json: any): Promise<GoogleActionRequest>; //tslint:disable-line
-    async intent(name: string, inputs?: any): Promise<GoogleActionRequest>; //tslint:disable-line
-    async intent(obj: any, inputs?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async intent(json?: object): Promise<GoogleActionRequest>; //tslint:disable-line
+    async intent(name?: string, inputs?: any): Promise<GoogleActionRequest>; //tslint:disable-line
+    async intent(obj?: any, inputs?: any): Promise<GoogleActionRequest> { //tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
 
@@ -26,7 +26,7 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
         }
     }
 
-    async launchRequest(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async launchRequest(json?: object): Promise<GoogleActionRequest> { //tslint:disable-line
         if (json) {
             return GoogleActionRequest.fromJSON(json);
         } else {
@@ -35,7 +35,7 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
             return GoogleActionRequest.fromJSON(JSON.parse(request));
         }
     }
-    async intentRequest(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async intentRequest(json?: object): Promise<GoogleActionRequest> { //tslint:disable-line
         if (json) {
             return GoogleActionRequest.fromJSON(json);
         } else {
@@ -45,7 +45,7 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
         }
     }
 
-    async rawRequest(json: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async rawRequest(json: object): Promise<GoogleActionRequest> { //tslint:disable-line
         return GoogleActionRequest.fromJSON(json);
     }
 
@@ -55,7 +55,7 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
     }
 
     // TODO:
-    async audioPlayerRequest(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async audioPlayerRequest(json?: object): Promise<GoogleActionRequest> { //tslint:disable-line
         if (json) {
             return GoogleActionRequest.fromJSON(json);
         } else {
@@ -66,7 +66,7 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<GoogleActio
     }
 
     // TODO:
-    async end(json?: any): Promise<GoogleActionRequest> { //tslint:disable-line
+    async end(json?: object): Promise<GoogleActionRequest> { //tslint:disable-line
         if (json) {
             return GoogleActionRequest.fromJSON(json);
         } else {

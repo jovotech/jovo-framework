@@ -7,7 +7,7 @@ import * as crypto from "crypto";
 import * as util from "util";
 import * as path from 'path';
 import {TestSuite} from "./TestSuite";
-import {JovoRequest, JovoResponse, SessionData} from "./Interfaces";
+import {Data, JovoRequest, JovoResponse, SessionData} from "./Interfaces";
 import {RequestOptions} from "http";
 
 const fsunlink = util.promisify(fs.unlink);
@@ -27,7 +27,10 @@ export class Conversation {
     testSuite: TestSuite;
     sessionData: SessionData = {};
 
-    $user = {
+    $user: {
+        $data: Data,
+        $metaData: Data
+    } = {
         $data: {},
         $metaData: {},
     };
@@ -59,9 +62,12 @@ export class Conversation {
 
     }
 
+    /**
+     * Sets userid, timestamp and locale to every request.
+     * @param {JovoRequest} req
+     */
     applyToRequest(req: JovoRequest): void {
         req.setUserId(this.config.userId || randomUserId());
-        req.setTimestamp(new Date().toISOString());
         if (this.config.locale) {
             req.setLocale(this.config.locale);
         }

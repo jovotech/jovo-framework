@@ -20,12 +20,12 @@ const samples: {[key: string]: string} = {
 export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
      type = 'AlexaSkill';
 
-    async launch(json?: any): Promise<AlexaRequest> { // tslint:disable-line
+    async launch(json?: object): Promise<AlexaRequest> { // tslint:disable-line
         return await this.launchRequest(json);
     }
-    async intent(json: any): Promise<AlexaRequest>; // tslint:disable-line
-    async intent(name: string, inputs?: any): Promise<AlexaRequest>; // tslint:disable-line
-    async intent(obj: any, inputs?: any): Promise<AlexaRequest> { // tslint:disable-line
+    async intent(json?: object): Promise<AlexaRequest>; // tslint:disable-line
+    async intent(name?: string, inputs?: any): Promise<AlexaRequest>; // tslint:disable-line
+    async intent(obj?: any, inputs?: any): Promise<AlexaRequest> { // tslint:disable-line
         if (typeof obj === 'string') {
             const req = await this.intentRequest();
             req.setIntentName(obj);
@@ -42,26 +42,26 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
         }
     }
 
-    async launchRequest(json?: any): Promise<AlexaRequest>  {  //tslint:disable-line
+    async launchRequest(json?: object): Promise<AlexaRequest>  {  //tslint:disable-line
         if (json) {
             return AlexaRequest.fromJSON(json);
         } else {
             // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
             const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
-    async intentRequest(json?: any): Promise<AlexaRequest> { // tslint:disable-line
+    async intentRequest(json?: object): Promise<AlexaRequest> { // tslint:disable-line
         if (json) {
             return AlexaRequest.fromJSON(json);
         } else {
             // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
             const request = JSON.stringify(require(getJsonFilePath('IntentRequest1')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
 
-    async rawRequest(json: any) { // tslint:disable-line
+    async rawRequest(json: object) { // tslint:disable-line
         return AlexaRequest.fromJSON(json);
     }
 
@@ -69,12 +69,12 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
         const request = JSON.stringify(require(getJsonFilePath(key)));
         return AlexaRequest.fromJSON(JSON.parse(request));
     }
-    async audioPlayerRequest(json?: any) { // tslint:disable-line
+    async audioPlayerRequest(json?: object) { // tslint:disable-line
         if (json) {
             return AlexaRequest.fromJSON(json);
         } else {
             const request = JSON.stringify(require(getJsonFilePath('AudioPlayer.PlaybackStarted')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
     /**
@@ -87,7 +87,7 @@ export class AlexaRequestBuilder implements RequestBuilder<AlexaRequest> {
             return AlexaRequest.fromJSON(json);
         } else {
             const request = JSON.stringify(require(getJsonFilePath('SessionEndedRequest')));
-            return AlexaRequest.fromJSON(JSON.parse(request));
+            return AlexaRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
         }
     }
 }

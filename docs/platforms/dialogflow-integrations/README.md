@@ -25,9 +25,24 @@ This way, you can extend Jovo to build conversational apps beyond [Alexa](../ama
 To enable a Dialogflow integration in your code, import the `jovo-platform-dialogflow` package and then register the integrations with the `app.use` method:
 
 ```js
+// @language=javascript
+
 // src/app.js
 
 const { Dialogflow, FacebookMessenger, Slack } = require('jovo-platform-dialogflow');
+
+app.use(
+    new Dialogflow().use(
+        new Slack(),
+        new FacebookMessenger()
+    )
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { Dialogflow, FacebookMessenger, Slack } from 'jovo-platform-dialogflow';
 
 app.use(
     new Dialogflow().use(
@@ -74,12 +89,20 @@ For platform-specific output, you can add custom payload ([learn more below](#cu
 To extend the responses with platform-specific output, you can add [custom payloads](https://dialogflow.com/docs/intents/rich-messages#custom_payload) to the Dialogflow response:
 
 ```js
+// @language=javascript
+
 this.$dialogflowAgent.setCustomPayload(platform, payload)
+
+// @language=typescript
+
+this.$dialogflowAgent!.setCustomPayload(platform: string, payload: object)
 ```
 
 You can find the right attributes to pass to the method in the [official Dialogflow docs](https://dialogflow.com/docs/intents/rich-messages#custom_payload). For example, you can add [Facebook Messenger Quick Replies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies) like this:
 
 ```js
+// @language=javascript
+
 // src/app.js
 
 app.setHandler({
@@ -107,7 +130,40 @@ app.setHandler({
       this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
    },
 
-   // Other Intents
+   // ...
+
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+
+   HelloWorldIntent() {
+      this.$dialogflowAgent!.setCustomPayload('facebook', {
+         "quick_replies": [
+               {
+                  "content_type": "text",
+                  "title": "Joe",
+                  "payload": "Joe",
+               },
+               {
+                  "content_type": "text",
+                  "title": "Samantha",
+                  "payload": "Samantha",
+               },
+               {
+                  "content_type": "text",
+                  "title": "Chris",
+                  "payload": "Chris",
+               }
+         ]
+      });
+      this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+   },
+
+   // ...
 
 });
 ```

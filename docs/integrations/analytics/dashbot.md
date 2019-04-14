@@ -59,29 +59,69 @@ $ npm install --save jovo-analytics-dashbot
 Enable the plugin like this:
 
 ```javascript
-// app.js file
+// @language=javascript
+
+// src/app.js
 
 const { DashbotAlexa, DashbotGoogleAssistant } = require('jovo-analytics-dashbot');
 
 app.use(
     new DashbotAlexa(),
     new DashbotGoogleAssistant()
-)
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { DashbotAlexa, DashbotGoogleAssistant } from 'jovo-analytics-dashbot';
+
+app.use(
+    new DashbotAlexa(),
+    new DashbotGoogleAssistant()
+);
 ```
 
 Add configurations like this:
 
 ```javascript
-// config.js file
+// @language=javascript
 
-analytics: {
-    DashbotAlexa: {
-        key: '<key>',
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        DashbotAlexa: {
+            key: '<key>',
+        },
+        DashbotGoogleAssistant: {
+            key: '<key>',
+        },
     },
-    DashbotGoogleAssistant: {
-        key: '<key>',
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        DashbotAlexa: {
+            key: '<key>',
+        },
+        DashbotGoogleAssistant: {
+            key: '<key>',
+        },
     },
-}
+
+    // ...
+
+};
 ```
 
 ### Test Dashbot

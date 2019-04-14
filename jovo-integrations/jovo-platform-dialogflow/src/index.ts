@@ -8,6 +8,7 @@ export { DialogflowRequest } from "./core/DialogflowRequest";
 export { DialogflowRequestBuilder } from "./core/DialogflowRequestBuilder";
 export { DialogflowTestSuite } from './core/Interfaces';
 import {DialogflowAgent} from "./DialogflowAgent";
+import {Context} from "./core/DialogflowRequest";
 
 export { FacebookMessenger } from './integrations/FacebookMessenger/FacebookMessenger';
 export { Slack } from './integrations/Slack/Slack';
@@ -27,9 +28,12 @@ declare module 'jovo-core/dist/src/Jovo' {
 
 
 declare module 'jovo-core/dist/src/Interfaces' {
+
     interface Output {
         Dialogflow: {
-                Payload: object;
+            Payload?: object;
+            OutputContexts?: Context[];
         };
+
     }
 }

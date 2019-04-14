@@ -1,7 +1,7 @@
-import {Db, BaseApp, PluginConfig} from 'jovo-core';
+import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 export interface Config extends PluginConfig {
     uri?: string;
@@ -19,6 +19,7 @@ export class MongoDb implements Db {
     };
     needsWriteFileAccess = false;
     isCreating = false;
+    client?: MongoClient;
 
     constructor(config?: Config) {
         if (config) {
@@ -26,7 +27,11 @@ export class MongoDb implements Db {
         }
     }
 
-    install(app: BaseApp) {
+    async install(app: BaseApp) {
+        this.errorHandling();
+
+        this.client = await this.getConnectedMongoClient(this.config.uri!);
+
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
                 app.$db = this;
@@ -39,21 +44,53 @@ export class MongoDb implements Db {
     uninstall(app: BaseApp) {
     }
 
+    async getConnectedMongoClient(uri: string): Promise<MongoClient> {
+        return await MongoClient.connect(uri, { useNewUrlParser: true });
+    }
+
     errorHandling() {
         if (!this.config.uri) {
-            throw new Error(`Couldn't use MongoDb. uri has to be set. Please check your config.`);
+            throw new JovoError(
+                'uri has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.primaryKeyColumn) {
-            throw new Error(`Couldn't use MongoDb. primaryKeyColumn has to be set. Please check your config.`);
+            throw new JovoError(
+                'primaryKeyColumn has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.databaseName) {
-            throw new Error(`Couldn't use MongoDb. databaseName has to be set. Please check your config.`);
+            throw new JovoError(
+                'databaseName has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
 
         if (!this.config.collectionName) {
-            throw new Error(`Couldn't use MongoDb. collectionName has to be set. Please check your config.`);
+            throw new JovoError(
+                'collectionName has to be set.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                undefined,
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 
@@ -63,52 +100,60 @@ export class MongoDb implements Db {
      * @return {Promise<any>}
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
-            const doc = await collection.findOne({userId: primaryKey});
-            await client.close();
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const doc = await collection.findOne({ userId: primaryKey });
             return doc;
         } catch (e) {
-            console.log('Error while loading from MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
-        return {};
     }
 
-    async save(primaryKey: string, key: string, data: object) {
+    async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const item = {
                 $set: {
                     [this.config.primaryKeyColumn!]: primaryKey,
-                    [key]: data
+                    [key]: data,
+                    updatedAt
                 }
             };
-            await collection.updateOne({userId: primaryKey}, item, {upsert: true});
-            await client.close();
+            await collection.updateOne({ userId: primaryKey }, item, { upsert: true });
         } catch (e) {
-            console.log('Error while saving to MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 
     async delete(primaryKey: string) {
-        this.errorHandling();
-
         try {
-            const client = await MongoClient.connect(this.config.uri!, {useNewUrlParser: true});
-            const collection = client.db(this.config.databaseName!).collection(this.config.collectionName!);
-            await collection.deleteOne({userId: primaryKey});
-            await client.close();
+            const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
+            await collection.deleteOne({ userId: primaryKey });
         } catch (e) {
-            console.log('Error while deleting from MongoDb. Please check the logs below...');
-            console.log(e);
+            throw new JovoError(
+                e.message,
+                ErrorCode.ERR_PLUGIN,
+                'jovo-db-mongodb',
+                undefined,
+                'Make sure the configuration you provided is valid.',
+                'https://www.jovo.tech/docs/databases/mongodb'
+            );
         }
     }
 }

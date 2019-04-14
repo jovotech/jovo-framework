@@ -59,6 +59,20 @@ export interface DeliveryAddressLocation {
     phoneNumber: string;
 }
 
+export interface OrderManagementAction {
+    button: {
+        openUrlAction: {
+            url: string;
+        };
+        title: string,
+    };
+    type: string;
+
+}
+export interface UserNotification {
+    text: string;
+    title: string;
+}
 
 export interface OrderUpdate {
     actionOrderId: string;
@@ -70,6 +84,8 @@ export interface OrderUpdate {
         userVisibleOrderId: string;
     };
     updateTime?: string;
+    orderManagementActions?: OrderManagementAction[];
+    userNotification?: UserNotification;
 }
 
 export class Transaction {

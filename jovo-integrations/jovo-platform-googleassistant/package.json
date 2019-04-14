@@ -1,32 +1,34 @@
 {
   "name": "jovo-platform-googleassistant",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
+    "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs ./ --mode file",
     "test": "jest"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.1.0",
-    "jovo-platform-dialogflow": "^2.1.1",
+    "jovo-core": "^2.2.0",
+    "jovo-platform-dialogflow": "^2.2.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.1",
+    "@types/jest": "^24.0.11",
     "@types/node": "^10.3.1",
-    "jest": "^23.4.2",
-    "jovo-framework": "^2.1.0",
+    "jest": "^24.6.0",
+    "jovo-framework": "^2.2.0",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.10.0",
+    "ts-jest": "^24.0.1",
+    "tslint": "^5.15.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.4.1"
   },
   "jest": {
     "transform": {

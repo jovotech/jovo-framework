@@ -24,7 +24,20 @@ $ npm install --save jovo-db-firestore
 Firestore can be enabled in the `src/app.js` file like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { Firestore } = require('jovo-db-firestore');
+
+// Enable DB after app initialization
+app.use(new Firestore());
+
+// @language=typescript
+
+// src/app.ts
+
+import { Firestore } from 'jovo-db-firestore';
 
 // Enable DB after app initialization
 app.use(new Firestore());
@@ -33,15 +46,52 @@ app.use(new Firestore());
 Inside your `config.js` file you have to set your `credential` and your `databaseURL`. You can also optionally set the collection name (default is `UserData`):
 
 ```javascript
-// config.js file
-db: {
-    Firestore: {
-        credential: require('<path-to-credential-json-file>'),
-        databaseURL: '<databaseURL>',
-        collectionName: '<collectionName>'
-    }
-}
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        Firestore: {
+            credential: require('<path-to-credential-json-file>'),
+            databaseURL: '<databaseURL>',
+            collectionName: '<collectionName>',
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        Firestore: {
+            credential: require('<path-to-credential-json-file>'),
+            databaseURL: '<databaseURL>',
+            collectionName: '<collectionName>',
+        },
+    },
+
+    // ...
+
+};
 ```
+
+> If you use plan to use the Firestore integration while hosting your project on AWS Lambda you have to add the following post install script to your `package.json`:
+
+```javascript
+"scripts": {
+  "postinstall": "npm install grpc --target=<lambda-function-node-version> --target_arch=x64 --target_platform=linux --target_libc=glibc"
+},
+```
+
+You need the script because the Firestore integration depends on the `firebase-admin` module, which depends on the `grpc` module. If you simply run `npm install` it will download the `grpc` binary for your node version and operating system combination, which might differ from the one Lambda expects, which is `node-v48-linux-x64-glibc`. The script installs the correct binary for you. Find more about that [here](https://github.com/grpc/grpc/issues/6443).
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to Google Firestore.",
 "route": "databases/firestore" }-->

@@ -25,7 +25,20 @@ $ npm install --save jovo-db-dynamodb
 DynamoDB can be enabled in the `src/app.js` file like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 const { DynamoDb } = require('jovo-db-dynamodb');
+
+// Enable DB after app initialization
+app.use(new DynamoDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { DynamoDb } from 'jovo-db-dynamodb';
 
 // Enable DB after app initialization
 app.use(new DynamoDb());
@@ -34,27 +47,83 @@ app.use(new DynamoDb());
 If you're running your code on Lambda, you can simply integrate a DynamoDB table like this in your `config.js` file:
 
 ```javascript
-// config.js file
-db: {
-    DynamoDb: {
-        tableName: 'yourTableName',
-    }
-}
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+        },
+    },
+
+    // ...
+
+};
 ```
 
 In case you're hosting your voice app somewhere else, you need to additionally add AWS config:
 
 ```javascript
-db: {
-    DynamoDb: {
-        tableName: 'yourTableName',
-        awsConfig: {
-            accessKeyId: 'yourAccessKeyId',
-            secretAccessKey: 'yourSecretAccessKey', 
-            region:  'yourRegion',
-        }
-    }
-}
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+            awsConfig: {
+                accessKeyId: 'yourAccessKeyId',
+                secretAccessKey: 'yourSecretAccessKey', 
+                region:  'yourRegion',
+            },
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DynamoDb: {
+            tableName: 'yourTableName',
+            awsConfig: {
+                accessKeyId: 'yourAccessKeyId',
+                secretAccessKey: 'yourSecretAccessKey', 
+                region:  'yourRegion',
+            },
+        },
+    },
+
+    // ...
+
+};
 ```
 
 You can find a detailed guide by Amazon about setting up your DynamoDB for programmatic access here (In case you're hosting your voice app somewhere else): [Setting Up DynamoDB (Web Service)](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).

@@ -10,6 +10,7 @@ In this section, you will learn more about how to use intents to route your user
     * [ON_REQUEST](#on_request)
     * [END](#end)
     * [Unhandled](#unhandled)
+    * [ON_ERROR](#on_error)
 * [Intent Hierarchy](#intent-hierarchy)
 * [Built-in Intents](#built-in-intents)
 * [intentMap](#intentmap)
@@ -21,6 +22,10 @@ In this section, you will learn more about how to use intents to route your user
 Besides at least one of the the required [`LAUNCH`](#launch) or [`NEW_SESSION`](#new_session) intents, you can add more intents that you defined at the respective developer platforms like this:
 
 ```javascript
+// @language=javascript
+
+// src/app.js
+
 app.setHandler({
     LAUNCH() {
         // Triggered when people open the voice app without a specific query
@@ -28,6 +33,25 @@ app.setHandler({
     },
 
     YourFirstIntent() {
+
+        // Do something here
+
+    },
+
+});
+
+// @language=typescript
+
+// src/app.ts
+
+app.setHandler({
+    LAUNCH() {
+        // Triggered when people open the voice app without a specific query
+        this.tell('Hello World!');
+    },
+
+    YourFirstIntent() {
+
         // Do something here
 
     },
@@ -225,7 +249,7 @@ It is helpful to find out why a session ended. Use getEndReason inside the `'END
 
 ```javascript
 END() {
-    let reason = this.getEndReason();
+    let reason = this.$alexaSkill.getEndReason();
 
     // For example, log
     console.log(reason);
@@ -280,10 +304,11 @@ See this example:
 app.setHandler({
 
     LAUNCH() {
-        let speech = 'Do you want to play a game?';
-        let reprompt = 'Please answer with yes or no.';
+        this.$speech.addText('Do you want to play a game?');
+        this.$reprompt.addText('Please answer with yes or no.');
+
         this.followUpState('PlayGameState')
-            .ask(speech, reprompt);
+            .ask(this.$speech, this.$reprompt);
     },
 
     'PlayGameState': {
@@ -296,13 +321,14 @@ app.setHandler({
         },
 
         Unhandled() {
-            let speech = 'You need to answer with yes, to play a game.';
-            let reprompt = 'Please answer with yes or no.';
-            this.ask(speech, reprompt);
+            this.$speech.addText('You need to answer with yes, to play a game.');
+            this.$reprompt.addText('Please answer with yes or no.');
+
+            this.ask(this.$speech, this.$reprompt);
         },
     },
 
-    // Add more intents here
+    // ...
 
 });
 ```
@@ -317,22 +343,45 @@ However, for some intents (for example, a `CancelIntent`), it might make sense t
 With `intentsToSkipUnhandled`, you can define intents that aren't matched to an `Unhandled` intent, if not found in a state. This way, you can make sure that they are always captured globally.
 
 ```javascript
-// config.js file
-intentsToSkipUnhandled: [
-    'END'
-] 
-```
+// @language=javascript
 
+// src/config.js
+
+module.exports = {
+    
+    intentsToSkipUnhandled: [
+        'END'
+    ],
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    intentsToSkipUnhandled: [
+        'END'
+    ],
+
+    // ...
+
+};
+```
 In the below example, if a person answers the first question with "Stop," it is not going to `Unhandled`, but to the global `END`:
 
 ```javascript
 app.setHandler({
 
     LAUNCH() {
-        let speech = 'Do you want to play a game?';
-        let reprompt = 'Please answer with yes or no.';
+        this.$speech.addText('Do you want to play a game?');
+        this.$reprompt.addText('Please answer with yes or no.');
+
         this.followUpState('PlayGameState')
-            .ask(speech, reprompt);
+            .ask(this.$speech, this.$reprompt);
     },
 
     'PlayGameState': {
@@ -345,9 +394,10 @@ app.setHandler({
         },
 
         Unhandled() {
-            let speech = 'You need to answer with yes, to play a game.';
-            let reprompt = 'Please answer with yes or no.';
-            this.ask(speech, reprompt);
+            this.$speech.addText('You need to answer with yes, to play a game.');
+            this.$reprompt.addText('Please answer with yes or no.');
+
+            this.ask(this.$speech, this.$reprompt);
         },
     },
 
@@ -355,10 +405,46 @@ app.setHandler({
         // Do something
     },
 
-    // Add more intents here
+    // ...
 
 });
 ```
+
+### ON_ERROR
+
+Jovo uses the standard intent `ON_ERROR` to catch error requests:
+
+```javascript
+ON_ERROR() {
+    // Triggered when there is an error
+ },
+```
+
+With Alexa Skills, you can use the `getError` method:
+
+```js
+// @language=javascript
+
+// Example
+ON_ERROR() {
+    console.log(`Error: ${JSON.stringify(this.$alexaSkill.getError())}`);
+    console.log(`Request: ${JSON.stringify(this.$alexaSkill.$request)}`);
+
+    this.ask('There was an error. Can I help you in any other way?');
+},
+
+// @language=typescript
+
+// Example
+ON_ERROR() {
+    console.log(`Error: ${JSON.stringify(this.$alexaSkill!.getError())}`);
+    console.log(`Request: ${JSON.stringify(this.$alexaSkill!.$request)}`);
+
+    this.ask('There was an error. Can I help you in any other way?');
+},
+```
+
+
 
 ## Intent Hierarchy
 
@@ -424,28 +510,99 @@ As mentioned above, the platforms offer different types of built-in intents.
 In cases where the names of certain intents differ across platforms, Jovo offers a simple mapping function for intents. You can add this to the configuration section of your voice app:
 
 ```javascript
-// config.js file
-intentMap: {
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    intentMap: {
 		'AMAZON.StopIntent': 'END',
-},
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    intentMap: {
+		'AMAZON.StopIntent': 'END',
+    },
+
+    // ...
+
+};
 ```
 
 This is useful especially for platform-specific, built-in intents. One example could be Amazon's standard intent when users ask for help: `AMAZON.HelpIntent`. You could create a similar intent on Dialogflow called `HelpIntent` and then do the matching with the Jovo `intentMap`.
 
 ```javascript
-intentMap: {
-    'AMAZON.HelpIntent' : 'HelpIntent'
-},
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    intentMap: {
+        'AMAZON.HelpIntent' : 'HelpIntent'
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    intentMap: {
+        'AMAZON.HelpIntent' : 'HelpIntent'
+    },
+
+    // ...
+
+};
 ```
 
 This can also be used if you have different naming conventions on both platforms and want to match both intents to a new name. In the below example, the `AMAZON.HelpIntent` and an intent called `help-intent` on Dialogflow are matched to a Jovo intent called `HelpIntent`.
 
 ```javascript
-intentMap: {
-    'AMAZON.HelpIntent' : 'HelpIntent',
-    'help-intent' : 'HelpIntent'
-},
-```
+// @language=javascript
 
+// src/config.js
+
+module.exports = {
+    
+    intentMap: {
+        'AMAZON.HelpIntent' : 'HelpIntent',
+        'help-intent' : 'HelpIntent'
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    intentMap: {
+        'AMAZON.HelpIntent' : 'HelpIntent',
+        'help-intent' : 'HelpIntent'
+    },
+
+    // ...
+
+};
+```
 
 <!--[metadata]: { "description": "Learn more about how to use intents with the Jovo Framework.", "route": "routing/intents" }-->

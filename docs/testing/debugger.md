@@ -24,9 +24,19 @@ In the Debugger, you can quickly test if the flow of your voice app works. For t
 ## Configuration
 
 ```javascript
-// app.js file
+// @language=javascript
+
+// src/app.js
 
 const { JovoDebugger } = require('jovo-plugin-debugger');
+
+app.use(new JovoDebugger());
+
+// @language=typescript
+
+// src/app.ts
+
+import { JovoDebugger } from 'jovo-plugin-debugger';
 
 app.use(new JovoDebugger());
 ```
