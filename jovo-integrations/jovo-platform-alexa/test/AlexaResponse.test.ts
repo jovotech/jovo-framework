@@ -56,47 +56,54 @@ test('test hasState', () => {
 });
 
 test('test hasSimpleCard', () => {
-    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(simpleCard));
-    expect(tellResponse.hasSimpleCard()).toBe(true);
+    const simpleCardResponse = AlexaResponse.fromJSON(_cloneDeep(simpleCard));
+    expect(simpleCardResponse.hasSimpleCard()).toBe(true);
 
-    expect(tellResponse.hasSimpleCard('Simple Title')).toBe(true);
-    expect(tellResponse.hasSimpleCard('title')).toBe(false);
+    expect(simpleCardResponse.hasSimpleCard('Simple Title')).toBe(true);
+    expect(simpleCardResponse.hasSimpleCard('title')).toBe(false);
 
-    expect(tellResponse.hasSimpleCard('Simple Title', 'Simple Text')).toBe(true);
-    expect(tellResponse.hasSimpleCard('Simple Title', 'no')).toBe(false);
+    expect(simpleCardResponse.hasSimpleCard('Simple Title', 'Simple Text')).toBe(true);
+    expect(simpleCardResponse.hasSimpleCard('Simple Title', 'no')).toBe(false);
+
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(tellResponse.hasStandardCard()).toBe(false);
 });
 
 test('test hasStandardCard', () => {
-    const askResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
-    expect(askResponse.hasStandardCard()).toBe(true);
+    const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
+    expect(standardCardResponse.hasStandardCard()).toBe(true);
 
-    expect(askResponse.hasStandardCard('Standard Title')).toBe(true);
-    expect(askResponse.hasStandardCard('title')).toBe(false);
+    expect(standardCardResponse.hasStandardCard('Standard Title')).toBe(true);
+    expect(standardCardResponse.hasStandardCard('title')).toBe(false);
 
-    expect(askResponse.hasStandardCard('Standard Title', 'Standard Text')).toBe(true);
-    expect(askResponse.hasStandardCard('Standard Title', 'no')).toBe(false);
+    expect(standardCardResponse.hasStandardCard('Standard Title', 'Standard Text')).toBe(true);
+    expect(standardCardResponse.hasStandardCard('Standard Title', 'no')).toBe(false);
 
-    expect(askResponse.hasStandardCard(
+    expect(standardCardResponse.hasStandardCard(
         'Standard Title',
         'Standard Text',
         'https://via.placeholder.com/720x480'
     )).toBe(true);
-    expect(askResponse.hasStandardCard(
+    expect(standardCardResponse.hasStandardCard(
         'Standard Title',
         'Standard Text',
         'https://via.placeholder.com/'
     )).toBe(false);
 
-    expect(askResponse.hasStandardCard(
+    expect(standardCardResponse.hasStandardCard(
         'Standard Title',
         'Standard Text',
         'https://via.placeholder.com/720x480',
         'https://via.placeholder.com/1200x800'
     )).toBe(true);
-    expect(askResponse.hasStandardCard(
+    expect(standardCardResponse.hasStandardCard(
         'Standard Title',
         'Standard Text',
         'https://via.placeholder.com/',
         'https://via.placeholder.com/'
     )).toBe(false);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasStandardCard()).toBe(false);
+
 });
