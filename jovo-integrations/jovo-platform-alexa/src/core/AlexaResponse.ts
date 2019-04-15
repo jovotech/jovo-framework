@@ -45,6 +45,10 @@ export class AlexaResponse implements JovoResponse {
         return _get(this, 'response.card');
     }
 
+    getDirectives() {
+        return _get(this, 'response.directives');
+    }
+
     getSessionData(path?: string) {
         if (path) {
             return this.getSessionAttribute(path);
@@ -212,6 +216,34 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
+    getApl() {
+        if (this.getDirectives()) {
+            const directivesArray = this.getDirectives();
+
+            for (const directiveItem of directivesArray) {
+                if (directiveItem.document) {
+                    if (directiveItem.document.type === 'APL') {
+                        return directiveItem;
+                    }
+                }
+
+            }
+        }
+        return;
+    }
+
+    getDisplayTemplate() {
+        if (this.getDirectives()) {
+            const directivesArray = this.getDirectives();
+
+            for (const directiveItem of directivesArray) {
+                if (directiveItem.type === 'Display.RenderTemplate') {
+                    return directiveItem;
+                }
+            }
+        }
+        return;
+    }
     /**
      * Checks if response is a tell request
      * @param {string| string[]} speechText
