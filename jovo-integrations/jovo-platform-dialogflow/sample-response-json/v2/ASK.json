@@ -5,7 +5,7 @@
                   "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/_jovo_session_pmfoz",
                   "lifespanCount": 1,
                   "parameters": {
-                          "closingMessage": "closing101",
+                          "session": "attribute",
                           "_JOVO_STATE_": "test"
                   }
           }

@@ -4,8 +4,6 @@ import {DialogflowResponse} from "../src/core/DialogflowResponse";
 import _cloneDeep = require('lodash.clonedeep');
 const askJSON = require('./../sample-response-json/v2/ASK.json');
 const tellJSON = require('./../sample-response-json/v2/TELL.json');
-const simpleCard = require('./../sample-response-json/v2/SimpleCardTell.json');
-const standardCard = require('./../sample-response-json/v2/StandardCardAsk.json');
 
 process.env.NODE_ENV = 'TEST';
 
@@ -21,3 +19,12 @@ test('test hasState', () => {
     expect(responseWithoutState.hasState()).toBe(false);
 });
 
+test('test hasSessionData', () => {
+    const responseWithState = DialogflowResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasSessionData("session", "attribute")).toBe(true);
+    expect(responseWithState.hasSessionData("session", "closed")).toBe(false);
+
+    expect(responseWithState.hasSessionData("session")).toBe(true);
+    expect(responseWithState.hasSessionData("age")).toBe(false);
+});
