@@ -41,6 +41,10 @@ export class AlexaResponse implements JovoResponse {
         this.sessionAttributes = {};
     }
 
+    getCard() {
+        return _get(this, 'response.card');
+    }
+
     getSessionData(path?: string) {
         if (path) {
             return this.getSessionAttribute(path);
@@ -130,6 +134,82 @@ export class AlexaResponse implements JovoResponse {
 
     hasSessionEnded() {
         return _get(this, 'response.shouldEndSession');
+    }
+
+    /**
+     * Checks if response object contains a simple card.
+     * @param {string} title
+     * @param {string} text
+     * @return {boolean}
+     */
+    hasSimpleCard(title?: string, text?: string): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+
+        if (cardObject.type !== 'Simple') {
+            return false;
+        }
+
+        if (title) {
+            if (title !== cardObject.title) {
+                return false;
+            }
+        }
+        if (text) {
+            if (text !== cardObject.text) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a standard card.
+     * @param {string} title
+     * @param {string} text
+     * @param {string} smallImageUrl
+     * @param {string} largeImageUrl
+     * @return {boolean}
+     */
+    hasStandardCard(title?: string, text?: string, smallImageUrl?: string, largeImageUrl?: string): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+
+        if (cardObject.type !== 'Standard') {
+            return false;
+        }
+
+        if (title) {
+            if (title !== cardObject.title) {
+                return false;
+            }
+        }
+        if (text) {
+            if (text !== cardObject.text) {
+                return false;
+            }
+        }
+        if (smallImageUrl) {
+            if (smallImageUrl !==
+                cardObject.image.smallImageUrl) {
+                return false;
+            }
+        }
+        if (largeImageUrl) {
+            if (largeImageUrl !==
+                cardObject.image.largeImageUrl) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
