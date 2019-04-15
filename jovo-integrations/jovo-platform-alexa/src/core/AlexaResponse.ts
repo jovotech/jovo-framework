@@ -142,7 +142,7 @@ export class AlexaResponse implements JovoResponse {
      * @param {string} text
      * @return {boolean}
      */
-    hasSimpleCard(title: string, text: string): boolean {
+    hasSimpleCard(title?: string, text?: string): boolean {
         const cardObject = this.getCard();
 
         if (!cardObject) {
@@ -175,7 +175,7 @@ export class AlexaResponse implements JovoResponse {
      * @param {string} largeImageUrl
      * @return {boolean}
      */
-    hasStandardCard(title: string, text: string, smallImageUrl: string, largeImageUrl: string): boolean {
+    hasStandardCard(title?: string, text?: string, smallImageUrl?: string, largeImageUrl?: string): boolean {
         const cardObject = this.getCard();
 
         if (!cardObject) {
