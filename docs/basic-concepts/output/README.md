@@ -61,7 +61,7 @@ You can also use [SSML](#ssml) or [speechBuilder](#speechbuilder) objects (`this
 Google Assistant offers the functionality to use multiple reprompts.
 
 ```javascript
-this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
+this.ask(speech, reprompt1, reprompt2, goodbyeMessage);
 ```
 
 > You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
