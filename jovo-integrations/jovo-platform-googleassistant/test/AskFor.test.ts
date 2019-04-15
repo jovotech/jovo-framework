@@ -1,4 +1,4 @@
-import {HandleRequest, JovoRequest, TestSuite} from "jovo-core";
+import {HandleRequest, JovoRequest, TestSuite, EnumRequestType} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
 import {DialogflowResponse} from "jovo-platform-dialogflow";
@@ -73,7 +73,7 @@ describe('test ON_SIGN_IN', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_SIGN_IN');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_SIGN_IN);
             done();
         });
     }, 250);
@@ -156,7 +156,7 @@ describe('test ON_PERMISSION', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_PERMISSION');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_PERMISSION);
             done();
         });
     }, 250);
@@ -308,7 +308,7 @@ describe('test ON_PERMISSION', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_PERMISSION');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_PERMISSION);
             done();
         });
     }, 250);
@@ -324,7 +324,7 @@ describe('test ON_PERMISSION', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_PERMISSION');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_PERMISSION);
             done();
         });
     }, 250);
@@ -448,7 +448,7 @@ describe('test ON_PERMISSION', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_PERMISSION');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_PERMISSION);
             done();
         });
     }, 250);
@@ -498,7 +498,7 @@ describe('test ON_PERMISSION', () => {
         app.handle(ExpressJS.dummyRequest(launchRequest));
 
         app.on('after.router', (handleRequest: HandleRequest) => {
-            expect(handleRequest.jovo!.$type.type).toBe('ON_PLACE');
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.ON_PLACE);
             done();
         });
     }, 250);
