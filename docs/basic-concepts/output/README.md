@@ -26,7 +26,7 @@ Jovo's basic output options offer simple methods for interacting with users thro
 
 ### tell
 
-The tell method is used to have Alexa or Google Home say something to your users. You can either use plain text, [SSML](#ssml) (Speech Synthesis Markup Language), or a [speechBuilder](#speechbuilder) object (`this.$speech`)).
+The tell method is used to have Alexa or Google Assistant say something to your users. You can either use plain text, [SSML](#ssml) (Speech Synthesis Markup Language), or a [speechBuilder](#speechbuilder) object (`this.$speech`)).
 
 ```javascript
 this.tell(speech);
@@ -64,7 +64,7 @@ Google Assistant offers the functionality to use multiple reprompts.
 this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
 ```
 
-> You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts '../google-assistant#multiple-reprompts').
+> You can find more detail about this feature here: [Platforms > Google Assistant > Multiple Reprompts](../../platforms/google-assistant/README.md#multiple-reprompts './google-assistant#multiple-reprompts').
 
 ### repeat
 
