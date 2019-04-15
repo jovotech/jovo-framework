@@ -3,13 +3,14 @@
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
 * [Introduction to the User Class](#introduction-to-the-user-class)
-    * [Configuration](#configuration)
+  * [Configuration](#configuration)
 * [Database Integrations](#database-integrations)
-    * [Save Data](#save-data)
-    * [Load Data](#load-data)
-    * [Delete a User](#delete-a-user)
+  * [Save Data](#save-data)
+  * [Load Data](#load-data)
+  * [Delete a User](#delete-a-user)
 * [Meta Data](#meta-data)
 * [Context](#context)
+* [UpdatedAt](#updatedat)
 * [User ID](#user-id)
 * [Locale](#locale)
 
@@ -30,6 +31,8 @@ There are certain configurations that can be changed when dealing with the user 
 ```javascript
 // config.js file
 user: {
+    updatedAt: false,
+    dataCaching: false,
     implicitSave: true,
     metaData: {
         enabled: false,
@@ -65,6 +68,38 @@ user: {
 > [Learn more about all available database integrations here](../../integrations/databases '../databases').
 
 The Jovo User object uses [database integrations](../../integrations/databases '../databases') to persist data across sessions. By default, the [file-based system](../../integrations/databases/file-db '../databases/file-db') will be used so you can start right away when prototyping locally.
+
+Also, by default the framework will write to the database with every user interaction (request & response). To enable data caching, i.e. only write to the database if the state of it has changed between the request and the response, you have to add the following to your configuration file:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        dataCaching: true
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        dataCaching: true
+    },
+
+    // ...
+
+};
+```
 
 Below, learn more about operations you can do for user-specific data:
 
@@ -404,6 +439,50 @@ const config = {
                 },
             },
         },
+    },
+
+    // ...
+
+};
+```
+
+## UpdatedAt
+
+The `updatedAt` column allows you to store the last time the database entry was updated at (String ISO 8601 format).
+
+```javascript
+{
+    "userId": "...",
+    "userData": {
+        "..."
+    },
+    "updatedAt": "2019-04-03T10:54:54.191Z"
+}
+```
+
+The option is disabled by default, but you can enable it inside your config file the following way:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    user: {
+        updatedAt: true
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    user: {
+        updatedAt: true
     },
 
     // ...
