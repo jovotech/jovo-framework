@@ -17,6 +17,7 @@ export class MySQL implements Db {
         tableName: 'users',
         primaryKeyColumn: 'userId',
         dataColumnName: 'userData',
+        connection: undefined,
     };
     pool?: Pool;
     needsWriteFileAccess = false;
@@ -145,7 +146,7 @@ export class MySQL implements Db {
 
     async delete(primaryKey: string) {
         this.errorHandling();
-        
+
         return new Promise(async (resolve, reject) => {
             try {
                 const connection: PoolConnection = await this.getConnection();
