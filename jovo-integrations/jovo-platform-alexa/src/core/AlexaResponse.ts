@@ -287,7 +287,7 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
-        /**
+    /**
      * Checks if response object contains a LinkAccount card.
      * @return {boolean}
      */

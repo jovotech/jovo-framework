@@ -199,8 +199,8 @@ test('test hasStandardCard', () => {
 });
 
 test('test hasLinkAccountCard', () => {
-    const LinkAccountResponse = AlexaResponse.fromJSON(_cloneDeep(linkAccountCard));
-    expect(LinkAccountResponse.hasLinkAccountCard()).toBe(true);
+    const linkAccountResponse = AlexaResponse.fromJSON(_cloneDeep(linkAccountCard));
+    expect(linkAccountResponse.hasLinkAccountCard()).toBe(true);
 
     const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
     expect(standardCardResponse.hasLinkAccountCard()).toBe(false);
@@ -211,11 +211,11 @@ test('test hasLinkAccountCard', () => {
 });
 
 test('test hasAskForAddressCard', () => {
-    const FullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
-    expect(FullAddressResponse.hasAskForAddressCard()).toBe(true);
+    const fullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
+    expect(fullAddressResponse.hasAskForAddressCard()).toBe(true);
 
-    const CountryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
-    expect(CountryPostalResponse.hasAskForAddressCard()).toBe(false);
+    const countryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
+    expect(countryPostalResponse.hasAskForAddressCard()).toBe(false);
 
     const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
     expect(standardCardResponse.hasAskForAddressCard()).toBe(false);
@@ -226,11 +226,11 @@ test('test hasAskForAddressCard', () => {
 });
 
 test('test hasAskForCountryAndPostalCodeCard', () => {
-    const CountryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
-    expect(CountryPostalResponse.hasAskForCountryAndPostalCodeCard()).toBe(true);
+    const countryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
+    expect(countryPostalResponse.hasAskForCountryAndPostalCodeCard()).toBe(true);
 
-    const FullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
-    expect(FullAddressResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
+    const fullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
+    expect(fullAddressResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
 
     const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
     expect(standardCardResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
