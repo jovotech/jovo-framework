@@ -287,6 +287,71 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
+        /**
+     * Checks if response object contains a LinkAccount card.
+     * @return {boolean}
+     */
+    hasLinkAccountCard(): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+
+        if (cardObject.type !== 'LinkAccount') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a ask for address card.
+     * @return {boolean}
+     */
+    hasAskForAddressCard(): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+        if (cardObject.type !== 'AskForPermissionsConsent') {
+            return false;
+        }
+
+        if (cardObject.permissions.length === 0) {
+            return false;
+        }
+        if (cardObject.permissions[0] !== 'read::alexa:device:all:address') {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a ask for country and postal code card.
+     * @return {boolean}
+     */
+    hasAskForCountryAndPostalCodeCard():boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+        if (cardObject.type !== 'AskForPermissionsConsent') {
+            return false;
+        }
+
+        if (cardObject.permissions.length === 0) {
+            return false;
+        }
+
+        if (cardObject.permissions[0] !== 'read::alexa:device:all:address:country_and_postal_code') {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Checks if response is a tell request
      * @param {string| string[]} speechText

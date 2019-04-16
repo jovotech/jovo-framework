@@ -5,6 +5,9 @@ import _cloneDeep = require('lodash.clonedeep');
 const directivesJSON = require('./../sample-response-json/v1/directives.json');
 const askJSON = require('./../sample-response-json/v1/ASK.json');
 const tellJSON = require('./../sample-response-json/v1/TELL.json');
+const countryPostalCard = require('./../sample-response-json/v1/CountryPostalCardAsk.json');
+const fullAddressCard = require('./../sample-response-json/v1/FullAddressCardAsk.json');
+const linkAccountCard = require('./../sample-response-json/v1/LinkAccountCardAsk.json');
 const simpleCard = require('./../sample-response-json/v1/SimpleCardTell.json');
 const standardCard = require('./../sample-response-json/v1/StandardCardAsk.json');
 
@@ -192,5 +195,47 @@ test('test hasStandardCard', () => {
 
     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
     expect(askResponse.hasStandardCard()).toBe(false);
+
+});
+
+test('test hasLinkAccountCard', () => {
+    const LinkAccountResponse = AlexaResponse.fromJSON(_cloneDeep(linkAccountCard));
+    expect(LinkAccountResponse.hasLinkAccountCard()).toBe(true);
+
+    const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
+    expect(standardCardResponse.hasLinkAccountCard()).toBe(false);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasLinkAccountCard()).toBe(false);
+
+});
+
+test('test hasAskForAddressCard', () => {
+    const FullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
+    expect(FullAddressResponse.hasAskForAddressCard()).toBe(true);
+
+    const CountryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
+    expect(CountryPostalResponse.hasAskForAddressCard()).toBe(false);
+
+    const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
+    expect(standardCardResponse.hasAskForAddressCard()).toBe(false);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasAskForAddressCard()).toBe(false);
+
+});
+
+test('test hasAskForCountryAndPostalCodeCard', () => {
+    const CountryPostalResponse = AlexaResponse.fromJSON(_cloneDeep(countryPostalCard));
+    expect(CountryPostalResponse.hasAskForCountryAndPostalCodeCard()).toBe(true);
+
+    const FullAddressResponse = AlexaResponse.fromJSON(_cloneDeep(fullAddressCard));
+    expect(FullAddressResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
+
+    const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
+    expect(standardCardResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasAskForCountryAndPostalCodeCard()).toBe(false);
 
 });
