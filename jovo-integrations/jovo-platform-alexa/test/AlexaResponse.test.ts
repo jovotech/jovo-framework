@@ -13,111 +13,184 @@ process.env.NODE_ENV = 'TEST';
 
 test('test getDirectives', () => {
     const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
-    const directivesArray = directivesResponse.getApl();
-console.log(directivesArray);
+    const directivesArray = directivesResponse.getDirectives();
+
     expect(directivesArray).not.toBeUndefined();
     expect(directivesArray[0].type).toMatch('Display.RenderTemplate');
-    expect(directivesArray[1].document.type).toMatch('APL');
+    expect(directivesArray[1].type).toMatch('AudioPlayer.Play');
+    expect(directivesArray[2].document.type).toMatch('APL');
+    expect(directivesArray[3].type).toMatch('VideoApp.Launch');
 
     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
     expect(askResponse.getDirectives()).toBeUndefined();
+});
+
+test('test getAplDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    expect(directivesResponse.getAplDirective()).not.toBeUndefined();
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.getAplDirective()).toBeUndefined();
+});
+
+test('test hasAplDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    expect(directivesResponse.hasAplDirective()).toBe(true);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasAplDirective()).toBe(false);
+});
+
+test('test getDisplayDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    const displayDirective = directivesResponse.getDisplayDirective();
+
+    expect(displayDirective).not.toBeUndefined();
+    expect(displayDirective.type).toMatch('Display.RenderTemplate');
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.getDisplayDirective()).toBeUndefined();
+});
+
+test('test hasDisplayDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    expect(directivesResponse.hasDisplayDirective()).toBe(true);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasDisplayDirective()).toBe(false);
+});
+
+test('test getAudioDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    const displayDirective = directivesResponse.getAudioDirective();
+
+    expect(displayDirective).not.toBeUndefined();
+    expect(displayDirective.type).toMatch('AudioPlayer.Play');
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.getAudioDirective()).toBeUndefined();
+});
+
+test('test hasAudioDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    expect(directivesResponse.hasAudioDirective()).toBe(true);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasAudioDirective()).toBe(false);
+});
+
+test('test getVideoDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    const displayDirective = directivesResponse.getVideoDirective();
+
+    expect(displayDirective).not.toBeUndefined();
+    expect(displayDirective.type).toMatch('VideoApp.Launch');
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.getVideoDirective()).toBeUndefined();
+});
+
+test('test hasVideoDirective', () => {
+    const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
+    expect(directivesResponse.hasVideoDirective()).toBe(true);
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasVideoDirective()).toBe(false);
+});
+test('test isTell', () => {
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(tellResponse.isTell()).toBe(true);
+    expect(tellResponse.isTell('Simple Tell')).toBe(true);
+    expect(tellResponse.isTell(['Simple Tell', 'foo', 'bar'])).toBe(true);
+
+    expect(tellResponse.isTell('Foo')).toBe(false);
+    expect(tellResponse.isTell(['foo', 'bar'])).toBe(false);
+
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.isTell()).toBe(false);
 
 });
 
-// test('test isTell', () => {
-//     const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
-//     expect(tellResponse.isTell()).toBe(true);
-//     expect(tellResponse.isTell('Simple Tell')).toBe(true);
-//     expect(tellResponse.isTell(['Simple Tell', 'foo', 'bar'])).toBe(true);
+test('test isAsk', () => {
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.isAsk()).toBe(true);
+    expect(askResponse.isAsk('Simple Ask')).toBe(true);
+    expect(askResponse.isAsk('Simple Ask', 'Simple Ask Reprompt')).toBe(true);
 
-//     expect(tellResponse.isTell('Foo')).toBe(false);
-//     expect(tellResponse.isTell(['foo', 'bar'])).toBe(false);
+    expect(askResponse.isAsk(['Simple Ask', 'foo', 'bar'])).toBe(true);
+    expect(askResponse.isAsk(['Simple Ask', 'foo', 'bar'], ['Simple Ask Reprompt', 'foo', 'bar'])).toBe(true);
 
+    expect(askResponse.isAsk('Foo')).toBe(false);
+    expect(askResponse.isAsk(['foo', 'bar'])).toBe(false);
 
-//     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
-//     expect(askResponse.isTell()).toBe(false);
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(tellResponse.isAsk()).toBe(false);
 
-// });
+});
 
-// test('test isAsk', () => {
-//     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
-//     expect(askResponse.isAsk()).toBe(true);
-//     expect(askResponse.isAsk('Simple Ask')).toBe(true);
-//     expect(askResponse.isAsk('Simple Ask', 'Simple Ask Reprompt')).toBe(true);
+test('test hasState', () => {
+    const responseWithState = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    responseWithState.sessionAttributes = {"_JOVO_STATE_":"test"};
 
-//     expect(askResponse.isAsk(['Simple Ask', 'foo', 'bar'])).toBe(true);
-//     expect(askResponse.isAsk(['Simple Ask', 'foo', 'bar'], ['Simple Ask Reprompt', 'foo', 'bar'])).toBe(true);
+    expect(responseWithState.hasState('test')).toBe(true);
+    expect(responseWithState.hasState('test123')).toBe(false);
+    expect(responseWithState.hasState()).toBe(true);
 
-//     expect(askResponse.isAsk('Foo')).toBe(false);
-//     expect(askResponse.isAsk(['foo', 'bar'])).toBe(false);
+    const responseWithoutState = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.hasState('test123')).toBe(false);
+    expect(responseWithoutState.hasState()).toBe(false);
+});
 
-//     const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
-//     expect(tellResponse.isAsk()).toBe(false);
+test('test hasSimpleCard', () => {
+    const simpleCardResponse = AlexaResponse.fromJSON(_cloneDeep(simpleCard));
+    expect(simpleCardResponse.hasSimpleCard()).toBe(true);
 
-// });
+    expect(simpleCardResponse.hasSimpleCard('Simple Title')).toBe(true);
+    expect(simpleCardResponse.hasSimpleCard('title')).toBe(false);
 
-// test('test hasState', () => {
-//     const responseWithState = AlexaResponse.fromJSON(_cloneDeep(askJSON));
-//     responseWithState.sessionAttributes = {"_JOVO_STATE_":"test"};
+    expect(simpleCardResponse.hasSimpleCard('Simple Title', 'Simple Text')).toBe(true);
+    expect(simpleCardResponse.hasSimpleCard('Simple Title', 'no')).toBe(false);
 
-//     expect(responseWithState.hasState('test')).toBe(true);
-//     expect(responseWithState.hasState('test123')).toBe(false);
-//     expect(responseWithState.hasState()).toBe(true);
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(tellResponse.hasStandardCard()).toBe(false);
+});
 
-//     const responseWithoutState = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
-//     expect(responseWithoutState.hasState('test123')).toBe(false);
-//     expect(responseWithoutState.hasState()).toBe(false);
-// });
+test('test hasStandardCard', () => {
+    const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
+    expect(standardCardResponse.hasStandardCard()).toBe(true);
 
-// test('test hasSimpleCard', () => {
-//     const simpleCardResponse = AlexaResponse.fromJSON(_cloneDeep(simpleCard));
-//     expect(simpleCardResponse.hasSimpleCard()).toBe(true);
+    expect(standardCardResponse.hasStandardCard('Standard Title')).toBe(true);
+    expect(standardCardResponse.hasStandardCard('title')).toBe(false);
 
-//     expect(simpleCardResponse.hasSimpleCard('Simple Title')).toBe(true);
-//     expect(simpleCardResponse.hasSimpleCard('title')).toBe(false);
+    expect(standardCardResponse.hasStandardCard('Standard Title', 'Standard Text')).toBe(true);
+    expect(standardCardResponse.hasStandardCard('Standard Title', 'no')).toBe(false);
 
-//     expect(simpleCardResponse.hasSimpleCard('Simple Title', 'Simple Text')).toBe(true);
-//     expect(simpleCardResponse.hasSimpleCard('Simple Title', 'no')).toBe(false);
+    expect(standardCardResponse.hasStandardCard(
+        'Standard Title',
+        'Standard Text',
+        'https://via.placeholder.com/720x480'
+    )).toBe(true);
+    expect(standardCardResponse.hasStandardCard(
+        'Standard Title',
+        'Standard Text',
+        'https://via.placeholder.com/'
+    )).toBe(false);
 
-//     const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
-//     expect(tellResponse.hasStandardCard()).toBe(false);
-// });
+    expect(standardCardResponse.hasStandardCard(
+        'Standard Title',
+        'Standard Text',
+        'https://via.placeholder.com/720x480',
+        'https://via.placeholder.com/1200x800'
+    )).toBe(true);
+    expect(standardCardResponse.hasStandardCard(
+        'Standard Title',
+        'Standard Text',
+        'https://via.placeholder.com/',
+        'https://via.placeholder.com/'
+    )).toBe(false);
 
-// test('test hasStandardCard', () => {
-//     const standardCardResponse = AlexaResponse.fromJSON(_cloneDeep(standardCard));
-//     expect(standardCardResponse.hasStandardCard()).toBe(true);
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.hasStandardCard()).toBe(false);
 
-//     expect(standardCardResponse.hasStandardCard('Standard Title')).toBe(true);
-//     expect(standardCardResponse.hasStandardCard('title')).toBe(false);
-
-//     expect(standardCardResponse.hasStandardCard('Standard Title', 'Standard Text')).toBe(true);
-//     expect(standardCardResponse.hasStandardCard('Standard Title', 'no')).toBe(false);
-
-//     expect(standardCardResponse.hasStandardCard(
-//         'Standard Title',
-//         'Standard Text',
-//         'https://via.placeholder.com/720x480'
-//     )).toBe(true);
-//     expect(standardCardResponse.hasStandardCard(
-//         'Standard Title',
-//         'Standard Text',
-//         'https://via.placeholder.com/'
-//     )).toBe(false);
-
-//     expect(standardCardResponse.hasStandardCard(
-//         'Standard Title',
-//         'Standard Text',
-//         'https://via.placeholder.com/720x480',
-//         'https://via.placeholder.com/1200x800'
-//     )).toBe(true);
-//     expect(standardCardResponse.hasStandardCard(
-//         'Standard Title',
-//         'Standard Text',
-//         'https://via.placeholder.com/',
-//         'https://via.placeholder.com/'
-//     )).toBe(false);
-
-//     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
-//     expect(askResponse.hasStandardCard()).toBe(false);
-
-// });
+});

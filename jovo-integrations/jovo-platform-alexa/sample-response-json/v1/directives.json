@@ -39,6 +39,17 @@
         }
       },
       {
+        "type": "AudioPlayer.Play",
+        "playBehavior": "REPLACE_ALL",
+        "audioItem": {
+          "stream": {
+            "url": "www.sampleAudio.mp3",
+            "token": "someToken",
+            "offsetInMilliseconds": 0
+          }
+        }
+      },
+      {
         "version": "1.0",
         "document": {
           "type": "APL",
@@ -68,6 +79,15 @@
             "textContent": {
               "text": "Sample text"
             }
+          }
+        }
+      },
+      {
+        "type": "VideoApp.Launch",
+        "videoItem": {
+          "source": "www.sampleVideo.mp4",
+          "metadata": {
+            "title": "Sample Video Title"
           }
         }
       }

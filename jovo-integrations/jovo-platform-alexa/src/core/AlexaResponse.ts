@@ -48,6 +48,79 @@ export class AlexaResponse implements JovoResponse {
     getDirectives() {
         return _get(this, 'response.directives');
     }
+    getDirective(directiveType?: string) {
+        const allDirectives = this.getDirectives();
+
+        for (const directiveItem of allDirectives) {
+            if (directiveItem.type && directiveItem.type.indexOf(directiveType) > -1) {
+                return directiveItem;
+            }
+        }
+    }
+
+    getAplDirective() {
+        const allDirectives = this.getDirectives();
+
+        if (allDirectives) {
+            for (const directiveItem of allDirectives) {
+                if (directiveItem.document && directiveItem.document.type === 'APL') {
+                    return directiveItem;
+                }
+            }
+        }
+
+        return;
+    }
+    hasAplDirective(): boolean {
+        if (!this.getAplDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    getDisplayDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('Display');
+        }
+        return;
+    }
+
+    hasDisplayDirective(): boolean {
+        if (!this.getDisplayDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+    getAudioDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('AudioPlayer');
+        }
+        return;
+    }
+
+    hasAudioDirective(): boolean {
+        if (!this.getAudioDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+    getVideoDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('VideoApp');
+        }
+        return;
+    }
+
+    hasVideoDirective(): boolean {
+        if (!this.getVideoDirective()) {
+            return false;
+        }
+
+        return true;
+    }
 
     getSessionData(path?: string) {
         if (path) {
@@ -68,8 +141,6 @@ export class AlexaResponse implements JovoResponse {
     getSessionAttributes() {
         return _get(this, 'sessionAttributes');
     }
-
-
 
     setSessionAttributes(sessionData: SessionData) {
         _set(this, 'sessionAttributes', sessionData);
@@ -216,34 +287,6 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
-    getApl() {
-        if (this.getDirectives()) {
-            const directivesArray = this.getDirectives();
-
-            for (const directiveItem of directivesArray) {
-                if (directiveItem.document) {
-                    if (directiveItem.document.type === 'APL') {
-                        return directiveItem;
-                    }
-                }
-
-            }
-        }
-        return;
-    }
-
-    getDisplayTemplate() {
-        if (this.getDirectives()) {
-            const directivesArray = this.getDirectives();
-
-            for (const directiveItem of directivesArray) {
-                if (directiveItem.type === 'Display.RenderTemplate') {
-                    return directiveItem;
-                }
-            }
-        }
-        return;
-    }
     /**
      * Checks if response is a tell request
      * @param {string| string[]} speechText
