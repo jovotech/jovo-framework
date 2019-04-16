@@ -1,9 +1,10 @@
-import {Plugin, EnumRequestType} from "jovo-core";
+import {Plugin} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
+import {EnumGoogleAssistantRequestType} from "../core/google-assistant-enums";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
 export interface Device {
     location: {
@@ -317,19 +318,19 @@ export class AskFor implements Plugin {
     }
     type(googleAction: GoogleAction) {
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.PERMISSION') {
-            googleAction.$type.type = EnumRequestType.ON_PERMISSION;
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_PERMISSION;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.SIGN_IN') {
-            googleAction.$type.type = EnumRequestType.ON_SIGN_IN;
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_SIGN_IN;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.CONFIRMATION') {
-            googleAction.$type.type = EnumRequestType.ON_CONFIRMATION;
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_CONFIRMATION;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.DATETIME') {
-            googleAction.$type.type = EnumRequestType.ON_DATETIME;
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_DATETIME;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.PLACE') {
-            googleAction.$type.type = EnumRequestType.ON_PLACE;
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_PLACE;
         }
     }
     output(googleAction: GoogleAction) {

@@ -533,65 +533,11 @@ export abstract class Jovo extends EventEmitter {
     }
 
     /**
-     * Returns true if the current request is of type ON_EVENT
-     * @public
-     * @return {boolean}
-     */  
-    isEventRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_EVENT;
-    }
-
-    /**
      * Returns true if the current request is of type ON_ELEMENT_SELECTED
      * @public
      * @return {boolean}
      */  
     isElementSelectedRequest(): boolean {
         return this.$type.type === EnumRequestType.ON_ELEMENT_SELECTED;
-    }
-
-    /**
-     * Returns true if the current request is of type ON_SIGN_IN
-     * @public
-     * @return {boolean}
-     */
-    isSignInRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_SIGN_IN;
-    }
-
-    /**
-     * Returns true if the current request is of type ON_PERMISSION
-     * @public
-     * @return {boolean}
-     */    
-    isPermissionRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_PERMISSION;
-    }
-
-    /**
-     * Returns true if the current request is of type ON_CONFIRMATION
-     * @public
-     * @return {boolean}
-     */  
-    isConfirmationRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_CONFIRMATION;
-    }
-
-    /**
-     * Returns true if the current request is of type ON_DATETIME
-     * @public
-     * @return {boolean}
-     */  
-    isDateTimeRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_DATETIME;
-    }
-
-    /**
-     * Returns true if the current request is of type ON_PLACE
-     * @public
-     * @return {boolean}
-     */  
-    isPlaceRequest(): boolean {
-        return this.$type.type === EnumRequestType.ON_PLACE;
     }
 }

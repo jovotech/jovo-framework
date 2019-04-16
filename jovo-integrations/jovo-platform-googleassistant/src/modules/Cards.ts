@@ -1,4 +1,4 @@
-import {Plugin} from "jovo-core";
+import {Plugin, EnumRequestType} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
@@ -171,7 +171,7 @@ export class Cards implements Plugin {
     }
     type(googleAction: GoogleAction) {
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.OPTION') {
-            _set(googleAction.$type, 'type', 'ON_ELEMENT_SELECTED'); // TODO: constant
+            googleAction.$type.type = EnumRequestType.ON_ELEMENT_SELECTED;
 
             for (const argument of _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0]["arguments"]', [])) {
                 if (argument.name === 'OPTION') {
