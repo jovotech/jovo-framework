@@ -4,6 +4,7 @@ import _get = require('lodash.get');
 export interface RichResponseItem {
     simpleResponse: {
         ssml?: string;
+        displayText?: string | undefined;
     };
 }
 
