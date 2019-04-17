@@ -139,9 +139,11 @@ export class Firestore implements Db {
         this.errorHandling();
 
         const userData = {
-                [key]: data,
-                updatedAt
+            [key]: data,
         };
+        if (updatedAt) {
+            userData.updatedAt = updatedAt;
+        }
 
         const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(this.config.collectionName).doc(primaryKey);
         await docRef.set(userData, {merge: true});
