@@ -45,6 +45,83 @@ export class AlexaResponse implements JovoResponse {
         return _get(this, 'response.card');
     }
 
+    getDirectives() {
+        return _get(this, 'response.directives');
+    }
+    getDirective(directiveType?: string) {
+        const allDirectives = this.getDirectives();
+
+        for (const directiveItem of allDirectives) {
+            if (directiveItem.type && directiveItem.type.indexOf(directiveType) > -1) {
+                return directiveItem;
+            }
+        }
+    }
+
+    getAplDirective() {
+        const allDirectives = this.getDirectives();
+
+        if (allDirectives) {
+            for (const directiveItem of allDirectives) {
+                if (directiveItem.document && directiveItem.document.type === 'APL') {
+                    return directiveItem;
+                }
+            }
+        }
+
+        return;
+    }
+    hasAplDirective(): boolean {
+        if (!this.getAplDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    getDisplayDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('Display');
+        }
+        return;
+    }
+
+    hasDisplayDirective(): boolean {
+        if (!this.getDisplayDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+    getAudioDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('AudioPlayer');
+        }
+        return;
+    }
+
+    hasAudioDirective(): boolean {
+        if (!this.getAudioDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+    getVideoDirective() {
+        if (this.getDirectives()) {
+            return this.getDirective('VideoApp');
+        }
+        return;
+    }
+
+    hasVideoDirective(): boolean {
+        if (!this.getVideoDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+
     getSessionData(path?: string) {
         if (path) {
             return this.getSessionAttribute(path);
@@ -64,8 +141,6 @@ export class AlexaResponse implements JovoResponse {
     getSessionAttributes() {
         return _get(this, 'sessionAttributes');
     }
-
-
 
     setSessionAttributes(sessionData: SessionData) {
         _set(this, 'sessionAttributes', sessionData);
@@ -209,6 +284,71 @@ export class AlexaResponse implements JovoResponse {
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a LinkAccount card.
+     * @return {boolean}
+     */
+    hasLinkAccountCard(): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+
+        if (cardObject.type !== 'LinkAccount') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a ask for address card.
+     * @return {boolean}
+     */
+    hasAskForAddressCard(): boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+        if (cardObject.type !== 'AskForPermissionsConsent') {
+            return false;
+        }
+
+        if (cardObject.permissions.length === 0) {
+            return false;
+        }
+        if (cardObject.permissions[0] !== 'read::alexa:device:all:address') {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if response object contains a ask for country and postal code card.
+     * @return {boolean}
+     */
+    hasAskForCountryAndPostalCodeCard():boolean {
+        const cardObject = this.getCard();
+
+        if (!cardObject) {
+            return false;
+        }
+        if (cardObject.type !== 'AskForPermissionsConsent') {
+            return false;
+        }
+
+        if (cardObject.permissions.length === 0) {
+            return false;
+        }
+
+        if (cardObject.permissions[0] !== 'read::alexa:device:all:address:country_and_postal_code') {
+            return false;
+        }
         return true;
     }
 
