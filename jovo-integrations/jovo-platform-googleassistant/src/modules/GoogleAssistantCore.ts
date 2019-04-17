@@ -24,8 +24,8 @@ export class GoogleAssistantCore implements Plugin {
 
         GoogleAction.prototype.displayText = function(displayText: string, speech: string | undefined) {
             let currentDisplayText=_get(this.$output, 'GoogleAssistant.displayText')
-            if(currentDisplayText==undefined){
-                currentDisplayText=[]
+            if(currentDisplayText === undefined){
+                currentDisplayText=[];
             }
             _set(this.$output, 'GoogleAssistant.displayText',currentDisplayText.concat([{text:displayText,ssml:speech}]));
             return this;
@@ -94,13 +94,25 @@ export class GoogleAssistantCore implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
-            const displayText=_get(output, 'GoogleAssistant.displayText')
-            displayText.forEach(function(simpleResponse,key){
-                _set(googleAction.$response, 'richResponse.items['+key+'].simpleResponse.displayText', simpleResponse.text);
-                if((key==0 && simpleResponse.ssml!=undefined) || key >0){
-                    _set(googleAction.$response, 'richResponse.items['+key+'].simpleResponse.ssml', simpleResponse.ssml);
+            const displayText=_get(output, 'GoogleAssistant.displayText');
+            let items=_get(googleAction.$response, 'richResponse.items');
+            displayText.forEach((simpleResponse: any , key: number) => {
+                if(key >0){
+                    items.push({
+                        simpleResponse:{
+                            displayText: simpleResponse.text,
+                            ssml: simpleResponse.ssml
+                        }
+                    });
+                }else{
+                    _set(items, '[0].simpleResponse.displayText', simpleResponse.text);
+                    if(simpleResponse.ssml !== undefined){
+                        _set(items, '[0].simpleResponse.ssml', simpleResponse.ssml);
+                    }
                 }
-            })
+
+            });
+            _set(googleAction.$response, 'richResponse.items', items);
         }
     }
     async userStorageGet(googleAction: GoogleAction) {
