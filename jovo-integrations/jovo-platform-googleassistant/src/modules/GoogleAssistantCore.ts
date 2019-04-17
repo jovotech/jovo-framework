@@ -23,7 +23,7 @@ export class GoogleAssistantCore implements Plugin {
         googleAssistant.middleware('after.$output')!.use(this.userStorageStore.bind(this));
 
         GoogleAction.prototype.displayText = function(displayText: string, speech: string | undefined) {
-            let currentDisplayText=_get(this.$output, 'GoogleAssistant.displayText')
+            let currentDisplayText=_get(this.$output, 'GoogleAssistant.displayText');
             if(currentDisplayText === undefined){
                 currentDisplayText=[];
             }
@@ -95,7 +95,7 @@ export class GoogleAssistantCore implements Plugin {
 
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
             const displayText=_get(output, 'GoogleAssistant.displayText');
-            let items=_get(googleAction.$response, 'richResponse.items');
+            const items = _get(googleAction.$response, 'richResponse.items');
             displayText.forEach((simpleResponse: any , key: number) => {
                 if(key >0){
                     items.push({
