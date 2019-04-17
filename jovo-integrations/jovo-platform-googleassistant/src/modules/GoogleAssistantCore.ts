@@ -4,7 +4,7 @@ import _get = require('lodash.get');
 
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
-import {GoogleActionResponse} from "../core/GoogleActionResponse";
+import {GoogleActionResponse, RichResponseItem} from "../core/GoogleActionResponse";
 import {GoogleActionSpeechBuilder} from "../core/GoogleActionSpeechBuilder";
 
 import uuidv4 = require('uuid/v4');
@@ -27,7 +27,7 @@ export class GoogleAssistantCore implements Plugin {
             if(currentDisplayText === undefined){
                 currentDisplayText=[];
             }
-            _set(this.$output, 'GoogleAssistant.displayText',currentDisplayText.concat([{text:displayText,ssml:speech}]));
+            _set(this.$output, 'GoogleAssistant.displayText',currentDisplayText.concat([{"displayText": displayText,"ssml": speech}]));
             return this;
         };
 
@@ -96,16 +96,16 @@ export class GoogleAssistantCore implements Plugin {
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
             const displayText=_get(output, 'GoogleAssistant.displayText');
             const items = _get(googleAction.$response, 'richResponse.items');
-            displayText.forEach((simpleResponse: any , key: number) => {
+            displayText.forEach((simpleResponse: RichResponseItem["simpleResponse"] , key: number) => {
                 if(key >0){
                     items.push({
                         simpleResponse:{
-                            displayText: simpleResponse.text,
+                            displayText: simpleResponse.displayText,
                             ssml: simpleResponse.ssml
                         }
                     });
                 }else{
-                    _set(items, '[0].simpleResponse.displayText', simpleResponse.text);
+                    _set(items, '[0].simpleResponse.displayText', simpleResponse.displayText);
                     if(simpleResponse.ssml !== undefined){
                         _set(items, '[0].simpleResponse.ssml', simpleResponse.ssml);
                     }
