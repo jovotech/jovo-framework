@@ -22,10 +22,12 @@ export class GoogleAssistantCore implements Plugin {
         googleAssistant.middleware('$output')!.use(this.output.bind(this));
         googleAssistant.middleware('after.$output')!.use(this.userStorageStore.bind(this));
 
-        GoogleAction.prototype.displayText = function(displayText: string) {
-            _set(this.$output, 'GoogleAssistant.displayText',
-                displayText
-            );
+        GoogleAction.prototype.displayText = function(displayText: string, speech: string | undefined) {
+            let currentDisplayText=_get(this.$output, 'GoogleAssistant.displayText')
+            if(currentDisplayText==undefined){
+                currentDisplayText=[]
+            }
+            _set(this.$output, 'GoogleAssistant.displayText',currentDisplayText.concat([{text:displayText,ssml:speech}]));
             return this;
         };
 
@@ -92,7 +94,13 @@ export class GoogleAssistantCore implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
-            _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
+            const displayText=_get(output, 'GoogleAssistant.displayText')
+            displayText.forEach(function(simpleResponse,key){
+                _set(googleAction.$response, 'richResponse.items['+key+'].simpleResponse.displayText', simpleResponse.text);
+                if((key==0 && simpleResponse.ssml!=undefined) || key >0){
+                    _set(googleAction.$response, 'richResponse.items['+key+'].simpleResponse.ssml', simpleResponse.ssml);
+                }
+            })
         }
     }
     async userStorageGet(googleAction: GoogleAction) {

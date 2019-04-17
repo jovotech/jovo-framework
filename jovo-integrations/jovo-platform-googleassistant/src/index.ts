@@ -339,7 +339,7 @@ declare module './core/GoogleAction' {
 
 declare module './core/GoogleAction' {
     interface GoogleAction {
-        displayText(displayText: string): this;
+        displayText(displayText: string, speech: string | undefined): this;
     }
 }
 
