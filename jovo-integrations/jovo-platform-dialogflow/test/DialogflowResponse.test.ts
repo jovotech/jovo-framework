@@ -28,3 +28,15 @@ test('test hasSessionData', () => {
     expect(responseWithState.hasSessionData("session")).toBe(true);
     expect(responseWithState.hasSessionData("age")).toBe(false);
 });
+
+test('test hasDisplayText', () => {
+    const responseWithState = DialogflowResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasDisplayText('Sample Display Text')).toBe(true);
+    expect(responseWithState.hasDisplayText('test123')).toBe(false);
+    expect(responseWithState.hasDisplayText()).toBe(true);
+
+    const responseWithoutState = DialogflowResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.hasDisplayText('test123')).toBe(false);
+    expect(responseWithoutState.hasDisplayText()).toBe(false);
+});

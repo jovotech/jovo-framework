@@ -9,6 +9,8 @@ Learn more about the Jovo `$response` object.
 * [Platform Specific Methods](#platform-specific-methods)
    * [Alexa Methods](#alexa-methods)
       * [Alexa Response Getters](#alexa-response-getters)
+   * [Google Assistant Methods](#google-assistant-methods)
+      * [Google Assistant Response Getters](#google-assistant-response-getters)
 
 ## Introduction
 
@@ -71,6 +73,14 @@ You can use these cross-platform helper methods:
 | `getAudioDirective(): Audio object | undefind` | Returns Audio Player object from response.|
 | `getVideoDirective(): Video object | undefind` | Returns Video Player object from response.|
 
+### Google Assistant Methods
+
+#### Google Assistant Response Getters
+
+| Method        | Description        |
+| ------------- |-------------|
+| `hasDisplayText(text?: string): boolean` | Checks that Google response has display text. |
+| `has(): boolean` | Checks |
 
 <!--[metadata]: {"description": "Learn more about the Jovo $response object.",
 		        "route": "requests-responses/response"}-->

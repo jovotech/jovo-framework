@@ -17,7 +17,8 @@
         "items": [
           {
             "simpleResponse": {
-              "ssml": "<speak>Simple Ask</speak>"
+              "ssml": "<speak>Simple Ask</speak>",
+              "displayText": "Sample Display Text"
             }
           }
         ]
