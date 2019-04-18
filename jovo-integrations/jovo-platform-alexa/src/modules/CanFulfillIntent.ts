@@ -89,7 +89,6 @@ export class CanFulfillIntent implements Plugin {
         if (!alexaSkill.$response) {
             alexaSkill.$response = new AlexaResponse();
         }
-        console.log(JSON.stringify(output, null, '\t'));
         const response = alexaSkill.$response as AlexaResponse;
 
         if (_get(output, 'Alexa.CanFulfillRequest')) {
