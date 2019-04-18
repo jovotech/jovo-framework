@@ -4,6 +4,7 @@ import _get = require('lodash.get');
 
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
+import {EnumGoogleAssistantRequestType} from "../core/google-assistant-enums";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
 export interface Device {
     location: {
@@ -317,19 +318,19 @@ export class AskFor implements Plugin {
     }
     type(googleAction: GoogleAction) {
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.PERMISSION') {
-            _set(googleAction.$type, 'type', 'ON_PERMISSION'); // TODO: constant
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_PERMISSION;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.SIGN_IN') {
-            _set(googleAction.$type, 'type', 'ON_SIGN_IN');
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_SIGN_IN;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.CONFIRMATION') {
-            _set(googleAction.$type, 'type', 'ON_CONFIRMATION');
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_CONFIRMATION;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.DATETIME') {
-            _set(googleAction.$type, 'type', 'ON_DATETIME');
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_DATETIME;
         }
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.PLACE') {
-            _set(googleAction.$type, 'type', 'ON_PLACE');
+            googleAction.$type.type = EnumGoogleAssistantRequestType.ON_PLACE;
         }
     }
     output(googleAction: GoogleAction) {

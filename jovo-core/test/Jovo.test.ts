@@ -1,4 +1,5 @@
-import {BaseApp, Host, Jovo, SessionConstants, SpeechBuilder} from "../src";
+import {BaseApp, Host, Jovo, SessionConstants, SpeechBuilder, EnumRequestType} from "../src";
+process.env.NODE_ENV = 'UNIT_TEST';
 
 class JovoImpl extends Jovo {
     /**
@@ -420,5 +421,95 @@ test('test showAccountLinkingCard', () => {
             AccountLinkingCard: {
             }
         }
+    });
+});
+
+describe('test isLaunchRequest()', () => {
+    test('should return true', () => {
+        jovo.$type.type = EnumRequestType.LAUNCH;
+    
+        const result = jovo.isLaunchRequest();
+    
+        expect(result).toBe(true);
+    });
+    
+    test('should return false', () => {
+        jovo.$type.type = 'test';
+
+        const result = jovo.isLaunchRequest();
+
+        expect(result).toBe(false);
+    });
+});
+
+describe('test isIntentRequest()', () => {
+    test('should return true', () => {
+        jovo.$type.type = EnumRequestType.INTENT;
+    
+        const result = jovo.isIntentRequest();
+    
+        expect(result).toBe(true);
+    });
+    
+    test('should return false', () => {
+        jovo.$type.type = 'test';
+
+        const result = jovo.isIntentRequest();
+
+        expect(result).toBe(false);
+    });
+});
+
+describe('test isEndRequest()', () => {
+    test('should return true', () => {
+        jovo.$type.type = EnumRequestType.END;
+    
+        const result = jovo.isEndRequest();
+    
+        expect(result).toBe(true);
+    });
+    
+    test('should return false', () => {
+        jovo.$type.type = 'test';
+
+        const result = jovo.isEndRequest();
+
+        expect(result).toBe(false);
+    });
+});
+
+describe('test isAudioPlayerRequest()', () => {
+    test('should return true', () => {
+        jovo.$type.type = EnumRequestType.AUDIOPLAYER;
+    
+        const result = jovo.isAudioPlayerRequest();
+    
+        expect(result).toBe(true);
+    });
+    
+    test('should return false', () => {
+        jovo.$type.type = 'test';
+
+        const result = jovo.isAudioPlayerRequest();
+
+        expect(result).toBe(false);
+    });
+});
+
+describe('test isElementSelectedRequest()', () => {
+    test('should return true', () => {
+        jovo.$type.type = EnumRequestType.ON_ELEMENT_SELECTED;
+    
+        const result = jovo.isElementSelectedRequest();
+    
+        expect(result).toBe(true);
+    });
+    
+    test('should return false', () => {
+        jovo.$type.type = 'test';
+
+        const result = jovo.isElementSelectedRequest();
+
+        expect(result).toBe(false);
     });
 });
