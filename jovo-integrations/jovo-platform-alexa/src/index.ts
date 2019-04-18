@@ -113,7 +113,7 @@ declare module './core/AlexaSkill' {
          * @public
          * @param {string} canFulfillRequest
          */
-        canFulfillRequest(canFulfillRequest: string): this;
+        canFulfillRequest(canFulfillRequest?: string): this;
 
         /**
          * Sets can fulfill request values.
