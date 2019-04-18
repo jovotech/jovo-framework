@@ -21,6 +21,10 @@
           "name":{
             "name":"name",
             "value":"Jeff"
+          },
+          "age":{
+            "name":"age",
+            "value":"twenty four"
           }
         }
       },
@@ -40,11 +44,10 @@
         },
         "device":{
           "supportedInterfaces":{
-  
+
           }
         }
       }
     },
     "version":"1.0"
   }
-  

@@ -65,8 +65,8 @@ export class CanFulfillIntent implements Plugin {
             if (canFulfillSlot !== 'YES' && canFulfillSlot !== 'NO') {
                 throw new Error('canFulfill must be one the following values: YES | NO');
             }
-            _set(this.$output, 'Alexa.CanFulfillSlot', {
-                slotName, canUnderstandSlot, canFulfillSlot
+            _set(this.$output, `Alexa.CanFulfillSlot.${slotName}`, {
+                canUnderstandSlot, canFulfillSlot
             });
             return this;
         };
@@ -89,7 +89,7 @@ export class CanFulfillIntent implements Plugin {
         if (!alexaSkill.$response) {
             alexaSkill.$response = new AlexaResponse();
         }
-
+        console.log(JSON.stringify(output, null, '\t'));
         const response = alexaSkill.$response as AlexaResponse;
 
         if (_get(output, 'Alexa.CanFulfillRequest')) {
