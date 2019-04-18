@@ -52,6 +52,9 @@ export class DialogflowResponse implements JovoResponse {
 
 
     getSessionAttributes() {
+        if (!_get(this, 'outputContexts')) {
+            return {};
+        }
         const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
             return context.name.indexOf('/contexts/_jovo_session_') > -1;
         });
