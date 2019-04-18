@@ -1,0 +1,108 @@
+{
+  "version": "1.0",
+  "response": {
+    "shouldEndSession": false,
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Sample Text</speak>"
+    },
+    "reprompt": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>What else can I do for you?</speak>"
+      }
+    },
+    "directives": [
+      {
+        "type": "Display.RenderTemplate",
+        "template": {
+          "type": "BodyTemplate7",
+          "token": "BodyTemplate7",
+          "title": "Title",
+          "backgroundImage": {
+            "contentDescription": "Textured grey background",
+            "sources": [
+              {
+                "url": "http://url.com"
+              }
+            ]
+          },
+          "image": {
+            "contentDescription": "Mount St. Helens landscape",
+            "sources": [
+              {
+                "url": "http://url.com"
+              }
+            ]
+          },
+          "backButton": "HIDDEN"
+        }
+      },
+      {
+        "type": "AudioPlayer.Play",
+        "playBehavior": "REPLACE_ALL",
+        "audioItem": {
+          "stream": {
+            "url": "www.sampleAudio.mp3",
+            "token": "someToken",
+            "offsetInMilliseconds": 0
+          }
+        }
+      },
+      {
+        "version": "1.0",
+        "document": {
+          "type": "APL",
+          "version": "1.0",
+          "import": [],
+          "resources": [],
+          "styles": {},
+          "layouts": {},
+          "mainTemplate": {
+            "description": "apl template",
+            "parameters": [
+              "datasources"
+            ],
+            "items": [
+              {
+                "type": "baseContainer"
+              }
+            ]
+          }
+        },
+        "datasources": {
+          "templateData": {
+            "type": "object",
+            "header": {
+              "headerTitle": "Title"
+            },
+            "textContent": {
+              "text": "Sample text"
+            }
+          }
+        }
+      },
+      {
+        "type": "VideoApp.Launch",
+        "videoItem": {
+          "source": "www.sampleVideo.mp4",
+          "metadata": {
+            "title": "Sample Video Title"
+          }
+        }
+      }
+    ],
+    "card": {
+      "type": "Standard",
+      "image": {
+        "smallImageUrl": "https://via.placeholder.com/720x480",
+        "largeImageUrl": "https://via.placeholder.com/1200x800"
+      },
+      "title": "Standard Title",
+      "text": "Standard Text"
+    }
+  },
+  "sessionAttributes": {
+    "session": "attribute"
+  }
+}

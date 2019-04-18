@@ -1,15 +1,21 @@
 import { ResponsesSheet, GoogleSheetsCMS } from '../src/';
 import { Cms, BaseApp, HandleRequest } from 'jovo-core';
-import * as cSheetValues from './mockObj/sheetValues.json';
+import * as cPublicSheetValues from './mockObj/publicSheetValues.json';
+import * as cPrivateSheetValues from './mockObj/privateSheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
+import * as cI18nModel from './mockObj/i18nModel.json';
 import _cloneDeep = require('lodash.clonedeep');
-const i18n = require('i18next');
+import i18n from 'i18next';
 
-let sheetValues: any[];     // tslint:disable-line
+let publicSheetValues: any[];       // tslint:disable-line
+let privateSheetValues: any[];      // tslint:disable-line
+let i18nModel: any;                 // tslint:disable-line
 let handleRequest: HandleRequest;
 beforeEach(() => {
     handleRequest = new MockHandleRequest();
-    sheetValues = _cloneDeep(cSheetValues);
+    publicSheetValues = _cloneDeep(cPublicSheetValues);
+    privateSheetValues = _cloneDeep(cPrivateSheetValues);
+    i18nModel = _cloneDeep(cI18nModel);
 });
 
 describe('ResponsesSheet.constructor()', () => {
@@ -28,7 +34,7 @@ describe('ResponsesSheet.constructor()', () => {
 });
 
 describe('ResponsesSheet.install()', () => {
-    test('t function for cms', () => {
+    test('should register Cms.t()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const responsesSheet = new ResponsesSheet();
 
@@ -41,18 +47,20 @@ describe('ResponsesSheet.install()', () => {
 describe('ResponsesSheet.parse()', () => {
     test('should throw error if entity is not set', () => {
         const responsesSheet = new ResponsesSheet();
-        expect(() => responsesSheet.parse(handleRequest, sheetValues))
-            .toThrow('Entity has to be set.');
+        expect(() => responsesSheet.parse(handleRequest, publicSheetValues))
+            .toThrow('entity has to be set.');
     });
 
-    test('with empty array', () => {
+    test('without headers and without values', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
+
         responsesSheet.parse(handleRequest, []);
+
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
         expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
@@ -64,16 +72,10 @@ describe('ResponsesSheet.parse()', () => {
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(handleRequest, [
-            [
-                'WELCOME',
-                'Welcome_Default'
-            ],
-            [
-                'GOODBYE',
-                'Goodbye_Default'
-            ]
-        ]);
+
+        publicSheetValues.shift();
+        responsesSheet.parse(handleRequest, publicSheetValues);
+
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
         expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
@@ -85,83 +87,40 @@ describe('ResponsesSheet.parse()', () => {
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(handleRequest, [
-            [
-                'key',
-                'en-us'
-            ]
-        ]);
+
+        publicSheetValues = [publicSheetValues[0]];
+        responsesSheet.parse(handleRequest, publicSheetValues);
+
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
         expect(handleRequest.app.$cms.test).toStrictEqual({});
     });
 
-    test('with valid values', () => {
+    test('with valid public spreadsheet values', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
-        responsesSheet.parse(handleRequest, sheetValues);
+
+        responsesSheet.parse(handleRequest, publicSheetValues);
+
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
-        expect(handleRequest.app.$cms.test).toStrictEqual({
-            'en-US': {
-                translation: {
-                    WELCOME: ['Welcome_Default'],
-                    GOODBYE: ['Goodbye_Default', 'Bye_Default']
-                }
-            },
-            'de-DE': {
-                translation: {
-                    WELCOME: ['Willkommen_Default'],
-                    GOODBYE: []
-                }
-            }
-        });
+        expect(handleRequest.app.$cms.test).toStrictEqual(i18nModel);
     });
 
-    test('with valid values and platform-specific responses', () => {
-        const app = new BaseApp();
-        const googleSheetsCMS = new GoogleSheetsCMS();
-        googleSheetsCMS.install(app);
+    test('with valid private spreadsheet values', () => {
         const responsesSheet = new ResponsesSheet({
             name: 'test'
         });
-        responsesSheet.install(googleSheetsCMS);
-        handleRequest.app.getAppTypes = () => {
-            return ['AlexaSkill'];
-        };
-
-        sheetValues[0].push('en-us-alexaskill');
-        sheetValues[1].push('Welcome_Alexa');
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
 
-        responsesSheet.parse(handleRequest, sheetValues);
+        responsesSheet.parse(handleRequest, privateSheetValues);
 
-        // @ts-ignore
-        expect(app.config.platformSpecificResponses).toBeTruthy();
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
-        expect(handleRequest.app.$cms.test).toStrictEqual({
-            'en-US': {
-                translation: {
-                    WELCOME: ['Welcome_Default'],
-                    GOODBYE: ['Goodbye_Default', 'Bye_Default']
-                },
-                AlexaSkill: {
-                    translation: {
-                        WELCOME: ['Welcome_Alexa']
-                    }
-                }
-            },
-            'de-DE': {
-                translation: {
-                    WELCOME: ['Willkommen_Default'],
-                    GOODBYE: []
-                }
-            }
-        });
+        expect(handleRequest.app.$cms.test).toStrictEqual(i18nModel);
     });
 
     test('should merge new values in existing i18n object', () => {
@@ -195,22 +154,72 @@ describe('ResponsesSheet.parse()', () => {
                 }
             });
 
-        responsesSheet.parse(handleRequest, sheetValues);
+        responsesSheet.parse(handleRequest, publicSheetValues);
 
-        expect(handleRequest.app.$cms.I18Next.i18n.store.data)
-            .toStrictEqual({
-                'en-US': {
-                    translation: {
-                        WELCOME: ['Welcome_Default'],
-                        GOODBYE: ['Goodbye_Default', 'Bye_Default']
-                    }
-                },
-                'de-DE': {
-                    translation: {
-                        WELCOME: ['Willkommen_Default'],
-                        GOODBYE: []
-                    }
-                }
+        expect(handleRequest.app.$cms.I18Next.i18n.store.data).toStrictEqual(i18nModel);
+    });
+
+    describe('with platform-specific responses', () => {
+        test('with private spreadsheet values', () => {
+            const app = new BaseApp();
+            const googleSheetsCMS = new GoogleSheetsCMS();
+            googleSheetsCMS.install(app);
+            const responsesSheet = new ResponsesSheet({
+                name: 'test'
             });
+            responsesSheet.install(googleSheetsCMS);
+            handleRequest.app.getAppTypes = () => {
+                return ['AlexaSkill'];
+            };
+
+            expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+            expect(handleRequest.app.$cms.test).toBeUndefined();
+
+            privateSheetValues[0].push('en-US-AlexaSkill');
+            privateSheetValues[1].push('Welcome_Alexa');
+            i18nModel['en-US'].AlexaSkill = {
+                translation: {
+                    WELCOME: ['Welcome_Alexa'],
+                    GOODBYE: []
+                }
+            };
+            responsesSheet.parse(handleRequest, privateSheetValues);
+
+            // @ts-ignore
+            expect(app.config.platformSpecificResponses).toBeTruthy();
+            expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+            expect(handleRequest.app.$cms.test).toStrictEqual(i18nModel);
+        });
+
+        test('with public spreadsheet values', () => {
+            const app = new BaseApp();
+            const googleSheetsCMS = new GoogleSheetsCMS();
+            googleSheetsCMS.install(app);
+            const responsesSheet = new ResponsesSheet({
+                name: 'test'
+            });
+            responsesSheet.install(googleSheetsCMS);
+            handleRequest.app.getAppTypes = () => {
+                return ['AlexaSkill'];
+            };
+
+            expect(handleRequest.app.$cms.I18Next).toBeUndefined();
+            expect(handleRequest.app.$cms.test).toBeUndefined();
+
+            publicSheetValues[0].push('en-us-alexaskill');
+            publicSheetValues[1].push('Welcome_Alexa');
+            i18nModel['en-US'].AlexaSkill = {
+                translation: {
+                    WELCOME: ['Welcome_Alexa'],
+                    GOODBYE: []
+                }
+            };
+            responsesSheet.parse(handleRequest, publicSheetValues);
+
+            // @ts-ignore
+            expect(app.config.platformSpecificResponses).toBeTruthy();
+            expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
+            expect(handleRequest.app.$cms.test).toStrictEqual(i18nModel);
+        });
     });
 });

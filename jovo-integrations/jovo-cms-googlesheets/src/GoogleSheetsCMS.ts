@@ -99,7 +99,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         }
     }
 
-    async loadPublicSpreadSheetData(spreadsheetId: string, sheetPosition = 1) {
+    async loadPublicSpreadsheetData(spreadsheetId: string, sheetPosition = 1) {
         const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
         Log.verbose('Accessing public spreadsheet: ' + url);
         return await this.getJSON(url);

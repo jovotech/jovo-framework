@@ -53,7 +53,7 @@ Method | Description
 `setTitle(title)` | Title of the card
 `setSubtitle(subtitle)` | Subtitle of the card
 `setFormattedText(text)` | Body text of the card
-`setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
+`setImage(imageObject)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
 `setImageDisplay(option)` | Choose the [display option](https://developers.google.com/actions/reference/rest/Shared.Types/ImageDisplayOptions)
 `addButton(title, url)` | Add a [button](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#button) at the bottom of the card
 
@@ -71,7 +71,12 @@ const { GoogleAssistant } = require('jovo-platform-googleassistant');
 let basicCard = new GoogleAssistant.BasicCard()
   .setTitle('Jovo')
   .setFormattedText('Welcome to the documentation of the Jovo framework')
-  .setImage('http://via.placeholder.com/350x150?text=Basic+Card', 'Jovo Card', '350', '150')
+  .setImage({
+      url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
+      accessibilityText: 'Jovo Card',
+      width: 350,
+      height: 150
+  })
   .setImageDisplay('WHITE') 
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
@@ -90,7 +95,12 @@ import { GoogleAssistant } from 'jovo-platform-googleassistant';
 let basicCard = new GoogleAssistant.BasicCard()
   .setTitle('Jovo')
   .setFormattedText('Welcome to the documentation of the Jovo framework')
-  .setImage('http://via.placeholder.com/350x150?text=Basic+Card', 'Jovo Card', '350', '150')
+  .setImage({
+      url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
+      accessibilityText: 'Jovo Card',
+      width: 350,
+      height: 150
+  })
   .setImageDisplay('WHITE') 
   .addButton('Jovo website', 'https://www.jovo.tech/');
 
@@ -109,7 +119,7 @@ Method | Description
 :--- | :---
 `setTitle(title)` | Title of the card
 `setSubtitle(subtitle)` | Subtitle of the card
-`setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
+`setImage(imageObj)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
 `addRow(cellsText, dividerAfter)` | Add data for a single [row](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
 `addRows(rowsText) ` | Add data for multiple [rows](https://actions-on-google.github.io/actions-on-google-nodejs/interfaces/actionssdk_api_v2.googleactionsv2uielementstablecardrow.html)
 `addColumn(header, horizontalAlignment)` | Add data for a single column. Choose the [horizontal alignment](https://developers.google.com/actions/reference/rest/Shared.Types/HorizontalAlignment)
@@ -127,7 +137,12 @@ const { GoogleAssistant } = require('jovo-platform-googleassistant');
 
 let tableCard = new GoogleAssistant.Table()
   .setTitle('Jovo')
-  .setImage('http://via.placeholder.com/150x150?text=Table', 'Jovo Card', '150', '150')
+  .setImage({
+      url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
+      accessibilityText: 'Jovo Card',
+      width: 350,
+      height: 150
+  })
   .addColumn('header 1','CENTER')
   .addColumn('header 2','LEADING')
   .addColumn('header 3','TRAILING')
@@ -148,7 +163,12 @@ import { GoogleAssistant } from 'jovo-platform-googleassistant';
 
 let tableCard = new GoogleAssistant.Table()
   .setTitle('Jovo')
-  .setImage('http://via.placeholder.com/150x150?text=Table', 'Jovo Card', '150', '150')
+  .setImage({
+      url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
+      accessibilityText: 'Jovo Card',
+      width: 350,
+      height: 150
+  })
   .addColumn('header 1','CENTER')
   .addColumn('header 2','LEADING')
   .addColumn('header 3','TRAILING')
@@ -172,7 +192,7 @@ Method | Description
 :--- | :---
 `setTitle(title)` | Title of the card
 `setDescription(text)` | Body text of the card
-`setImage(imageURL, accessibilityText, width, height)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
+`setImage(imageObj)` | Add an [image object](https://developers.google.com/actions/reference/rest/Shared.Types/Image) to the card
 `setKey(key)` | Unique key to identify the card
 `addSynonym(synonym)` | Possible synonyms, which can be used to select the card in dialog
 

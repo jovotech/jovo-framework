@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {},
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Simple Tell</speak>"
+    },
+    "card": {
+      "type": "Simple",
+      "title": "Simple Title",
+      "text": "Simple Text"
+    },
+    "shouldEndSession": true
+  }
+}

@@ -1,7 +1,7 @@
 import { DefaultSheet, GoogleSheetsCMS } from '../src/';
 import { BaseApp, JovoError, ErrorCode, HandleRequest } from 'jovo-core';
 import * as feed from './mockObj/feedEntries.json';
-import * as sheetValues from './mockObj/sheetValues.json';
+import * as sheetValues from './mockObj/publicSheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
 
 let handleRequest: HandleRequest;
@@ -52,21 +52,14 @@ describe('DefaultSheet.install()', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
         const defaultSheet = new DefaultSheet();
 
-        const fnsOld = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = googleSheetsCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = googleSheetsCMS.middleware('retrieve')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = googleSheetsCMS.middleware('retrieve')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 
     test('should register middleware on request with caching on parent', () => {
@@ -77,21 +70,14 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const fnsOld = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 
     test('should register middleware on request with caching', () => {
@@ -102,21 +88,14 @@ describe('DefaultSheet.install()', () => {
         const app = new BaseApp();
         googleSheetsCMS.install(app);
 
-        const fnsOld = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsOld.length).toEqual(0);
+        let fn;
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeUndefined();
 
         defaultSheet.install(googleSheetsCMS);
 
-        const fnsNew = app.middleware('request')!.fns.map((i) => {
-            if (i.name === 'bound retrieve') {
-                return i;
-            }
-        });
-        expect(fnsNew.length).toEqual(1);
+        fn = app.middleware('request')!.fns.find((i) => i.name === 'bound retrieve');
+        expect(fn).toBeDefined();
     });
 });
 
@@ -125,7 +104,7 @@ describe('DefaultSheet.parse()', () => {
         const defaultSheet = new DefaultSheet();
 
         expect(() => defaultSheet.parse(handleRequest, []))
-            .toThrow('Entity has to be set.');
+            .toThrow('entity has to be set.');
     });
 
     test('should set values to entity attribute', () => {
@@ -134,8 +113,24 @@ describe('DefaultSheet.parse()', () => {
         });
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
+
         defaultSheet.parse(handleRequest, []);
+
         expect(handleRequest.app.$cms.test).toStrictEqual([]);
+    });
+});
+
+describe('DefaultSheet.parsePublicToPrivate()', () => {
+    test('should throw Jovo Error with empty feed', () => {
+        const defaultSheet = new DefaultSheet();
+        expect(() => defaultSheet['parsePublicToPrivate']({ feed: {} }))
+            .toThrow('No spreadsheet values found.');
+    });
+
+    test('with valid values', () => {
+        const defaultSheet = new DefaultSheet();
+        expect(defaultSheet['parsePublicToPrivate'](feed))
+            .toStrictEqual(sheetValues);
     });
 });
 
@@ -167,29 +162,16 @@ describe('DefaultSheet.retrieve()', () => {
         );
     });
 
-    test.skip('should reject Promise with JovoError if no range is set', async () => {
+    test('should set retrieved values with parsePublicToPrivate() from mocked function loadPublicSpreadsheetData()', async () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
-        const defaultSheet = new DefaultSheet({
-            spreadsheetId: '123',
-            name: 'test'
-        });
-        defaultSheet.install(googleSheetsCMS);
-
-        await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
-            new JovoError('range has to be set.', ErrorCode.ERR_PLUGIN)
-        );
-    });
-
-    test('should set retrieved values from mocked method -> parsePublicToPrivate', async () => {
-        const googleSheetsCMS = new GoogleSheetsCMS();
-        googleSheetsCMS.loadPublicSpreadSheetData =
+        googleSheetsCMS.loadPublicSpreadsheetData =
             (spreadsheetId: string, sheetPosition = 1) => new Promise((res, rej) => res(feed));
 
         const defaultSheet = new DefaultSheet({
             spreadsheetId: '123',
             name: 'test',
             range: 'A:B',
-            access: 'public'    // this values does not matter for this test, as long as the right method is mocked
+            access: 'public'
         });
         defaultSheet.install(googleSheetsCMS);
 

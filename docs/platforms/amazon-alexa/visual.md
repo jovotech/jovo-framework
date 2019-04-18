@@ -1,8 +1,8 @@
-# Visual Output
+# Alexa Visual Output
 
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
-* [Introduction to Visual Output](#introduction-to-visual-output)
+* [Introduction to Alexa Visual Output](#introduction-to-alexa-visual-output)
 * [Cards](#cards)
   * [Simple Card](#simple-card)
   * [Standard Card](#standard-card)
@@ -10,7 +10,7 @@ Learn more about how to build Alexa Skills with visual output using the Jovo Fra
   * [Body Templates](#body-templates)
   * [List Templates](#body-templates)
 * [Alexa Presentation Language](#alexa-presentation-language)
-* [Video](#video)
+* [Video App Interface](#video-app-interface)
 
 ## Introduction to Visual Ouput
 
@@ -115,7 +115,35 @@ this.$alexaSkill!.showCard(
 Display Templates can be used to include content on the screen of the Echo Show or Spot. There is a variety of templates, each having a different composition and features. You can find the
 [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html).
 
-To be able to use display templates for devices like Echo Show, you need to enable them in the Interfaces tab in the Amazon Developer Console:
+To be able to use display templates for devices like Echo Show, add the following configurations to your `project.js`:
+
+```js
+alexaSkill: {
+  manifest: {
+    apis: {
+        custom: {
+            interfaces: [
+                {
+                    type: 'RENDER_TEMPLATE'
+                }
+            ]
+        }
+    }
+  }
+}
+```
+
+Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
+
+```sh
+# Build platforms folder
+$ jovo build
+
+# Upload to Alexa
+$ jovo deploy
+```
+
+Alternatively, you can enable it in the Interfaces tab in the Amazon Developer Console:
 
 ![Alexa Console: Enable Display Interface](../../img/alexa-enable-display-interface.jpg)
 
@@ -415,7 +443,8 @@ ShowTemplateIntent() {
 To enable APL, add the following configurations to your `project.js`:
 
 ```js
-manifest: {
+alexaSkill: {
+  manifest: {
     apis: {
         custom: {
             interfaces: [
@@ -425,6 +454,7 @@ manifest: {
             ]
         }
     }
+  }
 }
 ```
 
@@ -438,7 +468,7 @@ $ jovo build
 $ jovo deploy
 ```
 
-## Video
+## Video App Interface
 
 To launch videos on an Echo Show you can use the `VideoApp` interface:
 
@@ -464,8 +494,35 @@ this.$alexaSkill.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Sub
 this.$alexaSkill!.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle', 'Get ready to watch your video!');
 ```
 
-
 Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).
+
+To enable the video app interface, add the following configurations to your `project.js`:
+
+```js
+alexaSkill: {
+  manifest: {
+    apis: {
+        custom: {
+            interfaces: [
+                {
+                    type: 'VIDEO_APP'
+                }
+            ]
+        }
+    }
+  }
+}
+```
+
+Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
+
+```sh
+# Build platforms folder
+$ jovo build
+
+# Upload to Alexa
+$ jovo deploy
+```
 
 
 <!--[metadata]: {"description": "Learn how to use Amazon Echo Show Display Templates and other Visual Output Elements in your Amazon Alexa Skills with the Jovo Framework",
