@@ -47,6 +47,26 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
+    getDisplayText() {
+        return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText')
+    }
+
+    hasDisplayText(text?: string): boolean {
+        const displayTextObject = this.getDisplayText();
+
+        if (!displayTextObject) {
+            return false;
+        }
+
+        if (text) {
+            if (text !== displayTextObject) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     getSpeech() {
         if (!_get(this, 'richResponse.items[0].simpleResponse.ssml')) {
             return;
