@@ -39,7 +39,7 @@ Google Assistant allows to add multiple reprompts that are spoken out in order i
 The reprompts can be added to the [`ask`](../../basic-concepts/output#ask './output#ask') method by using an array.
 
 ```javascript
-this.ask(speech, [reprompt1, reprompt2, goodbyeMessage]);
+this.ask(speech, reprompt1, reprompt2, goodbyeMessage);
 ```
 
 The first two messages are usually reprompt messages, the third one is used to say goodbye to the user.

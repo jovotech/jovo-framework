@@ -150,27 +150,21 @@ export class DialogflowResponse implements JovoResponse {
     }
 
     hasState(state: string) {
-        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/_jovo_session_') > -1;
-        });
-
-        if (sessionContext) {
-            return _get(sessionContext, `parameters.${SessionConstants.STATE}`) === state ;
-        }
-
-        return false;
+        return this.hasSessionAttribute(SessionConstants.STATE, state);
     }
 
     hasSessionAttribute(name: string, value?: any) { // tslint:disable-line
-        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/_jovo_session_') > -1;
-        });
-
-        if (sessionContext) {
-            return typeof _get(sessionContext, `parameters.${name}`) !== 'undefined' ;
+        if (!this.getSessionAttribute(name)) {
+            return false;
         }
 
-        return false;
+        if (typeof value !== 'undefined') {
+            if (this.getSessionAttribute(name) !== value) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     getPlatformResponse() {

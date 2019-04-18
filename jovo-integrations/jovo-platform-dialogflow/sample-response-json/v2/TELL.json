@@ -1,0 +1,23 @@
+{
+  "fulfillmentText": "Simple Tell",
+  "outputContexts": [
+    {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_screen_output"
+    }
+  ],
+  "payload": {
+    "google": {
+      "expectUserResponse": false,
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "ssml": "<speak>Simple Tell</speak>"
+            }
+          }
+        ]
+      },
+      "userStorage": "{\"userId\":\"h3oyld\"}"
+    }
+  }
+}

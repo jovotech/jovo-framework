@@ -1,6 +1,6 @@
 import {EventEmitter} from "events";
 import {BaseApp} from "./BaseApp";
-import {SessionConstants} from "./enums";
+import {SessionConstants, EnumRequestType} from "./enums";
 import {SpeechBuilder} from "./SpeechBuilder";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
@@ -494,5 +494,50 @@ export abstract class Jovo extends EventEmitter {
      */
     endSession() {
         console.log('endSession() is obsolete in v2');
+    }
+
+    /**
+     * Returns true if the current request is of type LAUNCH
+     * @public
+     * @return {boolean}
+     */
+    isLaunchRequest(): boolean {
+        return this.$type.type === EnumRequestType.LAUNCH;
+    }
+
+    /**
+     * Returns true if the current request is of type INTENT
+     * @public
+     * @return {boolean}
+     */
+    isIntentRequest(): boolean {
+        return this.$type.type === EnumRequestType.INTENT;
+    }
+
+    /**
+     * Returns true if the current request is of type END
+     * @public
+     * @return {boolean}
+     */  
+    isEndRequest(): boolean {
+        return this.$type.type === EnumRequestType.END;
+    }
+
+    /**
+     * Returns true if the current request is of type AUDIOPLAYER
+     * @public
+     * @return {boolean}
+     */   
+    isAudioPlayerRequest(): boolean {
+        return this.$type.type === EnumRequestType.AUDIOPLAYER;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_ELEMENT_SELECTED
+     * @public
+     * @return {boolean}
+     */  
+    isElementSelectedRequest(): boolean {
+        return this.$type.type === EnumRequestType.ON_ELEMENT_SELECTED;
     }
 }

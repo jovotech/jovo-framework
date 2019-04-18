@@ -125,9 +125,12 @@ export class MongoDb implements Db {
                 $set: {
                     [this.config.primaryKeyColumn!]: primaryKey,
                     [key]: data,
-                    updatedAt
                 }
             };
+            if (updatedAt) {
+                item.$set.updatedAt = updatedAt;
+            }
+            
             await collection.updateOne({ userId: primaryKey }, item, { upsert: true });
         } catch (e) {
             throw new JovoError(

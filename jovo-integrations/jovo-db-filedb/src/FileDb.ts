@@ -101,13 +101,18 @@ export class FileDb implements Db {
 
         if(userData) {
             _set(userData, key, data);
-            _set(userData, 'updatedAt', updatedAt);
+            if (updatedAt) {
+                userData.updatedAt = updatedAt;
+            }
         } else {
             const newData = {
                 [this.config.primaryKeyColumn!]: primaryKey,
                 [key]: data,
-                updatedAt
             };
+            if (updatedAt) {
+                newData.updatedAt = updatedAt;
+            }
+
             users.push(newData);
         }
         Log.verbose(`Saving data to: ${this.config.pathToFile}`);

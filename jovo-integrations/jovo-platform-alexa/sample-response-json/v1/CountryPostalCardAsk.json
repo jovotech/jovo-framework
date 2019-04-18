@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {},
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Simple Ask</speak>"
+    },
+    "reprompt": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>Simple Ask Reprompt</speak>"
+      }
+    },
+    "card": {
+      "type": "AskForPermissionsConsent",
+      "permissions": [
+        "read::alexa:device:all:address:country_and_postal_code"
+      ]
+    },
+    "shouldEndSession": false
+  }
+}

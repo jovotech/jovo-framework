@@ -1,0 +1,39 @@
+{
+  "fulfillmentText": "Simple Ask",
+  "outputContexts": [
+    {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/_jovo_session_pmfoz",
+      "lifespanCount": 1,
+      "parameters": {
+        "session": "attribute",
+        "_JOVO_STATE_": "test"
+      }
+    }
+  ],
+  "payload": {
+    "google": {
+      "expectUserResponse": true,
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "ssml": "<speak>Simple Ask</speak>"
+            }
+          }
+        ]
+      },
+      "noInputPrompts": [
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        },
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        },
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        }
+      ],
+      "userStorage": "{\"userId\":\"nq07lg\"}"
+    }
+  }
+}
