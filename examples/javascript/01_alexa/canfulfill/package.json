@@ -1,0 +1,20 @@
+{
+  "name": "jovo-examples-alexa-canfulfill",
+  "version": "2.2.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^2.2.0",
+    "jovo-platform-alexa": "^2.2.0",
+    "jovo-plugin-debugger": "^2.2.0"
+  }
+}

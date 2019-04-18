@@ -6,7 +6,7 @@ const {
     Lambda
 } = require('jovo-framework');
 
-const { app } = require('./app.js');
+const {app} = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.PORT || 3000;
