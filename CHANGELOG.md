@@ -1,5 +1,31 @@
 # Jovo Framework Changelog
 
+
+
+## 2.2.2 (2019-04-18)
+
+
+#### :nail_care: Enhancement
+* `jovo-platform-alexa` [#470](https://github.com/jovotech/jovo-framework/pull/470) Add Alexa response getters  ([@natrixx](https://github.com/natrixx))
+* `jovo-framework` [#474](https://github.com/jovotech/jovo-framework/pull/474) Adds helpers to check for request types ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#463](https://github.com/jovotech/jovo-framework/pull/463) Refactoring and unit tests ([@KaanKC](https://github.com/KaanKC))
+* `jovo-airtable-cms` [#461](https://github.com/jovotech/jovo-framework/pull/461) Add AirtableCMS Unit Tests ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-platform-alexa` [#475](https://github.com/jovotech/jovo-framework/pull/475) Adds CanfulfillIntentRequest example | 🐛 Sets canFulfillRequest() param to possibly undefined ([@KaanKC](https://github.com/KaanKC))
+
+
+#### :bug: Bug Fix
+* `jovo-db-firestore` [#473](https://github.com/jovotech/jovo-framework/pull/473) Fix Saves updatedAt only if it's defined (issue #472) ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-dialogflow` [#464](https://github.com/jovotech/jovo-framework/pull/464) Fixed hasState(), hasSessionData() (issue #462) ([@natrixx](https://github.com/natrixx))
+* `jovo-db-mysql` Fix default connection config
+
+
+#### Committers: 3
+- natrixx ([@natrixx](https://github.com/natrixx))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+
+
+
 ## 2.2.1 (2019-04-08)
 
 #### :bug: Bug Fix
