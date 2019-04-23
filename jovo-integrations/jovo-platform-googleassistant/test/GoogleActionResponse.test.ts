@@ -18,3 +18,44 @@ test('test hasDisplayText', () => {
     expect(responseWithoutState.hasDisplayText('test123')).toBe(false);
     expect(responseWithoutState.hasDisplayText()).toBe(false);
 });
+
+test('test getDisplayText', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.getDisplayText()).toMatch('Sample Display Text');
+    expect(responseWithState.getDisplayText()).not.toBeUndefined();
+
+    const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.getDisplayText()).toBeUndefined();
+});
+
+test('test getSuggestionChips', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+    const suggestionChips = responseWithState.getSuggestionChips();
+
+    expect(suggestionChips).not.toBeUndefined();
+    expect(suggestionChips[0].title).toMatch('Suggestion 1');
+    expect(suggestionChips[1].title).toMatch('Suggestion 2');
+    expect(suggestionChips[2].title).toMatch('Suggestion 3');
+
+    const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.getSuggestionChips()).toBeUndefined();
+});
+
+test('test hasSuggestionChips', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasSuggestionChips('Suggestion 1')).toBe(true);
+    expect(responseWithState.hasSuggestionChips('test123')).toBe(false);
+    expect(responseWithState.hasSuggestionChips()).toBe(true);
+
+    expect(responseWithState.hasSuggestionChips('Suggestion 1', 'Suggestion 2')).toBe(true);
+    expect(responseWithState.hasSuggestionChips('test123', 'Suggestion 2')).toBe(false);
+
+    expect(responseWithState.hasSuggestionChips('Suggestion 1', 'Suggestion 2', 'Suggestion 3')).toBe(true);
+    expect(responseWithState.hasSuggestionChips('Suggestion 1', 'test123', 'Suggestion 3')).toBe(false);
+
+    const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.hasSuggestionChips('test123')).toBe(false);
+    expect(responseWithoutState.hasSuggestionChips()).toBe(false);
+});

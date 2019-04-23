@@ -80,7 +80,9 @@ You can use these cross-platform helper methods:
 | Method        | Description        |
 | ------------- |-------------|
 | `hasDisplayText(text?: string): boolean` | Checks that Google response has display text. |
-| `has(): boolean` | Checks |
+| `hasSuggestionChips(chipOne?: string, chipTwo?: string, chipThree?: string): boolean` | Checks that Google response has suggestion chips. |
+| `getDisplayText(): string` | Returns display text as string. |
+| `getSuggestionChips(): object` | Returns suggestion chips object. |
 
 <!--[metadata]: {"description": "Learn more about the Jovo $response object.",
 		        "route": "requests-responses/response"}-->

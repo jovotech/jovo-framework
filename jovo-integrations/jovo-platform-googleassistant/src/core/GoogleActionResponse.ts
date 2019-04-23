@@ -50,6 +50,9 @@ export class GoogleActionResponse implements JovoResponse {
     getDisplayText() {
         return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText')
     }
+    getSuggestionChips() {
+        return _get(this, 'payload.google.richResponse.suggestions')
+    }
 
     hasDisplayText(text?: string): boolean {
         const displayTextObject = this.getDisplayText();
@@ -60,6 +63,34 @@ export class GoogleActionResponse implements JovoResponse {
 
         if (text) {
             if (text !== displayTextObject) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    hasSuggestionChips(chipOne?: string, chipTwo?: string, chipThree?: string): boolean {
+        const suggestionChipObject = this.getSuggestionChips();
+
+        if (!suggestionChipObject) {
+            return false;
+        }
+
+        if (chipOne) {
+            if (chipOne !== suggestionChipObject[0].title) {
+                return false;
+            }
+        }
+
+        if (chipTwo) {
+            if (chipTwo !== suggestionChipObject[1].title) {
+                return false;
+            }
+        }
+
+        if (chipThree) {
+            if (chipThree !== suggestionChipObject[2].title) {
                 return false;
             }
         }
