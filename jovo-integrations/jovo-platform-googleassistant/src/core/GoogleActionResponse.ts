@@ -48,10 +48,10 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getDisplayText() {
-        return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText')
+        return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText');
     }
     getSuggestionChips() {
-        return _get(this, 'payload.google.richResponse.suggestions')
+        return _get(this, 'payload.google.richResponse.suggestions');
     }
 
     hasDisplayText(text?: string): boolean {
