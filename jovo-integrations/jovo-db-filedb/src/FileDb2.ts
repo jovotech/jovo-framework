@@ -78,13 +78,18 @@ export class FileDb2 implements Db {
             const oldDataContent = await this.readFile(pathToFile);
             const oldData = JSON.parse(oldDataContent);
             _set(oldData, key, data);
-            _set(oldData, 'updatedAt', updatedAt);
+            if (updatedAt) {
+                oldData.updatedAt = updatedAt;
+            }   
+
             return await this.saveFile(pathToFile, oldData);
         } else {
             const newData = {
                 [key]: data,
-                updatedAt
             };
+            if (updatedAt) {
+                newData.updatedAt = updatedAt;
+            }
             return await this.saveFile(pathToFile, newData);
         }
     }

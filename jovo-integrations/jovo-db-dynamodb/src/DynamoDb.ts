@@ -172,9 +172,12 @@ export class DynamoDb implements Db {
             Item: {
                 [this.config.primaryKeyColumn!]: primaryKey,
                 [key]: data,
-                updatedAt
             }
         };
+        if (updatedAt) {
+            getDataMapParams.Item.updatedAt = updatedAt;
+        }
+
         if (!this.isCreating) {
             return await this.docClient!.put(getDataMapParams).promise();
         }

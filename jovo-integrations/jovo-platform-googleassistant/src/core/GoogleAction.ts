@@ -6,6 +6,7 @@ import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
 import {GoogleActionRequest} from "./GoogleActionRequest";
 import {Context} from "jovo-platform-dialogflow/dist/src/core/DialogflowRequest";
+import { EnumGoogleAssistantRequestType } from "./google-assistant-enums";
 
 type reprompt = string | SpeechBuilder;
 
@@ -244,4 +245,48 @@ export class GoogleAction extends Jovo {
         // return _.isNumber(parseInt(this.getUserId()));
     }
 
+    /**
+     * Returns true if the current request is of type ON_SIGN_IN
+     * @public
+     * @return {boolean}
+     */
+    isSignInRequest(): boolean {
+        return this.$type.type === EnumGoogleAssistantRequestType.ON_SIGN_IN;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_PERMISSION
+     * @public
+     * @return {boolean}
+     */    
+    isPermissionRequest(): boolean {
+        return this.$type.type === EnumGoogleAssistantRequestType.ON_PERMISSION;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_CONFIRMATION
+     * @public
+     * @return {boolean}
+     */  
+    isConfirmationRequest(): boolean {
+        return this.$type.type === EnumGoogleAssistantRequestType.ON_CONFIRMATION;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_DATETIME
+     * @public
+     * @return {boolean}
+     */  
+    isDateTimeRequest(): boolean {
+        return this.$type.type === EnumGoogleAssistantRequestType.ON_DATETIME;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_PLACE
+     * @public
+     * @return {boolean}
+     */  
+    isPlaceRequest(): boolean {
+        return this.$type.type === EnumGoogleAssistantRequestType.ON_PLACE;
+    }
 }

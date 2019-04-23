@@ -114,7 +114,9 @@ export class DatastoreDb implements Db {
             entity = entities[0];
         }
 
-        _set(entity, 'updatedAt', updatedAt);
+        if (updatedAt) {
+            entity.updatedAt = updatedAt;
+        }
 
         // Don't confuse with the "data" key form the "save" method, actually this is
         // the data node necessary for datastore, whereas in the "save" method we add a second data

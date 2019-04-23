@@ -2,7 +2,8 @@ import _get = require('lodash.get');
 
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaRequest} from "../core/AlexaRequest";
-import {EnumRequestType, Plugin} from 'jovo-core';
+import {EnumAlexaRequestType} from "../core/alexa-enums";
+import {Plugin} from 'jovo-core';
 import {Alexa} from "../Alexa";
 
 export class HouseholdListEvent implements Plugin {
@@ -16,7 +17,7 @@ export class HouseholdListEvent implements Plugin {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
         if (_get(alexaRequest, 'request.type').substring(0, 23) === 'AlexaHouseholdListEvent') {
             alexaSkill.$type = {
-                type: EnumRequestType.ON_EVENT,
+                type: EnumAlexaRequestType.ON_EVENT,
                 subType: _get(alexaRequest, 'request.type').substring(24)
             };
         }

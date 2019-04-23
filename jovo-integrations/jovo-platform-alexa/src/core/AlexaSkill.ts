@@ -28,6 +28,7 @@ import {
     ListTemplate2,
     ListTemplate3
 } from "..";
+import {EnumAlexaRequestType} from "./alexa-enums";
 
 export class AlexaSkill extends Jovo {
     $alexaSkill: AlexaSkill;
@@ -521,6 +522,51 @@ export class AlexaSkill extends Jovo {
     shouldEndSession(value: boolean | null) {
         _set(this.$output, 'Alexa.shouldEndSession', value);
         return this;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_EVENT
+     * @public
+     * @return {boolean}
+     */  
+    isEventRequest(): boolean {
+        return this.$type.type === EnumAlexaRequestType.ON_EVENT;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_PURCHASE
+     * @public
+     * @return {boolean}
+     */ 
+    isPurchaseRequest(): boolean {
+        return this.$type.type === EnumAlexaRequestType.ON_PURCHASE;
+    }
+
+    /**
+     * Returns true if the current request is of type CAN_FULFILL_INTENT
+     * @public
+     * @return {boolean}
+     */ 
+    isCanFulfillIntentRequest(): boolean {
+        return this.$type.type === EnumAlexaRequestType.CAN_FULFILL_INTENT;
+    }
+
+    /**
+     * Returns true if the current request is of type PLAYBACKCONTROLLER
+     * @public
+     * @return {boolean}
+     */ 
+    isPlaybackControllerRequest(): boolean {
+        return this.$type.type === EnumAlexaRequestType.PLAYBACKCONTROLLER;
+    }
+
+    /**
+     * Returns true if the current request is of type ON_GAME_ENGINE_INPUT_HANDLER_EVENT
+     * @public
+     * @return {boolean}
+     */ 
+    isGameEngineInputHandlerEventRequest(): boolean {
+        return this.$type.type === EnumAlexaRequestType.ON_GAME_ENGINE_INPUT_HANDLER_EVENT;
     }
 }
 

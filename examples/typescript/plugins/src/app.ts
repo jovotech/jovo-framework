@@ -7,6 +7,7 @@ import { GoogleAssistant } from 'jovo-platform-googleassistant';
 import { Alexa } from 'jovo-platform-alexa';
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { FileDb } from 'jovo-db-filedb';
+import {MiddlewareAuthPlugin} from "./Plugin";
 
 
 const app = new App();
@@ -33,17 +34,6 @@ class EventListenerPlugin implements Plugin {
 
 
 
-class MiddlewareAuthPlugin implements Plugin {
-    install(app: App) {
-        app.middleware('request')!.use(this.auth.bind(this));
-    }
-
-    auth(handleRequest: HandleRequest) {
-        if (!handleRequest.host.headers['auth-code']) {
-            // throw new Error('Missing auth code');
-        }
-    }
-}
 
 
 app.use(new EventListenerPlugin());
