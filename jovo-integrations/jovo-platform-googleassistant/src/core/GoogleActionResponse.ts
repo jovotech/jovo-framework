@@ -55,14 +55,14 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     hasDisplayText(text?: string): boolean {
-        const displayTextObject = this.getDisplayText();
+        const displayTextString = this.getDisplayText();
 
-        if (!displayTextObject) {
+        if (!displayTextString) {
             return false;
         }
 
         if (text) {
-            if (text !== displayTextObject) {
+            if (text !== displayTextString) {
                 return false;
             }
         }
@@ -70,27 +70,14 @@ export class GoogleActionResponse implements JovoResponse {
         return true;
     }
 
-    hasSuggestionChips(chipOne?: string, chipTwo?: string, chipThree?: string): boolean {
-        const suggestionChipObject = this.getSuggestionChips();
+    hasSuggestionChips(...chips: string[]){
+        const suggestionChipArray = this.getSuggestionChips();
 
-        if (!suggestionChipObject) {
+        if (!suggestionChipArray) {
             return false;
         }
-
-        if (chipOne) {
-            if (chipOne !== suggestionChipObject[0].title) {
-                return false;
-            }
-        }
-
-        if (chipTwo) {
-            if (chipTwo !== suggestionChipObject[1].title) {
-                return false;
-            }
-        }
-
-        if (chipThree) {
-            if (chipThree !== suggestionChipObject[2].title) {
+        for (let i = 0; i < chips.length; i++) {
+            if (!suggestionChipArray[i] || chips[i] !== suggestionChipArray[i].title) {
                 return false;
             }
         }

@@ -55,6 +55,27 @@ test('test hasSuggestionChips', () => {
     expect(responseWithState.hasSuggestionChips('Suggestion 1', 'Suggestion 2', 'Suggestion 3')).toBe(true);
     expect(responseWithState.hasSuggestionChips('Suggestion 1', 'test123', 'Suggestion 3')).toBe(false);
 
+    expect(responseWithState.hasSuggestionChips(
+        'Suggestion 1',
+        'Suggestion 2',
+        'Suggestion 3',
+        'Suggestion 4',
+        'Suggestion 5',
+        'Suggestion 6',
+        'Suggestion 7',
+        'Suggestion 8'
+    )).toBe(true);
+    expect(responseWithState.hasSuggestionChips(
+        'Suggestion 1',
+        'Suggestion 2',
+        'Suggestion 3',
+        'Suggestion 4',
+        'Test123',
+        'Suggestion 6',
+        'Suggestion 7',
+        'Suggestion 8'
+    )).toBe(false);
+
     const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
     expect(responseWithoutState.hasSuggestionChips('test123')).toBe(false);
     expect(responseWithoutState.hasSuggestionChips()).toBe(false);
