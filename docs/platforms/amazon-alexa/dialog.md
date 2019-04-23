@@ -89,6 +89,28 @@ this.$alexaSkill.$dialog.delegate()
 this.$alexaSkill!.$dialog.delegate()
 ```
 
+Optionally you can also pass in an `Intent` object as described [here](https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#pass-a-new-intent):
+
+```javascript
+// @language=javascript
+
+const updatedIntent = {
+    name: 'SearchFlightIntent',
+    confirmationStatus: 'NONE'
+};
+
+this.$alexaSkill.$dialog.delegate(updatedIntent)
+
+// @language=typescript
+
+const updatedIntent = {
+    name: 'SearchFlightIntent',
+    confirmationStatus: 'NONE'
+};
+
+this.$alexaSkill!.$dialog.delegate(updatedIntent)
+```
+
 ### Control the Dialog in Your Code
 
 The Dialog Interface allows you to jump in and control the conversation yourself. Keep in mind that the prompts you prepared in the Skill Builder are only used if you delegate the conversation to Alexa. The utterances are still beeing used.
