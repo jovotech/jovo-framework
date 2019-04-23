@@ -21,6 +21,17 @@
               "displayText": "Sample Display Text"
             }
           }
+        ],
+        "suggestions": [
+          {
+            "title": "Suggestion 1"
+          },
+          {
+            "title": "Suggestion 2"
+          },
+          {
+            "title": "Suggestion 3"
+          }
         ]
       },
       "noInputPrompts": [
