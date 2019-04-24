@@ -80,7 +80,7 @@ You can use these cross-platform helper methods:
 | Method        | Description        |
 | ------------- |-------------|
 | `hasDisplayText(text?: string): boolean` | Checks that Google response has display text. |
-| `hasSuggestionChips(chipOne?: string, chipTwo?: string, chipThree?: string): boolean` | Checks that Google response has suggestion chips. |
+| `hasSuggestionChips(chips?: string[]): boolean` | Checks that Google response has suggestion chips. |
 | `getDisplayText(): string` | Returns display text as string. |
 | `getSuggestionChips(): object` | Returns suggestion chips object. |
 
