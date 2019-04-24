@@ -1,0 +1,37 @@
+{
+  "fulfillmentText": "Hello World!",
+  "outputContexts": [
+    {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/google_assistant_welcome"
+    },
+    {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/actions_capability_screen_output"
+    }
+  ],
+  "payload": {
+    "google": {
+      "expectUserResponse": false,
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "ssml": "<speak>Hello World!</speak>",
+              "displayText": "Sample Display Text"
+            }
+          },
+          {
+            "basicCard": {
+              "title": "Sample Card Title",
+              "formattedText": "Sample Card Content",
+              "image": {
+                "url": "www.image.com",
+                "accessibilityText": "Sample Card Title"
+              }
+            }
+          }
+        ]
+      },
+      "userStorage": "{\"userId\":\"hteu0d\"}"
+    }
+  }
+}

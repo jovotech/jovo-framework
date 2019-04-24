@@ -47,6 +47,44 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
+    getDisplayText() {
+        return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText');
+    }
+    getSuggestionChips() {
+        return _get(this, 'payload.google.richResponse.suggestions');
+    }
+
+    hasDisplayText(text?: string): boolean {
+        const displayTextString = this.getDisplayText();
+
+        if (!displayTextString) {
+            return false;
+        }
+
+        if (text) {
+            if (text !== displayTextString) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    hasSuggestionChips(...chips: string[]){
+        const suggestionChipArray = this.getSuggestionChips();
+
+        if (!suggestionChipArray) {
+            return false;
+        }
+        for (let i = 0; i < chips.length; i++) {
+            if (!suggestionChipArray[i] || chips[i] !== suggestionChipArray[i].title) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     getSpeech() {
         if (!_get(this, 'richResponse.items[0].simpleResponse.ssml')) {
             return;
