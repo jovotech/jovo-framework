@@ -70,7 +70,7 @@ export class GoogleActionResponse implements JovoResponse {
         return true;
     }
 
-    hasSuggestionChips(...chips: string[]){
+    hasSuggestionChips(...chips: string[]): boolean {
         const suggestionChipArray = this.getSuggestionChips();
 
         if (!suggestionChipArray) {
