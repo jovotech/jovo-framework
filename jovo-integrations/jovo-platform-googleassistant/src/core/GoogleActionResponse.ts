@@ -47,6 +47,10 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
+    getCard() {
+        return _get(this, 'payload.google.richResponse.items');
+    }
+
     getDisplayText() {
         return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText');
     }

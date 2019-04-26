@@ -19,6 +19,16 @@ test('test hasDisplayText', () => {
     expect(responseWithoutState.hasDisplayText()).toBe(false);
 });
 
+test.only('test getCard', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+console.log(responseWithState.getCard());
+    // expect(responseWithState.getDisplayText()).toMatch('Sample Display Text');
+    expect(responseWithState.getCard()).not.toBeUndefined();
+
+    // const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    // expect(responseWithoutState.getDisplayText()).toBeUndefined();
+});
+
 test('test getDisplayText', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
 
