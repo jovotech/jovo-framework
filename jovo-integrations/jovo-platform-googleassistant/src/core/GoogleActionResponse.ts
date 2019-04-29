@@ -57,38 +57,6 @@ export class GoogleActionResponse implements JovoResponse {
         }
     }
 
-    getMediaResponse() {
-        let items = _get(this, 'payload.google.richResponse.items');
-
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].mediaResponse) {
-                return items[i].mediaResponse;
-            }
-        }
-    }
-
-    hasMediaResponse(url?: string, name?: string): boolean {
-        const mediaResponseObject = this.getMediaResponse();
-
-        if (!mediaResponseObject) {
-            return false;
-        }
-
-        if (url) {
-            if (url != mediaResponseObject.mediaObjects[0].contentUrl) {
-                return false;
-            }
-        }
-
-        if (name) {
-            if (name != mediaResponseObject.mediaObjects[0].name) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     hasImageCard(title?: string, content?: string, imageUrl?: string): boolean {
         const basicCardObject = this.getBasicCard();
 
@@ -178,6 +146,38 @@ export class GoogleActionResponse implements JovoResponse {
         }
         for (let i = 0; i < chips.length; i++) {
             if (!suggestionChipArray[i] || chips[i] !== suggestionChipArray[i].title) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    getMediaResponse() {
+        let items = _get(this, 'payload.google.richResponse.items');
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].mediaResponse) {
+                return items[i].mediaResponse;
+            }
+        }
+    }
+
+    hasMediaResponse(url?: string, name?: string): boolean {
+        const mediaResponseObject = this.getMediaResponse();
+
+        if (!mediaResponseObject) {
+            return false;
+        }
+
+        if (url) {
+            if (url != mediaResponseObject.mediaObjects[0].contentUrl) {
+                return false;
+            }
+        }
+
+        if (name) {
+            if (name != mediaResponseObject.mediaObjects[0].name) {
                 return false;
             }
         }
