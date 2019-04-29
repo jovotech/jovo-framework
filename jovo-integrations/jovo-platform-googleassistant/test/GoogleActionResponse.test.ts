@@ -10,7 +10,6 @@ process.env.NODE_ENV = 'TEST';
 
 test('test getCard', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.getBasicCard().title).toMatch('Sample Card Title');
     expect(responseWithState.getBasicCard()).not.toBeUndefined();
 
@@ -20,7 +19,6 @@ test('test getCard', () => {
 
 test('test hasImageCard', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.hasImageCard()).toBe(false);
     expect(responseWithState.hasImageCard('Sample Display Text')).toBe(false);
     expect(responseWithState.hasImageCard('Sample Card Title', 'Sample Card Content')).toBe(false);
@@ -28,7 +26,6 @@ test('test hasImageCard', () => {
 
 
     const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
-
     expect(imageCardResponse.hasImageCard()).toBe(true);
     expect(imageCardResponse.hasImageCard('Sample Display Text')).toBe(false);
     expect(imageCardResponse.hasImageCard('Sample Card Title', 'Sample Card Content')).toBe(true);
@@ -39,7 +36,6 @@ test('test hasImageCard', () => {
 
 test('test hasSimpleCard', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.hasSimpleCard()).toBe(true);
     expect(responseWithState.hasSimpleCard('Sample Display Text')).toBe(false);
     expect(responseWithState.hasSimpleCard('Sample Card Title', 'Sample Card Content')).toBe(true);
@@ -47,7 +43,6 @@ test('test hasSimpleCard', () => {
 
 
     const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
-
     expect(imageCardResponse.hasSimpleCard()).toBe(false);
     expect(imageCardResponse.hasSimpleCard('Sample Display Text')).toBe(false);
     expect(imageCardResponse.hasSimpleCard('Sample Card Title', 'Sample Card Content')).toBe(false);
@@ -55,7 +50,6 @@ test('test hasSimpleCard', () => {
 
 test('test hasDisplayText', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.hasDisplayText('Sample Display Text')).toBe(true);
     expect(responseWithState.hasDisplayText('test123')).toBe(false);
     expect(responseWithState.hasDisplayText()).toBe(true);
@@ -67,7 +61,6 @@ test('test hasDisplayText', () => {
 
 test('test getDisplayText', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.getDisplayText()).toMatch('Sample Display Text');
     expect(responseWithState.getDisplayText()).not.toBeUndefined();
 
@@ -142,7 +135,6 @@ test('test getMediaResponse', () => {
 
 test('test hasMediaResponse', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-
     expect(responseWithState.hasMediaResponse()).toBe(true);
     expect(responseWithState.hasMediaResponse('Sample Display Text')).toBe(false);
     expect(responseWithState.hasMediaResponse('https://www.url.to/file.mp3', 'song one')).toBe(true);
@@ -150,7 +142,6 @@ test('test hasMediaResponse', () => {
 
 
     const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
-
     expect(imageCardResponse.hasMediaResponse()).toBe(false);
     expect(imageCardResponse.hasMediaResponse('Sample Display Text')).toBe(false);
     expect(imageCardResponse.hasMediaResponse('https://www.url.to/file.mp3', 'song one')).toBe(false);
