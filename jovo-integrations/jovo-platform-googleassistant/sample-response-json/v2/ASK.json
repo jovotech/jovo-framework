@@ -20,6 +20,12 @@
               "ssml": "<speak>Simple Ask</speak>",
               "displayText": "Sample Display Text"
             }
+          },
+          {
+            "basicCard": {
+              "title": "Sample Card Title",
+              "formattedText": "Sample Card Content"
+            }
           }
         ],
         "suggestions": [

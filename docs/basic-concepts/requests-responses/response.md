@@ -80,8 +80,11 @@ You can use these cross-platform helper methods:
 | Method        | Description        |
 | ------------- |-------------|
 | `hasDisplayText(text?: string): boolean` | Checks that Google response has display text. |
+| `hasImageCard(title?: string, content?: string, imageUrl?: string): boolean` | Checks that Google response has basic card with an image. |
+| `hasSimpleCard(title?: string, content?: string): boolean` | Checks that Google response has basic card without image. |
 | `hasSuggestionChips(chips?: string[]): boolean` | Checks that Google response has suggestion chips. |
 | `getDisplayText(): string` | Returns display text as string. |
+| `getBasicCard(): object` | Returns basic card object. |
 | `getSuggestionChips(): object` | Returns suggestion chips object. |
 
 <!--[metadata]: {"description": "Learn more about the Jovo $response object.",

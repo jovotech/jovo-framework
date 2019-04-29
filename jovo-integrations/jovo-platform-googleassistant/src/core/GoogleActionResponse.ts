@@ -47,8 +47,72 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
-    getCard() {
-        return _get(this, 'payload.google.richResponse.items');
+    getBasicCard() {
+        let items = _get(this, 'payload.google.richResponse.items');
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].basicCard) {
+                return items[i].basicCard;
+            }
+        }
+    }
+
+    hasImageCard(title?: string, content?: string, imageUrl?: string): boolean {
+        const basicCardObject = this.getBasicCard();
+
+        if (!basicCardObject){
+            return false;
+        }
+
+        if (!basicCardObject.image) {
+            return false;
+        }
+
+        if (title) {
+            if (title !== basicCardObject.title) {
+                return false;
+            }
+        }
+
+        if (content) {
+            if (content !== basicCardObject.formattedText) {
+                return false;
+            }
+        }
+
+        if (imageUrl) {
+            if (imageUrl !== basicCardObject.image.url) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    hasSimpleCard(title?: string, content?: string): boolean {
+        const basicCardObject = this.getBasicCard();
+
+        if (!basicCardObject){
+            return false;
+        }
+
+        if (basicCardObject.image) {
+            return false;
+        }
+
+        if (title) {
+            if (title !== basicCardObject.title) {
+                return false;
+            }
+        }
+
+        if (content) {
+            if (content !== basicCardObject.formattedText) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     getDisplayText() {

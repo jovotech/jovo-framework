@@ -3,9 +3,55 @@
 import {GoogleActionResponse} from "../src/core/GoogleActionResponse";
 import _cloneDeep = require('lodash.clonedeep');
 const askJSON = require('./../sample-response-json/v2/ASK.json');
+const imageCardJSON = require('./../sample-response-json/v2/tellBasicImageCard.json');
 const tellJSON = require('./../sample-response-json/v2/TELL.json');
 
 process.env.NODE_ENV = 'TEST';
+
+test('test getCard', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.getBasicCard().title).toMatch('Sample Card Title');
+    expect(responseWithState.getBasicCard()).not.toBeUndefined();
+
+    const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.getBasicCard()).toBeUndefined();
+});
+
+test('test hasImageCard', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasImageCard()).toBe(false);
+    expect(responseWithState.hasImageCard('Sample Display Text')).toBe(false);
+    expect(responseWithState.hasImageCard('Sample Card Title', 'Sample Card Content')).toBe(false);
+    expect(responseWithState.hasImageCard('Sample Card Title', 'Sample Card Content', 'www.image.com')).toBe(false);
+
+
+    const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
+
+    expect(imageCardResponse.hasImageCard()).toBe(true);
+    expect(imageCardResponse.hasImageCard('Sample Display Text')).toBe(false);
+    expect(imageCardResponse.hasImageCard('Sample Card Title', 'Sample Card Content')).toBe(true);
+    expect(imageCardResponse.hasImageCard('Sample Card Title', 'Sample Jovo Content')).toBe(false);
+    expect(imageCardResponse.hasImageCard('Sample Card Title', 'Sample Card Content', 'www.image.com')).toBe(true);
+    expect(imageCardResponse.hasImageCard('Sample Card Title', 'Sample Card Content', 'www.jovo.com')).toBe(false);
+});
+
+test('test hasSimpleCard', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasSimpleCard()).toBe(true);
+    expect(responseWithState.hasSimpleCard('Sample Display Text')).toBe(false);
+    expect(responseWithState.hasSimpleCard('Sample Card Title', 'Sample Card Content')).toBe(true);
+    expect(responseWithState.hasSimpleCard('Sample Card Title', 'Sample Jovo Content')).toBe(false);
+
+
+    const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
+
+    expect(imageCardResponse.hasSimpleCard()).toBe(false);
+    expect(imageCardResponse.hasSimpleCard('Sample Display Text')).toBe(false);
+    expect(imageCardResponse.hasSimpleCard('Sample Card Title', 'Sample Card Content')).toBe(false);
+});
 
 test('test hasDisplayText', () => {
     const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
@@ -17,16 +63,6 @@ test('test hasDisplayText', () => {
     const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
     expect(responseWithoutState.hasDisplayText('test123')).toBe(false);
     expect(responseWithoutState.hasDisplayText()).toBe(false);
-});
-
-test.only('test getCard', () => {
-    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
-console.log(responseWithState.getCard());
-    // expect(responseWithState.getDisplayText()).toMatch('Sample Display Text');
-    expect(responseWithState.getCard()).not.toBeUndefined();
-
-    // const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
-    // expect(responseWithoutState.getDisplayText()).toBeUndefined();
 });
 
 test('test getDisplayText', () => {
