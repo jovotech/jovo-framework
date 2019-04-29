@@ -126,3 +126,32 @@ test('test hasSuggestionChips', () => {
     expect(responseWithoutState.hasSuggestionChips('test123')).toBe(false);
     expect(responseWithoutState.hasSuggestionChips()).toBe(false);
 });
+
+test('test getMediaResponse', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+    const mediaResponse = responseWithState.getMediaResponse();
+
+    expect(mediaResponse).not.toBeUndefined();
+    expect(mediaResponse.mediaType).toMatch('AUDIO');
+    expect(mediaResponse.mediaObjects[0].name).toMatch('song one');
+    expect(mediaResponse.mediaObjects[0].contentUrl).toMatch('https://www.url.to/file.mp3');
+
+    const responseWithoutState = GoogleActionResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(responseWithoutState.getMediaResponse()).toBeUndefined();
+});
+
+test('test hasMediaResponse', () => {
+    const responseWithState = GoogleActionResponse.fromJSON(_cloneDeep(askJSON));
+
+    expect(responseWithState.hasMediaResponse()).toBe(true);
+    expect(responseWithState.hasMediaResponse('Sample Display Text')).toBe(false);
+    expect(responseWithState.hasMediaResponse('https://www.url.to/file.mp3', 'song one')).toBe(true);
+    expect(responseWithState.hasMediaResponse('https://www.url.to/file.mp3', 'Sample Jovo Content')).toBe(false);
+
+
+    const imageCardResponse = GoogleActionResponse.fromJSON(_cloneDeep(imageCardJSON));
+
+    expect(imageCardResponse.hasMediaResponse()).toBe(false);
+    expect(imageCardResponse.hasMediaResponse('Sample Display Text')).toBe(false);
+    expect(imageCardResponse.hasMediaResponse('https://www.url.to/file.mp3', 'song one')).toBe(false);
+});
