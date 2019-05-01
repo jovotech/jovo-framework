@@ -6,9 +6,12 @@ import * as crypto from "crypto";
 
 import * as util from "util";
 import * as path from 'path';
+import {Log} from "./Log";
+import {TestHost} from "./TestHost";
 import {TestSuite} from "./TestSuite";
 import {Data, JovoRequest, JovoResponse, SessionData} from "./Interfaces";
 import {RequestOptions} from "http";
+import { BaseApp } from './BaseApp';
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
@@ -75,12 +78,10 @@ export class Conversation {
     }
 
     /**
-     * Prepares post data, returns response
-     * @param {JovoRequest} req
-     * @returns {Promise<JovoResponse>}
+     * Set request user and session data
+     * @param req 
      */
-    async send(req: JovoRequest): Promise<JovoResponse> {
-
+    async prepare(req: JovoRequest): Promise<JovoRequest> {
         this.applyToRequest(req);
         await this.saveUserData();
 
@@ -90,20 +91,63 @@ export class Conversation {
             req.setSessionData(this.sessionData);
         }
 
+        return req;
+    }
+
+    /**
+     * Send request to server, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async send(req: JovoRequest): Promise<JovoResponse> {
+
+        await this.prepare(req);
+
         const postData = JSON.stringify(req.toJSON());
 
         try {
             const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
             const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
-            this.sessionData = jovoResponse.getSessionData() || {};
-            await this.updateUserData();
-            if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
-                this.clearDb();
-            }
+            await this.postProcess(jovoResponse);
             return jovoResponse;
-
         } catch (e) {
             throw e;
+        }
+    }
+
+    /**
+     * Send request directly to app, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async sendToApp(req: JovoRequest, app: BaseApp): Promise<JovoResponse> {
+
+        await this.prepare(req);
+
+        const host = new TestHost(req);
+        await app.handle(host);
+
+        if (host.didFail()) {
+            throw host.getError();
+        } else {
+            const response = host.getResponse();
+            const jovoResponse = this.testSuite.responseBuilder.create(response);
+            await this.postProcess(jovoResponse);
+            return jovoResponse;
+        }
+    }
+
+    /**
+     * Perform user/session data housekeeping with response
+     * @param jovoResponse
+     */
+    async postProcess(jovoResponse: JovoResponse): Promise<void> {
+        this.sessionData = jovoResponse.getSessionData() || {};
+        await this.updateUserData();
+        if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
+            this.clearDb();
         }
     }
 
