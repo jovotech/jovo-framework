@@ -48,7 +48,7 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getBasicCard() {
-        let items = _get(this, 'payload.google.richResponse.items');
+        const items = _get(this, 'payload.google.richResponse.items');
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].basicCard) {
@@ -154,7 +154,7 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getMediaResponse() {
-        let items = _get(this, 'payload.google.richResponse.items');
+        const items = _get(this, 'payload.google.richResponse.items');
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].mediaResponse) {
@@ -171,13 +171,13 @@ export class GoogleActionResponse implements JovoResponse {
         }
 
         if (url) {
-            if (url != mediaResponseObject.mediaObjects[0].contentUrl) {
+            if (url !== mediaResponseObject.mediaObjects[0].contentUrl) {
                 return false;
             }
         }
 
         if (name) {
-            if (name != mediaResponseObject.mediaObjects[0].name) {
+            if (name !== mediaResponseObject.mediaObjects[0].name) {
                 return false;
             }
         }
