@@ -99,7 +99,7 @@ await dummyApiCall(2000);
 this.tell('Text after API call');
 ```
 
-> Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework-nodejs/tree/v2/examples/01_alexa/progressive-response/src).
+> Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/01_alexa/progressive-response/src/app.js).
 
 ### Visual Output
 

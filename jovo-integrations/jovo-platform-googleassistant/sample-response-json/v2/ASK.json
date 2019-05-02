@@ -1,0 +1,83 @@
+{
+  "fulfillmentText": "Simple Ask",
+  "outputContexts": [
+    {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/_jovo_session_pmfoz",
+      "lifespanCount": 1,
+      "parameters": {
+        "session": "attribute",
+        "_JOVO_STATE_": "test"
+      }
+    }
+  ],
+  "payload": {
+    "google": {
+      "expectUserResponse": true,
+      "richResponse": {
+        "items": [
+          {
+            "simpleResponse": {
+              "ssml": "<speak>Simple Ask</speak>",
+              "displayText": "Sample Display Text"
+            }
+          },
+          {
+            "basicCard": {
+              "title": "Sample Card Title",
+              "formattedText": "Sample Card Content"
+            }
+          },
+          {
+            "mediaResponse": {
+              "mediaType": "AUDIO",
+              "mediaObjects": [
+                {
+                  "name": "song one",
+                  "contentUrl": "https://www.url.to/file.mp3"
+                }
+              ]
+            }
+          }
+        ],
+        "suggestions": [
+          {
+            "title": "Suggestion 1"
+          },
+          {
+            "title": "Suggestion 2"
+          },
+          {
+            "title": "Suggestion 3"
+          },
+          {
+            "title": "Suggestion 4"
+          },
+          {
+            "title": "Suggestion 5"
+          },
+          {
+            "title": "Suggestion 6"
+          },
+          {
+            "title": "Suggestion 7"
+          },
+          {
+            "title": "Suggestion 8"
+          }
+        ]
+      },
+      "noInputPrompts": [
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        },
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        },
+        {
+          "ssml": "<speak>Simple Ask Reprompt</speak>"
+        }
+      ],
+      "userStorage": "{\"userId\":\"nq07lg\"}"
+    }
+  }
+}
