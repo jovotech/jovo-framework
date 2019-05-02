@@ -20,6 +20,23 @@
               "ssml": "<speak>Simple Ask</speak>",
               "displayText": "Sample Display Text"
             }
+          },
+          {
+            "basicCard": {
+              "title": "Sample Card Title",
+              "formattedText": "Sample Card Content"
+            }
+          },
+          {
+            "mediaResponse": {
+              "mediaType": "AUDIO",
+              "mediaObjects": [
+                {
+                  "name": "song one",
+                  "contentUrl": "https://www.url.to/file.mp3"
+                }
+              ]
+            }
           }
         ],
         "suggestions": [

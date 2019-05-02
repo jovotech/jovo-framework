@@ -47,6 +47,74 @@ export class GoogleActionResponse implements JovoResponse {
         return this;
     }
 
+    getBasicCard() {
+        const items = _get(this, 'payload.google.richResponse.items');
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].basicCard) {
+                return items[i].basicCard;
+            }
+        }
+    }
+
+    hasImageCard(title?: string, content?: string, imageUrl?: string): boolean {
+        const basicCardObject = this.getBasicCard();
+
+        if (!basicCardObject){
+            return false;
+        }
+
+        if (!basicCardObject.image) {
+            return false;
+        }
+
+        if (title) {
+            if (title !== basicCardObject.title) {
+                return false;
+            }
+        }
+
+        if (content) {
+            if (content !== basicCardObject.formattedText) {
+                return false;
+            }
+        }
+
+        if (imageUrl) {
+            if (imageUrl !== basicCardObject.image.url) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    hasSimpleCard(title?: string, content?: string): boolean {
+        const basicCardObject = this.getBasicCard();
+
+        if (!basicCardObject){
+            return false;
+        }
+
+        if (basicCardObject.image) {
+            return false;
+        }
+
+        if (title) {
+            if (title !== basicCardObject.title) {
+                return false;
+            }
+        }
+
+        if (content) {
+            if (content !== basicCardObject.formattedText) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     getDisplayText() {
         return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText');
     }
@@ -78,6 +146,38 @@ export class GoogleActionResponse implements JovoResponse {
         }
         for (let i = 0; i < chips.length; i++) {
             if (!suggestionChipArray[i] || chips[i] !== suggestionChipArray[i].title) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    getMediaResponse() {
+        const items = _get(this, 'payload.google.richResponse.items');
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].mediaResponse) {
+                return items[i].mediaResponse;
+            }
+        }
+    }
+
+    hasMediaResponse(url?: string, name?: string): boolean {
+        const mediaResponseObject = this.getMediaResponse();
+
+        if (!mediaResponseObject) {
+            return false;
+        }
+
+        if (url) {
+            if (url !== mediaResponseObject.mediaObjects[0].contentUrl) {
+                return false;
+            }
+        }
+
+        if (name) {
+            if (name !== mediaResponseObject.mediaObjects[0].name) {
                 return false;
             }
         }
