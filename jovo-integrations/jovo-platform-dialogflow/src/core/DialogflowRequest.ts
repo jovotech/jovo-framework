@@ -176,7 +176,8 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
 
     getInputs(): Inputs { // tslint:disable-line
         const params = _get(this, 'queryResult.parameters');
-        return _mapValues(params, (value: string, name: string) => {
+
+        const inputs = _mapValues(params, (value: string, name: string) => {
             return {
                 name,
                 value,
@@ -184,6 +185,25 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
                 id: value, // Added for cross platform consistency
             };
         });
+
+        if (this.queryResult.outputContexts && this.queryResult.outputContexts.length > 0) {
+            // TODO: is the first element enough?
+            const parameters = this.queryResult.outputContexts[0].parameters;
+            for (const key in parameters) {
+                if (inputs[key]) {
+                    const originalKey = key + '.original';
+                    inputs[originalKey] = {
+                        name: originalKey,
+                        value: parameters[originalKey],
+                        key: parameters[originalKey],
+                        id: parameters[originalKey],
+                    };
+                }
+            }
+
+
+        }
+        return inputs;
     }
 
     setInputs(inputs: Inputs): this {
