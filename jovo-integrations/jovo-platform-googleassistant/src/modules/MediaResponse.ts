@@ -91,20 +91,20 @@ export class MediaResponsePlugin implements Plugin {
         if (!googleAction.hasMediaResponseInterface()) {
             return;
         }
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
         const output = googleAction.$output;
 
         if (_get(output, 'GoogleAssistant.MediaResponse')) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 mediaResponse: {
                     mediaType: 'AUDIO',
                     mediaObjects: [_get(output, 'GoogleAssistant.MediaResponse')]
                 }
             });
-            _set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
         }
     }
     uninstall(googleAssistant: GoogleAssistant) {

@@ -447,14 +447,14 @@ export class TransactionsPlugin implements Plugin {
 
     output(googleAction: GoogleAction) {
 
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
         const output = googleAction.$output;
 
         if (_get(output, 'GoogleAssistant.TransactionRequirementsCheck')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.TRANSACTION_REQUIREMENTS_CHECK',
                 data: {
                     '@type': "type.googleapis.com/google.actions.v2.TransactionRequirementsCheckSpec",
@@ -466,8 +466,8 @@ export class TransactionsPlugin implements Plugin {
 
 
         if (_get(output, 'GoogleAssistant.AskForDeliveryAddress')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.DELIVERY_ADDRESS',
                 data: {
                     '@type': "type.googleapis.com/google.actions.v2.DeliveryAddressValueSpec",
@@ -479,8 +479,8 @@ export class TransactionsPlugin implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.TransactionDecision')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.TRANSACTION_DECISION',
                 data: {
                     '@type': "type.googleapis.com/google.actions.v2.TransactionDecisionValueSpec",
@@ -497,8 +497,8 @@ export class TransactionsPlugin implements Plugin {
 
 
         if (_get(output, 'GoogleAssistant.OrderUpdate')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 structuredResponse: {
                     orderUpdate: _get(output, 'GoogleAssistant.OrderUpdate.orderUpdate'),
@@ -510,21 +510,21 @@ export class TransactionsPlugin implements Plugin {
                     textToSpeech: _get(output, 'GoogleAssistant.OrderUpdate.speech'),
                 }
             });
-            _set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
         }
 
         const completePurchase = _get(output, "GoogleAssistant.CompletePurchase");
 
         if (completePurchase) {
-            _set(googleAction.$response, "expectUserResponse", true);
-            _set(googleAction.$response, "systemIntent", {
+            _set(googleAction.$originalResponse, "expectUserResponse", true);
+            _set(googleAction.$originalResponse, "systemIntent", {
                 intent: "actions.intent.COMPLETE_PURCHASE",
                 inputValueData: {
                     "@type": "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec",
                     skuId: completePurchase.skuId
                 },
             });
-            _set(googleAction.$response, 'inputPrompt', {
+            _set(googleAction.$originalResponse, 'inputPrompt', {
                 initialPrompts: [
                     {
                         textToSpeech: 'PLACEHOLDER',

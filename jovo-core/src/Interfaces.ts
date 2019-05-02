@@ -95,8 +95,8 @@ export interface Db extends Plugin {
 }
 
 export interface Platform extends Plugin {
-    requestBuilder: RequestBuilder;
-    responseBuilder: ResponseBuilder;
+    requestBuilder?: RequestBuilder;
+    responseBuilder?: ResponseBuilder;
 
     /**
      * Returns the specific TestSuite implementation for this platform
@@ -159,13 +159,16 @@ export interface Output {
     };
 }
 
+export interface RequestJSON {
+
+}
+
 export interface JovoRequest {
     /**
      * Converts object to json
      * @return {any}
      */
     toJSON(): any; // tslint:disable-line
-
 
     /**
      * Returns user id

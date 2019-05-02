@@ -24,6 +24,7 @@ export interface DialogflowResponseJSON {
 export class DialogflowResponse implements JovoResponse {
     fulfillmentText?: string;
     payload?: Payload;
+    outputContexts?: Context[];
 
     getPlatformId() {
         if (this.payload) {
@@ -52,13 +53,18 @@ export class DialogflowResponse implements JovoResponse {
 
 
     getSessionAttributes() {
-        const sessionContext =_get(this, 'outputContexts').find((context: Context) => {
-            return context.name.indexOf('/contexts/_jovo_session_') > -1;
-        });
 
-        if (sessionContext) {
-            return sessionContext.parameters;
+        if (this.outputContexts) {
+            const sessionContext = this.outputContexts.find((context: Context) => {
+                return context.name.indexOf('/contexts/_jovo_session_') > -1;
+            });
+
+            if (sessionContext) {
+                return sessionContext.parameters;
+            }
         }
+
+
         return {};
     }
 
@@ -135,7 +141,7 @@ export class DialogflowResponse implements JovoResponse {
                 return this.payload[platformId].isTell(speech);
             }
         }
-        return true;
+        return false;
     }
 
     isAsk(speech?: string | string[], reprompt?: string | string[]) {
@@ -166,6 +172,7 @@ export class DialogflowResponse implements JovoResponse {
 
         return true;
     }
+
 
     getPlatformResponse() {
         return this.payload[this.getPlatformId()];

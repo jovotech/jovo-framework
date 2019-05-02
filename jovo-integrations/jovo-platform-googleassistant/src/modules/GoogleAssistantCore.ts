@@ -33,7 +33,6 @@ export class GoogleAssistantCore implements Plugin {
 
     async init(handleRequest: HandleRequest) {
         const requestObject = handleRequest.host.$request;
-
         if (requestObject.user &&
             requestObject.conversation &&
             requestObject.surface &&
@@ -50,13 +49,14 @@ export class GoogleAssistantCore implements Plugin {
 
     async output(googleAction: GoogleAction) {
         const output = googleAction.$output;
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
+
         const tell = _get(output, 'GoogleAssistant.tell') || _get(output, 'tell');
         if (tell) {
-            _set(googleAction.$response, 'expectUserResponse', false);
-            _set(googleAction.$response, 'richResponse.items', [{
+            _set(googleAction.$originalResponse, 'expectUserResponse', false);
+            _set(googleAction.$originalResponse, 'richResponse.items', [{
                 simpleResponse: {
                     ssml: GoogleActionSpeechBuilder.toSSML(tell.speech),
                 }
@@ -65,14 +65,15 @@ export class GoogleAssistantCore implements Plugin {
         const ask = _get(output, 'GoogleAssistant.ask') || _get(output, 'ask');
 
         if (ask) {
-            _set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
 
             // speech
-            _set(googleAction.$response, 'richResponse.items', [{
+            _set(googleAction.$originalResponse, 'richResponse.items', [{
                 simpleResponse: {
                     ssml: GoogleActionSpeechBuilder.toSSML(ask.speech),
                 }
-            }]);
+            },
+                ]);
 
             // reprompts
             const noInputPrompts: any[] = []; // tslint:disable-line
@@ -88,12 +89,14 @@ export class GoogleAssistantCore implements Plugin {
                     });
                 });
             }
-            _set(googleAction.$response, 'noInputPrompts', noInputPrompts);
+            _set(googleAction.$originalResponse, 'noInputPrompts', noInputPrompts);
         }
 
         if (_get(output, 'GoogleAssistant.displayText') && googleAction.hasScreenInterface()) {
-            _set(googleAction.$response, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
+            _set(googleAction.$originalResponse, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
         }
+
+
     }
     async userStorageGet(googleAction: GoogleAction) {
         try {
@@ -111,10 +114,10 @@ export class GoogleAssistantCore implements Plugin {
     }
     async userStorageStore(googleAction: GoogleAction) {
         const output = googleAction.$output;
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
-        _set(googleAction.$response, 'userStorage', JSON.stringify(googleAction.$user.$storage));
+        _set(googleAction.$originalResponse, 'userStorage', JSON.stringify(googleAction.$user.$storage));
     }
     uninstall(googleAssistant: GoogleAssistant) {
 

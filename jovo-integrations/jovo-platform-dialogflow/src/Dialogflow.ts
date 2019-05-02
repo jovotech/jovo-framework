@@ -12,14 +12,15 @@ import {DialogflowCore} from "./DialogflowCore";
 import {DialogflowRequestBuilder} from "./core/DialogflowRequestBuilder";
 import {DialogflowResponseBuilder} from "./core/DialogflowResponseBuilder";
 import {DialogflowTestSuite} from './core/Interfaces';
+import {DialogflowFactory} from "./core/DialogflowFactory";
 
 export interface DialogflowConfig extends ExtensibleConfig {
 }
 
 export class Dialogflow extends Extensible implements Platform {
 
-    requestBuilder = new DialogflowRequestBuilder();
-    responseBuilder = new DialogflowResponseBuilder();
+    requestBuilder = new DialogflowRequestBuilder(new DialogflowFactory());
+    responseBuilder = new DialogflowResponseBuilder(new DialogflowFactory());
 
     config: DialogflowConfig = {
         enabled: true,
@@ -45,7 +46,7 @@ export class Dialogflow extends Extensible implements Platform {
     }
 
     makeTestSuite(): DialogflowTestSuite {
-        return new TestSuite(new DialogflowRequestBuilder(), new DialogflowResponseBuilder());
+        return new TestSuite(this.requestBuilder, this.responseBuilder);
     }
 
     getAppType(): string {

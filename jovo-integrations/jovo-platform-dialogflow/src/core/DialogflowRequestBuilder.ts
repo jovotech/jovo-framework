@@ -1,7 +1,9 @@
 import _set = require('lodash.set');
-import {RequestBuilder, JovoRequest} from "jovo-core";
-import {DialogflowRequest} from "./DialogflowRequest";
+import {RequestBuilder} from "jovo-core";
+import {DialogflowRequest, DialogflowRequestJSON} from "./DialogflowRequest";
 import * as path from "path";
+import {DialogflowFactory} from "./DialogflowFactory";
+import {PlatformFactory} from "../index";
 
 const samples: {[key: string]: {[key: string]: string} | string} = {
     'google': {
@@ -21,10 +23,14 @@ const samples: {[key: string]: {[key: string]: string} | string} = {
     }
 };
 
-export class DialogflowRequestBuilder implements RequestBuilder<DialogflowRequest> {
+type PlatformType = 'google' | 'facebook' | 'slack';
+
+export class DialogflowRequestBuilder<T extends PlatformFactory = DialogflowFactory> implements RequestBuilder<DialogflowRequest> {
      type = 'DialogflowAgent';
-     platform: string;
-     platformRequestClazz: JovoRequest;
+
+    constructor(private factory: T) {
+
+    }
 
     async launch(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         return await this.launchRequest(json);
@@ -50,33 +56,21 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
 
     async launchRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
-            return DialogflowRequest.fromJSON(json);
+            return this.factory.createRequest(json) as DialogflowRequest;
         } else {
-            // @ts-ignore
-            const reqObj: any = this.platform ? getJsonFilePath('DefaultWelcomeIntent', this.platform) : getJsonFilePath('DefaultWelcomeIntent'); // tslint:disable-line
+            const reqObj: any = getJsonFilePath('DefaultWelcomeIntent', this.factory.type()); // tslint:disable-line
             const request = JSON.stringify(require(reqObj));
-
-            const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
-            // @ts-ignore
-            dialogflowRequest.originalDetectIntentRequest.payload = this.platformRequestClazz.fromJSON(dialogflowRequest.originalDetectIntentRequest.payload);
-            return dialogflowRequest;
-
+            return this.factory.createRequest(request as DialogflowRequestJSON) as DialogflowRequest;
         }
     }
+
     async intentRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
-            return DialogflowRequest.fromJSON(json);
+            return this.factory.createRequest(json) as DialogflowRequest;
         } else {
-            // @ts-ignore
-            const reqObj: any = this.platform ? getJsonFilePath('HelpIntent', this.platform) : getJsonFilePath('HelpIntent'); // tslint:disable-line
-
+            const reqObj: any = getJsonFilePath('HelpIntent', this.factory.type()); // tslint:disable-line
             const request = JSON.stringify(require(reqObj));
-
-
-            const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
-// @ts-ignore
-            dialogflowRequest.originalDetectIntentRequest.payload = this.platformRequestClazz.fromJSON(dialogflowRequest.originalDetectIntentRequest.payload);
-            return dialogflowRequest;
+            return this.factory.createRequest(request as DialogflowRequestJSON) as DialogflowRequest;
         }
     }
 
@@ -85,37 +79,32 @@ export class DialogflowRequestBuilder implements RequestBuilder<DialogflowReques
     }
 
     async rawRequestByKey(key: string): Promise<DialogflowRequest> {
-        // @ts-ignore
-        const reqObj: any = this.platform ? getJsonFilePath(key, this.platform) : getJsonFilePath(key); // tslint:disable-line
+        const reqObj: any = getJsonFilePath(key, this.factory.type()); // tslint:disable-line
         const request = JSON.stringify(require(reqObj));
-
-        const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
-        // @ts-ignore
-        dialogflowRequest.originalDetectIntentRequest.payload = this.platformRequestClazz.fromJSON(dialogflowRequest.originalDetectIntentRequest.payload);
-        return dialogflowRequest;
+        return this.factory.createRequest(request as DialogflowRequestJSON) as DialogflowRequest;
     }
     async audioPlayerRequest(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
-            return DialogflowRequest.fromJSON(json);
+            return this.factory.createRequest(json) as DialogflowRequest;
         } else {
-            // @ts-ignore
-            const reqObj: any = this.platform ? getJsonFilePath('MediaFinished', this.platform) : getJsonFilePath('MediaFinished'); // tslint:disable-line
+            const reqObj: any = getJsonFilePath('MediaFinished', this.factory.type()); // tslint:disable-line
             const request = JSON.stringify(require(reqObj));
-
-            const dialogflowRequest = DialogflowRequest.fromJSON(JSON.parse(request));
-            // @ts-ignore
-            dialogflowRequest.originalDetectIntentRequest.payload = this.platformRequestClazz.fromJSON(dialogflowRequest.originalDetectIntentRequest.payload);
-            return dialogflowRequest;
+            return this.factory.createRequest(request as DialogflowRequestJSON) as DialogflowRequest;
         }
+
     }
     async end(json?: object): Promise<DialogflowRequest> { // tslint:disable-line
         if (json) {
-            return DialogflowRequest.fromJSON(json);
+            return this.factory.createRequest(json) as DialogflowRequest;
         } else {
-            // @ts-ignore
-            const request = JSON.stringify(require(getJsonFilePath('Cancel')));
-            return DialogflowRequest.fromJSON(JSON.parse(request));
+            const reqObj: any = getJsonFilePath('Cancel', this.factory.type()); // tslint:disable-line
+            const request = JSON.stringify(require(reqObj));
+            return this.factory.createRequest(request as DialogflowRequestJSON) as DialogflowRequest;
         }
+    }
+
+    async getPlatformRequest(key: string, platform: string) {
+        return JSON.parse(JSON.stringify(require(getJsonFilePath(key, platform))));
     }
 }
 function getJsonFilePath(key: string, platform = 'google'): string {

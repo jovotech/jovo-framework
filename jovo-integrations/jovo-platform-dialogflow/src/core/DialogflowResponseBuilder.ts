@@ -1,15 +1,15 @@
-import {ResponseBuilder, JovoResponse} from "jovo-core";
+import {ResponseBuilder} from "jovo-core";
 import {DialogflowResponse} from "./DialogflowResponse";
+import {PlatformFactory} from "../index";
+import {DialogflowFactory} from "./DialogflowFactory";
 
-export class DialogflowResponseBuilder implements ResponseBuilder<DialogflowResponse> {
-    platform: string;
-    platformResponseClazz: JovoResponse;
+export class DialogflowResponseBuilder<T extends PlatformFactory = DialogflowFactory> implements ResponseBuilder<DialogflowResponse> {
+
+    constructor(private factory: T) {
+
+    }
+
     create(json: any): DialogflowResponse { // tslint:disable-line
-        const dialogflowResponse = DialogflowResponse.fromJSON(json) as DialogflowResponse;
-        if (dialogflowResponse.payload) {
-            // @ts-ignore
-            dialogflowResponse.payload[this.platform] = this.platformResponseClazz.fromJSON(dialogflowResponse.payload[this.platform]);
-        }
-        return dialogflowResponse;
+        return this.factory.createResponse(json) as DialogflowResponse;
     }
 }

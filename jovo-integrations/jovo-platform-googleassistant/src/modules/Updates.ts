@@ -50,7 +50,7 @@ export class Updates {
 
   /**
    * Check if the user has cancelled the updates
-   * @returns {boolean} 
+   * @returns {boolean}
    */
   isRegisterUpdateCancelled(): boolean {
     return this.getRegisterUpdateStatus() === 'CANCELLED';
@@ -89,21 +89,21 @@ export class UpdatesPlugin implements Plugin {
     if (intentName === 'actions.intent.CONFIGURE_UPDATES') {
       _set(googleAction.$type, 'type', 'ON_CONFIGURE_UPDATES');
     }
-  
+
     googleAction.$updates = new Updates(googleAction);
   }
 
   output(googleAction: GoogleAction) {
-    if (!googleAction.$response) {
-      googleAction.$response = new GoogleActionResponse();
+    if (!googleAction.$originalResponse) {
+      googleAction.$originalResponse = new GoogleActionResponse();
     }
     const output = googleAction.$output;
 
     const askForRegisterUpdate = _get(output, "GoogleAssistant.AskForRegisterUpdate");
 
     if (askForRegisterUpdate) {
-        _set(googleAction.$response, "expectUserResponse", true);
-        _set(googleAction.$response, "systemIntent", {
+        _set(googleAction.$originalResponse, "expectUserResponse", true);
+        _set(googleAction.$originalResponse, "systemIntent", {
           intent: "actions.intent.REGISTER_UPDATE",
           inputValueData: {
               "@type": "type.googleapis.com/google.actions.v2.RegisterUpdateValueSpec",
@@ -115,7 +115,7 @@ export class UpdatesPlugin implements Plugin {
               },
           },
         });
-        _set(googleAction.$response, 'inputPrompt', {
+        _set(googleAction.$originalResponse, 'inputPrompt', {
           initialPrompts: [
               {
                   textToSpeech: 'PLACEHOLDER_FOR_REGISTER_UPDATE',
