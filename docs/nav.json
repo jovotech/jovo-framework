@@ -484,6 +484,10 @@
                 {
                     "title": "Plugins",
                     "route": "plugins"
+                },
+                {
+                    "title": "Contributing",
+                    "route": "contributing"
                 }
             ]
         }
