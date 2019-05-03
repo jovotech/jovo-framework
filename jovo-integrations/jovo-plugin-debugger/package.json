@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-debugger",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^2.19.0",
-    "jovo-core": "^2.2.1",
+    "jovo-core": "^2.2.2",
     "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
