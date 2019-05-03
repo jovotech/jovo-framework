@@ -202,10 +202,10 @@ export class AlexaRequest implements JovoRequest {
             }
             const resolutionsPerAuthority=_get(slots[slot], 'resolutions.resolutionsPerAuthority')
             if(resolutionsPerAuthority){
-                resolutionsPerAuthority.forEach((item) => {
-                    if (_get(item, 'values[0]')) {
-                        input.key = _get(item, 'values[0]').value.name;
-                        input.id = _get(item, 'values[0]').value.id;
+                Object.keys(resolutionsPerAuthority).forEach((item) => {
+                    if (_get(resolutionsPerAuthority[item], 'values[0]')) {
+                        input.key = _get(resolutionsPerAuthority[item], 'values[0]').value.name;
+                        input.id = _get(resolutionsPerAuthority[item], 'values[0]').value.id;
                     }
                 });
             }
