@@ -1,20 +1,21 @@
-import {BaseApp, ExtensibleConfig, Host, Log, Logger, LogLevel} from "jovo-core";
+import { BaseApp, ExtensibleConfig, Host, Log, Logger, LogLevel } from "jovo-core";
 import * as fs from 'fs';
 import * as path from "path";
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import {FileDb2} from "jovo-db-filedb";
+import { FileDb2 } from "jovo-db-filedb";
 import {
     Config as JovoUserConfig,
     ContextConfig,
-    MetaDataConfig} from "./middleware/user/JovoUser";
+    MetaDataConfig
+} from "./middleware/user/JovoUser";
 
-import {BasicLogging} from "./middleware/logging/BasicLogging";
-import {JovoUser} from "./middleware/user/JovoUser";
-import {I18Next, Config as I18NextConfig} from "jovo-cms-i18next";
-import {Handler} from "./middleware/Handler";
-import {Router, Config as RouterConfig} from "./middleware/Router";
+import { BasicLogging } from "./middleware/logging/BasicLogging";
+import { JovoUser } from "./middleware/user/JovoUser";
+import { I18Next, Config as I18NextConfig } from "jovo-cms-i18next";
+import { Handler } from "./middleware/Handler";
+import { Router, Config as RouterConfig } from "./middleware/Router";
 
 if (process.argv.includes('--port')) {
     process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
@@ -64,7 +65,7 @@ export class App extends BaseApp {
             process.chdir(process.env.JOVO_CWD);
         }
 
-        const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js' );
+        const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js');
         if (fs.existsSync(pathToConfig)) {
             const fileConfig = require(pathToConfig) || {};
             this.config = _merge(fileConfig, this.config);
@@ -108,7 +109,7 @@ export class App extends BaseApp {
             }
         }
 
-        const pathToStageConfig = path.join(process.cwd(), 'config.' + stage + '.js' );
+        const pathToStageConfig = path.join(process.cwd(), 'config.' + stage + '.js');
 
         if (fs.existsSync(pathToStageConfig)) {
 
@@ -137,7 +138,7 @@ export class App extends BaseApp {
         _merge(this.config.plugin, this.config.cms);
         _merge(this.config.plugin, this.config.analytics);
         _merge(this.config.plugin, this.config.nlu);
-
+        _merge(this.config.plugin, { Validation: { validation: this.config.validation } });
     }
 
     initConfig() {
@@ -365,7 +366,7 @@ export class App extends BaseApp {
      * @deprecated
      * @param {{[p: string]: string}} inputMap
      */
-    setInputMap(inputMap: {[key: string]: string}) {
+    setInputMap(inputMap: { [key: string]: string }) {
         this.config.inputMap = inputMap;
     }
 
@@ -396,7 +397,7 @@ export class App extends BaseApp {
      * @deprecated
      * @param {{[p: string]: string}} intentMap
      */
-    setIntentMap(intentMap: {[key: string]: string}) {
+    setIntentMap(intentMap: { [key: string]: string }) {
         this.config.intentMap = intentMap;
         if (this.$plugins.get('Router')) {
             (this.$plugins.get('Router') as Router).config.intentMap = this.config.intentMap;
@@ -559,8 +560,8 @@ export interface Config extends ExtensibleConfig {
         requestLoggingObjects?: string[],
         responseLoggingObjects?: string[],
 
-        intentMap?: {[key: string]: string};
-        inputMap?: {[key: string]: string};
+        intentMap?: { [key: string]: string };
+        inputMap?: { [key: string]: string };
 
         intentsToSkipUnhandled: string[];
         userMetaData?: MetaDataConfig;
@@ -570,19 +571,20 @@ export interface Config extends ExtensibleConfig {
     keepSessionDataOnSessionEnded?: boolean;
     logging?: boolean | LoggingConfig;
 
-    inputMap?: {[key: string]: string};
+    inputMap?: { [key: string]: string };
 
-    user?: JovoUserConfig | {[key: string]: any; metaData: boolean; context: boolean}; // tslint:disable-line
+    user?: JovoUserConfig | { [key: string]: any; metaData: boolean; context: boolean }; // tslint:disable-line
     i18n?: I18NextConfig;
-    db?: {[key: string]: any}; // tslint:disable-line
-    analytics?: {[key: string]: any}; // tslint:disable-line
-    platform?: {[key: string]: any}; // tslint:disable-line
-    cms?: {[key: string]: any}; // tslint:disable-line
-    nlu?: {[key: string]: any}; // tslint:disable-line
+    db?: { [key: string]: any }; // tslint:disable-line
+    analytics?: { [key: string]: any }; // tslint:disable-line
+    platform?: { [key: string]: any }; // tslint:disable-line
+    cms?: { [key: string]: any }; // tslint:disable-line
+    nlu?: { [key: string]: any }; // tslint:disable-line
+    validation?: { [key: string]: any };  // tslint:disable-line
 }
 
 // handler
 export interface Config {
     handlers?: any; // tslint:disable-line
 }
-export interface Config extends RouterConfig {}
+export interface Config extends RouterConfig { }
