@@ -46,7 +46,7 @@ $ npm link jovo-framework
 $ npm link jovo-core
 ```
 
-If you are modifying other packages in the Jovo framework, e.g. plugins, you should repeat this process for those packages.
+If you are modifying other packages in the Jovo Framework, e.g. plugins, you should repeat this process for those packages.
 
 > Note that if you run `npm install` in your app, it will install the actual packages, overwriting the symlinks.
 
@@ -64,7 +64,8 @@ Run all of these commands at the top level of your jovo-framework clone.
 
 > Jovo uses [Jest](https://jestjs.io/) for unit tests and [tslint](https://palantir.github.io/tslint/) for static analysis.
 
-Compile TypeScript
+Compile TypeScript:
+
 ```shell
 $ npm run tsc
 ```
