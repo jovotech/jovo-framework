@@ -1,5 +1,7 @@
 # Jovo Framework Changelog
 
+## 2.2.4 (2019-05-03)
+* `jovo-framework` Improve Conversation test runtime handling (`send(req)`, `sendToServer(req)`, `sendToApp(req, app)`)
 
 
 ## 2.2.3 (2019-05-03)
