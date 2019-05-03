@@ -48,7 +48,7 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getBasicCard() {
-        const items = _get(this, 'payload.google.richResponse.items');
+        const items = _get(this, 'richResponse.items');
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].basicCard) {
@@ -116,10 +116,10 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getDisplayText() {
-        return _get(this, 'payload.google.richResponse.items[0].simpleResponse.displayText');
+        return _get(this, 'richResponse.items[0].simpleResponse.displayText');
     }
     getSuggestionChips() {
-        return _get(this, 'payload.google.richResponse.suggestions');
+        return _get(this, 'richResponse.suggestions');
     }
 
     hasDisplayText(text?: string): boolean {
@@ -154,7 +154,7 @@ export class GoogleActionResponse implements JovoResponse {
     }
 
     getMediaResponse() {
-        const items = _get(this, 'payload.google.richResponse.items');
+        const items = _get(this, 'richResponse.items');
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].mediaResponse) {

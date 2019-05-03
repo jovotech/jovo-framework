@@ -2,9 +2,9 @@
 
 import {GoogleActionResponse} from "../src/core/GoogleActionResponse";
 import _cloneDeep = require('lodash.clonedeep');
-const askJSON = require('./../sample-response-json/v2/ASK.json');
-const imageCardJSON = require('./../sample-response-json/v2/tellBasicImageCard.json');
-const tellJSON = require('./../sample-response-json/v2/TELL.json');
+const askJSON = require('./../sample-response-json/v2/ASK.json').payload.google;
+const imageCardJSON = require('./../sample-response-json/v2/tellBasicImageCard.json').payload.google;
+const tellJSON = require('./../sample-response-json/v2/TELL.json').payload.google;
 
 process.env.NODE_ENV = 'TEST';
 

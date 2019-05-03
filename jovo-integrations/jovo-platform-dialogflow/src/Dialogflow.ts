@@ -81,7 +81,7 @@ export class Dialogflow extends Extensible implements Platform {
         if (requestObject.responseId &&
             requestObject.queryResult &&
             requestObject.originalDetectIntentRequest &&
-            requestObject.originalDetectIntentRequest.source !== 'google') {
+            (!requestObject.originalDetectIntentRequest.source || requestObject.originalDetectIntentRequest.source !== 'google')) {
             handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
         }
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {

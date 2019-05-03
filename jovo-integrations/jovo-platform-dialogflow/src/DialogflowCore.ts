@@ -100,15 +100,18 @@ export class DialogflowCore implements Plugin {
     output(dialogflowAgent: DialogflowAgent) {
         const output = dialogflowAgent.$output;
         const request = dialogflowAgent.$request as DialogflowRequest;
-        const response = dialogflowAgent.$response as DialogflowResponse;
 
+
+        if (!dialogflowAgent.$response) {
+            dialogflowAgent.$response = new DialogflowResponse();
+        }
 
         if (output.tell) {
-            response.fulfillmentText = output.tell.speech.toString();
+            (dialogflowAgent.$response as DialogflowResponse).fulfillmentText = output.tell.speech.toString();
         }
 
         if (output.ask) {
-            response.fulfillmentText = output.ask.speech.toString();
+            (dialogflowAgent.$response as DialogflowResponse).fulfillmentText = output.ask.speech.toString();
         }
 
         const outputContexts = request.queryResult.outputContexts || [];
@@ -154,10 +157,13 @@ export class DialogflowCore implements Plugin {
             }
         }
 
-        response.outputContexts = newOutputContexts;
+        (dialogflowAgent.$response as DialogflowResponse).outputContexts = newOutputContexts;
         if (_get(output, 'Dialogflow.Payload')) {
             _set(dialogflowAgent.$response, 'payload', _get(output, 'Dialogflow.Payload'));
         }
+
+
+
     }
 
 }
