@@ -20,7 +20,8 @@
     "jovo-cms-i18next": "^2.2.1",
     "jovo-core": "^2.2.1",
     "jovo-db-filedb": "^2.2.1",
-    "lodash.get": "^4.4.2"
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

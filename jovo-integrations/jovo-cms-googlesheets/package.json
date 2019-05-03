@@ -16,7 +16,10 @@
   "dependencies": {
     "googleapis": "^37.2.0",
     "i18next": "^15.0.8",
-    "jovo-core": "^2.2.1"
+    "jovo-core": "^2.2.1",
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
+    "lodash.set": "^4.3.2"
   },
   "devDependencies": {
     "@types/i18next": "^12.1.0",
