@@ -23,7 +23,7 @@ type ConversationTestRuntime = 'app' | 'server';
 export interface ConversationConfig {
     userId?: string;
     locale?: string;
-    runtime: ConversationTestRuntime;
+    runtime?: ConversationTestRuntime;
     defaultDbDirectory?: string;
     deleteDbOnSessionEnded?: boolean;
     httpOptions?: RequestOptions;
