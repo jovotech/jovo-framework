@@ -1,26 +1,29 @@
 import * as http from 'http';
+import {RequestOptions} from 'http';
 import * as fs from 'fs';
-import _merge = require('lodash.merge');
-import _get = require('lodash.get');
 import * as crypto from "crypto";
 
 import * as util from "util";
 import * as path from 'path';
-import {Log} from "./Log";
 import {TestHost} from "./TestHost";
 import {TestSuite} from "./TestSuite";
 import {Data, JovoRequest, JovoResponse, SessionData} from "./Interfaces";
-import {RequestOptions} from "http";
-import { BaseApp } from './BaseApp';
+import {BaseApp} from './BaseApp';
+import {ErrorCode, JovoError} from "./errors/JovoError";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
 const fsreadFile = util.promisify(fs.readFile);
 const fswriteFile = util.promisify(fs.writeFile);
 
+type ConversationTestRuntime = 'app' | 'server';
+
 export interface ConversationConfig {
     userId?: string;
     locale?: string;
+    runtime: ConversationTestRuntime;
     defaultDbDirectory?: string;
     deleteDbOnSessionEnded?: boolean;
     httpOptions?: RequestOptions;
@@ -29,6 +32,7 @@ export interface ConversationConfig {
 export class Conversation {
     testSuite: TestSuite;
     sessionData: SessionData = {};
+    app?: BaseApp;
 
     $user: {
         $data: Data,
@@ -43,6 +47,7 @@ export class Conversation {
         locale: 'en-US',
         defaultDbDirectory: './db/tests/',
         deleteDbOnSessionEnded: false,
+        runtime: "server",
         httpOptions: {
             host: 'localhost',
             port: process.env.JOVO_PORT || 3000,
@@ -63,6 +68,14 @@ export class Conversation {
             this.config = _merge(this.config, config);
         }
 
+        if (this.config.runtime === 'app') {
+            try {
+                // TODO: cleaner solution required
+                process.env.JOVO_CONFIG = process.cwd() + '/src/config.js';
+                this.app = require( process.cwd() + '/src/app').app;
+            } catch(e) {
+            }
+        }
     }
 
     /**
@@ -79,7 +92,7 @@ export class Conversation {
 
     /**
      * Set request user and session data
-     * @param req 
+     * @param req
      */
     async prepare(req: JovoRequest): Promise<JovoRequest> {
         this.applyToRequest(req);
@@ -95,7 +108,7 @@ export class Conversation {
     }
 
     /**
-     * Send request to server, resolve with response.
+     * Send request to server or directly to the app, resolve with response.
      * Rejects with Error on failure.
      * @param {JovoRequest} req
      * @returns {Promise<JovoResponse>}
@@ -104,6 +117,27 @@ export class Conversation {
 
         await this.prepare(req);
 
+        if (this.config.runtime === 'server') {
+            return this.sendToServer(req);
+        } else if (this.config.runtime === 'app') {
+
+            if (!this.app) {
+                throw new JovoError('Can\'t find a valid app object', ErrorCode.ERR, 'jovo-core', 'Imported app object can\'t be found at the default path. Please add a valid object via conversation.app = require(...)');
+            }
+            return this.sendToApp(req, this.app);
+        }
+
+        throw new JovoError('Conversation send type not valid. Try \'app\' or \'server\'');
+    }
+
+
+    /**
+     * Send request to server, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async sendToServer(req: JovoRequest): Promise<JovoResponse> {
         const postData = JSON.stringify(req.toJSON());
 
         try {
