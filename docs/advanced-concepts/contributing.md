@@ -17,6 +17,7 @@ If you're not familiar with forking in GitHub, this article will help you get st
 > The packages that make up Jovo are all contained in a single monorepo. Jovo uses [Lerna](https://lerna.js.org/) to manage these packages.
 
 Initialize your workspace (run this in the top level of your jovo-framework clone):
+
 ```shell
 $ npm install
 $ npm run init
@@ -28,7 +29,9 @@ If you have a Jovo app that depends on the feature or fix you are implementing, 
 
 Create [links](https://docs.npmjs.com/cli/link.html) for the framework
 This will create symlinks to jovo-framework and jovo-core in your system's global npm modules.
+
 > Note that the repo is called jovo-framework, but `npm link` must be run in jovo-framework/jovo-framework
+
 ```shell
 $ cd jovo-framework
 $ npm run tsc
@@ -39,7 +42,8 @@ $ npm run tsc
 $ npm link
 ```
 
-Now create links in your project
+Now create links in your project:
+
 ```shell
 $ cd <your project>
 $ npm link jovo-framework
@@ -53,6 +57,7 @@ If you are modifying other packages in the Jovo Framework, e.g. plugins, you sho
 ## Make your Changes
 
 Create a new branch for your fix or feature:
+
 ```shell
 $ git checkout -b <new-branch-name>
 ```
@@ -71,18 +76,22 @@ $ npm run tsc
 ```
 
 Run linter:
+
 ```shell
 $ npm run tslint
 ```
 Run tests:
+
 ```shell
 $ npm run test
 ```
 
 ## Share your Changes
 
+> [We're using Gitmoji for commit messages. Learn more here.](https://gitmoji.carloscuesta.me)
+
 Add and commit code:
-> [gitmoji guide](https://gitmoji.carloscuesta.me)
+
 ```shell
 $ git add .
 $ git commit -m ":GITMOJI: Text"
@@ -90,6 +99,7 @@ $ git push origin -u <branchname>
 ```
 
 ### Create a Pull-Request on GitHub
+
 See this article from GitHub: https://help.github.com/en/articles/creating-a-pull-request-from-a-fork
 
 <!--[metadata]: {
