@@ -200,7 +200,7 @@ export class AlexaRequest implements JovoRequest {
                 input.value = slots[slot].value;
                 input.key = slots[slot].value;
             }
-            const resolutionsPerAuthority=_get(slots[slot], 'resolutions.resolutionsPerAuthority')
+            const resolutionsPerAuthority=_get(slots[slot], 'resolutions.resolutionsPerAuthority');
             if(resolutionsPerAuthority){
                 Object.keys(resolutionsPerAuthority).forEach((item) => {
                     if (_get(resolutionsPerAuthority[item], 'values[0]')) {
