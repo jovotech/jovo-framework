@@ -103,12 +103,12 @@ export class ResponsesTable extends DefaultTable {
                     key = `${locale}.${platform}.translation.${row[0]}`;
                 }
 
-                const valueArray = _get(resources, key, []);
-
-                if (cell) {
-                    valueArray.push(cell);
+                if (!cell) {
+                    continue;
                 }
-                
+
+                const valueArray = _get(resources, key, []);
+                valueArray.push(cell);
                 _set(resources, key, valueArray);
             }
         }
