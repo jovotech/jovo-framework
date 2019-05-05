@@ -157,7 +157,6 @@ describe('ResponsesTable.parse()', () => {
         i18nModel['en-US'].AlexaSkill = {
             translation: {
                 WELCOME: ['Welcome_Alexa'],
-                GOODBYE: []
             }
         };
         responsesTable.parse(handleRequest, tableValues);
