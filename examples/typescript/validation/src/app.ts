@@ -27,14 +27,21 @@ app.setHandler({
     },
 
     MyNameIsIntent() {
+        console.log('MyNameIsIntent called!');
         this.tell('name');
     },
 
     Unhandled() {
         this.tell('Unhandled!');
+    },
+
+    STATE: {
+        SecondUnhandled() {
+            this.tell('Second Unhandled!');
+        }
     }
 
 });
 
 
-export {app};
+export { app };

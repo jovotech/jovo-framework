@@ -1,4 +1,4 @@
-import { IsRequiredValidator } from 'jovo-plugin-validation';
+import { IsRequiredValidator, ValidValuesValidator } from 'jovo-plugin-validation';
 
 const config = {
    logging: false,
@@ -17,7 +17,15 @@ const config = {
             //     new IsRequiredValidator(),
             //     // new ValidValuesValidator(['John', 'Sean'], 'Unhandled')
             // ]
-            name: new IsRequiredValidator()
+            name: [
+                new IsRequiredValidator('STATE.SecondUnhandled'),
+                new ValidValuesValidator(['James', 'Henry'], 'STATE.SecondUnhandled'),
+                function(this: any) {
+                    if(this.$inputs.name.value === 'Ruben') {
+                        this.toIntent('Unhandled');
+                    }
+                }
+            ]
         }
     }
 };
