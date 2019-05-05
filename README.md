@@ -140,14 +140,7 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 Location | Access your user's location data | [📝](./docs/platforms/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/platforms/google-assistant/media-response.md)
 Push Notifications | Send push notifications to your users | [📝](./docs/platforms/google-assistant/notifications.md)
-
-#### Missing
-
-The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
-
-Platform | Feature | Docs
-:--- | :--- | :---
-**Google Action** | Transactions (WIP) | [📝](https://developers.google.com/actions/transactions/)
+Transactions | Sell digital and physical goods in your Google Actions | [📝](./docs/platforms/google-assistant/transactions.md)
 
 ### Integrations
 

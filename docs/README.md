@@ -1,6 +1,6 @@
 # Jovo Framework Documentation
 
-[Take a look at the docs on our website, they're prettier there!](https://www.jovo.tech/framework/docs/)
+[Take a look at the docs on our website, they're prettier there!](https://www.jovo.tech/docs/)
 
 > 🚀 Join our newsletter for free courses on voice app development: [www.jovo.tech/newsletter](https://www.jovo.tech/newsletter) 
 
@@ -8,24 +8,32 @@
 
 Category | Sub-Category | Additional Content
 :--- | :--- | :---
-Getting Started | [Installation](./01_getting-started) | &nbsp;
-&nbsp; | [Tutorials](./01_getting-started/tutorials.md) | &nbsp;
-&nbsp; | [Voice App Basics](./01_getting-started/voice-app-basics.md) | &nbsp;
-CLI | [Overview](./02_cli) | &nbsp;
-&nbsp; | [Workflows](../02_cli/workflows.md) | &nbsp;
-App Configuration | [Overview](./03_app-configuration) | &nbsp;
-&nbsp; | [Language Models](./03_app-configuration/01_models)  | [Platforms](./03_app-configuration/01_models/platforms)
-&nbsp; | [Server Configuration](./03_app-configuration/02_server) | [Webhook](./03_app-configuration/02_server/webhook.md), [AWS Lambda](./03_app-configuration/02_server/aws-lambda.md), [Azure Functions](./03_app-configuration/02_server/azure-functions.md)
-App Logic | [Overview](./04_app-logic) | &nbsp;
-&nbsp; | [Routing](./04_app-logic/01_routing) | &nbsp;
-&nbsp; | [Data](./04_app-logic/02_data) | [User](./04_app-logic/02_data/user.md)
-&nbsp; | [Output](./04_app-logic/03_output) | [speechBuilder](./04_app-logic/03_output/speechbuilder.md), [i18n](./04_app-logic/03_output/i18n.md), [Visual Output](./04_app-logic/03_output/visual-output.md)
-Platform-specific Features | [Overview](./05_platform-specifics) | &nbsp;
-&nbsp; | [Amazon Alexa](./05_platform-specifics/amazon-alexa) | [Audioplayer](./05_platform-specifics/amazon-alexa/audioplayer.md), [Dialog Interface](./05_platform-specifics/amazon-alexa/dialog.md), [Visual Output](./05_platform-specifics/amazon-alexa/visuals.md), [List](./05_platform-specifics/amazon-alexa/list.md)
-&nbsp; | [Google Assistant](./05_platform-specifics/google-assistant) | [Visual Output](./05_platform-specifics/google-assistant/visual.md), [Data](./05_platform-specifics/google-assistant/data.md), [Media Response](./05_platform-specifics/google-assistant/media-response.md)
-&nbsp; Integrations | [Overview](./06_integrations) | &nbsp;
-&nbsp; | [Databases](./06_integrations/databases) | &nbsp;
-&nbsp; | [Analytics](./06_integrations/analytics) | &nbsp;
-Advanced Features | [Overview](./07_advanced) | [Unit Testing](./07_advanced/unit-testing)
-Jovo Debugger | [Overview](./08_advanced) | &nbsp;
-Support | [Overview](./09_support) | &nbsp;
+Getting Started | [Quickstart Guide](./getting-started) | &nbsp;
+&nbsp; | [Installation](./getting-started/installation.md) | &nbsp;
+&nbsp; | [Next Steps](./getting-started/next-steps.md) | &nbsp;
+&nbsp; | [Voice App Basics](./getting-started/voice-app-basics.md) | &nbsp;
+Basic Concepts | [Requests & Responses](./basic-concepts/requests-responses) | [Request Object](./basic-concepts/requests-responses/request.md), [Response Object](./basic-concepts/requests-responses/response.md)
+&nbsp; | [Language Model](./basic-concepts/model)  | [Platforms](./basic-concepts/model/platforms)
+&nbsp; | [Routing](./basic-concepts/routing)  | [Intents](./basic-concepts/routing/intents.md), [States](./basic-concepts/routing/states.md), [Input](./basic-concepts/routing/input.md), [Event Listeners](./basic-concepts/routing/event-listeners.md)
+&nbsp; | [Data](./basic-concepts/data)  | [User](./basic-concepts/data/user.md), [Logging](./basic-concepts/data/logging.md)
+&nbsp; | [Output](./basic-concepts/output)  | [SpeechBuilder](./basic-concepts/output/speechbuilder.md), [Logging](./basic-concepts/output/logging.md), [SpeechBuilder](./basic-concepts/output/speechbuilder.md), [i18n](./basic-concepts/output/i18n.md), [i18n](./basic-concepts/output/i18n.md), [Visual Output](./basic-concepts/output/visual-output.md), [Output Object](./basic-concepts/output/object.md)
+Workflows | [Project Lifecycle](./workflows/project-lifecycle.md) | &nbsp;
+&nbsp;| [Jovo Webhook](./workflows/jovo-webhook.md) | &nbsp;
+&nbsp; | [CLI Commands](./workflows/cli)  | [new](./workflows/cli/new.md), [run](./workflows/cli/run.md), [build](./workflows/cli/build.md), [deploy](./workflows/cli/deploy.md), [get](./workflows/cli/get.md)
+Configuration | [Project Structure](./configuration/project-structure.md) | &nbsp;
+&nbsp; | [app.js](./configuration/app-js.md) | &nbsp;
+&nbsp; | [config.js](./configuration/config-js.md) | &nbsp;
+&nbsp; | [project.js](./configuration/project-js.md) | &nbsp;
+&nbsp; | [Hosting](./configuration/hosting) | [ExpressJS](./configuration/hosting/express-js.md), [AWS Lambda](./configuration/hosting/aws-lambda.md), [AWS Lambda](./configuration/hosting/aws-lambda.md), [Google Cloud](./configuration/hosting/google-cloud-functions.md), [Azure Functions](./configuration/hosting/azure-functions.md)
+Platforms | [Amazon Alexa](./platforms/amazon-alexa) | &nbsp;
+&nbsp; | [Google Assistant](./platforms/google-assistant) | &nbsp;
+&nbsp; | [Dialogflow Integrations](./platforms/google-assistant) | &nbsp;
+Integrations | [Databases](./integrations/databases) | &nbsp;
+&nbsp; | [CMS](./integrations/cms) | &nbsp;
+&nbsp; | [Analytics](./integrations/analytics) | &nbsp;
+Testing | [Jovo Debugger](./testing/debugger.md) | &nbsp;
+&nbsp; | [Unit Testing](./testing/unit-testing.md) | &nbsp;
+Advanced Concepts | [Framework Architecture](./advanced-concepts/architecture.md) | &nbsp;
+&nbsp; | [Hooks](./advanced-concepts/hooks.md) | &nbsp;
+&nbsp; | [Plugins](./advanced-concepts/plugins.md) | &nbsp;
+&nbsp; | [Contributing](./advanced-concepts/contributing.md) | &nbsp;
