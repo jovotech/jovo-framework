@@ -1,5 +1,5 @@
 
-import { Plugin, BaseApp, PluginConfig, HandleRequest } from 'jovo-core';
+import { Plugin, BaseApp, PluginConfig, HandleRequest, Jovo } from 'jovo-core';
 import _merge = require('lodash.merge');
 
 interface Config extends PluginConfig {
@@ -32,7 +32,8 @@ export class Validation implements Plugin {
     run(handleRequest: HandleRequest) {
         const request = handleRequest.jovo!.$request!;
         const intent = request.getIntentName()!;
-        const inputs = handleRequest.jovo!.$inputs;
+        const jovo = handleRequest.jovo;
+        const inputs = jovo!.$inputs;
         const { validation } = this.config!;
 
         console.log('Got a request!!');
@@ -54,11 +55,11 @@ export class Validation implements Plugin {
                 switch(intentToValidate[key].constructor) {
                     case Array: {
                         for(const validator of intentToValidate[key]) {
-                            validator.validate(inputs[key]);
+                            validator.validate.call(jovo);
                         }
                     } break;
                     default: {
-                        intentToValidate[key].validate(inputs[key]);
+                        intentToValidate[key].validate.call(jovo);
                     }
                 } 
             }
@@ -70,10 +71,18 @@ interface IValidator {
     validate(): any;
 }
 
-export class IsRequiredValidator implements IValidator {
-    constructor() { }
+export class Validator implements IValidator {
+    constructor() {}
+    validate() {}
+}
 
-    validate() {
+export class IsRequiredValidator extends Validator {
+    constructor() { 
+        super();
+    }
+
+    validate(this: Jovo) {
         console.log('Validating...');
+        console.log(this.$request!.getIntentName());
     }
 }
