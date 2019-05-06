@@ -167,7 +167,7 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
         );
 
         if (keyExists) {
-            let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+            const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
                 jovo.$app!.$cms.I18Next.i18n, args
             );
 
