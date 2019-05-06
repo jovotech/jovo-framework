@@ -166,27 +166,13 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
             jovo.$app!.$cms.I18Next.i18n, args
         );
         if (keyExists) {
-            return fetch(jovo, args);
+            return jovo.$app!.$cms.I18Next.i18n.t.apply(
+                jovo.$app!.$cms.I18Next.i18n, args
+            );
         }
         args[0] = key;
     }
-
-    return fetch(jovo, args);
-}
-
-function fetch(jovo: Jovo, args: any[]) {       // tslint:disable-line
-    let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+    return jovo.$app!.$cms.I18Next.i18n.t.apply(
         jovo.$app!.$cms.I18Next.i18n, args
     );
-
-    if (translatedText.constructor === String && translatedText === '/') {
-        translatedText = '';
-    } else if (translatedText.constructor === Array) {
-        const i = translatedText.indexOf('/');
-        if (i > -1) {
-            translatedText[i] = '';
-        }
-    }
-
-    return translatedText;
 }
