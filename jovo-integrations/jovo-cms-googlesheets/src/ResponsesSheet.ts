@@ -109,11 +109,7 @@ export class ResponsesSheet extends DefaultSheet {
                 }
 
                 const valueArray = _get(resources, key, []);
-                let value = cell;
-                if (cell === '/') {
-                    value = '';
-                }
-                valueArray.push(value);
+                valueArray.push(cell);
                 _set(resources, key, valueArray);
             }
         }

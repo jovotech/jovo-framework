@@ -124,7 +124,7 @@ export class I18Next extends BaseCmsPlugin {
             if (!handleRequest.app.$cms.I18Next.resources.hasOwnProperty(locale)) {
                 continue;
             }
-            
+
             const resource = handleRequest.app.$cms.I18Next.resources[locale];
             for (const platform of handleRequest.app.getAppTypes()) {
                 if (resource[platform]) {
@@ -165,20 +165,28 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
         const keyExists = jovo.$app!.$cms.I18Next.i18n.exists.apply(
             jovo.$app!.$cms.I18Next.i18n, args
         );
-
         if (keyExists) {
-            const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
-                jovo.$app!.$cms.I18Next.i18n, args
-            );
-
-            return translatedText;
+            return fetch(jovo, args);
         }
-
         args[0] = key;
     }
 
-    const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+    return fetch(jovo, args);
+}
+
+function fetch(jovo: Jovo, args: any[]) {       // tslint:disable-line
+    let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
         jovo.$app!.$cms.I18Next.i18n, args
     );
+
+    if (translatedText.constructor === String && translatedText === '/') {
+        translatedText = '';
+    } else if (translatedText.constructor === Array) {
+        const i = translatedText.indexOf('/');
+        if (i > -1) {
+            translatedText[i] = '';
+        }
+    }
+
     return translatedText;
 }
