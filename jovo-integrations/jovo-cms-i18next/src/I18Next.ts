@@ -171,15 +171,6 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
                 jovo.$app!.$cms.I18Next.i18n, args
             );
 
-            if (typeof translatedText === 'string' && translatedText === '/') {
-                translatedText = '';
-            } else if (translatedText.constructor === Array) {
-                const i = translatedText.indexOf('/');
-                if (i > -1) {
-                    translatedText[i] = '';
-                }
-            }
-
             return translatedText;
         }
 
