@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@azure/functions": "^1.0.1-beta2",
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.2.3",
+    "jovo-cms-i18next": "^2.2.4",
     "jovo-core": "^2.2.3",
     "jovo-db-filedb": "^2.2.3",
     "lodash.get": "^4.4.2",
