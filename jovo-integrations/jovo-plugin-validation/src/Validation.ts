@@ -46,6 +46,9 @@ export class Validation implements Plugin {
         }
 
         const intentToValidate = validation[intent];
+        if(!intentToValidate) {
+            return;
+        }
 
         for (const key in inputs) {
             if (!inputs.hasOwnProperty(key)) {
@@ -63,7 +66,9 @@ export class Validation implements Plugin {
                                 } break;
                                 case Object: {
                                     validator.setInputToValidate(key);
-                                    validator.validate(jovo);
+                                    if(!validator.validate(jovo)) {
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -73,7 +78,9 @@ export class Validation implements Plugin {
                     }
                     default: {
                         intentToValidate[key].setInputToValidate(key);
-                        intentToValidate[key].validate(jovo);
+                        if(!intentToValidate[key].validate(jovo)) {
+                            return;
+                        }
                     }
                 }
             }

@@ -31,7 +31,10 @@
     "ts-jest": "^24.0.1",
     "tslint": "^5.15.0",
     "typedoc": "^0.13.0",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.1",
+    "jovo-framework": "^2.2.3",
+    "jovo-platform-alexa": "^2.2.2",
+    "jovo-platform-googleassistant": "^2.2.2"
   },
   "jest": {
     "transform": {

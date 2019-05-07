@@ -1,7 +1,7 @@
 import { Jovo } from 'jovo-core';
 
 interface IValidator {
-    validate(jovo: Jovo): any;
+    validate(jovo: Jovo): boolean;
 }
 
 export class Validator implements IValidator {
@@ -13,7 +13,9 @@ export class Validator implements IValidator {
         this.inputToValidate = input;
     }
 
-    validate(jovo: Jovo) { }
+    validate(jovo: Jovo) { 
+        return true;
+    }
 }
 
 export class IsRequiredValidator extends Validator {
@@ -26,7 +28,9 @@ export class IsRequiredValidator extends Validator {
         if (!input || !input.value) {
             // @ts-ignore
             jovo.toIntent(this.handler);
+            return false;
         }
+        return true;
     }
 }
 
@@ -49,9 +53,11 @@ export class ValidValuesValidator extends Validator {
         for (const value of this.validValues) {
             if (input.value !== value) {
                 // @ts-ignore
-                return jovo.toIntent(this.handler);
+                jovo.toIntent(this.handler);
+                return false;
             }
         }
+        return true;
     }
 }
 
@@ -73,9 +79,11 @@ export class InvalidValuesValidator extends Validator {
         for (const value of this.invalidValues) {
             if (input.value === value) {
                 // @ts-ignore
-                return jovo.toIntent(this.handler);
+                jovo.toIntent(this.handler);
+                return false;
             }
         }
+        return true;
     }
 }
 
