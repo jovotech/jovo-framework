@@ -1,0 +1,69 @@
+{
+  "responseId": "9c15d8f9-bc1a-49c4-88cf-c5192e2c5d1e",
+  "queryResult": {
+    "queryText": "GOOGLE_ASSISTANT_WELCOME",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "outputContexts": [
+      {
+        "name": "projects/abc/agent/environments/__aog-2/users/-/sessions/ABwppHFVubQ6jAeRz12-hsxqjezrm__0poztFy-yD-TtIoqE7VJW87jG2oAGXs5fRln79iOW1PMXXp5Vq1naPzqvFtfijrr40g/contexts/google_assistant_welcome"
+      },
+      {
+        "name": "projects/abc/agent/environments/__aog-2/users/-/sessions/ABwppHFVubQ6jAeRz12-hsxqjezrm__0poztFy-yD-TtIoqE7VJW87jG2oAGXs5fRln79iOW1PMXXp5Vq1naPzqvFtfijrr40g/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/abc/agent/environments/__aog-2/users/-/sessions/ABwppHFVubQ6jAeRz12-hsxqjezrm__0poztFy-yD-TtIoqE7VJW87jG2oAGXs5fRln79iOW1PMXXp5Vq1naPzqvFtfijrr40g/contexts/google_assistant_input_type_voice"
+      }
+    ],
+    "intent": {
+      "name": "projects/abc/agent/intents/26aca5a6-0548-4b75-9df0-6d35a4b0cd6a",
+      "displayName": "Default Welcome Intent"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "Test App",
+              "inputType": "VOICE"
+            }
+          ],
+          "arguments": [
+            {
+              "textValue": "1",
+              "name": "is_health_check",
+              "boolValue": true
+            }
+          ],
+          "intent": "actions.intent.MAIN"
+        }
+      ],
+      "user": {
+        "profile": {
+          "givenName": "Google",
+          "familyName": "Crawler"
+        },
+        "locale": "en-US",
+        "userId": "v/AK0c4GPUGl9li2HES4iSwV4tdv6z+9490BQXivC5U="
+      },
+      "conversation": {
+        "conversationId": "ABwppHFVubQ6jAeRz12-hsxqjezrm__0poztFy-yD-TtIoqE7VJW87jG2oAGXs5fRln79iOW1PMXXp5Vq1naPzqvFtfijrr40g",
+        "type": "NEW"
+      }
+    }
+  },
+  "session": "projects/abc/agent/environments/__aog-2/users/-/sessions/ABwppHFVubQ6jAeRz12-hsxqjezrm__0poztFy-yD-TtIoqE7VJW87jG2oAGXs5fRln79iOW1PMXXp5Vq1naPzqvFtfijrr40g"
+}

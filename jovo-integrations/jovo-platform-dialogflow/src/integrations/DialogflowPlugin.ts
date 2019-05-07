@@ -83,6 +83,7 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
                     type: EnumRequestType.INTENT
                 };
             }
+
         }
     };
 

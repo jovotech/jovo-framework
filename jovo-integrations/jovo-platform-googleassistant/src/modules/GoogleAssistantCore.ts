@@ -8,6 +8,7 @@ import {GoogleActionResponse} from "../core/GoogleActionResponse";
 import {GoogleActionSpeechBuilder} from "../core/GoogleActionSpeechBuilder";
 
 import uuidv4 = require('uuid/v4');
+import {EnumGoogleAssistantRequestType} from "../core/google-assistant-enums";
 
 
 
@@ -44,6 +45,12 @@ export class GoogleAssistantCore implements Plugin {
     type(googleAction: GoogleAction) {
         if (_get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') === 'actions.intent.CANCEL') {
             _set(googleAction.$type, 'type', EnumRequestType.END);
+        }
+        if (_get(googleAction.$originalRequest || googleAction.$request,
+            'inputs[0].arguments[0].name') === 'is_health_check' &&
+            _get(googleAction.$originalRequest || googleAction.$request,
+                'inputs[0].arguments[0].boolValue') === true) {
+            _set(googleAction.$type, 'type', EnumGoogleAssistantRequestType.ON_HEALTH_CHECK);
         }
     }
 
