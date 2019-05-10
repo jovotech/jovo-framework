@@ -4,7 +4,7 @@
 
 ## 2.2.5 (2019-05-07)
 
-#### bug Bug Fix
+#### :bug: Bug Fix
  `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework//pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
 
 #### Committers 1
