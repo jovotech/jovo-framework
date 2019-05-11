@@ -1,7 +1,5 @@
 
 import { App } from 'jovo-framework';
-
-
 import { GoogleAssistant } from 'jovo-platform-googleassistant';
 import { Alexa } from 'jovo-platform-alexa';
 import { JovoDebugger } from 'jovo-plugin-debugger';
@@ -28,16 +26,20 @@ app.setHandler({
 
     MyNameIsIntent() {
         console.log('MyNameIsIntent called!');
-        this.tell('name');
+        this.tell(`Hey ${this.$inputs.name.value}`);
     },
 
     Unhandled() {
-        this.tell('Unhandled!');
+        this.tell('InvalidValues failed!');
     },
 
     STATE: {
+        Unhandled() {
+            this.tell('Function failed!');
+        },
+
         SecondUnhandled() {
-            this.tell('Second Unhandled!');
+            this.tell('IsRequired failed!');
         }
     }
 

@@ -1,12 +1,14 @@
 
 import { Plugin, BaseApp, PluginConfig, HandleRequest, Jovo } from 'jovo-core';
 import _merge = require('lodash.merge');
+import { Validator } from './Validators';
 
 interface Config extends PluginConfig {
     validation?: {
-        [key: string]: {
-            [key: string]: any  // tslint:disable-line
-        }
+        // [key: string]: {
+        //     [key: string]: any  // tslint:disable-line
+        // } | Validator | any[]
+        [key: string]: any
     }
 }
 
@@ -29,57 +31,48 @@ export class Validation implements Plugin {
 
     uninstall(app: BaseApp) { }
 
-
-    /**
-     * TODO Current problems: 
-     * - if one validator fails, the remaining validators are all called
-     */
-    run(handleRequest: HandleRequest) {
-        const request = handleRequest.jovo!.$request!;
-        const intent = request.getIntentName()!;
-        const jovo = handleRequest.jovo;
-        const inputs = jovo!.$inputs;
+    async run(handleRequest: HandleRequest) {
+        const jovo = handleRequest.jovo!;
+        const inputs = jovo.$inputs;
+        const intent = jovo.$request!.getIntentName()!;
         const { validation } = this.config!;
 
-        if (!validation || !validation[intent]) {
+        if (!validation) {
             return;
         }
 
-        const intentToValidate = validation[intent];
-        if(!intentToValidate) {
-            return;
-        }
-
-        for (const key in inputs) {
-            if (!inputs.hasOwnProperty(key)) {
+        for (const input in inputs) {
+            if (!inputs.hasOwnProperty(input)) {
                 continue;
             }
 
-            if (intentToValidate[key]) {
-                console.log(intentToValidate[key]);
-                switch (intentToValidate[key].constructor) {
-                    case Array: {
-                        for (const validator of intentToValidate[key]) {
-                            switch (validator.constructor) {
-                                case Function: {
-                                    validator.call(jovo);
-                                } break;
-                                case Object: {
-                                    validator.setInputToValidate(key);
-                                    if(!validator.validate(jovo)) {
+            for (const intentToValidate of [validation[intent][input], validation[input]]) {
+                if (intentToValidate) {
+                    switch (intentToValidate.constructor) {
+                        case Array: {
+                            for (const validator of intentToValidate) {
+                                if (validator instanceof Validator) {
+                                    validator.setInputToValidate(input);
+                                    if (!validator.validate(jovo)) {
                                         return;
                                     }
+                                } else {
+                                    await validator.call(jovo);
                                 }
                             }
-                        }
-                    } break;
-                    case Function: {
-                        intentToValidate[key].call(jovo);
-                    }
-                    default: {
-                        intentToValidate[key].setInputToValidate(key);
-                        if(!intentToValidate[key].validate(jovo)) {
-                            return;
+                        } break;
+                        case Function: {
+                            if (intentToValidate instanceof Validator) {
+                                intentToValidate.setInputToValidate(input);
+                                if (!intentToValidate.validate(jovo)) {
+                                    return;
+                                }
+                            } else {
+                                await intentToValidate.call(jovo);
+                            }
+                        } break;
+                        default: {
+                            throw new Error('Not supported.');
                         }
                     }
                 }

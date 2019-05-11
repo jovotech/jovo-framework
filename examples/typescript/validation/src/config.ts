@@ -1,11 +1,11 @@
-import { IsRequiredValidator, ValidValuesValidator } from 'jovo-plugin-validation';
+import { IsRequiredValidator, InvalidValuesValidator, ReplaceValuesValidator } from 'jovo-plugin-validation';
 
 const config = {
-   logging: false,
+    logging: false,
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   },
+    intentMap: {
+        'AMAZON.StopIntent': 'END',
+    },
     db: {
         FileDb: {
             pathToFile: './../../db/db.json'
@@ -13,20 +13,31 @@ const config = {
     },
     validation: {
         MyNameIsIntent: {
-            // name: [
-            //     new IsRequiredValidator(),
-            //     // new ValidValuesValidator(['John', 'Sean'], 'Unhandled')
-            // ]
             name: [
-                new IsRequiredValidator('STATE.SecondUnhandled'),
-                new ValidValuesValidator(['James', 'Henry'], 'STATE.SecondUnhandled'),
-                function(this: any) {
-                    if(this.$inputs.name.value === 'Ruben') {
-                        this.toIntent('Unhandled');
+                new IsRequiredValidator({
+                    onFail: 'STATE.SecondUnhandled'
+                }),
+                new InvalidValuesValidator({
+                    values: ['James', 'Henry'],
+                }),
+                function (this: any) {
+                    if (this.$inputs.name.value === 'Ruben') {
+                        this.toIntent('STATE.Unhandled');
                     }
-                }
+                },
+                new ReplaceValuesValidator(
+                    {
+                        values: ['Shawn', 'John'],
+                        mapTo: 'Sean'
+                    },
+                    {
+                        values: ['Mike', 'Mark'],
+                        mapTo: 'Michael'
+                    }
+                )
             ]
-        }
+        },
+        name: [new IsRequiredValidator()]
     }
 };
 

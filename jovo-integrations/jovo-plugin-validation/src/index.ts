@@ -3,5 +3,7 @@ export {
     Validator,
     IsRequiredValidator,
     ValidValuesValidator,
-    InvalidValuesValidator
+    InvalidValuesValidator,
+    ReplaceValuesValidator,
+    Config
 } from './Validators';

@@ -15,7 +15,8 @@
 				"{name}",
 				"my name is {name}",
 				"i am {name}",
-				"you can call me {name}"
+				"you can call me {name}",
+				"my name is not important"
 			],
 			"inputs":[
 				{

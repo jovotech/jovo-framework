@@ -1,33 +1,38 @@
 import { Jovo } from 'jovo-core';
 
-interface IValidator {
-    validate(jovo: Jovo): boolean;
+export interface Config {
+    onFail?: string;
+    values?: string[];
+    replace?: { values: string[], mapTo: string }[];
 }
 
-export class Validator implements IValidator {
+export abstract class Validator {
     protected inputToValidate: string = '';
+    protected onFail: string = 'Unhandled';
 
-    constructor() { }
+    constructor(config?: Config) {
+        if (config && config.onFail) {
+            this.onFail = config.onFail;
+        }
+    }
 
     setInputToValidate(input: string) {
         this.inputToValidate = input;
     }
 
-    validate(jovo: Jovo) { 
-        return true;
-    }
+    abstract validate(jovo: Jovo): boolean;
 }
 
 export class IsRequiredValidator extends Validator {
-    constructor(private handler: string = 'Unhandled') {
-        super();
+    constructor(config?: Config) {
+        super(config);
     }
 
     validate(jovo: Jovo) {
         const input = jovo.$inputs[this.inputToValidate];
         if (!input || !input.value) {
             // @ts-ignore
-            jovo.toIntent(this.handler);
+            jovo.toIntent(this.onFail);
             return false;
         }
         return true;
@@ -35,25 +40,28 @@ export class IsRequiredValidator extends Validator {
 }
 
 export class ValidValuesValidator extends Validator {
-    constructor(
-        private validValues: string[],
-        private handler: string = 'Unhandled'
-    ) {
-        super();
+    validValues: string[] = [];
+
+    constructor(config?: Config) {
+        super(config);
+
+        if (config && config.values) {
+            this.validValues = config.values;
+        }
     }
 
     validate(jovo: Jovo) {
         const input = jovo.$inputs[this.inputToValidate];
 
         if (!input || !input.value) {
-            // TODO return to handler? -> would replace isrequiredvalidator, maybe extend IsRequired?
-            return;
+            // TODO return to onFail? return true? -> would replace isrequiredvalidator, maybe extend IsRequired?
+            return false;
         }
 
         for (const value of this.validValues) {
             if (input.value !== value) {
                 // @ts-ignore
-                jovo.toIntent(this.handler);
+                jovo.toIntent(this.onFail);
                 return false;
             }
         }
@@ -62,24 +70,27 @@ export class ValidValuesValidator extends Validator {
 }
 
 export class InvalidValuesValidator extends Validator {
-    constructor(
-        private invalidValues: string[],
-        private handler: string = 'Unhandled'
-    ) {
-        super();
+    invalidValues: string[] = [];
+
+    constructor(config?: Config) {
+        super(config);
+
+        if (config && config.values) {
+            this.invalidValues = config.values;
+        }
     }
 
     validate(jovo: Jovo) {
         const input = jovo.$inputs[this.inputToValidate];
 
         if (!input || !input.value) {
-            return;
+            return false;
         }
 
         for (const value of this.invalidValues) {
             if (input.value === value) {
                 // @ts-ignore
-                jovo.toIntent(this.handler);
+                jovo.toIntent(this.onFail);
                 return false;
             }
         }
@@ -87,8 +98,28 @@ export class InvalidValuesValidator extends Validator {
     }
 }
 
-// export class ReplaceValuesValidator extends Validator {
-//     constructor(
-        
-//     )
-// }
+export class ReplaceValuesValidator extends Validator {
+    maps: { values: string[], mapTo: string }[] = [];
+    constructor(...args: any[]) {
+        super();
+        this.maps = args;
+    }
+
+    validate(jovo: Jovo) {
+        const input = jovo.$inputs[this.inputToValidate];
+
+        if (!input || !input.value) {
+            return false;
+        }
+
+        for (const r of this.maps) {
+            console.log(r);
+            if (r.values.indexOf(input.value) > -1) {
+                // TODO replace key as well? 
+                input.value = r.mapTo;
+                return true;
+            }
+        }
+        return true;
+    }
+}
