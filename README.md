@@ -204,10 +204,10 @@ Find a quickstart guide and comprehensive tutorials here:
 
 
 ## Contributing
-<a href="https://www.codetriage.com/jovotech/jovo-framework" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework/badges/users.svg"></a>
-
+   
 We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
-* [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
+* [CONTRIBUTING.md](./.github/CONTRIBUTING.md) 
+* [Step by step process](https://github.com/jovotech/jovo-framework/blob/master/docs/advanced-concepts/contributing.md) 
 * Take a look at our [issues](https://github.com/jovotech/jovo-framework/issues)
 * Add your project to [jovotech/builtwithjovo](https://github.com/jovotech/builtwithjovo)
 
