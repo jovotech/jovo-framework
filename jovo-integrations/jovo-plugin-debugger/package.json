@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-debugger",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

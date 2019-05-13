@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-alexa",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
