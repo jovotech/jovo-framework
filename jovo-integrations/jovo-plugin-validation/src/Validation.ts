@@ -1,13 +1,13 @@
 
-import { Plugin, BaseApp, PluginConfig, HandleRequest, JovoError, ErrorCode } from 'jovo-core';
+import { Plugin, BaseApp, PluginConfig, HandleRequest, JovoError, Jovo, ErrorCode } from 'jovo-core';
 import _merge = require('lodash.merge');
 import { Validator } from './Validators';
 
 interface Config extends PluginConfig {
     validation?: {
         // [key: string]: {
-        //     [key: string]: any  // tslint:disable-line
-        // } | Validator | any[]
+        //     [key: string]: Validator | Function | any[]
+        // } | Validator | Function;
         [key: string]: any
     }
 }
@@ -25,13 +25,13 @@ export class Validation implements Plugin {
 
     install(app: BaseApp) {
         if (Object.keys(this.config.validation!).length > 0) {
-            app.middleware('router')!.use(this.run.bind(this));
+            app.middleware('router')!.use(this.validate.bind(this));
         }
     }
 
     uninstall(app: BaseApp) { }
 
-    async run(handleRequest: HandleRequest) {
+    async validate(handleRequest: HandleRequest) {
         const jovo = handleRequest.jovo!;
         const inputs = jovo.$inputs;
         const state = jovo.$request!.getState();
@@ -42,7 +42,7 @@ export class Validation implements Plugin {
             return;
         }
 
-        const route = (state ? `${state}.` : '') + intent;
+        const route = `${(state ? `${state}.` : '')}${intent}`;
 
         for (const input in inputs) {
             if (!inputs.hasOwnProperty(input)) {
@@ -53,44 +53,33 @@ export class Validation implements Plugin {
                 if (validator) {
                     if (validator.constructor === Array) {
                         for (const v of validator) {
-                            if (v instanceof Validator) {
-                                v.setInputToValidate(input);
-                                if (!v.validate(jovo)) {
-                                    return;
-                                }
-                            } else if (v.constructor === Function) {
-                                // TODO require to return false?
-                                await v.call(jovo);
-                            } else {
-                                throw new JovoError(
-                                    'This validation type is not supported.',
-                                    ErrorCode.ERR_PLUGIN,
-                                    'jovo-plugin-validation',
-                                    undefined,
-                                    'Please make sure you only use supported types of validation such as a function or a Validator',
-                                    ''
-                                );
-                            }
+                            await this.parseForValidator(v, input, jovo);
                         }
-                    } else if (validator instanceof Validator) {
-                        validator.setInputToValidate(input);
-                        if (!validator.validate(jovo)) {
-                            return;
-                        }
-                    } else if (validator.constructor === Function) {
-                        await validator.call(jovo);
                     } else {
-                        throw new JovoError(
-                            'This validation type is not supported.',
-                            ErrorCode.ERR_PLUGIN,
-                            'jovo-plugin-validation',
-                            undefined,
-                            'Please make sure you only use supported types of validation such as a function or a Validator',
-                            ''
-                        );
+                        await this.parseForValidator(validator, input, jovo);
                     }
                 }
             }
+        }
+    }
+
+    private async parseForValidator(validator: Validator | Function, input: string, jovo: Jovo) {
+        if (validator instanceof Validator) {
+            validator.setInputToValidate(input);
+            if (!validator.validate(jovo)) {
+                return;
+            }
+        } else if (validator.constructor === Function) {
+            await validator.call(jovo);
+        } else {
+            throw new JovoError(
+                'This validation type is not supported.',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-plugin-validation',
+                undefined,
+                'Please make sure you only use supported types of validation such as a function or a Validator',
+                ''
+            );
         }
     }
 }

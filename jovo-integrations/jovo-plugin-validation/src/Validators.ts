@@ -16,7 +16,7 @@ export abstract class Validator {
     constructor(config?: Config) {
         if (config && config.onFail) {
             const onFail = config.onFail.split('.');
-            const intent = onFail.pop()!;
+            const intent = onFail.pop() || 'Unhandled';
             const state = onFail.join('.');
             this.onFail = { state, intent };
         }

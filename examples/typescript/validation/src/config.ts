@@ -1,4 +1,4 @@
-import { IsRequiredValidator, InvalidValuesValidator, ReplaceValuesValidator } from 'jovo-plugin-validation';
+import { IsRequiredValidator, InvalidValuesValidator, ReplaceValuesValidator, ValidValuesValidator } from 'jovo-plugin-validation';
 
 const config = {
     logging: false,
@@ -12,17 +12,21 @@ const config = {
         }
     },
     validation: {
+        'STATE.MyNameIsIntent': {
+            name: new ValidValuesValidator({
+                values: ['Bob', 'Henry'],
+                onFail: 'STATE.MyNameIsIntentFailed'
+            })
+        },
         MyNameIsIntent: {
             name: [
-                new IsRequiredValidator({
-                    onFail: 'STATE.SecondUnhandled'
-                }),
                 new InvalidValuesValidator({
                     values: ['James', 'Henry'],
                 }),
                 function (this: any) {
+                    console.log('Function validator called.');
                     if (this.$inputs.name.value === 'Ruben') {
-                        this.toIntent('STATE.Unhandled');
+                        this.toIntent('MyNameIsIntentFailed');
                     }
                 },
                 new ReplaceValuesValidator(
@@ -37,7 +41,16 @@ const config = {
                 )
             ]
         },
-        name: [new IsRequiredValidator()]
+        DayIntent: {
+            day: new ValidValuesValidator({
+                values: ['Monday', 'Tuesday'],
+                onFail: 'DayIntentFailed'
+            })
+        },
+        name: new IsRequiredValidator(),
+        day: [
+            new IsRequiredValidator()
+        ]
     }
 };
 

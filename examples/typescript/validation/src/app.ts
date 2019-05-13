@@ -21,7 +21,7 @@ app.setHandler({
     LAUNCH() {
         console.log(this.t('WELCOME_GLOBAL'));
 
-        this.tell(this.t('WELCOME'));
+        this.toStateIntent('STATE', 'ExampleIntent');
     },
 
     MyNameIsIntent() {
@@ -29,18 +29,44 @@ app.setHandler({
         this.tell(`Hey ${this.$inputs.name.value}`);
     },
 
+    MyNameIsIntentFailed() {
+        this.tell('MyNameIsIntent failed.');
+    },
+
+    DayIntent() {
+        this.tell(`${this.$inputs.day.value}, huh?`);
+    },
+
+    DayIntentFailed() {
+        this.tell('DayIntent failed.');
+    },
+
     Unhandled() {
-        this.tell('InvalidValues failed!');
+        this.tell('Unhandled');
     },
 
     STATE: {
-        Unhandled() {
-            this.tell('Function failed!');
+        ExampleIntent() {
+            console.log('Example');
+            this.ask('What is your name?');
         },
 
-        SecondUnhandled() {
-            this.tell('IsRequired failed!');
-        }
+        MyNameIsIntent() {
+            console.log('MyNameIsIntent called in STATE!');
+            this.tell(`Hey ${this.$inputs.name.value}`);
+        },
+
+        MyNameIsIntentFailed() {
+            this.tell('MyNameIsIntent failed in STATE.');
+        },
+
+        DayIntent() {
+            this.tell(`STATE: ${this.$inputs.day.value}, huh?`);
+        },
+
+        DayIntentFailed() {
+            this.tell('DayIntent failed in STATE.');
+        },
     }
 
 });

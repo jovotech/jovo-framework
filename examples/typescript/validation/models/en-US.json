@@ -1,30 +1,51 @@
 {
-	"invocation":"my test app",
-	"intents":[
+	"invocation": "my test app",
+	"intents": [
 		{
-			"name":"HelloWorldIntent",
-			"phrases":[
+			"name": "HelloWorldIntent",
+			"phrases": [
 				"hello",
 				"say hello",
 				"say hello world"
 			]
 		},
 		{
-			"name":"MyNameIsIntent",
-			"phrases":[
+			"name": "MyNameIsIntent",
+			"phrases": [
 				"{name}",
 				"my name is {name}",
 				"i am {name}",
 				"you can call me {name}",
 				"my name is not important"
 			],
-			"inputs":[
+			"inputs": [
 				{
-					"name":"name",
-					"type":{
-						"alexa":"AMAZON.US_FIRST_NAME",
-						"dialogflow":"@sys.given-name"
+					"name": "name",
+					"type": {
+						"alexa": "AMAZON.US_FIRST_NAME",
+						"dialogflow": "@sys.given-name"
 					}
+				}
+			]
+		},
+		{
+			"name": "DayIntent",
+			"phrases": [
+				"{day}",
+				"today is {day}",
+				"this day is a {day}"
+			],
+			"inputs": [
+				{
+					"name": "day",
+					"values": [
+						{
+							"value": "Monday"
+						},
+						{
+							"value": "Tuesday"
+						}
+					]
 				}
 			]
 		}
