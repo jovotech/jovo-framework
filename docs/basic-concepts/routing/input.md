@@ -131,6 +131,10 @@ app.setHandler({
 });
 ```
 
+## Validation
+
+Since v2.3.0 we support input validation. With it, you can register multiple validators per input in your configuration file, either for a specific intent or globally.
+
 
 
 

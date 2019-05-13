@@ -8,11 +8,17 @@ export interface Config {
 
 export abstract class Validator {
     protected inputToValidate: string = '';
-    protected onFail: string = 'Unhandled';
+    protected onFail: {
+        state?: string;
+        intent: string;
+    } = { intent: 'Unhandled' };
 
     constructor(config?: Config) {
         if (config && config.onFail) {
-            this.onFail = config.onFail;
+            const onFail = config.onFail.split('.');
+            const intent = onFail.pop()!;
+            const state = onFail.join('.');
+            this.onFail = { state, intent };
         }
     }
 
@@ -31,8 +37,9 @@ export class IsRequiredValidator extends Validator {
     validate(jovo: Jovo) {
         const input = jovo.$inputs[this.inputToValidate];
         if (!input || !input.value) {
+            const { state, intent } = this.onFail;
             // @ts-ignore
-            jovo.toIntent(this.onFail);
+            jovo.toStateIntent(state, intent);
             return false;
         }
         return true;
@@ -58,12 +65,11 @@ export class ValidValuesValidator extends Validator {
             return false;
         }
 
-        for (const value of this.validValues) {
-            if (input.value !== value) {
-                // @ts-ignore
-                jovo.toIntent(this.onFail);
-                return false;
-            }
+        if (this.validValues.indexOf(input.value) === -1) {
+            const { state, intent } = this.onFail;
+            // @ts-ignore
+            jovo.toStateIntent(state, intent);
+            return false;
         }
         return true;
     }
@@ -87,12 +93,11 @@ export class InvalidValuesValidator extends Validator {
             return false;
         }
 
-        for (const value of this.invalidValues) {
-            if (input.value === value) {
-                // @ts-ignore
-                jovo.toIntent(this.onFail);
-                return false;
-            }
+        if (this.invalidValues.indexOf(input.value) > -1) {
+            const { state, intent } = this.onFail;
+            // @ts-ignore
+            jovo.toStateIntent(state, intent);
+            return false;
         }
         return true;
     }
@@ -113,7 +118,6 @@ export class ReplaceValuesValidator extends Validator {
         }
 
         for (const r of this.maps) {
-            console.log(r);
             if (r.values.indexOf(input.value) > -1) {
                 // TODO replace key as well? 
                 input.value = r.mapTo;
