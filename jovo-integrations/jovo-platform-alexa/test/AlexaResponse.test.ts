@@ -14,6 +14,16 @@ const standardCard = require('./../sample-response-json/v1/StandardCardAsk.json'
 
 process.env.NODE_ENV = 'TEST';
 
+test('test getReprompt', () => {
+    const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
+    expect(tellResponse.getReprompt()).toBeUndefined();
+
+    const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
+    expect(askResponse.getReprompt()).toBe('Simple Ask Reprompt');
+
+});
+
+
 test('test getDirectives', () => {
     const directivesResponse = AlexaResponse.fromJSON(_cloneDeep(directivesJSON));
     const directivesArray = directivesResponse.getDirectives();
@@ -100,6 +110,7 @@ test('test hasVideoDirective', () => {
     const askResponse = AlexaResponse.fromJSON(_cloneDeep(askJSON));
     expect(askResponse.hasVideoDirective()).toBe(false);
 });
+
 test('test isTell', () => {
     const tellResponse = AlexaResponse.fromJSON(_cloneDeep(tellJSON));
     expect(tellResponse.isTell()).toBe(true);

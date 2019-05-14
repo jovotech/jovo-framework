@@ -152,7 +152,7 @@ export class JovoDebugger implements Plugin {
                     const offsetInMilliSeconds = Math.round(obj.options.currentTime * 1000);
 
                     const types: {[key: string]: string} = {
-                        finished: 'AudioPlayer.Finished',
+                        finished: 'AudioPlayer.PlaybackFinished',
                         nearlyfinished: 'AudioPlayer.PlaybackNearlyFinished',
                         paused: 'AudioPlayer.PlaybackStopped',
                         started: 'AudioPlayer.PlaybackStarted',
