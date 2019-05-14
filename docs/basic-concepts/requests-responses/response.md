@@ -74,6 +74,24 @@ You can use these cross-platform helper methods:
 | `getVideoDirective(): Video object | undefind` | Returns Video Player object from response.|
 
 ### Google Assistant Methods
+Google Assistant responses are an object within the Dialogflow response and need to be accessed with an additional method. You can use the additional method `getPlatformResponse()` in the following ways:
+
+```javascript
+// @language=javascript
+
+test('should NOT have suggestion chips', async () => {
+   expect(
+      response.getPlatformResponse().hasSuggestionChips()).toBe(false);
+});
+
+// @language=typescript
+
+test('should have suggestion chips', async () => {
+   expect(
+      (response.getPlatformResponse() as GoogleActionResponse).hasSuggestionChips()).toBe(true);
+});
+
+```
 
 #### Google Assistant Response Getters
 
