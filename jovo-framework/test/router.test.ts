@@ -1,6 +1,7 @@
 
 import {Router} from './../src/middleware/Router';
 import {Config as AppConfig} from "./../src/App";
+import { Component } from '../src';
 process.env.NODE_ENV = 'UNIT_TEST';
 
 
@@ -164,17 +165,65 @@ test('test intentRoute() Intents with dots', () => {
 
 });
 
+describe('test mapIntentName()', () => {
+    test('should map to END', () => {
+        const appConfig: AppConfig = {
+            intentMap: {
+                'AMAZON.StopIntent': 'END',
+            },
+        };
+        const result = Router.mapIntentName(appConfig, 'AMAZON.StopIntent');
+        expect(result).toBe('END');
+    
 
-test('test mapIntentName()', () => {
-    const appConfig1: AppConfig = {
-        intentMap: {
-            'AMAZON.StopIntent': 'END',
-        },
-    };
-    const result1 = Router.mapIntentName(appConfig1, 'AMAZON.StopIntent');
-    expect(result1).toBe('END');
+    });
 
-    const result2 = Router.mapIntentName(appConfig1, 'AMAZON.CancelIntent');
-    expect(result2).toBe('AMAZON.CancelIntent');
+    test('shouldn\'t map to anything', () => {
+        const appConfig: AppConfig = {
+            intentMap: {
+                'AMAZON.StopIntent': 'END',
+            },
+        };
+        const result = Router.mapIntentName(appConfig, 'AMAZON.CancelIntent');
+        expect(result).toBe('AMAZON.CancelIntent');
+    });
 
+    test('should map using component\'s intentMap', () => {
+        const appConfig: AppConfig = {
+            intentMap: {
+                'AMAZON.StopIntent': 'END',
+            },
+        };
+        const component = {
+            config: {
+                intentMap: {
+                    'AMAZON.StopIntent': 'Component.StopIntent'
+                }
+            }
+        } as unknown as Component; // hack so we don't have to implement the full Component class, but just the parts we need
+        
+        const result = Router.mapIntentName(appConfig, 'AMAZON.StopIntent', component);
+
+        expect(result).toBe('Component.StopIntent');
+    });
+
+    test('should map using root intentMap because the intent isn\'t specified in component\'s intentMap', () => {
+        const appConfig: AppConfig = {
+            intentMap: {
+                'AMAZON.StopIntent': 'END',
+            },
+        };
+        const component = {
+            config: {
+                intentMap: {
+                    'AMAZON.CancelIntent': 'Component.CancelIntent'
+                }
+            }
+        } as unknown as Component; // hack so we don't have to implement the full Component class, but just the parts we need
+        
+        const result = Router.mapIntentName(appConfig, 'AMAZON.StopIntent', component);
+
+        expect(result).toBe('END');
+    });
 });
+
