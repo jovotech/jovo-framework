@@ -81,17 +81,23 @@ export abstract class Extensible extends EventEmitter implements Plugin {
                 }
 
             }
+            if (typeof plugin.config === 'undefined' || // enabled by default, even without config
+                plugin.config && typeof plugin.config.enabled === 'undefined' || // enabled with config, but without enabled property
+                plugin.config && typeof plugin.config.enabled === 'boolean' && plugin.config.enabled === true) { // enabled with config, and boolean enabled property
+                this.$plugins.set(name, plugin);
 
-            this.$plugins.set(name, plugin);
+                plugin.install(this);
 
-            plugin.install(this);
-
-            if (this.constructor.name === 'App') {
-                Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name})`);
-                Log.debug(`${JSON.stringify(plugin.config || {}, null, '\t')}`);
-                Log.debug();
+                if (this.constructor.name === 'App') {
+                    Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name})`);
+                    Log.debug(`${JSON.stringify(plugin.config || {}, null, '\t')}`);
+                    Log.debug();
+                }
+                this.emit('use', plugin);
             }
-            this.emit('use', plugin);
+
+
+
         });
         return this;
     }

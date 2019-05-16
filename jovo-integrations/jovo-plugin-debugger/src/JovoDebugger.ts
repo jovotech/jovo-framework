@@ -72,6 +72,16 @@ export class JovoDebugger implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
+
+        if (process.argv.indexOf('--jovo-webhook') > -1 && process.argv.indexOf('--disable-jovo-debugger') === -1) {
+            this.config.enabled = true;
+        }
+
+        // e.g. npm run launch
+        if (process.argv.indexOf('--webhook') > -1 && ['--intent', '--launch', '--file', '--template'].some(r => process.argv.includes(r))) {
+            this.config.enabled = true;
+
+        }
     }
 
     async install(app: BaseApp) {
@@ -81,11 +91,7 @@ export class JovoDebugger implements Plugin {
             }
         });
 
-        if (process.argv.indexOf('--jovo-webhook') > -1 && process.argv.indexOf('--disable-jovo-debugger') === -1) {
-            this.config.enabled = true;
-        }
         if (!this.config.enabled) {
-
             return;
         }
 
