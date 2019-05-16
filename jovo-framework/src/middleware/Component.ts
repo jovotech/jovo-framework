@@ -50,7 +50,7 @@ export class Component implements Plugin {
      */
     async loadI18nFiles(handleRequest: HandleRequest) {
         const pathToComponent = `../components/${this.name}/`;
-        const filesDir = path.join(pathToComponent, this.pathToI18n || '').replace(new RegExp('\\' + path.sep, 'g'), '/');;
+        const filesDir = path.join(pathToComponent, this.pathToI18n || '').replace(new RegExp('\\' + path.sep, 'g'), '/');
         this.i18next!.config.filesDir = filesDir;
 
         this.i18next!.loadFiles(handleRequest);
