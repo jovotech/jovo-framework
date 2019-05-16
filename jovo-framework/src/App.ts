@@ -4,6 +4,7 @@ import * as path from "path";
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import _cloneDeep = require('lodash.clonedeep');
 import {FileDb2} from "jovo-db-filedb";
 import {
     Config as JovoUserConfig,
@@ -15,6 +16,7 @@ import {JovoUser} from "./middleware/user/JovoUser";
 import {I18Next, Config as I18NextConfig} from "jovo-cms-i18next";
 import {Handler} from "./middleware/Handler";
 import {Router, Config as RouterConfig} from "./middleware/Router";
+import {Component, Config as ComponentConfig} from "./middleware/Component";
 
 if (process.argv.includes('--port')) {
     process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
@@ -49,7 +51,6 @@ export class App extends BaseApp {
 
     constructor(config?: Config) {
         super(config);
-
         this.$cms = {};
 
         if (config) {
@@ -137,7 +138,7 @@ export class App extends BaseApp {
         _merge(this.config.plugin, this.config.cms);
         _merge(this.config.plugin, this.config.analytics);
         _merge(this.config.plugin, this.config.nlu);
-
+        _merge(this.config.plugin, this.config.components);
     }
 
     initConfig() {
@@ -268,6 +269,28 @@ export class App extends BaseApp {
         }
         await super.handle(host);
     }
+
+    useComponents(...components: Component[]) {
+        components.forEach((component) => {
+            component.name = component.name || component.constructor.name;
+
+            const componentAppConfig: ComponentConfig = _cloneDeep(this.$config.plugin[component.name!]); // config defined in project's main config.js file
+            component.config = component.mergeConfig(componentAppConfig);
+
+            this.setHandler(component.handler);
+
+            this.$plugins.set(component.name, component);
+            component.install(this);
+            this.emit('use', component);
+
+            if (this.constructor.name === 'App') {
+                Log.yellow().verbose(`Installed component: ${component.name}`);
+                Log.debug(`${JSON.stringify(component.config || {}, null, '\t')}`);
+                Log.debug();
+            }
+        });
+    }
+
     /**
      * @deprecated
      * @param config
@@ -534,7 +557,6 @@ export class App extends BaseApp {
     addChatbaseAnalytics(dbConfig: any) { // tslint:disable-line
 
     }
-
 }
 
 
@@ -572,6 +594,7 @@ export interface Config extends ExtensibleConfig {
     platform?: {[key: string]: any}; // tslint:disable-line
     cms?: {[key: string]: any}; // tslint:disable-line
     nlu?: {[key: string]: any}; // tslint:disable-line
+    components?: {[key: string]: ComponentConfig}; // tslint:disable-line
 }
 
 // handler

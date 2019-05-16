@@ -15,5 +15,6 @@ export enum EnumRequestType {
 }
 
 export enum SessionConstants {
+    COMPONENT = "_JOVO_COMPONENT_",
     STATE = "_JOVO_STATE_",
 }

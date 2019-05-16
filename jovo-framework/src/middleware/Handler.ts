@@ -1,4 +1,4 @@
-import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log, JovoError} from "jovo-core";
+import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log, JovoError, SessionConstants} from "jovo-core";
 import _get = require('lodash.get');
 import {Route, Router} from "./Router";
 import {Config as AppConfig} from './../App';
@@ -312,6 +312,17 @@ export class Handler implements Plugin {
             return await Handler.applyHandle(this, route, true);
         };
 
+        /**
+         * Delegates the requests & responses to the component defined with "componentName"
+         * @param {string} componentName 
+         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @returns {Promise<void>}
+         */
+        Jovo.prototype.delegate = function(componentName: string, onCompletedIntent): Promise<void> {
+            this.setSessionAttribute(SessionConstants.COMPONENT, componentName); // 
+            this.$components[componentName].onCompletedIntent = onCompletedIntent;
+            return this.toStateIntent(componentName, 'START');  
+        };
 
         /**
          * Jumps from the inside of a state to a global intent
