@@ -185,25 +185,25 @@ export class Cards implements Plugin {
         if (!googleAction.hasScreenInterface()) {
             return;
         }
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
         const output = googleAction.$output;
 
         const cardSimpleCard = _get(output, 'GoogleAssistant.card.SimpleCard') || _get(output, 'card.SimpleCard');
         if (cardSimpleCard) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 basicCard: new BasicCard()
                     .setTitle(_get(cardSimpleCard, 'title'))
                     .setFormattedText(_get(cardSimpleCard, 'content'))
             });
-            _set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
         }
 
         const cardImageCard = _get(output, 'GoogleAssistant.card.ImageCard') || _get(output, 'card.ImageCard');
         if (cardImageCard) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 basicCard: new BasicCard()
                     .setTitle(_get(cardImageCard, 'title'))
@@ -214,21 +214,21 @@ export class Cards implements Plugin {
                     })
             });
 
-            _set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
         }
 
         if (_get(output, 'card.AccountLinkingCard')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
 
 
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.SIGN_IN',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.SignInValueSpec',
                     optContext: _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech')) || '',
                 }
             });
-            _set(googleAction.$response, 'inputPrompt', {
+            _set(googleAction.$originalResponse, 'inputPrompt', {
                 initialPrompts: [
                     {
                         textToSpeech: 'PLACEHOLDER_FOR_SIGN_IN',
@@ -241,33 +241,33 @@ export class Cards implements Plugin {
 
         const cardBasicCard = _get(output, 'GoogleAssistant.card.BasicCard');
         if (cardBasicCard) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 basicCard: cardBasicCard
             });
-            _set(googleAction.$response, 'richResponse.items', richResponseItems);
+            _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
         }
 
         if (_get(output, 'GoogleAssistant.SuggestionChips')) {
-            const suggestionChips = _get(googleAction.$response, 'richResponse.suggestions', []);
+            const suggestionChips = _get(googleAction.$originalResponse, 'richResponse.suggestions', []);
 
             _get(output, 'GoogleAssistant.SuggestionChips').forEach((chip: string) => {
                 suggestionChips.push({
                     title: chip
                 });
             });
-            _set(googleAction.$response, 'richResponse.suggestions', suggestionChips);
+            _set(googleAction.$originalResponse, 'richResponse.suggestions', suggestionChips);
         }
 
         if (_get(output, 'GoogleAssistant.LinkOutSuggestion')) {
-            _set(googleAction.$response, 'richResponse.linkOutSuggestion', {
+            _set(googleAction.$originalResponse, 'richResponse.linkOutSuggestion', {
                 destinationName: _get(output, 'GoogleAssistant.LinkOutSuggestion.destinationName'),
                 url: _get(output, 'GoogleAssistant.LinkOutSuggestion.url'),
             });
         }
 
         if (_get(output, 'GoogleAssistant.Carousel')) {
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.OPTION',
                 data: {
                     '@type': 'type.googleapis.com/google.actions.v2.OptionValueSpec',
@@ -277,7 +277,7 @@ export class Cards implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.List')) {
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.OPTION',
                 data: {
                     '@type': 'type.googleapis.com/google.actions.v2.OptionValueSpec',
@@ -287,14 +287,14 @@ export class Cards implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.CarouselBrowse')) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 carouselBrowse: _get(output, 'GoogleAssistant.CarouselBrowse')
             });
         }
 
         if (_get(output, 'GoogleAssistant.Table')) {
-            const richResponseItems = _get(googleAction.$response, 'richResponse.items', []);
+            const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
             richResponseItems.push({
                 tableCard: _get(output, 'GoogleAssistant.Table')
             });

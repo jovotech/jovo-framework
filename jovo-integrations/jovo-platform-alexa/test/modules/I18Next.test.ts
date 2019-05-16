@@ -25,7 +25,7 @@ const i18NextData = {
                 'Goodbye_Alexa_1',
                 'Goodbye_Alexa_2'
             ],
-            EMPTY: '/',
+            EMPTY: '',
             OBJECT: {
                 key: 'Value_Alexa'
             }

@@ -1,23 +1,29 @@
 import * as http from 'http';
+import {RequestOptions} from 'http';
 import * as fs from 'fs';
-import _merge = require('lodash.merge');
-import _get = require('lodash.get');
 import * as crypto from "crypto";
 
 import * as util from "util";
 import * as path from 'path';
+import {TestHost} from "./TestHost";
 import {TestSuite} from "./TestSuite";
 import {Data, JovoRequest, JovoResponse, SessionData} from "./Interfaces";
-import {RequestOptions} from "http";
+import {BaseApp} from './BaseApp';
+import {ErrorCode, JovoError} from "./errors/JovoError";
+import _merge = require('lodash.merge');
+import _get = require('lodash.get');
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
 const fsreadFile = util.promisify(fs.readFile);
 const fswriteFile = util.promisify(fs.writeFile);
 
+type ConversationTestRuntime = 'app' | 'server';
+
 export interface ConversationConfig {
     userId?: string;
     locale?: string;
+    runtime?: ConversationTestRuntime;
     defaultDbDirectory?: string;
     deleteDbOnSessionEnded?: boolean;
     httpOptions?: RequestOptions;
@@ -26,6 +32,7 @@ export interface ConversationConfig {
 export class Conversation {
     testSuite: TestSuite;
     sessionData: SessionData = {};
+    app?: BaseApp;
 
     $user: {
         $data: Data,
@@ -40,6 +47,7 @@ export class Conversation {
         locale: 'en-US',
         defaultDbDirectory: './db/tests/',
         deleteDbOnSessionEnded: false,
+        runtime: "server",
         httpOptions: {
             host: 'localhost',
             port: process.env.JOVO_PORT || 3000,
@@ -60,6 +68,14 @@ export class Conversation {
             this.config = _merge(this.config, config);
         }
 
+        if (this.config.runtime === 'app') {
+            try {
+                // TODO: cleaner solution required
+                process.env.JOVO_CONFIG = process.cwd() + '/src/config.js';
+                this.app = require( process.cwd() + '/src/app').app;
+            } catch(e) {
+            }
+        }
     }
 
     /**
@@ -75,12 +91,10 @@ export class Conversation {
     }
 
     /**
-     * Prepares post data, returns response
-     * @param {JovoRequest} req
-     * @returns {Promise<JovoResponse>}
+     * Set request user and session data
+     * @param req
      */
-    async send(req: JovoRequest): Promise<JovoResponse> {
-
+    async prepare(req: JovoRequest): Promise<JovoRequest> {
         this.applyToRequest(req);
         await this.saveUserData();
 
@@ -90,20 +104,84 @@ export class Conversation {
             req.setSessionData(this.sessionData);
         }
 
+        return req;
+    }
+
+    /**
+     * Send request to server or directly to the app, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async send(req: JovoRequest): Promise<JovoResponse> {
+
+        await this.prepare(req);
+
+        if (this.config.runtime === 'server') {
+            return this.sendToServer(req);
+        } else if (this.config.runtime === 'app') {
+
+            if (!this.app) {
+                throw new JovoError('Can\'t find a valid app object', ErrorCode.ERR, 'jovo-core', 'Imported app object can\'t be found at the default path. Please add a valid object via conversation.app = require(...)');
+            }
+            return this.sendToApp(req, this.app);
+        }
+
+        throw new JovoError('Conversation send type not valid. Try \'app\' or \'server\'');
+    }
+
+
+    /**
+     * Send request to server, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async sendToServer(req: JovoRequest): Promise<JovoResponse> {
         const postData = JSON.stringify(req.toJSON());
 
         try {
             const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
             const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
-            this.sessionData = jovoResponse.getSessionData() || {};
-            await this.updateUserData();
-            if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
-                this.clearDb();
-            }
+            await this.postProcess(jovoResponse);
             return jovoResponse;
-
         } catch (e) {
             throw e;
+        }
+    }
+
+    /**
+     * Send request directly to app, resolve with response.
+     * Rejects with Error on failure.
+     * @param {JovoRequest} req
+     * @returns {Promise<JovoResponse>}
+     */
+    async sendToApp(req: JovoRequest, app: BaseApp): Promise<JovoResponse> {
+
+        await this.prepare(req);
+
+        const host = new TestHost(req);
+        await app.handle(host);
+
+        if (host.didFail()) {
+            throw host.getError();
+        } else {
+            const response = host.getResponse();
+            const jovoResponse = this.testSuite.responseBuilder.create(response);
+            await this.postProcess(jovoResponse);
+            return jovoResponse;
+        }
+    }
+
+    /**
+     * Perform user/session data housekeeping with response
+     * @param jovoResponse
+     */
+    async postProcess(jovoResponse: JovoResponse): Promise<void> {
+        this.sessionData = jovoResponse.getSessionData() || {};
+        await this.updateUserData();
+        if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
+            this.clearDb();
         }
     }
 

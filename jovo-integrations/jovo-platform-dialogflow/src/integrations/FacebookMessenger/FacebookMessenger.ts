@@ -34,32 +34,37 @@ export class FacebookMessenger implements Plugin {
 
     }
     type(dialogflowAgent: DialogflowAgent) {
-        dialogflowAgent.$user = new FacebookMessengerUser(dialogflowAgent);
+        if (dialogflowAgent.isFacebookMessengerBot()) {
+            dialogflowAgent.$user = new FacebookMessengerUser(dialogflowAgent);
+        }
     }
 
     output(dialogflowAgent: DialogflowAgent) {
-        const output = dialogflowAgent.$output;
+        if (dialogflowAgent.isFacebookMessengerBot()) {
 
-        const isFacebookMessengerRequest = _get(dialogflowAgent.$request, 'originalDetectIntentRequest.source') === 'facebook';
+            const output = dialogflowAgent.$output;
 
-        if (!isFacebookMessengerRequest) {
-            return;
-        }
+            const isFacebookMessengerRequest = _get(dialogflowAgent.$request, 'originalDetectIntentRequest.source') === 'facebook';
 
-        if (!dialogflowAgent.$response) {
-            dialogflowAgent.$response = new DialogflowResponse();
-        }
+            if (!isFacebookMessengerRequest) {
+                return;
+            }
 
-        if (_get(output, 'Dialogflow.Payload.facebook')) {
-            _set(dialogflowAgent.$response, 'payload.facebook', _get(output, 'Dialogflow.Payload.facebook'));
-        }
+            if (!dialogflowAgent.$response) {
+                dialogflowAgent.$response = new DialogflowResponse();
+            }
 
-        if (output.tell) {
-            _set(dialogflowAgent.$response, 'payload.facebook.text', `${output.tell.speech}`);
-        }
+            if (_get(output, 'Dialogflow.Payload.facebook')) {
+                _set(dialogflowAgent.$response, 'payload.facebook', _get(output, 'Dialogflow.Payload.facebook'));
+            }
 
-        if (output.ask) {
-            _set(dialogflowAgent.$response, 'payload.facebook.text', `${output.ask.speech}`);
+            if (output.tell) {
+                _set(dialogflowAgent.$response, 'payload.facebook.text', `${output.tell.speech}`);
+            }
+
+            if (output.ask) {
+                _set(dialogflowAgent.$response, 'payload.facebook.text', `${output.ask.speech}`);
+            }
         }
     }
 

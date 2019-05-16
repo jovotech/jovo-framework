@@ -25,7 +25,7 @@ const i18NextData = {
                 'Goodbye_GoogleAssistant_1',
                 'Goodbye_GoogleAssistant_2'
             ],
-            EMPTY: '/',
+            EMPTY: '',
             OBJECT: {
                 key: 'Value_GoogleAssistant'
             }

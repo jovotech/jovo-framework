@@ -36,7 +36,6 @@ export {ExtensibleConfig} from './Extensible';
 export {Cms} from './Cms';
 export {BaseCmsPlugin} from './BaseCmsPlugin';
 export {JovoError, ErrorCode} from './errors/JovoError';
-
 export {
     HandleRequest,
     Plugin,
@@ -58,8 +57,8 @@ export {
     Data,
     JovoFunction,
     HandlerReturnType,
-    Handler
-
+    Handler,
+    RequestJSON,
 } from './Interfaces';
 
 export {Util} from './Util';

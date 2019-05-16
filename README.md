@@ -140,14 +140,7 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 Location | Access your user's location data | [📝](./docs/platforms/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/platforms/google-assistant/media-response.md)
 Push Notifications | Send push notifications to your users | [📝](./docs/platforms/google-assistant/notifications.md)
-
-#### Missing
-
-The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
-
-Platform | Feature | Docs
-:--- | :--- | :---
-**Google Action** | Transactions (WIP) | [📝](https://developers.google.com/actions/transactions/)
+Transactions | Sell digital and physical goods in your Google Actions | [📝](./docs/platforms/google-assistant/transactions.md)
 
 ### Integrations
 
@@ -211,10 +204,10 @@ Find a quickstart guide and comprehensive tutorials here:
 
 
 ## Contributing
-<a href="https://www.codetriage.com/jovotech/jovo-framework" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework/badges/users.svg"></a>
-
+   
 We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
-* [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
+* [CONTRIBUTING.md](./.github/CONTRIBUTING.md) 
+* [Step by step process](https://github.com/jovotech/jovo-framework/blob/master/docs/advanced-concepts/contributing.md) 
 * Take a look at our [issues](https://github.com/jovotech/jovo-framework/issues)
 * Add your project to [jovotech/builtwithjovo](https://github.com/jovotech/builtwithjovo)
 

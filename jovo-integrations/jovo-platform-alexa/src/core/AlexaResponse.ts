@@ -154,7 +154,7 @@ export class AlexaResponse implements JovoResponse {
         return SpeechBuilder.removeSpeakTags(_get(this, 'response.outputSpeech.ssml'));
     }
     getReprompt() {
-        if (!_get(this, 'response.outputSpeech.ssml')) {
+        if (!_get(this, 'response.reprompt.outputSpeech.ssml')) {
             return;
         }
         return SpeechBuilder.removeSpeakTags(_get(this, 'response.reprompt.outputSpeech.ssml'));

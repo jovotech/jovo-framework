@@ -1,4 +1,4 @@
-import {BaseApp, Jovo, SpeechBuilder, Host} from "jovo-core";
+import {BaseApp, Jovo, SpeechBuilder, Host, JovoRequest, JovoResponse} from "jovo-core";
 import _get = require('lodash.get');
 const _sample = require('lodash.sample');
 
@@ -12,13 +12,15 @@ type reprompt = string | SpeechBuilder;
 
 export class GoogleAction extends Jovo {
     $user: GoogleActionUser;
-    $originalRequest: any; // tslint:disable-line
-    platformRequest: any; // tslint:disable-line
+    // $originalRequest?: T;
+    // $originalResponse?: U;
+
+    // platformRequest: T;
 
     constructor(app: BaseApp, host: Host) {
         super(app, host);
         this.$googleAction = this;
-        this.platformRequest = GoogleActionRequest;
+        // this.platformRequest = platformRequest;
         this.$speech = new GoogleActionSpeechBuilder(this);
         this.$reprompt = new GoogleActionSpeechBuilder(this);
         this.$user = new GoogleActionUser(this);
@@ -258,7 +260,7 @@ export class GoogleAction extends Jovo {
      * Returns true if the current request is of type ON_PERMISSION
      * @public
      * @return {boolean}
-     */    
+     */
     isPermissionRequest(): boolean {
         return this.$type.type === EnumGoogleAssistantRequestType.ON_PERMISSION;
     }
@@ -267,7 +269,7 @@ export class GoogleAction extends Jovo {
      * Returns true if the current request is of type ON_CONFIRMATION
      * @public
      * @return {boolean}
-     */  
+     */
     isConfirmationRequest(): boolean {
         return this.$type.type === EnumGoogleAssistantRequestType.ON_CONFIRMATION;
     }
@@ -276,7 +278,7 @@ export class GoogleAction extends Jovo {
      * Returns true if the current request is of type ON_DATETIME
      * @public
      * @return {boolean}
-     */  
+     */
     isDateTimeRequest(): boolean {
         return this.$type.type === EnumGoogleAssistantRequestType.ON_DATETIME;
     }
@@ -285,7 +287,7 @@ export class GoogleAction extends Jovo {
      * Returns true if the current request is of type ON_PLACE
      * @public
      * @return {boolean}
-     */  
+     */
     isPlaceRequest(): boolean {
         return this.$type.type === EnumGoogleAssistantRequestType.ON_PLACE;
     }

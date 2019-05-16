@@ -180,7 +180,6 @@ describe('ResponsesSheet.parse()', () => {
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
                     WELCOME: ['Welcome_Alexa'],
-                    GOODBYE: []
                 }
             };
             responsesSheet.parse(handleRequest, privateSheetValues);
@@ -211,7 +210,6 @@ describe('ResponsesSheet.parse()', () => {
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
                     WELCOME: ['Welcome_Alexa'],
-                    GOODBYE: []
                 }
             };
             responsesSheet.parse(handleRequest, publicSheetValues);

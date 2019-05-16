@@ -5,7 +5,6 @@
 import {Inputs, JovoRequest, SessionData} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
-import {SessionConstants} from "../../../../jovo-core/dist/src";
 
 interface User {
     userId: string;
@@ -66,6 +65,32 @@ export interface GoogleActionRequestJSON {
     availableSurfaces?: Surface;
 }
 
+
+//
+// export class PlatformRequest<T> {
+//
+//     static fromJSON<T, U extends {}>(json: T|string, type: U): U {
+//         if (typeof json === 'string') {
+//             // if it's a string, parse it first
+//             return JSON.parse(json, PlatformRequest.reviver.bind(this, type));
+//         } else {
+//             // create an instance of the User class
+//             const request = Object.create(type);
+//
+//             // copy all the fields from the json object
+//             return Object.assign(request, json);
+//         }
+//     }
+//
+//     // reviver can be passed as the second parameter to JSON.parse
+//     // to automatically call User.fromJSON on the resulting value.
+//     //@ts-ignore
+//     static reviver<U>(type: U, key: string, value: any): any { // tslint:disable-line
+//         return key === "" ? PlatformRequest.fromJSON(value, type) : value;
+//     }
+//
+// }
+
 export class GoogleActionRequest implements JovoRequest {
     user?: User;
     conversation?: Conversation;
@@ -81,7 +106,7 @@ export class GoogleActionRequest implements JovoRequest {
         }
     }
 
-    getIntentName() {
+    getIntentName(): string | undefined {
         return undefined;
     }
     getSessionData() {
@@ -117,11 +142,7 @@ export class GoogleActionRequest implements JovoRequest {
             return Object.assign(request, json);
         }
     }
-
-    // reviver can be passed as the second parameter to JSON.parse
-    // to automatically call User.fromJSON on the resulting value.
-    //@ts-ignore
-    static reviver(key: string, value: any): any { // tslint:disable-line
+    static reviver( key: string, value: any): any { // tslint:disable-line
         return key === "" ? GoogleActionRequest.fromJSON(value) : value;
     }
 

@@ -96,10 +96,10 @@ export class AskFor implements Plugin {
 
         /**
          * Calls askForNotification()
-         * 
+         *
          * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
          * Might have an effect soon.
-         * 
+         *
          * Exists to comply with Googles naming conventions
          * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
@@ -110,7 +110,7 @@ export class AskFor implements Plugin {
         GoogleAction.prototype.askForUpdate = function(intent: string, name?: string, text?: string) {
             return this.askForNotification(intent, name, text);
         };
-        
+
         /**
          * Ask for notification permission
          * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
@@ -218,7 +218,7 @@ export class AskFor implements Plugin {
          */
         GoogleAction.prototype.isSignInOk = function() {
             return this.getSignInStatus() === 'OK';
-        };  
+        };
 
 
         /**
@@ -336,8 +336,8 @@ export class AskFor implements Plugin {
     output(googleAction: GoogleAction) {
 
         const output = googleAction.$output;
-        if (!googleAction.$response) {
-            googleAction.$response = new GoogleActionResponse();
+        if (!googleAction.$originalResponse) {
+            googleAction.$originalResponse = new GoogleActionResponse();
         }
 
         const askForSignIn = _get(output, 'card.AccountLinkingCard') ||
@@ -348,16 +348,16 @@ export class AskFor implements Plugin {
             const optContext = _get(output, 'GoogleAssistant.AskForSignIn.optContext') ||
                 _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech'));
 
-            _set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
 
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.SIGN_IN',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.SignInValueSpec',
                     optContext: optContext || '',
                 }
             });
-            _set(googleAction.$response, 'inputPrompt', {
+            _set(googleAction.$originalResponse, 'inputPrompt', {
                 initialPrompts: [
                     {
                         textToSpeech: 'PLACEHOLDER_FOR_SIGN_IN',
@@ -371,9 +371,9 @@ export class AskFor implements Plugin {
             const optContext = _get(output, 'GoogleAssistant.AskForPermission.optContext') ||
                 _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech'));
 
-            _set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
 
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.PERMISSION',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.PermissionValueSpec',
@@ -388,9 +388,9 @@ export class AskFor implements Plugin {
             const optContext = _get(output, 'GoogleAssistant.AskForPermission.optContext') ||
                 _get(output, 'ask.speech', _get(output, 'GoogleAssistant.ask.speech'));
 
-            _set(googleAction.$response, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
 
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.PERMISSION',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.PermissionValueSpec',
@@ -405,8 +405,8 @@ export class AskFor implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.AskForDateTime')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.DATETIME',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.DateTimeValueSpec',
@@ -417,8 +417,8 @@ export class AskFor implements Plugin {
 
 
         if (_get(output, 'GoogleAssistant.AskForConfirmation')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.CONFIRMATION',
                 inputValueData: {
                     '@type': 'type.googleapis.com/google.actions.v2.ConfirmationValueSpec',
@@ -430,8 +430,8 @@ export class AskFor implements Plugin {
         }
 
         if (_get(output, 'GoogleAssistant.AskForPlace')) {
-            _set(googleAction.$response, 'expectUserResponse', true);
-            _set(googleAction.$response, 'systemIntent', {
+            _set(googleAction.$originalResponse, 'expectUserResponse', true);
+            _set(googleAction.$originalResponse, 'systemIntent', {
                 intent: 'actions.intent.PLACE',
                 inputValueData: {
                     "@type": "type.googleapis.com/google.actions.v2.PlaceValueSpec",

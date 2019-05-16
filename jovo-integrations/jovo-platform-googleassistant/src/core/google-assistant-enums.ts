@@ -3,5 +3,7 @@ export enum EnumGoogleAssistantRequestType {
     ON_SIGN_IN = "ON_SIGN_IN",
     ON_CONFIRMATION = "ON_CONFIRMATION",
     ON_DATETIME = "ON_DATETIME",
-    ON_PLACE = "ON_PLACE"
+    ON_PLACE = "ON_PLACE",
+    ON_HEALTH_CHECK = "ON_HEALTH_CHECK"
+
 }

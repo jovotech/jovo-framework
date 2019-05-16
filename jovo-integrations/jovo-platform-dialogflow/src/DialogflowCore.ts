@@ -1,10 +1,10 @@
-import {NLUData, Plugin, BaseApp, PluginConfig} from "jovo-core";
+import {NLUData, Plugin, BaseApp, PluginConfig, Util} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import {EnumRequestType} from "jovo-core";
 import {Dialogflow} from "./Dialogflow";
 import {DialogflowAgent} from "./DialogflowAgent";
-import {DialogflowRequest} from "./core/DialogflowRequest";
+import {Context, DialogflowRequest} from "./core/DialogflowRequest";
 import {DialogflowResponse} from "./core/DialogflowResponse";
 
 export interface Config extends PluginConfig {
@@ -99,51 +99,71 @@ export class DialogflowCore implements Plugin {
 
     output(dialogflowAgent: DialogflowAgent) {
         const output = dialogflowAgent.$output;
+        const request = dialogflowAgent.$request as DialogflowRequest;
+
 
         if (!dialogflowAgent.$response) {
             dialogflowAgent.$response = new DialogflowResponse();
         }
 
-
         if (output.tell) {
-            _set(dialogflowAgent.$response, 'fulfillmentText', `${output.tell.speech}`);
+            (dialogflowAgent.$response as DialogflowResponse).fulfillmentText = output.tell.speech.toString();
         }
 
         if (output.ask) {
-            _set(dialogflowAgent.$response, 'fulfillmentText', `${output.ask.speech}`);
+            (dialogflowAgent.$response as DialogflowResponse).fulfillmentText = output.ask.speech.toString();
         }
-        const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
 
-        const sessionId = _get(dialogflowRequest, 'session');
+        const outputContexts = request.queryResult.outputContexts || [];
 
-        const outputContexts = _get(dialogflowRequest, 'queryResult.outputContexts', []);
-        const contextName = `${sessionId}/contexts/${this.config.sessionContextId}`;
+        const sessionContextPrefix = `${request.session}/contexts/_jovo_session_`;
 
+
+        // remove non-jovo contexts
+        const newOutputContexts = outputContexts.filter((context: Context) => {
+            return !context.name.startsWith(sessionContextPrefix) && context.lifespanCount && context.lifespanCount > 0;
+        });
+
+        // add jovo session context
         if (Object.keys(dialogflowAgent.$session.$data).length > 0) {
-            const sessionContext = outputContexts.find((context: any) => { // tslint:disable-line
-                return context.name === contextName;
+            newOutputContexts.push({
+                name: `${sessionContextPrefix}${Util.randomStr(5)}`,
+                lifespanCount: 1,
+                parameters: dialogflowAgent.$session.$data
             });
+        }
+        if (dialogflowAgent.$output.Dialogflow && dialogflowAgent.$output.Dialogflow.OutputContexts) {
 
-            if (sessionContext) {
-                outputContexts.forEach((context: any) => { // tslint:disable-line
-                    if (context.name === contextName) {
-                        context.parameters = dialogflowAgent.$session.$data;
+            for (let i = 0; i < dialogflowAgent.$output.Dialogflow.OutputContexts.length; i++) {
+                const contextObj = dialogflowAgent.$output.Dialogflow.OutputContexts[i];
+                const outputContextName = `${request.session}/contexts/${contextObj.name}`;
+
+                let updateCount = 0;
+                for (let j = 0; j < newOutputContexts.length; j++) {
+                    if ((newOutputContexts[j] as Context) &&
+                        (newOutputContexts[j] as Context).name === outputContextName) {
+                        (newOutputContexts[j] as Context).lifespanCount = contextObj.lifespanCount;
+                        (newOutputContexts[j] as Context).parameters = contextObj.parameters;
+                        updateCount++;
                     }
-                });
-            } else {
-                outputContexts.push({
-                    name: contextName,
-                    lifespanCount: 1000,
-                    parameters: dialogflowAgent.$session.$data
-                });
+                }
+                if (updateCount === 0) {
+                    newOutputContexts.push({
+                        name: outputContextName,
+                        lifespanCount: contextObj.lifespanCount,
+                        parameters: contextObj.parameters
+                    });
+                }
             }
         }
-        _set(dialogflowAgent.$response, 'outputContexts', outputContexts);
 
-
+        (dialogflowAgent.$response as DialogflowResponse).outputContexts = newOutputContexts;
         if (_get(output, 'Dialogflow.Payload')) {
             _set(dialogflowAgent.$response, 'payload', _get(output, 'Dialogflow.Payload'));
         }
+
+
+
     }
 
 }

@@ -1,6 +1,7 @@
 import _sample = require('lodash.sample');
 import {SpeechBuilder} from "jovo-core";
 import {AlexaSkill} from "./AlexaSkill";
+import {SsmlElements} from "jovo-core/dist/src/SpeechBuilder";
 
 
 export class AlexaSpeechBuilder extends SpeechBuilder {
@@ -62,14 +63,16 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
      * @param {number} probability
      * @returns {this}
      */
-    addText(text: string | string[], condition?: boolean, probability?: number): this {
+    addText(text: string | string[], condition?: boolean, probability?: number, surroundSsml?: SsmlElements): this {
+        let ssmlText = text;
         if (AlexaSpeechBuilder.pollyVoice) {
             if (Array.isArray(text)) {
-                return super.addText(`<voice name="${AlexaSpeechBuilder.pollyVoice}">${_sample(text)}</voice>`, condition, probability);
+                ssmlText = `<voice name="${AlexaSpeechBuilder.pollyVoice}">${_sample(text)}</voice>`;
+            } else {
+                ssmlText = `<voice name="${AlexaSpeechBuilder.pollyVoice}">${text}</voice>`;
             }
-            return super.addText(`<voice name="${AlexaSpeechBuilder.pollyVoice}">${text}</voice>`, condition, probability);
         }
 
-        return super.addText(text, condition, probability);
+        return super.addText(ssmlText, condition, probability, surroundSsml);
     }
 }

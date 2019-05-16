@@ -2,6 +2,41 @@
 
 
 
+## 2.2.5 (2019-05-07)
+
+#### :bug: Bug Fix
+ `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework//pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
+
+#### Committers 1
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+
+
+## 2.2.4 (2019-05-03)
+* `jovo-framework` Improve Conversation test runtime handling (`send(req)`, `sendToServer(req)`, `sendToApp(req, app)`)
+
+
+## 2.2.3 (2019-05-03)
+
+#### :rocket: New Feature
+* `jovo-platform-googleassistant` [#479](https://github.com/jovotech/jovo-framework/pull/479) Add google res getters   ([@natrixx](https://github.com/natrixx))
+* `jovo-framework` [#488](https://github.com/jovotech/jovo-framework/pull/488) Send test requests directly to app object (issue #469)  ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+#### :nail_care: Enhancement
+* `jovo-platform-dialogflow`, `jovo-platform-googleassistant` Improve robustness of the Dialogflow/Googleassistant integration
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` Fix Dialogflow testsuite issue #481
+* `jovo-platform-dialogflow` Fix missing `X.original` input parameter
+* `jovo-framework` [#490](https://github.com/jovotech/jovo-framework/pull/490) Add missing dependencies (in dev setup) ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+
+#### Committers: 3
+- natrixx ([@natrixx](https://github.com/natrixx))
+- Stephen Wilcox ([@stephen-wilcox](https://github.com/stephen-wilcox))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 2.2.2 (2019-04-18)
 
 

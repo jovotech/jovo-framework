@@ -23,7 +23,7 @@ In this section, you will learn more about how to use intents and states to rout
 
 Typically, routing in a Jovo app is done in the `app.js` file in the `src` folder of your project. By default, routing elements are added by using the `setHandler` method.
 
-This is how a simple handler looks like:
+This is what a simple handler looks like:
 
 ```javascript
 // @language=javascript

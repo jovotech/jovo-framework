@@ -1,5 +1,8 @@
 import * as path from "path";
-
+import {RequestOptions} from "https";
+import _merge = require('lodash.merge');
+import * as url from 'url';
+import * as https from "https";
 
 export class Util {
 
@@ -40,4 +43,78 @@ export class Util {
         };
     }
 
+    /**
+     * Creates random string of length 7
+     */
+    static randomStr(length = 6) {
+        return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
+    }
+
+    /**
+     * Async delay helper
+     * @param delayInMilliseconds
+     */
+    static delay(delayInMilliseconds: number) {
+        return new Promise((resolve) => setTimeout(resolve, delayInMilliseconds));
+    }
+
+    /**
+     * Post
+     * @param options
+     * @param payload
+     */
+    static post(options: RequestOptions, payload: object): void;
+    static post(url: string, payload: object): void;
+    static post(urlOrOptions: string | RequestOptions, payload: object) {
+        return new Promise((resolve, reject) => {
+            const data = JSON.stringify(payload);
+            const options = {
+                port: '443',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(data)
+                }
+            };
+
+            if (typeof urlOrOptions === 'string') {
+                const parsedUrl = url.parse(urlOrOptions);
+
+                _merge(options, {
+                    host: parsedUrl.host,
+                    path: parsedUrl.path
+                });
+
+            } else {
+                _merge(options, urlOrOptions);
+            }
+
+
+            console.log(options);
+            // Set up the request
+            const req = https.request(options, (res) => {
+                res.setEncoding('utf8');
+
+                let rawData = '';
+                res.on('data', (chunk) => {
+                    rawData += chunk;
+                });
+
+                res.on('end', () => {
+                    resolve(res);
+                });
+
+                res.on('error',  (e) => {
+                    reject(e);
+                });
+            }).on('error', (e) => {
+                reject(e);
+            });
+
+            // post the data
+            req.write(data);
+            req.end();
+
+        });
+    }
 }

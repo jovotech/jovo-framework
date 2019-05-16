@@ -1,4 +1,3 @@
-import { DialogflowNlu } from 'jovo-platform-dialogflow';
 
 import _set = require('lodash.set');
 import _get = require('lodash.get');
@@ -19,12 +18,12 @@ import {Cards} from "./modules/Cards";
 import {AskFor} from "./modules/AskFor";
 import {UpdatesPlugin} from "./modules/Updates";
 import {MediaResponsePlugin} from "./modules/MediaResponse";
-import {GoogleActionRequest} from "./core/GoogleActionRequest";
-import {GoogleActionResponse} from "./core/GoogleActionResponse";
 import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilder";
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
 import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
+import {DialogflowPlugin} from "jovo-platform-dialogflow";
+import {GoogleAssistantDialogflowFactory} from "./dialogflow/GoogleAssistantDialogflowFactory";
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
@@ -131,35 +130,37 @@ export class GoogleAssistant extends Extensible implements Platform {
     }
 
     makeTestSuite(): GoogleAssistantTestSuite {
-        this.remove('DialogflowNlu');
+        this.remove('DialogflowPlugin');
         this.initDialogflow();
         return new TestSuite(this.requestBuilder, this.responseBuilder);
     }
 
     initDialogflow() {
-        // @ts-ignore //TODO:
-        this.use(new DialogflowNlu({
-            platformRequestClazz: GoogleActionRequest,
-            platformClazz: GoogleAction,
-            platformResponseClazz: GoogleActionResponse,
-            platformId: 'google'
-        }));
+        this.use(
+            new DialogflowPlugin(
+                {},
+                new GoogleAssistantDialogflowFactory()
+            )
+        );
     }
 
     async initialize(handleRequest: HandleRequest) {
-        handleRequest.platformClazz = GoogleAction;
         await this.middleware('$init')!.run(handleRequest);
+
+
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'GoogleAction') {
             return Promise.resolve();
         }
+
         await this.middleware('$request')!.run(handleRequest.jovo);
+
+
         await this.middleware('$type')!.run(handleRequest.jovo);
 
         await this.middleware('$session')!.run(handleRequest.jovo);
         if (this.config.handlers) {
-            _set(handleRequest.app, 'config.handlers', _merge( _get(handleRequest.app, 'config.handlers'), this.config.handlers));
+            _set(handleRequest.app, 'config.handlers', _merge(_get(handleRequest.app, 'config.handlers'), this.config.handlers));
         }
-
     }
 
     async nlu(handleRequest: HandleRequest) {
@@ -183,6 +184,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             return Promise.resolve();
         }
         await this.middleware('$response')!.run(handleRequest.jovo);
+
         handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson ?
             this.responseBuilder.create(handleRequest.jovo.$rawResponseJson) : handleRequest.jovo.$response;
         await handleRequest.host.setResponse(handleRequest.jovo.$response);

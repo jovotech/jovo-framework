@@ -20,10 +20,10 @@ interface QueryResult {
     outputContexts?: Context[];
 }
 
-export interface OriginalDetectIntentRequest {
+export interface OriginalDetectIntentRequest<T extends JovoRequest = JovoRequest> {
     source: string;
     version: string;
-    payload: JovoRequest;
+    payload: T;
 }
 
 export interface DialogflowRequestJSON {
@@ -39,12 +39,16 @@ export interface Context {
 }
 
 
-export class DialogflowRequest implements JovoRequest {
+export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements JovoRequest {
 
     responseId?: string;
     queryResult?: QueryResult;
     originalDetectIntentRequest?: OriginalDetectIntentRequest;
     session?: string;
+
+    constructor(originalRequest: T) {
+        this.originalDetectIntentRequest.payload = originalRequest;
+    }
 
 
     getSessionId(): string | undefined {
@@ -102,7 +106,18 @@ export class DialogflowRequest implements JovoRequest {
         }
         return this;
     }
+    /**
+     * Returns session context of request
+     */
+    getSessionContext(): Context | undefined {
+        const sessionId = this.session;
 
+        if (this.queryResult && this.queryResult.outputContexts) {
+            return this.queryResult.outputContexts.find((context: Context) => {
+                return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
+            });
+        }
+    }
     toJSON(): DialogflowRequestJSON {
         // copy all fields from `this` to an empty object and return in
         return Object.assign({}, this);
@@ -161,7 +176,8 @@ export class DialogflowRequest implements JovoRequest {
 
     getInputs(): Inputs { // tslint:disable-line
         const params = _get(this, 'queryResult.parameters');
-        return _mapValues(params, (value: string, name: string) => {
+
+        const inputs = _mapValues(params, (value: string, name: string) => {
             return {
                 name,
                 value,
@@ -169,6 +185,25 @@ export class DialogflowRequest implements JovoRequest {
                 id: value, // Added for cross platform consistency
             };
         });
+
+        if (this.queryResult.outputContexts && this.queryResult.outputContexts.length > 0) {
+            // TODO: is the first element enough?
+            const parameters = this.queryResult.outputContexts[0].parameters;
+            for (const key in parameters) {
+                if (inputs[key]) {
+                    const originalKey = key + '.original';
+                    inputs[originalKey] = {
+                        name: originalKey,
+                        value: parameters[originalKey],
+                        key: parameters[originalKey],
+                        id: parameters[originalKey],
+                    };
+                }
+            }
+
+
+        }
+        return inputs;
     }
 
     setInputs(inputs: Inputs): this {
@@ -320,4 +355,10 @@ export class DialogflowRequest implements JovoRequest {
         this.queryResult.parameters[key] = value;
         return this;
     }
+
+
+    getParameters() {
+        return this.queryResult.parameters;
+    }
+
 }

@@ -12,14 +12,15 @@ import {DialogflowCore} from "./DialogflowCore";
 import {DialogflowRequestBuilder} from "./core/DialogflowRequestBuilder";
 import {DialogflowResponseBuilder} from "./core/DialogflowResponseBuilder";
 import {DialogflowTestSuite} from './core/Interfaces';
+import {DialogflowFactory} from "./core/DialogflowFactory";
 
 export interface DialogflowConfig extends ExtensibleConfig {
 }
 
 export class Dialogflow extends Extensible implements Platform {
 
-    requestBuilder = new DialogflowRequestBuilder();
-    responseBuilder = new DialogflowResponseBuilder();
+    requestBuilder = new DialogflowRequestBuilder(new DialogflowFactory());
+    responseBuilder = new DialogflowResponseBuilder(new DialogflowFactory());
 
     config: DialogflowConfig = {
         enabled: true,
@@ -45,7 +46,7 @@ export class Dialogflow extends Extensible implements Platform {
     }
 
     makeTestSuite(): DialogflowTestSuite {
-        return new TestSuite(new DialogflowRequestBuilder(), new DialogflowResponseBuilder());
+        return new TestSuite(this.requestBuilder, this.responseBuilder);
     }
 
     getAppType(): string {
@@ -80,7 +81,7 @@ export class Dialogflow extends Extensible implements Platform {
         if (requestObject.responseId &&
             requestObject.queryResult &&
             requestObject.originalDetectIntentRequest &&
-            requestObject.originalDetectIntentRequest.source !== 'google') {
+            (!requestObject.originalDetectIntentRequest.source || requestObject.originalDetectIntentRequest.source !== 'google')) {
             handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
         }
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {

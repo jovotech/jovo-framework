@@ -124,7 +124,7 @@ export class I18Next extends BaseCmsPlugin {
             if (!handleRequest.app.$cms.I18Next.resources.hasOwnProperty(locale)) {
                 continue;
             }
-            
+
             const resource = handleRequest.app.$cms.I18Next.resources[locale];
             for (const platform of handleRequest.app.getAppTypes()) {
                 if (resource[platform]) {
@@ -165,29 +165,14 @@ function getSpeech(this: any, args: any) {  // tslint:disable-line
         const keyExists = jovo.$app!.$cms.I18Next.i18n.exists.apply(
             jovo.$app!.$cms.I18Next.i18n, args
         );
-
         if (keyExists) {
-            let translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+            return jovo.$app!.$cms.I18Next.i18n.t.apply(
                 jovo.$app!.$cms.I18Next.i18n, args
             );
-
-            if (typeof translatedText === 'string' && translatedText === '/') {
-                translatedText = '';
-            } else if (translatedText.constructor === Array) {
-                const i = translatedText.indexOf('/');
-                if (i > -1) {
-                    translatedText[i] = '';
-                }
-            }
-
-            return translatedText;
         }
-
         args[0] = key;
     }
-
-    const translatedText = jovo.$app!.$cms.I18Next.i18n.t.apply(
+    return jovo.$app!.$cms.I18Next.i18n.t.apply(
         jovo.$app!.$cms.I18Next.i18n, args
     );
-    return translatedText;
 }

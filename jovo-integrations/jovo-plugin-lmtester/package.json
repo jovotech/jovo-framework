@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-lmtester",
-  "version": "2.2.1",
+  "version": "2.2.3",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.1"
+    "jovo-core": "^2.2.3"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",

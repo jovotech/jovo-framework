@@ -489,13 +489,13 @@ export class AlexaSkill extends Jovo {
     }
 
     /**
-     * Returns reason code for an end of a session
+     * Returns error object
      *
      * @public
      * @return {*}
      */
     getError() {
-        return _get(this.$request, 'request.reason');
+        return _get(this.$request, 'request.error');
     }
 
     /**
@@ -528,7 +528,7 @@ export class AlexaSkill extends Jovo {
      * Returns true if the current request is of type ON_EVENT
      * @public
      * @return {boolean}
-     */  
+     */
     isEventRequest(): boolean {
         return this.$type.type === EnumAlexaRequestType.ON_EVENT;
     }
@@ -537,7 +537,7 @@ export class AlexaSkill extends Jovo {
      * Returns true if the current request is of type ON_PURCHASE
      * @public
      * @return {boolean}
-     */ 
+     */
     isPurchaseRequest(): boolean {
         return this.$type.type === EnumAlexaRequestType.ON_PURCHASE;
     }
@@ -546,7 +546,7 @@ export class AlexaSkill extends Jovo {
      * Returns true if the current request is of type CAN_FULFILL_INTENT
      * @public
      * @return {boolean}
-     */ 
+     */
     isCanFulfillIntentRequest(): boolean {
         return this.$type.type === EnumAlexaRequestType.CAN_FULFILL_INTENT;
     }
@@ -555,7 +555,7 @@ export class AlexaSkill extends Jovo {
      * Returns true if the current request is of type PLAYBACKCONTROLLER
      * @public
      * @return {boolean}
-     */ 
+     */
     isPlaybackControllerRequest(): boolean {
         return this.$type.type === EnumAlexaRequestType.PLAYBACKCONTROLLER;
     }
@@ -564,7 +564,7 @@ export class AlexaSkill extends Jovo {
      * Returns true if the current request is of type ON_GAME_ENGINE_INPUT_HANDLER_EVENT
      * @public
      * @return {boolean}
-     */ 
+     */
     isGameEngineInputHandlerEventRequest(): boolean {
         return this.$type.type === EnumAlexaRequestType.ON_GAME_ENGINE_INPUT_HANDLER_EVENT;
     }
