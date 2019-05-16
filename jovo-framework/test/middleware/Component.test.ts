@@ -107,7 +107,7 @@ describe('test loadI18nFiles()', () => {
 
         component.loadI18nFiles(mockHandleRequest);
 
-        expect(component.i18next!.config.filesDir).toBe('..\\components\\test\\src\\i18n');
+        expect(component.i18next!.config.filesDir).toBe('../components/test/src/i18n');
     });
 
     test('should call i18next.loadFiles()', () => {
