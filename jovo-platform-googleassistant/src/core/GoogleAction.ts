@@ -1,11 +1,9 @@
-import {BaseApp, Jovo, SpeechBuilder, Host, JovoRequest, JovoResponse} from "jovo-core";
+import {BaseApp, Jovo, SpeechBuilder, Host} from "jovo-core";
 import _get = require('lodash.get');
 const _sample = require('lodash.sample');
 
 import {GoogleActionUser} from "./GoogleActionUser";
 import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
-import {GoogleActionRequest} from "./GoogleActionRequest";
-import {Context} from "../jovo-platform-dialogflow/dist/src/core/DialogflowRequest";
 import { EnumGoogleAssistantRequestType } from "./google-assistant-enums";
 
 type reprompt = string | SpeechBuilder;
@@ -233,7 +231,7 @@ export class GoogleAction extends Jovo {
      * @param name
      */
     getOutputContext(name: string) {
-        return _get( this.$request, 'queryResult.outputContexts', []).find((context: Context) => {
+        return _get( this.$request, 'queryResult.outputContexts', []).find((context: any) => { // tslint:disable-line
             return context.name.indexOf(`/contexts/${name}`) > -1;
         });
     }

@@ -1,6 +1,5 @@
 import {GoogleActionRequest} from "./GoogleActionRequest";
 import {RequestBuilder} from "jovo-core";
-import {DialogflowRequest} from "../../node_modules/jovo-platform-dialogflow";
 const samples: {[key: string]: string} = {
     'LaunchRequest': './../../sample-request-json/v1/LaunchRequest.json',
     'IntentRequest1': './../../sample-request-json/v1/IntentRequest1.json',
