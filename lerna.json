@@ -2,7 +2,7 @@
   "packages": [
     "jovo-framework",
     "jovo-core",
-    "jovo-platform-*",
+    "jovo-platforms/*",
     "jovo-integrations/*",
     "examples/**"
   ],

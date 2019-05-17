@@ -1,11 +1,11 @@
 import {Plugin, BaseApp, Jovo, EnumRequestType} from "jovo-core";
-import {Config} from "../../DialogflowCore";
-import {Dialogflow} from "../../Dialogflow";
-import {DialogflowResponse} from "../../core/DialogflowResponse";
-import {DialogflowAgent} from "../../DialogflowAgent";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import {Config} from "../../DialogflowCore";
+import {Dialogflow} from "../../Dialogflow";
+import {DialogflowAgent} from "../../DialogflowAgent";
 import {FacebookMessengerUser} from "./FacebookMessengerUser";
+import {DialogflowResponse} from "../..";
 
 
 export interface DialogflowAgent {

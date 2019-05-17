@@ -1,7 +1,7 @@
 import {HandleRequest, JovoRequest, TestSuite} from "jovo-core";
 import {App, ExpressJS} from "jovo-framework";
 import {GoogleAssistant} from "../src";
-import {DialogflowResponse} from "../node_modules/jovo-platform-dialogflow";
+import {DialogflowResponse} from "jovo-platform-dialogflow";
 import {GoogleActionResponse} from "../src/core/GoogleActionResponse";
 import _get = require('lodash.get');
 

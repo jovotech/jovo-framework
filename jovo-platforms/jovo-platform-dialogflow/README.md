@@ -1,4 +1,4 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+[![Jovo Framework](../../docs/img/jovo-header.png)](https://www.jovo.tech)
 
 <p align="center">The development framework for cross-platform voice apps</p>
 
@@ -17,10 +17,10 @@
 </p>
 <br/>
 
-# Google Assistant Platform Integration
+# Dialogflow Platform Integration
 
 ```sh
-npm install jovo-platform-googleassistant
+npm install jovo-platform-dialogflow
 ```
 
 Find the docs here: https://www.jovo.tech/docs/google-assistant

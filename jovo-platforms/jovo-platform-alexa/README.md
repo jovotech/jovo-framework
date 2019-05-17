@@ -1,4 +1,4 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+[![Jovo Framework](../../docs/img/jovo-header.png)](https://www.jovo.tech)
 
 <p align="center">The development framework for cross-platform voice apps</p>
 
@@ -17,10 +17,10 @@
 </p>
 <br/>
 
-# Dialogflow Platform Integration
+# Amazon Alexa Platform Integration
 
 ```sh
-npm install jovo-platform-dialogflow
+npm install jovo-platform-alexa
 ```
 
-Find the docs here: https://www.jovo.tech/docs/google-assistant
+Find the docs here: https://www.jovo.tech/docs/amazon-alexa

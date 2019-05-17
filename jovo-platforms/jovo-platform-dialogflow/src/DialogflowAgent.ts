@@ -1,7 +1,7 @@
 import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
-import {DialogflowUser} from "./DialogflowUser";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import {DialogflowUser} from "./DialogflowUser";
 
 export type SupportedIntegration = 'FacebookMessenger' | 'Slack';
 

@@ -6,7 +6,7 @@ import {
     DialogflowRequestJSON,
     DialogflowResponse,
     DialogflowResponseJSON
-} from "../../node_modules/jovo-platform-dialogflow";
+} from "jovo-platform-dialogflow";
 import {GoogleActionRequest, GoogleActionRequestJSON} from "../core/GoogleActionRequest";
 import {GoogleActionResponse, GoogleActionResponseJSON} from "../core/GoogleActionResponse";
 

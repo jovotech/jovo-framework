@@ -1,6 +1,6 @@
 import { Jovo} from 'jovo-core';
-import {DialogflowUser} from "../../DialogflowUser";
 import _get = require('lodash.get');
+import {DialogflowUser} from "../../DialogflowUser";
 
 export class SlackUser extends DialogflowUser {
 

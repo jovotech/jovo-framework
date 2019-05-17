@@ -22,7 +22,7 @@ import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilde
 import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
 import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
-import {DialogflowPlugin} from "../node_modules/jovo-platform-dialogflow";
+import {DialogflowPlugin} from "jovo-platform-dialogflow";
 import {GoogleAssistantDialogflowFactory} from "./dialogflow/GoogleAssistantDialogflowFactory";
 
 export interface Config extends ExtensibleConfig {

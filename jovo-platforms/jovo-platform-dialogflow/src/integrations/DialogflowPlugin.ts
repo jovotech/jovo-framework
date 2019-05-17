@@ -7,10 +7,10 @@ import {
     NLUData, Platform, Util,
 } from "jovo-core";
 import _merge = require('lodash.merge');
-import {DialogflowRequest, DialogflowRequestBuilder, DialogflowResponse, PlatformFactory} from "../index";
-import {DialogflowResponseBuilder} from "../core/DialogflowResponseBuilder";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import {DialogflowRequest, DialogflowRequestBuilder, DialogflowResponse, PlatformFactory} from "../index";
+import {DialogflowResponseBuilder} from "../core/DialogflowResponseBuilder";
 import {Context} from "../core/DialogflowRequest";
 
 

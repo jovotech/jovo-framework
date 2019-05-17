@@ -1,7 +1,7 @@
 import {ResponseBuilder} from "jovo-core";
 import {DialogflowResponse} from "./DialogflowResponse";
-import {PlatformFactory} from "../index";
 import {DialogflowFactory} from "./DialogflowFactory";
+import {PlatformFactory} from "../index";
 
 export class DialogflowResponseBuilder<T extends PlatformFactory = DialogflowFactory> implements ResponseBuilder<DialogflowResponse> {
 

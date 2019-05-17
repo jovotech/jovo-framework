@@ -1,7 +1,7 @@
 
 
-import {DialogflowResponse} from "../src/core/DialogflowResponse";
 import _cloneDeep = require('lodash.clonedeep');
+import {DialogflowResponse} from "../src";
 const askJSON = require('../sample-response-json/v2/ASK.json');
 const tellJSON = require('../sample-response-json/v2/TELL.json');
 
