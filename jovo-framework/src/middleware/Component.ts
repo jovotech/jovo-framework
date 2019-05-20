@@ -8,6 +8,21 @@ export interface Config extends PluginConfig {
     intentMap?: {
         [key: string]: string;
     };
+    i18n?: {
+        resources: {
+            [key: string]: { // locale
+                translation: {
+                    [key: string]: string; // actual key value pair specifying the response
+                };
+                AlexaSkill: {
+                    [key: string]: string;
+                };
+                GoogleAction: {
+                    [key: string]: string;
+                };
+            };
+        };
+    };
 }
 
 export interface Response {
@@ -49,6 +64,11 @@ export class Component implements Plugin {
      * @param handleRequest 
      */
     async loadI18nFiles(handleRequest: HandleRequest) {
+        // add user specified i18n resources
+        if (this.config.i18n) {
+            this.i18next!.config.resources = this.config.i18n.resources;
+        }
+
         const pathToComponent = `../components/${this.name}/`;
         const filesDir = path.join(pathToComponent, this.pathToI18n || '').replace(new RegExp('\\' + path.sep, 'g'), '/');
         this.i18next!.config.filesDir = filesDir;
