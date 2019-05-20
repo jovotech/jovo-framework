@@ -1,16 +1,14 @@
 import {
     Validator,
-    ValidationError,
     IsRequiredValidator,
     ValidValuesValidator,
     InvalidValuesValidator
 } from '../src/validators';
-import { Jovo } from '../src';
 
 describe('Validator', () => {
     test('Validator.setInputToValidate()', () => {
         class ValidatorImpl extends Validator {
-            validate(jovo: Jovo) { }
+            validate() { }
         }
         const v = new ValidatorImpl();
         expect(v['inputToValidate']).toBeUndefined();
@@ -52,26 +50,34 @@ describe('ValidValuesValidator', () => {
         test('empty input value', () => {
             const v = new ValidValuesValidator(['valid1', 'valid2']);
             v.setInputToValidate({
-                key: 'name',
+                key: 'key',
                 value: ''
             })
             v.validate();
         });
-        test('regex input value', () => {
 
-        });
-        test('normal string value', () => {
-            const v = new ValidValuesValidator(['valid1', 'valid2']);
+        test('regex input value', () => {
+            const v = new ValidValuesValidator([RegExp('.*llo.*')]);
             v.setInputToValidate({
-                key: 'name',
+                key: 'key',
+                value: 'hello'
+            });
+            v.validate();
+        });
+
+        test('normal string value', () => {
+            const v = new ValidValuesValidator(['valid1']);
+            v.setInputToValidate({
+                key: 'key',
                 value: 'valid1'
             })
             v.validate();
         });
+
         test('should throw error if input is not valid', () => {
             const v = new ValidValuesValidator(['valid1', 'valid2']);
             v.setInputToValidate({
-                key: 'name',
+                key: 'key',
                 value: 'valid3'
             })
             expect(() => v.validate()).toThrow('ValidValuesValidator failed.');
@@ -81,9 +87,40 @@ describe('ValidValuesValidator', () => {
 
 describe('InvalidValuesValidator', () => {
     describe('InvalidValuesValidator.validate()', () => {
-        test('empty input value');
-        test('regex input value');
-        test('normal string value');
-        test('should throw error if input is not valid');
+        test('empty input value', () => {
+            const v = new InvalidValuesValidator(['invalid1']);
+            v.setInputToValidate({
+                key: 'key',
+                value: ''
+            })
+            v.validate();
+        });
+
+        test('regex input value', () => {
+            const v = new InvalidValuesValidator([RegExp('.*llo.*')]);
+            v.setInputToValidate({
+                key: 'key',
+                value: 'hello'
+            });
+            expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
+        });
+
+        test('normal string value', () => {
+            const v = new InvalidValuesValidator(['invalid1']);
+            v.setInputToValidate({
+                key: 'key',
+                value: 'invalid1'
+            })
+            expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
+        });
+
+        test('should succeed if input value is not present in array', () => {
+            const v = new InvalidValuesValidator(['invalid1', 'invalid2']);
+            v.setInputToValidate({
+                key: 'key',
+                value: 'validValue'
+            });
+            v.validate();
+        });
     });
 });

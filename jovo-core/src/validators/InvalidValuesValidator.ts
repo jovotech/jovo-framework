@@ -18,11 +18,17 @@ export class InvalidValuesValidator extends Validator {
         for (const v of this.invalidValues) {
             if (typeof v === 'string') {
                 if (input.value.toLowerCase() === v.toLowerCase()) {
-                    return;
+                    throw new ValidationError(
+                        `${this.constructor.name} failed.`,
+                        this.constructor.name
+                    );
                 }
             } else if (v instanceof RegExp) {
                 if (v.test(input.value)) {
-                    return;
+                    throw new ValidationError(
+                        `${this.constructor.name} failed.`,
+                        this.constructor.name
+                    );
                 }
             } else {
                 throw new JovoError(
@@ -30,10 +36,5 @@ export class InvalidValuesValidator extends Validator {
                 );
             }
         }
-
-        throw new ValidationError(
-            `${this.constructor.name} failed.`,
-            this.constructor.name
-        );
     }
 }
