@@ -513,3 +513,21 @@ describe('test isElementSelectedRequest()', () => {
         expect(result).toBe(false);
     });
 });
+
+// describe('test validate()', () => {
+//     describe('IsRequiredValidator', () => {
+
+//     });
+
+//     describe('ValidValuesValidator', () => {
+
+//     });
+
+//     describe('InvalidValuesValidator', () => {
+
+//     });
+
+//     describe('schema', () => {
+//         test('single input')
+//     })
+// });

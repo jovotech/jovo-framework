@@ -1,12 +1,12 @@
-import {Inputs} from "./Interfaces";
-import {Log} from "./Log";
+import { Inputs } from "./Interfaces";
+import { Log } from "./Log";
 
 try {
     // do not use source map support with jest.
     if (process.env.JEST_WORKER_ID === undefined) {
         require('source-map-support').install();
     }
-} catch(error) {
+} catch (error) {
 
 }
 
@@ -28,14 +28,21 @@ export { Jovo } from './Jovo';
 export { EnumRequestType, SessionConstants } from './enums';
 export { SpeechBuilder } from './SpeechBuilder';
 
-export {Middleware} from './Middleware';
-export {TestSuite, RequestBuilder, ResponseBuilder} from './TestSuite';
-export {Conversation, ConversationConfig} from './Conversation';
-export {Extensible} from './Extensible';
-export {ExtensibleConfig} from './Extensible';
-export {Cms} from './Cms';
-export {BaseCmsPlugin} from './BaseCmsPlugin';
-export {JovoError, ErrorCode} from './errors/JovoError';
+export { Middleware } from './Middleware';
+export { TestSuite, RequestBuilder, ResponseBuilder } from './TestSuite';
+export { Conversation, ConversationConfig } from './Conversation';
+export { Extensible } from './Extensible';
+export { ExtensibleConfig } from './Extensible';
+export { Cms } from './Cms';
+export { BaseCmsPlugin } from './BaseCmsPlugin';
+export { JovoError, ErrorCode } from './errors/JovoError';
+export {
+    Validator,
+    ValidationError,
+    IsRequiredValidator,
+    ValidValuesValidator,
+    InvalidValuesValidator
+} from './validators';
 export {
     HandleRequest,
     Plugin,
@@ -61,8 +68,8 @@ export {
     RequestJSON,
 } from './Interfaces';
 
-export {Util} from './Util';
-export {LogLevel, Log, Logger} from './Log';
-export {User} from './User';
+export { Util } from './Util';
+export { LogLevel, Log, Logger } from './Log';
+export { User } from './User';
 
 

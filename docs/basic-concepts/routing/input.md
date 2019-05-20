@@ -133,9 +133,141 @@ app.setHandler({
 
 ## Validation
 
-Since v2.3.0 we support input validation. With it, you can register multiple validators per input in your configuration file, either for a specific intent or globally.
+Since v2.3.0 we support input validation, which allows you to register multiple validators per input in your configuration file, either for a specific intent or globally.
 
+```javascript
+// @language=javascript
 
+// config.js
+
+validation: {
+    MyNameIsIntent: {
+        name: [
+            new IsRequiredValidator(),
+            new InvalidValuesValidator({
+                values: ['Mercedes', 'Toyota'],
+                onFail: 'ValidatorFailedIntent'
+            })
+        ]
+    }
+}
+
+// @language=typescript
+
+// config.ts
+
+validation: {
+    MyNameIsIntent: {
+        name: [
+            new IsRequiredValidator(),
+            new InvalidValuesValidator({
+                values: ['Mercedes', 'Toyota'],
+                onFail: 'ValidatorFailedIntent'
+            })
+        ]
+    }
+}
+```
+
+You can validate your input in multiple ways, either as a specific Validator, your own function or a mixture from both in an array.
+
+The Validation Plugin already offers you multiple built-in Validators to choose from, each with its own functionality and set of parameter attributes.
+
+```javascript
+// @language=javascript
+
+// config.ts
+
+validation: {
+    MyNameIsIntent: {
+        name: [
+            new IsRequiredValidator(),  // check if current input is required and present
+            new ValidValuesValidator({
+                values: ['James', 'John'],
+                onFail: 'Unhandled'
+            })
+            new InvalidValuesValidator({    // check current input for registered invalid values
+                values: ['Mercedes', 'Toyota'],
+                onFail: 'ValidatorFailedIntent'
+            }),
+            new ReplaceValuesValidator(     // replace occurrences of current input with registered replace value
+                {
+                    values: ['Shawn', 'Sean'],
+                    mapTo: 'John'
+                },
+                {
+                    values: ['Mike', 'Mark'],
+                    mapTo: 'Michael'
+                }
+            )
+        ]
+    }
+}
+
+// @language=typescript
+
+// config.ts
+
+validation: {
+    MyNameIsIntent: {
+        name: [
+            new IsRequiredValidator(),      // check if current input is required and present
+            new ValidValuesValidator({
+                values: ['James', 'John'],
+                onFail: 'Unhandled'
+            })
+            new InvalidValuesValidator({    // check current input for registered invalid values
+                values: ['Mercedes', 'Toyota'],
+                onFail: 'ValidatorFailedIntent'
+            }),
+            new ReplaceValuesValidator(     // replace occurrences of current input with registered replace value
+                {
+                    values: ['Shawn', 'Sean'],
+                    mapTo: 'John'
+                },
+                {
+                    values: ['Mike', 'Mark'],
+                    mapTo: 'Michael'
+                }
+            )
+        ]
+    }
+}
+```
+
+Each Validator derives from a base abstract class `Validator`, which contains an abstract function `validate()` that gets overwritten by each deriving Validator. This means that you can easily write your own Validators and use them in your configuration file.
+
+An alternative would be to write your own validating function in the configuration file.
+
+```javascript
+// @language=javascript
+
+// config.ts
+
+validation: {
+    MyNameIsIntent: {
+        name: function() {
+            if(this.$inputs.name.value === 'John') {
+                this.toIntent('Unhandled');
+            }
+        }
+    }
+}
+
+// @language=typescript
+
+// config.ts
+
+validation: {
+    MyNameIsIntent: {
+        name: function(this: any) {
+            if(this.$inputs.name.value === 'John') {
+                this.toIntent('Unhandled');
+            }
+        }
+    }
+}
+```
 
 
 <!--[metadata]: {"description": "Learn how to deal with entities and slot values provided by your users.", "route": "routing/input"}-->

@@ -1,7 +1,7 @@
-import {EventEmitter} from "events";
-import {BaseApp} from "./BaseApp";
-import {SessionConstants, EnumRequestType} from "./enums";
-import {SpeechBuilder} from "./SpeechBuilder";
+import { EventEmitter } from "events";
+import { BaseApp } from "./BaseApp";
+import { SessionConstants, EnumRequestType } from "./enums";
+import { SpeechBuilder } from "./SpeechBuilder";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 const _sample = require('lodash.sample');
@@ -18,9 +18,11 @@ import {
     SessionAttributes, SessionData
 } from "./Interfaces";
 
-import {User} from "./User";
-import {Cms} from "./Cms";
-import {Log} from "./Log";
+import { User } from "./User";
+import { Cms } from "./Cms";
+import { Log } from "./Log";
+import { Validator, ValidationError } from "./validators";
+import { JovoError, ErrorCode } from "./errors/JovoError";
 
 export abstract class Jovo extends EventEmitter {
     readonly $host: Host;
@@ -387,7 +389,7 @@ export abstract class Jovo extends EventEmitter {
      * keys from the inputMap
      * @param {*} inputMap
      */
-    mapInputs(inputMap: {[key: string]: string}): void {
+    mapInputs(inputMap: { [key: string]: string }): void {
         const mappedInputs: Inputs = {};
 
         Object.keys(this.$inputs).forEach((inputKey: string) => {
@@ -518,7 +520,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type END
      * @public
      * @return {boolean}
-     */  
+     */
     isEndRequest(): boolean {
         return this.$type.type === EnumRequestType.END;
     }
@@ -527,7 +529,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type AUDIOPLAYER
      * @public
      * @return {boolean}
-     */   
+     */
     isAudioPlayerRequest(): boolean {
         return this.$type.type === EnumRequestType.AUDIOPLAYER;
     }
@@ -536,8 +538,69 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type ON_ELEMENT_SELECTED
      * @public
      * @return {boolean}
-     */  
+     */
     isElementSelectedRequest(): boolean {
         return this.$type.type === EnumRequestType.ON_ELEMENT_SELECTED;
+    }
+
+    /**
+     * 
+     * @param schema 
+     */
+    async validate(schema: { [key: string]: any }) {
+        const failedValidators: any[] = [];
+        for (const input in schema) {
+            if (!schema.hasOwnProperty(input)) {
+                continue;
+            }
+
+            const validator = schema[input];
+            if (validator.constructor === Array) {
+                for (const v of validator) {
+                    await this.parseForValidator(v, this.$inputs[input], failedValidators);
+                }
+            } else {
+                await this.parseForValidator(validator, this.$inputs[input], failedValidators);
+            }
+        }
+        return {
+            failed(...args: string[]) {
+                return failedValidators.reduce((res, v) => {
+                    for (const p of args) {
+                        if (v.indexOf(p) === -1) {
+                            return res;
+                        }
+                    }
+                    res.push(v);
+                    return res;
+                }, []).length > 0;
+            }
+        }
+    }
+
+    private async parseForValidator(validator: Validator | Function, input: any, failedValidators: any[]) {
+        try {
+            if (validator instanceof Validator) {
+                validator.setInputToValidate(input);
+                await validator.validate(this);
+            } else if (typeof validator === 'function') {
+                await validator.call(this);
+            } else {
+                throw new JovoError(
+                    'This validation type is not supported.',
+                    ErrorCode.ERR_PLUGIN,
+                    'jovo-plugin-validation',
+                    undefined,
+                    'Please make sure you only use supported types of validation such as a function or an extended Validator',
+                    ''
+                );
+            }
+        } catch (err) {
+            if (err.constructor === ValidationError) {
+                failedValidators.push([err.validator, input.name]);
+            } else {
+                throw err;
+            }
+        }
     }
 }

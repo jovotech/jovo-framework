@@ -1,11 +1,10 @@
 
 import { App } from 'jovo-framework';
+import { ValidationError, IsRequiredValidator, ValidValuesValidator, InvalidValuesValidator, Jovo } from 'jovo-core';
 import { GoogleAssistant } from 'jovo-platform-googleassistant';
 import { Alexa } from 'jovo-platform-alexa';
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { FileDb } from 'jovo-db-filedb';
-import { Validation } from 'jovo-plugin-validation';
-
 
 const app = new App();
 
@@ -14,7 +13,6 @@ app.use(
     new Alexa(),
     new JovoDebugger(),
     new FileDb(),
-    new Validation()
 );
 
 app.setHandler({
@@ -24,51 +22,32 @@ app.setHandler({
         this.toStateIntent('STATE', 'ExampleIntent');
     },
 
-    MyNameIsIntent() {
-        console.log('MyNameIsIntent called!');
+    async MyNameIsIntent() {
+        const schema = {
+            name: [
+                new IsRequiredValidator(),
+                new ValidValuesValidator(['Mercedes', 'Bmw', RegExp('dsa.', 'g'), /hll./g]),
+                async function (this: Jovo) {
+                    if (this.$inputs.name.value === 'baby')
+                        throw new ValidationError('Function failed.', 'OwnFunction');
+                }
+            ],
+            day: new ValidValuesValidator(['', ''])
+        }
+
+        for (let i = 0; i < 100; i++) {
+            console.time('time');
+            const validation = await this.validate(schema);
+            if (validation.failed('name', 'ValidValuesValidator')) { }
+            console.timeEnd('time');
+        }
+
         this.tell(`Hey ${this.$inputs.name.value}`);
-    },
-
-    MyNameIsIntentFailed() {
-        this.tell('MyNameIsIntent failed.');
-    },
-
-    DayIntent() {
-        this.tell(`${this.$inputs.day.value}, huh?`);
-    },
-
-    DayIntentFailed() {
-        this.tell('DayIntent failed.');
     },
 
     Unhandled() {
         this.tell('Unhandled');
-    },
-
-    STATE: {
-        ExampleIntent() {
-            console.log('Example');
-            this.ask('What is your name?');
-        },
-
-        MyNameIsIntent() {
-            console.log('MyNameIsIntent called in STATE!');
-            this.tell(`Hey ${this.$inputs.name.value}`);
-        },
-
-        MyNameIsIntentFailed() {
-            this.tell('MyNameIsIntent failed in STATE.');
-        },
-
-        DayIntent() {
-            this.tell(`STATE: ${this.$inputs.day.value}, huh?`);
-        },
-
-        DayIntentFailed() {
-            this.tell('DayIntent failed in STATE.');
-        },
     }
-
 });
 
 
