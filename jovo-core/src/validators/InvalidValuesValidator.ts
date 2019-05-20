@@ -8,6 +8,11 @@ export class InvalidValuesValidator extends Validator {
         this.invalidValues = invalidValues;
     }
 
+    /**
+     * Filters the current request input data for invalid values.
+     * @throws ValidationError if input data is invalid.
+     * @throws JovoError if value is not of type string|RegExp.
+     */
     validate() {
         const input = this.inputToValidate;
 

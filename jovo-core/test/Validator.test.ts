@@ -8,7 +8,7 @@ import {
 describe('Validator', () => {
     test('Validator.setInputToValidate()', () => {
         class ValidatorImpl extends Validator {
-            validate() { }
+            validate() { }  // tslint:disable-line
         }
         const v = new ValidatorImpl();
         expect(v['inputToValidate']).toBeUndefined();
@@ -31,7 +31,7 @@ describe('IsRequiredValidator', () => {
                 key: 'name',
                 value: ''
             });
-            expect(() => v.validate()).toThrow('IsRequiredValidator failed.')
+            expect(() => v.validate()).toThrow('IsRequiredValidator failed.');
         });
 
         test('should succeed with value set', () => {
@@ -52,7 +52,7 @@ describe('ValidValuesValidator', () => {
             v.setInputToValidate({
                 key: 'key',
                 value: ''
-            })
+            });
             v.validate();
         });
 
@@ -70,7 +70,7 @@ describe('ValidValuesValidator', () => {
             v.setInputToValidate({
                 key: 'key',
                 value: 'valid1'
-            })
+            });
             v.validate();
         });
 
@@ -79,7 +79,7 @@ describe('ValidValuesValidator', () => {
             v.setInputToValidate({
                 key: 'key',
                 value: 'valid3'
-            })
+            });
             expect(() => v.validate()).toThrow('ValidValuesValidator failed.');
         });
     });
@@ -92,7 +92,7 @@ describe('InvalidValuesValidator', () => {
             v.setInputToValidate({
                 key: 'key',
                 value: ''
-            })
+            });
             v.validate();
         });
 
@@ -110,7 +110,7 @@ describe('InvalidValuesValidator', () => {
             v.setInputToValidate({
                 key: 'key',
                 value: 'invalid1'
-            })
+            });
             expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
         });
 

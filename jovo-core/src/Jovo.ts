@@ -544,11 +544,12 @@ export abstract class Jovo extends EventEmitter {
     }
 
     /**
-     * 
-     * @param schema 
+     * Validates incoming request input data for all registered validators.
+     * @param schema The object containing all validators of type Validator or function.
+     * @returns object Contains function failed() to filter for failed validators.
      */
-    async validate(schema: { [key: string]: any }) {
-        const failedValidators: any[] = [];
+    async validate(schema: { [key: string]: any }) {    // tslint:disable-line:no-any
+        const failedValidators: any[] = [];     // tslint:disable-line:no-any
         for (const input in schema) {
             if (!schema.hasOwnProperty(input)) {
                 continue;
@@ -575,10 +576,17 @@ export abstract class Jovo extends EventEmitter {
                     return res;
                 }, []).length > 0;
             }
-        }
+        };
     }
 
-    private async parseForValidator(validator: Validator | Function, input: any, failedValidators: any[]) {
+    /**
+     * Helper function for this.validate().
+     * @param validator The current Validator to call the current request input data on.
+     * @param input The current input data to validate.
+     * @param failedValidators An array of already failed validators.
+     * @throws JovoError if the validator has an unsupported type.
+     */
+    private async parseForValidator(validator: Validator | Function, input: any, failedValidators: any[]) {     // tslint:disable-line:no-any
         try {
             if (validator instanceof Validator) {
                 validator.setInputToValidate(input);
