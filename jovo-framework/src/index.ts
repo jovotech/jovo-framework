@@ -3,6 +3,8 @@ import {App} from "./App";
 import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
 import {Jovo, Data, Handler, Util, Log, LogLevel} from 'jovo-core';
 import {Route} from "./middleware/Router";
+import { Component } from "./middleware/Component";
+
 export { App } from './App';
 export { server as Webhook } from './server';
 export { verifiedServer as WebhookVerified } from './server';
@@ -17,6 +19,7 @@ export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log };
 
+export { Component, Config as ComponentConfig, Response as ComponentResponse} from './middleware/Component';
 
 declare module 'express' {
     interface Application {
@@ -118,6 +121,22 @@ declare module 'jovo-core/dist/src/Jovo' {
          * @return {*}
          */
         getRoute(): Route;
+
+        /**
+         * Delegates the requests & responses to the component defined with "componentName"
+         * @param {string} componentName 
+         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @returns {Promise<void>}
+         */
+        delegate(componentName: string, onCompletedIntent: string): Promise<void>;
+    }
+}
+
+declare module 'jovo-core/dist/src/Jovo' {
+    export interface Jovo {
+        $components: {
+            [key: string]: Component;
+        };
     }
 }
 
