@@ -31,9 +31,6 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
-        if (typeof this.config.enabled === 'undefined') {
-            this.config.enabled = true;
-        }
         this.actionSet = new ActionSet([], this);
     }
 
@@ -51,6 +48,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             };
 
             if (plugin.config) {
+                if(typeof plugin.config.enabled === 'undefined') {
+                    plugin.config.enabled = true;
+                }
 
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
                 const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
