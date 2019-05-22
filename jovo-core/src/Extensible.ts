@@ -1,13 +1,13 @@
-import * as EventEmitter from "events";
-import {Plugin, PluginConfig} from "./Interfaces";
-import {ActionSet} from "./ActionSet";
-import {Middleware} from "./Middleware";
+import * as EventEmitter from 'events';
+import {Plugin, PluginConfig} from './Interfaces';
+import {ActionSet} from './ActionSet';
+import {Middleware} from './Middleware';
+import {Log} from './Log';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _isEqual = require('lodash.isequal');
 import _cloneDeep = require('lodash.clonedeep');
 import _transform = require('lodash.transform');
-import {Log} from "./Log";
 
 
 export interface ExtensibleConfig extends PluginConfig {
@@ -31,6 +31,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
         if (config) {
             this.config = _merge(this.config, config);
         }
+        if (typeof this.config.enabled === 'undefined') {
+            this.config.enabled = true;
+        }
         this.actionSet = new ActionSet([], this);
     }
 
@@ -42,9 +45,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
     use(...plugins: Plugin[]): this {
         plugins.forEach((plugin) => {
             const name = plugin.name || plugin.constructor.name;
-            // needed to instantiate the object from a string
+            // needed to differentiate the default configuration from the constructor-passed config.
             const tmpConstructorArray: any = { // tslint:disable-line
-                [plugin.constructor.name]: plugin.constructor
+                [plugin.constructor.name]: plugin.constructor,
             };
 
             if (plugin.config) {
@@ -52,21 +55,26 @@ export abstract class Extensible extends EventEmitter implements Plugin {
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
                 const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
                 const appConfig = _cloneDeep(this.config);
-
-                const pluginAppConfig: any = {}; // tslint:disable-line
-
-                Object.keys(pluginDefaultConfig).forEach((item: string) => {
-                    pluginAppConfig[item] = _get(appConfig, `plugin.${name}.${item}`);
-                });
-
-                const pluginConstructorConfig: any = {}; // tslint:disable-line
                 const constructorConfig = difference(plugin.config, pluginDefaultConfig);
 
-                Object.keys(pluginDefaultConfig).forEach((item: string) => {
-                    pluginConstructorConfig[item] = _get(constructorConfig, `${item}`);
-                });
+                for (const prop in plugin.config) {
+                    if (pluginDefaultConfig.hasOwnProperty(prop)) {
+                        let val;
+                        const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
 
-                plugin.config = _merge(pluginDefaultConfig, pluginAppConfig, constructorConfig );
+                        if (typeof constructorConfig[prop] !== 'undefined') {
+                            val = plugin.config[prop];
+                        } else if (typeof appConfigVal !== 'undefined') {
+                            val = appConfigVal;
+                        } else {
+                            val = pluginDefaultConfig[prop];
+                        }
+                        plugin.config[prop] = val;
+                    } else {
+                        Log.warn(`[${name}] Property '${prop}' passed as config-option for plugin '${name}' but not defined in the default-config. Only properties that exist in the default-configuration can be set!`);
+                    }
+                }
+
                 if (this.config.plugin && this.config.plugin[name]) {
                     this.config.plugin[name] = plugin.config;
                 }
@@ -83,7 +91,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             }
             if (typeof plugin.config === 'undefined' || // enabled by default, even without config
                 plugin.config && typeof plugin.config.enabled === 'undefined' || // enabled with config, but without enabled property
-                plugin.config && typeof plugin.config.enabled === 'boolean' && plugin.config.enabled === true) { // enabled with config, and boolean enabled property
+                plugin.config && typeof plugin.config.enabled === 'boolean' && plugin.config.enabled) { // enabled with config, and boolean enabled property
                 this.$plugins.set(name, plugin);
 
                 plugin.install(this);
@@ -95,7 +103,6 @@ export abstract class Extensible extends EventEmitter implements Plugin {
                 }
                 this.emit('use', plugin);
             }
-
 
 
         });
@@ -168,6 +175,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
      */
     uninstall?(extensible: Extensible): void;
 }
+
 /**
  * @see https://gist.github.com/Yimiprod/7ee176597fef230d1451
  * Deep diff between two object, using lodash
@@ -186,5 +194,6 @@ function difference(object: any, base: any) {
             }
         });
     }
+
     return changes(object, base);
 }
