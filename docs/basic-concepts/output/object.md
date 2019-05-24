@@ -91,7 +91,7 @@ And the generated response would be the following:
 }
 ```
 
-If you are reading the logs returned from the server (e.g. AWS CloudWatch), you can use the [`JSON.stringify()`] method to turn the object into a human-readable JSON string response:
+If you are reading the logs returned from the server (e.g. AWS CloudWatch), you can use the `JSON.stringify()` method to turn the object into a human-readable JSON string response:
 
 ```js
 this.tell('Hello World!');
