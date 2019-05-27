@@ -1,6 +1,8 @@
-import {Input, JovoRequest, SessionData, Inputs, SessionConstants} from "jovo-core";
+import { Input, JovoRequest, SessionData, Inputs, SessionConstants } from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import * as util from 'util';
+import { Interface } from "readline";
 
 export interface SessionAttributes {
     [key: string]: any; //tslint:disable-line
@@ -16,6 +18,7 @@ export interface Session {
 
 export interface Context {
     System: System;
+    Viewport: Viewport;
     AudioPlayer: {
         token: string;
         offsetInMilliseconds: number;
@@ -73,6 +76,42 @@ export interface System {
     apiAccessToken?: string;
 }
 
+export interface Viewport {
+    experiences: Experiences;
+    shape: string;
+    pixelWidth: number;
+    pixelHeight: number;
+    dpi: number;
+    currentPixelWidth: number;
+    currentPixelHeight: number;
+    touch: TouchMethods;
+    keyboard: InputMechanisms;
+    video: Codecs;
+}
+
+export interface Experiences {
+    [index: number]: Experience;
+}
+
+export interface Experience {
+    arcMinuteWidth: number;
+    arcMinuteHeight: number;
+    canRotate: boolean;
+    canResize: boolean;
+}
+
+export interface TouchMethods {
+    [index: number]: string;
+}
+
+export interface InputMechanisms {
+    [index: number]: string;
+}
+
+export interface Codecs {
+    [index: number]: string;
+}
+
 export interface Device {
     deviceId: string;
 }
@@ -103,7 +142,7 @@ export interface Slot {
 export interface Intent {
     name: string;
     confirmationStatus: ConfirmationStatus;
-    slots?: {[key: string]: Slot};
+    slots?: { [key: string]: Slot };
 }
 
 export interface Request {
@@ -172,6 +211,62 @@ export class AlexaRequest implements JovoRequest {
     request?: Request;
 
     // JovoRequest implementation
+
+    getAlexaDevice(): string {
+        // console.log(alexaRequest);
+        console.log("viewport : " + util.inspect(this.context!.Viewport));
+        let device = 'Echo - voice only';
+
+        if (this.context && this.context.Viewport ) {
+
+            device = "Unknow Device with Screen "+ this.context!.Viewport.pixelWidth + 'x' + this.context!.Viewport.pixelHeight;
+
+            if (this.context.Viewport.pixelWidth === 480 &&
+                this.context!.Viewport.pixelHeight === 480 &&
+                this.context!.Viewport.shape==='ROUND') {
+            device = 'Alexa Small Hub'; //'Echo Spot';
+        }
+            if (this.context!.Viewport.pixelWidth === 1280 &&
+                this.context!.Viewport.pixelHeight === 720 &&
+                this.context!.Viewport.shape==='RECTANGLE') {
+                device = 'Alexa HD Ready TV';
+            }
+            if (this.context!.Viewport.pixelWidth === 1920 &&
+                this.context!.Viewport.pixelHeight === 1080 && 
+                this.context!.Viewport.shape==='RECTANGLE') {
+                device = 'Alexa Extra Large TV'; //'Full HD TV';
+            }
+
+
+            if (this.context!.Viewport.pixelWidth === 1024 &&
+                this.context!.Viewport.pixelHeight === 600 &&
+                this.context!.Viewport.shape==='RECTANGLE') {
+                device = 'Alexa Medium Hub'; //'Echo Show 1st gen';
+            }
+
+            if (this.context!.Viewport.pixelWidth === 1280 &&
+                this.context!.Viewport.pixelHeight === 800 &&
+                this.context!.Viewport.shape==='RECTANGLE') {
+                device = 'Alexa Large Hub' ;//'Echo Show 2nd gen';
+            }
+        }
+        console.log("Device in method = " + device);
+
+        return device;
+    }
+
+    getScreenResolution(alexaRequest: AlexaRequest): string {
+        // console.log(alexaRequest);
+        let device = '';
+
+        const viewPort = _get(alexaRequest, 'context.Viewport');
+        if (viewPort) {
+
+            device = _get(viewPort, 'pixelWidth') + 'x' + _get(viewPort, 'pixelHeight');
+        }
+
+        return device;
+    }
 
     getSessionId(): string | undefined {
         if (this.session) {
@@ -397,7 +492,7 @@ export class AlexaRequest implements JovoRequest {
     }
 
     addInput(key: string, value: string | object) {
-        if ( typeof value === 'string') {
+        if (typeof value === 'string') {
             _set(this, `request.intent.slots.${key}`, {
                 name: key,
                 value
@@ -580,7 +675,7 @@ export class AlexaRequest implements JovoRequest {
      * Returns geolocation coordinate accuracy in meters
      * @return {number | undefined} [0, MAX_INTEGER]
      */
-    getCoordinateAccuracy(): number | undefined{
+    getCoordinateAccuracy(): number | undefined {
         return _get(this.getCoordinateObject(), 'accuracyInMeters');
     }
 
@@ -722,7 +817,7 @@ export class AlexaRequest implements JovoRequest {
 
     // fromJSON is used to convert an serialized version
     // of the User to an instance of the class
-    static fromJSON(json: AlexaRequestJSON|string): AlexaRequest {
+    static fromJSON(json: AlexaRequestJSON | string): AlexaRequest {
         if (typeof json === 'string') {
             // if it's a string, parse it first
             return JSON.parse(json, AlexaRequest.reviver);
