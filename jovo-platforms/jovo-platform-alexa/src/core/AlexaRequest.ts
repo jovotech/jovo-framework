@@ -226,27 +226,27 @@ export class AlexaRequest implements JovoRequest {
                 this.context!.Viewport.shape==='ROUND') {
             device = 'Alexa Small Hub'; //'Echo Spot';
         }
-            if (this.context!.Viewport.pixelWidth === 1280 &&
-                this.context!.Viewport.pixelHeight === 720 &&
-                this.context!.Viewport.shape==='RECTANGLE') {
+            if (this.context.Viewport.pixelWidth === 1280 &&
+                this.context.Viewport.pixelHeight === 720 &&
+                this.context.Viewport.shape==='RECTANGLE') {
                 device = 'Alexa HD Ready TV';
             }
-            if (this.context!.Viewport.pixelWidth === 1920 &&
-                this.context!.Viewport.pixelHeight === 1080 && 
-                this.context!.Viewport.shape==='RECTANGLE') {
+            if (this.context.Viewport.pixelWidth === 1920 &&
+                this.context.Viewport.pixelHeight === 1080 && 
+                this.context.Viewport.shape==='RECTANGLE') {
                 device = 'Alexa Extra Large TV'; //'Full HD TV';
             }
 
 
-            if (this.context!.Viewport.pixelWidth === 1024 &&
-                this.context!.Viewport.pixelHeight === 600 &&
-                this.context!.Viewport.shape==='RECTANGLE') {
+            if (this.context.Viewport.pixelWidth === 1024 &&
+                this.context.Viewport.pixelHeight === 600 &&
+                this.context.Viewport.shape==='RECTANGLE') {
                 device = 'Alexa Medium Hub'; //'Echo Show 1st gen';
             }
 
-            if (this.context!.Viewport.pixelWidth === 1280 &&
-                this.context!.Viewport.pixelHeight === 800 &&
-                this.context!.Viewport.shape==='RECTANGLE') {
+            if (this.context.Viewport.pixelWidth === 1280 &&
+                this.context.Viewport.pixelHeight === 800 &&
+                this.context.Viewport.shape==='RECTANGLE') {
                 device = 'Alexa Large Hub' ;//'Echo Show 2nd gen';
             }
         }
