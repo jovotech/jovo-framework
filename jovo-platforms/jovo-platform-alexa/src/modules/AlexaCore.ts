@@ -30,7 +30,7 @@ export class AlexaCore implements Plugin {
         const requestObject = handleRequest.host.getRequestObject();
         if (requestObject.version &&
             requestObject.request) {
-            handleRequest.jovo = new AlexaSkill(handleRequest.app, handleRequest.host);
+            handleRequest.jovo = new AlexaSkill(handleRequest.app, handleRequest.host, handleRequest);
         }
     }
 

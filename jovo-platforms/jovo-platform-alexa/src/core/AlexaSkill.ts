@@ -1,4 +1,4 @@
-import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
+import {BaseApp, Jovo, Host, SpeechBuilder, HandleRequest} from "jovo-core";
 import {
     AlexaRequest,
     Geolocation,
@@ -35,8 +35,8 @@ export class AlexaSkill extends Jovo {
     // @ts-ignore
     $user: AlexaUser;
 
-    constructor(app: BaseApp, host: Host) {
-        super(app, host);
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
+        super(app, host, handleRequest);
         this.$alexaSkill = this;
         this.$response = new AlexaResponse();
         this.$speech = new AlexaSpeechBuilder(this);

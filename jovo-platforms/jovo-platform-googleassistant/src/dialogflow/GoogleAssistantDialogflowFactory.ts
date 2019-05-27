@@ -1,4 +1,4 @@
-import {BaseApp, Host} from "jovo-core";
+import {BaseApp, HandleRequest, Host} from "jovo-core";
 import {GoogleAction} from "../core/GoogleAction";
 import {
     PlatformFactory,
@@ -12,8 +12,8 @@ import {GoogleActionResponse, GoogleActionResponseJSON} from "../core/GoogleActi
 
 
 export class GoogleAssistantDialogflowFactory implements PlatformFactory {
-    createPlatformRequest(app: BaseApp, host: Host): GoogleAction {
-        return new GoogleAction(app, host);
+    createPlatformRequest(app: BaseApp, host: Host, handleRequest?: HandleRequest): GoogleAction {
+        return new GoogleAction(app, host, handleRequest);
     }
 
     createRequest(json: DialogflowRequestJSON): DialogflowRequest {

@@ -1,4 +1,4 @@
-import {BaseApp, Jovo, Host, SpeechBuilder} from "jovo-core";
+import {BaseApp, Jovo, Host, SpeechBuilder, HandleRequest} from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import {DialogflowUser} from "./DialogflowUser";
@@ -8,8 +8,8 @@ export type SupportedIntegration = 'FacebookMessenger' | 'Slack';
 export class DialogflowAgent extends Jovo {
     $dialogflowAgent: DialogflowAgent;
 
-    constructor(app: BaseApp, host: Host) {
-        super(app, host);
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
+        super(app, host, handleRequest);
         this.$dialogflowAgent = this;
         this.$user = new DialogflowUser(this);
     }

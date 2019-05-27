@@ -1,4 +1,4 @@
-import {BaseApp, Jovo, SpeechBuilder, Host} from "jovo-core";
+import {BaseApp, Jovo, SpeechBuilder, Host, HandleRequest} from "jovo-core";
 import _get = require('lodash.get');
 const _sample = require('lodash.sample');
 
@@ -15,8 +15,8 @@ export class GoogleAction extends Jovo {
 
     // platformRequest: T;
 
-    constructor(app: BaseApp, host: Host) {
-        super(app, host);
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
+        super(app, host, handleRequest);
         this.$googleAction = this;
         // this.platformRequest = platformRequest;
         this.$speech = new GoogleActionSpeechBuilder(this);

@@ -38,7 +38,7 @@ export class GoogleAssistantCore implements Plugin {
             requestObject.conversation &&
             requestObject.surface &&
             requestObject.availableSurfaces) {
-            handleRequest.jovo = new GoogleAction(handleRequest.app, handleRequest.host);
+            handleRequest.jovo = new GoogleAction(handleRequest.app, handleRequest.host, handleRequest);
         }
     }
 

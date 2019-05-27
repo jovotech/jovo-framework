@@ -15,7 +15,7 @@ import {
     Output,
     RequestType,
     NLUData,
-    SessionAttributes, SessionData
+    SessionAttributes, SessionData, HandleRequest
 } from "./Interfaces";
 
 import {User} from "./User";
@@ -27,6 +27,7 @@ export abstract class Jovo extends EventEmitter {
     readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
+    $handleRequest?: HandleRequest;
     $jovo: Jovo;
     $user: User;
     $nlu?: NLUData;
@@ -44,10 +45,11 @@ export abstract class Jovo extends EventEmitter {
 
     $requestSessionAttributes: SessionAttributes = {};
 
-    constructor(app: BaseApp, host: Host) {
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
         super();
         this.setMaxListeners(0);
         this.$jovo = this;
+        this.$handleRequest = handleRequest;
         this.$host = host;
         this.$app = app;
         this.$data = {};
@@ -518,7 +520,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type END
      * @public
      * @return {boolean}
-     */  
+     */
     isEndRequest(): boolean {
         return this.$type.type === EnumRequestType.END;
     }
@@ -527,7 +529,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type AUDIOPLAYER
      * @public
      * @return {boolean}
-     */   
+     */
     isAudioPlayerRequest(): boolean {
         return this.$type.type === EnumRequestType.AUDIOPLAYER;
     }
@@ -536,7 +538,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type ON_ELEMENT_SELECTED
      * @public
      * @return {boolean}
-     */  
+     */
     isElementSelectedRequest(): boolean {
         return this.$type.type === EnumRequestType.ON_ELEMENT_SELECTED;
     }
