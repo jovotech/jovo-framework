@@ -1,8 +1,7 @@
 import { Input, JovoRequest, SessionData, Inputs, SessionConstants } from "jovo-core";
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import * as util from 'util';
-import { Interface } from "readline";
+
 
 export interface SessionAttributes {
     [key: string]: any; //tslint:disable-line
@@ -18,7 +17,7 @@ export interface Session {
 
 export interface Context {
     System: System;
-    Viewport: Viewport;
+    Viewport?: Viewport;
     AudioPlayer: {
         token: string;
         offsetInMilliseconds: number;
@@ -84,9 +83,9 @@ export interface Viewport {
     dpi: number;
     currentPixelWidth: number;
     currentPixelHeight: number;
-    touch: TouchMethods;
-    keyboard: InputMechanisms;
-    video: Codecs;
+    touch?: TouchMethods;
+    keyboard?: InputMechanisms;
+    video?: Codecs;
 }
 
 export interface Experiences {
@@ -213,17 +212,15 @@ export class AlexaRequest implements JovoRequest {
     // JovoRequest implementation
 
     getAlexaDevice(): string {
-        // console.log(alexaRequest);
-        console.log("viewport : " + util.inspect(this.context!.Viewport));
         let device = 'Echo - voice only';
 
         if (this.context && this.context.Viewport ) {
 
-            device = "Unknow Device with Screen "+ this.context!.Viewport.pixelWidth + 'x' + this.context!.Viewport.pixelHeight;
+            device = "Unknow Device with Screen "+ this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
 
             if (this.context.Viewport.pixelWidth === 480 &&
-                this.context!.Viewport.pixelHeight === 480 &&
-                this.context!.Viewport.shape==='ROUND') {
+                this.context.Viewport.pixelHeight === 480 &&
+                this.context.Viewport.shape==='ROUND') {
             device = 'Alexa Small Hub'; //'Echo Spot';
         }
             if (this.context.Viewport.pixelWidth === 1280 &&
