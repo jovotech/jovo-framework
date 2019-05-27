@@ -48,17 +48,19 @@ export abstract class Extensible extends EventEmitter implements Plugin {
             };
 
             if (plugin.config) {
-                if(typeof plugin.config.enabled === 'undefined') {
-                    plugin.config.enabled = true;
-                }
-
                 const emptyDefaultPluginObject = new tmpConstructorArray[plugin.constructor.name]();
                 const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
+
+                if (typeof pluginDefaultConfig.enabled === 'undefined') {
+                    pluginDefaultConfig.enabled = true;
+                }
+
                 const appConfig = _cloneDeep(this.config);
                 const constructorConfig = difference(plugin.config, pluginDefaultConfig);
 
+
                 for (const prop in plugin.config) {
-                    if (pluginDefaultConfig.hasOwnProperty(prop)) {
+                    if (prop in pluginDefaultConfig) {
                         let val;
                         const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
 
@@ -186,9 +188,9 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 // tslint:disable-next-line
 function difference(object: any, base: any) {
     // tslint:disable-next-line
-    function changes(object: any, base: any) {
+    function changes(object: any, base: { [key: string]: any }) {
         // tslint:disable-next-line
-        return _transform(object, (result: any, value: any, key: any) => {
+        return _transform(object, (result: { [key: string]: any }, value: any, key: string) => {
             if (!_isEqual(value, base[key])) {
                 result[key] = (typeof value === 'object' && typeof base[key] === 'object') ? changes(value, base[key]) : value;
             }
