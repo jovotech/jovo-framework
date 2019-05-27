@@ -252,18 +252,6 @@ export class AlexaRequest implements JovoRequest {
         return device;
     }
 
-    getScreenResolution(alexaRequest: AlexaRequest): string {
-        // console.log(alexaRequest);
-        let device = '';
-
-        const viewPort = _get(alexaRequest, 'context.Viewport');
-        if (viewPort) {
-
-            device = _get(viewPort, 'pixelWidth') + 'x' + _get(viewPort, 'pixelHeight');
-        }
-
-        return device;
-    }
 
     getSessionId(): string | undefined {
         if (this.session) {
