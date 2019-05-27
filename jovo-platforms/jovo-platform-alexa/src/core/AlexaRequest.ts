@@ -76,21 +76,19 @@ export interface System {
 }
 
 export interface Viewport {
-    experiences: Experiences;
-    shape: string;
+    experiences: Experience [];
+    shape: 'RECTANGLE' | 'ROUND';
     pixelWidth: number;
     pixelHeight: number;
     dpi: number;
     currentPixelWidth: number;
     currentPixelHeight: number;
-    touch?: TouchMethods;
-    keyboard?: InputMechanisms;
-    video?: Codecs;
+
+    touch?: TouchMethod [];
+    keyboard?: InputMechanism [];
+    video?: {codecs: string[];};
 }
 
-export interface Experiences {
-    [index: number]: Experience;
-}
 
 export interface Experience {
     arcMinuteWidth: number;
@@ -99,17 +97,9 @@ export interface Experience {
     canResize: boolean;
 }
 
-export interface TouchMethods {
-    [index: number]: string;
-}
+export type TouchMethod = 'SINGLE';
+export type InputMechanism = 'DIRECTION';
 
-export interface InputMechanisms {
-    [index: number]: string;
-}
-
-export interface Codecs {
-    [index: number]: string;
-}
 
 export interface Device {
     deviceId: string;
@@ -247,8 +237,6 @@ export class AlexaRequest implements JovoRequest {
                 device = 'Alexa Large Hub' ;//'Echo Show 2nd gen';
             }
         }
-        console.log("Device in method = " + device);
-
         return device;
     }
 
