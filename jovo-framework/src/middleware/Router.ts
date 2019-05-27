@@ -1,8 +1,10 @@
-import {BaseApp, Plugin, EnumRequestType, HandleRequest, PluginConfig, Log} from 'jovo-core';
+import {BaseApp, Plugin, EnumRequestType, HandleRequest, PluginConfig, Log, SessionConstants} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import {App, Config as AppConfig} from "../App";
+import { Component } from "./Component";
+
 export interface Config extends PluginConfig {
     intentMap?: { [key: string]: string; };
     intentsToSkipUnhandled?: string[];
@@ -63,7 +65,13 @@ export class Router implements Plugin {
                 throw new Error(`Couldn't get route for intent request.`);
             }
 
-            const intent = Router.mapIntentName(this.config, handleRequest.jovo.$nlu.intent.name);
+            // parse component to `mapIntentName` only if it's active
+            let component: Component | undefined = undefined;
+            if (handleRequest.jovo.getSessionAttribute(SessionConstants.COMPONENT)) {
+                component = handleRequest.jovo.$components[handleRequest.jovo.getSessionAttribute(SessionConstants.COMPONENT)];
+            }
+
+            const intent = Router.mapIntentName(this.config, handleRequest.jovo.$nlu.intent.name, component);
             route = Router.intentRoute(handleRequest.jovo.$handlers, handleRequest.jovo.getState(), intent, (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled);
         } else if (route.type === EnumRequestType.END) {
             // do end stuff
@@ -177,21 +185,33 @@ export class Router implements Plugin {
 
     /**
      * Maps given intent by the platform with a map in the config
-     *
+     * Uses component's intent map if it's active
      * {
      *     'AMAZON.StopIntent': 'StopIntent',
      * }
      *
      * @param {Config} appConfig
      * @param {string} intentName
+     * @param {string} componentName
      * @returns {string}
      */
-    static mapIntentName(appConfig: AppConfig, intentName: string): string {
+    static mapIntentName(appConfig: Config, intentName: string, component?: Component): string {
+        // use component's intent map if component is in use:
+        if (component) {
+            const componentIntentMap = component.config.intentMap;
+            if (componentIntentMap && componentIntentMap[intentName]) {
+                Log.verbose(`Mapping intent from ${intentName} to ${componentIntentMap[intentName]}`);
+
+                return componentIntentMap[intentName];
+            }
+        }
+
         // use intent mapping if set
         if (appConfig.intentMap && appConfig.intentMap[intentName]) {
             Log.verbose(`Mapping intent from ${intentName} to ${appConfig.intentMap[intentName]}`);
             return appConfig.intentMap[intentName];
         }
+        
         return intentName;
     }
 
