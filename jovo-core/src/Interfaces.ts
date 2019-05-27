@@ -46,7 +46,7 @@ export interface Plugin {
 export interface PluginConfig {
     enabled?: boolean;
 
-    [index: number]: any; // tslint:disable-line
+    [index: string]: any; // tslint:disable-line
 }
 
 
