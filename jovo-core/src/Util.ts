@@ -3,6 +3,7 @@ import {RequestOptions} from "https";
 import _merge = require('lodash.merge');
 import * as url from 'url';
 import * as https from "https";
+import * as http from "http";
 
 export class Util {
 
@@ -59,13 +60,22 @@ export class Util {
     }
 
     /**
-     * Post
+     * Returns random in a given range.
+     * @param min
+     * @param max
+     */
+    static randomNumber(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Post https
      * @param options
      * @param payload
      */
-    static post(options: RequestOptions, payload: object): void;
-    static post(url: string, payload: object): void;
-    static post(urlOrOptions: string | RequestOptions, payload: object) {
+    static httpsPost(options: RequestOptions, payload: object): void;
+    static httpsPost(url: string, payload: object): void;
+    static httpsPost(urlOrOptions: string | RequestOptions, payload: object) {
         return new Promise((resolve, reject) => {
             const data = JSON.stringify(payload);
             const options = {
@@ -90,9 +100,65 @@ export class Util {
             }
 
 
-            console.log(options);
             // Set up the request
             const req = https.request(options, (res) => {
+                res.setEncoding('utf8');
+
+                let rawData = '';
+                res.on('data', (chunk) => {
+                    rawData += chunk;
+                });
+
+                res.on('end', () => {
+                    resolve(res);
+                });
+
+                res.on('error',  (e) => {
+                    reject(e);
+                });
+            }).on('error', (e) => {
+                reject(e);
+            });
+
+            // post the data
+            req.write(data);
+            req.end();
+
+        });
+    }
+    /**
+     * Post http
+     * @param options
+     * @param payload
+     */
+    static httpPost(options: RequestOptions, payload: object): void;
+    static httpPost(url: string, payload: object): void;
+    static httpPost(urlOrOptions: string | RequestOptions, payload: object) {
+        return new Promise((resolve, reject) => {
+            const data = JSON.stringify(payload);
+            const options = {
+                port: '80',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(data)
+                }
+            };
+
+            if (typeof urlOrOptions === 'string') {
+                const parsedUrl = url.parse(urlOrOptions);
+
+                _merge(options, {
+                    host: parsedUrl.host,
+                    path: parsedUrl.path
+                });
+
+            } else {
+                _merge(options, urlOrOptions);
+            }
+
+            // Set up the request
+            const req = http.request(options, (res) => {
                 res.setEncoding('utf8');
 
                 let rawData = '';
