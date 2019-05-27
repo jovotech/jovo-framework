@@ -90,12 +90,13 @@ export class I18Next extends BaseCmsPlugin {
     }
 
     async loadFiles(handleRequest: HandleRequest) {
+        if (!handleRequest.app.$cms.I18Next) {
+            handleRequest.app.$cms.I18Next = { resources: {} };
+        }
+
         const readdir = util.promisify(fs.readdir);
-        handleRequest.app.$cms.I18Next = {};
-        handleRequest.app.$cms.I18Next.resources = {};
 
         const filesDir = this.config.filesDir || '';
-
         if (fs.existsSync(filesDir)) {
             const dir = await readdir(filesDir);
 
@@ -108,11 +109,10 @@ export class I18Next extends BaseCmsPlugin {
                     const locale = file.split('.')[0];
                     Log.verbose(`- ${file}`);
 
-                    handleRequest.app.$cms.I18Next.resources[locale] = require(
-                        path.join(
-                            process.cwd(),
-                            filesDir,
-                            file));
+                    const pathToFile = path.join(process.cwd(), filesDir, file);
+                    const resource = _merge(handleRequest.app.$cms.I18Next.resources[locale], require(pathToFile));
+
+                    handleRequest.app.$cms.I18Next.resources[locale] = resource;
                 }
             });
         } else if (this.config.resources) {

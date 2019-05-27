@@ -769,6 +769,15 @@ export class AlexaRequest implements JovoRequest {
             typeof _get(this.getSupportedInterfaces(), 'AudioPlayer') !== 'undefined';
     }
 
+
+    /**
+     * checks if request has automotive context property
+     * @return {boolean}
+     */
+    hasAutomotive() {
+        return typeof _get(this, 'context.Automotive') !== 'undefined';
+    }
+
     /**
      * Returns display capability of request device
      * @return {boolean}
