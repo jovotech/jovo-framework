@@ -29,21 +29,30 @@
 			]
 		},
 		{
-			"name": "DayIntent",
+			"name": "WorkDayIntent",
 			"phrases": [
-				"{day}",
-				"today is {day}",
-				"this day is a {day}"
+				"{workday}",
+				"today is {workday}",
+				"this day is a {workday}"
 			],
 			"inputs": [
 				{
-					"name": "day",
+					"name": "workday",
 					"values": [
 						{
 							"value": "Monday"
 						},
 						{
 							"value": "Tuesday"
+						},
+						{
+							"value": "Wednesday"
+						},
+						{
+							"value": "Thursday"
+						},
+						{
+							"value": "Friday"
 						}
 					]
 				}

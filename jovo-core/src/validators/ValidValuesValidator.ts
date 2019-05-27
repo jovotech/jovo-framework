@@ -18,8 +18,10 @@ export class ValidValuesValidator extends Validator {
         const input = this.inputToValidate;
 
         if (!input || !input.value) {
-            // TODO return to onFail? return true? -> would replace isrequiredvalidator, maybe extend IsRequired?
-            return;
+            throw new ValidationError(
+                this.constructor.name,
+                `${this.constructor.name} failed.`
+            );
         }
 
         for (const v of this.validValues) {
@@ -39,8 +41,8 @@ export class ValidValuesValidator extends Validator {
         }
 
         throw new ValidationError(
-            `${this.constructor.name} failed.`,
-            this.constructor.name
+            this.constructor.name,
+            `${this.constructor.name} failed.`
         );
     }
 }

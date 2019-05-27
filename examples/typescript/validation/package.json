@@ -24,8 +24,7 @@
     "jovo-framework": "^2.2.3",
     "jovo-platform-alexa": "^2.2.4",
     "jovo-platform-googleassistant": "^2.2.3",
-    "jovo-plugin-debugger": "^2.2.2",
-    "jovo-plugin-validation": "^2.2.1"
+    "jovo-plugin-debugger": "^2.2.2"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

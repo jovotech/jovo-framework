@@ -1,4 +1,4 @@
-import {BaseApp, Host, Jovo, SessionConstants, SpeechBuilder, EnumRequestType} from "../src";
+import { BaseApp, Host, Jovo, SessionConstants, SpeechBuilder, EnumRequestType, Validator, ValidationError, IsRequiredValidator, ValidValuesValidator } from "../src";
 process.env.NODE_ENV = 'UNIT_TEST';
 
 class JovoImpl extends Jovo {
@@ -119,7 +119,7 @@ class DummyHost implements Host {
      * Dummy setResponse implementation
      */
     setResponse(obj: any): Promise<any> { // tslint:disable-line
-        return new Promise((resolve, reject) => {});
+        return new Promise((resolve, reject) => { });
     }
 
     /**
@@ -349,8 +349,8 @@ test('test getInput', () => {
     };
 
     expect(jovo.getInput('inputA')).toEqual({
-            name: 'inputA',
-            value: 'foobar'
+        name: 'inputA',
+        value: 'foobar'
     });
 });
 
@@ -427,12 +427,12 @@ test('test showAccountLinkingCard', () => {
 describe('test isLaunchRequest()', () => {
     test('should return true', () => {
         jovo.$type.type = EnumRequestType.LAUNCH;
-    
+
         const result = jovo.isLaunchRequest();
-    
+
         expect(result).toBe(true);
     });
-    
+
     test('should return false', () => {
         jovo.$type.type = 'test';
 
@@ -445,12 +445,12 @@ describe('test isLaunchRequest()', () => {
 describe('test isIntentRequest()', () => {
     test('should return true', () => {
         jovo.$type.type = EnumRequestType.INTENT;
-    
+
         const result = jovo.isIntentRequest();
-    
+
         expect(result).toBe(true);
     });
-    
+
     test('should return false', () => {
         jovo.$type.type = 'test';
 
@@ -463,12 +463,12 @@ describe('test isIntentRequest()', () => {
 describe('test isEndRequest()', () => {
     test('should return true', () => {
         jovo.$type.type = EnumRequestType.END;
-    
+
         const result = jovo.isEndRequest();
-    
+
         expect(result).toBe(true);
     });
-    
+
     test('should return false', () => {
         jovo.$type.type = 'test';
 
@@ -481,12 +481,12 @@ describe('test isEndRequest()', () => {
 describe('test isAudioPlayerRequest()', () => {
     test('should return true', () => {
         jovo.$type.type = EnumRequestType.AUDIOPLAYER;
-    
+
         const result = jovo.isAudioPlayerRequest();
-    
+
         expect(result).toBe(true);
     });
-    
+
     test('should return false', () => {
         jovo.$type.type = 'test';
 
@@ -499,12 +499,12 @@ describe('test isAudioPlayerRequest()', () => {
 describe('test isElementSelectedRequest()', () => {
     test('should return true', () => {
         jovo.$type.type = EnumRequestType.ON_ELEMENT_SELECTED;
-    
+
         const result = jovo.isElementSelectedRequest();
-    
+
         expect(result).toBe(true);
     });
-    
+
     test('should return false', () => {
         jovo.$type.type = 'test';
 
@@ -514,20 +514,83 @@ describe('test isElementSelectedRequest()', () => {
     });
 });
 
-// describe('test validate()', () => {
-//     describe('IsRequiredValidator', () => {
+describe('test validate()', () => {
+    describe.skip('schema', () => {
+        test('with array', () => {
+            const schema = {
+                name: [
+                    new IsRequiredValidator(),
+                    new ValidValuesValidator(['valid1', 'valid2'])
+                ]
+            };
+            jovo.$inputs.name = { name: 'name', value: 'valid2' };
+            jovo.validate(schema);
+            expect(jovo['parseForValidator']).toHaveBeenCalledTimes(2);
+        });
 
-//     });
+        test('normally', () => {
+            const schema = {
+                name: new IsRequiredValidator()
+            };
+            jovo.$inputs.name = { name: 'name', value: 'valid1' };
+            jovo.validate(schema);
+            expect(jovo['parseForValidator']).toHaveBeenCalledTimes(1);
+        });
+    });
 
-//     describe('ValidValuesValidator', () => {
+    describe('test returned failed() function', () => {
+        describe('for some failed', () => {
 
-//     });
+            test('should return true without parameters', () => {
+                const schema = {
+                    name1: new IsRequiredValidator(),
+                    name2: new IsRequiredValidator()
+                };
+                jovo.$inputs = {
+                    name1: {
+                        name: 'name1',
+                        value: ''
+                    },
+                    name2: {
+                        name: 'name2', 
+                        value: 'John'
+                    }
+                };
+                const validation = jovo.validate(schema);
+                expect(validation.failed()).toBeTruthy();
+                expect(validation.failed('name1')).toBeTruthy();
+            });
+        });
 
-//     describe('InvalidValuesValidator', () => {
+        describe('for empty failedValidators', () => {
 
-//     });
+        });
+    });
+});
 
-//     describe('schema', () => {
-//         test('single input')
-//     })
-// });
+describe('test parseForValidator()', () => {
+    class ValidatorImpl extends Validator {
+        validate() {    // tslint:disable-line
+            if (this.inputToValidate!.value === 'test') {
+                throw new ValidationError('', 'Validator');
+            }
+        }
+    }
+
+    test('should succeed with validator of type Validator', () => {
+        const parseForValidator = jovo['parseForValidator'];
+        const v = new ValidatorImpl();
+        const failedValidators: string[][] = [];
+        parseForValidator(v, { value: 'value' }, failedValidators);
+        expect(failedValidators).toHaveLength(0);
+    });
+
+    test('should push failed validator onto failedValidators', () => {
+        const parseForValidator = jovo['parseForValidator'];
+        const v = new ValidatorImpl();
+        const failedValidators: string[][] = [];
+        parseForValidator(v, { name: 'key', value: 'test' }, failedValidators);
+        expect(failedValidators).toHaveLength(1);
+        expect(failedValidators[0]).toStrictEqual(['Validator', 'key']);
+    });
+});

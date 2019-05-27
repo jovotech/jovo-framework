@@ -9,8 +9,8 @@ export class IsRequiredValidator extends Validator {
         const input = this.inputToValidate;
         if (!input || !input.value) {
             throw new ValidationError(
-                `${this.constructor.name} failed.`,
-                this.constructor.name
+                this.constructor.name,
+                `${this.constructor.name} failed.`
             );
         }
     }

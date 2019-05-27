@@ -544,12 +544,12 @@ export abstract class Jovo extends EventEmitter {
     }
 
     /**
-     * Validates incoming request input data for all registered validators.
-     * @param schema The object containing all validators of type Validator or function.
+     * Validates incoming request input data for all registered validators asynchronous.
+     * @param schema The object containing all validators of type Validator|Function.
      * @returns object Contains function failed() to filter for failed validators.
      */
-    async validate(schema: { [key: string]: any }) {    // tslint:disable-line:no-any
-        const failedValidators: any[] = [];     // tslint:disable-line:no-any
+    async validateAsync(schema: { [key: string]: any }) {
+        const failedValidators: string[][] = [];     // tslint:disable-line:no-any
         for (const input in schema) {
             if (!schema.hasOwnProperty(input)) {
                 continue;
@@ -558,15 +558,48 @@ export abstract class Jovo extends EventEmitter {
             const validator = schema[input];
             if (validator.constructor === Array) {
                 for (const v of validator) {
-                    await this.parseForValidator(v, this.$inputs[input], failedValidators);
+                    await this.parseForValidatorAsync(v, this.$inputs[input], failedValidators);
                 }
             } else {
-                await this.parseForValidator(validator, this.$inputs[input], failedValidators);
+                await this.parseForValidatorAsync(validator, this.$inputs[input], failedValidators);
             }
         }
+        return this.parseForFailedValidators(failedValidators);
+    }
+
+    /**
+     * Validates incoming request input data for all registered validators.
+     * @param schema The object containing all validators of type Validator|Function.
+     * @returns object Contains function failed() to filter for failed validators.
+     */
+    validate(schema: { [key: string]: any }) {
+        const failedValidators: string[][] = [];     // tslint:disable-line:no-any
+        for (const input in schema) {
+            if (!schema.hasOwnProperty(input)) {
+                continue;
+            }
+
+            const validator = schema[input];
+            if (validator.constructor === Array) {
+                for (const v of validator) {
+                    this.parseForValidator(v, this.$inputs[input], failedValidators);
+                }
+            } else {
+                this.parseForValidator(validator, this.$inputs[input], failedValidators);
+            }
+        }
+        return this.parseForFailedValidators(failedValidators);
+    }
+
+    /**
+     * Reduces all failed validators to a set applying to the filter in ...args.
+     * @param failedValidators An array of all failed validators.
+     * @returns object Contains a function to filter through all failed validators.
+     */
+    protected parseForFailedValidators(failedValidators: string[][]) {
         return {
             failed(...args: string[]) {
-                return failedValidators.reduce((res, v) => {
+                return failedValidators.reduce((res: string[][], v: string[]) => {
                     for (const p of args) {
                         if (v.indexOf(p) === -1) {
                             return res;
@@ -586,7 +619,40 @@ export abstract class Jovo extends EventEmitter {
      * @param failedValidators An array of already failed validators.
      * @throws JovoError if the validator has an unsupported type.
      */
-    private async parseForValidator(validator: Validator | Function, input: any, failedValidators: any[]) {     // tslint:disable-line:no-any
+    protected parseForValidator(validator: Validator | Function, input: any, failedValidators: string[][]) {     // tslint:disable-line:no-any
+        try {
+            if (validator instanceof Validator) {
+                validator.setInputToValidate(input);
+                validator.validate(this);
+            } else if (typeof validator === 'function') {
+                validator.call(this);
+            } else {
+                throw new JovoError(
+                    'This validation type is not supported.',
+                    ErrorCode.ERR,
+                    'jovo-core',
+                    undefined,
+                    'Please make sure you only use supported types of validation such as a function or an extended Validator',
+                    ''
+                );
+            }
+        } catch (err) {
+            if (err.constructor === ValidationError) {
+                failedValidators.push([err.validator, input.name, err.message]);
+            } else {
+                throw err;
+            }
+        }
+    }
+
+    /**
+     * Asynchronous helper function for this.validateAsync().
+     * @param validator The current Validator to call the current request input data on.
+     * @param input The current input data to validate.
+     * @param failedValidators An array of already failed validators.
+     * @throws JovoError if the validator has an unsupported type.
+     */
+    protected async parseForValidatorAsync(validator: Validator | Function, input: any, failedValidators: string[][]) {     // tslint:disable-line:no-any
         try {
             if (validator instanceof Validator) {
                 validator.setInputToValidate(input);
@@ -596,8 +662,8 @@ export abstract class Jovo extends EventEmitter {
             } else {
                 throw new JovoError(
                     'This validation type is not supported.',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-plugin-validation',
+                    ErrorCode.ERR,
+                    'jovo-core',
                     undefined,
                     'Please make sure you only use supported types of validation such as a function or an extended Validator',
                     ''
@@ -605,7 +671,7 @@ export abstract class Jovo extends EventEmitter {
             }
         } catch (err) {
             if (err.constructor === ValidationError) {
-                failedValidators.push([err.validator, input.name]);
+                failedValidators.push([err.validator, input.name, err.message]);
             } else {
                 throw err;
             }

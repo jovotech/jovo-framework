@@ -13,11 +13,11 @@ describe('Validator', () => {
         const v = new ValidatorImpl();
         expect(v['inputToValidate']).toBeUndefined();
         v.setInputToValidate({
-            key: 'name',
+            name: 'name',
             value: 'test'
         });
         expect(v['inputToValidate']).toStrictEqual({
-            key: 'name',
+            name: 'name',
             value: 'test'
         });
     });
@@ -28,7 +28,7 @@ describe('IsRequiredValidator', () => {
         test('should throw ValidationError if validation fails', () => {
             const v = new IsRequiredValidator();
             v.setInputToValidate({
-                key: 'name',
+                name: 'name',
                 value: ''
             });
             expect(() => v.validate()).toThrow('IsRequiredValidator failed.');
@@ -37,7 +37,7 @@ describe('IsRequiredValidator', () => {
         test('should succeed with value set', () => {
             const v = new IsRequiredValidator();
             v.setInputToValidate({
-                key: 'name',
+                name: 'name',
                 value: 'test'
             });
             v.validate();
@@ -50,7 +50,7 @@ describe('ValidValuesValidator', () => {
         test('empty input value', () => {
             const v = new ValidValuesValidator(['valid1', 'valid2']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: ''
             });
             v.validate();
@@ -59,7 +59,7 @@ describe('ValidValuesValidator', () => {
         test('regex input value', () => {
             const v = new ValidValuesValidator([RegExp('.*llo.*')]);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'hello'
             });
             v.validate();
@@ -68,7 +68,7 @@ describe('ValidValuesValidator', () => {
         test('normal string value', () => {
             const v = new ValidValuesValidator(['valid1']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'valid1'
             });
             v.validate();
@@ -77,7 +77,7 @@ describe('ValidValuesValidator', () => {
         test('should throw error if input is not valid', () => {
             const v = new ValidValuesValidator(['valid1', 'valid2']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'valid3'
             });
             expect(() => v.validate()).toThrow('ValidValuesValidator failed.');
@@ -90,7 +90,7 @@ describe('InvalidValuesValidator', () => {
         test('empty input value', () => {
             const v = new InvalidValuesValidator(['invalid1']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: ''
             });
             v.validate();
@@ -99,7 +99,7 @@ describe('InvalidValuesValidator', () => {
         test('regex input value', () => {
             const v = new InvalidValuesValidator([RegExp('.*llo.*')]);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'hello'
             });
             expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
@@ -108,7 +108,7 @@ describe('InvalidValuesValidator', () => {
         test('normal string value', () => {
             const v = new InvalidValuesValidator(['invalid1']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'invalid1'
             });
             expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
@@ -117,7 +117,7 @@ describe('InvalidValuesValidator', () => {
         test('should succeed if input value is not present in array', () => {
             const v = new InvalidValuesValidator(['invalid1', 'invalid2']);
             v.setInputToValidate({
-                key: 'key',
+                name: 'name',
                 value: 'validValue'
             });
             v.validate();

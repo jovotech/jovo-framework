@@ -17,22 +17,25 @@ export class InvalidValuesValidator extends Validator {
         const input = this.inputToValidate;
 
         if (!input || !input.value) {
-            return;
+            throw new ValidationError(
+                this.constructor.name,
+                `${this.constructor.name} failed.`
+            );
         }
 
         for (const v of this.invalidValues) {
             if (typeof v === 'string') {
                 if (input.value.toLowerCase() === v.toLowerCase()) {
                     throw new ValidationError(
-                        `${this.constructor.name} failed.`,
-                        this.constructor.name
+                        this.constructor.name,
+                        `${this.constructor.name} failed.`
                     );
                 }
             } else if (v instanceof RegExp) {
                 if (v.test(input.value)) {
                     throw new ValidationError(
-                        `${this.constructor.name} failed.`,
-                        this.constructor.name
+                        this.constructor.name,
+                        `${this.constructor.name} failed.`
                     );
                 }
             } else {

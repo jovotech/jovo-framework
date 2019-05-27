@@ -1,11 +1,14 @@
+'use strict';
 
-import { App } from 'jovo-framework';
-import { ValidationError, IsRequiredValidator, InvalidValuesValidator } from 'jovo-core';
-import { GoogleAssistant } from 'jovo-platform-googleassistant';
-import { Alexa } from 'jovo-platform-alexa';
-import { JovoDebugger } from 'jovo-plugin-debugger';
-import { FileDb } from 'jovo-db-filedb';
-import * as https from 'https';
+const { App } = require('jovo-framework');
+const { Alexa } = require('jovo-platform-alexa');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { JovoDebugger } = require('jovo-plugin-debugger');
+const { FileDb } = require('jovo-db-filedb');
+const { ValidationError, InvalidValuesValidator, IsRequiredValidator } = require('jovo-core');
+const https = require('https');
+
+const { OwnValidator } = require('./Validators/OwnValidator');
 
 const app = new App();
 
@@ -25,10 +28,11 @@ app.setHandler({
         const schema = {
             name: [
                 new IsRequiredValidator(),
+                new OwnValidator(),
                 new InvalidValuesValidator(['Reginald', 'Thomas', 'Alexander']),
                 async function () {
                     try {
-                        const todoData: { [key: string]: any } = await new Promise((res, rej) => {
+                        const todoData = await new Promise((res, rej) => {
                             https.get('https://jsonplaceholder.typicode.com/todos/1', function (r) {
                                 let data = '';
                                 r.on('data', function (d) {
@@ -102,4 +106,4 @@ app.setHandler({
     }
 });
 
-export { app };
+module.exports = { app };

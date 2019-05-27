@@ -133,141 +133,216 @@ app.setHandler({
 
 ## Validation
 
-Since v2.3.0 we support input validation, which allows you to register multiple validators per input in your configuration file, either for a specific intent or globally.
+Since v2.3.0 we support input validation, which allows you to register multiple validators per input in your intent.
 
 ```javascript
 // @language=javascript
 
-// config.js
+// app.js
 
-validation: {
-    MyNameIsIntent: {
-        name: [
-            new IsRequiredValidator(),
-            new InvalidValuesValidator({
-                values: ['Mercedes', 'Toyota'],
-                onFail: 'ValidatorFailedIntent'
-            })
-        ]
+MyNameIsIntent() {
+    const schema = {
+        name: new IsRequiredValidator()
+    };
+
+    const validation = this.validate(schema);
+
+    if(validation.failed('name')) {
+        return this.ask('Please tell me your name again.');
     }
+
+    this.tell(`Hey ${this.$inputs.name.value}!`);
 }
 
 // @language=typescript
 
-// config.ts
+// app.ts
 
-validation: {
-    MyNameIsIntent: {
-        name: [
-            new IsRequiredValidator(),
-            new InvalidValuesValidator({
-                values: ['Mercedes', 'Toyota'],
-                onFail: 'ValidatorFailedIntent'
-            })
-        ]
+MyNameIsIntent() {
+    const schema = {
+        name: new IsRequiredValidator()
+    };
+
+    const validation = this.validate(schema);
+    
+    if(validation.failed('name')) {
+        return this.ask('Please tell me your name again.');
     }
+
+    this.tell(`Hey ${this.$inputs.name.value}!`);
 }
 ```
 
-You can validate your input in multiple ways, either as a specific Validator, your own function or a mixture from both in an array.
+After defining your schema, where you define how you want to validate your inputs for the current intent, the core function of input validation `this.validate()` will be called. This will return an object containing a function `failed()`. You can use it to check, if the validation failed for a specific case. 
 
+```javascript
+// @language=javascript
+
+if(validation.failed()) {}      // Input validation failed in general
+if(validation.failed('name')) {}    // Input validation failed for input field 'name'
+if(validation.failed('IsRequiredValidator')) {}     // Input validation failed for a specific validator
+if(validation.failed('name', 'IsRequiredValidator')) {}     // Input validation failed for input field 'name' and a specific validator
+
+// @language=typescript
+
+if(validation.failed()) {}      // Input validation failed in general
+if(validation.failed('name')) {}    // Input validation failed for input field 'name'
+if(validation.failed('IsRequiredValidator')) {}     // Input validation failed for a specific validator
+if(validation.failed('name', 'IsRequiredValidator')) {}     // Input validation failed for input field 'name' and a specific validator
+```
+
+You can validate your input in multiple ways, either as a specific Validator, your own function or a mixture from both in an array.
 The Validation Plugin already offers you multiple built-in Validators to choose from, each with its own functionality and set of parameter attributes.
 
 ```javascript
 // @language=javascript
 
-// config.ts
+// MyNameIsIntent
 
-validation: {
-    MyNameIsIntent: {
-        name: [
-            new IsRequiredValidator(),  // check if current input is required and present
-            new ValidValuesValidator({
-                values: ['James', 'John'],
-                onFail: 'Unhandled'
-            })
-            new InvalidValuesValidator({    // check current input for registered invalid values
-                values: ['Mercedes', 'Toyota'],
-                onFail: 'ValidatorFailedIntent'
-            }),
-            new ReplaceValuesValidator(     // replace occurrences of current input with registered replace value
-                {
-                    values: ['Shawn', 'Sean'],
-                    mapTo: 'John'
-                },
-                {
-                    values: ['Mike', 'Mark'],
-                    mapTo: 'Michael'
-                }
-            )
-        ]
-    }
-}
+const schema = {
+    name: [
+        new IsRequiredValidator(),      // check if current input is required and present
+        new ValidValuesValidator([      // fails if current input value does not match one of the registered values
+            'James', 
+            'John'
+        ]),
+        new InvalidValuesValidator([    // fails if current input value matches one of the registered values
+            'Mercedes', 
+            'Toyota'
+        ]),
+        function() {
+            if(this.$inputs.name.value === 'someValue') {
+                throw new ValidationError('OwnFunctionValidator', 'My own validator function failed.');
+            }
+        }
+    ]
+};
 
 // @language=typescript
 
-// config.ts
+// MyNameIsIntent
 
-validation: {
-    MyNameIsIntent: {
-        name: [
-            new IsRequiredValidator(),      // check if current input is required and present
-            new ValidValuesValidator({
-                values: ['James', 'John'],
-                onFail: 'Unhandled'
-            })
-            new InvalidValuesValidator({    // check current input for registered invalid values
-                values: ['Mercedes', 'Toyota'],
-                onFail: 'ValidatorFailedIntent'
-            }),
-            new ReplaceValuesValidator(     // replace occurrences of current input with registered replace value
-                {
-                    values: ['Shawn', 'Sean'],
-                    mapTo: 'John'
-                },
-                {
-                    values: ['Mike', 'Mark'],
-                    mapTo: 'Michael'
-                }
-            )
-        ]
-    }
-}
+const schema = {
+    name: [
+        new IsRequiredValidator(),      // check if current input is required and present
+        new ValidValuesValidator([      // fails if current input value does not match one of the registered values
+            'James', 
+            'John'
+        ]),
+        new InvalidValuesValidator([    // fails if current input value matches one of the registered values
+            'Mercedes', 
+            'Toyota'
+        ]),
+        function(this: Jovo) {
+            if(this.$inputs.name.value === 'someValue') {
+                throw new ValidationError('OwnFunctionValidator', 'My own validator function failed.');
+            }
+        }
+    ]
+};
+
 ```
 
-Each Validator derives from a base abstract class `Validator`, which contains an abstract function `validate()` that gets overwritten by each deriving Validator. This means that you can easily write your own Validators and use them in your configuration file.
-
-An alternative would be to write your own validating function in the configuration file.
+Each Validator derives from a base abstract class `Validator`, which contains an abstract function `validate()` that gets overwritten by each deriving Validator. This means that besides using a function, you can easily write your own Validators and use them with the built-in Validators.
 
 ```javascript
 // @language=javascript
 
-// config.ts
+// OwnValidator.js
 
-validation: {
-    MyNameIsIntent: {
-        name: function() {
-            if(this.$inputs.name.value === 'John') {
-                this.toIntent('Unhandled');
-            }
+const { Validator, Jovo, ValidationError } = require('jovo-core');
+
+class OwnValidator extends Validator {
+    validate(jovo) {
+        if (['invalidName1', 'invalidName2'].includes(jovo.$inputs.name.value)) {
+            throw new ValidationError(
+                this.constructor.name,
+                `My own validator failed for ${jovo.$inputs.name.value}.`
+            );
         }
     }
+};
+
+module.exports = { OwnValidator };
+
+// MyNameIsIntent
+
+const schema = {
+    name: [
+        new IsRequiredValidator(),
+        new OwnValidator(), 
+    ]
+};
+
+// @language=typescript
+
+// OwnValidator.ts
+
+import { Validator, Jovo, ValidationError } from 'jovo-core';
+
+export class OwnValidator extends Validator {
+    validate(jovo: Jovo) {
+        if (['invalidName1', 'invalidName2'].includes(jovo.$inputs.name.value)) {
+            throw new ValidationError(
+                this.constructor.name,
+                `My own validator failed for ${jovo.$inputs.name.value}.`
+            );
+        }
+    }
+};
+
+// MyNameIsIntent
+
+const schema = {
+    name: [
+        new IsRequiredValidator(),
+        new OwnValidator(), 
+    ]
+};
+
+```
+
+Regardless of whether you're using your own function or Validator, whenever you want to mark a path as failed you need to throw a ValidationError. This class expects at least a Validator identifier and an optional error message. Both of these can be used as a filter in the returned `failed()` function. This can be useful if you want to throw multiple ValidationErrors per function.
+
+```javascript
+// @language=javascript
+
+// MyNameIsIntent
+
+const schema = {
+    name: function() {
+        if(this.$inputs.name.value === 'someValue') {
+            throw new ValidationError('OwnFunctionValidator', 'My own validator function failed.');
+        }
+    }
+};
+
+const validation = this.validate(schema);
+
+if(validation.failed('name', 'OwnFunctionValidator', 'My own validator function failed.')) {
+    // ...
 }
 
 // @language=typescript
 
-// config.ts
+// MyNameIsIntent
 
-validation: {
-    MyNameIsIntent: {
-        name: function(this: any) {
-            if(this.$inputs.name.value === 'John') {
-                this.toIntent('Unhandled');
-            }
+const schema = {
+    name: function(this: Jovo) {
+        if(this.$inputs.name.value === 'someValue') {
+            throw new ValidationError('OwnFunctionValidator', 'My own validator function failed.');
         }
     }
+};
+
+const validation = this.validate(schema);
+
+if(validation.failed('name', 'OwnFunctionValidator', 'My own validator function failed.')) {
+    // ...
 }
+
 ```
 
+You can even use async/await in your own function/Validator for asynchronous calls. For this, simply use `await this.validateAsync()` instead of `this.validate()`.
 
 <!--[metadata]: {"description": "Learn how to deal with entities and slot values provided by your users.", "route": "routing/input"}-->
