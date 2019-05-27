@@ -7,7 +7,7 @@
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
-    "tscw": "tscw --watch",
+    "tscw": "tsc --watch",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
