@@ -1,7 +1,7 @@
-import { Plugin, PluginConfig, BaseApp, HandleRequest, Jovo } from 'jovo-core';
+import { PluginConfig, BaseApp, HandleRequest, Jovo, Analytics } from 'jovo-core';
 import * as ua from 'universal-analytics';
 export interface Config extends PluginConfig {
-    accountId: string;
+    trackingId: string;
 }
 export interface EventParameters {
     ec: string;
@@ -10,56 +10,64 @@ export interface EventParameters {
     ev?: number;
     dp?: string;
 }
-export declare class GoogleAnalyticsSender implements Plugin {
+/**
+ * @public
+ */
+export declare class GoogleAnalyticsSender implements Analytics {
     name?: string | undefined;
+    jovo?: Jovo | undefined;
     config: Config;
     constructor(config?: Config);
-    static getAlexaDevice(alexaRequest: any): string;
-    static getScreenResolution(alexaRequest: any): string;
+    track(handleRequest: HandleRequest): void;
     install(app: BaseApp): void;
     uninstall(parent?: any): void;
     /**
-     * Pageviews should allways send intent data -> method returns standard
-     * @param jovo
+     * Sets the analytics variable to the instance of this object for making it accessable in skill code
+     * @param handleRequest
      */
-    getCurrentPageParameters(jovo: Jovo): ua.PageviewParams;
+    setJovoObjectAccess(handleRequest: HandleRequest): void;
+    /**
+     * Pageviews should allways send intent data -> method returns standard
+     */
+    getCurrentPageParameters(): ua.PageviewParams | undefined;
     /**
      * SendEvent with parameters are custom
      * @param visitor
      * @param jovo
      * @param eventParameters
      */
-    sendIntentEvent(visitor: ua.Visitor, jovo: Jovo, eventParameters: EventParameters): void;
+    sendIntentEvent(visitor: ua.Visitor, eventParameters: EventParameters): void;
+    throwJovoNotSetError(): void;
     /**
      * Generates Hash for User Id
      * @param jovo
      */
-    getUserId(jovo: Jovo): string;
+    getUserId(): string;
     /**
      * Generates pageName from State and Intent Name
      * @param jovo
      */
-    getPageName(jovo: Jovo): string;
+    getPageName(): string;
+    static getScreenResolution(alexaRequest: any): string;
     /**
      * Visitor initiation which sets needed fixed parameters
      * @param jovo
      */
-    initVisitor(jovo: Jovo): ua.Visitor;
+    initVisitor(): ua.Visitor | undefined;
     /**
      * User Events ties users to event category and action
-     * @param jovo
      * @param eventName maps to category -> eventGroup
      * @param eventElement maps to action -> instance of eventGroup
      */
-    sendUserEvent(jovo: Jovo, eventName: string, eventElement?: string): void;
+    sendUserEvent(eventCategory: string, eventElement?: string): void;
     /**
      * Auto send intent data after each response. Also setting sessions and flowErrors
      * @param handleRequest
      */
-    sendDataToAnalytics(handleRequest: HandleRequest): void;
+    sendDataToGA(handleRequest: HandleRequest): void;
     /**
      * Auto send Exception to Google Analytics if Error
      * @param handleRequest
      */
-    sendErrorToGoogle(handleRequest: HandleRequest): void;
+    sendErrorToGA(handleRequest: HandleRequest): void;
 }

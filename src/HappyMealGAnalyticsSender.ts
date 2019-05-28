@@ -19,7 +19,7 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
     }
 
     sendUserTransaction(jovo : Jovo, transactionId: string)    {
-        this.initVisitor(jovo)
+        this.initVisitor()!
             .transaction({ti: transactionId, "tr": "1"})
 
     }
@@ -30,12 +30,12 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
 
         let idHash = murmurhash.v3(jovo.$user.getId()!) + murmurhash.v3(jovo.getDeviceId()!);
 
-        let visitor = this.initVisitor(jovo);
+        let visitor = this.initVisitor();
 
 
         if (jovo.getMappedIntentName() === 'StartGameIntent') {
             console.log("***************SEND Transaction");
-            visitor
+            visitor!
                 .transaction("0", (err) => {
                     console.log("callback from transaction...");
                      
@@ -53,7 +53,7 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
                 el: idHash.toString()
             }
             //console.log('visitor in subclass: '+ util.inspect(this.visitor));
-            this.sendIntentEvent(visitor, jovo, eventParams);
+            this.sendIntentEvent(visitor!, eventParams);
         }
 
 

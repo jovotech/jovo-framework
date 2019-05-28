@@ -1,5 +1,5 @@
 {
-  "name": "googleanalyticsplugin",
+  "name": "jovo-analytics-googleanalytics",
   "version": "1.0.0",
   "description": "google analytics jovo plugin for tracking voice apps",
   "main": "dist/index.js",
