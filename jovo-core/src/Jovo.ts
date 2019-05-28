@@ -548,8 +548,8 @@ export abstract class Jovo extends EventEmitter {
      * @param schema The object containing all validators of type Validator|Function.
      * @returns object Contains function failed() to filter for failed validators.
      */
-    async validateAsync(schema: { [key: string]: any }) {
-        const failedValidators: string[][] = [];     // tslint:disable-line:no-any
+    async validateAsync(schema: { [key: string]: any }) {   // tslint:disable-line:no-any
+        const failedValidators: string[][] = [];            // tslint:disable-line:no-any
         for (const input in schema) {
             if (!schema.hasOwnProperty(input)) {
                 continue;
@@ -572,8 +572,8 @@ export abstract class Jovo extends EventEmitter {
      * @param schema The object containing all validators of type Validator|Function.
      * @returns object Contains function failed() to filter for failed validators.
      */
-    validate(schema: { [key: string]: any }) {
-        const failedValidators: string[][] = [];     // tslint:disable-line:no-any
+    validate(schema: { [key: string]: any }) {      // tslint:disable-line:no-any
+        const failedValidators: string[][] = [];    // tslint:disable-line:no-any
         for (const input in schema) {
             if (!schema.hasOwnProperty(input)) {
                 continue;
@@ -625,6 +625,7 @@ export abstract class Jovo extends EventEmitter {
                 validator.setInputToValidate(input);
                 validator.validate(this);
             } else if (typeof validator === 'function') {
+                console.log(typeof this);
                 validator.call(this);
             } else {
                 throw new JovoError(

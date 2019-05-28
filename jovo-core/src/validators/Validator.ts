@@ -21,7 +21,7 @@ export abstract class Validator {
 export class ValidationError extends Error {
     constructor(
         public validator: string,
-        public message: string = ''
+        public message = ''
     ) {
         super(message);
     }

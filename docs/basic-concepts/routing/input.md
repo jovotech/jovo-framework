@@ -225,13 +225,15 @@ const schema = {
 const schema = {
     name: [
         new IsRequiredValidator(),      // check if current input is required and present
-        new ValidValuesValidator([      // fails if current input value does not match one of the registered values
+        new ValidValuesValidator([      // fails if current input value does not match one of the registered values, accepts string and regex values
             'James', 
-            'John'
+            'John',
+            /S.*n/g
         ]),
-        new InvalidValuesValidator([    // fails if current input value matches one of the registered values
+        new InvalidValuesValidator([    // fails if current input value matches one of the registered values, accepts string and regex values
             'Mercedes', 
-            'Toyota'
+            'Toyota',
+            /S.*n/g
         ]),
         function(this: Jovo) {
             if(this.$inputs.name.value === 'someValue') {

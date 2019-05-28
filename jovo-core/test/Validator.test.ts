@@ -2,8 +2,25 @@ import {
     Validator,
     IsRequiredValidator,
     ValidValuesValidator,
-    InvalidValuesValidator
+    InvalidValuesValidator,
+    ValidationError
 } from '../src/validators';
+
+describe('ValidationError', () => {
+    describe('ValidationError.constructor', () => {
+        test('should accept only one parameter', () => {
+            const err = new ValidationError('Validator');
+            expect(err.message).toMatch('');
+            expect(err.validator).toMatch('Validator');
+        });
+
+        test('should accept two parameters', () => {
+            const err = new ValidationError('Validator', 'Validator failed');
+            expect(err.message).toMatch('Validator failed');
+            expect(err.validator).toMatch('Validator');
+        });
+    });
+});
 
 describe('Validator', () => {
     test('Validator.setInputToValidate()', () => {
@@ -53,7 +70,7 @@ describe('ValidValuesValidator', () => {
                 name: 'name',
                 value: ''
             });
-            v.validate();
+            expect(() => v.validate()).toThrow('ValidValuesValidator failed.');
         });
 
         test('regex input value', () => {
@@ -93,7 +110,7 @@ describe('InvalidValuesValidator', () => {
                 name: 'name',
                 value: ''
             });
-            v.validate();
+            expect(() => v.validate()).toThrow('InvalidValuesValidator failed.');
         });
 
         test('regex input value', () => {
