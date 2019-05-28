@@ -1,5 +1,16 @@
 # Jovo Framework Changelog
 
+
+
+## 2.2.5 (2019-05-07)
+
+#### :bug: Bug Fix
+ `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework//pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
+
+#### Committers 1
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+
+
 ## 2.2.4 (2019-05-03)
 * `jovo-framework` Improve Conversation test runtime handling (`send(req)`, `sendToServer(req)`, `sendToApp(req, app)`)
 

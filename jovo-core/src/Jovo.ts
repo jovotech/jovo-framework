@@ -15,7 +15,7 @@ import {
     Output,
     RequestType,
     NLUData,
-    SessionAttributes, SessionData
+    SessionAttributes, SessionData, HandleRequest
 } from "./Interfaces";
 
 import { User } from "./User";
@@ -29,6 +29,7 @@ export abstract class Jovo extends EventEmitter {
     readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
+    $handleRequest?: HandleRequest;
     $jovo: Jovo;
     $user: User;
     $nlu?: NLUData;
@@ -46,10 +47,11 @@ export abstract class Jovo extends EventEmitter {
 
     $requestSessionAttributes: SessionAttributes = {};
 
-    constructor(app: BaseApp, host: Host) {
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
         super();
         this.setMaxListeners(0);
         this.$jovo = this;
+        this.$handleRequest = handleRequest;
         this.$host = host;
         this.$app = app;
         this.$data = {};

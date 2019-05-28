@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-speechbuilder",
-  "version": "2.2.4",
+  "version": "2.2.8",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,10 +13,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.2.2",
-    "jovo-framework": "^2.2.3",
-    "jovo-platform-alexa": "^2.2.4",
-    "jovo-platform-googleassistant": "^2.2.3",
-    "jovo-plugin-debugger": "^2.2.2"
+    "jovo-db-filedb": "^2.2.4",
+    "jovo-framework": "^2.2.6",
+    "jovo-platform-alexa": "^2.2.8",
+    "jovo-platform-googleassistant": "^2.2.6",
+    "jovo-plugin-debugger": "^2.2.5"
   }
 }
