@@ -517,7 +517,7 @@ describe('test isElementSelectedRequest()', () => {
 describe('test validateAsync()', () => {
     test('should succeed with valid input field', async () => {
         const schema = {
-            name: async function (this: Jovo) {
+            async name(this: Jovo) {
                 await jest.fn().mockResolvedValue(100);
                 if (this.$inputs.name.value === 'test') {
                     throw new ValidationError('Function');
@@ -549,7 +549,7 @@ describe('test validateAsync()', () => {
 
     test('should fail with single validator', async () => {
         const schema = {
-            name: async function (this: Jovo) {
+            async name(this: Jovo) {
                 await jest.fn().mockResolvedValue(100);
                 if (this.$inputs.name.value === 'test') {
                     throw new ValidationError('Function');
@@ -561,7 +561,7 @@ describe('test validateAsync()', () => {
         expect(validation.failed('name')).toBeTruthy();
         expect(validation.failed('Function')).toBeTruthy();
     });
-})
+});
 
 describe('test validate()', () => {
     test('should succeed with valid input field', () => {
