@@ -35,7 +35,11 @@ export class ValidValuesValidator extends Validator {
                 }
             } else {
                 throw new JovoError(
-                    'Value type is not supported.'
+                    'Value type is not supported.',
+                    ErrorCode.ERR,
+                    'jovo-core',
+                    undefined,
+                    'Please only use the supported value types string|RegExp.'
                 );
             }
         }
