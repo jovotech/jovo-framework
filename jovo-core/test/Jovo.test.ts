@@ -514,12 +514,57 @@ describe('test isElementSelectedRequest()', () => {
     });
 });
 
-// describe('test validateAsync()', () => {
+describe('test validateAsync()', () => {
+    test('should succeed with valid input field', async () => {
+        const schema = {
+            name: async function (this: Jovo) {
+                await jest.fn().mockResolvedValue(100);
+                if (this.$inputs.name.value === 'test') {
+                    throw new ValidationError('Function');
+                }
+            }
+        };
+        jovo.$inputs.name = { name: 'name', value: 'valid' };
+        const validation = await jovo.validateAsync(schema);
+        expect(validation.failed()).toBeFalsy();
+    });
 
-// })
+    test('should fail with array of validators', async () => {
+        const schema = {
+            name: [
+                new IsRequiredValidator(),
+                async function (this: Jovo) {
+                    await jest.fn().mockResolvedValue(100);
+                    if (this.$inputs.name.value === 'test') {
+                        throw new ValidationError('Function');
+                    }
+                }
+            ]
+        };
+        jovo.$inputs.name = { name: 'name', value: 'test' };
+        const validation = await jovo.validateAsync(schema);
+        expect(validation.failed('name')).toBeTruthy();
+        expect(validation.failed('Function')).toBeTruthy();
+    });
+
+    test('should fail with single validator', async () => {
+        const schema = {
+            name: async function (this: Jovo) {
+                await jest.fn().mockResolvedValue(100);
+                if (this.$inputs.name.value === 'test') {
+                    throw new ValidationError('Function');
+                }
+            }
+        };
+        jovo.$inputs.name = { name: 'name', value: 'test' };
+        const validation = await jovo.validateAsync(schema);
+        expect(validation.failed('name')).toBeTruthy();
+        expect(validation.failed('Function')).toBeTruthy();
+    });
+})
 
 describe('test validate()', () => {
-    test('should succeed ', () => {
+    test('should succeed with valid input field', () => {
         const schema = {
             name: new IsRequiredValidator()
         };
@@ -581,7 +626,7 @@ describe('test parseForFailedValidators()', () => {
             expect(obj.failed('Validator', 'name')).toBeTruthy();
         });
 
-        test('should return true for tree arguments', () => {
+        test('should return true for three arguments', () => {
             const func = jovo['parseForFailedValidators'];
             const failedValidators: string[][] = [
                 ['Validator', 'name', 'Name cannot be null.']

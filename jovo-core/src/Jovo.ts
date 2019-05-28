@@ -625,7 +625,6 @@ export abstract class Jovo extends EventEmitter {
                 validator.setInputToValidate(input);
                 validator.validate(this);
             } else if (typeof validator === 'function') {
-                console.log(typeof this);
                 validator.call(this);
             } else {
                 throw new JovoError(
