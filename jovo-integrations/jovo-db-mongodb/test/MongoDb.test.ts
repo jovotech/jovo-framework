@@ -1,4 +1,4 @@
-import { BaseApp, JovoError } from "jovo-core";
+import { BaseApp, JovoError, Util } from "jovo-core";
 import { MongoDb } from "../src/MongoDb";
 import {MongoClient} from  "mongodb";
 import MongoMemoryServer from 'mongodb-memory-server';
@@ -138,6 +138,8 @@ describe('test database operations', () => {
     });
 
     afterEach(async () => {
+        // Workaround. There's probably an unresolved promise
+        await Util.delay(200);
         await mongoServer.stop();
     });
 
