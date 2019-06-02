@@ -140,8 +140,6 @@ describe('test database operations', () => {
     });
 
     afterEach(async () => {
-        // Workaround. There's probably an unresolved promise
-        await Util.delay(200);
         await mongoServer.stop();
     });
 
@@ -154,7 +152,7 @@ describe('test database operations', () => {
                 [key]: data
             }
         };
-        
+
         await collection.updateOne({userId: primaryKey}, item, {upsert: true});
     }
 
