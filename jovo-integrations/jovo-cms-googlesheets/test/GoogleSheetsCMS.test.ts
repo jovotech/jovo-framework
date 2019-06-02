@@ -1,6 +1,8 @@
 import { GoogleSheetsCMS } from '../src/';
 import { BaseApp } from 'jovo-core';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 describe('GoogleSheetsCMS.constructor()', () => {
     test('without config', () => {
         const googleSheetsCMS = new GoogleSheetsCMS();
