@@ -1,6 +1,8 @@
 import { AirtableCMS } from '../src';
 import { BaseApp } from 'jovo-core';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 describe('AirtableCMS.constructor()', () => {
     test('without config', () => {
         const airtableCMS = new AirtableCMS();

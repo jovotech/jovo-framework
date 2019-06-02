@@ -5,6 +5,8 @@ import * as path from 'path';
 import _merge = require('lodash.merge');
 const rimraf = require("rimraf");
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 describe('test installation', () => {
 
     afterAll(() => {

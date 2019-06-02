@@ -3,6 +3,8 @@ import {BaseApp, JovoError} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 jest.mock('aws-sdk');
 
 describe('test install()', () => {
