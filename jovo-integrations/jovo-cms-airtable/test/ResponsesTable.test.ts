@@ -6,6 +6,8 @@ import { MockHandleRequest } from './mockObj/mockHR';
 import _cloneDeep = require('lodash.clonedeep');
 import i18n from 'i18next';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 let tableValues: any[];       // tslint:disable-line
 let i18nModel: any;                 // tslint:disable-line
 let handleRequest: HandleRequest;
