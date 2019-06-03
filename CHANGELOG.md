@@ -1,11 +1,40 @@
 # Jovo Framework Changelog
 
 
+## 2.2.7 (2019-06-03)
+
+#### :rocket: New Feature
+* `jovo-framework` [#503](https://github.com/jovotech/jovo-framework/pull/503) Adds Conversational Components (BETA)  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#511](https://github.com/jovotech/jovo-framework/pull/511) Adds Input validation ([@rubenaeg](https://github.com/stephen-wilcox))
+* `jovo-platform-alexa` [#506](https://github.com/jovotech/jovo-framework/pull/506) Adds hasAutomotive getter ([@natrixx](https://github.com/natrixx))
+* `jovo-platform-alexa` [#506](https://github.com/jovotech/jovo-framework/pull/506) Adds viewport info for alexaRequests ([@freiSMS](https://github.com/freiSMS))
+
+#### :nail_care: Enhancement
+* `jovo-core` [#507](https://github.com/jovotech/jovo-framework/pull/507) Refactored loading of the config-data ([@Veake](https/github.com/Veake))
+
+
+#### :bug: Bug Fix
+* `jovo-cms-googlesheets` Fix response sheet parser. Single values will be transformed to a string
+* `jovo-platform-alexa` [#497](https://github.com/jovotech/jovo-framework/pull/497) Address getReprompt issue for Alexa ([@natrixx](https://github.com/natrixx))
+* `jovo-plugin-debugger` [#496](https://github.com/jovotech/jovo-framework/pull/496) Fix AUDIOPLAYER.AlexaSkill.PlaybackFinished intent name in debugger ([@curiousdustin](https://github.com/curiousdustin))
+
+ 
+
+#### Committers: 7
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Max R. ([@Veake](https://github.com/Veake))
+- natrixx ([@natrixx](https://github.com/natrixx))
+- Dustin Bahr ([@curiousdustin](https://github.com/curiousdustin))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 
 ## 2.2.5 (2019-05-07)
 
 #### :bug: Bug Fix
- `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework//pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
+ `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework/pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
 
 #### Committers 1
 - Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
