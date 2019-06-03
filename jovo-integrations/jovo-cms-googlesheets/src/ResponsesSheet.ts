@@ -68,6 +68,8 @@ export class ResponsesSheet extends DefaultSheet {
         const headers: string[] = values[0];
         const platforms = handleRequest.app.getAppTypes();
         const resources: any = {}; // tslint:disable-line
+        let tKey = '';
+
         for (let i = 1; i < values.length; i++) {
             const row: string[] = values[i];
             for (let j = 1; j < headers.length; j++) {
@@ -98,23 +100,36 @@ export class ResponsesSheet extends DefaultSheet {
                 if (!locale.match(/^[A-Za-z]{2,4}([_-]([A-Za-z]{4}|[0-9]{3}))?([_-]([A-Za-z]{2}|[0-9]{3}))?$/)) {
                     continue;
                 }
-
-                let key = `${locale}.translation.${row[0]}`;
+                // take key from the line above, if the key is empty
+                tKey = row[0] !== '' ? row[0] : tKey;
+                let key = `${locale}.translation.${tKey}`;
                 if (platform) {
-                    key = `${locale}.${platform}.translation.${row[0]}`;
+                    key = `${locale}.${platform}.translation.${tKey}`;
                 }
 
                 if (!cell) {
                     continue;
                 }
-
-                const valueArray = _get(resources, key, []);
                 let value = cell;
                 if (cell === '/') {
                     value = '';
                 }
-                valueArray.push(value);
-                _set(resources, key, valueArray);
+                let existingKeyValue = _get(resources, key);
+                // is key existing?
+                if (!existingKeyValue) {
+                    _set(resources, key, value);
+                } else {
+
+                    // add new element to existing array
+                    if (Array.isArray(existingKeyValue)) {
+                        existingKeyValue.push(value);
+                    } else { // create array from existing string and new value
+                        existingKeyValue = [existingKeyValue, value];
+                    }
+                    _set(resources, key, existingKeyValue);
+                }
+
+
             }
         }
 
