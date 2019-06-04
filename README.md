@@ -85,7 +85,7 @@ Name | Description | Docs
 :--- | :--- | :---
 Command Line Tools | Create and run Jovo projects from your command line | [📝](./docs/workflows/cli)
 Routing | Easy routing capabilities for intents and states | [📝](./docs/basic-concepts/routing)
-Data input | Deal with user specific data and request parameters (slots and entities) easily| [📝](./docs/basic-concepts/data)
+Data input | Deal with user specific data and request parameters (slots and entities) easily | [📝](./docs/basic-concepts/data)
 Speech and visual output &nbsp; | Craft your responses, including speech an visual elements | [📝](./docs/basic-concepts/output)
 
 
@@ -93,6 +93,7 @@ Speech and visual output &nbsp; | Craft your responses, including speech an visu
 
 Name | Description | Docs
 :--- | :--- | :---
+Input Validation | Define and execute different methods of validation for your user's inputs | [📝](./docs/basic-concepts/routing/input.md#validation)
 User object | Create contextual experiences with user specific data and services | [📝](./docs/basic-concepts/data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](./docs/basic-concepts/output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](./docs/basic-concepts/output/i18n.md)

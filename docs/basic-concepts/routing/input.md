@@ -5,6 +5,7 @@ In this section, you will learn how to deal with entities and slot values provid
 * [Introduction to User Input](#introduction-to-user-input)
 * [How to Access Input](#how-to-access-input)
 * [inputMap](#inputmap)
+* [Validation](#validation)
 
 ## Introduction to User Input
 
