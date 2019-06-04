@@ -4,6 +4,8 @@ import * as feed from './mockObj/feedEntries.json';
 import * as sheetValues from './mockObj/publicSheetValues.json';
 import { MockHandleRequest } from './mockObj/mockHR';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 let handleRequest: HandleRequest;
 beforeEach(() => {
     handleRequest = new MockHandleRequest();

@@ -7,6 +7,8 @@ import * as cI18nModel from './mockObj/i18nModel.json';
 import _cloneDeep = require('lodash.clonedeep');
 import i18n from 'i18next';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 let publicSheetValues: any[];       // tslint:disable-line
 let privateSheetValues: any[];      // tslint:disable-line
 let i18nModel: any;                 // tslint:disable-line
@@ -179,7 +181,7 @@ describe('ResponsesSheet.parse()', () => {
             privateSheetValues[1].push('Welcome_Alexa');
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
-                    WELCOME: ['Welcome_Alexa'],
+                    WELCOME: 'Welcome_Alexa',
                 }
             };
             responsesSheet.parse(handleRequest, privateSheetValues);
@@ -209,7 +211,7 @@ describe('ResponsesSheet.parse()', () => {
             publicSheetValues[1].push('Welcome_Alexa');
             i18nModel['en-US'].AlexaSkill = {
                 translation: {
-                    WELCOME: ['Welcome_Alexa'],
+                    WELCOME: 'Welcome_Alexa',
                 }
             };
             responsesSheet.parse(handleRequest, publicSheetValues);

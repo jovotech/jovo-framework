@@ -2,6 +2,8 @@ import { DefaultTable, AirtableCMS } from '../src';
 import { BaseApp, ErrorCode, JovoError } from 'jovo-core';
 import { MockHandleRequest } from './mockObj/mockHR';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 let handleRequest: MockHandleRequest;
 beforeEach(() => {
     handleRequest = new MockHandleRequest();

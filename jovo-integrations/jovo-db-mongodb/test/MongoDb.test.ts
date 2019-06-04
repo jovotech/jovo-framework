@@ -1,8 +1,10 @@
-import { BaseApp, JovoError } from "jovo-core";
+import { BaseApp, JovoError, Util } from "jovo-core";
 import { MongoDb } from "../src/MongoDb";
 import {MongoClient} from  "mongodb";
 import MongoMemoryServer from 'mongodb-memory-server';
 import _set = require('lodash.set');
+
+process.env.NODE_ENV = 'UNIT_TEST';
 
 jest.setTimeout(600000);
 
@@ -150,15 +152,15 @@ describe('test database operations', () => {
                 [key]: data
             }
         };
+
         await collection.updateOne({userId: primaryKey}, item, {upsert: true});
-        await client.close();
     }
 
     async function load(primaryKey: string) {
         const client = await MongoClient.connect(config.uri!, {useNewUrlParser: true});
         const collection = client.db(config.databaseName!).collection(config.collectionName!);
         const doc = await collection.findOne({userId: primaryKey});
-        await client.close();
+
         return doc;
     }
 

@@ -1,13 +1,13 @@
 {
   "name": "jovo-core",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
-    "tscw": "tscw --watch",
+    "tscw": "tsc --watch",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
