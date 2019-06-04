@@ -1,7 +1,8 @@
-import {Host} from "./Interfaces";
+import { Host } from './Interfaces';
+import { Log } from './Log';
 
 export class TestHost implements Host {
-    headers: {[key: string]: string};
+    headers: { [ key: string ]: string };
     hasWriteFileAccess = true; // tests shouldn't write to filesystem
     req: any; // tslint:disable-line:no-any
     $request: any; // tslint:disable-line:no-any
@@ -11,7 +12,7 @@ export class TestHost implements Host {
 
 
     constructor(req: any) { // tslint:disable-line:no-any
-        this.headers = {"jovo-test": "TestHost"};
+        this.headers = {'jovo-test': 'TestHost'};
         this.req = req;
         this.$request = req;
     }
@@ -48,7 +49,8 @@ export class TestHost implements Host {
      * @param error
      */
     fail(error: Error) {
-        console.log("TestHost.fail: ", error);
+        Log.error('TestHost.fail: ');
+        Log.error(error);
         this.err = error;
         this.failed = true;
     }

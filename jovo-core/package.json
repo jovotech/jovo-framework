@@ -41,10 +41,12 @@
     "@types/lodash.transform": "^4.6.4",
     "@types/node": "^10.3.1",
     "jest": "^24.6.0",
+    "prettier": "1.17.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
     "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.4.1"
   },

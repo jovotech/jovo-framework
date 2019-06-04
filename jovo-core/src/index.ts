@@ -1,13 +1,13 @@
-import { Inputs } from "./Interfaces";
-import { Log } from "./Log";
+import { Inputs } from './Interfaces';
+import { Log } from './Log';
 
 try {
     // do not use source map support with jest.
     if (process.env.JEST_WORKER_ID === undefined) {
-        require('source-map-support').install();
+        require('source-map-support').install(); // tslint:disable-line
     }
 } catch (error) {
-
+    Log.error(error);
 }
 
 declare global {
@@ -41,7 +41,7 @@ export {
     ValidationError,
     IsRequiredValidator,
     ValidValuesValidator,
-    InvalidValuesValidator
+    InvalidValuesValidator,
 } from './validators';
 export {
     HandleRequest,

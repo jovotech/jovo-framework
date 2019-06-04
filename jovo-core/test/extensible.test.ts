@@ -1,29 +1,31 @@
+import _merge = require('lodash.merge');
 
-import {Extensible, ExtensibleConfig} from "../src/Extensible";
-import * as _ from "lodash";
-import {Plugin, PluginConfig} from "../src/Interfaces";
+import { Extensible, ExtensibleConfig } from '../src/Extensible';
+import { Plugin, PluginConfig } from '../src/Interfaces';
 //
 //
 interface ConfigBase extends ExtensibleConfig {
-    key?:string;
+    key?: string;
 }
+
 class BaseClass extends Extensible {
     config: ConfigBase = {
         key: 'value',
-        plugin: {}
+        plugin: {},
     };
+
     constructor(config?: ConfigBase) {
         super(config);
 
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
     /**
      * Dummy install implementation
      */
-    install() {
+    install() { // tslint:disable-line:no-empty
 
     }
 }
@@ -31,6 +33,7 @@ class BaseClass extends Extensible {
 interface ConfigPluginA extends PluginConfig {
     pluginA: string;
 }
+
 //
 class PluginA implements Plugin {
 
@@ -40,7 +43,7 @@ class PluginA implements Plugin {
 
     constructor(config?: ConfigPluginA) {
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -63,20 +66,21 @@ class PluginB implements Plugin {
 
 
 interface ConfigExtensiblePlugin extends ExtensibleConfig {
-    key?:string;
+    key?: string;
     plugins?: any; // tslint:disable-line
 }
 
 class ExtensiblePlugin extends Extensible implements Plugin {
     config: ConfigExtensiblePlugin = {
         key: 'ExtensiblePlugin',
-        plugins: {}
+        plugins: {},
 
     };
+
     constructor(config?: ConfigBase) {
         super(config);
         if (config) {
-            this.config = _.merge(this.config, config);
+            this.config = _merge(this.config, config);
         }
     }
 
@@ -87,6 +91,7 @@ class ExtensiblePlugin extends Extensible implements Plugin {
 
     }
 }
+
 test('test plugins in base class plugins map', () => {
     const baseClass = new BaseClass();
     baseClass.use(new PluginA());
@@ -114,9 +119,9 @@ test('test PluginA config from plugins-baseclass config', () => {
     const baseClass = new BaseClass({
         plugin: {
             PluginA: {
-                pluginA: 'fromBaseClass'
-            }
-        }
+                pluginA: 'fromBaseClass',
+            },
+        },
     });
     baseClass.use(new PluginA());
     expect((baseClass.$plugins.get('PluginA') as PluginA).config.pluginA).toBe('fromBaseClass');
@@ -126,13 +131,13 @@ test('test PluginA constructor config priority', () => {
     const baseClass = new BaseClass({
         plugin: {
             PluginA: {
-                pluginA: 'fromBaseClass'
-            }
-        }
+                pluginA: 'fromBaseClass',
+            },
+        },
     });
 
     baseClass.use(new PluginA({
-        pluginA: 'fromConstructor'
+        pluginA: 'fromConstructor',
     }));
     expect((baseClass.$plugins.get('PluginA')  as PluginA).config.pluginA).toBe('fromConstructor');
 });
@@ -141,14 +146,14 @@ test('test ExtensiblePlugin', () => {
     const baseClass = new BaseClass({
         plugin: {
             ExtensiblePlugin: {
-                key: 'ExtensiblePlugin from BaseAppConfig'
-            }
-        }
+                key: 'ExtensiblePlugin from BaseAppConfig',
+            },
+        },
     });
 
     const extensiblePlugin = new ExtensiblePlugin();
     extensiblePlugin.use(new PluginA({
-        pluginA: 'fromConstructor'
+        pluginA: 'fromConstructor',
     }));
 
     baseClass.use(extensiblePlugin);

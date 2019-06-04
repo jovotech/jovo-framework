@@ -1,4 +1,5 @@
-import { Validator, ValidationError } from './Validator';
+import { Validator } from './Validator';
+import { ValidationError } from './ValidatorError';
 
 export class IsRequiredValidator extends Validator {
     /**
@@ -10,7 +11,7 @@ export class IsRequiredValidator extends Validator {
         if (!input || !input.value) {
             throw new ValidationError(
                 this.constructor.name,
-                `${this.constructor.name} failed.`
+                `${this.constructor.name} failed.`,
             );
         }
     }

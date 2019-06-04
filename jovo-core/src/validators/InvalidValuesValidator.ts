@@ -1,8 +1,10 @@
-import { Validator, ValidationError } from './Validator';
-import { JovoError, ErrorCode } from '../errors/JovoError';
+import { ErrorCode, JovoError } from '../errors/JovoError';
+import { Validator } from './Validator';
+import { ValidationError } from './ValidatorError';
 
 export class InvalidValuesValidator extends Validator {
     invalidValues: Array<string | RegExp> = [];
+
     constructor(invalidValues: Array<string | RegExp> = []) {
         super();
         this.invalidValues = invalidValues;
@@ -19,7 +21,7 @@ export class InvalidValuesValidator extends Validator {
         if (!input || !input.value) {
             throw new ValidationError(
                 this.constructor.name,
-                `${this.constructor.name} failed.`
+                `${this.constructor.name} failed.`,
             );
         }
 
@@ -28,14 +30,14 @@ export class InvalidValuesValidator extends Validator {
                 if (input.value.toLowerCase() === v.toLowerCase()) {
                     throw new ValidationError(
                         this.constructor.name,
-                        `${this.constructor.name} failed.`
+                        `${this.constructor.name} failed.`,
                     );
                 }
             } else if (v instanceof RegExp) {
                 if (v.test(input.value)) {
                     throw new ValidationError(
                         this.constructor.name,
-                        `${this.constructor.name} failed.`
+                        `${this.constructor.name} failed.`,
                     );
                 }
             } else {
@@ -44,7 +46,7 @@ export class InvalidValuesValidator extends Validator {
                     ErrorCode.ERR,
                     'jovo-core',
                     undefined,
-                    'Please only use the supported value types string|RegExp.'
+                    'Please only use the supported value types string|RegExp.',
                 );
             }
         }

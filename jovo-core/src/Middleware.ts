@@ -1,5 +1,5 @@
-import {Extensible} from "./Extensible";
-import {Log} from "./Log";
+import { Extensible } from './Extensible';
+import { Log } from './Log';
 
 export class Middleware {
 
@@ -70,7 +70,7 @@ export class Middleware {
             if (concurrent) {
                 const promiseArr = [];
                 for (const fn of this.fns) {
-                    promiseArr.push(new Promise( async (resolve, reject) => {
+                    promiseArr.push(new Promise(async (resolve, reject) => {
                         try {
                             await fn.apply(null, arguments);
                             resolve();

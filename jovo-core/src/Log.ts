@@ -1,11 +1,11 @@
+import { ContinuationLocalStorage } from 'asyncctx';
 import _merge = require('lodash.merge');
-import {ContinuationLocalStorage} from 'asyncctx';
-import {Host} from "./Interfaces";
+import { Host } from './Interfaces';
 
 export enum LogLevel {
     NONE = -1,
     ERROR = 0, // red().bold()
-    WARN= 1, // yellow().bold()
+    WARN = 1, // yellow().bold()
     INFO = 2, //
     VERBOSE = 3, // yellow()
     DEBUG = 4, // yellow()
@@ -16,7 +16,7 @@ interface Config {
     appenderSymbol: string;
     appenderOffset: string;
     ignoreFormatting: boolean;
-    appenders: {[key: string]: Appender};
+    appenders: { [ key: string ]: Appender };
     /**
      * Set to true to disable async hooks.
      * They're used to give certain appenders access to the request object,
@@ -35,37 +35,84 @@ interface LogEvent {
 }
 
 interface Appender {
+    ignoreFormatting: boolean;
+    logLevel: LogLevel;
+    trackRequest: boolean;
+
+    [ key: string ]: any; // tslint:disable-line
     /**
      * Write method for the LogEvent object
      * @param logEvent
      */
     write(logEvent: LogEvent): void;
-    ignoreFormatting: boolean;
-    logLevel: LogLevel;
-    trackRequest: boolean;
-    [key: string]: any; // tslint:disable-line
 }
 
 /**
  * Prints to console and exits process.
  * @param {object} obj
  */
-console.dd = (obj: object) => {
-    console.log(obj);
+console.dd = (obj: object) => { // tslint:disable-line:no-console
+    console.log(obj); // tslint:disable-line:no-console
     process.exit(0);
 };
 
 export class Logger {
+
+    /**
+     * Check, if LogLevel matches current LogLevel
+     * @param {LogLevel} logLevel
+     * @returns {boolean}
+     */
+    static isLogLevel(logLevel: LogLevel) {
+        if (!process.env.JOVO_LOG_LEVEL) {
+            return false;
+        }
+
+        const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
+
+        if (!isNaN(jovoLog)) {
+            return logLevel <= jovoLog;
+
+        } else {
+            return logLevel <= (Logger.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
+        }
+    }
+
+    /**
+     * Convert string LogLevel to enum LogLevel
+     * @param {string} logLevelStr
+     * @returns {LogLevel | undefined}
+     */
+    static getLogLevelFromString(logLevelStr: string): LogLevel | undefined {
+        logLevelStr = logLevelStr.toUpperCase();
+
+        switch (logLevelStr) {
+            case 'ERROR':
+                return LogLevel.ERROR;
+            case 'WARN':
+                return LogLevel.WARN;
+            case 'INFO':
+                return LogLevel.INFO;
+            case 'VERBOSE':
+                return LogLevel.VERBOSE;
+            case 'DEBUG':
+                return LogLevel.DEBUG;
+            default:
+                return;
+        }
+    }
+
+
     config: Config = {
         appenderLength: 70,
-        appenderSymbol: '-',
         appenderOffset: '  ',
-        ignoreFormatting: false,
+        appenderSymbol: '-',
         appenders: {},
         disableAsyncHooks: false,
+        ignoreFormatting: false,
     };
 
-    private timeMap: {[key: string]: number} = {};
+    private timeMap: { [ key: string ]: number } = {};
 
     private cls?: ContinuationLocalStorage<Host>;
 
@@ -82,7 +129,7 @@ export class Logger {
      * Adds appender to Log instance
      */
     addAppender(name: string, appender: Appender): this {
-        this.config.appenders[name] = appender;
+        this.config.appenders[ name ] = appender;
 
         if (appender.trackRequest) {
             this.activateRequestTracking();
@@ -97,10 +144,10 @@ export class Logger {
      * @param {string} name
      */
     removeAppender(name: string) {
-        if (!this.config.appenders![name]) {
+        if (!this.config.appenders![ name ]) {
             throw new Error(`Can't remove non-existing appender.`);
         }
-        delete this.config.appenders![name];
+        delete this.config.appenders![ name ];
     }
 
 
@@ -118,6 +165,9 @@ export class Logger {
      */
     addConsoleAppender(options?: any) { // tslint:disable-line
         const appender: Appender = {
+            ignoreFormatting: false,
+            logLevel: LogLevel.DEBUG,
+            trackRequest: false,
             write: (logEvent: LogEvent) => {
                 const msg = logEvent.msg || '';
                 if (logEvent.isFormat) {
@@ -128,9 +178,6 @@ export class Logger {
                     process.stdout.write('\n');
                 }
             },
-            logLevel: LogLevel.DEBUG,
-            ignoreFormatting: false,
-            trackRequest: false,
         };
         _merge(appender, options);
         return this.addAppender((options && options.name) || 'console', appender);
@@ -144,16 +191,16 @@ export class Logger {
      */
     addFileAppender(path: string, options?: any) { // tslint:disable-line
         const appender: Appender = {
+            ignoreFormatting: true,
+            logLevel: LogLevel.DEBUG,
+            stream: require('fs').createWriteStream(path, {flags: 'a'}),
+            trackRequest: false,
             write: (logEvent: LogEvent) => {
                 const msg = logEvent.msg || '';
 
                 this.config.appenders.file.stream.write(msg);
                 this.config.appenders.file.stream.write('\n');
             },
-            stream: require('fs').createWriteStream(path, {flags : 'a'}),
-            logLevel: LogLevel.DEBUG,
-            ignoreFormatting: true,
-            trackRequest: false,
         };
 
         _merge(appender, options);
@@ -168,12 +215,12 @@ export class Logger {
      */
     addFormat(format: string) {
         Object.keys(this.config.appenders).forEach((key) => {
-            const appender = this.config.appenders[key];
-            if(appender.ignoreFormatting === false) {
+            const appender = this.config.appenders[ key ];
+            if (appender.ignoreFormatting === false) {
                 appender.write({
-                    msg: format,
                     isFormat: true,
-                    logLevel: LogLevel.NONE
+                    logLevel: LogLevel.NONE,
+                    msg: format,
                 });
             }
         });
@@ -188,17 +235,17 @@ export class Logger {
      */
     writeToStreams(msg: string | object, logLevel: LogLevel) {
         Object.keys(this.config.appenders).forEach((key) => {
-            const appender = this.config.appenders[key];
+            const appender = this.config.appenders[ key ];
             if (appender.logLevel >= logLevel) {
                 if (typeof msg === 'object') {
                     msg = JSON.stringify(msg).trim();
                     msg = '\b\b';
                 }
                 appender.write({
-                    msg,
-                    logLevel,
                     isFormat: false,
-                    requestContext: this.cls ? this.cls.getContext() : undefined
+                    logLevel,
+                    msg,
+                    requestContext: this.cls ? this.cls.getContext() : undefined,
                 });
             }
         });
@@ -421,8 +468,8 @@ export class Logger {
      */
     removeTime(obj: string | object) {
         const key = obj.toString();
-        if (this.timeMap[key]) {
-            delete this.timeMap[key];
+        if (this.timeMap[ key ]) {
+            delete this.timeMap[ key ];
         }
     }
 
@@ -432,7 +479,7 @@ export class Logger {
      */
     setTime(obj: string | object) {
         const key = obj.toString();
-        this.timeMap[key] = new Date().getTime();
+        this.timeMap[ key ] = new Date().getTime();
     }
 
     /**
@@ -444,12 +491,11 @@ export class Logger {
         const key = obj.toString();
         const now = new Date().getTime();
 
-        if (!this.timeMap[key]) {
-            console.log('No start for ' + key);
+        if (!this.timeMap[ key ]) {
             return -1;
         }
 
-        return now - this.timeMap[key];
+        return now - this.timeMap[ key ];
     }
 
 
@@ -461,11 +507,11 @@ export class Logger {
      */
     header(header?: string, module?: string) {
         header = header ? header : '';
-        module = module ? ' ('+module+')' : '';
+        module = module ? ' (' + module + ')' : '';
 
         this.bold();
         let str = header + module + ' ';
-        for (let i = 0; i < this.config.appenderLength - (header.length+module.length); i++) {
+        for (let i = 0; i < this.config.appenderLength - (header.length + module.length); i++) {
             str += this.config.appenderSymbol;
         }
         return '\n' + str + '\n';
@@ -480,9 +526,9 @@ export class Logger {
      */
     subheader(subheader?: string, module?: string) {
         subheader = subheader ? subheader : '';
-        module = module ? ' ('+module+')' : '';
-        let str = this.config.appenderOffset  + '-- ' + subheader + module +  ' ';
-        for (let i = 0; i < this.config.appenderLength - (subheader.length+module.length); i++) {
+        module = module ? ' (' + module + ')' : '';
+        let str = this.config.appenderOffset + '-- ' + subheader + module + ' ';
+        for (let i = 0; i < this.config.appenderLength - (subheader.length + module.length); i++) {
             str += this.config.appenderSymbol;
         }
         return '\n' + str + '\n';
@@ -697,56 +743,18 @@ export class Logger {
      * @param {object} obj
      */
     dd(obj: object) {
-        console.log(obj);
+        console.log(obj); // tslint:disable-line:no-console
         process.exit(0);
     }
 
     /**
-     * Check, if LogLevel matches current LogLevel
-     * @param {LogLevel} logLevel
-     * @returns {boolean}
+     * Activates request tracking, allowing getRequestContext() to be used.
      */
-    static isLogLevel(logLevel: LogLevel) {
-        if (!process.env.JOVO_LOG_LEVEL) {
-            return false;
-        }
-
-        const jovoLog = Number(process.env.JOVO_LOG_LEVEL);
-
-        if (!isNaN(jovoLog)) {
-            return logLevel <= jovoLog;
-
-        } else {
-            return logLevel <= (Logger.getLogLevelFromString(process.env.JOVO_LOG_LEVEL || 'error') || LogLevel.ERROR);
+    private activateRequestTracking() {
+        if (!this.cls && !this.config.disableAsyncHooks) {
+            this.cls = new ContinuationLocalStorage();
         }
     }
-
-    /**
-     * Convert string LogLevel to enum LogLevel
-     * @param {string} logLevelStr
-     * @returns {LogLevel | undefined}
-     */
-    static getLogLevelFromString(logLevelStr: string): LogLevel | undefined {
-        logLevelStr = logLevelStr.toUpperCase();
-
-        switch (logLevelStr) {
-            case 'ERROR': return LogLevel.ERROR;
-            case 'WARN': return LogLevel.WARN;
-            case 'INFO': return LogLevel.INFO;
-            case 'VERBOSE': return LogLevel.VERBOSE;
-            case 'DEBUG': return LogLevel.DEBUG;
-            default: return;
-        }
-    }
-
-   /**
-    * Activates request tracking, allowing getRequestContext() to be used.
-    */
-   private activateRequestTracking() {
-       if (!this.cls && !this.config.disableAsyncHooks) {
-           this.cls = new ContinuationLocalStorage();
-       }
-   }
 
 }
 

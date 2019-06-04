@@ -1,9 +1,9 @@
 import {
-    Validator,
-    IsRequiredValidator,
-    ValidValuesValidator,
     InvalidValuesValidator,
-    ValidationError
+    IsRequiredValidator,
+    ValidationError,
+    Validator,
+    ValidValuesValidator,
 } from '../src/validators';
 
 describe('ValidationError', () => {
@@ -28,12 +28,12 @@ describe('Validator', () => {
             validate() { }  // tslint:disable-line
         }
         const v = new ValidatorImpl();
-        expect(v['inputToValidate']).toBeUndefined();
+        expect(v.inputToValidate).toBeUndefined();
         v.setInputToValidate({
             name: 'name',
             value: 'test'
         });
-        expect(v['inputToValidate']).toStrictEqual({
+        expect(v.inputToValidate).toStrictEqual({
             name: 'name',
             value: 'test'
         });

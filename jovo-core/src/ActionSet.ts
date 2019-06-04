@@ -1,15 +1,14 @@
-import {Middleware} from "./Middleware";
-import {Extensible} from "./Extensible";
+import { Extensible } from './Extensible';
+import { Middleware } from './Middleware';
 
 /**
  * Set of middlewares predefined for an extensible class
  */
 export class ActionSet {
-
     middleware: Map<string, Middleware> = new Map();
 
     constructor(names: string[], parent: Extensible) {
-        names.forEach((name) => {
+        names.forEach(name => {
             this.create(name, parent);
         });
     }
@@ -23,7 +22,6 @@ export class ActionSet {
         return this.middleware.get(middlewareName);
     }
 
-
     /**
      * Creates meiddleware
      * @param {string} middlewareName
@@ -36,4 +34,3 @@ export class ActionSet {
         return middleware;
     }
 }
-

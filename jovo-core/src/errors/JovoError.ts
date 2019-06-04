@@ -1,4 +1,4 @@
-import {Log} from "../Log";
+import {Log} from '../Log';
 
 
 export enum ErrorCode {
@@ -8,28 +8,6 @@ export enum ErrorCode {
 
 
 export class JovoError extends Error {
-
-    code: ErrorCode | string = ErrorCode.ERR;
-    module: string | undefined;
-    details: string | undefined;
-    hint: string | undefined;
-    seeMore: string | undefined;
-
-    constructor(message: string,
-                code: ErrorCode | string = ErrorCode.ERR,
-                module?: string,
-                details?: string,
-                hint?: string,
-                seeMore?: string) {
-        super(message);
-        this.module = module;
-        this.details = details;
-        this.hint = hint;
-        this.code = code;
-        this.seeMore = seeMore;
-    }
-
-
     /**
      * Prints JovoError instance in an uniformed style.
      * @param {JovoError} e
@@ -51,9 +29,9 @@ export class JovoError extends Error {
             Log.error('Stack:');
             Log.error(e.stack);
         }
-        if (e.message.indexOf('is not a function')  > -1) {
+        if (e.message.indexOf('is not a function') > -1) {
             e.hint = 'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
-            e.seeMore  = 'https://www.jovo.tech/docs/installation/upgrading';
+            e.seeMore = 'https://www.jovo.tech/docs/installation/upgrading';
         }
 
         if (e.module) {
@@ -83,4 +61,28 @@ export class JovoError extends Error {
         Log.red().error(Log.header());
 
     }
+
+
+    code: ErrorCode | string = ErrorCode.ERR;
+    module: string | undefined;
+    details: string | undefined;
+    hint: string | undefined;
+    seeMore: string | undefined;
+
+
+    constructor(message: string,
+                code: ErrorCode | string = ErrorCode.ERR,
+                module?: string,
+                details?: string,
+                hint?: string,
+                seeMore?: string) {
+        super(message);
+        this.module = module;
+        this.details = details;
+        this.hint = hint;
+        this.code = code;
+        this.seeMore = seeMore;
+    }
+
+
 }

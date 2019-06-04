@@ -1,17 +1,18 @@
+import * as crypto from 'crypto';
 import * as http from 'http';
-import {RequestOptions} from 'http';
-import * as fs from 'fs';
-import * as crypto from "crypto";
+import { RequestOptions } from 'http'; // tslint:disable-line
 
-import * as util from "util";
-import * as path from 'path';
-import {TestHost} from "./TestHost";
-import {TestSuite} from "./TestSuite";
-import {Data, JovoRequest, JovoResponse, SessionData} from "./Interfaces";
-import {BaseApp} from './BaseApp';
-import {ErrorCode, JovoError} from "./errors/JovoError";
-import _merge = require('lodash.merge');
+import * as fs from 'fs';
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import * as path from 'path';
+import * as util from 'util';
+import { BaseApp } from './BaseApp';
+import { ErrorCode, JovoError } from './errors/JovoError';
+import { Data, JovoRequest, JovoResponse, SessionData } from './Interfaces';
+import { Log } from './Log';
+import { TestHost } from './TestHost';
+import { TestSuite } from './TestSuite';
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
@@ -35,32 +36,31 @@ export class Conversation {
     app?: BaseApp;
 
     $user: {
-        $data: Data,
-        $metaData: Data
+        $data: Data;
+        $metaData: Data;
     } = {
         $data: {},
         $metaData: {},
     };
 
     config: ConversationConfig = {
-        userId: randomUserId(),
-        locale: 'en-US',
         defaultDbDirectory: './db/tests/',
         deleteDbOnSessionEnded: false,
-        runtime: "server",
         httpOptions: {
-            host: 'localhost',
-            port: process.env.JOVO_PORT || 3000,
-            path: '/webhook',
-            method: 'POST',
             headers: {
-                'accept': 'application/json',
+                accept: 'application/json',
                 'content-type': 'application/json',
-                'jovo-test': 'true'
+                'jovo-test': 'true',
             },
+            host: 'localhost',
+            method: 'POST',
+            path: '/webhook',
+            port: process.env.JOVO_PORT || 3000,
         },
+        locale: 'en-US',
+        runtime: 'server',
+        userId: randomUserId(),
     };
-
 
     constructor(testSuite: TestSuite, config?: ConversationConfig) {
         this.testSuite = testSuite;
@@ -72,8 +72,9 @@ export class Conversation {
             try {
                 // TODO: cleaner solution required
                 process.env.JOVO_CONFIG = process.cwd() + '/src/config.js';
-                this.app = require( process.cwd() + '/src/app').app;
-            } catch(e) {
+                this.app = require(process.cwd() + '/src/app').app;
+            } catch (e) {
+                Log.error(e);
             }
         }
     }
@@ -87,7 +88,6 @@ export class Conversation {
         if (this.config.locale) {
             req.setLocale(this.config.locale);
         }
-
     }
 
     /**
@@ -100,7 +100,7 @@ export class Conversation {
 
         if (req.isNewSession()) {
             this.clearSession();
-        } else if(Object.keys(this.sessionData).length > 0) {
+        } else if (Object.keys(this.sessionData).length > 0) {
             req.setSessionData(this.sessionData);
         }
 
@@ -114,22 +114,26 @@ export class Conversation {
      * @returns {Promise<JovoResponse>}
      */
     async send(req: JovoRequest): Promise<JovoResponse> {
-
         await this.prepare(req);
 
         if (this.config.runtime === 'server') {
             return this.sendToServer(req);
         } else if (this.config.runtime === 'app') {
-
             if (!this.app) {
-                throw new JovoError('Can\'t find a valid app object', ErrorCode.ERR, 'jovo-core', 'Imported app object can\'t be found at the default path. Please add a valid object via conversation.app = require(...)');
+                throw new JovoError(
+                    'Can\'t find a valid app object',
+                    ErrorCode.ERR,
+                    'jovo-core',
+                    'Imported app object can\'t be found at the default path. Please add a valid object via conversation.app = require(...)',
+                );
             }
             return this.sendToApp(req, this.app);
         }
 
-        throw new JovoError('Conversation send type not valid. Try \'app\' or \'server\'');
+        throw new JovoError(
+            'Conversation send type not valid. Try \'app\' or \'server\'',
+        );
     }
-
 
     /**
      * Send request to server, resolve with response.
@@ -141,8 +145,13 @@ export class Conversation {
         const postData = JSON.stringify(req.toJSON());
 
         try {
-            const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
-            const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
+            const response = await Conversation.httpRequest(
+                postData,
+                this.config.httpOptions || {},
+            );
+            const jovoResponse = this.testSuite.responseBuilder.create(
+                JSON.parse(response),
+            );
             await this.postProcess(jovoResponse);
             return jovoResponse;
         } catch (e) {
@@ -157,7 +166,6 @@ export class Conversation {
      * @returns {Promise<JovoResponse>}
      */
     async sendToApp(req: JovoRequest, app: BaseApp): Promise<JovoResponse> {
-
         await this.prepare(req);
 
         const host = new TestHost(req);
@@ -180,7 +188,10 @@ export class Conversation {
     async postProcess(jovoResponse: JovoResponse): Promise<void> {
         this.sessionData = jovoResponse.getSessionData() || {};
         await this.updateUserData();
-        if (this.config.deleteDbOnSessionEnded === true && jovoResponse.hasSessionEnded()) {
+        if (
+            this.config.deleteDbOnSessionEnded === true &&
+            jovoResponse.hasSessionEnded()
+        ) {
             this.clearDb();
         }
     }
@@ -206,7 +217,10 @@ export class Conversation {
      * @returns {Promise<void>}
      */
     async clearDb() {
-        const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId + '.json');
+        const pathToDb = path.join(
+            this.config.defaultDbDirectory!,
+            this.config.userId + '.json',
+        );
         const exists = await fsexists(pathToDb);
         if (!exists) {
             throw new Error(`Can't find ${pathToDb}`);
@@ -220,15 +234,21 @@ export class Conversation {
      * @returns {Promise<void>}
      */
     private async saveUserData() {
-        if (Object.keys(this.$user.$data).length > 0 || Object.keys(this.$user.$metaData).length > 0) {
+        if (
+            Object.keys(this.$user.$data).length > 0 ||
+            Object.keys(this.$user.$metaData).length > 0
+        ) {
             const userDataObj = {
                 userData: {
                     data: this.$user.$data,
-                    metaData: this.$user.$metaData
-                }
+                    metaData: this.$user.$metaData,
+                },
             };
 
-            const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId!  + '.json');
+            const pathToDb = path.join(
+                this.config.defaultDbDirectory!,
+                this.config.userId! + '.json',
+            );
             await fswriteFile(pathToDb, JSON.stringify(userDataObj, null, '\t'));
         }
     }
@@ -238,7 +258,10 @@ export class Conversation {
      * @returns {Promise<void>}
      */
     private async updateUserData() {
-        const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId!  + '.json');
+        const pathToDb = path.join(
+            this.config.defaultDbDirectory!,
+            this.config.userId! + '.json',
+        );
         const dbExists = await fsexists(pathToDb);
 
         if (dbExists) {
@@ -254,32 +277,37 @@ export class Conversation {
      * @param {RequestOptions} options
      * @returns {Promise<any>}
      */
-    private static httpRequest(postData: string, options: RequestOptions): Promise<any> { //tslint:disable-line
+    private static httpRequest(
+        postData: string,
+        options: RequestOptions,
+    ): Promise<any> {
+        //tslint:disable-line
         return new Promise((resolve, reject) => {
-            const request = http.request(options, (res) => {
-                res.setEncoding('utf8');
-                let result = '';
-                res.on('data', (data) => {
-                    result += data;
+            const request = http
+                .request(options, res => {
+                    res.setEncoding('utf8');
+                    let result = '';
+                    res.on('data', data => {
+                        result += data;
+                    });
+                    res.on('end', () => {
+                        resolve(result);
+                    });
+                })
+                .on('error', (e: Error) => {
+                    if (_get(e, 'code') === 'ECONNREFUSED') {
+                        Log.error();
+                        Log.error('Your server must be running for your tests to work.');
+                        Log.error();
+                        Log.error(e);
+                        Log.error();
+                    }
+                    reject(e);
                 });
-                res.on('end', () => {
-                    resolve(result);
-                });
-            }).on('error', (e: Error) => {
-                if (_get(e, 'code') === 'ECONNREFUSED') {
-                                console.log();
-                                console.log('Your server must be running for your tests to work.');
-                                console.log();
-                                console.log(e);
-                                console.log();
-                            }
-                reject(e);
-            });
             request.write(postData);
             request.end();
         });
     }
-
 }
 
 /**
@@ -287,7 +315,9 @@ export class Conversation {
  * @returns {string}
  */
 function randomUserId(): string {
-    return Math.random().toString(36).substring(7);
+    return Math.random()
+        .toString(36)
+        .substring(7);
 }
 
 /**
@@ -295,5 +325,8 @@ function randomUserId(): string {
  * @returns {string}
  */
 function projectUserId(): string {
-    return `testuser-${crypto.createHash('md5').update(__dirname).digest("hex")}`;
+    return `testuser-${crypto
+        .createHash('md5')
+        .update(__dirname)
+        .digest('hex')}`;
 }

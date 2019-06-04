@@ -1,5 +1,4 @@
-
-import {SpeechBuilder} from "../src";
+import { SpeechBuilder } from '../src';
 
 test('is empty on initiation', () => {
     const sb = new SpeechBuilder();
@@ -36,7 +35,7 @@ test('addText', () => {
 
     // test variation
     const speechBuilder2 = new SpeechBuilder();
-    speechBuilder2.addText(['text1', 'text2']);
+    speechBuilder2.addText([ 'text1', 'text2' ]);
     expect(speechBuilder2.toString()).toMatch(/^(text1|text2)/);
 
     // test variation
@@ -56,19 +55,19 @@ test('addText', () => {
     speechBuilder5.addText('text1', true, 1.0, {
         prosody: {
             pitch: '+1st',
-            rate: 'fast'
-        }
+            rate: 'fast',
+        },
     });
     expect(speechBuilder5.toString()).toBe('<prosody pitch="+1st" rate="fast">text1</prosody>');
 
     const speechBuilder6 = new SpeechBuilder();
     speechBuilder6.addText('text1', true, 1.0, {
         emphasis: {
-            level: 'moderate'
+            level: 'moderate',
         },
         prosody: {
-            rate: 'fast'
-        }
+            rate: 'fast',
+        },
     });
     expect(speechBuilder6.toString()).toBe('<prosody rate="fast"><emphasis level="moderate">text1</emphasis></prosody>');
 });
@@ -83,7 +82,7 @@ test('addBreak', () => {
     expect(speechBuilder2.toString()).toBe('<break strength="x-weak"/>');
 
     const speechBuilder3 = new SpeechBuilder();
-    speechBuilder3.addBreak(['300ms', '1s']);
+    speechBuilder3.addBreak([ '300ms', '1s' ]);
     const regex = /<break time="(300ms|1s)"\/>/;
     expect(speechBuilder3.toString()).toMatch(regex);
 });
@@ -95,7 +94,7 @@ test('addSentence', () => {
     expect(speechBuilder.toString()).toBe('<s>This is a sentence</s>');
 
     const speechBuilder2 = new SpeechBuilder();
-    speechBuilder2.addSentence(['sentence1', 'sentence2']);
+    speechBuilder2.addSentence([ 'sentence1', 'sentence2' ]);
     const regex = /<s>(sentence1|sentence2)<\/s>/;
 
     expect(speechBuilder2.toString()).toMatch(regex);
@@ -112,7 +111,7 @@ test('addSayAsCardinal', () => {
     expect(speechBuilder2.toString()).toBe('<say-as interpret-as="cardinal">10</say-as>');
 
     const speechBuilder3 = new SpeechBuilder();
-    speechBuilder3.addSayAsCardinal([10, 20]);
+    speechBuilder3.addSayAsCardinal([ 10, 20 ]);
     const regex = /<say-as interpret-as="cardinal">(10|20)<\/say-as>/;
     expect(speechBuilder3.toString()).toMatch(regex);
 
@@ -128,7 +127,7 @@ test('addSayAsOrdinal', () => {
     expect(speechBuilder2.toString()).toBe('<say-as interpret-as="ordinal">10</say-as>');
 
     const speechBuilder3 = new SpeechBuilder();
-    speechBuilder3.addSayAsOrdinal([10, 20]);
+    speechBuilder3.addSayAsOrdinal([ 10, 20 ]);
     const regex = /<say-as interpret-as="ordinal">(10|20)<\/say-as>/;
     expect(speechBuilder3.toString()).toMatch(regex);
 
@@ -144,7 +143,7 @@ test('addSayAsCharacters', () => {
     expect(speechBuilder2.toString()).toBe('<say-as interpret-as="characters">abc</say-as>');
 
     const speechBuilder3 = new SpeechBuilder();
-    speechBuilder3.addCharacters(['abc', 'def']);
+    speechBuilder3.addCharacters([ 'abc', 'def' ]);
     const regex = /<say-as interpret-as="characters">(abc|def)<\/say-as>/;
     expect(speechBuilder3.toString()).toMatch(regex);
 });
@@ -155,7 +154,7 @@ test('addPhoneme', () => {
     expect(speechBuilder.toString()).toBe('<phoneme alphabet="x-sampa" ph="&quot;kvo:t@">quote</phoneme>');
 
     const speechBuilder2 = new SpeechBuilder();
-    speechBuilder2.addPhoneme('quote', 'ˈkvoːtə', );
+    speechBuilder2.addPhoneme('quote', 'ˈkvoːtə');
     expect(speechBuilder2.toString()).toBe('<phoneme alphabet="ipa" ph="ˈkvoːtə">quote</phoneme>');
 
 
@@ -192,6 +191,6 @@ test('test escapeXML', () => {
 });
 
 test('test build()', () => {
-   const speechBuilder = new SpeechBuilder();
+    const speechBuilder = new SpeechBuilder();
     expect(speechBuilder.build()).toBe('');
 });

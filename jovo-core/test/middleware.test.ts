@@ -1,17 +1,17 @@
-
-import {Middleware} from './../src/Middleware';
-import {Extensible, ExtensibleConfig} from "./../src/Extensible";
-import {ActionSet} from "../src";
+import { ActionSet } from '../src';
+import { Extensible } from './../src/Extensible';
+import { Middleware } from './../src/Middleware';
 
 class Parent extends Extensible {
     /**
      * Dummy install implementation
      */
-    install() {
+    install() { // tslint:disable-line:no-empty
 
     }
 
 }
+
 test('test Middleware class initialization', () => {
     const middleware = new Middleware('name', new Parent());
     expect(middleware.fns.length).toBe(0);
@@ -27,11 +27,10 @@ test('test Middleware class use()', () => {
     middleware.use(fn);
 
     expect(middleware.fns.length).toBe(1);
-    expect(middleware.fns[0]).toBe(fn);
+    expect(middleware.fns[ 0 ]).toBe(fn);
     expect(middleware.use(fn)).toBe(middleware);
 
 });
-
 
 
 test('test multiple use() calls', () => {
@@ -60,8 +59,8 @@ test('test run with multiple functions', async () => {
             return this.test;
         },
         context1: {
-            test: 'abc'
-        }
+            test: 'abc',
+        },
     };
 
     const test2 = {
@@ -71,8 +70,8 @@ test('test run with multiple functions', async () => {
             return this.test;
         },
         context1: {
-            test: 'def'
-        }
+            test: 'def',
+        },
     };
 
     const spy = jest.spyOn(test, 'fn1');
@@ -84,18 +83,16 @@ test('test run with multiple functions', async () => {
     await middleware.run(undefined);
 
     expect(spy).toBeCalled();
-    expect(spy.mock.results[0].value).toBe('abc');
+    expect(spy.mock.results[ 0 ].value).toBe('abc');
 
     expect(spy2).toBeCalled();
-    expect(spy2.mock.results[0].value).toBe('def');
+    expect(spy2.mock.results[ 0 ].value).toBe('def');
 });
-
-
 
 
 test('test middleware before/after and events', async () => {
     const parent = new Parent();
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
 
     const test = {
         // @ts-ignore
@@ -104,8 +101,8 @@ test('test middleware before/after and events', async () => {
             return this.test;
         },
         context1: {
-            test: 'abc'
-        }
+            test: 'abc',
+        },
     };
 
     const beforeTest = {
@@ -115,8 +112,8 @@ test('test middleware before/after and events', async () => {
             return this.test;
         },
         context1: {
-            test: 'before'
-        }
+            test: 'before',
+        },
     };
     const afterTest = {
         // @ts-ignore
@@ -125,8 +122,8 @@ test('test middleware before/after and events', async () => {
             return this.test;
         },
         context1: {
-            test: 'after'
-        }
+            test: 'after',
+        },
     };
 
     const spy = jest.spyOn(test, 'fn1');
@@ -139,12 +136,12 @@ test('test middleware before/after and events', async () => {
     parent.middleware('after.middleware1')!.use(afterTest.afterFn1.bind(afterTest.context1));
 
     const listener = {
-        beforeListenerFunc() {
+        beforeListenerFunc() { // tslint:disable-line:no-empty
         },
-        listenerFunc() {
+        listenerFunc() { // tslint:disable-line:no-empty
         },
-        afterListenerFunc() {
-        }
+        afterListenerFunc() { // tslint:disable-line:no-empty
+        },
     };
     const spyBeforeListener = jest.spyOn(listener, 'beforeListenerFunc');
     const spyListener = jest.spyOn(listener, 'listenerFunc');
@@ -155,18 +152,17 @@ test('test middleware before/after and events', async () => {
     parent.on('after.middleware1', listener.afterListenerFunc);
 
 
-
     // @ts-ignore
     await parent.middleware('middleware1')!.run(undefined);
 
     expect(spy).toBeCalled();
-    expect(spy.mock.results[0].value).toBe('abc');
+    expect(spy.mock.results[ 0 ].value).toBe('abc');
 
     expect(spyBefore).toBeCalled();
-    expect(spyBefore.mock.results[0].value).toBe('before');
+    expect(spyBefore.mock.results[ 0 ].value).toBe('before');
 
     expect(spyAfter).toBeCalled();
-    expect(spyAfter.mock.results[0].value).toBe('after');
+    expect(spyAfter.mock.results[ 0 ].value).toBe('after');
 
     expect(spyBeforeListener).toBeCalled();
     expect(spyListener).toBeCalled();
@@ -179,7 +175,7 @@ test('test middleware sequential', async (done) => {
     const parent = new Parent();
     let testValue = '';
 
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
     parent.middleware('middleware1')!.use(() => {
         testValue += 'a';
     });
@@ -202,7 +198,7 @@ test('test middleware sequential', async (done) => {
 test('test middleware parallel', async (done) => {
     const parent = new Parent();
 
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
     parent.middleware('middleware1')!.use(async () => {
         await delay();
     });
@@ -224,14 +220,18 @@ test('test middleware parallel', async (done) => {
 test('test remove middleware', async () => {
     const parent = new Parent();
 
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
 
-    const f1 = () => {};
-    const f2 = () => {};
-    const f3 = () => {};
-    const f4 = () => {};
+    const f1 = () => {
+    }; // tslint:disable-line:no-empty
+    const f2 = () => {
+    }; // tslint:disable-line:no-empty
+    const f3 = () => {
+    }; // tslint:disable-line:no-empty
+    const f4 = () => {
+    }; // tslint:disable-line:no-empty
 
-    parent.middleware('middleware1')!.use(f1,f2,f3,f4);
+    parent.middleware('middleware1')!.use(f1, f2, f3, f4);
     expect(parent.middleware('middleware1')!.fns.length).toBe(4);
     parent.middleware('middleware1')!.remove(f3);
     expect(parent.middleware('middleware1')!.fns.length).toBe(3);
@@ -246,7 +246,7 @@ test('test remove middleware', async () => {
 test('test skip middleware', async () => {
     const parent = new Parent();
     let testValue = '';
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
 
     parent.middleware('middleware1')!.use(() => {
         testValue = 'test';
@@ -262,7 +262,7 @@ test('test skip middleware', async () => {
 test('test disable middleware', async () => {
     const parent = new Parent();
     let testValue = '';
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
 
     parent.middleware('middleware1')!.use(() => {
         testValue = 'test';
@@ -277,7 +277,7 @@ test('test disable middleware', async () => {
 
 test('test try/catch in sequential', async (done) => {
     const parent = new Parent();
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
     expect.assertions(1);
 
     const f1 = () => {
@@ -297,7 +297,7 @@ test('test try/catch in sequential', async (done) => {
 });
 test('test try/catch in parallel', async (done) => {
     const parent = new Parent();
-    parent.actionSet = new ActionSet(['middleware1'], parent);
+    parent.actionSet = new ActionSet([ 'middleware1' ], parent);
     expect.assertions(1);
 
     const f1 = () => {

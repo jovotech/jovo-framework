@@ -568,7 +568,7 @@ export interface NLUData {
 }
 
 
-export type HandlerReturnType = Function | Promise<Function> | Promise<Jovo> | Promise<void> | void;
+export type HandlerReturnType = () => void | Promise<Function> | Promise<Jovo> | Promise<void> | void;
 export type JovoFunction = (this: Jovo, jovo?: Jovo, done?: Function) => HandlerReturnType;
 
 

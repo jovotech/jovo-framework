@@ -1,8 +1,10 @@
+import {EnumRequestType, Jovo} from "jovo-core";
 
-import {Handler} from './../src/middleware/Handler';
 import {App, Config as AppConfig} from './../src/App';
-import {EnumRequestType, HandleRequest, Jovo, JovoRequest} from "jovo-core";
-require('source-map-support').install();
+import {Handler} from './../src/middleware/Handler';
+
+
+require('source-map-support').install(); // tslint:disable-line
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
 jest.setTimeout(250);
@@ -11,7 +13,7 @@ jest.setTimeout(250);
 test('test setHandler with single handler', () => {
     app = new App();
     app.setHandler({
-        LAUNCH() {
+        LAUNCH() { // tslint:disable-line:no-empty
 
         },
         State: {
@@ -48,11 +50,11 @@ test('test setHandler with multiple handlers', () => {
 test('test throw exception on non existing route', (done) => {
     const jovo = {
         $handlers: {
-            IntentA() {
+            IntentA() { // tslint:disable-line:no-empty
 
             },
-            Unhandled() {
-                console.log('unhandled');
+            Unhandled() { // tslint:disable-line:no-empty
+
             },
         }
     };
@@ -70,14 +72,13 @@ test('test throw exception on non existing route', (done) => {
 test('test skip exception on non existing route', async (done) => {
     const jovo = {
         $handlers: {
-            ON_REQUEST() {
+            ON_REQUEST() { // tslint:disable-line:no-empty
 
             },
-            IntentA() {
+            IntentA() { // tslint:disable-line:no-empty
 
             },
-            Unhandled() {
-                console.log('unhandled');
+            Unhandled() { // tslint:disable-line:no-empty
             },
         }
     };
@@ -187,7 +188,7 @@ test('test handleOnPromise on route that immediately throws exception', async ()
 
 test('test applyHandle on route with callback', async () => {
 
-    const jovo = {
+    const jovoObj = {
         $handlers: {
             IntentA(jovo: Jovo, callback: () => void) {
                 callback();
@@ -196,7 +197,7 @@ test('test applyHandle on route with callback', async () => {
     };
 
     // @ts-ignore
-    await Handler.applyHandle(jovo, {
+    await Handler.applyHandle(jovoObj, {
         path: 'IntentA',
         type: EnumRequestType.INTENT,
     });
@@ -234,7 +235,7 @@ test('test handleOnPromise on route with callback that immediately throws except
 
 
     try {
-        const jovo = {
+        const jovoObj = {
             $handlers: {
                 ON_REQUEST(jovo: Jovo, callback: () => {}) {
                     throw new Error(errorMessage);
@@ -242,7 +243,7 @@ test('test handleOnPromise on route with callback that immediately throws except
             }
         };
         // @ts-ignore
-        await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
+        await Handler.handleOnPromise(jovoObj, jovoObj.$handlers.ON_REQUEST);
 
     } catch (e) {
         expect(e).toEqual(new Error(errorMessage));
@@ -299,7 +300,7 @@ test('test handleOnPromise on route that returns a promise wrapped in a promise'
 test('test handleOnRequest', () => {
     const jovo = {
         $handlers: {
-            ON_REQUEST() {
+            ON_REQUEST() {  // tslint:disable-line:no-empty
 
             },
         }
