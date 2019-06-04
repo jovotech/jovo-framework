@@ -1,9 +1,4 @@
 module.exports = {
-    intentMap: {
-        'PhoneNumberIntent': 'COMPONENT_PHONE_NUMBER_PhoneNumberIntent',
-        'AMAZON.YesIntent': 'COMPONENT_PHONE_NUMBER_YesIntent',
-        'YesIntent': 'COMPONENT_PHONE_NUMBER_YesIntent',
-        'AMAZON.NoIntent': 'COMPONENT_PHONE_NUMBER_NoIntent',
-        'NoIntent': 'COMPONENT_PHONE_NUMBER_NoIntent'
-    }
+    intentMap: {},
+    numberOfFails: 3 // Number of fails after which the component switches to the sequence mode
 };

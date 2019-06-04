@@ -1,4 +1,4 @@
-import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log, JovoError, SessionConstants} from "jovo-core";
+import {Jovo, Plugin, Inputs, EnumRequestType, HandleRequest, BaseApp, Log, JovoError, SessionConstants, ErrorCode} from "jovo-core";
 import _get = require('lodash.get');
 import {Route, Router} from "./Router";
 import {Config as AppConfig} from './../App';
@@ -318,9 +318,22 @@ export class Handler implements Plugin {
          * @param {string} onCompletedIntent intent to which the component will route to after it's done
          * @returns {Promise<void>}
          */
-        Jovo.prototype.delegate = function(componentName: string, onCompletedIntent): Promise<void> {
-            this.setSessionAttribute(SessionConstants.COMPONENT, componentName); // 
+        Jovo.prototype.delegate = function(componentName: string, onCompletedIntent: string): Promise<void> {
+            if (!this.$components[componentName]) {
+                throw new JovoError(
+                    `Couldn\'t find component named ${componentName}`,
+                    ErrorCode.ERR,
+                    'jovo-framework',
+                    'The component to which you want to delegate to, doesn\'t exist',
+                    'Components are initialized using app.useComponents(...components)',
+                    'TODO jovodocs'
+                );
+            }
+
+            this.setSessionAttribute(SessionConstants.COMPONENT, componentName);
+            this.$components[componentName].stateBeforeDelegate = this.getState();
             this.$components[componentName].onCompletedIntent = onCompletedIntent;
+            
             return this.toStateIntent(componentName, 'START');  
         };
 

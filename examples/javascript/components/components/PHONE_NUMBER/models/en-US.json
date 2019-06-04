@@ -1,7 +1,7 @@
 {
 	"intents": [
 		{
-			"name": "COMPONENT_PHONE_NUMBER_PhoneNumberIntent",
+			"name": "PhoneNumberIntent",
 			"phrases": [
 				"{phoneNumber}",
 				"my number is {phoneNumber}",
@@ -19,7 +19,7 @@
 			]
 		},
 		{
-			"name": "COMPONENT_PHONE_NUMBER_PhoneNumberSequenceIntent",
+			"name": "PhoneNumberSequenceIntent",
 			"phrases": [
 				"{sequence}",
 				"next is {sequence}"
@@ -35,7 +35,7 @@
 			]
 		},
 		{
-			"name": "COMPONENT_PHONE_NUMBER_YesIntent",
+			"name": "YesIntent",
 			"alexa": {
 				"name": "AMAZON.YesIntent"
 			},
@@ -49,7 +49,7 @@
 			]
         },
         {
-			"name": "COMPONENT_PHONE_NUMBER_NoIntent",
+			"name": "NoIntent",
 			"alexa": {
 				"name": "AMAZON.NoIntent"
 			},
@@ -63,7 +63,7 @@
 			]
 		},
         {
-			"name": "COMPONENT_PHONE_NUMBER_HelpIntent",
+			"name": "HelpIntent",
 			"alexa": {
 				"name": "AMAZON.HelpIntent"
 			},
@@ -77,6 +77,24 @@
 				"how",
 				"why"
 			]
+		},
+		{
+			"name": "StopIntent",
+			"phrases": [
+				"stop",
+				"cancel",
+				"stop the app"
+			],
+			"alexa": {
+				"name": "AMAZON.StopIntent"
+			},
+			"dialogflow": {
+				"events": [
+					{
+						"name": "actions_intent_CANCEL"
+					}
+				]
+			}
 		}
 	]
 }
