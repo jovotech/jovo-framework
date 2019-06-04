@@ -236,13 +236,13 @@ export class MySQL implements Db {
     private getConnection(): Promise<PoolConnection> {
         return new Promise((resolve, reject) => {
             if (!this.pool) {
-                throw new JovoError(
+                return reject(new JovoError(
                     'Connection could not be established.',
                     ErrorCode.ERR_PLUGIN,
                     'jovo-db-mysql',
                     undefined,
                     undefined,
-                    'https://www.jovo.tech/docs/databases/mysql');
+                    'https://www.jovo.tech/docs/databases/mysql'));
             }
             this.pool.getConnection((err, connection) => {
                 if (err) {
