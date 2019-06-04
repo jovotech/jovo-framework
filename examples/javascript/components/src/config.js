@@ -1,5 +1,5 @@
 module.exports = {
-   logging: true,
+   logging: false,
     intentMap: {
         'AMAZON.StopIntent': 'END',
     },
@@ -10,11 +10,7 @@ module.exports = {
     },
     components: {
         PHONE_NUMBER: {
-            intentMap: {
-                'AMAZON.HelpIntent': 'COMPONENT_PHONE_NUMBER_HelpIntent',
-                'HelpIntent': 'COMPONENT_PHONE_NUMBER_HelpIntent',
-            }
+            numberOfFails: 3
         }
     }
-
 };

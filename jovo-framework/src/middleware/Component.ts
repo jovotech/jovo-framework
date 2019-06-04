@@ -23,6 +23,7 @@ export class Component implements Plugin {
     pathToI18n?: string; // path to dir containing i18n files
     name?: string;
     $response?: Response;
+    stateBeforeDelegate?: string; // Used to route the app back to the state where it left off after the component is done.
     onCompletedIntent?: string; // intent to which the component routes to, when it sends out response
     i18next?: I18Next;
 
