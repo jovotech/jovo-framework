@@ -327,7 +327,7 @@ export class JovoUser implements Plugin {
         Log.verbose(Log.header('Jovo user (load)', 'framework'));
         Log.yellow().verbose(`this.$user.getId(): ${userId}`);
 
-        if (!data) {
+        if (!data || data === undefined) {
             handleRequest.jovo.$user.isDeleted = false;
         } else {
             handleRequest.jovo.$user.new = false;
