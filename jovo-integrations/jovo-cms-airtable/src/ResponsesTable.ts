@@ -128,11 +128,11 @@ export class ResponsesTable extends DefaultTable {
 
                 for (const platform of platforms) {
                     if (resource[platform]) {
-                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform]);
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform], true);
                     }
                 }
 
-                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation);
+                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation, true);
             });
         }
 
