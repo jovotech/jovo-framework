@@ -18,6 +18,7 @@ process.on('uncaughtException', err => {
 export type BaseAppMiddleware =
 	| 'setup'
 	| 'request'
+	| 'asr'
 	| 'platform.init'
 	| 'platform.nlu'
 	| 'nlu'
@@ -49,6 +50,7 @@ export class BaseApp extends Extensible {
 
 	middlewares: BaseAppMiddleware[] = [
 		'setup',
+		'asr',
 		'request',
 		'platform.init',
 		'platform.nlu',
@@ -192,6 +194,9 @@ export class BaseApp extends Extensible {
 				await this.middleware('setup')!.run(handleRequest);
 				this.initialized = true;
 			}
+
+			// TODO not sure if this is the best spot for that
+			await this.middleware('asr')!.run(handleRequest);
 
 			// Raw JSON request from platform gets processed. Can be used for authentication middlewares.
 			await this.middleware('request')!.run(handleRequest);
