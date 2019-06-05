@@ -20,6 +20,6 @@
     "jovo-plugin-debugger": "^2.2.6"
   },
   "devDependencies": {
-    "jest": "^24.6.0"
+    "jest": "^24.8.0"
   }
 }
