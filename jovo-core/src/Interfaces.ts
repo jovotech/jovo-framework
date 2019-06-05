@@ -125,16 +125,10 @@ export interface Analytics extends Plugin {
     track(handleRequest: HandleRequest): void;
 }
 
-
-// export interface AppConfig extends ExtensibleConfig {
-//     // logging?: boolean;
-//     intentMap?: {[key: string]: string};
-//     inputMap?: {[key: string]: string};
-// }
-
 export interface RequestType {
     type?: string;
     subType?: string;
+    optional?: boolean;
 }
 
 export interface Output {

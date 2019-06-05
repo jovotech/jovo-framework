@@ -56,6 +56,9 @@ test('test throw exception on non existing route', (done) => {
             Unhandled() { // tslint:disable-line:no-empty
 
             },
+        },
+        $type: {
+            type: EnumRequestType.INTENT,
         }
     };
 
@@ -69,7 +72,25 @@ test('test throw exception on non existing route', (done) => {
     });
 });
 
-test('test skip exception on non existing route', async (done) => {
+test('test skip throwing exception on optional request types', async (done) => {
+    const jovo = {
+        $handlers: {
+        },
+        $type: {
+            type: 'OPTIONAL_TYPE',
+            optional: true,
+        }
+    };
+    // @ts-ignore
+    await Handler.applyHandle(jovo, {
+        path: 'OPTIONAL_TYPE',
+        type: 'OPTIONAL_TYPE',
+    });
+    done();
+});
+
+
+test('test skip exception on non existing route, because ON_REQUEST is there', async (done) => {
     const jovo = {
         $handlers: {
             ON_REQUEST() { // tslint:disable-line:no-empty
@@ -91,6 +112,7 @@ test('test skip exception on non existing route', async (done) => {
 
     done();
 });
+
 
 test('test applyHandle on route that returns rejected promise', async () => {
     const rejectionReason = 'rejection reason';

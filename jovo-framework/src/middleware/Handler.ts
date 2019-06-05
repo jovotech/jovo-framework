@@ -189,7 +189,7 @@ export class Handler implements Plugin {
             }
         }
 
-        // // throw error if no handler and no UNHANDLED on same level
+        // throw error if no handler and no UNHANDLED on same level
         if (
             !(
             _get(jovo.$handlers, EnumRequestType.NEW_SESSION) ||
@@ -199,14 +199,15 @@ export class Handler implements Plugin {
 
             !_get(jovo.$handlers, route.path)) {
 
-            throw new JovoError(
-                `Could not find the route "${route.path}" in your handler function.`,
-                'ERR_NO_ROUTE',
-                'jovo-framework'
-                );
-        }
 
-        // Object.assign(Jovo.prototype, _get(jovo, 'handlers'));
+            if (!jovo.$type.optional) {
+                throw new JovoError(
+                    `Could not find the route "${route.path}" in your handler function.`,
+                    'ERR_NO_ROUTE',
+                    'jovo-framework'
+                );
+            }
+        }
 
         if (_get(jovo.$handlers, route.path)) {
             const func:Function = _get(jovo.$handlers, route.path);
@@ -314,7 +315,7 @@ export class Handler implements Plugin {
 
         /**
          * Delegates the requests & responses to the component defined with "componentName"
-         * @param {string} componentName 
+         * @param {string} componentName
          * @param {string} onCompletedIntent intent to which the component will route to after it's done
          * @returns {Promise<void>}
          */
@@ -333,8 +334,8 @@ export class Handler implements Plugin {
             this.setSessionAttribute(SessionConstants.COMPONENT, componentName);
             this.$components[componentName].stateBeforeDelegate = this.getState();
             this.$components[componentName].onCompletedIntent = onCompletedIntent;
-            
-            return this.toStateIntent(componentName, 'START');  
+
+            return this.toStateIntent(componentName, 'START');
         };
 
         /**
