@@ -11,6 +11,7 @@ export interface Config extends GoogleSheetsSheet {
 export class ObjectArraySheet extends DefaultSheet {
     config: Config = {
         enabled: true,
+        name: undefined,
         range: 'A:Z',
     };
     constructor(config?: Config) {
