@@ -77,7 +77,7 @@ export abstract class Extensible extends EventEmitter implements Plugin {
 						}
 						plugin.config[prop] = val;
 					} else {
-						Log.warn(
+						Log.verbose(
 							`[${name}] Property '${prop}' passed as config-option for plugin '${name}' but not defined in the default-config. Only properties that exist in the default-configuration can be set!`
 						);
 					}
