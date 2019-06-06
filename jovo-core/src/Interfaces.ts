@@ -82,6 +82,11 @@ export interface HandleRequest {
      */
     $data?: any; // tslint:disable-line
 
+    /**
+     * Data retrieved from ASR.
+     */
+    $asr?: any // tslint:disable-line
+
 
     platformClazz?: any; // tslint:disable-line
 

@@ -18,8 +18,8 @@ process.on('uncaughtException', err => {
 export type BaseAppMiddleware =
 	| 'setup'
 	| 'request'
-	| 'asr'
 	| 'platform.init'
+	| 'asr'
 	| 'platform.nlu'
 	| 'nlu'
 	| 'user.load'
@@ -50,9 +50,9 @@ export class BaseApp extends Extensible {
 
 	middlewares: BaseAppMiddleware[] = [
 		'setup',
-		'asr',
 		'request',
 		'platform.init',
+		'asr',
 		'platform.nlu',
 		'nlu',
 		'user.load',
@@ -195,9 +195,6 @@ export class BaseApp extends Extensible {
 				this.initialized = true;
 			}
 
-			// TODO not sure if this is the best spot for that
-			await this.middleware('asr')!.run(handleRequest);
-
 			// Raw JSON request from platform gets processed. Can be used for authentication middlewares.
 			await this.middleware('request')!.run(handleRequest);
 
@@ -230,6 +227,9 @@ export class BaseApp extends Extensible {
 				)}`
 			);
 			Log.verbose();
+
+			// Automatic speech recognition (ASR) information gets extracted.
+			await this.middleware('asr')!.run(handleRequest);
 
 			// 	Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. Alexa). Intents and inputs are set.
 			await this.middleware('platform.nlu')!.run(handleRequest);
