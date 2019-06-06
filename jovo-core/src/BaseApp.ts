@@ -27,6 +27,7 @@ export type BaseAppMiddleware =
 	| 'handler'
 	| 'user.save'
 	| 'platform.output'
+	| 'tts'
 	| 'response'
 	| 'fail'
 	| string;
@@ -60,6 +61,7 @@ export class BaseApp extends Extensible {
 		'handler',
 		'user.save',
 		'platform.output',
+		'tts',
 		'response',
 		'fail'
 	];
@@ -266,6 +268,8 @@ export class BaseApp extends Extensible {
 
 			// Platform response JSON gets created from output object.
 			await this.middleware('platform.output')!.run(handleRequest);
+
+			await this.middleware('tts')!.run(handleRequest);
 
 			Log.verbose(Log.header('Response ', 'framework'));
 			// Response gets sent back to platform.
