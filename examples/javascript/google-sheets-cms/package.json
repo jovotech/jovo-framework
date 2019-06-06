@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-google-sheets-cms",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-cms-googlesheets": "^2.2.7",
+    "jovo-cms-googlesheets": "^2.2.8",
     "jovo-db-dynamodb": "^2.2.6",
     "jovo-db-filedb": "^2.2.6",
     "jovo-framework": "^2.2.8",
