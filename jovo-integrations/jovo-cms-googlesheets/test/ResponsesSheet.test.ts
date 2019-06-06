@@ -141,7 +141,7 @@ describe('ResponsesSheet.parse()', () => {
             load: 'all',
             returnObjects: true,
             interpolation: {
-                escapeValue: false, // do not escape ssml tags
+                escapeValue: false
             }
         });
 

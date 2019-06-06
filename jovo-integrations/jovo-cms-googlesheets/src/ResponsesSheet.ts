@@ -142,11 +142,11 @@ export class ResponsesSheet extends DefaultSheet {
 
                 for (const platform of platforms) {
                     if (resource[platform]) {
-                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform]);
+                        handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, platform, resource[platform], true, true);
                     }
                 }
 
-                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation);
+                handleRequest.app.$cms.I18Next.i18n.addResourceBundle(localeKey, 'translation', resource.translation, true, true);
             });
         }
 
