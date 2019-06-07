@@ -1,6 +1,18 @@
 # Jovo Framework Changelog
 
 
+## 2.2.9 (2019-06-07)
+
+
+#### :bug: Bug Fix
+* `jovo-core` Fix error in plugin configs (fix issue #521)
+
+ 
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.8 (2019-06-05)
 
 #### :nail_care: Enhancement
