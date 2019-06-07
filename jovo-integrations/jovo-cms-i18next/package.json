@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-i18next",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "i18next": "^15.0.8",
-    "jovo-core": "^2.2.6"
+    "jovo-core": "^2.2.7"
   },
   "devDependencies": {
     "@types/i18next": "^12.1.0",
