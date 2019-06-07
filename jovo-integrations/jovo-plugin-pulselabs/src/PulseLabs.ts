@@ -10,7 +10,7 @@ export class PulseLabs implements Plugin {
     config: Config = {
         apiKey: ''
     };
-    pulse: any;
+    pulse: typeof pulseLabsRecorder;
     constructor(config?: Config) {
         if (config) {
             this.config = _merge(this.config, config);
@@ -18,8 +18,8 @@ export class PulseLabs implements Plugin {
         this.pulse = pulseLabsRecorder.init(this.config.apiKey);
     }
 
-    install(app: BaseApp) {
-        app.on('after.response', this.logData.bind(this));
+    async install(app: BaseApp) {
+        app.on('after.response', await this.logData.bind(this));
     }
 
     async logData(handleRequest: HandleRequest) {
