@@ -17,10 +17,8 @@
 </p>
 <br/>
 
-# Jovo Debugger Plugin
+# Jovo Pulse Labs Plugin
 
 ```sh
-npm install jovo-plugin-debugger
+npm install jovo-plugin-pulselabs
 ```
-
-Find the docs here: https://www.jovo.tech/docs/debugger
