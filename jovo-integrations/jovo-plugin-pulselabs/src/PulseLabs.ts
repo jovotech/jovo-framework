@@ -18,8 +18,8 @@ export class PulseLabs implements Plugin {
         this.pulse = pulseLabsRecorder.init(this.config.apiKey);
     }
 
-    async install(app: BaseApp) {
-        app.on('after.response', await this.logData.bind(this));
+    install(app: BaseApp) {
+        app.on('after.response', this.logData.bind(this));
     }
 
     async logData(handleRequest: HandleRequest) {
