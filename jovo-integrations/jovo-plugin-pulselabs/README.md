@@ -19,6 +19,18 @@
 
 # Jovo Pulse Labs Plugin
 
+Install package:
+
 ```sh
 npm install jovo-plugin-pulselabs
+```
+
+Add the plugin to your `app.js` file:
+
+```js
+// src/app.js
+
+const { PulseLabs } = require ('jovo-plugin-pulselabs');
+
+app.use( new PulseLabs({ apiKey: 'yourApiKey' }) );
 ```
