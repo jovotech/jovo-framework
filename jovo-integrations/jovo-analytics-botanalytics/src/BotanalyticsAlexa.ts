@@ -1,4 +1,4 @@
-import { Analytics, PluginConfig, BaseApp, HandleRequest } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, PluginConfig} from 'jovo-core';
 import _merge = require('lodash.merge');
 
 import { AmazonAlexa } from 'botanalytics';

@@ -14,7 +14,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.7"
+    "jovo-core": "^2.2.7",
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
@@ -26,6 +28,7 @@
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.4.1"
   },

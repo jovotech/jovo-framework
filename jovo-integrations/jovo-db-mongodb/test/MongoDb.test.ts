@@ -1,8 +1,9 @@
-import { BaseApp, JovoError, Util } from "jovo-core";
-import { MongoDb } from "../src/MongoDb";
-import {MongoClient} from  "mongodb";
-import MongoMemoryServer from 'mongodb-memory-server';
+import { BaseApp, JovoError } from 'jovo-core';
 import _set = require('lodash.set');
+import { MongoClient } from 'mongodb';
+import MongoMemoryServer from 'mongodb-memory-server'; // tslint:disable-line:no-implicit-dependencies
+
+import { MongoDb } from '../src/MongoDb';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 
@@ -52,10 +53,10 @@ describe('test install()', () => {
 describe('test errorHandling() which checks config parameters', () => {
     test('test should throw a JovoError if uri isn\'t set', () => {
         const config = {
-            uri: '',
-            databaseName: 'test',
             collectionName: 'UserData',
-            primaryKeyColumn: 'userId'
+            databaseName: 'test',
+            primaryKeyColumn: 'userId',
+            uri: '',
         };
         const mongodb = new MongoDb(config);
 
@@ -66,10 +67,10 @@ describe('test errorHandling() which checks config parameters', () => {
 
     test('test should throw a JovoError if databaseName isn\'t set', () => {
         const config = {
-            uri: 'test',
-            databaseName: '',
             collectionName: 'UserData',
-            primaryKeyColumn: 'userId'
+            databaseName: '',
+            primaryKeyColumn: 'userId',
+            uri: 'test',
         };
         const mongodb = new MongoDb(config);
 
@@ -80,10 +81,10 @@ describe('test errorHandling() which checks config parameters', () => {
 
     test('test should throw a JovoError if primaryKeyColumn isn\'t set', () => {
         const config = {
-            uri: 'test',
+            collectionName: 'UserData',
             databaseName: 'test',
             primaryKeyColumn: '',
-            collectionName: 'UserData'
+            uri: 'test',
         };
         const mongodb = new MongoDb(config);
 
@@ -94,10 +95,10 @@ describe('test errorHandling() which checks config parameters', () => {
 
     test('test should throw a JovoError if collectionName isn\'t set', () => {
         const config = {
-            uri: 'test',
+            collectionName: '',
             databaseName: 'test',
             primaryKeyColumn: 'userId',
-            collectionName: ''
+            uri: 'test',
         };
         const mongodb = new MongoDb(config);
 
@@ -108,10 +109,10 @@ describe('test errorHandling() which checks config parameters', () => {
 
     test('test shouldn\'t throw a JovoError if config is valid', () => {
         const config = {
-            uri: 'test',
+            collectionName: 'UserData',
             databaseName: 'test',
             primaryKeyColumn: 'userId',
-            collectionName: 'UserData'
+            uri: 'test',
         };
         const mongodb = new MongoDb(config);
 
@@ -125,10 +126,11 @@ describe('test database operations', () => {
     let mongoServer: MongoMemoryServer;
     let mongodb: MongoDb;
     const app = new BaseApp();
-    let config: any = { // tslint:disable-line
+    const config: any = {
+        collectionName: 'UserData',
+        // tslint:disable-line
         databaseName: 'test',
         primaryKeyColumn: 'userId',
-        collectionName: 'UserData'
     };
 
     beforeEach(async () => {
@@ -143,22 +145,31 @@ describe('test database operations', () => {
         await mongoServer.stop();
     });
 
-    async function save(primaryKey: string, key: string, data: any) { // tslint:disable-line
-        const client = await MongoClient.connect(config.uri!, {useNewUrlParser: true});
-        const collection = client.db(config.databaseName!).collection(config.collectionName!);
+    async function save(primaryKey: string, key: string, data: any) {
+        // tslint:disable-line
+        const client = await MongoClient.connect(config.uri!, {
+            useNewUrlParser: true,
+        });
+        const collection = client
+            .db(config.databaseName!)
+            .collection(config.collectionName!);
         const item = {
             $set: {
-                [config.primaryKeyColumn!]: primaryKey,
-                [key]: data
-            }
+                [ config.primaryKeyColumn! ]: primaryKey,
+                [ key ]: data,
+            },
         };
 
         await collection.updateOne({userId: primaryKey}, item, {upsert: true});
     }
 
     async function load(primaryKey: string) {
-        const client = await MongoClient.connect(config.uri!, {useNewUrlParser: true});
-        const collection = client.db(config.databaseName!).collection(config.collectionName!);
+        const client = await MongoClient.connect(config.uri!, {
+            useNewUrlParser: true,
+        });
+        const collection = client
+            .db(config.databaseName!)
+            .collection(config.collectionName!);
         const doc = await collection.findOne({userId: primaryKey});
 
         return doc;
@@ -169,22 +180,22 @@ describe('test database operations', () => {
             const primaryKey = 'idTest';
             const object = {
                 key: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             };
 
             await mongodb.save(primaryKey, 'key', object.key);
             const result = await load(primaryKey);
 
-            expect(result[mongodb.config.primaryKeyColumn!]).toEqual(primaryKey);
+            expect(result[ mongodb.config.primaryKeyColumn! ]).toEqual(primaryKey);
         });
 
         test('test should save key value pair for primaryKey', async () => {
             const primaryKey = 'idTest';
             const object = {
                 key: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             };
 
             await mongodb.save(primaryKey, 'key', object.key);
@@ -197,13 +208,13 @@ describe('test database operations', () => {
             const primaryKey = 'idTest';
             const existingObject = {
                 oldKey: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             };
             const newObject = {
                 newKey: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             };
 
             await mongodb.save(primaryKey, 'oldKey', existingObject.oldKey);
@@ -221,8 +232,8 @@ describe('test database operations', () => {
             const primaryKeyTwo = 'userTwo';
             const object = {
                 key: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             };
 
             await mongodb.save(primaryKeyOne, 'key', object.key);
@@ -238,7 +249,8 @@ describe('test database operations', () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
 
-            await mongodb.save('userId', 'key', {key: 'value'})
+            await mongodb
+                .save('userId', 'key', {key: 'value'})
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });
     });
@@ -275,7 +287,8 @@ describe('test database operations', () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
 
-            await mongodb.delete('userId')
+            await mongodb
+                .delete('userId')
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });
     });
@@ -299,9 +312,9 @@ describe('test database operations', () => {
             // In this case the uri does not connect to an actual mongodb instance
             _set(mongodb.config, 'uri', 'xyz');
 
-            await mongodb.load('userId')
+            await mongodb
+                .load('userId')
                 .catch(e => expect(e).toBeInstanceOf(JovoError));
         });
     });
 });
-

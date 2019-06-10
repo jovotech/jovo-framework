@@ -1,11 +1,13 @@
-import { ResponsesSheet, GoogleSheetsCMS } from '../src/';
-import { Cms, BaseApp, HandleRequest } from 'jovo-core';
-import * as cPublicSheetValues from './mockObj/publicSheetValues.json';
-import * as cPrivateSheetValues from './mockObj/privateSheetValues.json';
-import { MockHandleRequest } from './mockObj/mockHR';
-import * as cI18nModel from './mockObj/i18nModel.json';
-import _cloneDeep = require('lodash.clonedeep');
 import i18n from 'i18next';
+import { BaseApp, Cms, HandleRequest } from 'jovo-core';
+import _cloneDeep = require('lodash.clonedeep');
+
+import { GoogleSheetsCMS, ResponsesSheet } from '../src/';
+
+import * as cI18nModel from './mockObj/i18nModel.json';
+import { MockHandleRequest } from './mockObj/mockHR';
+import * as cPrivateSheetValues from './mockObj/privateSheetValues.json';
+import * as cPublicSheetValues from './mockObj/publicSheetValues.json';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 
@@ -28,7 +30,7 @@ describe('ResponsesSheet.constructor()', () => {
 
     test('with config', () => {
         const responsesSheet = new ResponsesSheet({
-            range: 'A:B'
+            range: 'A:B',
         });
 
         expect(responsesSheet.config.range).toMatch('A:B');
@@ -55,7 +57,7 @@ describe('ResponsesSheet.parse()', () => {
 
     test('without headers and without values', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
@@ -69,7 +71,7 @@ describe('ResponsesSheet.parse()', () => {
 
     test('without headers', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
@@ -84,13 +86,13 @@ describe('ResponsesSheet.parse()', () => {
 
     test('without values', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
         expect(handleRequest.app.$cms.test).toBeUndefined();
 
-        publicSheetValues = [publicSheetValues[0]];
+        publicSheetValues = [ publicSheetValues[ 0 ] ];
         responsesSheet.parse(handleRequest, publicSheetValues);
 
         expect(handleRequest.app.$cms.I18Next.i18n).toBeDefined();
@@ -99,7 +101,7 @@ describe('ResponsesSheet.parse()', () => {
 
     test('with valid public spreadsheet values', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
@@ -113,7 +115,7 @@ describe('ResponsesSheet.parse()', () => {
 
     test('with valid private spreadsheet values', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         expect(handleRequest.app.$cms.I18Next).toBeUndefined();
@@ -127,33 +129,33 @@ describe('ResponsesSheet.parse()', () => {
 
     test('should merge new values in existing i18n object', () => {
         const responsesSheet = new ResponsesSheet({
-            name: 'test'
+            name: 'test',
         });
 
         i18n.init({
+            interpolation: {
+                escapeValue: false,
+            },
+            load: 'all',
             resources: {
                 'en-US': {
                     translation: {
-                        WELCOME: ['Welcome']
-                    }
-                }
+                        WELCOME: [ 'Welcome' ],
+                    },
+                },
             },
-            load: 'all',
             returnObjects: true,
-            interpolation: {
-                escapeValue: false
-            }
         });
 
-        handleRequest.app.$cms.I18Next = { i18n };
+        handleRequest.app.$cms.I18Next = {i18n};
 
         expect(handleRequest.app.$cms.I18Next.i18n.store.data)
             .toStrictEqual({
                 'en-US': {
                     translation: {
-                        WELCOME: ['Welcome']
-                    }
-                }
+                        WELCOME: [ 'Welcome' ],
+                    },
+                },
             });
 
         responsesSheet.parse(handleRequest, publicSheetValues);
@@ -167,22 +169,22 @@ describe('ResponsesSheet.parse()', () => {
             const googleSheetsCMS = new GoogleSheetsCMS();
             googleSheetsCMS.install(app);
             const responsesSheet = new ResponsesSheet({
-                name: 'test'
+                name: 'test',
             });
             responsesSheet.install(googleSheetsCMS);
             handleRequest.app.getAppTypes = () => {
-                return ['AlexaSkill'];
+                return [ 'AlexaSkill' ];
             };
 
             expect(handleRequest.app.$cms.I18Next).toBeUndefined();
             expect(handleRequest.app.$cms.test).toBeUndefined();
 
-            privateSheetValues[0].push('en-US-AlexaSkill');
-            privateSheetValues[1].push('Welcome_Alexa');
-            i18nModel['en-US'].AlexaSkill = {
+            privateSheetValues[ 0 ].push('en-US-AlexaSkill');
+            privateSheetValues[ 1 ].push('Welcome_Alexa');
+            i18nModel[ 'en-US' ].AlexaSkill = {
                 translation: {
                     WELCOME: 'Welcome_Alexa',
-                }
+                },
             };
             responsesSheet.parse(handleRequest, privateSheetValues);
 
@@ -197,22 +199,22 @@ describe('ResponsesSheet.parse()', () => {
             const googleSheetsCMS = new GoogleSheetsCMS();
             googleSheetsCMS.install(app);
             const responsesSheet = new ResponsesSheet({
-                name: 'test'
+                name: 'test',
             });
             responsesSheet.install(googleSheetsCMS);
             handleRequest.app.getAppTypes = () => {
-                return ['AlexaSkill'];
+                return [ 'AlexaSkill' ];
             };
 
             expect(handleRequest.app.$cms.I18Next).toBeUndefined();
             expect(handleRequest.app.$cms.test).toBeUndefined();
 
-            publicSheetValues[0].push('en-us-alexaskill');
-            publicSheetValues[1].push('Welcome_Alexa');
-            i18nModel['en-US'].AlexaSkill = {
+            publicSheetValues[ 0 ].push('en-us-alexaskill');
+            publicSheetValues[ 1 ].push('Welcome_Alexa');
+            i18nModel[ 'en-US' ].AlexaSkill = {
                 translation: {
                     WELCOME: 'Welcome_Alexa',
-                }
+                },
             };
             responsesSheet.parse(handleRequest, publicSheetValues);
 

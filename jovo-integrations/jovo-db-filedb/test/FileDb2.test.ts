@@ -1,9 +1,11 @@
-import { BaseApp, JovoError } from "jovo-core";
-import { FileDb2 } from "./../src/FileDb2";
-import * as fs from "fs";
-import * as path from 'path';
+import * as fs from 'fs';
+import { BaseApp, JovoError } from 'jovo-core';
 import _merge = require('lodash.merge');
-const rimraf = require("rimraf");
+import * as path from 'path';
+import rimraf = require('rimraf'); // tslint:disable-line:no-implicit-dependencies
+
+import { FileDb2 } from './../src/FileDb2';
+
 
 process.env.NODE_ENV = 'UNIT_TEST';
 
@@ -48,8 +50,7 @@ describe('test database operations', () => {
 
     function resetDatabase() {
         const pathToFile = path.join(filedb2.config.path!, `${existingUserId}.json`);
-        const data = existingObject;
-        const stringifiedData = JSON.stringify(data, null, '\t');
+        const stringifiedData = JSON.stringify(existingObject, null, '\t');
         fs.writeFileSync(pathToFile, stringifiedData);
     }
 
@@ -71,7 +72,7 @@ describe('test database operations', () => {
     });
 
     describe('test save()', () => {
-        test('test should save userData in ${userId}.json inside folder specified in path', async () => {
+        test('test should save userData in \'userId.json\' inside folder specified in path', async () => {
             const userId = 'testId';
             const objectToBeSaved = {
                 testKey: 'testValue'

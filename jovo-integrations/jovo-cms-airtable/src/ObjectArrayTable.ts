@@ -1,8 +1,8 @@
+import { ErrorCode, HandleRequest, JovoError } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-import { AirtableTable, DefaultTable } from "./DefaultTable";
-import { HandleRequest, JovoError, ErrorCode } from 'jovo-core';
+import { AirtableTable, DefaultTable } from './DefaultTable';
 
 export interface Config extends AirtableTable {
 
@@ -12,8 +12,8 @@ export class ObjectArrayTable extends DefaultTable {
     config: Config = {
         enabled: true,
         selectOptions: {
-            view: 'Grid view'
-        }
+            view: 'Grid view',
+        },
     };
 
     constructor(config?: Config) {
@@ -33,23 +33,23 @@ export class ObjectArrayTable extends DefaultTable {
                 'jovo-cms-airtable',
                 'The sheet\'s name has to be defined in your config.js file',
                 undefined,
-                'https://www.jovo.tech/docs/cms/airtable#configuration'
+                'https://www.jovo.tech/docs/cms/airtable#configuration',
             );
         }
-        
+
         const resultArray = [];
-        const keys = values[0];
+        const keys = values[ 0 ];
         for (let i = 1; i < values.length; i++) {
-            const row: string[] = values[i];
+            const row: string[] = values[ i ];
             const obj = {};
 
             for (let j = 0; j < row.length; j++) {
-                const cell: string = row[j];
-                _set(obj, `${keys[j]}`, cell);
+                const cell: string = row[ j ];
+                _set(obj, `${keys[ j ]}`, cell);
             }
             resultArray.push(obj);
         }
 
-        handleRequest.app.$cms[name] = resultArray;
+        handleRequest.app.$cms[ name ] = resultArray;
     }
 }

@@ -1,5 +1,5 @@
 import {BaseApp} from 'jovo-core';
-import {MongoDb, Config} from 'jovo-db-mongodb';
+import {Config, MongoDb } from 'jovo-db-mongodb';
 import _get = require('lodash.get');
 
 export class CosmosDb extends MongoDb {

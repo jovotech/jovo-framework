@@ -1,8 +1,8 @@
+import { ErrorCode, HandleRequest, JovoError } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-import {DefaultSheet, GoogleSheetsSheet} from "./DefaultSheet";
-import {HandleRequest, JovoError, ErrorCode} from "jovo-core";
+import { DefaultSheet, GoogleSheetsSheet } from './DefaultSheet';
 
 
 export interface Config extends GoogleSheetsSheet {
@@ -14,6 +14,7 @@ export class ObjectArraySheet extends DefaultSheet {
         name: undefined,
         range: 'A:Z',
     };
+
     constructor(config?: Config) {
         super(config);
         if (config) {
@@ -31,23 +32,23 @@ export class ObjectArraySheet extends DefaultSheet {
                 'jovo-cms-googlesheets',
                 'The sheet\'s name has to be defined in your config.js file.',
                 undefined,
-                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration',
             );
         }
 
         const resultArray = [];
-        const keys = values[0];
+        const keys = values[ 0 ];
         for (let i = 1; i < values.length; i++) {
-            const row: string[] = values[i];
+            const row: string[] = values[ i ];
             const obj = {};
 
             for (let j = 0; j < row.length; j++) {
-                const cell: string = row[j];
-                _set(obj, `${keys[j]}`, cell);
+                const cell: string = row[ j ];
+                _set(obj, `${keys[ j ]}`, cell);
             }
             resultArray.push(obj);
         }
 
-        handleRequest.app.$cms[entity] = resultArray;
+        handleRequest.app.$cms[ entity ] = resultArray;
     }
 }
