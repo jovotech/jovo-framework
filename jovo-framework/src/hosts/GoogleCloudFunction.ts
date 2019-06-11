@@ -1,7 +1,7 @@
-import {Host} from "jovo-core";
+import { Host } from 'jovo-core';
 
 export class GoogleCloudFunction implements Host {
-    headers: {[key: string]: string};
+    headers: { [ key: string ]: string };
     hasWriteFileAccess = false;
     req: any; // tslint:disable-line
     res: any; // tslint:disable-line

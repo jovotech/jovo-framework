@@ -1,4 +1,4 @@
-import {Host, JovoRequest} from "jovo-core";
+import { Host, JovoRequest } from 'jovo-core';
 
 export class ExpressJS implements Host {
     headers: any; // tslint:disable-line
@@ -21,13 +21,16 @@ export class ExpressJS implements Host {
         req.body = jovoRequest.toJSON();
 
         const res = JSON.parse(webhookResponse);
-        res.json = (json: any) => {}; // tslint:disable-line
+        res.json = (json: any) => {
+        }; // tslint:disable-line
 
         return new ExpressJS(req, res);
     }
+
     getRequestObject() {
         return this.$request;
     }
+
     setResponse(obj: any) { // tslint:disable-line
         return new Promise<void>((resolve) => {
 

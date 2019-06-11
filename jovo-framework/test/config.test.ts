@@ -1,5 +1,6 @@
-import {App} from './../src/App';
-import {BasicLogging} from "../src";
+import { BasicLogging } from '../src';
+import { App } from './../src/App';
+
 process.env.NODE_ENV = 'UNIT_TEST';
 
 let app: App;
@@ -31,7 +32,6 @@ test('test logging', () => {
     expect(app.config.plugin.BasicLogging.response).toBe(true);
 
 
-
     app = new App({
         logging: false,
     });
@@ -44,19 +44,19 @@ test('test logging', () => {
     app = new App({
         logging: {
             request: true,
+            requestObjects: [ 'a', 'b' ],
             response: false,
-            requestObjects: ['a', 'b'],
-            responseObjects: ['c', 'd'],
+            responseObjects: [ 'c', 'd' ],
         },
     });
 
     expect(typeof app.config.logging).toBe('object');
 
     expect(app.config.plugin.BasicLogging.requestObjects).toEqual(
-        expect.arrayContaining(['a', 'b']),
+        expect.arrayContaining([ 'a', 'b' ]),
     );
     expect(app.config.plugin.BasicLogging.responseObjects).toEqual(
-        expect.arrayContaining(['c', 'd']),
+        expect.arrayContaining([ 'c', 'd' ]),
     );
 
     expect(app.config.plugin.BasicLogging.request).toBe(true);
@@ -70,7 +70,7 @@ test('test user', () => {
         user: {
             context: true,
             metaData: true,
-        }
+        },
     });
     expect(app.config.plugin.JovoUser.context.enabled).toBe(true);
     expect(app.config.plugin.JovoUser.metaData.enabled).toBe(true);
@@ -79,7 +79,7 @@ test('test user', () => {
     app = new App({
         user: {
             implicitSave: false,
-        }
+        },
     });
     expect(app.config.plugin.JovoUser.implicitSave).toBe(false);
 
@@ -87,43 +87,43 @@ test('test user', () => {
 test('test inputMap', () => {
     app = new App({
         inputMap: {
-            'a': 'b'
-        }
+            'a': 'b',
+        },
     });
     expect(app.config.inputMap).toEqual(
-        expect.objectContaining({a:'b'}),
+        expect.objectContaining({a: 'b'}),
     );
 
 });
 test('test intentMap', () => {
     app = new App({
         intentMap: {
-            'IntentA': 'IntentB'
+            'IntentA': 'IntentB',
         },
-        intentsToSkipUnhandled: ['IntentX', 'IntentY']
+        intentsToSkipUnhandled: [ 'IntentX', 'IntentY' ],
     });
     expect(app.config.plugin.Router.intentMap).toEqual(
-        expect.objectContaining({IntentA:'IntentB'}),
+        expect.objectContaining({IntentA: 'IntentB'}),
     );
 
     expect(app.config.plugin.Router.intentsToSkipUnhandled).toEqual(
-        expect.arrayContaining(['IntentX', 'IntentY']),
+        expect.arrayContaining([ 'IntentX', 'IntentY' ]),
     );
 });
 
 test('test intentMap', () => {
     app = new App({
         intentMap: {
-            'IntentA': 'IntentB'
+            'IntentA': 'IntentB',
         },
-        intentsToSkipUnhandled: ['IntentX', 'IntentY']
+        intentsToSkipUnhandled: [ 'IntentX', 'IntentY' ],
     });
     expect(app.config.plugin.Router.intentMap).toEqual(
-        expect.objectContaining({IntentA:'IntentB'}),
+        expect.objectContaining({IntentA: 'IntentB'}),
     );
 
     expect(app.config.plugin.Router.intentsToSkipUnhandled).toEqual(
-        expect.arrayContaining(['IntentX', 'IntentY']),
+        expect.arrayContaining([ 'IntentX', 'IntentY' ]),
     );
 });
 
@@ -135,29 +135,29 @@ test('test i18n', () => {
                 'en-US': {
                     translation: {
                         'WELCOME': 'Hello World',
-                    }
-                }
-            }
-        }
+                    },
+                },
+            },
+        },
     });
     expect(app.config.plugin.I18Next.resources).toEqual(
         expect.objectContaining({
             'en-US': {
                 translation: {
                     'WELCOME': 'Hello World',
-                }
-            }
+                },
+            },
         }),
     );
 
 
     app = new App({
         i18n: {
-            filesDir: './dir'
-        }
+            filesDir: './dir',
+        },
     });
     expect(app.config.plugin.I18Next.filesDir).toEqual(
-        './dir'
+        './dir',
     );
 
 });
