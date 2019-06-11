@@ -457,6 +457,17 @@ export class AlexaRequest implements JovoRequest {
     }
 
 
+    /**
+     * Sets sessionId for the request
+     * @param sessionId
+     */
+    setSessionId(sessionId: string) {
+        if (this.session) {
+            this.session.sessionId = sessionId;
+        }
+        return this;
+    }
+
     setAudioInterface() {
         if (_get(this, 'context.System.device.supportedInterfaces')) {
             _set(this, 'context.System.device.supportedInterfaces', {

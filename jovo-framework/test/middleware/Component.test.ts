@@ -1,18 +1,18 @@
 process.env.NODE_ENV = 'UNIT_TEST';
 
-import { Component, Config as ComponentConfig } from "../../src/middleware/Component";
-import { BaseApp, HandleRequest, Jovo } from "jovo-core";
-import { I18Next } from "jovo-cms-i18next";
+import { I18Next } from 'jovo-cms-i18next';
+import { BaseApp, HandleRequest, Jovo } from 'jovo-core';
+import { Component, Config as ComponentConfig } from '../../src/middleware/Component';
 
 describe('test constructor', () => {
     let component: Component;
 
     test('should merge config passed as param', () => {
-        const config = { a: 'test' } as unknown as ComponentConfig;
-        
+        const config = {a: 'test'} as unknown as ComponentConfig;
+
         component = new Component(config);
 
-        expect(component.config).toEqual({ a : 'test' });
+        expect(component.config).toEqual({a: 'test'});
     });
 });
 
@@ -36,18 +36,18 @@ describe('test mergeConfig()', () => {
 
     test('should return merged config', () => {
         component.config = {
-            a: 'test'
+            a: 'test',
         } as unknown as ComponentConfig; // hack so we don't have to implement the full Component class, but just the parts we need
-        
+
         const appConfig = {
-            b: 'test'
+            b: 'test',
         } as unknown as ComponentConfig;
 
         const mergedConfig = component.mergeConfig(appConfig);
 
         expect(mergedConfig).toEqual({
             a: 'test',
-            b: 'test'
+            b: 'test',
         });
     });
 });
@@ -59,7 +59,7 @@ describe('test initialize()', () => {
     beforeEach(() => {
         component = new Component();
         mockHandleRequest = {
-            jovo: {} as unknown as Jovo
+            jovo: {} as unknown as Jovo,
         } as unknown as HandleRequest;
     });
 
@@ -75,7 +75,7 @@ describe('test initialize()', () => {
 
         component.initialize(mockHandleRequest);
 
-        expect(mockHandleRequest.jovo!.$components['test']).toBe(component);
+        expect(mockHandleRequest.jovo!.$components[ 'test' ]).toBe(component); // tslint:disable-line:no-string-literal
     });
 });
 
@@ -89,13 +89,13 @@ describe('test loadI18nFiles()', () => {
 
         mockHandleRequest = {
             app: {
-                $cms: {}
-            } as unknown as BaseApp
+                $cms: {},
+            } as unknown as BaseApp,
         } as unknown as HandleRequest; // hack so we don't have to implement the full Component class, but just the parts we need
-        
+
         i18next = {
             config: {},
-            loadFiles: jest.fn()
+            loadFiles: jest.fn(),
         } as unknown as I18Next;
 
         component.i18next = i18next;

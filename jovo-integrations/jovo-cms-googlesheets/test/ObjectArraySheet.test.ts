@@ -1,5 +1,6 @@
+import { HandleRequest } from 'jovo-core';
+
 import { ObjectArraySheet } from '../src';
-import { HandleRequest, BaseApp } from 'jovo-core';
 import { MockHandleRequest } from './mockObj/mockHR';
 
 let handleRequest: HandleRequest;

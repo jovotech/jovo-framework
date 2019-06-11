@@ -1,32 +1,38 @@
-import {EventEmitter} from "events";
-import {BaseApp} from "./BaseApp";
-import {SessionConstants, EnumRequestType} from "./enums";
-import {SpeechBuilder} from "./SpeechBuilder";
+import { EventEmitter } from 'events';
 import _get = require('lodash.get');
+import _sample = require('lodash.sample');
 import _set = require('lodash.set');
-const _sample = require('lodash.sample');
+import { BaseApp } from './BaseApp';
+import { Cms } from './Cms';
+import { EnumRequestType, SessionConstants } from './enums';
+import { ErrorCode, JovoError } from './errors/JovoError';
+import { Log } from './Log';
+import { SpeechBuilder } from './SpeechBuilder';
 
 import {
+    HandleRequest,
     Host,
     Inputs,
     JovoData,
     JovoRequest,
-    JovoResponse, JovoSession,
+    JovoResponse,
+    JovoSession,
+    NLUData,
     Output,
     RequestType,
-    NLUData,
-    SessionAttributes, SessionData
-} from "./Interfaces";
+    SessionAttributes,
+    SessionData,
+} from './Interfaces';
 
-import {User} from "./User";
-import {Cms} from "./Cms";
-import {Log} from "./Log";
+import { User } from './User';
+import { ValidationError, Validator } from './validators';
 
 export abstract class Jovo extends EventEmitter {
     readonly $host: Host;
     readonly $app: BaseApp;
     readonly $data: JovoData;
     $type: RequestType;
+    $handleRequest?: HandleRequest;
     $jovo: Jovo;
     $user: User;
     $nlu?: NLUData;
@@ -44,18 +50,18 @@ export abstract class Jovo extends EventEmitter {
 
     $requestSessionAttributes: SessionAttributes = {};
 
-    constructor(app: BaseApp, host: Host) {
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
         super();
         this.setMaxListeners(0);
         this.$jovo = this;
+        this.$handleRequest = handleRequest;
         this.$host = host;
         this.$app = app;
         this.$data = {};
         this.$session = {
-            $data: {}
+            $data: {},
         };
-        this.$type = {
-        };
+        this.$type = {};
         this.$inputs = {};
         this.$output = {};
         this.$request = undefined;
@@ -93,7 +99,6 @@ export abstract class Jovo extends EventEmitter {
      */
     abstract hasVideoInterface(): boolean;
 
-
     /**
      * Returns Speechbuilder object initialized for the platform
      * @public
@@ -107,7 +112,6 @@ export abstract class Jovo extends EventEmitter {
      * @return {SpeechBuilder}
      */
     abstract speechBuilder(): SpeechBuilder | undefined;
-
 
     /**
      * Returns device id. Doesn't work with all platforms.
@@ -127,7 +131,6 @@ export abstract class Jovo extends EventEmitter {
      */
     abstract getTimestamp(): string | undefined;
 
-
     /**
      * Returns locale of the request
      * @deprecated use this.$request.getLocale() instead
@@ -135,15 +138,12 @@ export abstract class Jovo extends EventEmitter {
      */
     abstract getLocale(): string | undefined;
 
-
-
     /**
      * Returns type of platform ("AlexaSkill","GoogleAction")
      * @public
      * @return {string}
      */
     abstract getType(): string | undefined;
-
 
     /**
      * Returns type of platform e.g. ("Alexa","GoogleAssistant")
@@ -169,7 +169,6 @@ export abstract class Jovo extends EventEmitter {
         return this.$user.getId();
     }
 
-
     /**
      * Returns state value stored in the request session
      * @return {string}
@@ -177,7 +176,6 @@ export abstract class Jovo extends EventEmitter {
     getState() {
         return this.getSessionAttribute(SessionConstants.STATE);
     }
-
 
     /**
      * Saves state to sessionAttributes
@@ -193,18 +191,16 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
-
     /**
      * Removes state from session
      * @return {Jovo}
      */
     removeState() {
-        if (this.$session && this.$session.$data[SessionConstants.STATE]) {
-            delete this.$session.$data[SessionConstants.STATE];
+        if (this.$session && this.$session.$data[ SessionConstants.STATE ]) {
+            delete this.$session.$data[ SessionConstants.STATE ];
         }
         return this;
     }
-
 
     /**
      * Returns session data value for given path
@@ -219,19 +215,18 @@ export abstract class Jovo extends EventEmitter {
         }
     }
 
-
     /**
      * Returns session attribute value for given path
      * @param {string} path
      * @return {any}
      */
-    getSessionAttribute(path: string): any { // tslint:disable-line
+    getSessionAttribute(path: string): any {
+        // tslint:disable-line
         if (this.$session) {
             return _get(this.$session.$data, path);
         }
         return;
     }
-
 
     /**
      * Returns full session attributes obj
@@ -244,7 +239,6 @@ export abstract class Jovo extends EventEmitter {
         return;
     }
 
-
     /**
      * Sets session data for given path
      * @param {SessionData} obj
@@ -252,7 +246,8 @@ export abstract class Jovo extends EventEmitter {
      */
     setSessionData(obj: SessionData): this;
     setSessionData(path: string, value: any): this; // tslint:disable-line
-    setSessionData(objOrPath: string | SessionData, value?: any) { // tslint:disable-line
+    setSessionData(objOrPath: string | SessionData, value?: any) {
+        // tslint:disable-line
         if (typeof objOrPath === 'string') {
             return this.setSessionAttribute(objOrPath, value);
         } else {
@@ -260,20 +255,19 @@ export abstract class Jovo extends EventEmitter {
         }
     }
 
-
     /**
      * Sets session attribute for given path
      * @param {string} path
      * @param {any} value
      * @return {Jovo} this
      */
-    setSessionAttribute(path: string, value: any): this { // tslint:disable-line
+    setSessionAttribute(path: string, value: any): this {
+        // tslint:disable-line
         if (this.$session) {
             _set(this.$session.$data, path, value);
         }
         return this;
     }
-
 
     /**
      * Adds session data object for given path
@@ -281,10 +275,10 @@ export abstract class Jovo extends EventEmitter {
      * @param {any} value
      * @return {Jovo} this
      */
-    addSessionData(path: string, value: any): this { // tslint:disable-line
+    addSessionData(path: string, value: any): this {
+        // tslint:disable-line
         return this.setSessionAttribute(path, value);
     }
-
 
     /**
      * Adds session attribute for given path
@@ -292,10 +286,10 @@ export abstract class Jovo extends EventEmitter {
      * @param {any} value
      * @return {Jovo} this
      */
-    addSessionAttribute(path: string, value: any): this { // tslint:disable-line
+    addSessionAttribute(path: string, value: any): this {
+        // tslint:disable-line
         return this.setSessionAttribute(path, value);
     }
-
 
     /**
      * Sets full session attributes obj
@@ -310,7 +304,6 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
-
     /**
      * Returns access token
      * @deprecated use this.$request.getAccessToken() instead
@@ -319,7 +312,6 @@ export abstract class Jovo extends EventEmitter {
     getAccessToken(): string | undefined {
         return this.$request!.getAccessToken();
     }
-
 
     /**
      * Returns request intent name
@@ -330,7 +322,6 @@ export abstract class Jovo extends EventEmitter {
         return this.$request!.getIntentName();
     }
 
-
     /**
      * Responds with the given text and ends session
      * Transforms plaintext to SSML
@@ -338,17 +329,21 @@ export abstract class Jovo extends EventEmitter {
      * @param {string|SpeechBuilder|string[]} speech Plaintext or SSML
      */
     tell(speech: string | SpeechBuilder | string[]): Jovo {
+
+        if (!speech) {
+            throw new Error('Speech must not be undefined');
+        }
+
         if (Array.isArray(speech)) {
-            speech = _sample(speech);
+            speech = _sample(speech)!;
         }
 
         delete this.$output.ask;
         this.$output.tell = {
-            speech: speech.toString()
+            speech: speech.toString(),
         };
         return this;
     }
-
 
     /**
      * Says speech and waits for answer from user.
@@ -358,11 +353,18 @@ export abstract class Jovo extends EventEmitter {
      * @param {string|SpeechBuilder} speech
      * @param {string|SpeechBuilder|Array<SpeechBuilder>|Array<string>} reprompt
      */
-    ask(speech: string | SpeechBuilder | string[], reprompt?: string | SpeechBuilder | string[]) {
+    ask(
+        speech: string | SpeechBuilder | string[],
+        reprompt?: string | SpeechBuilder | string[],
+    ) {
         delete this.$output.tell;
 
+        if (!speech) {
+            throw new Error('Speech must not be undefined');
+        }
+
         if (Array.isArray(speech)) {
-            speech = _sample(speech);
+            speech = _sample(speech)!;
         }
 
         if (Array.isArray(reprompt)) {
@@ -375,33 +377,30 @@ export abstract class Jovo extends EventEmitter {
 
         this.$output.ask = {
             speech: speech.toString(),
-            reprompt: reprompt.toString()
+            reprompt: reprompt.toString(), // tslint:disable-line:object-literal-sort-keys
         };
 
         return this;
     }
-
 
     /**
      * Maps incoming request input key names with
      * keys from the inputMap
      * @param {*} inputMap
      */
-    mapInputs(inputMap: {[key: string]: string}): void {
+    mapInputs(inputMap: { [ key: string ]: string }): void {
         const mappedInputs: Inputs = {};
 
         Object.keys(this.$inputs).forEach((inputKey: string) => {
-            if (inputMap[inputKey]) {
-                Log.verbose(`Mapping input key ${inputKey} to ${inputMap[inputKey]}.`);
-                mappedInputs[inputMap[inputKey]] = this.$inputs[inputKey];
+            if (inputMap[ inputKey ]) {
+                Log.verbose(`Mapping input key ${inputKey} to ${inputMap[ inputKey ]}.`);
+                mappedInputs[ inputMap[ inputKey ] ] = this.$inputs[ inputKey ];
             } else {
-                mappedInputs[inputKey] = this.$inputs[inputKey];
+                mappedInputs[ inputKey ] = this.$inputs[ inputKey ];
             }
-
         });
         this.$inputs = mappedInputs;
     }
-
 
     /**
      * Get input object by name
@@ -412,7 +411,6 @@ export abstract class Jovo extends EventEmitter {
     getInput(key: string) {
         return _get(this.$inputs, key);
     }
-
 
     /**
      * Sets output object
@@ -425,15 +423,14 @@ export abstract class Jovo extends EventEmitter {
         return this;
     }
 
-
     /**
      * Set raw json response.
      * @param obj
      */
-    setResponseObject(obj: any) { // tslint:disable-line
+    setResponseObject(obj: any) {
+        // tslint:disable-line
         this.$rawResponseJson = obj;
     }
-
 
     /**
      * Shows simple card to response
@@ -445,13 +442,12 @@ export abstract class Jovo extends EventEmitter {
     showSimpleCard(title: string, content: string) {
         this.$output.card = {
             SimpleCard: {
+                content,
                 title,
-                content
-            }
+            },
         };
         return this;
     }
-
 
     /**
      * Shows image card to response
@@ -464,14 +460,13 @@ export abstract class Jovo extends EventEmitter {
     showImageCard(title: string, content: string, imageUrl: string) {
         this.$output.card = {
             ImageCard: {
-                title,
                 content,
                 imageUrl,
-            }
+                title,
+            },
         };
         return this;
     }
-
 
     /**
      * Shows account linking card to response
@@ -480,12 +475,10 @@ export abstract class Jovo extends EventEmitter {
      */
     showAccountLinkingCard() {
         this.$output.card = {
-            AccountLinkingCard: {
-            }
+            AccountLinkingCard: {},
         };
         return this;
     }
-
 
     /**
      * Fires respond event and ends session.
@@ -493,7 +486,7 @@ export abstract class Jovo extends EventEmitter {
      * @public
      */
     endSession() {
-        console.log('endSession() is obsolete in v2');
+        Log.info('endSession() is obsolete in v2');
     }
 
     /**
@@ -518,7 +511,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type END
      * @public
      * @return {boolean}
-     */  
+     */
     isEndRequest(): boolean {
         return this.$type.type === EnumRequestType.END;
     }
@@ -527,7 +520,7 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type AUDIOPLAYER
      * @public
      * @return {boolean}
-     */   
+     */
     isAudioPlayerRequest(): boolean {
         return this.$type.type === EnumRequestType.AUDIOPLAYER;
     }
@@ -536,8 +529,168 @@ export abstract class Jovo extends EventEmitter {
      * Returns true if the current request is of type ON_ELEMENT_SELECTED
      * @public
      * @return {boolean}
-     */  
+     */
     isElementSelectedRequest(): boolean {
         return this.$type.type === EnumRequestType.ON_ELEMENT_SELECTED;
+    }
+
+    /**
+     * Validates incoming request input data for all registered validators asynchronous.
+     * @param schema The object containing all validators of type Validator|Function.
+     * @returns object Contains function failed() to filter for failed validators.
+     */
+    async validateAsync(schema: { [ key: string ]: any }) {
+        // tslint:disable-line:no-any
+        const failedValidators: string[][] = []; // tslint:disable-line:no-any
+        for (const input in schema) {
+            if (!schema.hasOwnProperty(input)) {
+                continue;
+            }
+
+            const validator = schema[ input ];
+            if (validator.constructor === Array) {
+                for (const v of validator) {
+                    await this.parseForValidatorAsync(
+                        v,
+                        this.$inputs[ input ],
+                        failedValidators,
+                    );
+                }
+            } else {
+                await this.parseForValidatorAsync(
+                    validator,
+                    this.$inputs[ input ],
+                    failedValidators,
+                );
+            }
+        }
+        return this.parseForFailedValidators(failedValidators);
+    }
+
+    /**
+     * Validates incoming request input data for all registered validators.
+     * @param schema The object containing all validators of type Validator|Function.
+     * @returns object Contains function failed() to filter for failed validators.
+     */
+    validate(schema: { [ key: string ]: any }) {
+        // tslint:disable-line:no-any
+        const failedValidators: string[][] = []; // tslint:disable-line:no-any
+        for (const input in schema) {
+            if (!schema.hasOwnProperty(input)) {
+                continue;
+            }
+
+            const validator = schema[ input ];
+            if (validator.constructor === Array) {
+                for (const v of validator) {
+                    this.parseForValidator(v, this.$inputs[ input ], failedValidators);
+                }
+            } else {
+                this.parseForValidator(
+                    validator,
+                    this.$inputs[ input ],
+                    failedValidators,
+                );
+            }
+        }
+        return this.parseForFailedValidators(failedValidators);
+    }
+
+    /**
+     * Reduces all failed validators to a set applying to the filter in ...args.
+     * @param failedValidators An array of all failed validators.
+     * @returns object Contains a function to filter through all failed validators.
+     */
+    parseForFailedValidators(failedValidators: string[][]) {
+        return {
+            failed(...args: string[]) {
+                return (
+                    failedValidators.reduce((res: string[][], v: string[]) => {
+                        for (const p of args) {
+                            if (v.indexOf(p) === -1) {
+                                return res;
+                            }
+                        }
+                        res.push(v);
+                        return res;
+                    }, []).length > 0
+                );
+            },
+        };
+    }
+
+    /**
+     * Helper function for this.validate().
+     * @param validator The current Validator to call the current request input data on.
+     * @param input The current input data to validate.
+     * @param failedValidators An array of already failed validators.
+     * @throws JovoError if the validator has an unsupported type.
+     */
+    parseForValidator(
+        validator: () => void | Validator,
+        input: any,
+        failedValidators: string[][],
+    ) {
+        // tslint:disable-line:no-any
+        try {
+            if (validator instanceof Validator) {
+                validator.setInputToValidate(input);
+                validator.validate(this);
+            } else if (typeof validator === 'function') {
+                validator.call(this);
+            } else {
+                throw new JovoError(
+                    'This validation type is not supported.',
+                    ErrorCode.ERR,
+                    'jovo-core',
+                    undefined,
+                    'Please make sure you only use supported types of validation such as a function or an extended Validator',
+                    '',
+                );
+            }
+        } catch (err) {
+            if (err.constructor === ValidationError) {
+                failedValidators.push([ err.validator, input.name, err.message ]);
+            } else {
+                throw err;
+            }
+        }
+    }
+
+    /**
+     * Asynchronous helper function for this.validateAsync().
+     * @param validator The current Validator to call the current request input data on.
+     * @param input The current input data to validate.
+     * @param failedValidators An array of already failed validators.
+     * @throws JovoError if the validator has an unsupported type.
+     */
+    async parseForValidatorAsync(
+        validator: () => void | Validator,
+        input: any,
+        failedValidators: string[][],
+    ) {
+        // tslint:disable-line:no-any
+        try {
+            if (validator instanceof Validator) {
+                validator.setInputToValidate(input);
+                await validator.validate(this);
+            } else if (typeof validator === 'function') {
+                await validator.call(this);
+            } else {
+                throw new JovoError(
+                    'This validation type is not supported.',
+                    ErrorCode.ERR,
+                    'jovo-core',
+                    undefined,
+                    'Please make sure you only use supported types of validation such as a function or an extended Validator',
+                );
+            }
+        } catch (err) {
+            if (err.constructor === ValidationError) {
+                failedValidators.push([ err.validator, input.name, err.message ]);
+            } else {
+                throw err;
+            }
+        }
     }
 }

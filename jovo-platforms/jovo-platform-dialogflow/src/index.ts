@@ -1,4 +1,4 @@
-import {BaseApp, Host, Jovo, JovoRequest} from "jovo-core";
+import {BaseApp, HandleRequest, Host, Jovo, JovoRequest} from "jovo-core";
 import {Output} from "jovo-core/dist/src/Interfaces";
 import {DialogflowAgent} from "./DialogflowAgent";
 import {Context, DialogflowRequest} from "./core/DialogflowRequest";
@@ -18,7 +18,7 @@ export { DialogflowPlugin} from './integrations/DialogflowPlugin';
 
 
 export interface PlatformFactory<T extends Jovo = Jovo> {
-    createPlatformRequest(app: BaseApp, host: Host): T;
+    createPlatformRequest(app: BaseApp, host: Host, handleRequest?: HandleRequest): T;
     createRequest(json?: any): DialogflowRequest; // tslint:disable-line
     createResponse(json?: any): DialogflowResponse; // tslint:disable-line
     type(): string;

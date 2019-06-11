@@ -6,6 +6,7 @@ import {Inputs, JovoRequest, SessionData} from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
+
 interface User {
     userId: string;
     locale: string;
@@ -64,32 +65,6 @@ export interface GoogleActionRequestJSON {
     isInSandbox?: boolean;
     availableSurfaces?: Surface;
 }
-
-
-//
-// export class PlatformRequest<T> {
-//
-//     static fromJSON<T, U extends {}>(json: T|string, type: U): U {
-//         if (typeof json === 'string') {
-//             // if it's a string, parse it first
-//             return JSON.parse(json, PlatformRequest.reviver.bind(this, type));
-//         } else {
-//             // create an instance of the User class
-//             const request = Object.create(type);
-//
-//             // copy all the fields from the json object
-//             return Object.assign(request, json);
-//         }
-//     }
-//
-//     // reviver can be passed as the second parameter to JSON.parse
-//     // to automatically call User.fromJSON on the resulting value.
-//     //@ts-ignore
-//     static reviver<U>(type: U, key: string, value: any): any { // tslint:disable-line
-//         return key === "" ? PlatformRequest.fromJSON(value, type) : value;
-//     }
-//
-// }
 
 export class GoogleActionRequest implements JovoRequest {
     user?: User;
@@ -186,13 +161,13 @@ export class GoogleActionRequest implements JovoRequest {
 
     hasAudioInterface(): boolean {
         const audioCapability = _get(this, 'surface.capabilities')
-            .capabilities.find((item: Capability) => item.name === 'AUDIO_OUTPUT');
+            .find((item: Capability) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO');
         return typeof audioCapability !== 'undefined';
     }
 
     hasScreenInterface(): boolean {
         const screenCapability = _get(this, 'surface.capabilities')
-            .capabilities.find((item: Capability) => item.name === 'SCREEN_OUTPUT');
+            .find((item: Capability) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO');
         return typeof screenCapability !== 'undefined';
     }
 

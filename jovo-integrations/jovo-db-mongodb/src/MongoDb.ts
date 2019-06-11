@@ -1,6 +1,6 @@
-import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
-import _merge = require('lodash.merge');
+import {BaseApp, Db, ErrorCode, JovoError, PluginConfig} from 'jovo-core';
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import { MongoClient } from 'mongodb';
 
 export interface Config extends PluginConfig {
@@ -12,10 +12,10 @@ export interface Config extends PluginConfig {
 
 export class MongoDb implements Db {
     config: Config = {
-        uri: undefined,
-        databaseName: undefined,
         collectionName: 'UserData',
+        databaseName: undefined,
         primaryKeyColumn: 'userId',
+        uri: undefined,
     };
     needsWriteFileAccess = false;
     isCreating = false;
@@ -41,11 +41,8 @@ export class MongoDb implements Db {
         }
     }
 
-    uninstall(app: BaseApp) {
-    }
-
     async getConnectedMongoClient(uri: string): Promise<MongoClient> {
-        return await MongoClient.connect(uri, { useNewUrlParser: true });
+        return MongoClient.connect(uri, { useNewUrlParser: true });
     }
 
     errorHandling() {
@@ -130,7 +127,7 @@ export class MongoDb implements Db {
             if (updatedAt) {
                 item.$set.updatedAt = updatedAt;
             }
-            
+
             await collection.updateOne({ userId: primaryKey }, item, { upsert: true });
         } catch (e) {
             throw new JovoError(

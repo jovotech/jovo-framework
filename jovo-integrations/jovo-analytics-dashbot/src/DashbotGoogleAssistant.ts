@@ -1,7 +1,7 @@
-import { Analytics, PluginConfig, BaseApp, HandleRequest } from "jovo-core";
+import { Google } from 'dashbot';
+import * as dashbot from 'dashbot'; // tslint:disable-line
+import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
-import {Google} from 'dashbot';
-import * as dashbot from 'dashbot';
 
 export interface Config extends PluginConfig {
     key: string;

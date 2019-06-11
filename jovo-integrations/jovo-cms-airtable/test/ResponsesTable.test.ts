@@ -1,10 +1,13 @@
-import { ResponsesTable, AirtableCMS } from '../src';
-import { HandleRequest, Cms, BaseApp } from 'jovo-core';
-import * as cTableValues from './mockObj/tableValues.json';
+import i18n from 'i18next';
+import { BaseApp, Cms, HandleRequest} from 'jovo-core';
+import _cloneDeep = require('lodash.clonedeep');
+
+import { AirtableCMS, ResponsesTable } from '../src';
 import * as cI18nModel from './mockObj/i18nModel.json';
 import { MockHandleRequest } from './mockObj/mockHR';
-import _cloneDeep = require('lodash.clonedeep');
-import i18n from 'i18next';
+import * as cTableValues from './mockObj/tableValues.json';
+
+process.env.NODE_ENV = 'UNIT_TEST';
 
 let tableValues: any[];       // tslint:disable-line
 let i18nModel: any;                 // tslint:disable-line
@@ -107,6 +110,10 @@ describe('ResponsesTable.parse()', () => {
         });
 
         i18n.init({
+            interpolation: {
+                escapeValue: false, // do not escape ssml tags
+            },
+            load: 'all',
             resources: {
                 'en-US': {
                     translation: {
@@ -114,11 +121,7 @@ describe('ResponsesTable.parse()', () => {
                     }
                 }
             },
-            load: 'all',
-            returnObjects: true,
-            interpolation: {
-                escapeValue: false, // do not escape ssml tags
-            }
+            returnObjects: true
         });
 
         handleRequest.app.$cms.I18Next = { i18n };
