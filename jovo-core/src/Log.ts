@@ -11,7 +11,7 @@ export enum LogLevel {
     DEBUG = 4, // yellow()
 }
 
-interface Config {
+export interface Config {
     appenderLength: number;
     appenderSymbol: string;
     appenderOffset: string;
@@ -27,14 +27,14 @@ interface Config {
     disableAsyncHooks: boolean;
 }
 
-interface LogEvent {
+export interface LogEvent {
     msg: string;
     logLevel: LogLevel;
     isFormat: boolean;
     requestContext?: Host;
 }
 
-interface Appender {
+export interface Appender {
     ignoreFormatting: boolean;
     logLevel: LogLevel;
     trackRequest: boolean;
