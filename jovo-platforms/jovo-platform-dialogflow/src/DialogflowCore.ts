@@ -16,7 +16,7 @@ export class DialogflowCore implements Plugin {
 
     config: Config = {
         enabled: true,
-        sessionContextId: 'session',
+        sessionContextId: '_jovo_session_',
 
     };
 
@@ -79,10 +79,10 @@ export class DialogflowCore implements Plugin {
     session(dialogflowAgent: DialogflowAgent)  {
         const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
         const sessionId = _get(dialogflowRequest, 'session');
-
+        const sessionKey = `${sessionId}/contexts/${this.config.sessionContextId}`;
         if (_get(dialogflowRequest, 'queryResult.outputContexts')) {
             const sessionContext =_get(dialogflowRequest, 'queryResult.outputContexts').find((context: any) => { // tslint:disable-line
-                return context.name === `${sessionId}/contexts/${this.config.sessionContextId}`;
+                return context.name.startsWith(sessionKey);
             });
 
             if (sessionContext) {
@@ -116,7 +116,7 @@ export class DialogflowCore implements Plugin {
 
         const outputContexts = request.queryResult.outputContexts || [];
 
-        const sessionContextPrefix = `${request.session}/contexts/_jovo_session_`;
+        const sessionContextPrefix = `${request.session}/contexts/${this.config.sessionContextId}`;
 
 
         // remove non-jovo contexts
