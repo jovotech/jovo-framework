@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 const server: express.Application = express();
 
 server.jovoApp = undefined;
-server.use(bodyParser.json());
+server.use(bodyParser.json({limit: '20mb'}));
 
 server.listen = function() {
     if (server.jovoApp) {
