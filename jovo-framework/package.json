@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -18,13 +18,13 @@
     "@azure/functions": "^1.0.1-beta2",
     "body-parser": "^1.19.0",
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.2.8",
-    "jovo-core": "^2.2.7",
-    "jovo-db-filedb": "^2.2.7",
-    "lodash.get": "^4.4.2",
-    "lodash.set": "^4.3.2",
+    "jovo-cms-i18next": "^2.2.9",
+    "jovo-core": "^2.2.8",
+    "jovo-db-filedb": "^2.2.8",
     "lodash.clonedeep": "^4.5.0",
-    "lodash.merge": "^4.6.1"
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
+    "lodash.set": "^4.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
