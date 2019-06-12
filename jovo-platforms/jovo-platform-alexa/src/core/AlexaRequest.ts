@@ -240,13 +240,14 @@ export class AlexaRequest implements JovoRequest {
         return device;
     }
 
-    getScreenResolution(): string {
-        let resolution = 'no screen';
+    getScreenResolution(): string | undefined {
+        let resolution = '';
 
         if (this.context && this.context.Viewport) {
             resolution = this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
+            return resolution;
         }
-        return resolution;
+        return (resolution)? resolution : undefined;
     }
 
 
