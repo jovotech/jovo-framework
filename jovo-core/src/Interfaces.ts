@@ -50,6 +50,11 @@ export interface PluginConfig {
 }
 
 
+export interface AsrData {
+    text: string;
+    raw?: any;
+}
+
 /**
  * Passed to all middleware functions
  */
@@ -85,7 +90,7 @@ export interface HandleRequest {
     /**
      * Data retrieved from ASR.
      */
-    $asr?: any // tslint:disable-line
+    $asr?: AsrData
 
 
     platformClazz?: any; // tslint:disable-line
