@@ -36,7 +36,7 @@ verifiedServer.listen = function () {
 
         const httpServer = http.createServer(this);
         // @ts-ignore
-        return server.listen.apply(httpServer, arguments); // eslint-disable-line
+        return httpServer.listen.apply(httpServer, arguments); // eslint-disable-line
     } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
             Log.warn();
