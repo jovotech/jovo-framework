@@ -17,12 +17,12 @@
 </p>
 <br/>
 
-# Jovo Pulse Labs Plugin
+# Jovo PulseLabs Plugin
 
 Install package:
 
 ```sh
-npm install jovo-plugin-pulselabs
+npm install jovo-plugin-pulselabs --save
 ```
 
 Add the plugin to your `app.js` file:
@@ -34,3 +34,16 @@ const { PulseLabs } = require ('jovo-plugin-pulselabs');
 
 app.use( new PulseLabs({ apiKey: 'yourApiKey' }) );
 ```
+
+# Configuring additional options
+
+You can pass additional configuration options as below:
+
+```js
+
+app.use( new PulseLabs({ apiKey: 'yourApiKey' , timeout: 2000, debug: true }) );
+```
+
+***debug*** - ```boolean``` logs helpful debugging information
+<br/>
+***timeout*** - ```number``` timeouts requests after given milliseconds
