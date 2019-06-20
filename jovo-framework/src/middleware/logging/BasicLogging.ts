@@ -1,5 +1,7 @@
-import {BaseApp, HandleRequest, Plugin, PluginConfig, Log, LogLevel, Logger} from "jovo-core";
+import {BaseApp, HandleRequest, Log, Logger, LogLevel, Plugin, PluginConfig} from 'jovo-core';
+import {request} from 'express';
 import _get = require('lodash.get');
+import _set = require('lodash.set');
 import _merge = require('lodash.merge');
 
 
@@ -8,7 +10,10 @@ export interface Config extends PluginConfig {
     request?: boolean;
     response?: boolean;
     requestObjects?: string[];
+    excludedRequestObjects?: string[];
     responseObjects?: string[];
+    excludedResponseObjects?: string[];
+    excludeReplaceValue?: string;
     space?: string;
     styling?: boolean;
 }
@@ -20,7 +25,10 @@ export class BasicLogging implements Plugin {
         request: false,
         response: false,
         requestObjects: [],
+        excludedRequestObjects: [],
         responseObjects: [],
+        excludedResponseObjects: [],
+        excludeReplaceValue: undefined,
         space: '\t',
         styling: false,
     };
@@ -33,6 +41,7 @@ export class BasicLogging implements Plugin {
         this.requestLogger = this.requestLogger.bind(this);
         this.responseLogger = this.responseLogger.bind(this);
     }
+
     install(app: BaseApp) {
         if (this.config.logging === true) {
             this.config.request = true;
@@ -61,15 +70,26 @@ export class BasicLogging implements Plugin {
         if (!this.config.request) {
             return;
         }
+
+        const requestCopy = Object.assign({}, handleRequest.host.getRequestObject());
+
+        if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
+            this.config.excludedRequestObjects.forEach((excludePath: string) => {
+                _set(requestCopy, excludePath, this.config.excludeReplaceValue);
+            });
+        }
+
         if (this.config.requestObjects && this.config.requestObjects.length > 0) {
             this.config.requestObjects.forEach((path: string) => {
                 console.log(
                     JSON.stringify(
-                        _get(handleRequest.host.getRequestObject(), path), null, this.config.space));
+                        _get(requestCopy, path), null, this.config.space));
+
             });
         } else {
-            console.log(JSON.stringify(handleRequest.host.getRequestObject(), null, this.config.space));
+            console.log(JSON.stringify(requestCopy, null, this.config.space));
         }
+
     };
 
     responseLogger = (handleRequest: HandleRequest) => {
@@ -86,6 +106,15 @@ export class BasicLogging implements Plugin {
         if (!handleRequest.jovo) {
             return;
         }
+
+        const responseCopy = Object.assign({}, handleRequest.jovo.$response);
+
+        if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
+            this.config.excludedResponseObjects.forEach((excludePath: string) => {
+                _set(responseCopy, excludePath, this.config.excludeReplaceValue);
+            });
+        }
+
         if (this.config.responseObjects && this.config.responseObjects.length > 0) {
             this.config.responseObjects.forEach((path: string) => {
                 if (!handleRequest.jovo) {
@@ -93,10 +122,10 @@ export class BasicLogging implements Plugin {
                 }
                 console.log(
                     JSON.stringify(
-                        _get(handleRequest.jovo.$response, path), null, this.config.space));
+                        _get(responseCopy, path), null, this.config.space));
             });
         } else {
-            console.log(this.style(JSON.stringify(handleRequest.jovo.$response, null, this.config.space)));
+            console.log(this.style(JSON.stringify(responseCopy, null, this.config.space)));
         }
 
     };
@@ -105,7 +134,7 @@ export class BasicLogging implements Plugin {
     style(text: string) {
         if (this.config.styling) {
             text = text.replace(/<speak>(.+?)<\/speak>/g, `<speak>\x1b[36m$1\x1b[0m</speak>`);
-            text = text.replace( /"_JOVO_STATE_": "(.+?)"/g,`"_JOVO_STATE_": "\x1b[33m$1\x1b[0m"`);
+            text = text.replace(/"_JOVO_STATE_": "(.+?)"/g, `"_JOVO_STATE_": "\x1b[33m$1\x1b[0m"`);
         }
         return text;
 
