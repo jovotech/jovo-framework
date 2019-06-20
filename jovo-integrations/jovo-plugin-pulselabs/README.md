@@ -41,7 +41,7 @@ You can pass additional configuration options as below:
 
 ```js
 
-app.use( new PulseLabs({ apiKey: 'yourApiKey' , timeout: 2000, debug: true }) );
+app.use( new PulseLabs({ apiKey: 'yourApiKey' , options: { timeout: 2000, debug: true } }) );
 ```
 
 ***debug*** - ```boolean``` logs helpful debugging information
