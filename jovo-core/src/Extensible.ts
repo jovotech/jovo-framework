@@ -16,7 +16,7 @@ export interface ExtensibleConfig extends PluginConfig {
 /**
  * Allows a class to use plugins
  */
-export abstract class Extensible extends EventEmitter implements Plugin {
+export abstract class Extensible extends EventEmitter.EventEmitter implements Plugin {
 	config: ExtensibleConfig = {
 		enabled: true,
 		plugin: {}
