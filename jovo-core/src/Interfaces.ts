@@ -49,12 +49,6 @@ export interface PluginConfig {
     [index: string]: any; // tslint:disable-line
 }
 
-
-export interface AsrData {
-    text: string;
-    raw?: any;
-}
-
 /**
  * Passed to all middleware functions
  */
@@ -87,12 +81,6 @@ export interface HandleRequest {
      */
     $data?: any; // tslint:disable-line
 
-    /**
-     * Data retrieved from ASR.
-     */
-    $asr?: AsrData
-
-
     platformClazz?: any; // tslint:disable-line
 
 }
@@ -101,9 +89,9 @@ export interface HandleRequest {
 export interface Db extends Plugin {
     needsWriteFileAccess: boolean;
 
-    save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<any>; // tslint:disable-line
-    load(primaryKey: string): Promise<any>; // tslint:disable-line
-    delete(primaryKey: string): Promise<any>; // tslint:disable-line
+    save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo): Promise<any>; // tslint:disable-line
+    load(primaryKey: string, jovo?: Jovo): Promise<any>; // tslint:disable-line
+    delete(primaryKey: string, jovo?: Jovo): Promise<any>; // tslint:disable-line
 }
 
 export interface Platform extends Plugin {
