@@ -22,6 +22,7 @@ export interface Response {
 	data?: {
 		[key: string]: any; // tslint:disable-line
 	};
+	error?: Error;
 }
 
 export class Component implements Plugin {
