@@ -2,11 +2,11 @@
 
 Learn how to use Google Analytics for your Alexa Skills and Google Actions built with Jovo.
 
-* [About Google Analytics](#about-googleanalytics)
-* [Installation](#bespoken)
-   * [Create a Bespoken Dashboard Account](#create-a-bespoken-dashboard-account)
-   * [Enable Bespoken Analytics](#enable-bespoken-analytics)
-   * [Test Bespoken](#test-bespoken)
+* [About Google Analytics](#about-google-analytics)
+* [Installation](#installation)
+   * [Create a Google Analytics Account](#create-a-google-analytics-account)
+   * [Enable Google Analytics](#enable-google-analytics)
+   * [Test Google Analytics](#test-google-analytics)
    
 
 
