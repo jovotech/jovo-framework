@@ -25,7 +25,7 @@ export class TwilioUser extends DialogflowUser {
             city: this.twilioPayload.FromCity,
             zip: this.twilioPayload.FromZip,
             state: this.twilioPayload.FromState
-        }
+        };
     }
 
     getTwilioPayload(): TwilioPayload {
