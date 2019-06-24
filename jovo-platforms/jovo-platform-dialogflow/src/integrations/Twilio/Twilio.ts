@@ -5,7 +5,7 @@ import {Dialogflow} from "../../Dialogflow";
 import {DialogflowAgent} from "../../DialogflowAgent";
 import {TwilioUser} from "./TwilioUser";
 
-export class TwilioBot implements Plugin {
+export class Twilio implements Plugin {
     config: Config = {
         enabled: true,
     };
