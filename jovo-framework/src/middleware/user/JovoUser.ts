@@ -1,19 +1,19 @@
 import {
     BaseApp,
-    Output,
     EnumRequestType,
+    ErrorCode,
     HandleRequest,
     Inputs,
     Jovo,
+    JovoError,
+    Log,
+    Output,
     Plugin,
     PluginConfig,
-    User,
     SessionConstants,
-    Log,
-    JovoError,
-    ErrorCode,
-    SpeechBuilder
-} from "jovo-core";
+    SpeechBuilder,
+    User,
+} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import crypto = require('crypto');
@@ -125,7 +125,7 @@ export class JovoUser implements Plugin {
             },
         },
         updatedAt: false,
-        dataCaching: false
+        dataCaching: false,
     };
 
     constructor(config?: Config) {
@@ -161,7 +161,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {String}
          */
-        User.prototype.getPrevRequestState = function(index: number) {
+        User.prototype.getPrevRequestState = function (index: number) {
             return _get(this.$context, `prev[${index}].request.state`);
         };
 
@@ -171,7 +171,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {String}
          */
-        User.prototype.getPrevResponseState = function(index: number) {
+        User.prototype.getPrevResponseState = function (index: number) {
             return _get(this.$context, `prev[${index}].response.state`);
         };
 
@@ -181,7 +181,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {*}
          */
-        User.prototype.getPrevInputs = function(index: number) {
+        User.prototype.getPrevInputs = function (index: number) {
             return _get(this.$context, `prev[${index}].request.inputs`);
         };
 
@@ -191,7 +191,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {String|*}
          */
-        User.prototype.getPrevTimestamp = function(index: number) {
+        User.prototype.getPrevTimestamp = function (index: number) {
             return _get(this.$context, `prev[${index}].request.timestamp`);
         };
 
@@ -201,7 +201,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {String}
          */
-        User.prototype.getPrevSpeech = function(index: number) {
+        User.prototype.getPrevSpeech = function (index: number) {
             return _get(this.$context, `prev[${index}].response.speech`);
         };
 
@@ -211,7 +211,7 @@ export class JovoUser implements Plugin {
          * @param {number} index
          * @return {String}
          */
-        User.prototype.getPrevReprompt = function(index: number) {
+        User.prototype.getPrevReprompt = function (index: number) {
             return _get(this.$context, `prev[${index}].response.reprompt`);
         };
 
@@ -220,7 +220,7 @@ export class JovoUser implements Plugin {
          * Explicit user deletion
          * @returns {Promise<void>}
          */
-        User.prototype.delete = async function() {
+        User.prototype.delete = async function () {
             const userId = this.getId();
 
             if (typeof userId === 'undefined') {
@@ -228,7 +228,7 @@ export class JovoUser implements Plugin {
             }
 
             if (this.jovo.$app!.$db) {
-                await this.jovo.$app!.$db.delete(userId);
+                await this.jovo.$app!.$db.delete(userId, this.jovo);
                 this.isDeleted = true;
                 Log.verbose(`User with id ${userId} has been deleted.`);
             } else {
@@ -241,14 +241,14 @@ export class JovoUser implements Plugin {
          * Load user from db
          * @returns {Promise<any>}
          */
-        User.prototype.loadData = async function() {
+        User.prototype.loadData = async function () {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
             return await loadDb({
                 jovo: this.jovo,
                 host: this.jovo.$host,
-                app: this.jovo.$app
+                app: this.jovo.$app,
             }, true);
 
         };
@@ -257,14 +257,14 @@ export class JovoUser implements Plugin {
          * Save user to db
          * @returns {Promise<any>}
          */
-        User.prototype.saveData = async function() {
+        User.prototype.saveData = async function () {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
             return await saveDb({
                 jovo: this.jovo,
                 host: this.jovo.$host,
-                app: this.jovo.$app
+                app: this.jovo.$app,
             }, true);
 
         };
@@ -278,12 +278,13 @@ export class JovoUser implements Plugin {
          *      context: true
          * }
          */
-        Jovo.prototype.repeat = async function() {
+        Jovo.prototype.repeat = async function () {
             if (_get(this.$user, '$context.prev[0].response.output')) {
                 this.setOutput(_get(this.$user, '$context.prev[0].response.output'));
             }
         };
     }
+
     loadDb = async (handleRequest: HandleRequest, force = false) => {
         // no database
         if (!handleRequest.app.$db) {
@@ -301,7 +302,7 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 'jovo object is not initialized.',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
 
@@ -309,7 +310,7 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 'user object is not initialized',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
         const userId = handleRequest.jovo.$user.getId();
@@ -318,11 +319,11 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 `Can't load user with undefined userId`,
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
 
-        const data = await handleRequest.app.$db.load(userId);
+        const data = await handleRequest.app.$db.load(userId, handleRequest.jovo);
 
         Log.verbose(Log.header('Jovo user (load)', 'framework'));
         Log.yellow().verbose(`this.$user.getId(): ${userId}`);
@@ -332,13 +333,12 @@ export class JovoUser implements Plugin {
         } else {
             handleRequest.jovo.$user.new = false;
         }
-
         handleRequest.jovo.$user.$data = _get(data, `${this.config.columnName}.data`, {});
-        
+
         if (this.config.metaData && this.config.metaData.enabled) {
             handleRequest.jovo.$user.$metaData = _get(data, `${this.config.columnName}.metaData`, {});
         }
-        
+
         if (this.config.context && this.config.context.enabled) {
             handleRequest.jovo.$user.$context = _get(data, `${this.config.columnName}.context`, {});
         }
@@ -347,7 +347,7 @@ export class JovoUser implements Plugin {
         const userData = {
             data: handleRequest.jovo.$user.$data,
             metaData: handleRequest.jovo.$user.$metaData,
-            context: handleRequest.jovo.$user.$context
+            context: handleRequest.jovo.$user.$context,
         };
 
         this.updateDbLastState(handleRequest, userData);
@@ -375,24 +375,24 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 'jovo object is not initialized.',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
         if (!handleRequest.jovo.$user) {
             throw new JovoError(
                 'user object is not initialized',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
-        if(handleRequest.jovo.$user.isDeleted) {
+        if (handleRequest.jovo.$user.isDeleted) {
             return Promise.resolve();
         }
         if (this.config.implicitSave === false && force === false) {
             return Promise.resolve();
         }
-        const userData: {data?: any, context?: UserContext, metaData?: UserMetaData} =  { // tslint:disable-line
-            data: _get(handleRequest.jovo.$user, '$data')
+        const userData: { data?: any, context?: UserContext, metaData?: UserMetaData } = { // tslint:disable-line
+            data: _get(handleRequest.jovo.$user, '$data'),
         };
 
         if (this.config.context &&
@@ -413,7 +413,7 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 `Can't save user with undefined userId`,
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
 
@@ -426,7 +426,8 @@ export class JovoUser implements Plugin {
                     userId,
                     this.config.columnName || 'userData',
                     userData,
-                    updatedAt
+                    updatedAt,
+                    handleRequest.jovo,
                 );
             }
         } else {
@@ -434,7 +435,8 @@ export class JovoUser implements Plugin {
                 userId,
                 this.config.columnName || 'userData',
                 userData,
-                updatedAt
+                updatedAt,
+                handleRequest.jovo,
             );
         }
 
@@ -450,7 +452,7 @@ export class JovoUser implements Plugin {
     };
 
     /**
-     * Caches the current state of the user data hashed inside the jovo object 
+     * Caches the current state of the user data hashed inside the jovo object
      * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
      * @param {object} data user data
      */
@@ -461,7 +463,7 @@ export class JovoUser implements Plugin {
     }
 
     /**
-     * 
+     *
      * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
      * @param {object} data current user data
      */
@@ -478,7 +480,7 @@ export class JovoUser implements Plugin {
             throw new JovoError(
                 'jovo object is not initialized.',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
 
@@ -505,7 +507,7 @@ export class JovoUser implements Plugin {
 
     /**
      * update $metaData.createdAt
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateCreatedAt(handleRequest: HandleRequest) {
         // createdAt should only be set once for each user
@@ -516,7 +518,7 @@ export class JovoUser implements Plugin {
 
     /**
      * update $metaData.lastUsedAt
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateLastUsedAt(handleRequest: HandleRequest) {
         handleRequest.jovo!.$user.$metaData.lastUsedAt = new Date().toISOString();
@@ -524,7 +526,7 @@ export class JovoUser implements Plugin {
 
     /**
      * update $metaData.sessionsCount
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateSessionsCount(handleRequest: HandleRequest) {
         let sessionsCount = handleRequest.jovo!.$user.$metaData.sessionsCount || 0;
@@ -536,7 +538,7 @@ export class JovoUser implements Plugin {
 
     /**
      * update $metaData.requests
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateRequestHistory(handleRequest: HandleRequest) {
         if (!handleRequest.jovo!.$user.$metaData.requests) {
@@ -562,32 +564,32 @@ export class JovoUser implements Plugin {
 
     /**
      * update $metaData.devices
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateDevices(handleRequest: HandleRequest) {
         if (!handleRequest.jovo!.$user.$metaData.devices) {
             handleRequest.jovo!.$user.$metaData.devices = {};
         }
-        if (!handleRequest.jovo!.$user.$metaData.devices[""+handleRequest.jovo!.getDeviceId()+""]) {
+        if (!handleRequest.jovo!.$user.$metaData.devices['' + handleRequest.jovo!.getDeviceId() + '']) {
             const device = {
                 hasAudioInterface: handleRequest.jovo!.hasAudioInterface(),
                 hasScreenInterface: handleRequest.jovo!.hasScreenInterface(),
                 hasVideoInterface: handleRequest.jovo!.hasVideoInterface(),
             };
-            handleRequest.jovo!.$user.$metaData.devices[""+handleRequest.jovo!.getDeviceId()+""] = device;
+            handleRequest.jovo!.$user.$metaData.devices['' + handleRequest.jovo!.getDeviceId() + ''] = device;
         }
     }
 
     /**
      * update $user.$context
-     * @param {HandleRequest} handleRequest 
+     * @param {HandleRequest} handleRequest
      */
     private updateContextData(handleRequest: HandleRequest) {
         if (!handleRequest.jovo) {
             throw new JovoError(
                 'jovo object is not initialized.',
                 ErrorCode.ERR,
-                'jovo-framework'
+                'jovo-framework',
             );
         }
 
@@ -645,8 +647,8 @@ export class JovoUser implements Plugin {
     }
 
     /**
-     * @param {HandleRequest} handleRequest 
-     * @param {ContextPrevObject} prevObject 
+     * @param {HandleRequest} handleRequest
+     * @param {ContextPrevObject} prevObject
      */
     private updatePrevSpeech(handleRequest: HandleRequest, prevObject: ContextPrevObject) {
         if (handleRequest.jovo!.$output.tell) {
