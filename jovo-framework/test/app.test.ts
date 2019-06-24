@@ -1,45 +1,46 @@
-import {App} from './../src/App';
 import { Component } from '../src';
-let app: App;
+import { App } from './../src/App';
+
+let appBase: App;
 jest.setTimeout(250);
 process.env.NODE_ENV = 'UNIT_TEST';
 
 
-app = new App();
+appBase = new App();
 test('test onRequest', (done) => {
 
-    app.onRequest(() => {
-       done();
+    appBase.onRequest(() => {
+        done();
     });
 
-    app.emit('request');
+    appBase.emit('request');
 });
 
 
 test('test onResponse', (done) => {
 
-    app.onResponse(() => {
+    appBase.onResponse(() => {
         done();
     });
 
-    app.emit('response');
+    appBase.emit('response');
 });
 
 test('test onFail', (done) => {
 
-    app.onFail(() => {
+    appBase.onFail(() => {
         done();
     });
 
-    app.emit('fail');
+    appBase.emit('fail');
 });
 test('test onError', (done) => {
 
-    app.onError(() => {
+    appBase.onError(() => {
         done();
     });
 
-    app.emit('fail');
+    appBase.emit('fail');
 });
 
 describe('test useComponents()', () => {
@@ -52,15 +53,17 @@ describe('test useComponents()', () => {
     });
 
     test('should add component\'s handler to handlers', () => {
-        const testFunction = new Function();
+        const testFunction = () => {
+            //
+        };
         component.handler = {
-            test: testFunction
+            test: testFunction,
         };
 
         app.useComponents(component);
 
         expect(app.config.handlers).toEqual({
-            test: testFunction
+            test: testFunction,
         });
     });
 

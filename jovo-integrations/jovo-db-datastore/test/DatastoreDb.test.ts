@@ -1,7 +1,8 @@
-import {BaseApp, JovoError} from "jovo-core";
-import {DatastoreDb} from "../src/DatastoreDb";
-import _set = require('lodash.set');
-import Datastore = require("@google-cloud/datastore");
+import Datastore = require('@google-cloud/datastore');
+import { BaseApp, JovoError } from 'jovo-core';
+import _set = require('lodash.set'); // tslint:disable-line:no-implicit-dependencies
+
+import { DatastoreDb } from '../src/DatastoreDb';
 
 describe('test install()', () => {
     test('should assign new Datastore to datastore property', () => {
@@ -90,9 +91,9 @@ describe('test database operations', () => {
     describe('test save()', () => {
         test('should call errorHandling()', async () => {
             const obj = {
-                key: jest.fn(),
                 get: jest.fn().mockResolvedValue([]),
-                save: jest.fn()
+                key: jest.fn(),
+                save: jest.fn(),
             };
             _set(datastoreDb, 'datastore', obj);
             jest.spyOn(datastoreDb, 'errorHandling');
@@ -105,9 +106,9 @@ describe('test database operations', () => {
         test('should load the current user data using datastore.get()', async () => {
             const getMock = jest.fn().mockResolvedValue([]);
             const obj = {
-                key: jest.fn(),
                 get: getMock,
-                save: jest.fn()
+                key: jest.fn(),
+                save: jest.fn(),
             };
             _set(datastoreDb, 'datastore', obj);
 
@@ -118,14 +119,14 @@ describe('test database operations', () => {
 
         test('should keep prior data while saving', async () => {
             const obj = {
-                key: jest.fn().mockReturnValue('entityKey'),
-                get: jest.fn().mockResolvedValue([{
-                    [datastoreDb.config.primaryKeyColumn!]: 'id',
+                get: jest.fn().mockResolvedValue([ {
+                    [ datastoreDb.config.primaryKeyColumn! ]: 'id',
                     data: {
-                        oldKey: 'oldValue'
-                    }
-                }]),
-                save: jest.fn()
+                        oldKey: 'oldValue',
+                    },
+                } ]),
+                key: jest.fn().mockReturnValue('entityKey'),
+                save: jest.fn(),
             };
             _set(datastoreDb, 'datastore', obj);
 
@@ -133,22 +134,22 @@ describe('test database operations', () => {
 
             // oldKey & oldValue as well as key & value should be present
             expect(datastoreDb.datastore!.save).toHaveBeenCalledWith({
-                key: 'entityKey',
                 data: {
-                    [datastoreDb.config.primaryKeyColumn!]: 'id',
+                    [ datastoreDb.config.primaryKeyColumn! ]: 'id',
                     data: {
+                        key: 'value',
                         oldKey: 'oldValue',
-                        key: 'value'
-                    }
-                }
+                    },
+                },
+                key: 'entityKey',
             });
         });
 
         test('should create new object with "primaryKey" set as the value for "primaryKeyColumn"', async () => {
             const obj = {
-                key: jest.fn().mockReturnValue('entityKey'),
                 get: jest.fn().mockResolvedValue([]),
-                save: jest.fn()
+                key: jest.fn().mockReturnValue('entityKey'),
+                save: jest.fn(),
             };
             _set(datastoreDb, 'datastore', obj);
 
@@ -156,13 +157,13 @@ describe('test database operations', () => {
 
             // oldKey & oldValue as well as key & value should be present
             expect(datastoreDb.datastore!.save).toHaveBeenCalledWith({
-                key: 'entityKey',
                 data: {
-                    [datastoreDb.config.primaryKeyColumn!]: 'id',
+                    [ datastoreDb.config.primaryKeyColumn! ]: 'id',
                     data: {
-                        key: 'value'
-                    }
-                }
+                        key: 'value',
+                    },
+                },
+                key: 'entityKey',
             });
         });
     });
@@ -170,8 +171,8 @@ describe('test database operations', () => {
     describe('test load()', () => {
         test('should call errorHandling()', async () => {
             const mockDatastore = {
+                get: jest.fn().mockResolvedValue([]),
                 key: jest.fn(),
-                get: jest.fn().mockResolvedValue([])
             };
             _set(datastoreDb, 'datastore', mockDatastore);
             jest.spyOn(datastoreDb, 'errorHandling');
@@ -183,8 +184,8 @@ describe('test database operations', () => {
 
         test('should return empty object because there was no data for that user', async () => {
             const mockDatastore = {
+                get: jest.fn().mockResolvedValue([]),
                 key: jest.fn(),
-                get: jest.fn().mockResolvedValue([])
             };
             _set(datastoreDb, 'datastore', mockDatastore);
 
@@ -195,8 +196,8 @@ describe('test database operations', () => {
 
         test('should return user data', async () => {
             const mockDatastore = {
+                get: jest.fn().mockResolvedValue([ {data: {key: 'value'}} ]),
                 key: jest.fn(),
-                get: jest.fn().mockResolvedValue([{data: {key: 'value'}}])
             };
             _set(datastoreDb, 'datastore', mockDatastore);
 
@@ -209,8 +210,8 @@ describe('test database operations', () => {
     describe('test delete()', () => {
         test('should call errorHandling()', async () => {
             const mockDatastore = {
+                delete: jest.fn().mockResolvedValue('test'),
                 key: jest.fn(),
-                delete: jest.fn().mockResolvedValue('test')
             };
             _set(datastoreDb, 'datastore', mockDatastore);
             jest.spyOn(datastoreDb, 'errorHandling');
@@ -222,8 +223,8 @@ describe('test database operations', () => {
 
         test('should return the api response', async () => {
             const mockDatastore = {
+                delete: jest.fn().mockResolvedValue('test'),
                 key: jest.fn(),
-                delete: jest.fn().mockResolvedValue('test')
             };
             _set(datastoreDb, 'datastore', mockDatastore);
 

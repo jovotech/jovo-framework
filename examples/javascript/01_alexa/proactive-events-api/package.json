@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-proactive-events-api",
-  "version": "2.2.9",
+  "version": "2.2.12",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.7",
-    "jovo-platform-alexa": "^2.2.9"
+    "jovo-framework": "^2.2.10",
+    "jovo-platform-alexa": "^2.2.12"
   }
 }

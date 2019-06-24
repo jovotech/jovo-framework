@@ -1,7 +1,41 @@
 # Jovo Framework Changelog
 
 
+## 2.2.9 (2019-06-07)
+
+
+#### :bug: Bug Fix
+* `jovo-core` Fix error in plugin configs (fix issue #521)
+
+ 
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2.2.8 (2019-06-05)
+
+#### :nail_care: Enhancement
+* `jovo-framework` [#515](https://github.com/jovotech/jovo-framework/pull/515) Adds Conversational Components (BETA)  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-core` Updates TSLint rules (WIP)
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests
+ 
+
+#### Committers: 2
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
 ## 2.2.7 (2019-06-03)
+
+## Breaking Changes
+
+* `jovo-cms-googlesheets` Values without variations (one row) previously returned an array with one element. This was not the expected behavior.
+Since this version single values are return as a string. (Doesn't break anything if you use the SpeechBuilder)<br><br>
+Old version: this.$cms.t('key')[0]\
+Fixed version: this.$cms.t('key')
+
 
 #### :rocket: New Feature
 * `jovo-framework` [#503](https://github.com/jovotech/jovo-framework/pull/503) Adds Conversational Components (BETA)  ([@KaanKC](https://github.com/KaanKC))
@@ -28,8 +62,6 @@
 - Dustin Bahr ([@curiousdustin](https://github.com/curiousdustin))
 - freiSMS ([@freiSMS](https://github.com/freiSMS))
 - Alex ([@aswetlow](https://github.com/aswetlow))
-
-
 
 ## 2.2.5 (2019-05-07)
 

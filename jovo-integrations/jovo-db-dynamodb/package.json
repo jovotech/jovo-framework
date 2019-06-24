@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-dynamodb",
-  "version": "2.2.5",
+  "version": "2.2.8",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.294.0",
-    "jovo-core": "^2.2.5",
+    "jovo-core": "^2.2.8",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2"
@@ -23,11 +23,12 @@
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/node": "^10.3.1",
-    "jest": "^24.6.0",
+    "jest": "^24.8.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
-    "tslint": "^5.15.0",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.4.1"
   },

@@ -69,7 +69,7 @@ export {
 } from './Interfaces';
 
 export { Util } from './Util';
-export { LogLevel, Log, Logger } from './Log';
+export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './Log';
 export { User } from './User';
 
 

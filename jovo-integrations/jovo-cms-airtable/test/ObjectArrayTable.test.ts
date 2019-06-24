@@ -1,6 +1,6 @@
-import { ObjectArrayTable } from "../src";
-import { HandleRequest } from "jovo-core";
-import { MockHandleRequest } from "./mockObj/mockHR";
+import { HandleRequest } from 'jovo-core';
+import { ObjectArrayTable } from '../src';
+import { MockHandleRequest } from './mockObj/mockHR';
 
 let handleRequest: HandleRequest;
 beforeEach(() => {
@@ -14,7 +14,7 @@ describe('ObjectArrayTable.constructor()', () => {
     });
 
     test('with config', () => {
-        const objectArrayTable = new ObjectArrayTable({ enabled: false });
+        const objectArrayTable = new ObjectArrayTable({enabled: false});
         expect(objectArrayTable.config.enabled).toBeFalsy();
     });
 });
@@ -27,7 +27,7 @@ describe('ObjectArrayTable.parse()', () => {
     });
 
     test('with empty array', () => {
-        const objectArrayTable = new ObjectArrayTable({ name: 'test' });
+        const objectArrayTable = new ObjectArrayTable({name: 'test'});
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
         objectArrayTable.parse(handleRequest, []);
@@ -35,17 +35,17 @@ describe('ObjectArrayTable.parse()', () => {
     });
 
     test('with valid values', () => {
-        const objectArrayTable = new ObjectArrayTable({ name: 'test' });
+        const objectArrayTable = new ObjectArrayTable({name: 'test'});
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
         objectArrayTable.parse(handleRequest, [
-            ['keys', 'values'], ['key1', 'value1']
+            [ 'keys', 'values' ], [ 'key1', 'value1' ],
         ]);
         expect(handleRequest.app.$cms.test).toStrictEqual([
             {
                 keys: 'key1',
-                values: 'value1'
-            }
+                values: 'value1',
+            },
         ]);
     });
 });

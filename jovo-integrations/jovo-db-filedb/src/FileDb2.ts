@@ -1,16 +1,43 @@
-
-import {Db, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
-import * as path from 'path';
-import * as fs from "fs";
-import _set = require('lodash.set');
+import * as fs from 'fs';
+import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
-import {BaseApp} from "jovo-core";
+import _set = require('lodash.set');
+import * as path from 'path';
 
 interface Config extends PluginConfig {
     path?: string;
 }
 
 export class FileDb2 implements Db {
+
+    /**
+     * Creates paths recursively
+     * @param {string} targetDir
+     * @param {boolean} isRelativeToScript
+     */
+    private static mkDirByPathSync(targetDir: string, isRelativeToScript: boolean) {
+        const sep = path.sep;
+        const initDir = path.isAbsolute(targetDir) ? sep : '';
+        const baseDir = isRelativeToScript ? __dirname : '.';
+
+        targetDir.split(sep).reduce((parentDir, childDir) => {
+            const curDir = path.resolve(baseDir, parentDir, childDir);
+            try {
+                if (!fs.existsSync(curDir)) {
+                    fs.mkdirSync(curDir);
+                    Log.info(`Directory ${curDir} created!`);
+                }
+            } catch (err) {
+                if (err.code !== 'EEXIST') {
+                    throw err;
+                }
+
+                Log.error(`Directory ${curDir} already exists!`);
+            }
+
+            return curDir;
+        }, initDir);
+    }
 
     needsWriteFileAccess = true;
     config: Config = {
@@ -33,10 +60,6 @@ export class FileDb2 implements Db {
         if (!fs.existsSync(path.join(this.config.path!))) {
             FileDb2.mkDirByPathSync(path.join(this.config.path!), false);
         }
-    }
-
-    uninstall(app: BaseApp) {
-
     }
 
     errorHandling() {
@@ -80,9 +103,9 @@ export class FileDb2 implements Db {
             _set(oldData, key, data);
             if (updatedAt) {
                 oldData.updatedAt = updatedAt;
-            }   
+            }
 
-            return await this.saveFile(pathToFile, oldData);
+            return this.saveFile(pathToFile, oldData);
         } else {
             const newData = {
                 [key]: data,
@@ -90,7 +113,7 @@ export class FileDb2 implements Db {
             if (updatedAt) {
                 newData.updatedAt = updatedAt;
             }
-            return await this.saveFile(pathToFile, newData);
+            return this.saveFile(pathToFile, newData);
         }
     }
 
@@ -99,7 +122,7 @@ export class FileDb2 implements Db {
 
         const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
 
-        return await this.deleteFile(pathToFile);
+        return this.deleteFile(pathToFile);
     }
 
 
@@ -118,7 +141,6 @@ export class FileDb2 implements Db {
         return new Promise<any>((resolve, reject) => { // tslint:disable-line
             fs.writeFile(filename, JSON.stringify(data, null, '\t'), (err) => {
                 if (err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve();
@@ -137,33 +159,6 @@ export class FileDb2 implements Db {
         });
     }
 
-    /**
-     * Creates paths recursively
-     * @param {string} targetDir
-     * @param {boolean} isRelativeToScript
-     */
-    private static mkDirByPathSync(targetDir: string, isRelativeToScript: boolean) {
-        const sep = path.sep;
-        const initDir = path.isAbsolute(targetDir) ? sep : '';
-        const baseDir = isRelativeToScript ? __dirname : '.';
 
-        targetDir.split(sep).reduce((parentDir, childDir) => {
-            const curDir = path.resolve(baseDir, parentDir, childDir);
-            try {
-                if (!fs.existsSync(curDir)) {
-                    fs.mkdirSync(curDir);
-                    console.log(`Directory ${curDir} created!`);
-                }
-            } catch (err) {
-                if (err.code !== 'EEXIST') {
-                    throw err;
-                }
-
-                console.log(`Directory ${curDir} already exists!`);
-            }
-
-            return curDir;
-        }, initDir);
-    }
 
 }

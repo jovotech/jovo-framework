@@ -76,7 +76,7 @@ export interface System {
 }
 
 export interface Viewport {
-    experiences: Experience [];
+    experiences: Experience[];
     shape: 'RECTANGLE' | 'ROUND';
     pixelWidth: number;
     pixelHeight: number;
@@ -84,9 +84,9 @@ export interface Viewport {
     currentPixelWidth: number;
     currentPixelHeight: number;
 
-    touch?: TouchMethod [];
-    keyboard?: InputMechanism [];
-    video?: {codecs: string[];};
+    touch?: TouchMethod[];
+    keyboard?: InputMechanism[];
+    video?: { codecs: string[]; };
 }
 
 
@@ -204,40 +204,49 @@ export class AlexaRequest implements JovoRequest {
     getAlexaDevice(): string {
         let device = 'Echo - voice only';
 
-        if (this.context && this.context.Viewport ) {
+        if (this.context && this.context.Viewport) {
 
-            device = "Unknow Device with Screen "+ this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
+            device = "Unknow Device with Screen " + this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
 
             if (this.context.Viewport.pixelWidth === 480 &&
                 this.context.Viewport.pixelHeight === 480 &&
-                this.context.Viewport.shape==='ROUND') {
-            device = 'Alexa Small Hub'; //'Echo Spot';
-        }
+                this.context.Viewport.shape === 'ROUND') {
+                device = 'Alexa Small Hub'; //'Echo Spot';
+            }
             if (this.context.Viewport.pixelWidth === 1280 &&
                 this.context.Viewport.pixelHeight === 720 &&
-                this.context.Viewport.shape==='RECTANGLE') {
+                this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa HD Ready TV';
             }
             if (this.context.Viewport.pixelWidth === 1920 &&
-                this.context.Viewport.pixelHeight === 1080 && 
-                this.context.Viewport.shape==='RECTANGLE') {
+                this.context.Viewport.pixelHeight === 1080 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa Extra Large TV'; //'Full HD TV';
             }
 
 
             if (this.context.Viewport.pixelWidth === 1024 &&
                 this.context.Viewport.pixelHeight === 600 &&
-                this.context.Viewport.shape==='RECTANGLE') {
+                this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa Medium Hub'; //'Echo Show 1st gen';
             }
 
             if (this.context.Viewport.pixelWidth === 1280 &&
                 this.context.Viewport.pixelHeight === 800 &&
-                this.context.Viewport.shape==='RECTANGLE') {
-                device = 'Alexa Large Hub' ;//'Echo Show 2nd gen';
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = 'Alexa Large Hub';//'Echo Show 2nd gen';
             }
         }
         return device;
+    }
+
+    getScreenResolution(): string | undefined {
+        let resolution;
+
+        if (this.context && this.context.Viewport) {
+            resolution = this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
+        }
+        return resolution;
     }
 
 

@@ -1,7 +1,7 @@
-import {EnumRequestType, Jovo} from "jovo-core";
+import { EnumRequestType, Jovo } from 'jovo-core';
 
-import {App, Config as AppConfig} from './../src/App';
-import {Handler} from './../src/middleware/Handler';
+import { App, Config as AppConfig } from './../src/App';
+import { Handler } from './../src/middleware/Handler';
 
 
 require('source-map-support').install(); // tslint:disable-line
@@ -18,7 +18,7 @@ test('test setHandler with single handler', () => {
         },
         State: {
             Intent() {
-
+                //
             },
         },
     });
@@ -32,13 +32,13 @@ test('test setHandler with multiple handlers', () => {
     app.setHandler({
         State: {
             Intent() {
-
+                //
             },
         },
     }, {
         State2: {
             Intent() {
-
+                //
             },
         },
     });
@@ -56,7 +56,10 @@ test('test throw exception on non existing route', (done) => {
             Unhandled() { // tslint:disable-line:no-empty
 
             },
-        }
+        },
+        $type: {
+            type: EnumRequestType.INTENT,
+        },
     };
 
     // @ts-ignore
@@ -69,7 +72,24 @@ test('test throw exception on non existing route', (done) => {
     });
 });
 
-test('test skip exception on non existing route', async (done) => {
+test('test skip throwing exception on optional request types', async (done) => {
+    const jovo = {
+        $handlers: {},
+        $type: {
+            optional: true,
+            type: 'OPTIONAL_TYPE',
+        },
+    };
+    // @ts-ignore
+    await Handler.applyHandle(jovo, {
+        path: 'OPTIONAL_TYPE',
+        type: 'OPTIONAL_TYPE',
+    });
+    done();
+});
+
+
+test('test skip exception on non existing route, because ON_REQUEST is there', async (done) => {
     const jovo = {
         $handlers: {
             ON_REQUEST() { // tslint:disable-line:no-empty
@@ -80,7 +100,7 @@ test('test skip exception on non existing route', async (done) => {
             },
             Unhandled() { // tslint:disable-line:no-empty
             },
-        }
+        },
     };
 
     // @ts-ignore
@@ -92,6 +112,7 @@ test('test skip exception on non existing route', async (done) => {
     done();
 });
 
+
 test('test applyHandle on route that returns rejected promise', async () => {
     const rejectionReason = 'rejection reason';
 
@@ -101,8 +122,8 @@ test('test applyHandle on route that returns rejected promise', async () => {
         $handlers: {
             IntentA() {
                 return Promise.reject(rejectionReason);
-            }
-        }
+            },
+        },
     };
 
     try {
@@ -123,14 +144,13 @@ test('test handleOnPromise on route that returns rejected promise', async () => 
     expect.assertions(1);
 
 
-
     try {
         const jovo = {
             $handlers: {
                 ON_REQUEST() {
                     return Promise.reject(rejectionReason);
-                }
-            }
+                },
+            },
         };
         // @ts-ignore
         await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
@@ -148,8 +168,8 @@ test('test applyHandle on route that immediately throws exception', async () => 
         $handlers: {
             IntentA() {
                 throw new Error(errorMessage);
-            }
-        }
+            },
+        },
     };
 
     try {
@@ -174,8 +194,8 @@ test('test handleOnPromise on route that immediately throws exception', async ()
             $handlers: {
                 ON_REQUEST() {
                     throw new Error(errorMessage);
-                }
-            }
+                },
+            },
         };
         // @ts-ignore
         await Handler.handleOnPromise(jovo, jovo.$handlers.ON_REQUEST);
@@ -192,8 +212,8 @@ test('test applyHandle on route with callback', async () => {
         $handlers: {
             IntentA(jovo: Jovo, callback: () => void) {
                 callback();
-            }
-        }
+            },
+        },
     };
 
     // @ts-ignore
@@ -212,8 +232,8 @@ test('test applyHandle on route with callback that immediately throws exception'
         $handlers: {
             IntentA(callback: () => {}) {
                 throw new Error(errorMessage);
-            }
-        }
+            },
+        },
     };
 
     try {
@@ -239,8 +259,8 @@ test('test handleOnPromise on route with callback that immediately throws except
             $handlers: {
                 ON_REQUEST(jovo: Jovo, callback: () => {}) {
                     throw new Error(errorMessage);
-                }
-            }
+                },
+            },
         };
         // @ts-ignore
         await Handler.handleOnPromise(jovoObj, jovoObj.$handlers.ON_REQUEST);
@@ -261,8 +281,8 @@ test('test applyHandle on route that returns a promise wrapped in a promise', as
                     executed = true;
                     resolve();
                 });
-            }
-        }
+            },
+        },
     };
 
     // @ts-ignore
@@ -285,8 +305,8 @@ test('test handleOnPromise on route that returns a promise wrapped in a promise'
                     executed = true;
                     resolve();
                 });
-            }
-        }
+            },
+        },
     };
 
     // @ts-ignore
@@ -303,7 +323,7 @@ test('test handleOnRequest', () => {
             ON_REQUEST() {  // tslint:disable-line:no-empty
 
             },
-        }
+        },
     };
     const spy = jest.spyOn(jovo.$handlers, 'ON_REQUEST');
     // @ts-ignore
@@ -319,7 +339,7 @@ test('test handleOnNewSession (NEW_SESSION=true)', async () => {
                 newSessionVariable = true;
             },
         },
-        isNewSession: () => true
+        isNewSession: () => true,
 
     };
 
@@ -339,7 +359,7 @@ test('test handleOnNewSession (NEW_SESSION=false)', () => {
                 newSessionVariable = true;
             },
         },
-        isNewSession: () => false
+        isNewSession: () => false,
 
     };
 
@@ -360,8 +380,8 @@ test('test handleOnNewUser (NEW_USER=true)', async () => {
             },
         },
         $user: {
-            isNew: () => true
-        }
+            isNew: () => true,
+        },
 
     };
 
@@ -384,8 +404,8 @@ test('test handleOnNewUser (NEW_USER=false)', async () => {
             },
         },
         $user: {
-            isNew: () => false
-        }
+            isNew: () => false,
+        },
 
     };
 
@@ -402,9 +422,9 @@ test('test handleOnPromise with triggeredToIntent = true', async () => {
         $handlers: {
             async ON_REQUEST() {
                 executed = true;
-            }
+            },
         },
-        triggeredToIntent: true
+        triggeredToIntent: true,
 
     };
     // @ts-ignore

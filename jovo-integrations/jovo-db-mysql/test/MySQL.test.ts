@@ -1,9 +1,8 @@
-import {BaseApp, JovoError} from "jovo-core";
-import {MySQL} from "../src/MySQL";
+import { BaseApp, JovoError } from 'jovo-core';
+import _set = require('lodash.set'); // tslint:disable-line:no-implicit-dependencies
 import * as mysql from 'mysql';
 
-import _set = require('lodash.set');
-
+import { MySQL } from '../src/MySQL';
 
 describe('test install()', () => {
     test('should throw JovoError because config.connection is undefined', () => {
@@ -18,7 +17,7 @@ describe('test install()', () => {
 
     test('should call createPool() and parse it config.connection', () => {
         const config = {
-            connection: {}
+            connection: {},
         };
         jest.spyOn(mysql, 'createPool');
         const mySQL = new MySQL(config);
@@ -32,7 +31,7 @@ describe('test install()', () => {
 
     describe('test install() setting app.$db', () => {
         const config = {
-            connection: {}
+            connection: {},
         };
         test('test should set app.$db to be MySQL if no default db was set in config', () => {
             const mySQL = new MySQL(config);
@@ -124,7 +123,7 @@ describe('test database operations', () => {
                 throw error;
             });
             // hack to access private function
-            mySQL['select'] = mockSelect;
+            mySQL.select = mockSelect;
 
             await mySQL.load('id')
                 .catch(e => expect(e.code).toBe('test'));
@@ -136,19 +135,19 @@ describe('test database operations', () => {
                 _set(error, 'code', 'ER_NO_SUCH_TABLE');
                 throw error;
             });
-            mySQL['select'] = mockSelect;
-            mySQL['createTable'] = jest.fn();
+            mySQL.select = mockSelect;
+            mySQL.createTable = jest.fn();
 
             await mySQL.load('id');
 
-            expect(mySQL['createTable']).toHaveBeenCalledTimes(1);
+            expect(mySQL.createTable).toHaveBeenCalledTimes(1);
         });
 
         test('should return value returned by select()', async () => {
             const mockSelect = jest.fn().mockImplementation(() => {
                 return 42;
             });
-            mySQL['select'] = mockSelect;
+            mySQL.select = mockSelect;
 
             const result = await mySQL.load('id');
 
@@ -158,7 +157,7 @@ describe('test database operations', () => {
 
     describe('test save()', () => {
         test('should call errorHandling()', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
@@ -173,7 +172,7 @@ describe('test database operations', () => {
         });
 
         test('connection.query() should reject the error parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
@@ -187,7 +186,7 @@ describe('test database operations', () => {
         });
 
         test('connection.query() should resolve the value parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(null, 'test');
@@ -201,7 +200,7 @@ describe('test database operations', () => {
         });
 
         test('should catch and reject error thrown while trying to insert the data', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
@@ -213,7 +212,7 @@ describe('test database operations', () => {
 
     describe('test delete()', () => {
         test('should call errorHandling()', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
@@ -228,7 +227,7 @@ describe('test database operations', () => {
         });
 
         test('connection.query() should reject the error parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
@@ -242,7 +241,7 @@ describe('test database operations', () => {
         });
 
         test('connection.query() should resolve the value parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, values: any, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
@@ -256,7 +255,7 @@ describe('test database operations', () => {
         });
 
         test('should catch and reject error thrown while trying to insert the data', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
@@ -268,7 +267,7 @@ describe('test database operations', () => {
 
     describe('test createTable()', () => {
         test('should call errorHandling()', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
@@ -278,13 +277,13 @@ describe('test database operations', () => {
             jest.spyOn(mySQL, 'errorHandling');
 
             // hack to access private
-            await mySQL['createTable']();
+            await mySQL.createTable();
 
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
         test('connection.query() should reject the error parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
@@ -292,13 +291,13 @@ describe('test database operations', () => {
                 });
             });
 
-            await mySQL['createTable']().catch(e => {
+            await mySQL.createTable().catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
 
         test('connection.query() should resolve the value parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, cb: any) => { // tslint:disable-line
                         cb(undefined, 'test');
@@ -306,17 +305,17 @@ describe('test database operations', () => {
                 });
             });
 
-            const result = await mySQL['createTable']();
+            const result = await mySQL.createTable();
 
             expect(result).toBe('test');
         });
 
         test('should catch and reject error thrown while trying to create the table', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            await mySQL['createTable']().catch(e => {
+            await mySQL.createTable().catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         });
@@ -324,13 +323,13 @@ describe('test database operations', () => {
 
     describe('test select()', () => {
         test('should call errorHandling()', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result = [
                             {
-                                userData: '{"key": "value"}'
-                            }
+                                userData: '{"key": "value"}',
+                            },
                         ];
                         cb(undefined, result);
                     },
@@ -339,88 +338,88 @@ describe('test database operations', () => {
             jest.spyOn(mySQL, 'errorHandling');
 
             // hack to access private
-            await mySQL['select']('id');
+            await mySQL.select('id');
 
             expect(mySQL.errorHandling).toHaveBeenCalledTimes(1);
         });
 
         test('connection.query() should reject the error parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         cb(new Error('Callback Error'));
-                    }
+                    },
                 });
             });
 
-            await mySQL['select']('id').catch(e => {
+            await mySQL.select('id').catch(e => {
                 expect(e.message).toBe('Callback Error');
             });
         });
 
         test('connection.query() should resolve the value parsed to the callback', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
-                        const result = [
+                        const res = [
                             {
-                                userData: '{"key": "value"}'
-                            }
+                                userData: '{"key": "value"}',
+                            },
                         ];
-                        cb(undefined, result);
-                    }
+                        cb(undefined, res);
+                    },
                 });
             });
 
-            const result = await mySQL['select']('id');
+            const result = await mySQL.select('id');
 
             expect(result).toEqual({
                 userData: {
-                    key: 'value'
-                }
+                    key: 'value',
+                },
             });
         });
 
         test('connection.query() should resolve undefined as the value parsed is an empty array (i.e. no data found)', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result: any[] = []; // tslint:disable-line
                         cb(undefined, result);
-                    }
+                    },
                 });
             });
 
-            const result = await mySQL['select']('id');
+            const result = await mySQL.select('id');
 
             expect(result).toBe(undefined);
         });
 
         test('should catch and reject error thrown while trying to select the data', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 throw new Error('getConnection threw an Error');
             });
 
-            await mySQL['select']('id').catch(e => {
+            await mySQL.select('id').catch(e => {
                 expect(e.message).toBe('getConnection threw an Error');
             });
         });
 
         test('should catch and reject error thrown while trying to JSON.parse() the queried', async () => {
-            mySQL['getConnection'] = jest.fn().mockImplementation(() => {
+            mySQL.getConnection = jest.fn().mockImplementation(() => {
                 return Promise.resolve({
                     query: (options: string, value: any, cb: any) => { // tslint:disable-line
                         const result = [
                             {
-                                userData: '{key: "value"}' // invalid JSON
-                            }
+                                userData: '{key: "value"}', // invalid JSON
+                            },
                         ];
                         cb(undefined, result);
-                    }
+                    },
                 });
             });
 
-            await mySQL['select']('id').catch(e => {
+            await mySQL.select('id').catch(e => {
                 expect(e).toBeInstanceOf(Error);
             });
         });
@@ -434,7 +433,7 @@ describe('test getConnection()', () => {
         mySQL = new MySQL();
         _set(mySQL, 'pool', undefined);
 
-        await mySQL['getConnection']()
+        await mySQL.getConnection()
             .catch(e => expect(e).toBeInstanceOf(JovoError));
     });
 
@@ -446,7 +445,7 @@ describe('test getConnection()', () => {
         });
         _set(mySQL, 'pool.getConnection', getConnectionMock);
 
-        await mySQL['getConnection']().catch(e => {
+        await mySQL.getConnection().catch(e => {
             // to make sure that pool.getConnection is the one throwing the error,
             // we check whether the mock was called
             expect(getConnectionMock).toHaveBeenCalledTimes(1);
@@ -461,7 +460,7 @@ describe('test getConnection()', () => {
         });
         _set(mySQL, 'pool.getConnection', getConnectionMock);
 
-        await mySQL['getConnection']().then(connection => {
+        await mySQL.getConnection().then(connection => {
             expect(getConnectionMock).toHaveBeenCalledTimes(1);
             expect(connection).toBe('test');
         });

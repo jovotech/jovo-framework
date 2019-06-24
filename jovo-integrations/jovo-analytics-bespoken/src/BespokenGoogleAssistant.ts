@@ -1,8 +1,7 @@
-import {Analytics, PluginConfig, BaseApp, HandleRequest} from "jovo-core";
-import _merge = require('lodash.merge');
-
-import * as uuid from 'uuid';
 import * as https from 'https';
+import { Analytics, BaseApp, HandleRequest, Log, PluginConfig } from 'jovo-core';
+import _merge = require('lodash.merge');
+import * as uuid from 'uuid';
 
 export interface Config extends PluginConfig {
     key: string;
@@ -55,32 +54,33 @@ export class BespokenGoogleAssistant implements Analytics {
             const tag = index ? 'response' : 'request';
             return {
                 log_type: 'INFO',
-                timestamp: new Date(),
                 payload,
                 tags: [tag],
+                timestamp: new Date(),
             };
         });
         return {
+            logs,
             source: this.config.key,
             transaction_id: uuid.v4(),
-            logs,
         };
     }
 
     sendDataToLogless(data: string) {
         const options = {
-            host: 'logless.bespoken.tools',
-            path: '/v1/receive',
-            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            host: 'logless.bespoken.tools',
+            method: 'POST',
+            path: '/v1/receive'
         };
 
         const httpRequest = https.request(options);
 
         httpRequest.on('error', (error) => {
-            console.error('Error while logging to Bespoken Services', error);
+            Log.error('Error while logging to Bespoken Services');
+            Log.error(error);
         });
 
         httpRequest.end(data);

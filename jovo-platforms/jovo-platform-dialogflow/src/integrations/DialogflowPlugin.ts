@@ -73,7 +73,7 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
     };
 
     type = (jovo: Jovo) => {
-        if (jovo.$request) {
+        if (jovo.$request && !jovo.$type.type) {
             if (jovo.$request.getIntentName() === 'Default Welcome Intent') {
                 jovo.$type = {
                     type: EnumRequestType.LAUNCH
@@ -83,7 +83,6 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
                     type: EnumRequestType.INTENT
                 };
             }
-
         }
     };
 

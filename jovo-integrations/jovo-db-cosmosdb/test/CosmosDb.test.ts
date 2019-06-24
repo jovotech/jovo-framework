@@ -1,8 +1,8 @@
-import { BaseApp } from "jovo-core";
-import { CosmosDb } from "../src/CosmosDb";
-import { MongoDb } from "jovo-db-mongodb";
+import { BaseApp } from 'jovo-core';
+import { MongoDb } from 'jovo-db-mongodb';
 import _set = require('lodash.set');
 
+import { CosmosDb } from '../src/CosmosDb';
 describe('test install()', () => {
     describe('test install() setting app.$db', () => {
         beforeAll(() => {

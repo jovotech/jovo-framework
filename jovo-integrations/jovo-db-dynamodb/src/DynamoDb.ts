@@ -1,9 +1,9 @@
-import {Db, BaseApp, PluginConfig, Log, JovoError, ErrorCode} from 'jovo-core';
-import _merge = require('lodash.merge');
-import _get = require('lodash.get');
 import * as AWS from 'aws-sdk';
-import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
-import {GetItemOutput} from 'aws-sdk/clients/dynamodb';
+import { GetItemOutput } from 'aws-sdk/clients/dynamodb'; // tslint:disable-line:no-submodule-imports
+import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'; // tslint:disable-line:no-submodule-imports
+import {BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig} from 'jovo-core';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
     tableName?: string;
@@ -21,16 +21,16 @@ export interface Config extends PluginConfig {
 
 export class DynamoDb implements Db {
     config: Config = {
-        tableName: undefined,
+        awsConfig: undefined,
+        awsXray: false,
         createTableOnInit: true,
-        primaryKeyColumn: 'userId',
+        dax: undefined,
         documentClientConfig: {
             convertEmptyValues: true,
         },
-        dax: undefined,
-        awsXray: false,
         dynamoDbConfig: {},
-        awsConfig: undefined,
+        primaryKeyColumn: 'userId',
+        tableName: undefined,
     };
     needsWriteFileAccess = false;
     dynamoClient?: AWS.DynamoDB;
@@ -44,6 +44,7 @@ export class DynamoDb implements Db {
         }
         this.aws = AWS;
     }
+
     install(app: BaseApp) {
 
         if (this.config.awsConfig) {
@@ -63,7 +64,7 @@ export class DynamoDb implements Db {
                         ErrorCode.ERR_PLUGIN,
                         'jovo-db-dynamodb',
                         undefined,
-                        'Please run `npm install aws-xray-sdk-core`'
+                        'Please run `npm install aws-xray-sdk-core`',
                     );
                 } else {
                     throw e;
@@ -86,7 +87,7 @@ export class DynamoDb implements Db {
             try {
                 const AmazonDaxClient = require('amazon-dax-client'); // tslint:disable-line
                 const dax = new AmazonDaxClient(this.config.dax);
-                this.docClient =  new this.aws.DynamoDB.DocumentClient({service: dax});
+                this.docClient = new this.aws.DynamoDB.DocumentClient({service: dax});
             } catch (e) {
                 if (e.message.includes('Cannot find module \'amazon-dax-client\'')) {
                     throw new JovoError(
@@ -94,7 +95,7 @@ export class DynamoDb implements Db {
                         ErrorCode.ERR_PLUGIN,
                         'jovo-db-dynamodb',
                         undefined,
-                        'Please run `npm install amazon-dax-client`'
+                        'Please run `npm install amazon-dax-client`',
                     );
                 } else {
                     throw e;
@@ -114,10 +115,6 @@ export class DynamoDb implements Db {
         }
     }
 
-    uninstall(app: BaseApp) {
-
-    }
-
     /**
      * Returns object for given primaryKey
      * @param {string} primaryKey
@@ -127,11 +124,11 @@ export class DynamoDb implements Db {
         this.errorHandling();
 
         const getDataMapParams: DocumentClient.GetItemInput = {
+            ConsistentRead: true,
             Key: {
-                [this.config.primaryKeyColumn!]: primaryKey,
+                [ this.config.primaryKeyColumn! ]: primaryKey,
             },
             TableName: this.config.tableName!,
-            ConsistentRead: true,
         };
 
         try {
@@ -168,18 +165,18 @@ export class DynamoDb implements Db {
         this.errorHandling();
 
         const getDataMapParams: DocumentClient.PutItemInput = {
-            TableName: this.config.tableName!,
             Item: {
-                [this.config.primaryKeyColumn!]: primaryKey,
-                [key]: data,
-            }
+                [ this.config.primaryKeyColumn! ]: primaryKey,
+                [ key ]: data,
+            },
+            TableName: this.config.tableName!,
         };
         if (updatedAt) {
             getDataMapParams.Item.updatedAt = updatedAt;
         }
 
         if (!this.isCreating) {
-            return await this.docClient!.put(getDataMapParams).promise();
+            return this.docClient!.put(getDataMapParams).promise();
         }
     }
 
@@ -187,22 +184,21 @@ export class DynamoDb implements Db {
         this.errorHandling();
 
         const deleteItemInput: DocumentClient.DeleteItemInput = {
-            TableName: this.config.tableName!,
             Key: {
-                [this.config.primaryKeyColumn!]: primaryKey
-            }
+                [ this.config.primaryKeyColumn! ]: primaryKey,
+            },
+            TableName: this.config.tableName!,
         };
 
-        return await this.docClient!.delete(deleteItemInput).promise();
+        return this.docClient!.delete(deleteItemInput).promise();
     }
 
-    private async createTable() {
+    async createTable() {
         if (!this.dynamoClient) {
             throw new JovoError(`Couldn't use DynamoDb. DynamoClient is not initialized.`, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
         }
 
         const newTableParams: AWS.DynamoDB.Types.CreateTableInput = {
-            TableName: this.config.tableName!,
             AttributeDefinitions: [
                 {
                     AttributeName: this.config.primaryKeyColumn!,
@@ -219,6 +215,7 @@ export class DynamoDb implements Db {
                 ReadCapacityUnits: 5,
                 WriteCapacityUnits: 5,
             },
+            TableName: this.config.tableName!,
         };
 
         try {
@@ -243,7 +240,7 @@ export class DynamoDb implements Db {
             throw new JovoError(
                 err.message,
                 ErrorCode.ERR_PLUGIN,
-                'jovo-db-dynamodb'
+                'jovo-db-dynamodb',
             );
         }
     }
