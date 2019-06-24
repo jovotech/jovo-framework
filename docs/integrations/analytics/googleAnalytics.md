@@ -12,7 +12,7 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
 
 ## About Google Analytics
 
-![Google Website](../../img/bespoken-home.jpg)
+![Google Website](../../img/ga00_banner.png)
 
 [Google Analytics](https://analytics.google.com/analytics/web/) lets you measure your advertising ROI as well as track your Flash, video, and social networking sites and applications.
 
@@ -26,13 +26,13 @@ To use Google Analytics for your voice app, you need to complete the following s
 2. Enable Google Analytics in your Jovo voice app
 3. Test your app
 
-### Create a Bespoken Dashboard Account
+### Create a Google Analytics Account
 
 1. Login to Google Analytics with a google account at https://marketingplatform.google.com/intl/de/about/analytics/.
 
-2. Click start for free:
+2. Click Start for free:
 
-![Bespoken Add a Skill or Action](../../img/ga0_landingPage.png)
+![Google Analytics Landing Page](../../img/ga0_landingPage.png)
 
 3. Click sign up
 ![Google Analytics sign up](../../img/ga1_signUp.png)
@@ -126,7 +126,7 @@ const config = {
 };
 ```
 
-### Test Bespoken
+### Test Google Analytics
 
 Test your voice app, after a bit your session should appear in your tracking website.
 
