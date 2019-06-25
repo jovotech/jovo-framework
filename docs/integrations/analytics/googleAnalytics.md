@@ -7,7 +7,7 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
    * [Create a Google Analytics Account](#create-a-google-analytics-account)
    * [Enable Google Analytics](#enable-google-analytics)
    * [Test Google Analytics](#test-google-analytics)
-* [Usagage](#usage)
+* [Usage](#usage)
    * [Concept] (#concept)
    * []
    
@@ -19,7 +19,7 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
 
 [Google Analytics](https://analytics.google.com/analytics/web/) lets you measure your advertising ROI as well as track your Flash, video, and social networking sites and applications.
 
-With the Google Analytics integration for Jovo, you can track the behaviour of you voice app and get insights about your users.
+With the Google Analytics integration for Jovo, you can track the behavior of you voice app and get insights about your users. It offers standard tracking which will start immediately after activating and developer methods for sending events and transactions from your voice app. Even thought you won't have to mess with creating users and adding appropriate data the plugin offers the possibility to adjust and overwrite implemented tracking and helper methods (for example if you want to adjust the algorithm which generates the userId). 
 
 ## Installation
 
@@ -40,7 +40,7 @@ To use Google Analytics for your voice app, you need to complete the following s
 3. Click sign up
 ![Google Analytics sign up](../../img/ga1_signUp.png)
 
-4. Fill the formular like you want. Stay with "Website" and choose a random string for the URL. The plugin will do the tracking on its own. Finish by clicking "get tracking id". 
+4. Fill the form like you want. Stay with "Website" and choose a random string for the URL. The plugin will do the tracking on its own. Finish by clicking "get tracking id". 
 ![Google Analytics set up account](../../img/ga2_newAccount.png)
 
 5. After confirming the terms of service you will arrive at the admin section of your Google Analytics Tracking Website. Copy the trackingId which you will need it to connect your voice app.
@@ -134,10 +134,10 @@ const config = {
 Test your voice app, after a bit your session should appear in your tracking website.
 
 ##Usage
-Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It seperates into the parts:
+Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It separates into the parts:
 1. Automatic intent tracking
 2. User methods
-3. Customize standard behaviour
+3. Customize standard behavior
 
 #### 1. Automatic intent tracking
 After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. To see intent metrics navigate to "Behavior" -> "Overview" in your google analytics web pannel. After some time the "Behaviour Flow" will show intent paths users take within your skill.
@@ -145,17 +145,19 @@ Google Analytics for Jovo enhances all sent data with the information shown in t
 
 ![AutoTrackingFlow](../../img/ga4_Processing_autoDataOnly.png) 
 
+##### User Id
+The userID is a hash generated from the according platform response. Be carefull when using Google Assistant because the userId will change sometimes if account linking is not activated. 
+
 ##### Source
 You can use the "data source" to split users into segments from Amazon Alexa and Google Assistant. The following grafic shows some test traffic for the "Audience Overview".
             ![AudienceOverview](../../img/ga5_AudienceSegmentExample.png)
 
-Segment templates can be added by clicking at the links bellow. Withing the opened dialog you can add them to any Google Analytics view you like. 
-[AlexaSegmentTemplate](https://analytics.google.com/analytics/web/template?uid=cnQV_g8eR5Of0eQngb2A7g)
-
-[GoogleAssistantTemplate](https://analytics.google.com/analytics/web/template?uid=Wvd3HYvyQDKFfXClkrXCAw) Afterwards you can click at the "AllUsers" segment in any report and activate them via the checkboxes. The grafic bellow highlights both points with red rectangles. Click the third rectangle "actions" to adjust them (for example by adding additional behaviour filters).
+Segment templates can be added by clicking at [AlexaSegmentTemplate](https://analytics.google.com/analytics/web/template?uid=cnQV_g8eR5Of0eQngb2A7g) and [GoogleAssistantTemplate](https://analytics.google.com/analytics/web/template?uid=Wvd3HYvyQDKFfXClkrXCAw). Withing the opened dialog you can add them to any Google Analytics view you like. 
+Afterwards you can click at the "AllUsers" segment in any report and activate them via the checkboxes. The grafic bellow highlights both points via red rectangles. Click the third rectangle "actions" to adjust them (for example by adding additional behaviour filters).
 ![SegmentActivation](../../img/ga7_segmentSelection.png)
 
-#####Device
+##### Device & ScreenResolution
+Device Info can be found in "Audience" -> "Technology" -> "Browser&OS". The browser field will display recognized device types. Within this report you have the possibility to switch to screen resolution.
 ![DeviceInfo](../../img/ga6_DeviceInfo.png)
 
 
