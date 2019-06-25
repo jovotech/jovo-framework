@@ -140,8 +140,17 @@ Google Analytics for Jovo is designed to tie tracking data to users and intents 
 3. Customize standard behaviour
 
 #### 1. Automatic intent tracking
-After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. It enhances such pageviews with the information shown in the scheme bellow: 
+After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. To see intent metrics navigate to "Behavior" -> "Overview" in your google analytics web pannel. After some time the "Behaviour Flow" will show the intent paths users are taking within your skill.
+Google Analytics for Jovo enhances all sent data with the information shown in the scheme bellow: 
+
 ![AutoTrackingFlow](../../img/ga4_Processing_autoDataOnly.png) 
+
+For example you can use the "source" to split users into segments from Amazon Alexa and Google Assistant. The following grafic shows some test traffic for the "Audience Overview".
+![AudienceOverview](../../img/ga5_AudienceSegmentExample.png)
+
+Segment templates can be added by clicking at the links bellow. Withing the opened dialog you can add them to any Google Analytics view you like.
+[AlexaSegmentTemplate](https://analytics.google.com/analytics/web/template?uid=cnQV_g8eR5Of0eQngb2A7g)
+[GoogleAssistantTemplate](https://analytics.google.com/analytics/web/template?uid=Wvd3HYvyQDKFfXClkrXCAw)
 
 
 <!--[metadata]: {"description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo",
