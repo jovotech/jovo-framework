@@ -135,7 +135,13 @@ Test your voice app, after a bit your session should appear in your tracking web
 
 ##Usage
 Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It seperates into the parts:
-1.  
+1. Automatic intent tracking
+2. User methods
+3. Customize standard behaviour
+
+#### 1. Automatic intent tracking
+After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. It enhances such pageviews with the information shown in the scheme bellow: 
+![AutoTrackingFlow](../../img/ga4_Processing_autoDataOnly.png) 
 
 
 <!--[metadata]: {"description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo",
