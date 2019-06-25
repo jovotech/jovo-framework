@@ -7,6 +7,9 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
    * [Create a Google Analytics Account](#create-a-google-analytics-account)
    * [Enable Google Analytics](#enable-google-analytics)
    * [Test Google Analytics](#test-google-analytics)
+* [Usagage](#usage)
+   * [Concept] (#concept)
+   * []
    
 
 
@@ -130,6 +133,9 @@ const config = {
 
 Test your voice app, after a bit your session should appear in your tracking website.
 
+##Usage
+Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It seperates into the parts:
+1.  
 
 
 <!--[metadata]: {"description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo",
