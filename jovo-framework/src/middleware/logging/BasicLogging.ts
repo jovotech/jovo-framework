@@ -75,7 +75,9 @@ export class BasicLogging implements Plugin {
 
         if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
             this.config.excludedRequestObjects.forEach((excludePath: string) => {
-                _set(requestCopy, excludePath, this.config.excludeReplaceValue);
+                if (_get(requestCopy, excludePath)) {
+                    _set(requestCopy, excludePath, this.config.excludeReplaceValue);
+                }
             });
         }
 
@@ -111,7 +113,9 @@ export class BasicLogging implements Plugin {
 
         if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
             this.config.excludedResponseObjects.forEach((excludePath: string) => {
-                _set(responseCopy, excludePath, this.config.excludeReplaceValue);
+                if (_get(responseCopy, excludePath)) {
+                    _set(responseCopy, excludePath, this.config.excludeReplaceValue);
+                }
             });
         }
 
