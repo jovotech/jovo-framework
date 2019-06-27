@@ -133,23 +133,25 @@ const config = {
 
 Test your voice app, after a bit your session should appear in your tracking website.
 
-##Usage
+## Usage
 Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It separates into the parts:
 1. Automatic intent tracking
-2. User methods
+2. Developer methods
 3. Customize standard behavior
 
-#### 1. Automatic intent tracking
-After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. To see intent metrics navigate to "Behavior" -> "Overview" in your google analytics web pannel. After some time the "Behaviour Flow" will show intent paths users take within your skill.
-Google Analytics for Jovo enhances all sent data with the information shown in the scheme bellow. It will be explained in the section underneath.
+#### Automatic intent tracking
+After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. To see intent metrics navigate to "Behavior" -> "Overview" in your google analytics web panel. After some time the "Behavior Flow" will show intent paths users take within your skill.
+Google Analytics for Jovo enhances all sent data with the information shown in the scheme bellow. The orange node objects are listing all data tracked in the different steps of the plugin processing. It will be explained in the section underneath.
 
 ![AutoTrackingFlow](../../img/ga4_Processing_autoDataOnly.png) 
 
 ##### User Id
-The userID is a hash generated from the according platform response. Be carefull when using Google Assistant because the userId will change sometimes if account linking is not activated. 
+The userID is a hash generated from the according platform response. Be careful when using Google Assistant because the userId will change sometimes if account linking is not activated.
+
+Remark: Like you can see the graphic displays userId twice. This is because google analytics dimensions are organized by scopes and we need the userId at "hitLevel" for some custom reports (see [googleAnalyticsScopes](https://www.bounteous.com/insights/2016/11/30/understanding-scope-google-analytics-reporting/) for more details on scopes). 
 
 ##### Source
-You can use the "data source" to split users into segments from Amazon Alexa and Google Assistant. The following grafic shows some test traffic for the "Audience Overview".
+You can use the "data source" to split users into segments from Amazon Alexa and Google Assistant. The following graphic shows some test traffic for the "Audience Overview".
             ![AudienceOverview](../../img/ga5_AudienceSegmentExample.png)
 
 Segment templates can be added by clicking at [AlexaSegmentTemplate](https://analytics.google.com/analytics/web/template?uid=cnQV_g8eR5Of0eQngb2A7g) and [GoogleAssistantTemplate](https://analytics.google.com/analytics/web/template?uid=Wvd3HYvyQDKFfXClkrXCAw). Withing the opened dialog you can add them to any Google Analytics view you like. 
@@ -160,6 +162,92 @@ Afterwards you can click at the "AllUsers" segment in any report and activate th
 Device Info can be found in "Audience" -> "Technology" -> "Browser&OS". The browser field will display recognized device types. Within this report you have the possibility to switch to screen resolution.
 ![DeviceInfo](../../img/ga6_DeviceInfo.png)
 
+
+#### Developer Methods
+The plugin offers developer methods for sending data (like events and transactions) from your skills code. Currently the following methods are supported:
+* sendEvent(eventParameters)
+* sendTransaction(transactionParams)
+* sendItem(itemParams)
+* sendUserEvent (eventCategory, eventElement)
+* sendUserTransaction (transactionId)
+* sendCustomMetric (index, value)  
+
+You can call them via the this.$googleAnalytics object:
+```javascript
+{
+    MyNameIsIntent() {
+        const userName = this.$inputs.name.value;
+        this.$googleAnalytics.sendUserEvent("userNames", userName);
+        this.tell('Hey ' + userName + ', nice to meet you!');
+    },
+}
+
+```
+
+They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section). They will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) plugin which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine a event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
+Because the initUser Method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
+
+
+#### Customize Standard Behavior
+Google Analytics integration for Jovo organizes changeable behavior in appropriate methods. This way developers can overwrite the parts they want to customize and the changes will take effect for [automatic intent tracking](#automatic-intent-tracking) and [developer methods](#developer-methods). The picture bellow shows the method chain with gray boxes. The orange notes above are showing which data is set in each part.
+
+![](../../img/ga8_methodChainForCustomization.png)
+
+Let's take the use case of setting a specific medium and source as an example. 
+Start with your extension of a plugin class and overwrite methods you want to adjust. Most often you will firstly call the inherited method from the plugin and afterwards add your custom data. The medium/source useCase wants to adjust visitor data and therefore overwrites the initVisitor method:
+ 
+
+```javascript
+import { GoogleAnalyticsAlexa } from "./GoogleAnalyticsAlexa";
+import * as ua from 'universal-analytics';
+import { Jovo } from "jovo-core";
+
+export class CustomGAnalyticsAlexa extends GoogleAnalyticsAlexa  {
+    initVisitor(jovo : Jovo) :ua.Visitor {
+        let visitor = super.initVisitor(jovo); //setting standard parameters for visitor
+        visitor.set("campaignMedium", "referral");
+        visitor.set("campaignSource", "alexaSkill");
+        return visitor;
+    }
+}
+```
+Instead of [enabling the GoogleAnalyticsAlexa base class](#enable-google-analytics
+) you will have to replace "GoogleAnalyticsAlexa" with the name of your custom class.
+
+#### Enable cross device tracking
+The example above was used in a case where an google analytics tracking was already running for a website and the customer wanted to add separated skill tracking. When the skill sends a link to the website (via email/sms) the current analytics session should continue. To enable tracking from skill to website you have to 
+* Adjust the google analytics tracking code on the website
+* Add a clientIdParamter to the link sent from the skill 
+
+##### Adjust GA Tracking Code
+Replace the tracking code in the head of your websites html file with the version bellow. Make sure to adjust the trackingId with your own one ("Admin"-> "Tracking Info"-> "Tracking Code").
+```javascript
+<!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-138062..."></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+
+
+    if (!urlSearchParams.get("voiceClientID")) {
+      gtag('config', 'UA-138062...');
+    }
+
+    else {
+      gtag('config', 'UA-138062...', {
+        'user_id': urlSearchParams.get("voiceClientID"),
+        'client_id': urlSearchParams.get("voiceClientID"),
+        //'strictCidFormat': false
+      });
+    }
+  </script>
+  ```
+
+  ##### Send clientId with link from skill
+  The code above will try to extract the parameter "voiceClientID" from the url parameters. Add it to the link you send to users and the session will persist after they click on it. https://testPage.com/path?var1=test will get to https://testPage.com/path?var1=test&voiceClientID=2210018__. You can get the clientId by calling the getUserId method.
 
 
 
