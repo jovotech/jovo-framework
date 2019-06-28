@@ -10,14 +10,10 @@ class HappyMealGAnalyticsSender extends GoogleAnalyticsSender_1.GoogleAnalyticsS
         super.install(app);
         //app.middleware('response')!.use(this.SendSessionsPlayedCount.bind(this));
     }
-    sendUserTransaction(jovo, transactionId) {
-        this.initVisitor()
-            .transaction({ ti: transactionId, "tr": "1" });
-    }
     sendSessionsPlayedCount(handleRequest) {
         let jovo = handleRequest.jovo;
         let idHash = murmurhash.v3(jovo.$user.getId()) + murmurhash.v3(jovo.getDeviceId());
-        let visitor = this.initVisitor();
+        let visitor = this.initVisitor(jovo);
         if (jovo.getMappedIntentName() === 'StartGameIntent') {
             console.log("***************SEND Transaction");
             visitor
@@ -32,9 +28,9 @@ class HappyMealGAnalyticsSender extends GoogleAnalyticsSender_1.GoogleAnalyticsS
             ;
             console.log("***************SENT Transaction");
             let eventParams = {
-                ec: "GamesStarted",
-                ea: "StartGame",
-                el: idHash.toString()
+                eventCategory: "GamesStarted",
+                eventAction: "StartGame",
+                eventLabel: idHash.toString()
             };
             //console.log('visitor in subclass: '+ util.inspect(this.visitor));
             this.sendIntentEvent(visitor, eventParams);

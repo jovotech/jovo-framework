@@ -18,11 +18,7 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
         //app.middleware('response')!.use(this.SendSessionsPlayedCount.bind(this));
     }
 
-    sendUserTransaction(jovo : Jovo, transactionId: string)    {
-        this.initVisitor()!
-            .transaction({ti: transactionId, "tr": "1"})
 
-    }
 
 
     sendSessionsPlayedCount(handleRequest: HandleRequest) {
@@ -30,7 +26,7 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
 
         let idHash = murmurhash.v3(jovo.$user.getId()!) + murmurhash.v3(jovo.getDeviceId()!);
 
-        let visitor = this.initVisitor();
+        let visitor = this.initVisitor(jovo);
 
 
         if (jovo.getMappedIntentName() === 'StartGameIntent') {
@@ -48,9 +44,9 @@ export class HappyMealGAnalyticsSender extends GoogleAnalyticsSender {
                 ;
             console.log("***************SENT Transaction");
             let eventParams: EventParameters = {
-                ec: "GamesStarted",
-                ea: "StartGame",
-                el: idHash.toString()
+                eventCategory: "GamesStarted",
+                eventAction: "StartGame",
+                eventLabel: idHash.toString()
             }
             //console.log('visitor in subclass: '+ util.inspect(this.visitor));
             this.sendIntentEvent(visitor!, eventParams);

@@ -4,18 +4,36 @@ export interface Config extends PluginConfig {
     trackingId: string;
 }
 export interface EventParameters {
-    ec: string;
-    ea: string;
-    el?: string;
-    ev?: number;
-    dp?: string;
+    eventCategory: string;
+    eventAction: string;
+    eventLabel?: string;
+    eventValue?: number;
+    documentPath?: string;
+}
+export interface TransactionParams {
+    ti: string;
+    tr?: string | number;
+    ts?: string | number;
+    tt?: string | number;
+    ta?: string;
+    p?: string;
+    [key: string]: any;
+}
+export interface ItemParams {
+    ip?: string | number;
+    iq?: string | number;
+    ic?: string;
+    in?: string;
+    iv?: string;
+    p?: string;
+    ti: string;
+    [key: string]: any;
 }
 /**
  * @public
  */
 export declare class GoogleAnalyticsSender implements Analytics {
     name?: string | undefined;
-    jovo?: Jovo | undefined;
     config: Config;
     constructor(config?: Config);
     track(handleRequest: HandleRequest): void;
@@ -29,37 +47,49 @@ export declare class GoogleAnalyticsSender implements Analytics {
     /**
      * Pageviews should allways send intent data -> method returns standard
      */
-    getCurrentPageParameters(): ua.PageviewParams | undefined;
+    getCurrentPageParameters(jovo: Jovo): ua.PageviewParams;
     /**
      * SendEvent with parameters are custom
      * @param visitor
-     * @param jovo
      * @param eventParameters
      */
     sendIntentEvent(visitor: ua.Visitor, eventParameters: EventParameters): void;
+    sendEvent(jovo: Jovo, eventParameters: EventParameters): void;
+    sendTransaction(jovo: Jovo, transactionParams: TransactionParams): void;
+    sendItem(jovo: Jovo, itemParams: ItemParams): void;
+    /**
+     * throws an error if jovo was not set
+     */
     throwJovoNotSetError(): void;
     /**
      * Generates Hash for User Id
      * @param jovo
      */
-    getUserId(): string;
+    getUserId(jovo: Jovo): string;
     /**
      * Generates pageName from State and Intent Name
      * @param jovo
      */
-    getPageName(): string;
-    static getScreenResolution(alexaRequest: any): string;
+    getPageName(jovo: Jovo): string;
     /**
      * Visitor initiation which sets needed fixed parameters
      * @param jovo
      */
-    initVisitor(): ua.Visitor | undefined;
+    initVisitor(jovo: Jovo): ua.Visitor;
+    sendCustomMetric(jovo: Jovo, indexInGA: number, value: string): void;
+    sendUserTransaction(jovo: Jovo, transactionId: string): void;
     /**
      * User Events ties users to event category and action
      * @param eventName maps to category -> eventGroup
      * @param eventElement maps to action -> instance of eventGroup
      */
-    sendUserEvent(eventCategory: string, eventElement?: string): void;
+    sendUserEvent(jovo: Jovo, eventCategory: string, eventElement?: string): void;
+    sendFlowErrors(jovo: Jovo): void;
+    /**
+     * Checks if session started or ended
+     * returns end, start, undefined
+     */
+    getSessionTag(jovo: Jovo): string | undefined;
     /**
      * Auto send intent data after each response. Also setting sessions and flowErrors
      * @param handleRequest

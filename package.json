@@ -2,7 +2,7 @@
   "name": "jovo-analytics-googleanalytics",
   "version": "1.0.0",
   "description": "google analytics jovo plugin for tracking voice apps",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "test": "jest",
     "tsc": "tsc",
