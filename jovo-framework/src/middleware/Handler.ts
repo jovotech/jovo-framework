@@ -14,6 +14,7 @@ import _get = require('lodash.get');
 
 
 import { Config as AppConfig } from './../App';
+import { DelegationOptions } from './Component';
 import { Route, Router } from './Router';
 
 export class Handler implements Plugin {
@@ -355,12 +356,12 @@ export class Handler implements Plugin {
         /**
          * Delegates the requests & responses to the component defined with "componentName"
          * @param {string} componentName
-         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @param {DelegationOptions} options
          * @returns {Promise<void>}
          */
         Jovo.prototype.delegate = function (
             componentName: string,
-            onCompletedIntent: string,
+            options: DelegationOptions,
         ): Promise<void> {
             if (!this.$components[ componentName ]) {
                 throw new JovoError(
@@ -375,7 +376,7 @@ export class Handler implements Plugin {
 
             this.setSessionAttribute(SessionConstants.COMPONENT, componentName);
             this.$components[ componentName ].stateBeforeDelegate = this.getState();
-            this.$components[ componentName ].onCompletedIntent = onCompletedIntent;
+            this.$components[ componentName ].onCompletedIntent = options.onCompletedIntent;
 
             return this.toStateIntent(componentName, 'START');
         };

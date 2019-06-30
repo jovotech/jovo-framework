@@ -27,6 +27,10 @@ export interface Response {
 	error?: Error;
 }
 
+export interface DelegationOptions {
+	onCompletedIntent: string;
+}
+
 export class Component implements Plugin {
 	config: Config = {};
 	handler: Handler = {};

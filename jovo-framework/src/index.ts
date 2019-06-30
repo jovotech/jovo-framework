@@ -1,7 +1,7 @@
 import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Util } from 'jovo-core';
 import { App } from './App';
 
-import { Component } from './middleware/Component';
+import { Component, DelegationOptions } from './middleware/Component';
 import { Route } from './middleware/Router';
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
@@ -19,7 +19,13 @@ export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log };
 
-export { Component, Config as ComponentConfig, Response as ComponentResponse, ResponseStatus as ComponentResponseStatus } from './middleware/Component';
+export { 
+    Component,
+    Config as ComponentConfig,
+    DelegationOptions as ComponentDelegationOptions,
+    Response as ComponentResponse,
+    ResponseStatus as ComponentResponseStatus
+} from './middleware/Component';
 
 declare module 'express' {
     interface Application {
@@ -113,10 +119,10 @@ declare module 'jovo-core/dist/src/Jovo' {
         /**
          * Delegates the requests & responses to the component defined with "componentName"
          * @param {string} componentName
-         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @param {DelegationOptions} options
          * @returns {Promise<void>}
          */
-        delegate(componentName: string, onCompletedIntent: string): Promise<void>;
+        delegate(componentName: string, options: DelegationOptions): Promise<void>;
     }
 }
 
