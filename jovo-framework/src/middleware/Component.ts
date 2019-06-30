@@ -17,8 +17,10 @@ export interface Config extends PluginConfig {
 	};
 }
 
+export type ResponseStatus = 'SUCCESSFUL' | 'REJECTED' | 'ERROR';
+
 export interface Response {
-	status: 'SUCCESSFUL' | 'REJECTED' | 'ERROR';
+	status: ResponseStatus;
 	data?: {
 		[key: string]: any; // tslint:disable-line
 	};

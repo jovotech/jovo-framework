@@ -19,7 +19,7 @@ export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log };
 
-export { Component, Config as ComponentConfig, Response as ComponentResponse } from './middleware/Component';
+export { Component, Config as ComponentConfig, Response as ComponentResponse, ResponseStatus as ComponentResponseStatus } from './middleware/Component';
 
 declare module 'express' {
     interface Application {
