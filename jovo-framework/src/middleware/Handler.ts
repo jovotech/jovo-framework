@@ -370,7 +370,7 @@ export class Handler implements Plugin {
                     'jovo-framework',
                     'The component to which you want to delegate to, doesn\'t exist',
                     'Components are initialized using app.useComponents(...components)',
-                    'TODO jovodocs',
+                    'https://www.jovo.tech/docs/advanced-concepts/components',
                 );
             }
 
