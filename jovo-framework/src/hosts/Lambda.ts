@@ -1,8 +1,8 @@
-import {Host, Log} from "jovo-core";
+import { Host, Log } from 'jovo-core';
 
 if (process.env.LAMBDA_TASK_ROOT && process.env.AWS_EXECUTION_ENV) {
-    if (Log.config.appenders['console']) {
-        Log.config.appenders['console'].ignoreFormatting = true;
+    if (Log.config.appenders[ 'console' ]) { // tslint:disable-line:no-string-literal
+        Log.config.appenders[ 'console' ].ignoreFormatting = true; // tslint:disable-line:no-string-literal
     }
 }
 
@@ -27,19 +27,21 @@ export class Lambda implements Host {
             this.$request = event;
         }
     }
+
     getRequestObject() {
         return this.$request;
     }
+
     setResponse(obj: any) { // tslint:disable-line
         return new Promise<void>((resolve) => {
             if (this.isApiGateway) {
                 this.callback(null, {
-                    statusCode: 200,
                     body: JSON.stringify(obj),
-                    isBase64Encoded: false,
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     },
+                    isBase64Encoded: false,
+                    statusCode: 200,
                 });
             } else {
                 this.callback(null, obj);
@@ -60,12 +62,12 @@ export class Lambda implements Host {
 
         if (this.isApiGateway) {
             this.callback(error, {
-                statusCode: 500,
                 body: JSON.stringify(responseObj),
-                isBase64Encoded: false,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                 },
+                isBase64Encoded: false,
+                statusCode: 500,
             });
         } else {
             this.callback(error, responseObj);

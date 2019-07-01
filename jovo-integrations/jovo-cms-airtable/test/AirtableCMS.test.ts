@@ -1,5 +1,5 @@
-import { AirtableCMS } from '../src';
 import { BaseApp } from 'jovo-core';
+import { AirtableCMS } from '../src';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 

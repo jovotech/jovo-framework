@@ -1,8 +1,8 @@
+import { ErrorCode, HandleRequest, JovoError } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-import { DefaultSheet, GoogleSheetsSheet } from "./DefaultSheet";
-import { HandleRequest, JovoError, ErrorCode } from "jovo-core";
+import { DefaultSheet, GoogleSheetsSheet } from './DefaultSheet';
 
 
 export interface Config extends GoogleSheetsSheet {
@@ -13,6 +13,7 @@ export class KeyValueSheet extends DefaultSheet {
         enabled: true,
         range: 'A:B',
     };
+
     constructor(config?: Config) {
         super(config);
         if (config) {
@@ -30,20 +31,20 @@ export class KeyValueSheet extends DefaultSheet {
                 'jovo-cms-googlesheets',
                 'The sheet\'s name has to be defined in your config.js file.',
                 undefined,
-                'https://www.jovo.tech/docs/cms/google-sheets#configuration'
+                'https://www.jovo.tech/docs/cms/google-sheets#configuration',
             );
         }
 
         const kv = {};
 
         for (let i = 1; i < values.length; i++) {
-            const row: string[] = values[i];
+            const row: string[] = values[ i ];
             for (let j = 1; j < row.length; j++) {
-                const cell: string = row[j];
-                _set(kv, `${row[0]}`, cell);
+                const cell: string = row[ j ];
+                _set(kv, `${row[ 0 ]}`, cell);
             }
         }
 
-        handleRequest.app.$cms[entity] = kv;
+        handleRequest.app.$cms[ entity ] = kv;
     }
 }

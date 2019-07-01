@@ -97,18 +97,11 @@ export class AskFor implements Plugin {
         /**
          * Calls askForNotification()
          *
-         * "name" and "text" currently don't have any effect, but are implemented in the actionssdk as well.
-         * Might have an effect soon.
-         *
-         * Exists to comply with Googles naming conventions
-         * we believe askForNotification makes it more clear, which is the reason both exist.
          * @public
          * @param {string} intent // intent for which you want to send notifications
-         * @param {string} name // currently doesn't change anything
-         * @param {string} text // currently doesn't change anything
          */
-        GoogleAction.prototype.askForUpdate = function(intent: string, name?: string, text?: string) {
-            return this.askForNotification(intent, name, text);
+        GoogleAction.prototype.askForUpdate = function(intent: string) {
+            return this.askForNotification(intent);
         };
 
         /**
@@ -117,17 +110,11 @@ export class AskFor implements Plugin {
          * Might have an effect soon.
          * @public
          * @param {string} intent // intent for which you want to send notifications
-         * @param {string} name // currently doesn't change anything
-         * @param {string} text // currently doesn't change anything
          */
-        GoogleAction.prototype.askForNotification = function(intent: string, name?: string, text?: string) {
+        GoogleAction.prototype.askForNotification = function(intent: string) {
             this.$output.GoogleAssistant = {
                 AskForUpdatePermission: { // Google calls it UpdatePermission as well
                     intent,
-                    arguments: {
-                        name,
-                        textValue: text
-                    }
                 }
             };
             return this;
@@ -397,7 +384,6 @@ export class AskFor implements Plugin {
                     optContext: optContext || '',
                     permissions: ['UPDATE'],
                     updatePermissionValueSpec: {
-                        arguments: _get(output, 'GoogleAssistant.AskForUpdatePermission.arguments'),
                         intent: _get(output, 'GoogleAssistant.AskForUpdatePermission.intent')
                     }
                 }

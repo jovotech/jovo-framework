@@ -1,6 +1,7 @@
-import * as http from 'http';
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
+import * as http from 'http';
+import { Log } from 'jovo-core';
 
 // Create a new express application instance
 const server: express.Application = express();
@@ -8,21 +9,21 @@ const server: express.Application = express();
 server.jovoApp = undefined;
 server.use(bodyParser.json());
 
-server.listen = function() {
+server.listen = function () {
     if (server.jovoApp) {
         server.jovoApp.initWebhook();
     }
     const s = http.createServer(this);
     // @ts-ignore
-    return s.listen.apply(s, arguments); // eslint-disable-line
+    return s.listen.apply(s, arguments);
 };
 
 const verifiedServer: express.Application = express();
 verifiedServer.jovoApp = undefined;
 
-verifiedServer.listen = function() {
+verifiedServer.listen = function () {
     try {
-        const verifier = require('alexa-verifier-middleware');
+        const verifier = require('alexa-verifier-middleware'); // tslint:disable-line:no-implicit-dependencies
 
         if (verifiedServer.jovoApp) {
             verifiedServer.jovoApp.initWebhook();
@@ -33,19 +34,19 @@ verifiedServer.listen = function() {
         router.use('/webhook_alexa', bodyParser.json());
         router.use('/webhook', bodyParser.json());
 
-        const server = http.createServer(this);
+        const httpServer = http.createServer(this);
         // @ts-ignore
-        return server.listen.apply(server, arguments); // eslint-disable-line
+        return httpServer.listen.apply(httpServer, arguments); // eslint-disable-line
     } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
-            console.log();
-            console.log('  Please install module alexa-verifier-middleware');
-            console.log('  $ npm install alexa-verifier-middleware');
-            console.log();
+            Log.warn();
+            Log.warn('  Please install module alexa-verifier-middleware');
+            Log.warn('  $ npm install alexa-verifier-middleware');
+            Log.warn();
         } else {
-            console.log(error);
+            Log.error(error);
         }
     }
 };
 
-export {server, verifiedServer};
+export { server, verifiedServer };

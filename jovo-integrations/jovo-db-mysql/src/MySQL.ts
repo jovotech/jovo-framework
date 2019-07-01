@@ -1,9 +1,8 @@
-
-import {Db, BaseApp, PluginConfig, ErrorCode, JovoError, Log} from 'jovo-core';
-import _merge = require('lodash.merge');
+import {BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig} from 'jovo-core';
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import * as mysql from 'mysql';
-import {MysqlError, Pool, PoolConnection, PoolConfig} from "mysql";
+import { MysqlError, Pool, PoolConfig, PoolConnection} from 'mysql'; // tslint:disable-line:no-duplicate-imports
 
 export interface Config extends PluginConfig {
     tableName?: string;
@@ -14,10 +13,10 @@ export interface Config extends PluginConfig {
 
 export class MySQL implements Db {
     config: Config = {
-        tableName: 'users',
-        primaryKeyColumn: 'userId',
-        dataColumnName: 'userData',
         connection: undefined,
+        dataColumnName: 'userData',
+        primaryKeyColumn: 'userId',
+        tableName: 'users',
     };
     pool?: Pool;
     needsWriteFileAccess = false;
@@ -65,7 +64,7 @@ export class MySQL implements Db {
                 'jovo-db-mysql',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/mysql'
+                'https://www.jovo.tech/docs/databases/mysql',
             );
         }
 
@@ -76,7 +75,7 @@ export class MySQL implements Db {
                 'jovo-db-mysql',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/mysql'
+                'https://www.jovo.tech/docs/databases/mysql',
             );
         }
 
@@ -87,7 +86,7 @@ export class MySQL implements Db {
                 'jovo-db-mysql',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/mysql'
+                'https://www.jovo.tech/docs/databases/mysql',
             );
         }
     }
@@ -122,20 +121,20 @@ export class MySQL implements Db {
                     `INSERT INTO ${this.config.tableName} SET ? ON DUPLICATE KEY UPDATE ${this.config.dataColumnName}=?`,
                     [
                         {
-                            [this.config.primaryKeyColumn!] : primaryKey,
-                            [this.config.dataColumnName!]: JSON.stringify(data)
+                            [ this.config.primaryKeyColumn! ]: primaryKey,
+                            [ this.config.dataColumnName! ]: JSON.stringify(data),
                         },
-                        JSON.stringify(data)
+                        JSON.stringify(data),
                     ],
                     (error: MysqlError | null, results: any) => { // tslint:disable-line
 
-                        if(error) {
+                        if (error) {
                             return reject(error);
                         }
                         resolve(results);
                         connection.release();
 
-                    }
+                    },
                 );
                 Log.verbose('SQL STATEMENT: ' + query.sql);
             } catch (e) {
@@ -153,9 +152,9 @@ export class MySQL implements Db {
 
                 const query = connection.query(
                     `DELETE FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
-                    [primaryKey],
+                    [ primaryKey ],
                     (error: MysqlError | null, results: any) => { // tslint:disable-line
-                        if(error) {
+                        if (error) {
                             return reject(error);
                         }
                         resolve(results);
@@ -168,7 +167,7 @@ export class MySQL implements Db {
         });
     }
 
-    private createTable(): Promise<any> { // tslint:disable-line
+    createTable(): Promise<any> { // tslint:disable-line
         this.errorHandling();
 
         return new Promise(async (resolve, reject) => {
@@ -182,21 +181,21 @@ export class MySQL implements Db {
                     `;
 
                 const query = connection.query(sql, (error: MysqlError, results: any) => { // tslint:disable-line
-                    if(error) {
+                    if (error) {
                         return reject(error);
                     }
                     resolve(results);
                     connection.release();
                 });
                 Log.verbose('SQL STATEMENT: ' + query.sql);
-            } catch(e) {
+            } catch (e) {
                 reject(e);
 
             }
         });
     }
 
-    private select(primaryKey: string) {
+    select(primaryKey: string) {
         this.errorHandling();
 
         return new Promise(async (resolve, reject) => {
@@ -207,9 +206,9 @@ export class MySQL implements Db {
                 // Use the connection
                 const query = connection.query(
                     `SELECT * FROM ${this.config.tableName} WHERE ${this.config.primaryKeyColumn} = ?`,
-                    [primaryKey],
+                    [ primaryKey ],
                     (error: MysqlError | null, results: any) => { // tslint:disable-line
-                        if(error) {
+                        if (error) {
                             return reject(error);
                         }
 
@@ -218,7 +217,7 @@ export class MySQL implements Db {
                         }
 
                         try {
-                            resolve({ [this.config.dataColumnName!]: JSON.parse(results[0][this.config.dataColumnName!])});
+                            resolve({[ this.config.dataColumnName! ]: JSON.parse(results[ 0 ][ this.config.dataColumnName! ])});
                         } catch (e) {
                             reject(e);
                         }
@@ -233,7 +232,7 @@ export class MySQL implements Db {
 
     }
 
-    private getConnection(): Promise<PoolConnection> {
+    getConnection(): Promise<PoolConnection> {
         return new Promise((resolve, reject) => {
             if (!this.pool) {
                 return reject(new JovoError(

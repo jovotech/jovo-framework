@@ -1,21 +1,31 @@
 import { BaseApp, HandleRequest, Plugin, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
-const pulseLabsRecorder = require('pulselabs-recorder');
+import PulseLabsRecorder = require('pulselabs-recorder');
 
 export interface Config extends PluginConfig {
     apiKey: string;
+    options?: {
+      debug?: boolean;
+      timeout?: number;
+    }
 }
 
 export class PulseLabs implements Plugin {
     config: Config = {
-        apiKey: ''
+      apiKey: '',
+      options: {
+        debug: false,
+        timeout: 2000
+      }
     };
-    pulse: typeof pulseLabsRecorder;
+    pulse: PulseLabsRecorder;
+
     constructor(config?: Config) {
-        if (config) {
-            this.config = _merge(this.config, config);
+        if(config) {
+            this.config = _merge(this.config, config)
         }
-        this.pulse = pulseLabsRecorder.init(this.config.apiKey);
+        const initOptions = {...this.config.options, 'integrationType': 'Jovo'};
+        this.pulse = PulseLabsRecorder.init(this.config.apiKey, initOptions);
     }
 
     install(app: BaseApp) {

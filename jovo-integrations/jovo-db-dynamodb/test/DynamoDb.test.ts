@@ -1,7 +1,8 @@
-import {DynamoDb} from "../src/DynamoDb";
-import {BaseApp, JovoError} from "jovo-core";
-import _set = require('lodash.set');
+import { BaseApp, JovoError } from 'jovo-core';
 import _get = require('lodash.get');
+import _set = require('lodash.set');
+
+import { DynamoDb } from '../src/DynamoDb';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 
@@ -46,18 +47,18 @@ describe('test install()', () => {
             const config = {
                 awsConfig: {
                     params: {
-                        key: 'value'
-                    }
+                        key: 'value',
+                    },
                 },
                 dynamoDbConfig: {
-                    endpoint: 'value'
-                }
+                    endpoint: 'value',
+                },
             };
             const mergedConfig = {
+                endpoint: 'value',
                 params: {
-                    key: 'value'
+                    key: 'value',
                 },
-                endpoint: 'value'
             };
             dynamoDb = new DynamoDb(config);
             app = new BaseApp();
@@ -72,20 +73,20 @@ describe('test install()', () => {
             const config = {
                 awsConfig: {
                     params: {
-                        key: 'value'
-                    }
+                        key: 'value',
+                    },
                 },
                 documentClientConfig: {
+                    attrValue: 'S8',
                     convertEmptyValues: false,
-                    attrValue: 'S8'
-                }
+                },
             };
             const mergedConfig = {
-                params: {
-                    key: 'value'
-                },
+                attrValue: 'S8',
                 convertEmptyValues: false,
-                attrValue: 'S8'
+                params: {
+                    key: 'value',
+                },
             };
             dynamoDb = new DynamoDb(config);
             app = new BaseApp();
@@ -100,11 +101,11 @@ describe('test install()', () => {
     describe('test install() setting up AWSXray if included in config', () => {
         test('test should throw Error because aws-xray-sdk-core package isn\'t installed', () => {
             const config = {
-                awsXray: true
+                awsXray: true,
             };
             const dynamoDb = new DynamoDb(config);
             const app = new BaseApp();
-            
+
             expect(() => {
                 dynamoDb.install(app);
             }).toThrowError(JovoError);
@@ -114,11 +115,11 @@ describe('test install()', () => {
     describe('test install() setting up dax if included in config', () => {
         test('test should throw error because config.awsXray is true', () => {
             const config = {
+                awsXray: true,
                 dax: {
-                    endpoint: ['1', '2'],
-                    region: 'one'
+                    endpoint: [ '1', '2' ],
+                    region: 'one',
                 },
-                awsXray: true
             };
             const dynamoDb = new DynamoDb(config);
             const app = new BaseApp();
@@ -131,13 +132,13 @@ describe('test install()', () => {
         test('test should throw Error because amazon-dax-client package isn\'t installed', () => {
             const config = {
                 dax: {
-                    endpoint: ['1', '2'],
-                    region: 'one'
-                }
+                    endpoint: [ '1', '2' ],
+                    region: 'one',
+                },
             };
             const dynamoDb = new DynamoDb(config);
             const app = new BaseApp();
-            
+
             expect(() => {
                 dynamoDb.install(app);
             }).toThrowError(JovoError);
@@ -150,7 +151,7 @@ describe('test errorHandling()', () => {
     let dynamoDb: DynamoDb;
     let app: BaseApp;
     const config = {
-        tableName: 'test'
+        tableName: 'test',
     };
 
     test('test should throw JovoError if tableName is missing in config', async () => {
@@ -190,7 +191,7 @@ describe('test database operations', () => {
     let dynamoDb: DynamoDb;
 
     const config = {
-        tableName: 'test'
+        tableName: 'test',
     };
 
     describe('test save()', () => {
@@ -199,9 +200,9 @@ describe('test database operations', () => {
             const mockDocClient = {
                 put: jest.fn().mockImplementation((params) => {
                     return {
-                        promise: jest.fn()
+                        promise: jest.fn(),
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -218,9 +219,9 @@ describe('test database operations', () => {
                     return {
                         promise: () => {
                             return Promise.resolve({Attributes: params.Item});
-                        }
+                        },
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -228,14 +229,14 @@ describe('test database operations', () => {
             const result = await dynamoDb.save('id', 'key', 'value');
 
             expect(result!.Attributes).toEqual({
-                [dynamoDb.config.primaryKeyColumn!]: 'id',
-                key: 'value'
+                [ dynamoDb.config.primaryKeyColumn! ]: 'id',
+                key: 'value',
             });
         });
 
         test('should not save anything to database because isCreating is true', async () => {
             const mockDocClient = {
-                put: jest.fn()
+                put: jest.fn(),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -253,9 +254,9 @@ describe('test database operations', () => {
             const mockDocClient = {
                 delete: jest.fn().mockImplementation((params) => {
                     return {
-                        promise: jest.fn()
+                        promise: jest.fn(),
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -272,15 +273,15 @@ describe('test database operations', () => {
                     return {
                         promise: () => {
                             return Promise.resolve({test: 'test'});
-                        }
+                        },
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.delete('id');
-            
+
             expect(result).toEqual({test: 'test'});
         });
 
@@ -294,12 +295,12 @@ describe('test database operations', () => {
                     return {
                         promise: () => {
                             return {
+                                ConsumedCapacity: 1,
                                 Item: {userId: 'id', key: 'value'},
-                                ConsumedCapacity: 1
                             };
-                        }
+                        },
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -315,9 +316,9 @@ describe('test database operations', () => {
                 get: jest.fn().mockImplementation((params) => {
                     const error = new Error();
                     _set(error, 'code', 'xyz');
-    
+
                     throw error;
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -332,21 +333,21 @@ describe('test database operations', () => {
                     return {
                         promise: () => {
                             return {
+                                ConsumedCapacity: 1,
                                 Item: {userId: 'id', key: 'value'},
-                                ConsumedCapacity: 1
                             };
-                        }
+                        },
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.load('id');
-        
+
             expect(result).toEqual({
+                key: 'value',
                 userId: 'id',
-                key: 'value'
             });
         });
 
@@ -356,9 +357,9 @@ describe('test database operations', () => {
                 get: jest.fn().mockImplementation((params) => {
                     const error = new Error();
                     _set(error, 'code', 'ResourceNotFoundException');
-    
+
                     throw error;
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
@@ -371,22 +372,22 @@ describe('test database operations', () => {
             expect(result).toEqual({});
         });
 
-        test('test should return undefined because there is no data for that user', async() => {
+        test('test should return undefined because there is no data for that user', async () => {
             // If there is not data for the user, get() won't return the Item property
             const mockDocClient = {
                 get: jest.fn().mockImplementation((params) => {
                     return {
                         promise: () => {
                             return {ConsumedCapacity: 1};
-                        }
+                        },
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb(config);
             _set(dynamoDb, 'docClient', mockDocClient);
 
             const result = await dynamoDb.load('id');
-        
+
             expect(result).toBeUndefined();
         });
     });
@@ -396,7 +397,7 @@ describe('test database operations', () => {
             dynamoDb = new DynamoDb();
             _set(dynamoDb, 'dynamoClient', undefined);
 
-            await dynamoDb['createTable']().catch(e => expect(e).toBeInstanceOf(JovoError));
+            await dynamoDb.createTable().catch(e => expect(e).toBeInstanceOf(JovoError));
         });
 
         test('should call dynamoClient.createTable()', async () => {
@@ -404,14 +405,14 @@ describe('test database operations', () => {
             const mockDynamoClient = {
                 createTable: mockCreateTable.mockImplementation(() => {
                     return {
-                        promise: jest.fn()
+                        promise: jest.fn(),
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb();
             _set(dynamoDb, 'dynamoClient', mockDynamoClient);
 
-            await dynamoDb['createTable']();
+            await dynamoDb.createTable();
 
             expect(mockCreateTable).toHaveBeenCalledTimes(1);
         });
@@ -420,12 +421,12 @@ describe('test database operations', () => {
             const mockDynamoClient = {
                 createTable: jest.fn().mockImplementation(() => {
                     throw new Error();
-                })
+                }),
             };
             dynamoDb = new DynamoDb();
             _set(dynamoDb, 'dynamoClient', mockDynamoClient);
 
-            await dynamoDb['createTable']().catch(e => expect(e).toBeInstanceOf(JovoError));
+            await dynamoDb.createTable().catch(e => expect(e).toBeInstanceOf(JovoError));
         });
 
         test('should set isCreating to true if the returned TableStatus is "CREATING"', async () => {
@@ -434,17 +435,16 @@ describe('test database operations', () => {
                     return {
                         promise: jest.fn().mockResolvedValue({
                             TableDescription: {
-                                TableStatus: 'CREATING'
-                            }
-                        })
+                                TableStatus: 'CREATING',
+                            },
+                        }),
                     };
-                })
+                }),
             };
             dynamoDb = new DynamoDb();
             _set(dynamoDb, 'dynamoClient', mockDynamoClient);
 
-            await dynamoDb['createTable']();
-
+            await dynamoDb.createTable();
             expect(dynamoDb.isCreating).toBe(true);
         });
     });

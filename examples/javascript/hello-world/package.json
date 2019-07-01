@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-hello-world",
-  "version": "2.2.10",
+  "version": "2.2.13",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -8,19 +8,20 @@
     "tsc": "node -v",
     "test": "echo \"Error: no test specified\"",
     "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./dist",
     "launch": "npm start -- --launch"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "jovo-core": "^2.2.6",
-    "jovo-db-dynamodb": "^2.2.6",
-    "jovo-db-filedb": "^2.2.6",
-    "jovo-framework": "^2.2.8",
-    "jovo-platform-alexa": "^2.2.10",
-    "jovo-platform-dialogflow": "^2.2.7",
-    "jovo-platform-googleassistant": "^2.2.8",
-    "jovo-plugin-debugger": "^2.2.7"
+    "jovo-core": "^2.2.8",
+    "jovo-db-dynamodb": "^2.2.8",
+    "jovo-db-filedb": "^2.2.8",
+    "jovo-framework": "^2.2.11",
+    "jovo-platform-alexa": "^2.2.13",
+    "jovo-platform-dialogflow": "^2.2.9",
+    "jovo-platform-googleassistant": "^2.2.11",
+    "jovo-plugin-debugger": "^2.2.9"
   }
 }
