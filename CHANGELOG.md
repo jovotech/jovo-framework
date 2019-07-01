@@ -1,6 +1,27 @@
 # Jovo Framework Changelog
 
 
+
+## 2.2.11 (2019-07-01)
+
+#### :rocket: New Feature
+* `jovo-platform-dialogflow` [#531](https://github.com/jovotech/jovo-framework/pull/531) Adds Twilio Dialogflow Integration ([@BronxBombers](https://github.com/BronxBombers))
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` [#533](https://github.com/jovotech/jovo-framework/pull/533) Adds possibility to partially exclude and replace the log  ([@Veake](https://github.com/Veake))
+
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests issue #517
+* `jovo-platform-googleassistant` Fixes askForNotification issue #529
+
+
+#### Committers: 3
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- Max R. ([@Veake](https://github.com/Veake))
+- BronxBombers ([@BronxBombers](https://github.com/BronxBombers))
+
 ## 2.2.10 (2019-06-19)
 
 
