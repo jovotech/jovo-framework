@@ -16,10 +16,12 @@ export interface Config extends PluginConfig {
 	request?: boolean;
 	response?: boolean;
 	requestObjects?: string[];
-	excludedRequestObjects?: string[];
 	responseObjects?: string[];
-	excludedResponseObjects?: string[];
-    excludeReplaceValue?: string;
+	maskRequestObjects?: string[];
+	maskResponseObjects?: string[];
+	maskValue?: any;
+	excludeRequestObjects?: string[];
+	excludeResponseObjects?: string[];
 	space?: string;
 	styling?: boolean;
 }
@@ -29,12 +31,14 @@ export class BasicLogging implements Plugin {
 		enabled: true,
 		logging: undefined,
 		request: false,
+		maskValue: '[ Hidden ]',
 		requestObjects: [],
-		excludedRequestObjects: [],
+		maskRequestObjects: [],
+		excludeRequestObjects: [],
 		response: false,
+		maskResponseObjects: [],
+		excludeResponseObjects: [],
 		responseObjects: [],
-		excludedResponseObjects: [],
-		excludeReplaceValue: undefined,
 		space: '\t',
 		styling: false
 	};
@@ -86,26 +90,39 @@ export class BasicLogging implements Plugin {
 
 		const requestCopy = Object.assign({}, handleRequest.host.getRequestObject());
 
-        if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
-            this.config.excludedRequestObjects.forEach((excludePath: string) => {
-                if (_get(requestCopy, excludePath)) {
-                    _set(requestCopy, excludePath, this.config.excludeReplaceValue);
-                }
-            });
-        }
+		if (this.config.maskRequestObjects && this.config.maskRequestObjects.length > 0) {
+			this.config.maskRequestObjects.forEach((maskPath: string) => {
+				const value = _get(requestCopy, maskPath);
+				if (value) {
+					let newValue = this.config.maskValue;
+					if (typeof newValue === 'function') {
+						newValue = this.config.maskValue(value);
+					}
+					_set(requestCopy, maskPath, newValue);
+				}
+			});
+		}
 
-        if (this.config.requestObjects && this.config.requestObjects.length > 0) {
-            this.config.requestObjects.forEach((path: string) => {
+		if (this.config.excludeRequestObjects && this.config.excludeRequestObjects.length > 0) {
+			this.config.excludeRequestObjects.forEach((excludePath: string) => {
+				if (_get(requestCopy, excludePath)) {
+					_set(requestCopy, excludePath, undefined);
+				}
+			});
+		}
+
+		if (this.config.requestObjects && this.config.requestObjects.length > 0) {
+			this.config.requestObjects.forEach((path: string) => {
 				// tslint:disable-next-line
-                console.log(
-                    JSON.stringify(
-                        _get(requestCopy, path), null, this.config.space));
+				console.log(
+					JSON.stringify(
+						_get(requestCopy, path), null, this.config.space));
 
-            });
-        } else {
+			});
+		} else {
 			// tslint:disable-next-line
-            console.log(JSON.stringify(requestCopy, null, this.config.space));
-        }
+			console.log(JSON.stringify(requestCopy, null, this.config.space));
+		}
 	};
 
 	responseLogger = (handleRequest: HandleRequest) => {
@@ -126,28 +143,41 @@ export class BasicLogging implements Plugin {
 
 		const responseCopy = Object.assign({}, handleRequest.jovo.$response);
 
-        if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
-            this.config.excludedResponseObjects.forEach((excludePath: string) => {
-                if (_get(responseCopy, excludePath)) {
-                    _set(responseCopy, excludePath, this.config.excludeReplaceValue);
-                }
-            });
-        }
+		if (this.config.maskResponseObjects && this.config.maskResponseObjects.length > 0) {
+			this.config.maskResponseObjects.forEach((maskPath: string) => {
+				const value = _get(responseCopy, maskPath);
+				if (value) {
+					let newValue = this.config.maskValue;
+					if(typeof newValue === 'function') {
+						newValue = this.config.maskValue(value);
+					}
+					_set(responseCopy, maskPath, newValue);
+				}
+			});
+		}
 
-        if (this.config.responseObjects && this.config.responseObjects.length > 0) {
-            this.config.responseObjects.forEach((path: string) => {
-                if (!handleRequest.jovo) {
-                    return;
+		if (this.config.excludeResponseObjects && this.config.excludeResponseObjects.length > 0) {
+			this.config.excludeResponseObjects.forEach((excludePath: string) => {
+				if (_get(responseCopy, excludePath)) {
+					_set(responseCopy, excludePath, undefined);
+				}
+			});
+		}
+
+		if (this.config.responseObjects && this.config.responseObjects.length > 0) {
+			this.config.responseObjects.forEach((path: string) => {
+				if (!handleRequest.jovo) {
+					return;
 				}
 				// tslint:disable-next-line
-                console.log(
-                    JSON.stringify(
-                        _get(responseCopy, path), null, this.config.space));
-            });
-        } else {
+				console.log(
+					JSON.stringify(
+						_get(responseCopy, path), null, this.config.space));
+			});
+		} else {
 			// tslint:disable-next-line
-            console.log(this.style(JSON.stringify(responseCopy, null, this.config.space)));
-        }
+			console.log(this.style(JSON.stringify(responseCopy, null, this.config.space)));
+		}
 	};
 
 	style(text: string) {
