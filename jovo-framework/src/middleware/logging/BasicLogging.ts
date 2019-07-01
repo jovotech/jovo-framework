@@ -10,6 +10,7 @@ import {
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import _merge = require('lodash.merge');
+import _unset = require('lodash.unset');
 
 export interface Config extends PluginConfig {
 	logging?: boolean;
@@ -105,9 +106,8 @@ export class BasicLogging implements Plugin {
 
 		if (this.config.excludeRequestObjects && this.config.excludeRequestObjects.length > 0) {
 			this.config.excludeRequestObjects.forEach((excludePath: string) => {
-				if (_get(requestCopy, excludePath)) {
-					_set(requestCopy, excludePath, undefined);
-				}
+					_unset(requestCopy, excludePath);
+
 			});
 		}
 
@@ -158,9 +158,7 @@ export class BasicLogging implements Plugin {
 
 		if (this.config.excludeResponseObjects && this.config.excludeResponseObjects.length > 0) {
 			this.config.excludeResponseObjects.forEach((excludePath: string) => {
-				if (_get(responseCopy, excludePath)) {
-					_set(responseCopy, excludePath, undefined);
-				}
+					_unset(responseCopy, excludePath);
 			});
 		}
 
