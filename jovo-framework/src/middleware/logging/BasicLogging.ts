@@ -8,8 +8,8 @@ import {
 	PluginConfig
 } from 'jovo-core';
 import _get = require('lodash.get');
-import _set = require('lodash.set');
 import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import _unset = require('lodash.unset');
 
 export interface Config extends PluginConfig {
@@ -28,6 +28,7 @@ export interface Config extends PluginConfig {
 }
 
 export class BasicLogging implements Plugin {
+	// tslint:disable: object-literal-sort-keys
 	config: Config = {
 		enabled: true,
 		logging: undefined,
@@ -43,7 +44,7 @@ export class BasicLogging implements Plugin {
 		space: '\t',
 		styling: false
 	};
-
+	// tslint:enable
 	constructor(config?: Config) {
 		if (config) {
 			this.config = _merge(this.config, config);
@@ -89,8 +90,7 @@ export class BasicLogging implements Plugin {
 			return;
 		}
 
-		const requestCopy = Object.assign({}, handleRequest.host.getRequestObject());
-
+		const requestCopy = Object.assign({}, handleRequest.host.getRequestObject()); // tslint:disable-line:prefer-object-spread
 		if (this.config.maskRequestObjects && this.config.maskRequestObjects.length > 0) {
 			this.config.maskRequestObjects.forEach((maskPath: string) => {
 				const value = _get(requestCopy, maskPath);
@@ -141,7 +141,7 @@ export class BasicLogging implements Plugin {
 			return;
 		}
 
-		const responseCopy = Object.assign({}, handleRequest.jovo.$response);
+		const responseCopy = Object.assign({}, handleRequest.jovo.$response);  // tslint:disable-line:prefer-object-spread
 
 		if (this.config.maskResponseObjects && this.config.maskResponseObjects.length > 0) {
 			this.config.maskResponseObjects.forEach((maskPath: string) => {

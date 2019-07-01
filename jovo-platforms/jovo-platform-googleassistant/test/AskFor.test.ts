@@ -367,7 +367,7 @@ describe('test ON_PERMISSION', () => {
     test('test askForNotification()', async (done) => {
         app.setHandler({
             LAUNCH() {
-                this.$googleAction!.askForNotification('TestIntent', 'TestName', 'TestText');
+                this.$googleAction!.askForNotification('TestIntent');
             },
         });
 
@@ -390,10 +390,6 @@ describe('test ON_PERMISSION', () => {
                             "UPDATE"
                         ],
                         "updatePermissionValueSpec": {
-                            "arguments": {
-                                "name": "TestName",
-                                "textValue": "TestText"
-                            },
                             "intent": "TestIntent"
                         }
                     }
@@ -429,7 +425,6 @@ describe('test ON_PERMISSION', () => {
                             "UPDATE"
                         ],
                         "updatePermissionValueSpec": {
-                            "arguments": {},
                             "intent": "TestIntent"
                         }
                     }
