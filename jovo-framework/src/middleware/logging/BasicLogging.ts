@@ -8,6 +8,7 @@ import {
 	PluginConfig
 } from 'jovo-core';
 import _get = require('lodash.get');
+import _set = require('lodash.set');
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
@@ -15,7 +16,10 @@ export interface Config extends PluginConfig {
 	request?: boolean;
 	response?: boolean;
 	requestObjects?: string[];
+	excludedRequestObjects?: string[];
 	responseObjects?: string[];
+	excludedResponseObjects?: string[];
+    excludeReplaceValue?: string;
 	space?: string;
 	styling?: boolean;
 }
@@ -26,8 +30,11 @@ export class BasicLogging implements Plugin {
 		logging: undefined,
 		request: false,
 		requestObjects: [],
+		excludedRequestObjects: [],
 		response: false,
 		responseObjects: [],
+		excludedResponseObjects: [],
+		excludeReplaceValue: undefined,
 		space: '\t',
 		styling: false
 	};
@@ -76,25 +83,29 @@ export class BasicLogging implements Plugin {
 		if (!this.config.request) {
 			return;
 		}
-		if (this.config.requestObjects && this.config.requestObjects.length > 0) {
-			this.config.requestObjects.forEach((path: string) => {
-				console.log( // tslint:disable-line:no-console
-					JSON.stringify(
-						_get(handleRequest.host.getRequestObject(), path),
-						null,
-						this.config.space
-					)
-				);
-			});
-		} else {
-			console.log( // tslint:disable-line:no-console
-				JSON.stringify(
-					handleRequest.host.getRequestObject(),
-					null,
-					this.config.space
-				)
-			);
-		}
+
+		const requestCopy = Object.assign({}, handleRequest.host.getRequestObject());
+
+        if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
+            this.config.excludedRequestObjects.forEach((excludePath: string) => {
+                if (_get(requestCopy, excludePath)) {
+                    _set(requestCopy, excludePath, this.config.excludeReplaceValue);
+                }
+            });
+        }
+
+        if (this.config.requestObjects && this.config.requestObjects.length > 0) {
+            this.config.requestObjects.forEach((path: string) => {
+				// tslint:disable-next-line
+                console.log(
+                    JSON.stringify(
+                        _get(requestCopy, path), null, this.config.space));
+
+            });
+        } else {
+			// tslint:disable-next-line
+            console.log(JSON.stringify(requestCopy, null, this.config.space));
+        }
 	};
 
 	responseLogger = (handleRequest: HandleRequest) => {
@@ -112,26 +123,31 @@ export class BasicLogging implements Plugin {
 		if (!handleRequest.jovo) {
 			return;
 		}
-		if (this.config.responseObjects && this.config.responseObjects.length > 0) {
-			this.config.responseObjects.forEach((path: string) => {
-				if (!handleRequest.jovo) {
-					return;
+
+		const responseCopy = Object.assign({}, handleRequest.jovo.$response);
+
+        if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
+            this.config.excludedResponseObjects.forEach((excludePath: string) => {
+                if (_get(responseCopy, excludePath)) {
+                    _set(responseCopy, excludePath, this.config.excludeReplaceValue);
+                }
+            });
+        }
+
+        if (this.config.responseObjects && this.config.responseObjects.length > 0) {
+            this.config.responseObjects.forEach((path: string) => {
+                if (!handleRequest.jovo) {
+                    return;
 				}
-				console.log( // tslint:disable-line:no-console
+				// tslint:disable-next-line
+                console.log(
                     JSON.stringify(
-						_get(handleRequest.jovo.$response, path),
-						null,
-						this.config.space
-					)
-				);
-			});
-		} else {
-			console.log( // tslint:disable-line:no-console
-				this.style(
-					JSON.stringify(handleRequest.jovo.$response, null, this.config.space)
-				)
-			);
-		}
+                        _get(responseCopy, path), null, this.config.space));
+            });
+        } else {
+			// tslint:disable-next-line
+            console.log(this.style(JSON.stringify(responseCopy, null, this.config.space)));
+        }
 	};
 
 	style(text: string) {
