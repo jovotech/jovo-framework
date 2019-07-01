@@ -29,7 +29,7 @@ app.setHandler({
     },
 
     YesIntent() {
-        this.$googleAction!.askForNotification('HelloWorldIntent', 'Test name', 'Test Text');
+        this.$googleAction!.askForNotification('HelloWorldIntent');
     },
 
     async SendNotificationIntent() {
