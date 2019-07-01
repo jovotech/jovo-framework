@@ -18,9 +18,9 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
 
 ![Google Website](../../img/ga00_banner.png)
 
-[Google Analytics](https://analytics.google.com/analytics/web/) lets you measure your advertising ROI as well as track your Flash, video, and social networking sites and applications.
+[Google Analytics](https://analytics.google.com/analytics/web/) let you measure your advertising ROI as well as track your Flash, video, and social networking sites and applications.
 
-With the Google Analytics integration for Jovo, you can track the behavior of you voice app and get insights about your users. It offers standard tracking which will start immediately after activating and developer methods for sending events and transactions from your voice app. Even thought you won't have to mess with creating users and adding appropriate data the plugin offers the possibility to adjust and overwrite implemented tracking and helper methods (for example if you want to adjust the algorithm which generates the userId). 
+With the Google Analytics integration for Jovo, you can track the behavior of you voice app and get insights about your users. It offers [standard tracking](#automatic-intent-tracking) which will start immediately after activating and [developer methods](#developer-methods) for sending events and transactions from your voice app. Even thought you won't have to mess with creating users and adding appropriate data the plugin offers the possibility to [adjust and overwrite implemented tracking and helper methods](#customize-standard-behavior) (for example if you want to adjust the algorithm which generates the userId). 
 
 ## Installation
 
@@ -190,6 +190,10 @@ The plugin offers developer methods for sending data (like events and transactio
 * sendUserTransaction (transactionId)
 * sendCustomMetric (index, value)  
 
+
+They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section). They will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) plugin which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine a event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
+Because the initUser Method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
+
 You can call them via the this.$googleAnalytics object:
 ```javascript
 {
@@ -201,8 +205,6 @@ You can call them via the this.$googleAnalytics object:
 }
 
 ```
-They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section). They will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) plugin which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine a event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
-Because the initUser Method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
 
 
 #### Customize Standard Behavior
