@@ -1,6 +1,17 @@
 # Jovo Framework Changelog
 
 
+## 2.2.10 (2019-06-19)
+
+
+#### :bug: Bug Fix
+* `jovo-framework` [#525](https://github.com/jovotech/jovo-framework/pull/525) Fixing a bug in server.js that breaks the express server  ([@daveradical](https://github.com/daveradical))
+
+
+#### Committers: 1
+- daveradical ([@daveradical](https://github.com/daveradical))
+
+
 ## 2.2.9 (2019-06-07)
 
 

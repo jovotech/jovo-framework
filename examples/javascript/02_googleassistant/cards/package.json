@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-cards",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.10",
-    "jovo-platform-googleassistant": "^2.2.10"
+    "jovo-framework": "^2.2.11",
+    "jovo-platform-googleassistant": "^2.2.11"
   }
 }
