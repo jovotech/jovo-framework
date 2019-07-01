@@ -2,7 +2,7 @@
 
 
 
-## 2.2.11 (2019-07-01)
+## 2.2.12 (2019-07-01)
 
 #### :rocket: New Feature
 * `jovo-platform-dialogflow` [#531](https://github.com/jovotech/jovo-framework/pull/531) Adds Twilio Dialogflow Integration ([@BronxBombers](https://github.com/BronxBombers))
