@@ -8,8 +8,9 @@ Learn how to use Google Analytics for your Alexa Skills and Google Actions built
    * [Enable Google Analytics](#enable-google-analytics)
    * [Test Google Analytics](#test-google-analytics)
 * [Usage](#usage)
-   * [Concept] (#concept)
-   * []
+    * [Automatic intent tracking](#automatic-intent-tracking)
+    * [Developer methods](#developer-methods)
+    * [Customize standard behavior](#customize-standard-behavior)
    
 
 
@@ -59,7 +60,7 @@ To add Google Analytics to your voice app, do the following:
 First, download the npm package:
 
 ```sh
-$ npm install --save jovo-analytics-bespoken	//todo: change npm
+$ npm install --save jovo-analytics-googleanalytics	//todo: change npm
 ```
 
 Enable the plugin like this:
@@ -141,14 +142,14 @@ Google Analytics for Jovo is designed to tie tracking data to users and intents 
 
 #### Automatic intent tracking
 After the plugin is enabled it automatically tracks intents by sending pageviews to google analytics. To see intent metrics navigate to "Behavior" -> "Overview" in your google analytics web panel. After some time the "Behavior Flow" will show intent paths users take within your skill.
-Google Analytics for Jovo enhances all sent data with the information shown in the scheme bellow. The orange node objects are listing all data tracked in the different steps of the plugin processing. It will be explained in the section underneath.
+Google Analytics for Jovo enhances all sent data with the information shown in the scheme bellow. The orange node objects are listing all data tracked in the different steps of the plugin processing. It will be explained in the section underneath. Have a look at our [templates](#templates) which will help you to analyse this data. 
 
 ![AutoTrackingFlow](../../img/ga4_Processing_autoDataOnly.png) 
 
 ##### User Id
 The userID is a hash generated from the according platform response. Be careful when using Google Assistant because the userId will change sometimes if account linking is not activated.
 
-Remark: Like you can see the graphic displays userId twice. This is because google analytics dimensions are organized by scopes and we need the userId at "hitLevel" for some custom reports (see [googleAnalyticsScopes](https://www.bounteous.com/insights/2016/11/30/understanding-scope-google-analytics-reporting/) for more details on scopes). 
+Remark: Did you can see that the graphic displays userId twice? This is because google analytics dimensions are organized by scopes and we need the userId at "hitLevel" for some custom reports (see [googleAnalyticsScopes](https://www.bounteous.com/insights/2016/11/30/understanding-scope-google-analytics-reporting/) for more details on scopes). The setup is explained  []
 
 ##### Source
 You can use the "data source" to split users into segments from Amazon Alexa and Google Assistant. The following graphic shows some test traffic for the "Audience Overview".
@@ -161,6 +162,23 @@ Afterwards you can click at the "AllUsers" segment in any report and activate th
 ##### Device & ScreenResolution
 Device Info can be found in "Audience" -> "Technology" -> "Browser&OS". The browser field will display recognized device types. Within this report you have the possibility to switch to screen resolution.
 ![DeviceInfo](../../img/ga6_DeviceInfo.png)
+
+##### Custom User Id
+To enable a userId at hit level do the following:
+* Go to "Admin"->"CustomDefinitions"->"CustomDimensions" ![path](../../img/ga9_CustomDimension.png)
+* Click "New Custom Dimension"
+* Give it a name like "clientId". Set "Scope" to "hit" and enable the "active" checkbox
+Remark: Google Analytics is targeting custom dimensions via indices. Make sure that die clientId is at position 1.
+
+Afterwards you can use our 
+
+##### Templates
+Just click the link to add a template to you google analytics custom reports:
+* [ErrorAndException](https://analytics.google.com/analytics/web/template?uid=1xkvI9b9Tq-O55HPz6963g): lists exceptions from your skill
+* [Flow Error](https://analytics.google.com/analytics/web/template?uid=RbRGVYbeS_6slju5nhjYCQ): where (which state and intent) did your skill jump to unhandled? Why did it get there? Did the NLU not match spoken input to an intent (nluUnhandled) or was the matched intent not implemented/ reachable from the current state(skillUnhandled)? Also contains information about exceeded reprompts.
+* [Flow Error per device](https://analytics.google.com/analytics/web/template?uid=zhSQr1wjStq_vBq9zULjtw): splits the report above per device
+* [Intent Details](https://analytics.google.com/analytics/web/template?uid=V7hdC8gbSOeZaf_zP8Mr-w)
+
 
 
 #### Developer Methods
@@ -183,7 +201,6 @@ You can call them via the this.$googleAnalytics object:
 }
 
 ```
-
 They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section). They will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) plugin which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine a event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
 Because the initUser Method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
 
@@ -197,8 +214,22 @@ Let's take the use case of setting a specific medium and source as an example.
 Start with your extension of a plugin class and overwrite methods you want to adjust. Most often you will firstly call the inherited method from the plugin and afterwards add your custom data. The medium/source useCase wants to adjust visitor data and therefore overwrites the initVisitor method:
  
 
-```javascript
-import { GoogleAnalyticsAlexa } from "./GoogleAnalyticsAlexa";
+```js
+// @language=javascript
+const { GoogleAnalyticsAlexa} = require('jovo-analytics-googleanalytics');
+
+class ext extends GoogleAnalyticsAlexa {
+    initVisitor(jovo) {
+        let visitor = super.initVisitor(jovo);
+        visitor.set("campaignMedium", "referral");
+        visitor.set("campaignSource", "googleAction");
+        return visitor;
+    }
+}
+exports.ext = ext;
+
+// @language=typescript
+import { GoogleAnalyticsAlexa } from 'jovo-analytics-googleanalytics';
 import * as ua from 'universal-analytics';
 import { Jovo } from "jovo-core";
 
@@ -215,7 +246,7 @@ Instead of [enabling the GoogleAnalyticsAlexa base class](#enable-google-analyti
 ) you will have to replace "GoogleAnalyticsAlexa" with the name of your custom class.
 
 #### Enable cross device tracking
-The example above was used in a case where an google analytics tracking was already running for a website and the customer wanted to add separated skill tracking. When the skill sends a link to the website (via email/sms) the current analytics session should continue. To enable tracking from skill to website you have to 
+The example above was used in a case where google analytics tracking was already running for a website and the customer wanted to add separated skill tracking. When the skill sends a link to the website (via email/sms) the current analytics session should continue. To enable tracking from skill to website you have to 
 * Adjust the google analytics tracking code on the website
 * Add a clientIdParamter to the link sent from the skill 
 
@@ -248,6 +279,8 @@ Replace the tracking code in the head of your websites html file with the versio
 
   ##### Send clientId with link from skill
   The code above will try to extract the parameter "voiceClientID" from the url parameters. Add it to the link you send to users and the session will persist after they click on it. https://testPage.com/path?var1=test will get to https://testPage.com/path?var1=test&voiceClientID=2210018__. You can get the clientId by calling the getUserId method.
+
+
 
 
 
