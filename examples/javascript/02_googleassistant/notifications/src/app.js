@@ -23,18 +23,19 @@ app.use(
 
 app.setHandler({
     async LAUNCH() {
+
         this.toIntent('AskForNotifications');
         // this.toIntent('SendNotificationIntent');
     },
     AskForNotifications() {
-        // You have to show them suggestion chips inviting them to opt-in, 
+        // You have to show them suggestion chips inviting them to opt-in,
         // before you can send the actual permission request
         this.$googleAction.showSuggestionChips(['yes', 'no']);
         this.ask('Notifications?');
     },
 
     YesIntent() {
-        this.$googleAction.askForNotification('HelloWorldIntent', 'Test name', 'Test Text');
+        this.$googleAction.askForNotification('HelloWorldIntent');
     },
 
     async SendNotificationIntent() {
@@ -59,7 +60,7 @@ app.setHandler({
     },
 
     HelloWorldIntent() {
-        this.tell('Hello World!');
+        // this.tell('Hello World!');
     },
 
     ON_PERMISSION() {
