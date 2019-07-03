@@ -223,7 +223,7 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
 
         const sessionId = _get(this, 'session');
         let sessionAttributes: any = {}; // tslint:disable-line
-        const sessionContext =_get(this, 'queryResult.outputContexts').find((context: Context) => {
+        const sessionContext =_get(this, 'queryResult.outputContexts', []).find((context: Context) => {
             return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
         });
 
@@ -240,8 +240,8 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
 
     setSessionAttributes(attributes: SessionData): this { // tslint:disable-line
         const sessionId = _get(this, 'session');
-        const sessionContext: Context =_get(this, 'queryResult.outputContexts').find((context: Context) => {
-            return context.name === `${sessionId}/contexts/session`;
+        const sessionContext: Context =_get(this, 'queryResult.outputContexts', []).find((context: Context) => {
+            return context.name.startsWith(`${sessionId}/contexts/_jovo_session_`);
         });
 
         if (sessionContext) {
