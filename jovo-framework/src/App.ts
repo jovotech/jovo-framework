@@ -22,7 +22,8 @@ import {
 	MetaDataConfig
 } from './middleware/user/JovoUser';
 
-import { Component, Config as ComponentConfig } from './middleware/Component';
+import { ComponentConfig } from './middleware/Component';
+import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Handler } from './middleware/Handler';
 import { BasicLogging } from './middleware/logging/BasicLogging';
 import { Config as RouterConfig, Router } from './middleware/Router';
@@ -365,24 +366,24 @@ export class App extends BaseApp {
 		await super.handle(host);
 	}
 
-	useComponents(...components: Component[]) {
-		components.forEach(component => {
-			component.name = component.name || component.constructor.name;
+	useComponents(...components: ComponentPlugin[]) {
+		components.forEach(componentPlugin => {
+			componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
 
 			const componentAppConfig: ComponentConfig = _cloneDeep(
-				this.$config.plugin[component.name!]
+				this.$config.plugin[componentPlugin.name!]
 			); // config defined in project's main config.js file
-			component.config = component.mergeConfig(componentAppConfig);
+			componentPlugin.config = componentPlugin.mergeConfig(componentAppConfig);
 
-			this.setHandler(component.handler);
+			this.setHandler(componentPlugin.handler);
 
-			this.$plugins.set(component.name, component);
-			component.install(this);
-			this.emit('use', component);
+			this.$plugins.set(componentPlugin.name, componentPlugin);
+			componentPlugin.install(this);
+			this.emit('use', componentPlugin);
 
 			if (this.constructor.name === 'App') {
-				Log.yellow().verbose(`Installed component: ${component.name}`);
-				Log.debug(`${JSON.stringify(component.config || {}, null, '\t')}`);
+				Log.yellow().verbose(`Installed component: ${componentPlugin.name}`);
+				Log.debug(`${JSON.stringify(componentPlugin.config || {}, null, '\t')}`);
 				Log.debug();
 			}
 		});

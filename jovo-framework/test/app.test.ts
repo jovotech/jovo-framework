@@ -1,4 +1,4 @@
-import { Component } from '../src';
+import { ComponentPlugin } from '../src';
 import { App } from './../src/App';
 
 let appBase: App;
@@ -44,53 +44,53 @@ test('test onError', (done) => {
 });
 
 describe('test useComponents()', () => {
-    let component: Component;
+    let componentPlugin: ComponentPlugin;
     let app: App;
 
     beforeEach(() => {
-        component = new Component();
+        componentPlugin = new ComponentPlugin();
         app = new App();
     });
 
-    test('should add component\'s handler to handlers', () => {
+    test('should add componentPlugin\'s handler to handlers', () => {
         const testFunction = () => {
             //
         };
-        component.handler = {
+        componentPlugin.handler = {
             test: testFunction,
         };
 
-        app.useComponents(component);
+        app.useComponents(componentPlugin);
 
         expect(app.config.handlers).toEqual({
             test: testFunction,
         });
     });
 
-    test('should add component to $plugins map', () => {
-        component.name = 'test';
+    test('should add componentPlugin to $plugins map', () => {
+        componentPlugin.name = 'test';
 
-        app.useComponents(component);
+        app.useComponents(componentPlugin);
 
-        expect(app.$plugins.get(component.name)).toBe(component);
+        expect(app.$plugins.get(componentPlugin.name)).toBe(componentPlugin);
     });
 
-    test('should call component\'s install function', () => {
-        jest.spyOn(component, 'install');
+    test('should call componentPlugin\'s install function', () => {
+        jest.spyOn(componentPlugin, 'install');
 
-        app.useComponents(component);
+        app.useComponents(componentPlugin);
 
-        expect(component.install).toHaveBeenCalled();
+        expect(componentPlugin.install).toHaveBeenCalled();
     });
 
     test('should run through array of components', () => {
-        const component2 = new Component();
-        jest.spyOn(component, 'install');
-        jest.spyOn(component2, 'install');
+        const componentPlugin2 = new ComponentPlugin();
+        jest.spyOn(componentPlugin, 'install');
+        jest.spyOn(componentPlugin2, 'install');
 
-        app.useComponents(component, component2);
+        app.useComponents(componentPlugin, componentPlugin2);
 
-        expect(component.install).toHaveBeenCalled();
-        expect(component2.install).toHaveBeenCalled();
+        expect(componentPlugin.install).toHaveBeenCalled();
+        expect(componentPlugin2.install).toHaveBeenCalled();
     });
 });

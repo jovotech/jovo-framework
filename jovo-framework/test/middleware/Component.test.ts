@@ -2,48 +2,48 @@ process.env.NODE_ENV = 'UNIT_TEST';
 
 import { I18Next } from 'jovo-cms-i18next';
 import { BaseApp, HandleRequest, Jovo } from 'jovo-core';
-import { Component, Config as ComponentConfig } from '../../src/middleware/Component';
+import { Component, ComponentConfig, ComponentPlugin } from '../../src';
 
 describe('test constructor', () => {
-    let component: Component;
+    let componentPlugin: ComponentPlugin;
 
     test('should merge config passed as param', () => {
         const config = {a: 'test'} as unknown as ComponentConfig;
 
-        component = new Component(config);
+        componentPlugin = new ComponentPlugin(config);
 
-        expect(component.config).toEqual({a: 'test'});
+        expect(componentPlugin.config).toEqual({a: 'test'});
     });
 });
 
 describe('test install()', () => {
     test('should create I18Next object', () => {
         const app = new BaseApp();
-        const component = new Component();
+        const componentPlugin = new ComponentPlugin();
 
-        component.install(app);
+        componentPlugin.install(app);
 
-        expect(component.i18next).toBeInstanceOf(I18Next);
+        expect(componentPlugin.i18next).toBeInstanceOf(I18Next);
     });
 });
 
 describe('test mergeConfig()', () => {
-    let component: Component;
+    let componentPlugin: ComponentPlugin;
 
     beforeEach(() => {
-        component = new Component();
+        componentPlugin = new ComponentPlugin();
     });
 
     test('should return merged config', () => {
-        component.config = {
+        componentPlugin.config = {
             a: 'test',
-        } as unknown as ComponentConfig; // hack so we don't have to implement the full Component class, but just the parts we need
+        } as unknown as ComponentConfig; // hack so we don't have to implement the full ComponentPlugin class, but just the parts we need
 
         const appConfig = {
             b: 'test',
         } as unknown as ComponentConfig;
 
-        const mergedConfig = component.mergeConfig(appConfig);
+        const mergedConfig = componentPlugin.mergeConfig(appConfig);
 
         expect(mergedConfig).toEqual({
             a: 'test',
@@ -53,69 +53,69 @@ describe('test mergeConfig()', () => {
 });
 
 describe('test initialize()', () => {
-    let component: Component;
+    let componentPlugin: ComponentPlugin;
     let mockHandleRequest: HandleRequest;
 
     beforeEach(() => {
-        component = new Component();
+        componentPlugin = new ComponentPlugin();
         mockHandleRequest = {
             jovo: {} as unknown as Jovo,
         } as unknown as HandleRequest;
     });
 
     test('should create $components object', () => {
-        component.initialize(mockHandleRequest);
+        componentPlugin.initialize(mockHandleRequest);
 
         expect(mockHandleRequest.jovo!.$components).toBeDefined();
     });
 
-    test('should add reference to component to `$components` object', () => {
-        component.name = 'test';
+    test('should add a new Component object to `$components`', () => {
+        componentPlugin.name = 'test';
         mockHandleRequest.jovo!.$components = {};
 
-        component.initialize(mockHandleRequest);
+        componentPlugin.initialize(mockHandleRequest);
 
-        expect(mockHandleRequest.jovo!.$components[ 'test' ]).toBe(component); // tslint:disable-line:no-string-literal
+        expect(mockHandleRequest.jovo!.$components[ 'test' ]).toBeInstanceOf(Component); // tslint:disable-line:no-string-literal
     });
 });
 
 describe('test loadI18nFiles()', () => {
-    let component: Component;
+    let componentPlugin: ComponentPlugin;
     let mockHandleRequest: HandleRequest;
     let i18next: I18Next;
 
     beforeEach(() => {
-        component = new Component();
+        componentPlugin = new ComponentPlugin();
 
         mockHandleRequest = {
             app: {
                 $cms: {},
             } as unknown as BaseApp,
-        } as unknown as HandleRequest; // hack so we don't have to implement the full Component class, but just the parts we need
+        } as unknown as HandleRequest; // hack so we don't have to implement the full ComponentPlugin class, but just the parts we need
 
         i18next = {
             config: {},
             loadFiles: jest.fn(),
         } as unknown as I18Next;
 
-        component.i18next = i18next;
+        componentPlugin.i18next = i18next;
     });
 
     test('should set i18next filesDir to be pathToComponent + pathToI18n', () => {
-        component.name = 'test';
-        component.pathToI18n = './src/i18n';
+        componentPlugin.name = 'test';
+        componentPlugin.pathToI18n = './src/i18n';
 
-        component.loadI18nFiles(mockHandleRequest);
+        componentPlugin.loadI18nFiles(mockHandleRequest);
 
-        expect(component.i18next!.config.filesDir).toBe('../components/test/src/i18n');
+        expect(componentPlugin.i18next!.config.filesDir).toBe('../components/test/src/i18n');
     });
 
     test('should call i18next.loadFiles()', () => {
-        component.name = 'test';
-        component.pathToI18n = './src/i18n';
+        componentPlugin.name = 'test';
+        componentPlugin.pathToI18n = './src/i18n';
 
-        component.loadI18nFiles(mockHandleRequest);
+        componentPlugin.loadI18nFiles(mockHandleRequest);
 
-        expect(component.i18next!.loadFiles).toHaveBeenCalled();
+        expect(componentPlugin.i18next!.loadFiles).toHaveBeenCalled();
     });
 });

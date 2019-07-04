@@ -14,7 +14,7 @@ import _get = require('lodash.get');
 
 
 import { Config as AppConfig } from './../App';
-import { DelegationOptions } from './Component';
+import { ComponentDelegationOptions } from './Component';
 import { Route, Router } from './Router';
 
 export class Handler implements Plugin {
@@ -356,12 +356,12 @@ export class Handler implements Plugin {
         /**
          * Delegates the requests & responses to the component defined with "componentName"
          * @param {string} componentName
-         * @param {DelegationOptions} options
+         * @param {ComponentDelegationOptions} options
          * @returns {Promise<void>}
          */
         Jovo.prototype.delegate = function (
             componentName: string,
-            options: DelegationOptions,
+            options: ComponentDelegationOptions,
         ): Promise<void> {
             if (!this.$components[ componentName ]) {
                 throw new JovoError(
