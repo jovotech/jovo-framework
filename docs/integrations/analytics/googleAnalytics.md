@@ -24,7 +24,7 @@ With the Google Analytics integration for Jovo, you can track the behavior of yo
 
 ## Installation
 
-To use Google Analytics for your voice app, you need to complete the following steps:
+To use Google Analytics for your voice app, you need to complyedete the following steps:
 
 1. Create a Google Analytics account
 2. Enable Google Analytics in your Jovo voice app
@@ -32,7 +32,7 @@ To use Google Analytics for your voice app, you need to complete the following s
 
 ### Create a Google Analytics Account
 
-1. Login to Google Analytics with a google account at https://marketingplatform.google.com/intl/de/about/analytics/.
+1. Login to Google Analytics with a google account at https://marketingplatform.google.com/intl/en/about/analytics/.
 
 2. Click Start for free:
 
@@ -70,7 +70,7 @@ Enable the plugin like this:
 
 // src/app.js
 
-const { GoogleAnalyticsAlexa, GoogleAnalyticsAssistant } = require('jovo-analytics-bespoken'); //todo: change require
+const { GoogleAnalyticsAlexa, GoogleAnalyticsAssistant } = require('jovo-analytics-googleanalytics'); 
 
 app.use(
     new GoogleAnalyticsAlexa(),
@@ -80,7 +80,7 @@ app.use(
 
 // src/app.ts
 
-import { GoogleAnalyticsAlexa, GoogleAnalyticsAssistant } from 'jovo-analytics-bespoken'; //todo
+import { GoogleAnalyticsAlexa, GoogleAnalyticsAssistant } from 'jovo-analytics-googleanalytics';
 
 app.use(
     new GoogleAnalyticsAlexa(),
@@ -132,7 +132,7 @@ const config = {
 
 ### Test Google Analytics
 
-Test your voice app, after a bit your session should appear in your tracking website.
+Test your voice app, after a bit your session should appear at your tracking website.
 
 ## Usage
 Google Analytics for Jovo is designed to tie tracking data to users and intents (without having the developer to mess with it). It separates into the parts:
@@ -149,14 +149,14 @@ Google Analytics for Jovo enhances all sent data with the information shown in t
 ##### User Id
 The userID is a hash generated from the according platform response. Be careful when using Google Assistant because the userId will change sometimes if account linking is not activated.
 
-Remark: Did you can see that the graphic displays userId twice? This is because google analytics dimensions are organized by scopes and we need the userId at "hitLevel" for some custom reports (see [googleAnalyticsScopes](https://www.bounteous.com/insights/2016/11/30/understanding-scope-google-analytics-reporting/) for more details on scopes). The setup is explained  []
+Remark: Did you see that the graphic displays userId twice? This is because google analytics dimensions are organized by scopes and we need the userId at "hitLevel" for some custom reports (see [googleAnalyticsScopes](https://www.bounteous.com/insights/2016/11/30/understanding-scope-google-analytics-reporting/) for more details on scopes). The setup is explained [here](#custom-user-id).
 
 ##### Source
 You can use the "data source" to split users into segments from Amazon Alexa and Google Assistant. The following graphic shows some test traffic for the "Audience Overview".
             ![AudienceOverview](../../img/ga5_AudienceSegmentExample.png)
 
 Segment templates can be added by clicking at [AlexaSegmentTemplate](https://analytics.google.com/analytics/web/template?uid=cnQV_g8eR5Of0eQngb2A7g) and [GoogleAssistantTemplate](https://analytics.google.com/analytics/web/template?uid=Wvd3HYvyQDKFfXClkrXCAw). Withing the opened dialog you can add them to any Google Analytics view you like. 
-Afterwards you can click at the "AllUsers" segment in any report and activate them via the checkboxes. The grafic bellow highlights both points via red rectangles. Click the third rectangle "actions" to adjust them (for example by adding additional behaviour filters).
+Afterwards click at the "AllUsers" segment in any report and activate them via the checkboxes. The graphic bellow highlights both points via red rectangles. Click the third rectangle "actions" to adjust them (for example by adding additional behavior filters).
 ![SegmentActivation](../../img/ga7_segmentSelection.png)
 
 ##### Device & ScreenResolution
@@ -170,7 +170,7 @@ To enable a userId at hit level do the following:
 * Give it a name like "clientId". Set "Scope" to "hit" and enable the "active" checkbox
 Remark: Google Analytics is targeting custom dimensions via indices. Make sure that die clientId is at position 1.
 
-Afterwards you can use our 
+Afterwards you can link metrics at hit scope like "gamesPlayed" with this newly created userId. 
 
 ##### Templates
 Just click the link to add a template to you google analytics custom reports:
@@ -191,8 +191,8 @@ The plugin offers developer methods for sending data (like events and transactio
 * sendCustomMetric (index, value)  
 
 
-They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section). They will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) plugin which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine a event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
-Because the initUser Method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
+They take care of creating a google analytics visitor with appropriate data (using the initUser method shown in the last section) and will afterwards trigger according methods from the [universal-analytics-plugin](https://github.com/peaksandpies/universal-analytics) which has a nice list of [acceptable params](https://github.com/peaksandpies/universal-analytics/blob/HEAD/AcceptableParams.md) for events, transactions and items. We also added "UserEvents" which combine an event-category and instance of this category (the event-element) with the users id (event-label). This makes it easy to analyse events per user without having to add custom dimensions (see above). 
+Because the initVisitor method will return a universal analytics visitor you also have the possibility to access each method from this npm package. Be careful when using them, because they will only be reflected in your current call. So if you manipulate the visitor object this way the [Automatic Intent Tracking](#automatic-intent-tracking) will still be processed without added data. To change standard behavior you have to [overwrite standard methods](#customize-standard-behavior). 
 
 You can call them via the this.$googleAnalytics object:
 ```javascript
@@ -273,7 +273,6 @@ Replace the tracking code in the head of your websites html file with the versio
       gtag('config', 'UA-138062...', {
         'user_id': urlSearchParams.get("voiceClientID"),
         'client_id': urlSearchParams.get("voiceClientID"),
-        //'strictCidFormat': false
       });
     }
   </script>
@@ -287,5 +286,5 @@ Replace the tracking code in the head of your websites html file with the versio
 
 
 
-<!--[metadata]: {"description": "Add Bespoken Analytics to your Alexa Skills and Google Actions with Jovo",
-"route": "analytics/bespoken" }-->
+<!--[metadata]: {"description": "Add Google Analytics to your Alexa Skills and Google Actions with Jovo",
+"route": "analytics/googleAnalytics" }-->
