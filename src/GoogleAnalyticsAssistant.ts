@@ -22,7 +22,6 @@ export class GoogleAnalyticsAssistant extends GoogleAnalyticsSender {
             const isHealtCheck = (_get(handleRequest.jovo.$request!, 'originalDetectIntentRequest.payload.inputs[0].arguments[0].name') === 'is_health_check') || uuid === '464556658';
             if (!isHealtCheck) {
                 super.sendDataToGA(handleRequest);
-                console.log("*****Google Assistant sent data to GA");
             }
             else {
                 console.log("is healthcheck -> skip");
@@ -37,13 +36,12 @@ export class GoogleAnalyticsAssistant extends GoogleAnalyticsSender {
     //Overwrite base class functions to add platform specific content
     initVisitor(jovo: Jovo): ua.Visitor {
         const visitor = super.initVisitor(jovo);
-        //let  gAssistantRequest = jovo.$googleAction!.$request as GoogleActionRequest;
         let deviceInfo = "notSet";
         if (jovo.$request!.hasScreenInterface()) {
-            deviceInfo = "Assistant device - with Screen";
+            deviceInfo = "Assistant device - with screen";
         }
         else {
-            deviceInfo = "Assistant device - voice Only";
+            deviceInfo = "Assistant device - voice only";
         }
 
 

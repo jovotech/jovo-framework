@@ -16,7 +16,6 @@ class GoogleAnalyticsAssistant extends GoogleAnalyticsSender_1.GoogleAnalyticsSe
             const isHealtCheck = (_get(handleRequest.jovo.$request, 'originalDetectIntentRequest.payload.inputs[0].arguments[0].name') === 'is_health_check') || uuid === '464556658';
             if (!isHealtCheck) {
                 super.sendDataToGA(handleRequest);
-                console.log("*****Google Assistant sent data to GA");
             }
             else {
                 console.log("is healthcheck -> skip");
@@ -30,10 +29,10 @@ class GoogleAnalyticsAssistant extends GoogleAnalyticsSender_1.GoogleAnalyticsSe
         //let  gAssistantRequest = jovo.$googleAction!.$request as GoogleActionRequest;
         let deviceInfo = "notSet";
         if (jovo.$request.hasScreenInterface()) {
-            deviceInfo = "Assistant device - with Screen";
+            deviceInfo = "Assistant device - with screen";
         }
         else {
-            deviceInfo = "Assistant device - voice Only";
+            deviceInfo = "Assistant device - voice only";
         }
         visitor.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`); //fake UserAgent which makes GA mappping device to browser field and platform type to mobile
         return visitor;

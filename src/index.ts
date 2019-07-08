@@ -13,6 +13,6 @@ import { DeveloperTrackingMethods } from './DeveloperTrackingMethods';
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
-        $analytics? : DeveloperTrackingMethods;
+        $googleAnalytics? : DeveloperTrackingMethods;
     }
 }

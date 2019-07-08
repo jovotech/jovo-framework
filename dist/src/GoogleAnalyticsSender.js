@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jovo_core_1 = require("jovo-core");
-const util = require("util");
 const ua = require("universal-analytics");
 const _get = require("lodash.get");
 const _merge = require("lodash.merge");
@@ -12,12 +11,8 @@ const DeveloperTrackingMethods_1 = require("./DeveloperTrackingMethods");
  * @public
  */
 class GoogleAnalyticsSender {
-    //      "allowSyntheticDefaultImports": true
     constructor(config) {
-        //jovo?: Jovo | undefined;
-        //visitor?: ua.Visitor | undefined;
         this.config = {
-            //'accountId': "UA-137590211-1",
             trackingId: ""
         };
         if (config) {
@@ -29,8 +24,6 @@ class GoogleAnalyticsSender {
         this.sendDataToGA.bind(this);
     }
     install(app) {
-        //app.middleware('platform.init')!.use(this.InitVisitor.bind(this));
-        //app.middleware('response')!.use(this.InitVisitor.bind(this));
         if (!this.config.trackingId) {
             throw new jovo_core_1.JovoError("Google Analytics tracking id was not found.", jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', "trackingId needs to be added to config.js. See https://www.jovo.tech/docs/analytics/dashbot for details.", "You can find your tracking id in GoogleAnalytics by clicking: Admin -> Property Settings -> Tracking Id");
         }
@@ -53,8 +46,7 @@ class GoogleAnalyticsSender {
         if (!jovo) {
             return this.throwJovoNotSetError();
         }
-        jovo.$analytics = new DeveloperTrackingMethods_1.DeveloperTrackingMethods(this, jovo);
-        console.log("analytics available");
+        jovo.$googleAnalytics = new DeveloperTrackingMethods_1.DeveloperTrackingMethods(this, jovo);
     }
     /**
      * Pageviews should allways send intent data -> method returns standard
@@ -115,7 +107,6 @@ class GoogleAnalyticsSender {
         }
         //let idHash = murmurhash.v3(jovo.$user.getId()!) + murmurhash.v3(jovo.getDeviceId()!); //for local testing via different devices 
         const idHash = murmurhash.v3(jovo.$user.getId());
-        //let uuid = idHash + "_uniqueUser"; //for local testing
         const uuid = idHash.toString();
         return uuid;
     }
@@ -184,7 +175,6 @@ class GoogleAnalyticsSender {
                 eventLabel: this.getUserId(jovo),
                 documentPath: this.getPageName(jovo)
             };
-            //console.log('visitor in subclass: '+ util.inspect(this.visitor));
             this.sendIntentEvent(visitor, eventParams);
         }
         else {
@@ -195,11 +185,9 @@ class GoogleAnalyticsSender {
         //Detect and Send Flow Errors 
         if (jovo.$request.getIntentName() === "AMAZON.FallbackIntent" || jovo.$request.getIntentName() === 'Default Fallback Intent') {
             this.sendUserEvent(jovo, "FlowError", "nluUnhandled");
-            console.log("...nlu undhandled");
         }
         else if (jovo.getRoute().path.endsWith("Unhandled")) {
             this.sendUserEvent(jovo, "FlowError", "skillUnhandled");
-            console.log("...skill unhandled");
         }
     }
     /**
@@ -214,13 +202,11 @@ class GoogleAnalyticsSender {
         }
         //jovo.$type
         if (jovo.getMappedIntentName() === 'END') {
-            console.log("is end Intent -> setting endSession tag");
             sessionTag = 'end';
         }
         //end session if session Ended Request
         if (jovo.$type === "END") {
             sessionTag = 'end';
-            console.log("is session Ended Request -> setting endSession tag");
         }
         return sessionTag;
     }
@@ -241,19 +227,14 @@ class GoogleAnalyticsSender {
         }
         //Search for custom metrics set by user
         if (jovo.$data) {
-            //console.log("*******CHECKING FOR CUSTOM METRICS: ");
-            //console.log("data: " + util.inspect(jovo.$data));
             Object.entries(jovo.$data).forEach(entry => {
                 const dataKey = entry[0];
                 const dataValue = entry[1];
-                //console.log("key: " + entry[0]);
                 if (dataKey.startsWith("cm") && dataValue) { //check if custom dimension data and only add if value
                     visitor.set(dataKey, dataValue);
                 }
             });
         }
-        console.log("permanent uid visitor: " + util.inspect(visitor));
-        //let intentName = jovo.getMappedIntentName() ? jovo.getMappedIntentName()! : "LAUNCH";
         const intentName = jovo.getMappedIntentName() ? jovo.getMappedIntentName() : jovo.$type.type;
         //send Intent Name + standard Info
         visitor

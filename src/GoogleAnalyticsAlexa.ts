@@ -19,7 +19,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalyticsSender {
     sendDataToGA(handleRequest: HandleRequest) {
         if (handleRequest.jovo && handleRequest.jovo.constructor.name === 'AlexaSkill') {
             super.sendDataToGA(handleRequest);
-            console.log("*****+Alexa sent data to GA");
         }
     }
 
@@ -35,7 +34,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalyticsSender {
                 console.log(`..is session Ended Request.. checking reason..`);
                 if (alexaRequest.request!.reason === 'EXCEEDED_MAX_REPROMPTS') {
                     this.sendUserEvent(jovo, "FlowError", "exceeded reprompts");
-                    console.log("'..send exceeded reprompts event to GA.");
+                    console.log("'..sent exceeded reprompts event to GA.");
                 }
                 else {
                     console.log(`session Ended Request with no flow Errors. Route: ${util.inspect(jovo.getRoute())}`);
@@ -57,7 +56,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalyticsSender {
         //set referrer link for redirected users 
         const launchType: string | undefined = _get(jovo.$request, 'request.launchRequestType');
         if (launchType) {
-            //console.log("setting document referrer to " + _get(jovo.$request, 'request.metadata.referrer')); not used in GA momently
             visitor.set('documentReferrer', _get(jovo.$request, 'request.metadata.referrer'));
         }
         return visitor;

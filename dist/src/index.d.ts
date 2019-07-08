@@ -6,6 +6,6 @@ export { VoiceGiftGAnalyticsAssistant } from './VoiceGiftGAnalyticsAssistant';
 import { DeveloperTrackingMethods } from './DeveloperTrackingMethods';
 declare module 'jovo-core/dist/src/Jovo' {
     interface Jovo {
-        $analytics?: DeveloperTrackingMethods;
+        $googleAnalytics?: DeveloperTrackingMethods;
     }
 }

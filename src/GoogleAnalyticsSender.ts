@@ -3,7 +3,6 @@ import { Plugin, PluginConfig, BaseApp, HandleRequest, Jovo, Util, User, JovoDat
 import { JovoUser, App } from 'jovo-framework';
 import * as util from 'util';
 
-//import { AlexaRequest } from '/home/anjovo/github/ownRepos/jovo-framework/jovo-integrations/jovo-platform-alexa';
 import { GoogleAssistant, GoogleActionRequest } from 'jovo-platform-googleassistant';
 
 
@@ -13,7 +12,6 @@ import _merge = require('lodash.merge');
 import { eventNames } from 'cluster';
 import * as murmurhash from 'murmurhash';
 import { DeveloperTrackingMethods } from './DeveloperTrackingMethods';
-//import * as UserAgent from 'user-agents';
 
 
 export interface Config extends PluginConfig {
@@ -57,18 +55,10 @@ export interface ItemParams {
  * @public
  */
 export class GoogleAnalyticsSender implements Analytics {
-
-
     name?: string | undefined;
-    //jovo?: Jovo | undefined;
-    //visitor?: ua.Visitor | undefined;
-
     config: Config = {
-        //'accountId': "UA-137590211-1",
         trackingId: ""
     };
-
-    //      "allowSyntheticDefaultImports": true
 
     constructor(config?: Config) {
         if (config) {
@@ -84,8 +74,6 @@ export class GoogleAnalyticsSender implements Analytics {
 
 
     install(app: BaseApp): void {
-        //app.middleware('platform.init')!.use(this.InitVisitor.bind(this));
-        //app.middleware('response')!.use(this.InitVisitor.bind(this));
         if (!this.config.trackingId) {
             throw new JovoError("Google Analytics tracking id was not found.",
                 ErrorCode.ERR_PLUGIN,
@@ -115,8 +103,7 @@ export class GoogleAnalyticsSender implements Analytics {
         if (!jovo) {
             return this.throwJovoNotSetError();
         }
-        jovo.$analytics = new DeveloperTrackingMethods(this, jovo);
-        console.log("analytics available");
+        jovo.$googleAnalytics = new DeveloperTrackingMethods(this, jovo);
     }
 
     /**
@@ -200,10 +187,8 @@ export class GoogleAnalyticsSender implements Analytics {
             this.throwJovoNotSetError();
         }
         //let idHash = murmurhash.v3(jovo.$user.getId()!) + murmurhash.v3(jovo.getDeviceId()!); //for local testing via different devices 
-
         const idHash = murmurhash.v3(jovo.$user.getId()!);
 
-        //let uuid = idHash + "_uniqueUser"; //for local testing
         const uuid = idHash.toString();
         return uuid;
     }
@@ -288,7 +273,6 @@ export class GoogleAnalyticsSender implements Analytics {
                 eventLabel: this.getUserId(jovo),
                 documentPath: this.getPageName(jovo)
             };
-            //console.log('visitor in subclass: '+ util.inspect(this.visitor));
             this.sendIntentEvent(visitor, eventParams);
         }
         else {
@@ -302,11 +286,9 @@ export class GoogleAnalyticsSender implements Analytics {
         //Detect and Send Flow Errors 
         if (jovo.$request!.getIntentName() === "AMAZON.FallbackIntent" || jovo.$request!.getIntentName() === 'Default Fallback Intent') {
             this.sendUserEvent(jovo, "FlowError", "nluUnhandled");
-            console.log("...nlu undhandled");
         }
         else if (jovo!.getRoute().path.endsWith("Unhandled")) {
             this.sendUserEvent(jovo, "FlowError", "skillUnhandled");
-            console.log("...skill unhandled");
         }
     }
 
@@ -323,14 +305,12 @@ export class GoogleAnalyticsSender implements Analytics {
 
         //jovo.$type
         if (jovo.getMappedIntentName() === 'END') {
-            console.log("is end Intent -> setting endSession tag");
             sessionTag = 'end';
         }
 
         //end session if session Ended Request
         if (jovo.$type === "END") {
             sessionTag = 'end';
-            console.log("is session Ended Request -> setting endSession tag");
         }
         return sessionTag;
     }
@@ -360,22 +340,15 @@ export class GoogleAnalyticsSender implements Analytics {
 
         //Search for custom metrics set by user
         if (jovo.$data) {
-            //console.log("*******CHECKING FOR CUSTOM METRICS: ");
-            //console.log("data: " + util.inspect(jovo.$data));
             Object.entries(jovo.$data).forEach(entry => {
                 const dataKey = entry[0];
                 const dataValue = entry[1];
-                //console.log("key: " + entry[0]);
                 if (dataKey.startsWith("cm") && dataValue) {   //check if custom dimension data and only add if value
                     visitor.set(dataKey, dataValue);
                 }
             });
         }
 
-        console.log("permanent uid visitor: " + util.inspect(visitor));
-
-
-        //let intentName = jovo.getMappedIntentName() ? jovo.getMappedIntentName()! : "LAUNCH";
         const intentName = jovo.getMappedIntentName() ? jovo.getMappedIntentName()! : jovo.$type.type!;
 
 
