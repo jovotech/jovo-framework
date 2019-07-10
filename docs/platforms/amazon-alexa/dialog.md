@@ -218,7 +218,7 @@ let updatedIntent = {
             confirmationStatus: 'CONFIRMED',
         },
         city:{
-            Name: 'city',
+            name: 'city',
             confirmationStatus: 'NONE',
         }
     }
