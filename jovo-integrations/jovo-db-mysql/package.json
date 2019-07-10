@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-mysql",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.9",
+    "jovo-core": "^2.2.10",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "mysql": "^2.16.0"

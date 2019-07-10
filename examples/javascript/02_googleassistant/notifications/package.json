@@ -1,6 +1,6 @@
 {
     "name": "jovo-examples-googleassistant-notifications",
-    "version": "2.2.12",
+    "version": "2.2.13",
     "private": true,
     "description": "",
     "main": "index.js",
@@ -14,7 +14,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "googleapis": "^37.2.0",
-        "jovo-framework": "^2.2.12",
-        "jovo-platform-googleassistant": "^2.2.12"
+        "jovo-framework": "^2.2.13",
+        "jovo-platform-googleassistant": "^2.2.13"
     }
 }

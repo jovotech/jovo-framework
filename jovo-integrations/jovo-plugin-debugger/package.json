@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-debugger",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^2.19.0",
-    "jovo-core": "^2.2.9",
+    "jovo-core": "^2.2.10",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",

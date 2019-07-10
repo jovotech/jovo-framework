@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-dialogflow",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.9",
+    "jovo-core": "^2.2.10",
     "lodash.get": "^4.4.2",
     "lodash.mapvalues": "^4.6.0",
     "lodash.set": "^4.3.2"

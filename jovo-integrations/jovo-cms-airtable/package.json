@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-airtable",
-  "version": "2.2.11",
+  "version": "2.2.12",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "airtable": "^0.5.9",
     "i18next": "^15.0.8",
-    "jovo-core": "^2.2.9",
+    "jovo-core": "^2.2.10",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
