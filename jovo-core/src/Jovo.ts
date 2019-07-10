@@ -10,6 +10,7 @@ import { Log } from './Log';
 import { SpeechBuilder } from './SpeechBuilder';
 
 import {
+    ASRData,
     HandleRequest,
     Host,
     Inputs,
@@ -35,6 +36,7 @@ export abstract class Jovo extends EventEmitter {
     $handleRequest?: HandleRequest;
     $jovo: Jovo;
     $user: User;
+    $asr?: ASRData;
     $nlu?: NLUData;
     $inputs: Inputs;
     readonly $output: Output;

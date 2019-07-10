@@ -177,7 +177,6 @@ export interface JovoRequest {
      */
     getAccessToken(): string | undefined;
 
-
     /**
      * Returns locale
      * @return {String}
@@ -551,12 +550,19 @@ export interface Host {
 
 }
 
+export interface ASRData {
+    text?: string;
+
+    [key: string]: any;
+}
+
 export interface NLUData {
     intent?: {
         name: string;
     };
-    // TODO
-    inputs?: Map<string, any>; // tslint:disable-line
+    inputs?: Record<string, any>;
+
+    [key: string]: any;
 }
 
 
