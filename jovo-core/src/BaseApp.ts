@@ -12,6 +12,15 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 process.on('uncaughtException', err => {
+
+    if ((err as JovoError).code && (err as JovoError).code === 'EADDRINUSE') {
+    	const usedPort = err.message.replace( /^\D+/g, '');
+        err.message = `The port ${usedPort} is already in use.`;
+		(err as JovoError).hint = 'You might already run Jovo in a different tab. ' +
+			'If the port is used by a different application, you can either change the port number in src/index.js, or specify the port as an option,' +
+			' e.g. jovo run --port 3301';
+    }
+
 	JovoError.printError(err as JovoError);
 });
 
