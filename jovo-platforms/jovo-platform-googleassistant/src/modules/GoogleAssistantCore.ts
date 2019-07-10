@@ -49,7 +49,8 @@ export class GoogleAssistantCore implements Plugin {
         if (_get(googleAction.$originalRequest || googleAction.$request,
             'inputs[0].arguments[0].name') === 'is_health_check' &&
             _get(googleAction.$originalRequest || googleAction.$request,
-                'inputs[0].arguments[0].boolValue') === true) {
+                'inputs[0].arguments[0].boolValue') === true &&
+            googleAction.$app.config.handlers.ON_HEALTH_CHECK) {
             _set(googleAction.$type, 'type', EnumGoogleAssistantRequestType.ON_HEALTH_CHECK);
             _set(googleAction.$type, 'optional', true);
         }
