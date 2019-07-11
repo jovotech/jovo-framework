@@ -2,10 +2,11 @@
 
 In this section, you can learn more about different types of services that can be used for hosting your Alexa Skills and Google Actions.
 
-* [Introduction](#introduction)
-* [Deployment](#deployment)
-* [Available Integrations](#available-integrations)
-* [Code Example](#code-example)
+- [Hosting](#Hosting)
+  - [Introduction](#Introduction)
+  - [Deployment](#Deployment)
+  - [Available Integrations](#Available-Integrations)
+  - [Code Example](#Code-Example)
 
 
 ## Introduction
@@ -35,13 +36,13 @@ You can then use this file and upload it to the hosting provider of your choice.
 
 Find more information on server integrations here:
 
-Name | Description
------------- | -------------
-[ExpressJS Webhook](./express-js.md './hosting/express-js') | Run an express server as HTTPS endpoint
-[AWS Lambda](./aws-lambda.md './hosting/aws-lambda') | Run the voice app as AWS Lambda Function
-[Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') | Run the voice app on Google Cloud Functions
-[Azure Functions](./azure-functions.md './hosting/azure-functions') | Run the voice app on Azure Functions
-
+| Name                                                                                     | Description                                 |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [ExpressJS Webhook](./express-js.md './hosting/express-js')                              | Run an express server as HTTPS endpoint     |
+| [AWS Lambda](./aws-lambda.md './hosting/aws-lambda')                                     | Run the voice app as AWS Lambda Function    |
+| [Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') | Run the voice app on Google Cloud Functions |
+| [Azure Functions](./azure-functions.md './hosting/azure-functions')                      | Run the voice app on Azure Functions        |
+| [Using nodejs built-in http server](./http-host.md './hosting/http-host')                | Run your app (almost) anywhere              |
 
 ## Code Example
 
