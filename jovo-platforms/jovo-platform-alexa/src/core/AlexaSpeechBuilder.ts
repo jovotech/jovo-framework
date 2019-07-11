@@ -11,20 +11,6 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
     constructor(alexaSkill: AlexaSkill) {
         super(alexaSkill);
     }
-    /**
-     * Adds audio tag to speech
-     * @public
-     * @param {string} url secure url to audio
-     * @param {boolean} condition
-     * @param {number} probability
-     * @return {SpeechBuilder}
-     */
-    addAudio(url: string | string[], condition?: boolean, probability?: number): this {
-        if (Array.isArray(url)) {
-            return this.addText('<audio src="' + _sample(url)  + '"/>', condition, probability);
-        }
-        return this.addText('<audio src="' + url  + '"/>', condition, probability);
-    }
 
     /**
      * Adds text with language

@@ -1,29 +1,21 @@
-
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
-
-import {
-    BaseApp,
-    Extensible,
-    Platform,
-    Jovo,
-    HandleRequest, ActionSet, TestSuite,ExtensibleConfig
-} from "jovo-core";
+import {ActionSet, BaseApp, Extensible, ExtensibleConfig, HandleRequest, Jovo, Platform, TestSuite} from 'jovo-core';
 
 
-import {GoogleAction} from "./core/GoogleAction";
-import {GoogleAssistantCore} from "./modules/GoogleAssistantCore";
-import {Cards} from "./modules/Cards";
-import {AskFor} from "./modules/AskFor";
-import {UpdatesPlugin} from "./modules/Updates";
-import {MediaResponsePlugin} from "./modules/MediaResponse";
-import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilder";
-import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
+import {GoogleAction} from './core/GoogleAction';
+import {GoogleAssistantCore} from './modules/GoogleAssistantCore';
+import {Cards} from './modules/Cards';
+import {AskFor} from './modules/AskFor';
+import {UpdatesPlugin} from './modules/Updates';
+import {MediaResponsePlugin} from './modules/MediaResponse';
+import {GoogleAssistantRequestBuilder} from './core/GoogleAssistantRequestBuilder';
+import {GoogleAssistantResponseBuilder} from './core/GoogleAssistantResponseBuilder';
 import {GoogleAssistantTestSuite} from './core/Interfaces';
-import {TransactionsPlugin} from "./modules/Transaction";
-import {DialogflowPlugin} from "jovo-platform-dialogflow";
-import {GoogleAssistantDialogflowFactory} from "./dialogflow/GoogleAssistantDialogflowFactory";
+import {TransactionsPlugin} from './modules/Transaction';
+import {DialogflowPlugin} from 'jovo-platform-dialogflow';
+import {GoogleAssistantDialogflowFactory} from './dialogflow/GoogleAssistantDialogflowFactory';
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
@@ -60,8 +52,9 @@ export class GoogleAssistant extends Extensible implements Platform {
             '$type',
             '$nlu',
             '$inputs',
+            '$tts',
             '$output',
-            '$response'
+            '$response',
         ], this);
 
     }
@@ -76,6 +69,7 @@ export class GoogleAssistant extends Extensible implements Platform {
         app.$platform.set(this.constructor.name, this);
         app.middleware('platform.init')!.use(this.initialize.bind(this));
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
+        app.middleware('tts')!.use(this.tts.bind(this));
         app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
         this.use(
@@ -84,7 +78,7 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin()
+            new TransactionsPlugin(),
         );
 
         Jovo.prototype.$googleAction = undefined;
@@ -93,7 +87,7 @@ export class GoogleAssistant extends Extensible implements Platform {
          * Returns googleAction instance
          * @returns {GoogleAction}
          */
-        Jovo.prototype.googleAction = function() {
+        Jovo.prototype.googleAction = function () {
             if (this.constructor.name !== 'GoogleAction') {
                 throw Error(`Can't handle request. Please use this.isGoogleAction()`);
             }
@@ -105,7 +99,7 @@ export class GoogleAssistant extends Extensible implements Platform {
          * @public
          * @return {boolean} isGoogleAction
          */
-        Jovo.prototype.isGoogleAction = function() {
+        Jovo.prototype.isGoogleAction = function () {
             return this.constructor.name === 'GoogleAction';
         };
 
@@ -114,13 +108,13 @@ export class GoogleAssistant extends Extensible implements Platform {
          * @public
          * @param {*} handler
          */
-        BaseApp.prototype.setGoogleAssistantHandler = function(...handlers: any[]) { // tslint:disable-line
+        BaseApp.prototype.setGoogleAssistantHandler = function (...handlers: any[]) { // tslint:disable-line
             for (const obj of handlers) { // eslint-disable-line
                 if (typeof obj !== 'object') {
                     throw new Error('Handler must be of type object.');
                 }
-               const sourceHandler = _get(this.config.plugin,'GoogleAssistant.handlers');
-               _set(this.config.plugin, 'GoogleAssistant.handlers', _merge(sourceHandler,obj));
+                const sourceHandler = _get(this.config.plugin, 'GoogleAssistant.handlers');
+                _set(this.config.plugin, 'GoogleAssistant.handlers', _merge(sourceHandler, obj));
             }
             return this;
         };
@@ -139,8 +133,8 @@ export class GoogleAssistant extends Extensible implements Platform {
         this.use(
             new DialogflowPlugin(
                 {},
-                new GoogleAssistantDialogflowFactory()
-            )
+                new GoogleAssistantDialogflowFactory(),
+            ),
         );
     }
 
@@ -170,6 +164,13 @@ export class GoogleAssistant extends Extensible implements Platform {
 
         await this.middleware('$nlu')!.run(handleRequest.jovo);
         await this.middleware('$inputs')!.run(handleRequest.jovo);
+    }
+
+    async tts(handleRequest: HandleRequest) {
+        if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'GoogleAction') {
+            return Promise.resolve();
+        }
+        await this.middleware('$tts')!.run(handleRequest.jovo);
     }
 
     async output(handleRequest: HandleRequest) {

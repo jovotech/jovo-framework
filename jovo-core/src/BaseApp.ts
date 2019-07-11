@@ -26,8 +26,8 @@ export type BaseAppMiddleware =
     | 'router'
     | 'handler'
     | 'user.save'
-    | 'platform.output'
     | 'tts'
+    | 'platform.output'
     | 'response'
     | 'fail'
     | string;
@@ -60,8 +60,8 @@ export class BaseApp extends Extensible {
         'router',
         'handler',
         'user.save',
-        'platform.output',
         'tts',
+        'platform.output',
         'response',
         'fail',
     ];
@@ -266,10 +266,10 @@ export class BaseApp extends Extensible {
                 JSON.stringify(handleRequest.jovo.$output, null, '\t'),
             );
 
+            await this.middleware('tts')!.run(handleRequest);
+
             // Platform response JSON gets created from output object.
             await this.middleware('platform.output')!.run(handleRequest);
-
-            await this.middleware('tts')!.run(handleRequest);
 
             Log.verbose(Log.header('Response ', 'framework'));
             // Response gets sent back to platform.

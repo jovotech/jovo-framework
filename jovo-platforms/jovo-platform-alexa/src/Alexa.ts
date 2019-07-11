@@ -1,31 +1,34 @@
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import _merge = require('lodash.merge');
-
 import {
+    ActionSet,
     BaseApp,
+    EnumRequestType,
     Extensible,
+    ExtensibleConfig,
+    HandleRequest,
+    Jovo,
     Platform,
     TestSuite,
-    HandleRequest, ActionSet, ExtensibleConfig, Jovo, EnumRequestType
-} from "jovo-core";
-import {AlexaSkill} from "./core/AlexaSkill";
-import {AlexaTestSuite} from "./core/Interfaces";
-import {AlexaCore} from "./modules/AlexaCore";
-import {AudioPlayerPlugin} from "./modules/AudioPlayerPlugin";
-import {CanFulfillIntent} from "./modules/CanFulfillIntent";
-import {Display} from "./modules/Display";
-import {GameEnginePlugin} from "./modules/GameEnginePlugin";
-import {HouseholdListEvent} from "./modules/HouseholdListEvent";
-import {InSkillPurchasePlugin} from "./modules/InSkillPurchasePlugin";
-import {PlaybackController} from "./modules/PlaybackController";
-import {SkillEvent} from "./modules/SkillEvent";
-import {Cards} from "./modules/Cards";
-import {DialogInterface} from "./modules/DialogInterface";
-import {AlexaNLU} from "./modules/AlexaNLU";
+} from 'jovo-core';
+import {AlexaSkill} from './core/AlexaSkill';
+import {AlexaTestSuite} from './core/Interfaces';
+import {AlexaCore} from './modules/AlexaCore';
+import {AudioPlayerPlugin} from './modules/AudioPlayerPlugin';
+import {CanFulfillIntent} from './modules/CanFulfillIntent';
+import {Display} from './modules/Display';
+import {GameEnginePlugin} from './modules/GameEnginePlugin';
+import {HouseholdListEvent} from './modules/HouseholdListEvent';
+import {InSkillPurchasePlugin} from './modules/InSkillPurchasePlugin';
+import {PlaybackController} from './modules/PlaybackController';
+import {SkillEvent} from './modules/SkillEvent';
+import {Cards} from './modules/Cards';
+import {DialogInterface} from './modules/DialogInterface';
+import {AlexaNLU} from './modules/AlexaNLU';
 import {AlexaRequestBuilder} from './core/AlexaRequestBuilder';
-import {AlexaResponseBuilder} from "./core/AlexaResponseBuilder";
-import {GadgetControllerPlugin} from "./modules/GadgetControllerPlugin";
+import {AlexaResponseBuilder} from './core/AlexaResponseBuilder';
+import {GadgetControllerPlugin} from './modules/GadgetControllerPlugin';
 import {ProactiveEventPlugin} from './modules/ProactiveEvent';
 
 export interface Config extends ExtensibleConfig {
@@ -62,8 +65,9 @@ export class Alexa extends Extensible implements Platform {
             '$type',
             '$nlu',
             '$inputs',
+            '$tts',
             '$output',
-            '$response'
+            '$response',
         ], this);
     }
 
@@ -76,6 +80,7 @@ export class Alexa extends Extensible implements Platform {
         app.$platform.set(this.constructor.name, this);
         app.middleware('platform.init')!.use(this.initialize.bind(this));
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
+        app.middleware('tts')!.use(this.tts.bind(this));
         app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
 
@@ -107,27 +112,27 @@ export class Alexa extends Extensible implements Platform {
             new SkillEvent(),
             new Cards(),
             new DialogInterface(),
-            new ProactiveEventPlugin()
+            new ProactiveEventPlugin(),
         );
 
         Jovo.prototype.$alexaSkill = undefined;
-        Jovo.prototype.alexaSkill = function() {
-            if (this.constructor.name !== 'AlexaSkill'  ) {
+        Jovo.prototype.alexaSkill = function () {
+            if (this.constructor.name !== 'AlexaSkill') {
                 throw Error(`Can't handle request. Please use this.isAlexaSkill()`);
             }
             return this as AlexaSkill;
         };
-        Jovo.prototype.isAlexaSkill = function() {
+        Jovo.prototype.isAlexaSkill = function () {
             return this.constructor.name === 'AlexaSkill';
         };
 
-        BaseApp.prototype.setAlexaHandler = function(...handlers: any[]) { // tslint:disable-line
+        BaseApp.prototype.setAlexaHandler = function (...handlers: any[]) { // tslint:disable-line
             for (const obj of handlers) { // eslint-disable-line
                 if (typeof obj !== 'object') {
                     throw new Error('Handler must be of type object.');
                 }
-                const sourceHandler = _get(this.config.plugin,'Alexa.handlers');
-                _set(this.config.plugin, 'Alexa.handlers', _merge(sourceHandler,obj));
+                const sourceHandler = _get(this.config.plugin, 'Alexa.handlers');
+                _set(this.config.plugin, 'Alexa.handlers', _merge(sourceHandler, obj));
             }
             return this;
         };
@@ -152,7 +157,7 @@ export class Alexa extends Extensible implements Platform {
 
 
         if (this.config.handlers) {
-             _set(handleRequest.app, 'config.handlers', _merge( _get(handleRequest.app, 'config.handlers'), this.config.handlers));
+            _set(handleRequest.app, 'config.handlers', _merge(_get(handleRequest.app, 'config.handlers'), this.config.handlers));
         }
     }
 
@@ -166,12 +171,20 @@ export class Alexa extends Extensible implements Platform {
 
     }
 
+    async tts(handleRequest: HandleRequest) {
+        if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
+            return Promise.resolve();
+        }
+        await this.middleware('$tts')!.run(handleRequest.jovo);
+    }
+
     async output(handleRequest: HandleRequest) {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
             return Promise.resolve();
         }
         await this.middleware('$output')!.run(handleRequest.jovo);
     }
+
     async response(handleRequest: HandleRequest) {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
             return Promise.resolve();
@@ -182,6 +195,7 @@ export class Alexa extends Extensible implements Platform {
             this.responseBuilder.create(handleRequest.jovo.$rawResponseJson) : handleRequest.jovo.$response;
         await handleRequest.host.setResponse(handleRequest.jovo.$response);
     }
+
     uninstall(app: BaseApp) {
 
     }

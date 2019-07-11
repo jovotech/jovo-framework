@@ -59,6 +59,7 @@ export class Dialogflow extends Extensible implements Platform {
         // Register to BaseApp middleware
         app.middleware('platform.init')!.use(this.initialize.bind(this));
         app.middleware('platform.nlu')!.use(this.nlu.bind(this));
+        app.middleware('tts')!.use(this.tts.bind(this));
         app.middleware('platform.output')!.use(this.output.bind(this));
         app.middleware('response')!.use(this.response.bind(this));
 
@@ -105,6 +106,12 @@ export class Dialogflow extends Extensible implements Platform {
 
     }
 
+    async tts(handleRequest: HandleRequest) {
+        if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
+            return Promise.resolve();
+        }
+        await this.middleware('$tts')!.run(handleRequest.jovo);
+    }
 
     async output(handleRequest: HandleRequest) {
         if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
