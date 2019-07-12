@@ -132,14 +132,11 @@ export interface RequestType {
 export interface Output {
     tell?: {
         speech: string | SpeechBuilder;
-        speechText?: string;
     };
 
     ask?: {
         speech: string | SpeechBuilder;
-        speechText?: string;
         reprompt: string | SpeechBuilder | string[];
-        repromptText?: string;
     };
 
     card?: {
