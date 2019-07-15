@@ -280,8 +280,8 @@ export class JovoUser implements Plugin {
          * }
          */
         Jovo.prototype.repeat = async function () {
-            if (_get(this.$user, '$context.prev[0].response.output')) {
-                this.setOutput(_get(this.$user, '$context.prev[0].response.output'));
+            if (_get(this.$user, '$context.prev[0].response.speech')) {
+                this.setOutput({ask: _get(this.$user, '$context.prev[0].response')});
             }
         };
     }
