@@ -1,0 +1,37 @@
+{
+  "name": "jovo-analytics-googleanalytics",
+  "version": "1.0.0",
+  "description": "google analytics jovo plugin for tracking voice apps",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "test": "jest",
+    "tsc": "tsc",
+    "tscw": "tsc --watch",
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js build-ts --cwd ./",
+    "start": "cd ./dist && node index.js --webhook",
+    "launch": "npm start -- --launch"
+  },
+  "author": "freiSMS",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/google.analytics": "0.0.39",
+    "@types/murmurhash": "0.0.1",
+    "@types/node": "^11.13.0",
+    "@types/useragent": "^2.1.1",
+    "jovo-core": "^2.2.3",
+    "jovo-framework": "^2.2.5",
+    "jovo-platform-alexa": "^2.2.7",
+    "jovo-platform-googleassistant": "^2.2.5",
+    "murmurhash": "0.0.2",
+    "universal-analytics": "^0.4.20",
+    "user-agents": "^1.0.255"
+  },
+  "devDependencies": {
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/universal-analytics": "^0.4.2",
+    "tslint": "^5.14.0"
+  }
+}
