@@ -1,55 +1,51 @@
 import { GoogleAnalyticsSender } from "./GoogleAnalyticsSender";
-import {Jovo} from 'jovo-core';
+import { Jovo } from 'jovo-core';
 import { AlexaRequest } from 'jovo-platform-alexa';
 import _get = require('lodash.get');
-
-
-
 import * as ua from 'universal-analytics';
-import * as util from 'util';
 import * as murmurhash from 'murmurhash';
-import {EventParameters, ItemParams, TransactionParams} from './GoogleAnalyticsSender'
+import { EventParameters, ItemParams, TransactionParams } from './GoogleAnalyticsSender';
 
 
 
-export class DeveloperTrackingMethods   {
-    globalGARef : GoogleAnalyticsSender;
-    jovo : Jovo;
+export class DeveloperTrackingMethods {
+    globalGARef: GoogleAnalyticsSender;
+    jovo: Jovo;
 
 
-    constructor (googleAnalytics : GoogleAnalyticsSender, jovo : Jovo) {
+    constructor(googleAnalytics: GoogleAnalyticsSender, jovo: Jovo) {
         this.globalGARef = googleAnalytics;
         this.jovo = jovo;
 
     }
 
     sendEvent(eventParameters: EventParameters) {
-       this.globalGARef.sendEvent(this.jovo, eventParameters);
+        this.globalGARef.sendEvent(this.jovo, eventParameters);
     }
 
     sendTransaction(transactionParams: TransactionParams) {
         this.globalGARef.sendTransaction(this.jovo, transactionParams);
     }
 
-    sendItem(itemParams : ItemParams)   {
+    sendItem(itemParams: ItemParams) {
         this.globalGARef.sendItem(this.jovo, itemParams);
     }
 
 
-    sendUserTransaction(transactionId: string)    {
-       this.globalGARef.sendUserTransaction(this.jovo, transactionId);
+    sendUserTransaction(transactionId: string) {
+        this.globalGARef.sendUserTransaction(this.jovo, transactionId);
     }
 
 
-    sendCustomMetric(indexInGA : number, value : string)    {
+    sendCustomMetric(indexInGA: number, value: string) {
         this.globalGARef.sendCustomMetric(this.jovo, indexInGA, value);
     }
 
-     /**
-     * User Events ties users to event category and action
-     * @param eventName maps to category -> eventGroup
-     * @param eventElement maps to action -> instance of eventGroup
-     */
+    /**
+    * User Events ties users to event category and action
+    * @param eventCategory -> eventGroup
+    * @param eventElement maps to action -> instance of eventGroup
+    */
     sendUserEvent(eventCategory: string, eventElement = "defaultItem") {
 
         if (this.jovo) {
@@ -83,7 +79,6 @@ export class DeveloperTrackingMethods   {
 
     /**
      * Generates pageName from State and Intent Name
-     * @param jovo 
      */
     getPageName() {
         return this.globalGARef.getPageName(this.jovo);
@@ -91,7 +86,6 @@ export class DeveloperTrackingMethods   {
 
     /**
      * Visitor initiation which sets needed fixed parameters
-     * @param jovo
      */
     initVisitor(): ua.Visitor | undefined {
         return this.globalGARef.initVisitor(this.jovo);

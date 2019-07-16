@@ -1,7 +1,6 @@
 import { GoogleAnalyticsSender } from "./GoogleAnalyticsSender";
 import * as ua from 'universal-analytics';
 import _get = require('lodash.get');
-import * as util from 'util';
 
 import { HandleRequest, Jovo } from "jovo-core";
 import { AlexaRequest } from "jovo-platform-alexa";
