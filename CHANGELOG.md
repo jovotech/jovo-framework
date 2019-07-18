@@ -1,5 +1,19 @@
 # Jovo Framework Changelog
 
+## 2.2.13 (2019-07-10)
+
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` [#535](https://github.com/jovotech/jovo-framework/pull/535) Fixes Dialogflow Session Attributes ([@BronxBombers](https://github.com/BronxBombers))
+* `jovo-platform-googleassistant` [#539](https://github.com/jovotech/jovo-framework/pull/539) Fixes hasScreenInterface ([@freiSMS](https://github.com/freiSMS))
+* `jovo-platform-alexa` Fixes APL directives in combination with InSkillPurchase directives
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests issue #517 (again)
+
+
+#### Committers: 3
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- BronxBombers ([@BronxBombers](https://github.com/BronxBombers))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
 
 
 ## 2.2.12 (2019-07-01)

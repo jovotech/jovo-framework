@@ -167,7 +167,7 @@ export class GoogleActionRequest implements JovoRequest {
 
     hasScreenInterface(): boolean {
         const screenCapability = _get(this, 'surface.capabilities')
-            .find((item: Capability) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO');
+            .find((item: Capability) => item.name === 'actions.capability.SCREEN_OUTPUT');
         return typeof screenCapability !== 'undefined';
     }
 
