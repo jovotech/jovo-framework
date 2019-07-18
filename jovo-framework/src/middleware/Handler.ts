@@ -373,8 +373,11 @@ export class Handler implements Plugin {
                     'https://www.jovo.tech/docs/advanced-concepts/components',
                 );
             }
+            if (!this.$session.$data[SessionConstants.COMPONENT]) {
+                this.$session.$data[SessionConstants.COMPONENT] = [];
+            }
 
-            this.setSessionAttribute(SessionConstants.COMPONENT, componentName);
+            this.$session.$data[SessionConstants.COMPONENT].push(componentName);
             this.$components[ componentName ].stateBeforeDelegate = this.getState();
             this.$components[ componentName ].onCompletedIntent = options.onCompletedIntent;
 

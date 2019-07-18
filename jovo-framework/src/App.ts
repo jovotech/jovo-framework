@@ -367,18 +367,24 @@ export class App extends BaseApp {
 	}
 
 	useComponents(...components: ComponentPlugin[]) {
-		components.forEach(componentPlugin => {
-			componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
+		// setActiveComponents has to be executed before initializeComponent
+		this.middleware('before.handler')!.use(ComponentPlugin.setActiveComponents, ComponentPlugin.initializeComponent);
+		this.middleware('before.platform.output')!.use(ComponentPlugin.updateSessionComponentStack);
+
+		components.forEach((componentPlugin) => {
+			this.middleware('setup')!.use(componentPlugin.setAsBaseComponent.bind(componentPlugin));
+			componentPlugin.install(this);
 
 			const componentAppConfig: ComponentConfig = _cloneDeep(
 				this.$config.plugin[componentPlugin.name!]
 			); // config defined in project's main config.js file
 			componentPlugin.config = componentPlugin.mergeConfig(componentAppConfig);
+			
+			// 1st layer components handler have to be set after the child component's handler were merged
+			// currently they are merged in `after.setup`
+			this.middleware('before.request')!.use(componentPlugin.setHandler.bind(componentPlugin));
+			this.$plugins.set(componentPlugin.name!, componentPlugin);
 
-			this.setHandler(componentPlugin.handler);
-
-			this.$plugins.set(componentPlugin.name, componentPlugin);
-			componentPlugin.install(this);
 			this.emit('use', componentPlugin);
 
 			if (this.constructor.name === 'App') {

@@ -2,6 +2,7 @@ import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Util } from 'jovo-core';
 import { App } from './App';
 
 import { Component, ComponentDelegationOptions } from './middleware/Component';
+import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Route } from './middleware/Router';
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
@@ -27,7 +28,8 @@ export {
     ComponentResponseStatus
 } from './middleware/Component';
 
-export { ComponentPlugin } from './middleware/ComponentPlugin';
+export { ComponentPlugin } from './middleware/ComponentPlugin'
+
 
 declare module 'express' {
     interface Application {
@@ -37,12 +39,19 @@ declare module 'express' {
 
 
 declare module 'jovo-core/dist/src/BaseApp' {
-
-    /**
-     * Sets handler object
-     * @param {Object} handlers
-     */
     export interface BaseApp {
+        /**
+         * 1st layer components.
+         * These were initialized by the developer using `app.useComponents`
+         */
+        $baseComponents: {
+            [key: string]: ComponentPlugin;
+        };
+        
+        /**
+         * Sets handler object
+         * @param {Object} handlers
+         */
         setHandler(...handler: Handler[]): this;
     }
 }
@@ -132,6 +141,10 @@ declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
         $components: {
             [ key: string ]: Component;
+        };
+
+        $activeComponents: {
+            [ key: string ]: ComponentPlugin
         };
     }
 }
