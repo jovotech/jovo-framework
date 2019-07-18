@@ -3,11 +3,12 @@ import { Handler, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 
 class Component {
-	config: Config = {};
-	handler: Handler = {};
-	data?: ComponentData;
-	onCompletedIntent?: string; // intent to which the component routes to, when it sends out response
 	$response?: Response;
+	config: Config = {};
+	data?: ComponentData;
+	handler: Handler = {};
+	name?: string;
+	onCompletedIntent?: string; // intent to which the component routes to, when it sends out response
 	stateBeforeDelegate?: string; // Used to route the app back to the state where it left off after the component is done.
 
 	constructor(config?: Config) {
