@@ -1,7 +1,20 @@
 # Jovo Framework Changelog
 
-## 2.2.13 (2019-07-10)
 
+## 2.2.14 (2019-07-19)
+
+
+#### :rocket: New Feature
+* `jovo-framework` Add simpler SSL integration
+
+#### :bug: Bug Fix
+* `jovo-core` Fixes sessionData as a copy to the request object bug issue #544
+* `jovo-platform-googleassistant` Fixes optional parameters in addAudio
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+## 2.2.13 (2019-07-10)
 
 #### :bug: Bug Fix
 * `jovo-platform-dialogflow` [#535](https://github.com/jovotech/jovo-framework/pull/535) Fixes Dialogflow Session Attributes ([@BronxBombers](https://github.com/BronxBombers))
