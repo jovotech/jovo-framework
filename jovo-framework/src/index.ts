@@ -22,8 +22,10 @@ export { Util, LogLevel, Log };
 export { Component, Config as ComponentConfig, Response as ComponentResponse } from './middleware/Component';
 
 declare module 'express' {
+
     interface Application {
         jovoApp?: App;
+        ssl?: {key: Buffer, cert: Buffer}
     }
 }
 
