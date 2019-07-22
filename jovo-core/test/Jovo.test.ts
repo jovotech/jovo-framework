@@ -659,7 +659,7 @@ describe('test parseForValidator()', () => {
         const v = new ValidatorImpl();
         const failedValidators: string[][] = [];
         // @ts-ignore
-        func(v, {value: 'value'}, failedValidators);
+        func(v, 'key', {value: 'value'}, failedValidators);
         expect(failedValidators).toHaveLength(0);
     });
 
@@ -668,7 +668,7 @@ describe('test parseForValidator()', () => {
         const v = new ValidatorImpl();
         const failedValidators: string[][] = [];
         // @ts-ignore
-        func(v, {name: 'key', value: 'test'}, failedValidators);
+        func(v, 'key', {name: 'key', value: 'test'}, failedValidators);
         expect(failedValidators).toHaveLength(1);
         expect(failedValidators[ 0 ]).toStrictEqual([ 'Validator', 'key', '' ]);
     });
@@ -690,7 +690,7 @@ describe('test parseForValidatorAsync()', () => {
         const v = new ValidatorImpl();
         const failedValidators: string[][] = [];
         // @ts-ignore
-        await func(v, {value: 'value'}, failedValidators);
+        await func(v, 'key', {value: 'value'}, failedValidators);
         expect(failedValidators).toHaveLength(0);
     });
 
@@ -699,7 +699,7 @@ describe('test parseForValidatorAsync()', () => {
         const v = new ValidatorImpl();
         const failedValidators: string[][] = [];
         // @ts-ignore
-        await func(v, {name: 'key', value: 'test'}, failedValidators);
+        await func(v, 'key', {name: 'key', value: 'test'}, failedValidators);
         expect(failedValidators).toHaveLength(1);
         expect(failedValidators[ 0 ]).toStrictEqual([ 'Validator', 'key', '' ]);
     });
