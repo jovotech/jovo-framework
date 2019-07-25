@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { google} from 'googleapis';
 import * as https from 'https';
+import * as path from 'path';
 import {
 ActionSet,
 BaseApp,
@@ -64,6 +65,10 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
             objectarray: ObjectArraySheet,
             responses: ResponsesSheet
 		};
+
+        if (process.env.JEST_WORKER_ID && this.config.credentialsFile && !path.isAbsolute(this.config.credentialsFile)) {
+            this.config.credentialsFile = path.join('./src', this.config.credentialsFile);
+        }
 
 		if (this.config.sheets) {
 			this.config.sheets.forEach((sheet: GoogleSheetsSheet) => {
