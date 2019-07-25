@@ -386,7 +386,7 @@ declare module './core/AlexaSkill' {
          * @param {*} text
          * @return {AlexaSkill}
          */
-        showHint(text: string): this;
+        showHint(text: string | string[]): this;
 
 
         /**
