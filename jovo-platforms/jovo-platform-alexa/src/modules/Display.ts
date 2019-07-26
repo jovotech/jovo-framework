@@ -1,6 +1,7 @@
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import _merge = require('lodash.merge');
+import _sample = require('lodash.sample');
 
 import {EnumRequestType, Plugin} from 'jovo-core';
 import {AlexaSkill} from "../core/AlexaSkill";
@@ -37,9 +38,9 @@ export class Display implements Plugin {
          * @param {*} text
          * @return {AlexaSkill}
          */
-        AlexaSkill.prototype.showHint = function(text: string) {
+        AlexaSkill.prototype.showHint = function(text: string | string[]) {
             _set(this.$output, 'Alexa.DisplayHint',
-                new DisplayHintDirective(text)
+                new DisplayHintDirective(Array.isArray(text) ? _sample(text)! : text)
             );
             return this;
         };
