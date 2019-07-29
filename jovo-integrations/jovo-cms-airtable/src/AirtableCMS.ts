@@ -113,15 +113,23 @@ export class AirtableCMS extends BaseCmsPlugin {
                          * To maintain the same structure as the jovo-cms-googlesheets integration, the data will be converted to an array of arrays
                          */
 
-                            // push keys first as that's the first row of the table and put the last key at the first spot of the array.
+                        // push keys first as that's the first row of the table
                         const record = _get(records[ 0 ], 'fields');
                         let keys = Object.keys(record);
                         keys = this.shiftLastItemToFirstIndex(keys);
                         arr.push(keys);
 
-                        records.forEach((r: object) => {
+                        records.forEach((r: any) => {
                             // push each records values
-                            let values = Object.values(_get(r, 'fields'));
+                            let values: string[] = [];
+                            /**
+                             * Airtable doesn't parse key & value of a cell without a value
+                             * Replace missing key/value pairs with empty strings
+                             */
+                            keys.forEach((key) => {
+                                const value = r.fields[key] || '';
+                                values.push(value);
+                            });
                             values = this.shiftLastItemToFirstIndex(values);
                             arr.push(values);
                         });
