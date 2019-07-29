@@ -206,7 +206,7 @@ export class AlexaRequest implements JovoRequest {
 
         if (this.context && this.context.Viewport) {
 
-            device = "Unknow Device with Screen " + this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
+            device = "Unknown Device with Screen " + this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
 
             if (this.context.Viewport.pixelWidth === 480 &&
                 this.context.Viewport.pixelHeight === 480 &&
