@@ -9,8 +9,8 @@ import {
     Coordinate,
     Altitude,
     Heading,
-    Speed
-} from "./AlexaRequest";
+    Speed, AuthorityResolution,
+} from './AlexaRequest';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -92,6 +92,31 @@ export class AlexaSkill extends Jovo {
         return this.$request!.getLocale();
     }
 
+
+    isErSuccessMatch(name: string): boolean {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+
+        if (alexaRequest.request &&
+            alexaRequest.request.intent &&
+            alexaRequest.request.intent.slots &&
+            alexaRequest.request.intent.slots[name]) {
+
+            const slot = alexaRequest.request.intent.slots[name];
+
+            let successMatch = false;
+            if (slot.resolutions && slot.resolutions.resolutionsPerAuthority) {
+                slot.resolutions.resolutionsPerAuthority.forEach((authority: AuthorityResolution) => {
+                   if (authority.status.code === 'ER_SUCCESS_MATCH') {
+                       successMatch = true;
+                   }
+                });
+            }
+
+            return successMatch;
+        }
+
+        return false;
+    }
 
     /**
      * Returns UserID

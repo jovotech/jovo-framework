@@ -126,6 +126,24 @@ export interface Slot {
     confirmationStatus?: ConfirmationStatus;
     value: string;
     source?: string;
+    resolutions?: {
+        resolutionsPerAuthority: AuthorityResolution[];
+    };
+}
+
+export type AuthorityResolutionStatusCode = 'ER_SUCCESS_MATCH' | 'ER_SUCCESS_NO_MATCH' | 'ER_ERROR_TIMEOUT' | 'ER_ERROR_EXCEPTION';
+
+export interface AuthorityResolution {
+    authority: string;
+    status: {
+        code: AuthorityResolutionStatusCode
+    };
+    values: Array<{
+        value: {
+            name: string;
+            id: string;
+        }
+    }>;
 }
 
 export interface Intent {
@@ -184,7 +202,6 @@ export interface AlexaRequestJSON {
     context?: Context;
     session?: Session;
     request?: Request;
-    resolutions?: any; // tslint:disable-line
 }
 
 
@@ -310,8 +327,12 @@ export class AlexaRequest implements JovoRequest {
         return this;
     }
 
-    getLocale() {
-        return _get(this, 'request.locale');
+    getLocale(): string {
+        return this.request!.locale;
+    }
+
+    getLanguage(): string {
+        return this.getLocale().substring(0, 2);
     }
 
     getSessionData() {
