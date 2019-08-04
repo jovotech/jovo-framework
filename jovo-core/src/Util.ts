@@ -81,9 +81,9 @@ export class Util {
      * @param options
      * @param payload
      */
-    static httpsPost(options: RequestOptions, payload: object): void;
-    static httpsPost(url: string, payload: object): void; // tslint:disable-line:unified-signatures
-    static httpsPost(urlOrOptions: string | RequestOptions, payload: object) {
+    static httpsPost<T>(options: RequestOptions, payload: object): Promise<T>;
+    static httpsPost<T>(url: string, payload: object): Promise<T>; // tslint:disable-line:unified-signatures
+    static httpsPost<T>(urlOrOptions: string | RequestOptions, payload: object): Promise<T> {
         return new Promise((resolve, reject) => {
             const data = JSON.stringify(payload);
             const options = {
@@ -117,7 +117,11 @@ export class Util {
                     });
 
                     res.on('end', () => {
-                        resolve(res);
+                        try {
+                            resolve(JSON.parse(rawData));
+                        } catch (e) {
+                            reject(e);
+                        }
                     });
 
                     res.on('error', e => {
@@ -139,9 +143,9 @@ export class Util {
      * @param options
      * @param payload
      */
-    static httpPost(options: RequestOptions, payload: object): void;
-    static httpPost(url: string, payload: object): void; // tslint:disable-line:unified-signatures
-    static httpPost(urlOrOptions: string | RequestOptions, payload: object) {
+    static httpPost<T>(options: RequestOptions, payload: object): Promise<T>;
+    static httpPost<T>(url: string, payload: object): Promise<T>; // tslint:disable-line:unified-signatures
+    static httpPost<T>(urlOrOptions: string | RequestOptions, payload: object): Promise<T> {
         return new Promise((resolve, reject) => {
             const data = JSON.stringify(payload);
             const options = {
@@ -175,7 +179,11 @@ export class Util {
                     });
 
                     res.on('end', () => {
-                        resolve(res);
+                        try {
+                            resolve(JSON.parse(rawData));
+                        } catch (e) {
+                            reject(e);
+                        }
                     });
 
                     res.on('error', e => {
