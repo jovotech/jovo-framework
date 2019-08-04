@@ -44,7 +44,7 @@ export interface Appender {
      * Write method for the LogEvent object
      * @param logEvent
      */
-    write(logEvent: LogEvent): void;
+    write(logEvent: LogEvent, breakline?: boolean): void;
 }
 
 /**
@@ -168,14 +168,17 @@ export class Logger {
             ignoreFormatting: false,
             logLevel: LogLevel.DEBUG,
             trackRequest: false,
-            write: (logEvent: LogEvent) => {
+            write: (logEvent: LogEvent, breakline = true) => {
                 const msg = logEvent.msg || '';
                 if (logEvent.isFormat) {
                     process.stdout.write(msg);
                 } else {
                     process.stdout.write(this.config.appenderOffset);
                     process.stdout.write(msg.split('\n').join('\n' + this.config.appenderOffset));
-                    process.stdout.write('\n');
+
+                    if (breakline) {
+                        process.stdout.write('\n');
+                    }
                 }
             },
         };
@@ -195,11 +198,13 @@ export class Logger {
             logLevel: LogLevel.DEBUG,
             stream: require('fs').createWriteStream(path, {flags: 'a'}),
             trackRequest: false,
-            write: (logEvent: LogEvent) => {
+            write: (logEvent: LogEvent, breakline = true) => {
                 const msg = logEvent.msg || '';
 
                 this.config.appenders.file.stream.write(msg);
-                this.config.appenders.file.stream.write('\n');
+                if (breakline) {
+                    this.config.appenders.file.stream.write('\n');
+                }
             },
         };
 
@@ -233,7 +238,7 @@ export class Logger {
      * @param msg
      * @param {LogLevel} logLevel
      */
-    writeToStreams(msg: string | object, logLevel: LogLevel) {
+    writeToStreams(msg: string | object, logLevel: LogLevel, breakline = true) {
         Object.keys(this.config.appenders).forEach((key) => {
             const appender = this.config.appenders[ key ];
             if (appender.logLevel >= logLevel) {
@@ -246,7 +251,7 @@ export class Logger {
                     logLevel,
                     msg,
                     requestContext: this.cls ? this.cls.getContext() : undefined,
-                });
+                }, breakline);
             }
         });
     }
