@@ -42,7 +42,7 @@ export class InteractiveCanvas implements Plugin {
                     htmlResponse: {
                         url: htmlResponse.url,
                         updatedState: htmlResponse.data,
-                        suppressMic: htmlResponse.supress
+                        suppressMic: htmlResponse.suppress
                     }
                 }
             );

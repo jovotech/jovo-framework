@@ -360,8 +360,8 @@ declare module './core/GoogleAction' {
     interface GoogleAction {
         htmlResponse(obj: {
             url?: string,
-            // tslint:disable-next-line:no-any
-            data?: Record<string, any>;
+            data?: Record<string, any>; // tslint:disable-line
+            suppress?: boolean;
         }): this;
     }
 }
@@ -448,8 +448,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
 
             HtmlResponse?: {
                 url?: string;
-                data?: Record<string, any>;
-                supress?: boolean;
+                data?: Record<string, any>; // tslint:disable-line
+                suppress?: boolean;
             }
         };
     }
