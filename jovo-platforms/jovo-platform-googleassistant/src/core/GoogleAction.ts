@@ -154,6 +154,18 @@ export class GoogleAction extends Jovo {
             .find((item: {name:string}) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
     }
 
+    /**
+     * Returns interactive canvas capability of request device
+     * @public
+     * @return {boolean}
+     */
+    hasInteractiveCanvasInterface() {
+        if (!_get(this.$originalRequest || this.$request, 'surface.capabilities')) {
+            return false;
+        }
+        return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
+            .find((item: {name:string}) => item.name === 'actions.capability.INTERACTIVE_CANVAS') !== 'undefined';
+    }
 
     /**
      * Returns video capability of request device
