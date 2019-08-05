@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { google} from 'googleapis';
 import * as https from 'https';
-import * as path from 'path';
 import {
 ActionSet,
 BaseApp,
@@ -13,6 +12,7 @@ JovoError,
 Log
 } from 'jovo-core';
 import _merge = require('lodash.merge');
+import * as path from 'path';
 
 import * as util from 'util';
 
