@@ -139,8 +139,7 @@ describe('DefaultTable.retrieve', () => {
         const defaultTable = new DefaultTable({ table: 'table', name: 'test', selectOptions: {} });
         defaultTable.install(airtableCMS);
 
-        airtableCMS.loadTableData =
-            (selectOptions: object, table: string) => new Promise((res, rej) => res({}));
+        airtableCMS.loadTableData = jest.fn().mockResolvedValue({});
 
         expect(handleRequest.app.$cms.test).toBeUndefined();
 
