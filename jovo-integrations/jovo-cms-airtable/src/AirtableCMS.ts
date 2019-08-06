@@ -15,7 +15,7 @@ import { KeyValueTable } from './KeyValueTable';
 import { ObjectArrayTable } from './ObjectArrayTable';
 import { ResponsesTable } from './ResponsesTable';
 
-import Airtable = require('airtable');
+import * as Airtable from 'airtable';
 
 export interface Config extends ExtensibleConfig {
     apiKey?: string;
@@ -32,7 +32,7 @@ export class AirtableCMS extends BaseCmsPlugin {
         enabled: true,
         tables: [],
     };
-    base!: Airtable['Base']['baseFn'];
+    base!: Airtable.Base;
     baseApp: any; // tslint:disable-line
 
     constructor(config?: Config) {
@@ -95,17 +95,14 @@ export class AirtableCMS extends BaseCmsPlugin {
         );
     }
 
-    async loadTableData(
-        selectOptions: AirtableTable['selectOptions'],
-        table: string,
-    ): Promise<{}> {
+    async loadTableData(loadOptions: LoadOptions): Promise<{}> {
         return new Promise((resolve, reject) => {
-            const arr: object[] = [];
+            const arr: any[] = [];
 
-            this.base(table)
-                .select(selectOptions!)
+            this.base(loadOptions.table)
+                .select(loadOptions.selectOptions!)
                 .eachPage(
-                    (records: object[], fetchNextPage: () => void) => {
+                    (records: any[], fetchNextPage: () => void) => {
                         /**
                          * This function (`page`) will get called for each page of records.
                          * records is an array of objects where the keys are the first row of the table and the values are the current rows values.
@@ -115,8 +112,8 @@ export class AirtableCMS extends BaseCmsPlugin {
 
                         // push keys first as that's the first row of the table
                         const record = _get(records[ 0 ], 'fields');
-                        let keys = Object.keys(record);
-                        keys = this.shiftLastItemToFirstIndex(keys);
+                        let keys = loadOptions.order || Object.keys(record);
+
                         arr.push(keys);
 
                         records.forEach((r: any) => {
@@ -130,7 +127,7 @@ export class AirtableCMS extends BaseCmsPlugin {
                                 const value = r.fields[key] || '';
                                 values.push(value);
                             });
-                            values = this.shiftLastItemToFirstIndex(values);
+
                             arr.push(values);
                         });
 
@@ -161,4 +158,17 @@ export class AirtableCMS extends BaseCmsPlugin {
         arr.unshift(lastItem);
         return arr;
     }
+}
+
+interface LoadOptions {
+    table: string;
+    order?: string[];
+    selectOptions?: {
+        // documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
+        fields?: string[];
+        filterByFormula?: string;
+        maxRecords?: number;
+        sort?: object[];
+        view?: string;
+    };
 }
