@@ -552,6 +552,7 @@ export abstract class Jovo extends EventEmitter {
                 for (const v of validator) {
                     await this.parseForValidatorAsync(
                         v,
+                        input,
                         this.$inputs[ input ],
                         failedValidators,
                     );
@@ -559,6 +560,7 @@ export abstract class Jovo extends EventEmitter {
             } else {
                 await this.parseForValidatorAsync(
                     validator,
+                    input,
                     this.$inputs[ input ],
                     failedValidators,
                 );
@@ -583,11 +585,12 @@ export abstract class Jovo extends EventEmitter {
             const validator = schema[ input ];
             if (validator.constructor === Array) {
                 for (const v of validator) {
-                    this.parseForValidator(v, this.$inputs[ input ], failedValidators);
+                    this.parseForValidator(v, input, this.$inputs[ input ], failedValidators);
                 }
             } else {
                 this.parseForValidator(
                     validator,
+                    input,
                     this.$inputs[ input ],
                     failedValidators,
                 );
@@ -622,12 +625,14 @@ export abstract class Jovo extends EventEmitter {
     /**
      * Helper function for this.validate().
      * @param validator The current Validator to call the current request input data on.
+     * @param inputName The current input data name to validate.
      * @param input The current input data to validate.
      * @param failedValidators An array of already failed validators.
      * @throws JovoError if the validator has an unsupported type.
      */
     parseForValidator(
         validator: () => void | Validator,
+        inputName: string,
         input: any,
         failedValidators: string[][],
     ) {
@@ -650,7 +655,7 @@ export abstract class Jovo extends EventEmitter {
             }
         } catch (err) {
             if (err.constructor === ValidationError) {
-                failedValidators.push([ err.validator, input.name, err.message ]);
+                failedValidators.push([ err.validator, inputName, err.message ]);
             } else {
                 throw err;
             }
@@ -660,12 +665,14 @@ export abstract class Jovo extends EventEmitter {
     /**
      * Asynchronous helper function for this.validateAsync().
      * @param validator The current Validator to call the current request input data on.
+     * @param inputName The current input data name to validate.
      * @param input The current input data to validate.
      * @param failedValidators An array of already failed validators.
      * @throws JovoError if the validator has an unsupported type.
      */
     async parseForValidatorAsync(
         validator: () => void | Validator,
+        inputName: string,
         input: any,
         failedValidators: string[][],
     ) {
@@ -687,7 +694,7 @@ export abstract class Jovo extends EventEmitter {
             }
         } catch (err) {
             if (err.constructor === ValidationError) {
-                failedValidators.push([ err.validator, input.name, err.message ]);
+                failedValidators.push([ err.validator, inputName, err.message ]);
             } else {
                 throw err;
             }
