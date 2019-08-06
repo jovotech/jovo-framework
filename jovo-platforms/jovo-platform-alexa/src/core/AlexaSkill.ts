@@ -99,19 +99,7 @@ export class AlexaSkill extends Jovo {
      */
     getEntityResolutions(slotName: string): AuthorityResolution[] {
         const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
-
-        if (alexaRequest.request &&
-            alexaRequest.request.intent &&
-            alexaRequest.request.intent.slots &&
-            alexaRequest.request.intent.slots[slotName]) {
-
-            const slot = alexaRequest.request.intent.slots[slotName];
-
-            if (slot.resolutions && slot.resolutions.resolutionsPerAuthority) {
-                return slot.resolutions.resolutionsPerAuthority as AuthorityResolution[];
-            }
-        }
-        return [];
+        return alexaRequest.getEntityResolutions(slotName);
     }
 
     /**
@@ -119,9 +107,8 @@ export class AlexaSkill extends Jovo {
      * @param slotName
      */
     hasEntityMatch(slotName: string): boolean {
-        return typeof this.getEntityResolutions(slotName).find((authorityResolution: AuthorityResolution) => {
-            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
-        }) !== 'undefined';
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.hasEntityMatch(slotName);
     }
 
     /**
@@ -129,9 +116,8 @@ export class AlexaSkill extends Jovo {
      * @param slotName
      */
     getEntityMatches(slotName: string): AuthorityResolution[] {
-        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
-            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
-        });
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getEntityMatches(slotName);
     }
 
     /**
@@ -139,10 +125,8 @@ export class AlexaSkill extends Jovo {
      * @param slotName
      */
     getDynamicEntityMatches(slotName: string): AuthorityResolution[] {
-        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
-            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
-                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.dynamic');
-        });
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getDynamicEntityMatches(slotName);
     }
 
     /**
@@ -150,10 +134,8 @@ export class AlexaSkill extends Jovo {
      * @param slotName
      */
     getStaticEntityMatches(slotName: string): AuthorityResolution[] {
-        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
-            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
-                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.amzn1');
-        });
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getStaticEntityMatches(slotName);
     }
 
     /**
