@@ -13,7 +13,6 @@
       "resolveJsonModule": true
     },
     "include": [
-      "**/*.d.ts",
       "src/**/*",
       "test/**/*"
     ],
