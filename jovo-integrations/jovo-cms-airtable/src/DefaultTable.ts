@@ -86,8 +86,8 @@ export class DefaultTable implements Plugin {
         }
         const loadOptions = {
             order: this.config.order,
-            table: this.config.table,
-            selectOptions: this.config.selectOptions
+            selectOptions: this.config.selectOptions,
+            table: this.config.table
         };
 
         const values = await this.cms.loadTableData(loadOptions);

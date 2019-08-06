@@ -156,7 +156,9 @@ export class ResponsesTable extends DefaultTable {
      * @param {string} index 
      */
     moveValueToIndexX(array: any[][], value: any, index: number) {
-        if (array.length < 1) return;
+        if (array.length < 1) {
+            return;
+        }
 
         const headers: string[] = array[0];
         const currentIndexOfKey = headers.indexOf(value);

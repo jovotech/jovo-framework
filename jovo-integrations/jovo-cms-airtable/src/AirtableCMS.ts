@@ -112,13 +112,13 @@ export class AirtableCMS extends BaseCmsPlugin {
 
                         // push keys first as that's the first row of the table
                         const record = _get(records[ 0 ], 'fields');
-                        let keys = loadOptions.order || Object.keys(record);
+                        const keys = loadOptions.order || Object.keys(record);
 
                         arr.push(keys);
 
                         records.forEach((r: any) => {
                             // push each records values
-                            let values: string[] = [];
+                            const values: string[] = [];
                             /**
                              * Airtable doesn't parse key & value of a cell without a value
                              * Replace missing key/value pairs with empty strings
