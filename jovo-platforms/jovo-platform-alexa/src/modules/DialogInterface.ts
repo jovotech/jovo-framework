@@ -6,7 +6,7 @@ import {AlexaRequest, Intent} from "../core/AlexaRequest";
 import {AlexaSkill} from "../core/AlexaSkill";
 import {AlexaSpeechBuilder} from "../core/AlexaSpeechBuilder";
 import {AlexaResponse} from "../index";
-import {AudioPlayer} from "./AudioPlayerPlugin";
+import { DynamicEntityType } from '../core/AlexaResponse';
 
 export class DialogInterface implements Plugin {
     install(alexa: Alexa) {
@@ -19,6 +19,50 @@ export class DialogInterface implements Plugin {
             return this.$dialog;
         };
 
+        /**
+         * Clears temporary dynamic entities
+         */
+        AlexaSkill.prototype.clearDynamicEntities = function() {
+            if (!this.$output.Alexa) {
+                this.$output.Alexa = {};
+            }
+
+            if (!this.$output.Alexa.Directives) {
+                this.$output.Alexa.Directives = [];
+            }
+
+            this.$output.Alexa.Directives.push({
+                type: 'Dialog.UpdateDynamicEntities',
+                updateBehavior: 'CLEAR'
+            });
+            return this;
+        };
+
+
+        /**
+         * Replaces dynamic entities for the session
+         * @param dynamicEntityTypes
+         */
+        AlexaSkill.prototype.replaceDynamicEntities = function(dynamicEntityTypes: DynamicEntityType[] | DynamicEntityType) {
+            if (!this.$output.Alexa) {
+                this.$output.Alexa = {};
+            }
+
+            if (!this.$output.Alexa.Directives) {
+                this.$output.Alexa.Directives = [];
+            }
+
+            if (!Array.isArray(dynamicEntityTypes)) {
+                dynamicEntityTypes = [dynamicEntityTypes];
+            }
+
+            this.$output.Alexa.Directives.push({
+                type: 'Dialog.UpdateDynamicEntities',
+                updateBehavior: 'REPLACE',
+                types: dynamicEntityTypes
+            });
+            return this;
+        };
 
         // backwards compatibility deprecated methods
 

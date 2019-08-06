@@ -1,4 +1,5 @@
 import {LinkAccountCard} from "./response/visuals/LinkAccountCard";
+import { Directive, DynamicEntityType } from './core/AlexaResponse';
 
 export { AlexaRequestBuilder } from "./core/AlexaRequestBuilder";
 export { Alexa } from './Alexa';
@@ -59,7 +60,6 @@ import {Handler} from "jovo-core";
 import {Intent} from "./core/AlexaRequest";
 import {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
 import {ProactiveEvent} from "./modules/ProactiveEvent";
-
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
@@ -220,7 +220,6 @@ declare module './core/AlexaSkill' {
 
 // Dialog
 declare module './core/AlexaSkill' {
-
     interface AlexaSkill {
         $dialog?: Dialog;
         dialog(): Dialog | undefined;
@@ -334,6 +333,20 @@ declare module './core/AlexaSkill' {
          * @return {AlexaSkill}
          */
         dialogConfirmIntent(speech: string | AlexaSpeechBuilder, reprompt: string | AlexaSpeechBuilder, updatedIntent?: Intent): AlexaSkill;
+
+
+        /**
+         * Clears temporary dynamic entities
+         */
+        clearDynamicEntities(): this;
+
+
+        /**
+         * Replaces dynamic entities for the session
+         * @param dynamicEntityTypes
+         */
+        replaceDynamicEntities(dynamicEntityTypes: DynamicEntityType[]): this;
+
     }
 }
 // GadgetController
@@ -447,3 +460,13 @@ declare module './core/AlexaSkill' {
     }
 }
 
+
+declare module 'jovo-core/dist/src/Interfaces' {
+
+    interface Output {
+        Alexa: {
+            Directives?: Directive[];
+
+        };
+    }
+}

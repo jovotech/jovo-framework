@@ -93,29 +93,67 @@ export class AlexaSkill extends Jovo {
     }
 
 
-    isErSuccessMatch(name: string): boolean {
+    /**
+     * Returns all entity resolutions for the slot name.
+     * @param slotName
+     */
+    getEntityResolutions(slotName: string): AuthorityResolution[] {
         const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
 
         if (alexaRequest.request &&
             alexaRequest.request.intent &&
             alexaRequest.request.intent.slots &&
-            alexaRequest.request.intent.slots[name]) {
+            alexaRequest.request.intent.slots[slotName]) {
 
-            const slot = alexaRequest.request.intent.slots[name];
+            const slot = alexaRequest.request.intent.slots[slotName];
 
-            let successMatch = false;
             if (slot.resolutions && slot.resolutions.resolutionsPerAuthority) {
-                slot.resolutions.resolutionsPerAuthority.forEach((authority: AuthorityResolution) => {
-                   if (authority.status.code === 'ER_SUCCESS_MATCH') {
-                       successMatch = true;
-                   }
-                });
+                return slot.resolutions.resolutionsPerAuthority as AuthorityResolution[];
             }
-
-            return successMatch;
         }
+        return [];
+    }
 
-        return false;
+    /**
+     * Returns true if there is a successful matched entity
+     * @param slotName
+     */
+    hasEntityMatch(slotName: string): boolean {
+        return typeof this.getEntityResolutions(slotName).find((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
+        }) !== 'undefined';
+    }
+
+    /**
+     * Returns array of successfully matched entities
+     * @param slotName
+     */
+    getEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
+        });
+    }
+
+    /**
+     * Returns array of successfully matched dynamic entities
+     * @param slotName
+     */
+    getDynamicEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
+                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.dynamic');
+        });
+    }
+
+    /**
+     * Returns array of successfully matched static entities
+     * @param slotName
+     */
+    getStaticEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
+                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.amzn1');
+        });
     }
 
     /**
