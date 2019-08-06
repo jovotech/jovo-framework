@@ -1,11 +1,35 @@
 # Jovo Framework Changelog
 
 
+## 2.2.15 (2019-08-06)
+
+#### :rocket: New Feature
+
+* `jovo-platform-alexa` [#549](https://github.com/jovotech/jovo-framework/pull/549) Added support for random hints  ([@frivas](https://github.com/frivas))
+* `jovo-platform-alexa` Improves Dynamic Entities. Sample code: 90b98ab692471f595165128a764d8c1c136ba1d4
+* `jovo-platform-googleassistant` Adds interactive canvas integration. Sample Code: e8f81dea801bddd70caf69c819092e33d27b023a
+* `jovo-framework` Adds custom handler object to `this` (WIP for TS projects)
+
+
+#### :bug: Bug Fix
+* `jovo-framework` [#545](https://github.com/jovotech/jovo-framework/pull/545) Prevents validators to fail after redirect ([@gpalozzi](https://github.com/gpalozzi))
+* `jovo-cms-airtable` [#555](https://github.com/jovotech/jovo-framework/pull/555) Fixes multiple bugs of the Airtable integration  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-alexa` [#491](https://github.com/jovotech/jovo-framework/pull/491) Fixes slot resolutions for Dynamic Entities ([@kouz75](https://github.com/kouz75))
+
+
+#### Committers: 5
+- Francisco Rivas ([@frivas](https://github.com/frivas))
+- Gabriele Palozzi ([@gpalozzi](https://github.com/gpalozzi))
+- scouzinier ([@gpalozzi](https://github.com/kouz75))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.14 (2019-07-19)
 
 
 #### :rocket: New Feature
-* `jovo-framework` Add simpler SSL integration
+* `jovo-framework` Adds simpler SSL integration
 
 #### :bug: Bug Fix
 * `jovo-core` Fixes sessionData as a copy to the request object bug issue #544
