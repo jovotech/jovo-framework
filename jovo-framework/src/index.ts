@@ -1,4 +1,4 @@
-import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Util } from 'jovo-core';
+import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Project, Util } from 'jovo-core';
 import { App } from './App';
 
 import { Component } from './middleware/Component';
@@ -17,7 +17,7 @@ export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
-export { Util, LogLevel, Log };
+export { Util, LogLevel, Log, Project };
 
 export { Component, Config as ComponentConfig, Response as ComponentResponse } from './middleware/Component';
 

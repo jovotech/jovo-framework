@@ -1,5 +1,7 @@
 import { Inputs } from './Interfaces';
 import { Log } from './Log';
+import { Project as P } from './Project';
+export const Project = P.getInstance();
 
 try {
     // do not use source map support with jest.
