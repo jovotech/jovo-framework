@@ -259,7 +259,6 @@ export class AlexaRequest implements JovoRequest {
 
     getScreenResolution(): string | undefined {
         let resolution;
-1
         if (this.context && this.context.Viewport) {
             resolution = this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
         }
