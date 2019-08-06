@@ -1,8 +1,8 @@
-import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
+import Datastore = require('@google-cloud/datastore');
+import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
+import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
-import _get = require('lodash.get');
-import Datastore = require("@google-cloud/datastore");
 
 export interface Config extends PluginConfig {
     entity?: string;
@@ -20,8 +20,8 @@ export class DatastoreDb implements Db {
     datastore?: Datastore;
     config: Config = {
         entity: 'JovoUser',
-        primaryKeyColumn: 'userId',
         gCloudConfig: {},
+        primaryKeyColumn: 'userId',
     };
     isCreating = false;
     needsWriteFileAccess = false;
@@ -45,10 +45,6 @@ export class DatastoreDb implements Db {
         }
     }
 
-    uninstall(app: BaseApp) {
-
-    }
-
     errorHandling() {
         if (!this.datastore) {
             throw new JovoError(
@@ -57,7 +53,7 @@ export class DatastoreDb implements Db {
                 'jovo-db-datastore',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/google-datastore'
+                'https://www.jovo.tech/docs/databases/google-datastore',
             );
         }
 
@@ -68,7 +64,7 @@ export class DatastoreDb implements Db {
                 'jovo-db-datastore',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/google-datastore'
+                'https://www.jovo.tech/docs/databases/google-datastore',
             );
         }
 
@@ -79,7 +75,7 @@ export class DatastoreDb implements Db {
                 'jovo-db-datastore',
                 undefined,
                 undefined,
-                'https://www.jovo.tech/docs/databases/google-datastore'
+                'https://www.jovo.tech/docs/databases/google-datastore',
             );
         }
     }
@@ -92,26 +88,26 @@ export class DatastoreDb implements Db {
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
         this.errorHandling();
 
-        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
+        const entityKey = this.datastore!.key([ this.config.entity!, primaryKey ]);
         const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
-        const entity = entities[0];
+        const entity = entities[ 0 ];
         return entity ? entity.data : {};
     }
 
     async save(primaryKey: string, key: string, data: any, updatedAt?: string) { // tslint:disable-line
         this.errorHandling();
 
-        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
+        const entityKey = this.datastore!.key([ this.config.entity!, primaryKey ]);
 
         const entities: any[] = await this.datastore!.get(entityKey); // tslint:disable-line
 
-        let entity = undefined;
-        if (entities[0] === undefined) {
+        let entity;
+        if (entities[ 0 ] === undefined) {
             entity = {
-                [this.config.primaryKeyColumn!]: primaryKey,
+                [ this.config.primaryKeyColumn! ]: primaryKey,
             };
         } else {
-            entity = entities[0];
+            entity = entities[ 0 ];
         }
 
         if (updatedAt) {
@@ -122,10 +118,10 @@ export class DatastoreDb implements Db {
         // the data node necessary for datastore, whereas in the "save" method we add a second data
         // node for storing our own data.
         _set(entity, 'data.' + key, data);
-        
+
         const dataStoreDataObject = {
-            key: entityKey,
             data: entity,
+            key: entityKey,
         };
         await this.datastore!.save(dataStoreDataObject);
 
@@ -134,8 +130,8 @@ export class DatastoreDb implements Db {
     async delete(primaryKey: string) {
         this.errorHandling();
 
-        const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
-        return await this.datastore!.delete(entityKey);
+        const entityKey = this.datastore!.key([ this.config.entity!, primaryKey ]);
+        return this.datastore!.delete(entityKey);
     }
 
 }

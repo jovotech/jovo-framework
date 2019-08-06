@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-debugger",
-  "version": "2.2.1",
+  "version": "2.2.12",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^2.19.0",
-    "jovo-core": "^2.2.1",
+    "jovo-core": "^2.2.11",
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
+    "lodash.set": "^4.3.2",
     "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
@@ -24,11 +27,12 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
     "@types/socket.io-client": "^1.4.32",
-    "jest": "^24.6.0",
+    "jest": "^24.8.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
-    "tslint": "^5.15.0",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.4.1"
   },

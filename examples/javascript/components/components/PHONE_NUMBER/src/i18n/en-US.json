@@ -1,0 +1,22 @@
+{
+    "translation": {
+        "component-phone-number": {
+            "start-question": "Please tell me your phone number.",
+            "fail-empty": " Sorry, I didn't get that. Could you please repeat your phone number?",
+            "reprompt": " Please tell me your phone number digit by digit.",
+            "fail-invalid": " Sorry, it seems like this is not a valid phone number. Let's try again! What is your phone number?",
+            "confirm-question": "OK, I got <say-as interpret-as='digits'>{{phoneNumber}}</say-as>. Is that correct?",
+            "confirm-question-middle": "</say-as></prosody><break time='0.1s'/><prosody rate='x-slow'><say-as interpret-as='digits'>",
+            "confirm-question-end": "</say-as></prosody></s><s>Is that correct?</s>",
+            "confirm-reprompt": " Is your phone number really  <prosody rate='x-slow'><say-as interpret-as='digits'>{{phoneNumber}}</say-as></prosody>?",
+            "confirm-reject": "Alright, let's try again. What is your phone number? ",
+            "help": "To proceed, I need your phone number. Simply answer with your number digit by digit.",
+            "sequence-start": "Unfortunately, I have some problems understanding your phone number. Let's slow down, please tell me the first three digits of your number.",
+            "sequence-confirm-question": "I got <say-as interpret-as=\"digits\">{{sequence}}</say-as> . Is that correct?",
+            "sequence-question": "Great! Please continue with the next three digits of your phone number.",
+            "sequence-reprompt": "Please tell me the next three digits of your phone number.",
+            "sequence-confirm-reject": "Oh, sorry! Could you say these digits again?",
+            "sequence-help": "To proceed, I need your phone number. Simply start by telling me the first three digits of your number."
+        }
+    }
+}

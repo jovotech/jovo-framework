@@ -1,9 +1,7 @@
 {
     "en-US": {
         "translation": {
-            "WELCOME": [
-                "Welcome_Default"
-            ],
+            "WELCOME": "Welcome_Default",
             "GOODBYE": [
                 "Goodbye_Default",
                 "Bye_Default"
@@ -12,10 +10,7 @@
     },
     "de-DE": {
         "translation": {
-            "WELCOME": [
-                "Willkommen_Default"
-            ],
-            "GOODBYE": []
+            "WELCOME": "Willkommen_Default"
         }
     }
 }

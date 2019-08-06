@@ -1,8 +1,10 @@
-import {App} from "./App";
+import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Project, Util } from 'jovo-core';
+import { App } from './App';
 
-import {UserMetaData, UserContext, ContextPrevObject} from "./middleware/user/JovoUser";
-import {Jovo, Data, Handler, Util, Log, LogLevel} from 'jovo-core';
-import {Route} from "./middleware/Router";
+import { Component } from './middleware/Component';
+import { Route } from './middleware/Router';
+import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
+
 export { App } from './App';
 export { server as Webhook } from './server';
 export { verifiedServer as WebhookVerified } from './server';
@@ -15,12 +17,15 @@ export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
-export { Util, LogLevel, Log };
+export { Util, LogLevel, Log, Project };
 
+export { Component, Config as ComponentConfig, Response as ComponentResponse } from './middleware/Component';
 
 declare module 'express' {
+
     interface Application {
         jovoApp?: App;
+        ssl?: {key: Buffer, cert: Buffer}
     }
 }
 
@@ -85,18 +90,6 @@ declare module 'jovo-core/dist/src/Jovo' {
          */
         followUpState(state: string): this;
 
-
-        /**
-         * Returns path to function inside the handler
-         * Examples
-         * LAUNCH = Launch function
-         * State1:IntentA => IntentA in state 'State1'
-         * @public
-         * @return {*}
-         */
-        getHandlerPath(): string;
-
-
         /**
          * Skips intent handling when called in NEW_USER, NEW_SESSION, ON_REQUEST
          * @public
@@ -118,6 +111,22 @@ declare module 'jovo-core/dist/src/Jovo' {
          * @return {*}
          */
         getRoute(): Route;
+
+        /**
+         * Delegates the requests & responses to the component defined with "componentName"
+         * @param {string} componentName
+         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @returns {Promise<void>}
+         */
+        delegate(componentName: string, onCompletedIntent: string): Promise<void>;
+    }
+}
+
+declare module 'jovo-core/dist/src/Jovo' {
+    export interface Jovo {
+        $components: {
+            [ key: string ]: Component;
+        };
     }
 }
 

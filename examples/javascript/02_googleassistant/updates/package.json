@@ -1,38 +1,20 @@
 {
-  "name": "jovo-examples-googleassistant-updates",
-  "version": "2.2.2",
-  "private": true,
-  "description": "A sample voice app that works with the Jovo Framework",
-  "main": "src/index.js",
-  "dependencies": {
-    "jovo-db-filedb": "^2.2.1",
-    "jovo-framework": "^2.2.2",
-    "jovo-platform-alexa": "^2.2.2",
-    "jovo-platform-googleassistant": "^2.2.2",
-    "jovo-plugin-debugger": "^2.2.1"
-  },
-  "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-install": "^1.1.0",
-    "gulp-run-command": "0.0.9",
-    "gulp-zip": "^4.2.0",
-    "jest": "^24.6.0"
-  },
-  "scripts": {
-    "tsc": "node -v",
-    "test": "jest",
-    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./",
-    "start": "cd src && node index.js --webhook",
-    "launch": "npm start -- --launch"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jovotech/jovo-sample-voice-app-nodejs.git"
-  },
-  "author": "Jovo",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/jovotech/jovo-sample-voice-app-nodejs/issues"
-  },
-  "homepage": "https://github.com/jovotech/jovo-sample-voice-app-nodejs#readme"
+	"name": "jovo-examples-googleassistant-updates",
+	"version": "2.2.9",
+	"private": true,
+	"description": "A sample voice app that works with the Jovo Framework",
+	"main": "src/index.js",
+	"devDependencies": {
+		"jest": "^24.8.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jovotech/jovo-sample-voice-app-nodejs.git"
+	},
+	"author": "Jovo",
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/jovotech/jovo-sample-voice-app-nodejs/issues"
+	},
+	"homepage": "https://github.com/jovotech/jovo-sample-voice-app-nodejs#readme"
 }

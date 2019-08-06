@@ -1,4 +1,4 @@
-import {Jovo} from "./Jovo";
+import { Jovo } from './Jovo';
 
 export class User {
     new = true;
@@ -12,7 +12,7 @@ export class User {
      * Returns user id
      * @returns {string | undefined}
      */
-    getId(): string | undefined{
+    getId(): string | undefined {
         return undefined;
     }
 

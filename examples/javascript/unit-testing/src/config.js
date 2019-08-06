@@ -1,5 +1,5 @@
 module.exports = {
-   logging: true,
+   logging: false,
    user: {
       metaData: true,
    },

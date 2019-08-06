@@ -85,7 +85,7 @@ Name | Description | Docs
 :--- | :--- | :---
 Command Line Tools | Create and run Jovo projects from your command line | [📝](./docs/workflows/cli)
 Routing | Easy routing capabilities for intents and states | [📝](./docs/basic-concepts/routing)
-Data input | Deal with user specific data and request parameters (slots and entities) easily| [📝](./docs/basic-concepts/data)
+Data input | Deal with user specific data and request parameters (slots and entities) easily | [📝](./docs/basic-concepts/data)
 Speech and visual output &nbsp; | Craft your responses, including speech an visual elements | [📝](./docs/basic-concepts/output)
 
 
@@ -93,6 +93,7 @@ Speech and visual output &nbsp; | Craft your responses, including speech an visu
 
 Name | Description | Docs
 :--- | :--- | :---
+Input Validation | Define and execute different methods of validation for your user's inputs | [📝](./docs/basic-concepts/routing/input.md#validation)
 User object | Create contextual experiences with user specific data and services | [📝](./docs/basic-concepts/data/user.md)
 Speech Builder | Helpful class to create speech output and add variety to your responses | [📝](./docs/basic-concepts/output/speechbuilder.md)
 i18n | Create multilingual voice apps | [📝](./docs/basic-concepts/output/i18n.md)
@@ -140,14 +141,7 @@ Suggestion Chips | Display buttons to allow your users to quickly reply on mobil
 Location | Access your user's location data | [📝](./docs/platforms/google-assistant/data.md#location)
 Media Response | Play longform audio | [📝](./docs/platforms/google-assistant/media-response.md)
 Push Notifications | Send push notifications to your users | [📝](./docs/platforms/google-assistant/notifications.md)
-
-#### Missing
-
-The following features are **not** implemented yet. We appreciate any kind of help and are also happy to assist you, if you have any questions about the core code. You can reach us on [Slack](https://slackin-uwinbxqkfx.now.sh/).
-
-Platform | Feature | Docs
-:--- | :--- | :---
-**Google Action** | Transactions (WIP) | [📝](https://developers.google.com/actions/transactions/)
+Transactions | Sell digital and physical goods in your Google Actions | [📝](./docs/platforms/google-assistant/transactions.md)
 
 ### Integrations
 
@@ -211,10 +205,10 @@ Find a quickstart guide and comprehensive tutorials here:
 
 
 ## Contributing
-<a href="https://www.codetriage.com/jovotech/jovo-framework" target="_blank"><img src="https://www.codetriage.com/jovotech/jovo-framework/badges/users.svg"></a>
-
+   
 We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
-* [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
+* [CONTRIBUTING.md](./.github/CONTRIBUTING.md) 
+* [Step by step process](https://github.com/jovotech/jovo-framework/blob/master/docs/advanced-concepts/contributing.md) 
 * Take a look at our [issues](https://github.com/jovotech/jovo-framework/issues)
 * Add your project to [jovotech/builtwithjovo](https://github.com/jovotech/builtwithjovo)
 

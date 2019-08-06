@@ -1,0 +1,58 @@
+{
+  "name": "jovo-platform-dialogflow",
+  "version": "2.2.12",
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "tslint": "node_modules/.bin/tslint -p tsconfig.json -c tslint.json",
+    "tsc": "node_modules/.bin/tsc",
+    "rimraf": "node_modules/.bin/rimraf ./dist",
+    "test": "node_modules/.bin/jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-core": "^2.2.11",
+    "lodash.get": "^4.4.2",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.set": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/jest": "^24.0.11",
+    "@types/lodash.clonedeep": "^4.5.4",
+    "@types/lodash.get": "^4.4.6",
+    "@types/node": "^10.3.1",
+    "jest": "^24.8.0",
+    "lodash.clonedeep": "^4.5.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^24.0.1",
+    "tslint": "^5.17.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.4.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/dist/",
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  },
+  "files": [
+    "dist/src/**/*",
+    "sample-request-json"
+  ],
+  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
+}

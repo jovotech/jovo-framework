@@ -488,6 +488,10 @@
                 {
                     "title": "Contributing",
                     "route": "contributing"
+                },
+                {
+                    "title": "Components",
+                    "route": "components"
                 }
             ]
         }

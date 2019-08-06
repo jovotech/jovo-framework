@@ -1,0 +1,62 @@
+{
+	"invocation": "my test app",
+	"intents": [
+		{
+			"name": "HelloWorldIntent",
+			"phrases": [
+				"hello",
+				"say hello",
+				"say hello world"
+			]
+		},
+		{
+			"name": "MyNameIsIntent",
+			"phrases": [
+				"{name}",
+				"my name is {name}",
+				"i am {name}",
+				"you can call me {name}",
+				"my name is not important"
+			],
+			"inputs": [
+				{
+					"name": "name",
+					"type": {
+						"alexa": "AMAZON.US_FIRST_NAME",
+						"dialogflow": "@sys.given-name"
+					}
+				}
+			]
+		},
+		{
+			"name": "WorkDayIntent",
+			"phrases": [
+				"{workday}",
+				"today is {workday}",
+				"this day is a {workday}"
+			],
+			"inputs": [
+				{
+					"name": "workday",
+					"values": [
+						{
+							"value": "Monday"
+						},
+						{
+							"value": "Tuesday"
+						},
+						{
+							"value": "Wednesday"
+						},
+						{
+							"value": "Thursday"
+						},
+						{
+							"value": "Friday"
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,7 +1,7 @@
-import {Db, BaseApp, PluginConfig, JovoError, ErrorCode} from 'jovo-core';
+import firebase = require('firebase-admin');
+import {BaseApp, Db, ErrorCode, JovoError, PluginConfig} from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
-import firebase = require('firebase-admin');
 
 export interface Config extends PluginConfig {
     databaseURL?: string;
@@ -11,9 +11,9 @@ export interface Config extends PluginConfig {
 
 export class Firestore implements Db {
     config: Config = {
-        databaseURL: undefined,
         collectionName: 'UserData',
-        credential: undefined
+        credential: undefined,
+        databaseURL: undefined
     };
     needsWriteFileAccess = false;
     isCreating = false;
@@ -71,10 +71,6 @@ export class Firestore implements Db {
             timestampsInSnapshots: true
         });
     }
-
-    uninstall(app: BaseApp) {
-    }
-
 
     /**
      * Throws JovoError if collectionName, credential or databaseURL was not set inside config.js

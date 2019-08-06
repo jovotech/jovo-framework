@@ -1,15 +1,17 @@
-import {ActionSet, BaseApp, Host, Jovo} from "../src";
-import {Extensible} from "../src/Extensible";
+import { ActionSet, BaseApp, Host, Jovo } from '../src';
+import { Extensible } from '../src/Extensible';
+
 class Parent extends Extensible {
 
     /**
      * Empty install() implementation
      */
-    install() {
+    install() { // tslint:disable-line:no-empty
 
     }
 
 }
+
 test('test constructor', async () => {
     const baseApp = new BaseApp();
 
@@ -25,7 +27,7 @@ test('test constructor', async () => {
         'user.save',
         'platform.output',
         'response',
-        'fail'
+        'fail',
     ];
 
     middlewareArray.forEach((name) => {
@@ -35,7 +37,7 @@ test('test constructor', async () => {
 test('test initWebhook()', async (done) => {
     const baseApp = new BaseApp();
     baseApp.on('webhook.init', () => {
-       done();
+        done();
     });
     baseApp.initWebhook();
 });
@@ -46,7 +48,7 @@ test('test setUp()', async (done) => {
         done();
     });
 
-    //@ts-ignore
+    // @ts-ignore
     baseApp.middleware('setup')!.run(undefined);
 });
 

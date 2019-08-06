@@ -1,15 +1,16 @@
-import {Extensible} from "./Extensible";
-import {BaseApp} from "./BaseApp";
-import {HandleRequest} from "./Interfaces";
+import { BaseApp } from './BaseApp';
+import { Extensible } from './Extensible';
+import { HandleRequest } from './Interfaces';
 
 export class BaseCmsPlugin extends Extensible {
-
     /**
      * Implemented install method
      * @param {BaseApp} app
      */
     install(app: BaseApp) {
-        app.middleware('after.platform.init')!.use(this.copyCmsDataToContext.bind(this));
+        app
+            .middleware('after.platform.init')!
+            .use(this.copyCmsDataToContext.bind(this));
     }
 
     /**
@@ -22,12 +23,5 @@ export class BaseCmsPlugin extends Extensible {
             handleRequest.jovo.$cms.$jovo = handleRequest.jovo;
             Object.assign(handleRequest.jovo.$cms, handleRequest.app.$cms);
         }
-    }
-
-    /**
-     * Implemented uninstall method
-     * @param {BaseApp} app
-     */
-    uninstall(app: BaseApp) {
     }
 }

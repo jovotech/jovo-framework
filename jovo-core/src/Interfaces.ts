@@ -1,21 +1,21 @@
-import {
-    SpeechBuilder,
-    TestSuite, RequestBuilder, ResponseBuilder,
-    ExtensibleConfig,
-    Jovo,
-} from './index';
+import {ExtensibleConfig, Jovo, RequestBuilder, ResponseBuilder, SpeechBuilder, TestSuite} from './index';
 
 
-import {BaseApp} from "./BaseApp";
+import {BaseApp} from './BaseApp';
 
 
 export interface Data {
     [key: string]: any; // tslint:disable-line
 }
 
-export interface JovoData extends Data {}
-export interface AppData extends Data {}
-export interface SessionData extends Data {}
+export interface JovoData extends Data {
+}
+
+export interface AppData extends Data {
+}
+
+export interface SessionData extends Data {
+}
 
 
 export interface Plugin {
@@ -45,6 +45,8 @@ export interface Plugin {
 
 export interface PluginConfig {
     enabled?: boolean;
+
+    [index: string]: any; // tslint:disable-line
 }
 
 
@@ -81,7 +83,6 @@ export interface HandleRequest {
     $data?: any; // tslint:disable-line
 
 
-
     platformClazz?: any; // tslint:disable-line
 
 }
@@ -89,14 +90,15 @@ export interface HandleRequest {
 // specialized plugins
 export interface Db extends Plugin {
     needsWriteFileAccess: boolean;
+
     save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<any>; // tslint:disable-line
     load(primaryKey: string): Promise<any>; // tslint:disable-line
     delete(primaryKey: string): Promise<any>; // tslint:disable-line
 }
 
 export interface Platform extends Plugin {
-    requestBuilder: RequestBuilder;
-    responseBuilder: ResponseBuilder;
+    requestBuilder?: RequestBuilder;
+    responseBuilder?: ResponseBuilder;
 
     /**
      * Returns the specific TestSuite implementation for this platform
@@ -123,16 +125,10 @@ export interface Analytics extends Plugin {
     track(handleRequest: HandleRequest): void;
 }
 
-
-// export interface AppConfig extends ExtensibleConfig {
-//     // logging?: boolean;
-//     intentMap?: {[key: string]: string};
-//     inputMap?: {[key: string]: string};
-// }
-
 export interface RequestType {
     type?: string;
     subType?: string;
+    optional?: boolean;
 }
 
 export interface Output {
@@ -159,13 +155,16 @@ export interface Output {
     };
 }
 
+export interface RequestJSON {
+
+}
+
 export interface JovoRequest {
     /**
      * Converts object to json
      * @return {any}
      */
     toJSON(): any; // tslint:disable-line
-
 
     /**
      * Returns user id
@@ -525,7 +524,7 @@ export interface Host {
     /**
      * Headers of the request
      */
-    headers: {[key: string]: string};
+    headers: { [key: string]: string };
 
     /**
      * Full request object
@@ -563,7 +562,7 @@ export interface NLUData {
 }
 
 
-export type HandlerReturnType = Function | Promise<Function> | Promise<Jovo> | Promise<void> | void;
+export type HandlerReturnType = () => void | Promise<Function> | Promise<Jovo> | Promise<void> | void;
 export type JovoFunction = (this: Jovo, jovo?: Jovo, done?: Function) => HandlerReturnType;
 
 

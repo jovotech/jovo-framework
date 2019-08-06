@@ -1,5 +1,5 @@
-import {JovoError} from "../../src";
-import {ErrorCode} from "../../src/errors/JovoError";
+import { JovoError } from '../../src';
+import { ErrorCode } from '../../src/errors/JovoError';
 
 test('test JovoError class', () => {
     const jovoError = new JovoError(
@@ -20,7 +20,7 @@ test('test JovoError class', () => {
 
 test('test JovoError ErrorCode', () => {
     const jovoError = new JovoError(
-        'message'
+        'message',
     );
     expect(jovoError.message).toBe('message');
     expect(jovoError.code).toBe(ErrorCode.ERR);

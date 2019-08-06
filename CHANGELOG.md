@@ -1,6 +1,161 @@
 # Jovo Framework Changelog
 
 
+## 2.2.14 (2019-07-19)
+
+
+#### :rocket: New Feature
+* `jovo-framework` Add simpler SSL integration
+
+#### :bug: Bug Fix
+* `jovo-core` Fixes sessionData as a copy to the request object bug issue #544
+* `jovo-platform-googleassistant` Fixes optional parameters in addAudio
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+## 2.2.13 (2019-07-10)
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` [#535](https://github.com/jovotech/jovo-framework/pull/535) Fixes Dialogflow Session Attributes ([@BronxBombers](https://github.com/BronxBombers))
+* `jovo-platform-googleassistant` [#539](https://github.com/jovotech/jovo-framework/pull/539) Fixes hasScreenInterface ([@freiSMS](https://github.com/freiSMS))
+* `jovo-platform-alexa` Fixes APL directives in combination with InSkillPurchase directives
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests issue #517 (again)
+
+
+#### Committers: 3
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- BronxBombers ([@BronxBombers](https://github.com/BronxBombers))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
+
+
+## 2.2.12 (2019-07-01)
+
+#### :rocket: New Feature
+* `jovo-platform-dialogflow` [#531](https://github.com/jovotech/jovo-framework/pull/531) Adds Twilio Dialogflow Integration ([@BronxBombers](https://github.com/BronxBombers))
+
+
+#### :nail_care: Enhancement
+* `jovo-framework` [#533](https://github.com/jovotech/jovo-framework/pull/533) Adds possibility to partially exclude and replace the log  ([@Veake](https://github.com/Veake))
+
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests issue #517
+* `jovo-platform-googleassistant` Fixes askForNotification issue #529
+
+
+#### Committers: 3
+- Alex ([@aswetlow](https://github.com/aswetlow))
+- Max R. ([@Veake](https://github.com/Veake))
+- BronxBombers ([@BronxBombers](https://github.com/BronxBombers))
+
+## 2.2.10 (2019-06-19)
+
+
+#### :bug: Bug Fix
+* `jovo-framework` [#525](https://github.com/jovotech/jovo-framework/pull/525) Fixing a bug in server.js that breaks the express server  ([@daveradical](https://github.com/daveradical))
+
+
+#### Committers: 1
+- daveradical ([@daveradical](https://github.com/daveradical))
+
+
+## 2.2.9 (2019-06-07)
+
+
+#### :bug: Bug Fix
+* `jovo-core` Fix error in plugin configs (fix issue #521)
+
+ 
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2.2.8 (2019-06-05)
+
+#### :nail_care: Enhancement
+* `jovo-framework` [#515](https://github.com/jovotech/jovo-framework/pull/515) Adds Conversational Components (BETA)  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-core` Updates TSLint rules (WIP)
+
+#### :bug: Bug Fix
+* `jovo-platform-googleassistant` Fixes ON_HEALTH_CHECK requests
+ 
+
+#### Committers: 2
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+## 2.2.7 (2019-06-03)
+
+## Breaking Changes
+
+* `jovo-cms-googlesheets` Values without variations (one row) previously returned an array with one element. This was not the expected behavior.
+Since this version single values are return as a string. (Doesn't break anything if you use the SpeechBuilder)<br><br>
+Old version: this.$cms.t('key')[0]\
+Fixed version: this.$cms.t('key')
+
+
+#### :rocket: New Feature
+* `jovo-framework` [#503](https://github.com/jovotech/jovo-framework/pull/503) Adds Conversational Components (BETA)  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-framework` [#511](https://github.com/jovotech/jovo-framework/pull/511) Adds Input validation ([@rubenaeg](https://github.com/stephen-wilcox))
+* `jovo-platform-alexa` [#506](https://github.com/jovotech/jovo-framework/pull/506) Adds hasAutomotive getter ([@natrixx](https://github.com/natrixx))
+* `jovo-platform-alexa` [#506](https://github.com/jovotech/jovo-framework/pull/506) Adds viewport info for alexaRequests ([@freiSMS](https://github.com/freiSMS))
+
+#### :nail_care: Enhancement
+* `jovo-core` [#507](https://github.com/jovotech/jovo-framework/pull/507) Refactored loading of the config-data ([@Veake](https/github.com/Veake))
+
+
+#### :bug: Bug Fix
+* `jovo-cms-googlesheets` Fix response sheet parser. Single values will be transformed to a string
+* `jovo-platform-alexa` [#497](https://github.com/jovotech/jovo-framework/pull/497) Address getReprompt issue for Alexa ([@natrixx](https://github.com/natrixx))
+* `jovo-plugin-debugger` [#496](https://github.com/jovotech/jovo-framework/pull/496) Fix AUDIOPLAYER.AlexaSkill.PlaybackFinished intent name in debugger ([@curiousdustin](https://github.com/curiousdustin))
+
+ 
+
+#### Committers: 7
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Max R. ([@Veake](https://github.com/Veake))
+- natrixx ([@natrixx](https://github.com/natrixx))
+- Dustin Bahr ([@curiousdustin](https://github.com/curiousdustin))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+## 2.2.5 (2019-05-07)
+
+#### :bug: Bug Fix
+ `jovo-cms-googlesheets` [#494](https://github.com/jovotech/jovo-framework/pull/494) Fix empty Cells on CMS bug ([@rubenaeg](https/github.com/rubenaeg))
+
+#### Committers 1
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+
+
+## 2.2.4 (2019-05-03)
+* `jovo-framework` Improve Conversation test runtime handling (`send(req)`, `sendToServer(req)`, `sendToApp(req, app)`)
+
+
+## 2.2.3 (2019-05-03)
+
+#### :rocket: New Feature
+* `jovo-platform-googleassistant` [#479](https://github.com/jovotech/jovo-framework/pull/479) Add google res getters   ([@natrixx](https://github.com/natrixx))
+* `jovo-framework` [#488](https://github.com/jovotech/jovo-framework/pull/488) Send test requests directly to app object (issue #469)  ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+#### :nail_care: Enhancement
+* `jovo-platform-dialogflow`, `jovo-platform-googleassistant` Improve robustness of the Dialogflow/Googleassistant integration
+
+#### :bug: Bug Fix
+* `jovo-platform-dialogflow` Fix Dialogflow testsuite issue #481
+* `jovo-platform-dialogflow` Fix missing `X.original` input parameter
+* `jovo-framework` [#490](https://github.com/jovotech/jovo-framework/pull/490) Add missing dependencies (in dev setup) ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+
+#### Committers: 3
+- natrixx ([@natrixx](https://github.com/natrixx))
+- Stephen Wilcox ([@stephen-wilcox](https://github.com/stephen-wilcox))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 
 ## 2.2.2 (2019-04-18)
 

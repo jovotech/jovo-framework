@@ -1,4 +1,5 @@
-import {Plugin, PluginConfig, BaseApp, HandleRequest, EnumRequestType} from 'jovo-core';
+import { BaseApp, Db, EnumRequestType, ErrorCode, HandleRequest, JovoError, Log, Plugin, PluginConfig } from 'jovo-core';
+
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
@@ -48,14 +49,14 @@ export class LanguageModelTester implements Plugin {
             }
 
             if (handleRequest.jovo.$nlu && handleRequest.jovo.$nlu.intent) {
-                console.log();
-                console.log('Intent:');
-                console.log('  ' + handleRequest.jovo.$nlu.intent.name);
+                Log.info();
+                Log.info('Intent:');
+                Log.info('  ' + handleRequest.jovo.$nlu.intent.name);
 
                 if (handleRequest.jovo.$inputs) {
                     if (Object.keys(handleRequest.jovo.$inputs).length > 0) {
-                        console.log();
-                        console.log('Inputs:');
+                        Log.info();
+                        Log.info('Inputs:');
                     }
 
                     for (const key of Object.keys(handleRequest.jovo.$inputs)) {
@@ -68,21 +69,17 @@ export class LanguageModelTester implements Plugin {
                                 out += ` (${_get(input, 'alexaSkill.resolutions.resolutionsPerAuthority[0].status.code')})`;
                             }
 
-                            console.log('  ' + out);
+                            Log.info('  ' + out);
                         }
 
                     }
                 }
 
-                console.log();
-                console.log(' -----------------------------');
+                Log.info();
+                Log.info(' -----------------------------');
 
                 handleRequest.jovo.ask(handleRequest.jovo.$nlu.intent.name, 'Say the next phrase');
             }
         }
-    }
-
-    uninstall(app: BaseApp) {
-
     }
 }
