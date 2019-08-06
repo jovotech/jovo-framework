@@ -50,7 +50,7 @@ export class ResponsesTable extends DefaultTable {
         };
     }
 
-    parse(handleRequest: HandleRequest, values: any[]) {  // tslint:disable-line
+    parse(handleRequest: HandleRequest, values: any[][]) {  // tslint:disable-line
         const name = this.config.name;
 
         if (!name) {
@@ -63,6 +63,15 @@ export class ResponsesTable extends DefaultTable {
                 'https://www.jovo.tech/docs/cms/airtable#configuration',
             );
         }
+
+        /**
+         * The 2-dimensional array might not have the same order as the airtable base, i.e.
+         * the value at index 0 does not necessarily have to be from the 1st column.
+         * The response sheet expects the `key` property (1st column) to be at index 0,
+         * so we move it (1st dimension array), and all of its values (2nd dimension array)
+         * to index 0 of each of their arrays.
+         */
+        this.moveValueToIndexX(values, 'key', 0);
 
         const headers: string[] = values[ 0 ];
         const platforms = handleRequest.app.getAppTypes();
@@ -138,5 +147,29 @@ export class ResponsesTable extends DefaultTable {
         }
 
         handleRequest.app.$cms[ name ] = resources;
+    }
+
+    /**
+     * Moves `value` to `index` for every arr in the 2 dimensional `array`
+     * @param {any[][]} array 
+     * @param {any} value 
+     * @param {string} index 
+     */
+    moveValueToIndexX(array: any[][], value: any, index: number) {
+        if (array.length < 1) {
+            return;
+        }
+
+        const headers: string[] = array[0];
+        const currentIndexOfKey = headers.indexOf(value);
+
+        array.forEach((arr) => {
+            // move value to desired index
+            arr.splice(index, 0, arr[currentIndexOfKey]);
+            // arr length was increased by 1, i.e. key shifted one to the right
+            const newIndexOfKey = currentIndexOfKey + 1;
+            // delete value from previous index
+            arr.splice(newIndexOfKey, 1);
+        });
     }
 }
