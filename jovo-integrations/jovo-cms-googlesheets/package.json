@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "googleapis": "^37.2.0",
+    "googleapis": "^42.0.0",
     "i18next": "^15.0.8",
     "jovo-core": "^2.2.12",
     "lodash.clonedeep": "^4.5.0",
