@@ -12,8 +12,8 @@ Learn more about different configuration elements here:
 * [Project Structure](./project-structure.md './project-structure')
 * [app.js](./app-js.md './app-js')
 * [config.js](./config-js.md './config-js')
-* [project.js](./project-js.md './project-js')
-* [Hosting](./hosting './hosting')
+* /[project.js](./project-js.md './project-js')
+* /[Hosting](./hosting './hosting')
 
 
 
