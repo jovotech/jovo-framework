@@ -50,6 +50,14 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         this.originalDetectIntentRequest.payload = originalRequest;
     }
 
+    getDeviceName() : string    {
+        if (this.hasScreenInterface()) {
+            return "Assistant device - with screen";
+        }
+        else {
+            return "Assistant device - voice only";
+        }
+    }
 
     getSessionId(): string | undefined {
         return this.session;
