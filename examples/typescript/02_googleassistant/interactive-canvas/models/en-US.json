@@ -10,6 +10,12 @@
 			]
 		},
 		{
+			"name":"InstructionsIntent",
+			"phrases":[
+				"instructions"
+			]
+		},
+		{
 			"name":"MyNameIsIntent",
 			"phrases":[
 				"{name}",
