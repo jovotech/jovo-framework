@@ -33,7 +33,7 @@
     "@types/lodash.sample": "^4.2.4",
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "jovo-framework": "^2.2.15",
     "lodash.clonedeep": "^4.5.0",
     "rimraf": "^2.6.2",
