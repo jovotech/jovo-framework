@@ -81,6 +81,15 @@ export class GoogleActionRequest implements JovoRequest {
         }
     }
 
+    getDeviceName() : string    {
+        if (this.hasScreenInterface()) {
+            return "Assistant device - with screen";
+        }
+        else {
+            return "Assistant device - voice only";
+        }
+    }
+
     getIntentName(): string | undefined {
         return undefined;
     }

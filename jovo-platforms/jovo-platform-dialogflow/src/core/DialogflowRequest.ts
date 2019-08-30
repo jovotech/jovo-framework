@@ -51,12 +51,11 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
     }
 
     getDeviceName() : string    {
-        if (this.hasScreenInterface()) {
-            return "Assistant device - with screen";
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.getDeviceName') === 'function') {
+            return this.originalDetectIntentRequest.payload.getDeviceName();
         }
-        else {
-            return "Assistant device - voice only";
-        }
+        console.error('platform did not define deviceName');
+        return 'platform did not define deviceName';
     }
 
     getSessionId(): string | undefined {
