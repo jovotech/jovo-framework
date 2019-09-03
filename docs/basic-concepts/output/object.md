@@ -121,11 +121,11 @@ For example, it looks like this after `ask`:
 }
 ```
 
-## platform.output Middleware
+## output Middleware
 
 > [Learn more about the Jovo Framework Architecture here](../../advanced-concepts/architecture.md '../architecture').
 
-The `platform.output` middleware is used to turn the `$output` object into a `$response` object, as shown in the [Introduction](#introduction) above.
+The `output` middleware is used to turn the `$output` object into a `$response` object, as shown in the [Introduction](#introduction) above.
 
 The middleware turns the cross-platform output into platform-specific JSON responses based on the platform the framework is currently interacting with. This is why the `$output` object is helpful for [Hooks](../../advanced-concepts/hooks.md '../hooks') and [Plugins](../../advanced-concepts/plugins.md '../plugins'), as they then only need to worry about the abstracted object, not any possible response JSON structure.
 
