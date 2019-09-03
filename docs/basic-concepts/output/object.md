@@ -4,12 +4,12 @@ Learn more about the Jovo `$output` object.
 
 * [Introduction](#introduction)
 * [Output Structure](#output-structure)
-* [platform.output Middleware](#platformoutput-middleware)
+* [Output Middleware](#output-middleware)
 
 
 ## Introduction
 
-The Jovo `$output` is a consolidated JSON object that is prepared during [routing](../routing '../routing') , and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
+The Jovo `$output` is a consolidated JSON object that is prepared during [routing](../routing '../routing'), and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
 
 You can access the object like this:
 
@@ -121,7 +121,7 @@ For example, it looks like this after `ask`:
 }
 ```
 
-## output Middleware
+## Output Middleware
 
 > [Learn more about the Jovo Framework Architecture here](../../advanced-concepts/architecture.md '../architecture').
 
