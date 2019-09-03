@@ -9,7 +9,7 @@ Learn more about the Jovo `$output` object.
 
 ## Introduction
 
-The Jovo `$output` is a consolidated JSON object that prepared during [routing](../routing '../routing') , and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
+The Jovo `$output` is a consolidated JSON object that is prepared during [routing](../routing '../routing') , and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
 
 You can access the object like this:
 
