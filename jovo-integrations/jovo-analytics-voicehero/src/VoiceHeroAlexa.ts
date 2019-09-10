@@ -1,7 +1,7 @@
-import { AmazonAlexa } from 'voicehero-sdk';
-import * as voicehero from 'voicehero-sdk'; // tslint:disable-line
 import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
+import { AmazonAlexa } from 'voicehero-sdk';
+import * as voicehero from 'voicehero-sdk'; // tslint:disable-line
 
 export interface Config extends PluginConfig {
 	key: string;
