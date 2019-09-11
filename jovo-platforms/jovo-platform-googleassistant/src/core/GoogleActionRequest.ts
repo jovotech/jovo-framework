@@ -2,7 +2,7 @@
 /**
  * Base class of a request from alexa
  */
-import {Inputs, JovoRequest, SessionData} from "jovo-core";
+import { Inputs, JovoRequest, SessionData } from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
@@ -81,7 +81,7 @@ export class GoogleActionRequest implements JovoRequest {
         }
     }
 
-    getDeviceName() : string    {
+    getDeviceName(): string {
         if (this.hasScreenInterface()) {
             return "Assistant device - with screen";
         }
@@ -115,7 +115,7 @@ export class GoogleActionRequest implements JovoRequest {
 
     // fromJSON is used to convert an serialized version
     // of the User to an instance of the class
-    static fromJSON(json: GoogleActionRequestJSON|string): GoogleActionRequest {
+    static fromJSON(json: GoogleActionRequestJSON | string): GoogleActionRequest {
         if (typeof json === 'string') {
             // if it's a string, parse it first
             return JSON.parse(json, GoogleActionRequest.reviver);
@@ -126,13 +126,13 @@ export class GoogleActionRequest implements JovoRequest {
             return Object.assign(request, json);
         }
     }
-    static reviver( key: string, value: any): any { // tslint:disable-line
+    static reviver(key: string, value: any): any { // tslint:disable-line
         return key === "" ? GoogleActionRequest.fromJSON(value) : value;
     }
 
     // not available
     addInput(key: string, value: string): this {
-       return this;
+        return this;
     }
 
     // not available
@@ -182,6 +182,20 @@ export class GoogleActionRequest implements JovoRequest {
 
     hasVideoInterface(): boolean {
         return false;
+    }
+
+    hasWebBrowserInterface(): boolean {
+        if (this.surface) {
+            let allCapabilities = this.surface.capabilities;
+
+            //check if cap array contains web_browser 
+            let webBrowserCap = allCapabilities
+                .filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
+            return webBrowserCap.length === 0 ? false : true;
+        }
+        else {
+            return false;
+        }
     }
 
     isNewSession(): boolean {
