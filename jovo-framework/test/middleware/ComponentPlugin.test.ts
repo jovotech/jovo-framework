@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'UNIT_TEST';
 
 import { I18Next } from 'jovo-cms-i18next';
 import { BaseApp, HandleRequest, Jovo, SessionConstants } from 'jovo-core';
-import { ComponentConfig, ComponentPlugin, App, Component } from '../../src';
+import { App, Component, ComponentConfig, ComponentPlugin } from '../../src';
 import { ComponentConstructorOptions, ComponentSessionData } from '../../src/middleware/Component';
 
 describe('test constructor', () => {
@@ -43,15 +43,15 @@ describe('test merging of component handlers', () => {
         };
 
         mockHandleRequest = {
-            jovo: {} as unknown as Jovo, // workaround so we don't have to implement whole interface
-            app: baseApp
+            app: baseApp,
+            jovo: {} as unknown as Jovo // workaround so we don't have to implement whole interface
         } as unknown as HandleRequest;
 
         firstLayerComponent = new ComponentPlugin();
         firstLayerComponent.name = 'FirstLayerComponent';
         firstLayerComponent.handler = {
             FirstLayerComponent: {
-                firstLayerIntent() {}
+                firstLayerIntent() {return;}
             }
         };
 
@@ -63,14 +63,14 @@ describe('test merging of component handlers', () => {
         secondLayerComponent.name = 'SecondLayerComponent';
         secondLayerComponent.handler = {
             SecondLayerComponent: {
-                secondLayerIntent() {}
+                secondLayerIntent() {return;}
             }
         };
         const thirdLayerComponent = new ComponentPlugin();
         thirdLayerComponent.name = 'ThirdLayerComponent';
         thirdLayerComponent.handler = {
             ThirdLayerComponent: {
-                thirdLayerIntent() {}
+                thirdLayerIntent() {return;}
             }
         };
 
@@ -84,11 +84,11 @@ describe('test merging of component handlers', () => {
 
         const expectedResult = JSON.stringify({
             FirstLayerComponent: {
-                firstLayerIntent() {},
+                firstLayerIntent() {return;},
                 SecondLayerComponent: {
-                    secondLayerIntent() {},
+                    secondLayerIntent() {return;},
                     ThirdLayerComponent: {
-                        thirdLayerIntent() {}
+                        thirdLayerIntent() {return;}
                     }
                 }
             }
@@ -103,14 +103,14 @@ describe('test merging of component handlers', () => {
         secondLayerComponent.name = 'SecondLayerComponent'
         secondLayerComponent.handler = {
             SecondLayerComponent: {
-                secondLayerIntent() {}
+                secondLayerIntent() {return;}
             }
         };
         const secondLayerComponent2 = new ComponentPlugin();
         secondLayerComponent2.name = 'SecondLayerComponent2'
         secondLayerComponent2.handler = {
             SecondLayerComponent2: {
-                secondLayerIntent2() {}
+                secondLayerIntent2() {return;}
             }
         };
 
@@ -123,12 +123,12 @@ describe('test merging of component handlers', () => {
 
         const expectedResult = JSON.stringify({
             FirstLayerComponent: {
-                firstLayerIntent() {},
+                firstLayerIntent() {return;},
                 SecondLayerComponent: {
-                    secondLayerIntent() {}
+                    secondLayerIntent() {return;}
                 },
                 SecondLayerComponent2: {
-                    secondLayerIntent2() {}
+                    secondLayerIntent2() {return;}
                 }
             }
         });
@@ -145,7 +145,7 @@ describe('test merging of component handlers', () => {
 
         const expectedResult = JSON.stringify({
             FirstLayerComponent: {
-                firstLayerIntent() {}
+                firstLayerIntent() {return;}
             }
         });
         const result = JSON.stringify(mockHandleRequest.app.config.handlers);
@@ -169,15 +169,15 @@ describe('test $activeComponents being updated correctly', () => {
         };
 
         mockHandleRequest = {
+            app: baseApp,
             jovo: {
+                $app: baseApp,
                 $session: {
                     $data: {
                         [SessionConstants.COMPONENT]: []
                     }
-                },
-                $app: baseApp
-            } as unknown as Jovo, // workaround so we don't have to implement whole interface
-            app: baseApp
+                }
+            } as unknown as Jovo // workaround so we don't have to implement whole interface
         } as unknown as HandleRequest;
 
         firstLayerComponent = new ComponentPlugin();
@@ -251,15 +251,15 @@ describe('test $components setup', () => {
         };
 
         mockHandleRequest = {
+            app: baseApp,
             jovo: {
+                $app: baseApp,
                 $session: {
                     $data: {
                         [SessionConstants.COMPONENT]: []
                     }
-                },
-                $app: baseApp
-            } as unknown as Jovo, // workaround so we don't have to implement whole interface
-            app: baseApp
+                }
+            } as unknown as Jovo // workaround so we don't have to implement whole interface
         } as unknown as HandleRequest;
 
         firstLayerComponent = new ComponentPlugin();
@@ -344,17 +344,17 @@ describe('test component session stack', () => {
         };
 
         mockHandleRequest = {
+            app: baseApp,
             jovo: {
+                $app: baseApp,
                 $session: {
                     $data: {
                         [SessionConstants.COMPONENT]: [
                             [firstLayerComponent.name, testComponentSessionData]
                         ]
                     }
-                },
-                $app: baseApp
-            } as unknown as Jovo, // workaround so we don't have to implement whole interface
-            app: baseApp
+                }
+            } as unknown as Jovo // workaround so we don't have to implement whole interface
         } as unknown as HandleRequest;
 
         clearMiddlewareFunctions(app);
@@ -529,7 +529,7 @@ describe.only('test loadI18nFiles()', () => {
 
         componentPlugin.loadI18nFiles(mockHandleRequest);
 
-        expect(componentPlugin.i18next!.config.filesDir).toBe('../components/test/src/i18n');
+        expect(componentPlugin.i18next!.config.filesDir).toBe('components/test/src/i18n');
     });
 
     test('should call i18next.loadFiles()', () => {
