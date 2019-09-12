@@ -1,0 +1,21 @@
+{
+    "extends": [
+        "tslint:latest",
+        "tslint-config-prettier"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "node_modules/**/*"
+        ]
+    },
+    "rules": {
+        "interface-name": [true, "never-prefix"],
+        "member-access": [true, "no-public"],
+        "no-empty-interface": false,
+        "quotemark": [true, "single"],
+        "ban-types": [
+            false,
+            ["Function", ""]
+        ]
+    }
+}

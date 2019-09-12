@@ -1,0 +1,2 @@
+
+export { VoiceHeroAlexa } from './VoiceHeroAlexa';
