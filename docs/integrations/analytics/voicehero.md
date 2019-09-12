@@ -111,5 +111,5 @@ Test your voice app, and your session should appear in the Sessions tab.
 
 ![VoiceHero Test](../../img/voicehero-sessions-test.png)
 
-<!--[metadata]: {"description": "Add oicehero Analytics to your Alexa Skills and Google Actions with Jovo",
+<!--[metadata]: {"description": "Add Voicehero Analytics to your Alexa Skills and Google Actions with Jovo",
 "route": "analytics/voicehero" }-->
