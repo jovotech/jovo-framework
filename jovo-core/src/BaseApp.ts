@@ -7,8 +7,12 @@ import { Log, LogLevel } from './Log';
 process.on('unhandledRejection', (reason, p) => {
 	Log.error('unhandledRejection');
 	Log.error(p);
-	Log.error(reason.stack);
-	Log.error(reason);
+	if (reason) {
+		if ((reason as any).stack) {
+			Log.error((reason as any).stack);
+		}
+		Log.error(reason);
+	}
 });
 
 process.on('uncaughtException', err => {

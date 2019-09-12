@@ -12,6 +12,7 @@ JovoError,
 Log
 } from 'jovo-core';
 import _merge = require('lodash.merge');
+import * as path from 'path';
 
 import * as util from 'util';
 
@@ -64,6 +65,10 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
             objectarray: ObjectArraySheet,
             responses: ResponsesSheet
 		};
+
+        if (process.env.JEST_WORKER_ID && this.config.credentialsFile && !path.isAbsolute(this.config.credentialsFile)) {
+            this.config.credentialsFile = path.join('./src', this.config.credentialsFile);
+        }
 
 		if (this.config.sheets) {
 			this.config.sheets.forEach((sheet: GoogleSheetsSheet) => {

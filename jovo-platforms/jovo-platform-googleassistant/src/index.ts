@@ -358,6 +358,16 @@ declare module './core/GoogleAction' {
 
 declare module './core/GoogleAction' {
     interface GoogleAction {
+        htmlResponse(obj: {
+            url?: string,
+            data?: Record<string, any>; // tslint:disable-line
+            suppress?: boolean;
+        }): this;
+    }
+}
+
+declare module './core/GoogleAction' {
+    interface GoogleAction {
         $notification?: Notification;
         notification(): Notification | undefined;
     }
@@ -434,6 +444,12 @@ declare module 'jovo-core/dist/src/Interfaces' {
 
             CompletePurchase?: {
                 skuId: string;
+            }
+
+            HtmlResponse?: {
+                url?: string;
+                data?: Record<string, any>; // tslint:disable-line
+                suppress?: boolean;
             }
         };
     }

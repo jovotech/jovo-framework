@@ -1,25 +1,30 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as http from 'http';
+import * as https from 'https';
+
 import { Log } from 'jovo-core';
 
 // Create a new express application instance
 const server: express.Application = express();
 
 server.jovoApp = undefined;
+server.ssl = undefined;
 server.use(bodyParser.json());
 
 server.listen = function () {
     if (server.jovoApp) {
         server.jovoApp.initWebhook();
     }
-    const s = http.createServer(this);
+    const s = server.ssl ? https.createServer(server.ssl, this) : http.createServer(this);
+
     // @ts-ignore
     return s.listen.apply(s, arguments);
 };
 
 const verifiedServer: express.Application = express();
 verifiedServer.jovoApp = undefined;
+verifiedServer.ssl = undefined;
 
 verifiedServer.listen = function () {
     try {
@@ -34,7 +39,7 @@ verifiedServer.listen = function () {
         router.use('/webhook_alexa', bodyParser.json());
         router.use('/webhook', bodyParser.json());
 
-        const httpServer = http.createServer(this);
+        const httpServer = verifiedServer.ssl ? https.createServer(verifiedServer.ssl, this) : http.createServer(this);
         // @ts-ignore
         return httpServer.listen.apply(httpServer, arguments); // eslint-disable-line
     } catch (error) {

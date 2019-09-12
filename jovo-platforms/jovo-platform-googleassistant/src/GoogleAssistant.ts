@@ -24,6 +24,7 @@ import {GoogleAssistantTestSuite} from './core/Interfaces';
 import {TransactionsPlugin} from "./modules/Transaction";
 import {DialogflowPlugin} from "jovo-platform-dialogflow";
 import {GoogleAssistantDialogflowFactory} from "./dialogflow/GoogleAssistantDialogflowFactory";
+import { InteractiveCanvas } from './modules/InteractiveCanvas';
 
 export interface Config extends ExtensibleConfig {
     handlers?: any; //tslint:disable-line
@@ -84,7 +85,8 @@ export class GoogleAssistant extends Extensible implements Platform {
             new AskFor(),
             new MediaResponsePlugin(),
             new UpdatesPlugin(),
-            new TransactionsPlugin()
+            new TransactionsPlugin(),
+            new InteractiveCanvas()
         );
 
         Jovo.prototype.$googleAction = undefined;

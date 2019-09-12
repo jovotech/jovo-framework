@@ -444,6 +444,10 @@
                         {
                             "title": "Botanalytics",
                             "route": "analytics/botanalytics"
+                        },
+                        {
+                            "title": "VoiceHero",
+                            "route": "analytics/voicehero"
                         }
                     ]
                 }

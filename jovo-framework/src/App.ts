@@ -6,7 +6,8 @@ import {
 	Host,
 	Log,
 	Logger,
-	LogLevel
+	LogLevel,
+    Middleware
 } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 
@@ -56,6 +57,94 @@ if (process.argv.includes('--stage')) {
 		process.argv.indexOf('--stage') + 1
 	].trim();
 }
+
+if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-report')) {
+
+    const middlewareMap: Record<string, string[]> = {};
+
+    function getInstallLocation(stackStr: string, parent: string, middleware: string) {
+        const stackArray = stackStr.split('\n');
+        for (let i = 0; i < stackArray.length; i++) {
+            const stackLine = stackArray[i];
+            if (stackLine.includes('Middleware.use')) {
+                const nextStackLine = stackArray[i + 1];
+                let pluginName = 'Object.<anonymous>';
+
+                if (!nextStackLine.includes(pluginName)) {
+                    pluginName = nextStackLine.substring(nextStackLine.indexOf('at') + 3, nextStackLine.indexOf('.install'));
+                }
+                let location = ' - ' + nextStackLine.substring(nextStackLine.indexOf('(') + 1, nextStackLine.indexOf(')'));
+                // location = location.substring(process.cwd().length - 3);
+                location = '';
+                const middlewareFullKey = `${parent}.${middleware}`;
+
+
+                if (!middlewareMap[middlewareFullKey]) {
+                    middlewareMap[middlewareFullKey] = [];
+                }
+
+                middlewareMap[middlewareFullKey].push(`${pluginName}${location}`);
+
+            }
+        }
+
+    }
+
+    const oldMiddlewareUse = Middleware.prototype.use;
+
+    Middleware.prototype.use = function(fns) {
+        getInstallLocation(new Error().stack!, this.parent.constructor.name, this.name);
+        oldMiddlewareUse.call(this, fns);
+        return this;
+    };
+
+
+    const oldBaseAppHandle = BaseApp.prototype.handle;
+    BaseApp.prototype.handle = async function (host) {
+        Log.info();
+        Log.infoStart('Handle duration ')
+        await oldBaseAppHandle.call(this, host);
+        Log.infoEnd('Handle duration ')
+    };
+
+
+    const oldMiddlewareRun = Middleware.prototype.run;
+
+    Middleware.prototype.run = async function(object, concurrent) {
+        const start = process.hrtime();
+        await oldMiddlewareRun.call(this, object, concurrent);
+        const end = process.hrtime();
+
+        // duration of the complete middleware process
+        let duration = (end[1] - start[1]) / 1000 / 1000; // from nano to ms
+
+        if (duration < 0) {
+            duration = 0;
+        }
+
+        Log.writeToStreams(`\b→ ${this.parent.constructor.name}.${this.name}`, 2, false);
+
+        if (duration <= 80) { // good value
+            Log.green().info(`+${duration.toFixed(0)}ms`);
+        } else if (duration > 80 && duration <= 200) {  // ok value
+            Log.yellow().info(`+${duration.toFixed(0)}ms`);
+        } else if (duration > 200) {  // bad value
+            Log.red().info(`+${duration.toFixed(0)}ms`);
+        }
+
+        const middlewareFullKey = `${this.parent.constructor.name}.${this.name}`;
+
+
+        if (middlewareMap[middlewareFullKey]) {
+            middlewareMap[middlewareFullKey].forEach((impl) => {
+                // Log.dim().info(`↓ ${impl}`);
+            })
+        }
+    };
+
+}
+
+
 
 export class App extends BaseApp {
 	config: Config = {

@@ -101,7 +101,7 @@ export class Conversation {
         if (req.isNewSession()) {
             this.clearSession();
         } else if (Object.keys(this.sessionData).length > 0) {
-            req.setSessionData(this.sessionData);
+            req.setSessionData({...this.sessionData});
         }
 
         return req;

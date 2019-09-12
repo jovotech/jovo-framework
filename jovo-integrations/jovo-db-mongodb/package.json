@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-mongodb",
-  "version": "2.2.9",
+  "version": "2.2.13",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.9",
+    "jovo-core": "^2.2.12",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",
@@ -26,7 +26,7 @@
     "@types/lodash": "^4.14.109",
     "@types/mongodb": "^3.1.17",
     "@types/node": "^10.3.1",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "mongodb-memory-server": "^4.2.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

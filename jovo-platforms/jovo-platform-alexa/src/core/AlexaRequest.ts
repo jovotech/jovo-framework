@@ -126,6 +126,24 @@ export interface Slot {
     confirmationStatus?: ConfirmationStatus;
     value: string;
     source?: string;
+    resolutions?: {
+        resolutionsPerAuthority: AuthorityResolution[];
+    };
+}
+
+export type AuthorityResolutionStatusCode = 'ER_SUCCESS_MATCH' | 'ER_SUCCESS_NO_MATCH' | 'ER_ERROR_TIMEOUT' | 'ER_ERROR_EXCEPTION';
+
+export interface AuthorityResolution {
+    authority: string;
+    status: {
+        code: AuthorityResolutionStatusCode
+    };
+    values: Array<{
+        value: {
+            name: string;
+            id: string;
+        }
+    }>;
 }
 
 export interface Intent {
@@ -184,7 +202,6 @@ export interface AlexaRequestJSON {
     context?: Context;
     session?: Session;
     request?: Request;
-    resolutions?: any; // tslint:disable-line
 }
 
 
@@ -206,7 +223,7 @@ export class AlexaRequest implements JovoRequest {
 
         if (this.context && this.context.Viewport) {
 
-            device = "Unknow Device with Screen " + this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
+            device = "Unknown Device with Screen " + this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
 
             if (this.context.Viewport.pixelWidth === 480 &&
                 this.context.Viewport.pixelHeight === 480 &&
@@ -242,7 +259,6 @@ export class AlexaRequest implements JovoRequest {
 
     getScreenResolution(): string | undefined {
         let resolution;
-
         if (this.context && this.context.Viewport) {
             resolution = this.context.Viewport.pixelWidth + 'x' + this.context.Viewport.pixelHeight;
         }
@@ -277,14 +293,86 @@ export class AlexaRequest implements JovoRequest {
                 input.value = slots[slot].value;
                 input.key = slots[slot].value;
             }
-            if (_get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]')) {
-                input.key = _get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.name;
-                input.id = _get(slots[slot], 'resolutions.resolutionsPerAuthority[0].values[0]').value.id;
-            }
+
+            // check static entities first
+            this.getStaticEntityMatches(slot).forEach((authorityResolution: AuthorityResolution) => {
+                input.key = authorityResolution.values[0].value.name;
+                input.id = authorityResolution.values[0].value.id;
+            });
+
+            // dynamic entities have higher priority
+            this.getDynamicEntityMatches(slot).forEach((authorityResolution: AuthorityResolution) => {
+                input.key = authorityResolution.values[0].value.name;
+                input.id = authorityResolution.values[0].value.id;
+            });
+
             inputs[slot] = input;
         });
 
         return inputs;
+    }
+
+
+    /**
+     * Returns all entity resolutions for the slot name.
+     * @param slotName
+     */
+    getEntityResolutions(slotName: string): AuthorityResolution[] {
+
+        if (this.request &&
+            this.request.intent &&
+            this.request.intent.slots &&
+            this.request.intent.slots[slotName]) {
+
+            const slot = this.request.intent.slots[slotName];
+
+            if (slot.resolutions && slot.resolutions.resolutionsPerAuthority) {
+                return slot.resolutions.resolutionsPerAuthority as AuthorityResolution[];
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Returns true if there is a successful matched entity
+     * @param slotName
+     */
+    hasEntityMatch(slotName: string): boolean {
+        return typeof this.getEntityResolutions(slotName).find((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
+        }) !== 'undefined';
+    }
+
+    /**
+     * Returns array of successfully matched entities
+     * @param slotName
+     */
+    getEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH';
+        });
+    }
+
+    /**
+     * Returns array of successfully matched dynamic entities
+     * @param slotName
+     */
+    getDynamicEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
+                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.dynamic');
+        });
+    }
+
+    /**
+     * Returns array of successfully matched static entities
+     * @param slotName
+     */
+    getStaticEntityMatches(slotName: string): AuthorityResolution[] {
+        return this.getEntityResolutions(slotName).filter((authorityResolution: AuthorityResolution) => {
+            return authorityResolution.status.code === 'ER_SUCCESS_MATCH' &&
+                authorityResolution.authority.startsWith('amzn1.er-authority.echo-sdk.amzn1');
+        });
     }
 
     setInputs(inputs: Inputs): this {
@@ -310,8 +398,12 @@ export class AlexaRequest implements JovoRequest {
         return this;
     }
 
-    getLocale() {
-        return _get(this, 'request.locale');
+    getLocale(): string {
+        return this.request!.locale;
+    }
+
+    getLanguage(): string {
+        return this.getLocale().substring(0, 2);
     }
 
     getSessionData() {

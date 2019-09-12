@@ -9,8 +9,8 @@ import {
     Coordinate,
     Altitude,
     Heading,
-    Speed
-} from "./AlexaRequest";
+    Speed, AuthorityResolution,
+} from './AlexaRequest';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -92,6 +92,51 @@ export class AlexaSkill extends Jovo {
         return this.$request!.getLocale();
     }
 
+
+    /**
+     * Returns all entity resolutions for the slot name.
+     * @param slotName
+     */
+    getEntityResolutions(slotName: string): AuthorityResolution[] {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getEntityResolutions(slotName);
+    }
+
+    /**
+     * Returns true if there is a successful matched entity
+     * @param slotName
+     */
+    hasEntityMatch(slotName: string): boolean {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.hasEntityMatch(slotName);
+    }
+
+    /**
+     * Returns array of successfully matched entities
+     * @param slotName
+     */
+    getEntityMatches(slotName: string): AuthorityResolution[] {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getEntityMatches(slotName);
+    }
+
+    /**
+     * Returns array of successfully matched dynamic entities
+     * @param slotName
+     */
+    getDynamicEntityMatches(slotName: string): AuthorityResolution[] {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getDynamicEntityMatches(slotName);
+    }
+
+    /**
+     * Returns array of successfully matched static entities
+     * @param slotName
+     */
+    getStaticEntityMatches(slotName: string): AuthorityResolution[] {
+        const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+        return alexaRequest.getStaticEntityMatches(slotName);
+    }
 
     /**
      * Returns UserID

@@ -102,7 +102,7 @@ export class Handler implements Plugin {
 
         // no callback 'done' parameter
         if (params.length < 2) {
-            const result = await func.apply(jovo, [ jovo ]);
+            const result = await func.apply(Object.assign(jovo, jovo.$handlers), [ jovo ]); // tslint:disable-line
             if (typeof result === 'undefined') {
                 return;
             } else if (result.constructor.name === 'Promise') {
@@ -113,7 +113,7 @@ export class Handler implements Plugin {
             }
         } else {
             return new Promise(resolve => {
-                func.apply(jovo, [ jovo, resolve ]);
+                func.apply(Object.assign(jovo, jovo.$handlers), [ jovo, resolve ]); // tslint:disable-line
             });
         }
     }
@@ -194,7 +194,7 @@ export class Handler implements Plugin {
 
             // no callback 'done' parameter
             if (params.length < 2) {
-                const result = await func.apply(jovo, [ jovo ]);
+                const result = await func.apply(Object.assign(jovo, jovo.$handlers), [ jovo ]); // tslint:disable-line
                 if (typeof result === 'undefined') {
                     return;
                 } else if (result.constructor.name === 'Promise') {
@@ -204,7 +204,7 @@ export class Handler implements Plugin {
                 }
             } else {
                 return new Promise(resolve => {
-                    func.apply(jovo, [ jovo, resolve ]);
+                    func.apply(Object.assign(jovo, jovo.$handlers), [ jovo, resolve ]); // tslint:disable-line
                 });
             }
         }

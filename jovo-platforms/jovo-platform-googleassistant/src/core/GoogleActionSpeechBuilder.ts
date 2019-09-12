@@ -15,7 +15,7 @@ export class GoogleActionSpeechBuilder extends SpeechBuilder {
      * @param {number} probability
      * @return {SpeechBuilder}
      */
-    addAudio(url: string, text = '', condition: boolean, probability: number) {
+    addAudio(url: string, text = '', condition?: boolean, probability?: number) {
         // gets random element from array if url
         // is of type array
         if (Array.isArray(url)) {
