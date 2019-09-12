@@ -10,6 +10,19 @@ export interface Directive {
     type: string;
     updatedIntent?: object;
     slotToElicit?: string;
+    updateBehavior?: 'CLEAR' | 'REPLACE';
+    types?: DynamicEntityType[];
+}
+
+export interface DynamicEntityType {
+    name: string;
+    values: Array<{
+        id?: string;
+        name?: {
+            value: string,
+            synonyms?: string[];
+        }
+    }>;
 }
 
 export interface Response {

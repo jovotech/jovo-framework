@@ -1,0 +1,20 @@
+{
+  "name": "jovo-examples-googleassistant-interactive-canvas",
+  "version": "2.2.15",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd src && node index.js --webhook",
+    "launch": "npm start -- --launch",
+    "webapp": "node webapp/server.js",
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^2.2.15",
+    "jovo-platform-googleassistant": "^2.2.15"
+  }
+}

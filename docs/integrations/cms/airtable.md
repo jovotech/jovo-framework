@@ -71,6 +71,7 @@ module.exports = {
                     name: '<name>',
                     table: '<tableName>',
                     type: '<TableType>',
+                    order: ['UserId', 'Name', 'Location'],
                     selectOptions: {
                         fields: ['UserId', 'Name', 'Location']
                         sort: [
@@ -104,6 +105,7 @@ const config = {
                     name: '<name>',
                     table: '<tableName>',
                     type: '<TableType>',
+                    order: ['UserId', 'Name', 'Location'],
                     selectOptions: {
                         fields: ['UserId', 'Name', 'Location']
                         sort: [
@@ -130,7 +132,8 @@ Name | Description | Value | Required
 `tables` | Contains information about the tables of your base | `object[]` | Yes
 `tables.name` | The name which you will use to access the table: `this.$cms.name` | `string` | Yes
 `tables.table` | The name you've given the table in your base | `string` | Yes
-`tables.type` | The table type you want to use. Default: `default` | `string` - either `default`, `responses`, `keyvalue` or `objectarray` | Nos
+`tables.type` | The table type you want to use. Default: `default` | `string` - either `default`, `responses`, `keyvalue` or `objectarray` | No
+`tables.order` | To ensure that the values we retrieve from the Airtable API are in the correct order, you can specify an array of strings representing the order of columns, e.g. the value at index 0 of the array should be the title of the first column. This is especially important if you plan on using the default sheet type (2 dimensional array)| `string[]` | No
 `tables.selectOptions` | Allows you to specify how the data should be retrieved from your table | `object` | No
 `tables.selectOptions.fields` | Specify the fields (columns) that should be retrieved. If you decide to not retrieve the primary column of your table, keep in mind that in that case the last column of your table will be put in the first place of the array | `string[]` | No
 `tables.selectOptions.filterByFormula` | A [formula](https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference) used to filter records. The formula will be evaluated for each record, and if the result is not `0`, `false`, `""`, `NaN`, `[]`, or `#Error!` the record will be included in the response | `string` | No

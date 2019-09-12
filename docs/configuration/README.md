@@ -7,7 +7,7 @@ Learn more about how to configure your Jovo project
 
 ## Overview
 
-Learn more about the different configuration elements here:
+Learn more about different configuration elements here:
 
 * [Project Structure](./project-structure.md './project-structure')
 * [app.js](./app-js.md './app-js')

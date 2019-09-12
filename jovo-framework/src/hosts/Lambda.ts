@@ -14,6 +14,10 @@ export class Lambda implements Host {
     isApiGateway = false;
     $request: any; // tslint:disable-line
 
+    responseHeaders: Record<string, string> = {
+        'Content-Type': 'application/json; charset=utf-8',
+    };
+
     hasWriteFileAccess = false;
 
     constructor(event: any, context: any, callback: Function) { // tslint:disable-line
@@ -37,9 +41,7 @@ export class Lambda implements Host {
             if (this.isApiGateway) {
                 this.callback(null, {
                     body: JSON.stringify(obj),
-                    headers: {
-                        'Content-Type': 'application/json; charset=utf-8',
-                    },
+                    headers: this.responseHeaders,
                     isBase64Encoded: false,
                     statusCode: 200,
                 });

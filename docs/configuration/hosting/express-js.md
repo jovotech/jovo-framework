@@ -121,6 +121,33 @@ $ npm install alexa-verifier-middleware
 
 You can now Access the secured version of your application at /webhook_alexa and the unsecure version at /webhook.
 
+### SSL 
+
+```javascript
+// @language=javascript
+
+// src/index.js
+const fs = require('fs');
+
+// Add this
+Webhook.ssl = {
+   key: fs.readFileSync('/path/to/cert.key'),
+   cert: fs.readFileSync('/path/to/cert.pem'),
+};
+
+// @language=typescript
+
+// src/index.ts
+import * as fs from 'fs';
+
+// Add this
+Webhook.ssl = {
+   key: fs.readFileSync('/path/to/cert.key'),
+   cert: fs.readFileSync('/path/to/cert.pem'),
+};
+```
+
+
 ### Run Server
 
 To run the server, use the following command:

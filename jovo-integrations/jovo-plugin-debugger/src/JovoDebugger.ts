@@ -18,7 +18,12 @@ const fsexists = util.promisify(fs.exists);
 const WEBHOOK_URL = 'https://webhook.jovo.cloud';
 process.on('unhandledRejection', (reason, p) => {
     // Stack Trace
-    Log.error(reason.stack);
+    if (reason) {
+        if ((reason as any).stack) {
+            Log.error((reason as any).stack);
+        }
+        Log.error(reason);
+    }
 });
 
 export interface Config extends PluginConfig {

@@ -10,9 +10,11 @@ import _merge = require('lodash.merge');
 import { AirtableCMS } from './AirtableCMS';
 
 export interface AirtableTable extends PluginConfig {
+    caching?: boolean;
     name?: string;
-    type?: string;
+    order?: string[], // correct order of columns, i.e. index 0 should be first column of table
     table?: string;
+    type?: string;
     selectOptions?: {
         // documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
         fields?: string[];
@@ -21,13 +23,14 @@ export interface AirtableTable extends PluginConfig {
         sort?: object[];
         view?: string;
     };
-    caching?: boolean;
+
 }
 
 export class DefaultTable implements Plugin {
     config: AirtableTable = {
         caching: true,
         enabled: true,
+        order: [],
         selectOptions: {
             view: 'Grid view',
         },
@@ -81,8 +84,13 @@ export class DefaultTable implements Plugin {
                 'https://www.jovo.tech/docs/cms/airtable#configuration',
             ));
         }
+        const loadOptions = {
+            order: this.config.order,
+            selectOptions: this.config.selectOptions,
+            table: this.config.table
+        };
 
-        const values = await this.cms.loadTableData(this.config.selectOptions, this.config.table);
+        const values = await this.cms.loadTableData(loadOptions);
 
         if (values) {
             this.parse(handleRequest, values);

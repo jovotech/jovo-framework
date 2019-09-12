@@ -5,14 +5,27 @@ import {AppData, Db, HandleRequest, Host, Platform} from './Interfaces';
 import {Log, LogLevel} from './Log';
 
 process.on('unhandledRejection', (reason, p) => {
-    Log.error('unhandledRejection');
-    Log.error(p);
-    Log.error(reason.stack);
-    Log.error(reason);
+	Log.error('unhandledRejection');
+	Log.error(p);
+	if (reason) {
+		if ((reason as any).stack) {
+			Log.error((reason as any).stack);
+		}
+		Log.error(reason);
+	}
 });
 
 process.on('uncaughtException', err => {
-    JovoError.printError(err as JovoError);
+
+    if ((err as JovoError).code && (err as JovoError).code === 'EADDRINUSE') {
+    	const usedPort = err.message.replace( /^\D+/g, '');
+        err.message = `The port ${usedPort} is already in use.`;
+		(err as JovoError).hint = 'You might already run Jovo in a different tab. ' +
+			'If the port is used by a different application, you can either change the port number in src/index.js, or specify the port as an option,' +
+			' e.g. jovo run --port 3301';
+    }
+
+	JovoError.printError(err as JovoError);
 });
 
 export type BaseAppMiddleware =

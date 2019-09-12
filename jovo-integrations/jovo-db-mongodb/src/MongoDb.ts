@@ -30,8 +30,6 @@ export class MongoDb implements Db {
     async install(app: BaseApp) {
         this.errorHandling();
 
-        this.client = await this.getConnectedMongoClient(this.config.uri!);
-
         if (_get(app.config, 'db.default')) {
             if (_get(app.config, 'db.default') === 'MongoDb') {
                 app.$db = this;
@@ -39,6 +37,12 @@ export class MongoDb implements Db {
         } else {
             app.$db = this;
         }
+    }
+    async initClient() {
+        if(!this.client && this.config.uri) {
+            this.client = await this.getConnectedMongoClient(this.config.uri);
+        }
+
     }
 
     async getConnectedMongoClient(uri: string): Promise<MongoClient> {
@@ -98,6 +102,7 @@ export class MongoDb implements Db {
      */
     async load(primaryKey: string): Promise<any> { // tslint:disable-line
         try {
+            await this.initClient();
             const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const doc = await collection.findOne({ userId: primaryKey });
             return doc;
@@ -117,6 +122,7 @@ export class MongoDb implements Db {
         this.errorHandling();
 
         try {
+            await this.initClient();
             const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             const item = {
                 $set: {
@@ -143,6 +149,7 @@ export class MongoDb implements Db {
 
     async delete(primaryKey: string) {
         try {
+            await this.initClient();
             const collection = this.client!.db(this.config.databaseName!).collection(this.config.collectionName!);
             await collection.deleteOne({ userId: primaryKey });
         } catch (e) {
