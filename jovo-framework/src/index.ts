@@ -1,7 +1,7 @@
 import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Util } from 'jovo-core';
 import { App } from './App';
 
-import { Component, ComponentDelegationOptions } from './middleware/Component';
+import { Component, ComponentDelegationOptions, ComponentResponse } from './middleware/Component';
 import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Route } from './middleware/Router';
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
@@ -23,9 +23,12 @@ export { Util, LogLevel, Log };
 export { 
     Component,
     ComponentConfig,
+    ComponentConstructorOptions,
+    ComponentData,
     ComponentDelegationOptions,
     ComponentResponse,
-    ComponentResponseStatus
+    ComponentResponseStatus,
+    ComponentSessionData
 } from './middleware/Component';
 
 export { ComponentPlugin } from './middleware/ComponentPlugin'
@@ -146,6 +149,9 @@ declare module 'jovo-core/dist/src/Jovo' {
         $activeComponents: {
             [ key: string ]: ComponentPlugin
         };
+
+        sendComponentResponse(response: ComponentResponse): Promise<void>;
+        // getActiveComponent(): Component; TODO
     }
 }
 

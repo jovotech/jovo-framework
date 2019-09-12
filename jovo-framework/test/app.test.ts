@@ -52,21 +52,6 @@ describe('test useComponents()', () => {
         app = new App();
     });
 
-    test('should add componentPlugin\'s handler to handlers', () => {
-        const testFunction = () => {
-            //
-        };
-        componentPlugin.handler = {
-            test: testFunction,
-        };
-
-        app.useComponents(componentPlugin);
-
-        expect(app.config.handlers).toEqual({
-            test: testFunction,
-        });
-    });
-
     test('should add componentPlugin to $plugins map', () => {
         componentPlugin.name = 'test';
 

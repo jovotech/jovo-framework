@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'UNIT_TEST';
 import { I18Next } from 'jovo-cms-i18next';
 import { BaseApp, HandleRequest, Jovo, SessionConstants } from 'jovo-core';
 import { ComponentConfig, ComponentPlugin, App, Component } from '../../src';
+import { ComponentConstructorOptions, ComponentSessionData } from '../../src/middleware/Component';
 
 describe('test constructor', () => {
     let componentPlugin: ComponentPlugin;
@@ -173,7 +174,8 @@ describe('test $activeComponents being updated correctly', () => {
                     $data: {
                         [SessionConstants.COMPONENT]: []
                     }
-                }
+                },
+                $app: baseApp
             } as unknown as Jovo, // workaround so we don't have to implement whole interface
             app: baseApp
         } as unknown as HandleRequest;
@@ -198,7 +200,7 @@ describe('test $activeComponents being updated correctly', () => {
         const secondLayerComponent = new ComponentPlugin();
         firstLayerComponent.useComponents(secondLayerComponent);
         app.useComponents(firstLayerComponent);
-        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [firstLayerComponent.name!];
+        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [[firstLayerComponent.name!, {}]];
         
         await app.middleware('setup')!.run(mockHandleRequest);
         await app.middleware('handler')!.run(mockHandleRequest);
@@ -218,7 +220,10 @@ describe('test $activeComponents being updated correctly', () => {
         secondLayerComponent.useComponents(thirdLayerComponent);
         firstLayerComponent.useComponents(secondLayerComponent);
         app.useComponents(firstLayerComponent);
-        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [firstLayerComponent.name, secondLayerComponent.name];
+        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [
+            [firstLayerComponent.name, {}],
+            [secondLayerComponent.name, {}]
+        ];
         
         await app.middleware('setup')!.run(mockHandleRequest);
         await app.middleware('handler')!.run(mockHandleRequest);
@@ -251,7 +256,8 @@ describe('test $components setup', () => {
                     $data: {
                         [SessionConstants.COMPONENT]: []
                     }
-                }
+                },
+                $app: baseApp
             } as unknown as Jovo, // workaround so we don't have to implement whole interface
             app: baseApp
         } as unknown as HandleRequest;
@@ -280,7 +286,7 @@ describe('test $components setup', () => {
     test('should fill $components with $activeComponents', async () => {
         app.useComponents(firstLayerComponent);
         mockHandleRequest.app.$baseComponents = {[firstLayerComponent.name!]: firstLayerComponent};
-        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [firstLayerComponent.name];
+        mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [[firstLayerComponent.name, {}]];
 
         await app.middleware('handler')!.run(mockHandleRequest);
 
@@ -297,7 +303,7 @@ describe('test $components setup', () => {
      * i-th component name is compared with i-th componentPlugin name.
      * Returns false if they don't match
      * @param {Component[]} components $components values
-     * @param {ComponentPlugin[]} componentPlugins $
+     * @param {ComponentPlugin[]} componentPlugins
      */
     function compareComponentNames(components: Component[], componentPlugins: ComponentPlugin[]): boolean {
         for (let i = 0; i < components.length; i++) {
@@ -308,6 +314,138 @@ describe('test $components setup', () => {
 
         return true;
     }
+});
+
+describe('test component session stack', () => {
+    // $components should have a `Component` object for each `ComponentPlugin` in $activeComponents
+    let app: App;
+    let baseApp: BaseApp;
+    let mockHandleRequest: HandleRequest;
+    let firstLayerComponent: ComponentPlugin;
+    let componentConstructorOptions: ComponentConstructorOptions;
+    let testComponentSessionData: ComponentSessionData;
+
+    beforeEach(() => {
+        app = new App();
+        baseApp = new BaseApp();
+
+        testComponentSessionData = {
+            data: {},
+            onCompletedIntent: 'test',
+            stateBeforeDelegate: 'test'
+        };
+
+        firstLayerComponent = new ComponentPlugin();
+        firstLayerComponent.name = 'FirstLayerComponent';
+
+        componentConstructorOptions = {
+            config: {enabled: true},
+            name: 'FirstLayerComponent'
+        };
+
+        mockHandleRequest = {
+            jovo: {
+                $session: {
+                    $data: {
+                        [SessionConstants.COMPONENT]: [
+                            [firstLayerComponent.name, testComponentSessionData]
+                        ]
+                    }
+                },
+                $app: baseApp
+            } as unknown as Jovo, // workaround so we don't have to implement whole interface
+            app: baseApp
+        } as unknown as HandleRequest;
+
+        clearMiddlewareFunctions(app);
+    });
+
+    describe('test loading of component session data', () => {
+        test('should load the saved session data into the active component', () => {
+            mockHandleRequest.jovo!.$components = {
+                FirstLayerComponent: new Component(componentConstructorOptions)
+            };
+    
+            ComponentPlugin.loadLatestComponentSessionData(mockHandleRequest.jovo!);
+    
+            const component = mockHandleRequest.jovo!.$components.FirstLayerComponent;
+    
+            expect(component.data).toEqual(testComponentSessionData.data);
+            expect(component.onCompletedIntent).toBe(testComponentSessionData.onCompletedIntent);
+            expect(component.stateBeforeDelegate).toBe(testComponentSessionData.stateBeforeDelegate);
+        });
+    
+        test('should not change any of the session data', () => {
+            mockHandleRequest.jovo!.$components = {
+                FirstLayerComponent: new Component(componentConstructorOptions)
+            };
+    
+            ComponentPlugin.loadLatestComponentSessionData(mockHandleRequest.jovo!);
+    
+            expect(mockHandleRequest.jovo!.$session.$data).toEqual({
+                [SessionConstants.COMPONENT]: [
+                    [firstLayerComponent.name, testComponentSessionData]
+                ]
+            });
+        });
+        
+        test('should load the data of the latest component of the session stack', () => {
+            mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT].unshift(['test', {}]);
+
+            mockHandleRequest.jovo!.$components = {
+                FirstLayerComponent: new Component(componentConstructorOptions)
+            };
+    
+            ComponentPlugin.loadLatestComponentSessionData(mockHandleRequest.jovo!);
+    
+            const component = mockHandleRequest.jovo!.$components.FirstLayerComponent;
+    
+            expect(component.data).toEqual(testComponentSessionData.data);
+            expect(component.onCompletedIntent).toBe(testComponentSessionData.onCompletedIntent);
+            expect(component.stateBeforeDelegate).toBe(testComponentSessionData.stateBeforeDelegate);
+        });
+    });
+
+    describe('test saving of component session data', () => {
+        test('should save the data of the current active component', () => {
+            const FirstLayerComponent = new Component(componentConstructorOptions);
+            FirstLayerComponent.data = {};
+            FirstLayerComponent.onCompletedIntent = 'newIntent';
+            FirstLayerComponent.stateBeforeDelegate = 'newState';
+
+            mockHandleRequest.jovo!.$components = {
+                FirstLayerComponent
+            };
+
+            ComponentPlugin.saveComponentSessionData(mockHandleRequest);
+
+            expect(mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT][0][1]).toEqual({
+                data: {},
+                onCompletedIntent: 'newIntent',
+                stateBeforeDelegate: 'newState'
+            });
+        });
+
+        test('should leave the other component\'s data unchanged', () => {
+            mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT].push(['SecondLayerComponent', {}]);
+
+            const SecondLayerComponent = new Component(componentConstructorOptions);
+            SecondLayerComponent.data = {};
+            SecondLayerComponent.onCompletedIntent = 'newIntent';
+            SecondLayerComponent.stateBeforeDelegate = 'newState';
+
+            mockHandleRequest.jovo!.$components = {
+                SecondLayerComponent
+            };
+
+            ComponentPlugin.saveComponentSessionData(mockHandleRequest);
+
+            expect(mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT][0]).toEqual(
+                ['FirstLayerComponent', testComponentSessionData]
+            );
+        });
+    });
+
 });
 
 
@@ -327,7 +465,7 @@ describe('test mergeConfig()', () => {
             b: 'test',
         } as unknown as ComponentConfig;
 
-        const mergedConfig = componentPlugin.mergeConfig(appConfig);
+        const mergedConfig = {a: 'test', b: 'test'};
 
         expect(mergedConfig).toEqual({
             a: 'test',
@@ -363,7 +501,7 @@ describe('test mergeConfig()', () => {
 //     });
 // });
 
-describe('test loadI18nFiles()', () => {
+describe.only('test loadI18nFiles()', () => {
     let componentPlugin: ComponentPlugin;
     let mockHandleRequest: HandleRequest;
     let i18next: I18Next;

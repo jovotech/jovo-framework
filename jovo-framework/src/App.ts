@@ -366,22 +366,35 @@ export class App extends BaseApp {
 		await super.handle(host);
 	}
 
+	/**
+	 * 
+	 * @param {ComponentPlugin[]} components 
+	 */
 	useComponents(...components: ComponentPlugin[]) {
-		// setActiveComponents has to be executed before initializeComponent
-		this.middleware('before.handler')!.use(ComponentPlugin.setActiveComponents, ComponentPlugin.initializeComponent);
-		this.middleware('before.platform.output')!.use(ComponentPlugin.updateSessionComponentStack);
+		/**
+		 * router needs to access $components object,
+		 * which gets initialized in `initializeComponents`
+		 */
+		this.middleware('before.router')!.use(ComponentPlugin.initializeComponents);
+		this.middleware('platform.output')!.use(ComponentPlugin.saveComponentSessionData);
 
 		components.forEach((componentPlugin) => {
 			this.middleware('setup')!.use(componentPlugin.setAsBaseComponent.bind(componentPlugin));
-			componentPlugin.install(this);
 
-			const componentAppConfig: ComponentConfig = _cloneDeep(
-				this.$config.plugin[componentPlugin.name!]
-			); // config defined in project's main config.js file
-			componentPlugin.config = componentPlugin.mergeConfig(componentAppConfig);
-			
-			// 1st layer components handler have to be set after the child component's handler were merged
-			// currently they are merged in `after.setup`
+			componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
+
+			if (this.$config.components) {
+				const componentAppConfig: ComponentConfig = _cloneDeep(
+					this.$config.components[componentPlugin.name!]
+				); // config defined in project's main config.js file
+				_merge(componentPlugin.config, componentAppConfig);
+			}
+
+			componentPlugin.install(this);
+			/**
+			 * 1st layer components handler have to be set after the child component's handler were merged
+			 * currently they are merged in `after.setup`
+			 */
 			this.middleware('before.request')!.use(componentPlugin.setHandler.bind(componentPlugin));
 			this.$plugins.set(componentPlugin.name!, componentPlugin);
 
