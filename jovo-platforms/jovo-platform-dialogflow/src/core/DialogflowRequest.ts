@@ -93,7 +93,8 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         if (typeof _get(this.originalDetectIntentRequest, 'payload.isNewSession') === 'function') {
             return this.originalDetectIntentRequest.payload.isNewSession();
         }
-        return true;
+        const sessionContext: Context | undefined = this.getSessionContext();
+        return typeof sessionContext === 'undefined';
     }
 
     getIntentName() {
