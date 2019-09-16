@@ -50,7 +50,7 @@ export class DialogflowAgent extends Jovo {
      * @return {boolean}
      */
     isNewSession(): boolean {
-        return true;
+        return this.$request!.isNewSession();
     }
 
 
