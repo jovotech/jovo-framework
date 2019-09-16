@@ -1,0 +1,75 @@
+{
+  "name": "jovo-platform-sapcai",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "tslint": "node_modules/.bin/tslint -p tsconfig.json -c tslint.json",
+    "tsc": "node_modules/.bin/tsc",
+    "rimraf": "node_modules/.bin/rimraf ./dist",
+    "typedoc": "node_modules/.bin/typedoc --out ./docs ./ --mode file",
+    "test": "node_modules/.bin/jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/express": "^4.17.1",
+    "jovo-core": "^2.2.12",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.get": "^4.4.2",
+    "lodash.map": "^4.6.0",
+    "lodash.merge": "^4.6.1",
+    "lodash.sample": "^4.2.1",
+    "lodash.set": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/express": "^4.16.0",
+    "@types/lodash.camelcase": "^4.3.4",
+    "@types/lodash.clonedeep": "^4.5.4",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.map": "^4.6.13",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/lodash.sample": "^4.2.4",
+    "@types/lodash.set": "^4.3.6",
+    "@types/node": "^10.3.1",
+    "jest": "^24.9.0",
+    "jovo-framework": "^2.2.15",
+    "lodash.clonedeep": "^4.5.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^24.0.1",
+    "tslint": "^5.17.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.4.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/dist/",
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
+  },
+  "files": [
+    "dist/src/**/*",
+    "sample-request-json",
+    "sample-response-json"
+  ]
+}

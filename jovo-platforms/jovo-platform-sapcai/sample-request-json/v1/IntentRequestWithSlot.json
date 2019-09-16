@@ -1,0 +1,66 @@
+{
+  "nlp": {
+          "uuid": "f02e584e-d616-4f2e-8d11-465639cf2b94",
+          "intents": [
+                  {
+                          "slug": "answerintent",
+                          "confidence": 0.99,
+                          "description": null
+                  }
+          ],
+          "entities": {
+                  "number": [
+                          {
+                                  "scalar": 1,
+                                  "raw": "1",
+                                  "confidence": 0.99
+                          }
+                  ]
+          },
+          "language": "en",
+          "processing_language": "en",
+          "version": "1906.0.2",
+          "timestamp": "2019-09-12T09:47:57.985581+00:00",
+          "status": 200,
+          "source": "1",
+          "act": "assert",
+          "type": "desc:reason",
+          "sentiment": "neutral"
+  },
+  "action_id": "005b3c6b-d24f-4497-9309-2bb8f42885de",
+  "qna": {},
+  "conversation": {
+          "id": "test-1568281146823",
+          "conversation_id": "test-1568281146823",
+          "warning": "The conversation_id field will be depreciated on January 1st 2018! Switch to using the id field instead",
+          "language": "en",
+          "memory": {
+                  "GAME_STARTED": true,
+                  "questionSpeech": "Question 1. In the 1964 movie, why did Santa Claus almost cancel Christmas?  1. The Reindeer were sick.  2. No snow.  3. No toys.  4. Storm. ",
+                  "questionReprompt": "Question 1. In the 1964 movie, why did Santa Claus almost cancel Christmas?  1. The Reindeer were sick.  2. No snow.  3. No toys.  4. Storm. ",
+                  "currentQuestionIndex": 0,
+                  "correctAnswerIndex": 4,
+                  "questions": [
+                          25,
+                          27,
+                          21,
+                          14,
+                          11
+                  ],
+                  "score": 0,
+                  "correctAnswerText": "Storm",
+                  "_JOVO_STATE_": "TriviaState",
+                  "answer": {
+                          "scalar": 1,
+                          "raw": "1",
+                          "confidence": 0.99
+                  }
+          },
+          "skill_stack": [
+                  "answerintent"
+          ],
+          "skill": "answerintent",
+          "skill_occurences": 1,
+          "participant_data": {}
+  }
+}

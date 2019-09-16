@@ -1,0 +1,78 @@
+{
+  "nlp": {
+    "uuid": "c20773b6-980b-4b0e-af42-224917ea5ca4",
+    "intents": [
+      {
+        "slug": "startintent",
+        "confidence": 0.6,
+        "description": null
+      }
+    ],
+    "entities": {},
+    "language": "en",
+    "processing_language": "en",
+    "version": "1906.0.2",
+    "timestamp": "2019-09-12T09:39:39.635582+00:00",
+    "status": 200,
+    "source": "start game",
+    "act": "command",
+    "type": null,
+    "sentiment": "neutral"
+  },
+  "qna": {},
+  "messages": [
+    {
+      "type": "text",
+      "content": "Welcome to GAME_NAME.  I will ask you 5 questions, try to get as many right as you can. Just say the number of the answer. Are you ready?"
+    }
+  ],
+  "conversation": {
+    "id": "test-1568281146823",
+    "language": "en",
+    "memory": {
+      "_JOVO_STATE_": "StartState"
+    },
+    "skill": "startintent",
+    "skill_occurences": 1
+  },
+  "logs": {
+    "input": "start game",
+    "logs": [
+      {
+        "level": "info",
+        "code": "I_SKILL_TRIGGERED",
+        "data": {
+          "skill_id": "d529e635-cf14-450a-84f1-0eebb701142f",
+          "reason": "TRIGGERS_OK",
+          "message": "skill startintent has been triggered"
+        }
+      },
+      {
+        "level": "info",
+        "code": "I_REQUIREMENTS_OK",
+        "data": {
+          "skill_id": "d529e635-cf14-450a-84f1-0eebb701142f",
+          "message": "requirements of skill startintent validated, executing actions"
+        }
+      },
+      {
+        "level": "info",
+        "code": "I_EXECUTE_ACTION",
+        "data": {
+          "type": "http",
+          "value": {
+            "messages": [
+              {
+                "type": "text",
+                "content": "Welcome to GAME_NAME.  I will ask you 5 questions, try to get as many right as you can. Just say the number of the answer. Are you ready?"
+              }
+            ],
+            "fallback": null
+          }
+        }
+      }
+    ]
+  },
+  "hasDelay": true,
+  "hasNextMessage": false
+}
