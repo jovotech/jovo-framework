@@ -286,13 +286,6 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         return false;
     }
 
-    hasWebBrowserInterface() : boolean {
-        if (typeof _get(this.originalDetectIntentRequest, 'payload.hasScreenInterface') === 'function') {
-            return this.originalDetectIntentRequest.payload.hasWebBrowserInterface();
-        }
-        return false;
-    }
-
     setAccessToken(accessToken: string): this {
         if (typeof _get(this.originalDetectIntentRequest, 'payload.setAccessToken') === 'function') {
             this.originalDetectIntentRequest.payload.setAccessToken(accessToken);

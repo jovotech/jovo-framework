@@ -83,7 +83,12 @@ export class GoogleActionRequest implements JovoRequest {
 
     getDeviceName(): string {
         if (this.hasScreenInterface()) {
-            return "Assistant device - with screen";
+            if (this.hasWebBrowserInterface())  {
+                return "Assistant device - smartphone";
+            }
+            else {
+                return "Assistant device - smart display";
+            }
         }
         else {
             return "Assistant device - voice only";
@@ -168,6 +173,17 @@ export class GoogleActionRequest implements JovoRequest {
         return _get(this, 'user.userStorage');
     }
 
+    hasWebBrowserInterface(): boolean {
+        if (this.surface) {
+            let allCapabilities = this.surface.capabilities;
+
+            //check if cap array contains web_browser 
+            let webBrowserCap = allCapabilities.filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
+            return webBrowserCap.length === 0 ? false : true;
+        }
+        else {return false};
+    }
+
     hasAudioInterface(): boolean {
         const audioCapability = _get(this, 'surface.capabilities')
             .find((item: Capability) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO');
@@ -182,20 +198,6 @@ export class GoogleActionRequest implements JovoRequest {
 
     hasVideoInterface(): boolean {
         return false;
-    }
-
-    hasWebBrowserInterface(): boolean {
-        if (this.surface) {
-            let allCapabilities = this.surface.capabilities;
-
-            //check if cap array contains web_browser 
-            let webBrowserCap = allCapabilities
-                .filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
-            return webBrowserCap.length === 0 ? false : true;
-        }
-        else {
-            return false;
-        }
     }
 
     isNewSession(): boolean {

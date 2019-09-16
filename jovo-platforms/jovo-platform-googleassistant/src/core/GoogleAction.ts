@@ -1,10 +1,11 @@
-import {BaseApp, Jovo, SpeechBuilder, Host, HandleRequest} from "jovo-core";
+import { BaseApp, Jovo, SpeechBuilder, Host, HandleRequest } from "jovo-core";
 import _get = require('lodash.get');
 const _sample = require('lodash.sample');
 
-import {GoogleActionUser} from "./GoogleActionUser";
-import {GoogleActionSpeechBuilder} from "./GoogleActionSpeechBuilder";
+import { GoogleActionUser } from "./GoogleActionUser";
+import { GoogleActionSpeechBuilder } from "./GoogleActionSpeechBuilder";
 import { EnumGoogleAssistantRequestType } from "./google-assistant-enums";
+import { GoogleActionRequest } from "./GoogleActionRequest";
 
 type reprompt = string | SpeechBuilder;
 
@@ -112,6 +113,25 @@ export class GoogleAction extends Jovo {
         return this;
     }
 
+    /**
+     * Returns web browser capability of request device
+     * @public
+     * @return {boolean}
+     */
+    hasWebBrowserInterface(): boolean {
+        const googleActionRequest = this.$originalRequest as GoogleActionRequest;
+        if (googleActionRequest && googleActionRequest.surface) {
+            const allCapabilities = googleActionRequest.surface.capabilities;
+
+            //check if cap array contains web_browser 
+            const webBrowserCap = allCapabilities
+                .filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
+            return webBrowserCap.length === 0 ? false : true;
+        }
+        else {
+            return false;
+        }
+    }
 
     /**
      * Returns screen capability of request device
@@ -123,7 +143,7 @@ export class GoogleAction extends Jovo {
             return false;
         }
         return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
-            .find((item: {name:string}) => item.name === 'actions.capability.SCREEN_OUTPUT') !== 'undefined';
+            .find((item: { name: string }) => item.name === 'actions.capability.SCREEN_OUTPUT') !== 'undefined';
     }
 
 
@@ -137,7 +157,7 @@ export class GoogleAction extends Jovo {
             return false;
         }
         return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
-            .find((item: {name:string}) => item.name === 'actions.capability.AUDIO_OUTPUT') !== 'undefined';
+            .find((item: { name: string }) => item.name === 'actions.capability.AUDIO_OUTPUT') !== 'undefined';
     }
 
 
@@ -151,7 +171,7 @@ export class GoogleAction extends Jovo {
             return false;
         }
         return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
-            .find((item: {name:string}) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
+            .find((item: { name: string }) => item.name === 'actions.capability.MEDIA_RESPONSE_AUDIO') !== 'undefined';
     }
 
     /**
@@ -164,7 +184,7 @@ export class GoogleAction extends Jovo {
             return false;
         }
         return typeof _get(this.$originalRequest || this.$request, 'surface.capabilities')
-            .find((item: {name:string}) => item.name === 'actions.capability.INTERACTIVE_CANVAS') !== 'undefined';
+            .find((item: { name: string }) => item.name === 'actions.capability.INTERACTIVE_CANVAS') !== 'undefined';
     }
 
     /**
@@ -222,7 +242,7 @@ export class GoogleAction extends Jovo {
      * @param parameters
      * @param lifespanCount
      */
-    addOutputContext(name: string, parameters: {[key:string]: any}, lifespanCount = 1) { // tslint:disable-line
+    addOutputContext(name: string, parameters: { [key: string]: any }, lifespanCount = 1) { // tslint:disable-line
         if (!this.$output.Dialogflow) {
             this.$output.Dialogflow = {};
         }
@@ -243,7 +263,7 @@ export class GoogleAction extends Jovo {
      * @param name
      */
     getOutputContext(name: string) {
-        return _get( this.$request, 'queryResult.outputContexts', []).find((context: any) => { // tslint:disable-line
+        return _get(this.$request, 'queryResult.outputContexts', []).find((context: any) => { // tslint:disable-line
             return context.name.indexOf(`/contexts/${name}`) > -1;
         });
     }
