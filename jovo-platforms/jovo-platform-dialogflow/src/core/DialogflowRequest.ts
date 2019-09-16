@@ -50,6 +50,13 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         this.originalDetectIntentRequest.payload = originalRequest;
     }
 
+    getDeviceName() : string    {
+        if (typeof _get(this.originalDetectIntentRequest, 'payload.getDeviceName') === 'function') {
+            return this.originalDetectIntentRequest.payload.getDeviceName();
+        }
+        console.error('platform did not define deviceName');
+        return 'platform did not define deviceName';
+    }
 
     getSessionId(): string | undefined {
         return this.session;
