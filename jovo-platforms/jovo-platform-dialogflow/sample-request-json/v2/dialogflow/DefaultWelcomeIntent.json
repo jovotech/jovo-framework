@@ -1,0 +1,18 @@
+{
+  "responseId": "ba004821-5bbc-4bf9-8fa0-9c83bfb248e6",
+  "queryResult": {
+    "queryText": "WELCOME",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "intent": {
+      "name": "projects/newagent-904be/agent/intents/2c0f131a-8b4e-4cd7-8902-f618a1315895",
+      "displayName": "Default Welcome Intent"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en"
+  },
+  "originalDetectIntentRequest": {
+    "payload": {}
+  },
+  "session": "projects/newagent-904be/agent/sessions/1526414104011"
+}
