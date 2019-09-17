@@ -4,7 +4,7 @@ import {RequestBuilder} from "jovo-core";
 import * as path from 'path';
 const samples: {[key: string]: string} = {
     'LaunchRequest': 'LaunchRequest.json',
-    'IntentRequest1': 'IntentRequest1.json',
+    'IntentRequest1': 'IntentRequest.json',
     'IntentRequestWithSlot': 'IntentRequestWithSlot.json',
     'IntentRequestWithSlotResolution': 'IntentRequestWithSlotResolution.json',
     'Connections.Response': 'Connections.Response.json',

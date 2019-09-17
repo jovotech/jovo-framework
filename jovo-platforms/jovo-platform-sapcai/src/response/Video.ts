@@ -1,10 +1,10 @@
 import { BasicCard } from './BasicCard';
 
 export class Video extends BasicCard {
-    content?: string;
+  content?: string;
 
-    constructor(content: string) {
-        super('video');
-        this.content = content;
-    }
+  constructor(content: string) {
+    super('video');
+    this.content = content;
+  }
 }

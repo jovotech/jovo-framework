@@ -1,17 +1,17 @@
-import { Button } from "./Button";
-import { BasicCard } from "./BasicCard";
+import { Button } from './Button';
+import { BasicCard } from './BasicCard';
 import _merge = require('lodash.merge');
 
 export class QuickReplyContent {
-    title?: string;
-    buttons?: Button[];
+  title?: string;
+  buttons?: Button[];
 }
 
 export class QuickReply extends BasicCard {
-    content?: QuickReplyContent;
+  content?: QuickReplyContent;
 
-    constructor(content: QuickReplyContent) {
-        super('quickReplies');
-        this.content = content;
-    }
+  constructor(content: QuickReplyContent) {
+    super('quickReplies');
+    this.content = content;
+  }
 }

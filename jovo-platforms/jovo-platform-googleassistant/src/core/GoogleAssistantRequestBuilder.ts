@@ -2,7 +2,7 @@ import {GoogleActionRequest} from "./GoogleActionRequest";
 import {RequestBuilder} from "jovo-core";
 const samples: {[key: string]: string} = {
     'LaunchRequest': './../../sample-request-json/v1/LaunchRequest.json',
-    'IntentRequest1': './../../sample-request-json/v1/IntentRequest1.json',
+    'IntentRequest1': './../../sample-request-json/v1/IntentRequest.json',
     'Connections.Response': './../../sample-request-json/v1/Connections.Response.json',
     'AudioPlayer.PlaybackStarted': './../../sample-request-json/v1/AudioPlayer.PlaybackStarted.json',
 

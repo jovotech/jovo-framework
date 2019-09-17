@@ -1,63 +1,54 @@
-export { SAPCAI } from './SAPCAI';
-export { SAPCAISkill } from './SAPCAISkill';
-export * from './SAPCAIRequest';
-
-export { SAPCAIResponse } from './SAPCAIResponse';
-
-import { Button } from "./response/Button";
-export { QuickReply } from './response/QuickReply';
-export { Card } from './response/Card';
-
-export {SAPCAISpeechBuilder} from "./SAPCAISpeechBuilder";
-
-import { SAPCAISkill } from './SAPCAISkill';
-
-import {Handler} from "jovo-core";
-import {Intent} from "./SAPCAIRequest";
-import {SAPCAISpeechBuilder} from "./SAPCAISpeechBuilder";
-import { CardContent } from './response/Card';
+import { Handler } from 'jovo-core';
+import { SapCaiSkill } from './core/SapCaiSkill';
+import { Button, CardContent } from './response';
 
 declare module 'jovo-core/dist/src/Jovo' {
-    export interface Jovo {
-        $sapcaiSkill?: SAPCAISkill;
-        sapcaiSkill(): SAPCAISkill;
-        isSAPCAISkill(): boolean;
-    }
+  export interface Jovo {
+    $caiSkill?: SapCaiSkill;
+
+    caiSkill(): SapCaiSkill;
+
+    isCaiSkill(): boolean;
+  }
+}
+
+declare module './core/SapCaiSkill' {
+  interface SapCaiSkill {
+    showStandardCard(title: string, subtitle: string, imageUrl: string, buttons: Button[]): this;
+
+    showQuickReplyCard(title: string, buttons: Button[]): this;
+
+    showButtonsCard(title: string, buttons: Button[]): this;
+
+    showCarouselCard(items: CardContent[]): this;
+
+    showListCard(elements: CardContent[], buttons: Button[]): this;
+
+    showPictureCard(pictureUrl: string): this;
+
+    // Not supported at the moment
+    //showVideo(videoUrl: string): this;
+  }
 }
 
 declare module 'jovo-core/dist/src/BaseApp' {
-
-    interface BaseApp {
-
-        /**
-         * Sets alexa handlers
-         * @public
-         * @param {*} handler
-         */
-        setSAPCAIHandler(...handler: Handler[]): this; // tslint:disable-line
-    }
+  export interface BaseApp {
+    setCaiHandler(...handler: Handler[]): this;
+  }
 }
 
+export { SapCai } from './SapCai';
+export * from './core/Interfaces';
+export { SapCaiSkill } from './core/SapCaiSkill';
+export * from './core/SapCaiRequest';
+export * from './core/SapCaiResponse';
+export { SapCaiRequestBuilder } from './core/SapCaiRequestBuilder';
+export { SapCaiResponseBuilder } from './core/SapCaiResponseBuilder';
+export { SapCaiSpeechBuilder } from './core/SapCaiSpeechBuilder';
+export { SapCaiUser } from './core/SapCaiUser';
 
-// AudioPlayer
-declare module './SAPCAISkill' {
-    interface SAPCAISkill {
+export { SapCaiCore } from './modules/SapCaiCore';
+export { SapCaiNLU } from './modules/SapCaiNLU';
+export { Cards } from './modules/Cards';
 
-        showStandardCard(title: string, subtitle: string, imageUrl: string, buttons: Button[]): this;
-
-        showQuickReplyCard(title: string, buttons: Button[]): this;
-
-        showButtonsCard(title: string, buttons: Button[]): this;
-
-        showCarouselCard(items: CardContent[]): this;
-
-        showListCard(elements: CardContent[], buttons: Button[]): this;
-
-        showPictureCard(pictureUrl: string): this;
-
-        // Not supported at the moment
-        //showVideo(videoUrl: string): this;
-        
-    }
-}
-
+export * from './response';
