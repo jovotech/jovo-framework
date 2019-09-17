@@ -6,6 +6,7 @@ import { GoogleActionUser } from "./GoogleActionUser";
 import { GoogleActionSpeechBuilder } from "./GoogleActionSpeechBuilder";
 import { EnumGoogleAssistantRequestType } from "./google-assistant-enums";
 import { GoogleActionRequest } from "./GoogleActionRequest";
+import {DialogflowRequest} from "jovo-platform-dialogflow";
 
 type reprompt = string | SpeechBuilder;
 
@@ -119,18 +120,10 @@ export class GoogleAction extends Jovo {
      * @return {boolean}
      */
     hasWebBrowserInterface(): boolean {
-        const googleActionRequest = this.$originalRequest as GoogleActionRequest;
-        if (googleActionRequest && googleActionRequest.surface) {
-            const allCapabilities = googleActionRequest.surface.capabilities;
 
-            //check if cap array contains web_browser 
-            const webBrowserCap = allCapabilities
-                .filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
-            return webBrowserCap.length === 0 ? false : true;
-        }
-        else {
-            return false;
-        }
+    const currentDialogflowRequest =  this.$request! as DialogflowRequest;
+    const currentGoogleActionRequest =  currentDialogflowRequest.originalDetectIntentRequest!.payload as GoogleActionRequest;
+    return currentGoogleActionRequest.hasWebBrowserInterface();
     }
 
     /**

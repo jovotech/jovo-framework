@@ -175,13 +175,13 @@ export class GoogleActionRequest implements JovoRequest {
 
     hasWebBrowserInterface(): boolean {
         if (this.surface) {
-            let allCapabilities = this.surface.capabilities;
+            const allCapabilities = this.surface.capabilities;
 
             //check if cap array contains web_browser 
-            let webBrowserCap = allCapabilities.filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
+            const webBrowserCap = allCapabilities.filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
             return webBrowserCap.length === 0 ? false : true;
         }
-        else {return false};
+        return false;
     }
 
     hasAudioInterface(): boolean {
