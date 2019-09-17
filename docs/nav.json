@@ -494,8 +494,21 @@
                     "route": "contributing"
                 },
                 {
-                    "title": "Components",
-                    "route": "components"
+                    "title": "Conversational Components",
+                    "content": [
+                        {
+                            "title": "Conversational Components",
+                            "route": "components"
+                        },
+                        {
+                            "title": "Using Conversational Components",
+                            "route": "components/using-components"
+                        },
+                        {
+                            "title": "Developing Conversational Components",
+                            "route": "components/developing-components"
+                        }
+                    ]
                 }
             ]
         }
