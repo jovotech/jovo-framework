@@ -4,7 +4,7 @@ import { PluginConfig } from 'jovo-core';
 class Component {
 	$response?: Response;
 	config: Config;
-	data?: ComponentData;
+	data: ComponentData = {};
 	name: string;
 	onCompletedIntent?: string; // intent to which the component routes to, when it sends out response
 	stateBeforeDelegate?: string; // Used to route the app back to the state where it left off after the component is done.
