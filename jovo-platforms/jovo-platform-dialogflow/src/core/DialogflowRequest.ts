@@ -100,7 +100,8 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         if (typeof _get(this.originalDetectIntentRequest, 'payload.isNewSession') === 'function') {
             return this.originalDetectIntentRequest.payload.isNewSession();
         }
-        return true;
+        const askContext: Context | undefined = this.getAskContext();
+        return typeof askContext === 'undefined';
     }
 
     getIntentName() {
@@ -113,6 +114,7 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         }
         return this;
     }
+
     /**
      * Returns session context of request
      */
@@ -125,6 +127,20 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
             });
         }
     }
+
+    /**
+     * Returns ask context of request
+     */
+    getAskContext(): Context | undefined {
+        const sessionId = this.session;
+
+        if (this.queryResult && this.queryResult.outputContexts) {
+            return this.queryResult.outputContexts.find((context: Context) => {
+                return context.name.startsWith(`${sessionId}/contexts/_jovo_ask_`);
+            });
+        }
+    }
+
     toJSON(): DialogflowRequestJSON {
         // copy all fields from `this` to an empty object and return in
         return Object.assign({}, this);
