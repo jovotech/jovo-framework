@@ -8,7 +8,6 @@
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
-    "watch": "tsc -w",
     "typedoc": "typedoc --out ./docs ./ --mode file",
     "test": "jest",
     "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js build-ts --cwd ./dist",
