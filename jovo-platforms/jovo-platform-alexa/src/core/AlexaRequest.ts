@@ -219,7 +219,7 @@ export class AlexaRequest implements JovoRequest {
     // JovoRequest implementation
 
     /**
-     * @deprecated use the getDeviceName method which is platform undependend
+     * @deprecated use the getDeviceName method which is platform independent
      */
     getAlexaDevice(): string {
         return this.getDeviceName();
