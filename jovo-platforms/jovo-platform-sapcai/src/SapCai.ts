@@ -71,7 +71,7 @@ export class SapCai extends Extensible implements Platform {
     Jovo.prototype.$caiSkill = undefined;
     Jovo.prototype.caiSkill = function() {
       if (this.constructor.name !== 'SapCaiSkill') {
-        throw Error(`Can't handle request. Please use this.isSapCaiSkill()`);
+        throw Error(`Can't handle request. Please use this.isCaiSkill()`);
       }
       return this as SapCaiSkill;
     };
