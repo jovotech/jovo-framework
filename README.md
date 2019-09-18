@@ -165,6 +165,7 @@ See the [Jovo Analytics Layer](./docs/integrations/analytics) for more informati
 
 Name | Description | Docs
 :--- | :--- | :---
+VoiceHero | Actionable Insights to Improve Voice App Engagement | [📝](./docs/integrations/analytics/voicehero.md)
 Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flows, and Live Interaction Transcripts | [📝](./docs/integrations/analytics/dashbot.md)
 Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/integrations/analytics/bespoken.md)
 Chatbase | Voice App Analytics including Usage Metrics, Session Flows and Link Tracking | [📝](./docs/integrations/analytics/chatbase.md)
