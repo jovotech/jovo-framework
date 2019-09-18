@@ -1,9 +1,10 @@
 import { Input, Inputs, JovoRequest, SessionConstants, SessionData } from 'jovo-core';
 import { EntityValue, Message } from './Interfaces';
+import { NEW_SESSION_KEY } from '../index';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
-export interface SAPCAIInput extends Input {
+export interface SapCaiInput extends Input {
   caiSkill: {
     raw?: string;
     confidence: number;
@@ -40,13 +41,15 @@ export interface NLP {
 export interface Conversation {
   id?: string;
   language?: string;
+  // tslint:disable-next-line:no-any
   memory?: Record<string, any>;
   skill?: string;
   skill_occurences?: number;
 }
 
-export interface SAPCAIRequestJSON {
+export interface SapCaiRequestJSON {
   nlp?: NLP;
+  // tslint:disable-next-line:no-any
   qna?: Record<string, any>;
   messages?: Message[];
   conversation?: Conversation;
@@ -56,20 +59,41 @@ export interface SAPCAIRequestJSON {
 
 export class SapCaiRequest implements JovoRequest {
   nlp?: NLP;
+  // tslint:disable-next-line:no-any
   qna?: Record<string, any>;
   messages?: Message[];
   conversation?: Conversation;
   hasDelay?: boolean;
   hasNextMessage?: boolean;
 
+  // of the User to an instance of the class
+  static fromJSON(json: SapCaiRequestJSON | string): SapCaiRequest {
+    if (typeof json === 'string') {
+      // if it's a string, parse it first
+      return JSON.parse(json, SapCaiRequest.reviver);
+    } else {
+      // create an instance of the User class
+      const request = Object.create(SapCaiRequest.prototype);
+      // copy all the fields from the json object
+      return Object.assign(request, json);
+    }
+  }
+
+  // tslint:disable-next-line:no-any
+  static reviver(key: string, value: any): any {
+    //tslint:disable-line
+    return key === '' ? SapCaiRequest.fromJSON(value) : value;
+  }
+
   getSessionId(): string | undefined {
-    return this.nlp ? this.nlp.uuid : undefined;
+    return _get(this, 'conversation.id');
   }
 
   getAccessToken() {
     return undefined;
   }
 
+  // tslint:disable-next-line:no-any
   getEntityValue(input: any, type: string): EntityValue {
     let isBuiltInEntity = true;
     let value = undefined;
@@ -151,12 +175,14 @@ export class SapCaiRequest implements JovoRequest {
     return { isBuiltInEntity, value, type: type || null };
   }
 
-  getMemoryInputMeta(memoryInput: any, entities: { [key: string]: any[] }): any {
+  // tslint:disable-next-line:no-any
+  getMemoryInputMeta(memoryInput: any, entities: Record<string, any>): any {
     let meta = null;
     for (const [entityType, entityArray] of Object.entries(entities)) {
       for (const [entityIndex, entity] of Object.entries(entityArray)) {
         const entityMeta = this.getEntityValue(entity, entityType);
-        if (memoryInput.raw === entity.raw) {
+        // tslint:disable-next-line:no-any
+        if (memoryInput.raw === (entity as any).raw) {
           meta = entityMeta;
           return meta;
         }
@@ -168,6 +194,7 @@ export class SapCaiRequest implements JovoRequest {
   getInputs(): Inputs {
     const inputs: Inputs = {};
     const entities = this.getEntities();
+    // tslint:disable-next-line:no-any
     const memoryInputs: any[] = this.getMemoryInputs();
 
     // First of all parse entities
@@ -183,7 +210,7 @@ export class SapCaiRequest implements JovoRequest {
             source: 'entity',
           };
 
-          const input: SAPCAIInput = {
+          const input: SapCaiInput = {
             name: entityKey,
             key: entityKey,
             value: entityMeta.value,
@@ -201,6 +228,7 @@ export class SapCaiRequest implements JovoRequest {
       for (const [memoryInputsName, memoryInput] of Object.entries(memoryInputs)) {
         // Every memory input should be (as far as I know) matched by an entity.
         // To understand which
+        // tslint:disable-next-line:no-any
         let meta: any = {};
         if (memoryInput.confidence) {
           // this is an entity representation
@@ -220,7 +248,7 @@ export class SapCaiRequest implements JovoRequest {
           entityObj.type = meta.type;
           entityObj.gold = meta.gold;
 
-          const input: SAPCAIInput = {
+          const input: SapCaiInput = {
             name: memoryInputsName,
             key: memoryInputsName,
             value: meta.value,
@@ -239,14 +267,12 @@ export class SapCaiRequest implements JovoRequest {
     Object.keys(inputs).forEach((key: string) => {
       const input: Input = inputs[key];
 
-      //TODO
-      //TODO
       const slot: Entity = {
         raw: input.name!,
         scalar: input.value,
       };
 
-      const sapcaiInput = input as SAPCAIInput;
+      const sapcaiInput = input as SapCaiInput;
 
       if (sapcaiInput.caiSkill) {
         _set(this, `conversation.memory[${input.name}]`, sapcaiInput.caiSkill);
@@ -278,8 +304,8 @@ export class SapCaiRequest implements JovoRequest {
     return this.setSessionAttributes(sessionData);
   }
 
+  // tslint:disable-next-line:no-any
   addSessionData(key: string, value: any): this {
-    // tslint:disable-line
     return this.addSessionAttribute(key, value);
   }
 
@@ -292,7 +318,6 @@ export class SapCaiRequest implements JovoRequest {
   }
 
   getUserId() {
-    //TODO
     return _get(this, 'nlp.uuid');
   }
 
@@ -314,6 +339,8 @@ export class SapCaiRequest implements JovoRequest {
     return true;
   }
 
+  // Jovo Request -- SETTER
+
   /**
    * Returns video capability of request device
    * @return {boolean}
@@ -324,14 +351,10 @@ export class SapCaiRequest implements JovoRequest {
   }
 
   isNewSession() {
-    //TODO
-    return true;
+    return _get(this.getSessionAttributes(), NEW_SESSION_KEY, true);
   }
 
-  // Jovo Request -- SETTER
-
   setLocale(locale: string) {
-    //TODO
     if (_get(this, `nlp.language`)) {
       _set(this, 'nlp.language', locale);
     }
@@ -355,6 +378,7 @@ export class SapCaiRequest implements JovoRequest {
     return this;
   }
 
+  // tslint:disable-next-line:no-any
   addSessionAttribute(key: string, value: any) {
     // tslint:disable-line
     if (this.getSessionAttributes()) {
@@ -364,7 +388,6 @@ export class SapCaiRequest implements JovoRequest {
   }
 
   setUserId(userId: string) {
-    //TODO
     _set(this, 'nlp.uuid', userId);
     return this;
   }
@@ -375,12 +398,11 @@ export class SapCaiRequest implements JovoRequest {
   }
 
   setNewSession(isNew: boolean) {
-    //TODO
+    _set(this, `conversation.memory[${NEW_SESSION_KEY}]`, isNew);
     return this;
   }
 
   setTimestamp(timestamp: string) {
-    //TODO
     if (_get(this, `nlp.timestamp`)) {
       _set(this, 'nlp.timestamp', timestamp);
     }
@@ -392,7 +414,7 @@ export class SapCaiRequest implements JovoRequest {
    * @param sessionId
    */
   setSessionId(sessionId: string) {
-    //TODO
+    _set(this, 'conversation.id', sessionId);
     return this;
   }
 
@@ -409,9 +431,8 @@ export class SapCaiRequest implements JovoRequest {
   }
 
   addInput(key: string, value: string | object) {
-    //TODO
     if (typeof value === 'string') {
-      _set(this, `conversation.memorys.${key}`, {
+      _set(this, `conversation.memory.${key}`, {
         name: key,
         value,
       });
@@ -422,80 +443,69 @@ export class SapCaiRequest implements JovoRequest {
     return this;
   }
 
-  toJSON(): SAPCAIRequestJSON {
+  toJSON(): SapCaiRequestJSON {
     // copy all fields from `this` to an empty object and return in
     return Object.assign({}, this);
   }
-
-  // Alexa Request HELPER
 
   getIntentName() {
     return _get(this, 'conversation.skill');
   }
 
-  getEntities(): { [key: string]: any[] } {
+  // tslint:disable-next-line:no-any
+  getEntities(): Record<string, any> {
     return _get(this, 'nlp.entities');
   }
 
+  // tslint:disable-next-line:no-any
   getEntity(name: string): any[] {
     return _get(this, `nlp.entities.${name}`);
   }
 
-  setEntities(entities: { [key: string]: any[] }) {
+  // tslint:disable-next-line:no-any
+  setEntities(entities: Record<string, any>) {
     // tslint:disable-line
     _set(this, `nlp.entities`, entities);
     return this;
   }
 
+  // tslint:disable-next-line:no-any
   setEntity(name: string, value: any[]) {
     _set(this, `nlp.entities.${name}`, value);
     return this;
   }
 
+  // tslint:disable-next-line:no-any
   getMemoryInputs(): any[] {
     return _get(this, 'conversation.memory');
   }
 
+  // tslint:disable-next-line:no-any
   getMemoryInput(name: string): any | undefined {
     return _get(this, `conversation.memory.${name}`);
   }
 
+  // tslint:disable-next-line:no-any
   setMemoryInputs(entities: any[]) {
-    // tslint:disable-line
     _set(this, `conversation.memory`, entities);
     return this;
   }
 
+  // fromJSON is used to convert an serialized version
+
+  // tslint:disable-next-line:no-any
   setMemoryInput(name: string, value: any) {
     _set(this, `conversation.memory.${name}`, value);
     return this;
   }
+
+  // reviver can be passed as the second parameter to JSON.parse
+  // to automatically call User.fromJSON on the resulting value.
 
   setIntentName(intentName: string) {
     if (this.getIntentName()) {
       _set(this, 'conversation.skill', intentName);
     }
     return this;
-  }
-
-  // fromJSON is used to convert an serialized version
-  // of the User to an instance of the class
-  static fromJSON(json: SAPCAIRequestJSON | string): SapCaiRequest {
-    if (typeof json === 'string') {
-      // if it's a string, parse it first
-      return JSON.parse(json, SapCaiRequest.reviver);
-    } else {
-      // create an instance of the User class
-      const sapcaiRequest = Object.create(SapCaiRequest.prototype);
-      // copy all the fields from the json object
-      return Object.assign(sapcaiRequest, json);
-    }
-  }
-
-  // reviver can be passed as the second parameter to JSON.parse
-  // to automatically call User.fromJSON on the resulting value.
-  static reviver(key: string, value: any): any {
-    //tslint:disable-line
-    return key === '' ? SapCaiRequest.fromJSON(value) : value;
   }
 }

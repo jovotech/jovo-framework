@@ -37,6 +37,8 @@ declare module 'jovo-core/dist/src/BaseApp' {
   }
 }
 
+export const NEW_SESSION_KEY = '__JOVO_NEW_SESSION__';
+
 export { SapCai } from './SapCai';
 export * from './core/Interfaces';
 export { SapCaiSkill } from './core/SapCaiSkill';

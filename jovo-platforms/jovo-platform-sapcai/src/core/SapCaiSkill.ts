@@ -1,7 +1,4 @@
-import { BaseApp, Jovo, Host, SpeechBuilder, HandleRequest } from 'jovo-core';
-import { SapCaiRequest } from './SapCaiRequest';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
+import { BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
 
 import { SapCaiResponse } from './SapCaiResponse';
 import { SapCaiSpeechBuilder } from './SapCaiSpeechBuilder';
@@ -115,7 +112,7 @@ export class SapCaiSkill extends Jovo {
    * @return {string}
    */
   getType() {
-    return 'SAPCAISkill';
+    return 'SapCaiSkill';
   }
 
   /**
@@ -124,7 +121,7 @@ export class SapCaiSkill extends Jovo {
    * @return {string}
    */
   getPlatformType() {
-    return 'SAPCAI';
+    return 'SapCai';
   }
 
   /**

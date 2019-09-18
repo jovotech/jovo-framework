@@ -1,5 +1,3 @@
-import _merge = require('lodash.merge');
-
 export class Button {
   title?: string;
   value?: string;

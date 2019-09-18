@@ -1,6 +1,6 @@
 import { JovoResponse, SessionConstants, SessionData } from 'jovo-core';
-import { CardContent } from '../response';
-import { Message } from './Interfaces';
+import { Button, CardContent } from '../response';
+import { Message, MessageContentObject } from './Interfaces';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -8,8 +8,8 @@ export interface SessionAttributes {
   [key: string]: any; //tslint:disable-line
 }
 
-export interface SAPCAIResponseJSON {
-  replies?: any[];
+export interface SapCaiResponseJSON {
+  replies?: Message[];
   conversation?: ConversationData;
 }
 
@@ -26,51 +26,58 @@ export class SapCaiResponse implements JovoResponse {
     this.conversation = { memory: {} };
   }
 
-  getFirstReply(type: string) {
-    const items: Message[] = _get(this, 'replies');
-
-    for (let i = 0; i < items.length; i++) {
-      if (items[i] && items[i].type === type) {
-        return items[i];
-      }
+  // of the User to an instance of the class
+  static fromJSON(json: SapCaiResponseJSON | string) {
+    if (typeof json === 'string') {
+      // if it's a string, parse it first
+      return JSON.parse(json, SapCaiResponse.reviver);
+    } else {
+      // create an instance of the User class
+      const response = Object.create(SapCaiResponse.prototype);
+      // copy all the fields from the json object
+      return Object.assign(response, json);
     }
   }
 
-  getBasicText() {
+  // tslint:disable-next-line:no-any
+  static reviver(key: string, value: any): any {
+    return key === '' ? SapCaiResponse.fromJSON(value) : value;
+  }
+
+  getFirstReply(type: string): Message | undefined {
+    return this.replies.find((item: Message) => {
+      return item.type === type;
+    });
+  }
+
+  getBasicText(): Message | undefined {
     return this.getFirstReply('text');
   }
 
-  getBasicCard() {
+  getBasicCard(): Message | undefined {
     return this.getFirstReply('card');
   }
 
-  getQuickReplyCard() {
+  getQuickReplyCard(): Message | undefined {
     return this.getFirstReply('quickReplies');
   }
 
-  hasQuickReplyCard(title: string, ...chips: string[]) {
-    const quickReplies = this.getQuickReplyCard();
-
-    // TODO cleanup
-
+  hasQuickReplyCard(title: string, ...chips: string[]): boolean {
+    const quickReplyCard = this.getQuickReplyCard();
     if (
-      !quickReplies ||
       !title ||
-      typeof quickReplies.content === 'string' ||
-      !quickReplies.content.title ||
-      quickReplies.content.title !== title ||
-      !quickReplies.content.buttons
+      !quickReplyCard ||
+      typeof quickReplyCard.content !== 'object' ||
+      Array.isArray(quickReplyCard.content) ||
+      !quickReplyCard.content.title ||
+      !quickReplyCard.content.buttons ||
+      !Array.isArray(quickReplyCard.content.buttons) ||
+      quickReplyCard.content.title !== title
     ) {
       return false;
     }
 
-    for (let i = 0; i < chips.length; i++) {
-      if (!quickReplies.content.buttons[i] || chips[i] !== quickReplies.content.buttons[i].title) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.hasAllChipsAsButtons(quickReplyCard.content as MessageContentObject, chips);
   }
 
   getButtonsCard() {
@@ -81,23 +88,19 @@ export class SapCaiResponse implements JovoResponse {
     const buttonList = this.getButtonsCard();
 
     if (
-      !buttonList ||
       !title ||
-      typeof buttonList.content === 'string' ||
+      !buttonList ||
+      typeof buttonList.content !== 'object' ||
+      Array.isArray(buttonList.content) ||
       !buttonList.content.title ||
-      buttonList.content.title !== title ||
-      !buttonList.content.buttons
+      !buttonList.content.buttons ||
+      !Array.isArray(buttonList.content.buttons) ||
+      buttonList.content.title !== title
     ) {
       return false;
     }
 
-    for (let i = 0; i < chips.length; i++) {
-      if (!buttonList.content.buttons[i] || chips[i] !== buttonList.content.buttons[i].title) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.hasAllChipsAsButtons(buttonList.content as MessageContentObject, chips);
   }
 
   getCarouselCard() {
@@ -107,34 +110,28 @@ export class SapCaiResponse implements JovoResponse {
   hasCarouselCard(...items: CardContent[]) {
     const carousel = this.getCarouselCard();
 
-    // TODO cleanup
-    if (!carousel || typeof carousel.content === 'string' || !Array.isArray(carousel.content)) {
+    if (!carousel || typeof carousel.content !== 'object' || !Array.isArray(carousel.content)) {
       return false;
     }
 
-    for (let i = 0; i < items.length; i++) {
-      if (!carousel.content[i] || items[i].title !== carousel.content[i].title) {
-        return false;
-      }
-      if (!carousel.content[i] || items[i].subtitle !== carousel.content[i].subtitle) {
-        return false;
-      }
-      if (!carousel.content[i] || items[i].imageUrl !== carousel.content[i].imageUrl) {
-        return false;
-      }
-      if (items[i].buttons) {
-        for (let j = 0; j < items[i].buttons!.length; j++) {
-          if (
-            !carousel.content[i].buttons ||
-            items[i].buttons![j].title !== carousel.content[i].buttons[j].title
-          ) {
-            return false;
-          }
-        }
-      }
-    }
+    const hasInvalidItems = items.some((item: CardContent, index: number) => {
+      const content: MessageContentObject[] = carousel.content as MessageContentObject[];
 
-    return true;
+      const hasInvalidButtons = item.buttons
+        ? item.buttons.some((button: Button, i: number) => {
+            return !content[index].buttons || button.title !== content[index].buttons![i].title;
+          })
+        : false;
+      return (
+        !content[index] ||
+        item.title !== content[index].title ||
+        item.subtitle !== content[index].subtitle ||
+        item.imageUrl !== content[index].imageUrl ||
+        hasInvalidButtons
+      );
+    });
+
+    return !hasInvalidItems;
   }
 
   getListCard() {
@@ -144,42 +141,35 @@ export class SapCaiResponse implements JovoResponse {
   hasListCard(elements: CardContent[], buttonChips: string[]) {
     const list = this.getListCard();
 
-    // TODO cleanup
-    if (!list) {
+    if (!list || typeof list.content !== 'object') {
       return false;
     }
 
-    for (let i = 0; i < elements.length; i++) {
-      if (!list.content.elements[i] || elements[i].title !== list.content.elements[i].title) {
-        return false;
-      }
-      if (!list.content.elements[i] || elements[i].subtitle !== list.content.elements[i].subtitle) {
-        return false;
-      }
-      if (!list.content.elements[i] || elements[i].imageUrl !== list.content.elements[i].imageUrl) {
-        return false;
-      }
-      if (elements[i].buttons !== undefined) {
-        for (let j = 0; j < elements[i].buttons!.length; j++) {
-          if (
-            !list.content.elements[i].buttons ||
-            elements[i].buttons![j].title !== list.content.elements[i].buttons[j].title
-          ) {
-            return false;
-          }
-        }
-      }
-    }
+    const hasInvalidElement = elements.some((element: CardContent, index: number) => {
+      const content: MessageContentObject = list.content as MessageContentObject;
+
+      const hasInvalidButtons = element.buttons
+        ? element.buttons.some((button: Button, i: number) => {
+            return !content.elements![index].buttons || button.title !== content.elements![index].buttons![i].title;
+          })
+        : false;
+      return (
+        (content.elements && !content.elements[index]) ||
+        element.title !== content.elements![index].title ||
+        element.subtitle !== content.elements![index].subtitle ||
+        element.imageUrl !== content.elements![index].imageUrl ||
+        hasInvalidButtons
+      );
+    });
 
     if (buttonChips) {
-      for (let i = 0; i < buttonChips.length; i++) {
-        if (!list.content.buttons[i] || buttonChips[i] !== list.content.buttons[i].title) {
-          return false;
-        }
+      const validChips = this.hasAllChipsAsButtons(list.content as MessageContentObject, buttonChips);
+      if (!validChips) {
+        return false;
       }
     }
 
-    return true;
+    return !hasInvalidElement;
   }
 
   getImageCard() {
@@ -203,29 +193,16 @@ export class SapCaiResponse implements JovoResponse {
   hasStandardCard(title?: string, subtitle?: string, imageUrl?: string): boolean {
     const basicCardObject = this.getBasicCard();
 
-    if (!basicCardObject) {
+    if (!basicCardObject || typeof basicCardObject.content !== 'object') {
       return false;
     }
 
-    if (title) {
-      if (title !== basicCardObject.content.title) {
-        return false;
-      }
-    }
-
-    if (subtitle) {
-      if (subtitle !== basicCardObject.content.subtitle) {
-        return false;
-      }
-    }
-
-    if (imageUrl) {
-      if (imageUrl !== basicCardObject.content.imageUrl) {
-        return false;
-      }
-    }
-
-    return true;
+    const content: MessageContentObject = basicCardObject.content as MessageContentObject;
+    const hasInvalidData =
+      (title && title !== content.title) ||
+      (subtitle && subtitle !== content.subtitle) ||
+      (imageUrl && imageUrl !== content.imageUrl);
+    return !hasInvalidData;
   }
 
   getSessionData(path?: string) {
@@ -236,8 +213,8 @@ export class SapCaiResponse implements JovoResponse {
     }
   }
 
+  // tslint:disable-next-line:no-any
   hasSessionData(name: string, value?: any): boolean {
-    // tslint:disable-line
     return this.hasSessionAttribute(name, value);
   }
 
@@ -274,8 +251,8 @@ export class SapCaiResponse implements JovoResponse {
     return _get(this, `conversation.memory.${name}`);
   }
 
+  // tslint:disable-next-line:no-any
   hasSessionAttribute(name: string, value?: any): boolean {
-    // tslint:disable-line
     if (!this.getSessionAttribute(name)) {
       return false;
     }
@@ -304,7 +281,8 @@ export class SapCaiResponse implements JovoResponse {
    */
   isTell(speechText?: string | string[]): boolean {
     if (speechText) {
-      const ssml: string = this.getBasicText().content;
+      const basicText = this.getBasicText();
+      const ssml = basicText ? basicText.content : '';
 
       if (Array.isArray(speechText)) {
         for (const speechTextElement of speechText) {
@@ -324,29 +302,19 @@ export class SapCaiResponse implements JovoResponse {
     return false;
   }
 
-  toJSON(): SAPCAIResponseJSON {
+  // fromJSON is used to convert an serialized version
+
+  toJSON(): SapCaiResponseJSON {
     // copy all fields from `this` to an empty object and return in
     return Object.assign({}, this);
   }
 
-  // fromJSON is used to convert an serialized version
-  // of the User to an instance of the class
-  static fromJSON(json: SAPCAIResponseJSON | string) {
-    if (typeof json === 'string') {
-      // if it's a string, parse it first
-      return JSON.parse(json, SapCaiResponse.reviver);
-    } else {
-      // create an instance of the User class
-      const sapcaiResponse = Object.create(SapCaiResponse.prototype);
-      // copy all the fields from the json object
-      return Object.assign(sapcaiResponse, json);
-    }
-  }
-
   // reviver can be passed as the second parameter to JSON.parse
   // to automatically call User.fromJSON on the resulting value.
-  static reviver(key: string, value: any): any {
-    // tslint:disable-line
-    return key === '' ? SapCaiResponse.fromJSON(value) : value;
+
+  private hasAllChipsAsButtons(content: MessageContentObject, chips: string[]): boolean {
+    return !chips.some((chip: string, index: number) => {
+      return !content.buttons![index] || chip !== content.buttons![index].title;
+    });
   }
 }

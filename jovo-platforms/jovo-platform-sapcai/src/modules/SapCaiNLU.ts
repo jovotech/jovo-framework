@@ -10,10 +10,10 @@ export class SapCaiNLU implements Plugin {
 
   uninstall(sapcai: SapCai) {}
 
-  async nlu(sapcaiSkill: SapCaiSkill) {
-    const alexaRequest = sapcaiSkill.$request as SapCaiRequest;
-    if (sapcaiSkill.$type && sapcaiSkill.$type.type === EnumRequestType.INTENT) {
-      sapcaiSkill.$nlu = {
+  async nlu(caiSkill: SapCaiSkill) {
+    const alexaRequest = caiSkill.$request as SapCaiRequest;
+    if (caiSkill.$type && caiSkill.$type.type === EnumRequestType.INTENT) {
+      caiSkill.$nlu = {
         intent: {
           name: alexaRequest.getIntentName(),
         },
@@ -21,8 +21,8 @@ export class SapCaiNLU implements Plugin {
     }
   }
 
-  inputs(sapcaiSkill: SapCaiSkill) {
-    const sapcaiRequest = sapcaiSkill.$request as SapCaiRequest;
-    sapcaiSkill.$inputs = sapcaiRequest.getInputs();
+  inputs(caiSkill: SapCaiSkill) {
+    const request = caiSkill.$request as SapCaiRequest;
+    caiSkill.$inputs = request.getInputs();
   }
 }

@@ -1,6 +1,5 @@
 import { Button } from './Button';
 import { BasicCard } from './BasicCard';
-import _merge = require('lodash.merge');
 
 export class QuickReplyContent {
   title?: string;

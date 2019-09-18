@@ -1,12 +1,23 @@
-import { EnumRequestType, HandleRequest, Plugin } from 'jovo-core';
+import { EnumRequestType, HandleRequest, Plugin, PluginConfig } from 'jovo-core';
 import { SapCai } from '../SapCai';
-import { SapCaiRequest, SapCaiResponse, SapCaiSkill } from '..';
-import { SapCaiUser } from '../core/SapCaiUser';
+import { NEW_SESSION_KEY, SapCaiRequest, SapCaiResponse, SapCaiSkill, SapCaiUser } from '..';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
+class Config implements PluginConfig {
+  enabled?: boolean;
+  useLaunch?: boolean;
+}
+
 export class SapCaiCore implements Plugin {
+  config: Config = {
+    enabled: true,
+    useLaunch: true,
+  };
+
   install(cai: SapCai) {
+    this.config.useLaunch = cai.config.useLaunch;
+
     cai.middleware('$init')!.use(this.init.bind(this));
     cai.middleware('$request')!.use(this.request.bind(this));
     cai.middleware('$type')!.use(this.type.bind(this));
@@ -19,9 +30,8 @@ export class SapCaiCore implements Plugin {
   async init(handleRequest: HandleRequest) {
     const requestObject = handleRequest.host.getRequestObject();
 
-    //TODO improve check (maybe other platforms also use 'npl'.)
-    if (requestObject && requestObject.nlp) {
-      handleRequest.jovo = new SAPCAISkill(handleRequest.app, handleRequest.host, handleRequest);
+    if (requestObject && requestObject.nlp && requestObject.conversation && requestObject.conversation.id) {
+      handleRequest.jovo = new SapCaiSkill(handleRequest.app, handleRequest.host, handleRequest);
     }
   }
 
@@ -35,10 +45,21 @@ export class SapCaiCore implements Plugin {
   }
 
   async type(caiSkill: SapCaiSkill) {
-    // TODO correct type-handling!
     const request = caiSkill.$request as SapCaiRequest;
+    const sessionAttributes = request.getSessionAttributes();
+
+    let type = EnumRequestType.INTENT;
+
+    if (
+      this.config.useLaunch &&
+      sessionAttributes &&
+      (typeof sessionAttributes[NEW_SESSION_KEY] === 'undefined' || sessionAttributes[NEW_SESSION_KEY])
+    ) {
+      type = EnumRequestType.LAUNCH;
+      request.setNewSession(false);
+    }
     caiSkill.$type = {
-      type: EnumRequestType.INTENT,
+      type,
     };
   }
 
@@ -56,7 +77,7 @@ export class SapCaiCore implements Plugin {
     const output = caiSkill.$output;
 
     if (!caiSkill.$response) {
-      caiSkill.$response = new SAPCAIResponse();
+      caiSkill.$response = new SapCaiResponse();
     }
 
     if (Object.keys(output).length === 0) {

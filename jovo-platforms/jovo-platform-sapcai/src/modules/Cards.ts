@@ -1,6 +1,6 @@
 import { Plugin } from 'jovo-core';
 import { Button, ButtonList, Card, CardContent, Carousel, List, Picture } from '../response';
-import { QuickReply, SapCai, SapCaiResponse, SapCaiSkill } from '..';
+import { Message, QuickReply, SapCai, SapCaiResponse, SapCaiSkill } from '..';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -75,22 +75,22 @@ export class Cards implements Plugin {
 
     // Note supported yet by SAP CAI
     /*SapCaiSkill.prototype.showVideoCard = function(videoUrl: string) {
-                _set(this.$output, 'SapCai.Video',
-                    new Video(videoUrl)
-                );
-                return this;
-            };*/
+                    _set(this.$output, 'SapCai.Video',
+                        new Video(videoUrl)
+                    );
+                    return this;
+                };*/
   }
 
   uninstall(sapcai: SapCai) {}
 
-  output(sapcaiSkill: SapCaiSkill) {
-    const output = sapcaiSkill.$output;
-    const prevReplies = _get(sapcaiSkill.$response, 'replies');
-    const replies: any[] = prevReplies ? prevReplies : [];
+  output(caiSkill: SapCaiSkill) {
+    const output = caiSkill.$output;
+    const prevReplies = _get(caiSkill.$response, 'replies');
+    const replies: Message[] = prevReplies ? prevReplies : [];
 
-    if (!sapcaiSkill.$response) {
-      sapcaiSkill.$response = new SapCaiResponse();
+    if (!caiSkill.$response) {
+      caiSkill.$response = new SapCaiResponse();
     }
     const card = _get(output, 'SapCai.Card');
     if (card) {
@@ -127,6 +127,6 @@ export class Cards implements Plugin {
       replies.push(video);
     }
 
-    _set(sapcaiSkill.$response, 'replies', replies);
+    _set(caiSkill.$response, 'replies', replies);
   }
 }

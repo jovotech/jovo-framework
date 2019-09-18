@@ -12,17 +12,11 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
-import {
-  Cards,
-  SapCaiCore,
-  SapCaiNLU,
-  SapCaiRequestBuilder,
-  SapCaiResponseBuilder,
-  SapCaiSkill,
-} from '.';
+import { Cards, SapCaiCore, SapCaiNLU, SapCaiRequestBuilder, SapCaiResponseBuilder, SapCaiSkill } from '.';
 
 export interface Config extends ExtensibleConfig {
-  handlers?: any; //tslint:disable-line
+  handlers?: any; //tslint:disable-line:no-any
+  useLaunch?: boolean;
 }
 
 export class SapCai extends Extensible implements Platform {
@@ -33,6 +27,7 @@ export class SapCai extends Extensible implements Platform {
     enabled: true,
     plugin: {},
     handlers: undefined,
+    useLaunch: true,
   };
 
   constructor(config?: Config) {
@@ -43,23 +38,13 @@ export class SapCai extends Extensible implements Platform {
     }
 
     this.actionSet = new ActionSet(
-      [
-        '$init',
-        '$request',
-        '$session',
-        '$user',
-        '$type',
-        '$nlu',
-        '$inputs',
-        '$output',
-        '$response',
-      ],
+      ['$init', '$request', '$session', '$user', '$type', '$nlu', '$inputs', '$output', '$response'],
       this,
     );
   }
 
   getAppType(): string {
-    return 'SAPCAISkill';
+    return 'SapCaiSkill';
   }
 
   install(app: BaseApp) {
@@ -85,13 +70,13 @@ export class SapCai extends Extensible implements Platform {
 
     Jovo.prototype.$caiSkill = undefined;
     Jovo.prototype.caiSkill = function() {
-      if (this.constructor.name !== 'SAPCAISkill') {
-        throw Error(`Can't handle request. Please use this.isSAPCAISkill()`);
+      if (this.constructor.name !== 'SapCaiSkill') {
+        throw Error(`Can't handle request. Please use this.isSapCaiSkill()`);
       }
       return this as SapCaiSkill;
     };
     Jovo.prototype.isCaiSkill = function() {
-      return this.constructor.name === 'SAPCAISkill';
+      return this.constructor.name === 'SapCaiSkill';
     };
 
     //tslint:disable-next-line:no-any
@@ -118,7 +103,7 @@ export class SapCai extends Extensible implements Platform {
     handleRequest.platformClazz = SapCaiSkill;
     await this.middleware('$init')!.run(handleRequest);
 
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SAPCAISkill') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SapCaiSkill') {
       return Promise.resolve();
     }
     await this.middleware('$request')!.run(handleRequest.jovo);
@@ -135,7 +120,7 @@ export class SapCai extends Extensible implements Platform {
   }
 
   async nlu(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SAPCAISkill') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SapCaiSkill') {
       return Promise.resolve();
     }
     await this.middleware('$nlu')!.run(handleRequest.jovo);
@@ -143,14 +128,14 @@ export class SapCai extends Extensible implements Platform {
   }
 
   async output(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SAPCAISkill') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SapCaiSkill') {
       return Promise.resolve();
     }
     await this.middleware('$output')!.run(handleRequest.jovo);
   }
 
   async response(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SAPCAISkill') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'SapCaiSkill') {
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);

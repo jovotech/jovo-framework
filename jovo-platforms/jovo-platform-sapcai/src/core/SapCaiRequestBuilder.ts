@@ -1,22 +1,26 @@
 import { SapCaiRequest } from './SapCaiRequest';
 import { RequestBuilder } from 'jovo-core';
 import * as path from 'path';
+
 const samples: { [key: string]: string } = {
   LaunchRequest: 'LaunchRequest.json',
-  IntentRequest: 'IntentRequest.json',
+  IntentRequest: 'IntentRequest1.json',
   IntentRequestWithSlot: 'IntentRequestWithSlot.json',
   IntentRequestWithSlotResolution: 'IntentRequestWithSlotResolution.json',
 };
 
 export class SapCaiRequestBuilder implements RequestBuilder<SapCaiRequest> {
-  type = 'SAPCAISkill';
+  type = 'SapCaiSkill';
 
   async launch(json?: object): Promise<SapCaiRequest> {
     // tslint:disable-line
     return await this.launchRequest(json);
   }
-  async intent(json?: object): Promise<SapCaiRequest>; // tslint:disable-line
-  async intent(name?: string, inputs?: any): Promise<SapCaiRequest>; // tslint:disable-line
+
+  async intent(json?: object): Promise<SapCaiRequest>;
+  // tslint:disable-next-line:no-any
+  async intent(name?: string, inputs?: any): Promise<SapCaiRequest>;
+  // tslint:disable-next-line:no-any
   async intent(obj?: any, inputs?: any): Promise<SapCaiRequest> {
     // tslint:disable-line
     if (typeof obj === 'string') {
@@ -39,6 +43,7 @@ export class SapCaiRequestBuilder implements RequestBuilder<SapCaiRequest> {
     //tslint:disable-line
     return this.intent('LAUNCH', json);
   }
+
   async intentRequest(json?: object): Promise<SapCaiRequest> {
     // tslint:disable-line
     if (json) {
@@ -69,6 +74,7 @@ export class SapCaiRequestBuilder implements RequestBuilder<SapCaiRequest> {
     }
   }
 
+  // tslint:disable-next-line:no-any
   async end(json?: any) {
     // tslint:disable-line
     return this.intent('END', json);
