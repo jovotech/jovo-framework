@@ -20,6 +20,10 @@ const samples: {[key: string]: {[key: string]: string} | string} = {
         'OnPermissionNotification': 'OnPermissionNotification.json',
         'CompletePurchase': 'CompletePurchase.json',
         'OnPlace': 'OnPlace.json'
+    },
+    'dialogflow': {
+        'DefaultWelcomeIntent': 'DefaultWelcomeIntent.json',
+        'HelpIntent': 'HelpIntent.json',
     }
 };
 
