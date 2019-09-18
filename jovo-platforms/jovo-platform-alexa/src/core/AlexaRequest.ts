@@ -292,12 +292,11 @@ export class AlexaRequest implements JovoRequest {
             
             if (slots[slot].value) {
                 input.value = slots[slot].value;
+                input.key = slots[slot].value;
             }
             
             //check if there is an entity resolution
-            if (slots[slot].value && this.hasEntityMatch(slot.name)) {
-                input.key = slots[slot].value;
-            } else {
+            if (!this.hasEntityMatch(slot.name)) 
                 input.key = undefined;
             }
             
