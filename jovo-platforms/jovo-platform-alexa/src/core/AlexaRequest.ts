@@ -289,11 +289,18 @@ export class AlexaRequest implements JovoRequest {
                 name: slot,
                 alexaSkill: slots[slot],
             };
+            
             if (slots[slot].value) {
                 input.value = slots[slot].value;
-                input.key = slots[slot].value;
             }
-
+            
+            //check if there is an entity resolution
+            if (slots[slot].value && this.hasEntityMatch(slot.name)) {
+                input.key = slots[slot].value;
+            } else {
+                input.key = undefined;
+            }
+            
             // check static entities first
             this.getStaticEntityMatches(slot).forEach((authorityResolution: AuthorityResolution) => {
                 input.key = authorityResolution.values[0].value.name;
