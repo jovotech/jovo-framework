@@ -11,7 +11,6 @@ import { SpeechBuilder } from './SpeechBuilder';
 
 import {
     ASRData,
-    HandleRequest,
     Host,
     Inputs,
     JovoData,
@@ -27,6 +26,7 @@ import {
 
 import { User } from './User';
 import { ValidationError, Validator } from './validators';
+import {HandleRequest} from './HandleRequest';
 
 export abstract class Jovo extends EventEmitter {
     readonly $host: Host;

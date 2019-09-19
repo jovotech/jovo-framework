@@ -37,6 +37,10 @@ export class TestHost implements Host {
         });
     }
 
+    getQueryParams(): Record<string, string> {
+        return this.res.query || {};
+    }
+
     /**
      * Return the previously set response object
      */

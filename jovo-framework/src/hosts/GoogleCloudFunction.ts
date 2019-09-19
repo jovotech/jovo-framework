@@ -15,6 +15,11 @@ export class GoogleCloudFunction implements Host {
         this.$request = req.body;
     }
 
+    getQueryParams(): Record<string, string> {
+        return this.req.query || {};
+    }
+
+
     getRequestObject() {
         return this.$request;
     }
