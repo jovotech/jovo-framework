@@ -124,6 +124,15 @@ export class DialogflowCore implements Plugin {
             return !context.name.startsWith(sessionContextPrefix) && context.lifespanCount && context.lifespanCount > 0;
         });
 
+        // add ask context
+        if (output.ask) {
+            newOutputContexts.push({
+                name: `${request.session}/contexts/_jovo_ask_${Util.randomStr(5)}`,
+                lifespanCount: 1,
+                parameters: { ask: true }
+            });
+        }
+
         // add jovo session context
         if (Object.keys(dialogflowAgent.$session.$data).length > 0) {
             newOutputContexts.push({
@@ -132,6 +141,7 @@ export class DialogflowCore implements Plugin {
                 parameters: dialogflowAgent.$session.$data
             });
         }
+
         if (dialogflowAgent.$output.Dialogflow && dialogflowAgent.$output.Dialogflow.OutputContexts) {
 
             for (let i = 0; i < dialogflowAgent.$output.Dialogflow.OutputContexts.length; i++) {
@@ -158,11 +168,10 @@ export class DialogflowCore implements Plugin {
         }
 
         (dialogflowAgent.$response as DialogflowResponse).outputContexts = newOutputContexts;
+
         if (_get(output, 'Dialogflow.Payload')) {
             _set(dialogflowAgent.$response, 'payload', _get(output, 'Dialogflow.Payload'));
         }
-
-
 
     }
 
