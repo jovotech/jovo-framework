@@ -54,11 +54,11 @@ More detailed step-by-step guides for each service can be found in the [Availabl
 
 Name | Description
 ------------ | -------------
-[VoiceHero](./voicehero.md './analytics/voicehero') | Custom Voice App Analytics
 [Dashbot](./dashbot.md './analytics/dashbot') | Conversational Analytics
 [Bespoken](./bespoken.md './analytics/bespoken') | Voice App Logging and Monitoring
 [Chatbase](./chatbase.md './analytics/chatbase') | Virtual Agent Analytics
 [Botanalytics](./botanalytics.md './analytics/botanalytics') | Conversational Analytics
+[VoiceHero](./voicehero.md './analytics/voicehero') | Custom Voice App Analytics
 
 
 
