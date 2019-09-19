@@ -14,7 +14,7 @@ Learn how to use VoiceHero Analytics for your Alexa Skills built with Jovo.
 
 [VoiceHero](https://www.voicehero.ai/) empowers developers increase retention and performance of their voice app. Through powerful insights into user behaviour, VoiceHero points out actionable next steps to 10x your voice app.
 
-VoiceHero is currently in closed beta. Head on over to [our main site](https://www.voicehero.ai/) to get started.
+VoiceHero is currently in closed beta. Head on over to [their main site](https://www.voicehero.ai/) to get started.
 
 ## Installation
 
@@ -27,7 +27,7 @@ To use VoiceHero for your voice app, you need to complete the following steps:
 
 ### Get Started on VoiceHero
 
-1. Create a VoiceHero account (Head on over to [our main site](https://www.voicehero.ai/) to get started).
+1. Create a VoiceHero account (Head on over to [their main site](https://www.voicehero.ai/) to get started).
 
 2. Copy API Key from the [Dashboard](http://dashboard.voicehero.ai).
 
@@ -111,5 +111,5 @@ Test your voice app, and your session should appear in the Sessions tab.
 
 ![VoiceHero Test](../../img/voicehero-sessions-test.png)
 
-<!--[metadata]: {"description": "Add oicehero Analytics to your Alexa Skills and Google Actions with Jovo",
+<!--[metadata]: {"description": "Add Voicehero Analytics to your Alexa Skills and Google Actions with Jovo",
 "route": "analytics/voicehero" }-->
