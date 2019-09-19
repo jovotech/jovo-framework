@@ -62,7 +62,7 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
             requestObject.session &&
             requestObject.originalDetectIntentRequest.source === this.factory.type()) {
             // creates a platform instance, e.g. GoogleAction
-            handleRequest.jovo = this.factory.createPlatformRequest(handleRequest.app, handleRequest.host);
+            handleRequest.jovo = this.factory.createPlatformRequest(handleRequest.app, handleRequest.host, handleRequest);
         }
     };
 
