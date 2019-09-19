@@ -296,7 +296,7 @@ export class AlexaRequest implements JovoRequest {
             }
             
             //check if there is an entity resolution
-            if (!this.hasEntityMatch(slot.name)) 
+            if (!this.hasEntityMatch(slot.name)) {
                 input.key = undefined;
             }
             
