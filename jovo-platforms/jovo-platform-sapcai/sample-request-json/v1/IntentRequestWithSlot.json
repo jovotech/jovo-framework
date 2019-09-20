@@ -50,6 +50,7 @@
                   "score": 0,
                   "correctAnswerText": "Storm",
                   "_JOVO_STATE_": "TriviaState",
+                  "__JOVO_NEW_SESSION__": "false",
                   "answer": {
                           "scalar": 1,
                           "raw": "1",

@@ -30,8 +30,6 @@
     "id": "test-1568281146823",
     "language": "en",
     "memory": {
-      "_JOVO_STATE_": "StartState",
-      "__JOVO_NEW_SESSION__": "false"
     },
     "skill": "startintent",
     "skill_occurences": 1

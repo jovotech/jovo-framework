@@ -23,6 +23,7 @@ export class SapCaiCore implements Plugin {
     cai.middleware('$type')!.use(this.type.bind(this));
     cai.middleware('$session')!.use(this.session.bind(this));
     cai.middleware('$output')!.use(this.output.bind(this));
+    cai.middleware('$response')!.use(this.response.bind(this));
   }
 
   uninstall(cai: SapCai) {}
@@ -53,10 +54,9 @@ export class SapCaiCore implements Plugin {
     if (
       this.config.useLaunch &&
       sessionAttributes &&
-      (typeof sessionAttributes[NEW_SESSION_KEY] === 'undefined' || sessionAttributes[NEW_SESSION_KEY])
+      (typeof sessionAttributes[NEW_SESSION_KEY] === 'undefined' || sessionAttributes[NEW_SESSION_KEY] === true)
     ) {
       type = EnumRequestType.LAUNCH;
-      request.setNewSession(false);
     }
     caiSkill.$type = {
       type,
@@ -106,6 +106,15 @@ export class SapCaiCore implements Plugin {
 
     if (caiSkill.$session && caiSkill.$session.$data) {
       _set(caiSkill.$response, 'conversation.memory', caiSkill.$session.$data);
+    }
+  }
+
+  async response(caiSkill: SapCaiSkill) {
+    if(caiSkill.$type.type === EnumRequestType.LAUNCH) {
+      const response = caiSkill.$response || new SapCaiResponse();
+      const sessionAttributes = response.getSessionAttributes() || {};
+      sessionAttributes[NEW_SESSION_KEY] = false;
+      response.setSessionAttributes(sessionAttributes);
     }
   }
 }

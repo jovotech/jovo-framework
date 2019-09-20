@@ -40,8 +40,12 @@ export class SapCaiRequestBuilder implements RequestBuilder<SapCaiRequest> {
   }
 
   async launchRequest(json?: object): Promise<SapCaiRequest> {
-    //tslint:disable-line
-    return this.intent('LAUNCH', json);
+    if(json) {
+      return SapCaiRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
+      return SapCaiRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+    }
   }
 
   async intentRequest(json?: object): Promise<SapCaiRequest> {
