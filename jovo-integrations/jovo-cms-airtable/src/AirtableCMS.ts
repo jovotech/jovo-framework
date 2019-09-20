@@ -114,7 +114,9 @@ export class AirtableCMS extends BaseCmsPlugin {
                         const record = _get(records[ 0 ], 'fields');
                         const keys = loadOptions.order || Object.keys(record);
 
-                        arr.push(keys);
+                        if (!arr.length) {
+                          arr.push(keys);
+                        }
 
                         records.forEach((r: any) => {
                             // push each records values

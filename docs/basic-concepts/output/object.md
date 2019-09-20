@@ -4,12 +4,12 @@ Learn more about the Jovo `$output` object.
 
 * [Introduction](#introduction)
 * [Output Structure](#output-structure)
-* [platform.output Middleware](#platformoutput-middleware)
+* [Output Middleware](#output-middleware)
 
 
 ## Introduction
 
-The Jovo `$output` is a consolidated JSON object that prepared during [routing](../routing '../routing') , and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
+The Jovo `$output` is a consolidated JSON object that is prepared during [routing](../routing '../routing'), and later turned into a response in the [`platform.output` Middleware](#platformoutput-middleware).
 
 You can access the object like this:
 
@@ -121,11 +121,11 @@ For example, it looks like this after `ask`:
 }
 ```
 
-## platform.output Middleware
+## Output Middleware
 
 > [Learn more about the Jovo Framework Architecture here](../../advanced-concepts/architecture.md '../architecture').
 
-The `platform.output` middleware is used to turn the `$output` object into a `$response` object, as shown in the [Introduction](#introduction) above.
+The `output` middleware is used to turn the `$output` object into a `$response` object, as shown in the [Introduction](#introduction) above.
 
 The middleware turns the cross-platform output into platform-specific JSON responses based on the platform the framework is currently interacting with. This is why the `$output` object is helpful for [Hooks](../../advanced-concepts/hooks.md '../hooks') and [Plugins](../../advanced-concepts/plugins.md '../plugins'), as they then only need to worry about the abstracted object, not any possible response JSON structure.
 

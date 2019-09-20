@@ -12,7 +12,7 @@ import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
 import { App, Config as AppConfig } from '../App';
-import { Component } from './Component';
+import { Component, ComponentSessionData } from './Component';
 
 export interface Config extends PluginConfig {
 	intentMap?: { [key: string]: string };
@@ -204,20 +204,21 @@ export class Router implements Plugin {
 				throw new Error(`Couldn't get route for intent request.`);
 			}
 
-			// parse component to `mapIntentName` only if it's active
-			let component: Component | undefined;
-			if (handleRequest.jovo.getSessionAttribute(SessionConstants.COMPONENT)) {
-				component =
-					handleRequest.jovo.$components[
-						handleRequest.jovo.getSessionAttribute(SessionConstants.COMPONENT)
-					];
-			}
+            // parse component to `mapIntentName` only if it's active
+            let activeComponent: Component | undefined;
+            const componentSessionStack: Array<[string, ComponentSessionData]> = handleRequest.jovo.$session.$data[SessionConstants.COMPONENT];
 
-			const intent = Router.mapIntentName(
+            if (componentSessionStack && componentSessionStack.length > 0) {
+                const latestComponentFromSessionStack: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
+                activeComponent = handleRequest.jovo.$components[latestComponentFromSessionStack[0]];
+            }
+
+            const intent = Router.mapIntentName(
 				this.config,
 				handleRequest.jovo.$nlu.intent.name,
-				component
-			);
+				activeComponent
+            );
+            
 			route = Router.intentRoute(
 				handleRequest.jovo.$handlers,
 				handleRequest.jovo.getState(),

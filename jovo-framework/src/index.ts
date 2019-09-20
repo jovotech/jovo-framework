@@ -1,7 +1,8 @@
 import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Project, Util } from 'jovo-core';
 import { App } from './App';
 
-import { Component } from './middleware/Component';
+import { Component, ComponentDelegationOptions, ComponentResponse } from './middleware/Component';
+import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Route } from './middleware/Router';
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
@@ -19,7 +20,19 @@ export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log, Project };
 
-export { Component, Config as ComponentConfig, Response as ComponentResponse } from './middleware/Component';
+export { 
+    Component,
+    ComponentConfig,
+    ComponentConstructorOptions,
+    ComponentData,
+    ComponentDelegationOptions,
+    ComponentResponse,
+    ComponentResponseStatus,
+    ComponentSessionData
+} from './middleware/Component';
+
+export { ComponentPlugin } from './middleware/ComponentPlugin'
+
 
 declare module 'express' {
 
@@ -31,12 +44,19 @@ declare module 'express' {
 
 
 declare module 'jovo-core/dist/src/BaseApp' {
-
-    /**
-     * Sets handler object
-     * @param {Object} handlers
-     */
     export interface BaseApp {
+        /**
+         * 1st layer components.
+         * These were initialized by the developer using `app.useComponents`
+         */
+        $baseComponents: {
+            [key: string]: ComponentPlugin;
+        };
+        
+        /**
+         * Sets handler object
+         * @param {Object} handlers
+         */
         setHandler(...handler: Handler[]): this;
     }
 }
@@ -115,10 +135,10 @@ declare module 'jovo-core/dist/src/Jovo' {
         /**
          * Delegates the requests & responses to the component defined with "componentName"
          * @param {string} componentName
-         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @param {ComponentDelegationOptions} options
          * @returns {Promise<void>}
          */
-        delegate(componentName: string, onCompletedIntent: string): Promise<void>;
+        delegate(componentName: string, options: ComponentDelegationOptions): Promise<void>;
     }
 }
 
@@ -127,6 +147,13 @@ declare module 'jovo-core/dist/src/Jovo' {
         $components: {
             [ key: string ]: Component;
         };
+
+        $activeComponents: {
+            [ key: string ]: ComponentPlugin
+        };
+
+        sendComponentResponse(response: ComponentResponse): Promise<void>;
+        // getActiveComponent(): Component; TODO
     }
 }
 
