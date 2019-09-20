@@ -23,7 +23,8 @@ import {
 	MetaDataConfig
 } from './middleware/user/JovoUser';
 
-import { Component, Config as ComponentConfig } from './middleware/Component';
+import { ComponentConfig } from './middleware/Component';
+import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Handler } from './middleware/Handler';
 import { BasicLogging } from './middleware/logging/BasicLogging';
 import { Config as RouterConfig, Router } from './middleware/Router';
@@ -454,24 +455,43 @@ export class App extends BaseApp {
 		await super.handle(host);
 	}
 
-	useComponents(...components: Component[]) {
-		components.forEach(component => {
-			component.name = component.name || component.constructor.name;
+	/**
+	 * 
+	 * @param {ComponentPlugin[]} components 
+	 */
+	useComponents(...components: ComponentPlugin[]) {
+		/**
+		 * router needs to access $components object,
+		 * which gets initialized in `initializeComponents`
+		 */
+		this.middleware('before.router')!.use(ComponentPlugin.initializeComponents);
+		this.middleware('platform.output')!.use(ComponentPlugin.saveComponentSessionData);
 
-			const componentAppConfig: ComponentConfig = _cloneDeep(
-				this.$config.plugin[component.name!]
-			); // config defined in project's main config.js file
-			component.config = component.mergeConfig(componentAppConfig);
+		components.forEach((componentPlugin) => {
+			this.middleware('setup')!.use(componentPlugin.setAsBaseComponent.bind(componentPlugin));
 
-			this.setHandler(component.handler);
+			componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
 
-			this.$plugins.set(component.name, component);
-			component.install(this);
-			this.emit('use', component);
+			if (this.$config.components) {
+				const componentAppConfig: ComponentConfig = _cloneDeep(
+					this.$config.components[componentPlugin.name!]
+				); // config defined in project's main config.js file
+				_merge(componentPlugin.config, componentAppConfig);
+			}
+
+			componentPlugin.install(this);
+			/**
+			 * 1st layer components handler have to be set after the child component's handler were merged
+			 * currently they are merged in `after.setup`
+			 */
+			this.middleware('before.request')!.use(componentPlugin.setHandler.bind(componentPlugin));
+			this.$plugins.set(componentPlugin.name!, componentPlugin);
+
+			this.emit('use', componentPlugin);
 
 			if (this.constructor.name === 'App') {
-				Log.yellow().verbose(`Installed component: ${component.name}`);
-				Log.debug(`${JSON.stringify(component.config || {}, null, '\t')}`);
+				Log.yellow().verbose(`Installed component: ${componentPlugin.name}`);
+				Log.debug(`${JSON.stringify(componentPlugin.config || {}, null, '\t')}`);
 				Log.debug();
 			}
 		});
