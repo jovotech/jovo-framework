@@ -487,11 +487,13 @@ You can also optionally add a preamble message that Alexa will read before the v
 ```javascript
 // @language=javascript
 
-this.$alexaSkill.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle', 'Get ready to watch your video!');
+this.$alexaSkill.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle');
+this.tell('Get ready to watch your video!');
 
 // @language=typescript
 
 this.$alexaSkill!.showVideo('https://www.url.to/video.mp4', 'Any Title', 'Any Subtitle', 'Get ready to watch your video!');
+this.tell('Get ready to watch your video!');
 ```
 
 Find the [official Amazon reference here](https://developer.amazon.com/docs/custom-skills/videoapp-interface-reference.html).
