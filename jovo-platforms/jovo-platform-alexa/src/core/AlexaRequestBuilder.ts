@@ -7,6 +7,7 @@ const samples: {[key: string]: string} = {
     'IntentRequest1': 'IntentRequest1.json',
     'IntentRequestWithSlot': 'IntentRequestWithSlot.json',
     'IntentRequestWithSlotResolution': 'IntentRequestWithSlotResolution.json',
+    'IntentRequestWithSlotResolutionNoMatch': 'IntentRequestWithSlotResolutionNoMatch.json',
     'Connections.Response': 'Connections.Response.json',
     'AudioPlayer.PlaybackStarted': 'AudioPlayer.PlaybackStarted.json',
     'SessionEndedRequest': 'SessionEndedRequest.json',

@@ -169,6 +169,7 @@ Dashbot | Chatbot and Voice App Analytics including Usage Metrics, Behavior Flow
 Bespoken Analytics | Voice App Analytics including Usage Metrics, Logging, and Monitoring | [📝](./docs/integrations/analytics/bespoken.md)
 Chatbase | Voice App Analytics including Usage Metrics, Session Flows and Link Tracking | [📝](./docs/integrations/analytics/chatbase.md)
 Botanalytics | AI powered Chatbot Analytics and Voice Analytics | [📝](./docs/integrations/analytics/botanalytics.md)
+VoiceHero | Voice App Analytics including actionable insights, session tracking, custom events, cohorts, usage data and behavior flows to immediately improve in-app experience | [📝](./docs/integrations/analytics/voicehero.md)
 
 #### CMS Integrations
 

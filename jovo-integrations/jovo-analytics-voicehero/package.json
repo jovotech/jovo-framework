@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-voicehero",
-  "version": "2.2.12",
+  "version": "2.2.13",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,9 +14,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "voicehero-sdk": "^0.0.14",
-    "jovo-core": "^2.2.12",
-    "lodash.merge": "^4.6.1"
+    "jovo-core": "^2.2.13",
+    "lodash.merge": "^4.6.1",
+    "voicehero-sdk": "^0.0.14"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
@@ -46,5 +46,5 @@
   "files": [
     "dist/src/**/*"
   ],
-  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
+  "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
 }

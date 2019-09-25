@@ -58,6 +58,7 @@ Name | Description
 [Bespoken](./bespoken.md './analytics/bespoken') | Voice App Logging and Monitoring
 [Chatbase](./chatbase.md './analytics/chatbase') | Virtual Agent Analytics
 [Botanalytics](./botanalytics.md './analytics/botanalytics') | Conversational Analytics
+[VoiceHero](./voicehero.md './analytics/voicehero') | Custom Voice App Analytics
 
 
 

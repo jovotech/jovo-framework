@@ -26,19 +26,6 @@ describe('test requests', () => {
 
     });
 
-    test('test SessionEndedRequest with nested END', async (done) => {
-        app.setHandler({
-            END: {
-                USER_INITIATED() {
-                    done();
-                }
-            },
-        });
-        const request:JovoRequest = await t.requestBuilder.rawRequestByKey('SessionEndedRequest');
-        app.handle(ExpressJS.dummyRequest(request));
-
-    });
-
     test('test System.ExceptionEncountered', async (done) => {
         app.setHandler({
             ON_ERROR() {
