@@ -32,7 +32,7 @@ The response gets assembled from the `$output` object in the [`platform.output` 
 
 | Method        | Description        |
 | ------------- |-------------|
-| `setSessionData(sessionData: SessionData)` | Setts session data. [Learn more about session data here](../../basic-concepts/data#session-data '../data#session-data'). |
+| `setSessionData(sessionData: SessionData)` | Sets session data. [Learn more about session data here](../../basic-concepts/data#session-data '../data#session-data'). |
 
 
 ### Response Getters
@@ -43,7 +43,7 @@ You can use these cross-platform helper methods:
 
 | Method        | Description        |
 | ------------- |-------------|
-| `getSpeech(): string` | Returns speech text without "speak" and tags. |
+| `getSpeech(): string` | Returns speech text without "speak" tags. |
 | `getReprompt(): string` | Returns reprompt text without "speak" tags. |
 | `hasSessionData(name: string, value?: any): boolean` | Checks if response has a specific session attribute in it.
 | `getSessionData(): SessionData | undefined` | Returns session data. [Learn more about session data here](../../basic-concepts/data#session-data '../data#session-data'). |
