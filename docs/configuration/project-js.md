@@ -307,7 +307,7 @@ host: {
 }
 ```
 
-Note: If you're only building an Alexa Skill, der is no need to specify a host with the same information that is already in the `endpoint`. This is mostly important if you also want to host your Google Action on AWS Lambda and make it accessible through an API Gateway.
+Note: If you're only building an Alexa Skill, there is no need to specify a host with the same information that is already in the `endpoint`. This is mostly important if you also want to host your Google Action on AWS Lambda and make it accessible through an API Gateway.
 
 
 <!--[metadata]: {"description": "The project.js is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.", "route": "project-js"}-->
