@@ -180,7 +180,7 @@ Depending on the middleware you use, the object can be `undefined`, since the in
 
 ## Middleware Execution
 
-Each middleware can eiher be accessed by using its name (e.g. `platform.output`), or by prepending `before` (e.g. `before.platform.output`) or `after` (e.g. `after.platform.output`) to specify when in the order the hook should be triggered.
+Each middleware can either be accessed by using its name (e.g. `platform.output`), or by prepending `before` (e.g. `before.platform.output`) or `after` (e.g. `after.platform.output`) to specify when in the order the hook should be triggered.
 
 For example, the order of `platform.output` and the following `response` middlewares looks like this:
 
@@ -194,7 +194,7 @@ response
 after.response
 ```
 
-The anonymous function that you pass into the hook is then called when is is reached in the stack of middlewares.
+The anonymous function that you pass into the hook is then called when it is reached in the stack of middlewares.
 
 If you need to do API calls and await them in your hooks, use `asnyc/await`:
 

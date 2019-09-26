@@ -43,7 +43,7 @@ $ jovo deploy --platform alexaSkill --target info
 $ jovo build -p alexaSkill --deploy --target info
 ```
 
-To check wether the user granted you the permission you can use the following helper methods:
+To check whether the user granted you the permission you can use the following helper methods:
 
 ```javascript
 // @language=javascript

@@ -191,7 +191,7 @@ this.$alexaSkill!.showAskForGeoLocationCard();
 
 After your user has given their consent the incoming requests may contain a `Geolocation` object, as it depends on the device and its settings.
 
-To see wether a device supports the geolocation interface or not, you can use the following method:
+To see whether a device supports the geolocation interface or not, you can use the following method:
 
 ```javascript
 // @language=javascript
@@ -236,9 +236,9 @@ The incoming `Geolocation` object has the following structure:
 
 | Name                              | Description                                                        | Value                                   | Optional                   |
 | :-------------------------------- | :----------------------------------------------------------------- | :-------------------------------------- | :------------------------- |
-| `locationServices`                | Contains information wether location sharing is turned on          | `object`                                | Yes                        |
-| `locationServices.access`         | Specifies wether location sharing is enabled or disabled           | `enum` - either `ENABLED` or `DISABLED` | No                         |
-| `locationServices.status`         | Specifies wether location sharing is running or not                | `enum` - either `RUNNING` or `STOPPED`  | No                         |
+| `locationServices`                | Contains information whether location sharing is turned on          | `object`                                | Yes                        |
+| `locationServices.access`         | Specifies whether location sharing is enabled or disabled           | `enum` - either `ENABLED` or `DISABLED` | No                         |
+| `locationServices.status`         | Specifies whether location sharing is running or not                | `enum` - either `RUNNING` or `STOPPED`  | No                         |
 | `timestamp`                       | Timestamp specifying when the location data was retrieved          | `string` - ISO 8601                     | No                         |
 | `coordinate`                      | Contains information about the coordinates                         | `object`                                | No                         |
 | `coordinate.latitudeInDegrees`    | Specifies the latitude in degrees                                  | `number` - [-90.0, 90.0]                | No                         |

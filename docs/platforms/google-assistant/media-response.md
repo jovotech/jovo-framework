@@ -10,7 +10,7 @@ Learn how to use the Google Action Media Response with Jovo.
 
 ## Introduction
 
-The Google Action Media Response allows you to play audio content, which is longer than 120 seconds. While using the Media Response you loose control of the `stop`, `cancel` and `resume` commands, since Google handles these themselves, without your app even receiving the request.
+The Google Action Media Response allows you to play audio content, which is longer than 120 seconds. While using the Media Response you lose control of the `stop`, `cancel` and `resume` commands, since Google handles these themselves, without your app even receiving the request.
 
 You can access the Media Response features in two ways:
 
@@ -65,7 +65,7 @@ this.$googleAction!.$mediaResponse.play('https://www.url.to/file.mp3', 'song one
 this.tell('Enjoy the song!');
 ```
 
-If you use `tell()` it will be handled as a [final response](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#finalresponse) and you wont receive a callback that the audio playback is completed. 
+If you use `tell()` it will be handled as a [final response](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#finalresponse) and you won't receive a callback that the audio playback is completed. 
 
 The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](./visual.md#suggestion-chips './visual#suggestion-chips') to your response.
 
