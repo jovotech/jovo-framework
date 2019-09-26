@@ -113,7 +113,7 @@ this.$alexaSkill!.$dialog.delegate(updatedIntent)
 
 ### Control the Dialog in Your Code
 
-The Dialog Interface allows you to jump in and control the conversation yourself. Keep in mind that the prompts you prepared in the Skill Builder are only used if you delegate the conversation to Alexa. The utterances are still beeing used.
+The Dialog Interface allows you to jump in and control the conversation yourself. Keep in mind that the prompts you prepared in the Skill Builder are only used if you delegate the conversation to Alexa. The utterances are still being used.
 
 You have the possibility the ask the user to fill a certain slot, confirm a slot, or confirm the whole intent. You can also update the intent if you have certain values, for example the user's name, saved in a database. 
 
@@ -223,7 +223,7 @@ let updatedIntent = {
         }
     }
 };
-// You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
+// You update the intent and fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
 this.$alexaSkill.$dialog.elicitSlot('city', 'Which city are you living in?', updatedIntent);
 
@@ -244,7 +244,7 @@ let updatedIntent = {
         }
     }
 };
-// You update the intent an fill the name slot. There is only city slot left, so you can manually ask the user to fill that
+// You update the intent and fill the name slot. There is only city slot left, so you can manually ask the user to fill that
 
 this.$alexaSkill!.$dialog.elicitSlot('city', 'Which city are you living in?', updatedIntent);
 ```
