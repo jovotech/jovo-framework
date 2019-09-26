@@ -21,7 +21,7 @@ Jovo is an open-source framework based on [Typescript](https://www.typescriptlan
 There are several ways how you can install Jovo:
 * [Install the Jovo CLI](#jovo-cli-installation) (recommended way in our [quickstart guide](../README.md './quickstart'))
 * Download the [jovo-framework npm package](#jovo-framework-npm-package)
-* Cole a [Jovo Sample Voice App](#jovo-sample-voice-app)
+* Clone a [Jovo Sample Voice App](#jovo-sample-voice-app)
 
 > You can also find tutorials and courses here: [jovo.tech/learn](https://www.jovo.tech/learn). Happy coding!
 

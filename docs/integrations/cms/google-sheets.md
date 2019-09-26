@@ -439,7 +439,7 @@ const config = {
 
 ### Caching
 
-The content all sheets is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) sheets with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
+The content of all sheets is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) sheets with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
 
 You can choose between disabling caching for all sheets, or just specific ones in your `config.js` file:
 

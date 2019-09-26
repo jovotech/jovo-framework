@@ -295,7 +295,7 @@ The next request will go into the `DELIVERY_ADDRESS()` handler.
 
 ##### DELIVERY_ADDRESS
 
-After the user acceppted the delivery address (`this.$googleAction.$transaction.isDeliveryAddressAccepted()`), you can as them to make a transaction decision:
+After the user accepted the delivery address (`this.$googleAction.$transaction.isDeliveryAddressAccepted()`), you can as them to make a transaction decision:
 
 
 ```js

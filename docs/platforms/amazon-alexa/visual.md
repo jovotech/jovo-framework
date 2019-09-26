@@ -270,7 +270,7 @@ this.$alexaSkill!.showDisplayTemplate(bodyTemplate6);
 
 ### List Templates
 
-The list template is used to display a set of scrollabe and selectable items (text and images).
+The list template is used to display a set of scrollable and selectable items (text and images).
 
 [ListTemplate1](https://developer.amazon.com/docs/custom-skills/display-interface-reference.html#listtemplate1-for-text-lists-and-optional-images):
 
