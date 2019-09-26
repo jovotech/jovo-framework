@@ -14,7 +14,7 @@ Learn how to use Botanalytics for your Alexa Skills and Google Actions built wit
 
 [Botanalytics](https://botanalytics.co/) is a conversational analytics platform that supports a variety of channels, like Facebook Messenger, Slack, Kik, Twitter, Telegram, and more.
 
-[Botanalytics Voice Analytics](https://botanalytics.co/voice-analytics) offering allows you to see live transcopts, track performance across channels, and do intent analysis for your voice apps on Amazon Alexa and Google Assistant. 
+[Botanalytics Voice Analytics](https://botanalytics.co/voice-analytics) offering allows you to see live transcripts, track performance across channels, and do intent analysis for your voice apps on Amazon Alexa and Google Assistant. 
 
 ## Installation
 
