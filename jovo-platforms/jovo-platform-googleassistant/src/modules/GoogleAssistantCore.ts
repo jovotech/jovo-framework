@@ -36,7 +36,7 @@ export class GoogleAssistantCore implements Plugin {
         const requestObject = handleRequest.host.$request;
         /**
          * placeholder, since GoogleAction can't be run without dialogflow currently.
-         * Platform object creation is therefor handled by dialogflow integration.
+         * Platform object creation is therefore handled by dialogflow integration.
          */
         if (requestObject.user &&
             requestObject.conversation &&
