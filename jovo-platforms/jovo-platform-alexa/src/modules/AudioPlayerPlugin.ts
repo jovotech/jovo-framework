@@ -30,6 +30,10 @@ export interface AudioItem {
         url: string;
         offsetInMilliseconds: number;
         expectedPreviousToken?: string;
+        progressReport?: {
+            progressReportDelayInMilliseconds?: number;
+            progressReportIntervalInMilliseconds?: number;
+        }
     };
     metadata?: MetaData;
 }
@@ -43,6 +47,8 @@ export class AudioPlayer {
     token?: string;
     playerActivity?: string;
     offsetInMilliseconds: number;
+    progressReportDelayInMilliseconds?: number;
+    progressReportIntervalInMilliseconds?: number;
     expectedPreviousToken?: string;
     metaData?: MetaData;
 
@@ -52,6 +58,8 @@ export class AudioPlayer {
         this.alexaSkill = alexaSkill;
         this.playerActivity=_get(alexaSkill.$request, 'context.AudioPlayer.playerActivity');
         this.offsetInMilliseconds = _get(alexaSkill.$request, 'context.AudioPlayer.offsetInMilliseconds');
+        this.progressReportDelayInMilliseconds = _get(alexaSkill.$request, 'context.AudioPlayer.progressReportDelayInMilliseconds');
+        this.progressReportIntervalInMilliseconds = _get(alexaSkill.$request, 'context.AudioPlayer.progressReportIntervalInMilliseconds');
         this.token = _get(alexaSkill.$request, 'context.AudioPlayer.token') || _get(alexaSkill.$request, 'request.token');
 
     }
@@ -69,6 +77,7 @@ export class AudioPlayer {
                 url,
                 token,
                 offsetInMilliseconds: this.offsetInMilliseconds,
+                progressReport: {},
             },
         };
         if (this.expectedPreviousToken) {
@@ -77,6 +86,14 @@ export class AudioPlayer {
 
         if (this.metaData) {
             audioItem.metadata = this.metaData;
+        }
+
+        if (this.progressReportDelayInMilliseconds) {
+            audioItem.stream.progressReport.progressReportDelayInMilliseconds = this.progressReportDelayInMilliseconds;
+        }
+
+        if (this.progressReportIntervalInMilliseconds) {
+            audioItem.stream.progressReport.progressReportIntervalInMilliseconds = this.progressReportIntervalInMilliseconds;
         }
 
         _set(this.alexaSkill.$output, 'Alexa.AudioPlayer',
@@ -144,6 +161,42 @@ export class AudioPlayer {
      */
     setOffsetInMilliseconds(offsetInMilliseconds: number) {
         this.offsetInMilliseconds = offsetInMilliseconds;
+        return this;
+    }
+
+    /**
+     * Return progressReportDelayInMilliseconds
+     * @return {number}
+     */
+    getProgressReportDelayInMilliseconds() {
+        return this.progressReportDelayInMilliseconds;
+    }
+
+    /**
+     * Adds progressReportDelayInMilliseconds in ms to audio item
+     * @param {number} progressReportDelayInMilliseconds
+     * @return {AudioPlayerPlugin}
+     */
+    setProgressReportDelayInMilliseconds(progressReportDelayInMilliseconds: number) {
+        this.progressReportDelayInMilliseconds = progressReportDelayInMilliseconds;
+        return this;
+    }
+
+    /**
+     * Return progressReportIntervalInMilliseconds
+     * @return {number}
+     */
+    getProgressReportIntervalInMilliseconds() {
+        return this.progressReportIntervalInMilliseconds;
+    }
+
+    /**
+     * Adds progressReportIntervalInMilliseconds in ms to audio item
+     * @param {number} progressReportIntervalInMilliseconds
+     * @return {AudioPlayerPlugin}
+     */
+    setProgressReportIntervalInMilliseconds(progressReportIntervalInMilliseconds: number) {
+        this.progressReportIntervalInMilliseconds = progressReportIntervalInMilliseconds;
         return this;
     }
 
