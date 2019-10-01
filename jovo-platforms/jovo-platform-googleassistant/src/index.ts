@@ -368,6 +368,13 @@ declare module './core/GoogleAction' {
 
 declare module './core/GoogleAction' {
     interface GoogleAction {
+        newSurface(capabilities: string[], context: string, notificationTitle: string): this;
+        isNewSurfaceConfirmed(): boolean;
+    }
+}
+
+declare module './core/GoogleAction' {
+    interface GoogleAction {
         $notification?: Notification;
         notification(): Notification | undefined;
     }
@@ -450,6 +457,12 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 url?: string;
                 data?: Record<string, any>; // tslint:disable-line
                 suppress?: boolean;
+            }
+
+            NewSurface?: {
+                capabilities: string[],
+                context: string;
+                notificationTitle: string;
             }
         };
     }
