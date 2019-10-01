@@ -198,7 +198,7 @@ this.$alexaSkill!
 ```
 
 The data you get looks like this:
-s
+
 ```javascript
 { productId: 'amzn1.adg.product.994e8ec0-2f73-4130-837a-0bb06abe1ded',
   referenceName: 'frozen_sword',

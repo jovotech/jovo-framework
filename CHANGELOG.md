@@ -1,6 +1,31 @@
 # Jovo Framework Changelog
 
 
+## 2.2.16 (2019-09-20)
+
+#### :rocket: New Feature
+
+* `jovo-analytics-voicehero` [#574](https://github.com/jovotech/jovo-framework/pull/574) Added VoiceHero Analytics Integration  ([@jkcchan](https://github.com/jkcchan))
+* `jovo-platform-sapcai` [#577](https://github.com/jovotech/jovo-framework/pull/577) Added support to SAP Conversational AI Platform ([@StErMi](https://github.com/StErMi), [@Veake](https://github.com/Veake))
+
+
+#### :bug: Bug Fix
+* `jovo-db-mongodb`  Fixes MongoDB connection initialization ([@aswetlow](https://github.com/aswetlow))
+* `jovo-cms-airtable` [#570](https://github.com/jovotech/jovo-framework/pull/570) Fixes Airtable multipage table bug ([@hanllo](https://github.com/hanllo))
+* `jovo-platform-dialogflow` [#575](https://github.com/jovotech/jovo-framework/pull/575) Fixes isNewSession for Dialogflow platform ([@gpalozzi](https://github.com/gpalozzi))
+* `jovo-framework` Updated vulnerable packages
+* `jovo-framework` Several bugfixes in Jovo components (still WIP and in Beta) ([@KaanKC](https://github.com/KaanKC))
+
+
+#### Committers: 7
+- hanllo ([@hanllo](https://github.com/hanllo))
+- Jacob Chan ([@gpalozzi](https://github.com/jkcchan))
+- Gabriele Palozzi ([@gpalozzi](https://github.com/gpalozzi))
+- Emanuele Ricci ([@StErMi](https://github.com/StErMi))
+- Max R. ([@Veake](https://github.com/Veake))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
 ## 2.2.15 (2019-08-06)
 
 #### :rocket: New Feature
@@ -20,7 +45,7 @@
 #### Committers: 5
 - Francisco Rivas ([@frivas](https://github.com/frivas))
 - Gabriele Palozzi ([@gpalozzi](https://github.com/gpalozzi))
-- scouzinier ([@gpalozzi](https://github.com/kouz75))
+- scouzinier ([@kouz75](https://github.com/kouz75))
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
 - Alex ([@aswetlow](https://github.com/aswetlow))
 

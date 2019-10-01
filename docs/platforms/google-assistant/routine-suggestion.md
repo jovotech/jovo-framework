@@ -33,7 +33,7 @@ Select the intent and at the bottom of the tab you will find the `User engagemen
 
 ## Suggest your Intent
 
-To ask the user wether they want to add your intent to their routines, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent to their routines:
+To ask the user whether they want to add your intent to their routines, you have to first ask them if they are interested using suggestion chips, after that you can ask them to add your intent to their routines:
 
 ```javascript
 // @language=javascript
@@ -95,6 +95,6 @@ ON_REGISTER_UPDATE() {
 },
 ```
 
-Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check wether the user accepted your suggestion.
+Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check whether the user accepted your suggestion.
 
 <!--[metadata]: {"description": "Learn how to use routine suggestions for Google Assistant with the Jovo Framework.", "route": "google-assistant/routine-suggestion"}-->

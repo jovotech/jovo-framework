@@ -218,7 +218,7 @@ export class Router implements Plugin {
 				handleRequest.jovo.$nlu.intent.name,
 				activeComponent
             );
-            
+
 			route = Router.intentRoute(
 				handleRequest.jovo.$handlers,
 				handleRequest.jovo.getState(),
@@ -226,15 +226,13 @@ export class Router implements Plugin {
 				(handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled
 			);
 		} else if (route.type === EnumRequestType.END) {
-			// do end stuff
-			if (
-				typeof _get(
-					handleRequest.app.config,
-					`handlers.${EnumRequestType.END}`
-				) === 'function'
-			) {
-				route.path = EnumRequestType.END;
-			}
+            route = Router.intentRoute(
+                handleRequest.jovo.$handlers,
+                handleRequest.jovo.getState(),
+                EnumRequestType.END,
+                (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled
+            );
+            route.type = EnumRequestType.END;
 		} else if (route.type === EnumRequestType.AUDIOPLAYER) {
 			route.path = `${EnumRequestType.AUDIOPLAYER}["${
 				handleRequest.jovo.$type.subType
@@ -253,6 +251,7 @@ export class Router implements Plugin {
 				route.path += '.' + handleRequest.jovo.$type.subType;
 			}
 		}
+
 		_set(handleRequest.jovo.$plugins, 'Router.route', route);
 
 		Log.yellow().verbose('Route object:');

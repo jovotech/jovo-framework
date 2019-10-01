@@ -21,7 +21,7 @@ Each interaction between a user and a voice application consists of an interacti
 
 ### Request
 
-The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists information like
+The `request` is the incoming data that the voice platform sends to your app's endpoint. It consists of information like:
 
 * User ID,
 * [Intent](./routing/intents.md './routing/intents'), e.g. `MyNameIsIntent`
