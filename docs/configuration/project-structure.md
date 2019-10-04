@@ -28,7 +28,7 @@ These files are in the root folder and include anything that is needed to publis
 
 Project files include:
 * [project.js - Project Configuration](#projectjs---project-configuration)
-* [models - Language Model](#models---language-model)
+* [models - Language Model](#/models---language-model)
 * [platforms - Platform Files](#platforms---platform-files)
 
 ### project.js - Project Configuration
