@@ -47,7 +47,7 @@ app.use(
 
 app.setHandler({
     LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
+        return this.toIntent('HelloWorldIntent!!');
     },
 
     HelloWorldIntent() {
