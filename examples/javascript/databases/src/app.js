@@ -5,7 +5,7 @@ const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 const { DynamoDb } = require('jovo-db-dynamodb');
-const { DatastoreDb } = require('jovo-db-datastore');
+const { DataStoreDb } = require('jovo-db-datastore');
 const { MySQL } = require('jovo-db-mysql');
 
 
@@ -16,17 +16,16 @@ app.use(
     new GoogleAssistant(),
     new Alexa(),
     new JovoDebugger(),
-    // new FileDb(),
-    // new MySQL({
-    //     tableName: 'users',
-    //     connection: {
-    //         host     : 'localhost',
-    //         user     : 'root',
-    //         password : '',
-    //         database : 'test'
-    //     }
-    // })
-    new DatastoreDb()
+    new FileDb(),
+    new MySQL({
+        tableName: 'users',
+        connection: {
+            host     : 'localhost',
+            user     : 'root',
+            password : '',
+            database : 'test'
+        }
+    })
 );
 
 app.setHandler({
