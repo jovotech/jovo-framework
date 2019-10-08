@@ -338,7 +338,10 @@ export class JovoUser implements Plugin {
         handleRequest.jovo.$user.$data = _get(data, `${this.config.columnName}.data`, {});
 
         if (this.config.metaData && this.config.metaData.enabled) {
-            handleRequest.jovo.$user.$metaData = _get(data, `${this.config.columnName}.metaData`, {});
+            handleRequest.jovo.$user.$metaData = _get(data, `${this.config.columnName}.metaData`, {
+                createdAt: (new Date()).toISOString(),
+                sessionsCount: 0,
+            });
         }
 
         if (this.config.context && this.config.context.enabled) {
