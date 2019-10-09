@@ -181,18 +181,22 @@ Before you start any kind of transaction or refund process, always retrieve the 
 // @language=javascript
 
 let productReferenceName = 'frozen_sword'; 
-this.$alexaSkill
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error, product) => {
+this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+    .then((product) => {
+
+    })
+    .catch((error) => {
 
     });
 
 // @language=typescript
 
 let productReferenceName = 'frozen_sword'; 
-this.$alexaSkill!
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
+this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+    .then((product) => {
+
+    })
+    .catch((error) => {
 
     });
 ```
@@ -218,32 +222,30 @@ Using that data we can check if the user already owns the product:
 ```javascript
 // @language=javascript
 
-this.$alexaSkill
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error, product) => {
-        if (error) {
-            console.log(error);
-        }
+this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+    .then((product) => {
         if (product.entitled === 'ENTITLED') {
             // user already owns it
         } else {
             // user does not own it
         }
+    })
+    .catch((error) => {
+
     });
 
 // @language=typescript
 
-this.$alexaSkill!
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
-        if (error) {
-            console.log(error);
-        }
+this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+    .then((product) => {
         if (product.entitled === 'ENTITLED') {
             // user already owns it
         } else {
             // user does not own it
         }
+    })
+    .catch((error) => {
+
     });
 ```
 
@@ -262,42 +264,38 @@ Name | Description | Value | Required
 
 UpsellIntent() {
     let productReferenceName = 'frozen_sword';
-    this.$alexaSkill
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error, product) => {
-        if (error) {
-            console.log(error);
-        }
-        if (product.entitled === 'ENTITLED') {
-            this.tell('You have already bought this item.');
-            return;
-        } else {
-            let prompt = 'The frozen sword will help you on your journey. Are you interested?';
-            let token = 'testToken';
-            this.$alexaSkill.$inSkillPurchase.upsell(product.productId, prompt, token);
-        }
-    });
+    this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
+            if (product.entitled === 'ENTITLED') {
+                return this.tell('You have already bought this item.');
+            } else {
+                let prompt = 'The frozen sword will help you on your journey. Are you interested?';
+                let token = 'testToken';
+                this.$alexaSkill.$inSkillPurchase.upsell(product.productId, prompt, token);
+            }
+        })
+        .catch((error) => {
+
+        });
 },
 
 // @language=typescript
 
 UpsellIntent() {
     let productReferenceName = 'frozen_sword';
-    this.$alexaSkill!
-    .$inSkillPurchase
-    .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
-        if (error) {
-            console.log(error);
-        }
-        if (product.entitled === 'ENTITLED') {
-            this.tell('You have already bought this item.');
-            return;
-        } else {
-            let prompt = 'The frozen sword will help you on your journey. Are you interested?';
-            let token = 'testToken';
-            this.$alexaSkill!.$inSkillPurchase.upsell(product.productId, prompt, token);
-        }
-    });
+    this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
+            if (product.entitled === 'ENTITLED') {
+                return this.tell('You have already bought this item.');
+            } else {
+                let prompt = 'The frozen sword will help you on your journey. Are you interested?';
+                let token = 'testToken';
+                this.$alexaSkill!.$inSkillPurchase.upsell(product.productId, prompt, token);
+            }
+        })
+        .catch((error) => {
+
+        });
 },
 ```
 
@@ -315,18 +313,16 @@ Name | Description | Value | Required
 
 BuySkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
-    this.$alexaSkill
-        .$inSkillPurchase
-        .getProductByReferenceName(productReferenceName, (error, product) => {
-            if (error) {
-                console.log(error);
-            }
+    this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
             if (product.entitled === 'ENTITLED') {
-                this.tell('You have already bought this item.');
-                return;
+                return this.tell('You have already bought this item.');
             }
             let token = 'testToken';
             this.$alexaSkill.$inSkillPurchase.buy(product.productId, token);
+        })
+        .catch((error) => {
+            
         });
 },
 
@@ -334,18 +330,16 @@ BuySkillItemIntent() {
 
 BuySkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
-    this.$alexaSkill!
-        .$inSkillPurchase
-        .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
-            if (error) {
-                console.log(error);
-            }
+    this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
             if (product.entitled === 'ENTITLED') {
-                this.tell('You have already bought this item.');
-                return;
+                return this.tell('You have already bought this item.');
             }
             let token = 'testToken';
             this.$alexaSkill!.$inSkillPurchase.buy(product.productId, token);
+        })
+        .catch((error) => {
+            
         });
 },
 ```
@@ -365,18 +359,16 @@ Name | Description | Value | Required
 
 RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
-    this.$alexaSkill
-        .$inSkillPurchase
-        .getProductByReferenceName(productReferenceName, (error, product) => {
-            if (error) {
-                console.log(error);
-                // Continue, where you left off
-            }
+    this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
             if (product.entitled !== 'ENTITLED') {
-                this.tell('You have not bought this item yet.');
+                return this.tell('You have not bought this item yet.');
             }
             let token = 'testToken';
             this.$alexaSkill.$inSkillPurchase.cancel(product.productId, token);
+        })
+        .catch((error) => {
+
         });
 },
 
@@ -384,18 +376,16 @@ RefundSkillItemIntent() {
 
 RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
-    this.$alexaSkill!
-        .$inSkillPurchase
-        .getProductByReferenceName(productReferenceName, (error: Error, product: any) => {
-            if (error) {
-                console.log(error);
-                // Continue, where you left off
-            }
+    this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName)
+        .then((product) => {
             if (product.entitled !== 'ENTITLED') {
-                this.tell('You have not bought this item yet.');
+                return this.tell('You have not bought this item yet.');
             }
             let token = 'testToken';
             this.$alexaSkill!.$inSkillPurchase.cancel(product.productId, token);
+        })
+        .catch((error) => {
+
         });
 },
 ```
