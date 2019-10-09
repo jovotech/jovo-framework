@@ -47,84 +47,6 @@ export class Display implements Plugin {
 
 
         /**
-         * Adds apl directive
-         * @deprecated Please use addAPLDirective()
-         * @public
-         * @param {*} directive
-         * @return {AlexaSkill}
-         */
-        AlexaSkill.prototype.addAplDirective = function(directive: any) { // tslint:disable-line
-            const directives = _get(this.$output, 'Alexa.Apl', []);
-            directives.push(directive);
-            _set(this.$output, 'Alexa.Apl',directives);
-
-            return this;
-        };
-
-        /**
-         * Adds apl directive
-         * @public
-         * @param {*} directive
-         * @return {AlexaSkill}
-         */
-        AlexaSkill.prototype.addAPLDirective = function(directive: any) { // tslint:disable-line
-            const directives = _get(this.$output, 'Alexa.Apl', []);
-            directives.push(directive);
-            _set(this.$output, 'Alexa.Apl',directives);
-
-            return this;
-        };
-
-        /**
-         * Adds apl directive
-         * @public
-         * @param {*} documentDirective
-         * @return {AlexaSkill}
-         */
-        AlexaSkill.prototype.addAPLDocument = function(documentDirective: any) { // tslint:disable-line
-            const document = {
-                type: 'Alexa.Presentation.APL.RenderDocument',
-                version: '1.0',
-            };
-            _merge(document, documentDirective);
-
-            const directives = _get(this.$output, 'Alexa.Apl', []);
-            directives.push(document);
-            _set(this.$output, 'Alexa.Apl',directives);
-
-            return this;
-        };
-
-        /**
-         * Adds apl directive
-         * @public
-         * @param {string} token
-         * @param {*} commands
-         * @return {AlexaSkill}
-         */
-        AlexaSkill.prototype.addAPLCommands = function(token: string, commands: any[]) { // tslint:disable-line
-            const commandDirective = {
-                type: 'Alexa.Presentation.APL.ExecuteCommands',
-                token,
-                commands,
-            };
-
-            const existingExecuteCommands = _get(this.$output, 'Alexa.Apl', []).filter((directive: any) => { // tslint:disable-line
-                return directive.type === commandDirective.type && directive.token === commandDirective.token;
-            });
-
-            if (existingExecuteCommands[0]) {
-                existingExecuteCommands[0].commands = existingExecuteCommands[0].commands.concat(commands);
-            } else {
-                const directives = _get(this.$output, 'Alexa.Apl', []);
-                directives.push(commandDirective);
-                _set(this.$output, 'Alexa.Apl',directives);
-            }
-
-            return this;
-        };
-
-        /**
          * Shows video on Echo Show
          * @public
          * @param {string} url
@@ -144,8 +66,7 @@ export class Display implements Plugin {
     }
     type(alexaSkill: AlexaSkill) {
         const alexaRequest = alexaSkill.$request as AlexaRequest;
-        if (_get(alexaRequest, 'request.type') === 'Display.ElementSelected' ||
-        _get(alexaRequest, 'request.type') === 'Alexa.Presentation.APL.UserEvent') {
+        if (_get(alexaRequest, 'request.type') === 'Display.ElementSelected') {
             alexaSkill.$type = {
                 type: EnumRequestType.ON_ELEMENT_SELECTED,
                 subType: _get(alexaRequest, 'request.token')
@@ -184,19 +105,6 @@ export class Display implements Plugin {
                 if (alexaSkill.$session && alexaSkill.$session.$data) {
                     _set(response, 'sessionAttributes', alexaSkill.$session.$data);
                 }
-            }
-        }
-
-        if ((alexaSkill.$request! as AlexaRequest).hasAPLInterface()) {
-            if (_get(output, 'Alexa.Apl')) {
-                let directives = _get(response, 'response.directives', []);
-
-                if (Array.isArray(_get(output, 'Alexa.Apl'))) {
-                    directives = directives.concat(_get(output, 'Alexa.Apl'));
-                } else {
-                    directives.push(_get(output, 'Alexa.Apl'));
-                }
-                _set(response, 'response.directives', directives);
             }
         }
 
