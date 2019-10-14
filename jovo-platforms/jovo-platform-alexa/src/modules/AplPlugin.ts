@@ -52,7 +52,7 @@ export class Apl {
         }
 
         return this;
-    };
+    }
 
     setVersion(version: string) {
         this.version = version;

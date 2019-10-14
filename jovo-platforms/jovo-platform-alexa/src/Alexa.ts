@@ -27,7 +27,6 @@ import {AlexaRequestBuilder} from './core/AlexaRequestBuilder';
 import {AlexaResponseBuilder} from "./core/AlexaResponseBuilder";
 import {GadgetControllerPlugin} from "./modules/GadgetControllerPlugin";
 import {ProactiveEventPlugin} from './modules/ProactiveEvent';
-import { Apl } from './modules/Apl';
 import { AplPlugin } from './modules/AplPlugin';
 
 export interface Config extends ExtensibleConfig {
