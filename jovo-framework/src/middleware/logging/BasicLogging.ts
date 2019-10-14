@@ -84,7 +84,8 @@ export class BasicLogging implements Plugin {
 			return;
 		}
 
-		const requestCopy = Object.assign({}, handleRequest.host.getRequestObject()); // tslint:disable-line:prefer-object-spread
+		const requestCopy = JSON.parse(JSON.stringify(handleRequest.host.getRequestObject()));
+
 		if (this.config.maskRequestObjects && this.config.maskRequestObjects.length > 0) {
 			this.config.maskRequestObjects.forEach((maskPath: string) => {
 				const value = _get(requestCopy, maskPath);
@@ -135,7 +136,7 @@ export class BasicLogging implements Plugin {
 			return;
 		}
 
-		const responseCopy = Object.assign({}, handleRequest.jovo.$response);  // tslint:disable-line:prefer-object-spread
+		const responseCopy = JSON.parse(JSON.stringify(handleRequest.jovo.$response));
 
 		if (this.config.maskResponseObjects && this.config.maskResponseObjects.length > 0) {
 			this.config.maskResponseObjects.forEach((maskPath: string) => {

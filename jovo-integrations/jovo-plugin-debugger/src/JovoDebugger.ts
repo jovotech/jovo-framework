@@ -1,5 +1,15 @@
 import * as crypto from 'crypto';
-import { BaseApp, Db, ErrorCode, HandleRequest, JovoError, JovoRequest, JovoResponse, Log, Plugin, PluginConfig, SessionConstants, SessionData } from 'jovo-core';
+import {
+    BaseApp,
+    HandleRequest,
+    JovoRequest,
+    Log,
+    Plugin,
+    PluginConfig,
+    SessionConstants,
+    SessionData,
+    Util,
+} from 'jovo-core';
 
 import _get = require('lodash.get');
 import _set = require('lodash.set');
@@ -168,6 +178,40 @@ export class JovoDebugger implements Plugin {
                 req = await test.requestBuilder.launch();
             } else if (obj.type === 'INTENT') {
                 req = await test.requestBuilder.intent(obj.options.intentName, obj.options.inputs);
+                if (obj.platform === 'AlexaSkill' || 'Alexa') {
+                    if ( obj.options.alexaSkill &&  obj.options.alexaSkill.slots) {
+                        // tslint:disable-next-line:forin
+                        for (const slotName in obj.options.alexaSkill.slots) {
+                            const slot = obj.options.alexaSkill.slots[slotName];
+
+                            if (slot.key.length > 0) {
+                                const id = slot.id.length > 0 ? slot.id : Util.randomStr();
+
+                                const resolution =  {
+                                    resolutionsPerAuthority: [
+                                        {
+                                            authority: `amzn1.er-authority.echo-sdk.amzn1.ask.skill.a0541091-e492-4314-a8f1-c746e8666ee6.${slotName}`,
+                                            status: {
+                                                code: 'ER_SUCCESS_MATCH'
+                                            },
+                                            values: [
+                                                {
+                                                    value: {
+                                                        id,
+                                                        name: slot.key
+                                                    }
+                                                },
+                                            ]
+                                        }
+                                    ]
+                                };
+                                _set(req, `request.intent.slots.${slotName}.resolutions`, resolution);
+                            }
+
+                        }
+                    }
+                }
+
             } else if (obj.type === 'END') {
                 req = await test.requestBuilder.end();
             } else if (obj.type === 'AUDIOPLAYER') {

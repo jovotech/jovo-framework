@@ -126,9 +126,11 @@ export interface Slot {
     confirmationStatus?: ConfirmationStatus;
     value: string;
     source?: string;
-    resolutions?: {
-        resolutionsPerAuthority: AuthorityResolution[];
-    };
+    resolutions?: Resolutions;
+}
+
+export interface Resolutions {
+    resolutionsPerAuthority: AuthorityResolution[];
 }
 
 export type AuthorityResolutionStatusCode = 'ER_SUCCESS_MATCH' | 'ER_SUCCESS_NO_MATCH' | 'ER_ERROR_TIMEOUT' | 'ER_ERROR_EXCEPTION';
@@ -190,6 +192,7 @@ export interface AlexaInput extends Input {
         value?: string;
         confirmationStatus?: string;
         source?: string;
+        resolutions?: Resolutions;
     };
 }
 
@@ -894,11 +897,24 @@ export class AlexaRequest implements JovoRequest {
         return this;
     }
 
-    setSlot(name: string, value: string) {
+    setSlot(name: string, value: string, resolutions?: Resolutions, confirmationStatus?: ConfirmationStatus, source?: string) {
         _set(this, `request.intent.slots.${name}`, {
             name,
-            value
+            value,
         });
+
+        if (resolutions) {
+            _set(this, `request.intent.slots.${name}.resolutions`, resolutions);
+        }
+
+        if (confirmationStatus) {
+            _set(this, `request.intent.slots.${name}.confirmationStatus`, confirmationStatus);
+        }
+
+        if (source) {
+            _set(this, `request.intent.slots.${name}.source`, source);
+        }
+
         return this;
     }
 
