@@ -5,7 +5,7 @@ const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 const { DynamoDb } = require('jovo-db-dynamodb');
-const { DataStoreDb } = require('jovo-db-datastore');
+const { DatastoreDb } = require('jovo-db-datastore');
 const { MySQL } = require('jovo-db-mysql');
 
 
