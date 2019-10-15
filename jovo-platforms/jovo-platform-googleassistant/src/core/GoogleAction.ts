@@ -168,6 +168,19 @@ export class GoogleAction extends Jovo {
     }
 
     /**
+     * Returns array of availiable surfaces
+     * @return {Array<string>}
+     */
+    getAvailableSurfaces() {
+        if (!_get(this.$originalRequest || this.$request, 'availableSurfaces[0].capabilities')) {
+            return [];
+        }
+
+        return _get(this.$originalRequest || this.$request, 'availableSurfaces[0].capabilities')
+            .map((item: {name: string}) => item.name);
+    }
+
+    /**
      * Returns video capability of request device
      * @public
      * @return {boolean}
