@@ -1,6 +1,6 @@
 {
     "translation": {
-        "component-phone-number": {
+        "component-GetPhoneNumber": {
             "start-question": "Please tell me your phone number.",
             "fail-empty": " Sorry, I didn't get that. Could you please repeat your phone number?",
             "reprompt": " Please tell me your phone number digit by digit.",
@@ -15,6 +15,8 @@
             "sequence-confirm-question": "I got <say-as interpret-as=\"digits\">{{sequence}}</say-as> . Is that correct?",
             "sequence-question": "Great! Please continue with the next three digits of your phone number.",
             "sequence-reprompt": "Please tell me the next three digits of your phone number.",
+            "sequence-last-digits-question": "Great! Now tell me the last four digits please.",
+            "sequence-last-digits-reprompt": "Tell me the last four digits of your phone number please.",
             "sequence-confirm-reject": "Oh, sorry! Could you say these digits again?",
             "sequence-help": "To proceed, I need your phone number. Simply start by telling me the first three digits of your number."
         }
