@@ -230,6 +230,14 @@ export class GoogleAction extends Jovo {
     }
 
     /**
+     * Returns user's verification status
+     */
+    isVerifiedUser(): boolean {
+        return _get(this.$originalRequest || this.$request, 'user.userVerificationStatus') === 'VERIFIED';
+
+    }
+
+    /**
      * Adds additional output context objects
      * @param name
      * @param parameters
