@@ -23,6 +23,7 @@ export interface Config extends PluginConfig {
 	implicitSave?: boolean;
 	metaData?: MetaDataConfig;
 	context?: ContextConfig;
+	sessionData?: SessionDataConfig;
 	updatedAt?: boolean;
 	dataCaching?: boolean;
 }
@@ -34,6 +35,10 @@ export interface MetaDataConfig {
 	createdAt?: boolean;
 	requestHistorySize?: number;
 	devices?: boolean;
+}
+
+export interface SessionDataConfig {
+	enabled?: boolean;
 }
 
 export interface ContextConfig {
@@ -93,6 +98,8 @@ export interface UserMetaData {
 	};
 }
 
+export type UserSessionData = Record<string, any>;
+
 export class JovoUser implements Plugin {
 	config: Config = {
 		columnName: 'userData',
@@ -104,6 +111,9 @@ export class JovoUser implements Plugin {
 			createdAt: true,
 			requestHistorySize: 4,
 			devices: true
+		},
+		sessionData: {
+			enabled: false
 		},
 		context: {
 			enabled: false,
@@ -347,6 +357,14 @@ export class JovoUser implements Plugin {
 			);
 		}
 
+		if (this.config.sessionData && this.config.sessionData.enabled) {
+			handleRequest.jovo.$user.$sessionData = _get(
+				data,
+				`${this.config.columnName}.sessionData`,
+				{}
+			);
+		}
+
 		if (this.config.context && this.config.context.enabled) {
 			handleRequest.jovo.$user.$context = _get(
 				data,
@@ -359,6 +377,7 @@ export class JovoUser implements Plugin {
 		const userData = {
 			data: handleRequest.jovo.$user.$data,
 			metaData: handleRequest.jovo.$user.$metaData,
+			sessionData: handleRequest.jovo.$user.$sessionData,
 			context: handleRequest.jovo.$user.$context
 		};
 
@@ -414,6 +433,7 @@ export class JovoUser implements Plugin {
 			data?: any;
 			context?: UserContext;
 			metaData?: UserMetaData;
+			sessionData?: UserSessionData;
 		} = {
 			// tslint:disable-line
 			data: _get(handleRequest.jovo.$user, '$data')
@@ -422,6 +442,11 @@ export class JovoUser implements Plugin {
 		if (this.config.context && this.config.context.enabled) {
 			this.updateContextData(handleRequest);
 			userData.context = _get(handleRequest.jovo.$user, '$context');
+		}
+
+		if(this.config.sessionData && this.config.sessionData.enabled) {
+			this.updateSessionData(handleRequest);
+			userData.sessionData = _get(handleRequest.jovo.$user, '$sessionData');
 		}
 
 		if (this.config.metaData && this.config.metaData.enabled) {
@@ -629,6 +654,16 @@ export class JovoUser implements Plugin {
 			handleRequest.jovo!.$user.$metaData.devices[
 				'' + handleRequest.jovo!.getDeviceId() + ''
 			] = device;
+		}
+	}
+
+	private updateSessionData(handleRequest: HandleRequest) {
+		if (!handleRequest.jovo) {
+			throw new JovoError(
+				'jovo object is not initialized.',
+				ErrorCode.ERR,
+				'jovo-framework'
+			);
 		}
 	}
 
