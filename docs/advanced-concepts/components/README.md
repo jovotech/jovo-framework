@@ -144,11 +144,11 @@ That's the basic structure of a component.
 
 ## Using Conversational Components
 
-Learn how to integrate existing Conversational Components into your Jovo project [here](./using-components.md './using-components').
+Learn how to integrate existing Conversational Components into your Jovo project [here](./using-components.md './components/using-components').
 
 ## Developing Conversational Components
 
-Learn how to develop your own Conversational Components [here](./developing-components.md './developing-components').
+Learn how to develop your own Conversational Components [here](./developing-components.md './components/developing-components').
 
 <!--[metadata]: {
   "description": "Learn about the basic structure of Conversational Components.",
