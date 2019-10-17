@@ -19,8 +19,8 @@ export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log, Project };
-
-export { 
+export * from 'jovo-core';
+export {
     Component,
     ComponentConfig,
     ComponentConstructorOptions,
@@ -52,7 +52,7 @@ declare module 'jovo-core/dist/src/BaseApp' {
         $baseComponents: {
             [key: string]: ComponentPlugin;
         };
-        
+
         /**
          * Sets handler object
          * @param {Object} handlers
