@@ -52,6 +52,18 @@ const handler: Handler = {
         // other intents
     }
 }
+
+// @language=javascript
+// handler.js
+
+const handler = {
+    ConductSurvey: {
+        START() {
+
+        },
+        // other intents
+    }
+}
 ```
 
 ### config
@@ -73,13 +85,31 @@ interface SurveyConfig extends ComponentConfig {
 const config: SurveyConfig = {
     intentMap: {
         'AMAZON.HelpIntent': 'HelpIntent',
+        'AMAZON.NoIntent': 'NoIntent',
         'AMAZON.StopIntent': 'END',
-        'StopIntent': 'END'
+        'StopIntent': 'END',
+        'AMAZON.YesIntent': 'YesIntent'
     },
     numberOfQuestions: 3
 };
 
 export {SurveyConfig, config as Config};
+
+// @language=javascript
+// config.js
+
+const config = {
+    intentMap: {
+        'AMAZON.HelpIntent': 'HelpIntent',
+        'AMAZON.NoIntent': 'NoIntent',
+        'AMAZON.StopIntent': 'END',
+        'StopIntent': 'END',
+        'AMAZON.YesIntent': 'YesIntent'
+    },
+    numberOfFails: 3
+};
+
+module.exports = config;
 ```
 
 ### i18n
@@ -131,6 +161,25 @@ export class ConductSurvey extends ComponentPlugin {
         super(config);
     }
 }
+
+// @language=javascript
+// index.js
+
+const {ComponentPlugin} = require('jovo-framework');
+
+const componentConfig = require('./src/config');
+const componentHandler = require('./src/handler');
+
+class GetPhoneNumber extends ComponentPlugin {
+    constructor(config) {
+        super(config);
+        this.handler = componentHandler;
+        this.config = componentConfig;
+        this.pathToI18n = './src/i18n/';
+    }
+}
+
+module.exports = GetPhoneNumber; 
 ```
 
 Name | Description | Value | Required 
