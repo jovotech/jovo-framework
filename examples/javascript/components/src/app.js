@@ -19,9 +19,9 @@ app.use(
     new FileDb(),
 );
 
-const PHONE_NUMBER = require("../components/PHONE_NUMBER");
+const GetPhoneNumber = require("./components/GetPhoneNumber");
 
-app.useComponents(new PHONE_NUMBER());
+app.useComponents(new GetPhoneNumber());
 
 // ------------------------------------------------------------------
 // APP LOGIC
@@ -33,11 +33,13 @@ app.setHandler({
     },
 
     HelloWorldIntent() {
-        this.delegate('PHONE_NUMBER', 'CompletedIntent');
+        return this.delegate('GetPhoneNumber', {
+            onCompletedIntent: 'CompletedIntent'
+        });
     },
     CompletedIntent() {
-        console.log(this.$components.PHONE_NUMBER.$response);
-        this.tell('completed!');
+        console.log(this.$components.GetPhoneNumber.$response);
+        return this.tell('completed!');
     }
 });
 

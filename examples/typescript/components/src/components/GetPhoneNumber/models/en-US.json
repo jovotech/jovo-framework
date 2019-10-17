@@ -1,0 +1,100 @@
+{
+	"intents": [
+		{
+			"name": "PhoneNumberIntent",
+			"phrases": [
+				"{phoneNumber}",
+				"my number is {phoneNumber}",
+				"it is {phoneNumber}",
+				"my phone number is {phoneNumber}"
+			],
+			"inputs": [
+				{
+					"name": "phoneNumber",
+					"type": {
+						"alexa": "AMAZON.NUMBER",
+						"dialogflow": "@sys.phone-number"
+					}
+				}
+			]
+		},
+		{
+			"name": "PhoneNumberSequenceIntent",
+			"phrases": [
+				"{sequence}",
+				"next is {sequence}"
+			],
+			"inputs": [
+				{
+					"name": "sequence",
+					"type": {
+						"alexa": "AMAZON.NUMBER",
+						"dialogflow": "@sys.number-sequence"
+					}
+				}
+			]
+		},
+		{
+			"name": "YesIntent",
+			"alexa": {
+				"name": "AMAZON.YesIntent"
+			},
+			"phrases": [
+				"yes",
+				"yes please",
+				"yeah",
+				"absolutely",
+				"why not",
+				"i would love to"
+			]
+        },
+        {
+			"name": "NoIntent",
+			"alexa": {
+				"name": "AMAZON.NoIntent"
+			},
+			"phrases": [
+				"no",
+				"nope",
+				"no thanks",
+				"absolutely not",
+				"why",
+				"i would love not to"
+			]
+		},
+        {
+			"name": "HelpIntent",
+			"alexa": {
+				"name": "AMAZON.HelpIntent"
+			},
+			"phrases": [
+				"help",
+				"help me",
+				"i don't understand this",
+				"i need help",
+				"what do you mean",
+				"what does that mean",
+				"how",
+				"why"
+			]
+		},
+		{
+			"name": "StopIntent",
+			"phrases": [
+				"stop",
+				"cancel",
+				"stop the app"
+			],
+			"alexa": {
+				"name": "AMAZON.StopIntent"
+			},
+			"dialogflow": {
+				"events": [
+					{
+						"name": "actions_intent_CANCEL"
+					}
+				]
+			}
+		}
+	]
+}
