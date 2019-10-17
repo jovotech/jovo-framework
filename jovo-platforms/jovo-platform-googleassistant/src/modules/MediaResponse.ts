@@ -5,14 +5,8 @@ import _get = require('lodash.get');
 import {GoogleAssistant} from "../GoogleAssistant";
 import {GoogleAction} from "../core/GoogleAction";
 import {GoogleActionResponse} from "../core/GoogleActionResponse";
+import { MediaObject } from '../core/Interfaces';
 
-export interface MediaObject {
-    name: string;
-    contentUrl: string;
-    description?: string;
-    largeImage?: any; // tslint:disable-line
-    icon?: any; // tslint:disable-line
-}
 
 export class MediaResponse {
     googleAction: GoogleAction;

@@ -17,8 +17,9 @@ import {Carousel} from "./response/Carousel";
 import {CarouselBrowse} from "./response/CarouselBrowse";
 import {Table} from "./response/Table";
 import {List} from "./response/List";
-import {MediaObject, MediaResponse} from "./modules/MediaResponse";
+import {MediaResponse} from "./modules/MediaResponse";
 import {Updates} from "./modules/Updates";
+import { RichResponse } from './core/Interfaces';
 
 import {GoogleAction} from "./core/GoogleAction";
 import {Handler} from "jovo-core";
@@ -29,6 +30,7 @@ export {GoogleActionRequest} from './core/GoogleActionRequest';
 export {GoogleActionResponse} from './core/GoogleActionResponse';
 export {GoogleAssistantRequestBuilder} from './core/GoogleAssistantRequestBuilder';
 export {GoogleAssistantResponseBuilder} from './core/GoogleAssistantResponseBuilder';
+import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
 
 export {
     Transaction,
@@ -332,8 +334,13 @@ declare module './core/GoogleAction' {
 }
 
 declare module './core/GoogleAction' {
+
+
     interface GoogleAction {
         displayText(displayText: string): this;
+        richResponse(richResponse: RichResponse): this;
+        appendResponse(responseItem: Item): this;
+        appendSimpleResponse(simpleResponse: SimpleResponse): this;
     }
 }
 
@@ -379,6 +386,7 @@ declare module './core/GoogleAction' {
         notification(): Notification | undefined;
     }
 }
+
 
 declare module 'jovo-core/dist/src/Interfaces' {
     interface Output {
@@ -464,6 +472,9 @@ declare module 'jovo-core/dist/src/Interfaces' {
                 context: string;
                 notificationTitle: string;
             }
+
+            RichResponse?: RichResponse;
+            ResponseAppender?: Item[];
         };
     }
 }

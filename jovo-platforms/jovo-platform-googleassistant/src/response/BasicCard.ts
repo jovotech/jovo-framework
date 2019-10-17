@@ -1,11 +1,8 @@
 import _merge = require('lodash.merge');
+import { Image } from '../core/Interfaces';
 
 
-export interface BasicCardImage {
-    url: string;
-    accessibilityText: string;
-    width?: number;
-    height?: number;
+export interface BasicCardImage extends Image {
 }
 
 export interface BasicCardButton {

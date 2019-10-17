@@ -1,12 +1,9 @@
 /**
  * CarouselItem Class
  */
+import { Image } from '../core/Interfaces';
 
-export interface CollectionItemImage {
-    url: string;
-    accessibilityText: string;
-    width?: number;
-    height?: number;
+export interface CollectionItemImage extends Image {
 }
 
 
