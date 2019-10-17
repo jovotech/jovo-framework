@@ -2,9 +2,8 @@
 
 Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Firestore.
 
-- [Google Cloud Firestore](#google-cloud-firestore)
-  - [Introduction](#introduction)
-  - [Configuration](#configuration)
+* [Introduction](#introduction)
+* [Configuration](#configuration)
 
 > Tutorial: [Deploy to Google Cloud](https://www.jovo.tech/tutorials/deploy-to-google-cloud)
 
