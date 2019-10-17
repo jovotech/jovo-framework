@@ -1,4 +1,4 @@
-import {BaseApp, Db, ErrorCode, JovoError, PluginConfig} from 'jovo-core';
+import { BaseApp, Db, ErrorCode, JovoError, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import { MongoClient } from 'mongodb';
@@ -39,14 +39,14 @@ export class MongoDb implements Db {
         }
     }
     async initClient() {
-        if(!this.client && this.config.uri) {
+        if (!this.client && this.config.uri) {
             this.client = await this.getConnectedMongoClient(this.config.uri);
         }
 
     }
 
     async getConnectedMongoClient(uri: string): Promise<MongoClient> {
-        return MongoClient.connect(uri, { useNewUrlParser: true });
+        return MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     }
 
     errorHandling() {
