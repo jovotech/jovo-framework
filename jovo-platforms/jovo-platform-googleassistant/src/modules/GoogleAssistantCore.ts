@@ -9,6 +9,7 @@ import {GoogleActionSpeechBuilder} from "../core/GoogleActionSpeechBuilder";
 
 import uuidv4 = require('uuid/v4');
 import {EnumGoogleAssistantRequestType} from "../core/google-assistant-enums";
+import { Item, RichResponse, SimpleResponse } from '../core/Interfaces';
 
 
 
@@ -27,6 +28,33 @@ export class GoogleAssistantCore implements Plugin {
             _set(this.$output, 'GoogleAssistant.displayText',
                 displayText
             );
+            return this;
+        };
+
+        GoogleAction.prototype.richResponse = function(richResponse: RichResponse) {
+            _set(this.$output, 'GoogleAssistant.RichResponse',
+                richResponse
+            );
+            return this;
+        };
+
+        GoogleAction.prototype.appendResponse = function(responseItem: Item) {
+            if (this.$output.GoogleAssistant && this.$output.GoogleAssistant.ResponseAppender) {
+                this.$output.GoogleAssistant.ResponseAppender.push(responseItem);
+            } else {
+                if (!this.$output.GoogleAssistant) {
+                    this.$output.GoogleAssistant = {};
+                }
+
+                this.$output.GoogleAssistant.ResponseAppender = [responseItem];
+            }
+            return this;
+        };
+
+        GoogleAction.prototype.appendSimpleResponse = function(simpleResponse: SimpleResponse) {
+            this.appendResponse({
+                simpleResponse
+            });
             return this;
         };
 
@@ -109,6 +137,15 @@ export class GoogleAssistantCore implements Plugin {
             _set(googleAction.$originalResponse, 'richResponse.items[0].simpleResponse.displayText', _get(output, 'GoogleAssistant.displayText'));
         }
 
+        if (output.GoogleAssistant && output.GoogleAssistant.RichResponse) {
+            _set(googleAction.$originalResponse, 'richResponse', output.GoogleAssistant.RichResponse);
+        }
+
+        if (output.GoogleAssistant && output.GoogleAssistant.ResponseAppender) {
+            let responseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
+            responseItems = responseItems.concat(output.GoogleAssistant.ResponseAppender);
+            _set(googleAction.$originalResponse, 'richResponse.items', responseItems);
+        }
 
     }
     async userStorageGet(googleAction: GoogleAction) {
