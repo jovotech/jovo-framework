@@ -21,6 +21,7 @@ Initialize your workspace (run this in the top level of your jovo-framework clon
 ```shell
 $ npm install
 $ npm run init
+$ npm run devsetup
 ```
 
 ### Configure your App to use your Local Copy of the Jovo Framework

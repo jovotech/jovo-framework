@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-i18next",
-  "version": "2.2.13",
+  "version": "2.2.14",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "i18next": "^15.0.8",
-    "jovo-core": "^2.2.12",
+    "jovo-core": "^2.2.13",
     "lodash.merge": "^4.6.1"
   },
   "devDependencies": {
@@ -28,7 +28,7 @@
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.13.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.4.1"
   },
   "jest": {
@@ -47,5 +47,5 @@
   "files": [
     "dist/src/**/*"
   ],
-  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
+  "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
 }

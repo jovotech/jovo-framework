@@ -10,7 +10,7 @@ module.exports = {
     },
     components: {
         PHONE_NUMBER: {
-            numberOfFails: 3
+            numberOfFails: 2
         }
     }
 };

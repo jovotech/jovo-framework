@@ -2,14 +2,16 @@
 
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
-* [Introduction to Visual Output](#introduction-to-visual-output)
-* [Display Text](#display-text)
-* [Basic Card](#basic-card)
-* [Option Item](#option-item)
-  * [List Selector](#list-selector)
-  * [Carousel Selector](#carousel-selector)
-  * [ON_ELEMENT_SELECTED](#on_element_selected)
-* [Suggestion Chips](#suggestion-chips)
+- [Visual Output](#visual-output)
+  - [Introduction to Visual Output](#introduction-to-visual-output)
+  - [Display Text](#display-text)
+  - [Basic Card](#basic-card)
+  - [Table Card](#table-card)
+  - [Option Item](#option-item)
+    - [List Selector](#list-selector)
+    - [Carousel Selector](#carousel-selector)
+    - [ON_ELEMENT_SELECTED](#onelementselected)
+  - [Suggestion Chips](#suggestion-chips)
 
 
 ## Introduction to Visual Output
@@ -109,7 +111,7 @@ this.$googleAction!.showBasicCard(basicCard);
 
 [Official Documentation](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard)
 
-[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L32)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L33) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L37)
 
 ## Table Card
 
@@ -182,7 +184,7 @@ this.$googleAction!.showTable(tableCard);
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#table_card)
 
-[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L46)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L47) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L51)
 
 ## Option Item
 
@@ -222,7 +224,7 @@ itemOne
   .addSynonym('Option One');
 ```
 
-[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L72) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L76)
 
 
 ### List Selector
@@ -264,7 +266,7 @@ this.$googleAction!.showList(list);
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#list_selector)
 
-[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L71)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L72) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L76)
 
 ### Carousel Selector
 
@@ -299,7 +301,7 @@ this.$googleAction!.showCarousel(carousel);
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#carousel_selector)
 
-[Example](https://github.com/jovotech/jovo-framework/blob/master/examples/02_googleassistant/cards/src/app.js#L126)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L101) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L105)
 
 ### ON_ELEMENT_SELECTED
 
@@ -315,7 +317,7 @@ ON_ELEMENT_SELECTED() {
   }
 },
 ```
-[Example](https://github.com/jovotech/jovo-framework-nodejs/blob/master/examples/google_action_specific/appGoogleAssistantCards.js#L129)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L192) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L198)
 
 ## Suggestion Chips
 
@@ -341,6 +343,8 @@ this.$googleAction!.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
 ```
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)
+
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L67) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L71)
 
 <!--[metadata]: {"description": "Learn more about how to implement visual output into your voice driven application.",
 "route": "google-assistant/visual-output" }

@@ -64,7 +64,78 @@ describe('test request types', () => {
         });
     });
 
+    test('test end global', async (done) => {
+        app.setHandler({
+            END() {
+                done();
+            },
+        });
 
+        const request: JovoRequest = await t.requestBuilder.end();
+        request.setState('State');
+        app.handle(ExpressJS.dummyRequest(request));
+    });
+
+
+    test('test end in state', async (done) => {
+        app.setHandler({
+            State: {
+                END() {
+                    done();
+                },
+            }
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        request.setState('State');
+        app.handle(ExpressJS.dummyRequest(request));
+    });
+
+    test('test end in multilevel state', async (done) => {
+        app.setHandler({
+            State1: {
+                State2: {
+                    END() {
+                        done();
+                    },
+                }
+            }
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        request.setState('State1.State2');
+        app.handle(ExpressJS.dummyRequest(request));
+    });
+    test('test end without end', async (done) => {
+        app.setHandler({
+
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        request.setState('State1.State2');
+        app.handle(ExpressJS.dummyRequest(request));
+
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.END);
+            done();
+        });
+    });
+
+
+    test('test end (with state) in global ', async (done) => {
+        app.setHandler({
+            State1: {
+
+            },
+            END() {
+                done();
+            },
+        });
+
+        const request: JovoRequest = await t.requestBuilder.end();
+        request.setState('State1');
+        app.handle(ExpressJS.dummyRequest(request));
+    });
 });
 
 
@@ -1224,6 +1295,7 @@ describe('test app listener', () => {
     });
 
 });
+
 describe('test app config', () => {
     test('test keepSessionDataOnSessionEnded (default = false) ', async(done) => {
         app.setHandler({
@@ -1352,6 +1424,7 @@ describe('test routing', () => {
         app.handle(ExpressJS.dummyRequest(request));
     });
 });
+
 const randomUserId = () => {
     return 'user-' + Math.random().toString(36).substring(5) + '-' + Math.random().toString(36).substring(2);
 };

@@ -14,6 +14,8 @@ import _get = require('lodash.get');
 
 
 import { Config as AppConfig } from './../App';
+import { ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from './Component';
+import { ComponentPlugin } from './ComponentPlugin';
 import { Route, Router } from './Router';
 
 export class Handler implements Plugin {
@@ -355,12 +357,12 @@ export class Handler implements Plugin {
         /**
          * Delegates the requests & responses to the component defined with "componentName"
          * @param {string} componentName
-         * @param {string} onCompletedIntent intent to which the component will route to after it's done
+         * @param {ComponentDelegationOptions} options
          * @returns {Promise<void>}
          */
         Jovo.prototype.delegate = function (
             componentName: string,
-            onCompletedIntent: string,
+            options: ComponentDelegationOptions,
         ): Promise<void> {
             if (!this.$components[ componentName ]) {
                 throw new JovoError(
@@ -369,16 +371,60 @@ export class Handler implements Plugin {
                     'jovo-framework',
                     'The component to which you want to delegate to, doesn\'t exist',
                     'Components are initialized using app.useComponents(...components)',
-                    'TODO jovodocs',
+                    'https://www.jovo.tech/docs/advanced-concepts/components',
                 );
             }
+            if (!this.$session.$data[SessionConstants.COMPONENT]) {
+                this.$session.$data[SessionConstants.COMPONENT] = [];
+            }
 
-            this.setSessionAttribute(SessionConstants.COMPONENT, componentName);
-            this.$components[ componentName ].stateBeforeDelegate = this.getState();
-            this.$components[ componentName ].onCompletedIntent = onCompletedIntent;
+            this.$session.$data[SessionConstants.COMPONENT].push([componentName, {
+                data: options.data || {},
+                onCompletedIntent: options.onCompletedIntent,
+                stateBeforeDelegate: this.getState()
+            }]);
 
-            return this.toStateIntent(componentName, 'START');
+            ComponentPlugin.initializeComponents(this.$handleRequest!);
+            const state = this.getState() ? `${this.getState()}.${componentName}` : componentName;
+
+            return this.toStateIntent(state, 'START');
         };
+
+        /**
+         * Updates the componentSessionStack.
+         * 
+         * Routes back to the `onCompletedIntent` in the state, from which `delegate()` was called
+         * and sets the component's $response object.
+         * @param {ComponentResponse} response
+         */
+        Jovo.prototype.sendComponentResponse = function (response: ComponentResponse): Promise<void> {
+            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
+            const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
+            const activeComponent = this.$components[activeComponentSessionData[0]];
+
+            // save data from the current active component, before it is deleted by `initializeComponents()`
+            const componentName = activeComponent.name;
+            const stateBeforeDelegate = activeComponent.stateBeforeDelegate;
+            const onCompletedIntent = activeComponent.onCompletedIntent!;
+
+            // remove last element from stack as its not the active component anymore
+            componentSessionStack.pop();
+
+            ComponentPlugin.initializeComponents(this.$handleRequest!);
+            /**
+             * $components is not the same object as the one above anymore,
+             * as all of its data was reset by `initializedComponents()`
+             * The prior component is the active one now (or $baseComponents), which means
+             * the component that's response we want to set, also has an object initialized
+             * in $components, since its a member of the active one's `components`
+             */
+            this.$components[componentName].$response = response;
+
+            return this.toStateIntent(
+                stateBeforeDelegate,
+                onCompletedIntent
+            );
+        }
 
         /**
          * Jumps from the inside of a state to a global intent

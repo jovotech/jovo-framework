@@ -230,7 +230,7 @@ this.$cms.name
 
 ### Caching
 
-The content all tables is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) tables with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
+The content of all tables is cached into the Jovo `app` object by default, which allows for faster response times. For some use cases (like testing), however, it might make sense to retrieve the data for some (or all) tables with every request. Since Jovo `v2.1.4`, we support these instant updates by setting the `caching` option to `false`.
 
 You can choose between disabling caching for all tables, or just specific ones in your `config.js` file:
 

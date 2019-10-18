@@ -1,0 +1,169 @@
+{
+  "conversation": {
+    "id": "test-1568298534246",
+    "language": "en",
+    "memory": {},
+    "skill": "startintent",
+    "skill_occurences": 1
+  },
+  "hasDelay": true,
+  "hasNextMessage": false,
+  "replies": [
+    {
+      "type": "text",
+      "content": "Simple Ask"
+    },
+    {
+      "type": "card",
+      "content": {
+        "title": "Standard Title",
+        "subtitle": "Standard Text",
+        "imageUrl": "https://via.placeholder.com/1200x800",
+        "buttons": [
+          {
+            "title": "Card button 1 title",
+            "value": "Card button 1 value"
+          },
+          {
+            "title": "Card button 2 title",
+            "value": "Card button 2 value"
+          }
+        ]
+      }
+    },
+    {
+      "type": "quickReplies",
+      "content": {
+        "title": "Quick Reply Test",
+        "buttons": [
+          {
+            "title": "QR button 1 title",
+            "value": "QR button 1 value"
+          },
+          {
+            "title": "QR button 2 title",
+            "value": "QR button 2 value"
+          },
+          {
+            "title": "QR button 3 title",
+            "value": "QR button 3 value"
+          },
+          {
+            "title": "QR button 4 title",
+            "value": "QR button 4 value"
+          }
+        ]
+      }
+    },
+    {
+      "type": "buttons",
+      "content": {
+        "title": "Button List",
+        "buttons": [
+          {
+            "title": "BL button 1 title",
+            "value": "BL button 1 value"
+          },
+          {
+            "title": "BL button 2 title",
+            "value": "BL button 2 value"
+          },
+          {
+            "title": "BL button 3 title",
+            "value": "BL button 3 value"
+          },
+          {
+            "title": "BL button 4 title",
+            "value": "BL button 4 value"
+          }
+        ]
+      }
+    },
+    {
+      "type": "carousel",
+      "content": [
+        {
+          "title": "Carousel title 1",
+          "subtitle": "Carousel Subtitle 1",
+          "imageUrl": "https://materializecss.com/images/sample-1.jpg",
+          "buttons": [
+            {
+              "title": "Carousel button 1 title",
+              "value": "Carousel button 1 value"
+            },
+            {
+              "title": "Carousel button 2 title",
+              "value": "Carousel button 2 value"
+            }
+          ]
+        },
+        {
+          "title": "Carousel title 2",
+          "subtitle": "Carousel Subtitle 2",
+          "imageUrl": "https://materializecss.com/images/office.jpg",
+          "buttons": [
+            {
+              "title": "Carousel button 3 title",
+              "value": "Carousel button 3 value"
+            },
+            {
+              "title": "Carousel button 4 title",
+              "value": "Carousel button 4 value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "list",
+      "content": {
+        "elements": [
+          {
+            "title": "List title 1",
+            "subtitle": "List Subtitle 1",
+            "imageUrl": "https://materializecss.com/images/sample-1.jpg",
+            "buttons": [
+              {
+                "title": "List button 1 title",
+                "value": "button 1 value"
+              },
+              {
+                "title": "List button 2 title",
+                "value": "List button 2 value"
+              }
+            ]
+          },
+          {
+            "title": "List title 2",
+            "subtitle": "List Subtitle 2",
+            "imageUrl": "https://materializecss.com/images/office.jpg",
+            "buttons": [
+              {
+                "title": "List button 3 title",
+                "value": "button 3 value"
+              },
+              {
+                "title": "List button 4 title",
+                "value": "List button 4 value"
+              }
+            ]
+          }
+        ],
+        "buttons": [
+          {
+            "title": "List button 4 title",
+            "value": "List button 4 value"
+          },
+          {
+            "title": "List button 5 title",
+            "value": "List button 5 value"
+          }
+        ]
+      }
+    },
+    {
+      "type": "picture",
+      "content": "https://materializecss.com/images/showcase/varun_malhotra.jpg"
+    }
+  ]
+}

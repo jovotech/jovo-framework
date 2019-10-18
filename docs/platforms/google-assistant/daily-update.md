@@ -8,7 +8,7 @@ Learn how to use Google Action's daily updates with Jovo.
 
 ## Introduction
 
-Daily updates allow you to send push notifications to your user at a scheduled time, which, if tapped, triggers a predefined intent. It allows you to add your Action to your users daily routine.
+Daily updates allow you to send push notifications to your user at a scheduled time, which, if tapped, triggers a predefined intent. It allows you to add your Action to your user's daily routine.
 
 Google does automatically suggest intents you configured as possible daily update intents to the user if a dialog ends successfully, but the following section will explain how you can suggest it manually inside a session.
 
@@ -100,7 +100,7 @@ ON_REGISTER_UPDATE() {
 },
 ```
 
-Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check wether the user accepted your request.
+Using `this.$googleAction.$updates.isRegisterUpdateOk()` you can check whether the user accepted your request.
 
 <!--[metadata]: {"description": "Learn how to use daily updates for your Google Action with the Jovo Framework.", "route": "google-assistant/daily-update"}-->
 

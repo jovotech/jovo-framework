@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-apl",
-  "version": "2.2.17",
+  "version": "2.2.19",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.15",
-    "jovo-platform-alexa": "^2.2.17",
-    "jovo-plugin-debugger": "^2.2.13"
+    "jovo-framework": "^2.2.17",
+    "jovo-platform-alexa": "^2.2.19",
+    "jovo-plugin-debugger": "^2.2.15"
   }
 }

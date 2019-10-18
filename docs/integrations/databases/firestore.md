@@ -43,6 +43,38 @@ import { Firestore } from 'jovo-db-firestore';
 app.use(new Firestore());
 ```
 
+If you are using Firestore in other parts of your application and already have an intialized instance, you can just pass that into the constructor as well. This is especially helpful when using Firebase Cloud Functions. When deploying your code to Firebase Cloud Functions you don't need to provide the databaseURL and credential in the config.js file and you won't have the error related to the initializeApp method being called twice on the firebase-admin instance.
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { Firestore } = require('jovo-db-firestore');
+
+// Firebase admin and firestore initialization code
+const admin = require('firebase-admin');
+admin.initializeApp();
+let db = admin.firestore();
+
+// Enable DB after app initialization
+app.use(new Firestore({}, db));
+
+// @language=typescript
+
+// src/app.ts
+
+import { Firestore } from 'jovo-db-firestore';
+
+// Firebase admin and firestore initialization code
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+const db = admin.firestore();
+
+// Enable DB after app initialization
+app.use(new Firestore({}, db));
+```
+
 Inside your `config.js` file you have to set your `credential` and your `databaseURL`. You can also optionally set the collection name (default is `UserData`):
 
 ```javascript
