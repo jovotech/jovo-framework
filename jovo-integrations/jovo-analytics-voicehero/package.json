@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-core": "^2.2.13",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "voicehero-sdk": "^0.0.14"
   },
   "devDependencies": {
