@@ -19,7 +19,7 @@
 	},
 	"devDependencies": {
 		"@azure/functions": "^1.0.1-beta2",
-		"@google-cloud/datastore": "^2.0.0",
+		"@google-cloud/datastore": "^3.1.2",
 		"@types/es6-promise": "^3.3.0",
 		"@types/express": "^4.16.0",
 		"@types/i18next": "^12.1.0",
