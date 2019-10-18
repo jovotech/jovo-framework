@@ -1,4 +1,4 @@
-import Datastore = require('@google-cloud/datastore');
+import { Datastore } from '@google-cloud/datastore';
 import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
