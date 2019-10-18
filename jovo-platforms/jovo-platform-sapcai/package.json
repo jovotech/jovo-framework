@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-sapcai",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/express": "^4.16.0",
-    "jovo-core": "^2.2.13",
+    "jovo-core": "^2.2.14",
     "lodash.camelcase": "^4.3.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
@@ -37,7 +37,7 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
-    "jovo-framework": "^2.2.18",
+    "jovo-framework": "^2.2.19",
     "lodash.clonedeep": "^4.5.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
