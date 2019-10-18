@@ -20,7 +20,10 @@ export class Firestore implements Db {
     firebaseAdmin?: any; // tslint:disable-line
     firestore?: firebase.firestore.Firestore;
 
-    constructor(config?: Config) {
+    constructor(config?: Config, firestore?: firebase.firestore.Firestore, ) {
+        if(firestore){
+            this.firestore = firestore;
+        }
         if (config) {
             this.config = _merge(this.config, config);
         }
@@ -35,8 +38,10 @@ export class Firestore implements Db {
             app.$db = this;
         }
 
-        this.initializeFirebaseAdmin();
-        this.initializeFirestore(this.firebaseAdmin);
+        if(!this.firestore) {
+            this.initializeFirebaseAdmin();
+            this.initializeFirestore(this.firebaseAdmin);
+        }
     }
 
     initializeFirebaseAdmin() {
@@ -87,7 +92,7 @@ export class Firestore implements Db {
             );
         }
 
-        if (!this.config.credential) {
+        if (!this.firestore && !this.config.credential) {
             throw new JovoError(
                 'Service account credential has to be set',
                 ErrorCode.ERR_PLUGIN,
@@ -98,7 +103,7 @@ export class Firestore implements Db {
             );
         }
 
-        if (!this.config.databaseURL) {
+        if (!this.firestore && !this.config.databaseURL) {
             throw new JovoError(
                 'databaseURL has to be set',
                 ErrorCode.ERR_PLUGIN,
