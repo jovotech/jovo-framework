@@ -20,7 +20,7 @@ export class Firestore implements Db {
     firebaseAdmin?: any; // tslint:disable-line
     firestore?: firebase.firestore.Firestore;
 
-    constructor(firestore?: firebase.firestore.Firestore, config?: Config) {
+    constructor(config?: Config, firestore?: firebase.firestore.Firestore, ) {
         if(firestore){
             this.firestore = firestore;
         }

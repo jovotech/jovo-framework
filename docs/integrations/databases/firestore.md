@@ -58,7 +58,7 @@ admin.initializeApp();
 let db = admin.firestore();
 
 // Enable DB after app initialization
-app.use(new Firestore(db));
+app.use(new Firestore({}, db));
 
 // @language=typescript
 
@@ -72,7 +72,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Enable DB after app initialization
-app.use(new Firestore(db));
+app.use(new Firestore({}, db));
 ```
 
 Inside your `config.js` file you have to set your `credential` and your `databaseURL`. You can also optionally set the collection name (default is `UserData`):
