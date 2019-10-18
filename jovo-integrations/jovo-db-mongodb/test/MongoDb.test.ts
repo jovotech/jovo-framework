@@ -149,6 +149,7 @@ describe('test database operations', () => {
         // tslint:disable-line
         const client = await MongoClient.connect(config.uri!, {
             useNewUrlParser: true,
+            useUnifiedTopology: true
         });
         const collection = client
             .db(config.databaseName!)
@@ -166,6 +167,7 @@ describe('test database operations', () => {
     async function load(primaryKey: string) {
         const client = await MongoClient.connect(config.uri!, {
             useNewUrlParser: true,
+            useUnifiedTopology: true
         });
         const collection = client
             .db(config.databaseName!)
