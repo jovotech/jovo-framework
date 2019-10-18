@@ -178,7 +178,7 @@ export class GoogleActionRequest implements JovoRequest {
             const allCapabilities = this.surface.capabilities;
 
             //check if cap array contains web_browser 
-            const webBrowserCap = allCapabilities.filter(currentCapabilitie => currentCapabilitie.name === "actions.capability.WEB_BROWSER");
+            const webBrowserCap = allCapabilities.filter(currentCapability => currentCapability.name === "actions.capability.WEB_BROWSER");
             return webBrowserCap.length === 0 ? false : true;
         }
         return false;
