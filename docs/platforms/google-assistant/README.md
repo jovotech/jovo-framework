@@ -13,6 +13,7 @@ Learn more about Google Assistant specific features that can be used with the Jo
 * [Daily Update](#daily-update)
 * [Routine Suggestion](#routine-suggestion)
 * [Confirmation](#confirmation)
+* [Web Browser Interface](#web-browser-interface)
 
 ## Introduction to Google Assistant Specific Features
 
@@ -125,6 +126,10 @@ ON_CONFIRMATION() {
     }
 }
 ```
+
+## Web Browser Interface
+The web browser is a platform specific google action feature. Access it via:
+```this.$googleAction.hasWebBrowserInterface();``` 
 
 <!--[metadata]: {"description": "Build Google Actions (Apps for Google Home) with the Jovo Framework. Learn more about Google Assistant specific features here",
 "route": "google-assistant" }

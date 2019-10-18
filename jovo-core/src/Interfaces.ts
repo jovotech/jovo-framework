@@ -167,6 +167,13 @@ export interface JovoRequest {
     toJSON(): any; // tslint:disable-line
 
     /**
+     * Returns device name
+     * @return {string};
+     */
+    getDeviceName() : string;
+
+
+    /**
      * Returns user id
      * @return {string}
      */
