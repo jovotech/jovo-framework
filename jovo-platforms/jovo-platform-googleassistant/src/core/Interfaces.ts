@@ -5,6 +5,12 @@ import { BasicCard, CarouselBrowse, OrderUpdate, Table } from '..';
 
 export interface GoogleAssistantTestSuite extends TestSuite<GoogleAssistantRequestBuilder, GoogleAssistantResponseBuilder> {}
 
+export enum GoogleAssistantDeviceName {
+    GOOGLE_ASSISTANT_SPEAKER = 'GOOGLE_ASSISTANT_SPEAKER',
+    GOOGLE_ASSISTANT_PHONE = 'GOOGLE_ASSISTANT_PHONE',
+    GOOGLE_ASSISTANT_SMARTDISPLAY = 'GOOGLE_ASSISTANT_SMARTDISPLAY',
+}
+
 
 export interface SimpleResponse {
     textToSpeech?: string;

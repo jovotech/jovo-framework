@@ -5,6 +5,7 @@
 import { Inputs, JovoRequest, SessionData } from "jovo-core";
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import { GoogleAssistantDeviceName } from './Interfaces';
 
 
 interface User {
@@ -81,17 +82,17 @@ export class GoogleActionRequest implements JovoRequest {
         }
     }
 
-    getDeviceName(): string {
+    getDeviceName(): GoogleAssistantDeviceName {
         if (this.hasScreenInterface()) {
             if (this.hasWebBrowserInterface())  {
-                return "Assistant device - smartphone";
+                return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_PHONE;
             }
             else {
-                return "Assistant device - smart display";
+                return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_SMARTDISPLAY;
             }
         }
         else {
-            return "Assistant device - voice only";
+            return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_SPEAKER;
         }
     }
 
@@ -177,7 +178,7 @@ export class GoogleActionRequest implements JovoRequest {
         if (this.surface) {
             const allCapabilities = this.surface.capabilities;
 
-            //check if cap array contains web_browser 
+            //check if cap array contains web_browser
             const webBrowserCap = allCapabilities.filter(currentCapability => currentCapability.name === "actions.capability.WEB_BROWSER");
             return webBrowserCap.length === 0 ? false : true;
         }

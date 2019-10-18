@@ -170,7 +170,7 @@ export interface JovoRequest {
      * Returns device name
      * @return {string};
      */
-    getDeviceName() : string;
+    getDeviceName() : string | undefined;
 
 
     /**
@@ -576,3 +576,4 @@ export type JovoFunction = (this: Jovo, jovo?: Jovo, done?: Function) => Handler
 export interface Handler {
     [key: string]: JovoFunction | Handler | Function;
 }
+
