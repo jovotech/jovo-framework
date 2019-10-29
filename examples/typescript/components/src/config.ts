@@ -1,16 +1,20 @@
-module.exports = {
-   logging: false,
+const config = {
+    logging: true,
+
     intentMap: {
         'AMAZON.StopIntent': 'END',
     },
     db: {
         FileDb: {
-            pathToFile: './../db/db.json'
+            pathToFile: './../../db/db.json'
         }
     },
     components: {
-        PHONE_NUMBER: {
+        GetPhoneNumber: {
             numberOfFails: 2
         }
     }
+
 };
+
+export = config;

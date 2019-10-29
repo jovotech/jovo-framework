@@ -1,4 +1,4 @@
-import Datastore = require('@google-cloud/datastore');
+import { Datastore } from '@google-cloud/datastore';
 import { BaseApp, JovoError } from 'jovo-core';
 import _set = require('lodash.set'); // tslint:disable-line:no-implicit-dependencies
 
