@@ -4,7 +4,7 @@ import { App } from './App';
 import { Component, ComponentDelegationOptions, ComponentResponse } from './middleware/Component';
 import { ComponentPlugin } from './middleware/ComponentPlugin';
 import { Route } from './middleware/Router';
-import { ContextPrevObject, UserContext, UserMetaData, UserSessionData } from './middleware/user/JovoUser';
+import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
 export { App } from './App';
 export { server as Webhook } from './server';
@@ -176,7 +176,6 @@ declare module 'jovo-core/dist/src/User' {
 
     interface User {
         $metaData: UserMetaData;
-        $sessionData: UserSessionData;
         $data: Data;
         $context: UserContext;
         isDeleted: boolean;
