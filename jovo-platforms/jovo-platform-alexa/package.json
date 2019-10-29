@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-alexa",
-  "version": "2.2.19",
+  "version": "2.2.21",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -14,12 +14,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.13",
+    "jovo-core": "^2.2.14",
     "lodash.camelcase": "^4.3.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.map": "^4.6.0",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "lodash.sample": "^4.2.1",
     "lodash.set": "^4.3.2"
   },
@@ -34,7 +34,7 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
-    "jovo-framework": "^2.2.17",
+    "jovo-framework": "^2.2.19",
     "lodash.clonedeep": "^4.5.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

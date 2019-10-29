@@ -1,13 +1,10 @@
 /**
  * Table card UI element
  */
+import { Image } from '../core/Interfaces';
 
 
-interface TableImage {
-    url: string;
-    accessibilityText: string;
-    width?: number;
-    height?: number;
+interface TableImage extends Image {
 }
 
 interface TableButton {

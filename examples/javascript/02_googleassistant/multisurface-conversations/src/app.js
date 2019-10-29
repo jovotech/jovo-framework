@@ -11,8 +11,6 @@ const app = new App();
 
 const googleAssistant = new GoogleAssistant();
 
-googleAssistant.use(new NotificationPlugin());
-
 app.use(
     googleAssistant
 );

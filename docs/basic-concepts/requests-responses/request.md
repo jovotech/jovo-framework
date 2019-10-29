@@ -48,6 +48,7 @@ Here is a list of all available helper methods to get data from a request:
 | `getIntentName(): string | undefined` | Get the intent name for intent requests. `undefined` for launch requests. |
 | `getInputs(): Inputs` | Get inputs (slots, parameter) of the request. [Learn more about input here](../routing/input.md '../routing/input'). |
 | `getUserId(): string` | Get the User ID of the request. |
+|`getDeviceName(): string`| Get the device name.|
 | `getTimestamp(): string` | Get the timestamp of the request. Example: `2015-05-13T12:34:56Z`. |
 | `getLocale(): string` | Get the locale (language) of the request. Example: `en-US`. |
 | `getAccessToken(): string | undefined` | Get an access token to the request. |

@@ -1,4 +1,5 @@
-import { Input, JovoRequest, SessionData, Inputs, SessionConstants } from "jovo-core";
+import { Input, Inputs, JovoRequest, SessionConstants, SessionData } from 'jovo-core';
+import { AlexaDeviceName } from './Interfaces';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -221,6 +222,9 @@ export class AlexaRequest implements JovoRequest {
 
     // JovoRequest implementation
 
+    /**
+     * @deprecated use the getDeviceName method which is platform independent
+     */
     getAlexaDevice(): string {
         let device = 'Echo - voice only';
 
@@ -230,16 +234,27 @@ export class AlexaRequest implements JovoRequest {
 
             if (this.context.Viewport.pixelWidth === 480 &&
                 this.context.Viewport.pixelHeight === 480 &&
+                this.context.Viewport.dpi ===160 &&
                 this.context.Viewport.shape === 'ROUND') {
                 device = 'Alexa Small Hub'; //'Echo Spot';
             }
+
+            if (this.context.Viewport.pixelWidth === 960 &&
+                this.context.Viewport.pixelHeight === 480 &&
+                this.context.Viewport.dpi === 160 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = 'Alexa Small Hub Rectangular'; //'Echo Show 5';
+            }
+
             if (this.context.Viewport.pixelWidth === 1280 &&
                 this.context.Viewport.pixelHeight === 720 &&
                 this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa HD Ready TV';
             }
+
             if (this.context.Viewport.pixelWidth === 1920 &&
                 this.context.Viewport.pixelHeight === 1080 &&
+                this.context.Viewport.dpi === 320 &&
                 this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa Extra Large TV'; //'Full HD TV';
             }
@@ -247,18 +262,66 @@ export class AlexaRequest implements JovoRequest {
 
             if (this.context.Viewport.pixelWidth === 1024 &&
                 this.context.Viewport.pixelHeight === 600 &&
+                this.context.Viewport.dpi === 160 &&
                 this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa Medium Hub'; //'Echo Show 1st gen';
             }
 
             if (this.context.Viewport.pixelWidth === 1280 &&
                 this.context.Viewport.pixelHeight === 800 &&
+                this.context.Viewport.dpi === 160 &&
                 this.context.Viewport.shape === 'RECTANGLE') {
                 device = 'Alexa Large Hub';//'Echo Show 2nd gen';
             }
         }
         return device;
     }
+
+    getDeviceName(): AlexaDeviceName {
+        let device:AlexaDeviceName = AlexaDeviceName.ALEXA_AUDIO_ONLY;
+
+        if (this.context && this.context.Viewport) {
+
+            device = AlexaDeviceName.ALEXA_UNSPECIFIED_SCREEN;
+
+            if (this.context.Viewport.pixelWidth === 480 &&
+                this.context.Viewport.pixelHeight === 480 &&
+                this.context.Viewport.dpi ===160 &&
+                this.context.Viewport.shape === 'ROUND') {
+                device = AlexaDeviceName.ALEXA_HUB_SMALL_ROUND; //'Echo Spot';
+            }
+
+            if (this.context.Viewport.pixelWidth === 960 &&
+                this.context.Viewport.pixelHeight === 480 &&
+                this.context.Viewport.dpi === 160 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = AlexaDeviceName.ALEXA_HUB_SMALL_RECTANGLE; //'Echo Show 5';
+            }
+
+            if (this.context.Viewport.pixelWidth === 1920 &&
+                this.context.Viewport.pixelHeight === 1080 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = AlexaDeviceName.ALEXA_TV_XLARGE_RECTANGLE; //'Full HD TV';
+            }
+
+
+            if (this.context.Viewport.pixelWidth === 1024 &&
+                this.context.Viewport.pixelHeight === 600 &&
+                this.context.Viewport.dpi === 160 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = AlexaDeviceName.ALEXA_HUB_MEDIUM_RECTANGLE; //'Echo Show 1st gen';
+            }
+
+            if (this.context.Viewport.pixelWidth === 1280 &&
+                this.context.Viewport.pixelHeight === 800 &&
+                this.context.Viewport.dpi === 160 &&
+                this.context.Viewport.shape === 'RECTANGLE') {
+                device = AlexaDeviceName.ALEXA_HUB_LARGE_RECTANGLE;//'Echo Show 2nd gen';
+            }
+        }
+        return device;
+    }
+
 
     getScreenResolution(): string | undefined {
         let resolution;
@@ -876,6 +939,9 @@ export class AlexaRequest implements JovoRequest {
 
     hasAPLInterface() {
         return typeof _get(this.getSupportedInterfaces(), 'Alexa.Presentation.APL') !== 'undefined';
+    }
+    hasAPLTInterface() {
+        return typeof _get(this.getSupportedInterfaces(), 'Alexa.Presentation.APLT') !== 'undefined';
     }
     hasGeoLocationInterface() {
         return typeof _get(this.getSupportedInterfaces(), 'Geolocation') !== 'undefined';

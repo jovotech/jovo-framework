@@ -508,4 +508,8 @@ export class SapCaiRequest implements JovoRequest {
         }
         return this;
     }
+
+    getDeviceName(): string | undefined {
+        return;
+    }
 }

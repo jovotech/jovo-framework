@@ -22,6 +22,7 @@ export { BodyTemplate7 } from './response/visuals/BodyTemplate7';
 export { ListTemplate1 } from './response/visuals/ListTemplate1';
 export { ListTemplate2 } from './response/visuals/ListTemplate2';
 export { ListTemplate3 } from './response/visuals/ListTemplate3';
+export { Apl } from './modules/AplPlugin';
 
 export {
     ProactiveEventObject,
@@ -60,6 +61,9 @@ import {Handler} from "jovo-core";
 import {Intent} from "./core/AlexaRequest";
 import {AlexaSpeechBuilder} from "./core/AlexaSpeechBuilder";
 import {ProactiveEvent} from "./modules/ProactiveEvent";
+
+import { Apl } from './modules/AplPlugin';
+
 
 declare module 'jovo-core/dist/src/Jovo' {
     export interface Jovo {
@@ -137,8 +141,14 @@ declare module './core/AlexaSkill' {
     }
 }
 
+// Apl
+declare module './core/AlexaSkill' {
+    interface AlexaSkill {
+        $apl?: Apl;
+    }
+}
 
-// AudioPlayer
+
 declare module './core/AlexaSkill' {
     interface AlexaSkill {
 

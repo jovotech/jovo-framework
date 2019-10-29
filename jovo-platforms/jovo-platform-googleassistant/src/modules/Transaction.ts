@@ -88,6 +88,7 @@ export interface OrderUpdate {
     userNotification?: UserNotification;
 }
 
+
 export class Transaction {
     googleAction: GoogleAction;
     googleAssistant: GoogleAssistant;

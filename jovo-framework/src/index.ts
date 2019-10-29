@@ -19,7 +19,7 @@ export { BasicLogging } from './middleware/logging/BasicLogging';
 export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log, Project };
-
+export * from 'jovo-core';
 export {
     Component,
     ComponentConfig,
@@ -32,8 +32,6 @@ export {
 } from './middleware/Component';
 
 export { ComponentPlugin } from './middleware/ComponentPlugin'
-
-export * from 'jovo-core';
 
 declare module 'express' {
 

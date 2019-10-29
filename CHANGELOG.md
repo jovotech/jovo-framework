@@ -1,6 +1,30 @@
 # Jovo Framework Changelog
 
 
+## 2.2.19 (2019-09-18)
+
+#### :rocket: New Feature
+
+* `jovo-platform-alexa` `jovo-platform-googleassistant` [#578](https://github.com/jovotech/jovo-framework/pull/578) Add getDeviceName() helper to platform integrations  ([@freiSMS](https://github.com/freiSMS))
+* `jovo-platform-googleassistant` Add isVerifiedUser(), appendSimpleResponse() helper to GoogleAction 
+* `jovo-platform-alexa` Add $apl helpers to AlexaSkill (WIP) 
+
+#### :nail_care: Enhancement
+* `jovo-db-firestore` [#533](https://github.com/jovotech/jovo-framework/pull/533) Updated Firestore database integration to accept an already initialized instance in the constructor ([@shah-gaurav](https://github.com/shah-gaurav))
+
+#### :bug: Bug Fix
+* `jovo-db-mongodb`  [#570](https://github.com/jovotech/jovo-framework/pull/603) Fix deprecated MongoDb Constructor ([@rubenaeg](https://github.com/rubenaeg))
+* `jovo-framework`  Fix meta data initialization for new users on Lambda
+
+
+#### Committers: 5
+- Gaurav Shah ([@shah-gaurav](https://github.com/shah-gaurav))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.16 (2019-09-20)
 
 #### :rocket: New Feature
