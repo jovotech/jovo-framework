@@ -1,6 +1,6 @@
 import * as http from 'http';
-import * as url from 'url';
 import { Host } from 'jovo-core';
+import * as url from 'url';
 
 /**
  * Jovo Host implemented using the nodejs http package https://nodejs.org/api/http.html.

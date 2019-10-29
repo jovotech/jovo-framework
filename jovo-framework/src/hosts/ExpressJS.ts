@@ -1,5 +1,5 @@
-import { Host, JovoRequest } from 'jovo-core';
 import { Request, Response } from 'express';
+import { Host, JovoRequest } from 'jovo-core';
 
 export class ExpressJS implements Host {
 	headers: Record<string, string>;

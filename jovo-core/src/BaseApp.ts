@@ -1,9 +1,9 @@
 import { ActionSet } from './ActionSet';
 import { JovoError } from './errors/JovoError';
 import { Extensible, ExtensibleConfig } from './Extensible';
+import { HandleRequest } from './HandleRequest';
 import { AppData, Db, Host, Platform } from './Interfaces';
 import { Log, LogLevel } from './Log';
-import { HandleRequest } from './HandleRequest';
 
 process.on('unhandledRejection', (reason, p) => {
 	Log.error('unhandledRejection');

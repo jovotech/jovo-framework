@@ -1,5 +1,5 @@
-import {BaseApp, HandleRequest, Log, Logger, LogLevel, Plugin, PluginConfig} from 'jovo-core';
 import {request} from 'express';
+import {BaseApp, HandleRequest, Log, Logger, LogLevel, Plugin, PluginConfig} from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');

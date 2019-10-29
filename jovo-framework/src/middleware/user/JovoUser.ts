@@ -1,3 +1,4 @@
+import crypto = require('crypto');
 import {
 	BaseApp,
 	EnumRequestType,
@@ -14,9 +15,8 @@ import {
 	SpeechBuilder,
 	User
 } from 'jovo-core';
-import _merge = require('lodash.merge');
 import _get = require('lodash.get');
-import crypto = require('crypto');
+import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
 	columnName?: string;
@@ -251,12 +251,7 @@ export class JovoUser implements Plugin {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
-            return loadDb({
-                app: this.jovo.$app,
-                host: this.jovo.$host,
-                jovo: this.jovo,
-            }, true);
-
+            return loadDb(new HandleRequest(this.jovo.$app, this.jovo.$host, this.jovo), true);
         };
 
         /**
@@ -267,12 +262,7 @@ export class JovoUser implements Plugin {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
-            return saveDb({
-                app: this.jovo.$app,
-                host: this.jovo.$host,
-                jovo: this.jovo,
-            }, true);
-
+            return saveDb(new HandleRequest(this.jovo.$app, this.jovo.$host, this.jovo), true);
         };
 
         /**

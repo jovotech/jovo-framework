@@ -1,11 +1,11 @@
 import {
 	ExtensibleConfig,
+	HandleRequest,
 	Jovo,
 	RequestBuilder,
 	ResponseBuilder,
 	SpeechBuilder,
-	TestSuite,
-	HandleRequest
+	TestSuite
 } from './index';
 
 import { BaseApp } from './BaseApp';
@@ -123,225 +123,6 @@ export interface Output {
 		AccountLinkingCard?: object;
 	};
 }
-export interface JovoRequest {
-    /**
-     * Converts object to json
-     * @return {any}
-     */
-    toJSON(): any; // tslint:disable-line
-
-    /**
-     * Returns device name
-     * @return {string};
-     */
-    getDeviceName() : string | undefined;
-
-
-    /**
-     * Returns user id
-     * @return {string}
-     */
-    getUserId(): string;
-
-
-    /**
-     * Returns access token
-     * @return {string}
-     */
-    getAccessToken(): string | undefined;
-
-
-    /**
-     * Returns locale
-     * @return {String}
-     */
-    getLocale(): string;
-
-    /**
-     * Returns true if session is new
-     * @return {boolean}
-     */
-    isNewSession(): boolean;
-
-
-    /**
-     * Returns timestamp
-     * @return {string}
-     */
-    getTimestamp(): string;
-
-
-    /**
-     * Returns true if device has an audio interface
-     * @return {boolean}
-     */
-    hasAudioInterface(): boolean;
-
-    /**
-     * Returns true if device has a screen interface
-     * @return {boolean}
-     */
-    hasScreenInterface(): boolean;
-
-
-    /**
-     * Returns true if device has a video interface
-     * @return {boolean}
-     */
-    hasVideoInterface(): boolean;
-
-
-    /**
-     * Returns session data
-     * @return {SessionData}
-     */
-    getSessionAttributes(): SessionData;
-
-
-    /**
-     * Adds session attribute
-     * @param {string} key
-     * @param value
-     * @return {this}
-     */
-    addSessionAttribute(key: string, value: any): this; // tslint:disable-line
-
-
-    /**
-     * Returns session data
-     * @return {SessionData}
-     */
-    getSessionData(): SessionData;
-
-
-    /**
-     * Adds session attribute
-     * @param {string} key
-     * @param value
-     * @return {this}
-     */
-    addSessionData(key: string, value: any): this; // tslint:disable-line
-
-
-    /**
-     * Sets Timestamp
-     * @param {string} timestamp
-     * @return {this}
-     */
-    setTimestamp(timestamp: string): this;
-
-
-    /**
-     * Sets locale
-     * @param {string} locale
-     * @return {this}
-     */
-    setLocale(locale: string): this;
-
-    /**
-     * Sets user id
-     * @param {string} userId
-     * @return {this}
-     */
-    setUserId(userId: string): this;
-
-
-    /**
-     * Sets access token
-     * @param {string} accessToken
-     * @return {this}
-     */
-    setAccessToken(accessToken: string): this;
-
-    /**
-     * Sets new session
-     * @param {boolean} isNew
-     * @return {this}
-     */
-    setNewSession(isNew: boolean): this;
-
-
-    /**
-     * Sets audio interface capability
-     * @return {this}
-     */
-    setAudioInterface(): this;
-
-
-    /**
-     * Sets screen interface capability
-     * @return {this}
-     */
-    setScreenInterface(): this;
-
-
-    /**
-     * Sets video interface capability
-     * @return {this}
-     */
-    setVideoInterface(): this;
-
-
-    /**
-     * Sets full session data object
-     * @param {SessionData} attributes
-     * @return {this}
-     */
-    setSessionAttributes(attributes: SessionData): this;
-
-
-    /**
-     * Sets full session data object
-     * @param {SessionData} sessionData
-     * @return {this}
-     */
-    setSessionData(sessionData: SessionData): this;
-
-
-    /**
-     * Sets state to session data
-     * @param {string} state
-     * @return {this}
-     */
-    setState(state: string): this;
-
-
-    /**
-     * Returns intent name
-     * @return {string | undefined}
-     */
-    getIntentName(): string | undefined;
-
-
-    /**
-     * Sets intent name
-     * @param {string} intentName
-     * @returns {this}
-     */
-    setIntentName(intentName: string): this;
-
-    /**
-     * Returns inputs
-     * @return {Inputs}
-     */
-    getInputs(): Inputs;
-
-
-    /**
-     * Adds input to inputs
-     * @param {string} key
-     * @param {string} value
-     * @return {this}
-     */
-    addInput(key: string, value: string): this;
-
-
-    /**
-     * Returns state from request
-     * @return {string | undefined}
-     */
-    getState(): string | undefined;
-
 export interface RequestJSON {}
 
 export interface JovoRequest {
@@ -350,6 +131,12 @@ export interface JovoRequest {
 	 * @return {any}
 	 */
 	toJSON(): any; // tslint:disable-line
+
+	/**
+	 * Returns device name
+	 * @return {string};
+	 */
+	getDeviceName(): string | undefined;
 
 	/**
 	 * Returns user id
@@ -737,4 +524,3 @@ export type JovoFunction = (
 export interface Handler {
 	[key: string]: JovoFunction | Handler | Function;
 }
-

@@ -79,7 +79,7 @@ describe('test loadDb() and saveDb()', () => {
 			await expect(jovoUser.loadDb(mockHandleRequest)).resolves.toBeUndefined();
 		});
 
-		test("should resolve promise because db needs write file access but the host doesn't provide it", async () => {
+		test('should resolve promise because db needs write file access but the host doesn\'t provide it', async () => {
 			mockHandleRequest.app.$db.needsWriteFileAccess = true;
 			mockHandleRequest.host.hasWriteFileAccess = false;
 
@@ -123,7 +123,7 @@ describe('test loadDb() and saveDb()', () => {
 			await jovoUser
 				.loadDb(mockHandleRequest)
 				.catch(e =>
-					expect(e.message).toBe("Can't load user with undefined userId")
+					expect(e.message).toBe('Can\'t load user with undefined userId')
 				);
 		});
 
@@ -211,7 +211,7 @@ describe('test loadDb() and saveDb()', () => {
 			expect(mockHandleRequest.jovo!.$user.new).toBe(false);
 		});
 
-		test("should set $user.isDeleted to false because load() didn't retrieve data", async () => {
+		test('should set $user.isDeleted to false because load() didn\'t retrieve data', async () => {
 			mockHandleRequest.jovo!.$user.getId = jest.fn().mockReturnValue('userId');
 			mockHandleRequest.app.$db.load = jest.fn().mockResolvedValue(undefined);
 
@@ -228,7 +228,7 @@ describe('test loadDb() and saveDb()', () => {
 			await expect(jovoUser.saveDb(mockHandleRequest)).resolves.toBeUndefined();
 		});
 
-		test("should resolve promise because db needs write file access but the host doesn't provide it", async () => {
+		test('should resolve promise because db needs write file access but the host doesn\'t provide it', async () => {
 			mockHandleRequest.app.$db.needsWriteFileAccess = true;
 			mockHandleRequest.host.hasWriteFileAccess = false;
 
@@ -277,11 +277,11 @@ describe('test loadDb() and saveDb()', () => {
 			await jovoUser
 				.saveDb(mockHandleRequest)
 				.catch(e =>
-					expect(e.message).toBe("Can't save user with undefined userId")
+					expect(e.message).toBe('Can\'t save user with undefined userId')
 				);
 		});
 
-		test("shouldn't save data because dataCaching is on and there were no changes made", async () => {
+		test('shouldn\'t save data because dataCaching is on and there were no changes made', async () => {
 			jovoUser.config.dataCaching = true;
 			const oldState = JSON.stringify({ data: { key: 'value' } });
 			mockHandleRequest.jovo!.$user.db_cache_hash = crypto
@@ -326,7 +326,7 @@ describe('test loadDb() and saveDb()', () => {
 			expect(jovoUser['updateMetaData']).toHaveBeenCalledTimes(1); // tslint:disable-line:no-string-literal
 		});
 
-		test("shouldn't  update metaData because it's disabled in the config", async () => {
+		test('shouldn\'t  update metaData because it\'s disabled in the config', async () => {
 			jovoUser.config.metaData!.enabled = false;
 			jovoUser['updateMetaData'] = jest.fn(); // tslint:disable-line:no-string-literal
 
@@ -344,7 +344,7 @@ describe('test loadDb() and saveDb()', () => {
 			expect(jovoUser['updateContextData']).toHaveBeenCalledTimes(1); // tslint:disable-line:no-string-literal
 		});
 
-		test("shouldn't  update context because it's disabled in the config", async () => {
+		test('shouldn\'t  update context because it\'s disabled in the config', async () => {
 			jovoUser.config.context!.enabled = false;
 			jovoUser['updateContextData'] = jest.fn(); // tslint:disable-line:no-string-literal
 
@@ -407,7 +407,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.createdAt).toBeDefined();
 	});
 
-	test("shouldn't set createdAt because it's turned off in the config", () => {
+	test('shouldn\'t set createdAt because it\'s turned off in the config', () => {
 		jovoUser.config.metaData!.createdAt = false;
 
 		jovoUser['updateMetaData'](mockHandleRequest); // tslint:disable-line:no-string-literal
@@ -415,7 +415,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.createdAt).toBeUndefined();
 	});
 
-	test("shouldn't set createdAt because it's already set", () => {
+	test('shouldn\'t set createdAt because it\'s already set', () => {
 		jovoUser.config.metaData!.createdAt = true;
 		mockHandleRequest.jovo!.$user.$metaData.createdAt = 'xyz';
 
@@ -433,7 +433,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.createdAt).not.toBe('xyz');
 	});
 
-	test("shouldn't update lastUsedAt because it's turned off in the config", () => {
+	test('shouldn\'t update lastUsedAt because it\'s turned off in the config', () => {
 		jovoUser.config.metaData!.lastUsedAt = false;
 
 		jovoUser['updateMetaData'](mockHandleRequest); // tslint:disable-line:no-string-literal
@@ -441,7 +441,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.lastUsedAt).toBeUndefined();
 	});
 
-	test("shouldn't update sessionsCount because it's turned off in the config", () => {
+	test('shouldn\'t update sessionsCount because it\'s turned off in the config', () => {
 		jovoUser.config.metaData!.sessionsCount = false;
 
 		jovoUser['updateMetaData'](mockHandleRequest); // tslint:disable-line:no-string-literal
@@ -451,7 +451,7 @@ describe('test updateMetaData', () => {
 		).toBeUndefined();
 	});
 
-	test("should increment sessionsCount because it's a new session", () => {
+	test('should increment sessionsCount because it\'s a new session', () => {
 		jovoUser.config.metaData!.sessionsCount = true;
 		mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(true);
 		mockHandleRequest.jovo!.$user.$metaData.sessionsCount = 1;
@@ -461,7 +461,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.sessionsCount).toBe(2);
 	});
 
-	test("should set sessionsCount to 1 as it's the first ever session", () => {
+	test('should set sessionsCount to 1 as it\'s the first ever session', () => {
 		jovoUser.config.metaData!.sessionsCount = true;
 		mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(true);
 
@@ -470,7 +470,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.sessionsCount).toBe(1);
 	});
 
-	test("shouldn't increment sessionsCount because it's not a new session", () => {
+	test('shouldn\'t increment sessionsCount because it\'s not a new session', () => {
 		jovoUser.config.metaData!.sessionsCount = true;
 		mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(false);
 		mockHandleRequest.jovo!.$user.$metaData.sessionsCount = 1;
@@ -480,7 +480,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.sessionsCount).toBe(1);
 	});
 
-	test("shouldn't update requests because its size is set to 0 in the config", () => {
+	test('shouldn\'t update requests because its size is set to 0 in the config', () => {
 		jovoUser.config.metaData!.requestHistorySize = 0;
 		mockHandleRequest.jovo!.$user.$metaData.requests = {};
 
@@ -530,7 +530,7 @@ describe('test updateMetaData', () => {
 		expect(mockHandleRequest.jovo!.$user.$metaData.requests!.xyz.count).toBe(2);
 	});
 
-	test("shouldn't update devices as it's turned off in the config", () => {
+	test('shouldn\'t update devices as it\'s turned off in the config', () => {
 		jovoUser.config.metaData!.devices = false;
 
 		jovoUser['updateMetaData'](mockHandleRequest); // tslint:disable-line:no-string-literal
@@ -640,7 +640,7 @@ describe('test updateContextData', () => {
 		expect(mockHandleRequest.jovo!.$user.$context.prev).toBeUndefined();
 	});
 
-	test("shouldn't save empty object", () => {
+	test('shouldn\'t save empty object', () => {
 		jovoUser['updateContextData'](mockHandleRequest); // tslint:disable-line:no-string-literal
 
 		expect(mockHandleRequest.jovo!.$user.$context.prev![0]).toBeUndefined();
@@ -686,7 +686,7 @@ describe('test updateContextData', () => {
 		).toBe('xyz');
 	});
 
-	test("shouldn't set response.speech because it's disabled in the config", () => {
+	test('shouldn\'t set response.speech because it\'s disabled in the config', () => {
 		// enable and mock response.state, so the response object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].response inside expect()
 		jovoUser.config.context!.prev!.response!.state = true;
@@ -714,7 +714,7 @@ describe('test updateContextData', () => {
 		).toBe('reprompt');
 	});
 
-	test("shouldn't set response.reprompt as it's disabled in the config", () => {
+	test('shouldn\'t set response.reprompt as it\'s disabled in the config', () => {
 		// enable and mock response.state, so the response object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].response inside expect()
 		jovoUser.config.context!.prev!.response!.state = true;
@@ -739,7 +739,7 @@ describe('test updateContextData', () => {
 		).toBe('test');
 	});
 
-	test("shouldn't set response.state as it's turned off in the config", () => {
+	test('shouldn\'t set response.state as it\'s turned off in the config', () => {
 		// enable and mock response.reprompt, so the response object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].response inside expect()
 		jovoUser.config.context!.prev!.response!.reprompt = true;
@@ -764,7 +764,7 @@ describe('test updateContextData', () => {
 		).toBe('test');
 	});
 
-	test("shouldn't set response.output as it's turned off in the config", () => {
+	test('shouldn\'t set response.output as it\'s turned off in the config', () => {
 		// enable and mock response.reprompt, so the response object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].response inside expect()
 		jovoUser.config.context!.prev!.response!.reprompt = true;
@@ -791,7 +791,7 @@ describe('test updateContextData', () => {
 		).toBe('test');
 	});
 
-	test("shouldn't set request.timestamp", () => {
+	test('shouldn\'t set request.timestamp', () => {
 		// enable and mock request.inputs, so the request object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].request inside expect()
 		jovoUser.config.context!.prev!.request!.inputs = true;
@@ -817,7 +817,7 @@ describe('test updateContextData', () => {
 		);
 	});
 
-	test("shouldn't set request.state as it's turned off in the config", () => {
+	test('shouldn\'t set request.state as it\'s turned off in the config', () => {
 		// enable and mock request.inputs, so the request object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].request inside expect()
 		jovoUser.config.context!.prev!.request!.inputs = true;
@@ -846,7 +846,7 @@ describe('test updateContextData', () => {
 		});
 	});
 
-	test("shouldn't set request.inputs as it's turned off in the config", () => {
+	test('shouldn\'t set request.inputs as it\'s turned off in the config', () => {
 		// enable and mock request.timestamp, so the request object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].request inside expect()
 		jovoUser.config.context!.prev!.request!.timestamp = true;
@@ -862,7 +862,7 @@ describe('test updateContextData', () => {
 		).toBeUndefined();
 	});
 
-	test("should set request.intent to intent because it's an IntentRequest", () => {
+	test('should set request.intent to intent because it\'s an IntentRequest', () => {
 		jovoUser.config.context!.prev!.request!.intent = true;
 		mockHandleRequest.jovo!.$type.type = EnumRequestType.INTENT;
 		_set(mockHandleRequest.jovo!, '$plugins.Router.route.intent', 'test');
@@ -874,7 +874,7 @@ describe('test updateContextData', () => {
 		).toBe('test');
 	});
 
-	test("should set request.intent to path because it's not an IntentRequest", () => {
+	test('should set request.intent to path because it\'s not an IntentRequest', () => {
 		jovoUser.config.context!.prev!.request!.intent = true;
 		mockHandleRequest.jovo!.$type.type = 'xyz';
 		_set(mockHandleRequest.jovo!, '$plugins.Router.route.path', 'test');
@@ -886,7 +886,7 @@ describe('test updateContextData', () => {
 		).toBe('test');
 	});
 
-	test("shouldn't set request.intent as it's turned off in the config", () => {
+	test('shouldn\'t set request.intent as it\'s turned off in the config', () => {
 		// enable and mock request.timestamp, so the request object is created and saved to the prev array
 		// otherwise we would have an error when trying to access prev[0].request inside expect()
 		jovoUser.config.context!.prev!.request!.timestamp = true;
