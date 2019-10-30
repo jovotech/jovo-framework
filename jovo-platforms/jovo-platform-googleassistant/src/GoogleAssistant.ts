@@ -1,43 +1,43 @@
-
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
-
 import {
-    BaseApp,
-    Extensible,
-    Platform,
-    Jovo,
-    HandleRequest, ActionSet, TestSuite,ExtensibleConfig
-} from "jovo-core";
+	ActionSet,
+	BaseApp,
+	Extensible,
+	ExtensibleConfig,
+	HandleRequest,
+	Jovo,
+	Platform,
+	TestSuite
+} from 'jovo-core';
 
+import { GoogleAction } from './core/GoogleAction';
+import { GoogleAssistantCore } from './modules/GoogleAssistantCore';
+import { Cards } from './modules/Cards';
+import { AskFor } from './modules/AskFor';
+import { UpdatesPlugin } from './modules/Updates';
+import { MediaResponsePlugin } from './modules/MediaResponse';
+import { GoogleAssistantRequestBuilder } from './core/GoogleAssistantRequestBuilder';
+import { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBuilder';
+import { GoogleAssistantTestSuite } from './core/Interfaces';
 
-import {GoogleAction} from "./core/GoogleAction";
-import {GoogleAssistantCore} from "./modules/GoogleAssistantCore";
-import {Cards} from "./modules/Cards";
-import {AskFor} from "./modules/AskFor";
-import {UpdatesPlugin} from "./modules/Updates";
-import {MediaResponsePlugin} from "./modules/MediaResponse";
-import {GoogleAssistantRequestBuilder} from "./core/GoogleAssistantRequestBuilder";
-import {GoogleAssistantResponseBuilder} from "./core/GoogleAssistantResponseBuilder";
-import {GoogleAssistantTestSuite} from './core/Interfaces';
-import {TransactionsPlugin} from "./modules/Transaction";
-import {DialogflowPlugin} from "jovo-platform-dialogflow";
-import {GoogleAssistantDialogflowFactory} from "./dialogflow/GoogleAssistantDialogflowFactory";
+import { TransactionsPlugin } from './modules/Transaction';
+import { DialogflowPlugin } from 'jovo-platform-dialogflow';
+import { GoogleAssistantDialogflowFactory } from './dialogflow/GoogleAssistantDialogflowFactory';
 import { InteractiveCanvas } from './modules/InteractiveCanvas';
 import { NewSurface } from './modules/NewSurface';
 
 export interface Config extends ExtensibleConfig {
-    handlers?: any; //tslint:disable-line
+	handlers?: any; //tslint:disable-line
 
-    transactions?: {
-        androidPackageName?: string,
-        keyFile?: object;
-    };
+	transactions?: {
+		androidPackageName?: string;
+		keyFile?: object;
+	};
 }
 
 export class GoogleAssistant extends Extensible implements Platform {
-
     config: Config = {
         enabled: true,
         plugin: {},

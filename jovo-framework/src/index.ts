@@ -33,7 +33,6 @@ export {
 
 export { ComponentPlugin } from './middleware/ComponentPlugin'
 
-
 declare module 'express' {
 
     interface Application {
@@ -174,6 +173,7 @@ declare module 'jovo-core/dist/src/Jovo' {
 }
 
 declare module 'jovo-core/dist/src/User' {
+
     interface User {
         $metaData: UserMetaData;
         $data: Data;

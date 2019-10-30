@@ -1,13 +1,13 @@
 import _merge = require('lodash.merge');
 import _sample = require('lodash.sample');
-import { Jovo } from './Jovo';
+import {Jovo} from './Jovo';
 
 export interface SsmlElements {
-    [ tag: string ]: SsmlElementAttributes;
+    [tag: string]: SsmlElementAttributes;
 }
 
 export interface SsmlElementAttributes {
-    [ attribute: string ]: string | number | boolean;
+    [attribute: string]: string | number | boolean;
 }
 
 /** Class SpeechBuilder */
@@ -84,6 +84,23 @@ export class SpeechBuilder {
      */
     constructor(jovo?: Jovo) {
         this.jovo = jovo;
+    }
+
+
+    /**
+     * Adds audio tag to speech
+     * @public
+     * @param {string} url secure url to audio
+     * @param {string} text
+     * @param {boolean} condition
+     * @param {number} probability
+     * @return {SpeechBuilder}
+     */
+    addAudio(url: string | string[], text: string = '', condition?: boolean, probability?: number): this {
+        if (Array.isArray(url)) {
+            return this.addText(`<audio src="${_sample(url)}">${text}</audio>`, condition, probability);
+        }
+        return this.addText(`<audio src="${url}">${text}</audio>`, condition, probability);
     }
 
     /**
@@ -186,12 +203,12 @@ export class SpeechBuilder {
      * @return {SpeechBuilder}
      */
     addBreak(time: string | string[], condition?: boolean, probability?: number, surroundSsml?: SsmlElements): this {
-        const strengthValues = [ 'none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong' ];
+        const strengthValues = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
         const breakTime = Array.isArray(time) ? _sample(time)! : time;
         const attributeName = strengthValues.indexOf(breakTime) > -1 ? 'strength' : 'time';
         return this.addText('', condition, probability, _merge({
             break: {
-                [ attributeName ]: breakTime,
+                [attributeName]: breakTime,
             },
         }, surroundSsml));
     }
@@ -221,7 +238,7 @@ export class SpeechBuilder {
         let finalText = Array.isArray(text) ? _sample(text)! : text;
 
         if (typeof surroundSsml === 'object') {
-            Object.entries(surroundSsml).forEach(([ tagName, attributes ]) => {
+            Object.entries(surroundSsml).forEach(([tagName, attributes]) => {
                 finalText = this.wrapInSsmlElement(finalText, tagName, attributes);
             });
         }
@@ -249,7 +266,7 @@ export class SpeechBuilder {
      * @return {string}
      */
     buildAttributeString(attributes: SsmlElementAttributes) {
-        return Object.entries(attributes).map(([ attrName, attrVal ]) => ` ${attrName}="${attrVal}"`).join('');
+        return Object.entries(attributes).map(([attrName, attrVal]) => ` ${attrName}="${attrVal}"`).join('');
     }
 
     /**
