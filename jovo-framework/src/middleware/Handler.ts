@@ -337,8 +337,21 @@ export class Handler implements Plugin {
         ): Promise<any> {
             // tslint:disable-line
             this.triggeredToIntent = true;
+
+            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
+            if(componentSessionStack != null && componentSessionStack.length > 0) {
+                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
+                const activeComponent = this.$components[activeComponentSessionData[0]];
+
+                if(state !== activeComponent.name) {
+                    Log.verbose(` Changing component state to: ${state}`);
+                    state =  `${activeComponent.name}.${state}`;
+                }
+            } else {
+                Log.verbose(` Changing state to: ${state}`);
+            }
+
             this.setState(state);
-            Log.verbose(` Changing state to: ${state}`);
 
             const route = Router.intentRoute(
                 this.$handlers,
@@ -433,9 +446,21 @@ export class Handler implements Plugin {
          */
         Jovo.prototype.toStatelessIntent = async function (intent: string) {
             this.triggeredToIntent = true;
-            this.removeState();
+
+            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
+            if(componentSessionStack != null && componentSessionStack.length > 0) {
+                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
+                const activeComponent = this.$components[activeComponentSessionData[0]];
+
+                Log.verbose(` Removing state from component. (${activeComponent.name})`);
+                Log.verbose(` toStatelessIntent: ${intent}`);
+                this.setState(activeComponent.name);
+                return this.toStateIntent(activeComponent.name, intent);
+            }
+
             Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);
+            this.removeState();
             return this.toStateIntent(undefined, intent);
         };
 
@@ -445,6 +470,16 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
+            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
+            if(componentSessionStack != null && componentSessionStack.length > 0) {
+                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
+                const activeComponent = this.$components[activeComponentSessionData[0]];
+
+                if(state !== activeComponent.name) {
+                    state =  `${activeComponent.name}.${state}`;
+                }
+            }
+
             return this.setState(state);
         };
 
