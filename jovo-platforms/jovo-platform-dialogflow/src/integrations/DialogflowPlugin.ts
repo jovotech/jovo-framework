@@ -73,12 +73,12 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
     };
 
     type = (jovo: Jovo) => {
-        if (jovo.$request && !jovo.$type.type) {
+        if (jovo.$request && (!jovo.$type.type || jovo.$type.type === EnumRequestType.UNKNOWN_REQUEST)) {
             if (jovo.$request.getIntentName() === 'Default Welcome Intent') {
                 jovo.$type = {
                     type: EnumRequestType.LAUNCH
                 };
-            } else if (!jovo.$type.type) { //TODO:
+            } else if (!jovo.$type.type || jovo.$type.type === EnumRequestType.UNKNOWN_REQUEST) { //TODO:
                 jovo.$type = {
                     type: EnumRequestType.INTENT
                 };

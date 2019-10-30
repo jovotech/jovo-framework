@@ -61,7 +61,10 @@ export abstract class Jovo extends EventEmitter {
         this.$session = {
             $data: {},
         };
-        this.$type = {};
+        this.$type = {
+            type: EnumRequestType.UNKNOWN_REQUEST,
+            optional: true,
+        };
         this.$inputs = {};
         this.$output = {};
         this.$request = undefined;
