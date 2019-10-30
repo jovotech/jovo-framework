@@ -1,96 +1,101 @@
 import crypto = require('crypto');
 import {
-    BaseApp,
-    EnumRequestType,
-    ErrorCode,
-    HandleRequest,
-    Inputs,
-    Jovo,
-    JovoError,
-    Log,
-    Output,
-    Plugin,
-    PluginConfig,
-    SessionConstants,
-    SpeechBuilder,
-    User,
+	BaseApp,
+	EnumRequestType,
+	ErrorCode,
+	HandleRequest,
+	Inputs,
+	Jovo,
+	JovoError,
+	Log,
+	Output,
+	Plugin,
+	PluginConfig,
+	SessionConstants,
+	SpeechBuilder,
+	User
 } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
-    columnName?: string;
-    implicitSave?: boolean;
-    metaData?: MetaDataConfig;
-    context?: ContextConfig;
-    updatedAt?: boolean;
-    dataCaching?: boolean;
+	columnName?: string;
+	implicitSave?: boolean;
+	metaData?: MetaDataConfig;
+	context?: ContextConfig;
+	sessionData?: SessionDataConfig;
+	updatedAt?: boolean;
+	dataCaching?: boolean;
 }
 
 export interface MetaDataConfig {
-    enabled?: boolean;
-    lastUsedAt?: boolean;
-    sessionsCount?: boolean;
-    createdAt?: boolean;
-    requestHistorySize?: number;
-    devices?: boolean;
+	enabled?: boolean;
+	lastUsedAt?: boolean;
+	sessionsCount?: boolean;
+	createdAt?: boolean;
+	requestHistorySize?: number;
+	devices?: boolean;
+}
+
+export interface SessionDataConfig {
+	enabled?: boolean;
 }
 
 export interface ContextConfig {
-    enabled?: boolean;
-    prev?: {
-        size?: number;
-        request?: {
-            intent?: boolean;
-            state?: boolean;
-            inputs?: boolean;
-            timestamp?: boolean;
-        },
-        response?: {
-            speech?: boolean;
-            reprompt?: boolean;
-            state?: boolean;
-            output?: boolean;
-        },
-    };
+	enabled?: boolean;
+	prev?: {
+		size?: number;
+		request?: {
+			intent?: boolean;
+			state?: boolean;
+			inputs?: boolean;
+			timestamp?: boolean;
+		};
+		response?: {
+			speech?: boolean;
+			reprompt?: boolean;
+			state?: boolean;
+			output?: boolean;
+		};
+	};
 }
 
 export interface UserContext {
-    prev?: ContextPrevObject[];
+	prev?: ContextPrevObject[];
 }
 
 export interface ContextPrevObject {
-    request?: {
-        timestamp?: string;
-        state?: string;
-        intent?: string;
-        inputs?: Inputs;
-    };
-    response?: {
-        speech?: string | SpeechBuilder;
-        reprompt?: string | SpeechBuilder | string[];
-        state?: string;
-        output?: Output;
-    };
+	request?: {
+		timestamp?: string;
+		state?: string;
+		intent?: string;
+		inputs?: Inputs;
+	};
+	response?: {
+		speech?: string | SpeechBuilder;
+		reprompt?: string | SpeechBuilder | string[];
+		state?: string;
+		output?: Output;
+	};
 }
 
 export interface UserMetaData {
-    lastUsedAt?: string;
-    sessionsCount?: number;
-    createdAt?: string;
-    requests?: {
-        [ key: string ]: {
-            count: number;
-            log: string[];
-        };
-    };
-    devices?: {
-        [ key: string ]: {
-            hasAudioInterface: boolean;
-            hasScreenInterface: boolean;
-            hasVideoInterface: boolean;
-        };
-    };
+	lastUsedAt?: string;
+	sessionsCount?: number;
+	createdAt?: string;
+	requests?: {
+		[key: string]: {
+			count: number;
+			log: string[];
+		};
+	};
+	devices?: {
+		[key: string]: {
+			hasAudioInterface: boolean;
+			hasScreenInterface: boolean;
+			hasVideoInterface: boolean;
+		};
+	};
 }
 
 export class JovoUser implements Plugin {
@@ -246,12 +251,7 @@ export class JovoUser implements Plugin {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
-            return loadDb({
-                app: this.jovo.$app,
-                host: this.jovo.$host,
-                jovo: this.jovo,
-            }, true);
-
+            return loadDb(new HandleRequest(this.jovo.$app, this.jovo.$host, this.jovo), true);
         };
 
         /**
@@ -262,12 +262,7 @@ export class JovoUser implements Plugin {
             if (!this.jovo) {
                 throw new Error('Jovo object is not initialized.');
             }
-            return saveDb({
-                app: this.jovo.$app,
-                host: this.jovo.$host,
-                jovo: this.jovo,
-            }, true);
-
+            return saveDb(new HandleRequest(this.jovo.$app, this.jovo.$host, this.jovo), true);
         };
 
         /**
@@ -734,6 +729,5 @@ export class JovoUser implements Plugin {
         if (handleRequest.jovo!.$output) {
             prevObject.response!.output = handleRequest.jovo!.$output;
         }
-    }
-
+	}
 }

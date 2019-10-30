@@ -32,6 +32,10 @@ export class Lambda implements Host {
         }
     }
 
+    getQueryParams(): Record<string, string> {
+        return this.event.queryStringParameters || {};
+    }
+
     getRequestObject() {
         return this.$request;
     }

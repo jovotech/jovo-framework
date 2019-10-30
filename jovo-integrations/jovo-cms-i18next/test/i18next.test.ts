@@ -2,6 +2,7 @@ import { BaseApp, HandleRequest } from 'jovo-core';
 
 import { I18Next } from '../src/';
 import * as i18nData from './i18n/en-US.json';
+import {MockHandleRequest} from './mock/mockHR';
 
 describe('I18Next.constructor()', () => {
     test('without config', () => {
@@ -21,24 +22,7 @@ describe('I18Next.loadFiles()', () => {
             filesDir: './test/i18n/',
         });
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                $request: {},
-                hasWriteFileAccess: true,
-                headers: {},
-                getRequestObject() { // tslint:disable-line:no-empty
-
-                },
-                setResponse() {
-                    return new Promise((res, rej) => { // tslint:disable-line:no-empty
-
-                    });
-                },
-                fail() { // tslint:disable-line:no-empty
-                },
-            },
-        };
+        const mockHR = new MockHandleRequest();
 
         mockHR.app.getAppTypes = () => {
             return [ 'AlexaSkill' ];
@@ -60,25 +44,7 @@ describe('I18Next.loadFiles()', () => {
             },
         });
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                $request: {},
-                hasWriteFileAccess: true,
-                headers: {},
-                getRequestObject() { // tslint:disable-line:no-empty
-
-                },
-                setResponse() {
-                    return new Promise((res, rej) => { // tslint:disable-line:no-empty
-
-                    });
-                },
-                fail() { // tslint:disable-line:no-empty
-
-                },
-            },
-        };
+        const mockHR = new MockHandleRequest();
 
         mockHR.app.getAppTypes = () => {
             return [ 'AlexaSkill' ];
@@ -102,25 +68,7 @@ describe('I18Next.loadFiles()', () => {
             },
         });
 
-        const mockHR: HandleRequest = {
-            app: new BaseApp(),
-            host: {
-                $request: {},
-                hasWriteFileAccess: true,
-                headers: {},
-                getRequestObject() { // tslint:disable-line:no-empty
-
-                },
-                setResponse() {
-                    return new Promise((res, rej) => { // tslint:disable-line:no-empty
-
-                    });
-                },
-                fail() { // tslint:disable-line:no-empty
-
-                },
-            },
-        };
+        const mockHR = new MockHandleRequest();
 
         mockHR.app.getAppTypes = () => {
             return [ 'AlexaSkill' ];
