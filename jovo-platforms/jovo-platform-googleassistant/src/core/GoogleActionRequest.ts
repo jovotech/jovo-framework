@@ -205,6 +205,10 @@ export class GoogleActionRequest implements JovoRequest {
         return _get(this, 'conversation.type') !== 'ACTIVE';
     }
 
+    isNewSessionTemporaryWorkaround() {
+        return this.isNewSession();
+    }
+
     setAccessToken(accessToken: string): this {
         _set(this, `user.accessToken`, accessToken);
         return this;

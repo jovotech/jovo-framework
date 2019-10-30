@@ -533,7 +533,7 @@ export class JovoUser implements Plugin {
      */
     private updateSessionsCount(handleRequest: HandleRequest) {
         let sessionsCount = handleRequest.jovo!.$user.$metaData.sessionsCount || 0;
-        if (handleRequest.jovo!.isNewSession()) {
+        if (handleRequest.jovo!.$request!.isNewSessionTemporaryWorkaround()) {
             sessionsCount += 1;
         }
         handleRequest.jovo!.$user.$metaData.sessionsCount = sessionsCount;

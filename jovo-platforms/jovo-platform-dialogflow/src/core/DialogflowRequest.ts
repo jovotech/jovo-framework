@@ -103,6 +103,10 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
         return typeof askContext === 'undefined';
     }
 
+    isNewSessionTemporaryWorkaround() {
+        return this.isNewSession();
+    }
+
     getIntentName() {
         return this.queryResult.intent.displayName;
     }
