@@ -92,6 +92,27 @@ export class AlexaResponse implements JovoResponse {
         return true;
     }
 
+    getApltDirective() {
+        const allDirectives = this.getDirectives();
+
+        if (allDirectives) {
+            for (const directiveItem of allDirectives) {
+                if (directiveItem.document && directiveItem.document.type === 'APLT') {
+                    return directiveItem;
+                }
+            }
+        }
+
+        return;
+    }
+    hasApltDirective(): boolean {
+        if (!this.getApltDirective()) {
+            return false;
+        }
+
+        return true;
+    }
+
     getDisplayDirective() {
         if (this.getDirectives()) {
             return this.getDirective('Display');

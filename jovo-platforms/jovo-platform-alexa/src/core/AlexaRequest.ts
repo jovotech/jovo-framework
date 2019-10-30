@@ -944,6 +944,9 @@ export class AlexaRequest implements JovoRequest {
     hasAPLInterface() {
         return typeof _get(this.getSupportedInterfaces(), 'Alexa.Presentation.APL') !== 'undefined';
     }
+    hasAPLTInterface() {
+        return typeof _get(this.getSupportedInterfaces(), 'Alexa.Presentation.APLT') !== 'undefined';
+    }
     hasGeoLocationInterface() {
         return typeof _get(this.getSupportedInterfaces(), 'Geolocation') !== 'undefined';
     }

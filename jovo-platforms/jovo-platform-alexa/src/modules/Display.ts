@@ -96,7 +96,7 @@ export class Display implements Plugin {
                 directives.push(_get(output, 'Alexa.VideoApp'));
                 _set(response, 'response.directives', directives);
 
-                if (_get(response, 'response.shouldEndSession')) {
+                if (response && response.response && response.response.hasOwnProperty("shouldEndSession")) {
                     delete response.response.shouldEndSession;
                 }
 
