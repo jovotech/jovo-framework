@@ -14,7 +14,7 @@ import _get = require('lodash.get');
 
 
 import { Config as AppConfig } from './../App';
-import { ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from './Component';
+import { Component, ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from './Component';
 import { ComponentPlugin } from './ComponentPlugin';
 import { Route, Router } from './Router';
 
@@ -335,23 +335,52 @@ export class Handler implements Plugin {
             state: string | undefined,
             intent: string,
         ): Promise<any> {
+            // Check for Component Names inside State
+            if (typeof state !== 'undefined' && this.$components) {
+                const components: string[] = Object.keys(this.$components);
+                const states: string[] = state.split('.');
+                const matched: string[] = states.filter(s => components.includes(s));
+
+                if (states.length > 1 && matched.length > 0) {
+                    throw new JovoError(
+                        `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
+                        ErrorCode.ERR,
+                        'jovo-framework',
+                        'The state you want to use contains at least one component name.',
+                        'Rename the listed states to not interfere with them.'
+                    );
+                }
+            }
+
+            const currentState = this.getRootState();
+            if (typeof currentState !== 'undefined' && typeof state !== 'undefined') {
+                let currentStates: string[] = currentState.split('.');
+
+                if (typeof 'state' !== undefined && currentStates[currentStates.length - 1] !== state) {
+                    currentStates = [ ...currentStates, state];
+                }
+
+                state = currentStates.join('.');
+            }
+
+            return this.internalToStateIntent(state, intent);
+        };
+
+        /**
+         * Jumps to state intent without any validation
+         * @private
+         * @param {string} state name of state
+         * @param {string} intent name of intent
+         */
+        Jovo.prototype.internalToStateIntent = async function (
+            state: string | undefined,
+            intent: string,
+        ): Promise<any> {
             // tslint:disable-line
             this.triggeredToIntent = true;
 
-            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
-            if(componentSessionStack != null && componentSessionStack.length > 0) {
-                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
-                const activeComponent = this.$components[activeComponentSessionData[0]];
-
-                if(state !== activeComponent.name) {
-                    Log.verbose(` Changing component state to: ${state}`);
-                    state =  `${activeComponent.name}.${state}`;
-                }
-            } else {
-                Log.verbose(` Changing state to: ${state}`);
-            }
-
             this.setState(state);
+            Log.verbose(` Changing state to: ${state}`);
 
             const route = Router.intentRoute(
                 this.$handlers,
@@ -398,10 +427,49 @@ export class Handler implements Plugin {
             }]);
 
             ComponentPlugin.initializeComponents(this.$handleRequest!);
-            const state = this.getState() ? `${this.getState()}.${componentName}` : componentName;
 
-            return this.toStateIntent(state, 'START');
+            const state = this.getRootState() ? `${this.getRootState()}.${componentName}` : componentName;
+
+            return this.internalToStateIntent(state, 'START');
         };
+
+        /**
+         * Returns root state value stored in the request session.
+         * @return {string | undefined}
+         */
+        Jovo.prototype.getRootState = function (): string | undefined {
+            const currentState = this.$session.$data[SessionConstants.STATE];
+            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
+            
+            if (typeof componentSessionStack !== 'undefined' && typeof currentState !== 'undefined') { 
+                if(componentSessionStack.length > 0) {
+                    const components = Object.keys(this.$components || {});
+                    let currentStates = currentState.split('.');
+                    
+                    // Remove last State until we hit a Component
+                    while (!components.includes(currentStates[currentStates.length - 1])) {
+                        currentStates = currentStates.slice(0, -1);
+                    }
+    
+                    return currentStates.join('.');
+                }
+            }
+
+            return undefined;
+        };
+
+        Jovo.prototype.getActiveComponent = function (): Component | undefined {
+            const currentRoot = this.getRootState();
+
+            if (currentRoot) {
+                const states: string[] = currentRoot.split('.');
+                const activeComponent: Component = this.$components[states[states.length - 1]];
+                
+                return activeComponent;
+            }
+
+            return undefined;
+        }
 
         /**
          * Updates the componentSessionStack.
@@ -433,7 +501,7 @@ export class Handler implements Plugin {
              */
             this.$components[componentName].$response = response;
 
-            return this.toStateIntent(
+            return this.internalToStateIntent(
                 stateBeforeDelegate,
                 onCompletedIntent
             );
@@ -444,20 +512,19 @@ export class Handler implements Plugin {
          * @public
          * @param {string} intent name of intent
          */
-        Jovo.prototype.toStatelessIntent = async function (intent: string) {
-            this.triggeredToIntent = true;
+        Jovo.prototype.toStatelessIntent = async function (intent: string) {    
+            const currentState = this.getRootState();
 
-            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
-            if(componentSessionStack != null && componentSessionStack.length > 0) {
-                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
-                const activeComponent = this.$components[activeComponentSessionData[0]];
-
-                Log.verbose(` Removing state from component. (${activeComponent.name})`);
+            // Use Root State instead of clearing
+            if (typeof currentState !== 'undefined') {
+                const activeComponent = this.getActiveComponent();
+                Log.verbose(` Removing state from component. ${activeComponent ? `(${activeComponent.name})` : ''}`);
                 Log.verbose(` toStatelessIntent: ${intent}`);
-                this.setState(activeComponent.name);
-                return this.toStateIntent(activeComponent.name, intent);
+                
+                return this.internalToStateIntent(currentState, intent);
             }
-
+            
+            this.triggeredToIntent = true;
             Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);
             this.removeState();
@@ -470,14 +537,33 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
-            const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[SessionConstants.COMPONENT];
-            if(componentSessionStack != null && componentSessionStack.length > 0) {
-                const activeComponentSessionData: [string, ComponentSessionData] = componentSessionStack[componentSessionStack.length - 1];
-                const activeComponent = this.$components[activeComponentSessionData[0]];
-
-                if(state !== activeComponent.name) {
-                    state =  `${activeComponent.name}.${state}`;
+            // Check for Component Names inside State
+            if(this.$components) {
+                const components: string[] = Object.keys(this.$components);
+                const states: string[] = state.split('.');
+                const matched: string[] = states.filter(s => components.includes(s));
+    
+                if (states.length > 1 && matched.length > 0) {
+                    throw new JovoError(
+                        `Can not use component names as follow up states. Please rename the following states: ${matched.join(', ')}`,
+                        ErrorCode.ERR,
+                        'jovo-framework',
+                        'The follow up state you want to use contains at least one component name.',
+                        'Rename the listed states to not interfere with them.'
+                    );
                 }
+            }
+
+            const currentState = this.getRootState();
+
+            if (typeof currentState !== 'undefined') {
+                let currentStates: string[] = currentState.split('.');
+
+                if (currentStates[currentStates.length - 1] !== state) {
+                    currentStates = [ ...currentStates, state];
+                }
+
+                state = currentStates.join('.');
             }
 
             return this.setState(state);

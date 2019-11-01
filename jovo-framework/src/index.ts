@@ -96,6 +96,14 @@ declare module 'jovo-core/dist/src/Jovo' {
 
 
         /**
+         * Jumps to state intent without any state validation.
+         * @private
+         * @param {string} state name of state
+         * @param {string} intent name of intent
+         */
+        internalToStateIntent(state: string | undefined, intent: string): Promise<void>;
+
+        /**
          * Jumps from the inside of a state to a global intent
          * @public
          * @param {string} intent name of intent
@@ -152,8 +160,19 @@ declare module 'jovo-core/dist/src/Jovo' {
             [ key: string ]: ComponentPlugin
         };
 
+        /**
+         * Returns root state value stored in the request session.
+         * @return {string | undefined}
+         */
+        getRootState(): string | undefined;
+
+        /**
+         * Returns the active component.
+         * @return {string | undefined}
+         */
+        getActiveComponent(): Component | undefined;
+
         sendComponentResponse(response: ComponentResponse): Promise<void>;
-        // getActiveComponent(): Component; TODO
     }
 }
 
