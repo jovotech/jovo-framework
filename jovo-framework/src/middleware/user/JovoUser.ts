@@ -397,7 +397,7 @@ export class JovoUser implements Plugin {
 			context: handleRequest.jovo.$user.$context,
 			data: handleRequest.jovo.$user.$data,
 			metaData: handleRequest.jovo.$user.$metaData,
-			sessionData: handleRequest.jovo.$user.$sessionData
+			session: handleRequest.jovo.$user.$sessionData
 		};
 
 		this.updateDbLastState(handleRequest, userData);
