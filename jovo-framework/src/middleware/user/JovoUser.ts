@@ -100,6 +100,12 @@ export interface UserMetaData {
 	};
 }
 
+export interface UserSessionData {
+	// tslint:disable-next-line:no-any
+	data: Record<string, any>;
+	lastUpdatedAt: string;
+}
+
 export class JovoUser implements Plugin {
 	config: Config = {
 		columnName: 'userData',
@@ -365,7 +371,7 @@ export class JovoUser implements Plugin {
 			);
 		}
 		if (this.config.sessionData && this.config.sessionData.enabled) {
-			const serializedSessionData = _get(
+			const serializedSessionData: UserSessionData = _get(
 				data,
 				`${this.config.columnName}.sessionData`,
 				{}
@@ -450,7 +456,7 @@ export class JovoUser implements Plugin {
 			data?: Data;
 			context?: UserContext;
 			metaData?: UserMetaData;
-			sessionData?: Data;
+			session?: UserSessionData;
 		} = {
 			// tslint:disable-line
 			data: handleRequest.jovo.$user.$data
@@ -468,7 +474,7 @@ export class JovoUser implements Plugin {
 
 		if (this.config.sessionData && this.config.sessionData.enabled) {
 			this.updateSessionData(handleRequest);
-			userData.sessionData = {
+			userData.session = {
 				data: handleRequest.jovo.$user.$sessionData,
 				lastUpdatedAt: new Date().toISOString()
 			};
