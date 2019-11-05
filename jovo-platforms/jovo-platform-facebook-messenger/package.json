@@ -1,0 +1,71 @@
+{
+  "name": "jovo-platform-facebook-messenger",
+  "version": "1.0.0",
+  "description": " ",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "tsc": "tsc",
+    "tscw": "tsc --watch",
+    "watch": "tsc-watch --onSuccess \"npm run start --prefix ../jovo-platform-webassistant-demo\"",
+    "rimraf": "rimraf ./dist",
+    "typedoc": "typedoc --out ./docs --mode file",
+    "test": "jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "form-data": "^2.5.1",
+    "jovo-core": "^2.2.14",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.2",
+    "lodash.sample": "^4.2.1",
+    "lodash.set": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/lodash.clonedeep": "^4.5.6",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.set": "^4.3.6",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/node": "^12.7.5",
+    "@types/form-data": "^2.5.0",
+    "prettier": "^1.18.2",
+    "jest": "^24.9.0",
+    "jovo-framework": "^2.2.19",
+    "jovo-db-filedb": "^2.2.14",
+    "rimraf": "^3.0.0",
+    "source-map-support": "^0.5.13",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/dist/",
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
+  },
+  "files": [
+    "dist/src/**/*"
+  ]
+}
