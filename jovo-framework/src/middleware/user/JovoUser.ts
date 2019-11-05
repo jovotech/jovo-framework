@@ -40,7 +40,7 @@ export interface MetaDataConfig {
 
 export interface SessionDataConfig {
 	enabled?: boolean;
-	expireAfter?: number;
+	expireAfterSeconds?: number;
 }
 
 export interface ContextConfig {
@@ -139,7 +139,7 @@ export class JovoUser implements Plugin {
 		},
 		sessionData: {
 			enabled: false,
-			expireAfter: 300000
+			expireAfterSeconds: 300
 		},
 		updatedAt: false
 	};
@@ -377,7 +377,7 @@ export class JovoUser implements Plugin {
 				{}
 			);
 
-			const expireAfter = this.config.sessionData.expireAfter || 300000;
+			const expireAfter = (this.config.sessionData.expireAfterSeconds || 300) * 1000;
 
 			let sessionData = {};
 			if (serializedSessionData.lastUpdatedAt) {
