@@ -1,6 +1,4 @@
 import crypto = require('crypto');
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
 import {
 	BaseApp,
 	Data,
@@ -18,6 +16,8 @@ import {
 	SpeechBuilder,
 	User
 } from 'jovo-core';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
 	columnName?: string;
