@@ -178,6 +178,7 @@ declare module 'jovo-core/dist/src/User' {
         $metaData: UserMetaData;
         $data: Data;
         $context: UserContext;
+        $sessionData: Data;
         isDeleted: boolean;
         db_cache_hash?: string;
 
