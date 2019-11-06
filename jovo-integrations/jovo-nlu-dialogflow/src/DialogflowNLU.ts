@@ -8,9 +8,9 @@ import {
   Plugin,
   PluginConfig,
 } from 'jovo-core';
-import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
-import { HttpService } from './HttpService';
 import _merge = require('lodash.merge');
+import { HttpService } from './HttpService';
+import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
 
 export interface Config extends PluginConfig {
   defaultIntent?: string;
@@ -20,7 +20,7 @@ export interface Config extends PluginConfig {
   authToken?: string;
 }
 
-const BASE_URL = 'https://dialogflow.googleapis.com';
+const HOST = 'dialogflow.googleapis.com';
 
 export class DialogflowNLU implements Plugin {
   config: Config = {
@@ -122,10 +122,10 @@ export class DialogflowNLU implements Plugin {
     ) {
       throw new JovoError('Invalid auth token or invalid project id.');
     }
-    const url = `${BASE_URL}/v2/projects/${
-      this.config.projectId
-    }/agent/sessions/${session}:detectIntent`;
+    const path = `/v2/projects/${this.config.projectId}/agent/sessions/${session}:detectIntent`;
     const options: RequestOptions = {
+      host: HOST,
+      path,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,7 +140,6 @@ export class DialogflowNLU implements Plugin {
     const stringData = JSON.stringify(data);
     try {
       const response = await HttpService.makeRequest<DialogflowResponse>(
-        url,
         options,
         Buffer.from(stringData),
       );

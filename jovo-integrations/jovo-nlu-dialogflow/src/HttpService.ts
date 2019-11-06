@@ -1,6 +1,5 @@
 import { ClientRequest, IncomingHttpHeaders, IncomingMessage } from 'http';
 import * as https from 'https';
-import * as http from 'http';
 
 export interface RequestResult<T = {}> {
   data?: T;
@@ -10,13 +9,11 @@ export interface RequestResult<T = {}> {
 
 export class HttpService {
   static makeRequest<T = {}>(
-    url: string,
     options: https.RequestOptions = {},
     data?: Buffer,
   ): Promise<RequestResult<T>> {
     return new Promise<RequestResult<T>>((resolve, reject) => {
-      const httpProvider = url.startsWith('https') ? https : http;
-      const req: ClientRequest = httpProvider.request(url, options, (res: IncomingMessage) => {
+      const req: ClientRequest = https.request(options, (res: IncomingMessage) => {
         let collectedData = '';
 
         res.on('data', (chunk) => {
