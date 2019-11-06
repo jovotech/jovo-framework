@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-dialogflow-platforms",
-  "version": "2.2.21",
+  "version": "2.2.22",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,13 +14,13 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "jovo-core": "^2.2.14",
-    "jovo-db-dynamodb": "^2.2.14",
-    "jovo-db-filedb": "^2.2.14",
-    "jovo-framework": "^2.2.19",
-    "jovo-platform-alexa": "^2.2.21",
-    "jovo-platform-dialogflow": "^2.2.16",
-    "jovo-platform-googleassistant": "^2.2.19",
-    "jovo-plugin-debugger": "^2.2.16"
+    "jovo-core": "^2.2.15",
+    "jovo-db-dynamodb": "^2.2.15",
+    "jovo-db-filedb": "^2.2.15",
+    "jovo-framework": "^2.2.20",
+    "jovo-platform-alexa": "^2.2.22",
+    "jovo-platform-dialogflow": "^2.2.17",
+    "jovo-platform-googleassistant": "^2.2.20",
+    "jovo-plugin-debugger": "^2.2.17"
   }
 }
