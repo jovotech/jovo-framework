@@ -14,7 +14,7 @@ app.use(
     new FileDb(),
 );
 
-import { GetPhoneNumber } from "./components/GetPhoneNumber";
+import { GetPhoneNumber } from "./components/jovo-component-get-phone-number";
 
 app.useComponents(new GetPhoneNumber());
 
