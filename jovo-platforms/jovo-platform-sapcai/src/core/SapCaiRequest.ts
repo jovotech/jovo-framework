@@ -354,10 +354,6 @@ export class SapCaiRequest implements JovoRequest {
         return _get(this.getSessionAttributes(), NEW_SESSION_KEY, true);
     }
 
-    isNewSessionTemporaryWorkaround() {
-        return this.isNewSession();
-    }
-
     setLocale(locale: string) {
         if (_get(this, `nlp.language`)) {
             _set(this, 'nlp.language', locale);

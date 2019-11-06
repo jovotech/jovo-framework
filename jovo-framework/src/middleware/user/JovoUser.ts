@@ -621,7 +621,13 @@ export class JovoUser implements Plugin {
 	 */
 	private updateSessionsCount(handleRequest: HandleRequest) {
 		let sessionsCount = handleRequest.jovo!.$user.$metaData.sessionsCount || 0;
-		if (handleRequest.jovo!.isNewSession()) {
+
+		// TODO: temporary fix. will be removed in 2.3
+		if (handleRequest.jovo!.getType() === 'AlexaSkill') {
+			if (_get(handleRequest.jovo!.$request, 'session.new', false)) {
+				sessionsCount += 1;
+			}
+		} else if (handleRequest.jovo!.isNewSession()) {
 			sessionsCount += 1;
 		}
 		handleRequest.jovo!.$user.$metaData.sessionsCount = sessionsCount;

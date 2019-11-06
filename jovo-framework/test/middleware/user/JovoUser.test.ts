@@ -455,8 +455,6 @@ describe('test updateMetaData', () => {
     test('should increment sessionsCount because it\'s a new session', () => {
         jovoUser.config.metaData!.sessionsCount = true;
         mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(true);
-        // TODO: REMOVE AFTER 2.3
-        mockHandleRequest.jovo!.$request!.isNewSessionTemporaryWorkaround = jest.fn().mockReturnValue(true);
 
         mockHandleRequest.jovo!.$user.$metaData.sessionsCount = 1;
 
@@ -468,8 +466,6 @@ describe('test updateMetaData', () => {
     test('should set sessionsCount to 1 as it\'s the first ever session', () => {
         jovoUser.config.metaData!.sessionsCount = true;
         mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(true);
-// TODO: REMOVE AFTER 2.3
-        mockHandleRequest.jovo!.$request!.isNewSessionTemporaryWorkaround = jest.fn().mockReturnValue(true);
 
 		jovoUser['updateMetaData'](mockHandleRequest); // tslint:disable-line:no-string-literal
 
@@ -479,8 +475,6 @@ describe('test updateMetaData', () => {
     test('shouldn\'t increment sessionsCount because it\'s not a new session', () => {
         jovoUser.config.metaData!.sessionsCount = true;
         mockHandleRequest.jovo!.isNewSession = jest.fn().mockReturnValue(false);
-        // TODO: REMOVE AFTER 2.3
-        mockHandleRequest.jovo!.$request!.isNewSessionTemporaryWorkaround = jest.fn().mockReturnValue(false);
 
         mockHandleRequest.jovo!.$user.$metaData.sessionsCount = 1;
 

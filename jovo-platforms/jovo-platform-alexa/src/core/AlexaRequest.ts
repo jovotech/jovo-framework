@@ -529,10 +529,6 @@ export class AlexaRequest implements JovoRequest {
         return _get(this, 'session.new', true);
     }
 
-    isNewSessionTemporaryWorkaround() {
-        return _get(this, 'session.new', false);
-    }
-
     // Jovo Request -- SETTER
 
     setLocale(locale: string) {

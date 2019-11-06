@@ -163,12 +163,6 @@ export interface JovoRequest {
 	isNewSession(): boolean;
 
 	/**
-	 * ATTENTION: Will be removed in v2.3 of the framework
-	 * TODO:
-	 */
-	isNewSessionTemporaryWorkaround(): boolean;
-
-	/**
 	 * Returns timestamp
 	 * @return {string}
 	 */

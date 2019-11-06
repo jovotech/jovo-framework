@@ -107,10 +107,6 @@ export class MessengerBotRequest implements JovoRequest {
     return false;
   }
 
-  isNewSessionTemporaryWorkaround(): boolean {
-    return false;
-  }
-
   setAccessToken(accessToken: string): this {
     return this;
   }
