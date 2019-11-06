@@ -52,9 +52,6 @@ export class GoogleAnalytics implements Analytics {
             );
         }
 
-        // Initialise visitor object.
-        this.initVisitor(jovo);
-
         // Eiter start or stop the session. If sessionTag is undefined, it will be ignored.
         const sessionTag = this.getSessionTag(jovo);
         this.visitor!.set('sessionControl', sessionTag);
@@ -85,6 +82,7 @@ export class GoogleAnalytics implements Analytics {
             .send();
 
         // Detect and send Flow Errors
+        // TODO: test!
         this.sendFlowErrors(jovo);
 
         if (jovo.$inputs) {
@@ -94,9 +92,9 @@ export class GoogleAnalytics implements Analytics {
                 }
 
                 const params: Event = {
-                    eventCategory: "SlotInput",
-                    eventAction: value.key, //slot value
-                    eventLabel: key,   //slot name
+                    eventCategory: 'Inputs',
+                    eventAction: value.key,             // Input value
+                    eventLabel: key,                    // Input key
                     documentPath: jovo.getRoute().path
                 };
                 this.visitor!.event(params).send();
@@ -129,8 +127,8 @@ export class GoogleAnalytics implements Analytics {
     }
 
     /**
-     * Auto send Exception to Google Analytics if Error
-     * @param handleRequest 
+     * Tracks uncaught user exceptions.
+     * @param {object} handleRequest: HandleRequest to act upon
      */
     sendError(handleRequest: HandleRequest) {
         const jovo: Jovo = handleRequest.jovo!;
@@ -144,11 +142,18 @@ export class GoogleAnalytics implements Analytics {
             );
         }
 
+        // Stop the current tracking session.
         this.visitor!.set('sessionControl', 'end');
         this.visitor!
             .pageview(this.getPageParameters(jovo), (err: any) => {
                 if (err) {
-                    console.log('Error occured!');
+                    throw new JovoError(
+                        'Error while trying to track data.',
+                        ErrorCode.ERR_PLUGIN,
+                        'jovo-analytics-googleanalytics',
+                        '',
+                        ''
+                    );
                 }
             })
             .exception(handleRequest.error!.name)
@@ -238,6 +243,10 @@ export class GoogleAnalytics implements Analytics {
             );
         }
 
+        // Initialise visitor object.
+        this.initVisitor(jovo);
+
+        // Initialise googleAnalytics object.
         jovo.$googleAnalytics = {
             $data: {},
             sendEvent: (params: Event) => {
