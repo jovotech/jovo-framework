@@ -361,48 +361,6 @@ describe('test toIntent', () => {
     });
   });
 
-  test('test within the same state', async (done) => {
-    app.setHandler({
-      State1: {
-        IntentA() {
-          return this.toIntent('IntentB');
-        },
-        IntentB() {
-          this.tell('Hello IntentB');
-        },
-      },
-    });
-    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
-
-    app.handle(ExpressJS.dummyRequest(intentRequest.setState('State1')));
-
-    app.on('response', (handleRequest: HandleRequest) => {
-      expect(handleRequest.jovo!.$response!.isTell('Hello IntentB')).toBe(true);
-      done();
-    });
-  });
-
-  test('test in global handler', async (done) => {
-    app.setHandler({
-      State1: {
-        IntentA() {
-          return this.toIntent('IntentB');
-        },
-      },
-      IntentB() {
-        this.tell('Hello IntentB');
-      },
-    });
-    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
-
-    app.handle(ExpressJS.dummyRequest(intentRequest.setState('State1')));
-
-    app.on('response', (handleRequest: HandleRequest) => {
-      expect(handleRequest.jovo!.$response!.isTell('Hello IntentB')).toBe(true);
-      done();
-    });
-  });
-
   test('test multiple toIntents', async (done) => {
     app.setHandler({
       LAUNCH() {
@@ -616,25 +574,6 @@ describe('test handleOnNewSession', () => {
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
     app.handle(ExpressJS.dummyRequest(launchRequest));
-
-    app.on('response', (handleRequest: HandleRequest) => {
-      done();
-    });
-  });
-
-  test('NEW_SESSION but request with old session', async (done) => {
-    app.setHandler({
-      NEW_SESSION() {
-        // shouldn't be reached
-        this.$data.foo = 'bar';
-      },
-      IntentA() {
-        expect(this.$data.foo).toBe(undefined);
-      },
-    });
-    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
-
-    app.handle(ExpressJS.dummyRequest(intentRequest.setNewSession(false)));
 
     app.on('response', (handleRequest: HandleRequest) => {
       done();
@@ -933,24 +872,6 @@ describe('test handleOnNewSession', () => {
   });
 });
 describe('test removeState', () => {
-  test('test add followUpstate to session attributes', async (done) => {
-    app.setHandler({
-      LAUNCH() {
-        return this.toStateIntent('State1', 'IntentA');
-      },
-      State1: {
-        IntentA() {
-          expect(this.getState()).toBe('State1');
-          this.removeState();
-          expect(this.getState()).toBe(undefined);
-          done();
-        },
-      },
-    });
-    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
-
-    app.handle(ExpressJS.dummyRequest(intentRequest.setState('State1')));
-  });
 });
 
 describe('test followUpState', () => {
