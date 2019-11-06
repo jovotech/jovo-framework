@@ -7,7 +7,7 @@ Learn more about how to load your Conversational Component into your existing vo
 
 ## Introduction
 
-![jovo load <component>](../img/jovo-deploy.png "jovo load <component>")
+![jovo load <component>](../../img/jovo-deploy.png "jovo load <component>")
 
 
 `jovo load` is the Jovo CLI command to load a Conversational Component into your voice application's code base.
