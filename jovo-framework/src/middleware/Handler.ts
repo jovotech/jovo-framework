@@ -369,6 +369,8 @@ export class Handler implements Plugin {
                 : this.getRoute().path;
             this.$plugins.Router.route = route;
             Log.verbose(` toStateIntent: ${state}.${intent}`);
+
+            this.triggerStateValidation = true;
             return Handler.applyHandle(this, route, true);
         };
 
