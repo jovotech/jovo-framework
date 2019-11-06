@@ -13,7 +13,7 @@ Learn how to deploy your Alexa Skills and Google Actions with the `jovo deploy` 
 
 ## Introduction
 
-![jovo deploy command](../img/jovo-deploy.png "jovo deploy command")
+![jovo deploy command](../../img/jovo-deploy.png "jovo deploy command")
 
 `jovo deploy` is used for two things:
 * Upload the platform folders to their respective developer consoles (Amazon Alexa Developer Console, Dialogflow Console)
