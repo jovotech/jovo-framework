@@ -1,4 +1,4 @@
-import { BaseApp, Host } from "jovo-core";
+import { BaseApp, Host } from 'jovo-core';
 import {MessengerBot} from '../src';
 
 process.env.NODE_ENV = 'UNIT_TEST';

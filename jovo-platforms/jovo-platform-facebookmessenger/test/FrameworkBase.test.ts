@@ -7,7 +7,9 @@ import {
   SessionConstants,
   TestSuite,
 } from 'jovo-core';
+// tslint:disable-next-line
 import { FileDb } from 'jovo-db-filedb';
+// tslint:disable-next-line
 import { App, ExpressJS } from 'jovo-framework';
 import { FacebookMessenger } from '../src';
 import { RequestSLU } from './helper/RequestSLU';
@@ -36,6 +38,7 @@ beforeEach(() => {
 describe('test request types', () => {
   test('test launch', async (done) => {
     app.setHandler({
+      // tslint:disable-next-line
       LAUNCH() {},
     });
 
@@ -50,6 +53,7 @@ describe('test request types', () => {
 
   test('test intent', async (done) => {
     app.setHandler({
+      // tslint:disable-next-line
       HelloWorldIntent() {},
     });
 
@@ -956,6 +960,7 @@ describe('test followUpState', () => {
         this.followUpState('State1').ask('Hello World', 'foo');
       },
       State1: {
+        // tslint:disable-next-line
         IntentA() {},
       },
     });
@@ -973,6 +978,7 @@ describe('test followUpState', () => {
 describe('test app listener', () => {
   test('test onRequest', async (done) => {
     app.setHandler({
+      // tslint:disable-next-line
       LAUNCH() {},
     });
     app.onRequest((handleRequest: HandleRequest) => {

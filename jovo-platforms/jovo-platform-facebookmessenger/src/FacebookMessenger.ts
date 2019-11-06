@@ -347,6 +347,7 @@ export class FacebookMessenger extends Extensible implements Platform {
         const promises: Array<Promise<any>> = [];
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
+          // tslint:disable-next-line
           hostCopy.setResponse = async function(obj: any) {
             return;
           };
