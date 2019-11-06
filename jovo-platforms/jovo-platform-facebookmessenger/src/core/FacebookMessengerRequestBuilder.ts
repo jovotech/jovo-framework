@@ -1,6 +1,6 @@
 import { RequestBuilder } from 'jovo-core';
-import { MessengerBotRequest } from './MessengerBotRequest';
 import * as path from 'path';
+import { MessengerBotRequest } from './MessengerBotRequest';
 
 const samples: Record<string, string> = {
   IntentRequest: 'IntentRequest.json',

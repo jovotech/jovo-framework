@@ -13,6 +13,9 @@ import {
   ResponseBuilder,
   TestSuite,
 } from 'jovo-core';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import {
   AirlineTemplate,
   AirlineTemplateOptions,
@@ -45,9 +48,6 @@ import {
   TextMessage,
   TextMessageOptions,
 } from '.';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 
 export interface UpdateConfig<T> {
   updateOnSetup?: boolean;
@@ -347,6 +347,7 @@ export class FacebookMessenger extends Extensible implements Platform {
         const promises: Array<Promise<any>> = [];
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
+          // tslint:disable-next-line
           hostCopy.setResponse = async function(obj: any) {
             return;
           };

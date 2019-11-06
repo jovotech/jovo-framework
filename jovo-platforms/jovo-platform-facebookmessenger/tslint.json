@@ -24,6 +24,7 @@
             "options": [
                 "allow-snake-case"
             ]
-        }
+        },
+        "object-literal-sort-keys": false
     }
 }

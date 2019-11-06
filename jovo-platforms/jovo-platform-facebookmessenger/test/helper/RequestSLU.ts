@@ -11,8 +11,6 @@ export class RequestSLU implements Plugin {
     messenger.middleware('$inputs')!.use(this.inputs.bind(this));
   }
 
-  uninstall(messenger: FacebookMessenger) {}
-
   async nlu(messengerBot: MessengerBot) {
     const request = messengerBot.$request!;
 
@@ -33,7 +31,6 @@ export class RequestSLU implements Plugin {
   }
 
   async inputs(messengerBot: MessengerBot) {
-
     const request = messengerBot.$request as MessengerBotRequest;
     if (!messengerBot.$nlu && messengerBot.$type.type === EnumRequestType.INTENT) {
       throw new JovoError('No nlu data to get inputs off was given.');

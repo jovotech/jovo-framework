@@ -64,7 +64,6 @@ export class AttachmentMessage extends Message {
       form.append('filedata', this.options.data);
 
       form.submit(this.getUrl(pageAccessToken), (err, res) => {
-        console.log(err, res);
         if (err) {
           return reject(err);
         }
