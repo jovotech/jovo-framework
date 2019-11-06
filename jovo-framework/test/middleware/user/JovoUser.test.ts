@@ -11,7 +11,7 @@ import {
 	SessionConstants
 } from 'jovo-core';
 import _set = require('lodash.set');
-import { JovoUser } from '../../../src/middleware/user/JovoUser';
+import { JovoUser } from '../../../src';
 
 describe('test install()', () => {
 	let jovoUser: JovoUser;

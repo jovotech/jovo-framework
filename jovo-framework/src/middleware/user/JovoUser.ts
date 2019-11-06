@@ -623,7 +623,7 @@ export class JovoUser implements Plugin {
 		let sessionsCount = handleRequest.jovo!.$user.$metaData.sessionsCount || 0;
 
 		// TODO: temporary fix. will be removed in 2.3
-		if (handleRequest.jovo!.getType() === 'AlexaSkill') {
+		if (handleRequest.jovo!.constructor.name === 'AlexaSkill') {
 			if (_get(handleRequest.jovo!.$request, 'session.new', false)) {
 				sessionsCount += 1;
 			}
