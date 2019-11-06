@@ -26,5 +26,5 @@ $ jovo convert i18nToCsv|csvToI18n --from <originPath> [--to <targetPath>]
 
 The respective output files will be created either in your directory of choice, which you can optionally set with `--to <targetPath>` or in your root project folder, either in a `i18n/` folder or as a `responses.csv` file.
 
-<!--[metadata]: {"description": "Learn more about how to translate your Jovo Language Model into an Alexa Skill Interaction Model or a Dialogflow Agent with the jovo build CLI command.",
-                "route": "cli/build"}-->
+<!--[metadata]: {"description": "Learn more about how to convert your i18n model to csv and vice versa to quickly either import your spreadsheet data to an i18n model or import your i18n model to a cms of your choice with the `jovo convert` CLI command.",
+                "route": "cli/convert"}-->
