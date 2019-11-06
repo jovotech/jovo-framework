@@ -22,7 +22,7 @@ import {
   AirlineTemplatePayload,
   AttachmentMessage,
   AttachmentMessageOptions,
-  BASE_URL,
+  BASE_PATH,
   ButtonTemplate,
   ButtonTemplateOptions,
   ButtonTemplatePayload,
@@ -32,6 +32,7 @@ import {
   GenericTemplate,
   GenericTemplateOptions,
   GenericTemplatePayload,
+  HOST,
   HTTPS,
   MediaTemplate,
   MediaTemplateOptions,
@@ -115,7 +116,7 @@ export class FacebookMessenger extends Extensible implements Platform {
   install(app: BaseApp): void {
     // TODO additional handling if user.sessionData was explicitly set to false
     if (!_get(app.config, `user.sessionData`)) {
-      _set(app.$plugins.get('JovoUser')!.config!,'sessionData.enabled', true);
+      _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.enabled', true);
     }
 
     app.$platform.set(this.constructor.name, this);
@@ -137,8 +138,10 @@ export class FacebookMessenger extends Extensible implements Platform {
   }
 
   async setup(handleRequest: HandleRequest) {
-    const url = `${BASE_URL}/messenger_profile?access_token=${this.config.pageAccessToken}`;
+    const path = `${BASE_PATH}/messenger_profile?access_token=${this.config.pageAccessToken}`;
     const options = {
+      hostname: HOST,
+      path,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -177,7 +180,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     const json = JSON.stringify(data);
 
     try {
-      await HTTPS.makeRequest(url, options, Buffer.from(json));
+      await HTTPS.makeRequest(options, Buffer.from(json));
     } catch (e) {
       throw new JovoError(e, ErrorCode.ERR_PLUGIN, 'FacebookMessenger');
     }

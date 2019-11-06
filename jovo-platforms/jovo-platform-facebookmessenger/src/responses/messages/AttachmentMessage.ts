@@ -1,5 +1,5 @@
 import * as FormData from 'form-data';
-import { AttachmentType, HTTPS, IdentityData, Message, QuickReply } from '../..';
+import { AttachmentType, HOST, HTTPS, IdentityData, Message, QuickReply } from '../..';
 
 export interface AttachmentMessageOptions {
   type: AttachmentType;
@@ -45,7 +45,7 @@ export class AttachmentMessage extends Message {
 
     const buffer = Buffer.from(JSON.stringify(data));
 
-    return HTTPS.makeRequest(this.getUrl(pageAccessToken), this.getOptions(), buffer);
+    return HTTPS.makeRequest(this.getOptions(pageAccessToken), buffer);
   }
 
   private sendFile(pageAccessToken: string) {
@@ -63,7 +63,8 @@ export class AttachmentMessage extends Message {
       form.append('message', JSON.stringify(message));
       form.append('filedata', this.options.data);
 
-      form.submit(this.getUrl(pageAccessToken), (err, res) => {
+      const url = `https://${HOST}${this.getPath(pageAccessToken)}`;
+      form.submit(url, (err, res) => {
         if (err) {
           return reject(err);
         }

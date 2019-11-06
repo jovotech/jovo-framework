@@ -11,7 +11,8 @@ import { ReceiptTemplateOptions } from './responses/templates/ReceiptTemplate';
 
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
-export const BASE_URL = `https://graph.facebook.com/v4.0/me`;
+export const HOST = 'graph.facebook.com';
+export const BASE_PATH = '/v5.0/me';
 
 declare module 'jovo-core/dist/src/Jovo' {
   export interface Jovo {

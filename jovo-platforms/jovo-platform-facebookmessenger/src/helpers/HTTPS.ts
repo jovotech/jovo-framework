@@ -3,12 +3,11 @@ import * as https from 'https';
 
 export class HTTPS {
   static makeRequest<T = {}>(
-    url: string,
     options: https.RequestOptions = {},
     data?: Buffer,
   ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const req: ClientRequest = https.request(url, options, (res: IncomingMessage) => {
+      const req: ClientRequest = https.request(options, (res: IncomingMessage) => {
         let collectedData = '';
 
         res.on('data', (chunk) => {
