@@ -9,6 +9,8 @@ export class MessengerBot extends Jovo {
   constructor(app: BaseApp, host: Host, handleRequest: HandleRequest) {
     super(app, host, handleRequest);
     this.$messengerBot = this;
+    this.$speech = new MessengerBotSpeechBuilder(this);
+    this.$reprompt = new MessengerBotSpeechBuilder(this);
     this.$user = new MessengerBotUser(this);
   }
 
