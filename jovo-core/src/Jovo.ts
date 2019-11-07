@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import _get = require('lodash.get');
 import _sample = require('lodash.sample');
 import _set = require('lodash.set');
-import { BaseApp } from './BaseApp';
+import { BaseApp, BaseAppConfig } from './BaseApp';
 import { Cms } from './Cms';
 import { EnumRequestType, SessionConstants } from './enums';
 import { ErrorCode, JovoError } from './errors/JovoError';
@@ -32,6 +32,7 @@ export abstract class Jovo extends EventEmitter {
 	readonly $host: Host;
 	readonly $app: BaseApp;
 	readonly $data: JovoData;
+	readonly $config: BaseAppConfig;
 	$type: RequestType;
 	$handleRequest?: HandleRequest;
 	$jovo: Jovo;
@@ -60,13 +61,14 @@ export abstract class Jovo extends EventEmitter {
 		this.$host = host;
 		this.$app = app;
 		this.$data = {};
+		this.$config = JSON.parse(JSON.stringify(app.config));
 		this.$session = {
 			$data: {}
 		};
-        this.$type = {
-            optional: true,
-            type: EnumRequestType.UNKNOWN_REQUEST,
-        };
+		this.$type = {
+			optional: true,
+			type: EnumRequestType.UNKNOWN_REQUEST
+		};
 		this.$inputs = {};
 		this.$output = {};
 		this.$request = undefined;
