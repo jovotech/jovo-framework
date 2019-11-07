@@ -93,7 +93,17 @@ export class GoogleAnalytics implements Analytics {
                     eventLabel: key,                    // Input key
                     documentPath: jovo.getRoute().path
                 };
-                this.visitor!.event(params).send();
+                this.visitor!
+                    .event(params, (err: any) => {
+                        if (err) {
+                            throw new JovoError(
+                                err.message,
+                                ErrorCode.ERR_PLUGIN,
+                                'jovo-analytics-googleanalytics'
+                            );
+                        }
+                    })
+                    .send();
             }
         }
     }
@@ -146,9 +156,7 @@ export class GoogleAnalytics implements Analytics {
                     throw new JovoError(
                         'Error while trying to track data.',
                         ErrorCode.ERR_PLUGIN,
-                        'jovo-analytics-googleanalytics',
-                        '',
-                        ''
+                        'jovo-analytics-googleanalytics'
                     );
                 }
             })
@@ -234,7 +242,17 @@ export class GoogleAnalytics implements Analytics {
             documentPath: jovo.getRoute().path
         };
 
-        this.visitor!.event(params).send();
+        this.visitor!
+            .event(params, (err: any) => {
+                if (err) {
+                    throw new JovoError(
+                        err.message,
+                        ErrorCode.ERR_PLUGIN,
+                        'jovo-analytics-googleanalytics'
+                    );
+                }
+            })
+            .send();
     }
 
     /**
@@ -260,18 +278,48 @@ export class GoogleAnalytics implements Analytics {
         jovo.$googleAnalytics = {
             $data: {},
             sendEvent: (params: Event) => {
-                this.visitor!.event(params).send();
+                // TODO: interface implementation check?
+                // if (!('eventCategory' in params))
+                this.visitor!
+                    .event(params, (err: any) => {
+                        if (err) {
+                            throw new JovoError(
+                                err.message,
+                                ErrorCode.ERR_PLUGIN,
+                                'jovo-analytics-googleanalytics'
+                            );
+                        }
+                    })
+                    .send();
             },
+            // TODO: TEST
             sendTransaction: (params: Transaction) => {
-                this.visitor!.transaction(params).send();
+                this.visitor!
+                    .transaction(params, (err: any) => {
+                        if (err) {
+                            throw new JovoError(
+                                err.message,
+                                ErrorCode.ERR_PLUGIN,
+                                'jovo-analytics-googleanalytics'
+                            );
+                        }
+                    })
+                    .send();
             },
             sendItem: (params: Item) => {
-                this.visitor!.transaction(params).send();
+                this.visitor!
+                    .transaction(params, (err: any) => {
+                        if (err) {
+                            throw new JovoError(
+                                err.message,
+                                ErrorCode.ERR_PLUGIN,
+                                'jovo-analytics-googleanalytics'
+                            );
+                        }
+                    })
+                    .send();
             },
             sendUserEvent: this.sendUserEvent.bind(this),
-            sendUserTransaction: (transactionId: string) => {
-                this.visitor!.transaction({ ti: transactionId, tr: 1 });
-            },
             setCustomMetric(index: number, value: string) {
                 this.$data[`cm${index}`] = value;
             }
