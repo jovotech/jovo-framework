@@ -16,7 +16,8 @@ export interface ExtensibleConfig extends PluginConfig {
 /**
  * Allows a class to use plugins
  */
-export abstract class Extensible extends EventEmitter.EventEmitter implements Plugin {
+export abstract class Extensible extends EventEmitter.EventEmitter
+	implements Plugin {
 	config: ExtensibleConfig = {
 		enabled: true,
 		plugin: {}
@@ -53,12 +54,12 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 				]();
 				const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
 
-                if (typeof pluginDefaultConfig.enabled === 'undefined') {
-                    pluginDefaultConfig.enabled = true;
-                }
+				if (typeof pluginDefaultConfig.enabled === 'undefined') {
+					pluginDefaultConfig.enabled = true;
+				}
 
 				if (typeof plugin.config.enabled === 'undefined') {
-                    plugin.config.enabled = true;
+					plugin.config.enabled = true;
 				}
 
 				const appConfig = _cloneDeep(this.config);
@@ -69,11 +70,10 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 				);
 
 				for (const prop in plugin.config) {
-
 					if (prop in pluginDefaultConfig) {
 						let val;
 						const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
-                        if (typeof constructorConfig[prop] !== 'undefined') {
+						if (typeof constructorConfig[prop] !== 'undefined') {
 							val = plugin.config[prop];
 						} else if (typeof appConfigVal !== 'undefined') {
 							val = appConfigVal;
@@ -81,15 +81,12 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 							val = pluginDefaultConfig[prop];
 						}
 						if (typeof val === 'object') {
-                        	if(!plugin.config[prop]) { // tslint:disable-line
-                                plugin.config[prop] = val;
-                            } else {
-                                plugin.config[prop] = Object.assign(plugin.config[prop], val); // tslint:disable-line:prefer-object-spread
-                            }
-
-                        } else {
-                            plugin.config[prop] = val;
-                        }
+							plugin.config[prop] = !plugin.config[prop]
+								? val
+								: { ...plugin.config[prop], ...val };
+						} else {
+							plugin.config[prop] = val;
+						}
 					} else {
 						Log.verbose(
 							`[${name}] Property '${prop}' passed as config-option for plugin '${name}' but not defined in the default-config. Only properties that exist in the default-configuration can be set!`
@@ -97,7 +94,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 					}
 				}
 
-				if (this.config.plugin && this.config.plugin[name]) {
+				if (this.config.plugin && plugin.config) {
 					this.config.plugin[name] = plugin.config;
 				}
 			}
