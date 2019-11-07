@@ -210,6 +210,30 @@ export class Handler implements Plugin {
         }
     }
 
+    /**
+     * Checks if the given state contains the name of a initialized component.
+     * @param {Jovo} jovo
+     * @param {string | undefined} state
+     * @return {void}
+     * @throws {JovoError}
+     */
+    static checkStateForInitializedComponentName(jovo: Jovo, state: string | undefined): void {
+        if (state && jovo.$components) {
+            const components: string[] = Object.keys(jovo.$components);
+            const matched: string[] = state.split('.').filter(s => components.includes(s));
+
+            if (matched.length > 0) {
+                throw new JovoError(
+                    `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
+                    ErrorCode.ERR,
+                    'jovo-framework',
+                    'The used state contains at least one component name.',
+                    'Use this.delegate() or rename the listed states to prevent interference.'
+                );
+            }
+        }
+    };
+
 
     install(app: BaseApp) {
         app.middleware('before.router')!.use((handleRequest: HandleRequest) => {
@@ -298,7 +322,6 @@ export class Handler implements Plugin {
         };
 
         Jovo.prototype.triggeredToIntent = false;
-        Jovo.prototype.triggerStateValidation = true;
 
         /**
          * Jumps to an intent in the order state > global > unhandled > error
@@ -331,17 +354,19 @@ export class Handler implements Plugin {
          * @public
          * @param {string} state name of state
          * @param {string} intent name of intent
+         * @param {boolean} [validate=true] state validation toggle
          */
         Jovo.prototype.toStateIntent = async function (
             state: string | undefined,
             intent: string,
+            validate: boolean = true,
         ): Promise<any> {
             // tslint:disable-line
             this.triggeredToIntent = true;
 
             // Check for Component State Validation
-            if(this.triggerStateValidation === true) {
-                this.checkStateForInitializedComponentName(state);
+            if(validate === true) {
+                Handler.checkStateForInitializedComponentName(this, state);
 
                 const componentState = this.getActiveComponentsRootState();
                 if (componentState && state) {
@@ -370,7 +395,6 @@ export class Handler implements Plugin {
             this.$plugins.Router.route = route;
             Log.verbose(` toStateIntent: ${state}.${intent}`);
 
-            this.triggerStateValidation = true;
             return Handler.applyHandle(this, route, true);
         };
 
@@ -408,29 +432,7 @@ export class Handler implements Plugin {
 
             const state = this.getActiveComponentsRootState() ? `${this.getActiveComponentsRootState()}.${componentName}` : componentName;
 
-            this.triggerStateValidation = false;
-            return this.toStateIntent(state, 'START');
-        };
-
-        /**
-         * Checks if the given state contains the name of a initialized component.
-         * @throws {JovoError}
-         */
-        Jovo.prototype.checkStateForInitializedComponentName = function (state: string | undefined): void {
-            if (state && this.$components) {
-                const components: string[] = Object.keys(this.$components);
-                const matched: string[] = state.split('.').filter(s => components.includes(s));
-
-                if (matched.length > 0) {
-                    throw new JovoError(
-                        `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
-                        ErrorCode.ERR,
-                        'jovo-framework',
-                        'The used state contains at least one component name.',
-                        'Use this.delegate() or rename the listed states to prevent interference.'
-                    );
-                }
-            }
+            return this.toStateIntent(state, 'START', false);
         };
 
         /**
@@ -498,8 +500,7 @@ export class Handler implements Plugin {
              */
             this.$components[componentName].$response = response;
 
-            this.triggerStateValidation = false;
-            return this.toStateIntent(stateBeforeDelegate, onCompletedIntent);
+            return this.toStateIntent(stateBeforeDelegate, onCompletedIntent, false);
         }
 
         /**
@@ -516,8 +517,7 @@ export class Handler implements Plugin {
                 Log.verbose(` Removing state from component. ${activeComponent ? `(${activeComponent.name})` : ''}`);
                 Log.verbose(` toStatelessIntent: ${intent}`);
                 
-                this.triggerStateValidation = false;
-                return this.toStateIntent(componentState, intent);
+                return this.toStateIntent(componentState, intent, false);
             }
             
             this.triggeredToIntent = true;
@@ -533,7 +533,7 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
-            this.checkStateForInitializedComponentName(state);
+            Handler.checkStateForInitializedComponentName(this, state);
 
             const componentState = this.getActiveComponentsRootState();
             if (componentState) {
