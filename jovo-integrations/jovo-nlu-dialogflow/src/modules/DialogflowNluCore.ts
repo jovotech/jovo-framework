@@ -1,45 +1,36 @@
+import { EnumRequestType, Inputs, Jovo, JovoError, Plugin } from 'jovo-core';
+import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from '../Interfaces';
 import { RequestOptions } from 'https';
-import {
-  EnumRequestType,
-  Extensible,
-  Inputs,
-  Jovo,
-  JovoError,
-  Plugin,
-  PluginConfig,
-} from 'jovo-core';
-import _merge = require('lodash.merge');
-import { HttpService } from './HttpService';
-import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
-
-export interface Config extends PluginConfig {
-  defaultIntent?: string;
-  defaultLocale?: string;
-  minConfidence?: number;
-  projectId?: string;
-  authToken?: string;
-}
+import { HttpService } from '../HttpService';
+import { Config, DialogflowNlu } from '..';
 
 const HOST = 'dialogflow.googleapis.com';
 
-export class DialogflowNLU implements Plugin {
+export class DialogflowNluCore implements Plugin {
   config: Config = {
-    defaultIntent: 'DefaultFallbackIntent',
-    defaultLocale: 'en-US',
+    enabled: true,
+    defaultLocale: '',
     minConfidence: 0,
-    projectId: process.env.DIALOGFLOW_PROJECT_ID || '',
-    authToken: process.env.DIALOGFLOW_AUTH_TOKEN || '',
+    defaultIntent: 'DefaultFallbackIntent',
+    authToken: '',
+    apiKey: '',
+    projectId: '',
   };
 
-  constructor(config?: Config) {
-    if (config) {
-      this.config = _merge(this.config, config);
-    }
-  }
+  install(parent: DialogflowNlu): void {
+    this.config = { ...parent.config };
 
-  install(parent: Extensible) {
+    parent.middleware('$init')!.use(this.init.bind(this));
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
+  }
+
+  async init(jovo: Jovo) {
+    jovo.$data.DialogflowNlu = {
+      apiKey: this.config.apiKey,
+      authToken: this.config.authToken,
+      projectId: this.config.projectId,
+    };
   }
 
   async nlu(jovo: Jovo) {
@@ -51,7 +42,7 @@ export class DialogflowNLU implements Plugin {
       const session = `${new Date().getTime()}-${jovo.$user.getId()}`;
       const languageCode =
         (jovo.$request && jovo.$request.getLocale()) || this.config.defaultLocale!;
-      response = await this.naturalLanguageProcessing(session, {
+      response = await this.naturalLanguageProcessing(jovo, session, {
         text,
         languageCode,
       });
@@ -78,12 +69,7 @@ export class DialogflowNLU implements Plugin {
   }
 
   async inputs(jovo: Jovo) {
-    if ((!jovo.$nlu || !jovo.$nlu.Dialogflow) && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No nlu data to get inputs off was given.');
-    } else if (
-      jovo.$type.type === EnumRequestType.LAUNCH ||
-      jovo.$type.type === EnumRequestType.END
-    ) {
+    if (jovo.$type.type === EnumRequestType.LAUNCH || jovo.$type.type === EnumRequestType.END) {
       jovo.$inputs = {};
       return;
     }
@@ -111,26 +97,45 @@ export class DialogflowNLU implements Plugin {
   }
 
   private async naturalLanguageProcessing(
+    jovo: Jovo,
     session: string,
     textInput: DialogflowTextInput,
   ): Promise<DialogflowResponse> {
-    if (
-      !this.config.authToken ||
-      this.config.authToken.length === 0 ||
-      !this.config.projectId ||
-      this.config.projectId.length === 0
-    ) {
-      throw new JovoError('Invalid auth token or invalid project id.');
+    const { authToken, apiKey, projectId } = jovo.$data.DialogflowNlu;
+    const hasAuthToken = authToken && authToken.length > 0;
+    const hasApiKey = apiKey && apiKey.length > 0;
+    const hasProjectId = projectId && projectId.length > 0;
+    const hasAuth = hasAuthToken || hasApiKey;
+
+    if (!hasAuth || !hasProjectId) {
+      let reasons = '';
+      if (!hasProjectId) {
+        reasons += '\nNo valid project-id was given.';
+      }
+      if (!hasAuth) {
+        reasons += '\nNo authentication-data was given.';
+      }
+
+      throw new JovoError(`Can not access Dialogflow-API, because: ${reasons}`);
     }
-    const path = `/v2/projects/${this.config.projectId}/agent/sessions/${session}:detectIntent`;
+
+    let path = `/v2/projects/${projectId}/agent/sessions/${session}:detectIntent`;
+    const headers: Record<string, string> = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    if (hasApiKey && !hasAuthToken) {
+      path += `?key=${apiKey}`;
+    } else if (hasAuthToken) {
+      headers.Authorization = `Bearer ${authToken}`;
+    }
+
     const options: RequestOptions = {
       host: HOST,
       path,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.authToken}`,
-      },
+      headers,
     };
     const data: DialogflowRequest = {
       queryInput: {
@@ -147,7 +152,7 @@ export class DialogflowNLU implements Plugin {
       if (response.status === 200 && response.data && response.data.responseId) {
         return response.data;
       } else {
-        throw new Error(`Could not reach Dialogflow.`);
+        throw new Error(`Could not reach Dialogflow!`);
       }
     } catch (e) {
       throw new JovoError(e);
