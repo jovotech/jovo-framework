@@ -5,8 +5,6 @@ import * as murmurhash from 'murmurhash';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, Jovo, JovoError } from 'jovo-core';
 import { Config, Event, Item, Transaction } from './interfaces';
 
-// import { DeveloperTrackingMethods } from './DeveloperTrackingMethods';
-
 export class GoogleAnalytics implements Analytics {
     config: Config = {
         trackingId: ''
@@ -66,7 +64,6 @@ export class GoogleAnalytics implements Analytics {
         }
 
         // Track intent data.
-        // TODO: test mapped intents
         this.visitor!
             .pageview(this.getPageParameters(jovo), (err: any) => {
                 if (err) {
@@ -81,8 +78,7 @@ export class GoogleAnalytics implements Analytics {
             })
             .send();
 
-        // Detect and send Flow Errors
-        // TODO: test!
+        // Detect and send FlowErrors
         this.sendFlowErrors(jovo);
 
         if (jovo.$inputs) {
@@ -160,18 +156,29 @@ export class GoogleAnalytics implements Analytics {
             .send();
     }
 
+    /**
+     * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler. 
+     * TODO: send with exception function?
+     * @param {object} jovo: Jovo object
+     */
     sendFlowErrors(jovo: Jovo) {
-        //Detect and Send Flow Errors 
-        if (jovo.$request!.getIntentName() === "AMAZON.FallbackIntent" || jovo.$request!.getIntentName() === 'Default Fallback Intent') {
-            this.sendUserEvent(jovo, "FlowError", "nluUnhandled");
+        const intent = jovo.$request!.getIntentName();
+        const { path } = jovo.getRoute();
+
+        // Check if an error in the nlu model occurred.
+        if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
+            return this.sendUserEvent(jovo, 'FlowError', 'nluUnhandled');
         }
-        else if (jovo!.getRoute().path.endsWith("Unhandled")) {
-            this.sendUserEvent(jovo, "FlowError", "skillUnhandled");
+
+        // If the current path is unhandled, an error in the skill handler occurred.
+        if (path.endsWith('Unhandled')) {
+            return this.sendUserEvent(jovo, 'FlowError', 'skillUnhandled');
         }
     }
 
     /**
      * Construct pageview parameters, a.k.a intent tracking data.
+     * @param {object} jovo: Jovo object
      * @returns {object} pageParameters: Intent data to track
      */
     getPageParameters(jovo: Jovo) {
@@ -179,12 +186,13 @@ export class GoogleAnalytics implements Analytics {
         return {
             documentPath: path,
             documentHostName: type,
-            documentTitle: intent
+            documentTitle: intent || type
         };
     }
 
     /**
      * Generates hash for userId.
+     * @param {object} jovo: Jovo object
      * @returns {string} uuid: Hashed user id
      */
     getUserId(jovo: Jovo): string {
@@ -195,7 +203,8 @@ export class GoogleAnalytics implements Analytics {
 
     /**
      * Checks if the current session started or ended.
-     * @returns {string | void} sessionTag: Corresponding session tag
+     * @param {object} jovo: Jovo object
+     * @returns {string | void} sessionTag: Corresponding session tag (start|end|undefined)
      */
     getSessionTag(jovo: Jovo): string | void {
         if (
@@ -213,10 +222,11 @@ export class GoogleAnalytics implements Analytics {
 
     /**
      * User Events ties users to event category and action
-     * @param eventName maps to category -> eventGroup
-     * @param eventElement maps to action -> instance of eventGroup
+     * @param {object} jovo: Jovo object
+     * @param {string} eventName maps to category -> eventGroup
+     * @param {string} eventElement maps to action -> instance of eventGroup
      */
-    sendUserEvent(jovo: Jovo, eventCategory: string, eventElement = 'defaultItem') {
+    sendUserEvent(jovo: Jovo, eventCategory: string, eventElement: string) {
         const params: Event = {
             eventCategory,
             eventAction: eventElement,
