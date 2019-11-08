@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import _cloneDeep = require('lodash.clonedeep');
 import _get = require('lodash.get');
 import _sample = require('lodash.sample');
 import _set = require('lodash.set');
@@ -61,7 +62,7 @@ export abstract class Jovo extends EventEmitter {
 		this.$host = host;
 		this.$app = app;
 		this.$data = {};
-		this.$config = JSON.parse(JSON.stringify(app.config));
+		this.$config = _cloneDeep(app.config);
 		this.$session = {
 			$data: {}
 		};
