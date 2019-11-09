@@ -11,7 +11,9 @@ export enum EnumRequestType {
 
     AUDIOPLAYER = 'AUDIOPLAYER',
     ON_ELEMENT_SELECTED = 'ON_ELEMENT_SELECTED',
-    UNDEFINED = 'UNDEFINED'
+    UNDEFINED = 'UNDEFINED',
+    UNKNOWN_REQUEST = 'UNKNOWN_REQUEST'
+
 }
 
 export enum SessionConstants {

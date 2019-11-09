@@ -1,0 +1,30 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:latest",
+        "tslint-config-prettier"
+    ],
+    "linterOptions": {
+
+        "exclude": [
+            "node_modules/**/*"
+        ]
+    },
+    "rules": {
+        "interface-name": [true, "never-prefix"],
+        "member-access": [true, "no-public"],
+        "no-empty-interface": false,
+        "quotemark": [true, "single"],
+        "ban-types": [
+          false,
+          ["Function", ""]
+        ],
+        "prefer-object-spread": false,
+        "variable-name": {
+            "options": [
+                "allow-snake-case"
+            ]
+        },
+        "object-literal-sort-keys": false
+    }
+}

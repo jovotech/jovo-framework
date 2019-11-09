@@ -8,6 +8,7 @@ export class GoogleActionSpeechBuilder extends SpeechBuilder {
     constructor(googleAction: GoogleAction) {
         super(googleAction);
     }
+
     /**
      * Adds audio tag to speech
      * @public

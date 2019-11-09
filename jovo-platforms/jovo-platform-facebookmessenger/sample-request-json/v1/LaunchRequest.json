@@ -1,0 +1,19 @@
+{
+  "id": "113399660059468",
+  "time": 1570783318110,
+  "messaging": [
+    {
+      "sender": {
+        "id": "2321893584590078"
+      },
+      "recipient": {
+        "id": "113399660059468"
+      },
+      "timestamp": 1570783317538,
+      "postback": {
+        "title": "Get Started",
+        "payload": "LAUNCH_TEST"
+      }
+    }
+  ]
+}

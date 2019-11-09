@@ -46,6 +46,13 @@ After that have the enable the component using the the `useComponent(...componen
 const { GetPhoneNumber } = require("./components/jovo-component-get-phone-number");
 
 app.useComponents(new GetPhoneNumber());
+
+// @language=typescript
+// src/app.ts
+
+import { GetPhoneNumber } from "./components/jovo-component-get-phone-number";
+
+app.useComponents(new GetPhoneNumber());
 ```
 
 ## Configuration
@@ -64,6 +71,20 @@ module.exports = {
         }
     }
 };
+
+// @language=typescript
+// config.ts
+
+const config = {
+    // ...
+    components: {
+        GetPhoneNumber: {
+            numberOfFails: 2
+        }
+    }
+};
+
+export = config;
 ```
 
 The interface is the same as the component's default configuration, which should be documented in the component's README file.
@@ -103,14 +124,31 @@ Name | Description | Value | Required
 ```js
 // @language=javascript
 // src/app.js
-const delegationOptions = {
-    onCompletedIntent: 'HelloWorldIntent',
-    data: {
-        email: 'xyz@jovo.tech'
-    }
-};
 
-this.delegate('ScheduleMeeting', delegationOptions);
+HelloWorldIntent() {
+    const delegationOptions = {
+        onCompletedIntent: 'HelloWorldIntent',
+        data: {
+            email: 'xyz@jovo.tech'
+        }
+    };
+
+    this.delegate('ScheduleMeeting', delegationOptions);
+}
+
+// @language=typescript
+// src/app.ts
+
+HelloWorldIntent() {
+    const delegationOptions: ComponentDelegationOptions = {
+        onCompletedIntent: 'HelloWorldIntent',
+        data: {
+            email: 'xyz@jovo.tech'
+        }
+    };
+
+    this.delegate('ScheduleMeeting', delegationOptions);
+}
 ```
 
 At that point the component will go through the necessary steps to fulfill the task and route back to your specified intent with a response.
@@ -124,6 +162,15 @@ In the following example, we pass the user's email in the delegation options of 
 ```js
 // @language=javascript
 const delegationOptions = {
+    data: {
+        email: 'xyz@jovo.tech'
+    }
+};
+
+this.delegate('ScheduleMeeting', delegationOptions);
+
+// @language=typescript
+const delegationOptions: ComponentDelegationOptions = {
     data: {
         email: 'xyz@jovo.tech'
     }
@@ -151,13 +198,36 @@ const response = {
     data: {
         phoneNumber: '0123456789'
     },
-}
+};
+
+// @language=typescript
+const response: ComponentResponse = {
+    status: 'SUCCESSFUL',
+    data: {
+        phoneNumber: '0123456789'
+    },
+};
 ```
 
 In your `onCompletedIntent` you have to be prepared to handle all three possible statuses of a response:
 
 ```js
 // @language=javascript
+CompletedIntent() {
+    const response = this.$components.GetPhoneNumber.$response;
+
+    if (response.status === 'REJECTED') {
+        // handle REJECTED
+    }
+    else if (response.status === 'ERROR') {
+        // handle ERROR
+    }
+    else {
+        // handle SUCCESSFUL
+    }
+}
+
+// @language=typescript
 CompletedIntent() {
     const response = this.$components.GetPhoneNumber.$response;
 

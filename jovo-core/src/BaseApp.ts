@@ -1,7 +1,8 @@
 import { ActionSet } from './ActionSet';
 import { JovoError } from './errors/JovoError';
 import { Extensible, ExtensibleConfig } from './Extensible';
-import { AppData, Db, HandleRequest, Host, Platform } from './Interfaces';
+import { HandleRequest } from './HandleRequest';
+import { AppData, Db, Host, Platform } from './Interfaces';
 import { Log, LogLevel } from './Log';
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,14 +17,14 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 process.on('uncaughtException', err => {
-
-    if ((err as JovoError).code && (err as JovoError).code === 'EADDRINUSE') {
-    	const usedPort = err.message.replace( /^\D+/g, '');
-        err.message = `The port ${usedPort} is already in use.`;
-		(err as JovoError).hint = 'You might already run Jovo in a different tab. ' +
+	if ((err as JovoError).code && (err as JovoError).code === 'EADDRINUSE') {
+		const usedPort = err.message.replace(/^\D+/g, '');
+		err.message = `The port ${usedPort} is already in use.`;
+		(err as JovoError).hint =
+			'You might already run Jovo in a different tab. ' +
 			'If the port is used by a different application, you can either change the port number in src/index.js, or specify the port as an option,' +
 			' e.g. jovo run --port 3301';
-    }
+	}
 
 	JovoError.printError(err as JovoError);
 });
@@ -32,12 +33,14 @@ export type BaseAppMiddleware =
 	| 'setup'
 	| 'request'
 	| 'platform.init'
+	| 'asr'
 	| 'platform.nlu'
 	| 'nlu'
 	| 'user.load'
 	| 'router'
 	| 'handler'
 	| 'user.save'
+	| 'tts'
 	| 'platform.output'
 	| 'response'
 	| 'fail'
@@ -64,12 +67,14 @@ export class BaseApp extends Extensible {
 		'setup',
 		'request',
 		'platform.init',
+		'asr',
 		'platform.nlu',
 		'nlu',
 		'user.load',
 		'router',
 		'handler',
 		'user.save',
+		'tts',
 		'platform.output',
 		'response',
 		'fail'
@@ -189,11 +194,7 @@ export class BaseApp extends Extensible {
 	 * @returns {Promise<void>}
 	 */
 	async handle(host: Host) {
-		const handleRequest: HandleRequest = {
-			app: this,
-			host,
-			jovo: undefined
-		};
+		const handleRequest: HandleRequest = new HandleRequest(this, host);
 		try {
 			Log.setRequestContext(host);
 			Log.verbose(Log.header('Start request', 'framework'));
@@ -211,7 +212,11 @@ export class BaseApp extends Extensible {
 
 			// Determines which platform (e.g. Alexa, GoogleAssistant) sent the request. Initialization of abstracted jovo (this) object.
 			await this.middleware('platform.init')!.run(handleRequest);
-			if (!handleRequest.jovo) {
+
+			const shouldBeInitialized =
+				!handleRequest.excludedMiddlewareNames ||
+				!handleRequest.excludedMiddlewareNames.includes('platform.init');
+			if (!handleRequest.jovo && shouldBeInitialized) {
 				throw new JovoError(
 					`Can't handle request object.`,
 					'ERR_NO_MATCHING_PLATFORM',
@@ -219,25 +224,29 @@ export class BaseApp extends Extensible {
 					undefined,
 					'Please add an integration that handles that type of request.'
 				);
-			}
-			Log.verbose(Log.header('After init ', 'framework'));
+			} else if (handleRequest.jovo) {
+				Log.verbose(Log.header('After init ', 'framework'));
 
-			Log.yellow().verbose(
-				`this.\$${handleRequest.jovo.constructor.name
-					.substr(0, 1)
-					.toLowerCase()}${handleRequest.jovo.constructor.name.substr(
-					1
-				)} initialized`
-			);
-			Log.yellow().verbose(
-				`this.$type: ${JSON.stringify(handleRequest.jovo.$type)}`
-			);
-			Log.yellow().verbose(
-				`this.$session.$data : ${JSON.stringify(
-					handleRequest.jovo.$session.$data
-				)}`
-			);
-			Log.verbose();
+				Log.yellow().verbose(
+					`this.\$${handleRequest.jovo.constructor.name
+						.substr(0, 1)
+						.toLowerCase()}${handleRequest.jovo.constructor.name.substr(
+						1
+					)} initialized`
+				);
+				Log.yellow().verbose(
+					`this.$type: ${JSON.stringify(handleRequest.jovo.$type)}`
+				);
+				Log.yellow().verbose(
+					`this.$session.$data : ${JSON.stringify(
+						handleRequest.jovo.$session.$data
+					)}`
+				);
+				Log.verbose();
+			}
+
+			// Automatic speech recognition (ASR) information gets extracted.
+			await this.middleware('asr')!.run(handleRequest);
 
 			// 	Natural language understanding (NLU) information gets extracted for built-in NLUs (e.g. Alexa). Intents and inputs are set.
 			await this.middleware('platform.nlu')!.run(handleRequest);
@@ -245,13 +254,15 @@ export class BaseApp extends Extensible {
 			// Request gets routed through external NLU (e.g. Dialogflow standalone). Intents and inputs are set.
 			await this.middleware('nlu')!.run(handleRequest);
 
-			Log.verbose(Log.header('After nlu ', 'framework'));
-			Log.yellow().verbose(
-				`this.$nlu : ${JSON.stringify(handleRequest.jovo.$nlu)}`
-			);
-			Log.yellow().verbose(
-				`this.$inputs : ${JSON.stringify(handleRequest.jovo.$inputs)}`
-			);
+			if (handleRequest.jovo) {
+				Log.verbose(Log.header('After nlu ', 'framework'));
+				Log.yellow().verbose(
+					`this.$nlu : ${JSON.stringify(handleRequest.jovo.$nlu)}`
+				);
+				Log.yellow().verbose(
+					`this.$inputs : ${JSON.stringify(handleRequest.jovo.$inputs)}`
+				);
+			}
 
 			// Initialization of user object. User data is retrieved from database.
 			await this.middleware('user.load')!.run(handleRequest);
@@ -265,12 +276,16 @@ export class BaseApp extends Extensible {
 			// User gets finalized, DB operations.
 			await this.middleware('user.save')!.run(handleRequest);
 
-			Log.white().verbose(
-				Log.header(`Output object: this.$output`, 'framework')
-			);
-			Log.yellow().verbose(
-				JSON.stringify(handleRequest.jovo.$output, null, '\t')
-			);
+			if (handleRequest.jovo) {
+				Log.white().verbose(
+					Log.header(`Output object: this.$output`, 'framework')
+				);
+				Log.yellow().verbose(
+					JSON.stringify(handleRequest.jovo.$output, null, '\t')
+				);
+			}
+
+			await this.middleware('tts')!.run(handleRequest);
 
 			// Platform response JSON gets created from output object.
 			await this.middleware('platform.output')!.run(handleRequest);

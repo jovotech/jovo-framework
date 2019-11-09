@@ -1,13 +1,13 @@
 {
   "name": "jovo-framework",
-  "version": "2.2.19",
+  "version": "2.2.20",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
-    "tscw": "tscw --watch",
+    "tscw": "tsc --watch",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs ./ --mode file",
     "test": "jest --runInBand"
@@ -18,9 +18,9 @@
     "@azure/functions": "^1.0.1-beta2",
     "body-parser": "^1.19.0",
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.2.15",
-    "jovo-core": "^2.2.14",
-    "jovo-db-filedb": "^2.2.14",
+    "jovo-cms-i18next": "^2.2.16",
+    "jovo-core": "^2.2.15",
+    "jovo-db-filedb": "^2.2.15",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",

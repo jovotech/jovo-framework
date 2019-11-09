@@ -9,7 +9,7 @@ Learn how to import an existing Alexa Skill or Google Action into Jovo with the 
 
 ## Introduction
 
-![jovo get command](../img/jovo-get.png "jovo get command")
+![jovo get command](../../img/jovo-get.png "jovo get command")
 
 `jovo get` will import an existing Alexa Skill (Skill Information and Interaction Model) or Dialogflow agent (work in progress) into the `/platforms` folder. 
 

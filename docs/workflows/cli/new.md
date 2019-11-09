@@ -7,7 +7,7 @@ Learn how to create a new Jovo Project with the `jovo new` command of the Jovo C
 
 ## Introduction
 
-![jovo new command](../img/jovo-new.png "jovo new command")
+![jovo new command](../../img/jovo-new.png "jovo new command")
 
 You can create a Jovo project into a new directory with the following command:
 

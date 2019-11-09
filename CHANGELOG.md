@@ -1,7 +1,32 @@
 # Jovo Framework Changelog
 
+## 2.2.20 (2019-11-06)
 
-## 2.2.19 (2019-09-18)
+#### :rocket: New Feature
+
+* `jovo-platform-facebookmessenger` [#611](https://github.com/jovotech/jovo-framework/pull/611) Added Facebook Messenger platform (Alpha)  ([@Veake](https://github.com/Veake))
+* `jovo-framework` [#610](https://github.com/jovotech/jovo-framework/pull/610) Session-data can be saved in the database  ([@Veake](https://github.com/Veake))
+* `jovo-platform-alexa` [#606](https://github.com/jovotech/jovo-framework/pull/606) Add hasAPLTInterface for character displays devices  ([@kouz75](https://github.com/kouz75))
+* `jovo-nlu-dialogflow` [#613](https://github.com/jovotech/jovo-framework/pull/613) Implemented Dialogflow NLU plugin (Alpha)  ([@Veake](https://github.com/Veake))
+* `jovo-platform-googleassistant` Added `getProjectId()` to GoogleAction class
+* `jovo-framework` Added UNKNOWN_REQUEST handler for requests that don't have a specific request type
+
+#### :bug: Bug Fix
+* `jovo-platform-alexa`  [#607](https://github.com/jovotech/jovo-framework/pull/607) Fixed removing shouldEndSession in showVideo call ([@BronxBombers](https://github.com/BronxBombers))
+* `jovo-platform-dialogflow` Fix requests from Dialogflow console 
+* `jovo-platform-alexa`  Fixed session counter in JovoUser
+
+
+#### Committers: 4
+- Max Ripper ([@Veake](https://github.com/Veake))
+- BronxBombers ([@BronxBombers](https://github.com/BronxBombers))
+- scouzinier ([@kouz75](https://github.com/kouz75))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+
+## 2.2.19 (2019-10-18)
 
 #### :rocket: New Feature
 

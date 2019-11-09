@@ -335,4 +335,13 @@ export class GoogleAction extends Jovo {
     isPlaceRequest(): boolean {
         return this.$type.type === EnumGoogleAssistantRequestType.ON_PLACE;
     }
+
+    /**
+     * Returns the project id that is associated with this Google Action
+     */
+    getProjectId(): string | undefined {
+        let sessionId = _get(this.$request, 'session') as string;
+        sessionId = sessionId.substring(9, sessionId.indexOf('/agent/sessions'));
+        return sessionId;
+    }
 }

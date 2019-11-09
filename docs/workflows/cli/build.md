@@ -9,7 +9,7 @@ Learn more about how to translate your Jovo Language Model into an Alexa Skill I
 
 ## Introduction
 
-![jovo build command](../img/jovo-build.png "jovo build command")
+![jovo build command](../../img/jovo-build.png "jovo build command")
 
 `jovo build` is the command to create and update the platform specific interaction models using the Jovo model. Using the files in the `/models` folder and converting them into files in the `/platforms` folder.
 
@@ -38,7 +38,7 @@ $ jovo build [-p | --platform <platform>] [-r | --reverse] [-l | --locale <local
 
 ### Reverse Build
 
-![jovo build reverse converter](../img/jovo-build-reverse.png "jovo build reverse command")
+![jovo build reverse converter](../../img/jovo-build-reverse.png "jovo build reverse command")
 
 In this reverse process, you can create a [Jovo Language Model](../../basic-concepts/model '../model') from an existing `/platforms` folder, e.g. after you fetched the files with [`jovo get`](./get.md './get').
 

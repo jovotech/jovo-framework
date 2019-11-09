@@ -10,7 +10,7 @@ Learn how to use the `jovo run` command of the Jovo CLI to test your code locall
 
 ## Introduction
 
-![jovo run command](../img/jovo-run.png "jovo run command")
+![jovo run command](../../img/jovo-run.png "jovo run command")
 
 You can use the `jovo run` command to start the development server in your `index.js` file (default is port `3000`), and then point the Jovo Webhook to it.
 
@@ -80,7 +80,7 @@ $ jovo run --bst-proxy
 
 The result should look like this:
 
-![Jovo and bst proxy](../img/terminal-bst-proxy-1.jpg)
+![Jovo and bst proxy](../../img/terminal-bst-proxy-1.jpg)
 
 The URL also comes with logging and analytics capabilities for prototyping and testing.
 

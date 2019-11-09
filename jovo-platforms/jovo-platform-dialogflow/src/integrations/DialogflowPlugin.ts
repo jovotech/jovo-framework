@@ -3,9 +3,9 @@ import {
     Extensible,
     ExtensibleConfig,
     HandleRequest,
-    Jovo,
+    Jovo, Log,
     NLUData, Platform, Util,
-} from "jovo-core";
+} from 'jovo-core';
 import _merge = require('lodash.merge');
 import _get = require('lodash.get');
 import _set = require('lodash.set');
@@ -57,10 +57,24 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
 
     init = async (handleRequest: HandleRequest) => {
         const requestObject = handleRequest.host.getRequestObject();
+
+        const isDialogflowOnlyRequest = requestObject.queryResult &&
+            requestObject.originalDetectIntentRequest &&
+            requestObject.session &&
+            Object.keys(requestObject.originalDetectIntentRequest).length === 1;
+
+        const notStandaloneDialogflow = !handleRequest.app.getPlatformByName('Dialogflow') && isDialogflowOnlyRequest;
+
+        if (notStandaloneDialogflow) {
+            Log.info();
+            Log.info('INFO: Testing from the Dialogflow console has limited functionality.');
+            Log.info();
+        }
+
         if (requestObject.queryResult &&
             requestObject.originalDetectIntentRequest &&
             requestObject.session &&
-            requestObject.originalDetectIntentRequest.source === this.factory.type()) {
+            requestObject.originalDetectIntentRequest.source === this.factory.type() || notStandaloneDialogflow) {
             // creates a platform instance, e.g. GoogleAction
             handleRequest.jovo = this.factory.createPlatformRequest(handleRequest.app, handleRequest.host, handleRequest);
         }
@@ -73,12 +87,12 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
     };
 
     type = (jovo: Jovo) => {
-        if (jovo.$request && !jovo.$type.type) {
+        if (jovo.$request && (!jovo.$type.type || jovo.$type.type === EnumRequestType.UNKNOWN_REQUEST)) {
             if (jovo.$request.getIntentName() === 'Default Welcome Intent') {
                 jovo.$type = {
                     type: EnumRequestType.LAUNCH
                 };
-            } else if (!jovo.$type.type) { //TODO:
+            } else if (!jovo.$type.type || jovo.$type.type === EnumRequestType.UNKNOWN_REQUEST) { //TODO:
                 jovo.$type = {
                     type: EnumRequestType.INTENT
                 };

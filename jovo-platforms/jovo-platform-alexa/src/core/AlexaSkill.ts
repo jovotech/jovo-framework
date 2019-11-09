@@ -236,6 +236,14 @@ export class AlexaSkill extends Jovo {
     }
 
     /**
+     * Returns APLT capability of request device
+     * @public
+     * @return {boolean}
+     */
+    hasAPLTInterface() {
+        return (this.$request! as AlexaRequest).hasAPLTInterface();
+    }
+    /**
      * Returns the amazon pay permission status
      * @public
      * @return {PermissionStatus | undefined}
