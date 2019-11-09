@@ -5,9 +5,8 @@ import {
     HandleRequest,
     Jovo,
     JovoRequest,
-    SessionConstants,
-    TestSuite,
-    LogLevel
+    LogLevel,
+    TestSuite
 } from 'jovo-framework';
 import { Alexa } from 'jovo-platform-alexa';
 import { GoogleAssistant } from 'jovo-platform-googleassistant';
@@ -145,367 +144,6 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
             app.handle(ExpressJS.dummyRequest(request));
         });
     });
-
-
-    describe('test tell', () => {
-        test('tell plain text', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.tell('Hello World!');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
-                done();
-            });
-        });
-
-        test('tell speechbuilder', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.$speech.addText('Hello World!');
-                    this.tell(this.$speech);
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
-                done();
-            });
-        });
-
-        test('tell ssml', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.tell('<speak>Hello <break time="100ms"/></speak>');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isTell('Hello <break time="100ms"/>')).toBe(true);
-                done();
-            });
-        });
-    });
-
-    describe('test ask', () => {
-        test('ask plain text', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.ask('Hello World!', 'Reprompt');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isAsk('Hello World!', 'Reprompt')).toBe(true);
-                done();
-            });
-        });
-
-        test('ask speechbuilder', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.$speech.addText('Hello World!');
-                    this.$reprompt.addText('Reprompt!');
-                    this.ask(this.$speech, this.$reprompt);
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isAsk('Hello World!', 'Reprompt!')).toBe(true);
-                done();
-            });
-        });
-
-        test('ask ssml', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.ask(
-                        '<speak>Hello <break time="100ms"/></speak>',
-                        '<speak>Reprompt <break time="100ms"/></speak>'
-                    );
-
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isAsk('Hello <break time="100ms"/>', 'Reprompt <break time="100ms"/>')).toBe(true);
-                done();
-            });
-        });
-    });
-
-    describe('test $inputs', () => {
-        test('test getInput, $inputs', async (done) => {
-            app.setHandler({
-                HelloWorldIntent() {
-                    expect(this.getInput('name')!.value).toBe('Joe');
-                    expect(this.$inputs!.name.value).toBe('Joe');
-                    done();
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
-                name: 'Joe'
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        });
-
-        test('test mapInputs', async (done) => {
-            app.setConfig({
-                inputMap: {
-                    'given-name': 'name'
-                }
-            });
-            app.setHandler({
-                HelloWorldIntent() {
-                    expect(this.getInput('name')!.value).toBe('Joe');
-                    expect(this.$inputs!.name.value).toBe('Joe');
-                    done();
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
-                'given-name': 'Joe'
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        }, 100);
-    });
-
-    describe('test intentMap', () => {
-        test('test inputMap', async (done) => {
-            app.setConfig({
-                intentMap: {
-                    'HelloWorldIntent': 'MappedHelloWorldIntent'
-                }
-            });
-            app.setHandler({
-                MappedHelloWorldIntent() {
-                    expect(true).toBe(true);
-                    done();
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        }, 100);
-
-        test('test inputMap with predefined handler path', async (done) => {
-            app.setConfig({
-                intentMap: {
-                    'Stop.Intent': 'END'
-                }
-            });
-            app.setHandler({
-                END() {
-                    expect(true).toBe(true);
-                    done();
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('Stop.Intent', {});
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        }, 100);
-    });
-
-    describe('test $data', () => {
-        test('test different scopes', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.$app.$data.appData = 'appData';
-                    this.$data.thisData = 'thisData';
-                    this.$session!.$data.sessionData = 'sessionData';
-                    this.toIntent('HelloWorldIntent');
-                },
-                HelloWorldIntent() {
-                    this.ask('foo', 'bar');
-                }
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$app.$data.appData).toBe('appData');
-                expect(handleRequest.jovo!.$data.thisData).toBe('thisData');
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionData', 'sessionData')).toBe(true);
-                done();
-            });
-        });
-    });
-
-    describe('test state', () => {
-        test('test getState', async (done) => {
-            app.setHandler({
-                TestState: {
-                    SessionIntent() {
-                        expect(this.getState()).toBe('TestState');
-                        done();
-                    },
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
-            intentRequest.setSessionAttributes({
-                [SessionConstants.STATE]: 'TestState',
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        });
-
-        test('test keep state', async (done) => {
-            app.setHandler({
-                TestState: {
-                    SessionIntent() {
-                        this.ask('Hello', 'World');
-                    },
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
-            intentRequest.setSessionAttributes({
-                [SessionConstants.STATE]: 'TestState',
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE, 'TestState')).toBe(true);
-                done();
-            });
-        });
-
-        test('test removeState', async (done) => {
-            app.setHandler({
-                TestState: {
-                    SessionIntent() {
-                        this.removeState();
-                        this.ask('Hello', 'World');
-                    },
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
-            intentRequest.setSessionAttributes({
-                [SessionConstants.STATE]: 'TestState',
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE)).toBe(false);
-                done();
-            });
-        });
-
-        test('test setState', async (done) => {
-            app.setHandler({
-                TestState: {
-                    SessionIntent() {
-                        this.setState('AnotherTestState');
-                        this.ask('Hello', 'World');
-                    },
-                }
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
-            intentRequest.setSessionAttributes({
-                [SessionConstants.STATE]: 'TestState',
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE, 'AnotherTestState')).toBe(true);
-                done();
-            });
-        });
-
-    });
-
-
-    describe('test session attributes', () => {
-        test('test get session', async (done) => {
-            app.setHandler({
-                SessionIntent() {
-                    expect(this.getSessionAttribute('sessionName1')).toBe('sessionValue1');
-                    expect(this.$session!.$data.sessionName2).toBe('sessionValue2');
-
-                    this.ask('Foo', 'Bar');
-                    done();
-                },
-            });
-
-            const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
-            intentRequest.setSessionAttributes({
-                sessionName1: 'sessionValue1',
-                sessionName2: 'sessionValue2',
-            });
-            app.handle(ExpressJS.dummyRequest(intentRequest));
-        });
-
-        test('test set session', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.setSessionAttribute('sessionName1', 'sessionValue1');
-                    this.addSessionAttribute('sessionName2', 'sessionValue2');
-                    this.$session!.$data.sessionName3 = 'sessionValue3';
-                    this.ask('Foo', 'Bar');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName1', 'sessionValue1')).toBe(true);
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName2', 'sessionValue2')).toBe(true);
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName3', 'sessionValue3')).toBe(true);
-
-                done();
-            });
-        });
-
-        test('test setSessionAttributes', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.setSessionAttributes({
-                        sessionName1: 'sessionValue1',
-                        sessionName2: 'sessionValue2',
-                        sessionName3: 'sessionValue3',
-                    });
-                    this.ask('Foo', 'Bar');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName1', 'sessionValue1')).toBe(true);
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName2', 'sessionValue2')).toBe(true);
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('sessionName3', 'sessionValue3')).toBe(true);
-                done();
-            });
-        });
-
-    });
-
 
     describe('test toIntent', () => {
         test('no return', async (done) => {
@@ -1162,23 +800,6 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
         });
     });
 
-    describe('test handleOnNewSession', () => {
-        test('no NEW_SESSION', async (done) => {
-
-            app.setHandler({
-                'LAUNCH'() {
-                    expect(this.$data.foo).toBe(undefined);
-                },
-            });
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                done();
-            });
-        });
-    });
     describe('test removeState', () => {
         test('test add followUpstate to session attributes', async (done) => {
             app.setHandler({
@@ -1304,133 +925,112 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
 
     });
 
-    describe('test app config', () => {
-        test('test keepSessionDataOnSessionEnded (default = false) ', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.$session.$data.foo = 'bar';
-                    this.tell('Hello World!');
-                },
-            });
-
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('foo')).toBe(false);
-                done();
-            });
+    test('test intentMap', async (done) => {
+        app.setHandler({
+            HelloIntent() {
+                this.tell('Hello!');
+            },
         });
-        test('test keepSessionDataOnSessionEnded (true) ', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    this.$session.$data.foo = 'bar';
-                    this.tell('Hello World!');
-                },
-            });
-            // @ts-ignore
-            app.config.keepSessionDataOnSessionEnded = true;
+        app.config.plugin.Router.intentMap = {
+            'HelloWorldIntent': 'HelloIntent'
+        };
+        const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
+        app.handle(ExpressJS.dummyRequest(request));
 
-            const launchRequest: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(launchRequest));
-
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.hasSessionAttribute('foo')).toBe(true);
-                done();
-            });
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('Hello!')).toBeTruthy();
+            done();
         });
     });
 
-    describe('test routing', () => {
-        test('test intentMap', async (done) => {
-            app.setHandler({
-                HelloIntent() {
-                    this.tell('Hello!');
-                },
-            });
-            app.config.plugin.Router.intentMap = {
-                'HelloWorldIntent': 'HelloIntent'
-            };
-            const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
-            app.handle(ExpressJS.dummyRequest(request));
+    test('test intentMap with predefined handler path', async (done) => {
+        app.setHandler({
+            END() {
+                this.tell('Hello!');
+            },
+        });
+        app.config.plugin.Router.intentMap = {
+            'StopIntent': 'END'
+        };
+        const request: JovoRequest = await t.requestBuilder.intent('StopIntent');
+        app.handle(ExpressJS.dummyRequest(request));
 
-            app.on('response', (handleRequest: HandleRequest) => {
-                expect(handleRequest.jovo!.$response!.isTell('Hello!')).toBeTruthy();
+        app.on('response', (handleRequest: HandleRequest) => {
+            expect(handleRequest.jovo!.$response!.isTell('Hello!')).toBeTruthy();
+            done();
+        });
+    });
+
+    test('test getIntentName and getMappedIntentName', async (done) => {
+        app.setHandler({
+            HelloIntent() {
+                expect(this.getIntentName()).toEqual('HelloWorldIntent');
+                expect(this.getMappedIntentName()).toEqual('HelloIntent');
                 done();
-            });
+            },
         });
+        app.config.plugin.Router.intentMap = {
+            'HelloWorldIntent': 'HelloIntent'
+        };
+        const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
+        app.handle(ExpressJS.dummyRequest(request));
 
-        test('test getIntentName and getMappedIntentName', async (done) => {
-            app.setHandler({
-                HelloIntent() {
-                    expect(this.getIntentName()).toEqual('HelloWorldIntent');
-                    expect(this.getMappedIntentName()).toEqual('HelloIntent');
-                    done();
-                },
-            });
-            app.config.plugin.Router.intentMap = {
-                'HelloWorldIntent': 'HelloIntent'
-            };
-            const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
-            app.handle(ExpressJS.dummyRequest(request));
+    });
 
+    test('test getRoute', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                const route = this.getRoute();
+                expect(route.type).toEqual('LAUNCH');
+                expect(route.intent).toBeUndefined();
+                done();
+            },
         });
+        const request: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
 
-        test('test getRoute', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    const route = this.getRoute();
-                    expect(route.type).toEqual('LAUNCH');
-                    expect(route.intent).toBeUndefined();
-                    done();
-                },
-            });
-            const request: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(request));
+    });
+    test('test getRoute with toIntent', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                return this.toIntent('HelloIntent');
+            },
+            HelloIntent() {
+                const route = this.getRoute();
 
+                expect(route.from).toEqual('LAUNCH');
+                expect(route.type).toEqual('INTENT');
+                expect(route.intent).toEqual('HelloIntent');
+
+                done();
+            },
         });
-        test('test getRoute with toIntent', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    return this.toIntent('HelloIntent');
-                },
-                HelloIntent() {
-                    const route = this.getRoute();
+        const request: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
 
-                    expect(route.from).toEqual('LAUNCH');
-                    expect(route.type).toEqual('INTENT');
-                    expect(route.intent).toEqual('HelloIntent');
+    });
 
-                    done();
-                },
-            });
-            const request: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(request));
+    test('test getRoute with multiple toIntent', async (done) => {
+        app.setHandler({
+            LAUNCH() {
+                return this.toIntent('HelloIntent');
+            },
+            HelloIntent() {
+                return this.toIntent('HelloWorldIntent');
 
+            },
+            HelloWorldIntent() {
+                const route = this.getRoute();
+
+                expect(route.from).toEqual('LAUNCH/HelloIntent');
+                expect(route.type).toEqual('INTENT');
+                expect(route.intent).toEqual('HelloWorldIntent');
+
+                done();
+            },
         });
-
-        test('test getRoute with multiple toIntent', async (done) => {
-            app.setHandler({
-                LAUNCH() {
-                    return this.toIntent('HelloIntent');
-                },
-                HelloIntent() {
-                    return this.toIntent('HelloWorldIntent');
-
-                },
-                HelloWorldIntent() {
-                    const route = this.getRoute();
-
-                    expect(route.from).toEqual('LAUNCH/HelloIntent');
-                    expect(route.type).toEqual('INTENT');
-                    expect(route.intent).toEqual('HelloWorldIntent');
-
-                    done();
-                },
-            });
-            const request: JovoRequest = await t.requestBuilder.launch();
-            app.handle(ExpressJS.dummyRequest(request));
-        });
+        const request: JovoRequest = await t.requestBuilder.launch();
+        app.handle(ExpressJS.dummyRequest(request));
     });
 }
 
