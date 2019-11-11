@@ -8,7 +8,7 @@ class GoogleAnalyticsAssistant extends GoogleAnalytics_1.GoogleAnalytics {
         if (!jovo) {
             throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-        if (!jovo.isGoogleAction()) {
+        if (jovo.constructor.name !== 'GoogleAction') {
             return;
         }
         super.track(handleRequest);
@@ -25,7 +25,7 @@ class GoogleAnalyticsAssistant extends GoogleAnalytics_1.GoogleAnalytics {
         if (!jovo) {
             throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-        if (!jovo.isGoogleAction()) {
+        if (jovo.constructor.name !== 'GoogleAction') {
             return;
         }
         super.setGoogleAnalyticsObject(handleRequest);

@@ -1,7 +1,8 @@
 import { IEvent, ITransaction, ITransactionItem } from './src/interfaces';
+import { SpeechBuilder } from 'jovo-core';
 
-declare module 'jovo-core' {
-    export interface Jovo {
+declare module 'jovo-core/dist/src/Jovo' {
+    interface Jovo {
         $googleAnalytics: {
             $data: { [key: string]: string | number };
             sendEvent: (params: IEvent) => void;

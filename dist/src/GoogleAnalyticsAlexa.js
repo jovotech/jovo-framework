@@ -9,7 +9,7 @@ class GoogleAnalyticsAlexa extends GoogleAnalytics_1.GoogleAnalytics {
         if (!jovo) {
             throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
         super.track(handleRequest);
@@ -33,7 +33,7 @@ class GoogleAnalyticsAlexa extends GoogleAnalytics_1.GoogleAnalytics {
         if (!jovo) {
             throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
         super.setGoogleAnalyticsObject(handleRequest);

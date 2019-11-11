@@ -1,6 +1,4 @@
 import { GoogleAnalytics } from "./GoogleAnalytics";
-import * as ua from 'universal-analytics';
-import _get = require('lodash.get');
 import { GoogleActionRequest } from 'jovo-platform-googleassistant';
 import { HandleRequest, Jovo, JovoError, ErrorCode } from "jovo-core";
 
@@ -17,7 +15,7 @@ export class GoogleAnalyticsAssistant extends GoogleAnalytics {
             );
         }
 
-        if (!jovo.isGoogleAction()) {
+        if (jovo.constructor.name !== 'GoogleAction') {
             return;
         }
 
@@ -46,7 +44,7 @@ export class GoogleAnalyticsAssistant extends GoogleAnalytics {
             );
         }
 
-        if (!jovo.isGoogleAction()) {
+        if (jovo.constructor.name !== 'GoogleAction') {
             return;
         }
 

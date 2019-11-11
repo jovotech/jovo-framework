@@ -16,7 +16,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
             );
         }
 
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
 
@@ -54,7 +54,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
             );
         }
 
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
 
