@@ -17,10 +17,10 @@
 </p>
 <br/>
 
-# Botanalytics Integration
+# GoogleAnalytics Integration
 
 ```sh
-npm install jovo-analytics-botanalytics
+npm install jovo-analytics-googleanalytics
 ```
 
-Find the docs here: https://www.jovo.tech/docs/analytics/botanalytics
+Find the docs here: https://www.jovo.tech/docs/analytics/googleanalytics
