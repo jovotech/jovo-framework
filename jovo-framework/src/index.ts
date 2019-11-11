@@ -153,6 +153,15 @@ declare module 'jovo-core/dist/src/Jovo' {
         };
 
         /**
+         * Checks if the given state contains the name of a initialized component.
+         * @private
+         * @param {string | undefined} state
+         * @return {void}
+         * @throws {JovoError}
+         */
+        checkStateForInitializedComponentName(state: string | undefined): void;
+
+        /**
          * Returns the active components root state value.
          * @return {string | undefined}
          */

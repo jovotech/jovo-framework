@@ -210,30 +210,6 @@ export class Handler implements Plugin {
         }
     }
 
-    /**
-     * Checks if the given state contains the name of a initialized component.
-     * @param {Jovo} jovo
-     * @param {string | undefined} state
-     * @return {void}
-     * @throws {JovoError}
-     */
-    static checkStateForInitializedComponentName(jovo: Jovo, state: string | undefined): void {
-        if (state && jovo.$components) {
-            const components: string[] = Object.keys(jovo.$components);
-            const matched: string[] = state.split('.').filter(s => components.includes(s));
-
-            if (matched.length > 0) {
-                throw new JovoError(
-                    `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
-                    ErrorCode.ERR,
-                    'jovo-framework',
-                    'The used state contains at least one component name.',
-                    'Use this.delegate() or rename the listed states to prevent interference.'
-                );
-            }
-        }
-    };
-
 
     install(app: BaseApp) {
         app.middleware('before.router')!.use((handleRequest: HandleRequest) => {
@@ -350,6 +326,30 @@ export class Handler implements Plugin {
         Jovo.prototype.$handlers = undefined;
 
         /**
+         * Checks if the given state contains the name of a initialized component.
+         * @private
+         * @param {string | undefined} state
+         * @return {void}
+         * @throws {JovoError}
+         */
+        Jovo.prototype.checkStateForInitializedComponentName = function (state: string | undefined): void {
+            if (state && this.$components) {
+                const components: string[] = Object.keys(this.$components);
+                const matched: string[] = state.split('.').filter(s => components.includes(s));
+
+                if (matched.length > 0) {
+                    throw new JovoError(
+                        `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
+                        ErrorCode.ERR,
+                        'jovo-framework',
+                        'The used state contains at least one component name.',
+                        'Use this.delegate() or rename the listed states to prevent interference.'
+                    );
+                }
+            }
+        };
+
+        /**
          * Jumps to state intent in the order state > unhandled > error
          * @public
          * @param {string} state name of state
@@ -366,7 +366,7 @@ export class Handler implements Plugin {
 
             // Check for Component State Validation
             if(validate === true) {
-                Handler.checkStateForInitializedComponentName(this, state);
+                this.checkStateForInitializedComponentName(state);
 
                 const componentState = this.getActiveComponentsRootState();
                 if (componentState && state) {
@@ -533,7 +533,7 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
-            Handler.checkStateForInitializedComponentName(this, state);
+            this.checkStateForInitializedComponentName(state);
 
             const componentState = this.getActiveComponentsRootState();
             if (componentState) {
