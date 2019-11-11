@@ -1,37 +1,50 @@
 {
-  "name": "jovo-analytics-googleanalytics",
-  "version": "2.2.14",
-  "description": "Jovo Plugin for GoogleAnalytics",
-  "main": "dist/src/index.js",
-  "scripts": {
-    "tslint": "tslint -p tsconfig.json -c tslint.json",
-    "tsc": "tsc",
-    "test": "jest"
-  },
-  "author": "jovotech",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "@types/express": "^4.16.1",
-    "@types/google.analytics": "0.0.39",
-    "@types/murmurhash": "0.0.1",
-    "@types/node": "^11.15.2",
-    "@types/useragent": "^2.1.1",
-    "jovo-core": "^2.2.15",
-    "jovo-framework": "^2.2.20",
-    "jovo-platform-alexa": "^2.2.22",
-    "jovo-platform-googleassistant": "^2.2.20",
-    "murmurhash": "0.0.2",
-    "universal-analytics": "^0.4.20",
-    "user-agents": "^1.0.255"
-  },
-  "devDependencies": {
-    "@types/lodash.get": "^4.4.6",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/universal-analytics": "^0.4.2",
-    "tslint": "^5.14.0"
-  },
-  "files": [
-    "dist/src/**/*",
-    "**/*.d.ts"
-  ]
+	"name": "jovo-analytics-googleanalytics",
+	"version": "2.2.14",
+	"description": "Jovo Plugin for GoogleAnalytics",
+	"main": "dist/src/index.js",
+	"types": "dist/src/index.d.ts",
+	"scripts": {
+		"tslint": "tslint -p tsconfig.json -c tslint.json",
+		"tsc": "tsc",
+		"test": "jest"
+	},
+	"author": "jovotech",
+	"license": "Apache-2.0",
+	"dependencies": {
+		"@types/express": "^4.16.1",
+		"@types/google.analytics": "0.0.39",
+		"@types/murmurhash": "0.0.1",
+		"@types/node": "^11.15.2",
+		"@types/useragent": "^2.1.1",
+		"jovo-core": "^2.2.15",
+		"jovo-framework": "^2.2.20",
+		"jovo-platform-alexa": "^2.2.22",
+		"jovo-platform-googleassistant": "^2.2.20",
+		"murmurhash": "0.0.2",
+		"universal-analytics": "^0.4.20",
+		"user-agents": "^1.0.255"
+	},
+	"devDependencies": {
+		"@types/lodash.get": "^4.4.6",
+		"@types/lodash.merge": "^4.6.6",
+		"@types/universal-analytics": "^0.4.2",
+		"tslint": "^5.14.0"
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testURL": "http://localhost/",
+		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"json"
+		]
+	},
+	"files": [
+		"dist/src/**/*"
+	]
 }

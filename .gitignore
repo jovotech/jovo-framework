@@ -1,13 +1,2 @@
-node_modules/
-db/
-bundle/
-aplTest.json
-test/
-aplTest/
-bundle.zip
-.env
-.DS_Store
-src/spreadsheet/credentials.json
-.history/
-*lock*
-packages/jovo-analytics-googleanalytics/flows/*
+node_modules
+dist

@@ -1,28 +1,27 @@
 {
-  "compilerOptions": {
-    "lib": [
-      "es2017"
-    ],
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "removeComments": false,
-    "allowUnreachableCode": false,
-    "resolveJsonModule": true,
-    "noImplicitReturns": true,
-    "preserveConstEnums": true,
-    "declaration": true,
-    "strict": true,
-    "outDir": "./dist/src/",
-    "target": "es2017",
-    "sourceMap": true
-  },
-  "include": [
-    "./src/**/*",
-    "**/*.d.ts",
-    "./test/**/*"
-  ],
-  "exclude": [
-    "./dist/**/*",
-    "./node_modules/**/*"
-  ]
+	"compilerOptions": {
+		"lib": [
+			"es2017"
+		],
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"removeComments": false,
+		"allowUnreachableCode": false,
+		"noImplicitReturns": true,
+		"preserveConstEnums": true,
+		"declaration": true,
+		"strict": true,
+		"outDir": "./dist/",
+		"target": "es2017",
+		"sourceMap": true
+	},
+	"include": [
+		"./src/**/*",
+		"**/*.d.ts",
+		"./test/**/*"
+	],
+	"exclude": [
+		"./dist/**/*",
+		"./node_modules/**/*"
+	]
 }
