@@ -2,15 +2,15 @@ import * as ua from 'universal-analytics';
 import _merge = require('lodash.merge');
 import * as murmurhash from 'murmurhash';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, Jovo, JovoError } from 'jovo-core';
-import { IConfig, IEvent, ITransactionItem, ITransaction } from './interfaces';
+import { Config, Event, TransactionItem, Transaction } from './interfaces';
 
 export class GoogleAnalytics implements Analytics {
-    config: IConfig = {
+    config: Config = {
         trackingId: ''
     };
     visitor: ua.Visitor | undefined;
 
-    constructor(config?: IConfig) {
+    constructor(config?: Config) {
         if (config) {
             this.config = _merge(this.config, config);
         }
@@ -19,11 +19,12 @@ export class GoogleAnalytics implements Analytics {
     install(app: BaseApp) {
         if (!this.config.trackingId) {
             throw new JovoError(
-                'trackingId must be set',
+                'trackingId has to be set.',
                 ErrorCode.ERR_PLUGIN,
                 'jovo-analytics-googleanalytics',
-                'trackingId needs to be added to config.js. See https://www.jovo.tech/docs/analytics/dashbot for details.',
-                'You can find your tracking id in GoogleAnalytics by clicking: Admin -> Property Settings -> Tracking Id'
+                '',
+                'You can find your tracking id in GoogleAnalytics by clicking: Admin -> Property Settings -> Tracking Id',
+                'https://www.jovo.tech/docs/analytics/googleanalytics'
             );
         }
 
@@ -42,9 +43,7 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics',
-                'Jovo Instance was not available',
-                'Contact admin.'
+                'jovo-analytics-googleanalytics'
             );
         }
 
@@ -65,7 +64,7 @@ export class GoogleAnalytics implements Analytics {
             .pageview(this.getPageParameters(jovo), (err: any) => {
                 if (err) {
                     throw new JovoError(
-                        'Error while trying to track data.',
+                        err.message,
                         ErrorCode.ERR_PLUGIN,
                         'jovo-analytics-googleanalytics'
                     );
@@ -82,7 +81,7 @@ export class GoogleAnalytics implements Analytics {
                     continue;
                 }
 
-                const params: IEvent = {
+                const params: Event = {
                     eventCategory: 'Inputs',
                     eventAction: value.key,             // Input value
                     eventLabel: key,                    // Input key
@@ -131,9 +130,7 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics',
-                'Jovo Instance was not available',
-                'Contact admin.'
+                'jovo-analytics-googleanalytics'
             );
         }
 
@@ -143,7 +140,7 @@ export class GoogleAnalytics implements Analytics {
             .pageview(this.getPageParameters(jovo), (err: any) => {
                 if (err) {
                     throw new JovoError(
-                        'Error while trying to track data.',
+                        err.message,
                         ErrorCode.ERR_PLUGIN,
                         'jovo-analytics-googleanalytics'
                     );
@@ -163,12 +160,12 @@ export class GoogleAnalytics implements Analytics {
 
         // Check if an error in the nlu model occurred.
         if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
-            return this.sendUserEvent(jovo, 'UnhandledEvents', 'nluUnhandled');
+            return this.sendUserEvent(jovo, 'UnhandledEvents', 'NLU_Unhandled');
         }
 
         // If the current path is unhandled, an error in the skill handler occurred.
         if (path.endsWith('Unhandled')) {
-            return this.sendUserEvent(jovo, 'UnhandledEvents', 'skillUnhandled');
+            return this.sendUserEvent(jovo, 'UnhandledEvents', 'Skill_Unhandled');
         }
     }
 
@@ -223,7 +220,7 @@ export class GoogleAnalytics implements Analytics {
      * @param {string} eventElement maps to action -> instance of eventGroup
      */
     sendUserEvent(jovo: Jovo, eventCategory: string, eventElement: string) {
-        const params: IEvent = {
+        const params: Event = {
             eventCategory,
             eventAction: eventElement,
             eventLabel: this.getUserId(jovo),
@@ -253,9 +250,7 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics',
-                'Jovo Instance was not available',
-                'Contact admin.'
+                'jovo-analytics-googleanalytics'
             );
         }
 
@@ -265,7 +260,7 @@ export class GoogleAnalytics implements Analytics {
         // Initialise googleAnalytics object.
         jovo.$googleAnalytics = {
             $data: {},
-            sendEvent: (params: IEvent) => {
+            sendEvent: (params: Event) => {
                 this.visitor!
                     .event(params, (err: any) => {
                         if (err) {
@@ -278,7 +273,7 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            sendTransaction: (params: ITransaction) => {
+            sendTransaction: (params: Transaction) => {
                 this.visitor!
                     .transaction(params, (err: any) => {
                         if (err) {
@@ -291,7 +286,7 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            sendItem: (params: ITransactionItem) => {
+            sendItem: (params: TransactionItem) => {
                 this.visitor!
                     .transaction(params, (err: any) => {
                         if (err) {

@@ -21,6 +21,8 @@
 		"jovo-framework": "^2.2.20",
 		"jovo-platform-alexa": "^2.2.22",
 		"jovo-platform-googleassistant": "^2.2.20",
+		"lodash.get": "^4.4.2",
+		"lodash.merge": "^4.6.2",
 		"murmurhash": "0.0.2",
 		"universal-analytics": "^0.4.20",
 		"user-agents": "^1.0.255"
@@ -29,7 +31,8 @@
 		"@types/lodash.get": "^4.4.6",
 		"@types/lodash.merge": "^4.6.6",
 		"@types/universal-analytics": "^0.4.2",
-		"tslint": "^5.14.0"
+		"tslint": "^5.14.0",
+		"tslint-config-prettier": "^1.18.0"
 	},
 	"jest": {
 		"transform": {

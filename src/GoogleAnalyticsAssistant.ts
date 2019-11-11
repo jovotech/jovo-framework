@@ -1,6 +1,6 @@
-import { GoogleAnalytics } from "./GoogleAnalytics";
+import { GoogleAnalytics } from './GoogleAnalytics';
 import { GoogleActionRequest } from 'jovo-platform-googleassistant';
-import { HandleRequest, Jovo, JovoError, ErrorCode } from "jovo-core";
+import { HandleRequest, Jovo, JovoError, ErrorCode } from 'jovo-core';
 
 export class GoogleAnalyticsAssistant extends GoogleAnalytics {
     track(handleRequest: HandleRequest) {
@@ -9,9 +9,7 @@ export class GoogleAnalyticsAssistant extends GoogleAnalytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics',
-                'Jovo Instance was not available',
-                'Contact admin.'
+                'jovo-analytics-googleanalytics'
             );
         }
 
@@ -29,7 +27,7 @@ export class GoogleAnalyticsAssistant extends GoogleAnalytics {
         const deviceInfo = `Google Assistant Device - ${request.hasScreenInterface() ? 'Display Support' : 'Voice Only'}`;
 
         // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
-        this.visitor!.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`);
+        this.visitor!.set('userAgentOverride', `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`);
     }
 
     setGoogleAnalyticsObject(handleRequest: HandleRequest) {
@@ -38,9 +36,7 @@ export class GoogleAnalyticsAssistant extends GoogleAnalytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics',
-                'Jovo Instance was not available',
-                'Contact admin.'
+                'jovo-analytics-googleanalytics'
             );
         }
 
