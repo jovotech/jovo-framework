@@ -1,5 +1,5 @@
 import { IEvent, ITransaction, ITransactionItem } from './src/interfaces';
-import { SpeechBuilder } from 'jovo-core';
+import { Inputs } from 'jovo-core';
 
 declare module 'jovo-core/dist/src/Jovo' {
     interface Jovo {
@@ -11,7 +11,7 @@ declare module 'jovo-core/dist/src/Jovo' {
             sendUserEvent: Function;
             setCustomMetric: (index: number, value: string | number) => void;
         };
-        getRoute(): any;
+        getRoute(): { intent: string, path: string, type: string };
         getMappedIntentName(): string;
     }
 }

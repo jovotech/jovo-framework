@@ -40,7 +40,7 @@ class GoogleAnalyticsAlexa extends GoogleAnalytics_1.GoogleAnalytics {
     }
     sendUnhandledEvents(jovo) {
         super.sendUnhandledEvents(jovo);
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
         if (jovo.$alexaSkill.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {

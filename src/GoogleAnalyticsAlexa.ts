@@ -64,7 +64,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     sendUnhandledEvents(jovo: Jovo) {
         super.sendUnhandledEvents(jovo);
 
-        if (!jovo.isAlexaSkill()) {
+        if (jovo.constructor.name !== 'AlexaSkill') {
             return;
         }
 
