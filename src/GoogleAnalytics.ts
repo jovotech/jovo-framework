@@ -1,18 +1,16 @@
 import * as ua from 'universal-analytics';
-import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as murmurhash from 'murmurhash';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, Jovo, JovoError } from 'jovo-core';
-import { Config, Event, Item, Transaction } from './interfaces';
+import { IConfig, IEvent, ITransactionItem, ITransaction } from './interfaces';
 
 export class GoogleAnalytics implements Analytics {
-    config: Config = {
+    config: IConfig = {
         trackingId: ''
     };
     visitor: ua.Visitor | undefined;
-    platform: string | undefined;
 
-    constructor(config?: Config) {
+    constructor(config?: IConfig) {
         if (config) {
             this.config = _merge(this.config, config);
         }
@@ -55,7 +53,6 @@ export class GoogleAnalytics implements Analytics {
         this.visitor!.set('sessionControl', sessionTag);
 
         // Track custom set data as custom metrics.
-        // TODO: test!
         const customData = jovo.$googleAnalytics.$data;
         for (const [key, value] of Object.entries(customData)) {
             if (key.startsWith('cm')) {
@@ -70,16 +67,14 @@ export class GoogleAnalytics implements Analytics {
                     throw new JovoError(
                         'Error while trying to track data.',
                         ErrorCode.ERR_PLUGIN,
-                        'jovo-analytics-googleanalytics',
-                        '',
-                        ''
+                        'jovo-analytics-googleanalytics'
                     );
                 }
             })
             .send();
 
         // Detect and send FlowErrors
-        this.sendFlowErrors(jovo);
+        this.sendUnhandledEvents(jovo);
 
         if (jovo.$inputs) {
             for (const [key, value] of Object.entries(jovo.$inputs)) {
@@ -87,7 +82,7 @@ export class GoogleAnalytics implements Analytics {
                     continue;
                 }
 
-                const params: Event = {
+                const params: IEvent = {
                     eventCategory: 'Inputs',
                     eventAction: value.key,             // Input value
                     eventLabel: key,                    // Input key
@@ -122,12 +117,6 @@ export class GoogleAnalytics implements Analytics {
         visitor.set('userLanguage', jovo.getLocale());
         // Set user id as a custom dimension to track hits on the same scope
         visitor.set('cd1', uuid);
-
-        const referrer = _get(jovo.$request, 'request.metadata.referrer');
-        if (referrer) {
-            visitor.set("campaignMedium", "referral");
-            visitor.set("campaignSource", referrer);
-        }
 
         this.visitor = visitor;
     }
@@ -166,21 +155,20 @@ export class GoogleAnalytics implements Analytics {
 
     /**
      * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler. 
-     * TODO: send with exception function?
      * @param {object} jovo: Jovo object
      */
-    sendFlowErrors(jovo: Jovo) {
+    sendUnhandledEvents(jovo: Jovo) {
         const intent = jovo.$request!.getIntentName();
         const { path } = jovo.getRoute();
 
         // Check if an error in the nlu model occurred.
         if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
-            return this.sendUserEvent(jovo, 'FlowError', 'nluUnhandled');
+            return this.sendUserEvent(jovo, 'UnhandledEvents', 'nluUnhandled');
         }
 
         // If the current path is unhandled, an error in the skill handler occurred.
         if (path.endsWith('Unhandled')) {
-            return this.sendUserEvent(jovo, 'FlowError', 'skillUnhandled');
+            return this.sendUserEvent(jovo, 'UnhandledEvents', 'skillUnhandled');
         }
     }
 
@@ -235,7 +223,7 @@ export class GoogleAnalytics implements Analytics {
      * @param {string} eventElement maps to action -> instance of eventGroup
      */
     sendUserEvent(jovo: Jovo, eventCategory: string, eventElement: string) {
-        const params: Event = {
+        const params: IEvent = {
             eventCategory,
             eventAction: eventElement,
             eventLabel: this.getUserId(jovo),
@@ -277,9 +265,7 @@ export class GoogleAnalytics implements Analytics {
         // Initialise googleAnalytics object.
         jovo.$googleAnalytics = {
             $data: {},
-            sendEvent: (params: Event) => {
-                // TODO: interface implementation check?
-                // if (!('eventCategory' in params))
+            sendEvent: (params: IEvent) => {
                 this.visitor!
                     .event(params, (err: any) => {
                         if (err) {
@@ -292,8 +278,7 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            // TODO: TEST
-            sendTransaction: (params: Transaction) => {
+            sendTransaction: (params: ITransaction) => {
                 this.visitor!
                     .transaction(params, (err: any) => {
                         if (err) {
@@ -306,7 +291,7 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            sendItem: (params: Item) => {
+            sendItem: (params: ITransactionItem) => {
                 this.visitor!
                     .transaction(params, (err: any) => {
                         if (err) {
@@ -319,8 +304,10 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            sendUserEvent: this.sendUserEvent.bind(this),
-            setCustomMetric(index: number, value: string) {
+            sendUserEvent: (eventCategory: string, eventElement: string) => {
+                this.sendUserEvent(jovo, eventCategory, eventElement);
+            },
+            setCustomMetric(index: number, value: string | number) {
                 this.$data[`cm${index}`] = value;
             }
         };

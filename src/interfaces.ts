@@ -1,17 +1,17 @@
 import { PluginConfig } from "jovo-core";
 
-export interface Event {
+export interface IEvent {
     eventCategory: string;  // Category for event, e.g. Inputs, Errors, ...
     eventAction: string;    // Value for the event to track
     eventLabel?: string;    // Label under which to track the event, e.g. userId, ... 
-    eventValue?: number;    // Event value/weight
+    eventValue?: number;    // IEvent value/weight
     documentPath?: string;  // Path portion of the current conversational flow
 }
 
 /**
  * Represents a transaction, consisting of one or more transaction items, e.g. ISP.
  */
-export interface Transaction {
+export interface ITransaction {
     transactionId: string;                  // Unique id for transaction and corresponding items
     transactionRevenue?: string | number;   // Total revenue     
     transactionShipping?: string | number;  // Shipping cost
@@ -20,32 +20,16 @@ export interface Transaction {
     [key: string]: any;                     // Custom parameters
 }
 
-export interface Item {
-    transactionId: string;          // Transaction id
-    itemName: string;               // Item name
+export interface ITransactionItem {
+    transactionId: string;          // ITransaction id
+    itemName: string;               // ITransactionItem name
     itemPrice?: string | number;    // Price for a single item
     itemQuantity?: string | number; // Number of items purchased
-    itemCode?: string;              // Item code/SKU
+    itemCode?: string;              // ITransactionItem code/SKU
     itemCategory?: string;          // Category the item belongs to
     [key: string]: any;             // Custom parameters
 }
 
-export interface Config extends PluginConfig {
+export interface IConfig extends PluginConfig {
     trackingId: string;
-}x
-
-declare module 'jovo-core/dist/src/Jovo' {
-    export interface Jovo {
-        $googleAnalytics: {
-            $data: any;
-            sendEvent: Function;
-            sendTransaction: Function;
-            sendItem: Function;
-            sendUserEvent: Function;
-            sendUserTransaction: Function;
-            setCustomMetric: Function;
-        };
-        getMappedIntentName: Function;
-        getRoute: Function;
-    }
 }

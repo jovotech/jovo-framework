@@ -1,74 +1,75 @@
-// import { GoogleAnalytics } from "./GoogleAnalytics";
-// import * as ua from 'universal-analytics';
-// import _get = require('lodash.get');
-// import * as util from 'util';
+import { ErrorCode, HandleRequest, Jovo, JovoError } from "jovo-core";
+import { AlexaRequest } from "jovo-platform-alexa";
+import _get = require('lodash.get');
+import { GoogleAnalytics } from "./GoogleAnalytics";
 
-// import { HandleRequest, Jovo } from "jovo-core";
-// import { AlexaRequest } from "jovo-platform-alexa";
+export class GoogleAnalyticsAlexa extends GoogleAnalytics {
+    track(handleRequest: HandleRequest) {
+        const jovo: Jovo = handleRequest.jovo!;
+        if (!jovo) {
+            throw new JovoError(
+                'Jovo object is not set',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-analytics-googleanalytics',
+                'Jovo Instance was not available',
+                'Contact admin.'
+            );
+        }
 
-// export class GoogleAnalyticsAlexa extends GoogleAnalytics {
+        if (!jovo.isAlexaSkill()) {
+            return;
+        }
 
-//     //middleware functions:
-//     //only invoke if platform is matching
-//     setJovoObjectAccess(handleRequest: HandleRequest) {
-//         if (handleRequest.jovo && handleRequest.jovo.constructor.name === 'AlexaSkill') {
-//             super.setJovoObjectAccess(handleRequest);
-//         }
-//     }
+        super.track(handleRequest);
+    }
 
-//     sendDataToGA(handleRequest: HandleRequest) {
-//         if (handleRequest.jovo && handleRequest.jovo.constructor.name === 'AlexaSkill') {
-//             super.sendDataToGA(handleRequest);
-//         }
-//     }
+    initVisitor(jovo: Jovo) {
+        super.initVisitor(jovo);
 
+        const request = jovo.$request as AlexaRequest;
+        const deviceInfo = request.getDeviceName();
+        this.visitor!.set('screenResolution', request.getScreenResolution());
 
+        // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
+        this.visitor!.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`);
 
-//     //Help methods for middleware functions
-//     //Overwrite base class functions to add platform specific content
-//     sendFlowErrors(jovo: Jovo) {
-//         super.sendFlowErrors(jovo);
-//         if (jovo.getRoute().type === "END") {  //check for sessionEndedRequests with failure reason
-//             if (jovo.isAlexaSkill()) { //only avaiable momently for Alexa Skills
-//                 const alexaRequest = jovo.$request as AlexaRequest;
-//                 console.log(`..is session Ended Request.. checking reason..`);
-//                 if (alexaRequest.request!.reason === 'EXCEEDED_MAX_REPROMPTS') {
-//                     this.sendUserEvent(jovo, "FlowError", "exceeded reprompts");
-//                     console.log("'..sent exceeded reprompts event to GA.");
-//                 }
-//                 else {
-//                     console.log(`session Ended Request with no flow Errors. Route: ${util.inspect(jovo.getRoute())}`);
-//                 }
-//             }
-//         }
-//     }
+        const referrer = _get(request, 'request.metadata.referrer');
+        if (referrer) {
+            this.visitor!.set("campaignMedium", "referral");
+            this.visitor!.set("campaignSource", referrer);
+            this.visitor!.set('documentReferrer', referrer);
+        }
 
+    }
 
-//     initVisitor(jovo: Jovo): ua.Visitor {
-//         const visitor = super.initVisitor(jovo);
+    setGoogleAnalyticsObject(handleRequest: HandleRequest) {
+        const jovo: Jovo = handleRequest.jovo!;
+        if (!jovo) {
+            throw new JovoError(
+                'Jovo object is not set',
+                ErrorCode.ERR_PLUGIN,
+                'jovo-analytics-googleanalytics',
+                'Jovo Instance was not available',
+                'Contact admin.'
+            );
+        }
 
-//         //set device and screen resolution
-//         const alexaRequest = jovo.$request as AlexaRequest;
-//         const deviceInfo = alexaRequest.getAlexaDevice();
-//         visitor.set("screenResolution", alexaRequest.getScreenResolution());
-//         visitor.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`); //fake UserAgent which makes GA mappping device to browser field and platform type to mobile
+        if (!jovo.isAlexaSkill()) {
+            return;
+        }
 
-//         //set referrer link for redirected users 
-//         const launchType: string | undefined = _get(jovo.$request, 'request.launchRequestType');
-//         if (launchType) {
-//             visitor.set('documentReferrer', _get(jovo.$request, 'request.metadata.referrer'));
-//         }
-//         return visitor;
-//     }
+        super.setGoogleAnalyticsObject(handleRequest);
+    }
 
-//     getCurrentPageParameters(jovo: Jovo): ua.PageviewParams {
-//         let modPageParams = super.getCurrentPageParameters(jovo);
+    sendUnhandledEvents(jovo: Jovo) {
+        super.sendUnhandledEvents(jovo);
 
-//         //set host to referrer if launch was referred
-//         const launchType: string | undefined = _get(jovo.$request, 'request.launchRequestType');
-//         if (launchType) {
-//             modPageParams.dh = launchType;
-//         }
-//         return modPageParams;
-//     }
-// }
+        if (!jovo.isAlexaSkill()) {
+            return;
+        }
+
+        if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
+            this.sendUserEvent(jovo, "FlowError", "exceeded reprompts");
+        }
+    }
+}

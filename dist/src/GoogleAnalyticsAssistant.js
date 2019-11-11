@@ -1,41 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const GoogleAnalyticsSender_1 = require("./GoogleAnalyticsSender");
-const _get = require("lodash.get");
-class GoogleAnalyticsAssistant extends GoogleAnalyticsSender_1.GoogleAnalyticsSender {
-    //middleware functions:
-    //only invoke if platform is matching
-    setJovoObjectAccess(handleRequest) {
-        if (handleRequest.jovo && handleRequest.jovo.constructor.name === 'GoogleAction') {
-            super.setJovoObjectAccess(handleRequest);
+const GoogleAnalytics_1 = require("./GoogleAnalytics");
+const jovo_core_1 = require("jovo-core");
+class GoogleAnalyticsAssistant extends GoogleAnalytics_1.GoogleAnalytics {
+    track(handleRequest) {
+        const jovo = handleRequest.jovo;
+        if (!jovo) {
+            throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-    }
-    sendDataToGA(handleRequest) {
-        if (handleRequest.jovo && handleRequest.jovo.constructor.name === 'GoogleAction') {
-            const uuid = this.getUserId(handleRequest.jovo);
-            const isHealtCheck = (_get(handleRequest.jovo.$request, 'originalDetectIntentRequest.payload.inputs[0].arguments[0].name') === 'is_health_check') || uuid === '464556658';
-            if (!isHealtCheck) {
-                super.sendDataToGA(handleRequest);
-            }
-            else {
-                console.log("is healthcheck -> skip");
-            }
+        if (!jovo.isGoogleAction()) {
+            return;
         }
+        super.track(handleRequest);
     }
-    //Help methods for middleware functions
-    //Overwrite base class functions to add platform specific content
     initVisitor(jovo) {
-        const visitor = super.initVisitor(jovo);
-        //let  gAssistantRequest = jovo.$googleAction!.$request as GoogleActionRequest;
-        let deviceInfo = "notSet";
-        if (jovo.$request.hasScreenInterface()) {
-            deviceInfo = "Assistant device - with screen";
+        super.initVisitor(jovo);
+        const request = jovo.$request;
+        const deviceInfo = `Google Assistant Device - ${request.hasScreenInterface() ? 'Display Support' : 'Voice Only'}`;
+        // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
+        this.visitor.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`);
+    }
+    setGoogleAnalyticsObject(handleRequest) {
+        const jovo = handleRequest.jovo;
+        if (!jovo) {
+            throw new jovo_core_1.JovoError('Jovo object is not set', jovo_core_1.ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics', 'Jovo Instance was not available', 'Contact admin.');
         }
-        else {
-            deviceInfo = "Assistant device - voice only";
+        if (!jovo.isGoogleAction()) {
+            return;
         }
-        visitor.set("userAgentOverride", `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`); //fake UserAgent which makes GA mappping device to browser field and platform type to mobile
-        return visitor;
+        super.setGoogleAnalyticsObject(handleRequest);
     }
 }
 exports.GoogleAnalyticsAssistant = GoogleAnalyticsAssistant;

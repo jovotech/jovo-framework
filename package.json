@@ -2,7 +2,7 @@
   "name": "jovo-analytics-googleanalytics",
   "version": "1.0.0",
   "description": "google analytics jovo plugin for tracking voice apps",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "tsc": "tsc",
@@ -20,10 +20,10 @@
     "@types/murmurhash": "0.0.1",
     "@types/node": "^11.15.2",
     "@types/useragent": "^2.1.1",
-    "jovo-core": "^2.2.3",
-    "jovo-framework": "^2.2.5",
-    "jovo-platform-alexa": "^2.2.7",
-    "jovo-platform-googleassistant": "^2.2.5",
+    "jovo-core": "^2.2.15",
+    "jovo-framework": "^2.2.20",
+    "jovo-platform-alexa": "^2.2.22",
+    "jovo-platform-googleassistant": "^2.2.20",
     "murmurhash": "0.0.2",
     "universal-analytics": "^0.4.20",
     "user-agents": "^1.0.255"

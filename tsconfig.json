@@ -12,12 +12,13 @@
     "preserveConstEnums": true,
     "declaration": true,
     "strict": true,
-    "outDir": "./dist/",
+    "outDir": "./dist/src/",
     "target": "es2017",
     "sourceMap": true
   },
   "include": [
     "./src/**/*",
+    "**/*.d.ts",
     "./test/**/*"
   ],
   "exclude": [
