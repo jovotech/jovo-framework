@@ -1,19 +1,8 @@
-import { BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import { Jovo, SpeechBuilder } from 'jovo-core';
 import _get = require('lodash.get');
 import { MessengerBotSpeechBuilder } from './MessengerBotSpeechBuilder';
-import { MessengerBotUser } from './MessengerBotUser';
 
 export class MessengerBot extends Jovo {
-  $messengerBot: MessengerBot;
-
-  constructor(app: BaseApp, host: Host, handleRequest: HandleRequest) {
-    super(app, host, handleRequest);
-    this.$messengerBot = this;
-    this.$speech = new MessengerBotSpeechBuilder(this);
-    this.$reprompt = new MessengerBotSpeechBuilder(this);
-    this.$user = new MessengerBotUser(this);
-  }
-
   getDeviceId(): string | undefined {
     return undefined;
   }
