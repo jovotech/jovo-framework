@@ -4,7 +4,7 @@
     "jovo-core",
     "jovo-platforms/*",
     "jovo-integrations/*",
-    "integration-test",
+    "e2e",
     "examples/**"
   ],
   "ignoreChanges": [
