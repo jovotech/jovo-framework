@@ -19,7 +19,7 @@ export class MessengerBot extends Jovo {
   }
 
   getLocale(): string | undefined {
-    return this.$request ? this.$request.getLocale() : undefined;
+    return this.$request ? this.$request.getLocale() : 'en-US';
   }
 
   getPlatformType(): string {

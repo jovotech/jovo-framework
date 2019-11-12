@@ -26,6 +26,7 @@ export class MessengerBotRequest implements JovoRequest {
     intentName: string;
   };
   inputs?: Inputs;
+  locale?: string;
 
   addInput(key: string, value: string): this {
     if (!this.inputs) {
@@ -50,7 +51,6 @@ export class MessengerBotRequest implements JovoRequest {
     return undefined;
   }
 
-  // TODO check if undefined or something custom should be returned
   getDeviceName(): string | undefined {
     return undefined;
   }
@@ -64,7 +64,7 @@ export class MessengerBotRequest implements JovoRequest {
   }
 
   getLocale(): string {
-    return '';
+    return this.locale || 'en-US';
   }
 
   getSessionAttributes(): SessionData {
@@ -128,6 +128,7 @@ export class MessengerBotRequest implements JovoRequest {
   }
 
   setLocale(locale: string): this {
+    this.locale = locale;
     return this;
   }
 
