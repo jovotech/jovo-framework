@@ -11,9 +11,10 @@ import {
 import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
 import { RequestOptions } from 'https';
 import { HttpService } from './HttpService';
-import { google } from 'googleapis';
 import * as fs from 'fs';
 import * as util from 'util';
+import { JWT } from 'google-auth-library';
+import _merge = require('lodash.merge');
 
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
@@ -25,6 +26,7 @@ export interface Config extends PluginConfig {
   defaultLocale?: string;
   minConfidence?: number;
   credentialsFile?: string;
+  requireCredentialsFile?: boolean;
 }
 
 export class DialogflowNlu extends Extensible implements Plugin {
@@ -33,19 +35,47 @@ export class DialogflowNlu extends Extensible implements Plugin {
     defaultLocale: 'en-US',
     minConfidence: 0,
     credentialsFile: './credentials.json',
+    requireCredentialsFile: true,
   };
 
-  install(parent: Extensible) {
+  constructor(config?: Config) {
+    super(config);
+
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
+  }
+
+  // tslint:disable-next-line
+  jwtClient?: JWT;
+
+  async install(parent: Extensible) {
     parent.middleware('after.$init')!.use(this.afterInit.bind(this));
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
+    parent.middleware('after.$nlu')!.use(this.afterNlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
+
+    const jwtClient = await this.initializeJWT();
+    if (jwtClient) {
+      await jwtClient.authorize();
+      this.jwtClient = jwtClient;
+    }
   }
 
   async afterInit(handleRequest: HandleRequest) {
     if (handleRequest.jovo) {
+      let authToken = '';
+      if (this.jwtClient) {
+        const accessTokenObj = await this.jwtClient.getAccessToken();
+        if (accessTokenObj.token) {
+          authToken = accessTokenObj.token;
+        }
+      }
+      const projectId = this.jwtClient ? this.jwtClient.projectId : '';
+
       handleRequest.jovo.$data.DialogflowNlu = {
-        authToken: this.config.authToken,
-        projectId: this.config.projectId,
+        authToken,
+        projectId,
       };
     }
   }
@@ -85,6 +115,12 @@ export class DialogflowNlu extends Extensible implements Plugin {
     };
   }
 
+  async afterNlu(handleRequest: HandleRequest) {
+    if (handleRequest.jovo && handleRequest.jovo.$data.DialogflowNlu) {
+      delete handleRequest.jovo.$data.DialogflowNlu;
+    }
+  }
+
   async inputs(jovo: Jovo) {
     if ((!jovo.$nlu || !jovo.$nlu.Dialogflow) && jovo.$type.type === EnumRequestType.INTENT) {
       throw new JovoError('No nlu data to get inputs off was given.');
@@ -119,25 +155,35 @@ export class DialogflowNlu extends Extensible implements Plugin {
   }
 
   // tslint:disable-next-line:no-any
-  private async initializeJWT(): Promise<any> {
+  private async initializeJWT(): Promise<JWT | undefined> {
     if (!this.config.credentialsFile) {
-      throw new Error('Credentials file is mandatory');
+      if (this.config.requireCredentialsFile === false) {
+        return;
+      } else {
+        throw new Error('Credentials file is mandatory');
+      }
     }
 
     const fileExists = await exists(this.config.credentialsFile);
     if (!fileExists) {
-      throw new Error(`Credentials file doesn't exist`);
+      if (this.config.requireCredentialsFile === false) {
+        return;
+      } else {
+        throw new Error(`Credentials file doesn't exist in ${this.config.credentialsFile}`);
+      }
     }
 
     const results = await readFile(this.config.credentialsFile);
     const keyFileObject = JSON.parse(results.toString());
-    const jwtClient = new google.auth.JWT(
+
+    const jwtClient = new JWT(
       keyFileObject.client_email,
       undefined,
       keyFileObject.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets'],
+      ['https://www.googleapis.com/auth/dialogflow'],
       undefined,
     );
+    jwtClient.projectId = keyFileObject.project_id;
     return jwtClient;
   }
 
@@ -190,7 +236,11 @@ export class DialogflowNlu extends Extensible implements Plugin {
       if (response.status === 200 && response.data && response.data.responseId) {
         return response.data;
       } else {
-        throw new Error(`Could not reach Dialogflow!`);
+        throw new Error(
+          `Could not reach Dialogflow. status: ${response.status}, data: ${
+            response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
+          }`,
+        );
       }
     } catch (e) {
       throw new JovoError(e);
