@@ -46,7 +46,6 @@ export class DialogflowNlu extends Extensible implements Plugin {
     }
   }
 
-  // tslint:disable-next-line
   jwtClient?: JWT;
 
   async install(parent: Extensible) {
@@ -154,7 +153,6 @@ export class DialogflowNlu extends Extensible implements Plugin {
     jovo.$inputs = inputs;
   }
 
-  // tslint:disable-next-line:no-any
   private async initializeJWT(): Promise<JWT | undefined> {
     if (!this.config.credentialsFile) {
       if (this.config.requireCredentialsFile === false) {
