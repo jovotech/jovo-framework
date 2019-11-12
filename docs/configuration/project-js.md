@@ -212,7 +212,7 @@ In the `project.js`, you can also add or override specific elements of your lang
 
 Changing the invocation name is especially useful for different stages if you want to make sure you know which version of your voice app you're currently talking to.
 
-For example, you can override the language model for the `en-US` locale like thos:
+For example, you can override the language model for the `en-US` locale like this:
 
 ```javascript
 languageModel: {
