@@ -299,6 +299,11 @@ export class FacebookMessenger extends Extensible implements Platform {
       return this;
     };
 
+    Jovo.prototype.overrideText = function(text: string) {
+      this.$output.FacebookMessenger.OverrideText = text;
+      return this;
+    };
+
     Jovo.prototype.airlineTemplate = function(options: AirlineTemplateOptions) {
       const payload: AirlineTemplatePayload = { ...options, template_type: TemplateType.Airline };
       const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);

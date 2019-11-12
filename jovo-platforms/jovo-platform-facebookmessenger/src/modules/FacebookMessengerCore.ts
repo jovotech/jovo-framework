@@ -82,22 +82,20 @@ export class FacebookMessengerCore implements Plugin {
       return;
     }
 
+    const textOverride = _get(output, 'FacebookMessenger.OverrideText');
+
     const tell = _get(output, 'tell');
     if (tell) {
-      const text = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text: SpeechBuilder.removeSSML(tell.speech.toString()) },
-      );
-      response.messages.push(text);
+      const text = SpeechBuilder.removeSSML(textOverride || tell.speech.toString());
+      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      response.messages.push(textMessage);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const text = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text: SpeechBuilder.removeSSML(ask.speech.toString()) },
-      );
-      response.messages.push(text);
+      const text = SpeechBuilder.removeSSML(textOverride || ask.speech.toString());
+      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      response.messages.push(textMessage);
     }
 
     const messages = _get(output, 'FacebookMessenger.Messages');
