@@ -31,7 +31,7 @@ export interface Config extends PluginConfig {
 
 export class DialogflowNlu extends Extensible implements Plugin {
   config: Config = {
-    defaultIntent: 'DefaultFallbackIntent',
+    defaultIntent: 'Default Fallback Intent',
     defaultLocale: 'en-US',
     minConfidence: 0,
     credentialsFile: './credentials.json',
