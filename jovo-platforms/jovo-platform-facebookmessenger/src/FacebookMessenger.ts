@@ -66,6 +66,7 @@ export interface Config extends ExtensibleConfig {
   launch?: UpdateConfig<string>;
   pageAccessToken?: string;
   verifyToken?: string;
+  locale?: string;
 }
 
 export class FacebookMessenger extends Extensible implements Platform {
@@ -82,6 +83,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     },
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
+    locale: process.env.FB_LOCALE || 'en-US',
   };
 
   constructor(config?: Config) {
@@ -114,7 +116,6 @@ export class FacebookMessenger extends Extensible implements Platform {
   }
 
   install(app: BaseApp): void {
-    // TODO additional handling if user.sessionData was explicitly set to false
     if (!_get(app.config, `user.sessionData`)) {
       _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.enabled', true);
     }
@@ -295,6 +296,11 @@ export class FacebookMessenger extends Extensible implements Platform {
     Jovo.prototype.attachment = function(options: AttachmentMessageOptions) {
       const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
       this.$output.FacebookMessenger.Messages.push(message);
+      return this;
+    };
+
+    Jovo.prototype.overrideText = function(text: string) {
+      this.$output.FacebookMessenger.OverrideText = text;
       return this;
     };
 

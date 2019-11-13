@@ -90,9 +90,9 @@ declare module 'jovo-core/dist/src/Jovo' {
          * @public
          * @param {string} state name of state
          * @param {string} intent name of intent
+         * @param {boolean} [validate=true] state validation toggle
          */
-        toStateIntent(state: string | undefined, intent: string): Promise<void>;
-
+        toStateIntent(state: string | undefined, intent: string, validate?: boolean): Promise<void>;
 
         /**
          * Jumps from the inside of a state to a global intent
@@ -151,8 +151,28 @@ declare module 'jovo-core/dist/src/Jovo' {
             [ key: string ]: ComponentPlugin
         };
 
+        /**
+         * Checks if the given state contains the name of a initialized component.
+         * @private
+         * @param {string | undefined} state
+         * @return {void}
+         * @throws {JovoError}
+         */
+        checkStateForInitializedComponentName(state: string | undefined): void;
+
+        /**
+         * Returns the active components root state value.
+         * @return {string | undefined}
+         */
+        getActiveComponentsRootState(): string | undefined;
+        
+        /**
+         * Returns the active component.
+         * @return {string | undefined}
+         */
+        getActiveComponent(): Component | undefined;
+
         sendComponentResponse(response: ComponentResponse): Promise<void>;
-        // getActiveComponent(): Component; TODO
     }
 }
 

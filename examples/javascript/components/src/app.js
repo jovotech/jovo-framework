@@ -19,7 +19,7 @@ app.use(
     new FileDb(),
 );
 
-const GetPhoneNumber = require("./components/GetPhoneNumber");
+const GetPhoneNumber = require("./components/jovo-component-get-phone-number");
 
 app.useComponents(new GetPhoneNumber());
 
