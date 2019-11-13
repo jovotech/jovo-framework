@@ -14,7 +14,7 @@ import _get = require('lodash.get');
 
 
 import { Config as AppConfig } from './../App';
-import { ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from './Component';
+import { Component, ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from './Component';
 import { ComponentPlugin } from './ComponentPlugin';
 import { Route, Router } from './Router';
 
@@ -326,17 +326,60 @@ export class Handler implements Plugin {
         Jovo.prototype.$handlers = undefined;
 
         /**
+         * Checks if the given state contains the name of a initialized component.
+         * @private
+         * @param {string | undefined} state
+         * @return {void}
+         * @throws {JovoError}
+         */
+        Jovo.prototype.checkStateForInitializedComponentName = function (state: string | undefined): void {
+            if (state && this.$components) {
+                const components: string[] = Object.keys(this.$components);
+                const matched: string[] = state.split('.').filter(s => components.includes(s));
+
+                if (matched.length > 0) {
+                    throw new JovoError(
+                        `Can not use component names as states. Please rename the following states: ${matched.join(', ')}`,
+                        ErrorCode.ERR,
+                        'jovo-framework',
+                        'The used state contains at least one component name.',
+                        'Use this.delegate() or rename the listed states to prevent interference.'
+                    );
+                }
+            }
+        };
+
+        /**
          * Jumps to state intent in the order state > unhandled > error
          * @public
          * @param {string} state name of state
          * @param {string} intent name of intent
+         * @param {boolean} [validate=true] state validation toggle
          */
         Jovo.prototype.toStateIntent = async function (
             state: string | undefined,
             intent: string,
+            validate: boolean = true,
         ): Promise<any> {
             // tslint:disable-line
             this.triggeredToIntent = true;
+
+            // Check for Component State Validation
+            if(validate === true) {
+                this.checkStateForInitializedComponentName(state);
+
+                const componentState = this.getActiveComponentsRootState();
+                if (componentState && state) {
+                    let states: string[] = componentState.split('.');
+
+                    if (states[states.length - 1] !== state) {
+                        states = [ ...states, state];
+                    }
+
+                    state = states.join('.');
+                }
+            }
+
             this.setState(state);
             Log.verbose(` Changing state to: ${state}`);
 
@@ -351,6 +394,7 @@ export class Handler implements Plugin {
                 : this.getRoute().path;
             this.$plugins.Router.route = route;
             Log.verbose(` toStateIntent: ${state}.${intent}`);
+
             return Handler.applyHandle(this, route, true);
         };
 
@@ -385,10 +429,46 @@ export class Handler implements Plugin {
             }]);
 
             ComponentPlugin.initializeComponents(this.$handleRequest!);
-            const state = this.getState() ? `${this.getState()}.${componentName}` : componentName;
 
-            return this.toStateIntent(state, 'START');
+            const state = this.getActiveComponentsRootState() ? `${this.getActiveComponentsRootState()}.${componentName}` : componentName;
+
+            return this.toStateIntent(state, 'START', false);
         };
+
+        /**
+         * Returns the active components root state value.
+         * @return {string | undefined}
+         */
+        Jovo.prototype.getActiveComponentsRootState = function (): string | undefined {
+            const currentState = this.getState();
+
+            if (currentState && this.$components) {
+                const components = Object.keys(this.$components || {});
+                let states = currentState.split('.');
+                
+                // Remove last State until we hit a Component
+                while (!components.includes(states[states.length - 1])) {
+                    states = states.slice(0, -1);
+                }
+
+                return states.join('.');
+            }
+
+            return undefined;
+        };
+
+        Jovo.prototype.getActiveComponent = function (): Component | undefined {
+            const componentState = this.getActiveComponentsRootState();
+
+            if (componentState) {
+                const states: string[] = componentState.split('.');
+                const activeComponent: Component = this.$components[states[states.length - 1]];
+                
+                return activeComponent;
+            }
+
+            return undefined;
+        }
 
         /**
          * Updates the componentSessionStack.
@@ -420,10 +500,7 @@ export class Handler implements Plugin {
              */
             this.$components[componentName].$response = response;
 
-            return this.toStateIntent(
-                stateBeforeDelegate,
-                onCompletedIntent
-            );
+            return this.toStateIntent(stateBeforeDelegate, onCompletedIntent, false);
         }
 
         /**
@@ -431,11 +508,22 @@ export class Handler implements Plugin {
          * @public
          * @param {string} intent name of intent
          */
-        Jovo.prototype.toStatelessIntent = async function (intent: string) {
+        Jovo.prototype.toStatelessIntent = async function (intent: string) {    
+            const componentState = this.getActiveComponentsRootState();
+
+            // Check for Component Root State to prevent leaving any Active Components
+            if (componentState) {
+                const activeComponent = this.getActiveComponent();
+                Log.verbose(` Removing state from component. ${activeComponent ? `(${activeComponent.name})` : ''}`);
+                Log.verbose(` toStatelessIntent: ${intent}`);
+                
+                return this.toStateIntent(componentState, intent, false);
+            }
+            
             this.triggeredToIntent = true;
-            this.removeState();
             Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);
+            this.removeState();
             return this.toStateIntent(undefined, intent);
         };
 
@@ -445,6 +533,19 @@ export class Handler implements Plugin {
          * @return {Jovo}
          */
         Jovo.prototype.followUpState = function (state: string) {
+            this.checkStateForInitializedComponentName(state);
+
+            const componentState = this.getActiveComponentsRootState();
+            if (componentState) {
+                let states: string[] = componentState.split('.');
+
+                if (states[states.length - 1] !== state) {
+                    states = [ ...states, state];
+                }
+
+                state = states.join('.');
+            }
+
             return this.setState(state);
         };
 
