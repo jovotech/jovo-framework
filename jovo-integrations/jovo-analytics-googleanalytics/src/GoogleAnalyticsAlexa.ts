@@ -37,7 +37,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
             this.visitor!.set('campaignSource', referrer);
             this.visitor!.set('documentReferrer', referrer);
         }
-
     }
 
     setGoogleAnalyticsObject(handleRequest: HandleRequest) {
@@ -64,6 +63,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
             return;
         }
 
+        // @ts-ignore
         if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
             this.sendUserEvent(jovo, 'FlowError', 'Exceeded_Max_Reprompts');
         }

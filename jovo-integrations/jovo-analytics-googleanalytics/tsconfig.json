@@ -6,8 +6,6 @@
 		"module": "commonjs",
 		"noImplicitAny": true,
 		"removeComments": false,
-		"allowUnreachableCode": false,
-		"noImplicitReturns": true,
 		"preserveConstEnums": true,
 		"declaration": true,
 		"strict": true,
@@ -16,12 +14,13 @@
 		"sourceMap": true
 	},
 	"include": [
-		"./src/**/*",
 		"**/*.d.ts",
-		"./test/**/*"
+		"src/**/*",
+		"test/**/*"
 	],
 	"exclude": [
-		"./dist/**/*",
-		"./node_modules/**/*"
+		"dist/**/*",
+		"node_modules/**/*",
+		"**/*.spec.ts"
 	]
 }
