@@ -40,19 +40,13 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 	 * @returns {this}
 	 */
 	use(...plugins: Plugin[]): this {
-		plugins.forEach(plugin => {
+		for (const plugin of plugins) {
 			const name = plugin.name || plugin.constructor.name;
-			// needed to differentiate the default configuration from the constructor-passed config.
-			const tmpConstructorArray: any = {
-				// tslint:disable-line
-				[plugin.constructor.name]: plugin.constructor
-			};
 
 			if (plugin.config) {
-				const emptyDefaultPluginObject = new tmpConstructorArray[
-					plugin.constructor.name
-				]();
-				const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
+				const constructor = plugin.constructor as { new (): Plugin };
+				const emptyPluginObject = new constructor();
+				const pluginDefaultConfig = _cloneDeep(emptyPluginObject.config!);
 
 				if (typeof pluginDefaultConfig.enabled === 'undefined') {
 					pluginDefaultConfig.enabled = true;
@@ -70,7 +64,10 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 				);
 
 				for (const prop in plugin.config) {
-					if (prop in pluginDefaultConfig) {
+					if (
+						plugin.config.hasOwnProperty(prop) &&
+						pluginDefaultConfig.hasOwnProperty(prop)
+					) {
 						let val;
 						const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
 						if (typeof constructorConfig[prop] !== 'undefined') {
@@ -80,10 +77,17 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 						} else {
 							val = pluginDefaultConfig[prop];
 						}
+
 						if (typeof val === 'object') {
-							plugin.config[prop] = !plugin.config[prop]
-								? val
-								: { ...plugin.config[prop], ...val };
+							if (Array.isArray(val)) {
+								plugin.config[prop] = !plugin.config[prop]
+									? [...val]
+									: [...plugin.config[prop], ...val];
+							} else {
+								plugin.config[prop] = !plugin.config[prop]
+									? val
+									: { ...plugin.config[prop], ...val };
+							}
 						} else {
 							plugin.config[prop] = val;
 						}
@@ -94,9 +98,11 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 					}
 				}
 
-				if (this.config.plugin && plugin.config) {
-					this.config.plugin[name] = plugin.config;
+				if (!this.config.plugin) {
+					this.config.plugin = {};
 				}
+
+				this.config.plugin[name] = plugin.config;
 			}
 
 			// remove existing plugin with the same name
@@ -107,13 +113,13 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 					existingPlugin.uninstall(this);
 				}
 			}
-			if (
-				typeof plugin.config === 'undefined' || // enabled by default, even without config
-				(plugin.config && typeof plugin.config.enabled === 'undefined') || // enabled with config, but without enabled property
-				(plugin.config &&
-					typeof plugin.config.enabled === 'boolean' &&
-					plugin.config.enabled)
-			) {
+
+			const isPluginEnabled =
+				typeof plugin.config === 'undefined' ||
+				(plugin.config && typeof plugin.config.enabled === 'undefined') ||
+				(plugin.config && plugin.config.enabled === true);
+
+			if (isPluginEnabled) {
 				// enabled with config, and boolean enabled property
 				this.$plugins.set(name, plugin);
 
@@ -128,7 +134,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 				}
 				this.emit('use', plugin);
 			}
-		});
+		}
 		return this;
 	}
 
@@ -205,14 +211,12 @@ export abstract class Extensible extends EventEmitter.EventEmitter
  * @param  {any} base   Object to compare with
  * @return {any}        Return a new object who represent the diff
  */
-// tslint:disable-next-line
-function difference(object: any, base: any) {
-	// tslint:disable-next-line
-	function changes(object: any, base: { [key: string]: any }) {
-		// tslint:disable-next-line
+// tslint:disable:no-any
+function difference(object: Record<string, any>, base: Record<string, any>) {
+	function changes(object: Record<string, any>, base: Record<string, any>) {
 		return _transform(
 			object,
-			(result: { [key: string]: any }, value: any, key: string) => {
+			(result: Record<string, any>, value: any, key: string) => {
 				if (!_isEqual(value, base[key])) {
 					result[key] =
 						typeof value === 'object' && typeof base[key] === 'object'
@@ -225,3 +229,4 @@ function difference(object: any, base: any) {
 
 	return changes(object, base);
 }
+// tslint:enable:no-any
