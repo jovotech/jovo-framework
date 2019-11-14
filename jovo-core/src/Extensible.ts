@@ -16,7 +16,8 @@ export interface ExtensibleConfig extends PluginConfig {
 /**
  * Allows a class to use plugins
  */
-export abstract class Extensible extends EventEmitter.EventEmitter implements Plugin {
+export abstract class Extensible extends EventEmitter.EventEmitter
+	implements Plugin {
 	config: ExtensibleConfig = {
 		enabled: true,
 		plugin: {}
@@ -39,26 +40,20 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 	 * @returns {this}
 	 */
 	use(...plugins: Plugin[]): this {
-		plugins.forEach(plugin => {
+		for (const plugin of plugins) {
 			const name = plugin.name || plugin.constructor.name;
-			// needed to differentiate the default configuration from the constructor-passed config.
-			const tmpConstructorArray: any = {
-				// tslint:disable-line
-				[plugin.constructor.name]: plugin.constructor
-			};
 
 			if (plugin.config) {
-				const emptyDefaultPluginObject = new tmpConstructorArray[
-					plugin.constructor.name
-				]();
-				const pluginDefaultConfig = _cloneDeep(emptyDefaultPluginObject.config);
+				const constructor = plugin.constructor as new () => Plugin;
+				const emptyPluginObject = new constructor();
+				const pluginDefaultConfig = _cloneDeep(emptyPluginObject.config!);
 
-                if (typeof pluginDefaultConfig.enabled === 'undefined') {
-                    pluginDefaultConfig.enabled = true;
-                }
+				if (typeof pluginDefaultConfig.enabled === 'undefined') {
+					pluginDefaultConfig.enabled = true;
+				}
 
 				if (typeof plugin.config.enabled === 'undefined') {
-                    plugin.config.enabled = true;
+					plugin.config.enabled = true;
 				}
 
 				const appConfig = _cloneDeep(this.config);
@@ -69,27 +64,33 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 				);
 
 				for (const prop in plugin.config) {
-
-					if (prop in pluginDefaultConfig) {
+					if (
+						plugin.config.hasOwnProperty(prop) &&
+						pluginDefaultConfig.hasOwnProperty(prop)
+					) {
 						let val;
 						const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
-                        if (typeof constructorConfig[prop] !== 'undefined') {
+						if (typeof constructorConfig[prop] !== 'undefined') {
 							val = plugin.config[prop];
 						} else if (typeof appConfigVal !== 'undefined') {
 							val = appConfigVal;
 						} else {
 							val = pluginDefaultConfig[prop];
 						}
-						if (typeof val === 'object') {
-                        	if(!plugin.config[prop]) { // tslint:disable-line
-                                plugin.config[prop] = val;
-                            } else {
-                                plugin.config[prop] = Object.assign(plugin.config[prop], val); // tslint:disable-line:prefer-object-spread
-                            }
 
-                        } else {
-                            plugin.config[prop] = val;
-                        }
+						if (typeof val === 'object') {
+							if (Array.isArray(val)) {
+								plugin.config[prop] = !plugin.config[prop]
+									? [...val]
+									: [...plugin.config[prop], ...val];
+							} else {
+								plugin.config[prop] = !plugin.config[prop]
+									? val
+									: { ...plugin.config[prop], ...val };
+							}
+						} else {
+							plugin.config[prop] = val;
+						}
 					} else {
 						Log.verbose(
 							`[${name}] Property '${prop}' passed as config-option for plugin '${name}' but not defined in the default-config. Only properties that exist in the default-configuration can be set!`
@@ -97,9 +98,11 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 					}
 				}
 
-				if (this.config.plugin && this.config.plugin[name]) {
-					this.config.plugin[name] = plugin.config;
+				if (!this.config.plugin) {
+					this.config.plugin = {};
 				}
+
+				this.config.plugin[name] = plugin.config;
 			}
 
 			// remove existing plugin with the same name
@@ -110,13 +113,13 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 					existingPlugin.uninstall(this);
 				}
 			}
-			if (
-				typeof plugin.config === 'undefined' || // enabled by default, even without config
-				(plugin.config && typeof plugin.config.enabled === 'undefined') || // enabled with config, but without enabled property
-				(plugin.config &&
-					typeof plugin.config.enabled === 'boolean' &&
-					plugin.config.enabled)
-			) {
+
+			const isPluginEnabled =
+				typeof plugin.config === 'undefined' ||
+				(plugin.config && typeof plugin.config.enabled === 'undefined') ||
+				(plugin.config && plugin.config.enabled === true);
+
+			if (isPluginEnabled) {
 				// enabled with config, and boolean enabled property
 				this.$plugins.set(name, plugin);
 
@@ -131,7 +134,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 				}
 				this.emit('use', plugin);
 			}
-		});
+		}
 		return this;
 	}
 
@@ -204,18 +207,16 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
 /**
  * @see https://gist.github.com/Yimiprod/7ee176597fef230d1451
  * Deep diff between two object, using lodash
- * @param  {any} object Object compared
- * @param  {any} base   Object to compare with
- * @return {any}        Return a new object who represent the diff
+ * @param  {Record<string, any>} aObject Object compared
+ * @param  {Record<string, any>} aBase   Object to compare with
+ * @return {Record<string, any>>}        Return a new object who represent the diff
  */
-// tslint:disable-next-line
-function difference(object: any, base: any) {
-	// tslint:disable-next-line
-	function changes(object: any, base: { [key: string]: any }) {
-		// tslint:disable-next-line
+// tslint:disable:no-any
+function difference(aObject: Record<string, any>, aBase: Record<string, any>): Record<string, any> {
+	function changes(object: Record<string, any>, base: Record<string, any>): Record<string, any> {
 		return _transform(
 			object,
-			(result: { [key: string]: any }, value: any, key: string) => {
+			(result: Record<string, any>, value: any, key: string) => {
 				if (!_isEqual(value, base[key])) {
 					result[key] =
 						typeof value === 'object' && typeof base[key] === 'object'
@@ -226,5 +227,6 @@ function difference(object: any, base: any) {
 		);
 	}
 
-	return changes(object, base);
+	return changes(aObject, aBase);
 }
+// tslint:enable:no-any
