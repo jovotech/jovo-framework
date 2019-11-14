@@ -78,6 +78,9 @@ export class DialogflowNlu extends Extensible implements Plugin {
       const config =
         (handleRequest.jovo.$config.plugin && handleRequest.jovo.$config.plugin.DialogflowNlu) ||
         {};
+      if (!handleRequest.jovo.$config.plugin) {
+        handleRequest.jovo.$config.plugin = {};
+      }
       handleRequest.jovo.$config.plugin.DialogflowNlu = { ...config, authToken, projectId };
     }
   }
