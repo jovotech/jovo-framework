@@ -871,9 +871,6 @@ describe('test handleOnNewSession', () => {
     });
   });
 });
-describe('test removeState', () => {
-});
-
 describe('test followUpState', () => {
   test('test add followUpstate to session attributes', async (done) => {
     app.setHandler({

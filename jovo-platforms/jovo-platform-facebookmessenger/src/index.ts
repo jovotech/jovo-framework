@@ -22,6 +22,9 @@ declare module 'jovo-core/dist/src/Jovo' {
 
     isMessengerBot(): boolean;
 
+    // replaces text of ask / tell with the given text
+    overrideText(text: string): Jovo;
+
     text(options: TextMessageOptions): Jovo;
     attachment(options: AttachmentMessageOptions): Jovo;
 
@@ -39,6 +42,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
     FacebookMessenger: {
       Messages: Message[];
+      OverrideText?: string;
     };
   }
 }

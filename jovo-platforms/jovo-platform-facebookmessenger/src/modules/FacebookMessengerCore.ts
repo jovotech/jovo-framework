@@ -10,12 +10,13 @@ import {
   TextMessage,
 } from '..';
 
-// TODO implement session-data
 export class FacebookMessengerCore implements Plugin {
   private launchPayload?: string;
+  private locale?: string;
 
   install(messenger: FacebookMessenger): void {
     this.launchPayload = messenger.config.launch!.data;
+    this.locale = messenger.config.locale;
 
     messenger.middleware('$init')!.use(this.init.bind(this));
     messenger.middleware('$request')!.use(this.request.bind(this));
@@ -45,6 +46,7 @@ export class FacebookMessengerCore implements Plugin {
     }
 
     messengerBot.$request = MessengerBotRequest.fromJSON(messengerBot.$host.getRequestObject());
+    messengerBot.$request.setLocale(this.locale!);
     messengerBot.$user = new MessengerBotUser(messengerBot);
   }
 
@@ -62,10 +64,10 @@ export class FacebookMessengerCore implements Plugin {
   }
 
   async session(messengerBot: MessengerBot) {
-    if(!messengerBot.$session) {
-      messengerBot.$session = {$data: {}};
+    if (!messengerBot.$session) {
+      messengerBot.$session = { $data: {} };
     }
-    messengerBot.$session.$data = {...messengerBot.$user.$sessionData};
+    messengerBot.$session.$data = { ...messengerBot.$user.$sessionData };
   }
 
   async output(messengerBot: MessengerBot) {
@@ -80,28 +82,25 @@ export class FacebookMessengerCore implements Plugin {
       return;
     }
 
+    const textOverride = _get(output, 'FacebookMessenger.OverrideText');
+
     const tell = _get(output, 'tell');
     if (tell) {
-      const text = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text: SpeechBuilder.removeSSML(tell.speech.toString()) },
-      );
-      response.messages.push(text);
+      const text = SpeechBuilder.removeSSML(textOverride || tell.speech.toString());
+      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      response.messages.push(textMessage);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const text = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text: SpeechBuilder.removeSSML(ask.speech.toString()) },
-      );
-      response.messages.push(text);
+      const text = SpeechBuilder.removeSSML(textOverride || ask.speech.toString());
+      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      response.messages.push(textMessage);
     }
 
     const messages = _get(output, 'FacebookMessenger.Messages');
     if (messages && messages.length > 0) {
       response.messages.push(...messages);
     }
-
   }
 }

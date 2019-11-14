@@ -1,2 +1,2 @@
-export * from './DialogflowNLU';
+export * from './DialogflowNlu';
 export * from './Interfaces';

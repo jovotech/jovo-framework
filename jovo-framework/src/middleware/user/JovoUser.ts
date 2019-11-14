@@ -675,20 +675,15 @@ export class JovoUser implements Plugin {
 		if (!handleRequest.jovo!.$user.$metaData.devices) {
 			handleRequest.jovo!.$user.$metaData.devices = {};
 		}
-		if (
-			!handleRequest.jovo!.$user.$metaData.devices[
-				'' + handleRequest.jovo!.getDeviceId() + ''
-			]
-		) {
-			const device = {
-				hasAudioInterface: handleRequest.jovo!.hasAudioInterface(),
-				hasScreenInterface: handleRequest.jovo!.hasScreenInterface(),
-				hasVideoInterface: handleRequest.jovo!.hasVideoInterface()
-			};
-			handleRequest.jovo!.$user.$metaData.devices[
-				'' + handleRequest.jovo!.getDeviceId() + ''
-			] = device;
-		}
+
+		handleRequest.jovo!.$user.$metaData.devices[
+		'' + handleRequest.jovo!.getDeviceId() + ''
+			] = {
+			hasAudioInterface: handleRequest.jovo!.hasAudioInterface(),
+			hasScreenInterface: handleRequest.jovo!.hasScreenInterface(),
+			hasVideoInterface: handleRequest.jovo!.hasVideoInterface()
+		};
+
 	}
 
 	/**
