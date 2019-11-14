@@ -1,4 +1,5 @@
 import {
+  BaseApp,
   EnumRequestType,
   Extensible,
   HandleRequest,
@@ -15,6 +16,8 @@ import * as fs from 'fs';
 import * as util from 'util';
 import { JWT } from 'google-auth-library';
 import _merge = require('lodash.merge');
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
@@ -50,12 +53,19 @@ export class DialogflowNlu extends Extensible implements Plugin {
     }
   }
 
+  parentName?: string;
   jwtClient?: JWT;
 
   async install(parent: Extensible) {
+    if (parent instanceof BaseApp) {
+      throw new JovoError(`'DialogflowNlu' has to be an immediate plugin of a platform!`);
+    }
     parent.middleware('after.$init')!.use(this.afterInit.bind(this));
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
+
+    // tslint:disable-next-line
+    this.parentName = (parent as any).name || parent.constructor.name;
 
     const jwtClient = await this.initializeJWT();
     if (jwtClient) {
@@ -74,14 +84,10 @@ export class DialogflowNlu extends Extensible implements Plugin {
         }
       }
       const projectId = this.jwtClient ? this.jwtClient.projectId : '';
-
-      const config =
-        (handleRequest.jovo.$config.plugin && handleRequest.jovo.$config.plugin.DialogflowNlu) ||
-        this.config;
-      if (!handleRequest.jovo.$config.plugin) {
-        handleRequest.jovo.$config.plugin = {};
-      }
-      handleRequest.jovo.$config.plugin.DialogflowNlu = { ...config, authToken, projectId };
+      _set(handleRequest.jovo.$config, `plugin[${this.parentName}].DialogflowNlu`, {
+        authToken,
+        projectId,
+      });
     }
   }
 
@@ -182,6 +188,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
       undefined,
     );
     jwtClient.projectId = keyFileObject.project_id;
+
     return jwtClient;
   }
 
@@ -190,10 +197,12 @@ export class DialogflowNlu extends Extensible implements Plugin {
     session: string,
     textInput: DialogflowTextInput,
   ): Promise<DialogflowResponse> {
-    const { authToken, projectId } = (jovo.$config.plugin && jovo.$config.plugin.DialogflowNlu) || {
-      authToken: '',
-      projectId: '',
-    };
+    const { authToken, projectId } = _get(
+      jovo.$config,
+      `plugin[${this.parentName}].DialogflowNlu`,
+      { authToken: '', projectId: '' },
+    );
+
     const hasAuthToken = authToken && authToken.length > 0;
     const hasProjectId = projectId && projectId.length > 0;
 

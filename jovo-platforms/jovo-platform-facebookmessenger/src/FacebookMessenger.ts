@@ -258,11 +258,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     await this.middleware('$response')!.run(messengerBot);
 
     const messages: Message[] = _get(messengerBot, '$response.messages', []);
-    const pageAccessToken =
-      (handleRequest.jovo.$config.plugin &&
-        handleRequest.jovo.$config.plugin.FacebookMessenger &&
-        handleRequest.jovo.$config.plugin.FacebookMessenger.pageAccessToken) ||
-      '';
+    const pageAccessToken = _get(handleRequest.jovo.$config,'plugin.FacebookMessenger.pageAccessToken', '');
 
     for (const message of messages) {
       message.send(pageAccessToken).catch((e) => {
@@ -355,11 +351,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     Jovo.prototype.action = async function(action: SenderActionType) {
       const message = new SenderAction({ id: this.$user.getId()! }, action);
 
-      const pageAccessToken =
-        (this.$config.plugin &&
-          this.$config.plugin.FacebookMessenger &&
-          this.$config.plugin.FacebookMessenger.pageAccessToken) ||
-        '';
+      const pageAccessToken = _get(this.$config,'plugin.FacebookMessenger.pageAccessToken', '');
       const result = await message.send(pageAccessToken);
       return !!result;
     };
