@@ -361,7 +361,13 @@ export class FacebookMessenger extends Extensible implements Platform {
 
     Jovo.prototype.action = async function(action: SenderActionType) {
       const message = new SenderAction({ id: this.$user.getId()! }, action);
-      const result = await message.send(this.$config.plugin.FacebookMessenger.pageAccessToken!);
+
+      const pageAccessToken =
+        (this.$config.plugin &&
+          this.$config.plugin.FacebookMessenger &&
+          this.$config.plugin.FacebookMessenger.pageAccessToken) ||
+        '';
+      const result = await message.send(pageAccessToken);
       return !!result;
     };
   }
