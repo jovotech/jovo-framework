@@ -11,9 +11,9 @@ import {
 import { FileDb } from 'jovo-db-filedb';
 // tslint:disable-next-line
 import { App, ExpressJS } from 'jovo-framework';
+import _set = require('lodash.set');
 import { FacebookMessenger } from '../src';
 import { RequestSLU } from './helper/RequestSLU';
-import _set = require('lodash.set');
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -974,7 +974,7 @@ describe('test routing', () => {
       },
     });
     _set(app.config, 'plugin.Router.intentMap', {
-      HelloWorldIntent: 'HelloIntent'
+      HelloWorldIntent: 'HelloIntent',
     });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
@@ -994,7 +994,7 @@ describe('test routing', () => {
       },
     });
     _set(app.config, 'plugin.Router.intentMap', {
-      HelloWorldIntent: 'HelloIntent'
+      HelloWorldIntent: 'HelloIntent',
     });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
