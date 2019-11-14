@@ -223,6 +223,7 @@ export class Handler implements Plugin {
 
             const platform = handleRequest.jovo.getPlatformType();
             if (
+                handleRequest.app.config.plugin &&
                 handleRequest.app.config.plugin[ platform ] &&
                 handleRequest.app.config.plugin[ platform ].handlers
             ) {
@@ -445,7 +446,7 @@ export class Handler implements Plugin {
             if (currentState && this.$components) {
                 const components = Object.keys(this.$components || {});
                 let states = currentState.split('.');
-                
+
                 // Remove last State until we hit a Component
                 while (!components.includes(states[states.length - 1])) {
                     states = states.slice(0, -1);
@@ -463,7 +464,7 @@ export class Handler implements Plugin {
             if (componentState) {
                 const states: string[] = componentState.split('.');
                 const activeComponent: Component = this.$components[states[states.length - 1]];
-                
+
                 return activeComponent;
             }
 
@@ -472,7 +473,7 @@ export class Handler implements Plugin {
 
         /**
          * Updates the componentSessionStack.
-         * 
+         *
          * Routes back to the `onCompletedIntent` in the state, from which `delegate()` was called
          * and sets the component's $response object.
          * @param {ComponentResponse} response
@@ -508,7 +509,7 @@ export class Handler implements Plugin {
          * @public
          * @param {string} intent name of intent
          */
-        Jovo.prototype.toStatelessIntent = async function (intent: string) {    
+        Jovo.prototype.toStatelessIntent = async function (intent: string) {
             const componentState = this.getActiveComponentsRootState();
 
             // Check for Component Root State to prevent leaving any Active Components
@@ -516,10 +517,10 @@ export class Handler implements Plugin {
                 const activeComponent = this.getActiveComponent();
                 Log.verbose(` Removing state from component. ${activeComponent ? `(${activeComponent.name})` : ''}`);
                 Log.verbose(` toStatelessIntent: ${intent}`);
-                
+
                 return this.toStateIntent(componentState, intent, false);
             }
-            
+
             this.triggeredToIntent = true;
             Log.verbose(` Removing state.`);
             Log.verbose(` toStatelessIntent: ${intent}`);

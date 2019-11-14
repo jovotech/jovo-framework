@@ -13,6 +13,7 @@ import { FileDb } from 'jovo-db-filedb';
 import { App, ExpressJS } from 'jovo-framework';
 import { FacebookMessenger } from '../src';
 import { RequestSLU } from './helper/RequestSLU';
+import _set = require('lodash.set');
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -274,6 +275,7 @@ describe('test intentMap', () => {
         HelloWorldIntent: 'MappedHelloWorldIntent',
       },
     });
+
     app.setHandler({
       MappedHelloWorldIntent() {
         expect(true).toBe(true);
@@ -971,9 +973,9 @@ describe('test routing', () => {
         this.tell('Hello!');
       },
     });
-    app.config.plugin.Router.intentMap = {
-      HelloWorldIntent: 'HelloIntent',
-    };
+    _set(app.config, 'plugin.Router.intentMap', {
+      HelloWorldIntent: 'HelloIntent'
+    });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
 
@@ -991,9 +993,9 @@ describe('test routing', () => {
         done();
       },
     });
-    app.config.plugin.Router.intentMap = {
-      HelloWorldIntent: 'HelloIntent',
-    };
+    _set(app.config, 'plugin.Router.intentMap', {
+      HelloWorldIntent: 'HelloIntent'
+    });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
   });

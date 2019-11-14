@@ -124,7 +124,6 @@ export class FacebookMessenger extends Extensible implements Platform {
     app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('request')!.use(this.request.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
-    app.middleware('after.platform.init')!.use(this.afterInitialize.bind(this));
     app.middleware('nlu')!.use(this.nlu.bind(this));
     app.middleware('after.user.load')!.use(this.afterUserLoad.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
@@ -223,12 +222,6 @@ export class FacebookMessenger extends Extensible implements Platform {
 
     await this.middleware('$request')!.run(handleRequest.jovo);
     await this.middleware('$type')!.run(handleRequest.jovo);
-  }
-
-  async afterInitialize(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
-      return Promise.resolve();
-    }
   }
 
   async nlu(handleRequest: HandleRequest) {
