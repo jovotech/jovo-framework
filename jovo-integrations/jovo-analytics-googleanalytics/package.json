@@ -7,16 +7,13 @@
 	"scripts": {
 		"tslint": "tslint -p tsconfig.json -c tslint.json",
 		"tsc": "tsc",
-		"test": "jest"
+		"test": "jest",
+		"rimraf": "rimraf ./dist",
+		"typedoc": "typedoc --out ./docs ./ --mode file"
 	},
 	"author": "jovotech",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"@types/express": "^4.16.1",
-		"@types/google.analytics": "0.0.39",
-		"@types/murmurhash": "0.0.1",
-		"@types/node": "^11.15.2",
-		"@types/useragent": "^2.1.1",
 		"jovo-core": "^2.2.15",
 		"jovo-framework": "^2.2.20",
 		"jovo-platform-alexa": "^2.2.22",
@@ -28,11 +25,22 @@
 		"user-agents": "^1.0.255"
 	},
 	"devDependencies": {
+		"@types/jest": "^24.0.11",
+		"@types/express": "^4.16.0",
+		"@types/google.analytics": "0.0.39",
+		"@types/murmurhash": "0.0.1",
+		"@types/node": "^10.3.1",
+		"@types/useragent": "^2.1.1",
 		"@types/lodash.get": "^4.4.6",
 		"@types/lodash.merge": "^4.6.6",
 		"@types/universal-analytics": "^0.4.2",
-		"tslint": "^5.14.0",
-		"tslint-config-prettier": "^1.18.0"
+		"jest": "^24.9.0",
+		"ts-jest": "^24.0.1",
+		"rimraf": "^2.6.2",
+		"tslint": "^5.17.0",
+		"tslint-config-prettier": "^1.18.0",
+		"typedoc": "^0.15.0",
+		"typescript": "^3.4.1"
 	},
 	"jest": {
 		"transform": {
