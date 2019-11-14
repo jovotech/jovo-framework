@@ -9,6 +9,10 @@
 		]
 	},
 	"rules": {
+		"no-implicit-dependencies": [
+			true,
+			"dev"
+		],
 		"interface-name": [
 			true,
 			"never-prefix"
