@@ -14,6 +14,7 @@ declare module 'jovo-core/dist/src/Jovo' {
             sendUserEvent: Function;
             setCustomMetric: (index: number, value: string | number) => void;
         };
+        $alexaSkill: any;
         getRoute(): { intent: string, path: string, type: string };
         getMappedIntentName(): string;
     }
