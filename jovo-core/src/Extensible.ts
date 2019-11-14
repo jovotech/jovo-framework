@@ -44,7 +44,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 			const name = plugin.name || plugin.constructor.name;
 
 			if (plugin.config) {
-				const constructor = plugin.constructor as { new (): Plugin };
+				const constructor = plugin.constructor as new () => Plugin;
 				const emptyPluginObject = new constructor();
 				const pluginDefaultConfig = _cloneDeep(emptyPluginObject.config!);
 
@@ -207,13 +207,13 @@ export abstract class Extensible extends EventEmitter.EventEmitter
 /**
  * @see https://gist.github.com/Yimiprod/7ee176597fef230d1451
  * Deep diff between two object, using lodash
- * @param  {any} object Object compared
- * @param  {any} base   Object to compare with
- * @return {any}        Return a new object who represent the diff
+ * @param  {Record<string, any>} aObject Object compared
+ * @param  {Record<string, any>} aBase   Object to compare with
+ * @return {Record<string, any>>}        Return a new object who represent the diff
  */
 // tslint:disable:no-any
-function difference(object: Record<string, any>, base: Record<string, any>) {
-	function changes(object: Record<string, any>, base: Record<string, any>) {
+function difference(aObject: Record<string, any>, aBase: Record<string, any>): Record<string, any> {
+	function changes(object: Record<string, any>, base: Record<string, any>): Record<string, any> {
 		return _transform(
 			object,
 			(result: Record<string, any>, value: any, key: string) => {
@@ -227,6 +227,6 @@ function difference(object: Record<string, any>, base: Record<string, any>) {
 		);
 	}
 
-	return changes(object, base);
+	return changes(aObject, aBase);
 }
 // tslint:enable:no-any
