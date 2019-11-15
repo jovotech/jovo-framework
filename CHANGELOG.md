@@ -1,5 +1,27 @@
 # Jovo Framework Changelog
 
+
+## 2.2.21 (2019-11-15)
+
+#### :rocket: New Feature
+* `jovo-analytics-googleanalytics` Added Google Analytics integration (Alpha)  ([@freiSMS](https://github.com/freiSMS), [@rubenaeg](https://github.com/rubenaeg))
+* `jovo-framework` [#619](https://github.com/jovotech/jovo-framework/pull/619) Implemented request-config / fixed config-related bugs  ([@Veake](https://github.com/Veake))
+ 
+ #### :nail_care: Enhancement
+ * `jovo-framework` [#609](https://github.com/jovotech/jovo-framework/pull/609) Adjusted State Handling to prevent leaving active Conversational Components ([@stammbach](https://github.com/stammbach))
+ 
+#### :bug: Bug Fix
+* `jovo-platform-facebookmessenger` [#616](https://github.com/jovotech/jovo-framework/pull/616) Fixed bugs of jovo-platform-facebookmessenger ([@Veake](https://github.com/Veake))
+
+
+#### Committers: 4
+- Alexander Stammbach ([@stammbach](https://github.com/stammbach))
+- freiSMS ([@freiSMS](https://github.com/freiSMS))
+- Max Ripper ([@Veake](https://github.com/Veake))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+
+
+
 ## 2.2.20 (2019-11-06)
 
 #### :rocket: New Feature
@@ -46,7 +68,7 @@
 - Gaurav Shah ([@shah-gaurav](https://github.com/shah-gaurav))
 - freiSMS ([@freiSMS](https://github.com/freiSMS))
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
-- Ruben A. ([@rubenaeg](httpsgithub.comrubenaeg))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
 - Alex ([@aswetlow](https://github.com/aswetlow))
 
 
