@@ -26,7 +26,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
 
         const request = jovo.$request as AlexaRequest;
         const deviceInfo = request.getDeviceName();
-        this.visitor!.set('screenResolution', request.getScreenResolution());
+        this.visitor!.set('screenResolution', request.getScreenResolution!());
 
         // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
         this.visitor!.set('userAgentOverride', `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`);
@@ -37,7 +37,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
             this.visitor!.set('campaignSource', referrer);
             this.visitor!.set('documentReferrer', referrer);
         }
-
     }
 
     setGoogleAnalyticsObject(handleRequest: HandleRequest) {
