@@ -234,8 +234,9 @@ export class BaseApp extends Extensible {
 						1
 					)} initialized`
 				);
+
 				Log.yellow().verbose(
-					`this.$type: ${JSON.stringify(handleRequest.jovo.$type)}`
+					`this.$type: ${JSON.stringify(handleRequest.jovo.$type)} `
 				);
 				Log.yellow().verbose(
 					`this.$session.$data : ${JSON.stringify(
