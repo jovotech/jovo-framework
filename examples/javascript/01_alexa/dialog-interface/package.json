@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-dialog-interface",
-  "version": "2.2.23",
+  "version": "2.2.24",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.21",
-    "jovo-platform-alexa": "^2.2.23"
+    "jovo-framework": "^2.2.22",
+    "jovo-platform-alexa": "^2.2.24"
   }
 }
