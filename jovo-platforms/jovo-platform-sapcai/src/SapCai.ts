@@ -87,8 +87,8 @@ export class SapCai extends Extensible implements Platform {
         if (typeof obj !== 'object') {
           throw new Error('Handler must be of type object.');
         }
-        const sourceHandler = _get(this.config.plugin, 'SapCai.handlers');
-        _set(this.config.plugin, 'SapCai.handlers', _merge(sourceHandler, obj));
+        const sourceHandler = _get(this.config, 'plugin.SapCai.handlers');
+        _set(this.config, 'plugin.SapCai.handlers', _merge(sourceHandler, obj));
       }
       return this;
     };

@@ -258,7 +258,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     await this.middleware('$response')!.run(messengerBot);
 
     const messages: Message[] = _get(messengerBot, '$response.messages', []);
-    const pageAccessToken = this.config.pageAccessToken!;
+    const pageAccessToken = _get(handleRequest.jovo.$config,'plugin.FacebookMessenger.pageAccessToken', '');
 
     for (const message of messages) {
       message.send(pageAccessToken).catch((e) => {
@@ -275,8 +275,6 @@ export class FacebookMessenger extends Extensible implements Platform {
   }
 
   private augmentJovo() {
-    const pageAccessToken = this.config.pageAccessToken!;
-
     Jovo.prototype.$messengerBot = undefined;
     Jovo.prototype.messengerBot = function() {
       if (this.constructor.name !== 'MessengerBot') {
@@ -305,31 +303,46 @@ export class FacebookMessenger extends Extensible implements Platform {
     };
 
     Jovo.prototype.airlineTemplate = function(options: AirlineTemplateOptions) {
-      const payload: AirlineTemplatePayload = { ...options, template_type: TemplateType.Airline };
+      const payload: AirlineTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Airline,
+      };
       const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.buttonTemplate = function(options: ButtonTemplateOptions) {
-      const payload: ButtonTemplatePayload = { ...options, template_type: TemplateType.Button };
+      const payload: ButtonTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Button,
+      };
       const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.genericTemplate = function(options: GenericTemplateOptions) {
-      const payload: GenericTemplatePayload = { ...options, template_type: TemplateType.Generic };
+      const payload: GenericTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Generic,
+      };
       const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.mediaTemplate = function(options: MediaTemplateOptions) {
-      const payload: MediaTemplatePayload = { ...options, template_type: TemplateType.Media };
+      const payload: MediaTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Media,
+      };
       const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.receiptTemplate = function(options: ReceiptTemplateOptions) {
-      const payload: ReceiptTemplatePayload = { ...options, template_type: TemplateType.Receipt };
+      const payload: ReceiptTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Receipt,
+      };
       const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
@@ -337,6 +350,8 @@ export class FacebookMessenger extends Extensible implements Platform {
 
     Jovo.prototype.action = async function(action: SenderActionType) {
       const message = new SenderAction({ id: this.$user.getId()! }, action);
+
+      const pageAccessToken = _get(this.$config,'plugin.FacebookMessenger.pageAccessToken', '');
       const result = await message.send(pageAccessToken);
       return !!result;
     };
