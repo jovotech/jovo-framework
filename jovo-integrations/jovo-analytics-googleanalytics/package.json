@@ -32,8 +32,10 @@
 		"jovo-platform-alexa": "^2.2.25",
 		"jovo-platform-googleassistant": "^2.2.23",
 		"tslint": "^5.14.0",
-		"tslint-config-prettier": "^1.18.0"
-	},
+		"tslint-config-prettier": "^1.18.0",
+        "typescript": "^3.4.1",
+        "jest": "^24.9.0"
+    },
 	"jest": {
 		"transform": {
 			"^.+\\.tsx?$": "ts-jest"
