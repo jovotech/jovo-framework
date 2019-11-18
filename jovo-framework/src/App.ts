@@ -179,7 +179,7 @@ export class App extends BaseApp {
 			this.config = _merge(fileConfig, this.config);
 			Log.verbose('Using ' + pathToConfig);
 		} else {
-			if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST') {
+			if (!config && (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST')) {
 				Log.warn(`WARN: Couldn't find default config.js in your project.`);
 				Log.warn(`WARN: Expected path: ${path.resolve(pathToConfig)}`);
 			}
@@ -456,8 +456,8 @@ export class App extends BaseApp {
 	}
 
 	/**
-	 * 
-	 * @param {ComponentPlugin[]} components 
+	 *
+	 * @param {ComponentPlugin[]} components
 	 */
 	useComponents(...components: ComponentPlugin[]) {
 		/**
