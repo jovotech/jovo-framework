@@ -1,7 +1,6 @@
 {
 	"name": "jovo-analytics-googleanalytics",
 	"version": "2.2.16-alpha.0",
-	"private": true,
 	"description": "Jovo Plugin for GoogleAnalytics",
 	"main": "dist/src/index",
 	"types": "dist/src/index.d.ts",
