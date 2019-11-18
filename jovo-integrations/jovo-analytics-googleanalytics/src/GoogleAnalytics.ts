@@ -23,7 +23,7 @@ export class GoogleAnalytics implements Analytics {
                 ErrorCode.ERR_PLUGIN,
                 'jovo-analytics-googleanalytics',
                 '',
-                'You can find your tracking id in GoogleAnalytics by clicking: Admin -> Property Settings -> Tracking Id',
+                'You can find your tracking id in Google Analytics by clicking: Admin -> Property Settings -> Tracking Id',
                 'https://www.jovo.tech/docs/analytics/googleanalytics'
             );
         }
@@ -34,8 +34,8 @@ export class GoogleAnalytics implements Analytics {
     }
 
     /**
-     * Auto send intent data after each response. Also setting sessions and flowErrors 
-     * @param handleRequest 
+     * Auto send intent data after each response. Also setting sessions and flowErrors
+     * @param handleRequest
      */
     track(handleRequest: HandleRequest) {
         const jovo: Jovo = handleRequest.jovo!;
@@ -151,7 +151,7 @@ export class GoogleAnalytics implements Analytics {
     }
 
     /**
-     * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler. 
+     * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
      * @param {object} jovo: Jovo object
      */
     sendUnhandledEvents(jovo: Jovo) {
@@ -242,7 +242,7 @@ export class GoogleAnalytics implements Analytics {
 
     /**
      * Sets the analytics variable to the instance of this object for making it accessable in skill code
-     * @param handleRequest 
+     * @param handleRequest
      */
     setGoogleAnalyticsObject(handleRequest: HandleRequest) {
         const jovo = handleRequest.jovo;
