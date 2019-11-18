@@ -84,10 +84,16 @@ export class DialogflowNlu extends Extensible implements Plugin {
         }
       }
       const projectId = this.jwtClient ? this.jwtClient.projectId : '';
-      _set(handleRequest.jovo.$config, `plugin[${this.parentName}].DialogflowNlu`, {
+      _set(
+        handleRequest.jovo.$config,
+        `plugin.${this.parentName}.plugin.DialogflowNlu.authToken`,
         authToken,
+      );
+      _set(
+        handleRequest.jovo.$config,
+        `plugin.${this.parentName}.plugin.DialogflowNlu.projectId`,
         projectId,
-      });
+      );
     }
   }
 
@@ -197,11 +203,8 @@ export class DialogflowNlu extends Extensible implements Plugin {
     session: string,
     textInput: DialogflowTextInput,
   ): Promise<DialogflowResponse> {
-    const { authToken, projectId } = _get(
-      jovo.$config,
-      `plugin[${this.parentName}].DialogflowNlu`,
-      { authToken: '', projectId: '' },
-    );
+    const authToken = _get(jovo.$config, `plugin.${this.parentName}.plugin.DialogflowNlu.authToken`, '');
+    const projectId = _get(jovo.$config, `plugin.${this.parentName}.plugin.DialogflowNlu.projectId`, '');
 
     const hasAuthToken = authToken && authToken.length > 0;
     const hasProjectId = projectId && projectId.length > 0;
