@@ -1,10 +1,7 @@
-
-
-import {AlexaRequest} from "../src/core/AlexaRequest";
+import { AlexaRequest } from '../src/core/AlexaRequest';
 import _cloneDeep = require('lodash.clonedeep');
 const launchJSON = require('../sample-request-json/v1/LaunchRequest.json');
 const autoLaunchJSON = require('../sample-request-json/v1/AutomotiveLaunchRequest.json');
-
 
 process.env.NODE_ENV = 'TEST';
 

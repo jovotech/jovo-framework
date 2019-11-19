@@ -1,87 +1,81 @@
-import {User} from 'jovo-core';
+import { User } from 'jovo-core';
 import _get = require('lodash.get');
-import {GoogleAction} from "./GoogleAction";
+import { GoogleAction } from './GoogleAction';
 
 export interface UserProfile {
-    displayName: string;
-    givenName: string;
-    familyName: string;
+  displayName: string;
+  givenName: string;
+  familyName: string;
 }
 
 export class GoogleActionUser extends User {
-    googleAction: GoogleAction;
+  googleAction: GoogleAction;
 
-    $storage: any = {}; // tslint:disable-line
+  $storage: any = {}; // tslint:disable-line
 
-    constructor(googleAction: GoogleAction) {
-        super(googleAction);
-        this.googleAction = googleAction;
+  constructor(googleAction: GoogleAction) {
+    super(googleAction);
+    this.googleAction = googleAction;
+  }
 
+  getAccessToken() {
+    return this.googleAction.$request!.getAccessToken();
+  }
+  getId(): string {
+    return this.$storage.userId;
+  }
+
+  /**
+   * Returns user profile after askForName permission
+   * @return {UserProfile}
+   */
+  getProfile(): UserProfile {
+    return _get(this.googleAction.$originalRequest, 'user.profile');
+  }
+
+  /**
+   * Returns granted permission array after askForPermission
+   * @return {string[]}
+   */
+  getPermissions(): string[] {
+    return _get(this.googleAction.$originalRequest, 'user.permissions');
+  }
+
+  /**
+   * Checks for permission
+   * @param {string} permission
+   * @return {boolean}
+   */
+  hasPermission(permission: string): boolean {
+    const permissions = this.getPermissions();
+
+    if (!permissions) {
+      return false;
     }
+    return permissions.includes(permission);
+  }
 
-    getAccessToken() {
-        return this.googleAction.$request!.getAccessToken();
-    }
-    getId(): string {
-        return this.$storage.userId;
-    }
+  /**
+   * Checks for name permission
+   * @return {boolean}
+   */
+  hasNamePermission(): boolean {
+    return this.hasPermission('NAME');
+  }
 
-    /**
-     * Returns user profile after askForName permission
-     * @return {UserProfile}
-     */
-    getProfile(): UserProfile {
-        return _get(this.googleAction.$originalRequest, 'user.profile');
-    }
+  /**
+   * Checks for precise location permission
+   * @return {boolean}
+   */
+  hasPreciseLocationPermission(): boolean {
+    return this.hasPermission('DEVICE_PRECISE_LOCATION');
+  }
 
-    /**
-     * Returns granted permission array after askForPermission
-     * @return {string[]}
-     */
-    getPermissions(): string[] {
-        return _get(this.googleAction.$originalRequest, 'user.permissions');
-    }
-
-
-    /**
-     * Checks for permission
-     * @param {string} permission
-     * @return {boolean}
-     */
-    hasPermission(permission: string): boolean {
-        const permissions = this.getPermissions();
-
-        if (!permissions) {
-            return false;
-        }
-        return permissions.includes(permission);
-
-    }
-
-
-    /**
-     * Checks for name permission
-     * @return {boolean}
-     */
-    hasNamePermission(): boolean {
-        return this.hasPermission('NAME');
-    }
-
-
-    /**
-     * Checks for precise location permission
-     * @return {boolean}
-     */
-    hasPreciseLocationPermission(): boolean {
-        return this.hasPermission('DEVICE_PRECISE_LOCATION');
-    }
-
-
-    /**
-     * Checks for coarse location permission
-     * @return {boolean}
-     */
-    hasCoarseLocationPermission(): boolean {
-        return this.hasPermission('DEVICE_COARSE_LOCATION');
-    }
+  /**
+   * Checks for coarse location permission
+   * @return {boolean}
+   */
+  hasCoarseLocationPermission(): boolean {
+    return this.hasPermission('DEVICE_COARSE_LOCATION');
+  }
 }

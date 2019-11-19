@@ -23,7 +23,7 @@ export class FacebookMessengerRequestBuilder implements RequestBuilder<Messenger
   async intent(json?: object): Promise<MessengerBotRequest>;
   async intent(name?: string, slots?: any): Promise<MessengerBotRequest>;
   async intent(json?: object | string, slots?: any): Promise<MessengerBotRequest> {
-    if(typeof json === 'string') {
+    if (typeof json === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(json);
       return req;

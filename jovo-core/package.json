@@ -5,10 +5,11 @@
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "rimraf": "rimraf ./dist",
     "tsc": "tsc",
     "tscw": "tsc --watch",
-    "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
   },
@@ -41,7 +42,7 @@
     "@types/lodash.transform": "^4.6.4",
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
-    "prettier": "1.17.1",
+    "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",

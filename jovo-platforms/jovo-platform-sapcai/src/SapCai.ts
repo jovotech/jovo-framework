@@ -12,7 +12,14 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
-import { Cards, SapCaiCore, SapCaiNLU, SapCaiRequestBuilder, SapCaiResponseBuilder, SapCaiSkill } from '.';
+import {
+  Cards,
+  SapCaiCore,
+  SapCaiNLU,
+  SapCaiRequestBuilder,
+  SapCaiResponseBuilder,
+  SapCaiSkill,
+} from '.';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line:no-any
@@ -38,7 +45,17 @@ export class SapCai extends Extensible implements Platform {
     }
 
     this.actionSet = new ActionSet(
-      ['$init', '$request', '$session', '$user', '$type', '$nlu', '$inputs', '$output', '$response'],
+      [
+        '$init',
+        '$request',
+        '$session',
+        '$user',
+        '$type',
+        '$nlu',
+        '$inputs',
+        '$output',
+        '$response',
+      ],
       this,
     );
   }

@@ -203,8 +203,16 @@ export class DialogflowNlu extends Extensible implements Plugin {
     session: string,
     textInput: DialogflowTextInput,
   ): Promise<DialogflowResponse> {
-    const authToken = _get(jovo.$config, `plugin.${this.parentName}.plugin.DialogflowNlu.authToken`, '');
-    const projectId = _get(jovo.$config, `plugin.${this.parentName}.plugin.DialogflowNlu.projectId`, '');
+    const authToken = _get(
+      jovo.$config,
+      `plugin.${this.parentName}.plugin.DialogflowNlu.authToken`,
+      '',
+    );
+    const projectId = _get(
+      jovo.$config,
+      `plugin.${this.parentName}.plugin.DialogflowNlu.projectId`,
+      '',
+    );
 
     const hasAuthToken = authToken && authToken.length > 0;
     const hasProjectId = projectId && projectId.length > 0;

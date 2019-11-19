@@ -5,12 +5,13 @@
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "tslint": "node_modules/.bin/tslint -p tsconfig.json -c tslint.json",
-    "tsc": "node_modules/.bin/tsc",
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "tsc": "tsc",
     "watch": "tsc -w",
-    "rimraf": "node_modules/.bin/rimraf ./dist",
-    "typedoc": "node_modules/.bin/typedoc --out ./docs ./ --mode file",
-    "test": "node_modules/.bin/jest"
+    "rimraf": "rimraf ./dist",
+    "typedoc": "typedoc --out ./docs ./ --mode file",
+    "test": "jest"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
@@ -37,12 +38,14 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
+    "prettier": "1.19.1",
     "jovo-framework": "^2.2.23",
     "lodash.clonedeep": "^4.5.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.4.1"
   },

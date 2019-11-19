@@ -1,8 +1,7 @@
-import {Card} from "./Card";
+import { Card } from './Card';
 
 export class LinkAccountCard extends Card {
-
-    constructor() {
-        super('LinkAccount');
-    }
+  constructor() {
+    super('LinkAccount');
+  }
 }

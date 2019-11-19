@@ -2,10 +2,7 @@ import { ClientRequest, IncomingMessage } from 'http';
 import * as https from 'https';
 
 export class HTTPS {
-  static makeRequest<T = {}>(
-    options: https.RequestOptions = {},
-    data?: Buffer,
-  ): Promise<T> {
+  static makeRequest<T = {}>(options: https.RequestOptions = {}, data?: Buffer): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const req: ClientRequest = https.request(options, (res: IncomingMessage) => {
         let collectedData = '';

@@ -1,16 +1,15 @@
-import {User, Jovo} from 'jovo-core';
+import { User, Jovo } from 'jovo-core';
 
 export class DialogflowUser extends User {
+  constructor(jovo: Jovo) {
+    super(jovo);
+  }
 
-    constructor(jovo: Jovo) {
-        super(jovo);
-    }
+  getAccessToken(): string | undefined {
+    return undefined;
+  }
 
-    getAccessToken(): string | undefined {
-        return undefined;
-    }
-
-    getId(): string {
-        return 'TemporaryDialogflowUserId';
-    }
+  getId(): string {
+    return 'TemporaryDialogflowUserId';
+  }
 }
