@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-audioplayer",
-  "version": "2.2.25",
+  "version": "2.2.26",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.23",
-    "jovo-platform-alexa": "^2.2.25",
-    "jovo-plugin-debugger": "^2.2.19"
+    "jovo-framework": "^2.2.24",
+    "jovo-platform-alexa": "^2.2.26",
+    "jovo-plugin-debugger": "^2.2.20"
   }
 }
