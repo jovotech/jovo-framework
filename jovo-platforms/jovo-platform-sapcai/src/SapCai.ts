@@ -12,7 +12,14 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
-import { Cards, SapCaiCore, SapCaiNLU, SapCaiRequestBuilder, SapCaiResponseBuilder, SapCaiSkill } from '.';
+import {
+  Cards,
+  SapCaiCore,
+  SapCaiNLU,
+  SapCaiRequestBuilder,
+  SapCaiResponseBuilder,
+  SapCaiSkill,
+} from '.';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line:no-any
@@ -38,7 +45,17 @@ export class SapCai extends Extensible implements Platform {
     }
 
     this.actionSet = new ActionSet(
-      ['$init', '$request', '$session', '$user', '$type', '$nlu', '$inputs', '$output', '$response'],
+      [
+        '$init',
+        '$request',
+        '$session',
+        '$user',
+        '$type',
+        '$nlu',
+        '$inputs',
+        '$output',
+        '$response',
+      ],
       this,
     );
   }
@@ -87,8 +104,8 @@ export class SapCai extends Extensible implements Platform {
         if (typeof obj !== 'object') {
           throw new Error('Handler must be of type object.');
         }
-        const sourceHandler = _get(this.config.plugin, 'SapCai.handlers');
-        _set(this.config.plugin, 'SapCai.handlers', _merge(sourceHandler, obj));
+        const sourceHandler = _get(this.config, 'plugin.SapCai.handlers');
+        _set(this.config, 'plugin.SapCai.handlers', _merge(sourceHandler, obj));
       }
       return this;
     };

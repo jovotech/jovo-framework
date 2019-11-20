@@ -66,6 +66,7 @@ export interface Config extends ExtensibleConfig {
   launch?: UpdateConfig<string>;
   pageAccessToken?: string;
   verifyToken?: string;
+  locale?: string;
 }
 
 export class FacebookMessenger extends Extensible implements Platform {
@@ -82,6 +83,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     },
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
+    locale: process.env.FB_LOCALE || 'en-US',
   };
 
   constructor(config?: Config) {
@@ -114,7 +116,6 @@ export class FacebookMessenger extends Extensible implements Platform {
   }
 
   install(app: BaseApp): void {
-    // TODO additional handling if user.sessionData was explicitly set to false
     if (!_get(app.config, `user.sessionData`)) {
       _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.enabled', true);
     }
@@ -202,9 +203,7 @@ export class FacebookMessenger extends Extensible implements Platform {
           'The verify token that was set in the config does not match the verify token in the request!',
           ErrorCode.ERR,
           'FacebookMessenger',
-          `verify token in the config '${
-            this.config.verifyToken
-          }' does not match the passed verify token '${token}'!`,
+          `verify token in the config '${this.config.verifyToken}' does not match the passed verify token '${token}'!`,
           'Check the verify token in the config and in the webhook-verification-form.',
         );
       }
@@ -257,7 +256,11 @@ export class FacebookMessenger extends Extensible implements Platform {
     await this.middleware('$response')!.run(messengerBot);
 
     const messages: Message[] = _get(messengerBot, '$response.messages', []);
-    const pageAccessToken = this.config.pageAccessToken!;
+    const pageAccessToken = _get(
+      handleRequest.jovo.$config,
+      'plugin.FacebookMessenger.pageAccessToken',
+      '',
+    );
 
     for (const message of messages) {
       message.send(pageAccessToken).catch((e) => {
@@ -274,8 +277,6 @@ export class FacebookMessenger extends Extensible implements Platform {
   }
 
   private augmentJovo() {
-    const pageAccessToken = this.config.pageAccessToken!;
-
     Jovo.prototype.$messengerBot = undefined;
     Jovo.prototype.messengerBot = function() {
       if (this.constructor.name !== 'MessengerBot') {
@@ -298,32 +299,52 @@ export class FacebookMessenger extends Extensible implements Platform {
       return this;
     };
 
+    Jovo.prototype.overrideText = function(text: string) {
+      this.$output.FacebookMessenger.OverrideText = text;
+      return this;
+    };
+
     Jovo.prototype.airlineTemplate = function(options: AirlineTemplateOptions) {
-      const payload: AirlineTemplatePayload = { ...options, template_type: TemplateType.Airline };
+      const payload: AirlineTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Airline,
+      };
       const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.buttonTemplate = function(options: ButtonTemplateOptions) {
-      const payload: ButtonTemplatePayload = { ...options, template_type: TemplateType.Button };
+      const payload: ButtonTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Button,
+      };
       const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.genericTemplate = function(options: GenericTemplateOptions) {
-      const payload: GenericTemplatePayload = { ...options, template_type: TemplateType.Generic };
+      const payload: GenericTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Generic,
+      };
       const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.mediaTemplate = function(options: MediaTemplateOptions) {
-      const payload: MediaTemplatePayload = { ...options, template_type: TemplateType.Media };
+      const payload: MediaTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Media,
+      };
       const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
     };
     Jovo.prototype.receiptTemplate = function(options: ReceiptTemplateOptions) {
-      const payload: ReceiptTemplatePayload = { ...options, template_type: TemplateType.Receipt };
+      const payload: ReceiptTemplatePayload = {
+        ...options,
+        template_type: TemplateType.Receipt,
+      };
       const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
       this.$output.FacebookMessenger.Messages.push(message);
       return this;
@@ -331,6 +352,8 @@ export class FacebookMessenger extends Extensible implements Platform {
 
     Jovo.prototype.action = async function(action: SenderActionType) {
       const message = new SenderAction({ id: this.$user.getId()! }, action);
+
+      const pageAccessToken = _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');
       const result = await message.send(pageAccessToken);
       return !!result;
     };

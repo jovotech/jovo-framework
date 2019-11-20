@@ -1,8 +1,9 @@
-import {AlexaResponse} from "./AlexaResponse";
-import {ResponseBuilder} from "jovo-core";
+import { AlexaResponse } from './AlexaResponse';
+import { ResponseBuilder } from 'jovo-core';
 
 export class AlexaResponseBuilder implements ResponseBuilder<AlexaResponse> {
-    create(json: any): AlexaResponse { // tslint:disable-line
-        return AlexaResponse.fromJSON(json);
-    }
+  // tslint:disable-next-line
+  create(json: any): AlexaResponse {
+    return AlexaResponse.fromJSON(json);
+  }
 }

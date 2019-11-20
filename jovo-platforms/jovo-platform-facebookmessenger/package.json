@@ -1,10 +1,11 @@
 {
   "name": "jovo-platform-facebookmessenger",
-  "version": "2.0.1-alpha.0",
+  "version": "2.0.4-alpha.0",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
     "tscw": "tsc --watch",
@@ -17,7 +18,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "form-data": "^2.5.1",
-    "jovo-core": "^2.2.15",
+    "jovo-core": "^2.2.17",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -26,22 +27,23 @@
   },
   "devDependencies": {
     "@types/form-data": "^2.5.0",
-    "@types/jest": "^24.0.18",
-    "@types/lodash.clonedeep": "^4.5.6",
+    "@types/jest": "^24.0.11",
+    "@types/lodash.clonedeep": "^4.5.4",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
-    "@types/node": "^12.7.5",
+    "@types/node": "^10.3.1",
     "jest": "^24.9.0",
-    "jovo-db-filedb": "^2.2.15",
-    "jovo-framework": "^2.2.20",
-    "prettier": "^1.18.2",
-    "rimraf": "^3.0.0",
-    "source-map-support": "^0.5.13",
-    "ts-jest": "^24.1.0",
-    "tslint": "^5.20.0",
+    "jovo-db-filedb": "^2.2.17",
+    "jovo-framework": "^2.2.23",
+    "prettier": "1.19.1",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^24.0.1",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.4.1"
   },
   "jest": {
     "transform": {
@@ -67,5 +69,6 @@
   },
   "files": [
     "dist/src/**/*"
-  ]
+  ],
+  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
 }

@@ -1,16 +1,14 @@
-
 export class ApiError extends Error {
+  static PARSE_ERROR = 'PARSE_ERROR';
+  static ACCESS_NOT_REQUESTED = 'ACCESS_NOT_REQUESTED';
+  static NO_USER_PERMISSION = 'NO_USER_PERMISSION';
+  static NO_SKILL_PERMISSION = 'NO_SKILL_PERMISSION';
+  static ITEM_NOT_FOUND = 'ITEM_NOT_FOUND';
+  static ERROR = 'ERROR';
 
-    static PARSE_ERROR = 'PARSE_ERROR';
-    static ACCESS_NOT_REQUESTED = 'ACCESS_NOT_REQUESTED';
-    static NO_USER_PERMISSION = 'NO_USER_PERMISSION';
-    static NO_SKILL_PERMISSION = 'NO_SKILL_PERMISSION';
-    static ITEM_NOT_FOUND = 'ITEM_NOT_FOUND';
-    static ERROR = 'ERROR';
-
-    code: string;
-    constructor(message: string, code = ApiError.ERROR) {
-        super(message);
-        this.code = code;
-    }
+  code: string;
+  constructor(message: string, code = ApiError.ERROR) {
+    super(message);
+    this.code = code;
+  }
 }

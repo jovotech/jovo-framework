@@ -1,17 +1,16 @@
-
 export interface Card {
-    type: string;
+  type: string;
 }
 
 export abstract class Card {
-    type: string;
+  type: string;
 
-    constructor(type: string) {
-        this.type = type;
-    }
+  constructor(type: string) {
+    this.type = type;
+  }
 
-    setType(type: string): this {
-        this.type = type;
-        return this;
-    }
+  setType(type: string): this {
+    this.type = type;
+    return this;
+  }
 }

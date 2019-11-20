@@ -1,10 +1,11 @@
 {
   "name": "jovo-plugin-debugger",
-  "version": "2.2.17",
+  "version": "2.2.19",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
     "rimraf": "rimraf ./dist",
@@ -15,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^2.19.0",
-    "jovo-core": "^2.2.15",
+    "jovo-core": "^2.2.17",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
@@ -28,6 +29,7 @@
     "@types/node": "^10.3.1",
     "@types/socket.io-client": "^1.4.32",
     "jest": "^24.9.0",
+    "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
@@ -54,5 +56,5 @@
     "sample-request-json",
     "sample-response-json"
   ],
-  "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
+  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
 }

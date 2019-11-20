@@ -40,7 +40,7 @@ export class SapCaiRequestBuilder implements RequestBuilder<SapCaiRequest> {
   }
 
   async launchRequest(json?: object): Promise<SapCaiRequest> {
-    if(json) {
+    if (json) {
       return SapCaiRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));

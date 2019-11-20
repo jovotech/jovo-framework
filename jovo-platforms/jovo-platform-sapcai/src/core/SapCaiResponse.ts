@@ -150,7 +150,10 @@ export class SapCaiResponse implements JovoResponse {
 
       const hasInvalidButtons = element.buttons
         ? element.buttons.some((button: Button, i: number) => {
-            return !content.elements![index].buttons || button.title !== content.elements![index].buttons![i].title;
+            return (
+              !content.elements![index].buttons ||
+              button.title !== content.elements![index].buttons![i].title
+            );
           })
         : false;
       return (
@@ -163,7 +166,10 @@ export class SapCaiResponse implements JovoResponse {
     });
 
     if (buttonChips) {
-      const validChips = this.hasAllChipsAsButtons(list.content as MessageContentObject, buttonChips);
+      const validChips = this.hasAllChipsAsButtons(
+        list.content as MessageContentObject,
+        buttonChips,
+      );
       if (!validChips) {
         return false;
       }

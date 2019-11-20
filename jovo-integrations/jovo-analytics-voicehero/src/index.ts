@@ -1,2 +1,1 @@
-
 export { VoiceHeroAlexa } from './VoiceHeroAlexa';
