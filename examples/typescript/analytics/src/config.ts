@@ -31,6 +31,9 @@ const config = {
         ChatbaseGoogleAssistant: {
             key: 'keyGoogleAssistant',
             appVersion: '',
+        },
+        GoogleAnalytics: {
+            trackingId: ''
         }
     },
     db: {

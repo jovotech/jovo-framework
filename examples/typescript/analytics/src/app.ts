@@ -14,7 +14,7 @@ import { DashbotAlexa } from 'jovo-analytics-dashbot';
 import { DashbotGoogleAssistant } from 'jovo-analytics-dashbot';
 import { ChatbaseAlexa } from 'jovo-analytics-chatbase';
 import { ChatbaseGoogleAssistant } from 'jovo-analytics-chatbase';
-
+import { GoogleAnalytics } from 'jovo-analytics-googleanalytics';
 
 const app = new App();
 
@@ -30,7 +30,8 @@ app.use(
     new DashbotAlexa(),
     new DashbotGoogleAssistant(),
     new ChatbaseAlexa(),
-    new ChatbaseGoogleAssistant()
+    new ChatbaseGoogleAssistant(),
+    new GoogleAnalytics()
 );
 
 app.setHandler({
@@ -48,4 +49,4 @@ app.setHandler({
 });
 
 
-export {app};
+export { app };

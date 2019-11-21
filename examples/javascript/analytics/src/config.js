@@ -28,7 +28,7 @@ module.exports = {
 			appVersion: '',
 		},
 		GoogleAnalytics: {
-			trackingId: 'UA-152810782-1'
+			trackingId: ''
 		}
 	}
 };
