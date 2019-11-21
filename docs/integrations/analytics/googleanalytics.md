@@ -17,11 +17,11 @@ Learn how to use Google Analytics for your Jovo application.
         * [Custom Metrics](#custom-metrics)
     * [Custom Reports](#custom-reports)
     * [Developer Methods](#developer-methods)
-        * [sendEvent()](#sendevent
+        * [sendEvent()](#sendevent)
         * [sendTransaction()](#sendTransaction)
-        * [sendItem()](#senditem
-        * [sendUserEvent()](#senduserevent
-        * [setCustomMetric()](#setcustommetric
+        * [sendItem()](#senditem)
+        * [sendUserEvent()](#senduserevent)
+        * [setCustomMetric()](#setcustommetric)
 
 ## About Google Analytics
 
