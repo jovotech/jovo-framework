@@ -8,7 +8,8 @@ import {
   Jovo,
 } from 'jovo-core';
 import { App, ExpressJS } from 'jovo-framework';
-import {NEW_SESSION_KEY, SapCai} from '../src';
+import { NEW_SESSION_KEY, SapCai } from '../src';
+import _set = require('lodash.set');
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
@@ -326,7 +327,7 @@ describe('test session attributes', () => {
     intentRequest.setSessionAttributes({
       sessionName1: 'sessionValue1',
       sessionName2: 'sessionValue2',
-      [NEW_SESSION_KEY]: false
+      [NEW_SESSION_KEY]: false,
     });
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -1177,9 +1178,10 @@ describe('test routing', () => {
         this.tell('Hello!');
       },
     });
-    app.config.plugin.Router.intentMap = {
+
+    _set(app.config, 'plugin.Router.intentMap', {
       HelloWorldIntent: 'HelloIntent',
-    };
+    });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
 
@@ -1197,9 +1199,9 @@ describe('test routing', () => {
         done();
       },
     });
-    app.config.plugin.Router.intentMap = {
+    _set(app.config, 'plugin.Router.intentMap', {
       HelloWorldIntent: 'HelloIntent',
-    };
+    });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
   });

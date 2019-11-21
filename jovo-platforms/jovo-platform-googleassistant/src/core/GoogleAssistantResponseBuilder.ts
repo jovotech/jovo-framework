@@ -1,8 +1,9 @@
-import {ResponseBuilder} from "jovo-core";
-import {GoogleActionResponse} from "./GoogleActionResponse";
+import { ResponseBuilder } from 'jovo-core';
+import { GoogleActionResponse } from './GoogleActionResponse';
 
 export class GoogleAssistantResponseBuilder implements ResponseBuilder<GoogleActionResponse> {
-    create(json: any): GoogleActionResponse { // tslint:disable-line
-        return GoogleActionResponse.fromJSON(json);
-    }
+  // tslint:disable-next-line
+  create(json: any): GoogleActionResponse {
+    return GoogleActionResponse.fromJSON(json);
+  }
 }

@@ -31,7 +31,12 @@ export class SapCaiCore implements Plugin {
   async init(handleRequest: HandleRequest) {
     const requestObject = handleRequest.host.getRequestObject();
 
-    if (requestObject && requestObject.nlp && requestObject.conversation && requestObject.conversation.id) {
+    if (
+      requestObject &&
+      requestObject.nlp &&
+      requestObject.conversation &&
+      requestObject.conversation.id
+    ) {
       handleRequest.jovo = new SapCaiSkill(handleRequest.app, handleRequest.host, handleRequest);
     }
   }
@@ -54,7 +59,8 @@ export class SapCaiCore implements Plugin {
     if (
       this.config.useLaunch &&
       sessionAttributes &&
-      (typeof sessionAttributes[NEW_SESSION_KEY] === 'undefined' || sessionAttributes[NEW_SESSION_KEY] === true)
+      (typeof sessionAttributes[NEW_SESSION_KEY] === 'undefined' ||
+        sessionAttributes[NEW_SESSION_KEY] === true)
     ) {
       type = EnumRequestType.LAUNCH;
     }
@@ -110,7 +116,7 @@ export class SapCaiCore implements Plugin {
   }
 
   async response(caiSkill: SapCaiSkill) {
-    if(caiSkill.$type.type === EnumRequestType.LAUNCH) {
+    if (caiSkill.$type.type === EnumRequestType.LAUNCH) {
       const response = caiSkill.$response || new SapCaiResponse();
       const sessionAttributes = response.getSessionAttributes() || {};
       sessionAttributes[NEW_SESSION_KEY] = false;

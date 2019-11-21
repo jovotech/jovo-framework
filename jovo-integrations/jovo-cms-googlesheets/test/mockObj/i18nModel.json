@@ -1,16 +1,13 @@
 {
-    "en-US": {
-        "translation": {
-            "WELCOME": "Welcome_Default",
-            "GOODBYE": [
-                "Goodbye_Default",
-                "Bye_Default"
-            ]
-        }
-    },
-    "de-DE": {
-        "translation": {
-            "WELCOME": "Willkommen_Default"
-        }
+  "en-US": {
+    "translation": {
+      "WELCOME": "Welcome_Default",
+      "GOODBYE": ["Goodbye_Default", "Bye_Default"]
     }
+  },
+  "de-DE": {
+    "translation": {
+      "WELCOME": "Willkommen_Default"
+    }
+  }
 }

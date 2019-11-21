@@ -1,10 +1,10 @@
-import {Plugin} from "jovo-core";
-import _get = require("lodash.get");
-import _set = require("lodash.set");
+import { Plugin } from 'jovo-core';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
-import {GoogleAssistant} from "../GoogleAssistant";
-import {GoogleAction} from "../core/GoogleAction";
-import {GoogleActionResponse} from "../core/GoogleActionResponse";
+import { GoogleAssistant } from '../GoogleAssistant';
+import { GoogleAction } from '../core/GoogleAction';
+import { GoogleActionResponse } from '../core/GoogleActionResponse';
 
 export class Updates {
   googleAction: GoogleAction;
@@ -24,7 +24,7 @@ export class Updates {
       AskForRegisterUpdate: {
         intent,
         frequency,
-      }
+      },
     };
   }
 
@@ -41,9 +41,13 @@ export class Updates {
    * @returns {'OK'|'CANCELLED'}
    */
   getRegisterUpdateStatus(): string | undefined {
-    for (const argument of _get(this.googleAction.$originalRequest || this.googleAction.$request, 'inputs[0]["arguments"]', [])) {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
       if (argument.name === 'REGISTER_UPDATE') {
-          return argument.extension.status;
+        return argument.extension.status;
       }
     }
   }
@@ -62,9 +66,13 @@ export class Updates {
    * @returns {string|undefined}
    */
   getConfigureUpdatesIntent(): string | undefined {
-    for (const argument of _get(this.googleAction.$originalRequest || this.googleAction.$request, 'inputs[0]["arguments"]', [])) {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
       if (argument.name === 'UPDATE_INTENT') {
-          return argument.extension.status;
+        return argument.extension.status;
       }
     }
   }
@@ -72,14 +80,17 @@ export class Updates {
 
 export class UpdatesPlugin implements Plugin {
   install(googleAssistant: GoogleAssistant) {
-    googleAssistant.middleware("$type")!.use(this.type.bind(this));
-    googleAssistant.middleware("$output")!.use(this.output.bind(this));
+    googleAssistant.middleware('$type')!.use(this.type.bind(this));
+    googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
     GoogleAction.prototype.$updates = undefined;
   }
 
   type(googleAction: GoogleAction) {
-    const intentName = _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent');
+    const intentName = _get(
+      googleAction.$originalRequest || googleAction.$request,
+      'inputs[0].intent',
+    );
 
     if (intentName === 'actions.intent.REGISTER_UPDATE') {
       _set(googleAction.$type, 'type', 'ON_REGISTER_UPDATE');
@@ -99,35 +110,32 @@ export class UpdatesPlugin implements Plugin {
     }
     const output = googleAction.$output;
 
-    const askForRegisterUpdate = _get(output, "GoogleAssistant.AskForRegisterUpdate");
+    const askForRegisterUpdate = _get(output, 'GoogleAssistant.AskForRegisterUpdate');
 
     if (askForRegisterUpdate) {
-        _set(googleAction.$originalResponse, "expectUserResponse", true);
-        _set(googleAction.$originalResponse, "systemIntent", {
-          intent: "actions.intent.REGISTER_UPDATE",
-          inputValueData: {
-              "@type": "type.googleapis.com/google.actions.v2.RegisterUpdateValueSpec",
-              intent: askForRegisterUpdate.intent,
-              triggerContext: {
-                  timeContext: {
-                      frequency: askForRegisterUpdate.frequency,
-                  },
-              },
+      _set(googleAction.$originalResponse, 'expectUserResponse', true);
+      _set(googleAction.$originalResponse, 'systemIntent', {
+        intent: 'actions.intent.REGISTER_UPDATE',
+        inputValueData: {
+          '@type': 'type.googleapis.com/google.actions.v2.RegisterUpdateValueSpec',
+          'intent': askForRegisterUpdate.intent,
+          'triggerContext': {
+            timeContext: {
+              frequency: askForRegisterUpdate.frequency,
+            },
           },
-        });
-        _set(googleAction.$originalResponse, 'inputPrompt', {
-          initialPrompts: [
-              {
-                  textToSpeech: 'PLACEHOLDER_FOR_REGISTER_UPDATE',
-              },
-          ],
-          noInputPrompts: [],
+        },
+      });
+      _set(googleAction.$originalResponse, 'inputPrompt', {
+        initialPrompts: [
+          {
+            textToSpeech: 'PLACEHOLDER_FOR_REGISTER_UPDATE',
+          },
+        ],
+        noInputPrompts: [],
       });
     }
-
   }
 
-  uninstall(googleAssistant: GoogleAssistant) {
-
-  }
+  uninstall(googleAssistant: GoogleAssistant) {}
 }

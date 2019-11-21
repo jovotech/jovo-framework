@@ -1,7 +1,7 @@
 import { Jovo } from './Jovo';
 
 export class Cms {
-    $jovo?: Jovo;
+  $jovo?: Jovo;
 
-    [ key: string ]: any; // tslint:disable-line:no-any
+  [key: string]: any; // tslint:disable-line:no-any
 }

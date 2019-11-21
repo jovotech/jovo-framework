@@ -1,30 +1,30 @@
-import {Plugin, BaseApp} from "jovo-core";
+import { Plugin, BaseApp } from 'jovo-core';
 import _get = require('lodash.get');
-import {Config} from "../../DialogflowCore";
-import {Dialogflow} from "../../Dialogflow";
-import {DialogflowAgent} from "../../DialogflowAgent";
-import {TwilioUser} from "./TwilioUser";
+import { Config } from '../../DialogflowCore';
+import { Dialogflow } from '../../Dialogflow';
+import { DialogflowAgent } from '../../DialogflowAgent';
+import { TwilioUser } from './TwilioUser';
 
 export class Twilio implements Plugin {
-    config: Config = {
-        enabled: true,
+  config: Config = {
+    enabled: true,
+  };
+
+  constructor(config?: Config) {}
+
+  install(dialogFlow: Dialogflow) {
+    dialogFlow.middleware('$type')!.use(this.type.bind(this));
+
+    DialogflowAgent.prototype.isTwilioBot = function() {
+      return _get(this.$request, 'originalDetectIntentRequest.source') === 'twilio';
     };
+  }
 
-    constructor(config?: Config) {}
+  uninstall(app: BaseApp) {}
 
-    install(dialogFlow: Dialogflow) {
-        dialogFlow.middleware('$type')!.use(this.type.bind(this));
-
-        DialogflowAgent.prototype.isTwilioBot = function() {
-            return _get(this.$request, 'originalDetectIntentRequest.source') === 'twilio';
-        };
+  type(dialogflowAgent: DialogflowAgent) {
+    if (dialogflowAgent.isTwilioBot()) {
+      dialogflowAgent.$user = new TwilioUser(dialogflowAgent);
     }
-
-    uninstall(app: BaseApp) {}
-
-    type(dialogflowAgent: DialogflowAgent) {
-        if (dialogflowAgent.isTwilioBot()) {
-            dialogflowAgent.$user = new TwilioUser(dialogflowAgent);
-        }
-    }
+  }
 }

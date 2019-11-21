@@ -6,7 +6,7 @@ import { Config, Event, TransactionItem, Transaction } from './interfaces';
 
 export class GoogleAnalytics implements Analytics {
     config: Config = {
-        trackingId: ''
+        trackingId: '',
     };
     visitor: ua.Visitor | undefined;
 
@@ -23,8 +23,8 @@ export class GoogleAnalytics implements Analytics {
                 ErrorCode.ERR_PLUGIN,
                 'jovo-analytics-googleanalytics',
                 '',
-                'You can find your tracking id in GoogleAnalytics by clicking: Admin -> Property Settings -> Tracking Id',
-                'https://www.jovo.tech/docs/analytics/googleanalytics'
+                'You can find your tracking id in Google Analytics by clicking: Admin -> Property Settings -> Tracking Id',
+                'https://www.jovo.tech/docs/analytics/googleanalytics',
             );
         }
 
@@ -34,8 +34,8 @@ export class GoogleAnalytics implements Analytics {
     }
 
     /**
-     * Auto send intent data after each response. Also setting sessions and flowErrors 
-     * @param handleRequest 
+     * Auto send intent data after each response. Also setting sessions and flowErrors
+     * @param handleRequest
      */
     track(handleRequest: HandleRequest) {
         const jovo: Jovo = handleRequest.jovo!;
@@ -43,14 +43,14 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics'
+                'jovo-analytics-googleanalytics',
             );
         }
 
         // Validate current request type
         const { type: requestType } = jovo.getRoute();
         const invalidRequestTypes = ['AUDIOPLAYER'];
-        if(!this.config.trackDirectives && invalidRequestTypes.includes(requestType)) {
+        if (!this.config.trackDirectives && invalidRequestTypes.includes(requestType)) {
             return;
         }
 
@@ -67,17 +67,11 @@ export class GoogleAnalytics implements Analytics {
         }
 
         // Track intent data.
-        this.visitor!
-            .pageview(this.getPageParameters(jovo), (err: any) => {
-                if (err) {
-                    throw new JovoError(
-                        err.message,
-                        ErrorCode.ERR_PLUGIN,
-                        'jovo-analytics-googleanalytics'
-                    );
-                }
-            })
-            .send();
+        this.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
+            if (err) {
+                throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+            }
+        }).send();
 
         // Detect and send FlowErrors
         this.sendUnhandledEvents(jovo);
@@ -90,21 +84,19 @@ export class GoogleAnalytics implements Analytics {
 
                 const params: Event = {
                     eventCategory: 'Inputs',
-                    eventAction: value.key,             // Input value
-                    eventLabel: key,                    // Input key
-                    documentPath: jovo.getRoute().path
+                    eventAction: value.key, // Input value
+                    eventLabel: key, // Input key
+                    documentPath: jovo.getRoute().path,
                 };
-                this.visitor!
-                    .event(params, (err: any) => {
-                        if (err) {
-                            throw new JovoError(
-                                err.message,
-                                ErrorCode.ERR_PLUGIN,
-                                'jovo-analytics-googleanalytics'
-                            );
-                        }
-                    })
-                    .send();
+                this.visitor!.event(params, (err: any) => {
+                    if (err) {
+                        throw new JovoError(
+                            err.message,
+                            ErrorCode.ERR_PLUGIN,
+                            'jovo-analytics-googleanalytics',
+                        );
+                    }
+                }).send();
             }
         }
     }
@@ -137,28 +129,23 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics'
+                'jovo-analytics-googleanalytics',
             );
         }
 
         // Stop the current tracking session.
         this.visitor!.set('sessionControl', 'end');
-        this.visitor!
-            .pageview(this.getPageParameters(jovo), (err: any) => {
-                if (err) {
-                    throw new JovoError(
-                        err.message,
-                        ErrorCode.ERR_PLUGIN,
-                        'jovo-analytics-googleanalytics'
-                    );
-                }
-            })
+        this.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
+            if (err) {
+                throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+            }
+        })
             .exception(handleRequest.error!.name)
             .send();
     }
 
     /**
-     * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler. 
+     * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
      * @param {object} jovo: Jovo object
      */
     sendUnhandledEvents(jovo: Jovo) {
@@ -186,7 +173,7 @@ export class GoogleAnalytics implements Analytics {
         return {
             documentPath: path,
             documentHostName: type,
-            documentTitle: intent || type
+            documentTitle: intent || type,
         };
     }
 
@@ -224,32 +211,26 @@ export class GoogleAnalytics implements Analytics {
      * User Events ties users to event category and action
      * @param {object} jovo: Jovo object
      * @param {string} eventName maps to category -> eventGroup
-     * @param {string} eventAction maps to action -> instance of eventGroup
+     * @param {string} eventElement maps to action -> instance of eventGroup
      */
     sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
         const params: Event = {
             eventCategory,
             eventAction,
             eventLabel: this.getUserId(jovo),
-            documentPath: jovo.getRoute().path
+            documentPath: jovo.getRoute().path,
         };
 
-        this.visitor!
-            .event(params, (err: any) => {
-                if (err) {
-                    throw new JovoError(
-                        err.message,
-                        ErrorCode.ERR_PLUGIN,
-                        'jovo-analytics-googleanalytics'
-                    );
-                }
-            })
-            .send();
+        this.visitor!.event(params, (err: any) => {
+            if (err) {
+                throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+            }
+        }).send();
     }
 
     /**
      * Sets the analytics variable to the instance of this object for making it accessable in skill code
-     * @param handleRequest 
+     * @param handleRequest
      */
     setGoogleAnalyticsObject(handleRequest: HandleRequest) {
         const jovo = handleRequest.jovo;
@@ -257,7 +238,7 @@ export class GoogleAnalytics implements Analytics {
             throw new JovoError(
                 'Jovo object is not set',
                 ErrorCode.ERR_PLUGIN,
-                'jovo-analytics-googleanalytics'
+                'jovo-analytics-googleanalytics',
             );
         }
 
@@ -268,50 +249,44 @@ export class GoogleAnalytics implements Analytics {
         jovo.$googleAnalytics = {
             $data: {},
             sendEvent: (params: Event) => {
-                this.visitor!
-                    .event(params, (err: any) => {
-                        if (err) {
-                            throw new JovoError(
-                                err.message,
-                                ErrorCode.ERR_PLUGIN,
-                                'jovo-analytics-googleanalytics'
-                            );
-                        }
-                    })
-                    .send();
+                this.visitor!.event(params, (err: any) => {
+                    if (err) {
+                        throw new JovoError(
+                            err.message,
+                            ErrorCode.ERR_PLUGIN,
+                            'jovo-analytics-googleanalytics',
+                        );
+                    }
+                }).send();
             },
             sendTransaction: (params: Transaction) => {
-                this.visitor!
-                    .transaction(params, (err: any) => {
-                        if (err) {
-                            throw new JovoError(
-                                err.message,
-                                ErrorCode.ERR_PLUGIN,
-                                'jovo-analytics-googleanalytics'
-                            );
-                        }
-                    })
-                    .send();
+                this.visitor!.transaction(params, (err: any) => {
+                    if (err) {
+                        throw new JovoError(
+                            err.message,
+                            ErrorCode.ERR_PLUGIN,
+                            'jovo-analytics-googleanalytics',
+                        );
+                    }
+                }).send();
             },
             sendItem: (params: TransactionItem) => {
-                this.visitor!
-                    .transaction(params, (err: any) => {
-                        if (err) {
-                            throw new JovoError(
-                                err.message,
-                                ErrorCode.ERR_PLUGIN,
-                                'jovo-analytics-googleanalytics'
-                            );
-                        }
-                    })
-                    .send();
+                this.visitor!.transaction(params, (err: any) => {
+                    if (err) {
+                        throw new JovoError(
+                            err.message,
+                            ErrorCode.ERR_PLUGIN,
+                            'jovo-analytics-googleanalytics',
+                        );
+                    }
+                }).send();
             },
             sendUserEvent: (eventCategory: string, eventAction: string) => {
                 this.sendUserEvent(jovo, eventCategory, eventAction);
             },
             setCustomMetric(index: number, value: string | number) {
                 this.$data[`cm${index}`] = value;
-            }
+            },
         };
     }
 }

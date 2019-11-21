@@ -1,35 +1,35 @@
 {
-    "version": "1.0",
-    "encoding": "UTF-8",
-    "feed": {
-        "entry": [
-            {
-                "gsx$key": {
-                    "$t": "WELCOME"
-                },
-                "gsx$en-us": {
-                    "$t": "Welcome_Default"
-                },
-                "gsx$de-de": {
-                    "$t": "Willkommen_Default"
-                }
-            },
-            {
-                "gsx$key": {
-                    "$t": "GOODBYE"
-                },
-                "gsx$en-us": {
-                    "$t": "Goodbye_Default"
-                }
-            },
-            {
-                "gsx$key": {
-                    "$t": "GOODBYE"
-                },
-                "gsx$en-us": {
-                    "$t": "Bye_Default"
-                }
-            }
-        ]
-    }
+  "version": "1.0",
+  "encoding": "UTF-8",
+  "feed": {
+    "entry": [
+      {
+        "gsx$key": {
+          "$t": "WELCOME"
+        },
+        "gsx$en-us": {
+          "$t": "Welcome_Default"
+        },
+        "gsx$de-de": {
+          "$t": "Willkommen_Default"
+        }
+      },
+      {
+        "gsx$key": {
+          "$t": "GOODBYE"
+        },
+        "gsx$en-us": {
+          "$t": "Goodbye_Default"
+        }
+      },
+      {
+        "gsx$key": {
+          "$t": "GOODBYE"
+        },
+        "gsx$en-us": {
+          "$t": "Bye_Default"
+        }
+      }
+    ]
+  }
 }

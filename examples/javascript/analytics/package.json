@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-analytics",
-  "version": "2.2.23",
+  "version": "2.2.25",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,14 +13,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-analytics-bespoken": "^2.2.15",
-    "jovo-analytics-botanalytics": "^2.2.15",
-    "jovo-analytics-chatbase": "^2.2.15",
-    "jovo-analytics-dashbot": "^2.2.15",
+    "jovo-analytics-bespoken": "^2.2.17",
+    "jovo-analytics-botanalytics": "^2.2.17",
+    "jovo-analytics-chatbase": "^2.2.17",
+    "jovo-analytics-dashbot": "^2.2.17",
     "jovo-analytics-googleanalytics": "2.2.17-alpha.0",
-    "jovo-plugin-debugger": "2.2.19",
-    "jovo-framework": "^2.2.21",
-    "jovo-platform-alexa": "^2.2.23",
-    "jovo-platform-googleassistant": "^2.2.21"
+    "jovo-framework": "^2.2.23",
+    "jovo-platform-alexa": "^2.2.25",
+    "jovo-platform-googleassistant": "^2.2.23"
   }
 }

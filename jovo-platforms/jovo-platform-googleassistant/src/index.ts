@@ -11,470 +11,439 @@ export { List } from './response/List';
 export { NotificationObject, NotificationPlugin } from './modules/Notification';
 export { GoogleActionSpeechBuilder } from './core/GoogleActionSpeechBuilder';
 
-import {Device} from "./modules/AskFor";
-import {BasicCard} from "./response/BasicCard";
-import {Carousel} from "./response/Carousel";
-import {CarouselBrowse} from "./response/CarouselBrowse";
-import {Table} from "./response/Table";
-import {List} from "./response/List";
-import {MediaResponse} from "./modules/MediaResponse";
-import {Updates} from "./modules/Updates";
+import { Device } from './modules/AskFor';
+import { BasicCard } from './response/BasicCard';
+import { Carousel } from './response/Carousel';
+import { CarouselBrowse } from './response/CarouselBrowse';
+import { Table } from './response/Table';
+import { List } from './response/List';
+import { MediaResponse } from './modules/MediaResponse';
+import { Updates } from './modules/Updates';
 import { RichResponse } from './core/Interfaces';
 
-import {GoogleAction} from "./core/GoogleAction";
-import {Handler} from "jovo-core";
-import {Transaction, PaymentOptions, OrderUpdate, OrderOptions} from "./modules/Transaction";
-import {Notification} from './modules/Notification';
+import { GoogleAction } from './core/GoogleAction';
+import { Handler } from 'jovo-core';
+import { Transaction, PaymentOptions, OrderUpdate, OrderOptions } from './modules/Transaction';
+import { Notification } from './modules/Notification';
 
-export {GoogleActionRequest} from './core/GoogleActionRequest';
-export {GoogleActionResponse} from './core/GoogleActionResponse';
-export {GoogleAssistantRequestBuilder} from './core/GoogleAssistantRequestBuilder';
-export {GoogleAssistantResponseBuilder} from './core/GoogleAssistantResponseBuilder';
+export { GoogleActionRequest } from './core/GoogleActionRequest';
+export { GoogleActionResponse } from './core/GoogleActionResponse';
+export { GoogleAssistantRequestBuilder } from './core/GoogleAssistantRequestBuilder';
+export { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBuilder';
 import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
 
 export {
-    Transaction,
-    RequirementsCheckResult,
-    SupportedCardNetworks,
-    PaymentOptions,
-    OrderOptions,
-    GoogleProvidedOptions,
-    OrderUpdate
-} from "./modules/Transaction";
+  Transaction,
+  RequirementsCheckResult,
+  SupportedCardNetworks,
+  PaymentOptions,
+  OrderOptions,
+  GoogleProvidedOptions,
+  OrderUpdate,
+} from './modules/Transaction';
 declare module 'jovo-core/dist/src/Jovo' {
-    interface Jovo {
-        $googleAction?: GoogleAction;
+  interface Jovo {
+    $googleAction?: GoogleAction;
 
-        /**
-         * Returns googleAction instance
-         * @returns {GoogleAction}
-         */
-        googleAction(): GoogleAction;
+    /**
+     * Returns googleAction instance
+     * @returns {GoogleAction}
+     */
+    googleAction(): GoogleAction;
 
-        /**
-         * Type of platform is Google Action
-         * @public
-         * @return {boolean} isGoogleAction
-         */
-        isGoogleAction(): boolean;
-    }
+    /**
+     * Type of platform is Google Action
+     * @public
+     * @return {boolean} isGoogleAction
+     */
+    isGoogleAction(): boolean;
+  }
 }
 
 declare module 'jovo-core/dist/src/BaseApp' {
+  /**
+   * Sets alexa handlers
+   * @public
+   * @param {*} handler
+   */
+  interface BaseApp {
+    setGoogleAssistantHandler(...handler: Handler[]): this;
+  }
+}
+
+declare module './core/GoogleAction' {
+  interface GoogleAction {
+    /**
+     * Ask for name
+     * @public
+     * @param {string} optContext
+     */
+    askForName(optContext?: string): this;
 
     /**
-     * Sets alexa handlers
+     * Ask for zipcode and city
      * @public
-     * @param {*} handler
+     * @param {string} optContext
      */
-    interface BaseApp {
-        setGoogleAssistantHandler(...handler: Handler[]): this;
-    }
-}
+    askForZipCodeAndCity(optContext?: string): this;
 
+    /**
+     * Ask for name permission
+     * @public
+     * @param {string} optContext
+     */
+    askForNamePermission(optContext?: string): this;
 
-declare module './core/GoogleAction' {
+    /**
+     * Ask for coarse location permission
+     * @public
+     * @param {string} optContext
+     */
+    askForCoarseLocation(optContext?: string): this;
 
-    interface GoogleAction {
+    /**
+     * Ask for precise permissions
+     * @public
+     * @param {string} optContext
+     */
+    askForPreciseLocation(optContext?: string): this;
 
-        /**
-         * Ask for name
-         * @public
-         * @param {string} optContext
-         */
-        askForName(optContext?: string): this;
+    /**
+     * Calls askForNotification(intent, name, text)
+     *
+     * @public
+     * @param {string} intent // intent for which you want to send notifications
+     */
+    askForUpdate(intent: string): this;
 
+    /**
+     * Ask for notification permission
+     * @public
+     * @param {string} intent // intent for which you want to send notifications
+     */
+    askForNotification(intent: string): this;
 
-        /**
-         * Ask for zipcode and city
-         * @public
-         * @param {string} optContext
-         */
-        askForZipCodeAndCity(optContext?: string): this;
+    /**
+     * Ask for permissions
+     * @public
+     * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
+     * @param {string} optContext
+     */
+    askForPermission(permissions: string[], optContext?: string): this;
 
-        /**
-         * Ask for name permission
-         * @public
-         * @param {string} optContext
-         */
-        askForNamePermission(optContext?: string): this;
+    /**
+     * Returns true if permission granted
+     * @return {boolean}
+     */
+    isPermissionGranted(): boolean;
 
+    /**
+     * Ask form sign in
+     * @public
+     * @param {string} optContext
+     */
+    askForSignIn(optContext?: string): this;
 
-        /**
-         * Ask for coarse location permission
-         * @public
-         * @param {string} optContext
-         */
-        askForCoarseLocation(optContext?: string): this;
+    /**
+     * Returns sign in status after sign in
+     * @public
+     * @return {boolean}
+     */
+    getSignInStatus(): string;
 
+    /**
+     * Returns sign in cancelled
+     * @public
+     * @return {boolean}
+     */
+    isSignInCancelled(): boolean;
 
-        /**
-         * Ask for precise permissions
-         * @public
-         * @param {string} optContext
-         */
-        askForPreciseLocation(optContext?: string): this;
+    /**
+     * Returns sign in denied
+     * @public
+     * @return {boolean}
+     */
+    isSignInDenied(): boolean;
 
+    /**
+     * Returns sign in ok
+     * @public
+     * @return {null|string}
+     */
+    isSignInOk(): boolean;
 
-        /**
-         * Calls askForNotification(intent, name, text)
-         *
-         * @public
-         * @param {string} intent // intent for which you want to send notifications
-         */
-        askForUpdate(intent: string): this;
+    /**
+     * Ask for date time
+     * @public
+     * @param {*} questions
+     */
+    askForDateTime(questions: {
+      requestDatetimeText: string;
+      requestDateText: string;
+      requestTimeText: string;
+    }): this;
 
-        /**
-         * Ask for notification permission
-         * @public
-         * @param {string} intent // intent for which you want to send notifications
-         */
-        askForNotification(intent: string): this;
+    /**
+     * Return date time confirmation value
+     * @returns {string}
+     */
+    getDateTime(): string;
 
-        /**
-         * Ask for permissions
-         * @public
-         * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
-         * @param {string} optContext
-         */
-        askForPermission(permissions: string[], optContext?: string): this;
+    /**
+     * Return place confirmation value
+     * @return {object}
+     */
+    getPlace(): object | undefined;
 
+    /**
+     * Ask for confirmation
+     * @public
+     * @param {*} text
+     */
+    askForConfirmation(text: string): this;
 
-        /**
-         * Returns true if permission granted
-         * @return {boolean}
-         */
-        isPermissionGranted(): boolean;
+    /**
+     * Return confirmation status
+     * @returns {boolean}
+     */
+    isConfirmed(): boolean;
 
-        /**
-         * Ask form sign in
-         * @public
-         * @param {string} optContext
-         */
-        askForSignIn(optContext?: string): this;
+    /**
+     *  Ask for place
+     * @param {string} requestPrompt
+     * @param {string} permissionContext
+     * @returns {this}
+     */
+    askForPlace(requestPrompt: string, permissionContext?: string): this;
 
-        /**
-         * Returns sign in status after sign in
-         * @public
-         * @return {boolean}
-         */
-        getSignInStatus(): string;
-
-
-        /**
-         * Returns sign in cancelled
-         * @public
-         * @return {boolean}
-         */
-        isSignInCancelled(): boolean;
-
-
-        /**
-         * Returns sign in denied
-         * @public
-         * @return {boolean}
-         */
-        isSignInDenied(): boolean;
-
-        /**
-         * Returns sign in ok
-         * @public
-         * @return {null|string}
-         */
-        isSignInOk(): boolean;
-
-
-        /**
-         * Ask for date time
-         * @public
-         * @param {*} questions
-         */
-        askForDateTime(questions: {
-            requestDatetimeText: string;
-            requestDateText: string
-            requestTimeText: string
-        }): this;
-
-
-        /**
-         * Return date time confirmation value
-         * @returns {string}
-         */
-        getDateTime(): string;
-
-        /**
-         * Return place confirmation value
-         * @return {object}
-         */
-        getPlace(): object | undefined;
-
-        /**
-         * Ask for confirmation
-         * @public
-         * @param {*} text
-         */
-        askForConfirmation(text: string): this;
-
-        /**
-         * Return confirmation status
-         * @returns {boolean}
-         */
-        isConfirmed(): boolean;
-
-
-        /**
-         *  Ask for place
-         * @param {string} requestPrompt
-         * @param {string} permissionContext
-         * @returns {this}
-         */
-        askForPlace(requestPrompt: string, permissionContext?: string): this;
-
-        /**
-         * Return device object
-         * @returns {Device}
-         */
-        getDevice(): Device;
-    }
+    /**
+     * Return device object
+     * @returns {Device}
+     */
+    getDevice(): Device;
+  }
 }
 declare module './core/GoogleAction' {
-    interface GoogleAction {
+  interface GoogleAction {
+    /**
+     * Adds basic card to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {BasicCard} basicCard
+     * @return {GoogleAction}
+     */
+    showBasicCard(basicCard: BasicCard): this;
 
+    /**
+     * Adds suggestion chips to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {Array<String>} chips
+     * @return {GoogleAction}
+     */
+    showSuggestionChips(chips: string[]): this;
 
-        /**
-         * Adds basic card to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {BasicCard} basicCard
-         * @return {GoogleAction}
-         */
-        showBasicCard(basicCard: BasicCard): this;
+    /**
+     * Adds link out suggestion chip to response
+     * @public
+     * @param {string} destinationName
+     * @param {string} url
+     * @return {GoogleAction}
+     */
+    showLinkOutSuggestion(destinationName: string, url: string): this;
 
-        /**
-         * Adds suggestion chips to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {Array<String>} chips
-         * @return {GoogleAction}
-         */
-        showSuggestionChips(chips: string[]): this;
+    /**
+     * Adds carousel element to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {Carousel} carousel
+     * @return {GoogleAction}
+     */
+    showCarousel(carousel: Carousel): this;
 
+    /**
+     * Adds carousel browse element to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {Carousel} carouselBrowse
+     * @return {GoogleAction}
+     */
+    showCarouselBrowse(carouselBrowse: CarouselBrowse): this;
 
-        /**
-         * Adds link out suggestion chip to response
-         * @public
-         * @param {string} destinationName
-         * @param {string} url
-         * @return {GoogleAction}
-         */
-        showLinkOutSuggestion(destinationName: string, url: string): this;
+    /**
+     * Implementation of generic withSimpleTable
+     * Shows a simple table card to the response object
+     * @public
+     * @param {string} title
+     * @param {string} subtitle
+     * @param {array} columnHeaders
+     * @param {array} rowsText
+     * @return {GoogleAction} this
+     */
+    showSimpleTable(title: string, subtitle: string, columnHeaders: any[], rowsText: any[]): this; // tslint:disable-line
 
+    /**
+     * Adds table to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {Table} table
+     * @return {GoogleAction}
+     */
+    showTable(table: Table): this;
 
-        /**
-         * Adds carousel element to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {Carousel} carousel
-         * @return {GoogleAction}
-         */
-        showCarousel(carousel: Carousel): this;
+    /**
+     * Adds list element to response
+     * Works only with SCREEN_OUTPUT devices
+     * @public
+     * @param {List} list
+     * @return {GoogleAction}
+     */
+    showList(list: List): this;
 
-
-        /**
-         * Adds carousel browse element to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {Carousel} carouselBrowse
-         * @return {GoogleAction}
-         */
-        showCarouselBrowse(carouselBrowse: CarouselBrowse): this;
-
-
-        /**
-         * Implementation of generic withSimpleTable
-         * Shows a simple table card to the response object
-         * @public
-         * @param {string} title
-         * @param {string} subtitle
-         * @param {array} columnHeaders
-         * @param {array} rowsText
-         * @return {GoogleAction} this
-         */
-        showSimpleTable(title: string, subtitle: string, columnHeaders: any[], rowsText: any[]): this; // tslint:disable-line
-
-
-        /**
-         * Adds table to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {Table} table
-         * @return {GoogleAction}
-         */
-        showTable(table: Table): this;
-
-
-        /**
-         * Adds list element to response
-         * Works only with SCREEN_OUTPUT devices
-         * @public
-         * @param {List} list
-         * @return {GoogleAction}
-         */
-        showList(list: List): this;
-
-
-        /**
-         * Returns token of the request
-         * (Touched/Selected Element )
-         * @public
-         * @return {*}
-         */
-        getSelectedElementId(): string;
-    }
+    /**
+     * Returns token of the request
+     * (Touched/Selected Element )
+     * @public
+     * @return {*}
+     */
+    getSelectedElementId(): string;
+  }
 }
 
 declare module './core/GoogleAction' {
-
-
-    interface GoogleAction {
-        displayText(displayText: string): this;
-        richResponse(richResponse: RichResponse): this;
-        appendResponse(responseItem: Item): this;
-        appendSimpleResponse(simpleResponse: SimpleResponse): this;
-    }
-}
-
-
-declare module './core/GoogleAction' {
-    interface GoogleAction {
-        $audioPlayer?: MediaResponse;
-        $mediaResponse?: MediaResponse;
-        $updates?: Updates;
-
-        audioPlayer(): MediaResponse | undefined;
-        mediaResponse(): MediaResponse | undefined;
-    }
+  interface GoogleAction {
+    displayText(displayText: string): this;
+    richResponse(richResponse: RichResponse): this;
+    appendResponse(responseItem: Item): this;
+    appendSimpleResponse(simpleResponse: SimpleResponse): this;
+  }
 }
 
 declare module './core/GoogleAction' {
+  interface GoogleAction {
+    $audioPlayer?: MediaResponse;
+    $mediaResponse?: MediaResponse;
+    $updates?: Updates;
 
-    interface GoogleAction {
-        $transaction?: Transaction;
-    }
+    audioPlayer(): MediaResponse | undefined;
+    mediaResponse(): MediaResponse | undefined;
+  }
 }
 
 declare module './core/GoogleAction' {
-    interface GoogleAction {
-        htmlResponse(obj: {
-            url?: string,
-            data?: Record<string, any>; // tslint:disable-line
-            suppress?: boolean;
-        }): this;
-    }
+  interface GoogleAction {
+    $transaction?: Transaction;
+  }
 }
 
 declare module './core/GoogleAction' {
-    interface GoogleAction {
-        newSurface(capabilities: string[], context: string, notificationTitle: string): this;
-        isNewSurfaceConfirmed(): boolean;
-    }
+  interface GoogleAction {
+    htmlResponse(obj: {
+      url?: string;
+      data?: Record<string, any>; // tslint:disable-line
+      suppress?: boolean;
+    }): this;
+  }
 }
 
 declare module './core/GoogleAction' {
-    interface GoogleAction {
-        $notification?: Notification;
-        notification(): Notification | undefined;
-    }
+  interface GoogleAction {
+    newSurface(capabilities: string[], context: string, notificationTitle: string): this;
+    isNewSurfaceConfirmed(): boolean;
+  }
 }
 
+declare module './core/GoogleAction' {
+  interface GoogleAction {
+    $notification?: Notification;
+    notification(): Notification | undefined;
+  }
+}
 
 declare module 'jovo-core/dist/src/Interfaces' {
-    interface Output {
-        GoogleAssistant: {
-            AskForPermission?: {
-                permissions: string[],
-                optContext: string
-            };
-            AskForUpdatePermission?: {
-                intent: string,
-                arguments?: object
-            };
+  interface Output {
+    GoogleAssistant: {
+      AskForPermission?: {
+        permissions: string[];
+        optContext: string;
+      };
+      AskForUpdatePermission?: {
+        intent: string;
+        arguments?: object;
+      };
 
-            AskForRegisterUpdate?: {
-                intent: string;
-                frequency: string;
-            };
+      AskForRegisterUpdate?: {
+        intent: string;
+        frequency: string;
+      };
 
-            AskForSignIn?: {
-                optContext: string;
-            };
-            AskForDateTime?: {
-                requestDatetimeText: string;
-                requestDateText: string
-                requestTimeText: string
-            }
-            AskForConfirmation?: string;
-            AskForPlace?: {
-                requestPrompt: string;
-                permissionContext: string;
+      AskForSignIn?: {
+        optContext: string;
+      };
+      AskForDateTime?: {
+        requestDatetimeText: string;
+        requestDateText: string;
+        requestTimeText: string;
+      };
+      AskForConfirmation?: string;
+      AskForPlace?: {
+        requestPrompt: string;
+        permissionContext: string;
+      };
+      card?: {
+        BasicCard?: BasicCard;
+      };
+      SuggestionChips?: string[];
+      LinkOutSuggestion?: {
+        destinationName: string;
+        url: string;
+      };
+      CarouselBrowse?: CarouselBrowse;
+      Carousel?: Carousel;
 
-            }
-            card?: {
-                BasicCard?: BasicCard;
-            }
-            SuggestionChips?: string[];
-            LinkOutSuggestion?: {
-                destinationName: string,
-                url: string,
-            }
-            CarouselBrowse?: CarouselBrowse;
-            Carousel?: Carousel;
+      Table?: Table;
+      List?: List;
+      MediaResponse?: MediaObject;
 
-            Table?: Table;
-            List?: List;
-            MediaResponse?: MediaObject;
+      // transactions
+      AskForDeliveryAddress?: {
+        reason: string;
+      };
 
+      TransactionDecision?: {
+        orderOptions?: OrderOptions;
+        paymentOptions: PaymentOptions;
+        proposedOrder: any; // tslint:disable-line
+      };
 
+      TransactionRequirementsCheck?: {
+        orderOptions?: OrderOptions;
+        paymentOptions: PaymentOptions;
+      };
 
-            // transactions
-            AskForDeliveryAddress?: {
-                reason: string;
-            },
+      OrderUpdate?: {
+        orderUpdate: OrderUpdate;
+        speech: string;
+      };
 
-            TransactionDecision?: {
-                orderOptions?: OrderOptions,
-                paymentOptions: PaymentOptions,
-                proposedOrder: any; // tslint:disable-line
-            }
+      CompletePurchase?: {
+        skuId: string;
+      };
 
-            TransactionRequirementsCheck?: {
-                orderOptions?: OrderOptions,
-                paymentOptions: PaymentOptions,
-            }
+      HtmlResponse?: {
+        url?: string;
+        data?: Record<string, any>; // tslint:disable-line
+        suppress?: boolean;
+      };
 
-            OrderUpdate?: {
-                orderUpdate: OrderUpdate;
-                speech: string;
-            };
+      NewSurface?: {
+        capabilities: string[];
+        context: string;
+        notificationTitle: string;
+      };
 
-            CompletePurchase?: {
-                skuId: string;
-            }
-
-            HtmlResponse?: {
-                url?: string;
-                data?: Record<string, any>; // tslint:disable-line
-                suppress?: boolean;
-            }
-
-            NewSurface?: {
-                capabilities: string[],
-                context: string;
-                notificationTitle: string;
-            }
-
-            RichResponse?: RichResponse;
-            ResponseAppender?: Item[];
-        };
-    }
+      RichResponse?: RichResponse;
+      ResponseAppender?: Item[];
+    };
+  }
 }

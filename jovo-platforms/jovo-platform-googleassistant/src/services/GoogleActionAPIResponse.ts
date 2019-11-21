@@ -1,9 +1,10 @@
 export class GoogleActionAPIResponse {
-    httpStatus: number | undefined;
-    data: any; // tslint:disable-line
+  httpStatus: number | undefined;
+  data: any; // tslint:disable-line
 
-    constructor(httpStatus: number | undefined, data: any) { // tslint:disable-line
-        this.httpStatus = httpStatus;
-        this.data = data;
-    }
+  // tslint:disable-next-line
+  constructor(httpStatus: number | undefined, data: any) {
+    this.httpStatus = httpStatus;
+    this.data = data;
+  }
 }

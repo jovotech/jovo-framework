@@ -169,5 +169,4 @@ export class MessengerBotRequest implements JovoRequest {
   toJSON(): any {
     return Object.assign({}, this);
   }
-
 }
