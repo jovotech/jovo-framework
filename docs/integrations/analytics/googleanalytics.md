@@ -11,17 +11,17 @@ Learn how to use Google Analytics for your Jovo application.
     * [Intent Data Tracking](#intent-data-tracking)
     * [User Id](#user-id)
     * [Data Source](#data-source)
-    * [Device Info & Screen Resolution](#device-info-&-screen-resolution)
-    * [Custom Dimensions & Custom Metrics](#custom-dimensions-&-custom-metrics)
+    * [Device Info & Screen Resolution](#device-info--screen-resolution)
+    * [Custom Dimensions & Custom Metrics](#custom-dimensions--custom-metrics)
         * [Custom Dimensions](#custom-dimensions)
         * [Custom Metrics](#custom-metrics)
     * [Custom Reports](#custom-reports)
     * [Developer Methods](#developer-methods)
-        * [sendEvent()](#sendevent())
+        * [sendEvent()](#sendevent
         * [sendTransaction()](#sendTransaction)
-        * [sendItem()](#senditem())
-        * [sendUserEvent()](#senduserevent())
-        * [setCustomMetric()](#setcustommetric())
+        * [sendItem()](#senditem
+        * [sendUserEvent()](#senduserevent
+        * [setCustomMetric()](#setcustommetric
 
 ## About Google Analytics
 
