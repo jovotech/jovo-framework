@@ -26,6 +26,9 @@ module.exports = {
 		ChatbaseGoogleAssistant: {
 			key: 'keyGoogleAssistant',
 			appVersion: '',
+		},
+		GoogleAnalytics: {
+			trackingId: 'UA-152810782-1'
 		}
 	}
 };

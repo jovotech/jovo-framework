@@ -4,13 +4,15 @@ const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { BotAnalyticsAlexa } = require('jovo-analytics-botanalytics');
+const { GoogleAnalytics } = require('jovo-analytics-googleanalytics');
 
 const app = new App();
 app.use(
     new GoogleAssistant(),
     new Alexa(),
     new JovoDebugger(),
-    new BotAnalyticsAlexa()
+    // new BotAnalyticsAlexa(),
+    new GoogleAnalytics()
 );
 
 app.setHandler({

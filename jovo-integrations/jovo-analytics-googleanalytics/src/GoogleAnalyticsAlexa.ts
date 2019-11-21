@@ -59,10 +59,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     sendUnhandledEvents(jovo: Jovo) {
         super.sendUnhandledEvents(jovo);
 
-        if (jovo.constructor.name !== 'AlexaSkill') {
-            return;
-        }
-
         if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
             this.sendUserEvent(jovo, 'FlowError', 'Exceeded_Max_Reprompts');
         }

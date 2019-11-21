@@ -47,6 +47,13 @@ export class GoogleAnalytics implements Analytics {
             );
         }
 
+        // Validate current request type
+        const { type: requestType } = jovo.getRoute();
+        const invalidRequestTypes = ['AUDIOPLAYER'];
+        if(!this.config.trackDirectives && invalidRequestTypes.includes(requestType)) {
+            return;
+        }
+
         // Eiter start or stop the session. If sessionTag is undefined, it will be ignored.
         const sessionTag = this.getSessionTag(jovo);
         this.visitor!.set('sessionControl', sessionTag);
@@ -217,12 +224,12 @@ export class GoogleAnalytics implements Analytics {
      * User Events ties users to event category and action
      * @param {object} jovo: Jovo object
      * @param {string} eventName maps to category -> eventGroup
-     * @param {string} eventElement maps to action -> instance of eventGroup
+     * @param {string} eventAction maps to action -> instance of eventGroup
      */
-    sendUserEvent(jovo: Jovo, eventCategory: string, eventElement: string) {
+    sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
         const params: Event = {
             eventCategory,
-            eventAction: eventElement,
+            eventAction,
             eventLabel: this.getUserId(jovo),
             documentPath: jovo.getRoute().path
         };
@@ -299,8 +306,8 @@ export class GoogleAnalytics implements Analytics {
                     })
                     .send();
             },
-            sendUserEvent: (eventCategory: string, eventElement: string) => {
-                this.sendUserEvent(jovo, eventCategory, eventElement);
+            sendUserEvent: (eventCategory: string, eventAction: string) => {
+                this.sendUserEvent(jovo, eventCategory, eventAction);
             },
             setCustomMetric(index: number, value: string | number) {
                 this.$data[`cm${index}`] = value;

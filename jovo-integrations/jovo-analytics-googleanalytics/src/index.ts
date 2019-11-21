@@ -1,6 +1,6 @@
 export { GoogleAnalytics } from './GoogleAnalytics';
 export { GoogleAnalyticsAlexa } from './GoogleAnalyticsAlexa';
-export { GoogleAnalyticsAssistant } from './GoogleAnalyticsAssistant';
+export { GoogleAnalyticsGoogleAssistant } from './GoogleAnalyticsGoogleAssistant';
 
 // Declare necessary properties for Jovo
 import { Event, Transaction, TransactionItem } from './interfaces';

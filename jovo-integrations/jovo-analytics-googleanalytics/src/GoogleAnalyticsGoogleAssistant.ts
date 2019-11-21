@@ -2,7 +2,7 @@ import { GoogleAnalytics } from './GoogleAnalytics';
 import { GoogleActionRequest } from 'jovo-platform-googleassistant';
 import { HandleRequest, Jovo, JovoError, ErrorCode } from 'jovo-core';
 
-export class GoogleAnalyticsAssistant extends GoogleAnalytics {
+export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     track(handleRequest: HandleRequest) {
         const jovo: Jovo = handleRequest.jovo!;
         if (!jovo) {
