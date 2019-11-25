@@ -1,4 +1,4 @@
-# GoogleAnalytics
+# Google Analytics for Voice Apps
 
 Learn how to use Google Analytics for your Jovo application.
 
