@@ -207,19 +207,19 @@ export class Handler implements Plugin {
       handleRequest.jovo.$handlers = Object.assign(
         // tslint:disable-line:prefer-object-spread
         {},
-        (handleRequest.app.config as AppConfig).handlers,
+        (handleRequest.jovo.$config as AppConfig).handlers,
       );
 
       const platform = handleRequest.jovo.getPlatformType();
       if (
-        handleRequest.app.config.plugin &&
-        handleRequest.app.config.plugin[platform] &&
-        handleRequest.app.config.plugin[platform].handlers
+        handleRequest.jovo.$config.plugin &&
+        handleRequest.jovo.$config.plugin[platform] &&
+        handleRequest.jovo.$config.plugin[platform].handlers
       ) {
         const platformHandlers = Object.assign(
           // tslint:disable-line:prefer-object-spread
           {},
-          handleRequest.app.config.plugin[platform].handlers,
+          handleRequest.jovo.$config.plugin[platform].handlers,
         );
         Object.assign(handleRequest.jovo.$handlers, platformHandlers);
       }
@@ -237,7 +237,7 @@ export class Handler implements Plugin {
 
     Log.verbose(Log.header('Jovo handler ', 'framework'));
 
-    handleRequest.jovo.mapInputs(handleRequest.app.config.inputMap || {});
+    handleRequest.jovo.mapInputs(handleRequest.jovo.$config.inputMap || {});
     const route = handleRequest.jovo.$plugins.Router.route;
 
     await Handler.handleOnNewUser(handleRequest.jovo);
@@ -253,7 +253,7 @@ export class Handler implements Plugin {
       Log.warn(`WARN: Jovo instance is not available. ON_ERROR doesn't work here`);
       return;
     }
-    if (_get((handleRequest.app.config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
+    if (_get((handleRequest.jovo.$config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
       const route = {
         path: EnumRequestType.ON_ERROR,
         type: EnumRequestType.ON_ERROR,
@@ -297,7 +297,7 @@ export class Handler implements Plugin {
         this.$handlers,
         this.getState(),
         intent,
-        (this.$app.config as AppConfig).intentsToSkipUnhandled,
+        (this.$config as AppConfig).intentsToSkipUnhandled,
       );
       route.from = this.getRoute().from
         ? this.getRoute().from + '/' + this.getRoute().path
@@ -376,7 +376,7 @@ export class Handler implements Plugin {
         this.$handlers,
         state,
         intent,
-        (this.$app.config as AppConfig).intentsToSkipUnhandled,
+        (this.$config as AppConfig).intentsToSkipUnhandled,
       );
       route.from = this.getRoute().from
         ? this.getRoute().from + '/' + this.getRoute().path
