@@ -20,6 +20,7 @@ const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 import { DefaultSheet, GoogleSheetsSheet } from './DefaultSheet';
+import { KeyObjectSheet } from './KeyObjectSheet';
 import { KeyValueSheet } from './KeyValueSheet';
 import { ObjectArraySheet } from './ObjectArraySheet';
 import { ResponsesSheet } from './ResponsesSheet';
@@ -60,6 +61,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
 
     const defaultSheetMap: { [key: string]: any } = {
       default: DefaultSheet,
+      keyobject: KeyObjectSheet,
       keyvalue: KeyValueSheet,
       objectarray: ObjectArraySheet,
       responses: ResponsesSheet,
