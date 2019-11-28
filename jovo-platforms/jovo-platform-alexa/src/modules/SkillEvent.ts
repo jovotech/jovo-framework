@@ -19,7 +19,8 @@ export class SkillEvent implements Plugin {
   uninstall(alexa: Alexa) {}
   type(alexaSkill: AlexaSkill) {
     const alexaRequest = alexaSkill.$request as AlexaRequest;
-    if (_get(alexaRequest, 'request.type').substring(0, 15) === 'AlexaSkillEvent') {
+    if (_get(alexaRequest, 'request.type').substring(0, 15) === 'AlexaSkillEvent'
+         || _get(alexaRequest, 'request.type').substring(0, 9) === 'Reminders') {
       alexaSkill.$type = {
         type: EnumAlexaRequestType.ON_EVENT,
         subType: _get(alexaRequest, 'request.type'),
