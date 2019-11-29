@@ -25,5 +25,12 @@ export class SkillEvent implements Plugin {
         subType: _get(alexaRequest, 'request.type'),
       };
     }
+
+    if (_get(alexaRequest, 'request.type').substring(0, 9) === 'Reminders') {
+      alexaSkill.$type = {
+        type: EnumAlexaRequestType.ON_REMINDER_EVENT,
+        subType: _get(alexaRequest, 'request.type'),
+      };
+    }
   }
 }
