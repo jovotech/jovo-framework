@@ -16,12 +16,26 @@ app.use(
 
 app.setHandler({
     async LAUNCH() {
+        return this.toIntent('AskForRemindersIntent');
         // return this.toIntent('AddRelativeReminderIntent');
         // return this.toIntent('AddAbsoluteReminderIntent');
         // return this.toIntent('AllRemindersIntent');
         // return this.toIntent('UpdateReminderIntent');
-        return this.toIntent('DeleteReminderIntent');
+        // return this.toIntent('DeleteReminderIntent');
 
+    },
+    ON_PERMISSION() {
+        const status = this.$alexaSkill!.getPermissionStatus();
+
+        if (this.$alexaSkill!.hasPermissionAccepted()) {
+            return this.toIntent('AddAbsoluteReminderIntent');
+        }
+
+        this.tell(status!);
+    },
+    async AskForRemindersIntent() {
+        this.$alexaSkill!.askForReminders();
+        this.ask('Would you like to be reminded?');
     },
     async AddRelativeReminderIntent() {
         try {

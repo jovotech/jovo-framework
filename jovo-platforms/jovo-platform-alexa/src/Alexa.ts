@@ -31,6 +31,7 @@ import { AlexaResponseBuilder } from './core/AlexaResponseBuilder';
 import { GadgetControllerPlugin } from './modules/GadgetControllerPlugin';
 import { ProactiveEventPlugin } from './modules/ProactiveEvent';
 import { AplPlugin } from './modules/AplPlugin';
+import { AskFor } from './modules/AskFor';
 
 export interface Config extends ExtensibleConfig {
   allowedSkillIds: string[];
@@ -114,6 +115,7 @@ export class Alexa extends Extensible implements Platform {
       new Cards(),
       new DialogInterface(),
       new ProactiveEventPlugin(),
+      new AskFor(),
     );
 
     Jovo.prototype.$alexaSkill = undefined;
