@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-facebookmessenger",
-  "version": "2.0.5-alpha.0",
+  "version": "2.0.6-alpha.0",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -35,7 +35,7 @@
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
     "jovo-db-filedb": "^2.2.18",
-    "jovo-framework": "^2.2.24",
+    "jovo-framework": "^2.2.25",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

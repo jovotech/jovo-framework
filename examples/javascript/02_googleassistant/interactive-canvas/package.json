@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-interactive-canvas",
-  "version": "2.2.24",
+  "version": "2.2.25",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.24",
-    "jovo-platform-googleassistant": "^2.2.24"
+    "jovo-framework": "^2.2.25",
+    "jovo-platform-googleassistant": "^2.2.25"
   }
 }

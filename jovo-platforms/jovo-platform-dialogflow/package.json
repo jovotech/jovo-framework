@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-dialogflow",
-  "version": "2.2.20",
+  "version": "2.2.21",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

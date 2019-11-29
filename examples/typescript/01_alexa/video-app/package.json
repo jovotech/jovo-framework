@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-video-app",
-  "version": "2.2.26",
+  "version": "2.2.27",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -18,8 +18,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-db-filedb": "^2.2.18",
-    "jovo-framework": "^2.2.24",
-    "jovo-platform-alexa": "^2.2.26",
+    "jovo-framework": "^2.2.25",
+    "jovo-platform-alexa": "^2.2.27",
     "jovo-plugin-debugger": "^2.2.20"
   },
   "devDependencies": {

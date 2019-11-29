@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-canfulfill",
-  "version": "2.2.25",
+  "version": "2.2.26",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,8 +17,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.24",
-    "jovo-platform-alexa": "^2.2.26",
+    "jovo-framework": "^2.2.25",
+    "jovo-platform-alexa": "^2.2.27",
     "jovo-plugin-debugger": "^2.2.20"
   },
   "devDependencies": {

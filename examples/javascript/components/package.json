@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-components",
-  "version": "2.2.20",
+  "version": "2.2.21",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,10 +15,10 @@
   "dependencies": {
     "google-libphonenumber": "^3.2.2",
     "jovo-db-filedb": "^2.2.18",
-    "jovo-framework": "^2.2.24",
-    "jovo-platform-alexa": "^2.2.26",
-    "jovo-platform-dialogflow": "^2.2.20",
-    "jovo-platform-googleassistant": "^2.2.24",
+    "jovo-framework": "^2.2.25",
+    "jovo-platform-alexa": "^2.2.27",
+    "jovo-platform-dialogflow": "^2.2.21",
+    "jovo-platform-googleassistant": "^2.2.25",
     "jovo-plugin-debugger": "^2.2.20"
   }
 }
