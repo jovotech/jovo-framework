@@ -471,9 +471,9 @@ export interface AskForPermissionDirective {
   type: string;
   name: 'AskFor';
   payload: {
-    '@type': 'AskForPermissionsConsentRequest'
+    '@type': 'AskForPermissionsConsentRequest';
     '@version': string;
-    permissionScope: string;
+    'permissionScope': string;
   };
   token?: string;
 }

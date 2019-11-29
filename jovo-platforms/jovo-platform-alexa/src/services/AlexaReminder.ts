@@ -25,7 +25,7 @@ export class AlexaReminder {
         method: 'POST',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      const httpStatus = response.httpStatus+'';
+      const httpStatus = response.httpStatus + '';
       if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
         let apiError;
         if (response.data) {
@@ -58,7 +58,7 @@ export class AlexaReminder {
         method: 'GET',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      const httpStatus = response.httpStatus+'';
+      const httpStatus = response.httpStatus + '';
       if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
         let apiError;
         if (response.data) {
@@ -95,7 +95,7 @@ export class AlexaReminder {
         method: 'PUT',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      const httpStatus = response.httpStatus+'';
+      const httpStatus = response.httpStatus + '';
       if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
         let apiError;
         if (response.data) {
@@ -130,7 +130,7 @@ export class AlexaReminder {
         method: 'DELETE',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      const httpStatus = response.httpStatus+'';
+      const httpStatus = response.httpStatus + '';
       if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
         let apiError;
         if (response.data) {
@@ -163,7 +163,7 @@ export class AlexaReminder {
         method: 'GET',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      const httpStatus = response.httpStatus+'';
+      const httpStatus = response.httpStatus + '';
       if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
         let apiError;
         if (response.data) {

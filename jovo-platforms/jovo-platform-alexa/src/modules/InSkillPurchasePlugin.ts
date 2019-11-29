@@ -222,7 +222,10 @@ export class InSkillPurchasePlugin implements Plugin {
   type(alexaSkill: AlexaSkill) {
     const alexaRequest = alexaSkill.$request as AlexaRequest;
     const responseNames = ['Upsell', 'Buy', 'Cancel'];
-    if (_get(alexaRequest, 'request.type') === 'Connections.Response' && responseNames.includes(_get(alexaRequest, 'request.name'))) {
+    if (
+      _get(alexaRequest, 'request.type') === 'Connections.Response' &&
+      responseNames.includes(_get(alexaRequest, 'request.name'))
+    ) {
       alexaSkill.$type = {
         type: EnumAlexaRequestType.ON_PURCHASE,
       };
