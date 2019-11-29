@@ -7,8 +7,10 @@ import { DialogflowAgent } from '../../DialogflowAgent';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { DialogflowResponse } from '../..';
 
-export interface DialogflowAgent {
-  isFacebookMessengerBot(): boolean;
+declare module './../../DialogflowAgent' {
+  interface DialogflowAgent {
+    isFacebookMessengerBot(): boolean;
+  }
 }
 
 export class FacebookMessenger implements Plugin {
