@@ -221,7 +221,7 @@ export class InSkillPurchasePlugin implements Plugin {
   uninstall(alexa: Alexa) {}
   type(alexaSkill: AlexaSkill) {
     const alexaRequest = alexaSkill.$request as AlexaRequest;
-    const responseNames = ['Upsell', 'Buy', 'Cancel'];
+    const responseNames = ['Upsell', 'Buy', 'Cancel', 'Setup', 'Charge'];
     if (
       _get(alexaRequest, 'request.type') === 'Connections.Response' &&
       responseNames.includes(_get(alexaRequest, 'request.name'))
