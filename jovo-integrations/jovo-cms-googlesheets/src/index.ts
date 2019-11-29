@@ -3,6 +3,7 @@ export { KeyValueSheet } from './KeyValueSheet';
 export { DefaultSheet } from './DefaultSheet';
 export { ResponsesSheet } from './ResponsesSheet';
 export { ObjectArraySheet } from './ObjectArraySheet';
+export { KeyObjectSheet } from './KeyObjectSheet';
 
 declare module 'jovo-core/dist/src/Cms' {
   interface Cms {
