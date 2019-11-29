@@ -1,6 +1,17 @@
 # Jovo Framework Changelog
 
 
+## 2.2.22 (2019-11-29)
+
+#### :rocket: New Feature
+* `jovo-cms-googlesheets` [#625](https://github.com/jovotech/jovo-framework/pull/625) Add KeyObject sheet type to GoogleSheet CMS integration  ([@gpalozzi](https://github.com/gpalozzi))
+* `jovo-platform-alexa` Added Voice Permissions for Reminders
+ 
+ #### Committers: 2
+ - Gabriele Palozzi ([@gpalozzi](https://github.com/gpalozzi))
+ - Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.21 (2019-11-15)
 
 #### :rocket: New Feature
