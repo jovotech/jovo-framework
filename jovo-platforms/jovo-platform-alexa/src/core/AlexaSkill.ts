@@ -141,7 +141,7 @@ export class AlexaSkill extends Jovo {
    * @return {string}
    */
   getUserId(): string {
-    return _get(this.$request, 'session.user.userId') || _get(this.$request, 'context.user.userId');
+    return this.$user.getId();
   }
 
   /**
