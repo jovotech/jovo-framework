@@ -1,13 +1,13 @@
 {
-  "name": "jovo-db-dynamodb",
-  "version": "2.2.18",
+  "name": "jovo-asr-azure",
+  "version": "2.2.5",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
+    "tscw": "tsc --watch",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs ./ --mode file",
     "test": "jest"
@@ -15,22 +15,19 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "aws-sdk": "^2.477.0",
-    "jovo-core": "^2.2.18",
-    "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.2",
-    "lodash.set": "^4.3.2"
+    "jovo-core": "^2.2.18"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/es6-promise": "^3.3.0",
     "@types/jest": "^24.0.11",
+    "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
     "jest": "^24.9.0",
-    "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
-    "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.4.1"
   },
@@ -48,7 +45,9 @@
     ]
   },
   "files": [
-    "dist/src/**/*"
+    "dist/src/**/*",
+    "sample-request-json",
+    "sample-response-json"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
 }
