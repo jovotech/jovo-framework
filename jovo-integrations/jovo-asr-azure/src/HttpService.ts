@@ -23,7 +23,7 @@ export class HttpService {
         res.on('end', () => {
           try {
             const result: RequestResult<T> = {
-              data: JSON.parse(collectedData),
+              data: collectedData !== '' ? JSON.parse(collectedData) : {},
               headers: res.headers,
               status: res.statusCode!,
             };
