@@ -21,6 +21,6 @@ export interface AzureAsrResult {
   Display: string;
 }
 
-export interface DetailedAzureAsrResponse extends Exclude<SimpleAzureAsrResponse, 'DisplayText'> {
+export interface DetailedAzureAsrResponse extends Omit<SimpleAzureAsrResponse, 'DisplayText'> {
   NBest: AzureAsrResult[];
 }

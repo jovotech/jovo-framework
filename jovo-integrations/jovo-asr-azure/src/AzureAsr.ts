@@ -1,18 +1,10 @@
 import * as https from 'https';
 import * as querystring from 'querystring';
-import _merge = require('lodash.merge');
-import {
-  EnumRequestType,
-  Extensible,
-  Inputs,
-  Jovo,
-  JovoError,
-  Plugin,
-  PluginConfig,
-} from 'jovo-core';
+import { EnumRequestType, Extensible, Jovo, JovoError, Plugin, PluginConfig } from 'jovo-core';
 import { HttpService } from './HttpService';
 import { AudioEncoder } from './AudioEncoder';
 import { SimpleAzureAsrResponse } from './Interfaces';
+import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
   endpointKey?: string;
@@ -43,13 +35,12 @@ export class AzureAsr implements Plugin {
     if (audio && audio.data && audio.data instanceof Float32Array && audio.sampleRate) {
       const targetSampleRate = 16000;
       const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, targetSampleRate);
-      const wavBuffer = AudioEncoder.encodeToWav(downSampled, audio.sampleRate);
+      const wavBuffer = AudioEncoder.encodeToWav(downSampled, targetSampleRate);
 
       const result = await this.speechToText(
         wavBuffer,
         `audio/wav; codecs=audio/pcm; samplerate=${targetSampleRate}`,
       );
-      console.log(JSON.stringify(result, undefined, 2));
       jovo.$asr = {
         text: result.DisplayText || '',
         Azure: result,
@@ -79,7 +70,6 @@ export class AzureAsr implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       } else {
-        console.log(response.data);
         throw new Error(
           `Could not reach Luis. status: ${response.status}, data: ${
             response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
@@ -87,7 +77,6 @@ export class AzureAsr implements Plugin {
         );
       }
     } catch (e) {
-      console.log(e);
       throw new JovoError(e);
     }
   }
