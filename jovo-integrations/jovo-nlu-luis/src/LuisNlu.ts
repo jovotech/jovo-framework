@@ -22,7 +22,7 @@ export interface Config extends PluginConfig {
   slot?: 'production' | 'staging';
 }
 
-export class LuisNLU implements Plugin {
+export class LuisNlu implements Plugin {
   config: Config = {
     endpointKey: '',
     endpointHost: '',
@@ -41,7 +41,7 @@ export class LuisNLU implements Plugin {
   }
 
   async nlu(jovo: Jovo) {
-    const text = jovo.getRawText();
+    const text = (jovo.$asr && jovo.$asr.text) ?? jovo.getRawText();
 
     let response: LuisResponse | null = null;
     if (text) {

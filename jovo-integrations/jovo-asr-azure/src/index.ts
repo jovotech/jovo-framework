@@ -1,2 +1,2 @@
-export * from './AzureASR';
+export * from './AzureAsr';
 // export * from './Interfaces';

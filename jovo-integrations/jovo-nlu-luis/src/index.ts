@@ -1,2 +1,2 @@
-export * from './LuisNLU';
+export * from './LuisNlu';
 export * from './Interfaces';
