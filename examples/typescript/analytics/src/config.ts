@@ -1,46 +1,47 @@
-const config = {
-    logging: true,
+import { config } from 'jovo-framework';
 
-    intentMap: {
-      'AMAZON.StopIntent': 'END',
-    },
+// tslint:disable-next-line
+export default config({
+	logging: true,
 
-    analytics: {
-        BotAnalyticsAlexa: {
-            key: 'keyAlexa',
-        },
-        BotAnalyticsGoogleAssistant: {
-            key: 'keyGoogleAssistant',
-        },
-        BespokenAlexa: {
-            key: 'keyAlexa',
-        },
-        BespokenGoogleAssistant: {
-            key: 'keyGoogleAssistant',
-        },
-        DashbotAlexa: {
-            key: 'keyAlexa',
-        },
-        DashbotGoogleAssistant: {
-            key: 'keyGoogleAssistant',
-        },
-        ChatbaseAlexa: {
-            key: 'keyAlexa',
-            appVersion: '',
-        },
-        ChatbaseGoogleAssistant: {
-            key: 'keyGoogleAssistant',
-            appVersion: '',
-        },
-        GoogleAnalytics: {
-            trackingId: ''
-        }
-    },
-    db: {
-        FileDb: {
-            pathToFile: './../../db/db.json'
-        }
-    },
-};
+	intentMap: {
+		'AMAZON.StopIntent': 'END'
+	},
 
-export = config;
+	analytics: {
+		BotAnalyticsAlexa: {
+			key: 'keyAlexa'
+		},
+		BotAnalyticsGoogleAssistant: {
+			key: 'keyGoogleAssistant'
+		},
+		BespokenAlexa: {
+			key: 'keyAlexa'
+		},
+		BespokenGoogleAssistant: {
+			key: 'keyGoogleAssistant'
+		},
+		DashbotAlexa: {
+			key: 'keyAlexa'
+		},
+		DashbotGoogleAssistant: {
+			key: 'keyGoogleAssistant'
+		},
+		ChatbaseAlexa: {
+			key: 'keyAlexa',
+			appVersion: ''
+		},
+		ChatbaseGoogleAssistant: {
+			key: 'keyGoogleAssistant',
+			appVersion: ''
+		},
+		GoogleAnalytics: {
+			trackingId: ''
+		}
+	},
+	db: {
+		FileDb: {
+			pathToFile: './../../db/db.json'
+		}
+	}
+});

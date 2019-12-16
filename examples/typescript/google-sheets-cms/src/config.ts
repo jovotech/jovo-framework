@@ -1,28 +1,29 @@
-const config = {
-   logging: true,
+import { config } from 'jovo-framework';
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   },
-    db: {
-        FileDb: {
-            pathToFile: './../../db/db.json'
-        }
-    },
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '1adMWErUl7xrtmKCBiMjEJCfkWWHgmxASId5eeRRVBSc',
-            access: 'private',
-            credentialsFile: './credentials.json',
-            sheets: [
-                {
-                    name: 'testSheet',
-                    range: 'A:Z',
-                    type: 'ObjectArray',
-                },
-            ],
-        }
-    }
-};
+// tslint:disable-next-line
+export default config({
+	logging: true,
 
-export = config;
+	intentMap: {
+		'AMAZON.StopIntent': 'END'
+	},
+	db: {
+		FileDb: {
+			pathToFile: './../../db/db.json'
+		}
+	},
+	cms: {
+		GoogleSheetsCMS: {
+			spreadsheetId: '1adMWErUl7xrtmKCBiMjEJCfkWWHgmxASId5eeRRVBSc',
+			access: 'private',
+			credentialsFile: './credentials.json',
+			sheets: [
+				{
+					name: 'testSheet',
+					range: 'A:Z',
+					type: 'ObjectArray'
+				}
+			]
+		}
+	},
+});

@@ -24,6 +24,8 @@ app.setHandler({
     async LAUNCH(jovo) {
         this.$speech.addText(this.$cms.t('WELCOME'));
 
+        this.$config.
+
         console.log(this.$cms.testSheet);
         return this.tell(this.$speech);
     },

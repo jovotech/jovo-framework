@@ -1,7 +1,9 @@
-module.exports = {
-   logging: false,
+const { config } = require('jovo-framework');
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   }
-};
+module.exports = config({
+	logging: false,
+
+	intentMap: {
+		'AMAZON.StopIntent': 'END'
+	}
+});

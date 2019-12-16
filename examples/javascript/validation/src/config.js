@@ -1,14 +1,14 @@
-const config = {
-    logging: false,
+const { config } = require('jovo-framework');
 
-    intentMap: {
-        'AMAZON.StopIntent': 'END',
-    },
-    db: {
-        FileDb: {
-            pathToFile: './../../db/db.json'
-        }
-    }
-};
+module.exports = config({
+	logging: false,
 
-module.exports = { config };
+	intentMap: {
+		'AMAZON.StopIntent': 'END'
+	},
+	db: {
+		FileDb: {
+			pathToFile: './../../db/db.json'
+		}
+	}
+});
