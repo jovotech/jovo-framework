@@ -1,6 +1,7 @@
 import { Handler } from 'jovo-core';
 import { SapCaiSkill } from './core/SapCaiSkill';
 import { Button, CardContent } from './response';
+import { Config } from './SapCai';
 
 declare module 'jovo-core/dist/src/Jovo' {
   export interface Jovo {
@@ -39,7 +40,7 @@ declare module 'jovo-core/dist/src/BaseApp' {
 
 export const NEW_SESSION_KEY = '__JOVO_NEW_SESSION__';
 
-export { SapCai } from './SapCai';
+export { SapCai, Config } from './SapCai';
 export * from './core/Interfaces';
 export { SapCaiSkill } from './core/SapCaiSkill';
 export * from './core/SapCaiRequest';
@@ -54,3 +55,12 @@ export { SapCaiNLU } from './modules/SapCaiNLU';
 export { Cards } from './modules/Cards';
 
 export * from './response';
+
+interface AppSapCaiConfig {
+  SapCai?: Config;
+}
+
+declare module 'jovo-core/dist/src/Interfaces' {
+  export interface AppPlatformConfig extends AppSapCaiConfig {}
+  export interface ExtensiblePluginConfigs extends AppSapCaiConfig {}
+}

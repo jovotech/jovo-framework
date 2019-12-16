@@ -1,3 +1,4 @@
+import { BaseAppConfig } from './BaseApp';
 import {
   ExtensibleConfig,
   HandleRequest,
@@ -7,8 +8,6 @@ import {
   SpeechBuilder,
   TestSuite,
 } from './index';
-
-import { BaseApp } from './BaseApp';
 
 export interface Data {
   [key: string]: any; // tslint:disable-line
@@ -510,4 +509,17 @@ export type JovoFunction = (this: Jovo, jovo?: Jovo, done?: Function) => Handler
 
 export interface Handler {
   [key: string]: JovoFunction | Handler | Function;
+}
+
+export interface AppConfig extends BaseAppConfig {}
+
+export interface AppAnalyticsConfig extends Record<string, any> {}
+export interface AppCmsConfig extends Record<string, any> {}
+export interface AppComponentsConfig extends Record<string, PluginConfig> {}
+export interface AppDbConfig extends Record<string, any> {}
+export interface AppNluConfig extends Record<string, any> {}
+export interface AppPlatformConfig extends Record<string, any> {}
+
+export interface ExtensiblePluginConfigs {
+  [key: string]: any;
 }

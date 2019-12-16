@@ -1,7 +1,12 @@
-import { Inputs } from './Interfaces';
+import { AppConfig } from './Interfaces';
 import { Log } from './Log';
 import { Project as P } from './Project';
+
 export const Project = P.getInstance();
+
+export function config(cfg?: AppConfig): AppConfig {
+  return cfg || {};
+}
 
 try {
   // do not use source map support with jest.
@@ -46,29 +51,7 @@ export {
   ValidValuesValidator,
   InvalidValuesValidator,
 } from './validators';
-export {
-  Plugin,
-  PluginConfig,
-  Output,
-  JovoRequest,
-  RequestType,
-  Platform,
-  Analytics,
-  JovoResponse,
-  Db,
-  NLUData,
-  Inputs,
-  Input,
-  Host,
-  AppData,
-  JovoData,
-  SessionData,
-  Data,
-  JovoFunction,
-  HandlerReturnType,
-  Handler,
-  RequestJSON,
-} from './Interfaces';
+export * from './Interfaces';
 
 export { Util } from './Util';
 export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './Log';

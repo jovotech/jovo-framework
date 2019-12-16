@@ -1,25 +1,40 @@
 import * as fs from 'fs';
+import * as path from 'path';
+
 import { Config as I18NextConfig, I18Next } from 'jovo-cms-i18next';
-import { BaseApp, ExtensibleConfig, Host, Log, Logger, LogLevel, Middleware } from 'jovo-core';
+import {
+  AppAnalyticsConfig,
+  AppCmsConfig,
+  AppComponentsConfig,
+  AppDbConfig,
+  AppNluConfig,
+  AppPlatformConfig,
+  BaseApp,
+  ExtensibleConfig,
+  Host,
+  Log,
+  Logger,
+  LogLevel,
+  Middleware,
+  PluginConfig,
+} from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 
 import _cloneDeep = require('lodash.clonedeep');
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
-import * as path from 'path';
+import { ComponentConfig } from './middleware/Component';
+import { ComponentPlugin } from './middleware/ComponentPlugin';
+import { Handler } from './middleware/Handler';
+import { BasicLogging, Config as LoggingConfig } from './middleware/logging/BasicLogging';
+import { Config as RouterConfig, Router } from './middleware/Router';
 import {
   Config as JovoUserConfig,
   ContextConfig,
   JovoUser,
   MetaDataConfig,
 } from './middleware/user/JovoUser';
-
-import { ComponentConfig } from './middleware/Component';
-import { ComponentPlugin } from './middleware/ComponentPlugin';
-import { Handler } from './middleware/Handler';
-import { BasicLogging } from './middleware/logging/BasicLogging';
-import { Config as RouterConfig, Router } from './middleware/Router';
 
 if (process.argv.includes('--port')) {
   process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
@@ -720,14 +735,7 @@ export class App extends BaseApp {
   }
 }
 
-export interface LoggingConfig {
-  request?: boolean;
-  response?: boolean;
-  requestObjects?: string[];
-  responseObjects?: string[];
-}
-
-export interface Config extends ExtensibleConfig {
+export interface Config extends ExtensibleConfig, RouterConfig {
   v1?: {
     logging?: boolean;
     requestLogging?: boolean;
@@ -750,17 +758,12 @@ export interface Config extends ExtensibleConfig {
 
   user?: JovoUserConfig | { [key: string]: any; metaData: boolean; context: boolean }; // tslint:disable-line
   i18n?: I18NextConfig;
-  db?: { [key: string]: any }; // tslint:disable-line
-  analytics?: { [key: string]: any }; // tslint:disable-line
-  platform?: { [key: string]: any }; // tslint:disable-line
-  cms?: { [key: string]: any }; // tslint:disable-line
-  nlu?: { [key: string]: any }; // tslint:disable-line
-  components?: { [key: string]: ComponentConfig }; // tslint:disable-line
-}
+  db?: AppDbConfig;
+  analytics?: AppAnalyticsConfig;
+  platform?: AppPlatformConfig;
+  cms?: AppCmsConfig;
+  nlu?: AppNluConfig;
+  components?: AppComponentsConfig;
 
-// handler
-export interface Config {
   handlers?: any; // tslint:disable-line
 }
-
-export interface Config extends RouterConfig {}

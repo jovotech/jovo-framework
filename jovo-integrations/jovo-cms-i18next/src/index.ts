@@ -1,4 +1,17 @@
 export { I18Next, Config } from './I18Next';
+
+import { Config } from './I18Next';
+
+interface AppI18NextConfig {
+  I18Next?: Config;
+}
+
+declare module 'jovo-core/dist/src/Interfaces' {
+  export interface AppCmsConfig extends AppI18NextConfig {}
+
+  export interface ExtensiblePluginConfigs extends AppI18NextConfig {}
+}
+
 declare module 'jovo-core/dist/src/Cms' {
   export interface Cms {
     t(key: string, obj?: any): string | string[]; // tslint:disable-line
