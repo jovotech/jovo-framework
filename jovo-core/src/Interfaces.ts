@@ -511,7 +511,13 @@ export interface Handler {
   [key: string]: JovoFunction | Handler | Function;
 }
 
-export interface AppConfig extends BaseAppConfig {}
+export interface AppConfig extends BaseAppConfig {
+  analytics?: AppAnalyticsConfig;
+  platform?: AppPlatformConfig;
+  cms?: AppCmsConfig;
+  nlu?: AppNluConfig;
+  components?: AppComponentsConfig;
+}
 
 export interface AppAnalyticsConfig extends Record<string, any> {}
 export interface AppCmsConfig extends Record<string, any> {}

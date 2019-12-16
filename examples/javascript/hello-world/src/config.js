@@ -9,8 +9,5 @@ module.exports = config({
 		FileDb: {
 			pathToFile: './../db/db.json'
 		}
-	},
-	plugin: {
-		GoogleAssistant: {}
 	}
 });
