@@ -63,5 +63,5 @@ When you want to deploy your code to a webserver other than AWS Lambda, you need
 These can be implemented using the [Alexa-verifier](https://www.npmjs.com/package/alexa-verifier) package.
 
 
-<!--[metadata]: {"description": "Deploy your Google Actions and Alexa Skills to any server with the Jovo Framework",
-		        "route": "hosting/google-cloud-functions"}-->
+<!--[metadata]: {"description": "Deploy your Google Actions and Alexa Skills to any server with the Jovo Framework using the Node.js built-in http package",
+		        "route": "hosting/http-host"}-->
