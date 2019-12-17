@@ -18,6 +18,7 @@ import {
 } from '../services/AlexaReminder';
 import { ShoppingList, ShoppingListItem, ToDoList, ToDoListItem } from './Interfaces';
 import { AlexaSkill } from './AlexaSkill';
+import { AmazonPay, BuyerIdResponse, AmazonPayApiRequestOptions, BuyerAddressRequestOptions, BuyerAddressResponse } from '../services/AmazonPay';
 
 export class AlexaUser extends User {
   alexaSkill: AlexaSkill;
@@ -332,5 +333,23 @@ export class AlexaUser extends User {
    */
   getAllReminders(): Promise<ReminderListResponse> {
     return this.alexaReminder.getAllReminders();
+  }
+
+  getBuyerId(options: AmazonPayApiRequestOptions): Promise<BuyerIdResponse> {
+    const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
+    if (!options.apiAccessToken) {
+      options.apiAccessToken = alexaRequest.getApiAccessToken();
+    }
+
+    return AmazonPay.getBuyerId(options);
+  }
+
+  getBuyerAddress(options: BuyerAddressRequestOptions): Promise<BuyerAddressResponse> {
+    const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
+    if (!options.apiAccessToken) {
+      options.apiAccessToken = alexaRequest.getApiAccessToken();
+    }
+
+    return AmazonPay.getBuyerAddress(options);
   }
 }

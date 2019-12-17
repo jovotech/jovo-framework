@@ -7,6 +7,7 @@ export { AlexaSkill } from './core/AlexaSkill';
 export { AlexaTestSuite } from './core/Interfaces';
 export * from './core/AlexaRequest';
 export * from './services/AlexaReminder';
+export * from './services/AmazonPay';
 
 export { AlexaResponse } from './core/AlexaResponse';
 
