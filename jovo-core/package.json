@@ -17,6 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "asyncctx": "^2.0.3",
+    "axios": "^0.19.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
@@ -29,6 +30,7 @@
     "lodash.transform": "^4.6.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/jest": "^24.0.11",
     "@types/lodash.camelcase": "^4.3.4",
     "@types/lodash.clonedeep": "^4.5.4",
