@@ -2,6 +2,8 @@
 
 * [Introduction](#introduction)
 * [Permissions](#permissions)
+* [Buyer Id](#buyer-id)
+* [Buyer Address](#buyer-address)
 * [Send the Directive](#send-the-directive)
 
 ## Introduction
@@ -74,6 +76,85 @@ this.$alexaSkill.showAskForAmazonPayPermissionCard();
 
 this.$alexaSkill!.showAskForAmazonPayPermissionCard();
 ```
+
+## Buyer Id
+
+To get the user's buyer id, you can use the `getBuyerId()` helper method.
+
+You have to parse the method an options object with the following properties:
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`host` | Depending on the user's region, you have to send the api request to different hosts. For **NA** it's `pay-api.amazon.com`, for **EU & UK** it's `pay-api.amazon.eu` and for **JP** it's `pay-api.amazon.jp` | `String` | Yes
+
+```js
+// @language=javascript
+
+const options = {
+    host: 'pay-api.amazon.com'
+}
+const response = await this.$alexaSkill.$user.getBuyerId(options);
+
+// @language=typescript
+
+const options: AmazonPayApiRequestOptions = {
+    host: 'pay-api.amazon.com'
+}
+const response = await this.$alexaSkill.$user.getBuyerId(options);
+```
+
+If your request was successful, you will receive a response object with the following structure:
+
+Name | Description | Value
+:--- | :--- | :---
+`buyerId` | The user's buyer id | `String`
+
+## Buyer Address
+
+To access the user's buyer address, you can use the `getBuyerAddress()` helper method.
+
+You have to parse the method an options object with the following properties:
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`host` | Depending on the user's region, you have to send the api request to different hosts. For **NA** it's `pay-api.amazon.com`, for **EU & UK** it's `pay-api.amazon.eu` and for **JP** it's `pay-api.amazon.jp` | `String` | Yes
+`sellerId` | Your seller id | `String` | Yes
+`sandbox` | A boolean to specify wether you want to use the sandbox mode or not. The default value is `false` | `Boolean` | No
+`sandboxEmail` | The email address for the sandbox user account. Is only required, if `sandbox` is set to `true` | `String` | No
+
+```js
+// @language=javascript
+
+const options = {
+    host: 'pay-api.amazon.com',
+    sellerId: 'xyz'
+};
+const response = await this.$alexaSkill.$user.getBuyerAddress(options);
+
+// @language=typescript
+
+const options: AmazonPayApiRequestOptions = {
+    host: 'pay-api.amazon.com',
+    sellerId: 'xyz'
+};
+const response = await this.$alexaSkill.$user.getBuyerAddress(options);
+```
+
+If your request was successful, you will receive a response object with the following structure:
+
+Name | Description | Value
+:--- | :--- | :---
+`addresses` | Array of `address` objects | `Object[]`
+`addresses[].address` | address object | `Object`
+`addresses[].address.addressLine1` | | `String`
+`addresses[].address.city` | | `String`
+`addresses[].address.countryCode` | | `String`
+`addresses[].address.name` | | `String`
+`addresses[].address.phone` | | `String`
+`addresses[].address.postalCode` | | `String`
+`addresses[].address.stateOrRegion` | | `String`
+`addresses[].addressType` | | `String`
+
 
 ## Send the Directive
 
