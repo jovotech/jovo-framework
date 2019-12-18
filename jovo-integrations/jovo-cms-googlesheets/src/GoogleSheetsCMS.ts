@@ -14,13 +14,13 @@ import {
 } from 'jovo-core';
 import * as path from 'path';
 
+import _merge = require('lodash.merge');
 import * as util from 'util';
 import { DefaultSheet, GoogleSheetsSheet } from './DefaultSheet';
 import { KeyObjectSheet } from './KeyObjectSheet';
 import { KeyValueSheet } from './KeyValueSheet';
 import { ObjectArraySheet } from './ObjectArraySheet';
 import { ResponsesSheet } from './ResponsesSheet';
-import _merge = require('lodash.merge');
 
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);

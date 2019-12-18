@@ -38,10 +38,6 @@ export class Conversation {
    */
   private static async httpRequest(postData: string, options: RequestOptions): Promise<any> {
     const config = HttpService.httpRequestOptionsToAxiosRequestConfig(options);
-    // TODO test if this is correctly not stringifying the payload for a second time and if it is even necessary
-    // config.transformRequest = (data: string) => {
-    //   return data;
-    // };
     config.data = postData;
 
     try {
