@@ -1,29 +1,30 @@
 import * as fs from 'fs';
 import { google } from 'googleapis';
-import * as https from 'https';
 import {
   ActionSet,
+  AxiosRequestConfig,
   BaseApp,
   BaseCmsPlugin,
   ErrorCode,
   ExtensibleConfig,
   HandleRequest,
+  HttpService,
   JovoError,
   Log,
 } from 'jovo-core';
-import _merge = require('lodash.merge');
 import * as path from 'path';
 
 import * as util from 'util';
-
-const readdir = util.promisify(fs.readdir);
-const readFile = util.promisify(fs.readFile);
-const exists = util.promisify(fs.exists);
 import { DefaultSheet, GoogleSheetsSheet } from './DefaultSheet';
 import { KeyObjectSheet } from './KeyObjectSheet';
 import { KeyValueSheet } from './KeyValueSheet';
 import { ObjectArraySheet } from './ObjectArraySheet';
 import { ResponsesSheet } from './ResponsesSheet';
+import _merge = require('lodash.merge');
+
+const readdir = util.promisify(fs.readdir);
+const readFile = util.promisify(fs.readFile);
+const exists = util.promisify(fs.exists);
 
 export interface Config extends ExtensibleConfig {
   credentialsFile?: string;
@@ -94,7 +95,28 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
   async loadPublicSpreadsheetData(spreadsheetId: string, sheetPosition = 1) {
     const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
     Log.verbose('Accessing public spreadsheet: ' + url);
-    return this.getJSON(url);
+    const response = await HttpService.get(url);
+
+    if (response.status === 302) {
+      throw new JovoError(
+        'HTTP Response code 302',
+        ErrorCode.ERR_PLUGIN,
+        'jovo-cms-spreadsheets',
+        undefined,
+        'This might occur when you try to access a private spreadsheet without the permission.',
+      );
+    }
+    if (response.status === 400) {
+      throw new JovoError(
+        'HTTP Response code 400',
+        ErrorCode.ERR_PLUGIN,
+        'jovo-cms-spreadsheets',
+        undefined,
+        'This might occur when you use the wrong spreadsheet id.',
+      );
+    }
+
+    return response.data;
   }
 
   loadPrivateSpreadsheetData(spreadsheetId: string, sheet: string, range: string): Promise<any[]> {
@@ -191,53 +213,6 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
       } catch (error) {
         reject(error);
       }
-    });
-  }
-
-  private getJSON(url: string) {
-    return new Promise((resolve, reject) => {
-      https
-        .get(url, (res) => {
-          let body = '';
-
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
-
-          res.on('end', () => {
-            try {
-              if (res.statusCode === 302) {
-                return reject(
-                  new JovoError(
-                    'HTTP Response code 302',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-cms-spreadsheets',
-                    undefined,
-                    'This might occur when you try to access a private spreadsheet without the permission.',
-                  ),
-                );
-              }
-
-              if (res.statusCode === 400) {
-                return reject(
-                  new JovoError(
-                    'HTTP Response code 400',
-                    ErrorCode.ERR_PLUGIN,
-                    'jovo-cms-spreadsheets',
-                    undefined,
-                    'This might occur when you use the wrong spreadsheet id.',
-                  ),
-                );
-              }
-              resolve(JSON.parse(body));
-            } catch (e) {
-              reject(e);
-            }
-          });
-        })
-        .on('error', (e) => {
-          reject(e);
-        });
     });
   }
 }

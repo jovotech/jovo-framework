@@ -12,7 +12,7 @@ import { ReceiptTemplateOptions } from './responses/templates/ReceiptTemplate';
 
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
-export const HOST = 'graph.facebook.com';
+export const BASE_URL = 'https://graph.facebook.com';
 export const BASE_PATH = '/v5.0/me';
 
 declare module 'jovo-core/dist/src/Jovo' {
@@ -64,8 +64,6 @@ export * from './core/MessengerBotSpeechBuilder';
 export * from './core/MessengerBotUser';
 export * from './core/FacebookMessengerRequestBuilder';
 export * from './core/FacebookMessengerResponseBuilder';
-
-export * from './helpers/HTTPS';
 
 export * from './modules/FacebookMessengerCore';
 

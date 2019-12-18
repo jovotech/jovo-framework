@@ -1,8 +1,10 @@
 import {
+  AxiosRequestConfig,
   BaseApp,
   EnumRequestType,
   Extensible,
   HandleRequest,
+  HttpService,
   Inputs,
   Jovo,
   JovoError,
@@ -10,8 +12,6 @@ import {
   PluginConfig,
 } from 'jovo-core';
 import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
-import { RequestOptions } from 'https';
-import { HttpService } from './HttpService';
 import * as fs from 'fs';
 import * as util from 'util';
 import { JWT } from 'google-auth-library';
@@ -22,7 +22,7 @@ import _set = require('lodash.set');
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 
-const HOST = 'dialogflow.googleapis.com';
+const BASE_URL = 'https://dialogflow.googleapis.com';
 
 export interface Config extends PluginConfig {
   defaultIntent?: string;
@@ -236,24 +236,22 @@ export class DialogflowNlu extends Extensible implements Plugin {
       'Authorization': `Bearer ${authToken}`,
     };
 
-    const options: RequestOptions = {
-      host: HOST,
-      path,
-      method: 'POST',
-      headers,
-    };
     const data: DialogflowRequest = {
       queryInput: {
         text: textInput,
       },
     };
-    const stringData = JSON.stringify(data);
-    try {
-      const response = await HttpService.makeRequest<DialogflowResponse>(
-        options,
-        Buffer.from(stringData),
-      );
 
+    const config: AxiosRequestConfig = {
+      baseURL: BASE_URL,
+      url: path,
+      data,
+      method: 'POST',
+      headers,
+    };
+
+    try {
+      const response = await HttpService.request<DialogflowResponse>(config);
       if (response.status === 200 && response.data && response.data.responseId) {
         return response.data;
       } else {

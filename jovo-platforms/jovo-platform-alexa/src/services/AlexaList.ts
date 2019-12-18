@@ -1,5 +1,5 @@
 import { ApiError } from './ApiError';
-import { AlexaAPI } from './AlexaAPI';
+import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
 
 export interface HouseholdListStatusMap {
   href: string;
@@ -122,7 +122,7 @@ export class AlexaList {
   }
 
   async deleteListItemAPI(listId: string, itemId: string) {
-    const options = {
+    const options: ApiCallOptions = {
       endpoint: this.apiEndpoint,
       path: `/v2/householdlists/${listId}/items/${itemId}`,
       method: 'DELETE',
@@ -178,7 +178,7 @@ export class AlexaList {
   }
 
   async createListItemAPI(listId: string, householdListItem: HouseholdListItem) {
-    const options = {
+    const options: ApiCallOptions = {
       endpoint: this.apiEndpoint,
       path: `/v2/householdlists/${listId}/items`,
       method: 'POST',
@@ -208,7 +208,7 @@ export class AlexaList {
   }
 
   async updateListItemAPI(listId: string, householdListItem: HouseholdListItem) {
-    const options = {
+    const options: ApiCallOptions = {
       endpoint: this.apiEndpoint,
       path: `/v2/householdlists/${listId}/items/${householdListItem.id}`,
       method: 'PUT',

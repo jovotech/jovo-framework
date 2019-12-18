@@ -1,5 +1,5 @@
 import { ApiError } from './ApiError';
-import { AlexaAPI } from './AlexaAPI';
+import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
 
 export class AlexaReminder {
   apiEndpoint: string;
@@ -17,7 +17,7 @@ export class AlexaReminder {
    */
   async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {
     try {
-      const options = {
+      const options: ApiCallOptions = {
         endpoint: this.apiEndpoint,
         path: '/v1/alerts/reminders',
         permissionToken: this.apiAccessToken,
@@ -51,7 +51,7 @@ export class AlexaReminder {
    */
   async getReminder(alertToken: string): Promise<ReminderListResponse> {
     try {
-      const options = {
+      const options: ApiCallOptions = {
         endpoint: this.apiEndpoint,
         path: `/v1/alerts/reminders/${alertToken}`,
         permissionToken: this.apiAccessToken,
@@ -87,7 +87,7 @@ export class AlexaReminder {
    */
   async updateReminder(alertToken: string, reminder: Reminder) {
     try {
-      const options = {
+      const options: ApiCallOptions = {
         endpoint: this.apiEndpoint,
         path: `/v1/alerts/reminders/${alertToken}`,
         permissionToken: this.apiAccessToken,
@@ -123,7 +123,7 @@ export class AlexaReminder {
    */
   async deleteReminder(alertToken: string) {
     try {
-      const options = {
+      const options: ApiCallOptions = {
         endpoint: this.apiEndpoint,
         path: `/v1/alerts/reminders/${alertToken}`,
         permissionToken: this.apiAccessToken,
@@ -156,7 +156,7 @@ export class AlexaReminder {
    */
   async getAllReminders(): Promise<ReminderListResponse> {
     try {
-      const options = {
+      const options: ApiCallOptions = {
         endpoint: this.apiEndpoint,
         path: '/v1/alerts/reminders',
         permissionToken: this.apiAccessToken,

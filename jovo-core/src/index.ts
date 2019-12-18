@@ -54,5 +54,6 @@ export {
 export * from './Interfaces';
 
 export { Util } from './Util';
+export * from './HttpService';
 export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './Log';
 export { User } from './User';

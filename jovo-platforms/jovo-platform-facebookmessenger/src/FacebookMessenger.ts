@@ -1,11 +1,14 @@
 import {
   ActionSet,
+  AxiosError,
+  AxiosRequestConfig,
   BaseApp,
   ErrorCode,
   Extensible,
   ExtensibleConfig,
   HandleRequest,
   Host,
+  HttpService,
   Jovo,
   JovoError,
   Platform,
@@ -23,6 +26,7 @@ import {
   AttachmentMessage,
   AttachmentMessageOptions,
   BASE_PATH,
+  BASE_URL,
   ButtonTemplate,
   ButtonTemplateOptions,
   ButtonTemplatePayload,
@@ -32,8 +36,6 @@ import {
   GenericTemplate,
   GenericTemplateOptions,
   GenericTemplatePayload,
-  HOST,
-  HTTPS,
   MediaTemplate,
   MediaTemplateOptions,
   MediaTemplatePayload,
@@ -140,14 +142,7 @@ export class FacebookMessenger extends Extensible implements Platform {
 
   async setup(handleRequest: HandleRequest) {
     const path = `${BASE_PATH}/messenger_profile?access_token=${this.config.pageAccessToken}`;
-    const options = {
-      hostname: HOST,
-      path,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    const url = BASE_URL + path;
     const data: any = {};
 
     if (this.config.launch && this.config.launch.updateOnSetup) {
@@ -178,10 +173,21 @@ export class FacebookMessenger extends Extensible implements Platform {
       data.greeting = greetingElements;
     }
 
-    const json = JSON.stringify(data);
+    if (Object.keys(data).length === 0) {
+      return;
+    }
+
+    const config: AxiosRequestConfig = {
+      url,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data,
+    };
 
     try {
-      await HTTPS.makeRequest(options, Buffer.from(json));
+      await HttpService.request(config);
     } catch (e) {
       throw new JovoError(e, ErrorCode.ERR_PLUGIN, 'FacebookMessenger');
     }

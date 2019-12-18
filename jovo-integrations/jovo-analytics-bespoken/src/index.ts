@@ -8,6 +8,7 @@ interface AppBespokenConfig {
 
 declare module 'jovo-core/dist/src/Interfaces' {
   export interface AppAnalyticsConfig extends AppBespokenConfig {}
+
   export interface ExtensiblePluginConfigs extends AppBespokenConfig {}
 }
 
@@ -16,3 +17,4 @@ export {
   BespokenGoogleAssistant,
   Config as GoogleAssistantConfig,
 } from './BespokenGoogleAssistant';
+export * from './Interfaces';

@@ -1,10 +1,8 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import { RequestOptions } from 'http';
+export * from 'axios';
 
 export class HttpService {
-  static get axios(): AxiosInstance {
-    return axios;
-  }
-
   // tslint:disable-next-line:no-any
   static request<VALUE = any, RESPONSE = AxiosResponse<VALUE>>(
     config: AxiosRequestConfig,
@@ -64,5 +62,20 @@ export class HttpService {
     config?: AxiosRequestConfig,
   ): Promise<RESPONSE> {
     return axios.patch(url, data, config);
+  }
+
+  static httpRequestOptionsToAxiosRequestConfig(
+    options: RequestOptions,
+    isSecure = false,
+  ): AxiosRequestConfig {
+    const prefix = `http${isSecure ? 's' : ''}://`;
+    const host = options.hostname || options.host || '';
+    const port = options.port || isSecure ? 443 : 80;
+    const url = `${prefix}${host}${options.path}:${port}`;
+    return {
+      headers: options.headers,
+      method: options.method as Method | undefined,
+      url,
+    };
   }
 }

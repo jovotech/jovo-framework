@@ -1,42 +1,32 @@
-import * as https from 'https';
+import { HttpService } from 'jovo-core';
+
 export class AmazonProfileAPI {
   /**
    * Makes a request to the amazon profile api
    */
-  static requestAmazonProfile(acccessToken: string) {
-    return new Promise((resolve, reject) => {
-      const url = `https://api.amazon.com/user/profile?access_token=${acccessToken}`;
-      https
-        .get(url, (res) => {
-          const contentType = res.headers['content-type'] || '';
+  static async requestAmazonProfile(acccessToken: string) {
+    const url = `https://api.amazon.com/user/profile?access_token=${acccessToken}`;
 
-          let error;
-          if (res.statusCode !== 200) {
-            error = new Error('Something went wrong');
-          } else if (!/^application\/json/.test(contentType)) {
-            error = new Error('Wrong content type');
-          }
-          if (error) {
-            res.resume();
-            return reject(error);
-          }
+    let error;
+    try {
+      const response = await HttpService.get(url);
+      const contentType = response.headers['content-type'] || '';
 
-          res.setEncoding('utf8');
-          let rawData = '';
-          res.on('data', (chunk) => {
-            rawData += chunk;
-          });
-          res.on('end', () => {
-            try {
-              return resolve(JSON.parse(rawData));
-            } catch (e) {
-              return reject(new Error('Something went wrong'));
-            }
-          });
-        })
-        .on('error', (e) => {
-          return reject(new Error('Something went wrong'));
-        });
-    });
+      if (response.status !== 200) {
+        error = new Error('Something went wrong');
+      } else if (!/^application\/json/.test(contentType)) {
+        error = new Error('Wrong content type');
+      }
+
+      if (response.data && !error) {
+        return response.data;
+      }
+    } catch (e) {
+      error = new Error('Something went wrong');
+    }
+
+    if (error) {
+      throw error;
+    }
   }
 }
