@@ -27,14 +27,15 @@ export class AlexaAPI {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${options.permissionToken}`,
       },
+      validateStatus: (status: number) => {
+        return true;
+      }
     };
 
     const response = await HttpService.request(config);
-
     if (response.status !== 204 && response.data) {
       return new AlexaAPIResponse(response.status, response.data);
     }
-
     return new AlexaAPIResponse(response.status, {});
   }
 

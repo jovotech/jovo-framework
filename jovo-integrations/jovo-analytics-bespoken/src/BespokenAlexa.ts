@@ -82,7 +82,7 @@ export class BespokenAlexa implements Analytics {
       url: 'https://logless.bespoken.tools/v1/receive',
     };
 
-    HttpService.request(config).catch((e) => {
+    return HttpService.request(config).catch((e) => {
       Log.error('Error while logging to Bespoken Services');
       Log.error(e);
     });

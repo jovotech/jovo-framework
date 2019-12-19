@@ -75,7 +75,7 @@ export class ChatbaseGoogleAssistant implements Analytics {
       url: `https://chatbase.com/api/message${multiple ? 's' : ''}`,
     };
 
-    HttpService.request(config).catch((e) => {
+    return HttpService.request(config).catch((e) => {
       Log.error('Error while logging to Chatbase Services');
       Log.error(e);
     });

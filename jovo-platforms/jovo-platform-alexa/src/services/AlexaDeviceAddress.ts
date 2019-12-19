@@ -1,5 +1,6 @@
 import { ApiError } from './ApiError';
 import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
+import { AlexaAPIResponse } from './AlexaAPIResponse';
 
 export class AlexaDeviceAddress {
   static ADDRESS = 'address';
@@ -16,11 +17,11 @@ export class AlexaDeviceAddress {
       AlexaDeviceAddress.COUNTRY_AND_POSTAL_CODE,
     ];
     if (!apiAccessToken) {
-      return Promise.reject(new Error(`No apiAccessToken was found in that request`));
+      throw new Error(`No apiAccessToken was found in that request`);
     }
 
     if (!validProperties.includes(property)) {
-      return Promise.reject(new Error(`${property} is not a valid property`));
+      throw new Error(`${property} is not a valid property`);
     }
 
     const options: ApiCallOptions = {
@@ -30,7 +31,7 @@ export class AlexaDeviceAddress {
     };
 
     try {
-      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+      const response: AlexaAPIResponse = await AlexaAPI.apiCall(options);
 
       if (response.httpStatus === 403) {
         const apiError = new ApiError(response.data.message, response.data.code);
@@ -60,11 +61,12 @@ export class AlexaDeviceAddress {
         ) {
           apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
         }
+        // skip catch
         return Promise.reject(apiError);
       }
-      return Promise.resolve(response.data);
+      return response.data;
     } catch (e) {
-      return Promise.reject(new ApiError('Something went wrong.', ApiError.ERROR));
+      throw new ApiError('Something went wrong.', ApiError.ERROR);
     }
   }
 }

@@ -252,15 +252,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
 
     try {
       const response = await HttpService.request<DialogflowResponse>(config);
-      if (response.status === 200 && response.data && response.data.responseId) {
-        return response.data;
-      } else {
-        throw new Error(
-          `Could not reach Dialogflow. status: ${response.status}, data: ${
-            response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
-          }`,
-        );
-      }
+      return response.data;
     } catch (e) {
       throw new JovoError(e);
     }

@@ -95,7 +95,11 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
   async loadPublicSpreadsheetData(spreadsheetId: string, sheetPosition = 1) {
     const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
     Log.verbose('Accessing public spreadsheet: ' + url);
-    const response = await HttpService.get(url);
+    const response = await HttpService.get(url, {
+      validateStatus: (status: number) => {
+        return status < 500;
+      },
+    });
 
     if (response.status === 302) {
       throw new JovoError(

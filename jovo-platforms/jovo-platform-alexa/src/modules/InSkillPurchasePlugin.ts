@@ -182,9 +182,6 @@ export class InSkillPurchase {
     };
 
     const response = await HttpService.request(config);
-    if (response.status !== 200) {
-      throw new Error('Something went wrong');
-    }
     return response.data;
   }
 }

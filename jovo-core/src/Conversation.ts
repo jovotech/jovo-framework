@@ -40,19 +40,8 @@ export class Conversation {
     const config = HttpService.httpRequestOptionsToAxiosRequestConfig(options);
     config.data = postData;
 
-    try {
-      const response = await HttpService.request(config);
-      return response.data;
-    } catch (e) {
-      if (_get(e, 'code') === 'ECONNREFUSED') {
-        Log.error();
-        Log.error('Your server must be running for your tests to work.');
-        Log.error();
-        Log.error(e);
-        Log.error();
-      }
-      throw e;
-    }
+    const response = await HttpService.request(config);
+    return response.data;
   }
 
   testSuite: TestSuite;
@@ -166,14 +155,10 @@ export class Conversation {
   async sendToServer(req: JovoRequest): Promise<JovoResponse> {
     const postData = JSON.stringify(req.toJSON());
 
-    try {
-      const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
-      const jovoResponse = this.testSuite.responseBuilder.create(response);
-      await this.postProcess(jovoResponse);
-      return jovoResponse;
-    } catch (e) {
-      throw e;
-    }
+    const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
+    const jovoResponse = this.testSuite.responseBuilder.create(response);
+    await this.postProcess(jovoResponse);
+    return jovoResponse;
   }
 
   /**
