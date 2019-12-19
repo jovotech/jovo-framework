@@ -1,7 +1,9 @@
-import { Data, Handler, Log, LogLevel, Project, Util } from 'jovo-core';
-import { App, Config } from './App';
+import { Data, Log, LogLevel, Project, Util } from 'jovo-core';
+import { App } from './App';
 
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
+
+import { Config as BasicLoggingConfig } from './middleware/logging/BasicLogging';
 
 export { App } from './App';
 export { server as Webhook } from './server';
@@ -16,7 +18,6 @@ export { BasicLogging } from './middleware/logging/BasicLogging';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log, Project };
 export * from 'jovo-core';
-
 
 declare module 'express' {
   interface Application {
@@ -37,6 +38,12 @@ declare module 'jovo-core/dist/src/core/Jovo' {
      * }
      */
     repeat(): void;
+  }
+}
+
+declare module 'jovo-core/dist/src/Interfaces' {
+  export interface ExtensiblePluginConfigs {
+    BasicLogging?: BasicLoggingConfig;
   }
 }
 

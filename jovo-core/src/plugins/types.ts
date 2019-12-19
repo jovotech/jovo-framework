@@ -1,10 +1,10 @@
 import { Handler } from '../Interfaces';
-import { Component,ComponentDelegationOptions, ComponentResponse } from './Component';
+import { Component, ComponentDelegationOptions, ComponentResponse } from './Component';
 import { ComponentPlugin } from './ComponentPlugin';
-import { Route } from './Router';
+import { Route, Config as RouterConfig } from './Router';
+import { Config as I18NextConfig } from './I18Next';
 
 declare module './../core/Jovo' {
-
   export interface Jovo {
     $handlers: any; // tslint:disable-line
     triggeredToIntent: boolean;
@@ -80,7 +80,6 @@ declare module './../core/Jovo' {
   }
 }
 
-
 declare module './../core/BaseApp' {
   export interface BaseApp {
     /**
@@ -99,7 +98,6 @@ declare module './../core/BaseApp' {
   }
 }
 declare module './../core/Jovo' {
-
   export interface Jovo {
     $components: {
       [key: string]: Component;
@@ -134,7 +132,6 @@ declare module './../core/Jovo' {
   }
 }
 
-
 declare module './../util/Cms' {
   export interface Cms {
     t(key: string, obj?: any): string | string[]; // tslint:disable-line
@@ -151,5 +148,11 @@ declare module './../util/SpeechBuilder' {
   export interface SpeechBuilder {
     t(key: string, obj?: any): this; // tslint:disable-line
     addT(key: string, obj?: any): this; // tslint:disable-line
+  }
+}
+
+declare module './../Interfaces' {
+  export interface ExtensiblePluginConfigs {
+    Router?: RouterConfig;
   }
 }

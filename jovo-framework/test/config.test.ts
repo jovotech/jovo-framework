@@ -11,11 +11,11 @@ test('test basics', () => {
     logging: true,
   });
 
-  expect(app.config.plugin!.BasicLogging.logging).toBe(true);
+  expect(app.config.plugin!.BasicLogging!.logging).toBe(true);
   expect((app.$plugins.get('BasicLogging') as BasicLogging)!.config!.logging).toBe(true);
 
-  app.config.plugin!.BasicLogging.logging = false;
-  expect(app.config.plugin!.BasicLogging.logging).toBe(false);
+  app.config.plugin!.BasicLogging!.logging = false;
+  expect(app.config.plugin!.BasicLogging!.logging).toBe(false);
   expect((app.$plugins.get('BasicLogging') as BasicLogging)!.config!.logging).toBe(false);
 });
 
@@ -25,18 +25,18 @@ test('test logging', () => {
   });
 
   expect(app.config.logging).toBe(true);
-  expect(app.config.plugin!.BasicLogging.logging).toBe(true);
-  expect(app.config.plugin!.BasicLogging.request).toBe(true);
-  expect(app.config.plugin!.BasicLogging.response).toBe(true);
+  expect(app.config.plugin!.BasicLogging!.logging).toBe(true);
+  expect(app.config.plugin!.BasicLogging!.request).toBe(true);
+  expect(app.config.plugin!.BasicLogging!.response).toBe(true);
 
   app = new App({
     logging: false,
   });
 
   expect(app.config.logging).toBe(false);
-  expect(app.config.plugin!.BasicLogging.logging).toBe(false);
-  expect(app.config.plugin!.BasicLogging.request).toBe(false);
-  expect(app.config.plugin!.BasicLogging.response).toBe(false);
+  expect(app.config.plugin!.BasicLogging!.logging).toBe(false);
+  expect(app.config.plugin!.BasicLogging!.request).toBe(false);
+  expect(app.config.plugin!.BasicLogging!.response).toBe(false);
 
   app = new App({
     logging: {
@@ -49,15 +49,15 @@ test('test logging', () => {
 
   expect(typeof app.config.logging).toBe('object');
 
-  expect(app.config.plugin!.BasicLogging.requestObjects).toEqual(
+  expect(app.config.plugin!.BasicLogging!.requestObjects).toEqual(
     expect.arrayContaining(['a', 'b']),
   );
-  expect(app.config.plugin!.BasicLogging.responseObjects).toEqual(
+  expect(app.config.plugin!.BasicLogging!.responseObjects).toEqual(
     expect.arrayContaining(['c', 'd']),
   );
 
-  expect(app.config.plugin!.BasicLogging.request).toBe(true);
-  expect(app.config.plugin!.BasicLogging.response).toBe(false);
+  expect(app.config.plugin!.BasicLogging!.request).toBe(true);
+  expect(app.config.plugin!.BasicLogging!.response).toBe(false);
 });
 
 test('test user', () => {
@@ -92,11 +92,11 @@ test('test intentMap', () => {
     },
     intentsToSkipUnhandled: ['IntentX', 'IntentY'],
   });
-  expect(app.config.plugin!.Router.intentMap).toEqual(
+  expect(app.config.plugin!.Router!.intentMap).toEqual(
     expect.objectContaining({ IntentA: 'IntentB' }),
   );
 
-  expect(app.config.plugin!.Router.intentsToSkipUnhandled).toEqual(
+  expect(app.config.plugin!.Router!.intentsToSkipUnhandled).toEqual(
     expect.arrayContaining(['IntentX', 'IntentY']),
   );
 });
@@ -108,11 +108,11 @@ test('test intentMap', () => {
     },
     intentsToSkipUnhandled: ['IntentX', 'IntentY'],
   });
-  expect(app.config.plugin!.Router.intentMap).toEqual(
+  expect(app.config.plugin!.Router!.intentMap).toEqual(
     expect.objectContaining({ IntentA: 'IntentB' }),
   );
 
-  expect(app.config.plugin!.Router.intentsToSkipUnhandled).toEqual(
+  expect(app.config.plugin!.Router!.intentsToSkipUnhandled).toEqual(
     expect.arrayContaining(['IntentX', 'IntentY']),
   );
 });

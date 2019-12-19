@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Config as I18NextConfig } from 'jovo-cms-i18next';
 import {
   AppAnalyticsConfig,
   AppCmsConfig,
@@ -18,6 +17,7 @@ import {
   LogLevel,
   Middleware,
 } from 'jovo-core';
+import { Config as I18NextConfig } from 'jovo-core/dist/src/plugins/I18Next';
 import { FileDb2 } from 'jovo-db-filedb';
 import _merge = require('lodash.merge');
 import { BasicLogging, Config as LoggingConfig } from './middleware/logging/BasicLogging';
