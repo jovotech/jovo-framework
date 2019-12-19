@@ -118,12 +118,12 @@ export class Router implements Plugin {
    * Maps given intent by the platform with a map in the config
    * Uses component's intent map if it's active
    *
-   * @param {Config} appConfig
+   * @param {Config} routerConfig
    * @param {string} intentName
    * @param {string} component
    * @returns {string}
    */
-  static mapIntentName(appConfig: Config, intentName: string, component?: Component): string {
+  static mapIntentName(routerConfig: Config, intentName: string, component?: Component): string {
     // use component's intent map if component is in use:
     if (component) {
       const componentIntentMap = component.config.intentMap;
@@ -135,9 +135,9 @@ export class Router implements Plugin {
     }
 
     // use intent mapping if set
-    if (appConfig.intentMap && appConfig.intentMap[intentName]) {
-      Log.verbose(`Mapping intent from ${intentName} to ${appConfig.intentMap[intentName]}`);
-      return appConfig.intentMap[intentName];
+    if (routerConfig.intentMap && routerConfig.intentMap[intentName]) {
+      Log.verbose(`Mapping intent from ${intentName} to ${routerConfig.intentMap[intentName]}`);
+      return routerConfig.intentMap[intentName];
     }
 
     return intentName;
@@ -194,7 +194,7 @@ export class Router implements Plugin {
       }
 
       const intent = Router.mapIntentName(
-        this.config,
+        handleRequest.jovo.$config.plugin!.Router!,
         handleRequest.jovo.$nlu.intent.name,
         activeComponent,
       );
