@@ -1,6 +1,5 @@
-import { Plugin } from 'jovo-core';
+import { Plugin, AxiosRequestConfig, HttpService } from 'jovo-core';
 import { Alexa } from '../Alexa';
-import * as https from 'https';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -161,51 +160,29 @@ export class InSkillPurchase {
    * Returns productlist
    * @param {function} callback
    */
-  getProductList() {
+  async getProductList() {
     const alexaRequest = this.alexaSkill.$request as AlexaRequest;
 
-    return new Promise((resolve, reject) => {
-      const options = {
-        hostname: _get(
-          alexaRequest,
-          'context.System.apiEndpoint',
-          'https://api.amazonalexa.com',
-        ).substr(8),
-        port: 443,
-        path: '/v1/users/~current/skills/~current/inSkillProducts',
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept-Language': alexaRequest.getLocale(),
-          'Authorization': 'Bearer ' + alexaRequest.getApiAccessToken(),
-        },
-      };
-      let rawData = '';
+    const hostName = _get(
+      alexaRequest,
+      'context.System.apiEndpoint',
+      'https://api.amazonalexa.com',
+    ).substr(8);
+    const path = '/v1/users/~current/skills/~current/inSkillProducts';
+    const url = `https://${hostName}${path}`;
 
-      const req = https.get(options, (res) => {
-        res.setEncoding('utf8');
+    const config: AxiosRequestConfig = {
+      url,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Language': alexaRequest.getLocale(),
+        'Authorization': `Bearer ${alexaRequest.getApiAccessToken()}`,
+      },
+    };
 
-        if (res.statusCode !== 200) {
-          return reject(new Error('Something went wrong'));
-        }
-
-        res.on('data', (chunk) => {
-          rawData += chunk;
-        });
-
-        res.on('end', () => {
-          try {
-            return resolve(JSON.parse(rawData));
-          } catch (error) {
-            return reject(error);
-          }
-        });
-      });
-
-      req.on('error', (e) => {
-        return reject(e);
-      });
-    });
+    const response = await HttpService.request(config);
+    return response.data;
   }
 }
 

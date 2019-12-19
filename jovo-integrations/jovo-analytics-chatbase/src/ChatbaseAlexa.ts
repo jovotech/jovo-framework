@@ -1,5 +1,14 @@
-import * as https from 'https';
-import { Analytics, BaseApp, HandleRequest, Inputs, Jovo, Log, PluginConfig } from 'jovo-core';
+import {
+  Analytics,
+  AxiosRequestConfig,
+  BaseApp,
+  HandleRequest,
+  HttpService,
+  Inputs,
+  Jovo,
+  Log,
+  PluginConfig,
+} from 'jovo-core';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
@@ -35,7 +44,7 @@ export class ChatbaseAlexa implements Analytics {
 
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
       const data = this.createChatbaseData(handleRequest.jovo);
-      this.sendDataToChatbase(JSON.stringify(data));
+      this.sendDataToChatbase(data);
     }
   }
 
@@ -133,29 +142,21 @@ export class ChatbaseAlexa implements Analytics {
     return slots.join('\n').trim();
   }
 
-  sendDataToChatbase(data: string) {
-    const dataAsJSON = JSON.parse(data);
-    if (dataAsJSON) {
-      const multiple = dataAsJSON.messages !== undefined;
+  sendDataToChatbase(data: Record<string, any>) {
+    const multiple = typeof data.messages !== 'undefined';
 
-      const objectAsString = data;
-      const options = {
-        headers: {
-          'Content-Length': Buffer.byteLength(objectAsString),
-          'Content-Type': 'application/json',
-        },
-        host: 'chatbase.com',
-        method: 'POST',
-        path: multiple ? '/api/messages' : '/api/message',
-      };
+    const config: AxiosRequestConfig = {
+      data,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      url: `https://chatbase.com/api/message${multiple ? 's' : ''}`,
+    };
 
-      const httpRequest = https.request(options);
-
-      httpRequest.on('error ', (error) => {
-        Log.error('Error while logging to Chatbase Services');
-        Log.error(error);
-      });
-      httpRequest.end(objectAsString);
-    }
+    return HttpService.request(config).catch((e) => {
+      Log.error('Error while logging to Chatbase Services');
+      Log.error(e);
+    });
   }
 }

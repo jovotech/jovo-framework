@@ -1,8 +1,9 @@
 import { LinkAccountCard } from './response/visuals/LinkAccountCard';
 import { Directive, DynamicEntityType } from './core/AlexaResponse';
+import { Config } from './Alexa';
 
 export { AlexaRequestBuilder } from './core/AlexaRequestBuilder';
-export { Alexa } from './Alexa';
+export { Alexa, Config } from './Alexa';
 export { AlexaSkill } from './core/AlexaSkill';
 export { AlexaTestSuite } from './core/Interfaces';
 export * from './core/AlexaRequest';
@@ -458,6 +459,10 @@ declare module './core/AlexaSkill' {
   }
 }
 
+interface AppAlexaConfig {
+  Alexa?: Config;
+}
+
 declare module 'jovo-core/dist/src/Interfaces' {
   interface Output {
     Alexa: {
@@ -465,6 +470,9 @@ declare module 'jovo-core/dist/src/Interfaces' {
       AskForPermission?: AskForPermissionDirective;
     };
   }
+
+  export interface AppPlatformConfig extends AppAlexaConfig {}
+  export interface ExtensiblePluginConfigs extends AppAlexaConfig {}
 }
 
 export interface AskForPermissionDirective {

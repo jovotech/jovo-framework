@@ -1,34 +1,36 @@
-module.exports = {
+const { config } = require('jovo-framework');
+
+module.exports = config({
 	logging: true,
 	analytics: {
 		BotAnalyticsAlexa: {
-			key: 'keyAlexa',
+			key: 'keyAlexa'
 		},
 		BotAnalyticsGoogleAssistant: {
-			key: 'keyGoogleAssistant',
+			key: 'keyGoogleAssistant'
 		},
 		BespokenAlexa: {
-			key: 'keyAlexa',
+			key: 'keyAlexa'
 		},
 		BespokenGoogleAssistant: {
-			key: 'keyGoogleAssistant',
+			key: 'keyGoogleAssistant'
 		},
 		DashbotAlexa: {
-			key: 'keyAlexa',
+			key: 'keyAlexa'
 		},
 		DashbotGoogleAssistant: {
-			key: 'keyGoogleAssistant',
+			key: 'keyGoogleAssistant'
 		},
 		ChatbaseAlexa: {
 			key: 'keyAlexa',
-			appVersion: '',
+			appVersion: ''
 		},
 		ChatbaseGoogleAssistant: {
 			key: 'keyGoogleAssistant',
-			appVersion: '',
+			appVersion: ''
 		},
 		GoogleAnalytics: {
 			trackingId: ''
 		}
 	}
-};
+});

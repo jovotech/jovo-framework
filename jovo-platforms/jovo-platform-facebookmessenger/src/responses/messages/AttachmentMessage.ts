@@ -1,5 +1,6 @@
 import * as FormData from 'form-data';
-import { AttachmentType, HOST, HTTPS, IdentityData, Message, QuickReply } from '../..';
+import { AttachmentType, BASE_URL, IdentityData, Message, QuickReply } from '../..';
+import { HttpService } from 'jovo-core';
 
 export interface AttachmentMessageOptions {
   type: AttachmentType;
@@ -43,34 +44,29 @@ export class AttachmentMessage extends Message {
       (data.message.attachment.payload as any).attachment_id = this.options.data.toString();
     }
 
-    const buffer = Buffer.from(JSON.stringify(data));
+    const config = this.getConfig(pageAccessToken);
+    config.data = data;
 
-    return HTTPS.makeRequest(this.getOptions(pageAccessToken), buffer);
+    return HttpService.request(config);
   }
 
   private sendFile(pageAccessToken: string) {
-    return new Promise((resolve, reject) => {
-      const message = {
-        attachment: {
-          type: this.options.type,
-          payload: { is_reusable: this.options.isReusable || true },
-        },
-        quick_replies: this.options.quickReplies,
-      };
+    const message = {
+      attachment: {
+        type: this.options.type,
+        payload: { is_reusable: this.options.isReusable || true },
+      },
+      quick_replies: this.options.quickReplies,
+    };
 
-      const form = new FormData();
-      form.append('recipient', JSON.stringify(this.recipient));
-      form.append('message', JSON.stringify(message));
-      form.append('filedata', this.options.data);
+    const form = new FormData();
+    form.append('recipient', JSON.stringify(this.recipient));
+    form.append('message', JSON.stringify(message));
+    form.append('filedata', this.options.data);
 
-      const url = `https://${HOST}${this.getPath(pageAccessToken)}`;
-      form.submit(url, (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(res);
-      });
-    });
+    const url = `https://${BASE_URL}${this.getPath(pageAccessToken)}`;
+
+    return HttpService.post(url, form.getBuffer(), form.getHeaders());
   }
 
   private isUrlData(): boolean {

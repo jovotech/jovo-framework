@@ -1,3 +1,4 @@
+import { BaseAppConfig } from './core/BaseApp';
 import { ExtensibleConfig } from './core/Extensible';
 import { HandleRequest } from './core/HandleRequest';
 import { Jovo } from './core/Jovo';
@@ -505,4 +506,23 @@ export type JovoFunction = (this: Jovo, jovo?: Jovo, done?: Function) => Handler
 
 export interface Handler {
   [key: string]: JovoFunction | Handler | Function;
+}
+
+export interface AppConfig extends BaseAppConfig {
+  analytics?: AppAnalyticsConfig;
+  platform?: AppPlatformConfig;
+  cms?: AppCmsConfig;
+  nlu?: AppNluConfig;
+  components?: AppComponentsConfig;
+}
+
+export interface AppAnalyticsConfig extends Record<string, any> {}
+export interface AppCmsConfig extends Record<string, any> {}
+export interface AppComponentsConfig extends Record<string, PluginConfig> {}
+export interface AppDbConfig extends Record<string, any> {}
+export interface AppNluConfig extends Record<string, any> {}
+export interface AppPlatformConfig extends Record<string, any> {}
+
+export interface ExtensiblePluginConfigs {
+  [key: string]: any;
 }

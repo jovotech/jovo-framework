@@ -1,5 +1,6 @@
 import { MessengerBot } from './core/MessengerBot';
 import { SenderActionType } from './Enums';
+import { Config } from './FacebookMessenger';
 import { Message } from './responses/Message';
 import { AttachmentMessageOptions } from './responses/messages/AttachmentMessage';
 import { TextMessageOptions } from './responses/messages/TextMessage';
@@ -11,7 +12,7 @@ import { ReceiptTemplateOptions } from './responses/templates/ReceiptTemplate';
 
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
-export const HOST = 'graph.facebook.com';
+export const BASE_URL = 'https://graph.facebook.com';
 export const BASE_PATH = '/v5.0/me';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
@@ -38,6 +39,10 @@ declare module 'jovo-core/dist/src/core/Jovo' {
   }
 }
 
+interface AppFacebookMessengerConfig {
+  FacebookMessenger?: Config;
+}
+
 declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
     FacebookMessenger: {
@@ -45,6 +50,9 @@ declare module 'jovo-core/dist/src/Interfaces' {
       OverrideText?: string;
     };
   }
+
+  export interface AppPlatformConfig extends AppFacebookMessengerConfig {}
+  export interface ExtensiblePluginConfigs extends AppFacebookMessengerConfig {}
 }
 
 export * from './Interfaces';
@@ -56,8 +64,6 @@ export * from './core/MessengerBotSpeechBuilder';
 export * from './core/MessengerBotUser';
 export * from './core/FacebookMessengerRequestBuilder';
 export * from './core/FacebookMessengerResponseBuilder';
-
-export * from './helpers/HTTPS';
 
 export * from './modules/FacebookMessengerCore';
 

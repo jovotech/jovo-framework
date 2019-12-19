@@ -129,7 +129,7 @@ test('test i18n', () => {
       },
     },
   });
-  expect(app.config.plugin!.I18Next.resources).toEqual(
+  expect(app.config.plugin!.I18Next!.resources).toEqual(
     expect.objectContaining({
       'en-US': {
         translation: {
@@ -144,5 +144,5 @@ test('test i18n', () => {
       filesDir: './dir',
     },
   });
-  expect(app.config.plugin!.I18Next.filesDir).toEqual('./dir');
+  expect(app.config.plugin!.I18Next!.filesDir).toEqual('./dir');
 });

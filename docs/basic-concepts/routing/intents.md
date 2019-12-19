@@ -236,13 +236,6 @@ END() {
  },
 ```
 
-If you want to end the session without saying anything, use the following:
-
-```javascript
-this.endSession();
-```
-
-
 #### getEndReason
 
 It is helpful to find out why a session ended. Use getEndReason inside the `'END'` intent to receive more information. This currently only works for Amazon Alexa.

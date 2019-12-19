@@ -1,4 +1,6 @@
-export { GoogleAssistant } from './GoogleAssistant';
+import { Config } from './GoogleAssistant';
+
+export { GoogleAssistant, Config } from './GoogleAssistant';
 export { GoogleAssistantTestSuite } from './core/Interfaces';
 export { BasicCard } from './response/BasicCard';
 export { Carousel } from './response/Carousel';
@@ -360,6 +362,10 @@ declare module './core/GoogleAction' {
   }
 }
 
+export interface AppGoogleAssistantConfig {
+  GoogleAssistant?: Config;
+}
+
 declare module 'jovo-core/dist/src/Interfaces' {
   interface Output {
     GoogleAssistant: {
@@ -446,4 +452,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       ResponseAppender?: Item[];
     };
   }
+
+  export interface AppPlatformConfig extends AppGoogleAssistantConfig {}
+  export interface ExtensiblePluginConfigs extends AppGoogleAssistantConfig {}
 }

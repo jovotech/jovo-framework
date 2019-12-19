@@ -1,17 +1,15 @@
 import * as crypto from 'crypto';
-import * as http from 'http';
-import { RequestOptions } from 'http'; // tslint:disable-line
-
 import * as fs from 'fs';
+import { RequestOptions } from 'http';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as path from 'path';
 import * as util from 'util';
-import { BaseApp } from '../core/BaseApp';
-import { ErrorCode, JovoError } from '../errors/JovoError';
+import { BaseApp, ErrorCode, JovoError } from '..';
 import { Data, JovoRequest, JovoResponse, SessionData } from '../Interfaces';
 import { TestHost } from '../TestHost';
 import { TestSuite } from '../TestSuite';
+import { HttpService } from './HttpService';
 import { Log } from './Log';
 
 const fsunlink = util.promisify(fs.unlink);
@@ -31,6 +29,20 @@ export interface ConversationConfig {
 }
 
 export class Conversation {
+  /**
+   * Post request to the separately running jovo voice app instance
+   * @param {string} postData
+   * @param {RequestOptions} options
+   * @returns {Promise<any>}
+   */
+  private static async httpRequest(postData: string, options: RequestOptions): Promise<any> {
+    const config = HttpService.httpRequestOptionsToAxiosRequestConfig(options);
+    config.data = postData;
+
+    const response = await HttpService.request(config);
+    return response.data;
+  }
+
   testSuite: TestSuite;
   sessionData: SessionData = {};
   app?: BaseApp;
@@ -142,14 +154,10 @@ export class Conversation {
   async sendToServer(req: JovoRequest): Promise<JovoResponse> {
     const postData = JSON.stringify(req.toJSON());
 
-    try {
-      const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
-      const jovoResponse = this.testSuite.responseBuilder.create(JSON.parse(response));
-      await this.postProcess(jovoResponse);
-      return jovoResponse;
-    } catch (e) {
-      throw e;
-    }
+    const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
+    const jovoResponse = this.testSuite.responseBuilder.create(response);
+    await this.postProcess(jovoResponse);
+    return jovoResponse;
   }
 
   /**
@@ -247,41 +255,6 @@ export class Conversation {
       const parsedContent = JSON.parse(fileContent.toString());
       this.$user.$data = _get(parsedContent, 'userData.data');
     }
-  }
-
-  /**
-   * Post request to the separately running jovo voice app instance
-   * @param {string} postData
-   * @param {RequestOptions} options
-   * @returns {Promise<any>}
-   */
-  private static httpRequest(postData: string, options: RequestOptions): Promise<any> {
-    //tslint:disable-line
-    return new Promise((resolve, reject) => {
-      const request = http
-        .request(options, (res) => {
-          res.setEncoding('utf8');
-          let result = '';
-          res.on('data', (data) => {
-            result += data;
-          });
-          res.on('end', () => {
-            resolve(result);
-          });
-        })
-        .on('error', (e: Error) => {
-          if (_get(e, 'code') === 'ECONNREFUSED') {
-            Log.error();
-            Log.error('Your server must be running for your tests to work.');
-            Log.error();
-            Log.error(e);
-            Log.error();
-          }
-          reject(e);
-        });
-      request.write(postData);
-      request.end();
-    });
   }
 }
 

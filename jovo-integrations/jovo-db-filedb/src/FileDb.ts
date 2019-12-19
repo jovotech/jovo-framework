@@ -5,7 +5,7 @@ import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import * as path from 'path';
 
-interface Config extends PluginConfig {
+export interface Config extends PluginConfig {
   pathToFile?: string;
   primaryKeyColumn?: string;
 }

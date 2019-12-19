@@ -47,8 +47,12 @@ export class AlexaUser extends User {
    * @param {'active'|'completed'} status
    * @return {Promise}
    */
-  getShoppingList(status = 'active'): Promise<ShoppingList> {
-    return this.alexaList.getList('Alexa shopping list', status);
+  async getShoppingList(status = 'active'): Promise<ShoppingList> {
+    const list = await this.alexaList.getList('Alexa shopping list', status);
+    if (!list.items) {
+      list.items = [];
+    }
+    return list as ShoppingList;
   }
 
   /**
@@ -56,8 +60,12 @@ export class AlexaUser extends User {
    * @param {'active'|'completed'} status
    * @return {Promise}
    */
-  getToDoList(status = 'active'): Promise<ToDoList> {
-    return this.alexaList.getList('Alexa to-do list', status);
+  async getToDoList(status = 'active'): Promise<ToDoList> {
+    const list = await this.alexaList.getList('Alexa to-do list', status);
+    if(!list.items) {
+      list.items = [];
+    }
+    return list as ToDoList;
   }
 
   /**

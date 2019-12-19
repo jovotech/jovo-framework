@@ -1,7 +1,14 @@
+import { AppConfig } from './Interfaces';
 import { Log } from './util/Log';
 import { Project as P } from './util/Project';
-export {} from './plugins/types';
+
+export * from './plugins/types';
+
 export const Project = P.getInstance();
+
+export function config(cfg?: AppConfig): AppConfig {
+  return cfg || {};
+}
 
 try {
   // do not use source map support with jest.
@@ -39,51 +46,20 @@ export { BaseCmsPlugin } from './plugins/BaseCmsPlugin';
 export { JovoError, ErrorCode } from './errors/JovoError';
 export { HandleRequest } from './core/HandleRequest';
 
-export {
-  InvalidValuesValidator,
-} from './plugins/validators/InvalidValuesValidator';
-export {
-  IsRequiredValidator
-} from './plugins/validators/IsRequiredValidator';
+export { InvalidValuesValidator } from './plugins/validators/InvalidValuesValidator';
+export { IsRequiredValidator } from './plugins/validators/IsRequiredValidator';
 
-export {
-  Validator
-} from './plugins/validators/Validator';
+export { Validator } from './plugins/validators/Validator';
 
-export {
-  ValidationError
-} from './plugins/validators/ValidatorError';
+export { ValidationError } from './plugins/validators/ValidatorError';
 
-export {
-  ValidValuesValidator
-} from './plugins/validators/ValidValuesValidator';
-export {
-  Plugin,
-  PluginConfig,
-  Output,
-  JovoRequest,
-  RequestType,
-  Platform,
-  Analytics,
-  JovoResponse,
-  Db,
-  NLUData,
-  Inputs,
-  Input,
-  Host,
-  AppData,
-  JovoData,
-  SessionData,
-  Data,
-  JovoFunction,
-  HandlerReturnType,
-  Handler,
-  RequestJSON,
-} from './Interfaces';
-
+export { ValidValuesValidator } from './plugins/validators/ValidValuesValidator';
 export { Util } from './util/Util';
 export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './util/Log';
 export { User } from './core/User';
 export { ComponentPlugin } from './plugins/ComponentPlugin';
 export { Component } from './plugins/Component';
-export {Router} from './plugins/Router';
+export { Router } from './plugins/Router';
+export * from './Interfaces';
+
+export * from './util/HttpService';

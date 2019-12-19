@@ -1,11 +1,10 @@
-import { BaseApp, HandleRequest, Host, Jovo, JovoRequest } from 'jovo-core';
-import { Output } from 'jovo-core/dist/src/Interfaces';
+import { BaseApp, HandleRequest, Host, Jovo, JovoRequest, JovoResponse } from 'jovo-core';
 import { DialogflowAgent } from './DialogflowAgent';
 import { Context, DialogflowRequest } from './core/DialogflowRequest';
-import { JovoResponse } from 'jovo-core';
 import { DialogflowResponse } from './core/DialogflowResponse';
+import { DialogflowConfig } from './Dialogflow';
 
-export { Dialogflow } from './Dialogflow';
+export { Dialogflow, DialogflowConfig } from './Dialogflow';
 export { DialogflowResponse, DialogflowResponseJSON } from './core/DialogflowResponse';
 export { DialogflowRequest, DialogflowRequestJSON } from './core/DialogflowRequest';
 
@@ -19,6 +18,7 @@ export { DialogflowPlugin } from './integrations/DialogflowPlugin';
 
 export interface PlatformFactory<T extends Jovo = Jovo> {
   createPlatformRequest(app: BaseApp, host: Host, handleRequest?: HandleRequest): T;
+
   createRequest(json?: any): DialogflowRequest; // tslint:disable-line
   createResponse(json?: any): DialogflowResponse; // tslint:disable-line
   type(): string;
@@ -27,7 +27,9 @@ export interface PlatformFactory<T extends Jovo = Jovo> {
 declare module './DialogflowAgent' {
   interface DialogflowAgent {
     isFacebookMessengerBot(): boolean;
+
     isSlackBot(): boolean;
+
     isTwilioBot(): boolean;
   }
 }
@@ -40,6 +42,10 @@ declare module 'jovo-core/dist/src/core/Jovo' {
   }
 }
 
+interface AppDialogflowConfig {
+  Dialogflow?: DialogflowConfig;
+}
+
 declare module 'jovo-core/dist/src/Interfaces' {
   interface Output {
     Dialogflow: {
@@ -47,4 +53,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       OutputContexts?: Context[];
     };
   }
+
+  export interface AppPlatformConfig extends AppDialogflowConfig {}
+  export interface ExtensiblePluginConfigs extends AppDialogflowConfig {}
 }

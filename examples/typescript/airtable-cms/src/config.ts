@@ -1,35 +1,36 @@
-const config = {
-   logging: true,
+import { config } from 'jovo-framework';
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   },
-    db: {
-        FileDb: {
-            pathToFile: './../../db/db.json'
-        }
-    },
-    cms: {
-        AirtableCMS: {
-            apiKey: '<api-key>',
-            baseId: '<base-id>',
-            tables: [
-                {
-                    name: 'test',
-                    table: 'Table 1',
-                    type: 'Responses'
-                },
-                {
-                    name: 'test2',
-                    table: 'Table 2',
-                    type: 'ObjectArray',
-                    selectOptions: {
-                        fields: ['Name', 'Location']
-                    }
-                }
-            ]
-        }
-    }
-};
+// tslint:disable-next-line
+export default config({
+	logging: true,
 
-export = config;
+	intentMap: {
+		'AMAZON.StopIntent': 'END'
+	},
+	db: {
+		FileDb: {
+			pathToFile: './../../db/db.json'
+		}
+	},
+	cms: {
+		AirtableCMS: {
+			apiKey: '<api-key>',
+			baseId: '<base-id>',
+			tables: [
+				{
+					name: 'test',
+					table: 'Table 1',
+					type: 'Responses'
+				},
+				{
+					name: 'test2',
+					table: 'Table 2',
+					type: 'ObjectArray',
+					selectOptions: {
+						fields: ['Name', 'Location']
+					}
+				}
+			]
+		}
+	}
+});

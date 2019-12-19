@@ -4,13 +4,13 @@ import _get = require('lodash.get');
 import _isEqual = require('lodash.isequal');
 import _merge = require('lodash.merge');
 import _transform = require('lodash.transform');
-import { Plugin, PluginConfig } from './../Interfaces';
+import { ExtensiblePluginConfigs, Plugin, PluginConfig } from './../Interfaces';
 import { Log } from './../util/Log';
 import { ActionSet } from './ActionSet';
 import { Middleware } from './Middleware';
 
 export interface ExtensibleConfig extends PluginConfig {
-  plugin?: Record<string, any>; // tslint:disable-line
+  plugin?: ExtensiblePluginConfigs;
 }
 
 /**

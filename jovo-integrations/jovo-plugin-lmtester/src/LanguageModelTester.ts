@@ -13,7 +13,7 @@ import {
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
-interface Config extends PluginConfig {
+export interface Config extends PluginConfig {
   startText: string;
 }
 

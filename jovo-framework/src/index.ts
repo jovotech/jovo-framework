@@ -1,5 +1,5 @@
-import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Project, Util } from 'jovo-core';
-import { App } from './App';
+import { Data, Handler, Log, LogLevel, Project, Util } from 'jovo-core';
+import { App, Config } from './App';
 
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
@@ -24,9 +24,6 @@ declare module 'express' {
     ssl?: { key: Buffer; cert: Buffer };
   }
 }
-
-
-
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {

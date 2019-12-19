@@ -1,21 +1,27 @@
 import * as fs from 'fs';
-import { Config as I18NextConfig, I18Next } from 'jovo-cms-i18next';
-import { BaseApp, ExtensibleConfig, Host, Log, Logger, LogLevel, Middleware } from 'jovo-core';
-import { FileDb2 } from 'jovo-db-filedb';
-
-import _cloneDeep = require('lodash.clonedeep');
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 import * as path from 'path';
-import {
-  Config as JovoUserConfig,
-  ContextConfig,
-  JovoUser,
-  MetaDataConfig,
-} from './middleware/user/JovoUser';
 
-import { BasicLogging } from './middleware/logging/BasicLogging';
+import { Config as I18NextConfig } from 'jovo-cms-i18next';
+import {
+  AppAnalyticsConfig,
+  AppCmsConfig,
+  AppComponentsConfig,
+  AppDbConfig,
+  AppNluConfig,
+  AppPlatformConfig,
+  BaseApp,
+  ExtensibleConfig,
+  Handler,
+  Host,
+  Log,
+  Logger,
+  LogLevel,
+  Middleware,
+} from 'jovo-core';
+import { FileDb2 } from 'jovo-db-filedb';
+import { BasicLogging, Config as LoggingConfig } from './middleware/logging/BasicLogging';
+import { Config as JovoUserConfig, JovoUser } from './middleware/user/JovoUser';
+import _merge = require('lodash.merge');
 
 if (process.argv.includes('--port')) {
   process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
@@ -294,19 +300,17 @@ export class App extends BaseApp {
     }
   }
 
-
   init() {
     this.use(new BasicLogging());
     this.use(new JovoUser());
-
   }
 
   async handle(host: Host) {
     if (host.headers && host.headers['jovo-test']) {
       let fileDb2Path = './../db/tests';
 
+      // tslint:disable-next-line
       if (this.$db && this.$db.config && (this.$db.config! as any).pathToFile) {
-        // tslint:disable-line
         const dbPath = path.parse((this.$db.config! as any).pathToFile); // tslint:disable-line
         fileDb2Path = dbPath.dir + '/tests';
       }
@@ -323,8 +327,6 @@ export class App extends BaseApp {
     await super.handle(host);
   }
 
-
-
   /**
    * @deprecated
    * @param config
@@ -336,14 +338,6 @@ export class App extends BaseApp {
     this.initConfig();
     this.init();
   }
-
-}
-
-export interface LoggingConfig {
-  request?: boolean;
-  response?: boolean;
-  requestObjects?: string[];
-  responseObjects?: string[];
 }
 
 export interface Config extends ExtensibleConfig {
@@ -354,16 +348,13 @@ export interface Config extends ExtensibleConfig {
 
   user?: JovoUserConfig | { [key: string]: any; metaData: boolean; context: boolean }; // tslint:disable-line
   i18n?: I18NextConfig;
-  db?: { [key: string]: any }; // tslint:disable-line
-  analytics?: { [key: string]: any }; // tslint:disable-line
-  platform?: { [key: string]: any }; // tslint:disable-line
-  cms?: { [key: string]: any }; // tslint:disable-line
-  nlu?: { [key: string]: any }; // tslint:disable-line
-  // components?: { [key: string]: ComponentConfig }; // tslint:disable-line
-}
 
-// handler
-export interface Config {
-  handlers?: any; // tslint:disable-line
-}
+  db?: AppDbConfig;
+  analytics?: AppAnalyticsConfig;
+  platform?: AppPlatformConfig;
+  cms?: AppCmsConfig;
+  nlu?: AppNluConfig;
+  // components?: AppComponentsConfig;
 
+  handlers?: Handler[];
+}

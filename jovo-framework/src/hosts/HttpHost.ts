@@ -1,4 +1,4 @@
-import * as http from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { Host } from 'jovo-core';
 import * as url from 'url';
 
@@ -9,11 +9,11 @@ import * as url from 'url';
 export default class HttpHost implements Host {
   hasWriteFileAccess = true;
   $request: any; // tslint:disable-line
-  req: http.IncomingMessage;
-  res: http.ServerResponse;
-  headers: any; // tslint:disable-line
+  req: IncomingMessage;
+  res: ServerResponse;
+  headers: Record<string, any>; // tslint:disable-line
 
-  constructor(req: http.IncomingMessage, body: string, res: http.ServerResponse) {
+  constructor(req: IncomingMessage, body: string, res: ServerResponse) {
     this.req = req;
     this.res = res;
     this.headers = req.headers;
