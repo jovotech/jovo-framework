@@ -1,3 +1,4 @@
+// tslint:disable-next-line
 import { Context, HttpRequest } from '@azure/functions';
 import { Host, JovoResponse, Log, LogEvent, LogLevel } from 'jovo-core';
 

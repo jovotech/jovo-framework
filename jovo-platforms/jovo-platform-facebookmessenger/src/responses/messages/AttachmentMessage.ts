@@ -1,6 +1,6 @@
 import * as FormData from 'form-data';
-import { AttachmentType, BASE_URL, IdentityData, Message, QuickReply } from '../..';
 import { HttpService } from 'jovo-core';
+import { AttachmentType, BASE_URL, IdentityData, Message, QuickReply } from '../..';
 
 export interface AttachmentMessageOptions {
   type: AttachmentType;

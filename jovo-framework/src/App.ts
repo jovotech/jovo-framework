@@ -19,9 +19,9 @@ import {
   Middleware,
 } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
+import _merge = require('lodash.merge');
 import { BasicLogging, Config as LoggingConfig } from './middleware/logging/BasicLogging';
 import { Config as JovoUserConfig, JovoUser } from './middleware/user/JovoUser';
-import _merge = require('lodash.merge');
 
 if (process.argv.includes('--port')) {
   process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
