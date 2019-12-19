@@ -1,4 +1,4 @@
-import { Jovo } from './Jovo';
+import { Jovo } from './../core/Jovo';
 
 export class Cms {
   $jovo?: Jovo;

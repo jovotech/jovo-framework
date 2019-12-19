@@ -5,7 +5,7 @@
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
+    "prettier": "prettier --config ./.prettierrc.js --write \\\"{test,src}/**/*\\\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "rimraf": "rimraf ./dist",
     "tsc": "tsc",
@@ -26,7 +26,8 @@
     "lodash.merge": "^4.6.2",
     "lodash.sample": "^4.2.1",
     "lodash.set": "^4.3.2",
-    "lodash.transform": "^4.6.0"
+    "lodash.transform": "^4.6.0",
+    "i18next": "^19.0.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

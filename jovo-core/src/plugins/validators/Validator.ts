@@ -1,4 +1,4 @@
-import { Jovo } from '../Jovo';
+import { Jovo } from '../../core/Jovo';
 
 export abstract class Validator {
   inputToValidate: { [key: string]: any } | undefined; // tslint:disable-line:no-any

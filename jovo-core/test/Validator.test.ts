@@ -1,10 +1,4 @@
-import {
-  InvalidValuesValidator,
-  IsRequiredValidator,
-  ValidationError,
-  Validator,
-  ValidValuesValidator,
-} from '../src/validators';
+import { InvalidValuesValidator, IsRequiredValidator, ValidationError, Validator, ValidValuesValidator } from '../src';
 
 describe('ValidationError', () => {
   describe('ValidationError.constructor', () => {

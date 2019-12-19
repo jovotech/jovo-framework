@@ -1,18 +1,14 @@
-import {
-  BaseApp,
-  EnumRequestType,
-  HandleRequest,
-  Log,
-  Plugin,
-  PluginConfig,
-  SessionConstants,
-} from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
-
-import { App, Config as AppConfig } from '../App';
+import { BaseApp } from '../core/BaseApp';
+import { HandleRequest } from '../core/HandleRequest';
+import { EnumRequestType, SessionConstants } from '../enums';
+import { Plugin, PluginConfig } from '../Interfaces';
+import { Log } from '../util/Log';
 import { Component, ComponentSessionData } from './Component';
+
+// import { App, Config as AppConfig } from '../App';
 
 export interface Config extends PluginConfig {
   intentMap?: { [key: string]: string };
@@ -207,14 +203,14 @@ export class Router implements Plugin {
         handleRequest.jovo.$handlers,
         handleRequest.jovo.getState(),
         intent,
-        (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled,
+        handleRequest.jovo.$app.config.intentsToSkipUnhandled,
       );
     } else if (route.type === EnumRequestType.END) {
       route = Router.intentRoute(
         handleRequest.jovo.$handlers,
         handleRequest.jovo.getState(),
         EnumRequestType.END,
-        (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled,
+        handleRequest.jovo.$app.config.intentsToSkipUnhandled,
       );
       route.type = EnumRequestType.END;
     } else if (route.type === EnumRequestType.AUDIOPLAYER) {
@@ -225,7 +221,7 @@ export class Router implements Plugin {
         handleRequest.jovo.$handlers,
         handleRequest.jovo.getState(),
         EnumRequestType.ON_ELEMENT_SELECTED,
-        (handleRequest.jovo.$app.config as AppConfig).intentsToSkipUnhandled,
+        handleRequest.jovo.$app.config.intentsToSkipUnhandled,
       );
       route.type = EnumRequestType.ON_ELEMENT_SELECTED;
 

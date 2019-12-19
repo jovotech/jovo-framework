@@ -1,9 +1,16 @@
+import _cloneDeep = require('lodash.clonedeep');
+import _merge = require('lodash.merge');
+import { JovoError } from '../errors/JovoError';
+import { AppData, Db, Host, Platform } from '../Interfaces';
+import { ComponentConfig } from '../plugins/Component';
+import { ComponentPlugin } from '../plugins/ComponentPlugin';
+import { Handler } from '../plugins/Handler';
+import { I18Next } from '../plugins/I18Next';
+import { Router } from '../plugins/Router';
+import { Log, LogLevel } from '../util/Log';
 import { ActionSet } from './ActionSet';
-import { JovoError } from './errors/JovoError';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
-import { AppData, Db, Host, Platform } from './Interfaces';
-import { Log, LogLevel } from './Log';
 
 process.on('unhandledRejection', (reason, p) => {
   Log.error('unhandledRejection');
@@ -96,6 +103,10 @@ export class BaseApp extends Extensible {
         process.exit(2);
       });
     }
+
+    this.use(new I18Next());
+    this.use(new Router());
+    this.use(new Handler());
   }
 
   /**
@@ -301,6 +312,48 @@ export class BaseApp extends Extensible {
     }
   }
 
+
+  /**
+   *
+   * @param {ComponentPlugin[]} components
+   */
+  useComponents(...components: ComponentPlugin[]) {
+    /**
+     * router needs to access $components object,
+     * which gets initialized in `initializeComponents`
+     */
+    this.middleware('before.router')!.use(ComponentPlugin.initializeComponents);
+    this.middleware('platform.output')!.use(ComponentPlugin.saveComponentSessionData);
+
+    components.forEach((componentPlugin) => {
+      this.middleware('setup')!.use(componentPlugin.setAsBaseComponent.bind(componentPlugin));
+
+      componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
+
+      if (this.config.components) {
+        const componentAppConfig: ComponentConfig = _cloneDeep(
+          this.config.components[componentPlugin.name!],
+        ); // config defined in project's main config.js file
+        _merge(componentPlugin.config, componentAppConfig);
+      }
+
+      componentPlugin.install(this);
+      /**
+       * 1st layer components handler have to be set after the child component's handler were merged
+       * currently they are merged in `after.setup`
+       */
+      this.middleware('before.request')!.use(componentPlugin.setHandler.bind(componentPlugin));
+      this.$plugins.set(componentPlugin.name!, componentPlugin);
+
+      this.emit('use', componentPlugin);
+
+      if (this.constructor.name === 'App') {
+        Log.yellow().verbose(`Installed component: ${componentPlugin.name}`);
+        Log.debug(`${JSON.stringify(componentPlugin.config || {}, null, '\t')}`);
+        Log.debug();
+      }
+    });
+  }
   /**
    * On request listener
    * @param {Function} callback

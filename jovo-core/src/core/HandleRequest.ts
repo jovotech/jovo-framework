@@ -1,4 +1,4 @@
-import { BaseApp, Host, Jovo } from '.';
+import { BaseApp, Host, Jovo } from '..';
 
 export class HandleRequest {
   app: BaseApp;

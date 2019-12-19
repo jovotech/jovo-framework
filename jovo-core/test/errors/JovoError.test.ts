@@ -1,5 +1,4 @@
-import { JovoError } from '../../src';
-import { ErrorCode } from '../../src/errors/JovoError';
+import { ErrorCode, JovoError } from '../../src';
 
 test('test JovoError class', () => {
   const jovoError = new JovoError('message', 'ERR_CODE', 'module', 'details', 'hint', 'seeMore');

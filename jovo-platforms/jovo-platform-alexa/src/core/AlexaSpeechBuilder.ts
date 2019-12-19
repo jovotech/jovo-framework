@@ -1,7 +1,7 @@
 import _sample = require('lodash.sample');
 import { SpeechBuilder } from 'jovo-core';
 import { AlexaSkill } from './AlexaSkill';
-import { SsmlElements } from 'jovo-core/dist/src/SpeechBuilder';
+import { SsmlElements } from 'jovo-core/dist/src/util/SpeechBuilder';
 
 export class AlexaSpeechBuilder extends SpeechBuilder {
   static pollyVoice: string | undefined;

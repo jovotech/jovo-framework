@@ -7,12 +7,12 @@ import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as path from 'path';
 import * as util from 'util';
-import { BaseApp } from './BaseApp';
-import { ErrorCode, JovoError } from './errors/JovoError';
-import { Data, JovoRequest, JovoResponse, SessionData } from './Interfaces';
+import { BaseApp } from '../core/BaseApp';
+import { ErrorCode, JovoError } from '../errors/JovoError';
+import { Data, JovoRequest, JovoResponse, SessionData } from '../Interfaces';
+import { TestHost } from '../TestHost';
+import { TestSuite } from '../TestSuite';
 import { Log } from './Log';
-import { TestHost } from './TestHost';
-import { TestSuite } from './TestSuite';
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);

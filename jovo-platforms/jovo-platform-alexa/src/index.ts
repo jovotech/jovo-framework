@@ -63,7 +63,7 @@ import { ProactiveEvent } from './modules/ProactiveEvent';
 
 import { Apl } from './modules/AplPlugin';
 
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $alexaSkill?: AlexaSkill;
     alexaSkill(): AlexaSkill;
@@ -71,7 +71,7 @@ declare module 'jovo-core/dist/src/Jovo' {
   }
 }
 
-declare module 'jovo-core/dist/src/BaseApp' {
+declare module 'jovo-core/dist/src/core/BaseApp' {
   interface BaseApp {
     /**
      * Sets alexa handlers
@@ -82,7 +82,7 @@ declare module 'jovo-core/dist/src/BaseApp' {
   }
 }
 
-declare module 'jovo-core/dist/src/SpeechBuilder' {
+declare module 'jovo-core/dist/src/util/SpeechBuilder' {
   interface SpeechBuilder {
     addLangText(
       language: string,

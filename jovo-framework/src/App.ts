@@ -15,11 +15,7 @@ import {
   MetaDataConfig,
 } from './middleware/user/JovoUser';
 
-import { ComponentConfig } from './middleware/Component';
-import { ComponentPlugin } from './middleware/ComponentPlugin';
-import { Handler } from './middleware/Handler';
 import { BasicLogging } from './middleware/logging/BasicLogging';
-import { Config as RouterConfig, Router } from './middleware/Router';
 
 if (process.argv.includes('--port')) {
   process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
@@ -213,7 +209,6 @@ export class App extends BaseApp {
     }
 
     this.mergePluginConfiguration();
-    this.v1ConfigMigration();
     this.initConfig();
 
     Log.verbose(Log.header('App object initialized', 'jovo-framework'));
@@ -299,91 +294,11 @@ export class App extends BaseApp {
     }
   }
 
-  v1ConfigMigration() {
-    if (this.config.v1) {
-      _set(
-        this.config,
-        'plugin.JovoUser.implicitSave',
-        _get(this.config, 'plugin.JovoUser.implicitSave') ||
-          _get(this.config, 'v1.saveUserOnResponseEnabled'),
-      );
-      _set(
-        this.config,
-        'plugin.JovoUser.columnName',
-        _get(this.config, 'plugin.JovoUser.columnName') || _get(this.config, 'v1.userDataCol'),
-      );
-      _set(this.config, 'inputMap', this.config.inputMap || _get(this.config, 'v1.inputMap'));
-      _set(
-        this.config,
-        'plugin.Router.intentsToSkipUnhandled',
-        _get(this.config, 'plugin.Router.intentsToSkipUnhandled') ||
-          _get(this.config, 'v1.intentsToSkipUnhandled'),
-      );
-      _set(
-        this.config,
-        'plugin.Router.intentMap',
-        this.config.intentMap || _get(this.config, 'v1.intentMap'),
-      );
-
-      if (_get(this.config, 'v1.saveBeforeResponseEnabled')) {
-        Log.info(`'saveBeforeResponseEnabled' is deprecated since 2.0 `);
-      }
-      if (_get(this.config, 'v1.db.type') === 'file') {
-        _set(
-          this.config,
-          'plugin.FileDb.pathToFile',
-          _get(this.config, 'plugin.FileDb.pathToFile') ||
-            `./db/${_get(this.config, 'v1.db.localDbFilename')}.json`,
-        );
-      }
-
-      if (_get(this.config, 'v1.db.type') === 'dynamodb') {
-        _set(
-          this.config,
-          'plugin.DynamoDb.tableName',
-          _get(this.config, 'plugin.DynamoDb.tableName') || _get(this.config, 'v1.db.tableName'),
-        );
-        _set(
-          this.config,
-          'plugin.DynamoDb.awsConfig',
-          _get(this.config, 'plugin.DynamoDb.awsConfig') || _get(this.config, 'v1.db.awsConfig'),
-        );
-      }
-
-      _set(
-        this.config,
-        'plugin.JovoUser.metaData',
-        _get(this.config, 'plugin.JovoUser.metaData') || _get(this.config, 'v1.userMetaData'),
-      );
-      _set(
-        this.config,
-        'plugin.JovoUser.context',
-        _get(this.config, 'plugin.JovoUser.context') || _get(this.config, 'v1.userContext'),
-      );
-      _set(
-        this.config,
-        'plugin.I18Next',
-        _get(this.config, 'plugin.I18Next') || _get(this.config, 'v1.i18n'),
-      );
-      _set(
-        this.config,
-        'plugin.Alexa',
-        _get(this.config, 'plugin.Alexa') || _get(this.config, 'v1.alexaSkill'),
-      );
-      _set(
-        this.config,
-        'plugin.GoogleAssistant',
-        _get(this.config, 'plugin.GoogleAssistant') || _get(this.config, 'v1.googleAction'),
-      );
-    }
-  }
 
   init() {
     this.use(new BasicLogging());
     this.use(new JovoUser());
-    this.use(new I18Next());
-    this.use(new Router());
-    this.use(new Handler());
+
   }
 
   async handle(host: Host) {
@@ -408,47 +323,7 @@ export class App extends BaseApp {
     await super.handle(host);
   }
 
-  /**
-   *
-   * @param {ComponentPlugin[]} components
-   */
-  useComponents(...components: ComponentPlugin[]) {
-    /**
-     * router needs to access $components object,
-     * which gets initialized in `initializeComponents`
-     */
-    this.middleware('before.router')!.use(ComponentPlugin.initializeComponents);
-    this.middleware('platform.output')!.use(ComponentPlugin.saveComponentSessionData);
 
-    components.forEach((componentPlugin) => {
-      this.middleware('setup')!.use(componentPlugin.setAsBaseComponent.bind(componentPlugin));
-
-      componentPlugin.name = componentPlugin.name || componentPlugin.constructor.name;
-
-      if (this.$config.components) {
-        const componentAppConfig: ComponentConfig = _cloneDeep(
-          this.$config.components[componentPlugin.name!],
-        ); // config defined in project's main config.js file
-        _merge(componentPlugin.config, componentAppConfig);
-      }
-
-      componentPlugin.install(this);
-      /**
-       * 1st layer components handler have to be set after the child component's handler were merged
-       * currently they are merged in `after.setup`
-       */
-      this.middleware('before.request')!.use(componentPlugin.setHandler.bind(componentPlugin));
-      this.$plugins.set(componentPlugin.name!, componentPlugin);
-
-      this.emit('use', componentPlugin);
-
-      if (this.constructor.name === 'App') {
-        Log.yellow().verbose(`Installed component: ${componentPlugin.name}`);
-        Log.debug(`${JSON.stringify(componentPlugin.config || {}, null, '\t')}`);
-        Log.debug();
-      }
-    });
-  }
 
   /**
    * @deprecated
@@ -456,268 +331,12 @@ export class App extends BaseApp {
    */
   setConfig(config: Config) {
     this.config = _merge(this.config, config);
+
     this.mergePluginConfiguration();
     this.initConfig();
-    this.v1ConfigMigration();
     this.init();
   }
 
-  /**
-   * @deprecated
-   * @param {boolean} val
-   */
-  enableLogging(val = true) {
-    this.config.logging = val;
-    if (this.$plugins.get('BasicLogging')) {
-      (this.$plugins.get('BasicLogging') as BasicLogging).config.logging = val;
-      _set(this.config, 'plugin.BasicLogging.logging', val);
-    }
-    this.enableRequestLogging(val);
-    this.enableResponseLogging(val);
-  }
-
-  /**
-   * @deprecated
-   * @param {boolean} val
-   */
-  enableRequestLogging(val = true) {
-    if (this.$plugins.get('BasicLogging')) {
-      (this.$plugins.get('BasicLogging') as BasicLogging).config.request = val;
-      _set(this.config, 'plugin.BasicLogging.requestLogging', val);
-    }
-    // this.config.request = val;
-  }
-
-  /**
-   * @deprecated
-   * @param {boolean} val
-   */
-  enableResponseLogging(val = true) {
-    if (this.$plugins.get('BasicLogging')) {
-      (this.$plugins.get('BasicLogging') as BasicLogging).config.response = val;
-      _set(this.config, 'plugin.BasicLogging.responseLogging', val);
-    }
-    // this.config.responseLogging = val;
-  }
-
-  /**
-   * @deprecated
-   * @param {string | string[]} path
-   */
-  setRequestLoggingObjects(pathToObject: string | string[]) {
-    if (typeof pathToObject === 'string') {
-      // this.config.requestLoggingObjects = [path];
-    } else {
-      // this.config.requestLoggingObjects = path;
-    }
-
-    if (this.$plugins.get('BasicLogging')) {
-      // (this.$plugins.get('BasicLogging') as BasicLogging).config.requestLoggingObjects = this.config.requestLoggingObjects;
-      // _set(this.config, 'plugin.BasicLogging.logging', this.config.requestLoggingObjects);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param {string | string[]} path
-   */
-  setResponseLoggingObjects(pathToObject: string | string[]) {
-    if (typeof pathToObject === 'string') {
-      // this.config.responseLoggingObjects = [path];
-    } else {
-      // this.config.responseLoggingObjects = path;
-    }
-
-    if (this.$plugins.get('BasicLogging')) {
-      // (this.$plugins.get('BasicLogging') as BasicLogging).config.responseLoggingObjects = this.config.responseLoggingObjects;
-      // _set(this.config, 'plugin.BasicLogging.logging', this.config.responseLoggingObjects);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param {{[p: string]: string}} inputMap
-   */
-  setInputMap(inputMap: { [key: string]: string }) {
-    this.config.inputMap = inputMap;
-  }
-
-  /**
-   * @deprecated
-   * @param {UserMetaDataConfig} userMetaData
-   */
-  setUserMetaData(userMetaData: MetaDataConfig) {
-    if (!this.config.user) {
-      this.config.user = {};
-    }
-    this.config.user.metaData = userMetaData;
-  }
-
-  /**
-   * @deprecated
-   * @param {UserContextConfig} userContext
-   */
-  setUserContext(userContext: ContextConfig) {
-    if (!this.config.user) {
-      this.config.user = {};
-    }
-    this.config.user.context = userContext;
-  }
-
-  /**
-   * @deprecated
-   * @param {{[p: string]: string}} intentMap
-   */
-  setIntentMap(intentMap: { [key: string]: string }) {
-    this.config.intentMap = intentMap;
-    if (this.$plugins.get('Router')) {
-      (this.$plugins.get('Router') as Router).config.intentMap = this.config.intentMap;
-      _set(this.config, 'plugin.Router.intentMap', this.config.intentMap);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param {string[]} intentsToSkipUnhandled
-   */
-  setIntentsToSkipUnhandled(intentsToSkipUnhandled: string[]) {
-    if (this.$plugins.get('Router')) {
-      (this.$plugins.get(
-        'Router',
-      ) as Router).config.intentsToSkipUnhandled = intentsToSkipUnhandled;
-      _set(this.config, 'plugin.Router.intentsToSkipUnhandled', intentsToSkipUnhandled);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param i18n
-   */
-  setI18n(i18n: any) {
-    // tslint:disable-line
-    if (this.$plugins.get('I18Next')) {
-      (this.$plugins.get('I18Next') as I18Next).config = i18n;
-      _set(this.config, 'plugin.I18Next', i18n);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param alexaSkillConfig
-   */
-  setAlexaSkill(alexaSkillConfig: any) {
-    // tslint:disable-line
-    if (this.$plugins.get('Alexa')) {
-      _set(this.$plugins.get('Alexa')!, 'config', alexaSkillConfig);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param googleActionConfig
-   */
-  setGoogleAction(googleActionConfig: any) {
-    // tslint:disable-line
-    if (this.$plugins.get('GoogleAssistant')) {
-      _set(this.$plugins.get('GoogleAssistant')!, 'config', googleActionConfig);
-    }
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  setDb(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  setDynamoDb(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  setDynamoDbKey(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  setLanguageResources(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  setAnalytics(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addAnalytics(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addDashbotGoogleAction(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addDashbotAlexa(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addBotanalyticsGoogleAction(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addBotanalyticsAlexa(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addBespokenAnalytics(dbConfig: any) {
-    // tslint:disable-line
-  }
-
-  /**
-   * @deprecated
-   * @param dbConfig
-   */
-  addChatbaseAnalytics(dbConfig: any) {
-    // tslint:disable-line
-  }
 }
 
 export interface LoggingConfig {
@@ -728,21 +347,6 @@ export interface LoggingConfig {
 }
 
 export interface Config extends ExtensibleConfig {
-  v1?: {
-    logging?: boolean;
-    requestLogging?: boolean;
-    responseLogging?: boolean;
-    requestLoggingObjects?: string[];
-    responseLoggingObjects?: string[];
-
-    intentMap?: { [key: string]: string };
-    inputMap?: { [key: string]: string };
-
-    intentsToSkipUnhandled: string[];
-    userMetaData?: MetaDataConfig;
-    userContext?: ContextConfig;
-    i18n: any; // tslint:disable-line
-  };
   keepSessionDataOnSessionEnded?: boolean;
   logging?: boolean | LoggingConfig;
 
@@ -755,7 +359,7 @@ export interface Config extends ExtensibleConfig {
   platform?: { [key: string]: any }; // tslint:disable-line
   cms?: { [key: string]: any }; // tslint:disable-line
   nlu?: { [key: string]: any }; // tslint:disable-line
-  components?: { [key: string]: ComponentConfig }; // tslint:disable-line
+  // components?: { [key: string]: ComponentConfig }; // tslint:disable-line
 }
 
 // handler
@@ -763,4 +367,3 @@ export interface Config {
   handlers?: any; // tslint:disable-line
 }
 
-export interface Config extends RouterConfig {}

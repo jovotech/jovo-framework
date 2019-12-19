@@ -1,4 +1,4 @@
-import { Log } from '../Log';
+import { Log } from '../util/Log';
 
 export enum ErrorCode {
   ERR = 'ERR',

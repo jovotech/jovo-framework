@@ -1,6 +1,6 @@
-import { BaseApp } from './BaseApp';
-import { Extensible } from './Extensible';
-import { HandleRequest } from './HandleRequest';
+import { BaseApp } from '../core/BaseApp';
+import { Extensible } from '../core/Extensible';
+import { HandleRequest } from '../core/HandleRequest';
 
 export class BaseCmsPlugin extends Extensible {
   /**

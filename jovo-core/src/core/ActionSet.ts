@@ -1,9 +1,9 @@
-import { Extensible } from './Extensible';
-import { Middleware } from './Middleware';
-
 /**
  * Set of middlewares predefined for an extensible class
  */
+import { Extensible } from './Extensible';
+import { Middleware } from './Middleware';
+
 export class ActionSet {
   middleware: Map<string, Middleware> = new Map();
 

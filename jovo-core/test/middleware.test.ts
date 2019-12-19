@@ -1,6 +1,6 @@
 import { ActionSet } from '../src';
-import { Extensible } from './../src/Extensible';
-import { Middleware } from './../src/Middleware';
+import { Extensible } from './../src/core/Extensible';
+import { Middleware } from './../src/core/Middleware';
 
 class Parent extends Extensible {
   /**

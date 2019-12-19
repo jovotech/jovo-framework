@@ -1,14 +1,9 @@
-import {
-  ExtensibleConfig,
-  HandleRequest,
-  Jovo,
-  RequestBuilder,
-  ResponseBuilder,
-  SpeechBuilder,
-  TestSuite,
-} from './index';
+import { ExtensibleConfig } from './core/Extensible';
+import { HandleRequest } from './core/HandleRequest';
+import { Jovo } from './core/Jovo';
+import { RequestBuilder, ResponseBuilder, TestSuite } from './TestSuite';
+import { SpeechBuilder } from './util/SpeechBuilder';
 
-import { BaseApp } from './BaseApp';
 
 export interface Data {
   [key: string]: any; // tslint:disable-line

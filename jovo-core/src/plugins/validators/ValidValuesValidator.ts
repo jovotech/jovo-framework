@@ -1,4 +1,4 @@
-import { ErrorCode, JovoError } from '../errors/JovoError';
+import { ErrorCode, JovoError } from '../../errors/JovoError';
 import { Validator } from './Validator';
 import { ValidationError } from './ValidatorError';
 

@@ -1,24 +1,8 @@
-import {
-  BaseApp,
-  EnumRequestType,
-  ErrorCode,
-  HandleRequest,
-  Inputs,
-  Jovo,
-  JovoError,
-  Log,
-  Plugin,
-  SessionConstants,
-} from 'jovo-core';
 import _get = require('lodash.get');
 
-import { Config as AppConfig } from './../App';
-import {
-  Component,
-  ComponentDelegationOptions,
-  ComponentResponse,
-  ComponentSessionData,
-} from './Component';
+import { BaseApp, EnumRequestType, ErrorCode, HandleRequest, JovoError, Log, Plugin, SessionConstants } from '..';
+import { Jovo } from '../core/Jovo';
+import { Component, ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from '../plugins/Component';
 import { ComponentPlugin } from './ComponentPlugin';
 import { Route, Router } from './Router';
 
@@ -207,7 +191,7 @@ export class Handler implements Plugin {
       handleRequest.jovo.$handlers = Object.assign(
         // tslint:disable-line:prefer-object-spread
         {},
-        (handleRequest.jovo.$config as AppConfig).handlers,
+        handleRequest.jovo.$config.handlers,
       );
 
       const platform = handleRequest.jovo.getPlatformType();
@@ -253,7 +237,7 @@ export class Handler implements Plugin {
       Log.warn(`WARN: Jovo instance is not available. ON_ERROR doesn't work here`);
       return;
     }
-    if (_get((handleRequest.jovo.$config as AppConfig).handlers, EnumRequestType.ON_ERROR)) {
+    if (_get(handleRequest.jovo.$config.handlers, EnumRequestType.ON_ERROR)) {
       const route = {
         path: EnumRequestType.ON_ERROR,
         type: EnumRequestType.ON_ERROR,
@@ -273,16 +257,14 @@ export class Handler implements Plugin {
         if (typeof obj !== 'object') {
           throw new Error('Handler must be of type object.');
         }
-        (this.config as AppConfig).handlers = Object.assign(
+        this.config.handlers = Object.assign(
           // tslint:disable-line:prefer-object-spread
-          (this.config as AppConfig).handlers || {},
+          this.config.handlers || {},
           obj,
         );
       }
       return this;
     };
-
-    Jovo.prototype.triggeredToIntent = false;
 
     /**
      * Jumps to an intent in the order state > global > unhandled > error
@@ -297,7 +279,7 @@ export class Handler implements Plugin {
         this.$handlers,
         this.getState(),
         intent,
-        (this.$config as AppConfig).intentsToSkipUnhandled,
+        this.$config.intentsToSkipUnhandled,
       );
       route.from = this.getRoute().from
         ? this.getRoute().from + '/' + this.getRoute().path
@@ -376,7 +358,7 @@ export class Handler implements Plugin {
         this.$handlers,
         state,
         intent,
-        (this.$config as AppConfig).intentsToSkipUnhandled,
+        this.$config.intentsToSkipUnhandled,
       );
       route.from = this.getRoute().from
         ? this.getRoute().from + '/' + this.getRoute().path

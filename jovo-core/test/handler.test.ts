@@ -1,15 +1,13 @@
-import { EnumRequestType, Jovo } from 'jovo-core';
-
-import { App, Config as AppConfig } from './../src/App';
-import { Handler } from './../src/middleware/Handler';
+import { BaseApp, EnumRequestType, Jovo } from '../src';
+import {Handler} from '../src/plugins/Handler';
 
 require('source-map-support').install(); // tslint:disable-line
 process.env.NODE_ENV = 'UNIT_TEST';
-let app: App;
+let app: BaseApp;
 jest.setTimeout(250);
 
 test('test setHandler with single handler', () => {
-  app = new App();
+  app = new BaseApp();
   app.setHandler({
     LAUNCH() {
       // tslint:disable-line:no-empty
@@ -20,12 +18,12 @@ test('test setHandler with single handler', () => {
       },
     },
   });
-  expect((app.config as AppConfig).handlers.LAUNCH).toBeDefined();
-  expect((app.config as AppConfig).handlers.State).toBeDefined();
+  expect(app.config.handlers.LAUNCH).toBeDefined();
+  expect(app.config.handlers.State).toBeDefined();
 });
 
 test('test setHandler with multiple handlers', () => {
-  app = new App();
+  app = new BaseApp();
   app.setHandler(
     {
       State: {
@@ -42,8 +40,8 @@ test('test setHandler with multiple handlers', () => {
       },
     },
   );
-  expect((app.config as AppConfig).handlers.State).toBeDefined();
-  expect((app.config as AppConfig).handlers.State2).toBeDefined();
+  expect(app.config.handlers.State).toBeDefined();
+  expect(app.config.handlers.State2).toBeDefined();
 });
 
 test('test throw exception on non existing route', (done) => {

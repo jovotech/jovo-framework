@@ -1,6 +1,5 @@
-import { Component } from '../src';
-import { Config as AppConfig } from './../src/App';
-import { Router } from './../src/middleware/Router';
+import { Component, Router } from '../src';
+import { Config as RouterConfig } from './../src/plugins/Router';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 
@@ -154,7 +153,7 @@ test('test intentRoute() Intents with dots', () => {
 
 describe('test mapIntentName()', () => {
   test('should map to END', () => {
-    const appConfig: AppConfig = {
+    const appConfig: RouterConfig = {
       intentMap: {
         'AMAZON.StopIntent': 'END',
       },
@@ -164,7 +163,7 @@ describe('test mapIntentName()', () => {
   });
 
   test(`shouldn't map to anything`, () => {
-    const appConfig: AppConfig = {
+    const appConfig: RouterConfig = {
       intentMap: {
         'AMAZON.StopIntent': 'END',
       },
@@ -174,7 +173,7 @@ describe('test mapIntentName()', () => {
   });
 
   test(`should map using component's intentMap`, () => {
-    const appConfig: AppConfig = {
+    const appConfig: RouterConfig = {
       intentMap: {
         'AMAZON.StopIntent': 'END',
       },
@@ -193,7 +192,7 @@ describe('test mapIntentName()', () => {
   });
 
   test(`should map using root intentMap because the intent isn't specified in component's intentMap`, () => {
-    const appConfig: AppConfig = {
+    const appConfig: RouterConfig = {
       intentMap: {
         'AMAZON.StopIntent': 'END',
       },

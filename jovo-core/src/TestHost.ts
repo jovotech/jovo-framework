@@ -1,5 +1,5 @@
 import { Host } from './Interfaces';
-import { Log } from './Log';
+import { Log } from './util/Log';
 
 export class TestHost implements Host {
   headers: { [key: string]: string };

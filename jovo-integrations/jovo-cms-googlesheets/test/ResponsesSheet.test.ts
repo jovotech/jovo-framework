@@ -42,7 +42,6 @@ describe('ResponsesSheet.install()', () => {
     const googleSheetsCMS = new GoogleSheetsCMS();
     const responsesSheet = new ResponsesSheet();
 
-    expect(new Cms().t).toBeUndefined();
     responsesSheet.install(googleSheetsCMS);
     expect(new Cms().t).toBeInstanceOf(Function);
   });

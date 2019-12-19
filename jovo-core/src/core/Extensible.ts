@@ -4,9 +4,9 @@ import _get = require('lodash.get');
 import _isEqual = require('lodash.isequal');
 import _merge = require('lodash.merge');
 import _transform = require('lodash.transform');
+import { Plugin, PluginConfig } from './../Interfaces';
+import { Log } from './../util/Log';
 import { ActionSet } from './ActionSet';
-import { Plugin, PluginConfig } from './Interfaces';
-import { Log } from './Log';
 import { Middleware } from './Middleware';
 
 export interface ExtensibleConfig extends PluginConfig {
@@ -41,7 +41,6 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
   use(...plugins: Plugin[]): this {
     for (const plugin of plugins) {
       const name = plugin.name || plugin.constructor.name;
-
       if (plugin.config) {
         const constructor = plugin.constructor as new () => Plugin;
         const emptyPluginObject = new constructor();
@@ -111,7 +110,6 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
         typeof plugin.config === 'undefined' ||
         (plugin.config && typeof plugin.config.enabled === 'undefined') ||
         (plugin.config && plugin.config.enabled === true);
-
       if (isPluginEnabled) {
         // enabled with config, and boolean enabled property
         this.$plugins.set(name, plugin);

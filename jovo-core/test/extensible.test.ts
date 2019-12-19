@@ -1,7 +1,6 @@
 import _merge = require('lodash.merge');
+import { Extensible, ExtensibleConfig, Plugin, PluginConfig } from '../src';
 
-import { Extensible, ExtensibleConfig } from '../src/Extensible';
-import { Plugin, PluginConfig } from '../src/Interfaces';
 //
 //
 interface ConfigBase extends ExtensibleConfig {

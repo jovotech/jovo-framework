@@ -1,4 +1,4 @@
-import { PluginConfig } from 'jovo-core';
+import { PluginConfig } from '../Interfaces';
 
 class Component {
   $response?: Response;

@@ -14,7 +14,7 @@ export { FacebookMessenger, Config } from './FacebookMessenger';
 export const HOST = 'graph.facebook.com';
 export const BASE_PATH = '/v5.0/me';
 
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $messengerBot?: MessengerBot;
 

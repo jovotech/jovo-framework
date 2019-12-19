@@ -41,7 +41,7 @@ export {
   GoogleProvidedOptions,
   OrderUpdate,
 } from './modules/Transaction';
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $googleAction?: GoogleAction;
 
@@ -60,7 +60,7 @@ declare module 'jovo-core/dist/src/Jovo' {
   }
 }
 
-declare module 'jovo-core/dist/src/BaseApp' {
+declare module 'jovo-core/dist/src/core/BaseApp' {
   /**
    * Sets alexa handlers
    * @public

@@ -1,11 +1,14 @@
-import { I18Next } from 'jovo-cms-i18next';
-import { BaseApp, Extensible, Handler, HandleRequest, Jovo, SessionConstants } from 'jovo-core';
-import { Component, ComponentConfig, ComponentSessionData } from './Component';
+import { Component, ComponentConfig, ComponentSessionData } from '../plugins/Component';
 
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as path from 'path';
+import { BaseApp, HandleRequest, Jovo, SessionConstants } from '..';
+import { Extensible } from './../core/Extensible';
+import { Handler } from './../Interfaces';
 
+
+import { I18Next } from './I18Next';
 class ComponentPlugin extends Extensible {
   /**
    * Sets the active components, which are either the $baseComponents (if no component is active)
@@ -214,10 +217,9 @@ class ComponentPlugin extends Extensible {
    */
   async loadI18nFiles(handleRequest: HandleRequest) {
     const pathToComponent = `./components/${this.name}/`;
-    const filesDir = path
+    this.i18next!.config.filesDir = path
       .join(pathToComponent, this.pathToI18n || '')
       .replace(new RegExp('\\' + path.sep, 'g'), '/');
-    this.i18next!.config.filesDir = filesDir;
 
     this.i18next!.loadFiles(handleRequest);
   }

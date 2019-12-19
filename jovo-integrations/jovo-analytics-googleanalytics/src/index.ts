@@ -4,7 +4,7 @@ export { GoogleAnalyticsGoogleAssistant } from './GoogleAnalyticsGoogleAssistant
 
 // Declare necessary properties for Jovo
 import { Event, Transaction, TransactionItem } from './interfaces';
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $googleAnalytics: {
       $data: { [key: string]: string | number };

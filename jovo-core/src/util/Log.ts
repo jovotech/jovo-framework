@@ -1,6 +1,6 @@
 import { ContinuationLocalStorage } from 'asyncctx';
 import _merge = require('lodash.merge');
-import { Host } from './Interfaces';
+import { Host } from '../Interfaces';
 
 export enum LogLevel {
   NONE = -1,

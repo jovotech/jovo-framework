@@ -1,5 +1,4 @@
-import { ActionSet, BaseApp, Host, Jovo } from '../src';
-import { Extensible } from '../src/Extensible';
+import { BaseApp, ComponentPlugin, Extensible, Host, Jovo } from '../src';
 
 class Parent extends Extensible {
   /**
@@ -141,6 +140,44 @@ test('test hook() with callbacks', async (done) => {
 
   await baseApp.middleware('request')!.run({});
   await baseApp.middleware('platform.init')!.run({});
+});
+
+
+describe('test useComponents()', () => {
+  let componentPlugin: ComponentPlugin;
+  let app: BaseApp;
+
+  beforeEach(() => {
+    componentPlugin = new ComponentPlugin();
+    app = new BaseApp();
+  });
+
+  test('should add componentPlugin to $plugins map', () => {
+    componentPlugin.name = 'test';
+
+    app.useComponents(componentPlugin);
+
+    expect(app.$plugins.get(componentPlugin.name)).toBe(componentPlugin);
+  });
+
+  test(`should call componentPlugin's install function`, () => {
+    jest.spyOn(componentPlugin, 'install');
+
+    app.useComponents(componentPlugin);
+
+    expect(componentPlugin.install).toHaveBeenCalled();
+  });
+
+  test('should run through array of components', () => {
+    const componentPlugin2 = new ComponentPlugin();
+    jest.spyOn(componentPlugin, 'install');
+    jest.spyOn(componentPlugin2, 'install');
+
+    app.useComponents(componentPlugin, componentPlugin2);
+
+    expect(componentPlugin.install).toHaveBeenCalled();
+    expect(componentPlugin2.install).toHaveBeenCalled();
+  });
 });
 
 /**

@@ -1,5 +1,5 @@
-import { Conversation, ConversationConfig } from './Conversation';
 import { JovoRequest, JovoResponse } from './Interfaces';
+import { Conversation, ConversationConfig } from './util/Conversation';
 
 export interface RequestBuilder<T extends JovoRequest = JovoRequest> {
   type: string;

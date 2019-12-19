@@ -4,30 +4,32 @@ import _get = require('lodash.get');
 import _sample = require('lodash.sample');
 import _set = require('lodash.set');
 import { BaseApp, BaseAppConfig } from './BaseApp';
-import { Cms } from './Cms';
-import { EnumRequestType, SessionConstants } from './enums';
-import { ErrorCode, JovoError } from './errors/JovoError';
-import { Log } from './Log';
-import { SpeechBuilder } from './SpeechBuilder';
 
+
+import {
+  Cms,
+  EnumRequestType,
+  ErrorCode,
+  JovoError,
+  Log,
+  SessionConstants,
+  SessionData,
+  SpeechBuilder, ValidationError,
+  Validator,
+} from '..';
 import {
   ASRData,
   Host,
   Inputs,
   JovoData,
   JovoRequest,
-  JovoResponse,
-  JovoSession,
+  JovoResponse, JovoSession,
   NLUData,
   Output,
-  RequestType,
-  SessionAttributes,
-  SessionData,
-} from './Interfaces';
-
+  RequestType, SessionAttributes,
+} from '../Interfaces';
 import { HandleRequest } from './HandleRequest';
 import { User } from './User';
-import { ValidationError, Validator } from './validators';
 
 export abstract class Jovo extends EventEmitter {
   readonly $host: Host;
@@ -628,7 +630,9 @@ export abstract class Jovo extends EventEmitter {
     // tslint:disable-line:no-any
     try {
       if (validator instanceof Validator) {
+        // @ts-ignore
         validator.setInputToValidate(input);
+        // @ts-ignore
         validator.validate(this);
       } else if (typeof validator === 'function') {
         validator.call(this);
@@ -665,10 +669,11 @@ export abstract class Jovo extends EventEmitter {
     input: any,
     failedValidators: string[][],
   ) {
-    // tslint:disable-line:no-any
     try {
       if (validator instanceof Validator) {
+        // @ts-ignore
         validator.setInputToValidate(input);
+        // @ts-ignore
         await validator.validate(this);
       } else if (typeof validator === 'function') {
         await validator.call(this);

@@ -1,6 +1,6 @@
-import { Inputs } from './Interfaces';
-import { Log } from './Log';
-import { Project as P } from './Project';
+import { Log } from './util/Log';
+import { Project as P } from './util/Project';
+export {} from './plugins/types';
 export const Project = P.getInstance();
 
 try {
@@ -22,30 +22,41 @@ declare global {
   }
 }
 
-export { BaseApp } from './BaseApp';
-export { ActionSet } from './ActionSet';
+export { BaseApp } from './core/BaseApp';
+export { ActionSet } from './core/ActionSet';
 
-export { Jovo } from './Jovo';
+export { Jovo } from './core/Jovo';
 export { EnumRequestType, SessionConstants } from './enums';
-export { SpeechBuilder } from './SpeechBuilder';
+export { SpeechBuilder } from './util/SpeechBuilder';
 
-export { Middleware } from './Middleware';
+export { Middleware } from './core/Middleware';
 export { TestSuite, RequestBuilder, ResponseBuilder } from './TestSuite';
-export { Conversation, ConversationConfig } from './Conversation';
-export { Extensible } from './Extensible';
-export { ExtensibleConfig } from './Extensible';
-export { Cms } from './Cms';
-export { BaseCmsPlugin } from './BaseCmsPlugin';
+export { Conversation, ConversationConfig } from './util/Conversation';
+export { Extensible } from './core/Extensible';
+export { ExtensibleConfig } from './core/Extensible';
+export { Cms } from './util/Cms';
+export { BaseCmsPlugin } from './plugins/BaseCmsPlugin';
 export { JovoError, ErrorCode } from './errors/JovoError';
-export { HandleRequest } from './HandleRequest';
+export { HandleRequest } from './core/HandleRequest';
 
 export {
-  Validator,
-  ValidationError,
-  IsRequiredValidator,
-  ValidValuesValidator,
   InvalidValuesValidator,
-} from './validators';
+} from './plugins/validators/InvalidValuesValidator';
+export {
+  IsRequiredValidator
+} from './plugins/validators/IsRequiredValidator';
+
+export {
+  Validator
+} from './plugins/validators/Validator';
+
+export {
+  ValidationError
+} from './plugins/validators/ValidatorError';
+
+export {
+  ValidValuesValidator
+} from './plugins/validators/ValidValuesValidator';
 export {
   Plugin,
   PluginConfig,
@@ -70,6 +81,9 @@ export {
   RequestJSON,
 } from './Interfaces';
 
-export { Util } from './Util';
-export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './Log';
-export { User } from './User';
+export { Util } from './util/Util';
+export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './util/Log';
+export { User } from './core/User';
+export { ComponentPlugin } from './plugins/ComponentPlugin';
+export { Component } from './plugins/Component';
+export {Router} from './plugins/Router';

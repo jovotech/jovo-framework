@@ -1,6 +1,6 @@
 import _merge = require('lodash.merge');
 import _sample = require('lodash.sample');
-import { Jovo } from './Jovo';
+import { Jovo } from '../core/Jovo';
 
 export interface SsmlElements {
   [tag: string]: SsmlElementAttributes;

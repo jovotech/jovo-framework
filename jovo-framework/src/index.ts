@@ -1,9 +1,6 @@
 import { BaseApp, Data, Handler, Jovo, Log, LogLevel, Project, Util } from 'jovo-core';
 import { App } from './App';
 
-import { Component, ComponentDelegationOptions, ComponentResponse } from './middleware/Component';
-import { ComponentPlugin } from './middleware/ComponentPlugin';
-import { Route } from './middleware/Router';
 import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
 
 export { App } from './App';
@@ -16,22 +13,10 @@ export { AzureFunction } from './hosts/AzureFunction';
 export { GoogleCloudFunction } from './hosts/GoogleCloudFunction';
 
 export { BasicLogging } from './middleware/logging/BasicLogging';
-export { Router, Route } from './middleware/Router';
 export { JovoUser, UserMetaData, ContextPrevObject } from './middleware/user/JovoUser';
 export { Util, LogLevel, Log, Project };
 export * from 'jovo-core';
-export {
-  Component,
-  ComponentConfig,
-  ComponentConstructorOptions,
-  ComponentData,
-  ComponentDelegationOptions,
-  ComponentResponse,
-  ComponentResponseStatus,
-  ComponentSessionData,
-} from './middleware/Component';
 
-export { ComponentPlugin } from './middleware/ComponentPlugin';
 
 declare module 'express' {
   interface Application {
@@ -40,136 +25,10 @@ declare module 'express' {
   }
 }
 
-declare module 'jovo-core/dist/src/BaseApp' {
-  export interface BaseApp {
-    /**
-     * 1st layer components.
-     * These were initialized by the developer using `app.useComponents`
-     */
-    $baseComponents: {
-      [key: string]: ComponentPlugin;
-    };
 
-    /**
-     * Sets handler object
-     * @param {Object} handlers
-     */
-    setHandler(...handler: Handler[]): this;
-  }
-}
 
-declare module 'jovo-core/dist/src/Jovo' {
-  export interface Jovo {
-    $handlers: any; // tslint:disable-line
-    triggeredToIntent: boolean;
 
-    /**
-     * Returns path to function inside the handler
-     * Examples
-     * LAUNCH = Launch function
-     * State1:IntentA => IntentA in state 'State1'
-     * @public
-     * @return {string}
-     */
-    getHandlerPath(): string;
-
-    /**
-     * Jumps to an intent in the order state > global > unhandled > error
-     * @public
-     * @param {string} intent name of intent
-     */
-    toIntent(intent: string): Promise<void>;
-
-    /**
-     * Jumps to state intent in the order state > unhandled > error
-     * @public
-     * @param {string} state name of state
-     * @param {string} intent name of intent
-     * @param {boolean} [validate=true] state validation toggle
-     */
-    toStateIntent(state: string | undefined, intent: string, validate?: boolean): Promise<void>;
-
-    /**
-     * Jumps from the inside of a state to a global intent
-     * @public
-     * @param {string} intent name of intent
-     */
-    toStatelessIntent(intent: string): Promise<void>;
-
-    /**
-     * Adds state to session attributes
-     * @param {string} state
-     * @return {Jovo}
-     */
-    followUpState(state: string): this;
-
-    /**
-     * Skips intent handling when called in NEW_USER, NEW_SESSION, ON_REQUEST
-     * @public
-     * @return {*}
-     */
-    skipIntentHandling(): Promise<void>;
-
-    /**
-     * Returns mapped intent name.
-     * @public
-     * @return {*}
-     */
-    getMappedIntentName(): string;
-
-    /**
-     * Returns route object.
-     * @public
-     * @return {*}
-     */
-    getRoute(): Route;
-
-    /**
-     * Delegates the requests & responses to the component defined with "componentName"
-     * @param {string} componentName
-     * @param {ComponentDelegationOptions} options
-     * @returns {Promise<void>}
-     */
-    delegate(componentName: string, options: ComponentDelegationOptions): Promise<void>;
-  }
-}
-
-declare module 'jovo-core/dist/src/Jovo' {
-  export interface Jovo {
-    $components: {
-      [key: string]: Component;
-    };
-
-    $activeComponents: {
-      [key: string]: ComponentPlugin;
-    };
-
-    /**
-     * Checks if the given state contains the name of a initialized component.
-     * @private
-     * @param {string | undefined} state
-     * @return {void}
-     * @throws {JovoError}
-     */
-    checkStateForInitializedComponentName(state: string | undefined): void;
-
-    /**
-     * Returns the active components root state value.
-     * @return {string | undefined}
-     */
-    getActiveComponentsRootState(): string | undefined;
-
-    /**
-     * Returns the active component.
-     * @return {string | undefined}
-     */
-    getActiveComponent(): Component | undefined;
-
-    sendComponentResponse(response: ComponentResponse): Promise<void>;
-  }
-}
-
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     /**
      * Repeats last speech & reprompt
@@ -184,7 +43,7 @@ declare module 'jovo-core/dist/src/Jovo' {
   }
 }
 
-declare module 'jovo-core/dist/src/User' {
+declare module 'jovo-core/dist/src/core/User' {
   interface User {
     $metaData: UserMetaData;
     $data: Data;

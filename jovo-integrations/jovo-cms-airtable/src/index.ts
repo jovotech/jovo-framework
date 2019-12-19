@@ -4,7 +4,7 @@ export { ObjectArrayTable } from './ObjectArrayTable';
 export { ResponsesTable } from './ResponsesTable';
 export { KeyValueTable } from './KeyValueTable';
 
-declare module 'jovo-core/dist/src/Cms' {
+declare module 'jovo-core/dist/src/util/Cms' {
   interface Cms {
     t(): string | string[] | object | object[];
     i18Next: any; // tslint:disable-line

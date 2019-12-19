@@ -35,7 +35,6 @@ describe('ResponsesTable.install()', () => {
     const airtableCMS = new AirtableCMS();
     const responsesTable = new ResponsesTable();
 
-    expect(new Cms().t).toBeUndefined();
     responsesTable.install(airtableCMS);
     expect(new Cms().t).toBeInstanceOf(Function);
   });

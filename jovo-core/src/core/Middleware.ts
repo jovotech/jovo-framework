@@ -1,5 +1,5 @@
+import { Log } from '..';
 import { Extensible } from './Extensible';
-import { Log } from './Log';
 
 export class Middleware {
   fns: Function[];
@@ -48,10 +48,10 @@ export class Middleware {
         obj && obj.excludedMiddlewareNames
           ? obj.excludedMiddlewareNames.includes(this.name)
           : false;
-
       if (!this.parent.config.enabled || !this.enabled || isExcluded) {
         return Promise.resolve();
       }
+
 
       // LOGGING
       if (this.parent.constructor.name === 'App') {
@@ -59,7 +59,6 @@ export class Middleware {
           Log.debugStart(`-- middleware '${this.name}' done`);
         }
       }
-
       // before middleware available?
       if (this.parent.hasMiddleware(`before.${this.name}`)) {
         await this.parent.middleware(`before.${this.name}`)!.run(obj);

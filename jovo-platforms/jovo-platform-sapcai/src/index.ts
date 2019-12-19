@@ -2,7 +2,7 @@ import { Handler } from 'jovo-core';
 import { SapCaiSkill } from './core/SapCaiSkill';
 import { Button, CardContent } from './response';
 
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $caiSkill?: SapCaiSkill;
 
@@ -31,7 +31,7 @@ declare module './core/SapCaiSkill' {
   }
 }
 
-declare module 'jovo-core/dist/src/BaseApp' {
+declare module 'jovo-core/dist/src/core/BaseApp' {
   export interface BaseApp {
     setCaiHandler(...handler: Handler[]): this;
   }

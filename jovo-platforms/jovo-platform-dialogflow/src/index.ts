@@ -31,7 +31,7 @@ declare module './DialogflowAgent' {
     isTwilioBot(): boolean;
   }
 }
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $originalRequest?: JovoRequest;
     $originalResponse?: JovoResponse;
