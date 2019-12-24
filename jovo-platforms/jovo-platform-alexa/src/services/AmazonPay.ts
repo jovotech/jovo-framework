@@ -73,7 +73,7 @@ export class AmazonPay {
     };
 
     if (options.sandbox) {
-      apiRequestOptions.path = '/sandbox/v1/buyer/addresses';
+      apiRequestOptions.path = `/sandbox/v1/buyer/addresses?sellerId=${options.sellerId}`;
       apiRequestOptions.headers['x-amz-pay-sandbox-email-id'] = options.sandboxEmail;
     }
 
