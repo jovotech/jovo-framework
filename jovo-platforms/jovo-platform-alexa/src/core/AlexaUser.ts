@@ -18,7 +18,7 @@ import {
 } from '../services/AlexaReminder';
 import { ShoppingList, ShoppingListItem, ToDoList, ToDoListItem } from './Interfaces';
 import { AlexaSkill } from './AlexaSkill';
-import { AmazonPay, BuyerIdResponse, AmazonPayApiRequestOptions, BuyerAddressRequestOptions, BuyerAddressResponse } from '../services/AmazonPay';
+import { AmazonPay, BuyerIdResponse, AmazonPayApiRequestOptions, BuyerAddressRequestOptions, BuyerAddressResponse, BuyerAddress } from '../services/AmazonPay';
 
 export class AlexaUser extends User {
   alexaSkill: AlexaSkill;
@@ -351,5 +351,14 @@ export class AlexaUser extends User {
     }
 
     return AmazonPay.getBuyerAddress(options);
+  }
+
+  async getDefaultBuyerAddress(options: BuyerAddressRequestOptions): Promise<BuyerAddress | undefined> {
+    const { addresses } = await this.getBuyerAddress(options);
+    const defaultAddress = addresses.find(address => {
+      return address.addressType === 'DefaultOneClickShippingAddress'
+    });
+
+    return defaultAddress;
   }
 }
