@@ -140,7 +140,7 @@ const options: AmazonPayApiRequestOptions = {
 const response = await this.$alexaSkill.$user.getBuyerAddress(options);
 ```
 
-If your request was successful, you will receive a response object with the following structure:
+If your request was successful, you will receive a response object with an array containing all of the user's addresses:
 
 Name | Description | Value
 :--- | :--- | :---
@@ -155,6 +155,29 @@ Name | Description | Value
 `addresses[].address.stateOrRegion` | | `String`
 `addresses[].addressType` | | `String`
 
+### Default Buyer Address
+
+To get the buyer's default shipping address directly, use `getDefaultBuyerAddress()`.
+
+The function expects the same object as a parameter as [`getBuyerAddress()`](#buyer-address). As a response you get the default shipping addresses' object.
+
+```js
+// @language=javascript
+
+const options = {
+    host: 'pay-api.amazon.com',
+    sellerId: 'xyz'
+};
+const defaultAddress = await this.$alexaSkill.$user.getDefaultBuyerAddress(options);
+
+// @language=typescript
+
+const options: AmazonPayApiRequestOptions = {
+    host: 'pay-api.amazon.com',
+    sellerId: 'xyz'
+};
+const defaultAddress = await this.$alexaSkill.$user.getDefaultBuyerAddress(options);
+```
 
 ## Send the Directive
 
