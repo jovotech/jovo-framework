@@ -592,7 +592,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
       });
     });
   });
-  
+
   describe('test routing inside a component', () => {
     // TODO
   });

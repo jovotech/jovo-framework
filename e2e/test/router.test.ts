@@ -27,7 +27,9 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
   describe('test request types', () => {
     test('test launch', async (done) => {
       app.setHandler({
-        LAUNCH() {return;},
+        LAUNCH() {
+          return;
+        },
       });
 
       const launchRequest: JovoRequest = await t.requestBuilder.launch();
@@ -41,7 +43,9 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
 
     test('test intent', async (done) => {
       app.setHandler({
-        HelloWorldIntent() {return;},
+        HelloWorldIntent() {
+          return;
+        },
       });
 
       const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
@@ -55,7 +59,9 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
 
     test('test end', async (done) => {
       app.setHandler({
-        END() {return;},
+        END() {
+          return;
+        },
       });
 
       const request: JovoRequest = await t.requestBuilder.end();
@@ -773,7 +779,9 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
           this.followUpState('State1').ask('Hello World', 'foo');
         },
         State1: {
-          IntentA() {return;},
+          IntentA() {
+            return;
+          },
         },
       });
       const launchRequest: JovoRequest = await t.requestBuilder.launch();
@@ -791,7 +799,9 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
   describe('test app listener', () => {
     test('test onRequest', async (done) => {
       app.setHandler({
-        LAUNCH() {return;},
+        LAUNCH() {
+          return;
+        },
       });
       app.onRequest((handleRequest: HandleRequest) => {
         expect(handleRequest.jovo).toBeUndefined();

@@ -1,6 +1,9 @@
 export class AudioEncoder {
-
-  static sampleDown(buffer: Float32Array, currentSampleRate: number, newSampleRate: number): Float32Array {
+  static sampleDown(
+    buffer: Float32Array,
+    currentSampleRate: number,
+    newSampleRate: number,
+  ): Float32Array {
     if (newSampleRate === currentSampleRate) {
       return buffer;
     }

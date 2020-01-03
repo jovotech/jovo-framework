@@ -104,35 +104,34 @@ export class GoogleActionUser extends User {
         port: 443,
         path: `/tokeninfo?id_token=${tokenId}`,
         timeout: 2000,
-        protocol: 'https:'
+        protocol: 'https:',
       };
 
-      const req = https.get(options, (resp) => {
-        let data = '';
+      const req = https
+        .get(options, (resp) => {
+          let data = '';
 
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-          data += chunk;
+          // A chunk of data has been recieved.
+          resp.on('data', (chunk) => {
+            data += chunk;
+          });
+
+          // The whole response has been received. Print out the result.
+          resp.on('end', () => {
+            try {
+              const googleAccount = JSON.parse(data) as GoogleAccountProfile;
+              return resolve(googleAccount);
+            } catch (e) {
+              reject(e);
+            }
+          });
+        })
+        .on('error', (err) => {
+          reject(err);
         });
-
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-          try {
-            const googleAccount = JSON.parse(data) as GoogleAccountProfile;
-            return resolve(googleAccount);
-          } catch(e) {
-            reject(e);
-          }
-        });
-
-      }).on("error", (err) => {
-        reject(err);
-      });
       req.on('timeout', () => {
         req.abort();
       });
     });
-
-
   }
 }
