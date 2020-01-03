@@ -44,6 +44,7 @@ if (process.argv.includes('--stage')) {
 
 if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-report')) {
   const middlewareMap: Record<string, string[]> = {};
+  const performanceReport = process.argv[process.argv.indexOf('--performance-report') + 1] ? process.argv[process.argv.indexOf('--performance-report') + 1].trim() : undefined;
 
   function getInstallLocation(stackStr: string, parent: string, middleware: string) {
     const stackArray = stackStr.split('\n');
@@ -76,6 +77,7 @@ if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-
   }
 
   const oldMiddlewareUse = Middleware.prototype.use;
+
 
   Middleware.prototype.use = function(fns) {
     getInstallLocation(new Error().stack!, this.parent.constructor.name, this.name);
@@ -122,7 +124,9 @@ if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-
 
     if (middlewareMap[middlewareFullKey]) {
       middlewareMap[middlewareFullKey].forEach((impl) => {
-        // Log.dim().info(`↓ ${impl}`);
+        if (performanceReport === 'detailed') {
+          Log.dim().info(`↓ ${impl}`);
+        }
       });
     }
   };
