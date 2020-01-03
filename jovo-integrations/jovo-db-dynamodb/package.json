@@ -15,7 +15,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "aws-sdk": "^2.294.0",
+    "aws-sdk": "^2.477.0",
     "jovo-core": "^2.2.18",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -32,7 +32,7 @@
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "^3.4.1"
+    "typescript": "^3.7.3"
   },
   "jest": {
     "transform": {
