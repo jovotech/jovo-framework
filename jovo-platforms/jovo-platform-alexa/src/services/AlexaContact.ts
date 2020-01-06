@@ -31,16 +31,31 @@ export class AlexaContact {
     try {
       const response = await AlexaAPI.apiCall(options);
 
-      // TODO check if other statuses like 401 should go through
       if (response.status === 403) {
         const { message, code } = response.data;
         const apiError = new ApiError(message, code);
+
+        if (message === 'The authentication token is not valid.') {
+          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+        }
+
         if (message === 'Access to this resource has not yet been requested.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
 
         if (message === 'Access to this resource cannot be requested.') {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
+        }
+
+        if (code === 'ACCESS_DENIED' && message === 'Access denied with reason: FORBIDDEN') {
+          apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
+        }
+
+        if (
+          code === 'ACCESS_DENIED' &&
+          message === 'Access denied with reason: ACCESS_NOT_REQUESTED'
+        ) {
+          apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
         }
         // skip catch
         return Promise.reject(apiError);

@@ -64,10 +64,7 @@ export class AlexaDeviceAddress {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
 
-        if (
-          code === 'ACCESS_DENIED' &&
-          message === 'Access denied with reason: FORBIDDEN'
-        ) {
+        if (code === 'ACCESS_DENIED' && message === 'Access denied with reason: FORBIDDEN') {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
 

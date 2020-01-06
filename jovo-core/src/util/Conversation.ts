@@ -1,16 +1,15 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
-import { RequestOptions } from 'http';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
 import * as path from 'path';
 import * as util from 'util';
 import { BaseApp, ErrorCode, JovoError } from '..';
 import { Data, JovoRequest, JovoResponse, SessionData } from '../Interfaces';
 import { TestHost } from '../TestHost';
 import { TestSuite } from '../TestSuite';
-import { HttpService } from './HttpService';
+import { AxiosRequestConfig, HttpService } from './HttpService';
 import { Log } from './Log';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 
 const fsunlink = util.promisify(fs.unlink);
 const fsexists = util.promisify(fs.exists);
@@ -25,24 +24,10 @@ export interface ConversationConfig {
   runtime?: ConversationTestRuntime;
   defaultDbDirectory?: string;
   deleteDbOnSessionEnded?: boolean;
-  httpOptions?: RequestOptions;
+  httpOptions?: AxiosRequestConfig;
 }
 
 export class Conversation {
-  /**
-   * Post request to the separately running jovo voice app instance
-   * @param {string} postData
-   * @param {RequestOptions} options
-   * @returns {Promise<any>}
-   */
-  private static async httpRequest(postData: string, options: RequestOptions): Promise<any> {
-    const config = HttpService.httpRequestOptionsToAxiosRequestConfig(options);
-    config.data = postData;
-
-    const response = await HttpService.request(config);
-    return response.data;
-  }
-
   testSuite: TestSuite;
   sessionData: SessionData = {};
   app?: BaseApp;
@@ -64,10 +49,8 @@ export class Conversation {
         'content-type': 'application/json',
         'jovo-test': 'true',
       },
-      host: 'localhost',
       method: 'POST',
-      path: '/webhook',
-      port: process.env.JOVO_PORT || 3000,
+      url: `http://localhost:${process.env.JOVO_PORT || 3000}/webhook`,
     },
     locale: 'en-US',
     runtime: 'server',
@@ -152,10 +135,9 @@ export class Conversation {
    * @returns {Promise<JovoResponse>}
    */
   async sendToServer(req: JovoRequest): Promise<JovoResponse> {
-    const postData = JSON.stringify(req.toJSON());
-
-    const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
-    const jovoResponse = this.testSuite.responseBuilder.create(response);
+    const requestConfig = { ...this.config.httpOptions, data: req.toJSON() };
+    const response = await HttpService.request(requestConfig);
+    const jovoResponse = this.testSuite.responseBuilder.create(response.data);
     await this.postProcess(jovoResponse);
     return jovoResponse;
   }

@@ -63,19 +63,4 @@ export class HttpService {
   ): Promise<RESPONSE> {
     return axios.patch(url, data, config);
   }
-
-  static httpRequestOptionsToAxiosRequestConfig(
-    options: RequestOptions,
-    isSecure = false,
-  ): AxiosRequestConfig {
-    const prefix = `http${isSecure ? 's' : ''}://`;
-    const host = options.hostname || options.host || '';
-    const port = options.port || isSecure ? 443 : 80;
-    const url = `${prefix}${host}${options.path}:${port}`;
-    return {
-      headers: options.headers,
-      method: options.method as Method | undefined,
-      url,
-    };
-  }
 }
