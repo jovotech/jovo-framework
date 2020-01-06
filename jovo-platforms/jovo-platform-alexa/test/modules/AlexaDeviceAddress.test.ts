@@ -1,7 +1,7 @@
 import { AlexaAPI } from '../../src/services/AlexaAPI';
-import { AlexaAPIResponse } from '../../src/services/AlexaAPIResponse';
-import { ApiError } from '../../src/services/ApiError';
 import { AlexaDeviceAddress } from '../../src/services/AlexaDeviceAddress';
+import { ApiError } from '../../src/services/ApiError';
+
 jest.mock('../../src/services/AlexaAPI');
 
 process.env.NODE_ENV = 'TEST';
@@ -9,11 +9,12 @@ process.env.NODE_ENV = 'TEST';
 test('test 403 NO_USER_PERMISSION', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(
-      new AlexaAPIResponse(403, {
+    return Promise.resolve({
+      status: 403,
+      data: {
         message: 'Access to this resource has not yet been requested.',
-      }),
-    );
+      },
+    });
   });
 
   const result = AlexaDeviceAddress.deviceAddressApi(
@@ -34,11 +35,12 @@ test('test 403 NO_USER_PERMISSION', async () => {
 test('test 403 NO_SKILL_PERMISSION', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(
-      new AlexaAPIResponse(403, {
+    return Promise.resolve({
+      status: 403,
+      data: {
         message: 'Access to this resource cannot be requested.',
-      }),
-    );
+      },
+    });
   });
   const result = AlexaDeviceAddress.deviceAddressApi(
     AlexaDeviceAddress.ADDRESS,
@@ -87,7 +89,10 @@ test('test ADDRESS', async () => {
 
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, addressData));
+    return Promise.resolve({
+      status: 200,
+      data: addressData,
+    });
   });
   const result = AlexaDeviceAddress.deviceAddressApi(
     AlexaDeviceAddress.ADDRESS,
@@ -103,7 +108,10 @@ test('test COUNTRY_AND_POSTAL_CODE', async () => {
   const addressData = { countryCode: 'DE', postalCode: '10435' };
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, addressData));
+    return Promise.resolve({
+      status: 200,
+      data: addressData,
+    });
   });
   const result = AlexaDeviceAddress.deviceAddressApi(
     AlexaDeviceAddress.COUNTRY_AND_POSTAL_CODE,

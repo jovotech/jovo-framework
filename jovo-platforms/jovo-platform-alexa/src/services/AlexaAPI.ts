@@ -1,7 +1,11 @@
 import { ApiError } from './ApiError';
-import { AxiosRequestConfig, HttpService, Method, SpeechBuilder } from 'jovo-core';
-import { AlexaAPIResponse } from './AlexaAPIResponse';
+import { AxiosRequestConfig, HttpService, Method, SpeechBuilder, AxiosResponse } from 'jovo-core';
 import { AuthorizationResponse } from '../modules/ProactiveEvent';
+
+export interface ApiErrorData {
+  message: string;
+  code: string;
+}
 
 export interface ApiCallOptions {
   endpoint: string;
@@ -13,11 +17,11 @@ export interface ApiCallOptions {
 
 export class AlexaAPI {
   /**
-   *
    * @param {ApiCallOptions} options
-   * @returns {Promise<any>}
+   * @returns {Promise<AxiosResponse<T | ApiErrorData>>>}
    */
-  static async apiCall(options: ApiCallOptions) {
+  // tslint:disable-next-line:no-any
+  static apiCall<T = any>(options: ApiCallOptions): Promise<AxiosResponse<T | ApiErrorData>> {
     const url = options.endpoint + options.path;
     const config: AxiosRequestConfig = {
       data: options.json,
@@ -29,14 +33,9 @@ export class AlexaAPI {
       },
       validateStatus: (status: number) => {
         return true;
-      }
+      },
     };
-
-    const response = await HttpService.request(config);
-    if (response.status !== 204 && response.data) {
-      return new AlexaAPIResponse(response.status, response.data);
-    }
-    return new AlexaAPIResponse(response.status, {});
+    return HttpService.request<T>(config);
   }
 
   static async progressiveResponse(
@@ -44,9 +43,8 @@ export class AlexaAPI {
     requestId: string,
     apiEndPoint: string,
     apiAccessToken: string,
-  ) {
+  ): Promise<void> {
     const outputSpeech: string = speech.toString();
-
     const data = {
       header: {
         requestId,

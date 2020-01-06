@@ -1,6 +1,21 @@
-import { ApiError } from './ApiError';
 import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
-import { AlexaAPIResponse } from './AlexaAPIResponse';
+import { ApiError } from './ApiError';
+
+export interface DeviceAddress {
+  countryCode: string;
+  postalCode: string;
+}
+
+export interface AlexaDeviceAddressPostalAndCountry extends DeviceAddress {}
+
+export interface AlexaDeviceAddressFull extends DeviceAddress {
+  addressLine1: string;
+  addressLine2: string;
+  addressLine3: string;
+  districtOrCounty: string;
+  stateOrRegion: string;
+  city: string;
+}
 
 export class AlexaDeviceAddress {
   static ADDRESS = 'address';
@@ -31,33 +46,34 @@ export class AlexaDeviceAddress {
     };
 
     try {
-      const response: AlexaAPIResponse = await AlexaAPI.apiCall(options);
+      const response = await AlexaAPI.apiCall(options);
 
-      if (response.httpStatus === 403) {
-        const apiError = new ApiError(response.data.message, response.data.code);
+      if (response.status === 403) {
+        const { message, code } = response.data;
+        const apiError = new ApiError(message, code);
 
-        if (response.data.message === 'The authentication token is not valid.') {
+        if (message === 'The authentication token is not valid.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
 
-        if (response.data.message === 'Access to this resource has not yet been requested.') {
+        if (message === 'Access to this resource has not yet been requested.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
 
-        if (response.data.message === 'Access to this resource cannot be requested.') {
+        if (message === 'Access to this resource cannot be requested.') {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
 
         if (
-          response.data.code === 'ACCESS_DENIED' &&
-          response.data.message === 'Access denied with reason: FORBIDDEN'
+          code === 'ACCESS_DENIED' &&
+          message === 'Access denied with reason: FORBIDDEN'
         ) {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
 
         if (
-          response.data.code === 'ACCESS_DENIED' &&
-          response.data.message === 'Access denied with reason: ACCESS_NOT_REQUESTED'
+          code === 'ACCESS_DENIED' &&
+          message === 'Access denied with reason: ACCESS_NOT_REQUESTED'
         ) {
           apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
         }
@@ -69,20 +85,4 @@ export class AlexaDeviceAddress {
       throw new ApiError('Something went wrong.', ApiError.ERROR);
     }
   }
-}
-
-export interface DeviceAddress {
-  countryCode: string;
-  postalCode: string;
-}
-
-export interface AlexaDeviceAddressPostalAndCountry extends DeviceAddress {}
-
-export interface AlexaDeviceAddressFull extends DeviceAddress {
-  addressLine1: string;
-  addressLine2: string;
-  addressLine3: string;
-  districtOrCounty: string;
-  stateOrRegion: string;
-  city: string;
 }

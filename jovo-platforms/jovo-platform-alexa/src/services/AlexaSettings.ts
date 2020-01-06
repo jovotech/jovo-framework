@@ -18,11 +18,11 @@ export class AlexaSettings {
       AlexaSettings.TEMPERATURE_UNITS,
     ];
     if (!apiAccessToken) {
-      return Promise.reject(new Error(`No permissionToken was found in that request`));
+      throw new Error(`No permissionToken was found in that request`);
     }
 
     if (!validProperties.includes(property)) {
-      return Promise.reject(new Error(`${property} is not a valid property`));
+      throw new Error(`${property} is not a valid property`);
     }
     const options = {
       endpoint: apiEndpoint,
@@ -31,21 +31,23 @@ export class AlexaSettings {
     };
 
     try {
-      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 403) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Access to this resource has not yet been requested.') {
+      const response = await AlexaAPI.apiCall(options);
+      if (response.status === 403) {
+        const {message, code} = response.data;
+        const apiError = new ApiError(message, code);
+        if (message === 'Access to this resource has not yet been requested.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
 
-        if (response.data.message === 'Access to this resource cannot be requested.') {
+        if (message === 'Access to this resource cannot be requested.') {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
+        // skip catch
         return Promise.reject(apiError);
       }
-      return Promise.resolve(response.data);
+      return response.data;
     } catch (e) {
-      return Promise.reject(new ApiError('Something went wrong.', ApiError.ERROR));
+      throw new ApiError('Something went wrong.', ApiError.ERROR);
     }
   }
 }

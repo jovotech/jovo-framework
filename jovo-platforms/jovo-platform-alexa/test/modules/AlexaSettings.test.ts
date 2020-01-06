@@ -1,7 +1,7 @@
 import { AlexaAPI } from '../../src/services/AlexaAPI';
-import { AlexaAPIResponse } from '../../src/services/AlexaAPIResponse';
-import { ApiError } from '../../src/services/ApiError';
 import { AlexaSettings } from '../../src/services/AlexaSettings';
+import { ApiError } from '../../src/services/ApiError';
+
 jest.mock('../../src/services/AlexaAPI');
 
 process.env.NODE_ENV = 'TEST';
@@ -28,7 +28,10 @@ test('test 403 ERROR', async () => {
 test('test Timezone', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'Europe/Berlin'));
+    return Promise.resolve({
+      status: 200,
+      data: 'Europe/Berlin',
+    });
   });
 
   expect(
@@ -39,7 +42,10 @@ test('test Timezone', async () => {
 test('test Distance Units', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'METRIC'));
+    return Promise.resolve({
+      status: 200,
+      data: 'METRIC',
+    });
   });
   expect(
     AlexaSettings.settingsAPI(
@@ -54,7 +60,10 @@ test('test Distance Units', async () => {
 test('test Temperature Units', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'CELSIUS'));
+    return Promise.resolve({
+      status: 200,
+      data: 'CELSIUS',
+    });
   });
   expect(
     AlexaSettings.settingsAPI(
