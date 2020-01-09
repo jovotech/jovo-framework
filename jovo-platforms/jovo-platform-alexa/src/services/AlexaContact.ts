@@ -1,7 +1,6 @@
+import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
 import { ApiError } from './ApiError';
 import _camelCase = require('lodash.camelcase');
-
-import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
 
 export class AlexaContact {
   static NAME = 'name';
@@ -17,11 +16,11 @@ export class AlexaContact {
       AlexaContact.MOBILE_NUMBER,
     ];
     if (!permissionToken) {
-      return Promise.reject(new ApiError('No permissions from user.', ApiError.NO_USER_PERMISSION));
+      throw new ApiError('No permissions from user.', ApiError.NO_USER_PERMISSION);
     }
 
     if (!validProperties.includes(property)) {
-      return Promise.reject(new Error(`${property} is not a valid property`));
+      throw new Error(`${property} is not a valid property`);
     }
 
     const options: ApiCallOptions = {
@@ -30,24 +29,40 @@ export class AlexaContact {
       permissionToken,
     };
     try {
-      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+      const response = await AlexaAPI.apiCall(options);
 
-      if (response.httpStatus === 403) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Access to this resource has not yet been requested.') {
+      if (response.status === 403) {
+        const { message, code } = response.data;
+        const apiError = new ApiError(message, code);
+
+        if (message === 'The authentication token is not valid.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
 
-        if (response.data.message === 'Access to this resource cannot be requested.') {
+        if (message === 'Access to this resource has not yet been requested.') {
+          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+        }
+
+        if (message === 'Access to this resource cannot be requested.') {
           apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
         }
+
+        if (code === 'ACCESS_DENIED' && message === 'Access denied with reason: FORBIDDEN') {
+          apiError.code = ApiError.NO_SKILL_PERMISSION; // dev needs to set correct permissions in ASK console
+        }
+
+        if (
+          code === 'ACCESS_DENIED' &&
+          message === 'Access denied with reason: ACCESS_NOT_REQUESTED'
+        ) {
+          apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
+        }
+        // skip catch
         return Promise.reject(apiError);
       }
-      return Promise.resolve(response.data);
+      return response.data;
     } catch (e) {
-      return Promise.reject(
-        new ApiError(e.message || 'Something went wrong.', e.code || ApiError.ERROR),
-      );
+      throw new ApiError(e.message || 'Something went wrong.', e.code || ApiError.ERROR);
     }
   }
 }

@@ -1,8 +1,7 @@
-import { AlexaContact } from '../../src/services/AlexaContact';
-
 import { AlexaAPI } from '../../src/services/AlexaAPI';
-import { AlexaAPIResponse } from '../../src/services/AlexaAPIResponse';
+import { AlexaContact } from '../../src/services/AlexaContact';
 import { ApiError } from '../../src/services/ApiError';
+
 jest.mock('../../src/services/AlexaAPI');
 
 process.env.NODE_ENV = 'TEST';
@@ -10,11 +9,12 @@ process.env.NODE_ENV = 'TEST';
 test('test 403 NO_USER_PERMISSION', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(
-      new AlexaAPIResponse(403, {
+    return Promise.resolve({
+      status: 403,
+      data: {
         message: 'Access to this resource has not yet been requested.',
-      }),
-    );
+      },
+    });
   });
 
   const result = AlexaContact.contactAPI(AlexaContact.NAME, 'apiEndPoint', 'permissionToken');
@@ -30,11 +30,12 @@ test('test 403 NO_USER_PERMISSION', async () => {
 test('test 403 NO_SKILL_PERMISSION', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(
-      new AlexaAPIResponse(403, {
+    return Promise.resolve({
+      status: 403,
+      data: {
         message: 'Access to this resource cannot be requested.',
-      }),
-    );
+      },
+    });
   });
   const result = AlexaContact.contactAPI(AlexaContact.NAME, 'apiEndPoint', 'permissionToken');
   expect(result).rejects.toThrow('Access to this resource cannot be requested.');
@@ -62,8 +63,12 @@ test('test 403 ERROR', async () => {
 test('test NAME', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'John Doe'));
+    return Promise.resolve({
+      status: 200,
+      data: 'John Doe',
+    });
   });
+
   expect(
     AlexaContact.contactAPI(AlexaContact.NAME, 'apiEndPoint', 'permissionToken'),
   ).resolves.toBe('John Doe');
@@ -72,8 +77,12 @@ test('test NAME', async () => {
 test('test FULLNAME', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'John Doe'));
+    return Promise.resolve({
+      status: 200,
+      data: 'John Doe',
+    });
   });
+
   expect(
     AlexaContact.contactAPI(AlexaContact.NAME, 'apiEndPoint', 'permissionToken'),
   ).resolves.toBe('John Doe');
@@ -82,7 +91,10 @@ test('test FULLNAME', async () => {
 test('test GIVEN_NAME', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, 'Joe'));
+    return Promise.resolve({
+      status: 200,
+      data: 'Joe',
+    });
   });
   expect(
     AlexaContact.contactAPI(AlexaContact.GIVEN_NAME, 'apiEndPoint', 'permissionToken'),
@@ -92,7 +104,10 @@ test('test GIVEN_NAME', async () => {
 test('test MOBILE_NUMBER', async () => {
   // @ts-ignore
   AlexaAPI.apiCall.mockImplementation(({}) => {
-    return Promise.resolve(new AlexaAPIResponse(200, '12345'));
+    return Promise.resolve({
+      status: 200,
+      data: '12345',
+    });
   });
   expect(
     AlexaContact.contactAPI(AlexaContact.MOBILE_NUMBER, 'apiEndPoint', 'permissionToken'),

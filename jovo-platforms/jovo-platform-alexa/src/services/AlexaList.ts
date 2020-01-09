@@ -1,6 +1,5 @@
-import { ApiError } from './ApiError';
 import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
-import { AlexaAPIResponse } from './AlexaAPIResponse';
+import { ApiError } from './ApiError';
 
 export interface HouseholdListStatusMap {
   href: string;
@@ -179,13 +178,14 @@ export class AlexaList {
 
   private async handleApiCall(options: ApiCallOptions) {
     try {
-      const response: AlexaAPIResponse = await AlexaAPI.apiCall(options);
-      if (response.httpStatus === 403) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.Message === 'Not all permissions are authorized.') {
+      const response = await AlexaAPI.apiCall(options);
+      if (response.status === 403) {
+        const { message, code } = response.data;
+        const apiError = new ApiError(message, code);
+        if (message === 'Not all permissions are authorized.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
-        if (response.data.Message === 'Request is not authorized.') {
+        if (message === 'Request is not authorized.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
         return Promise.reject(apiError);
