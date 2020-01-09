@@ -1,16 +1,16 @@
 import {
+  AudioEncoder,
+  AxiosRequestConfig,
   EnumRequestType,
   Extensible,
+  HttpService,
   Inputs,
   Jovo,
   JovoError,
   Plugin,
-  PluginConfig,
+  PluginConfig
 } from 'jovo-core';
-import * as https from 'https';
 import { WitAiInput, WitAiIntent, WitAiResponse } from './Interfaces';
-import { AudioEncoder } from './AudioEncoder';
-import { HttpService } from './HttpService';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
@@ -128,8 +128,10 @@ export class WitAiSLU implements Plugin {
 
   private async speechToText(speech: Buffer, contentType: string): Promise<WitAiResponse> {
     const url = `${BASE_URL}/speech`;
-    const options: https.RequestOptions = {
+    const config: AxiosRequestConfig = {
+      url,
       method: 'POST',
+      data: speech,
       headers: {
         'Authorization': `Bearer ${this.config.token}`,
         'Content-Length': speech.byteLength,
@@ -137,8 +139,7 @@ export class WitAiSLU implements Plugin {
       },
     };
 
-    const response = await HttpService.makeRequest<WitAiResponse>(url, options, speech);
-
+    const response = await HttpService.request<WitAiResponse>(config);
     if (response.status === 200 && response.data && response.data.msg_id) {
       return response.data;
     } else {
@@ -149,14 +150,15 @@ export class WitAiSLU implements Plugin {
   private async naturalLanguageProcessing(text: string): Promise<WitAiResponse> {
     const query = encodeURIComponent(text);
     const url = `${BASE_URL}/message?q=${query}`;
-    const options: https.RequestOptions = {
+    const config: AxiosRequestConfig = {
+      url,
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.config.token}`,
       },
     };
 
-    const response = await HttpService.makeRequest<WitAiResponse>(url, options);
+    const response = await HttpService.request<WitAiResponse>(config);
     if (response.status === 200 && response.data && response.data.msg_id) {
       return response.data;
     } else {

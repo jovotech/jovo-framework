@@ -1,4 +1,5 @@
 import {
+  AudioEncoder,
   EnumRequestType,
   Extensible,
   Inputs,
@@ -16,7 +17,6 @@ import {
   PostTextResponse,
 } from 'aws-sdk/clients/lexruntime';
 import { AWSError } from 'aws-sdk/lib/error';
-import { AudioEncoder } from './AudioEncoder';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {

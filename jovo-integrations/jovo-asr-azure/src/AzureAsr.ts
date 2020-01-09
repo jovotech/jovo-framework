@@ -1,8 +1,15 @@
-import * as https from 'https';
 import * as querystring from 'querystring';
-import { EnumRequestType, Extensible, Jovo, JovoError, Plugin, PluginConfig } from 'jovo-core';
-import { HttpService } from './HttpService';
-import { AudioEncoder } from './AudioEncoder';
+import {
+  AudioEncoder,
+  AxiosRequestConfig,
+  EnumRequestType,
+  Extensible,
+  HttpService,
+  Jovo,
+  JovoError,
+  Plugin,
+  PluginConfig,
+} from 'jovo-core';
 import { SimpleAzureAsrResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 
@@ -55,10 +62,10 @@ export class AzureAsr implements Plugin {
       language: this.config.language,
     })}`;
 
-    const options: https.RequestOptions = {
-      host: this.config.endpointHost,
+    const config: AxiosRequestConfig = {
+      url: `${this.config.endpointKey}${path}`,
+      data: speech,
       method: 'POST',
-      path,
       headers: {
         'Ocp-Apim-Subscription-Key': this.config.endpointKey,
         'Content-type': contentType,
@@ -66,12 +73,12 @@ export class AzureAsr implements Plugin {
     };
 
     try {
-      const response = await HttpService.makeRequest<SimpleAzureAsrResponse>(options, speech);
+      const response = await HttpService.request<SimpleAzureAsrResponse>(config);
       if (response.status === 200 && response.data) {
         return response.data;
       } else {
         throw new Error(
-          `Could not reach Luis. status: ${response.status}, data: ${
+          `Could not reach AzureASR. status: ${response.status}, data: ${
             response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
           }`,
         );
