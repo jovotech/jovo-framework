@@ -1,9 +1,9 @@
-import { BaseApp, Component, ComponentPlugin, HandleRequest, Jovo, SessionConstants } from '../src';
-import { ComponentConfig, ComponentConstructorOptions, ComponentSessionData } from '../src/plugins/Component';
-import { I18Next } from '../src/plugins/I18Next';
-
 process.env.NODE_ENV = 'UNIT_TEST';
 
+import { I18Next } from 'jovo-cms-i18next';
+import { BaseApp, HandleRequest, Jovo, SessionConstants } from 'jovo-core';
+import { App, Component, ComponentConfig, ComponentPlugin } from '../../src';
+import { ComponentConstructorOptions, ComponentSessionData } from '../../src/middleware/Component';
 
 describe('test constructor', () => {
   let componentPlugin: ComponentPlugin;
@@ -27,165 +27,15 @@ describe('test install()', () => {
     expect(componentPlugin.i18next).toBeInstanceOf(I18Next);
   });
 });
-// jest.mock('jovo-cms-i18next');
-
-describe('test merging of component handlers', () => {
-  let app: BaseApp;
-  let baseApp: BaseApp;
-  let mockHandleRequest: HandleRequest;
-  let firstLayerComponent: ComponentPlugin;
-  beforeEach(() => {
-    app = new BaseApp();
-    baseApp = new BaseApp();
-
-    baseApp.config.plugin = {
-      ComponentPlugin: {},
-    };
-
-    mockHandleRequest = ({
-      app: baseApp,
-      jovo: ({} as unknown) as Jovo, // workaround so we don't have to implement whole interface
-    } as unknown) as HandleRequest;
-
-    firstLayerComponent = new ComponentPlugin();
-    firstLayerComponent.name = 'FirstLayerComponent';
-    firstLayerComponent.handler = {
-      FirstLayerComponent: {
-        firstLayerIntent() {
-          return;
-        },
-      },
-    };
-
-    clearMiddlewareFunctions(app);
-  });
-  // Tests whether the n-th layer components handlers are correctly merged into the n-1-th layer components handler
-  test(`should merge 3rd layer component's config into 2nd layer's and their combined handler into 1st layer's handler`, async () => {
-    const secondLayerComponent = new ComponentPlugin();
-    secondLayerComponent.name = 'SecondLayerComponent';
-    secondLayerComponent.handler = {
-      SecondLayerComponent: {
-        secondLayerIntent() {
-          return;
-        },
-      },
-    };
-    const thirdLayerComponent = new ComponentPlugin();
-    thirdLayerComponent.name = 'ThirdLayerComponent';
-    thirdLayerComponent.handler = {
-      ThirdLayerComponent: {
-        thirdLayerIntent() {
-          return;
-        },
-      },
-    };
-
-    // ToDo: Is the order of useComponents here important?
-    secondLayerComponent.useComponents(thirdLayerComponent);
-    firstLayerComponent.useComponents(secondLayerComponent);
-    app.useComponents(firstLayerComponent);
-
-    await app.middleware('setup')!.run(mockHandleRequest);
-    await app.middleware('request')!.run(mockHandleRequest);
-
-    const expectedResult = JSON.stringify({
-      FirstLayerComponent: {
-        firstLayerIntent() {
-          return;
-        },
-        SecondLayerComponent: {
-          secondLayerIntent() {
-            return;
-          },
-          ThirdLayerComponent: {
-            thirdLayerIntent() {
-              return;
-            },
-          },
-        },
-      },
-    });
-    const result = JSON.stringify(mockHandleRequest.app.config.handlers);
-
-    expect(result).toBe(expectedResult);
-  });
-
-  test(`should merge both 2nd layer components handlers into 1st layer's handler`, async () => {
-    const secondLayerComponent = new ComponentPlugin();
-    secondLayerComponent.name = 'SecondLayerComponent';
-    secondLayerComponent.handler = {
-      SecondLayerComponent: {
-        secondLayerIntent() {
-          return;
-        },
-      },
-    };
-    const secondLayerComponent2 = new ComponentPlugin();
-    secondLayerComponent2.name = 'SecondLayerComponent2';
-    secondLayerComponent2.handler = {
-      SecondLayerComponent2: {
-        secondLayerIntent2() {
-          return;
-        },
-      },
-    };
-
-    // ToDo: Is the order of useComponents here important?
-    firstLayerComponent.useComponents(secondLayerComponent, secondLayerComponent2);
-    app.useComponents(firstLayerComponent);
-
-    await app.middleware('setup')!.run(mockHandleRequest);
-    await app.middleware('request')!.run(mockHandleRequest);
-
-    const expectedResult = JSON.stringify({
-      FirstLayerComponent: {
-        firstLayerIntent() {
-          return;
-        },
-        SecondLayerComponent: {
-          secondLayerIntent() {
-            return;
-          },
-        },
-        SecondLayerComponent2: {
-          secondLayerIntent2() {
-            return;
-          },
-        },
-      },
-    });
-    const result = JSON.stringify(mockHandleRequest.app.config.handlers);
-
-    expect(result).toBe(expectedResult);
-  });
-
-  test(`shouldn't change the component's handler because there are no child components`, async () => {
-    app.useComponents(firstLayerComponent);
-
-    await app.middleware('setup')!.run(mockHandleRequest);
-    await app.middleware('request')!.run(mockHandleRequest);
-
-    const expectedResult = JSON.stringify({
-      FirstLayerComponent: {
-        firstLayerIntent() {
-          return;
-        },
-      },
-    });
-    const result = JSON.stringify(mockHandleRequest.app.config.handlers);
-
-    expect(result).toBe(expectedResult);
-  });
-});
 
 describe('test $activeComponents being updated correctly', () => {
-  let app: BaseApp;
+  let app: App;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
 
   beforeEach(() => {
-    app = new BaseApp();
+    app = new App();
     baseApp = new BaseApp();
 
     baseApp.config.plugin = {
@@ -206,15 +56,12 @@ describe('test $activeComponents being updated correctly', () => {
 
     firstLayerComponent = new ComponentPlugin();
     firstLayerComponent.name = 'FirstLayerComponent';
-
-    clearMiddlewareFunctions(app);
   });
 
-  test('$activeComponents should be same as $baseComponents at start of app', async () => {
+  test('$activeComponents should be same as $baseComponents at start of app', () => {
     app.useComponents(firstLayerComponent);
 
-    await app.middleware('setup')!.run(mockHandleRequest); // sets $baseComponents
-    await app.middleware('handler')!.run(mockHandleRequest);
+    ComponentPlugin.setActiveComponentPlugins(mockHandleRequest.jovo!);
 
     expect(mockHandleRequest.jovo!.$activeComponents).toEqual(
       mockHandleRequest.app.$baseComponents,
@@ -222,16 +69,20 @@ describe('test $activeComponents being updated correctly', () => {
   });
 
   // Test with sessionComponentStack.length = 1
-  test('$activeComponents should be the current active component and its child components (n=1)', async () => {
+  test('$activeComponents should be the current active component and its child components (n=1)', () => {
     const secondLayerComponent = new ComponentPlugin();
-    firstLayerComponent.useComponents(secondLayerComponent);
-    app.useComponents(firstLayerComponent);
+    secondLayerComponent.name = 'SecondLayerComponent';
+    firstLayerComponent.components = {
+      [secondLayerComponent.name!]: secondLayerComponent,
+    };
+    mockHandleRequest.app.$baseComponents = {
+      [firstLayerComponent.name!]: firstLayerComponent,
+    };
     mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [
       [firstLayerComponent.name!, {}],
     ];
 
-    await app.middleware('setup')!.run(mockHandleRequest);
-    await app.middleware('handler')!.run(mockHandleRequest);
+    ComponentPlugin.setActiveComponentPlugins(mockHandleRequest.jovo!);
 
     expect(mockHandleRequest.jovo!.$activeComponents).toEqual({
       [firstLayerComponent.name!]: firstLayerComponent,
@@ -245,16 +96,21 @@ describe('test $activeComponents being updated correctly', () => {
     secondLayerComponent.name = 'SecondLayerComponent';
     const thirdLayerComponent = new ComponentPlugin();
     thirdLayerComponent.name = 'ThirdLayerComponent';
-    secondLayerComponent.useComponents(thirdLayerComponent);
-    firstLayerComponent.useComponents(secondLayerComponent);
-    app.useComponents(firstLayerComponent);
+    secondLayerComponent.components = {
+      [thirdLayerComponent.name!]: thirdLayerComponent,
+    };
+    firstLayerComponent.components = {
+      [secondLayerComponent.name!]: secondLayerComponent,
+    };
+    mockHandleRequest.app.$baseComponents = {
+      [firstLayerComponent.name!]: firstLayerComponent,
+    };
     mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [
       [firstLayerComponent.name, {}],
       [secondLayerComponent.name, {}],
     ];
 
-    await app.middleware('setup')!.run(mockHandleRequest);
-    await app.middleware('handler')!.run(mockHandleRequest);
+    ComponentPlugin.setActiveComponentPlugins(mockHandleRequest.jovo!);
 
     expect(mockHandleRequest.jovo!.$activeComponents).toEqual({
       [secondLayerComponent.name!]: secondLayerComponent,
@@ -265,13 +121,13 @@ describe('test $activeComponents being updated correctly', () => {
 
 describe('test $components setup', () => {
   // $components should have a `Component` object for each `ComponentPlugin` in $activeComponents
-  let app: BaseApp;
+  let app: App;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
 
   beforeEach(() => {
-    app = new BaseApp();
+    app = new App();
     baseApp = new BaseApp();
 
     baseApp.config.plugin = {
@@ -292,33 +148,28 @@ describe('test $components setup', () => {
 
     firstLayerComponent = new ComponentPlugin();
     firstLayerComponent.name = 'FirstLayerComponent';
-
-    clearMiddlewareFunctions(app);
   });
 
   // no active component => $baseComponents are the active ones
   test('should fill $components with $baseComponents', async () => {
-    app.useComponents(firstLayerComponent);
     mockHandleRequest.app.$baseComponents = { [firstLayerComponent.name!]: firstLayerComponent };
 
-    await app.middleware('handler')!.run(mockHandleRequest);
+    ComponentPlugin.initializeComponents(mockHandleRequest);
 
     const componentObjects = Object.values(mockHandleRequest.jovo!.$components);
     const baseComponents = Object.values(mockHandleRequest.app.$baseComponents);
-
     const result = compareComponentNames(componentObjects, baseComponents);
 
     expect(result).toBe(true);
   });
 
   test('should fill $components with $activeComponents', async () => {
-    app.useComponents(firstLayerComponent);
     mockHandleRequest.app.$baseComponents = { [firstLayerComponent.name!]: firstLayerComponent };
     mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT] = [
       [firstLayerComponent.name, {}],
     ];
 
-    await app.middleware('handler')!.run(mockHandleRequest);
+    ComponentPlugin.initializeComponents(mockHandleRequest);
 
     const componentObjects = Object.values(mockHandleRequest.jovo!.$components);
     const activeComponents = Object.values(mockHandleRequest.jovo!.$activeComponents);
@@ -348,10 +199,9 @@ describe('test $components setup', () => {
     return true;
   }
 });
-
 describe('test component session stack', () => {
   // $components should have a `Component` object for each `ComponentPlugin` in $activeComponents
-  let app: BaseApp;
+  let app: App;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
@@ -359,7 +209,7 @@ describe('test component session stack', () => {
   let testComponentSessionData: ComponentSessionData;
 
   beforeEach(() => {
-    app = new BaseApp();
+    app = new App();
     baseApp = new BaseApp();
 
     testComponentSessionData = {
@@ -387,8 +237,6 @@ describe('test component session stack', () => {
         },
       } as unknown) as Jovo, // workaround so we don't have to implement whole interface
     } as unknown) as HandleRequest;
-
-    clearMiddlewareFunctions(app);
   });
 
   describe('test loading of component session data', () => {
@@ -455,7 +303,7 @@ describe('test component session stack', () => {
       });
     });
 
-    test(`should leave the other component's data unchanged`, () => {
+    test('should leave the other component\'s data unchanged', () => {
       mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT].push([
         'SecondLayerComponent',
         {},
@@ -532,7 +380,7 @@ describe('test mergeConfig()', () => {
 //     });
 // });
 
-describe.only('test loadI18nFiles()', () => {
+describe('test loadI18nFiles()', () => {
   let componentPlugin: ComponentPlugin;
   let mockHandleRequest: HandleRequest;
   let i18next: I18Next;
@@ -572,13 +420,3 @@ describe.only('test loadI18nFiles()', () => {
     expect(componentPlugin.i18next!.loadFiles).toHaveBeenCalled();
   });
 });
-
-/**
- * Deletes all the functions added to the middlewares by default
- * @param {App} app
- */
-function clearMiddlewareFunctions(app: BaseApp) {
-  app.middlewares.forEach((middleware) => {
-    app.middleware(middleware)!.fns = [];
-  });
-}

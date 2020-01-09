@@ -46,9 +46,6 @@
             "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
           },
           {
-            "name": "actions.capability.SCREEN_OUTPUT"
-          },
-          {
             "name": "actions.capability.AUDIO_OUTPUT"
           }
         ]

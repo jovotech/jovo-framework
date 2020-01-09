@@ -70,8 +70,8 @@ export class HttpService {
   ): AxiosRequestConfig {
     const prefix = `http${isSecure ? 's' : ''}://`;
     const host = options.hostname || options.host || '';
-    const port = options.port || isSecure ? 443 : 80;
-    const url = `${prefix}${host}${options.path}:${port}`;
+    const port = options.port || (isSecure ? 443 : 80);
+    const url = `${prefix}${host}:${port}${options.path}`;
     return {
       headers: options.headers,
       method: options.method as Method | undefined,

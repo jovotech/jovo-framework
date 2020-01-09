@@ -286,7 +286,7 @@ describe('test $inputs', () => {
 });
 
 describe('test intentMap', () => {
-  test('test inputMap', async (done) => {
+  test('test intentMap', async (done) => {
     app.setConfig({
       intentMap: {
         HelloWorldIntent: 'MappedHelloWorldIntent',
@@ -303,7 +303,7 @@ describe('test intentMap', () => {
     app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 
-  test('test inputMap with predefined handler path', async (done) => {
+  test('test intentMap with predefined handler path', async (done) => {
     app.setConfig({
       intentMap: {
         'Stop.Intent': 'END',

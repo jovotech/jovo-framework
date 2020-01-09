@@ -38,7 +38,6 @@ export class Conversation {
   private static async httpRequest(postData: string, options: RequestOptions): Promise<any> {
     const config = HttpService.httpRequestOptionsToAxiosRequestConfig(options);
     config.data = postData;
-
     const response = await HttpService.request(config);
     return response.data;
   }
@@ -153,7 +152,6 @@ export class Conversation {
    */
   async sendToServer(req: JovoRequest): Promise<JovoResponse> {
     const postData = JSON.stringify(req.toJSON());
-
     const response = await Conversation.httpRequest(postData, this.config.httpOptions || {});
     const jovoResponse = this.testSuite.responseBuilder.create(response);
     await this.postProcess(jovoResponse);
