@@ -63,3 +63,4 @@ export { Router } from './plugins/Router';
 export * from './Interfaces';
 
 export * from './util/HttpService';
+export {Config as I18NextConfig, I18Next} from './plugins/I18Next';

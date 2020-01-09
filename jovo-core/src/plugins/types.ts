@@ -1,8 +1,7 @@
 import { Handler } from '../Interfaces';
 import { Component, ComponentDelegationOptions, ComponentResponse } from './Component';
 import { ComponentPlugin } from './ComponentPlugin';
-import { Route, Config as RouterConfig } from './Router';
-import { Config as I18NextConfig } from './I18Next';
+import { Config as RouterConfig, Route } from './Router';
 
 declare module './../core/Jovo' {
   export interface Jovo {

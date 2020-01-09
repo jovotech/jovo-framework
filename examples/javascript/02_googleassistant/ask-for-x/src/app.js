@@ -14,10 +14,10 @@ app.setHandler({
     LAUNCH() {
         // return this.toIntent('AskForNameIntent');
         // return this.toIntent('AskForPreciseLocationIntent');
-        return this.toIntent('AskForZipCodeAndCityIntent');
+        // return this.toIntent('AskForZipCodeAndCityIntent');
         // return this.toIntent('AskForPermissionIntent');
         // return this.toIntent('AskForConfirmationIntent');
-        // return this.toIntent('AskForSignInIntent');
+        return this.toIntent('AskForSignInIntent');
         // return this.toIntent('AskForPlaceIntent');
     },
     AskForNameIntent() {
@@ -48,14 +48,17 @@ app.setHandler({
             this.tell('Not confirmed');
         }
     },
-    ON_SIGN_IN() {
+    async ON_SIGN_IN() {
 
         console.log('ON SIGN IN');
         if (this.$googleAction.isSignInOk()) {
-            this.tell('Login successful')
+            const res = await this.$googleAction.$user.getGoogleProfile();
+            console.log(res);
+            this.tell('Login successful');
         } else {
             this.tell('Login not successful');
         }
+
     },
     ON_PERMISSION() {
 
@@ -69,7 +72,7 @@ app.setHandler({
     },
     ON_PLACE() {
         console.log('ON_PLACE');
-        const place = this.$googleAction.getPlace(); 
+        const place = this.$googleAction.getPlace();
     }
 });
 

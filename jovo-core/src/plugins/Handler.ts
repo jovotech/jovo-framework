@@ -222,7 +222,7 @@ export class Handler implements Plugin {
     Log.verbose(Log.header('Jovo handler ', 'framework'));
 
     handleRequest.jovo.mapInputs(handleRequest.jovo.$config.inputMap || {});
-    const route = handleRequest.jovo.$plugins.Router.route;
+    const route = handleRequest.jovo.$plugins.Router.route as Route;
 
     await Handler.handleOnNewUser(handleRequest.jovo);
     await Handler.handleOnNewSession(handleRequest.jovo);
@@ -230,7 +230,7 @@ export class Handler implements Plugin {
     Log.verbose(Log.header('Handle ', 'framework'));
     Log.yellow().verbose(route);
     await Handler.applyHandle(handleRequest.jovo, route);
-  }
+    }
 
   async error(handleRequest: HandleRequest) {
     if (!handleRequest.jovo) {
