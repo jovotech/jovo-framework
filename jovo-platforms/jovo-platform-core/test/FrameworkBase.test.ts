@@ -916,7 +916,7 @@ describe('test routing', () => {
                 this.tell('Hello!');
             },
         });
-        app.config.plugin!.Router.intentMap = {
+        app.config.plugin!.Router!.intentMap = {
             'HelloWorldIntent': 'HelloIntent',
         };
         const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
@@ -936,7 +936,7 @@ describe('test routing', () => {
                 done();
             },
         });
-        app.config.plugin!.Router.intentMap = {
+        app.config.plugin!.Router!.intentMap = {
             'HelloWorldIntent': 'HelloIntent',
         };
         const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');

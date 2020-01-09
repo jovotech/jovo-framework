@@ -4,7 +4,7 @@ import { CorePlatformApp } from './core/CorePlatformApp';
 
 export { CorePlatform } from './CorePlatform';
 
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $corePlatformApp?: CorePlatformApp;
 
