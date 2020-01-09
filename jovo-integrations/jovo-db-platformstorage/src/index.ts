@@ -1,0 +1,1 @@
+export {PlatformStorage} from './PlatformStorage';
