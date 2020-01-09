@@ -1,9 +1,8 @@
 process.env.NODE_ENV = 'UNIT_TEST';
 
-import { I18Next } from 'jovo-cms-i18next';
-import { BaseApp, HandleRequest, Jovo, SessionConstants } from 'jovo-core';
-import { App, Component, ComponentConfig, ComponentPlugin } from '../../src';
-import { ComponentConstructorOptions, ComponentSessionData } from '../../src/middleware/Component';
+import { BaseApp, Component, ComponentPlugin, HandleRequest, Jovo, SessionConstants } from '../src';
+import { ComponentConfig, ComponentConstructorOptions, ComponentSessionData } from '../src/plugins/Component';
+import { I18Next } from '../src/plugins/I18Next';
 
 describe('test constructor', () => {
   let componentPlugin: ComponentPlugin;
@@ -29,13 +28,13 @@ describe('test install()', () => {
 });
 
 describe('test $activeComponents being updated correctly', () => {
-  let app: App;
+  let app: BaseApp;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
 
   beforeEach(() => {
-    app = new App();
+    app = new BaseApp();
     baseApp = new BaseApp();
 
     baseApp.config.plugin = {
@@ -121,13 +120,13 @@ describe('test $activeComponents being updated correctly', () => {
 
 describe('test $components setup', () => {
   // $components should have a `Component` object for each `ComponentPlugin` in $activeComponents
-  let app: App;
+  let app: BaseApp;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
 
   beforeEach(() => {
-    app = new App();
+    app = new BaseApp();
     baseApp = new BaseApp();
 
     baseApp.config.plugin = {
@@ -201,7 +200,7 @@ describe('test $components setup', () => {
 });
 describe('test component session stack', () => {
   // $components should have a `Component` object for each `ComponentPlugin` in $activeComponents
-  let app: App;
+  let app: BaseApp;
   let baseApp: BaseApp;
   let mockHandleRequest: HandleRequest;
   let firstLayerComponent: ComponentPlugin;
@@ -209,7 +208,7 @@ describe('test component session stack', () => {
   let testComponentSessionData: ComponentSessionData;
 
   beforeEach(() => {
-    app = new App();
+    app = new BaseApp();
     baseApp = new BaseApp();
 
     testComponentSessionData = {

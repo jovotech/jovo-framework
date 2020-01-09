@@ -12,12 +12,12 @@ import {
   ExtensibleConfig,
   Handler,
   Host,
+  I18NextConfig,
   Log,
   Logger,
   LogLevel,
-  Middleware,
+  Middleware
 } from 'jovo-core';
-import { Config as I18NextConfig } from 'jovo-core/dist/src/plugins/I18Next';
 import { FileDb2 } from 'jovo-db-filedb';
 import _merge = require('lodash.merge');
 import { BasicLogging, Config as LoggingConfig } from './middleware/logging/BasicLogging';

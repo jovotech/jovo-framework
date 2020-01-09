@@ -874,7 +874,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
         this.tell('Hello!');
       },
     });
-    app.config.plugin!.Router.intentMap = {
+    app.config.plugin!.Router!.intentMap = {
       HelloWorldIntent: 'HelloIntent',
     };
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
@@ -892,7 +892,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
         this.tell('Hello!');
       },
     });
-    app.config.plugin!.Router.intentMap = {
+    app.config.plugin!.Router!.intentMap = {
       StopIntent: 'END',
     };
     const request: JovoRequest = await t.requestBuilder.intent('StopIntent');
@@ -912,7 +912,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
         done();
       },
     });
-    app.config.plugin!.Router.intentMap = {
+    app.config.plugin!.Router!.intentMap = {
       HelloWorldIntent: 'HelloIntent',
     };
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent');
