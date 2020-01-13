@@ -12,6 +12,8 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
+import { AlexaRequest } from './core/AlexaRequest';
+import { AlexaResponse } from './core/AlexaResponse';
 import { AlexaSkill } from './core/AlexaSkill';
 import { AlexaTestSuite } from './core/Interfaces';
 import { AlexaCore } from './modules/AlexaCore';
@@ -39,7 +41,7 @@ export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line
 }
 
-export class Alexa extends Extensible implements Platform {
+export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
   requestBuilder = new AlexaRequestBuilder();
   responseBuilder = new AlexaResponseBuilder();
 
@@ -53,26 +55,9 @@ export class Alexa extends Extensible implements Platform {
 
   constructor(config?: Config) {
     super(config);
-
     if (config) {
       this.config = _merge(this.config, config);
     }
-
-    this.actionSet = new ActionSet(
-      [
-        '$init',
-        '$request',
-        '$session',
-        '$user',
-        '$type',
-        '$nlu',
-        '$inputs',
-        '$tts',
-        '$output',
-        '$response',
-      ],
-      this,
-    );
   }
 
   getAppType(): string {

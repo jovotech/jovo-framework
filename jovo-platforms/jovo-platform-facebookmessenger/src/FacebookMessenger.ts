@@ -42,6 +42,8 @@ import {
   Message,
   MessengerBot,
   MessengerBotEntry,
+  MessengerBotRequest,
+  MessengerBotResponse,
   ReceiptTemplate,
   ReceiptTemplateOptions,
   ReceiptTemplatePayload,
@@ -71,7 +73,7 @@ export interface Config extends ExtensibleConfig {
   locale?: string;
 }
 
-export class FacebookMessenger extends Extensible implements Platform {
+export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBotResponse> {
   requestBuilder: FacebookMessengerRequestBuilder = new FacebookMessengerRequestBuilder();
   responseBuilder: FacebookMessengerResponseBuilder = new FacebookMessengerResponseBuilder();
 
@@ -94,23 +96,6 @@ export class FacebookMessenger extends Extensible implements Platform {
     if (config) {
       this.config = _merge(this.config, config);
     }
-
-    this.actionSet = new ActionSet(
-      [
-        '$init',
-        '$request',
-        '$user',
-        '$type',
-        '$asr',
-        '$nlu',
-        '$inputs',
-        '$session',
-        '$tts',
-        '$output',
-        '$response',
-      ],
-      this,
-    );
   }
 
   getAppType(): string {
@@ -275,7 +260,7 @@ export class FacebookMessenger extends Extensible implements Platform {
     }
   }
 
-  makeTestSuite(): TestSuite<RequestBuilder, ResponseBuilder> {
+  makeTestSuite(): TestSuite<FacebookMessengerRequestBuilder, FacebookMessengerResponseBuilder> {
     return new TestSuite(
       new FacebookMessengerRequestBuilder(),
       new FacebookMessengerResponseBuilder(),

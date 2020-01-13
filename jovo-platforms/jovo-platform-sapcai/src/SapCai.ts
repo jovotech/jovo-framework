@@ -16,7 +16,9 @@ import {
   Cards,
   SapCaiCore,
   SapCaiNLU,
+  SapCaiRequest,
   SapCaiRequestBuilder,
+  SapCaiResponse,
   SapCaiResponseBuilder,
   SapCaiSkill,
 } from '.';
@@ -26,7 +28,7 @@ export interface Config extends ExtensibleConfig {
   useLaunch?: boolean;
 }
 
-export class SapCai extends Extensible implements Platform {
+export class SapCai extends Platform<SapCaiRequest, SapCaiResponse> {
   requestBuilder = new SapCaiRequestBuilder();
   responseBuilder = new SapCaiResponseBuilder();
 
@@ -43,21 +45,6 @@ export class SapCai extends Extensible implements Platform {
     if (config) {
       this.config = _merge(this.config, config);
     }
-
-    this.actionSet = new ActionSet(
-      [
-        '$init',
-        '$request',
-        '$session',
-        '$user',
-        '$type',
-        '$nlu',
-        '$inputs',
-        '$output',
-        '$response',
-      ],
-      this,
-    );
   }
 
   getAppType(): string {
@@ -111,8 +98,7 @@ export class SapCai extends Extensible implements Platform {
     };
   }
 
-  // tslint:disable-next-line:no-any
-  makeTestSuite(): any {
+  makeTestSuite(): TestSuite<SapCaiRequestBuilder, SapCaiResponseBuilder> {
     return new TestSuite(new SapCaiRequestBuilder(), new SapCaiResponseBuilder());
   }
 

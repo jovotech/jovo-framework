@@ -27,6 +27,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
   constructor(config?: ExtensibleConfig) {
     super();
     this.setMaxListeners(0);
+    // TODO: statement below could be deleted: the values set here are overridden by the config property in the extending classes
     if (config) {
       this.config = _merge(this.config, config);
     }

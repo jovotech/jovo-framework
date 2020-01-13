@@ -9,6 +9,8 @@ import {
   ActionSet,
   ExtensibleConfig,
 } from 'jovo-core';
+import { DialogflowRequest } from './core/DialogflowRequest';
+import { DialogflowResponse } from './core/DialogflowResponse';
 import { DialogflowAgent } from './DialogflowAgent';
 import { DialogflowCore } from './DialogflowCore';
 import { DialogflowRequestBuilder } from './core/DialogflowRequestBuilder';
@@ -18,7 +20,7 @@ import { DialogflowFactory } from './core/DialogflowFactory';
 
 export interface DialogflowConfig extends ExtensibleConfig {}
 
-export class Dialogflow extends Extensible implements Platform {
+export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> {
   requestBuilder = new DialogflowRequestBuilder(new DialogflowFactory());
   responseBuilder = new DialogflowResponseBuilder(new DialogflowFactory());
 
@@ -32,11 +34,6 @@ export class Dialogflow extends Extensible implements Platform {
     if (config) {
       this.config = _merge(this.config, config);
     }
-
-    this.actionSet = new ActionSet(
-      ['$request', '$session', '$user', '$type', '$nlu', '$inputs', '$output', '$response'],
-      this,
-    );
   }
 
   makeTestSuite(): DialogflowTestSuite {

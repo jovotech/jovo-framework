@@ -1,10 +1,7 @@
 import { BaseAppConfig } from './core/BaseApp';
-import { ExtensibleConfig } from './core/Extensible';
 import { HandleRequest } from './core/HandleRequest';
 import { Jovo } from './core/Jovo';
-import { RequestBuilder, ResponseBuilder, TestSuite } from './TestSuite';
 import { SpeechBuilder } from './util/SpeechBuilder';
-
 
 export interface Data {
   [key: string]: any; // tslint:disable-line
@@ -55,24 +52,6 @@ export interface Db extends Plugin {
   delete(primaryKey: string, jovo?: Jovo): Promise<any>; // tslint:disable-line
 }
 
-export interface Platform extends Plugin {
-  requestBuilder?: RequestBuilder;
-  responseBuilder?: ResponseBuilder;
-
-  /**
-   * Returns the specific TestSuite implementation for this platform
-   */
-  makeTestSuite(): TestSuite;
-
-  /**
-   * Returns app type of platform.
-   * E.g. AlexaSkill, GoogleAction
-   */
-  getAppType(): string;
-}
-
-export interface PlatformConfig extends ExtensibleConfig, PluginConfig {}
-
 export interface Analytics extends Plugin {
   /**
    * Tracking method
@@ -113,6 +92,7 @@ export interface Output {
     AccountLinkingCard?: object;
   };
 }
+
 export interface RequestJSON {}
 
 export interface JovoRequest {
@@ -517,10 +497,15 @@ export interface AppConfig extends BaseAppConfig {
 }
 
 export interface AppAnalyticsConfig extends Record<string, any> {}
+
 export interface AppCmsConfig extends Record<string, any> {}
+
 export interface AppComponentsConfig extends Record<string, PluginConfig> {}
+
 export interface AppDbConfig extends Record<string, any> {}
+
 export interface AppNluConfig extends Record<string, any> {}
+
 export interface AppPlatformConfig extends Record<string, any> {}
 
 export interface ExtensiblePluginConfigs {

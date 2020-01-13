@@ -1,5 +1,12 @@
 import {ActionSet, BaseApp, Extensible, ExtensibleConfig, HandleRequest, Jovo, Platform, RequestBuilder, ResponseBuilder, TestSuite, Log} from 'jovo-core';
-import {Cards, CorePlatformRequestBuilder, CorePlatformResponseBuilder, CorePlatformApp, CorePlatformCore} from '.';
+import {
+  Cards,
+  CorePlatformRequestBuilder,
+  CorePlatformResponseBuilder,
+  CorePlatformApp,
+  CorePlatformCore,
+  CorePlatformRequest, CorePlatformResponse
+} from '.';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
@@ -8,7 +15,7 @@ export interface Config extends ExtensibleConfig {
   handlers?: any;
 }
 
-export class CorePlatform extends Extensible implements Platform {
+export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResponse> {
   requestBuilder: CorePlatformRequestBuilder = new CorePlatformRequestBuilder();
   responseBuilder: CorePlatformResponseBuilder = new CorePlatformResponseBuilder();
 
@@ -87,7 +94,6 @@ export class CorePlatform extends Extensible implements Platform {
     Log.verbose('[CorePlatform] { request } ');
     if (handleRequest.host.$request.audio) {
       const audioData = handleRequest.host.$request.audio.data;
-      // handleRequest.host.$request.audio.raw = audioData;
       handleRequest.host.$request.audio.data = this.getSamplesFromAudio(audioData);
     }
   }
@@ -166,7 +172,7 @@ export class CorePlatform extends Extensible implements Platform {
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 
-  makeTestSuite(): TestSuite<RequestBuilder, ResponseBuilder> {
+  makeTestSuite(): TestSuite<CorePlatformRequestBuilder, CorePlatformResponseBuilder> {
     return new TestSuite(new CorePlatformRequestBuilder(), new CorePlatformResponseBuilder());
   }
 

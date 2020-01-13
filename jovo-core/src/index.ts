@@ -37,6 +37,7 @@ export { EnumRequestType, SessionConstants } from './enums';
 export { SpeechBuilder } from './util/SpeechBuilder';
 
 export { Middleware } from './core/Middleware';
+export { Platform } from './core/Platform';
 export { TestSuite, RequestBuilder, ResponseBuilder } from './TestSuite';
 export { Conversation, ConversationConfig } from './util/Conversation';
 export { Extensible } from './core/Extensible';
@@ -64,4 +65,4 @@ export * from './Interfaces';
 
 export * from './util/HttpService';
 export * from './util/AudioEncoder';
-export {Config as I18NextConfig, I18Next} from './plugins/I18Next';
+export { Config as I18NextConfig, I18Next } from './plugins/I18Next';

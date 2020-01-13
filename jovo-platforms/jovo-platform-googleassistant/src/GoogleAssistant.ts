@@ -1,32 +1,33 @@
-import _set = require('lodash.set');
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import {
   ActionSet,
   BaseApp,
-  Extensible,
   ExtensibleConfig,
   HandleRequest,
   Jovo,
   Platform,
   TestSuite,
 } from 'jovo-core';
+import { DialogflowPlugin } from 'jovo-platform-dialogflow';
 
 import { GoogleAction } from './core/GoogleAction';
-import { GoogleAssistantCore } from './modules/GoogleAssistantCore';
-import { Cards } from './modules/Cards';
-import { AskFor } from './modules/AskFor';
-import { UpdatesPlugin } from './modules/Updates';
-import { MediaResponsePlugin } from './modules/MediaResponse';
+import { GoogleActionRequest } from './core/GoogleActionRequest';
+import { GoogleActionResponse } from './core/GoogleActionResponse';
 import { GoogleAssistantRequestBuilder } from './core/GoogleAssistantRequestBuilder';
 import { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBuilder';
 import { GoogleAssistantTestSuite } from './core/Interfaces';
+import { GoogleAssistantDialogflowFactory } from './dialogflow/GoogleAssistantDialogflowFactory';
+import { AskFor } from './modules/AskFor';
+import { Cards } from './modules/Cards';
+import { GoogleAssistantCore } from './modules/GoogleAssistantCore';
+import { InteractiveCanvas } from './modules/InteractiveCanvas';
+import { MediaResponsePlugin } from './modules/MediaResponse';
+import { NewSurface } from './modules/NewSurface';
 
 import { TransactionsPlugin } from './modules/Transaction';
-import { DialogflowPlugin } from 'jovo-platform-dialogflow';
-import { GoogleAssistantDialogflowFactory } from './dialogflow/GoogleAssistantDialogflowFactory';
-import { InteractiveCanvas } from './modules/InteractiveCanvas';
-import { NewSurface } from './modules/NewSurface';
+import { UpdatesPlugin } from './modules/Updates';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line
@@ -37,7 +38,7 @@ export interface Config extends ExtensibleConfig {
   };
 }
 
-export class GoogleAssistant extends Extensible implements Platform {
+export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionResponse> {
   config: Config = {
     enabled: true,
     plugin: {},
@@ -52,21 +53,6 @@ export class GoogleAssistant extends Extensible implements Platform {
     if (config) {
       this.config = _merge(this.config, config);
     }
-
-    this.actionSet = new ActionSet(
-      [
-        '$init',
-        '$request',
-        '$session',
-        '$user',
-        '$type',
-        '$nlu',
-        '$inputs',
-        '$output',
-        '$response',
-      ],
-      this,
-    );
   }
 
   getAppType(): string {
