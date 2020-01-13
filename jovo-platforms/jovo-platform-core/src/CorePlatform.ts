@@ -1,15 +1,15 @@
-import {ActionSet, BaseApp, Extensible, ExtensibleConfig, HandleRequest, Jovo, Platform, RequestBuilder, ResponseBuilder, TestSuite, Log} from 'jovo-core';
-import {
-  Cards,
-  CorePlatformRequestBuilder,
-  CorePlatformResponseBuilder,
-  CorePlatformApp,
-  CorePlatformCore,
-  CorePlatformRequest, CorePlatformResponse
-} from '.';
+import {ActionSet, BaseApp, Extensible, ExtensibleConfig, HandleRequest, Jovo, Log, Platform, RequestBuilder, ResponseBuilder, TestSuite} from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
+import {
+  Cards,
+  CorePlatformApp,
+  CorePlatformCore,
+  CorePlatformRequest,
+  CorePlatformRequestBuilder,
+  CorePlatformResponse, CorePlatformResponseBuilder
+} from '.';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any;
@@ -175,8 +175,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   makeTestSuite(): TestSuite<CorePlatformRequestBuilder, CorePlatformResponseBuilder> {
     return new TestSuite(new CorePlatformRequestBuilder(), new CorePlatformResponseBuilder());
   }
-
-  uninstall(app: BaseApp): void {}
 
   private getSamplesFromAudio(base64: string): Float32Array {
     const binaryBuffer = Buffer.from(base64, 'base64').toString('binary');

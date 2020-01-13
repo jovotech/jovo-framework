@@ -304,9 +304,9 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   getDeviceName(): string {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   isNewSessionTemporaryWorkaround(): boolean {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }

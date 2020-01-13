@@ -1,8 +1,9 @@
 import {EnumRequestType, HandleRequest, Jovo, JovoRequest, LogLevel, SessionConstants, TestSuite} from 'jovo-core';
-import {App, ExpressJS} from 'jovo-framework';
+import {App, ExpressJS} from 'jovo-framework'; // tslint:disable-line
 import {CorePlatform} from '../src';
 import {RequestSLU} from './helper/RequestSLU';
 
+// tslint:disable-next-line
 console.log = () => {
 };
 
@@ -27,6 +28,7 @@ beforeEach(() => {
 describe('test request types', () => {
     test('test launch', async (done) => {
         app.setHandler({
+            // tslint:disable-next-line
             LAUNCH() {
             },
         });
@@ -42,6 +44,7 @@ describe('test request types', () => {
 
     test('test intent', async (done) => {
         app.setHandler({
+            // tslint:disable-next-line
             HelloWorldIntent() {
             },
         });
@@ -57,6 +60,7 @@ describe('test request types', () => {
 
     test('test end', async (done) => {
         app.setHandler({
+            // tslint:disable-next-line
             END() {
             },
         });
@@ -630,6 +634,7 @@ describe('test followUpState', () => {
                 this.followUpState('State1').ask('Hello World', 'foo');
             },
             State1: {
+                // tslint:disable-next-line
                 IntentA() {
 
                 },
@@ -794,6 +799,7 @@ describe('test handleOnRequest', () => {
 describe('test app listener', () => {
     test('test onRequest', async (done) => {
         app.setHandler({
+            // tslint:disable-next-line
             LAUNCH() {
             },
         });

@@ -13,7 +13,7 @@ import {
   ITextBlock,
   IVersion,
   Spacing,
-} from 'adaptivecards/lib/schema';
+} from 'adaptivecards/lib/schema'; // tslint:disable-line
 import _merge = require('lodash.merge');
 
 export type AdaptiveCardOptions = Omit<IAdaptiveCard, 'type' | 'version'>;

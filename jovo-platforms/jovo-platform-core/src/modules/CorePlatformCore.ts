@@ -1,8 +1,8 @@
-import {EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder} from 'jovo-core';
-import { CorePlatformRequest, CorePlatformResponse, CorePlatformApp, CorePlatformUser } from '..';
-import {CorePlatform} from '../CorePlatform';
+import { EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import { CorePlatformApp, CorePlatformRequest, CorePlatformResponse, CorePlatformUser } from '..';
+import { CorePlatform } from '../CorePlatform';
 
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
@@ -13,8 +13,6 @@ export class CorePlatformCore implements Plugin {
     platform.middleware('$tts.before')!.use(this.beforeTTS.bind(this));
     platform.middleware('$output')!.use(this.output.bind(this));
   }
-
-  uninstall(corePlatform: CorePlatform) {}
 
   async init(handleRequest: HandleRequest) {
     Log.verbose('[CorePlatformCore] ( $init )');
@@ -36,13 +34,13 @@ export class CorePlatformCore implements Plugin {
     }
 
     corePlatformApp.$request = CorePlatformRequest.fromJSON(
-        corePlatformApp.$host.getRequestObject(),
+      corePlatformApp.$host.getRequestObject(),
     ) as CorePlatformRequest;
     corePlatformApp.$user = new CorePlatformUser(corePlatformApp);
   }
 
   async type(corePlatformApp: CorePlatformApp) {
-    console.log('[CorePlatformCore] ( $type )');
+    Log.verbose('[CorePlatformCore] ( $type )');
     const request = corePlatformApp.$request as CorePlatformRequest;
 
     let type: EnumRequestType = EnumRequestType.INTENT;
@@ -72,16 +70,16 @@ export class CorePlatformCore implements Plugin {
     const tell = _get(corePlatformApp.$output, 'tell');
     if (tell) {
       corePlatformApp.$output.text = {
-        speech: SpeechBuilder.removeSSML(tell.speech.toString()),
         reprompt: '',
+        speech: SpeechBuilder.removeSSML(tell.speech.toString()),
       };
     }
 
     const ask = _get(corePlatformApp.$output, 'ask');
     if (ask) {
       corePlatformApp.$output.text = {
-        speech: SpeechBuilder.removeSSML(ask.speech.toString()),
         reprompt: SpeechBuilder.removeSSML(ask.reprompt.toString()),
+        speech: SpeechBuilder.removeSSML(ask.speech.toString()),
       };
     }
   }
@@ -140,7 +138,7 @@ export class CorePlatformCore implements Plugin {
 
     if (
       _get(corePlatformApp.$response, 'response.shouldEndSession') === false ||
-        corePlatformApp.$app.config.keepSessionDataOnSessionEnded
+      corePlatformApp.$app.config.keepSessionDataOnSessionEnded
     ) {
       // set sessionAttributes
       if (corePlatformApp.$session && corePlatformApp.$session.$data) {

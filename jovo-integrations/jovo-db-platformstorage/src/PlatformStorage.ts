@@ -1,60 +1,72 @@
-import {BaseApp, Db, Jovo, PluginConfig} from 'jovo-core';
+import { BaseApp, Db, Jovo, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 
-interface Config extends PluginConfig {
-
-}
+interface Config extends PluginConfig {}
 
 export class PlatformStorage implements Db {
-    needsWriteFileAccess = false;
+	needsWriteFileAccess = false;
 
-    config: Config = {};
+	config: Config = {};
 
-    constructor(config?: Config) {
-        if (config) {
-            this.config = _merge(this.config, config);
-        }
-    }
+	constructor(config?: Config) {
+		if (config) {
+			this.config = _merge(this.config, config);
+		}
+	}
 
-    install(app: BaseApp): void {
-        app.$db = this;
-    }
+	install(app: BaseApp): void {
+		app.$db = this;
+	}
 
-    async load(primaryKey: string, jovo?: Jovo): Promise<any> {
-        if (!jovo) {
-            return Promise.resolve();
-        }
-        const request = jovo.$request as any;
-        return request.user && request.user.storage ? {userData: request.user.storage} : {userData: {data: {}}};
-    }
+	// tslint:disable-next-line:no-any
+	async load(primaryKey: string, jovo?: Jovo): Promise<any> {
+		if (!jovo) {
+			return;
+		}
 
-    async save(primaryKey: string, key: string, data: any, updatedAt?: string | undefined, jovo?: Jovo): Promise<any> {
-        if (!jovo) {
-            return Promise.resolve();
-        }
-        const request = jovo.$request as any;
+		// tslint:disable-next-line:no-any
+		const request = jovo.$request as any;
+		return request.user && request.user.storage
+			? { userData: request.user.storage }
+			: { userData: { data: {} } };
+	}
 
-        const userData = request.user!.storage.userData;
-        Object.assign(userData, data);
+	async save(
+		primaryKey: string,
+		key: string,
+		data: any, // tslint:disable-line:no-any
+		updatedAt?: string | undefined,
+		jovo?: Jovo
+	): Promise<void> {
+		if (!jovo) {
+			return;
+		}
 
-        (jovo.$response as any).user = {
-            storage: {
-                userData
-            }
-        };
-        return Promise.resolve();
-    }
+		// tslint:disable-next-line:no-any
+		const request = jovo.$request as any;
+		const userData = request.user!.storage.userData;
+		Object.assign(userData, data);
 
-    async delete(primaryKey: string, jovo?: Jovo): Promise<any> {
-        if (!jovo) {
-            return Promise.resolve();
-        }
+		// tslint:disable-next-line:no-any
+		(jovo.$response as any).user = {
+			storage: {
+				userData
+			}
+		};
+		return;
+	}
 
-        (jovo.$response as any).user = {
-            storage: {
-                userData: {}
-            }
-        };
-        return Promise.resolve();
-    }
+	async delete(primaryKey: string, jovo?: Jovo): Promise<void> {
+		if (!jovo) {
+			return;
+		}
+
+		// tslint:disable-next-line:no-any
+		(jovo.$response as any).user = {
+			storage: {
+				userData: {}
+			}
+		};
+		return;
+	}
 }

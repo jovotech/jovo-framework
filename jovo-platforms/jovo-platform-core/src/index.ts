@@ -1,6 +1,6 @@
+import { CorePlatformApp } from './core/CorePlatformApp';
 import { Action } from './Interfaces';
 import { AdaptiveCardOptions } from './response/visuals/AdaptiveCard';
-import { CorePlatformApp } from './core/CorePlatformApp';
 
 export { CorePlatform } from './CorePlatform';
 
