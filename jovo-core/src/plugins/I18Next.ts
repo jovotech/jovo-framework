@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {InitOptions} from 'i18next';
+import { InitOptions } from 'i18next';
 import i18n = require('i18next');
 import _merge = require('lodash.merge');
 import * as path from 'path';
@@ -73,6 +73,7 @@ export class I18Next extends BaseCmsPlugin {
 
   install(app: BaseApp): void {
     super.install(app);
+
     app.middleware('setup')!.use(this.loadFiles.bind(this));
 
     Jovo.prototype.t = function() {
@@ -98,6 +99,8 @@ export class I18Next extends BaseCmsPlugin {
     if (!handleRequest || !handleRequest.app) {
       return;
     }
+
+    this.config = _merge(this.config, handleRequest.app.config.plugin!.I18Next);
 
     if (!handleRequest.app.$cms.I18Next) {
       handleRequest.app.$cms.I18Next = { resources: {} };
