@@ -98,7 +98,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
   }
 
   async nlu(jovo: Jovo) {
-    const text = jovo.getRawText();
+    const text = (jovo.$asr && jovo.$asr.text) ?? jovo.getRawText();
     let response: DialogflowResponse | null = null;
 
     if (text) {

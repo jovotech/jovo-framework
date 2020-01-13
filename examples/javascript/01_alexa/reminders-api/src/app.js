@@ -9,18 +9,32 @@ app.use(
 
 app.setHandler({
     async LAUNCH() {
+        // return this.toIntent('AskForRemindersIntent');
         // return this.toIntent('AddRelativeReminderIntent');
-        // return this.toIntent('AddAbsoluteReminderIntent');
+        return this.toIntent('AddAbsoluteReminderIntent');
         // return this.toIntent('AllRemindersIntent');
         // return this.toIntent('UpdateReminderIntent');
-        return this.toIntent('DeleteReminderIntent');
+        // return this.toIntent('DeleteReminderIntent');
 
+    },
+    ON_PERMISSION() {
+        const status = this.$alexaSkill.getPermissionStatus();
+
+        if (this.$alexaSkill.hasPermissionAccepted()) {
+            return this.toIntent('AddAbsoluteReminderIntent');
+        }
+
+        this.tell(status);
+    },
+    async AskForRemindersIntent() {
+        this.$alexaSkill.askForReminders();
+        this.ask('Would you like to be reminded?');
     },
     async AddRelativeReminderIntent() {
         try {
 
             const reminderRelative ={
-                'requestTime': '2018-09-22T19:04:00.672',           // valid ISO 8601 format - describes the time when event actually occurred
+                'requestTime': '2019-11-29T17:27:00.672',           // valid ISO 8601 format - describes the time when event actually occurred
                 'trigger': {
                     'type': 'SCHEDULED_RELATIVE',                 // Indicates type of trigger
                     'offsetInSeconds': '60',                    // If reminder is set using relative time, use this field to specify the time after which reminder will ring (in seconds)

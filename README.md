@@ -192,7 +192,7 @@ nodemon | Monitor changes and automatically restart the server | [📝](./docs/w
 
 Find a quickstart guide and comprehensive tutorials here:
 * General:
-    * [Build a cross-platform voice app in 5 simple steps](https://www.jovo.tech/get-started)
+    * [Build a cross-platform voice app in 5 simple steps](https://www.jovo.tech#getting-started)
     * [Build an Alexa Skill with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/)
     * [Build a Google Action with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/)
 * Account Linking:

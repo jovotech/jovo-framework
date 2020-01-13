@@ -25,10 +25,16 @@ export class AlexaReminder {
         method: 'POST',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 401) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Request Unauthorized.') {
-          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+      const httpStatus = response.httpStatus + '';
+      if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
+        let apiError;
+        if (response.data) {
+          apiError = new ApiError(response.data.message, response.data.code);
+          if (response.data.message === 'Request Unauthorized.') {
+            apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+          }
+        } else {
+          apiError = new ApiError('Something went wrong.', ApiError.ERROR);
         }
         return Promise.reject(apiError);
       }
@@ -52,10 +58,16 @@ export class AlexaReminder {
         method: 'GET',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 401) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Request Unauthorized.') {
-          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+      const httpStatus = response.httpStatus + '';
+      if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
+        let apiError;
+        if (response.data) {
+          apiError = new ApiError(response.data.message, response.data.code);
+          if (response.data.message === 'Request Unauthorized.') {
+            apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+          }
+        } else {
+          apiError = new ApiError('Something went wrong.', ApiError.ERROR);
         }
         return Promise.reject(apiError);
       }
@@ -83,10 +95,16 @@ export class AlexaReminder {
         method: 'PUT',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 401) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Request Unauthorized.') {
-          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+      const httpStatus = response.httpStatus + '';
+      if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
+        let apiError;
+        if (response.data) {
+          apiError = new ApiError(response.data.message, response.data.code);
+          if (response.data.message === 'Request Unauthorized.') {
+            apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+          }
+        } else {
+          apiError = new ApiError('Something went wrong.', ApiError.ERROR);
         }
         return Promise.reject(apiError);
       }
@@ -112,10 +130,16 @@ export class AlexaReminder {
         method: 'DELETE',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 401) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Request Unauthorized.') {
-          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+      const httpStatus = response.httpStatus + '';
+      if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
+        let apiError;
+        if (response.data) {
+          apiError = new ApiError(response.data.message, response.data.code);
+          if (response.data.message === 'Request Unauthorized.') {
+            apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+          }
+        } else {
+          apiError = new ApiError('Something went wrong.', ApiError.ERROR);
         }
         return Promise.reject(apiError);
       }
@@ -139,10 +163,16 @@ export class AlexaReminder {
         method: 'GET',
       };
       const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
-      if (response.httpStatus === 401) {
-        const apiError = new ApiError(response.data.message, response.data.code);
-        if (response.data.message === 'Request Unauthorized.') {
-          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+      const httpStatus = response.httpStatus + '';
+      if (httpStatus.startsWith('4') || httpStatus.startsWith('5')) {
+        let apiError;
+        if (response.data) {
+          apiError = new ApiError(response.data.message, response.data.code);
+          if (response.data.message === 'Request Unauthorized.') {
+            apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
+          }
+        } else {
+          apiError = new ApiError('Something went wrong.', ApiError.ERROR);
         }
         return Promise.reject(apiError);
       }

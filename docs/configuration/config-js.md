@@ -317,7 +317,24 @@ const config = {
 };
 ```
 
-> For project-related staging environments, take a look at [project.js](./project-js.md './project-js').
+When using expressJS for deploying your project, you should install the `dotenv` library to use staged config files:
+```
+npm install dotenv
+```
 
+and configure it inside your launch Intent:
+```
+LAUNCH() {
+
+  // ...
+
+  require('dotenv').config();
+
+  // ...
+
+},
+```
+
+> For project-related staging environments, take a look at [project.js](./project-js.md './project-js').
 
 <!--[metadata]: {"description": "Learn how to configure your Jovo Voice App for Amazon Alexa and Google Assistant", "route": "config-js"}-->

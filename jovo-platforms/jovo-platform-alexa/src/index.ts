@@ -463,6 +463,29 @@ declare module 'jovo-core/dist/src/Interfaces' {
   interface Output {
     Alexa: {
       Directives?: Directive[];
+      AskForPermission?: AskForPermissionDirective;
     };
+  }
+}
+
+export interface AskForPermissionDirective {
+  type: string;
+  name: 'AskFor';
+  payload: {
+    '@type': 'AskForPermissionsConsentRequest';
+    '@version': string;
+    'permissionScope': string;
+  };
+  token?: string;
+}
+
+// Ask For
+declare module './core/AlexaSkill' {
+  interface AlexaSkill {
+    askForPermission(permissionScope: string, token?: string): this;
+    askForReminders(token?: string): this;
+    getPermissionStatus(): string | undefined;
+    hasPermissionAccepted(): boolean;
+    hasPermissionDenied(): boolean;
   }
 }
