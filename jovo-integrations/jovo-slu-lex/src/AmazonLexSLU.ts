@@ -1,14 +1,3 @@
-import {
-  AudioEncoder,
-  EnumRequestType,
-  Extensible,
-  Inputs,
-  Jovo,
-  JovoError,
-  Plugin,
-  PluginConfig,
-} from 'jovo-core';
-import { AmazonCredentials } from './Interfaces';
 import { LexRuntime } from 'aws-sdk/clients/all';
 import {
   PostContentRequest,
@@ -17,6 +6,19 @@ import {
   PostTextResponse,
 } from 'aws-sdk/clients/lexruntime';
 import { AWSError } from 'aws-sdk/lib/error';
+import {
+  AudioEncoder,
+  EnumRequestType,
+  ErrorCode,
+  Extensible,
+  Inputs,
+  Jovo,
+  JovoError,
+  Platform,
+  Plugin,
+  PluginConfig,
+} from 'jovo-core';
+import { AmazonCredentials } from './Interfaces';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
@@ -25,6 +27,8 @@ export interface Config extends PluginConfig {
   credentials?: AmazonCredentials;
   defaultIntent?: string;
 }
+
+const TARGET_SAMPLE_RATE = 16000;
 
 export class AmazonLexSLU implements Plugin {
   config: Config = {
@@ -50,42 +54,60 @@ export class AmazonLexSLU implements Plugin {
     });
   }
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   install(parent: Extensible) {
-    parent.middleware('$asr')!.use(this.asr.bind(this));
+    if (!(parent instanceof Platform)) {
+      throw new JovoError(
+        `'${this.name}' has to be an immediate plugin of a platform!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
+    }
+    if (parent.supportsASR()) {
+      parent.middleware('$asr')!.use(this.asr.bind(this));
+    }
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
   }
 
   async asr(jovo: Jovo) {
     const text = jovo.getRawText();
-    // tslint:disable-next-line
-    const audio: { data: any; sampleRate: number } = (jovo.$request as any).audio;
 
-    if (audio && audio.data && audio.data instanceof Float32Array && audio.sampleRate) {
-      const targetSampleRate = 16000;
-      const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, targetSampleRate);
-      const wavBuffer = AudioEncoder.encodeToWav(downSampled, targetSampleRate);
+    type AudioData = { data?: Float32Array | string; sampleRate?: number };
+    const audio: AudioData | undefined = (jovo.$request as any).audio; // tslint:disable-line:no-any
+    const isValidAudio = audio && audio.data instanceof Float32Array && audio.sampleRate;
+
+    if (isValidAudio) {
+      const downSampled = AudioEncoder.sampleDown(
+        audio!.data as Float32Array,
+        audio!.sampleRate!,
+        TARGET_SAMPLE_RATE,
+      );
+      const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
       const result = await this.speechToText(jovo.$user.getId()!, wavBuffer);
       jovo.$asr = {
         text: result.inputTranscript || '',
-        AmazonLex: result,
+        [this.name]: result,
       };
     } else if (!text && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No audio or text input.');
+      throw new JovoError('No audio or text input.', ErrorCode.ERR_PLUGIN, this.name);
     }
   }
 
   async nlu(jovo: Jovo) {
-    const text = (jovo.$asr && jovo.$asr.text) ?? jovo.getRawText();
+    const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
 
     let response: PostContentResponse | PostTextResponse | null = null;
     if (text) {
       response = await this.naturalLanguageProcessing(jovo.$user.getId()!, text);
-    } else if (jovo.$asr && jovo.$asr.AmazonLex && !jovo.$asr.AmazonLex.error) {
-      response = jovo.$asr.AmazonLex as PostContentResponse;
+    } else if (jovo.$asr && jovo.$asr[this.name] && !jovo.$asr[this.name].error) {
+      response = jovo.$asr[this.name] as PostContentResponse;
     } else if (jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No audio or text input to process.');
+      throw new JovoError('No audio or text input to process.', ErrorCode.ERR_PLUGIN, this.name);
     }
 
     let intentName = 'DefaultFallbackIntent';
@@ -101,13 +123,17 @@ export class AmazonLexSLU implements Plugin {
       intent: {
         name: intentName,
       },
-      AmazonLex: response,
+      [this.name]: response,
     };
   }
 
   async inputs(jovo: Jovo) {
-    if ((!jovo.$nlu || !jovo.$nlu.AmazonLex) && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No nlu data to get inputs off was given.');
+    if ((!jovo.$nlu || !jovo.$nlu[this.name]) && jovo.$type.type === EnumRequestType.INTENT) {
+      throw new JovoError(
+        'No nlu data to get inputs off was given.',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     } else if (
       jovo.$type.type === EnumRequestType.LAUNCH ||
       jovo.$type.type === EnumRequestType.END
@@ -116,7 +142,7 @@ export class AmazonLexSLU implements Plugin {
       return;
     }
 
-    const response = jovo.$nlu!.AmazonLex as PostTextResponse;
+    const response = jovo.$nlu![this.name] as PostTextResponse;
 
     const inputs: Inputs = {};
     const slots = response.slots;

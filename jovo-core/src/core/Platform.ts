@@ -31,4 +31,12 @@ export abstract class Platform<
   abstract makeTestSuite(): TestSuite<RequestBuilder<REQ>, ResponseBuilder<RES>>;
 
   abstract getAppType(): string;
+
+  supportsASR(): boolean {
+    return this.actionSet.middleware.has('$asr');
+  }
+
+  supportsTTS(): boolean {
+    return this.actionSet.middleware.has('$tts');
+  }
 }

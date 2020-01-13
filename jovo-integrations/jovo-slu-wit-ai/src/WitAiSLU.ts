@@ -2,13 +2,15 @@ import {
   AudioEncoder,
   AxiosRequestConfig,
   EnumRequestType,
+  ErrorCode,
   Extensible,
   HttpService,
   Inputs,
   Jovo,
   JovoError,
+  Platform,
   Plugin,
-  PluginConfig
+  PluginConfig,
 } from 'jovo-core';
 import { WitAiInput, WitAiIntent, WitAiResponse } from './Interfaces';
 import _merge = require('lodash.merge');
@@ -19,6 +21,7 @@ export interface Config extends PluginConfig {
 }
 
 const BASE_URL = `https://api.wit.ai`;
+const TARGET_SAMPLE_RATE = 8000;
 
 export class WitAiSLU implements Plugin {
   config: Config = {
@@ -30,42 +33,60 @@ export class WitAiSLU implements Plugin {
     this.config = _merge(this.config, config);
   }
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   install(parent: Extensible): void {
-    parent.middleware('$asr')!.use(this.asr.bind(this));
+    if (!(parent instanceof Platform)) {
+      throw new JovoError(
+        `'${this.name}' has to be an immediate plugin of a platform!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
+    }
+    if (parent.supportsASR()) {
+      parent.middleware('$asr')!.use(this.asr.bind(this));
+    }
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
   }
 
   async asr(jovo: Jovo) {
     const text = jovo.getRawText();
-    //tslint:disable-next-line
-    const audio: { data: any; sampleRate: number } = (jovo.$request as any).audio;
 
-    if (audio && audio.data && audio.data instanceof Float32Array && audio.sampleRate) {
-      const targetSampleRate = 8000;
-      const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, targetSampleRate);
-      const wavBuffer = AudioEncoder.encodeToWav(downSampled, targetSampleRate);
+    type AudioData = { data?: Float32Array | string; sampleRate?: number };
+    const audio: AudioData | undefined = (jovo.$request as any).audio; // tslint:disable-line:no-any
+    const isValidAudio = audio && audio.data instanceof Float32Array && audio.sampleRate;
+
+    if (isValidAudio) {
+      const downSampled = AudioEncoder.sampleDown(
+        audio!.data as Float32Array,
+        audio!.sampleRate!,
+        TARGET_SAMPLE_RATE,
+      );
+      const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
       const result = await this.speechToText(wavBuffer, 'audio/wav');
       jovo.$asr = {
         text: result._text || '',
-        WitAi: result,
+        [this.name]: result,
       };
     } else if (!text && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No audio or text input.');
+      throw new JovoError('No audio or text input.', ErrorCode.ERR_PLUGIN, this.name);
     }
   }
 
   async nlu(jovo: Jovo) {
-    const text = (jovo.$asr && jovo.$asr.text) ?? jovo.getRawText();
+    const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
 
     let response: WitAiResponse | null = null;
     if (text) {
       response = await this.naturalLanguageProcessing(text);
-    } else if (jovo.$asr && jovo.$asr.WitAi && !jovo.$asr.WitAi.error) {
-      response = jovo.$asr.WitAi as WitAiResponse;
+    } else if (jovo.$asr && jovo.$asr[this.name] && !jovo.$asr[this.name].error) {
+      response = jovo.$asr[this.name] as WitAiResponse;
     } else if (jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No audio or text input to process.');
+      throw new JovoError('No audio or text input to process.', ErrorCode.ERR_PLUGIN, this.name);
     }
 
     let intentName = 'DefaultFallbackIntent';
@@ -90,15 +111,19 @@ export class WitAiSLU implements Plugin {
       intent: {
         name: intentName,
       },
-      WitAi: response,
+      [this.name]: response,
     };
   }
 
   async inputs(jovo: Jovo) {
     console.log('[WitAiSLU] ( $inputs )');
 
-    if ((!jovo.$nlu || !jovo.$nlu.WitAi) && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No nlu data to get inputs off was given.');
+    if ((!jovo.$nlu || !jovo.$nlu[this.name]) && jovo.$type.type === EnumRequestType.INTENT) {
+      throw new JovoError(
+        'No nlu data to get inputs off was given.',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     } else if (
       jovo.$type.type === EnumRequestType.LAUNCH ||
       jovo.$type.type === EnumRequestType.END
@@ -137,13 +162,22 @@ export class WitAiSLU implements Plugin {
         'Content-Length': speech.byteLength,
         'Content-Type': contentType,
       },
+      validateStatus: (status: number) => {
+        return true;
+      },
     };
-
-    const response = await HttpService.request<WitAiResponse>(config);
-    if (response.status === 200 && response.data && response.data.msg_id) {
-      return response.data;
-    } else {
-      throw new JovoError(`Could not reach Wit.Ai`);
+    try {
+      const response = await HttpService.request<WitAiResponse>(config);
+      if (response.status === 200 && response.data && response.data.msg_id) {
+        return response.data;
+      }
+      throw new Error(
+        `Could not retrieve ASR data. status: ${response.status}, data: ${
+          response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
+        }`,
+      );
+    } catch (e) {
+      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
     }
   }
 
@@ -156,13 +190,23 @@ export class WitAiSLU implements Plugin {
       headers: {
         Authorization: `Bearer ${this.config.token}`,
       },
+      validateStatus: (status: number) => {
+        return true;
+      },
     };
 
-    const response = await HttpService.request<WitAiResponse>(config);
-    if (response.status === 200 && response.data && response.data.msg_id) {
-      return response.data;
-    } else {
-      throw new JovoError(`Could not reach Wit.Ai`);
+    try {
+      const response = await HttpService.request<WitAiResponse>(config);
+      if (response.status === 200 && response.data && response.data.msg_id) {
+        return response.data;
+      }
+      throw new Error(
+        `Could not retrieve NLU data. status: ${response.status}, data: ${
+          response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
+        }`,
+      );
+    } catch (e) {
+      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
     }
   }
 }

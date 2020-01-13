@@ -1,26 +1,27 @@
+import * as fs from 'fs';
+import { JWT } from 'google-auth-library';
 import {
   AxiosRequestConfig,
-  BaseApp,
   EnumRequestType,
+  ErrorCode,
   Extensible,
   HandleRequest,
   HttpService,
   Inputs,
   Jovo,
   JovoError,
+  Platform,
   Plugin,
   PluginConfig,
 } from 'jovo-core';
+import { promisify } from 'util';
 import { DialogflowRequest, DialogflowResponse, DialogflowTextInput } from './Interfaces';
-import * as fs from 'fs';
-import * as util from 'util';
-import { JWT } from 'google-auth-library';
-import _merge = require('lodash.merge');
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
-const readFile = util.promisify(fs.readFile);
-const exists = util.promisify(fs.exists);
+const readFile = promisify(fs.readFile);
+const exists = promisify(fs.exists);
 
 const BASE_URL = 'https://dialogflow.googleapis.com';
 
@@ -56,16 +57,23 @@ export class DialogflowNlu extends Extensible implements Plugin {
   parentName?: string;
   jwtClient?: JWT;
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   async install(parent: Extensible) {
-    if (parent instanceof BaseApp) {
-      throw new JovoError(`'DialogflowNlu' has to be an immediate plugin of a platform!`);
+    if (!(parent instanceof Platform)) {
+      throw new JovoError(
+        `'${this.name}' has to be an immediate plugin of a platform!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     }
     parent.middleware('after.$init')!.use(this.afterInit.bind(this));
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
 
-    // tslint:disable-next-line
-    this.parentName = (parent as any).name || parent.constructor.name;
+    this.parentName = (parent as Plugin).name || parent.constructor.name;
 
     const jwtClient = await this.initializeJWT();
     if (jwtClient) {
@@ -98,7 +106,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
   }
 
   async nlu(jovo: Jovo) {
-    const text = (jovo.$asr && jovo.$asr.text) ?? jovo.getRawText();
+    const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
     let response: DialogflowResponse | null = null;
 
     if (text) {
@@ -111,7 +119,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
         languageCode,
       });
     } else if (jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No text input to process.');
+      throw new JovoError('No text input to process.', ErrorCode.ERR_PLUGIN, this.name);
     }
 
     const minConfidence = this.config.minConfidence || 0;
@@ -128,13 +136,17 @@ export class DialogflowNlu extends Extensible implements Plugin {
       intent: {
         name: intentName,
       },
-      Dialogflow: response,
+      [this.name]: response,
     };
   }
 
   async inputs(jovo: Jovo) {
-    if ((!jovo.$nlu || !jovo.$nlu.Dialogflow) && jovo.$type.type === EnumRequestType.INTENT) {
-      throw new JovoError('No nlu data to get inputs off was given.');
+    if ((!jovo.$nlu || !jovo.$nlu[this.name]) && jovo.$type.type === EnumRequestType.INTENT) {
+      throw new JovoError(
+        'No nlu data to get inputs off was given.',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     } else if (
       jovo.$type.type === EnumRequestType.LAUNCH ||
       jovo.$type.type === EnumRequestType.END
@@ -143,7 +155,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
       return;
     }
 
-    const response: DialogflowResponse = jovo.$nlu!.Dialogflow;
+    const response: DialogflowResponse = jovo.$nlu![this.name];
 
     const inputs: Inputs = {};
     const parameters = response.queryResult.parameters;
@@ -170,7 +182,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
       if (this.config.requireCredentialsFile === false) {
         return;
       } else {
-        throw new Error('Credentials file is mandatory');
+        throw new JovoError('Credentials file is mandatory', ErrorCode.ERR_PLUGIN, this.name);
       }
     }
 
@@ -179,7 +191,11 @@ export class DialogflowNlu extends Extensible implements Plugin {
       if (this.config.requireCredentialsFile === false) {
         return;
       } else {
-        throw new Error(`Credentials file doesn't exist in ${this.config.credentialsFile}`);
+        throw new JovoError(
+          `Credentials file doesn't exist in ${this.config.credentialsFile}`,
+          ErrorCode.ERR_PLUGIN,
+          this.name,
+        );
       }
     }
 
@@ -226,7 +242,11 @@ export class DialogflowNlu extends Extensible implements Plugin {
         reasons += '\nNo authentication-token was provided.';
       }
 
-      throw new JovoError(`Can not access Dialogflow-API, because: ${reasons}`);
+      throw new JovoError(
+        `Can not access Dialogflow-API, because: ${reasons}`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     }
 
     const path = `/v2/projects/${projectId}/agent/sessions/${session}:detectIntent`;
@@ -248,13 +268,23 @@ export class DialogflowNlu extends Extensible implements Plugin {
       data,
       method: 'POST',
       headers,
+      validateStatus: (status: number) => {
+        return true;
+      },
     };
 
     try {
       const response = await HttpService.request<DialogflowResponse>(config);
-      return response.data;
+      if (response.status === 200 && response.data) {
+        return response.data;
+      }
+      throw new Error(
+        `Could not retrieve NLU data. status: ${response.status}, data: ${
+          response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
+        }`,
+      );
     } catch (e) {
-      throw new JovoError(e);
+      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
     }
   }
 }
