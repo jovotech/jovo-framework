@@ -1,10 +1,7 @@
 import {
-  ActionSet,
-  AxiosError,
   AxiosRequestConfig,
   BaseApp,
   ErrorCode,
-  Extensible,
   ExtensibleConfig,
   HandleRequest,
   Host,
@@ -12,13 +9,8 @@ import {
   Jovo,
   JovoError,
   Platform,
-  RequestBuilder,
-  ResponseBuilder,
   TestSuite,
 } from 'jovo-core';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 import {
   AirlineTemplate,
   AirlineTemplateOptions,
@@ -53,6 +45,9 @@ import {
   TextMessage,
   TextMessageOptions,
 } from '.';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 export interface UpdateConfig<T> {
   updateOnSetup?: boolean;
