@@ -23,7 +23,7 @@ export interface Config extends PluginConfig {
 const BASE_URL = `https://api.wit.ai`;
 const TARGET_SAMPLE_RATE = 8000;
 
-export class WitAiSLU implements Plugin {
+export class WitAiSlu implements Plugin {
   config: Config = {
     token: '',
     minConfidence: 0,

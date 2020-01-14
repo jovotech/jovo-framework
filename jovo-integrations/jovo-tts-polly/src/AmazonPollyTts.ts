@@ -25,7 +25,7 @@ interface Config extends PluginConfig {
     languageCode?: LanguageCode;
 }
 
-export class AmazonPollyTTS implements Plugin {
+export class AmazonPollyTts implements Plugin {
     config: Config = {
         credentials: {
             region: 'us-east-1',

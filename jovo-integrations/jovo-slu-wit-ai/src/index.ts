@@ -1,2 +1,2 @@
-export * from './WitAiSLU';
+export * from './WitAiSlu';
 export * from './Interfaces';

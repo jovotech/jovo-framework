@@ -1,2 +1,2 @@
-export * from './AmazonLexSLU';
+export * from './AmazonLexSlu';
 export * from './Interfaces';
