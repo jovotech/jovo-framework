@@ -1,6 +1,20 @@
 # Jovo Framework Changelog
 
 
+## 2.2.25 (2020-01-14)
+
+#### :rocket: New Feature
+* `jovo-platform-alexa` [#644](https://github.com/jovotech/jovo-framework/pull/644) Added Amazon Pay Integration  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` Added getGoogleProfile() helper 
+* `jovo-asr-azure` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Azure ASR implementation (WIP) ([@Veake](https://github.com/Veake)) 
+* `jovo-nlu-luis` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Microsoft LUIS implementation (WIP) ([@Veake](https://github.com/Veake)) 
+
+ #### Committers: 3
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Max Ripper ([@Veake](https://github.com/Veake))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.22 (2019-11-29)
 
 #### :rocket: New Feature
