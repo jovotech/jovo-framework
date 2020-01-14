@@ -17,7 +17,7 @@ import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
   endpointKey?: string;
-  endpointHost?: string;
+  endpointRegion?: string;
   appId?: string;
   verbose?: boolean;
   defaultIntent?: string;
@@ -27,7 +27,7 @@ export interface Config extends PluginConfig {
 export class LuisNlu implements Plugin {
   config: Config = {
     endpointKey: '',
-    endpointHost: '',
+    endpointRegion: '',
     appId: '',
     verbose: false,
     slot: 'staging',
@@ -130,7 +130,7 @@ export class LuisNlu implements Plugin {
       this.config.slot
     }/predict?${querystring.stringify(queryParams)}`;
 
-    const url = `https://${this.config.endpointHost}${path}`;
+    const url = `https://${this.config.endpointRegion}.api.cognitive.microsoft.com${path}`;
     const options: AxiosRequestConfig = {
       url,
       validateStatus: (status: number) => {

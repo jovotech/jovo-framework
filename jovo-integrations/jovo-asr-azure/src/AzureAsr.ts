@@ -17,7 +17,7 @@ import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
   endpointKey?: string;
-  endpointHost?: string;
+  endpointRegion?: string;
   language?: string;
 }
 
@@ -26,7 +26,7 @@ const TARGET_SAMPLE_RATE = 16000;
 export class AzureAsr implements Plugin {
   config: Config = {
     endpointKey: '',
-    endpointHost: '',
+    endpointRegion: '',
     language: 'en-US',
   };
 
@@ -88,7 +88,7 @@ export class AzureAsr implements Plugin {
     const path = `/speech/recognition/conversation/cognitiveservices/v1?${stringify({
       language: this.config.language,
     })}`;
-    const url = this.config.endpointHost + path;
+    const url = `https://${this.config.endpointRegion}.sst.speech.microsoft.com${path}`;
 
     const config: AxiosRequestConfig = {
       url,
