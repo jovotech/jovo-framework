@@ -1,6 +1,6 @@
 {
 	"name": "jovo-analytics-googleanalytics",
-	"version": "2.2.21-alpha.0",
+	"version": "2.2.22-alpha.0",
 	"description": "Jovo Plugin for GoogleAnalytics",
 	"main": "dist/src/index",
 	"types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
 	"author": "jovotech",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"jovo-core": "^2.2.19",
+		"jovo-core": "^2.2.20",
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
 		"murmurhash": "0.0.2",
@@ -31,8 +31,8 @@
 		"@types/node": "^10.3.1",
 		"@types/universal-analytics": "^0.4.2",
 		"jest": "^24.9.0",
-		"jovo-platform-alexa": "^2.2.29",
-		"jovo-platform-googleassistant": "^2.2.26",
+		"jovo-platform-alexa": "^2.2.30",
+		"jovo-platform-googleassistant": "^2.2.27",
 		"prettier": "1.19.1",
 		"rimraf": "^2.6.2",
 		"tslint": "^5.17.0",

@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-todo-list",
-  "version": "2.2.29",
+  "version": "2.2.30",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.26",
-    "jovo-platform-alexa": "^2.2.29"
+    "jovo-framework": "^2.2.27",
+    "jovo-platform-alexa": "^2.2.30"
   }
 }
