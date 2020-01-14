@@ -18,7 +18,14 @@ import {
 } from '../services/AlexaReminder';
 import { ShoppingList, ShoppingListItem, ToDoList, ToDoListItem } from './Interfaces';
 import { AlexaSkill } from './AlexaSkill';
-import { AmazonPayAPI, BuyerIdResponse, AmazonPayApiRequestOptions, BuyerAddressRequestOptions, BuyerAddressResponse, BuyerAddress } from '../services/AmazonPayAPI';
+import {
+  AmazonPayAPI,
+  BuyerIdResponse,
+  AmazonPayApiRequestOptions,
+  BuyerAddressRequestOptions,
+  BuyerAddressResponse,
+  BuyerAddress,
+} from '../services/AmazonPayAPI';
 
 export class AlexaUser extends User {
   alexaSkill: AlexaSkill;
@@ -345,7 +352,9 @@ export class AlexaUser extends User {
     }
 
     if (!options.host) {
-      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(alexaRequest.getApiEndpoint());
+      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(
+        alexaRequest.getApiEndpoint(),
+      );
     }
 
     return AmazonPayAPI.getBuyerId(options);
@@ -358,15 +367,19 @@ export class AlexaUser extends User {
     }
 
     if (!options.host) {
-      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(alexaRequest.getApiEndpoint());
+      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(
+        alexaRequest.getApiEndpoint(),
+      );
     }
 
     return AmazonPayAPI.getBuyerAddress(options);
   }
 
-  async getDefaultBuyerAddress(options: BuyerAddressRequestOptions): Promise<BuyerAddress | undefined> {
+  async getDefaultBuyerAddress(
+    options: BuyerAddressRequestOptions,
+  ): Promise<BuyerAddress | undefined> {
     const { addresses } = await this.getBuyerAddress(options);
-    const defaultAddress = addresses.find(address => {
+    const defaultAddress = addresses.find((address) => {
       return address.addressType === 'DefaultOneClickShippingAddress';
     });
 

@@ -1,6 +1,6 @@
 import * as https from 'https';
 
-import { ApiError } from "./ApiError";
+import { ApiError } from './ApiError';
 import { AlexaAPIResponse } from './AlexaAPIResponse';
 import { RequestOptions } from 'https';
 
@@ -12,7 +12,7 @@ export interface AmazonPayApiRequestOptions {
 enum AmazonPayApiHost {
   EU = 'pay-api.amazon.eu',
   NA = 'pay-api.amazon.com',
-  JP = 'pay-api.amazon.jp'
+  JP = 'pay-api.amazon.jp',
 }
 
 export interface BuyerIdResponse {
@@ -52,7 +52,7 @@ export class AmazonPayAPI {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + options.apiAccessToken,
-      }
+      },
     };
 
     try {
@@ -76,7 +76,7 @@ export class AmazonPayAPI {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + options.apiAccessToken,
-      }
+      },
     };
 
     if (options.sandbox) {
@@ -96,7 +96,7 @@ export class AmazonPayAPI {
     }
   }
 
-  static async apiCall(options: any): Promise<any> { // tslint:disable-line 
+  static async apiCall(options: any): Promise<any> { // tslint:disable-line
     return new Promise((resolve, reject) => {
       const req = https
         .request(options, (res) => {
@@ -143,7 +143,7 @@ export class AmazonPayAPI {
       case 'https://api.eu.amazonalexa.com':
         return AmazonPayApiHost.EU;
       case 'https://api.fe.amazonalexa.com':
-        return AmazonPayApiHost.JP;    
+        return AmazonPayApiHost.JP;
       default:
         return AmazonPayApiHost.NA;
     }

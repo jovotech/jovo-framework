@@ -29,17 +29,14 @@ export class AmazonPayPlugin implements Plugin {
     };
   }
 
-  uninstall(alexa: Alexa) {
-
-  }
+  uninstall(alexa: Alexa) {}
 
   type(alexaSkill: AlexaSkill) {
     const alexaRequest = alexaSkill.$request as AlexaRequest;
 
     if (
       alexaRequest.request?.type === 'Connections.Response' &&
-      (alexaRequest.request?.name === 'Charge' ||
-      alexaRequest.request?.name === 'Setup')
+      (alexaRequest.request?.name === 'Charge' || alexaRequest.request?.name === 'Setup')
     ) {
       alexaSkill.$type = {
         type: EnumAlexaRequestType.ON_PURCHASE,
@@ -51,45 +48,63 @@ export class AmazonPayPlugin implements Plugin {
 }
 
 export type CurrencyCodes = 'EUR' | 'GBP' | 'JPY' | 'USD';
-export type CountryCodes =  'AT'|'BE'|'CH'|'CY'|'DE'|'DK'|'ES'|'FR'|'HU'|'IE'|'IT'|'JP'|'LU'|'NL'|'PT'|'SE'|'UK'|'US';
-export type Locales = 'de_DE'|'en_GB'|'en_US'|'es_ES'|'fr_FR'|'it_IT'|'ja_JP';
+export type CountryCodes =
+  | 'AT'
+  | 'BE'
+  | 'CH'
+  | 'CY'
+  | 'DE'
+  | 'DK'
+  | 'ES'
+  | 'FR'
+  | 'HU'
+  | 'IE'
+  | 'IT'
+  | 'JP'
+  | 'LU'
+  | 'NL'
+  | 'PT'
+  | 'SE'
+  | 'UK'
+  | 'US';
+export type Locales = 'de_DE' | 'en_GB' | 'en_US' | 'es_ES' | 'fr_FR' | 'it_IT' | 'ja_JP';
 export type BillingAgreementType = 'CustomerInitiatedTransaction' | 'MerchantInitiatedTransaction';
 
 // only extract optional attributes into their own interface
 export interface SetupPayload {
   '@type': 'SetupAmazonPayRequest';
   '@version': '2';
-  countryOfEstablishment: CountryCodes;
-  ledgerCurrency: CurrencyCodes;
-  sellerId: string;
-  checkoutLanguage?: Locales;
-  billingAgreementAttributes?: BillingAgreementAttributes;
-  needAmazonShippingAddress?: boolean;
-  sandboxMode?: boolean; // default is false
-  sandboxCustomerEmailId?: string; // needed if sandboxMode is true
+  'countryOfEstablishment': CountryCodes;
+  'ledgerCurrency': CurrencyCodes;
+  'sellerId': string;
+  'checkoutLanguage'?: Locales;
+  'billingAgreementAttributes'?: BillingAgreementAttributes;
+  'needAmazonShippingAddress'?: boolean;
+  'sandboxMode'?: boolean; // default is false
+  'sandboxCustomerEmailId'?: string; // needed if sandboxMode is true
 }
 
 export interface BillingAgreementAttributes {
   '@type': 'BillingAgreementAttributes';
   '@version': '2';
-  billingAgreementType?: BillingAgreementType;
-  subscriptionAmount?: SubscriptionAmount;
-  sellerBillingAgreementAttributes?: SellerBillingAgreementAttributes;
+  'billingAgreementType'?: BillingAgreementType;
+  'subscriptionAmount'?: SubscriptionAmount;
+  'sellerBillingAgreementAttributes'?: SellerBillingAgreementAttributes;
 }
 
 export interface SubscriptionAmount {
   '@type': 'Price';
   '@version': '2';
-  amount: string; // min: 0.01, max: 150,000.00
-  currencyCode: CurrencyCodes;
+  'amount': string; // min: 0.01, max: 150,000.00
+  'currencyCode': CurrencyCodes;
 }
 
 export interface SellerBillingAgreementAttributes {
   '@type': 'SellerBillingAgreementAttributes';
   '@version': '2';
-  sellerBillingAgreementId?: string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
-  storeName?: string;
-  customInformation?: string;
+  'sellerBillingAgreementId'?: string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
+  'storeName'?: string;
+  'customInformation'?: string;
 }
 
 // No interface for SetupResponsePayload because it's different for every region (DE, JP, UK, US).
@@ -103,9 +118,9 @@ export class SetupPayloadBuilder {
   payload: SetupPayload = {
     '@type': 'SetupAmazonPayRequest',
     '@version': '2',
-    countryOfEstablishment: 'US',
-    ledgerCurrency: 'USD',
-    sellerId: '',
+    'countryOfEstablishment': 'US',
+    'ledgerCurrency': 'USD',
+    'sellerId': '',
   };
   billingAgreementAttributes: BillingAgreementAttributes = {
     '@type': 'BillingAgreementAttributes',
@@ -114,8 +129,8 @@ export class SetupPayloadBuilder {
   subscriptionAmount: SubscriptionAmount = {
     '@type': 'Price',
     '@version': '2',
-    amount: '',
-    currencyCode: 'USD'
+    'amount': '',
+    'currencyCode': 'USD',
   };
   sellerBillingAgreementAttributes: SellerBillingAgreementAttributes = {
     '@type': 'SellerBillingAgreementAttributes',
@@ -224,33 +239,33 @@ export class SetupPayloadBuilder {
 export interface ChargePayload {
   '@type': 'ChargeAmazonPayRequest';
   '@version': '2';
-  billingAgreementId: string;
-  paymentAction: PaymentActions;
-  sellerId: string;
-  authorizeAttributes: {
+  'billingAgreementId': string;
+  'paymentAction': PaymentActions;
+  'sellerId': string;
+  'authorizeAttributes': {
     '@type': 'AuthorizeAttributes';
     '@version': '2';
-    authorizationReferenceId: string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
-    authorizationAmount: {
+    'authorizationReferenceId': string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
+    'authorizationAmount': {
       '@type': 'Price';
       '@version': '2';
-      amount: string; // min: 0.01, max: 150,000.00
-      currencyCode: CurrencyCodes;
+      'amount': string; // min: 0.01, max: 150,000.00
+      'currencyCode': CurrencyCodes;
     };
-    sellerAuthorizationNote?: string; // max 255 char.
-    softDescriptor?: string; // max 16 char.
-    transactionTimeout?: string;
+    'sellerAuthorizationNote'?: string; // max 255 char.
+    'softDescriptor'?: string; // max 16 char.
+    'transactionTimeout'?: string;
   };
-  sellerOrderAttributes?: SellerOrderAttributes;
+  'sellerOrderAttributes'?: SellerOrderAttributes;
 }
 
 export interface SellerOrderAttributes {
   '@type': 'SellerOrderAttributes';
   '@version': '2';
-  sellerOrderId?: string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
-  storeName?: string;
-  customInformation?: string; // max 1024 char.
-  sellerNote?: string; //max 1024 char.
+  'sellerOrderId'?: string; // only (a-z)(A-Z)(0-9)(-)(_) allowed
+  'storeName'?: string;
+  'customInformation'?: string; // max 1024 char.
+  'sellerNote'?: string; //max 1024 char.
 }
 
 export type PaymentActions = 'Authorize' | 'AuthorizeAndCapture';
@@ -263,20 +278,20 @@ export class ChargePayloadBuilder {
   payload: ChargePayload = {
     '@type': 'ChargeAmazonPayRequest',
     '@version': '2',
-    billingAgreementId: '',
-    paymentAction: 'AuthorizeAndCapture',
-    sellerId: '',
-    authorizeAttributes: {
+    'billingAgreementId': '',
+    'paymentAction': 'AuthorizeAndCapture',
+    'sellerId': '',
+    'authorizeAttributes': {
       '@type': 'AuthorizeAttributes',
       '@version': '2',
-      authorizationReferenceId: '',
-      authorizationAmount: {
+      'authorizationReferenceId': '',
+      'authorizationAmount': {
         '@type': 'Price',
         '@version': '2',
-        amount: '',
-        currencyCode: 'USD'
+        'amount': '',
+        'currencyCode': 'USD',
       },
-    }
+    },
   };
 
   sellerOrderAttributes: SellerOrderAttributes = {
@@ -360,5 +375,4 @@ export class ChargePayloadBuilder {
 
     return this.payload;
   }
-  
 }
