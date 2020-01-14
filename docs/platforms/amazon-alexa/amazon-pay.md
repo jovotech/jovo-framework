@@ -4,7 +4,11 @@
 * [Permissions](#permissions)
 * [Buyer Id](#buyer-id)
 * [Buyer Address](#buyer-address)
+  * [Default Buyer Address](#default-buyer-address)
 * [Send the Directive](#send-the-directive)
+  * [Payload Builder](#payload-builder)
+    * [Setup Payload Builder](#setup-payload-builder)
+    * [Charge Payload Builder](#charge-payload-builder)
 
 ## Introduction
 
@@ -257,5 +261,123 @@ ON_PURCHASE() {
 
 For the reference for both the `Setup` and `Charge` directive, please use the official Amazon documentation which you can find [here](https://developer.amazon.com/docs/amazon-pay/amazon-pay-apis-for-alexa.html).
 
+### Payload Builder
+
+For both the `Setup` and `Charge` we offer a payload builder. It takes care of all the default values of the payload.
+
+After building the payload using the respective helper methods, you call the `build()` method, which will return you the final object. 
+
+#### Setup Payload Builder
+
+```js
+// @language=javascript
+
+const payload = this.$alexaSkill.$pay.createSetupPayload()
+    .setSellerId('YOUR SELLER ID')
+    .setCountryOfEstablishment('DE')
+    .setLedgerCurrency('EUR')
+    .setCheckoutLanguage('en_US')
+    .setSellerBillingAgreementId('id')
+    .setBillingAgreementType('CustomerInitiatedTransaction')
+    .setSubscriptionAmount('19.99')
+    .setSubscriptionCurrencyCode('EUR')
+    .setStoreName('Test name')
+    .setCustomInformation('custom info')
+    .setNeedAmazonShippingAddress(true)
+    .setSandboxMode(true)
+    .setSandboxEmail('test@jovo.tech')
+    .build();
+
+// @language=typescript
+
+const payload = this.$alexaSkill.$pay.createSetupPayload()
+    .setSellerId('YOUR SELLER ID')
+    .setCountryOfEstablishment('DE')
+    .setLedgerCurrency('EUR')
+    .setCheckoutLanguage('en_US')
+    .setSellerBillingAgreementId('id')
+    .setBillingAgreementType('CustomerInitiatedTransaction')
+    .setSubscriptionAmount('19.99')
+    .setSubscriptionCurrencyCode('EUR')
+    .setStoreName('Test name')
+    .setCustomInformation('custom info')
+    .setNeedAmazonShippingAddress(true)
+    .setSandboxMode(true)
+    .setSandboxEmail('test@jovo.tech')
+    .build();
+```
+
+Name | Param
+:--- | :---
+`setSellerId()` | String
+`setCountryOfEstablishment()` | Enum - `DE`, `ES`, `US`, `UK`, etc.
+`setLedgerCurrency()` | Enum - `USD`, `EUR`, `GBP`, or `JPY`
+`setCheckoutLanguage()` | Enum - `de_DE`, `en_GB`, `en_US`, `es_ES`, `fr_FR`, `it_IT`, `ja_JP`
+`setSellerBillingAgreementId()` | String
+`setBillingAgreementType()` | Enum - `CustomerInitiatedTransaction` or `MerchantInitiatedTransaction`
+`setSubscriptionAmount()` | String
+`setSubscriptionCurrencyCode()` | Enum - `USD`, `EUR`, `GBP`, or `JPY`
+`setStoreName()` | String
+`setCustomInformation()` | String
+`setNeedAmazonShippingAddress()` | Boolean
+`setSandboxMode()` | Boolean
+`setSandboxEmail()` | String
+
+#### Charge Payload Builder
+
+```js
+// @language=javascript
+
+const payload = this.$alexaSkill.$pay.createChargePayload()
+    .setSellerId('YOUR SELLER ID')
+    .setBillingAgreementId('billing id')
+    .setPaymentAction('AuthorizeAndCapture')
+    .setAuthorizationReferenceId('reference id')
+    .setAuthorizationAmount('19.99')
+    .setAuthorizationCurrencyCode('EUR')
+    .setSoftDescriptor('description')
+    .setTransactionTimeout('0')
+    .setSellerAuthorizationNote('note')
+    .setStoreName('name')
+    .setCustomInformation('custom info')
+    .setSellerNote('sellerNote')
+    .setSellerOrderId('order id')
+    .build();
+
+// @language=typescript
+
+const payload = this.$alexaSkill.$pay.createChargePayload()
+    .setSellerId('YOUR SELLER ID')
+    .setBillingAgreementId('billing id')
+    .setPaymentAction('AuthorizeAndCapture')
+    .setAuthorizationReferenceId('reference id')
+    .setAuthorizationAmount('19.99')
+    .setAuthorizationCurrencyCode('EUR')
+    .setSoftDescriptor('description')
+    .setTransactionTimeout('0')
+    .setSellerAuthorizationNote('note')
+    .setStoreName('name')
+    .setCustomInformation('custom info')
+    .setSellerNote('sellerNote')
+    .setSellerOrderId('order id')
+    .build();
+```
+
+Name | Param
+:--- | :---
+`setSellerId()` | String
+`setBillingAgreementId()` | String
+`setPaymentAction()` | Enum - `Authorize` or `AuthorizeAndCapture`
+`setAuthorizationReferenceId()` | String
+`setAuthorizationAmount()` | String
+`setAuthorizationCurrencyCode()` | Enum - `USD`, `EUR`, `GBP`, or `JPY`
+`setSoftDescriptor()` | String
+`setTransactionTimeout()` | String
+`setSellerAuthorizationNote()` | String
+`setStoreName()` | String
+`setCustomInformation()` | String
+`setSellerNote()` | String
+`setSellerOrderId()` | String
+
 <!--[metadata]: {"description": "Learn how to use the Amazon Pay feature with Jovo",
-"route": "amazon-alexa/pay" }-->
+"route": "amazon-alexa/amazon-pay" }-->
