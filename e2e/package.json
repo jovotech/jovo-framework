@@ -1,5 +1,6 @@
 {
     "name": "e2e",
+    "private": true,
     "version": "2.2.18",
     "description": "",
     "main": "dist/src/index",
@@ -61,5 +62,5 @@
         "dist/src/**/*",
         "gulpfile.js"
     ],
-    "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
+    "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }
