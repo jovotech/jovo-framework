@@ -2,10 +2,17 @@ import * as https from 'https';
 
 import { ApiError } from "./ApiError";
 import { AlexaAPIResponse } from './AlexaAPIResponse';
+import { RequestOptions } from 'https';
 
 export interface AmazonPayApiRequestOptions {
-  host: 'pay-api.amazon.com' | 'pay-api.amazon.eu' | 'pay-api.amazon.jp';
+  host?: AmazonPayApiHost;
   apiAccessToken?: string;
+}
+
+enum AmazonPayApiHost {
+  EU = 'pay-api.amazon.eu',
+  NA = 'pay-api.amazon.com',
+  JP = 'pay-api.amazon.jp'
 }
 
 export interface BuyerIdResponse {
@@ -19,7 +26,7 @@ export interface BuyerAddressRequestOptions extends AmazonPayApiRequestOptions {
 }
 
 export interface BuyerAddressResponse {
-  addresses: BuyerAddress[]
+  addresses: BuyerAddress[];
 }
 
 export interface BuyerAddress {
@@ -35,9 +42,9 @@ export interface BuyerAddress {
   addressType: string;
 }
 
-export class AmazonPay {
+export class AmazonPayAPI {
   static async getBuyerId(options: AmazonPayApiRequestOptions): Promise<BuyerIdResponse> {
-    const apiRequestOptions: any = {
+    const apiRequestOptions: RequestOptions = {
       port: 443,
       hostname: options.host,
       path: '/live/v1/buyer/id',
@@ -49,7 +56,7 @@ export class AmazonPay {
     };
 
     try {
-      const response: any = await AmazonPay.apiCall(apiRequestOptions); // tslint:disable-line
+      const response: any = await AmazonPayAPI.apiCall(apiRequestOptions); // tslint:disable-line
       if (response.httpStatus !== 200) {
         const apiError = new ApiError(response.data.errorDescription, response.data.errorCode);
         return Promise.reject(apiError);
@@ -61,7 +68,7 @@ export class AmazonPay {
   }
 
   static async getBuyerAddress(options: BuyerAddressRequestOptions): Promise<BuyerAddressResponse> {
-    const apiRequestOptions: any = {
+    const apiRequestOptions: RequestOptions = {
       port: 443,
       hostname: options.host,
       path: `/live/v1/buyer/addresses?sellerId=${options.sellerId}`,
@@ -74,11 +81,11 @@ export class AmazonPay {
 
     if (options.sandbox) {
       apiRequestOptions.path = `/sandbox/v1/buyer/addresses?sellerId=${options.sellerId}`;
-      apiRequestOptions.headers['x-amz-pay-sandbox-email-id'] = options.sandboxEmail;
+      apiRequestOptions.headers!['x-amz-pay-sandbox-email-id'] = options.sandboxEmail;
     }
 
     try {
-      const response: any = await AmazonPay.apiCall(apiRequestOptions); // tslint:disable-line
+      const response: any = await AmazonPayAPI.apiCall(apiRequestOptions); // tslint:disable-line
       if (response.httpStatus !== 200) {
         const apiError = new ApiError(response.data.errorDescription, response.data.errorCode);
         return Promise.reject(apiError);
@@ -123,5 +130,22 @@ export class AmazonPay {
         });
       req.end();
     });
+  }
+
+  /**
+   * Maps the parsed Alexa API endpoint to the Amazon Pay API host.
+   * There is a separate one for NA, EU (+ UK) and JP
+   * @param {string} alexaApiEndpoint e.g. "https://api.amazonalexa.com"
+   * @returns {string}
+   */
+  static mapAlexaApiEndpointToAmazonPayApiHost(alexaApiEndpoint: string) {
+    switch (alexaApiEndpoint) {
+      case 'https://api.eu.amazonalexa.com':
+        return AmazonPayApiHost.EU;
+      case 'https://api.fe.amazonalexa.com':
+        return AmazonPayApiHost.JP;    
+      default:
+        return AmazonPayApiHost.NA;
+    }
   }
 }

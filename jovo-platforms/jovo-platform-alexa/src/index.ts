@@ -6,8 +6,9 @@ export { Alexa } from './Alexa';
 export { AlexaSkill } from './core/AlexaSkill';
 export { AlexaTestSuite } from './core/Interfaces';
 export * from './core/AlexaRequest';
+export * from './modules/AmazonPay';
 export * from './services/AlexaReminder';
-export * from './services/AmazonPay';
+export * from './services/AmazonPayAPI';
 
 export { AlexaResponse } from './core/AlexaResponse';
 
@@ -63,6 +64,7 @@ import { AlexaSpeechBuilder } from './core/AlexaSpeechBuilder';
 import { ProactiveEvent } from './modules/ProactiveEvent';
 
 import { Apl } from './modules/AplPlugin';
+import { AmazonPay } from './modules/AmazonPay';
 
 declare module 'jovo-core/dist/src/Jovo' {
   export interface Jovo {
@@ -456,6 +458,14 @@ declare module './core/AlexaSkill' {
   interface AlexaSkill {
     $proactiveEvent?: ProactiveEvent;
     proactiveEvent(): ProactiveEvent | undefined;
+  }
+}
+
+// Amazon Pay
+declare module './core/AlexaSkill' {
+  interface AlexaSkill {
+    $pay?: AmazonPay;
+    pay(): AmazonPay | undefined;
   }
 }
 
