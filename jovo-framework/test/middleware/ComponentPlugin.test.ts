@@ -327,7 +327,6 @@ describe('test component session stack', () => {
     });
   });
 });
-
 describe('test mergeConfig()', () => {
   let componentPlugin: ComponentPlugin;
 
