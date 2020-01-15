@@ -9,6 +9,7 @@
 * `jovo-asr-azure` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Azure ASR implementation (WIP) ([@Veake](https://github.com/Veake)) 
 * `jovo-nlu-luis` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Microsoft LUIS implementation (WIP) ([@Veake](https://github.com/Veake)) 
 
+
  #### Committers: 3
 - Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
 - Max Ripper ([@Veake](https://github.com/Veake))
