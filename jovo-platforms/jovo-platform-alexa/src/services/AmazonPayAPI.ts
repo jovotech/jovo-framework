@@ -95,8 +95,8 @@ export class AmazonPayAPI {
       return Promise.reject(e);
     }
   }
-
-  static async apiCall(options: any): Promise<any> { // tslint:disable-line
+  // tslint:disable-next-line
+  static async apiCall(options: any): Promise<any> {
     return new Promise((resolve, reject) => {
       const req = https
         .request(options, (res) => {
