@@ -3,9 +3,10 @@ install:
   - "npm install"
   - "npm run bootstrap"
   - "npm run prettier"
+  - "npm run tslint"
   - "npm run tsc"
   - "npm run test"
-  - "npm run tslint"
+
 
 
 node_js:
