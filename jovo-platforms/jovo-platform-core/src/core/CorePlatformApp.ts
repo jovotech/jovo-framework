@@ -3,6 +3,7 @@ import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
 import { CorePlatformUser } from './CorePlatformUser';
+import _get = require('lodash.get');
 
 export class CorePlatformApp extends Jovo {
   $corePlatformApp: CorePlatformApp;
@@ -29,7 +30,7 @@ export class CorePlatformApp extends Jovo {
   }
 
   getRawText(): string | undefined {
-    return this.$request ? (this.$request as CorePlatformRequest).text : undefined;
+    return _get(this, `$request.request.body.text`);
   }
 
   getSelectedElementId(): string | undefined {

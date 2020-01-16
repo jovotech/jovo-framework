@@ -13,6 +13,7 @@ interface ImageCard extends SimpleCard {
   imageUrl: string;
 }
 
+// TODO: refactor
 export class Cards implements Plugin {
   install(corePlatform: CorePlatform): void {
     corePlatform.middleware('$output')!.use(this.output.bind(this));

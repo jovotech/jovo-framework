@@ -4,10 +4,26 @@ import _set = require('lodash.set');
 
 export interface CorePlatformInput extends Input {}
 
-export type RequestType = 'LAUNCH' | 'INTENT' | 'TEXT' | 'EVENT' | 'AUDIO' | 'END' | 'ERROR';
-export type DeviceType = 'AUDIO' | 'BROWSER';
-export type Capability = 'AUDIO' | 'HTML' | 'TEXT';
+export enum RequestType {
+  Launch = 'LAUNCH',
+  Intent = 'INTENT',
+  Text = 'TEXT',
+  Event = 'EVENT',
+  Audio = 'AUDIO',
+  End = 'END',
+  Error = 'ERROR',
+}
 
+export enum DeviceType {
+  Audio = 'AUDIO',
+  Browser = 'BROWSER',
+}
+
+export enum Capability {
+  Audio = 'AUDIO',
+  Html = 'HTML',
+  Text = 'TEXT',
+}
 
 export interface Request {
   id: string;
@@ -16,7 +32,7 @@ export interface Request {
   body: RequestBody;
   locale?: string;
   nlu?: Nlu;
-  data?: Record<string, any>;
+  data?: Record<string, any>; // tslint:disable-line:no-any
 }
 
 export interface Nlu {
@@ -28,21 +44,21 @@ export interface RequestBody {
   audio?: {
     sampleRate: number;
     b64string: string;
-  },
+  };
   text?: string;
-  event?: Record<string, any>;
+  event?: Record<string, any>; // tslint:disable-line:no-any
 }
 
 export interface Session {
   id: string;
   new: boolean;
-  data?: Record<string, any>;
+  data?: Record<string, any>; // tslint:disable-line:no-any
 }
 
 export interface User {
   id: string;
   accessToken?: string;
-  data?: Record<string, any>;
+  data?: Record<string, any>; // tslint:disable-line:no-any
 }
 
 export interface Device {
@@ -53,6 +69,7 @@ export interface Device {
 
 export interface Context {
   appId: string;
+  platform: string;
   device: Device;
   session: Session;
   user: User;
@@ -65,62 +82,59 @@ export interface CorePlatformRequestJSON {
 }
 
 export class CorePlatformRequest implements JovoRequest {
-
-  static fromJSON(json: CorePlatformRequestJSON | string): CorePlatformRequest {
+  static fromJSON(json: CorePlatformRequestJSON | object | string): CorePlatformRequest {
     if (typeof json === 'string') {
       return JSON.parse(json, CorePlatformRequest.reviver);
     } else {
       const corePlatformRequest = Object.create(CorePlatformRequest.prototype);
-      // tslint:disable-next-line
       return Object.assign(corePlatformRequest, json);
     }
   }
 
+  // tslint:disable-next-line:no-any
   static reviver(key: string, value: any): any {
     return key === '' ? CorePlatformRequest.fromJSON(value) : value;
   }
 
-  version: string = '0.01';
-  request?: Request;
-  context?: Context;
+  version = '0.0.1';
+  request!: Request;
+  context!: Context;
 
   addInput(key: string, value: string | object): this {
     if (typeof value === 'string') {
-      _set(this, `inputs.${key}`, {
+      _set(this, `request.nlu.inputs.${key}`, {
         name: key,
         value,
       });
     } else {
-      _set(this, `inputs.${key}`, value);
+      _set(this, `request.nlu.inputs.${key}`, value);
     }
-
     return this;
   }
 
+  // tslint:disable-next-line:no-any
   addSessionAttribute(key: string, value: any): this {
     if (this.getSessionAttributes()) {
-      _set(this, `session.data.${key}`, value);
+      _set(this, `context.session.data.${key}`, value);
     }
     return this;
   }
 
+  // tslint:disable-next-line:no-any
   addSessionData(key: string, value: any): this {
     return this.addSessionAttribute(key, value);
   }
 
   getAccessToken(): string | undefined {
-    return _get(this, `user.accessToken`);
+    return _get(this, `context.user.accessToken`);
   }
 
   getInputs(): Inputs {
-    return this.inputs || {};
+    return _get(this, `request.nlu.inputs`, {});
   }
 
   getIntentName(): string | undefined {
-    if (_get(this, 'nlu.intentName')) {
-      return _get(this, 'nlu.intentName');
-    }
-    return;
+    return _get(this, `request.nlu.intent`);
   }
 
   getLocale(): string {
@@ -128,7 +142,7 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   getSessionAttributes(): SessionData {
-    return _get(this, 'session.data', {});
+    return _get(this, 'context.session.data', {});
   }
 
   getSessionData(): SessionData {
@@ -136,18 +150,16 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   getSessionId(): string | undefined {
-    if (this.session) {
-      return this.session.id;
-    }
-    return;
+    return _get(this, 'context.session.id');
   }
 
   getState(): string | undefined {
     return _get(this.getSessionAttributes(), SessionConstants.STATE);
   }
 
+  // tslint:disable-next-line:no-any
   getSupportedInterfaces(): Record<string, any> {
-    return _get(this, `request.supportedInterfaces`, []);
+    return _get(this, `context.device.capabilities`, []);
   }
 
   getTimestamp(): string {
@@ -155,7 +167,7 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   getUserId(): string {
-    return _get(this, 'user.id');
+    return _get(this, 'context.user.id', '');
   }
 
   hasAudioInterface(): boolean {
@@ -171,15 +183,15 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   isNewSession(): boolean {
-    return _get(this, `session.new`, true);
+    return _get(this, `context.session.new`, true);
   }
 
   hasTextInput(): boolean {
-    return !this.fromVoice || false;
+    return !!_get(this, `request.body.text`);
   }
 
   setAccessToken(accessToken: string): this {
-    _set(this, `user.accessToken`, accessToken);
+    _set(this, `context.user.accessToken`, accessToken);
     return this;
   }
 
@@ -193,12 +205,12 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   setInputs(inputs: Inputs): this {
-    this.inputs = inputs;
+    _set(this, 'request.nlu.inputs', inputs);
     return this;
   }
 
   setIntentName(intentName: string): this {
-    _set(this, 'nlu.intentName', intentName);
+    _set(this, 'request.nlu.intent', intentName);
     return this;
   }
 
@@ -210,9 +222,7 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   setNewSession(isNew: boolean): this {
-    if (_get(this, 'session.new')) {
-      _set(this, 'session.new', isNew);
-    }
+    _set(this, `context.session.new`, isNew);
     return this;
   }
 
@@ -228,9 +238,7 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   setSessionAttributes(attributes: SessionData): this {
-    if (this.getSessionAttributes()) {
-      _set(this, 'session.data', attributes);
-    }
+    _set(this, `context.session.data`, attributes);
     return this;
   }
 
@@ -239,21 +247,17 @@ export class CorePlatformRequest implements JovoRequest {
   }
 
   setState(state: string): this {
-    if (_get(this, 'session.data')) {
-      _set(this, `session.data[${SessionConstants.STATE}]`, state);
-    }
+    _set(this, `context.session.data[${SessionConstants.STATE}]`, state);
     return this;
   }
 
   setTimestamp(timestamp: string): this {
-    if (_get(this, `request.timestamp`)) {
-      _set(this, 'request.timestamp', timestamp);
-    }
+    _set(this, 'request.timestamp', timestamp);
     return this;
   }
 
   setUserId(userId: string): this {
-    _set(this, 'user.id', userId);
+    _set(this, 'context.user.id', userId);
     return this;
   }
 
@@ -272,14 +276,12 @@ export class CorePlatformRequest implements JovoRequest {
     return this.getSupportedInterfaces()[identifier];
   }
 
+  // tslint:disable-next-line:no-any
   toJSON(): any {
-    return Object.assign({}, this);
+    return { ...this };
   }
 
   getDeviceName(): string {
-    throw new Error('Method not implemented.');
-  }
-  isNewSessionTemporaryWorkaround(): boolean {
-    throw new Error('Method not implemented.');
+    return _get(this, `context.device.type`, '');
   }
 }

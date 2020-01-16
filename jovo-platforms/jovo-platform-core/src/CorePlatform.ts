@@ -1,18 +1,28 @@
-import {ActionSet, BaseApp, Extensible, ExtensibleConfig, HandleRequest, Jovo, Log, Platform, RequestBuilder, ResponseBuilder, TestSuite} from 'jovo-core';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
+import {
+  ActionSet,
+  BaseApp,
+  ExtensibleConfig,
+  HandleRequest,
+  Jovo,
+  Log,
+  Platform,
+  TestSuite,
+} from 'jovo-core';
 import {
   Cards,
   CorePlatformApp,
   CorePlatformCore,
   CorePlatformRequest,
   CorePlatformRequestBuilder,
-  CorePlatformResponse, CorePlatformResponseBuilder
+  CorePlatformResponse,
+  CorePlatformResponseBuilder,
 } from '.';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 export interface Config extends ExtensibleConfig {
-  handlers?: any;
+  handlers?: any; // tslint:disable-line:no-any
 }
 
 export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResponse> {
@@ -79,6 +89,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
       return this.constructor.name === 'CorePlatformApp';
     };
 
+    // tslint:disable-next-line:no-any
     Jovo.prototype.action = function(key: string, value: any) {
       const actions = this.$output.actions || [];
 
@@ -92,9 +103,9 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   async request(handleRequest: HandleRequest) {
     Log.verbose('--------------------------------------------------------------');
     Log.verbose('[CorePlatform] { request } ');
-    if (handleRequest.host.$request.audio) {
-      const audioData = handleRequest.host.$request.audio.data;
-      handleRequest.host.$request.audio.data = this.getSamplesFromAudio(audioData);
+    const audioData = _get(handleRequest.host.$request, 'request.body.audio');
+    if (audioData) {
+      _set(handleRequest.host.$request, 'request.body.audio', this.getSamplesFromAudio(audioData));
     }
   }
 
@@ -168,7 +179,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     Log.verbose('[CorePlatform] { response }');
     await this.middleware('$response')!.run(handleRequest.jovo);
 
-    // handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson ? this.responseBuilder.create(handleRequest.jovo.$rawResponseJson) : handleRequest.jovo.$response;
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 

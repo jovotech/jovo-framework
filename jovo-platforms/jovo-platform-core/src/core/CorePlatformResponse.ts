@@ -1,22 +1,38 @@
-import { JovoResponse, SessionConstants, SessionData, SpeechBuilder } from 'jovo-core';
+import { JovoResponse, SessionConstants, SessionData } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
+// tslint:disable-next-line:no-any
 export type Data = Record<string, any>;
 
-export type ActionType = 'SPEECH' | 'AUDIO' | 'VISUAL' | 'WAIT' | 'PROCESSING' | 'CUSTOM' | 'SEQ_CONTAINER' | 'PAR_CONTAINER' | 'QUICK_REPLY';
+export enum ActionType {
+  Speech = 'SPEECH',
+  Audio = 'AUDIO',
+  Visual = 'VISUAL',
+  Processing = 'PROCESSING',
+  Custom = 'CUSTOM',
+  SequenceContainer = 'SEQ_CONTAINER',
+  ParallelContainer = 'PAR_CONTAINER',
+  QuickReply = 'QUICK_REPLY',
+}
 
 export interface BaseAction {
-  name: string;
+  name?: string;
   type: ActionType;
   delay?: number;
   payload?: Data;
-  reprompts?: Reprompt[];
-
+  [key: string]: any; // tslint:disable-line:no-any
 }
 
-export type Action = SequentialAction | ParallelAction | Reprompt | SpeechAction |
-  AudioAction | VisualAction | ProcessingAction | QuickReplyAction;
+export type Action =
+  | SequentialAction
+  | ParallelAction
+  | Reprompt
+  | SpeechAction
+  | AudioAction
+  | VisualAction
+  | ProcessingAction
+  | QuickReplyAction;
 
 export interface SequentialAction extends BaseAction {
   actions: BaseAction[];
@@ -26,9 +42,7 @@ export interface ParallelAction extends BaseAction {
   actions: BaseAction[];
 }
 
-export interface Reprompt extends SequentialAction {
-
-}
+export interface Reprompt extends SequentialAction {}
 
 export interface SpeechAction extends BaseAction {
   ssml?: string;
@@ -46,18 +60,16 @@ export interface AudioTrack {
     description?: string;
     coverImageUrl?: string;
     backgroundImageUrl?: string;
-  }
+  };
 }
 export interface AudioAction extends BaseAction {
   tracks: AudioTrack[];
 }
 
-
 export type VisualActionType = 'BASIC_CARD' | 'IMAGE_CARD' | '';
 
-
 export interface VisualAction extends BaseAction {
-  visualType: VisualActionType
+  visualType: VisualActionType;
 }
 
 export interface VisualActionBasicCard extends VisualAction {
@@ -82,7 +94,7 @@ export interface QuickReply {
   id: string;
   label: string;
   url?: string;
-  value: any;
+  value: any; // tslint:disable-line:no-any
 }
 export interface QuickReplyAction extends BaseAction {
   replies: QuickReply[];
@@ -91,36 +103,24 @@ export interface QuickReplyAction extends BaseAction {
 export interface Response {
   version: string;
   actions: Action[];
+  reprompts?: Reprompt[];
   user?: {
     data: Data;
-  }
+  };
   session?: {
     end: boolean;
     data: Data;
-  },
-  context?: {
-
-  }
+  };
+  context?: {};
 }
 
+export interface CorePlatformResponseJSON extends Response {}
 
-
-export interface CorePlatformResponseJSON {
-  version: string;
-  response: Response;
-  session?: {
-    data?: Data;
-  }
-  user?: {
-    storage?: {
-      data: Data;
-    }
-  }
-}
-
+// TODO fully implement methods.
 export class CorePlatformResponse implements JovoResponse {
   // reviver can be passed as the second parameter to JSON.parse
   // to automatically call User.fromJSON on the resulting value.
+  // tslint:disable-next-line:no-any
   static reviver(key: string, value: any): any {
     // tslint:disable-line
     return key === '' ? CorePlatformResponse.fromJSON(value) : value;
@@ -139,34 +139,40 @@ export class CorePlatformResponse implements JovoResponse {
   }
 
   version: string;
-  response: Response;
-  sessionData?: Data;
-  userData?: Data;
+  actions: Action[];
+  reprompts: Reprompt[];
+  user: {
+    data: Data;
+  };
+  session: {
+    end: boolean;
+    data: Data;
+  };
+  context?: {};
 
   constructor() {
-    this.version = '1.0';
-    this.response = {};
-    this.sessionData = {};
-    this.userData = {};
+    this.version = '0.0.1';
+    this.actions = [];
+    this.reprompts = [];
+    this.user = {
+      data: {},
+    };
+    this.session = {
+      end: false,
+      data: {},
+    };
   }
 
   getReprompt(): string | undefined {
-    if (!_get(this, 'response.output.reprompt.text')) {
-      return;
-    }
-    return SpeechBuilder.removeSpeakTags(_get(this, 'response.output.reprompt.text'));
+    return JSON.stringify(this.reprompts);
   }
 
   getRepromptPlain(): string | undefined {
-    const reprompt = this.getReprompt();
-    if (!reprompt) {
-      return;
-    }
-    return SpeechBuilder.removeSSML(reprompt);
+    return this.getReprompt();
   }
 
   getSessionAttributes(): SessionData | undefined {
-    return this.sessionData;
+    return this.session.data;
   }
 
   getSessionData(): SessionData | undefined {
@@ -174,38 +180,27 @@ export class CorePlatformResponse implements JovoResponse {
   }
 
   getSpeech(): string | undefined {
-    if (!_get(this, 'response.output.speech.text')) {
-      return;
-    }
-    return SpeechBuilder.removeSpeakTags(_get(this, 'response.output.speech.text'));
+    return JSON.stringify(this.actions);
   }
 
   getSpeechPlain(): string | undefined {
-    const speech = this.getSpeech();
-    if (!speech) {
-      return;
-    }
-    return SpeechBuilder.removeSSML(speech);
+    return this.getSpeech();
   }
 
+  // tslint:disable-next-line:no-any
   hasSessionAttribute(name: string, value?: any): boolean {
-    if (!this.getSessionAttribute(name)) {
-      return false;
-    }
-    if (typeof value !== 'undefined') {
-      if (this.getSessionAttribute(name) !== value) {
-        return false;
-      }
-    }
-    return true;
+    return typeof value === 'undefined'
+      ? this.getSessionAttribute(name)
+      : this.getSessionAttribute(name) === value;
   }
 
+  // tslint:disable-next-line:no-any
   hasSessionData(name: string, value?: any): boolean {
     return this.hasSessionAttribute(name, value);
   }
 
   hasSessionEnded(): boolean {
-    return _get(this, 'response.shouldEndSession');
+    return _get(this, 'session.end', false);
   }
 
   hasState(state: string): boolean | undefined {
@@ -213,76 +208,15 @@ export class CorePlatformResponse implements JovoResponse {
   }
 
   isAsk(speechText?: string | string[], repromptText?: string | string[]): boolean {
-    if (_get(this, 'response.shouldEndSession') === true) {
-      return false;
-    }
-    if (speechText) {
-      const text: string = _get(this, 'response.output.speech.text');
-
-      if (Array.isArray(speechText)) {
-        for (const speechTextElement of speechText) {
-          if (speechTextElement === text) {
-            return true;
-          }
-        }
-        return false;
-      } else {
-        if (text !== speechText) {
-          return false;
-        }
-      }
-    }
-
-    if (repromptText) {
-      const text: string = _get(this, 'response.output.reprompt.text');
-
-      if (Array.isArray(repromptText)) {
-        for (const speechTextElement of repromptText) {
-          if (speechTextElement === text) {
-            return true;
-          }
-        }
-        return false;
-      } else {
-        if (text !== repromptText) {
-          return false;
-        }
-      }
-    }
-
-    if (!_get(this, 'response.output.speech') || !_get(this, 'response.output.speech.text')) {
-      return false;
-    }
-
-    if (!_get(this, 'response.output.reprompt') || !_get(this, 'response.output.reprompt.text')) {
-      return false;
-    }
-    return true;
+    return false;
   }
 
   isTell(speechText?: string | string[]): boolean {
-    if (_get(this, 'response.shouldEndSession') === false) {
-      return false;
-    }
-    if (speechText) {
-      const text: string = _get(this, 'response.output.speech.text');
-
-      if (Array.isArray(speechText)) {
-        for (const speechTextElement of speechText) {
-          if (speechTextElement === text) {
-            return true;
-          }
-        }
-        return false;
-      } else {
-        return text === speechText;
-      }
-    }
-    return true;
+    return false;
   }
 
   setSessionAttributes(sessionAttributes: SessionData): this {
-    _set(this, `sessionData`, sessionAttributes);
+    _set(this, `session.data`, sessionAttributes);
     return this;
   }
 
@@ -291,6 +225,6 @@ export class CorePlatformResponse implements JovoResponse {
   }
 
   getSessionAttribute(name: string) {
-    return _get(this, `sessionData.${name}`);
+    return _get(this, `session.data.${name}`);
   }
 }

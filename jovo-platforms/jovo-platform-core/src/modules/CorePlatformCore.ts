@@ -1,9 +1,12 @@
 import { EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 import { CorePlatformApp, CorePlatformRequest, CorePlatformResponse, CorePlatformUser } from '..';
 import { CorePlatform } from '../CorePlatform';
+import { RequestType } from '../core/CorePlatformRequest';
+import { ActionType, Reprompt, SpeechAction } from '../core/CorePlatformResponse';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
+// TODO refactor to work with new request
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
     platform.middleware('$init')!.use(this.init.bind(this));
@@ -16,9 +19,14 @@ export class CorePlatformCore implements Plugin {
 
   async init(handleRequest: HandleRequest) {
     Log.verbose('[CorePlatformCore] ( $init )');
-    const requestObject = handleRequest.host.getRequestObject();
+    const requestObject = handleRequest.host.getRequestObject() as CorePlatformRequest;
 
-    if (requestObject && requestObject.request && requestObject.$version) {
+    if (
+      requestObject.version &&
+      requestObject.request &&
+      requestObject.context &&
+      requestObject.context.platform
+    ) {
       handleRequest.jovo = new CorePlatformApp(
         handleRequest.app,
         handleRequest.host,
@@ -42,11 +50,13 @@ export class CorePlatformCore implements Plugin {
   async type(corePlatformApp: CorePlatformApp) {
     Log.verbose('[CorePlatformCore] ( $type )');
     const request = corePlatformApp.$request as CorePlatformRequest;
+    const requestType = _get(request, 'request.type');
 
     let type: EnumRequestType = EnumRequestType.INTENT;
-    if (request.isLaunch) {
+
+    if (requestType === RequestType.Launch) {
       type = EnumRequestType.LAUNCH;
-    } else if (request.isEnd) {
+    } else if (requestType === RequestType.End) {
       type = EnumRequestType.END;
     }
 
@@ -58,7 +68,7 @@ export class CorePlatformCore implements Plugin {
   async session(corePlatformApp: CorePlatformApp) {
     Log.verbose('[CorePlatformCore] ( $session )');
     const request = corePlatformApp.$request as CorePlatformRequest;
-    const sessionData = JSON.parse(JSON.stringify(request.getSessionAttributes() || {}));
+    const sessionData = request.getSessionAttributes() || {};
     corePlatformApp.$requestSessionAttributes = sessionData;
     if (!corePlatformApp.$session) {
       corePlatformApp.$session = { $data: {} };
@@ -84,6 +94,7 @@ export class CorePlatformCore implements Plugin {
     }
   }
 
+  // TODO: refactor
   output(corePlatformApp: CorePlatformApp) {
     Log.verbose('[CorePlatformCore] ( $output )');
     const output = corePlatformApp.$output;
@@ -97,52 +108,48 @@ export class CorePlatformCore implements Plugin {
 
     const tell = _get(output, 'tell');
     if (tell) {
-      const tellObj = {
-        speech: {
-          ssml: SpeechBuilder.toSSML(tell.speech.toString()),
-          text: _get(output, 'text.speech', ''),
-        },
+      const action: SpeechAction = {
+        type: ActionType.Speech,
+        ssml: tell.speech.toString(),
+        plain: SpeechBuilder.removeSSML(tell.speech.toString()),
       };
 
-      _set(corePlatformApp.$response, 'response.shouldEndSession', true);
-      _set(corePlatformApp.$response, 'response.output', tellObj);
+      (corePlatformApp.$response as CorePlatformResponse).actions.push(action);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const askObj: any = {
-        speech: {
-          ssml: SpeechBuilder.toSSML(ask.speech.toString()),
-          text: _get(output, 'text.speech', ''),
-        },
+      const action: SpeechAction = {
+        type: ActionType.Speech,
+        ssml: ask.speech.toString(),
+        plain: SpeechBuilder.removeSSML(ask.speech.toString()),
       };
-      if (ask.reprompt) {
-        askObj.reprompt = {
-          ssml: SpeechBuilder.toSSML(ask.reprompt.toString()),
-          text: _get(output, 'text.reprompt', ''),
-        };
-      }
+      const reprompt: Reprompt = {
+        type: ActionType.SequenceContainer,
+        actions: [
+          {
+            type: ActionType.Speech,
+            ssml: ask.reprompt.toString(),
+            plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
+          },
+        ],
+      };
 
-      _set(corePlatformApp.$response, 'response.shouldEndSession', false);
-      _set(corePlatformApp.$response, 'response.output', askObj);
+      (corePlatformApp.$response as CorePlatformResponse).actions.push(action);
+      (corePlatformApp.$response as CorePlatformResponse).reprompts.push(reprompt);
     }
 
     const actions = _get(output, 'actions');
     if (actions) {
-      _set(corePlatformApp.$response, 'response.output.actions', actions);
-    }
-
-    if (corePlatformApp.getRawText()) {
-      _set(corePlatformApp.$response, 'response.inputText', corePlatformApp.getRawText());
+      _set(corePlatformApp.$response, 'response.actions', actions);
     }
 
     if (
       _get(corePlatformApp.$response, 'response.shouldEndSession') === false ||
       corePlatformApp.$app.config.keepSessionDataOnSessionEnded
     ) {
-      // set sessionAttributes
       if (corePlatformApp.$session && corePlatformApp.$session.$data) {
-        _set(corePlatformApp.$response, 'sessionData', corePlatformApp.$session.$data);
+        _set(corePlatformApp.$response, 'session.data', corePlatformApp.$session.$data);
       }
     }
   }
