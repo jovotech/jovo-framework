@@ -19,7 +19,7 @@ const messenger = new FacebookMessenger({
 messenger.use(
 	new LuisNlu({
 		appId: process.env.LUIS_APP_ID,
-		endpointHost: 'westus.api.cognitive.microsoft.com',
+		endpointRegion: 'westus',
 		endpointKey: process.env.LUIS_ENDPOINT_KEY
 	})
 );

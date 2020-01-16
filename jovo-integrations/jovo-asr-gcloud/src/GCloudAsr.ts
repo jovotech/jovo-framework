@@ -11,26 +11,28 @@ import {
   Plugin,
   PluginConfig,
 } from 'jovo-core';
-import { stringify } from 'querystring';
-import { SimpleAzureAsrResponse } from './Interfaces';
+import { auth, JWT } from 'google-auth-library';
+import { promisify } from 'util';
+import * as fs from 'fs';
 import _merge = require('lodash.merge');
+import { RecognitionRequest, RecognitionResult } from './Interfaces';
+
+const readFile = promisify(fs.readFile);
 
 export interface Config extends PluginConfig {
-  endpointKey?: string;
-  endpointRegion?: string;
-  language?: string;
+  credentialsFile?: string;
 }
 
 const TARGET_SAMPLE_RATE = 16000;
 
-export class AzureAsr implements Plugin {
+export class GCloudAsr implements Plugin {
   config: Config = {
-    endpointKey: '',
-    endpointRegion: '',
-    language: 'en-US',
+    credentialsFile: './credentials.json',
   };
 
-  constructor(config: Config) {
+  jwtClient?: JWT;
+
+  constructor(config?: Config) {
     this.config = _merge(this.config, config);
   }
 
@@ -38,7 +40,7 @@ export class AzureAsr implements Plugin {
     return this.constructor.name;
   }
 
-  install(parent: Extensible) {
+  async install(parent: Extensible) {
     if (!(parent instanceof Platform)) {
       throw new JovoError(
         `'${this.name}' has to be an immediate plugin of a platform!`,
@@ -53,7 +55,14 @@ export class AzureAsr implements Plugin {
         this.name,
       );
     }
+
     parent.middleware('$asr')!.use(this.asr.bind(this));
+
+    const jwtClient = await this.initializeJWT();
+    if (jwtClient) {
+      await jwtClient.authorize();
+      this.jwtClient = jwtClient;
+    }
   }
 
   async asr(jovo: Jovo) {
@@ -71,12 +80,10 @@ export class AzureAsr implements Plugin {
       );
       const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
-      const result = await this.speechToText(
-        wavBuffer,
-        `audio/wav; codecs=audio/pcm; samplerate=${TARGET_SAMPLE_RATE}`,
-      );
+      const result = await this.speechToText(wavBuffer);
+
       jovo.$asr = {
-        text: result.DisplayText || '',
+        text: result.alternatives[0].transcript,
         [this.name]: result,
       };
     } else if (!text && jovo.$type.type === EnumRequestType.INTENT) {
@@ -84,27 +91,33 @@ export class AzureAsr implements Plugin {
     }
   }
 
-  private async speechToText(speech: Buffer, contentType: string): Promise<SimpleAzureAsrResponse> {
-    const path = `/speech/recognition/conversation/cognitiveservices/v1?${stringify({
-      language: this.config.language,
-    })}`;
-    const url = `https://${this.config.endpointRegion}.sst.speech.microsoft.com${path}`;
+  private async speechToText(speech: Buffer): Promise<RecognitionResult> {
+    const url = `https://speech.googleapis.com/v1/speech:recognize`;
+
+    const accessTokenObj = await this.jwtClient?.getAccessToken();
+    const authToken = accessTokenObj ? accessTokenObj.token : '';
+
+    const reqData: RecognitionRequest = {
+      config: {
+        languageCode: 'en-US',
+      },
+      audio: {
+        content: speech.toString('base64'),
+      },
+    };
 
     const config: AxiosRequestConfig = {
       url,
-      data: speech,
+      data: reqData,
       method: 'POST',
       headers: {
-        'Ocp-Apim-Subscription-Key': this.config.endpointKey,
-        'Content-type': contentType,
-      },
-      validateStatus: (status: number) => {
-        return true;
+        Authorization: `Bearer ${authToken}`,
       },
     };
 
     try {
-      const response = await HttpService.request<SimpleAzureAsrResponse>(config);
+      const response = await HttpService.request(config);
+      console.log({ response });
       if (response.status === 200 && response.data) {
         return response.data;
       }
@@ -115,6 +128,29 @@ export class AzureAsr implements Plugin {
       );
     } catch (e) {
       throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+    }
+  }
+
+  private async initializeJWT(): Promise<JWT> {
+    if (!this.config.credentialsFile) {
+      throw new JovoError('Credentials file is mandatory', ErrorCode.ERR_PLUGIN, this.name);
+    }
+
+    try {
+      const keyData = await readFile(this.config.credentialsFile);
+      const keyFileObject = JSON.parse(keyData.toString());
+
+      const jwtClient = new JWT(keyFileObject.client_email, undefined, keyFileObject.private_key, [
+        'https://www.googleapis.com/auth/cloud-platform',
+      ]);
+      jwtClient.projectId = keyFileObject.project_id;
+      return jwtClient;
+    } catch (e) {
+      throw new JovoError(
+        `Credentials file doesn't exist in ${this.config.credentialsFile}`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+      );
     }
   }
 }
