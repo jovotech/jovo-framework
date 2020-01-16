@@ -21,7 +21,8 @@
     "jovo-framework": "^2.2.25",
     "jovo-platform-core": "^2.2.5",
     "jovo-plugin-debugger": "^2.2.20",
-    "jovo-slu-lex": "^2.2.5"
+    "jovo-slu-lex": "^2.2.5",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

@@ -4,10 +4,106 @@ import _set = require('lodash.set');
 
 export type Data = Record<string, any>;
 
-export interface Response {
-  endSession?: boolean;
-  inputText?: string;
+export type ActionType = 'SPEECH' | 'AUDIO' | 'VISUAL' | 'WAIT' | 'PROCESSING' | 'CUSTOM' | 'SEQ_CONTAINER' | 'PAR_CONTAINER' | 'QUICK_REPLY';
+
+export interface BaseAction {
+  name: string;
+  type: ActionType;
+  delay?: number;
+  payload?: Data;
+  reprompts?: Reprompt[];
+
 }
+
+export type Action = SequentialAction | ParallelAction | Reprompt | SpeechAction |
+  AudioAction | VisualAction | ProcessingAction | QuickReplyAction;
+
+export interface SequentialAction extends BaseAction {
+  actions: BaseAction[];
+}
+
+export interface ParallelAction extends BaseAction {
+  actions: BaseAction[];
+}
+
+export interface Reprompt extends SequentialAction {
+
+}
+
+export interface SpeechAction extends BaseAction {
+  ssml?: string;
+  plain?: string;
+  displayText?: string;
+}
+
+export interface AudioTrack {
+  id: string;
+  url: string;
+  offsetInMs?: number;
+  durationInMs?: number;
+  metaData?: {
+    title?: string;
+    description?: string;
+    coverImageUrl?: string;
+    backgroundImageUrl?: string;
+  }
+}
+export interface AudioAction extends BaseAction {
+  tracks: AudioTrack[];
+}
+
+
+export type VisualActionType = 'BASIC_CARD' | 'IMAGE_CARD' | '';
+
+
+export interface VisualAction extends BaseAction {
+  visualType: VisualActionType
+}
+
+export interface VisualActionBasicCard extends VisualAction {
+  title: string;
+  body: string;
+}
+
+export interface VisualActionImageCard extends VisualAction {
+  title?: string;
+  body?: string;
+  imageUrl: string;
+}
+
+export type ProcessingActionType = 'HIDDEN' | 'TYPING' | 'SPINNER';
+export interface ProcessingAction {
+  processingType: ProcessingActionType;
+  durationInMs: number;
+  text?: string;
+}
+
+export interface QuickReply {
+  id: string;
+  label: string;
+  url?: string;
+  value: any;
+}
+export interface QuickReplyAction extends BaseAction {
+  replies: QuickReply[];
+}
+
+export interface Response {
+  version: string;
+  actions: Action[];
+  user?: {
+    data: Data;
+  }
+  session?: {
+    end: boolean;
+    data: Data;
+  },
+  context?: {
+
+  }
+}
+
+
 
 export interface CorePlatformResponseJSON {
   version: string;

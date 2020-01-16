@@ -9,6 +9,7 @@ const { CorePlatform } = require('jovo-platform-core');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 const { AmazonCredentials, AmazonLexSlu } = require('jovo-slu-lex');
+require('dotenv').config();
 
 const app = new App();
 
@@ -32,6 +33,7 @@ app.use(corePlatform, new JovoDebugger(), new FileDb());
 // ------------------------------------------------------------------
 // APP LOGIC
 // ------------------------------------------------------------------
+console.log(process.env.AWS_ACCESS_KEY_ID);
 
 app.setHandler({
 	LAUNCH() {

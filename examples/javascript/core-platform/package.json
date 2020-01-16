@@ -14,11 +14,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "dotenv": "^6.2.0",
     "jovo-db-filedb": "^2.2.18",
     "jovo-framework": "^2.2.25",
     "jovo-platform-core": "^2.2.5",
     "jovo-plugin-debugger": "^2.2.20",
-    "jovo-slu-lex": "^2.2.5"
+    "jovo-slu-lex": "^2.2.5",
+    "dotenv": "^8.2.0"
   }
 }

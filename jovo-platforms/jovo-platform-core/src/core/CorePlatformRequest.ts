@@ -4,16 +4,39 @@ import _set = require('lodash.set');
 
 export interface CorePlatformInput extends Input {}
 
+export type RequestType = 'LAUNCH' | 'INTENT' | 'TEXT' | 'EVENT' | 'AUDIO' | 'END' | 'ERROR';
+export type DeviceType = 'AUDIO' | 'BROWSER';
+export type Capability = 'AUDIO' | 'HTML' | 'TEXT';
+
+
 export interface Request {
-  locale: string;
+  id: string;
   timestamp: string;
-  supportedInterfaces: Record<string, any>;
+  type: RequestType;
+  body: RequestBody;
+  locale?: string;
+  nlu?: Nlu;
+  data?: Record<string, any>;
+}
+
+export interface Nlu {
+  intent?: string;
+  inputs?: Record<string, CorePlatformInput>;
+  confidence?: number;
+}
+export interface RequestBody {
+  audio?: {
+    sampleRate: number;
+    b64string: string;
+  },
+  text?: string;
+  event?: Record<string, any>;
 }
 
 export interface Session {
   id: string;
-  data: Record<string, any>;
   new: boolean;
+  data?: Record<string, any>;
 }
 
 export interface User {
@@ -22,60 +45,23 @@ export interface User {
   data?: Record<string, any>;
 }
 
+export interface Device {
+  id: string;
+  type: DeviceType;
+  capabilities: Record<Capability, string>;
+}
 
-export type RequestType = 'LAUNCH' | 'INTENT' | 'TEXT' | 'EVENT' | 'AUDIO' | 'END' | 'ERROR';
-export type DeviceType = 'AUDIO' | 'BROWSER';
-
-export interface Request {
-  $version: string;
-
-  request: {
-    requestId: string;
-    type: RequestType;
-    locale: string;
-    timestamp: string;
-  }
-  context: {
-    device: {
-      id: string,
-      deviceType: DeviceType,
-    }
-  }
-  user: {
-    id: string;
-    accessToken?: string;
-    storage?: {
-      data?: Record<string, any>;
-    }
-  }
-  session: {
-    id: string;
-    new: boolean;
-    data: Record<string, any>;
-  }
+export interface Context {
+  appId: string;
+  device: Device;
+  session: Session;
+  user: User;
 }
 
 export interface CorePlatformRequestJSON {
-  $version?: string;
-
-  request?: Request;
-  session?: Session;
-  user?: User;
-
-  audio?: {
-    sampleRate: number;
-    data: any;
-  };
-  text?: string;
-
-  isLaunch?: boolean;
-  isEnd?: boolean;
-  fromVoice?: boolean;
-
-  nlu?: {
-    intentName: string;
-  };
-  inputs?: Inputs;
+  version: string;
+  request: Request;
+  context: Context;
 }
 
 export class CorePlatformRequest implements JovoRequest {
@@ -94,22 +80,9 @@ export class CorePlatformRequest implements JovoRequest {
     return key === '' ? CorePlatformRequest.fromJSON(value) : value;
   }
 
-  $version?: string;
+  version: string = '0.01';
   request?: Request;
-  session?: Session;
-  user?: User;
-
-  audio?: string;
-  text?: string;
-
-  isLaunch?: boolean;
-  isEnd?: boolean;
-  fromVoice?: boolean;
-
-  nlu?: {
-    intentName: string;
-  };
-  inputs?: Inputs;
+  context?: Context;
 
   addInput(key: string, value: string | object): this {
     if (typeof value === 'string') {
