@@ -17,6 +17,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "jovo-asr-gcloud": "^2.2.5",
     "jovo-db-filedb": "^2.2.18",
     "jovo-framework": "^2.2.25",
     "jovo-platform-core": "^2.2.5",
