@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"lerna": "lerna",
-		"init": "lerna bootstrap",
+		"init": "lerna bootstrap --hoist",
 		"prettier": "lerna exec npm run prettier --ignore jovo-examples-*",
 		"rimraf": "lerna exec npm run rimraf --ignore jovo-examples-*",
 		"tsc": "lerna exec npm run tsc --ignore jovo-examples-*",
