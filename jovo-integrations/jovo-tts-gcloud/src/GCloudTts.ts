@@ -8,7 +8,7 @@ import {
   Platform,
   Plugin,
   PluginConfig,
-  SpeechBuilder
+  SpeechBuilder,
 } from 'jovo-core';
 import { JWT } from 'google-auth-library';
 import { promisify } from 'util';
@@ -26,7 +26,7 @@ export interface Config extends PluginConfig {
 
 export class GCloudTts implements Plugin {
   config: Config = {
-    credentialsFile: './credentials.json'
+    credentialsFile: './credentials.json',
   };
 
   jwtClient?: JWT;
@@ -44,14 +44,14 @@ export class GCloudTts implements Plugin {
       throw new JovoError(
         `'${this.name}' has to be an immediate plugin of a platform!`,
         ErrorCode.ERR_PLUGIN,
-        this.name
+        this.name,
       );
     }
     if (!parent.supportsTTS()) {
       throw new JovoError(
         `'${this.name}' can only be used by platforms that support TTS!`,
         ErrorCode.ERR_PLUGIN,
-        this.name
+        this.name,
       );
     }
 
@@ -121,11 +121,11 @@ export class GCloudTts implements Plugin {
     const reqData: SynthesisRequest = {
       input: { ssml },
       voice: {
-        languageCode: 'en-US'
+        languageCode: 'en-US',
       },
       audioConfig: {
-        audioEncoding: 'MP3'
-      }
+        audioEncoding: 'MP3',
+      },
     };
 
     const config: AxiosRequestConfig = {
@@ -133,11 +133,11 @@ export class GCloudTts implements Plugin {
       data: reqData,
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
       validateStatus: (status: number) => {
         return true;
-      }
+      },
     };
 
     try {
@@ -148,7 +148,7 @@ export class GCloudTts implements Plugin {
       throw new Error(
         `Could not retrieve TTS data. status: ${response.status}, data: ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
-        }`
+        }`,
       );
     } catch (e) {
       throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
@@ -165,7 +165,7 @@ export class GCloudTts implements Plugin {
       const keyFileObject = JSON.parse(keyData.toString());
 
       const jwtClient = new JWT(keyFileObject.client_email, undefined, keyFileObject.private_key, [
-        'https://www.googleapis.com/auth/cloud-platform'
+        'https://www.googleapis.com/auth/cloud-platform',
       ]);
       jwtClient.projectId = keyFileObject.project_id;
       return jwtClient;
@@ -173,7 +173,7 @@ export class GCloudTts implements Plugin {
       throw new JovoError(
         `Credentials file doesn't exist in ${this.config.credentialsFile}`,
         ErrorCode.ERR_PLUGIN,
-        this.name
+        this.name,
       );
     }
   }

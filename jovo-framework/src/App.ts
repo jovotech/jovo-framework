@@ -16,7 +16,7 @@ import {
   Log,
   Logger,
   LogLevel,
-  Middleware
+  Middleware,
 } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 import _merge = require('lodash.merge');

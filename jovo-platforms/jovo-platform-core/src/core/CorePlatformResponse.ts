@@ -158,8 +158,8 @@ export class CorePlatformResponse implements JovoResponse {
       data: {},
     };
     this.session = {
-      end: false,
       data: {},
+      end: false,
     };
   }
 

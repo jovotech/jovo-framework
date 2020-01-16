@@ -52,7 +52,6 @@ export class Middleware {
         return Promise.resolve();
       }
 
-
       // LOGGING
       if (this.parent.constructor.name === 'App') {
         if (this.fns.length > 0 || this.parent.listeners(this.name).length > 0) {

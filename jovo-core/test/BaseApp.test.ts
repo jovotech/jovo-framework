@@ -142,7 +142,6 @@ test('test hook() with callbacks', async (done) => {
   await baseApp.middleware('platform.init')!.run({});
 });
 
-
 describe('test useComponents()', () => {
   let componentPlugin: ComponentPlugin;
   let app: BaseApp;

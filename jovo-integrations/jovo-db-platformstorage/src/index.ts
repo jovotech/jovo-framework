@@ -1,1 +1,1 @@
-export {PlatformStorage} from './PlatformStorage';
+export { PlatformStorage } from './PlatformStorage';

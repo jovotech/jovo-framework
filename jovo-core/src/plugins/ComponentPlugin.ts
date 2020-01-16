@@ -7,7 +7,6 @@ import { BaseApp, HandleRequest, Jovo, SessionConstants } from '..';
 import { Extensible } from './../core/Extensible';
 import { Handler } from './../Interfaces';
 
-
 import { I18Next } from './I18Next';
 class ComponentPlugin extends Extensible {
   /**

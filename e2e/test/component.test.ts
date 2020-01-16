@@ -154,7 +154,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
      * Also, test the nesting of n-th layer component's handlers
      */
 
-    test('should add component\'s handler to project\'s handler', async (done) => {
+    test("should add component's handler to project's handler", async (done) => {
       app.useComponents(firstLayerComponent);
 
       const request = await t.requestBuilder.launch();
@@ -182,7 +182,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
     });
 
     // Tests whether the n-th layer components handlers are correctly merged into the n-1-th layer components handler
-    test('should merge 3rd layer component\'s config into 2nd layer\'s and their combined handler into 1st layer\'s handler', async (done) => {
+    test("should merge 3rd layer component's config into 2nd layer's and their combined handler into 1st layer's handler", async (done) => {
       const secondLayerComponent = new ComponentPlugin();
       secondLayerComponent.name = 'SecondLayerComponent';
       secondLayerComponent.handler = {
@@ -498,7 +498,7 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
       });
     });
 
-    test('should merge component\'s config into its child components default config', async (done) => {
+    test("should merge component's config into its child components default config", async (done) => {
       firstLayerComponent.config = {
         SecondLayerComponent: {
           key: 'newValue',

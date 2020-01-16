@@ -1,8 +1,22 @@
 import _get = require('lodash.get');
 
-import { BaseApp, EnumRequestType, ErrorCode, HandleRequest, JovoError, Log, Plugin, SessionConstants } from '..';
+import {
+  BaseApp,
+  EnumRequestType,
+  ErrorCode,
+  HandleRequest,
+  JovoError,
+  Log,
+  Plugin,
+  SessionConstants,
+} from '..';
 import { Jovo } from '../core/Jovo';
-import { Component, ComponentDelegationOptions, ComponentResponse, ComponentSessionData } from '../plugins/Component';
+import {
+  Component,
+  ComponentDelegationOptions,
+  ComponentResponse,
+  ComponentSessionData,
+} from '../plugins/Component';
 import { ComponentPlugin } from './ComponentPlugin';
 import { Route, Router } from './Router';
 
@@ -230,7 +244,7 @@ export class Handler implements Plugin {
     Log.verbose(Log.header('Handle ', 'framework'));
     Log.yellow().verbose(route);
     await Handler.applyHandle(handleRequest.jovo, route);
-    }
+  }
 
   async error(handleRequest: HandleRequest) {
     if (!handleRequest.jovo) {

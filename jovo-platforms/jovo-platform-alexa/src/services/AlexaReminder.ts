@@ -28,7 +28,7 @@ export class AlexaReminder {
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
-          const {message, code} = response.data;
+          const { message, code } = response.data;
           apiError = new ApiError(message, code);
           if (message === 'Request Unauthorized.') {
             apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
@@ -62,7 +62,7 @@ export class AlexaReminder {
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
-          const {message, code} = response.data;
+          const { message, code } = response.data;
           apiError = new ApiError(message, code);
           if (message === 'Request Unauthorized.') {
             apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
@@ -98,7 +98,7 @@ export class AlexaReminder {
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
-          const {message, code} = response.data;
+          const { message, code } = response.data;
           apiError = new ApiError(message, code);
           if (message === 'Request Unauthorized.') {
             apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
@@ -132,7 +132,7 @@ export class AlexaReminder {
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
-          const {message, code} = response.data;
+          const { message, code } = response.data;
           apiError = new ApiError(message, code);
           if (message === 'Request Unauthorized.') {
             apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
@@ -164,7 +164,7 @@ export class AlexaReminder {
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
-          const {message, code} = response.data;
+          const { message, code } = response.data;
           apiError = new ApiError(message, code);
           if (message === 'Request Unauthorized.') {
             apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app

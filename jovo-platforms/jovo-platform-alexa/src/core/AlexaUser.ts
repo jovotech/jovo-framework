@@ -62,7 +62,7 @@ export class AlexaUser extends User {
    */
   async getToDoList(status = 'active'): Promise<ToDoList> {
     const list = await this.alexaList.getList('Alexa to-do list', status);
-    if(!list.items) {
+    if (!list.items) {
       list.items = [];
     }
     return list as ToDoList;

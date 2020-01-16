@@ -33,7 +33,7 @@ export class AlexaSettings {
     try {
       const response = await AlexaAPI.apiCall(options);
       if (response.status === 403) {
-        const {message, code} = response.data;
+        const { message, code } = response.data;
         const apiError = new ApiError(message, code);
         if (message === 'Access to this resource has not yet been requested.') {
           apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app

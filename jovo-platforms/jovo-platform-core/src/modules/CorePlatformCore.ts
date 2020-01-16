@@ -1,10 +1,10 @@
 import { EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder } from 'jovo-core';
-import { CorePlatformApp, CorePlatformRequest, CorePlatformResponse, CorePlatformUser } from '..';
-import { CorePlatform } from '../CorePlatform';
-import { RequestType } from '../core/CorePlatformRequest';
-import { ActionType, Reprompt, SpeechAction } from '../core/CorePlatformResponse';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import { CorePlatformApp, CorePlatformRequest, CorePlatformResponse, CorePlatformUser } from '..';
+import { RequestType } from '../core/CorePlatformRequest';
+import { ActionType, Reprompt, SpeechAction } from '../core/CorePlatformResponse';
+import { CorePlatform } from '../CorePlatform';
 
 // TODO refactor to work with new request
 export class CorePlatformCore implements Plugin {
@@ -109,9 +109,9 @@ export class CorePlatformCore implements Plugin {
     const tell = _get(output, 'tell');
     if (tell) {
       const action: SpeechAction = {
-        type: ActionType.Speech,
-        ssml: tell.speech.toString(),
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
+        ssml: tell.speech.toString(),
+        type: ActionType.Speech,
       };
 
       (corePlatformApp.$response as CorePlatformResponse).actions.push(action);
@@ -120,19 +120,19 @@ export class CorePlatformCore implements Plugin {
     const ask = _get(output, 'ask');
     if (ask) {
       const action: SpeechAction = {
-        type: ActionType.Speech,
-        ssml: ask.speech.toString(),
         plain: SpeechBuilder.removeSSML(ask.speech.toString()),
+        ssml: ask.speech.toString(),
+        type: ActionType.Speech,
       };
       const reprompt: Reprompt = {
-        type: ActionType.SequenceContainer,
         actions: [
           {
-            type: ActionType.Speech,
-            ssml: ask.reprompt.toString(),
             plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
+            ssml: ask.reprompt.toString(),
+            type: ActionType.Speech,
           },
         ],
+        type: ActionType.SequenceContainer,
       };
 
       (corePlatformApp.$response as CorePlatformResponse).actions.push(action);

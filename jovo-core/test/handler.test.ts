@@ -1,5 +1,5 @@
 import { BaseApp, EnumRequestType, Jovo } from '../src';
-import {Handler} from '../src/plugins/Handler';
+import { Handler } from '../src/plugins/Handler';
 
 require('source-map-support').install(); // tslint:disable-line
 process.env.NODE_ENV = 'UNIT_TEST';

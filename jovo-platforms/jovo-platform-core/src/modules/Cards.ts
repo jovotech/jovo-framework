@@ -2,7 +2,7 @@ import { Plugin } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { AdaptiveCard, AdaptiveCardOptions, CorePlatformApp, CorePlatformResponse } from '..';
-import {CorePlatform} from '../CorePlatform';
+import { CorePlatform } from '../CorePlatform';
 
 interface SimpleCard {
   title: string;
@@ -47,7 +47,7 @@ export class Cards implements Plugin {
     const simpleCardOptions: SimpleCard | undefined = _get(output, 'card.SimpleCard');
     if (simpleCardOptions) {
       _set(
-          corePlatformApp.$response,
+        corePlatformApp.$response,
         'response.output.card',
         new AdaptiveCard({
           body: [
@@ -61,7 +61,7 @@ export class Cards implements Plugin {
     const imageCardOptions: ImageCard | undefined = _get(output, 'card.ImageCard');
     if (imageCardOptions) {
       _set(
-          corePlatformApp.$response,
+        corePlatformApp.$response,
         'response.output.card',
         new AdaptiveCard({
           body: [
@@ -76,14 +76,18 @@ export class Cards implements Plugin {
     const adaptiveCardOptions: AdaptiveCardOptions | undefined =
       _get(output, 'CorePlatform.AdaptiveCard') || _get(output, 'card.AdaptiveCard');
     if (adaptiveCardOptions) {
-      _set(corePlatformApp.$response, 'response.output.card', new AdaptiveCard(adaptiveCardOptions));
+      _set(
+        corePlatformApp.$response,
+        'response.output.card',
+        new AdaptiveCard(adaptiveCardOptions),
+      );
     }
 
     // TODO finish account linking card
     const accountLinkingCard = _get(output, 'card.AccountLinkingCard');
     if (accountLinkingCard) {
       _set(
-          corePlatformApp.$response,
+        corePlatformApp.$response,
         'response.output.card',
         new AdaptiveCard({
           body: [],

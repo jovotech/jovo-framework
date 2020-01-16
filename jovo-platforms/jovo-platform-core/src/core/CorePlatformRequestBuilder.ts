@@ -19,9 +19,9 @@ export class CorePlatformRequestBuilder implements RequestBuilder<CorePlatformRe
   }
 
   async intent(json?: object): Promise<CorePlatformRequest>;
-  //tslint:disable-next-line:no-any
+  // tslint:disable-next-line:no-any
   async intent(name?: string, inputs?: any): Promise<CorePlatformRequest>;
-  //tslint:disable-next-line:no-any
+  // tslint:disable-next-line:no-any
   async intent(obj?: any, inputs?: any): Promise<CorePlatformRequest> {
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
@@ -93,7 +93,7 @@ export class CorePlatformRequestBuilder implements RequestBuilder<CorePlatformRe
     return path.join(folder, 'sample-request-json', version, fileName);
   }
 
-  //tslint:disable-next-line:no-any
+  // tslint:disable-next-line:no-any
   private loadJson(key: string, version = 'v1'): any {
     return require(this.getJsonPath(key, version));
   }

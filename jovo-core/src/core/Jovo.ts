@@ -5,7 +5,6 @@ import _sample = require('lodash.sample');
 import _set = require('lodash.set');
 import { BaseApp, BaseAppConfig } from './BaseApp';
 
-
 import {
   Cms,
   EnumRequestType,
@@ -14,7 +13,8 @@ import {
   Log,
   SessionConstants,
   SessionData,
-  SpeechBuilder, ValidationError,
+  SpeechBuilder,
+  ValidationError,
   Validator,
 } from '..';
 import {
@@ -23,10 +23,12 @@ import {
   Inputs,
   JovoData,
   JovoRequest,
-  JovoResponse, JovoSession,
+  JovoResponse,
+  JovoSession,
   NLUData,
   Output,
-  RequestType, SessionAttributes,
+  RequestType,
+  SessionAttributes,
 } from '../Interfaces';
 import { HandleRequest } from './HandleRequest';
 import { User } from './User';

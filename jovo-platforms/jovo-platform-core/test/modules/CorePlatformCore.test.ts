@@ -31,8 +31,8 @@ describe('test requests', () => {
 
   test('test empty response', async (done) => {
     app.setHandler({
-        // tslint:disable-next-line
-        END() {},
+      // tslint:disable-next-line
+      END() {},
     });
     const request: JovoRequest = await t.requestBuilder.end();
     app.handle(ExpressJS.dummyRequest(request));

@@ -7,7 +7,6 @@ export { KeyObjectSheet } from './KeyObjectSheet';
 
 import { Config } from './GoogleSheetsCMS';
 
-
 declare module 'jovo-core/dist/src/util/Cms' {
   export interface Cms {
     t(): string | string[] | object | object[];

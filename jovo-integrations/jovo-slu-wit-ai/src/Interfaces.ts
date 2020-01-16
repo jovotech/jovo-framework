@@ -1,22 +1,20 @@
 export interface WitAiEntity {
-    confidence: number;
-    value: string;
+  confidence: number;
+  value: string;
 }
 
 export interface WitAiInput extends WitAiEntity {
-    suggested: boolean;
-    type: string;
+  suggested: boolean;
+  type: string;
 }
 
-export interface WitAiIntent extends WitAiEntity {
-
-}
+export interface WitAiIntent extends WitAiEntity {}
 
 export interface WitAiResponse {
-    _text: string;
-    msg_id: string;
-    entities: {
-        [key: string]: Array<WitAiEntity | WitAiInput> | undefined;
-        intent?: WitAiIntent[];
-    };
+  _text: string;
+  msg_id: string;
+  entities: {
+    [key: string]: Array<WitAiEntity | WitAiInput> | undefined;
+    intent?: WitAiIntent[];
+  };
 }

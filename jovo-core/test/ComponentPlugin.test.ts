@@ -1,7 +1,11 @@
 process.env.NODE_ENV = 'UNIT_TEST';
 
 import { BaseApp, Component, ComponentPlugin, HandleRequest, Jovo, SessionConstants } from '../src';
-import { ComponentConfig, ComponentConstructorOptions, ComponentSessionData } from '../src/plugins/Component';
+import {
+  ComponentConfig,
+  ComponentConstructorOptions,
+  ComponentSessionData,
+} from '../src/plugins/Component';
 import { I18Next } from '../src/plugins/I18Next';
 
 describe('test constructor', () => {
@@ -302,7 +306,7 @@ describe('test component session stack', () => {
       });
     });
 
-    test('should leave the other component\'s data unchanged', () => {
+    test("should leave the other component's data unchanged", () => {
       mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT].push([
         'SecondLayerComponent',
         {},

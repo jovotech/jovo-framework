@@ -6,7 +6,9 @@ import {
   Jovo,
   SessionConstants,
   SpeechBuilder,
-  ValidationError, Validator, ValidValuesValidator,
+  ValidationError,
+  Validator,
+  ValidValuesValidator,
 } from '../src';
 
 process.env.NODE_ENV = 'UNIT_TEST';

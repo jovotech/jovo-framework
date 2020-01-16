@@ -8,6 +8,9 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import {
   Cards,
   CorePlatformApp,
@@ -17,9 +20,6 @@ import {
   CorePlatformResponse,
   CorePlatformResponseBuilder,
 } from '.';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; // tslint:disable-line:no-any

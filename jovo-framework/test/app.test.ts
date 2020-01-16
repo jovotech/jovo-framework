@@ -35,5 +35,3 @@ test('test onError', (done) => {
 
   appBase.emit('fail');
 });
-
-
