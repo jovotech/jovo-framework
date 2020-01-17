@@ -21,12 +21,12 @@ export class Lambda implements Host {
 
   hasWriteFileAccess = false;
 
+  // tslint:disable-next-line:no-any
   constructor(event: any, context: any, callback: Function) {
-    // tslint:disable-line
     this.event = event;
     this.context = context;
     this.callback = callback;
-    if (event.body) {
+    if (typeof event.body !== 'undefined') {
       this.isApiGateway = true;
       this.$request = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
     } else {
@@ -47,7 +47,7 @@ export class Lambda implements Host {
     return new Promise<void>((resolve) => {
       if (this.isApiGateway) {
         this.callback(null, {
-          body: JSON.stringify(obj),
+          body: typeof obj === 'object' ? JSON.stringify(obj) : obj,
           headers: this.responseHeaders,
           isBase64Encoded: false,
           statusCode: 200,
