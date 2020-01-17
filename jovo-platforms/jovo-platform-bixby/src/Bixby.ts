@@ -1,13 +1,12 @@
 import {
-  Platform,
-  ExtensibleConfig,
-  ActionSet,
   BaseApp,
+  ErrorCode,
+  ExtensibleConfig,
   HandleRequest,
   Jovo,
   JovoError,
   TestSuite,
-  ErrorCode,
+  Platform
 } from 'jovo-core';
 import _merge from 'lodash.merge';
 import { BixbyRequestBuilder } from './core/BixbyRequestBuilder';

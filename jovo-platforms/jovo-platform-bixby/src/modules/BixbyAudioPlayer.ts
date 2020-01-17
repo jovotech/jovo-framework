@@ -52,7 +52,7 @@ export class BixbyAudioPlayer {
     };
     displayName = '';
     doNotWaitForTTS?: boolean;
-    repeatMode?: string;
+    repeatMode?: RepeatMode;
     startAudioItemIndex?: number;
 
     setRepeatMode(repeatMode: RepeatMode) {
