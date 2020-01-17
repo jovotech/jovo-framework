@@ -20,7 +20,7 @@ export class BixbyRequest implements JovoRequest {
         case '$vivContext':
           request.vivContext = val;
           break;
-        case '_JOVO_LAST_RESPONSE_':
+        case '_JOVO_PREV_RESPONSE_':
           request.sessionData = _get(bixbyJson, `${key}._JOVO_SESSION_DATA_`, {});
           break;
         default: {

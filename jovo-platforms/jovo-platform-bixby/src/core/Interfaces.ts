@@ -19,7 +19,7 @@ export interface VivContext {
 export interface BixbyRequestJSON {
   $vivContext: VivContext;
   // tslint:disable:no-any
-  _JOVO_LAST_RESPONSE_: any;
+  _JOVO_PREV_RESPONSE_: any;
   // tslint:disable:no-any
   [key: string]: any;
 }
