@@ -1,7 +1,11 @@
 import get = require('lodash.get');
 import { JovoWebClient, JovoWebClientOptions } from '../src';
 
-export function expectClientOptionToBe<T = any>(client: JovoWebClient, pathToOption: string, expectedValue: T) {
+export function expectClientOptionToBe<T = any>(
+  client: JovoWebClient,
+  pathToOption: string,
+  expectedValue: T,
+) {
   expect<T>(get(client.options, pathToOption)).toBe(expectedValue);
 }
 

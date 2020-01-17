@@ -20,7 +20,9 @@ describe('test SSMLEvaluator', () => {
   });
 
   test('test removeSSML keep break tag', () => {
-    expect(SSMLEvaluator.removeSSML('<speak>test<break time="3s"/></speak>', ['break'])).toBe('test<break time="3s"/>');
+    expect(SSMLEvaluator.removeSSML('<speak>test<break time="3s"/></speak>', ['break'])).toBe(
+      'test<break time="3s"/>',
+    );
   });
 
   test('test removeSpeakTags', () => {
@@ -28,7 +30,10 @@ describe('test SSMLEvaluator', () => {
   });
 
   test('test getSSMLParts', () => {
-    expect(SSMLEvaluator.getSSMLParts('<speak>test<break time="3s"/></speak>')).toBe(['test', '<break time="3s"/>']);
+    expect(SSMLEvaluator.getSSMLParts('<speak>test<break time="3s"/></speak>')).toStrictEqual([
+      'test',
+      '<break time="3s"/>',
+    ]);
   });
 
   test('test getBreakTime ms', () => {

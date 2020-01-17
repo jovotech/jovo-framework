@@ -1,5 +1,12 @@
 import uuid = require('uuid');
-import { RequestEvents, ResponseEvents, SessionData, StoreEvents, UserData, WebAssistantResponse } from '..';
+import {
+  RequestEvents,
+  ResponseEvents,
+  SessionData,
+  StoreEvents,
+  UserData,
+  WebAssistantResponse,
+} from '..';
 import { JovoWebClient } from '../JovoWebClient';
 
 const USER_DATA_STORAGE_KEY = 'user';

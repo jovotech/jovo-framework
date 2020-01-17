@@ -16,6 +16,7 @@
         "ban-types": [
           false,
           ["Function", ""]
-        ]
+        ],
+        "object-literal-sort-keys": false
     }
 }

@@ -103,7 +103,9 @@ export class SSMLEvaluator {
 
   static isSupportedTag(ssml: string): boolean {
     for (const tag of SUPPORTED_TAGS) {
-      const doesMatch = new RegExp(`(?:(<${tag}[^>]*[/]>)|(<${tag}[^>]*>.*?<[/][^>]*>))`, 'g').test(ssml);
+      const doesMatch = new RegExp(`(?:(<${tag}[^>]*[/]>)|(<${tag}[^>]*>.*?<[/][^>]*>))`, 'g').test(
+        ssml,
+      );
       if (doesMatch) {
         return true;
       }

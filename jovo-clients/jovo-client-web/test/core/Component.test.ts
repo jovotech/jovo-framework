@@ -10,7 +10,9 @@ class TestComponent extends Component<TestComponentOptions> {
     foo: 'bar',
   };
 
-  async onInit(): Promise<void> {}
+  async onInit(): Promise<void> {
+    // tslint:disable-line
+  }
 
   getDefaultOptions(): TestComponentOptions {
     return TestComponent.DEFAULT_OPTIONS;

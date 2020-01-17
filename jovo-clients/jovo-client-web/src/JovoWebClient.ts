@@ -183,7 +183,10 @@ export class JovoWebClient extends AdvancedEventEmitter {
     ) {
       // component with that name exists already -> merge options
       if (component.initOptions) {
-        this.options[component.name] = merge(this.options[component.name] || {}, component.initOptions);
+        this.options[component.name] = merge(
+          this.options[component.name] || {},
+          component.initOptions,
+        );
       }
     } else {
       // component with that name does not exist -> add to array and add options
@@ -200,7 +203,10 @@ export class JovoWebClient extends AdvancedEventEmitter {
     // TODO allow setting hostconfig!
 
     // enable markdown-it
-    AdaptiveCards.AdaptiveCard.onProcessMarkdown = (text: string, result: AdaptiveCards.IMarkdownProcessingResult) => {
+    AdaptiveCards.AdaptiveCard.onProcessMarkdown = (
+      text: string,
+      result: AdaptiveCards.IMarkdownProcessingResult,
+    ) => {
       result.outputHtml = new markdownit().render(text);
       result.didProcess = true;
     };

@@ -4,7 +4,10 @@ import { ComponentOptions, JovoWebClient } from '..';
  * O = ComponentOptionsType
  */
 export abstract class Component<O extends ComponentOptions = {}> {
-  constructor(protected readonly $client: JovoWebClient, protected readonly $initOptions?: Partial<O>) {}
+  constructor(
+    protected readonly $client: JovoWebClient,
+    protected readonly $initOptions?: Partial<O>,
+  ) {}
 
   get initOptions(): Partial<O> | undefined {
     return this.$initOptions;
@@ -20,7 +23,9 @@ export abstract class Component<O extends ComponentOptions = {}> {
 
   abstract async onInit(): Promise<void>;
 
-  async onStop(): Promise<void> {}
+  async onStop(): Promise<void> {
+    // tslint:disable-line
+  }
 
   abstract getDefaultOptions(): O;
 }

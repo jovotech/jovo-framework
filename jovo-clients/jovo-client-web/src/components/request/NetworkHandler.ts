@@ -7,7 +7,12 @@ export class NetworkHandler {
     this.$adapter = adapter;
   }
 
-  request<T = any>(type: RequestType, url: string, data?: any, options?: RequestOptions): Promise<NetworkResponse<T>> {
+  request<T = any>(
+    type: RequestType,
+    url: string,
+    data?: any,
+    options?: RequestOptions,
+  ): Promise<NetworkResponse<T>> {
     return this.$adapter.request<T>(type, url, data, options);
   }
 

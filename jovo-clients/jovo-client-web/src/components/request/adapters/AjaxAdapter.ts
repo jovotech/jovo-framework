@@ -4,7 +4,12 @@ import { NetworkAdapter, NetworkResponse, RequestOptions, RequestType } from '..
 export class AjaxAdapter implements NetworkAdapter {
   constructor(private readonly parent: EventEmitter) {}
 
-  request<T>(type: RequestType, url: string, data?: any, options?: RequestOptions): Promise<NetworkResponse<T>> {
+  request<T>(
+    type: RequestType,
+    url: string,
+    data?: any,
+    options?: RequestOptions,
+  ): Promise<NetworkResponse<T>> {
     return new Promise<NetworkResponse<T>>((resolve, reject) => {
       const xhrequest = new XMLHttpRequest();
 

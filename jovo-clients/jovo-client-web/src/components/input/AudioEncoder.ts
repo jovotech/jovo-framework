@@ -1,7 +1,10 @@
 export class AudioEncoder {
-  private static $recordSampleRate: number = 0;
-
-  static encodeToWav(chunks: any[], chunkLength: number, recordSampleRate: number, exportSampleRate: number): Blob {
+  static encodeToWav(
+    chunks: any[],
+    chunkLength: number,
+    recordSampleRate: number,
+    exportSampleRate: number,
+  ): Blob {
     this.$recordSampleRate = recordSampleRate;
     const merged = this.mergeChunks(chunks, chunkLength);
     const downSampled = this.sampleDown(merged, exportSampleRate);
@@ -9,6 +12,7 @@ export class AudioEncoder {
     this.$recordSampleRate = 0;
     return new Blob([view], { type: 'audio/wav' });
   }
+  private static $recordSampleRate: number = 0;
 
   private static mergeChunks(chunks: any[], chunkLength: number): Float32Array {
     const merged = new Float32Array(chunkLength);

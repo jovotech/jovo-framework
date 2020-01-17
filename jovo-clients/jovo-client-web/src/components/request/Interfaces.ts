@@ -10,5 +10,10 @@ export interface NetworkResponse<T = any> {
 }
 
 export interface NetworkAdapter {
-  request<T = any>(type: RequestType, url: string, data?: any, options?: RequestOptions): Promise<NetworkResponse<T>>;
+  request<T = any>(
+    type: RequestType,
+    url: string,
+    data?: any,
+    options?: RequestOptions,
+  ): Promise<NetworkResponse<T>>;
 }

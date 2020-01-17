@@ -1,4 +1,4 @@
-import { InputComponent, LoggerComponent, LogLevel, JovoWebClient } from '../src';
+import { InputComponent, JovoWebClient, LoggerComponent, LogLevel } from '../src';
 import { expectClientOptionToBe, makeTestClient } from './util';
 
 describe('test JovoWebClient', () => {
@@ -29,7 +29,10 @@ describe('test JovoWebClient', () => {
   });
 
   test('test use (override) (options)', () => {
-    client.use(new LoggerComponent(client), new LoggerComponent(client, { level: LogLevel.Warning }));
+    client.use(
+      new LoggerComponent(client),
+      new LoggerComponent(client, { level: LogLevel.Warning }),
+    );
     expect(client.component(loggerComponentName)).toBeDefined();
     expectClientOptionToBe(client, logLevelPath, LogLevel.Warning);
   });

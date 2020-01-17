@@ -20,7 +20,10 @@ export interface AudioPlayback {
 
 export interface ComponentOptions {}
 
-export type ComponentConstructor = new ($client: JovoWebClient, $initOptions?: ComponentOptions) => Component;
+export type ComponentConstructor = new (
+  $client: JovoWebClient,
+  $initOptions?: ComponentOptions,
+) => Component;
 
 export interface JovoWebClientOptions {
   debugMode: boolean;

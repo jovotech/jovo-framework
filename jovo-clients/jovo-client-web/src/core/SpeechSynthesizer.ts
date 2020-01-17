@@ -24,15 +24,27 @@ export class SpeechSynthesizer {
   }
 
   get canSpeak(): boolean {
-    return this.$speechSynthesis !== null && !this.$speechSynthesis.paused && !this.$speechSynthesis.speaking;
+    return (
+      this.$speechSynthesis !== null &&
+      !this.$speechSynthesis.paused &&
+      !this.$speechSynthesis.speaking
+    );
   }
 
   get canPause(): boolean {
-    return this.$speechSynthesis !== null && this.$speechSynthesis.speaking && !this.$speechSynthesis.paused;
+    return (
+      this.$speechSynthesis !== null &&
+      this.$speechSynthesis.speaking &&
+      !this.$speechSynthesis.paused
+    );
   }
 
   get canResume(): boolean {
-    return this.$speechSynthesis !== null && this.$speechSynthesis.speaking && this.$speechSynthesis.paused;
+    return (
+      this.$speechSynthesis !== null &&
+      this.$speechSynthesis.speaking &&
+      this.$speechSynthesis.paused
+    );
   }
 
   get canStop(): boolean {

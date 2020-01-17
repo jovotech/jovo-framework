@@ -3,11 +3,11 @@ import {
   Card,
   Component,
   ComponentOptions,
+  JovoWebClient,
   Output,
   RepromptTimer,
   RequestEvents,
   ResponseEvents,
-  JovoWebClient,
   WebAssistantResponse,
 } from '../..';
 
@@ -65,7 +65,10 @@ export class ResponseComponent extends Component<ResponseComponentOptions> {
   private async onResponse(data: WebAssistantResponse) {
     this.$isRunning = true;
     if (data && data.response && data.response.output) {
-      console.log('[RES]', data);
+      if (this.$client.options.debugMode) {
+        // tslint:disable-next-line:no-console
+        console.log('[RES]', data);
+      }
 
       if (data.response.output.actions && data.response.output.actions.length > 0) {
         this.emitActions(data.response.output.actions);

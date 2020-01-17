@@ -28,7 +28,9 @@ export class LoggerComponent extends Component<LoggerComponentOptions> implement
     return this.options.level;
   }
 
-  async onInit(): Promise<void> {}
+  async onInit(): Promise<void> {
+    // tslint:disable-line
+  }
 
   debug(...content: any[]): void {
     this.doLog({

@@ -9,8 +9,8 @@
     "tsc": "vue-cli-service build ./src/index.ts --target lib --name index && npm run declarations",
     "watch": "vue-cli-service build ./src/index.ts --target lib --name index --watch",
     "tscw": "tsc --watch --emitDeclarationOnly",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
+    "tslint": "vue-cli-service lint",
+    "test": "jest",
     "declarations": "tsc --emitDeclarationOnly"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "@vue/cli-plugin-unit-jest": "^4.1.0",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-core": "^6.26.3",
+    "jest": "^24.9.0",
     "prettier": "1.19.1",
     "ts-jest": "^24.0.1",
     "typescript": "^3.7.3",

@@ -8,7 +8,6 @@ import {
   NetworkHandler,
   NetworkResponse,
   RequestEvents,
-  VERSION,
   WebAssistantEvents,
 } from '../..';
 import { AjaxAdapter } from './adapters/AjaxAdapter';
@@ -85,7 +84,13 @@ export class RequestComponent extends Component<RequestComponentOptions> {
     try {
       const res = await this.sendRequest(data);
       this.$client.emit(RequestEvents.Result, res);
-      if (res.status && res.status === 200 && res.data && res.data.response && !res.data.response.outputSpeech) {
+      if (
+        res.status &&
+        res.status === 200 &&
+        res.data &&
+        res.data.response &&
+        !res.data.response.outputSpeech
+      ) {
         this.$client.emit(RequestEvents.Success, res.data);
       } else {
         this.$client.emit(RequestEvents.Error, new Error('No valid response was received.'));
@@ -98,7 +103,7 @@ export class RequestComponent extends Component<RequestComponentOptions> {
   private makeRequest(baseData: any) {
     // TODO add missing pieces of information!
     const requestData = {
-      $version: VERSION,
+      version: '1.0.0',
       request: {
         locale: this.locale,
         timestamp: new Date().toISOString(),
@@ -108,6 +113,11 @@ export class RequestComponent extends Component<RequestComponentOptions> {
     };
 
     Object.assign(requestData, baseData);
+
+    if (this.$client.options.debugMode) {
+      // tslint:disable-next-line:no-console
+      console.log('[REQ]', requestData);
+    }
 
     this.$client.emit(RequestEvents.Data, requestData);
     return requestData;

@@ -1,10 +1,10 @@
 import {
   InputRecordEvents,
+  JovoWebClient,
   Output,
   RequestEvents,
   ResponseComponentOptions,
   ResponseEvents,
-  JovoWebClient,
 } from '../..';
 
 export class RepromptTimer {
