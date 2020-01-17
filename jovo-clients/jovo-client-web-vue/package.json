@@ -1,0 +1,39 @@
+{
+  "name": "jovo-client-web-vue",
+  "version": "1.0.0",
+  "main": "dist/src/index.common.js",
+  "browser": "dist/src/index.umd.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "serve": "vue-cli-service serve ./src/index.ts --target lib --name index",
+    "tsc": "vue-cli-service build ./src/index.ts --target lib --name index && npm run declarations",
+    "watch": "vue-cli-service build ./src/index.ts --target lib --name index --watch",
+    "tscw": "tsc --watch --emitDeclarationOnly",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "declarations": "tsc --emitDeclarationOnly"
+  },
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "jovo-client-web": "^1.0.0",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.2",
+    "vue-property-decorator": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@vue/cli-service": "^4.1.2",
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-typescript": "^4.1.0",
+    "@vue/cli-plugin-unit-jest": "^4.1.0",
+    "@vue/test-utils": "^1.0.0-beta.30",
+    "babel-core": "^6.26.3",
+    "prettier": "1.19.1",
+    "ts-jest": "^24.0.1",
+    "typescript": "^3.7.3",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "files": [
+    "dist"
+  ]
+}
