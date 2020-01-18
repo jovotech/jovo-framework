@@ -90,7 +90,7 @@ export class AutopilotCore implements Plugin {
     const tell = output.tell;
     if (tell) {
       const sayAction = {
-        say: tell,
+        say: tell.speech,
       };
       response.actions.push(sayAction);
     }
@@ -98,9 +98,7 @@ export class AutopilotCore implements Plugin {
     const ask = output.ask;
     if (ask) {
       const sayAction = {
-        say: {
-          speech: ask.speech,
-        },
+        say: ask.speech,
       };
       const listenAction = {
         listen: true,
