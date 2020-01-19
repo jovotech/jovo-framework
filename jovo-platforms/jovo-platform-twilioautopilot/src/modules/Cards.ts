@@ -73,6 +73,7 @@ export class Cards implements Plugin {
       response.actions.unshift({ show });
     }
 
+    if (output.Autopilot.card?.StandardCard) {
       response.actions.unshift({ show: output.Autopilot.card.StandardCard });
     }
   }

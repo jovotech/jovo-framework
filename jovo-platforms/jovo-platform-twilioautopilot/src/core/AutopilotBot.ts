@@ -13,6 +13,7 @@ export class AutopilotBot extends Jovo {
     // $reprompt object has to be added even if the platform doesn't use it.
     // Is used by users as platform independent feature
     this.$reprompt = new AutopilotSpeechBuilder(this);
+    this.$output.Autopilot = {};
   }
 
   isNewSession(): boolean {

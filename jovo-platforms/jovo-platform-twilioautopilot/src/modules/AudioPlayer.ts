@@ -26,10 +26,6 @@ export class AudioPlayer {
       loop,
     };
 
-    if (!this.autopilotBot.$output.Autopilot) {
-      this.autopilotBot.$output.Autopilot = {};
-    }
-
     this.autopilotBot.$output.Autopilot.AudioPlayer = audio;
   }
 }
@@ -54,7 +50,7 @@ export class AudioPlayerPlugin implements Plugin {
     const response = autopilotBot.$response as AutopilotResponse;
 
     // audio player is only supported on "Voice". Will be ignored on other platforms
-    if (output.Autopilot?.AudioPlayer) {
+    if (output.Autopilot.AudioPlayer) {
       const playAction = output.Autopilot.AudioPlayer;
       response.actions.unshift(playAction);
     }
