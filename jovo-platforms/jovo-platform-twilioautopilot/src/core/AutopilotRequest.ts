@@ -39,9 +39,7 @@ export class AutopilotRequest implements JovoRequest {
   CurrentInput?: string; // user's raw text
   CurrentTask?: string; // intent name
   DialoguePayloadUrl?: string; // URL to JSON payload that contains the context and data collected during the Autopilot session.
-  Memory?: {
-    [key: string]: any; // tslint:disable-line
-  };
+  Memory?: string; // JSON string
   Channel?: string; // channel the interaction is taking place at. e.g. SMS
   CurrentTaskConfidence?: string;
   NextBestTask?: string;
@@ -103,16 +101,14 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   getSessionData(): SessionData {
-    return this.Memory || {};
+    return this.Memory ? JSON.parse(this.Memory) : {};
   }
 
   addSessionData(key: string, value: any): this {
-    // tslint:disable-line:no-any
-    // tslint:disable-line
-    if (!this.Memory) {
-      this.Memory = {};
-    }
-    this.Memory[key] = value;
+    const memory = this.Memory ? JSON.parse(this.Memory) : {};
+    memory[key] = value;
+    this.Memory = JSON.stringify(memory);
+
     return this;
   }
 
@@ -154,15 +150,15 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   setSessionData(sessionData: SessionData): this {
-    this.Memory = sessionData;
+    this.Memory = JSON.stringify(sessionData);
     return this;
   }
 
   setState(state: string): this {
-    if (!this.Memory) {
-      this.Memory = {};
-    }
-    this.Memory[SessionConstants.STATE] = state;
+    const memory = this.Memory ? JSON.parse(this.Memory) : {};
+    memory[SessionConstants.STATE] = state;
+    this.Memory = JSON.stringify(memory);
+
     return this;
   }
 
@@ -220,11 +216,9 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   getState(): string | undefined {
-    if (this.Memory) {
-      return this.Memory[SessionConstants.STATE];
-    } else {
-      return undefined;
-    }
+    const memory = this.Memory ? JSON.parse(this.Memory) : {};
+
+    return memory[SessionConstants.STATE];
   }
 
   setInputs(inputs: AutopilotInputs): this {
