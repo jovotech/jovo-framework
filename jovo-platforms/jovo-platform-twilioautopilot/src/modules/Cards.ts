@@ -56,7 +56,7 @@ export class Cards implements Plugin {
         body: card.content,
       };
 
-      response.actions.push({ show });
+      response.actions.unshift({ show });
     }
 
     if (output.card?.ImageCard) {
@@ -70,11 +70,10 @@ export class Cards implements Plugin {
         ],
       };
 
-      response.actions.push({ show });
+      response.actions.unshift({ show });
     }
 
-    if (output.Autopilot.card?.StandardCard) {
-      response.actions.push({ show: output.Autopilot.card.StandardCard });
+      response.actions.unshift({ show: output.Autopilot.card.StandardCard });
     }
   }
 }

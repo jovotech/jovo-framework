@@ -92,7 +92,7 @@ export class AutopilotCore implements Plugin {
       const sayAction = {
         say: tell.speech,
       };
-      response.actions.push(sayAction);
+      response.actions.unshift(sayAction);
     }
 
     const ask = output.ask;
@@ -103,13 +103,13 @@ export class AutopilotCore implements Plugin {
       const listenAction = {
         listen: true,
       };
-      response.actions.push(sayAction, listenAction);
+      response.actions.unshift(sayAction, listenAction);
     }
 
     // save session attributes.
     const rememberAction = {
       remember: autopilotBot.$session.$data,
     };
-    response.actions.push(rememberAction);
+    response.actions.unshift(rememberAction);
   }
 }

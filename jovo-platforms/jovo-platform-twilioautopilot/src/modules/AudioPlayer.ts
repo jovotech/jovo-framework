@@ -56,7 +56,7 @@ export class AudioPlayerPlugin implements Plugin {
     // audio player is only supported on "Voice". Will be ignored on other platforms
     if (output.Autopilot?.AudioPlayer) {
       const playAction = output.Autopilot.AudioPlayer;
-      response.actions.push(playAction);
+      response.actions.unshift(playAction);
     }
   }
 }
