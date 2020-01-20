@@ -41,7 +41,7 @@ export class ExpressJS implements Host {
   setResponse(obj: any) {
     // tslint:disable-line
     return new Promise<void>((resolve) => {
-      if (!this.res.headersSent) {
+      if (this.res.headersSent === false) {
         this.res.json(obj);
       }
       resolve();
@@ -49,7 +49,7 @@ export class ExpressJS implements Host {
   }
 
   fail(error: Error) {
-    if (!this.res.headersSent) {
+    if (this.res.headersSent === false) {
       const responseObj: any = {
         // tslint:disable-line
         code: 500,
