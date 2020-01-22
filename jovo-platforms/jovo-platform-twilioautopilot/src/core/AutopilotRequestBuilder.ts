@@ -1,36 +1,97 @@
+import * as path from 'path';
+
 import { RequestBuilder } from 'jovo-core';
 import { AutopilotRequest } from './AutopilotRequest';
 
-/**
- * TODO
- */
+const samples: { [key: string]: string } = {
+  'LaunchRequest': 'LaunchRequest.json',
+  'IntentRequest': 'IntentRequest.json',
+  'EndRequest': 'EndRequest.json',
+};
+
 export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest> {
   type = 'AutopilotBot';
 
   async launch(json?: object): Promise<AutopilotRequest> {
-    return new AutopilotRequest();
+    return await this.launchRequest(json);
   }
 
   async intent(json?: object): Promise<AutopilotRequest>;
   async intent(name?: string, slots?: any): Promise<AutopilotRequest>; // tslint:disable-line:no-any
-  async intent(obj?: any, inputs?: any): Promise<AutopilotRequest> {
-    // tslint:disable-line:no-any
-    return new AutopilotRequest();
+  async intent(obj?: any, inputs?: any): Promise<AutopilotRequest> { // tslint:disable-line:no-any
+    if (typeof obj === 'string') {
+      const req = await this.intentRequest();
+      req.setIntentName(obj);
+      if (inputs) {
+        for (const slot in inputs) {
+          if (inputs.hasOwnProperty(slot)) {
+            req.setSlot(slot, inputs[slot]);
+          }
+        }
+      }
+      return req;
+    } else {
+      return await this.intentRequest(obj);
+    }
   }
 
+  async launchRequest(json?: object): Promise<AutopilotRequest> {
+    //tslint:disable-line
+    if (json) {
+      return AutopilotRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
+      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+    }
+  }
+
+  async intentRequest(json?: object): Promise<AutopilotRequest> {
+    if (json) {
+      return AutopilotRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
+      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+    }
+  }
+
+  /**
+   * Autopilot doesn't have audio player requests
+   */
   async audioPlayerRequest(json?: object): Promise<AutopilotRequest> {
-    return new AutopilotRequest();
+    return await this.intentRequest();
   }
 
   async end(json?: object): Promise<AutopilotRequest> {
-    return new AutopilotRequest();
+    if (json) {
+      return AutopilotRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
+      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+    }
   }
 
   async rawRequest(json: object): Promise<AutopilotRequest> {
-    return new AutopilotRequest();
+    return AutopilotRequest.fromJSON(json);
   }
 
   async rawRequestByKey(key: string): Promise<AutopilotRequest> {
-    return new AutopilotRequest();
+    const req = JSON.stringify(require(getJsonFilePath(key)));
+    return AutopilotRequest.fromJSON(JSON.parse(req));
   }
+}
+
+function getJsonFilePath(key: string): string {
+  let folder = './../../../';
+
+  if (process.env.NODE_ENV === 'UNIT_TEST') {
+    folder = './../../';
+  }
+
+  const fileName = samples[key];
+
+  if (!fileName) {
+    throw new Error(`Can't find file.`);
+  }
+
+  return path.join(folder, 'sample-request-json', fileName);
 }
