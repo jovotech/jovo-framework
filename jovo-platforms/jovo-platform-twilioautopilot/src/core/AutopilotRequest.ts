@@ -167,7 +167,7 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   setIntentName(intentName: string): this {
-    this.currentTask = intentName;
+    this.CurrentTask = intentName;
     return this;
   }
 
