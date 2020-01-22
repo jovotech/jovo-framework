@@ -10,6 +10,7 @@ import { Autopilot } from '../Autopilot';
 import { AutopilotBot } from '../core/AutopilotBot';
 import { AutopilotRequest } from '../core/AutopilotRequest';
 import { AutopilotResponse } from '../core/AutopilotResponse';
+import { AutopilotUser } from '../core/AutopilotUser';
 
 export class AutopilotCore implements Plugin {
   install(autopilot: Autopilot) {
@@ -52,7 +53,7 @@ export class AutopilotCore implements Plugin {
     autopilotBot.$request = AutopilotRequest.fromJSON(
       autopilotBot.$host.getRequestObject(),
     ) as AutopilotRequest;
-    // autopilotBot.$user = new AutopilotUser(autopilotBot); // TODO
+    autopilotBot.$user = new AutopilotUser(autopilotBot);
   }
 
   async type(autopilotBot: AutopilotBot) {

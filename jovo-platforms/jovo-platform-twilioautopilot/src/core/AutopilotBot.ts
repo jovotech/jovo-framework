@@ -1,9 +1,12 @@
 import { Jovo, BaseApp, Host, HandleRequest } from 'jovo-core';
 import { AutopilotSpeechBuilder } from './AutopilotSpeechBuilder';
 import { AutopilotResponse } from './AutopilotResponse';
+import { AutopilotUser } from './AutopilotUser';
 
 export class AutopilotBot extends Jovo {
   $autopilotBot: AutopilotBot;
+  // @ts-ignore
+  $user: AutopilotUser;
 
   constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
     super(app, host, handleRequest);
