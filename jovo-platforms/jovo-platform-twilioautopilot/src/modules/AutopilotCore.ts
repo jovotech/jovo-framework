@@ -49,7 +49,6 @@ export class AutopilotCore implements Plugin {
       );
     }
 
-    // const requestString = JSON.stringify(autopilotBot.$host.getRequestObject());
     autopilotBot.$request = AutopilotRequest.fromJSON(
       autopilotBot.$host.getRequestObject(),
     ) as AutopilotRequest;
