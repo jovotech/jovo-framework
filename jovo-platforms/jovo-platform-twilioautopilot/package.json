@@ -55,7 +55,8 @@
     }
   },
   "files": [
-    "dist/src/**/*"
+    "dist/src/**/*",
+    "sample-request-json"
   ],
   "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
 }
