@@ -64,6 +64,10 @@ export class AutopilotCore implements Plugin {
       autopilotBot.$type = {
         type: EnumRequestType.LAUNCH,
       };
+    } else if (autopilotRequest.getIntentName() === 'goodbye') {
+      autopilotBot.$type = {
+        type: EnumRequestType.END,
+      };
     } else {
       autopilotBot.$type = {
         type: EnumRequestType.INTENT,
