@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "2.2.23",
+  "version": "2.2.27",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -19,9 +19,9 @@
     "@azure/functions": "^1.0.1-beta2",
     "body-parser": "^1.19.0",
     "express": "^4.16.3",
-    "jovo-cms-i18next": "^2.2.18",
-    "jovo-core": "^2.2.17",
-    "jovo-db-filedb": "^2.2.17",
+    "jovo-cms-i18next": "^2.2.21",
+    "jovo-core": "^2.2.20",
+    "jovo-db-filedb": "^2.2.20",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -47,8 +47,8 @@
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.15.0",
-    "typescript": "^3.4.1"
+    "typedoc": "^0.15.6",
+    "typescript": "^3.7.3"
   },
   "jest": {
     "transform": {
@@ -75,5 +75,5 @@
     "dist/src/**/*",
     "gulpfile.js"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }

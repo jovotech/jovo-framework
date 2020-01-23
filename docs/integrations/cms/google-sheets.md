@@ -11,6 +11,7 @@ Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
   * [Responses](#responses)
   * [KeyValue](#keyvalue)
   * [ObjectArray](#objectarray)
+  * [KeyObject](#keyobject)
 * [Defining your own Sheet Type](#defining-your-own-sheet-type)
 * [Advanced Features](#advanced-features)
   * [Caching](#caching)
@@ -368,6 +369,123 @@ Access the array using:
 
 ```javascript
 this.$cms.sheetName
+```
+
+### KeyObject
+
+The sheet type `KeyObject` is an extension of the [KeyValue](#keyvalue) type where rather than assigning a single value to each key, an object is assigned.
+For each row in the spreadsheet, the first cell is used as key, and the remaining cells in the row are converted to values of the nested object with the first row of the spreadsheet specifying the keys.
+
+You can define the range (which columns to access) in your config, default is 'A:C':
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+	cms: {
+		GoogleSheetsCMS: {
+			// ...
+
+			sheets: [
+				{
+					name: '<YourSheetName>',
+					type: 'KeyObject',
+					range: 'A:D'
+				}
+			]
+		}
+	}
+
+	// ...
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+	cms: {
+		GoogleSheetsCMS: {
+			// ...
+
+			sheets: [
+				{
+					name: '<YourSheetName>',
+					type: 'KeyObject',
+					range: 'A:D'
+				}
+			]
+		}
+	}
+
+	// ...
+};
+```
+
+Here's an example sheet:
+
+| Key    | Symbol | Price   | Volume   |
+| :----- | :----- | :------ | :------- |
+| apple  | AAPL   | 263.19  | 26032213 |
+| google | GOOG   | 1303.02 | 15893292 |
+
+And here's the object you will receive:
+
+```javascript
+{
+    apple: {
+        symbol: 'AAPL',
+        price: '263.19',
+        volume: '26032213',
+    },
+    google: {
+        symbol: 'GOOG',
+        price: '1303.02',
+        volume: '15893292',
+    },
+}
+```
+
+Access the object using:
+
+```javascript
+this.$cms.sheetName.key;
+```
+
+and the nested object using:
+
+```javascript
+this.$cms.sheetName.key.second_key;
+
+// e.g. this.$cms.sheetName.apple.price
+```
+
+**Please Note:** When a cell in the spreadsheet is empty it will be converted to an `undefined` value:
+
+Here's an example sheet with empty cells:
+
+| Key   | Name  | Surname | Address                 |
+| :---- | :---- | :------ | :---------------------- |
+| alice | Alice | White   |                         |
+| bob   | Bob   | Smith   | Newark, New Jersey, USA |
+
+here's the object you will receive:
+
+```javascript
+{
+    alice: {
+        name: 'Alice',
+        surname: 'White',
+        address: undefined,
+    },
+    bob: {
+        name: 'Bob',
+        surname: 'Smith',
+        address: 'Newark, New Jersey, USA',
+    },
+}
 ```
 
 ## Defining your own Sheet Type

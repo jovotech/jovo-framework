@@ -52,10 +52,12 @@ app.setHandler({
             this.tell('Not confirmed');
         }
     },
-    ON_SIGN_IN() {
+    async ON_SIGN_IN() {
 
         console.log('ON SIGN IN');
         if (this.$googleAction!.isSignInOk()) {
+            const res = await this.$googleAction!.$user.getGoogleProfile();
+            console.log(res);
             this.tell('Login successful');
         } else {
             this.tell('Login not successful');

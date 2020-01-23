@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-components",
-  "version": "2.2.19",
+  "version": "2.2.24",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -20,11 +20,11 @@
   "dependencies": {
     "google-libphonenumber": "^3.2.2",
     "googleapis": "^42.0.0",
-    "jovo-db-filedb": "^2.2.17",
-    "jovo-framework": "^2.2.23",
-    "jovo-platform-alexa": "^2.2.25",
-    "jovo-platform-googleassistant": "^2.2.23",
-    "jovo-plugin-debugger": "^2.2.19",
+    "jovo-db-filedb": "^2.2.20",
+    "jovo-framework": "^2.2.27",
+    "jovo-platform-alexa": "^2.2.30",
+    "jovo-platform-googleassistant": "^2.2.27",
+    "jovo-plugin-debugger": "^2.2.22",
     "jwt-decode": "2.2.0",
     "moment-timezone": "^0.5.23"
   },
@@ -44,8 +44,8 @@
     "source-map-support": "^0.5.8",
     "ts-jest": "^24.0.1",
     "tslint": "^5.17.0",
-    "typedoc": "^0.15.0",
-    "typescript": "^3.4.1"
+    "typedoc": "^0.15.6",
+    "typescript": "^3.7.3"
   },
   "jest": {
     "transform": {

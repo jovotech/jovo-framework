@@ -8,6 +8,7 @@ import { Cms } from './Cms';
 import { EnumRequestType, SessionConstants } from './enums';
 import { ErrorCode, JovoError } from './errors/JovoError';
 import { Log } from './Log';
+
 import { SpeechBuilder } from './SpeechBuilder';
 
 import {

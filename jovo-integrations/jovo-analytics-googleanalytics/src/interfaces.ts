@@ -31,6 +31,6 @@ export interface TransactionItem {
 }
 
 export interface Config extends PluginConfig {
-    trackingId: string;
-    trackDirectives?: boolean;
+  trackingId: string;
+  trackDirectives?: boolean;
 }
