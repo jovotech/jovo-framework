@@ -42,6 +42,16 @@ export class AlexaUser extends User {
   getId(): string {
     return this.alexaSkill.$request!.getUserId();
   }
+
+  /**
+   * Returns a personId associated with a voice profile.
+   * @returns {string}
+   */
+  getPersonId() {
+    const alexaRequest = this.alexaSkill.$request as AlexaRequest;
+    return alexaRequest.getPersonId();
+  }
+
   /**
    * Returns alexa shopping list
    * @param {'active'|'completed'} status

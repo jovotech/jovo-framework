@@ -13,6 +13,7 @@ export interface Session {
   application: Application;
   attributes: SessionAttributes; //tslint:disable-line
   user: User;
+  person: Person;
 }
 
 export interface Context {
@@ -70,6 +71,7 @@ export type PermissionStatus = 'GRANTED' | 'DENIED';
 export interface System {
   application: Application;
   user: User;
+  person: Person;
   device: Device;
   apiEndpoint: string;
   apiAccessToken?: string;
@@ -107,6 +109,11 @@ export interface User {
   userId: string;
   accessToken: string;
   permissions: Permission;
+}
+
+export interface Person {
+  personId: string;
+  accessToken: string;
 }
 
 export interface Permission {
@@ -530,6 +537,14 @@ export class AlexaRequest implements JovoRequest {
 
   getUserId() {
     return _get(this, 'session.user.userId') || _get(this, 'context.System.user.userId');
+  }
+
+  /**
+   * Returns a personId associated with a voice profile.
+   * @returns {string}
+   */
+  getPersonId() {
+    return _get(this, 'session.person.personId') || _get(this, 'context.System.person.personId');
   }
 
   /**
