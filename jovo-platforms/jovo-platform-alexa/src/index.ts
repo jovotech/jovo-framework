@@ -97,6 +97,14 @@ declare module 'jovo-core/dist/src/util/SpeechBuilder' {
       condition?: boolean,
       probability?: number,
     ): this;
+    addEmotion(
+      text: string | string[],
+      name: 'excited' | 'disappointed',
+      intensity: 'low' | 'medium' | 'high',
+      condition?: boolean,
+      probability?: number,
+      surroundSsml?: SsmlElements,
+    ): this;
   }
 }
 
