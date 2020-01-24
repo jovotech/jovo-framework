@@ -21,7 +21,7 @@ import { Table } from './response/Table';
 import { List } from './response/List';
 import { MediaResponse } from './modules/MediaResponse';
 import { Updates } from './modules/Updates';
-import { RichResponse } from './core/Interfaces';
+import { RichResponse, SessionEntityType } from './core/Interfaces';
 
 import { GoogleAction } from './core/GoogleAction';
 import { Handler } from 'jovo-core';
@@ -318,6 +318,9 @@ declare module './core/GoogleAction' {
     richResponse(richResponse: RichResponse): this;
     appendResponse(responseItem: Item): this;
     appendSimpleResponse(simpleResponse: SimpleResponse): this;
+
+    addSessionEntity(name: string, value?: string, synonyms?: string[]): this;
+    addSessionEntityTypes(sessionEntityTypes: SessionEntityType | SessionEntityType[]): this;
   }
 }
 
@@ -450,6 +453,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
 
       RichResponse?: RichResponse;
       ResponseAppender?: Item[];
+
+      SessionEntityTypes?: SessionEntityType[];
     };
   }
 

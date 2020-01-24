@@ -497,3 +497,14 @@ export interface RichResponse {
   suggestions?: Suggestion[];
   linkOutSuggestion?: LinkOutSuggestion;
 }
+
+export interface SessionEntityType {
+  name: string;
+  entities: SessionEntity[];
+  entityOverrideMode?: 'ENTITY_OVERRIDE_MODE_OVERRIDE';
+}
+
+export interface SessionEntity {
+  value: string;
+  synonyms?: string[];
+}
