@@ -80,7 +80,6 @@ export abstract class Jovo extends EventEmitter {
     this.$cms = new Cms();
     this.$speech = this.speechBuilder()!;
     this.$reprompt = this.speechBuilder()!;
-
   }
 
   /**
