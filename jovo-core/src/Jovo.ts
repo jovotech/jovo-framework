@@ -47,8 +47,8 @@ export abstract class Jovo extends EventEmitter {
   $response?: JovoResponse;
   $session: JovoSession;
   readonly $plugins?: any; // tslint:disable-line
-  $speech: SpeechBuilder = new SpeechBuilder();
-  $reprompt: SpeechBuilder = new SpeechBuilder();
+  $speech: SpeechBuilder;
+  $reprompt: SpeechBuilder;
   $cms: Cms;
 
   $rawResponseJson?: any; // tslint:disable-line
@@ -78,6 +78,9 @@ export abstract class Jovo extends EventEmitter {
     this.$plugins = {};
     this.$user = new User(this);
     this.$cms = new Cms();
+    this.$speech = this.speechBuilder()!;
+    this.$reprompt = this.speechBuilder()!;
+
   }
 
   /**
