@@ -212,6 +212,11 @@ export class GoogleAssistantCore implements Plugin {
       responseItems = responseItems.concat(output.GoogleAssistant.ResponseAppender);
       _set(googleAction.$originalResponse, 'richResponse.items', responseItems);
     }
+
+    if (output.GoogleAssistant && output.GoogleAssistant.SessionEntityTypes) {
+      const responseItems = output.GoogleAssistant.SessionEntityTypes;
+      _set(googleAction.$originalResponse, 'sessionEntityTypes', responseItems);
+    }
   }
   async userStorageGet(googleAction: GoogleAction) {
     try {
