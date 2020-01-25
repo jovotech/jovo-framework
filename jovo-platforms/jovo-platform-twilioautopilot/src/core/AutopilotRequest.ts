@@ -121,7 +121,7 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   setUserId(userId: string): this {
-    this.userIdentifier = userId;
+    this.UserIdentifier = userId;
     return this;
   }
 
