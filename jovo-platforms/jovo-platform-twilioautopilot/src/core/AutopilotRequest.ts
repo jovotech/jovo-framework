@@ -192,7 +192,6 @@ export class AutopilotRequest implements JovoRequest {
           // field was already parsed
           return;
         }
-
         const field: AutopilotInput = {
           name: fieldName,
           type: this[`Field_${fieldName}_Type`],
@@ -205,18 +204,14 @@ export class AutopilotRequest implements JovoRequest {
     return inputs;
   }
 
-  addInput(key: string, value: string | object): this {
-    if (!this.fields) {
-      this.fields = {};
-    }
+  addInput(key: string, value: string | AutopilotInput): this {
     if (typeof value === 'string') {
-      this.fields[key] = {
-        name: key,
-        value,
-      };
+      this[`Field_${key}_Value`] = value;
     } else {
-      this.fields[key] = value;
+      this[`Field_${key}_Type`] = value.type;
+      this[`Field_${key}_Value`] = value.value;
     }
+
     return this;
   }
 
@@ -227,7 +222,10 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   setInputs(inputs: AutopilotInputs): this {
-    this.fields = inputs;
+    Object.entries(inputs).forEach(([name, input]) => {
+      this.addInput(name, input);
+    });
+
     return this;
   }
 
@@ -262,5 +260,5 @@ function getFieldNameFromKey(key: string): string {
   const firstUnderscoreIndex = key.indexOf('_');
   const lastUnderscoreIndex = key.lastIndexOf('_');
 
-  return key.slice(firstUnderscoreIndex, lastUnderscoreIndex);
+  return key.slice(firstUnderscoreIndex + 1, lastUnderscoreIndex);
 }
