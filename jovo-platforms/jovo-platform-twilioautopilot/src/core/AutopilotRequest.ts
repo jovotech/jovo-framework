@@ -1,10 +1,10 @@
 import { JovoRequest, SessionData, SessionConstants, Inputs, Input } from 'jovo-core';
 
-interface AutopilotInputs extends Inputs {
+export interface AutopilotInputs extends Inputs {
   [key: string]: AutopilotInput;
 }
 
-interface AutopilotInput extends Input {
+export interface AutopilotInput extends Input {
   type?: string;
 }
 
