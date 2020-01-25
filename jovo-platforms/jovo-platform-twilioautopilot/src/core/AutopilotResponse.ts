@@ -136,7 +136,12 @@ export class AutopilotResponse implements JovoResponse {
 
   hasSessionAttribute(name: string, value?: any): boolean {
     // tslint:disable-line:no-any
-    return this.getSessionAttribute(name) === value;
+    if (value) {
+      return this.getSessionAttribute(name) === value
+    } else {
+      return this.getSessionAttribute(name) ? true : false;
+    }
+    
   }
 
   hasSessionEnded(): boolean {
