@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import { RequestBuilder } from 'jovo-core';
-import { AutopilotRequest } from './AutopilotRequest';
+import { AutopilotRequest, AutopilotInputs } from './AutopilotRequest';
 
 const samples: { [key: string]: string } = {
   'LaunchRequest': 'LaunchRequest.json',
@@ -18,14 +18,14 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
 
   async intent(json?: object): Promise<AutopilotRequest>;
   async intent(name?: string, slots?: any): Promise<AutopilotRequest>; // tslint:disable-line:no-any
-  async intent(obj?: any, inputs?: any): Promise<AutopilotRequest> { // tslint:disable-line:no-any
+  async intent(obj?: any, inputs?: AutopilotInputs): Promise<AutopilotRequest> { // tslint:disable-line:no-any
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(obj);
       if (inputs) {
         for (const slot in inputs) {
           if (inputs.hasOwnProperty(slot)) {
-            req.setSlot(slot, inputs[slot]);
+            req.addInput(slot, inputs[slot]);
           }
         }
       }
