@@ -171,6 +171,11 @@ export class AutopilotRequest implements JovoRequest {
     return this;
   }
 
+  setSessionId(id: string): this {
+    this.DialogueSid = id;
+    return this;
+  }
+
   getInputs(): AutopilotInputs {
     const inputs: AutopilotInputs = {};
     /**
