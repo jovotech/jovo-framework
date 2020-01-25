@@ -41,7 +41,9 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       return AutopilotRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
-      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      return AutopilotRequest.fromJSON(JSON.parse(request))
+        .setTimestamp(new Date().toISOString())
+        .setSessionId(generateRandomString(12));
     }
   }
 
@@ -50,7 +52,9 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       return AutopilotRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
-      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      return AutopilotRequest.fromJSON(JSON.parse(request))
+        .setTimestamp(new Date().toISOString())
+        .setSessionId(generateRandomString(12));
     }
   }
 
@@ -66,7 +70,9 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       return AutopilotRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
-      return AutopilotRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      return AutopilotRequest.fromJSON(JSON.parse(request))
+        .setTimestamp(new Date().toISOString())
+        .setSessionId(generateRandomString(12));
     }
   }
 
@@ -94,4 +100,19 @@ function getJsonFilePath(key: string): string {
   }
 
   return path.join(folder, 'sample-request-json', fileName);
+}
+
+/**
+ * Generates a random string [a-z][A-Z][0-9] with `length` number of characters.
+ * @param {number} length 
+ */
+function generateRandomString(length: number) {
+  let randomString = '';
+  const stringValues = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i++) {
+      randomString += stringValues.charAt(Math.floor(Math.random() * stringValues.length));
+  }
+
+  return randomString;
 }
