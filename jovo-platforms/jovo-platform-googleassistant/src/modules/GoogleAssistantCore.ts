@@ -12,6 +12,7 @@ import uuidv4 = require('uuid/v4');
 import { EnumGoogleAssistantRequestType } from '../core/google-assistant-enums';
 import { Item, RichResponse, SimpleResponse } from '../core/Interfaces';
 import { SessionEntity, SessionEntityType } from 'jovo-platform-dialogflow';
+import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
 
 export class GoogleAssistantCore implements Plugin {
   install(googleAssistant: GoogleAssistant) {
@@ -76,28 +77,34 @@ export class GoogleAssistantCore implements Plugin {
         }
       });
 
+      // Merge existing entities with new ones provided as arguments with _.unionWith.
       this.$output.GoogleAssistant.SessionEntityTypes = _unionWith(
         this.$output.GoogleAssistant.SessionEntityTypes,
         sessionEntityTypes,
-        (first: SessionEntityType, second: SessionEntityType) => {
-          if (first.name !== second.name) {
+        (newEntry: SessionEntityType, original: SessionEntityType) => {
+          // If the new session entity does not yet exist by its name, just add it to the new array.
+          if (newEntry.name !== original.name) {
             return false;
           }
 
+          // If the session entity already exists by its name, check if its entity values already exist.
           const entities = _unionWith(
-            first.entities,
-            second.entities,
-            (f: SessionEntity, s: SessionEntity) => {
-              if (f.value !== s.value) {
+            newEntry.entities,
+            original.entities,
+            (n: SessionEntity, o: SessionEntity) => {
+              // If the current value is not yet present, just add it with a new entry.
+              if (n.value !== o.value) {
                 return false;
               }
 
-              s.synonyms = s.synonyms.concat(f.synonyms);
+              // Else merge the respective synonyms and unify them.
+              o.synonyms = _unionWith(o.synonyms, n.synonyms);
               return true;
             },
           );
 
-          second.entities = entities;
+          // Replace old entries with new, merged ones.
+          original.entities = entities;
           return true;
         },
       );
@@ -113,13 +120,9 @@ export class GoogleAssistantCore implements Plugin {
       name: string,
       value: string,
       synonyms: string[],
-      entityOverrideMode = 'ENTITY_OVERRIDE_MODE_SUPPLEMENT',
+      entityOverrideMode?: EntityOverrideMode,
     ) {
-      const sessionEntityType: SessionEntityType = {
-        name,
-        entityOverrideMode,
-        entities: [{ value, synonyms }],
-      };
+      const sessionEntityType = { name, entityOverrideMode, entities: [{ value, synonyms }] };
       return this.addSessionEntityType(sessionEntityType);
     };
   }

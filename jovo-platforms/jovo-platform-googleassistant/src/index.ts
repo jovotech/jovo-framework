@@ -35,6 +35,7 @@ export { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBu
 import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
 
 import { SessionEntityType } from 'jovo-platform-dialogflow';
+import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
 
 export {
   Transaction,
@@ -321,7 +322,12 @@ declare module './core/GoogleAction' {
     appendResponse(responseItem: Item): this;
     appendSimpleResponse(simpleResponse: SimpleResponse): this;
 
-    addSessionEntity(name: string, value?: string, synonyms?: string[]): this;
+    addSessionEntity(
+      name: string,
+      value: string,
+      synonyms: string[],
+      entityOverrideMode?: EntityOverrideMode,
+    ): this;
     addSessionEntityTypes(sessionEntityTypes: SessionEntityType[]): this;
     addSessionEntityType(sessionEntityType: SessionEntityType): this;
   }

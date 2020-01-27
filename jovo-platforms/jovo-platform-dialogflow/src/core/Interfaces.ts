@@ -9,10 +9,14 @@ export interface SessionEntityType {
   name: string;
   entities: SessionEntity[];
   // Defines whether to override or supplement existing custom entities
-  entityOverrideMode?: 'ENTITY_OVERRIDE_MODE_OVERRIDE' | 'ENTITY_OVERRIDE_MODE_SUPPLEMENT';
+  entityOverrideMode?: EntityOverrideMode;
 }
 
 export interface SessionEntity {
   value: string;
   synonyms: string[];
 }
+
+export type EntityOverrideMode =
+  | 'ENTITY_OVERRIDE_MODE_OVERRIDE'
+  | 'ENTITY_OVERRIDE_MODE_SUPPLEMENT';
