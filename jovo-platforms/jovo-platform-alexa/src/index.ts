@@ -363,6 +363,9 @@ declare module './core/AlexaSkill' {
      * @param dynamicEntityTypes
      */
     replaceDynamicEntities(dynamicEntityTypes: DynamicEntityType[]): this;
+
+    addDynamicEntityTypes(dynamicEntityTypes: DynamicEntityType[]): this;
+    addDynamicEntityType(dynamicEntityType: DynamicEntityType): this;
   }
 }
 // GadgetController

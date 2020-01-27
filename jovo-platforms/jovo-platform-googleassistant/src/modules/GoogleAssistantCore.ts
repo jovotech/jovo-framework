@@ -54,6 +54,10 @@ export class GoogleAssistantCore implements Plugin {
       return this;
     };
 
+    /**
+     * Adds an array of session entities to the output object.
+     * @param {object} sessionEntityTypes
+     */
     GoogleAction.prototype.addSessionEntityTypes = function(
       sessionEntityTypes: SessionEntityType[],
     ) {
@@ -112,10 +116,21 @@ export class GoogleAssistantCore implements Plugin {
       return this;
     };
 
+    /**
+     * Adds one session entity to the output object.
+     * @param {object} sessionEntityType
+     */
     GoogleAction.prototype.addSessionEntityType = function(sessionEntityType: SessionEntityType) {
       return this.addSessionEntityTypes([sessionEntityType]);
     };
 
+    /**
+     * Adds one session entity to the output object by constructing it from provided arguments.
+     * @param {string} name: The identifier for the current session entity.
+     * @param {string} value: The key of the value for the current session entity.
+     * @param {object} synonyms: The actual values which can be used in prompts by the user.
+     * @param {object} entityOverrideMode: Optional. Specifies how to handle session entities.
+     */
     GoogleAction.prototype.addSessionEntity = function(
       name: string,
       value: string,
