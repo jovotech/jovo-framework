@@ -2,6 +2,7 @@ import _sample = require('lodash.sample');
 import { SpeechBuilder } from 'jovo-core';
 import { AlexaSkill } from './AlexaSkill';
 import { SsmlElements } from 'jovo-core/dist/src/util/SpeechBuilder';
+import { EmotionIntensity, EmotionName } from './Interfaces';
 
 export class AlexaSpeechBuilder extends SpeechBuilder {
   static pollyVoice: string | undefined;
@@ -83,9 +84,9 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
   }
 
   addEmotion(
+    name: EmotionName,
+    intensity: EmotionIntensity,
     text: string | string[],
-    name: 'excited' | 'disappointed',
-    intensity: 'low' | 'medium' | 'high',
     condition?: boolean,
     probability?: number,
     surroundSsml: SsmlElements = {},

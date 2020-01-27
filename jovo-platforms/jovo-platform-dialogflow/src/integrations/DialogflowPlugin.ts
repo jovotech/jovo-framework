@@ -172,8 +172,18 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
     }
 
     // TODO: testme
-    if (originalResponse && originalResponse.hasSessionEnded()) {
-      if (!_get(jovo.$app.config, 'keepSessionDataOnSessionEnded')) {
+    if (originalResponse) {
+      if (originalResponse.sessionEntityTypes) {
+        // set session entities
+        // @ts-ignore
+        response.sessionEntityTypes = originalResponse.sessionEntityTypes;
+        delete originalResponse.sessionEntityTypes;
+      }
+
+      if (
+        originalResponse.hasSessionEnded() &&
+        !_get(jovo.$app.config, 'keepSessionDataOnSessionEnded')
+      ) {
         _set(response, 'outputContexts', _get(request, 'queryResult.outputContexts'));
         response.outputContexts = request.queryResult.outputContexts;
         return;

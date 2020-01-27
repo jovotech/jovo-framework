@@ -21,7 +21,7 @@ import { Table } from './response/Table';
 import { List } from './response/List';
 import { MediaResponse } from './modules/MediaResponse';
 import { Updates } from './modules/Updates';
-import { RichResponse, SessionEntityType } from './core/Interfaces';
+import { RichResponse } from './core/Interfaces';
 
 import { GoogleAction } from './core/GoogleAction';
 import { Handler } from 'jovo-core';
@@ -33,6 +33,8 @@ export { GoogleActionResponse } from './core/GoogleActionResponse';
 export { GoogleAssistantRequestBuilder } from './core/GoogleAssistantRequestBuilder';
 export { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBuilder';
 import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
+
+import { SessionEntityType } from 'jovo-platform-dialogflow';
 
 export {
   Transaction,
@@ -320,7 +322,8 @@ declare module './core/GoogleAction' {
     appendSimpleResponse(simpleResponse: SimpleResponse): this;
 
     addSessionEntity(name: string, value?: string, synonyms?: string[]): this;
-    addSessionEntityTypes(sessionEntityTypes: SessionEntityType | SessionEntityType[]): this;
+    addSessionEntityTypes(sessionEntityTypes: SessionEntityType[]): this;
+    addSessionEntityType(sessionEntityType: SessionEntityType): this;
   }
 }
 

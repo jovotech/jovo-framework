@@ -1,5 +1,7 @@
 import _get = require('lodash.get');
+import _find = require('lodash.find');
 import { JovoResponse, SessionConstants, SessionData, SpeechBuilder } from 'jovo-core';
+import { SessionEntityType, SessionEntity } from './Interfaces';
 
 export interface Payload {
   [key: string]: JovoResponse;
@@ -24,6 +26,7 @@ export class DialogflowResponse implements JovoResponse {
   fulfillmentText?: string;
   payload?: Payload;
   outputContexts?: Context[];
+  sessionEntityTypes?: SessionEntityType[];
 
   getPlatformId() {
     if (this.payload) {

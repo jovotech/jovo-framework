@@ -1,7 +1,7 @@
 import { Plugin, HandleRequest, EnumRequestType } from 'jovo-core';
 import _set = require('lodash.set');
 import _get = require('lodash.get');
-import _find = require('lodash.find');
+import _unionWith = require('lodash.unionwith');
 
 import { GoogleAssistant } from '../GoogleAssistant';
 import { GoogleAction } from '../core/GoogleAction';
@@ -10,13 +10,8 @@ import { GoogleActionSpeechBuilder } from '../core/GoogleActionSpeechBuilder';
 
 import uuidv4 = require('uuid/v4');
 import { EnumGoogleAssistantRequestType } from '../core/google-assistant-enums';
-import {
-  Item,
-  RichResponse,
-  SimpleResponse,
-  SessionEntityType,
-  SessionEntity,
-} from '../core/Interfaces';
+import { Item, RichResponse, SimpleResponse } from '../core/Interfaces';
+import { SessionEntity, SessionEntityType } from 'jovo-platform-dialogflow';
 
 export class GoogleAssistantCore implements Plugin {
   install(googleAssistant: GoogleAssistant) {
@@ -58,53 +53,74 @@ export class GoogleAssistantCore implements Plugin {
       return this;
     };
 
-    GoogleAction.prototype.addSessionEntity = function(
-      name: string,
-      value: string,
-      synonyms?: string[],
+    GoogleAction.prototype.addSessionEntityTypes = function(
+      sessionEntityTypes: SessionEntityType[],
     ) {
-      const sessionEntityTypes = this.$output.GoogleAssistant.SessionEntityTypes || [];
-
-      // get object with name from session entities, if undefined, create it
-      const sessionEntityType: SessionEntityType = _find(
-        sessionEntityTypes,
-        (el: SessionEntityType) => {
-          return el.name === name;
-        },
-      ) || { name, entities: [] };
-
-      const sessionEntity: SessionEntity = _find(
-        sessionEntityType.entities,
-        (el: SessionEntity) => {
-          return el.value === value;
-        },
-      ) || { value, synonyms: [] };
-
-      if (synonyms) {
-        const syns = sessionEntity.synonyms || [];
-        syns.push(...synonyms);
-        sessionEntity.synonyms = syns;
+      if (!this.$output.GoogleAssistant) {
+        this.$output.GoogleAssistant = {};
       }
 
-      sessionEntityType.entities.push(sessionEntity);
-      sessionEntityTypes.push(sessionEntityType);
-      this.$output.GoogleAssistant.SessionEntityTypes = sessionEntityTypes;
+      if (!this.$output.GoogleAssistant.SessionEntityTypes) {
+        this.$output.GoogleAssistant.SessionEntityTypes = [];
+      }
+
+      sessionEntityTypes.forEach((el: SessionEntityType) => {
+        // Place session id in front of session entity name to accomodate to proper format
+        const sessionId = this.$request!.getSessionId();
+        const entityName = el.name;
+        el.name = `${sessionId}/entityTypes/${entityName}`;
+
+        // Set default override mode
+        if (!el.entityOverrideMode) {
+          el.entityOverrideMode = 'ENTITY_OVERRIDE_MODE_SUPPLEMENT';
+        }
+      });
+
+      this.$output.GoogleAssistant.SessionEntityTypes = _unionWith(
+        this.$output.GoogleAssistant.SessionEntityTypes,
+        sessionEntityTypes,
+        (first: SessionEntityType, second: SessionEntityType) => {
+          if (first.name !== second.name) {
+            return false;
+          }
+
+          const entities = _unionWith(
+            first.entities,
+            second.entities,
+            (f: SessionEntity, s: SessionEntity) => {
+              if (f.value !== s.value) {
+                return false;
+              }
+
+              s.synonyms = s.synonyms.concat(f.synonyms);
+              return true;
+            },
+          );
+
+          second.entities = entities;
+          return true;
+        },
+      );
 
       return this;
     };
 
-    GoogleAction.prototype.addSessionEntityTypes = function(
-      sessionEntityTypes: SessionEntityType | SessionEntityType[],
+    GoogleAction.prototype.addSessionEntityType = function(sessionEntityType: SessionEntityType) {
+      return this.addSessionEntityTypes([sessionEntityType]);
+    };
+
+    GoogleAction.prototype.addSessionEntity = function(
+      name: string,
+      value: string,
+      synonyms: string[],
+      entityOverrideMode = 'ENTITY_OVERRIDE_MODE_SUPPLEMENT',
     ) {
-      if (!Array.isArray(sessionEntityTypes)) {
-        sessionEntityTypes = [sessionEntityTypes];
-      }
-
-      const types = this.$output.GoogleAssistant.SessionEntityTypes || [];
-      types.push(...sessionEntityTypes);
-
-      this.$output.GoogleAssistant.SessionEntityTypes = types;
-      return this;
+      const sessionEntityType: SessionEntityType = {
+        name,
+        entityOverrideMode,
+        entities: [{ value, synonyms }],
+      };
+      return this.addSessionEntityType(sessionEntityType);
     };
   }
 
