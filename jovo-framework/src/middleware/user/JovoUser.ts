@@ -337,10 +337,11 @@ export class JovoUser implements Plugin {
     if (this.config.context && this.config.context.enabled) {
       handleRequest.jovo.$user.$context = _get(data, `${this.config.columnName}.context`, {});
     }
+
     if (this.config.sessionData && this.config.sessionData.enabled) {
       const serializedSessionData: UserSessionData = _get(
         data,
-        `${this.config.columnName}.sessionData`,
+        `${this.config.columnName}.session`,
         {},
       );
 
