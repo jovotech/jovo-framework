@@ -25,18 +25,14 @@ export class AutopilotCore implements Plugin {
 
   async init(handleRequest: HandleRequest) {
     const requestObject = handleRequest.host.getRequestObject();
-    // TODO
-    // if (
-    //   requestObject.AccountSid &&
-    //   requestObject.AssistantSid &&
-    //   requestObject.DialogueSid &&
-    //   requestObject.CurrentInput &&
-    //   requestObject.DialoguePayloadUrl
-    // ) {
-    //   handleRequest.jovo = new AutopilotBot(handleRequest.app, handleRequest.host, handleRequest);
-    // }
-
-    handleRequest.jovo = new AutopilotBot(handleRequest.app, handleRequest.host, handleRequest);
+    if (
+      requestObject.DialogueSid &&
+      requestObject.AccountSid &&
+      requestObject.AssistantSid &&
+      requestObject.UserIdentifier
+    ) {
+      handleRequest.jovo = new AutopilotBot(handleRequest.app, handleRequest.host, handleRequest);
+    }
   }
 
   async request(autopilotBot: AutopilotBot) {
