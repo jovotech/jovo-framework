@@ -240,11 +240,17 @@ export class AutopilotRequest implements JovoRequest {
   // TODO: why does it work like that?
   static fromJSON(json: AutopilotRequestJSON | string): AutopilotRequest {
     if (typeof json === 'string') {
+      json = decodeURIComponent(json);
       return JSON.parse(json);
     } else {
-      const request = Object.create(AutopilotRequest.prototype);
-      return Object.assign(request, json);
-    }
+      const request: AutopilotRequest = Object.create(AutopilotRequest.prototype);
+      Object.assign(request, json);
+      Object.entries(request).forEach(([key, value]) => {
+        request[key] = decodeURIComponent(value);
+      });
+
+      return request;
+    } 
   }
 
   // TODO: add autopilot specific get/set methods
