@@ -5,6 +5,8 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 * [Introduction](#introduction)
 * [Configuration](#configuration)
 * [Troubleshooting](#troubleshooting)
+    * [Timeout on AWS Lambda](#timeout-on-aws-lambda)
+    * [Connection Refused on MongoDb Atlas](#connection-refused-on-mongodb-atlas)
 
 
 ## Introduction
@@ -88,7 +90,7 @@ If you don't specify a collection name, a default collection ```UserData``` will
 
 Usually, the MongoDb integration should work as intended. However, we came across some edge cases that can cause the integration to misbehave by not connecting properly to the database.
 
-### Timeout on Lambda
+### Timeout on AWS Lambda
 
 If you want to deploy your skill to AWS Lambda, chances are, your skill will time out trying to connect to your MongoDb database. This is because by default, Lambda waits for all events in the event loop to be finished before returning a response, which means that it waits for the open MongoDb connection to close. To counteract this issue, you can set `callbackWaitsForEmptyEventLoop` to `false` in your `index.js` like so:
 
@@ -105,6 +107,8 @@ export const handler = async (event: any, context: any, callback: Function) => {
     await app.handle(new Lambda(event, context, callback));
 };
 ```
+
+This tells Lambda to return a response as soon as possible, without waiting for the event loop to be finished.
 
 Read more about best practices [here](https://docs.atlas.mongodb.com/best-practices-connecting-to-aws-lambda/).
 
