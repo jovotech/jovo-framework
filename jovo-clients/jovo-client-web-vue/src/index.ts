@@ -19,6 +19,7 @@ export function JovoWebAssistantVuePlugin(vue: typeof _Vue, options?: PluginOpti
   vue.prototype.$assistant = new JovoWebClientVue(options.url, options.client);
 }
 
+// tslint:disable-next-line
 export default {
   install: JovoWebAssistantVuePlugin,
 };

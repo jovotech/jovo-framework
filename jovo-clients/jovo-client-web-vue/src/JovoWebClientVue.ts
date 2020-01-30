@@ -14,6 +14,7 @@ import {
 import Vue from 'vue';
 import { Data } from './Interfaces';
 
+
 export class JovoWebClientVue {
   private readonly $store: Vue;
   private readonly $assistant: JovoWebClient;
@@ -62,6 +63,7 @@ export class JovoWebClientVue {
     this.$assistant.options = options;
   }
 
+  // tslint:disable-next-line:no-any
   on(event: string, func: (...args: any[]) => void) {
     if (!this.$events.includes(event)) {
       this.setupListener(event);
@@ -75,7 +77,7 @@ export class JovoWebClientVue {
   }
 
   // region input-related
-  sendText(text: string, fromVoice: boolean = true): JovoWebClientVue {
+  sendText(text: string, fromVoice = true): JovoWebClientVue {
     this.$assistant.input.sendText(text, fromVoice);
     return this;
   }
