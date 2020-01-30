@@ -1,5 +1,5 @@
 import _Vue from 'vue';
-import { PluginOptions } from './Interfaces';
+import { PluginConfig } from './Interfaces';
 import { JovoWebClientVue } from './JovoWebClientVue';
 
 export * from 'jovo-client-web';
@@ -10,13 +10,13 @@ declare module 'vue/types/vue' {
   }
 }
 
-export function JovoAssistantVuePlugin(vue: typeof _Vue, options?: PluginOptions) {
-  if (!options) {
+export function JovoAssistantVuePlugin(vue: typeof _Vue, config?: PluginConfig) {
+  if (!config) {
     throw new Error(
       `At least the 'url' option has to be set in order to use the JovoWebClientPlugin.`,
     );
   }
-  vue.prototype.$assistant = new JovoWebClientVue(options.url, options.client);
+  vue.prototype.$assistant = new JovoWebClientVue(config.url, config.client);
 }
 
 // tslint:disable-next-line
