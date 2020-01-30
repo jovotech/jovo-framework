@@ -34,6 +34,7 @@
     "@types/uuid": "^3.4.4",
     "barrelsby": "^2.1.1",
     "jest": "^24.9.0",
+    "jovo-platform-core": "^2.2.5",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

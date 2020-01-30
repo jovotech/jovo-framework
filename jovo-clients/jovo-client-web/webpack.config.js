@@ -20,7 +20,7 @@ function createConfig(target, targetName = target) {
       ],
     },
     resolve: {
-      extensions: ['.ts', '.js']
+      extensions: ['.ts', '.js'],
     },
     plugins: []
   };

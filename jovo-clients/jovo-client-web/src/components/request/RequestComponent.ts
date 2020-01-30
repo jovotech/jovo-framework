@@ -1,4 +1,5 @@
 import {
+  assistantEvents,
   AudioRecordedPayload,
   Base64Converter,
   Component,
@@ -8,7 +9,6 @@ import {
   NetworkHandler,
   NetworkResponse,
   RequestEvents,
-  assistantEvents,
 } from '../..';
 import { AjaxAdapter } from './adapters/AjaxAdapter';
 
