@@ -1,24 +1,21 @@
-import { ComponentOptions, JovoWebClient } from '..';
+import { ComponentConfig, CoreComponent, JovoWebClient } from '..';
 
-/**
- * O = ComponentOptionsType
- */
-export abstract class Component<O extends ComponentOptions = {}> {
+export abstract class Component<
+  CONFIG extends ComponentConfig = ComponentConfig
+> extends CoreComponent {
   constructor(
     protected readonly $client: JovoWebClient,
-    protected readonly $initOptions?: Partial<O>,
-  ) {}
-
-  get initOptions(): Partial<O> | undefined {
-    return this.$initOptions;
+    protected readonly $initConfig?: Partial<CONFIG>,
+  ) {
+    super($client);
   }
 
-  get name(): string {
-    return this.constructor.name;
+  get initConfig(): Partial<CONFIG> | undefined {
+    return this.$initConfig;
   }
 
-  get options(): O {
-    return this.$client.options[this.name];
+  get $config(): CONFIG {
+    return this.$client.$config[this.name];
   }
 
   abstract async onInit(): Promise<void>;
@@ -27,5 +24,5 @@ export abstract class Component<O extends ComponentOptions = {}> {
     // tslint:disable-line
   }
 
-  abstract getDefaultOptions(): O;
+  abstract getDefaultConfig(): CONFIG;
 }

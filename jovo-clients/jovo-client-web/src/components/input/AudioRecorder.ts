@@ -1,11 +1,12 @@
 import {
   AudioEncoder,
   AudioRecordedPayload,
-  InputComponentOptions,
+  InputComponentConfig,
   InputRecordEvents,
   JovoWebClient,
   RequestEvents,
-  WebAssistantEvents,
+  TypedArray,
+  assistantEvents,
 } from '../..';
 
 declare global {
@@ -16,52 +17,52 @@ declare global {
 }
 
 export class AudioRecorder {
-  get inputOptions(): InputComponentOptions {
-    return this.$client.options.InputComponent;
+  get inputConfig(): InputComponentConfig {
+    return this.$client.$config.InputComponent;
   }
 
   get speechRecognitionEnabled(): boolean {
-    return this.inputOptions.speechRecognition.enabled;
+    return this.inputConfig.speechRecognition.enabled;
   }
 
   get locale(): string {
-    return this.$client.options.locale;
+    return this.$client.$config.locale;
   }
 
   get minDecibels(): number {
-    return this.inputOptions.analyser.minDecibels!;
+    return this.inputConfig.analyser.minDecibels!;
   }
 
   get maxDecibels(): number {
-    return this.inputOptions.analyser.maxDecibels!;
+    return this.inputConfig.analyser.maxDecibels!;
   }
 
   get smoothingConstant(): number {
-    return this.inputOptions.analyser.smoothingTimeConstant!;
+    return this.inputConfig.analyser.smoothingTimeConstant!;
   }
 
   get bufferSize(): number {
-    return this.inputOptions.analyser.fftSize!;
+    return this.inputConfig.analyser.fftSize!;
   }
 
   get startThreshold(): number {
-    return this.inputOptions.startThreshold;
+    return this.inputConfig.startThreshold;
   }
 
   get timeout(): number {
-    return this.inputOptions.timeout;
+    return this.inputConfig.timeout;
   }
 
   get silenceThreshold(): number {
-    return this.inputOptions.silenceDetection.threshold;
+    return this.inputConfig.silenceDetection.threshold;
   }
 
   get silenceTimeout(): number {
-    return this.inputOptions.silenceDetection.timeout;
+    return this.inputConfig.silenceDetection.timeout;
   }
 
   get isPushToTalkUsed(): boolean {
-    return this.inputOptions.mode === 'push-to-talk';
+    return this.inputConfig.mode === 'push-to-talk';
   }
 
   get isRecording(): boolean {
@@ -69,11 +70,11 @@ export class AudioRecorder {
   }
 
   get shouldLaunchFirst(): boolean {
-    return this.$client.options.launchFirst;
+    return this.$client.$config.launchFirst;
   }
 
   get exportSampleRate(): number {
-    return this.inputOptions.exportSampleRate;
+    return this.inputConfig.exportSampleRate;
   }
 
   static new(client: JovoWebClient): Promise<AudioRecorder> {
@@ -88,6 +89,7 @@ export class AudioRecorder {
       }
     });
   }
+
   private readonly $context: AudioContext;
   private readonly $source: MediaStreamAudioSourceNode;
 
@@ -96,11 +98,11 @@ export class AudioRecorder {
   private readonly $sampleRate: number;
   private $recorder: ScriptProcessorNode | null;
   private $start: Date = new Date();
-  private $chunks: any[] = [];
-  private $chunkLength: number = 0;
-  private $recording: boolean = false;
-  private $speechRecognized: boolean = false;
-  private $startThresholdPassed: boolean = false;
+  private $chunks: TypedArray[] = [];
+  private $chunkLength = 0;
+  private $recording = false;
+  private $speechRecognized = false;
+  private $startThresholdPassed = false;
 
   private constructor(stream: MediaStream, private readonly $client: JovoWebClient) {
     const context = new AudioContext();
@@ -135,7 +137,7 @@ export class AudioRecorder {
   start() {
     if (!this.$recording && !this.$recorder) {
       if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-        this.$client.emit(WebAssistantEvents.LaunchRequest);
+        this.$client.emit(assistantEvents.LaunchRequest);
       } else {
         this.setupRecorder();
 

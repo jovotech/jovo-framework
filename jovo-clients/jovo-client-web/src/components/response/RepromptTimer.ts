@@ -1,19 +1,21 @@
 import {
+  CoreComponent,
   InputRecordEvents,
   JovoWebClient,
   Output,
   RequestEvents,
-  ResponseComponentOptions,
-  ResponseEvents,
+  ResponseComponentConfig,
+  ResponseEvents
 } from '../..';
 
-export class RepromptTimer {
+export class RepromptTimer extends CoreComponent {
   private $reprompt: Output | null = null;
-  private $attempts: number = 0;
-  private $activeRepromptTimerId: number = -1;
-  private $activeTimeoutTimerId: number = -1;
+  private $attempts = 0;
+  private $activeRepromptTimerId = -1;
+  private $activeTimeoutTimerId = -1;
 
-  constructor(private readonly $client: JovoWebClient) {
+  constructor(protected readonly $client: JovoWebClient) {
+    super($client);
     $client.on(InputRecordEvents.Started, this.onRecordingStarted.bind(this));
     $client.on(InputRecordEvents.Timeout, this.onTimeout.bind(this));
     $client.on(RequestEvents.Data, this.onInputRetrieved.bind(this));
@@ -24,20 +26,20 @@ export class RepromptTimer {
     return this.$attempts;
   }
 
-  get responseOptions(): ResponseComponentOptions {
-    return this.$client.options.ResponseComponent;
+  get responseConfig(): ResponseComponentConfig {
+    return this.$client.$config.ResponseComponent;
   }
 
   get maxAttempts(): number {
-    return this.responseOptions.reprompt.maxAttempts;
+    return this.responseConfig.reprompt.maxAttempts;
   }
 
   get interval(): number {
-    return this.responseOptions.reprompt.interval;
+    return this.responseConfig.reprompt.interval;
   }
 
   get isPushToTalkUsed(): boolean {
-    return this.$client.options.InputComponent.mode === 'push-to-talk';
+    return this.$client.$config.InputComponent.mode === 'push-to-talk';
   }
 
   handle(reprompt: Output) {
@@ -63,7 +65,7 @@ export class RepromptTimer {
       return;
     }
     if (this.maxAttempts === 0 || this.attempts < this.maxAttempts) {
-      this.$activeRepromptTimerId = setTimeout(async () => {
+      this.$activeRepromptTimerId = (setTimeout(async () => {
         this.$client.emit(ResponseEvents.Reprompt, this.$reprompt);
 
         await this.$client.ssmlEvaluator.evaluate(this.$reprompt!.ssml);
@@ -71,7 +73,7 @@ export class RepromptTimer {
         this.startReprompt();
 
         this.$attempts++;
-      }, this.interval) as any;
+      }, this.interval) as unknown) as number;
     } else {
       this.$client.emit(ResponseEvents.MaxRepromptsReached);
       this.onInputRetrieved();
@@ -81,9 +83,9 @@ export class RepromptTimer {
   private startReprompt() {
     if (this.$reprompt) {
       if (this.isPushToTalkUsed) {
-        this.$activeTimeoutTimerId = setTimeout(() => {
+        this.$activeTimeoutTimerId = (setTimeout(() => {
           this.$client.emit(InputRecordEvents.Timeout);
-        }, this.interval) as any;
+        }, this.interval) as unknown) as number;
       } else {
         this.$client.input.startRecording();
       }

@@ -1,22 +1,15 @@
-import { AudioPlayerEvents, Base64Converter } from '..';
-import { JovoWebClient } from '../JovoWebClient';
+import { AudioPlayerEvents, Base64Converter, CoreComponent } from '..';
 import { AudioPlayback } from './Interfaces';
 
-export class AudioPlayer {
-  private $volume: number = 1.0;
-  private $activePlaybacks: AudioPlayback[] = [];
-  private $idCounter: number = 0;
-
-  constructor(private readonly $client: JovoWebClient) {}
+export class AudioPlayer extends CoreComponent {
+  private $volume = 1.0;
+  private activePlaybacks: AudioPlayback[] = [];
+  private idCounter = 0;
 
   get isPlaying(): boolean {
-    let isPlaying = false;
-    this.$activePlaybacks.forEach((playback: AudioPlayback) => {
-      if (!playback.audio.paused && !playback.audio.ended) {
-        isPlaying = true;
-      }
+    return this.activePlaybacks.some((playback) => {
+      return !playback.audio.paused && !playback.audio.ended;
     });
-    return isPlaying;
   }
 
   get volume(): number {
@@ -25,9 +18,9 @@ export class AudioPlayer {
 
   set volume(value: number) {
     this.$volume = value;
-    this.$activePlaybacks.forEach((playback: AudioPlayback) => {
-      playback.audio.volume = value;
-    });
+    for (let i = 0, len = this.activePlaybacks.length; i < len; i++) {
+      this.activePlaybacks[i].audio.volume = value;
+    }
   }
 
   play(audioSource: string): Promise<void> {
@@ -41,40 +34,40 @@ export class AudioPlayer {
   resume(id: number) {
     const index = this.findPlaybackIndex(id);
     if (index >= 0) {
-      this.resumePlayback(this.$activePlaybacks[index]);
+      this.resumePlayback(this.activePlaybacks[index]);
     }
   }
 
   resumeAll() {
-    this.$activePlaybacks.forEach((playback: AudioPlayback) => {
-      this.resumePlayback(playback);
-    });
+    for (let i = 0, len = this.activePlaybacks.length; i < len; i++) {
+      this.resumePlayback(this.activePlaybacks[i]);
+    }
   }
 
   pause(id: number) {
     const index = this.findPlaybackIndex(id);
     if (index >= 0) {
-      this.pausePlayback(this.$activePlaybacks[index]);
+      this.pausePlayback(this.activePlaybacks[index]);
     }
   }
 
   pauseAll() {
-    this.$activePlaybacks.forEach((playback: AudioPlayback) => {
-      this.pausePlayback(playback);
-    });
+    for (let i = 0, len = this.activePlaybacks.length; i < len; i++) {
+      this.pausePlayback(this.activePlaybacks[i]);
+    }
   }
 
   stop(id: number) {
     const index = this.findPlaybackIndex(id);
     if (index >= 0) {
-      this.stopPlayback(this.$activePlaybacks[index]);
+      this.stopPlayback(this.activePlaybacks[index]);
     }
   }
 
   stopAll() {
-    this.$activePlaybacks.forEach((playback: AudioPlayback) => {
-      this.stopPlayback(playback);
-    });
+    for (let i = 0, len = this.activePlaybacks.length; i < len; i++) {
+      this.stopPlayback(this.activePlaybacks[i]);
+    }
   }
 
   private playBase64Encoded(base64Audio: string, contentType: string): Promise<void> {
@@ -94,7 +87,7 @@ export class AudioPlayer {
       try {
         const audio: HTMLAudioElement = new Audio(audioSource);
         audio.volume = this.volume;
-        const id = this.$idCounter;
+        const id = this.idCounter;
 
         audio.onerror = (e) => {
           this.$client.emit(AudioPlayerEvents.Error, e);
@@ -118,7 +111,7 @@ export class AudioPlayer {
         await audio.play();
         this.$client.emit(AudioPlayerEvents.Play, id);
 
-        this.$activePlaybacks.push({
+        this.activePlaybacks.push({
           audio,
           id,
         });
@@ -155,18 +148,18 @@ export class AudioPlayer {
   private removePlayback(id: number) {
     const index = this.findPlaybackIndex(id);
     if (index >= 0) {
-      this.$activePlaybacks.splice(index, 1);
+      this.activePlaybacks.splice(index, 1);
     }
   }
 
   private findPlayback(id: number): AudioPlayback | undefined {
-    return this.$activePlaybacks.find((playback: AudioPlayback) => {
+    return this.activePlaybacks.find((playback: AudioPlayback) => {
       return playback.id === id;
     });
   }
 
   private findPlaybackIndex(id: number): number {
-    return this.$activePlaybacks.findIndex((playback: AudioPlayback) => {
+    return this.activePlaybacks.findIndex((playback: AudioPlayback) => {
       return playback.id === id;
     });
   }

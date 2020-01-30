@@ -2,6 +2,7 @@ import { IAdaptiveCard } from 'adaptivecards';
 
 export interface Action {
   key: string;
+  // tslint:disable-next-line:no-any
   value: any;
 }
 
@@ -24,9 +25,11 @@ interface Response {
   inputText?: string;
 }
 
-export interface WebAssistantResponse {
+export interface AssistantResponse {
   version: string;
   response: Response;
+  // tslint:disable-next-line:no-any
   sessionData?: Record<string, any>;
+  // tslint:disable-next-line:no-any
   userData?: Record<string, any>;
 }

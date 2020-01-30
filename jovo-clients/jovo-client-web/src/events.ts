@@ -1,4 +1,4 @@
-export enum WebAssistantEvents {
+export enum assistantEvents {
   /** Called when the assistant finished starting */
   Loaded = 'loaded',
   /** Called when the launch-request is being sent  */

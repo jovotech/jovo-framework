@@ -2,19 +2,19 @@ import {
   AudioRecordedPayload,
   Base64Converter,
   Component,
-  ComponentOptions,
+  ComponentConfig,
   InputEvents,
   InputRecordEvents,
   NetworkHandler,
   NetworkResponse,
   RequestEvents,
-  WebAssistantEvents,
+  assistantEvents,
 } from '../..';
 import { AjaxAdapter } from './adapters/AjaxAdapter';
 
-export interface RequestComponentOptions extends ComponentOptions {}
+export interface RequestComponentConfig extends ComponentConfig {}
 
-export class RequestComponent extends Component<RequestComponentOptions> {
+export class RequestComponent extends Component<RequestComponentConfig> {
   private $networkHandler!: NetworkHandler;
 
   get url(): string {
@@ -22,27 +22,27 @@ export class RequestComponent extends Component<RequestComponentOptions> {
   }
 
   get isPushToTalkUsed(): boolean {
-    return this.$client.options.InputComponent.mode === 'push-to-talk';
+    return this.$client.$config.InputComponent.mode === 'push-to-talk';
   }
 
   get locale(): string {
-    return this.$client.options.locale;
+    return this.$client.$config.locale;
   }
 
   get shouldLaunchFirst(): boolean {
-    return this.$client.options.launchFirst;
+    return this.$client.$config.launchFirst;
   }
 
   async onInit(): Promise<void> {
     const adapter = new AjaxAdapter(this.$client);
     this.$networkHandler = new NetworkHandler(adapter);
-    this.$client.prependListener(WebAssistantEvents.LaunchRequest, this.onFirstRequest.bind(this));
+    this.$client.prependListener(assistantEvents.LaunchRequest, this.onFirstRequest.bind(this));
     this.$client.on(InputEvents.Text, this.onSendText.bind(this));
     this.$client.on(InputRecordEvents.Recorded, this.onAudioRecorded.bind(this));
     this.$client.on(InputRecordEvents.SpeechRecognized, this.onSpeechRecognized.bind(this));
   }
 
-  getDefaultOptions(): RequestComponentOptions {
+  getDefaultConfig(): RequestComponentConfig {
     return {};
   }
 
@@ -80,6 +80,7 @@ export class RequestComponent extends Component<RequestComponentOptions> {
     await this.handleSendRequest(data);
   }
 
+  // tslint:disable-next-line:no-any
   private async handleSendRequest(data: any) {
     try {
       const res = await this.sendRequest(data);
@@ -100,6 +101,7 @@ export class RequestComponent extends Component<RequestComponentOptions> {
     }
   }
 
+  // tslint:disable-next-line:no-any
   private makeRequest(baseData: any) {
     // TODO add missing pieces of information!
     const requestData = {
@@ -114,7 +116,7 @@ export class RequestComponent extends Component<RequestComponentOptions> {
 
     Object.assign(requestData, baseData);
 
-    if (this.$client.options.debugMode) {
+    if (this.$client.$config.debugMode) {
       // tslint:disable-next-line:no-console
       console.log('[REQ]', requestData);
     }
@@ -123,6 +125,7 @@ export class RequestComponent extends Component<RequestComponentOptions> {
     return requestData;
   }
 
+  // tslint:disable-next-line:no-any
   private sendRequest(data: any): Promise<NetworkResponse> {
     const jsonData = JSON.stringify(data);
     return this.$networkHandler.post(this.url, jsonData, {

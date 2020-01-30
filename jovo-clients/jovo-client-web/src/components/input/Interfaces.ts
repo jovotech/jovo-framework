@@ -1,3 +1,15 @@
+export type TypedArray =
+  | Int8Array
+  | Uint8Array
+  | Uint8ClampedArray
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array;
+
+
 export interface AudioProcessingPayload {
   data: Uint8Array;
   bufferLength: number;
@@ -12,35 +24,35 @@ export interface AudioRecordedPayload {
 
 export type RecordMode = 'default' | 'push-to-talk';
 
-export interface RecordModeOptions {
+export interface RecordModeConfig {
   triggerKey: number | string;
 }
 
-export interface RecorderOptions {
+export interface RecorderConfig {
   timeout?: number;
   startThreshold?: number;
   exportSampleRate?: number;
 
   mode?: RecordMode;
-  modeOptions?: RecordModeOptions;
+  modeConfig?: RecordModeConfig;
 
-  analyser?: AudioAnalyserOptions;
-  silenceDetection?: SilenceDetectionOptions;
-  speechRecognition?: SpeechRecognitionOptions;
+  analyser?: AudioAnalyserConfig;
+  silenceDetection?: SilenceDetectionConfig;
+  speechRecognition?: SpeechRecognitionConfig;
 }
 
-export interface AudioAnalyserOptions {
+export interface AudioAnalyserConfig {
   fftSize: number;
   minDecibels: number;
   maxDecibels: number;
   smoothingTimeConstant: number;
 }
 
-export interface SpeechRecognitionOptions {
+export interface SpeechRecognitionConfig {
   enabled: boolean;
 }
 
-export interface SilenceDetectionOptions {
+export interface SilenceDetectionConfig {
   threshold: number;
   timeout: number;
 }

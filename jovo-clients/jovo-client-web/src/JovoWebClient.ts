@@ -1,48 +1,62 @@
 import * as AdaptiveCards from 'adaptivecards';
-import merge = require('lodash.merge');
 import * as markdownit from 'markdown-it';
 import {
-  ASSISTANT_DEFAULT_OPTIONS,
+  AdvancedEventEmitter,
   AudioPlayer,
   Component,
   ComponentConstructor,
+  Config,
   ConversationComponent,
   InputComponent,
-  JovoWebClientOptions,
+  JovoWebClientConfig,
   Logger,
   LoggerComponent,
   LoggerEvents,
-  Options,
   RequestComponent,
   ResponseComponent,
   SpeechSynthesizer,
+  SSMLEvaluator,
   Store,
-  WebAssistantEvents,
+  assistantEvents,
 } from './';
-import { AdvancedEventEmitter } from './core/AdvancedEventEmitter';
-import { SSMLEvaluator } from './core/SSMLEvaluator';
+// tslint:disable-next-line
+import merge = require('lodash.merge');
+
+export function makeDefaultConfig(): Config {
+  return {
+    debugMode: false,
+    initBaseComponents: true,
+    launchFirst: true,
+    locale: navigator.language,
+    speechSynthesis: {
+      automaticallySetLanguage: true,
+    },
+  };
+}
 
 export class JovoWebClient extends AdvancedEventEmitter {
-  options: Options;
-  private $hasSentLaunchRequest = false;
-  private $isRunning = false;
+  $config: Config;
+
+  private launchRequestWasSent = false;
+
   private $volume = 1.0;
   private readonly $components: Component[];
+
   private readonly $store: Store;
   private readonly $audioPlayer: AudioPlayer;
   private readonly $speechSynthesizer: SpeechSynthesizer;
   private readonly $ssmlEvaluator: SSMLEvaluator;
   private readonly $adaptiveCards: AdaptiveCards.AdaptiveCard;
 
-  constructor(readonly url: string, options?: Partial<JovoWebClientOptions>) {
+  constructor(readonly url: string, config?: Partial<JovoWebClientConfig>) {
     super();
 
-    const defaultOptions = ASSISTANT_DEFAULT_OPTIONS();
-    this.options = options ? merge(defaultOptions, options) : defaultOptions;
+    const defaultConfig = makeDefaultConfig();
+    this.$config = config ? merge(defaultConfig, config) : defaultConfig;
 
     this.$components = [];
     // Workflow components
-    if (this.options.initBaseComponents) {
+    if (this.$config.initBaseComponents) {
       this.initBaseComponents(
         LoggerComponent,
         InputComponent,
@@ -61,11 +75,12 @@ export class JovoWebClient extends AdvancedEventEmitter {
     this.$adaptiveCards = new AdaptiveCards.AdaptiveCard();
     this.setupAdaptiveCards();
 
-    this.on(WebAssistantEvents.LaunchRequest, () => {
-      this.$hasSentLaunchRequest = true;
+    this.on(assistantEvents.LaunchRequest, () => {
+      this.launchRequestWasSent = true;
     });
 
-    if (this.options.debugMode) {
+    if (this.$config.debugMode) {
+      // tslint:disable-next-line:no-any
       this.onEmit = (type: string | symbol, ...args: any[]) => {
         if (type === LoggerEvents.Log) {
           return;
@@ -75,12 +90,8 @@ export class JovoWebClient extends AdvancedEventEmitter {
     }
   }
 
-  get isRunning(): boolean {
-    return this.$isRunning;
-  }
-
   get hasSentLaunchRequest(): boolean {
-    return this.$hasSentLaunchRequest;
+    return this.launchRequestWasSent;
   }
 
   get input(): InputComponent {
@@ -158,15 +169,13 @@ export class JovoWebClient extends AdvancedEventEmitter {
     for (const component of this.$components) {
       await component.onInit();
     }
-    this.emit(WebAssistantEvents.Loaded);
-    this.$isRunning = true;
+    this.emit(assistantEvents.Loaded);
   }
 
   async stop() {
     for (const component of this.$components) {
       await component.onStop();
     }
-    this.$isRunning = false;
   }
 
   private initBaseComponents(...componentConstructors: ComponentConstructor[]) {
@@ -181,19 +190,19 @@ export class JovoWebClient extends AdvancedEventEmitter {
         return registeredComponent.name === component.name;
       })
     ) {
-      // component with that name exists already -> merge options
-      if (component.initOptions) {
-        this.options[component.name] = merge(
-          this.options[component.name] || {},
-          component.initOptions,
+      // component with that name exists already -> merge $config
+      if (component.initConfig) {
+        this.$config[component.name] = merge(
+          this.$config[component.name] || {},
+          component.initConfig,
         );
       }
     } else {
-      // component with that name does not exist -> add to array and add options
-      const defaultOptions = component.getDefaultOptions();
-      this.options[component.name] = component.initOptions
-        ? merge(defaultOptions, component.initOptions)
-        : defaultOptions;
+      // component with that name does not exist -> add to array and add $config
+      const defaultConfig = component.getDefaultConfig();
+      this.$config[component.name] = component.initConfig
+        ? merge(defaultConfig, component.initConfig)
+        : defaultConfig;
       this.$components.push(component);
     }
   }

@@ -1,35 +1,35 @@
 import {
-  AudioAnalyserOptions,
+  AudioAnalyserConfig,
   AudioHelper,
   AudioProcessingPayload,
   AudioRecorder,
   AudioVisualizer,
   Component,
-  ComponentOptions,
+  ComponentConfig,
   InputEvents,
   InputRecordEvents,
   RecordMode,
-  RecordModeOptions,
-  SilenceDetectionOptions,
-  SpeechRecognitionOptions,
-  WebAssistantEvents,
+  RecordModeConfig,
+  SilenceDetectionConfig,
+  SpeechRecognitionConfig,
+  assistantEvents,
 } from '../..';
 
-export interface InputComponentOptions extends ComponentOptions {
+export interface InputComponentConfig extends ComponentConfig {
   timeout: number;
   startThreshold: number;
   exportSampleRate: number;
 
   mode: RecordMode;
-  modeOptions: RecordModeOptions;
+  modeConfig: RecordModeConfig;
 
-  analyser: AudioAnalyserOptions;
-  silenceDetection: SilenceDetectionOptions;
-  speechRecognition: SpeechRecognitionOptions;
+  analyser: AudioAnalyserConfig;
+  silenceDetection: SilenceDetectionConfig;
+  speechRecognition: SpeechRecognitionConfig;
 }
 
-export class InputComponent extends Component<InputComponentOptions> {
-  static DEFAULT_OPTIONS: InputComponentOptions = {
+export class InputComponent extends Component<InputComponentConfig> {
+  static DEFAULT_CONFIG: InputComponentConfig = {
     analyser: {
       fftSize: 2048,
       maxDecibels: -10,
@@ -38,7 +38,7 @@ export class InputComponent extends Component<InputComponentOptions> {
     },
     exportSampleRate: 8000,
     mode: 'default',
-    modeOptions: {
+    modeConfig: {
       triggerKey: '',
     },
     silenceDetection: {
@@ -53,28 +53,28 @@ export class InputComponent extends Component<InputComponentOptions> {
   };
   private $recorder: AudioRecorder | null = null;
   private $visualizer: AudioVisualizer | null = null;
-  private $keyPressFired: boolean = false;
-  private $recognizedText: string = '';
+  private $keyPressFired = false;
+  private $recognizedText = '';
 
   get isRecording(): boolean {
     return this.$recorder ? this.$recorder.isRecording : false;
   }
 
   get isPushToTalkUsed(): boolean {
-    return this.options.mode === 'push-to-talk';
+    return this.$config.mode === 'push-to-talk';
   }
 
   get shouldLaunchFirst(): boolean {
-    return this.$client.options.launchFirst;
+    return this.$client.$config.launchFirst;
   }
 
   get pushToTalkTriggerKey(): string | number {
-    return this.options.modeOptions.triggerKey;
+    return this.$config.modeConfig.triggerKey;
   }
 
-  sendText(text: string, fromVoice: boolean = true) {
+  sendText(text: string, fromVoice = true) {
     if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-      this.$client.emit(WebAssistantEvents.LaunchRequest);
+      this.$client.emit(assistantEvents.LaunchRequest);
     } else {
       this.$client.emit(InputEvents.Text, text, fromVoice);
     }
@@ -120,8 +120,8 @@ export class InputComponent extends Component<InputComponentOptions> {
     return super.onStop();
   }
 
-  getDefaultOptions(): InputComponentOptions {
-    return InputComponent.DEFAULT_OPTIONS;
+  getDefaultConfig(): InputComponentConfig {
+    return InputComponent.DEFAULT_CONFIG;
   }
 
   // region DOM-event-related

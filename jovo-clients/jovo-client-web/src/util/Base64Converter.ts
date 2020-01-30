@@ -21,7 +21,7 @@ export class Base64Converter {
     return new Promise((resolve, reject) => {
       const byteChars = atob(base64String);
       const byteNumbers = new Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) {
+      for (let i = 0, len = byteChars.length; i < len; i++) {
         byteNumbers[i] = byteChars.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);

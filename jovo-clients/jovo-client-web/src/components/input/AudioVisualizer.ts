@@ -1,58 +1,61 @@
 import { AudioProcessingPayload } from '../..';
 
-interface VisualizerOptions {
+interface VisualizerConfig {
   backgroundColor?: string;
   width?: number;
   color?: string;
 
+  // tslint:disable-next-line:no-any
   [index: string]: any;
 }
 
 export class AudioVisualizer {
+  // tslint:disable-next-line:no-any
   [index: string]: any;
 
-  backgroundColor: string = 'transparent';
-  width: number = 1;
-  color: string = '#abcdef';
+  backgroundColor = 'transparent';
+  width = 1;
+  color = '#abcdef';
 
-  private $canvasCtx: CanvasRenderingContext2D;
-
-  constructor(private readonly $canvas: HTMLCanvasElement, options?: VisualizerOptions) {
-    this.$canvasCtx = $canvas.getContext('2d')!;
-    if (options) {
-      for (const prop in options) {
-        if (options.hasOwnProperty(prop) && this.hasOwnProperty(prop)) {
-          this[prop] = options[prop];
+  constructor(private readonly $canvas: HTMLCanvasElement, config?: VisualizerConfig) {
+    if (config) {
+      for (const prop in config) {
+        if (config.hasOwnProperty(prop) && this.hasOwnProperty(prop)) {
+          this[prop] = config[prop];
         }
       }
     }
   }
 
   draw(payload: AudioProcessingPayload) {
-    const canvasWidth = this.$canvas.width;
-    const canvasHeight = this.$canvas.height;
-    this.$canvasCtx.fillStyle = this.backgroundColor;
-    this.$canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    const { width, height } = this.$canvas;
+    const ctx = this.$canvas.getContext('2d');
+    if (!ctx) {
+      return;
+    }
 
-    this.$canvasCtx.lineWidth = this.width;
-    this.$canvasCtx.strokeStyle = this.color;
+    ctx.fillStyle = this.backgroundColor;
+    ctx.clearRect(0, 0, width, height);
 
-    this.$canvasCtx.beginPath();
+    ctx.lineWidth = this.width;
+    ctx.strokeStyle = this.color;
 
-    const sliceWidth = canvasWidth / payload.bufferLength;
+    ctx.beginPath();
+
+    const sliceWidth = width / payload.bufferLength;
     let x = 0;
     for (let i = 0; i < payload.bufferLength; i++) {
       const value = payload.isEmptyBuffer ? 1 : payload.data[i] / 128;
-      const y = (value * canvasHeight) / 2;
+      const y = (value * height) / 2;
       if (i === 0) {
-        this.$canvasCtx.moveTo(x, y);
+        ctx.moveTo(x, y);
       } else {
-        this.$canvasCtx.lineTo(x, y);
+        ctx.lineTo(x, y);
       }
       x += sliceWidth;
     }
-    this.$canvasCtx.lineTo(canvasWidth, canvasHeight / 2);
-    this.$canvasCtx.stroke();
+    ctx.lineTo(width, height / 2);
+    ctx.stroke();
   }
 
   drawLine() {

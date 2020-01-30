@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { NetworkAdapter, NetworkResponse, RequestOptions, RequestType } from '../../..';
+import { NetworkAdapter, NetworkResponse, RequestConfig, RequestType } from '../../..';
 
 export class AjaxAdapter implements NetworkAdapter {
   constructor(private readonly parent: EventEmitter) {}
@@ -7,8 +7,8 @@ export class AjaxAdapter implements NetworkAdapter {
   request<T>(
     type: RequestType,
     url: string,
-    data?: any,
-    options?: RequestOptions,
+    data?: any, // tslint:disable-line:no-any
+    config?: RequestConfig,
   ): Promise<NetworkResponse<T>> {
     return new Promise<NetworkResponse<T>>((resolve, reject) => {
       const xhrequest = new XMLHttpRequest();
@@ -27,15 +27,15 @@ export class AjaxAdapter implements NetworkAdapter {
       }
 
       xhrequest.open(type.toUpperCase(), url, true);
-      if (options && options.headers) {
+      if (config && config.headers) {
         // tslint:disable-next-line:forin
-        for (const header in options.headers) {
+        for (const header in config.headers) {
           if (typeof data === 'undefined' && header.toLowerCase() === 'content-type') {
             // Remove Content-Type if data is undefined
-            delete options.headers[header];
+            delete config.headers[header];
           } else {
             // Otherwise add header to the request
-            xhrequest.setRequestHeader(header, options.headers[header]);
+            xhrequest.setRequestHeader(header, config.headers[header]);
           }
         }
       }

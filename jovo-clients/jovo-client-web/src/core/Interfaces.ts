@@ -1,14 +1,17 @@
 import { JovoWebClient } from '../JovoWebClient';
 import { Component } from './Component';
 
+// tslint:disable-next-line:no-any
+export type Data = Record<string, any>;
+
 export interface UserData {
   id: string;
-  data: Record<string, any>;
+  data: Data;
 }
 
 export interface SessionData {
   id: string;
-  data: Record<string, any>;
+  data: Data;
   new: boolean;
 }
 
@@ -18,14 +21,14 @@ export interface AudioPlayback {
   id: number;
 }
 
-export interface ComponentOptions {}
+export interface ComponentConfig {}
 
 export type ComponentConstructor = new (
   $client: JovoWebClient,
-  $initOptions?: ComponentOptions,
+  $initConfig?: ComponentConfig,
 ) => Component;
 
-export interface JovoWebClientOptions {
+export interface JovoWebClientConfig {
   debugMode: boolean;
   locale: string;
   launchFirst: boolean;
@@ -35,4 +38,4 @@ export interface JovoWebClientOptions {
   initBaseComponents: boolean;
 }
 
-export type Options = JovoWebClientOptions & Record<string, any>;
+export type Config = JovoWebClientConfig & Data;

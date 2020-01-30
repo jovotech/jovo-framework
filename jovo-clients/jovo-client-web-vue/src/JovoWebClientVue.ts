@@ -1,26 +1,25 @@
 import {
   AudioPlayerEvents,
   AudioVisualizer,
+  Config,
   ConversationEvents,
   ConversationPart,
   InputRecordEvents,
-  Options,
+  JovoWebClient,
   ResponseComponent,
   SpeechSynthesizerEvents,
   Store,
-  JovoWebClient,
-  WebAssistantEvents,
+  assistantEvents,
 } from 'jovo-client-web';
 import Vue from 'vue';
 import { Data } from './Interfaces';
-
 
 export class JovoWebClientVue {
   private readonly $store: Vue;
   private readonly $assistant: JovoWebClient;
   private readonly $events: string[];
 
-  constructor(url: string, options?: Options) {
+  constructor(url: string, config?: Config) {
     const data: Data = {
       isRecording: false,
       isFirstRequestDone: false,
@@ -29,7 +28,7 @@ export class JovoWebClientVue {
       conversationParts: [],
     };
     this.$store = new Vue({ data });
-    this.$assistant = new JovoWebClient(url, options);
+    this.$assistant = new JovoWebClient(url, config);
     this.$events = [];
     this.setupListeners();
     this.$assistant.start();
@@ -55,12 +54,12 @@ export class JovoWebClientVue {
     this.$assistant.volume = value;
   }
 
-  get options(): Options {
-    return this.$assistant.options;
+  get config(): Config {
+    return this.$assistant.$config;
   }
 
-  set options(options: Options) {
-    this.$assistant.options = options;
+  set config(config: Config) {
+    this.$assistant.$config = config;
   }
 
   // tslint:disable-next-line:no-any
@@ -72,6 +71,7 @@ export class JovoWebClientVue {
     this.$store.$on(event, func);
   }
 
+  // tslint:disable-next-line:no-any
   off(event: string, func: (...args: any[]) => void) {
     this.$store.$off(event, func);
   }
@@ -127,7 +127,7 @@ export class JovoWebClientVue {
   // endregion
 
   private setupListeners() {
-    this.on(WebAssistantEvents.LaunchRequest, () => {
+    this.on(assistantEvents.LaunchRequest, () => {
       this.data.isFirstRequestDone = false;
     });
 
@@ -184,6 +184,7 @@ export class JovoWebClientVue {
    * The advantage is, that less events are directly subscribed to an $assistant-event.
    */
   private setupListener(event: string) {
+    // tslint:disable-next-line:no-any
     this.$assistant.on(event, (...args: any[]) => {
       this.$store.$emit(event, ...args);
     });

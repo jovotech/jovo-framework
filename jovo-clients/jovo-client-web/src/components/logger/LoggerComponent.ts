@@ -1,6 +1,6 @@
-import { Component, ComponentOptions, Logger, LoggerEvents, LogPayload } from '../..';
+import { Component, ComponentConfig, Logger, LoggerEvents, LogPayload } from '../..';
 
-export interface LoggerComponentOptions extends ComponentOptions {
+export interface LoggerComponentConfig extends ComponentConfig {
   level: LogLevel;
 }
 
@@ -14,24 +14,27 @@ export enum LogLevel {
 }
 
 interface LogParameters {
+  // tslint:disable-next-line:no-any
   content: any[];
   forLevel: LogLevel;
+  // tslint:disable-next-line:no-any
   useMethod: (message: string) => any;
 }
 
-export class LoggerComponent extends Component<LoggerComponentOptions> implements Logger {
-  static DEFAULT_OPTIONS: LoggerComponentOptions = {
+export class LoggerComponent extends Component<LoggerComponentConfig> implements Logger {
+  static DEFAULT_CONFIG: LoggerComponentConfig = {
     level: LogLevel.Verbose,
   };
 
   get level(): LogLevel {
-    return this.options.level;
+    return this.$config.level;
   }
 
   async onInit(): Promise<void> {
     // tslint:disable-line
   }
 
+  // tslint:disable-next-line:no-any
   debug(...content: any[]): void {
     this.doLog({
       content,
@@ -41,16 +44,19 @@ export class LoggerComponent extends Component<LoggerComponentOptions> implement
     });
   }
 
+  // tslint:disable-next-line:no-any
   log(...content: any[]): void {
     // tslint:disable-next-line
     this.doLog({ content, forLevel: LogLevel.Log, useMethod: console.log });
   }
 
+  // tslint:disable-next-line:no-any
   info(...content: any[]): void {
     // tslint:disable-next-line
     this.doLog({ content, forLevel: LogLevel.Info, useMethod: console.info });
   }
 
+  // tslint:disable-next-line:no-any
   warn(...content: any[]): void {
     this.doLog({
       content,
@@ -60,13 +66,14 @@ export class LoggerComponent extends Component<LoggerComponentOptions> implement
     });
   }
 
+  // tslint:disable-next-line:no-any
   error(...content: any[]): void {
     // tslint:disable-next-line
     this.doLog({ content, forLevel: LogLevel.Error, useMethod: console.error });
   }
 
-  getDefaultOptions(): LoggerComponentOptions {
-    return LoggerComponent.DEFAULT_OPTIONS;
+  getDefaultConfig(): LoggerComponentConfig {
+    return LoggerComponent.DEFAULT_CONFIG;
   }
 
   private emitLog(payload: LogPayload) {
@@ -85,8 +92,10 @@ export class LoggerComponent extends Component<LoggerComponentOptions> implement
     }
   }
 
+  // tslint:disable-next-line:no-any
   private contentToString(...content: any[]): string {
     let value = '';
+    // tslint:disable-next-line:no-any
     content.forEach((item: any, index: number) => {
       if (typeof item === 'object' || Array.isArray(item)) {
         value += JSON.stringify(item, undefined, 2);

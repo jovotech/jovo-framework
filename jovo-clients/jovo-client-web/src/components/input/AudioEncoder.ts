@@ -1,6 +1,8 @@
+import { TypedArray } from './Interfaces';
+
 export class AudioEncoder {
   static encodeToWav(
-    chunks: any[],
+    chunks: TypedArray[],
     chunkLength: number,
     recordSampleRate: number,
     exportSampleRate: number,
@@ -12,9 +14,10 @@ export class AudioEncoder {
     this.$recordSampleRate = 0;
     return new Blob([view], { type: 'audio/wav' });
   }
-  private static $recordSampleRate: number = 0;
 
-  private static mergeChunks(chunks: any[], chunkLength: number): Float32Array {
+  private static $recordSampleRate = 0;
+
+  private static mergeChunks(chunks: TypedArray[], chunkLength: number): TypedArray {
     const merged = new Float32Array(chunkLength);
     let offset = 0;
     for (const chunk of chunks) {
@@ -24,7 +27,7 @@ export class AudioEncoder {
     return merged;
   }
 
-  private static sampleDown(buffer: Float32Array, exportSampleRate: number): Float32Array {
+  private static sampleDown(buffer: TypedArray, exportSampleRate: number): TypedArray {
     if (exportSampleRate === this.$recordSampleRate) {
       return buffer;
     }
@@ -48,7 +51,7 @@ export class AudioEncoder {
     return result;
   }
 
-  private static encodeWav(samples: Float32Array): DataView {
+  private static encodeWav(samples: TypedArray): DataView {
     const buffer = new ArrayBuffer(44 + samples.length * 2);
     const view = new DataView(buffer);
     // RIFF chunk descriptor
@@ -71,7 +74,7 @@ export class AudioEncoder {
     return view;
   }
 
-  private static floatTo16BitPCM(view: DataView, offset: number, val: any) {
+  private static floatTo16BitPCM(view: DataView, offset: number, val: TypedArray) {
     for (let i = 0; i < val.length; i++, offset += 2) {
       const s = Math.max(-1, Math.min(1, val[i]));
       view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);

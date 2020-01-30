@@ -5,8 +5,8 @@
   "browser": "dist/src/index.umd.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "tsc": "webpack",
-    "tscw": "webpack --watch",
+    "tsc": "webpack --mode production",
+    "tscw": "webpack --mode development --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
@@ -31,6 +31,7 @@
     "typedoc": "^0.15.6",
     "typescript": "^3.7.3",
     "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10"
   },
   "files": [

@@ -1,15 +1,15 @@
-import { RequestEvents } from '../events';
-import { JovoWebClient } from '../JovoWebClient';
+import { CoreComponent, JovoWebClient, RequestEvents } from '..';
 
 const TAG_AUDIO = 'audio';
 const TAG_BREAK = 'break';
 
 const SUPPORTED_TAGS = [TAG_AUDIO, TAG_BREAK];
 
-export class SSMLEvaluator {
+export class SSMLEvaluator extends CoreComponent {
   get supportedTags(): string[] {
     return SUPPORTED_TAGS;
   }
+
   static ESCAPE_AMPERSAND = true;
 
   /**
@@ -125,9 +125,11 @@ export class SSMLEvaluator {
   static isPlainText(ssml: string): boolean {
     return !/(?:(<[^>]*[/]>)|(<[^>]*>.*?<[/][^>]*>))/g.test(ssml);
   }
+
   private $isRunning = false;
 
-  constructor(private readonly $client: JovoWebClient) {
+  constructor(protected readonly $client: JovoWebClient) {
+    super($client);
     $client.on(RequestEvents.Data, () => {
       this.$isRunning = false;
     });
@@ -166,6 +168,7 @@ export class SSMLEvaluator {
             }, amount);
           });
           break;
+        default:
       }
       resolve();
     });

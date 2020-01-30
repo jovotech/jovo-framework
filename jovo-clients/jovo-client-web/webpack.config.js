@@ -15,13 +15,14 @@ function createConfig(target, targetName = target) {
         {
           test: /\.ts$/,
           use: 'ts-loader',
-          exclude: /node_modules/,
-        },
+          exclude: /node_modules/
+        }
       ],
     },
     resolve: {
-      extensions: ['.ts', '.js'],
+      extensions: ['.ts', '.js']
     },
+    plugins: []
   };
 }
 

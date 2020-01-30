@@ -1,11 +1,11 @@
-import { SpeechSynthesizerEvents } from '../events';
-import { JovoWebClient } from '../JovoWebClient';
+import { CoreComponent, JovoWebClient, SpeechSynthesizerEvents } from '..';
 
-export class SpeechSynthesizer {
-  private $volume: number = 1.0;
+export class SpeechSynthesizer extends CoreComponent {
+  private $volume = 1.0;
   private readonly $speechSynthesis: SpeechSynthesis | null = null;
 
-  constructor(private readonly $client: JovoWebClient) {
+  constructor(protected readonly $client: JovoWebClient) {
+    super($client);
     if ('speechSynthesis' in window) {
       this.$speechSynthesis = window.speechSynthesis;
     }
@@ -52,11 +52,11 @@ export class SpeechSynthesizer {
   }
 
   private get language(): string {
-    return this.$client.options.locale;
+    return this.$client.$config.locale;
   }
 
   private get isAutomaticLanguageEnabled(): boolean {
-    return this.$client.options.speechSynthesis.automaticallySetLanguage;
+    return this.$client.$config.speechSynthesis.automaticallySetLanguage;
   }
 
   speakText(text: string): Promise<void> {

@@ -1,12 +1,12 @@
-import { Component, ComponentOptions, JovoWebClient } from '../../src';
+import { Component, ComponentConfig, JovoWebClient } from '../../src';
 import { makeTestClient } from '../util';
 
-interface TestComponentOptions extends ComponentOptions {
+interface TestComponentConfig extends ComponentConfig {
   foo: string;
 }
 
-class TestComponent extends Component<TestComponentOptions> {
-  static DEFAULT_OPTIONS: TestComponentOptions = {
+class TestComponent extends Component<TestComponentConfig> {
+  static DEFAULT_CONFIG: TestComponentConfig = {
     foo: 'bar',
   };
 
@@ -14,8 +14,8 @@ class TestComponent extends Component<TestComponentOptions> {
     // tslint:disable-line
   }
 
-  getDefaultOptions(): TestComponentOptions {
-    return TestComponent.DEFAULT_OPTIONS;
+  getDefaultConfig(): TestComponentConfig {
+    return TestComponent.DEFAULT_CONFIG;
   }
 }
 
@@ -31,8 +31,8 @@ describe('test Component', () => {
     expect(component.name).toBe('TestComponent');
   });
 
-  test('test get options', () => {
-    expect(component.options.foo).toBe('bar');
+  test('test get $config', () => {
+    expect(component.$config.foo).toBe('bar');
   });
 
   test('test onInit', async () => {

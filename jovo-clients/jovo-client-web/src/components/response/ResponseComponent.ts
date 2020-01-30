@@ -2,24 +2,24 @@ import {
   Action,
   Card,
   Component,
-  ComponentOptions,
+  ComponentConfig,
   JovoWebClient,
   Output,
   RepromptTimer,
   RequestEvents,
   ResponseEvents,
-  WebAssistantResponse,
+  AssistantResponse,
 } from '../..';
 
-export interface ResponseComponentOptions extends ComponentOptions {
+export interface ResponseComponentConfig extends ComponentConfig {
   reprompt: {
     interval: number;
     maxAttempts: number;
   };
 }
 
-export class ResponseComponent extends Component<ResponseComponentOptions> {
-  static DEFAULT_OPTIONS: ResponseComponentOptions = {
+export class ResponseComponent extends Component<ResponseComponentConfig> {
+  static DEFAULT_CONFIG: ResponseComponentConfig = {
     reprompt: {
       interval: 2000,
       maxAttempts: 3,
@@ -34,9 +34,9 @@ export class ResponseComponent extends Component<ResponseComponentOptions> {
 
   constructor(
     protected readonly $client: JovoWebClient,
-    protected readonly $initOptions?: Partial<ResponseComponentOptions>,
+    protected readonly $initConfig?: Partial<ResponseComponentConfig>,
   ) {
-    super($client, $initOptions);
+    super($client, $initConfig);
     this.$repromptTimer = new RepromptTimer($client);
     this.addSuggestionChipStyle();
   }
@@ -46,8 +46,8 @@ export class ResponseComponent extends Component<ResponseComponentOptions> {
     this.$client.on(RequestEvents.Success, this.onResponse.bind(this));
   }
 
-  getDefaultOptions(): ResponseComponentOptions {
-    return ResponseComponent.DEFAULT_OPTIONS;
+  getDefaultConfig(): ResponseComponentConfig {
+    return ResponseComponent.DEFAULT_CONFIG;
   }
 
   private async onRequest() {
@@ -62,10 +62,10 @@ export class ResponseComponent extends Component<ResponseComponentOptions> {
     }
   }
 
-  private async onResponse(data: WebAssistantResponse) {
+  private async onResponse(data: AssistantResponse) {
     this.$isRunning = true;
     if (data && data.response && data.response.output) {
-      if (this.$client.options.debugMode) {
+      if (this.$client.$config.debugMode) {
         // tslint:disable-next-line:no-console
         console.log('[RES]', data);
       }

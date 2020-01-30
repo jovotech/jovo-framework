@@ -1,22 +1,25 @@
 import uuid = require('uuid');
 import {
+  CoreComponent,
+  Data,
+  JovoWebClient,
   RequestEvents,
   ResponseEvents,
   SessionData,
   StoreEvents,
   UserData,
-  WebAssistantResponse,
+  AssistantResponse,
 } from '..';
-import { JovoWebClient } from '../JovoWebClient';
 
 const USER_DATA_STORAGE_KEY = 'user';
 
-export class Store {
-  data: Record<string, any> = {};
+export class Store extends CoreComponent {
+  data: Data = {};
   user!: UserData;
   session!: SessionData;
 
-  constructor(private readonly $client: JovoWebClient) {
+  constructor(protected readonly $client: JovoWebClient) {
+    super($client);
     this.fillUserData();
     this.startNewSession();
 
@@ -24,7 +27,7 @@ export class Store {
     $client.on(ResponseEvents.MaxRepromptsReached, this.onMaxRepromptsReached.bind(this));
   }
 
-  startNewSession(isForced: boolean = false) {
+  startNewSession(isForced = false) {
     this.session = {
       data: {},
       id: uuid.v4(),
@@ -37,7 +40,7 @@ export class Store {
     this.startNewSession(true);
   }
 
-  private onResponse(data: WebAssistantResponse) {
+  private onResponse(data: AssistantResponse) {
     if (data.response.shouldEndSession) {
       this.startNewSession();
     } else {

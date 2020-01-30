@@ -1,6 +1,6 @@
 import {
   Component,
-  ComponentOptions,
+  ComponentConfig,
   ConversationEvents,
   ConversationPart,
   InputRecordEvents,
@@ -8,16 +8,16 @@ import {
   RequestEvents,
   ResponseEvents,
   StoreEvents,
-  WebAssistantResponse,
+  AssistantResponse,
 } from '../..';
 
-export interface ConversationComponentOptions extends ComponentOptions {}
+export interface ConversationComponentConfig extends ComponentConfig {}
 
-export class ConversationComponent extends Component<ConversationComponentOptions> {
+export class ConversationComponent extends Component<ConversationComponentConfig> {
   parts: ConversationPart[] = [];
-  addNextResponse: boolean = false;
-  endSession: boolean = false;
-  endSpeechRecognition: boolean = false;
+  addNextResponse = false;
+  endSession = false;
+  endSpeechRecognition = false;
   currentPart: ConversationPart | null = null;
 
   async onInit(): Promise<void> {
@@ -32,10 +32,11 @@ export class ConversationComponent extends Component<ConversationComponentOption
     this.$client.on(StoreEvents.NewSession, this.onNewSession.bind(this));
   }
 
-  getDefaultOptions(): ConversationComponentOptions {
+  getDefaultConfig(): ConversationComponentConfig {
     return {};
   }
 
+  // tslint:disable-next-line:no-any
   private onRequest(req: any) {
     if (req.isLaunch) {
       this.addPart({
@@ -59,7 +60,7 @@ export class ConversationComponent extends Component<ConversationComponentOption
     }
   }
 
-  private onResponse(res: WebAssistantResponse) {
+  private onResponse(res: AssistantResponse) {
     if (this.addNextResponse) {
       this.addPart({
         label: res.response.inputText!,
