@@ -15,7 +15,7 @@ export default class InputAudio extends Vue {
   source = '';
 
   mounted() {
-    this.$assistant.on(InputRecordEvents.Recorded, this.onAudioRecorded);
+    this.$assistant.on(InputRecordEvents.Recorded, this.onAudioRecorded.bind(this));
   }
 
   private onAudioRecorded(payload: AudioRecordedPayload) {

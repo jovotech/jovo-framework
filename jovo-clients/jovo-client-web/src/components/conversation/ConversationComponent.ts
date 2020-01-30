@@ -13,6 +13,7 @@ import {
 
 export interface ConversationComponentConfig extends ComponentConfig {}
 
+// TODO check if this works as intended
 export class ConversationComponent extends Component<ConversationComponentConfig> {
   parts: ConversationPart[] = [];
   addNextResponse = false;

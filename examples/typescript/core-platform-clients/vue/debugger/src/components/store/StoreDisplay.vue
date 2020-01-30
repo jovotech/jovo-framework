@@ -27,7 +27,7 @@ export default class StoreDisplay extends Vue {
     const copy = {};
 
     for (const key in this.$assistant.store) {
-      if (this.$assistant.store.hasOwnProperty(key) && key !== 'client') {
+      if (this.$assistant.store.hasOwnProperty(key) && key !== '$client') {
         set(copy, key, (this.$assistant.store as any)[key]);
       }
     }
