@@ -10,7 +10,7 @@ declare module 'vue/types/vue' {
   }
 }
 
-export function JovoassistantVuePlugin(vue: typeof _Vue, options?: PluginOptions) {
+export function JovoAssistantVuePlugin(vue: typeof _Vue, options?: PluginOptions) {
   if (!options) {
     throw new Error(
       `At least the 'url' option has to be set in order to use the JovoWebClientPlugin.`,
@@ -21,5 +21,5 @@ export function JovoassistantVuePlugin(vue: typeof _Vue, options?: PluginOptions
 
 // tslint:disable-next-line
 export default {
-  install: JovoassistantVuePlugin,
+  install: JovoAssistantVuePlugin,
 };
