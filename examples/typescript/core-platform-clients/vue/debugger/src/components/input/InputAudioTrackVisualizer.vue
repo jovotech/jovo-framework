@@ -29,7 +29,6 @@ export default class InputAudioTrackVisualizer extends Vue {
 
   mounted() {
     this.visualizer = new AudioVisualizer(this.$refs.canvas as HTMLCanvasElement);
-    console.log(this.$assistant, this.$assistant.setVisualizer);
     this.$assistant.setVisualizer(this.visualizer);
   }
 
