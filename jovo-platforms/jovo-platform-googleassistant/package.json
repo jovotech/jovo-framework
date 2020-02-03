@@ -15,7 +15,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/lodash.find": "^4.6.6",
     "jovo-core": "^2.2.18",
     "jovo-platform-dialogflow": "^2.2.21",
     "lodash.find": "^4.6.0",
@@ -31,6 +30,7 @@
     "@types/jest": "^24.0.11",
     "@types/lodash.clonedeep": "^4.5.4",
     "@types/lodash.unionwith": "^4.6.6",
+    "@types/lodash.find": "^4.6.6",
     "@types/lodash.zip": "^4.2.6",
     "@types/node": "^10.3.1",
     "googleapis": "^42.0.0",
