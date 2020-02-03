@@ -1,9 +1,11 @@
 import { FileDb } from 'jovo-db-filedb';
-import { App } from 'jovo-framework';
+import { App, LogLevel } from 'jovo-framework';
 import { CorePlatform } from 'jovo-platform-core';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { AmazonCredentials, AmazonLexSlu } from 'jovo-slu-lex';
+
+process.env.JOVO_LOG_LEVEL = LogLevel.DEBUG as any;
 
 const app = new App();
 
@@ -21,6 +23,7 @@ corePlatform.use(
 		botName: 'WebAssistantTest'
 	})
 );
+
 
 app.use(corePlatform, new JovoDebugger(), new FileDb());
 

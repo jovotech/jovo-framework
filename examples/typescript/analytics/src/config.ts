@@ -1,7 +1,7 @@
 import { config } from 'jovo-framework';
 
 // tslint:disable-next-line
-export default config({
+export = config({
 	logging: true,
 
 	intentMap: {
