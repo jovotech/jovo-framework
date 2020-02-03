@@ -48,7 +48,7 @@ export class AutopilotRequest implements JovoRequest {
   /* tslint:enable:variable-name */
 
   getUserId(): string {
-    return this.UserIdentifier || '';
+    return this.UserIdentifier!;
   }
 
   getRawText(): string {
