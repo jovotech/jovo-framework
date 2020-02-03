@@ -2,6 +2,7 @@ import * as AdaptiveCards from 'adaptivecards';
 import * as markdownit from 'markdown-it';
 import {
   AdvancedEventEmitter,
+  assistantEvents,
   AudioPlayer,
   Component,
   ComponentConstructor,
@@ -17,7 +18,6 @@ import {
   SpeechSynthesizer,
   SSMLEvaluator,
   Store,
-  assistantEvents,
 } from './';
 // tslint:disable-next-line
 import merge = require('lodash.merge');

@@ -91,7 +91,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
 
   async request(handleRequest: HandleRequest) {
     const audioData = _get(handleRequest.host.$request, 'request.body.audio');
-    console.log({ audioData });
     if (audioData) {
       _set(handleRequest.host.$request, 'request.body.audio', this.getSamplesFromAudio(audioData));
     }

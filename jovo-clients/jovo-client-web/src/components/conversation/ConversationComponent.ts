@@ -4,16 +4,14 @@ import {
   ConversationEvents,
   ConversationPart,
   InputRecordEvents,
-  Output,
   RequestEvents,
   ResponseEvents,
   StoreEvents,
-  AssistantResponse,
 } from '../..';
 
 export interface ConversationComponentConfig extends ComponentConfig {}
 
-// TODO check if this works as intended
+// TODO Rework when TS 3.8 was published or a workaround was developed for type-only imports.
 export class ConversationComponent extends Component<ConversationComponentConfig> {
   parts: ConversationPart[] = [];
   addNextResponse = false;
@@ -61,33 +59,36 @@ export class ConversationComponent extends Component<ConversationComponentConfig
     }
   }
 
-  private onResponse(res: AssistantResponse) {
-    if (this.addNextResponse) {
-      this.addPart({
-        label: res.response.inputText!,
-        subType: 'speech',
-        type: 'request',
-        value: res,
-      });
-    }
+  // tslint:disable-next:no-any
+  private onResponse(res: any) {
+    // if (this.addNextResponse) {
+    //   this.addPart({
+    //     label: res.response.inputText!,
+    //     subType: 'speech',
+    //     type: 'request',
+    //     value: res,
+    //   });
+    // }
   }
 
-  private onSpeech(speech: Output) {
-    this.addPart({
-      label: speech.text,
-      subType: 'speech',
-      type: 'response',
-      value: speech,
-    });
+  // tslint:disable-next:no-any
+  private onSpeech(speech: any) {
+    // this.addPart({
+    //   label: speech.text,
+    //   subType: 'speech',
+    //   type: 'response',
+    //   value: speech,
+    // });
   }
 
-  private onReprompt(reprompt: Output) {
-    this.addPart({
-      label: reprompt.text,
-      subType: 'reprompt',
-      type: 'response',
-      value: reprompt,
-    });
+  // tslint:disable-next:no-any
+  private onReprompt(reprompt: any) {
+    // this.addPart({
+    //   label: reprompt.text,
+    //   subType: 'reprompt',
+    //   type: 'response',
+    //   value: reprompt,
+    // });
   }
 
   private onNewSession(forced: boolean) {

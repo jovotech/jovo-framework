@@ -1,8 +1,8 @@
 import { Plugin } from 'jovo-core';
-import { AdaptiveCard, AdaptiveCardOptions, CorePlatformApp, CorePlatformResponse } from '..';
-import { CorePlatform } from '../CorePlatform';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import { AdaptiveCard, AdaptiveCardOptions, CorePlatformApp, CorePlatformResponse } from '..';
+import { CorePlatform } from '../CorePlatform';
 
 interface SimpleCard {
   title: string;
