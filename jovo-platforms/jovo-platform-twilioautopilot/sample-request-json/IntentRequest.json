@@ -1,0 +1,13 @@
+{
+  "CurrentTask": "HelloWorldIntent",
+  "CurrentInput": "Hello World",
+  "DialogueSid": "UK0393f8b64ad14621hui29dkmciw6c",
+  "Memory": "{\"twilio\":{\"chat\":{\"ChannelSid\":\"CH373268b0610c498jdn81bdf1fd3092b5\",\"AssistantName\":\"\",\"Attributes\":{},\"ServiceSid\":\"ISfa53a2fb49798imnmbc91jn0c8926\",\"Index\":50,\"From\":\"user\",\"MessageSid\":\"IM9123c249058b4f2ui891hjndbc140f7f\"}}}",
+  "DialoguePayloadUrl": "https://autopilot.twilio.com/v1/Assistants/${AssistantSid}/Dialogues/${DialogueSid}",
+  "Channel": "chat",
+  "NextBestTask": "",
+  "CurrentTaskConfidence": "1.0",
+  "AssistantSid": "UA91fe2d6482a313a28jd92hjsd91",
+  "UserIdentifier": "user",
+  "AccountSid": "ACd97f7bdf1u289dns91b"
+}
