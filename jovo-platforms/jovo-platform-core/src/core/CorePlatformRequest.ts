@@ -2,8 +2,6 @@ import { Input, Inputs, JovoRequest, SessionConstants, SessionData } from 'jovo-
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
-export interface CorePlatformInput extends Input {}
-
 export enum RequestType {
   Launch = 'LAUNCH',
   Intent = 'INTENT',
@@ -37,9 +35,10 @@ export interface Request {
 
 export interface Nlu {
   intent?: string;
-  inputs?: Record<string, CorePlatformInput>;
+  inputs?: Record<string, Input>;
   confidence?: number;
 }
+
 export interface RequestBody {
   audio?: {
     sampleRate: number;
@@ -81,7 +80,7 @@ export interface CorePlatformRequestJSON {
   context: Context;
 }
 
-export class CorePlatformRequest implements JovoRequest {
+export class CorePlatformRequest implements JovoRequest, CorePlatformRequestJSON {
   static fromJSON(json: CorePlatformRequestJSON | object | string): CorePlatformRequest {
     if (typeof json === 'string') {
       return JSON.parse(json, CorePlatformRequest.reviver);

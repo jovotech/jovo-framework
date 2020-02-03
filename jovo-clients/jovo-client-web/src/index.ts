@@ -1,7 +1,5 @@
-import { CorePlatformRequestJSON as CorePlatformRequest } from 'jovo-platform-core/dist/src/core/CorePlatformRequest';
-import { CorePlatformResponseJSON as CorePlatformResponse } from 'jovo-platform-core/dist/src/core/CorePlatformResponse';
+export const VERSION = '0.1.0';
 
-export { CorePlatformRequest, CorePlatformResponse };
 export * from './events';
 export * from './core/CoreComponent';
 export * from './core/Component';

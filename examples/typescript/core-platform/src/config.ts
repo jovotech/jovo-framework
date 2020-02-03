@@ -3,7 +3,7 @@ import { config } from 'jovo-framework';
 export = config({
 	logging: {
 		request: true,
-		response: false
+		response: true
 	},
 
 	intentMap: {

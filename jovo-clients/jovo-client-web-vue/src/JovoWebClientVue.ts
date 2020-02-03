@@ -1,4 +1,5 @@
 import {
+  assistantEvents,
   AudioPlayerEvents,
   AudioVisualizer,
   Config,
@@ -9,7 +10,6 @@ import {
   ResponseComponent,
   SpeechSynthesizerEvents,
   Store,
-  assistantEvents,
 } from 'jovo-client-web';
 import Vue from 'vue';
 import { Data } from './Interfaces';
@@ -104,11 +104,6 @@ export class JovoWebClientVue {
 
   setCardParent(htmlElement: HTMLElement): JovoWebClientVue {
     this.$assistant.component<ResponseComponent>('response')!.cardParent = htmlElement;
-    return this;
-  }
-
-  setSuggestionChipParent(htmlElement: HTMLElement): JovoWebClientVue {
-    this.$assistant.component<ResponseComponent>('response')!.suggestionChipsParent = htmlElement;
     return this;
   }
 

@@ -1,11 +1,11 @@
 import { EventEmitter } from 'events';
-import { NetworkAdapter, NetworkResponse, RequestConfig, RequestType } from '../../..';
+import { NetworkAdapter, NetworkResponse, RequestConfig, RequestMethod } from '../../..';
 
 export class AjaxAdapter implements NetworkAdapter {
   constructor(private readonly parent: EventEmitter) {}
 
   request<T>(
-    type: RequestType,
+    type: RequestMethod,
     url: string,
     data?: any, // tslint:disable-line:no-any
     config?: RequestConfig,

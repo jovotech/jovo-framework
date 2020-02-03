@@ -1,4 +1,5 @@
 import {
+  assistantEvents,
   AudioAnalyserConfig,
   AudioHelper,
   AudioProcessingPayload,
@@ -12,13 +13,11 @@ import {
   RecordModeConfig,
   SilenceDetectionConfig,
   SpeechRecognitionConfig,
-  assistantEvents,
 } from '../..';
 
 export interface InputComponentConfig extends ComponentConfig {
   timeout: number;
   startThreshold: number;
-  exportSampleRate: number;
 
   mode: RecordMode;
   modeConfig: RecordModeConfig;
@@ -36,7 +35,6 @@ export class InputComponent extends Component<InputComponentConfig> {
       minDecibels: -90,
       smoothingTimeConstant: 0.85,
     },
-    exportSampleRate: 8000,
     mode: 'default',
     modeConfig: {
       triggerKey: '',

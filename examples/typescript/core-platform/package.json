@@ -23,6 +23,7 @@
     "jovo-platform-core": "^2.2.5",
     "jovo-plugin-debugger": "^2.2.20",
     "jovo-slu-lex": "^2.2.5",
+    "jovo-tts-polly": "^2.2.5",
     "dotenv": "^8.2.0"
   },
   "devDependencies": {

@@ -7,15 +7,12 @@ export class AudioEncoder {
     recordSampleRate: number,
     exportSampleRate: number,
   ): Blob {
-    this.$recordSampleRate = recordSampleRate;
     const merged = this.mergeChunks(chunks, chunkLength);
-    const downSampled = this.sampleDown(merged, exportSampleRate);
-    const view = this.encodeWav(downSampled);
-    this.$recordSampleRate = 0;
+    const downSampled = this.sampleDown(merged, recordSampleRate, exportSampleRate);
+    // TODO check if recordSampleRate or exportSampleRate should be used.
+    const view = this.encodeWav(downSampled, exportSampleRate);
     return new Blob([view], { type: 'audio/wav' });
   }
-
-  private static $recordSampleRate = 0;
 
   private static mergeChunks(chunks: TypedArray[], chunkLength: number): TypedArray {
     const merged = new Float32Array(chunkLength);
@@ -27,11 +24,15 @@ export class AudioEncoder {
     return merged;
   }
 
-  private static sampleDown(buffer: TypedArray, exportSampleRate: number): TypedArray {
-    if (exportSampleRate === this.$recordSampleRate) {
+  private static sampleDown(
+    buffer: TypedArray,
+    recordSampleRate: number,
+    exportSampleRate: number,
+  ): TypedArray {
+    if (exportSampleRate === recordSampleRate) {
       return buffer;
     }
-    const ratio = this.$recordSampleRate / exportSampleRate;
+    const ratio = recordSampleRate / exportSampleRate;
     const newLength = Math.round(buffer.length / ratio);
     const result = new Float32Array(newLength);
     let offsetResult = 0;
@@ -51,7 +52,7 @@ export class AudioEncoder {
     return result;
   }
 
-  private static encodeWav(samples: TypedArray): DataView {
+  private static encodeWav(samples: TypedArray, sampleRate: number): DataView {
     const buffer = new ArrayBuffer(44 + samples.length * 2);
     const view = new DataView(buffer);
     // RIFF chunk descriptor
@@ -63,8 +64,8 @@ export class AudioEncoder {
     view.setUint32(16, 16, true); // chunkSize
     view.setUint16(20, 1, true); // wFormatTag
     view.setUint16(22, 1, true); // wChannels
-    view.setUint32(24, this.$recordSampleRate, true); // dwSamplesPerSec
-    view.setUint32(28, this.$recordSampleRate * 2, true); // dwAvgBytesPerSec
+    view.setUint32(24, sampleRate, true); // dwSamplesPerSec
+    view.setUint32(28, sampleRate * 2, true); // dwAvgBytesPerSec
     view.setUint16(32, 2, true); // wBlockAlign
     view.setUint16(34, 16, true); // wBitsPerSample
     // data sub-chunk

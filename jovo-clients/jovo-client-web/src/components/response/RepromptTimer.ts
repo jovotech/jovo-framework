@@ -2,14 +2,14 @@ import {
   CoreComponent,
   InputRecordEvents,
   JovoWebClient,
-  Output,
   RequestEvents,
   ResponseComponentConfig,
-  ResponseEvents
+  ResponseEvents,
 } from '../..';
 
+// TODO refactor when TS 3.8 ... look at ResponseComponent
 export class RepromptTimer extends CoreComponent {
-  private $reprompt: Output | null = null;
+  private $reprompt: any = null; // tslint:disable-line:no-any
   private $attempts = 0;
   private $activeRepromptTimerId = -1;
   private $activeTimeoutTimerId = -1;
@@ -42,7 +42,8 @@ export class RepromptTimer extends CoreComponent {
     return this.$client.$config.InputComponent.mode === 'push-to-talk';
   }
 
-  handle(reprompt: Output) {
+  // tslint:disable-next-line:no-any
+  handle(reprompt: any) {
     this.$reprompt = reprompt;
     this.startReprompt();
   }

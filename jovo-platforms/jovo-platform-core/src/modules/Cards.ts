@@ -1,8 +1,8 @@
 import { Plugin } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 import { AdaptiveCard, AdaptiveCardOptions, CorePlatformApp, CorePlatformResponse } from '..';
 import { CorePlatform } from '../CorePlatform';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 interface SimpleCard {
   title: string;
@@ -22,26 +22,12 @@ export class Cards implements Plugin {
       _set(this.$output, 'CorePlatform.AdaptiveCard', options);
       return this;
     };
-
-    CorePlatformApp.prototype.showSuggestionChips = function(chips: string[]) {
-      if (!this.$output.CorePlatform) {
-        this.$output.CorePlatform = {};
-      }
-
-      this.$output.CorePlatform.SuggestionChips = chips;
-      return this;
-    };
   }
 
   output(corePlatformApp: CorePlatformApp) {
     const output = corePlatformApp.$output;
     if (!corePlatformApp.$response) {
       corePlatformApp.$response = new CorePlatformResponse();
-    }
-
-    const suggestionChips: string[] | undefined = _get(output, 'CorePlatform.SuggestionChips');
-    if (suggestionChips && suggestionChips.length > 0) {
-      _set(corePlatformApp.$response, 'response.output.suggestionChips', suggestionChips);
     }
 
     const simpleCardOptions: SimpleCard | undefined = _get(output, 'card.SimpleCard');

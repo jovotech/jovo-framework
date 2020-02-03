@@ -1,4 +1,4 @@
-import { NetworkAdapter, NetworkResponse, RequestConfig, RequestType } from '../..';
+import { NetworkAdapter, NetworkResponse, RequestConfig, RequestMethod } from '../..';
 
 export class NetworkHandler {
   private $adapter: NetworkAdapter;
@@ -9,7 +9,7 @@ export class NetworkHandler {
 
   // tslint:disable-next-line:no-any
   request<T = any>(
-    type: RequestType,
+    type: RequestMethod,
     url: string,
     data?: any, // tslint:disable-line:no-any
 

@@ -1,3 +1,4 @@
+import uuid = require('uuid');
 import {
   assistantEvents,
   AudioRecordedPayload,
@@ -9,11 +10,13 @@ import {
   NetworkHandler,
   NetworkResponse,
   RequestEvents,
+  VERSION,
 } from '../..';
 import { AjaxAdapter } from './adapters/AjaxAdapter';
 
 export interface RequestComponentConfig extends ComponentConfig {}
 
+// TODO link with types of core-platform as soon as TS 3.8 is released or do a workaround which breaks the conventions tho
 export class RequestComponent extends Component<RequestComponentConfig> {
   private $networkHandler!: NetworkHandler;
 
@@ -48,36 +51,35 @@ export class RequestComponent extends Component<RequestComponentConfig> {
 
   private async onFirstRequest() {
     if (!this.$client.hasSentLaunchRequest && this.shouldLaunchFirst) {
-      const data = this.makeRequest({
-        isLaunch: true,
-      });
-      await this.handleSendRequest(data);
+      return this.send('LAUNCH');
     }
   }
 
   private async onAudioRecorded(payload: AudioRecordedPayload) {
     if (payload.forward) {
-      const base64EncodedAudio = await Base64Converter.blobToBase64(payload.sampled);
-      const data = this.makeRequest({
-        audio: base64EncodedAudio,
+      const base64EncodedAudio = await Base64Converter.blobToBase64(payload.raw);
+      return this.send('AUDIO', {
+        audio: {
+          sampleRate: payload.sampleRate,
+          b64string: base64EncodedAudio,
+        },
       });
-
-      await this.handleSendRequest(data);
     }
   }
 
   private async onSpeechRecognized(event: SpeechRecognitionEvent) {
     if (!this.isPushToTalkUsed && event.results[0].isFinal) {
-      await this.onSendText(event.results[0][0].transcript);
+      // TODO should be replaced with a request-type that shows that the value is derived from speech recognition
+      return this.send('TEXT', {
+        text: event.results[0][0].transcript,
+      });
     }
   }
 
-  private async onSendText(text: string, fromVoice = true) {
-    const data = this.makeRequest({
-      fromVoice,
+  private async onSendText(text: string) {
+    return this.send('TEXT', {
       text,
     });
-    await this.handleSendRequest(data);
   }
 
   // tslint:disable-next-line:no-any
@@ -85,44 +87,55 @@ export class RequestComponent extends Component<RequestComponentConfig> {
     try {
       const res = await this.sendRequest(data);
       this.$client.emit(RequestEvents.Result, res);
-      if (
-        res.status &&
-        res.status === 200 &&
-        res.data &&
-        res.data.response &&
-        !res.data.response.outputSpeech
-      ) {
+      if (res.status && res.status === 200 && res.data && res.data.version) {
         this.$client.emit(RequestEvents.Success, res.data);
       } else {
         this.$client.emit(RequestEvents.Error, new Error('No valid response was received.'));
       }
+      return;
     } catch (e) {
       this.$client.emit(RequestEvents.Error, e);
     }
   }
 
   // tslint:disable-next-line:no-any
-  private makeRequest(baseData: any) {
-    // TODO add missing pieces of information!
+  private send(type: string, body: Record<string, any> = {}) {
+    // TODO fill missing data like appId and platform
     const requestData = {
-      version: '1.0.0',
+      version: VERSION,
       request: {
-        locale: this.locale,
+        id: uuid.v4(),
         timestamp: new Date().toISOString(),
+        type,
+        body,
+        locale: this.locale,
+        nlu: {},
+        data: {},
       },
-      session: this.$client.store.session,
-      user: this.$client.store.user,
+      context: {
+        appId: '',
+        platform: 'CANNOT_BE_EMPTY',
+        device: {
+          id: '',
+          type: 'BROWSER',
+          capabilities: {
+            AUDIO: '',
+            HTML: '',
+            TEXT: '',
+          },
+        },
+        session: this.$client.store.session,
+        user: this.$client.store.user,
+      },
     };
-
-    Object.assign(requestData, baseData);
 
     if (this.$client.$config.debugMode) {
       // tslint:disable-next-line:no-console
       console.log('[REQ]', requestData);
     }
-
     this.$client.emit(RequestEvents.Data, requestData);
-    return requestData;
+
+    return this.handleSendRequest(requestData);
   }
 
   // tslint:disable-next-line:no-any

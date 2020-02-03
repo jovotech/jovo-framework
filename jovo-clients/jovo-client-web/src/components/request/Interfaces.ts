@@ -1,4 +1,4 @@
-export type RequestType = 'get' | 'post' | 'put' | 'delete';
+export type RequestMethod = 'get' | 'post' | 'put' | 'delete';
 
 export interface RequestConfig {
   headers?: Record<string, string>;
@@ -13,7 +13,7 @@ export interface NetworkResponse<T = any> {
 export interface NetworkAdapter {
   // tslint:disable-next-line:no-any
   request<T = any>(
-    type: RequestType,
+    type: RequestMethod,
     url: string,
     data?: any, // tslint:disable-line:no-any
     config?: RequestConfig,

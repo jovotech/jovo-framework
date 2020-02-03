@@ -6,6 +6,7 @@ export type Data = Record<string, any>;
 
 export interface UserData {
   id: string;
+  accessToken?: string;
   data: Data;
 }
 

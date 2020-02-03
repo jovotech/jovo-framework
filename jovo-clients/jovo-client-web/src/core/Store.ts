@@ -8,7 +8,6 @@ import {
   SessionData,
   StoreEvents,
   UserData,
-  AssistantResponse,
 } from '..';
 
 const USER_DATA_STORAGE_KEY = 'user';
@@ -40,20 +39,18 @@ export class Store extends CoreComponent {
     this.startNewSession(true);
   }
 
-  private onResponse(data: AssistantResponse) {
-    if (data.response.shouldEndSession) {
+  // TODO refactor when TS 3.8 or workaround
+  // tslint:disable-next-line:no-any
+  private onResponse(data: any) {
+    if (data.session.end) {
       this.startNewSession();
     } else {
       this.session.new = false;
-      if (data.sessionData) {
-        this.session.data = data.sessionData;
-      }
+      this.session.data = data.sessionData;
     }
 
-    if (data.userData) {
-      this.user.data = data.userData;
-      this.saveUser();
-    }
+    this.user.data = data.user.data;
+    this.saveUser();
   }
 
   private fillUserData() {

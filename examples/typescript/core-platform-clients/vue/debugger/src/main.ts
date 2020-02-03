@@ -16,6 +16,7 @@ Vue.use(JovoClientWebVue, {
   url: WEBHOOK_URL,
   client: {
     locale: 'en-US',
+
     debugMode: true,
     reprompt: {
       maxAttempts: 1,

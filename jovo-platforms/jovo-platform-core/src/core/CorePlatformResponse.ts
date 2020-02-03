@@ -42,7 +42,8 @@ export interface ParallelAction extends BaseAction {
   actions: BaseAction[];
 }
 
-export interface Reprompt extends SequentialAction {}
+// TODO this maybe has to extend SequentialAction
+export interface Reprompt extends BaseAction {}
 
 export interface SpeechAction extends BaseAction {
   ssml?: string;
@@ -100,7 +101,7 @@ export interface QuickReplyAction extends BaseAction {
   replies: QuickReply[];
 }
 
-export interface Response {
+export interface CorePlatformResponseJSON {
   version: string;
   actions: Action[];
   reprompts?: Reprompt[];
@@ -114,10 +115,8 @@ export interface Response {
   context?: {};
 }
 
-export interface CorePlatformResponseJSON extends Response {}
-
 // TODO fully implement methods.
-export class CorePlatformResponse implements JovoResponse {
+export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJSON {
   // reviver can be passed as the second parameter to JSON.parse
   // to automatically call User.fromJSON on the resulting value.
   // tslint:disable-next-line:no-any
