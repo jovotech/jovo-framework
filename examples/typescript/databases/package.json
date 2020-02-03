@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-databases",
-  "version": "2.2.33",
+  "version": "2.2.34",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -22,9 +22,9 @@
     "jovo-db-filedb": "^2.2.21",
     "jovo-db-mongodb": "^2.2.22",
     "jovo-db-mysql": "^2.2.21",
-    "jovo-framework": "^2.2.29",
-    "jovo-platform-alexa": "^2.2.32",
-    "jovo-platform-googleassistant": "^2.2.29",
+    "jovo-framework": "^2.2.30",
+    "jovo-platform-alexa": "^2.2.33",
+    "jovo-platform-googleassistant": "^2.2.30",
     "jovo-plugin-debugger": "^2.2.23"
   },
   "devDependencies": {

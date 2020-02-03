@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-dynamic-entities",
-  "version": "2.2.32",
+  "version": "2.2.33",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^2.2.29",
-    "jovo-platform-alexa": "^2.2.32",
+    "jovo-framework": "^2.2.30",
+    "jovo-platform-alexa": "^2.2.33",
     "jovo-plugin-debugger": "^2.2.23"
   }
 }

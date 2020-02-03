@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-googleassistant",
-  "version": "2.2.29",
+  "version": "2.2.30",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -31,7 +31,7 @@
     "@types/node": "^10.3.1",
     "googleapis": "^42.0.0",
     "jest": "^24.9.0",
-    "jovo-framework": "^2.2.29",
+    "jovo-framework": "^2.2.30",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
