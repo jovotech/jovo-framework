@@ -237,7 +237,6 @@ export class AutopilotRequest implements JovoRequest {
     return Object.assign({}, this);
   }
 
-  // TODO: why does it work like that?
   static fromJSON(json: AutopilotRequestJSON | string): AutopilotRequest {
     if (typeof json === 'string') {
       json = decodeURIComponent(json);
