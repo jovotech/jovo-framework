@@ -358,6 +358,15 @@
                 {
                     "title": "Dialogflow Integrations",
                     "route": "dialogflow-integrations"
+                },
+                {
+                    "title": "Twilio Autopilot",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "twilio-autopilot"
+                        }
+                    ]
                 }
             ]
         },

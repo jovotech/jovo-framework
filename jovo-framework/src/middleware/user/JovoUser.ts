@@ -40,6 +40,8 @@ export interface MetaDataConfig {
 
 export interface SessionDataConfig {
   enabled?: boolean;
+  data?: boolean;
+  id?: boolean
   expireAfterSeconds?: number;
 }
 
@@ -102,8 +104,9 @@ export interface UserMetaData {
 
 export interface UserSessionData {
   // tslint:disable-next-line:no-any
-  data: Record<string, any>;
-  lastUpdatedAt: string;
+  $data?: Record<string, any>;
+  id?: string;
+  lastUpdatedAt?: string;
 }
 
 export class JovoUser implements Plugin {
@@ -138,8 +141,10 @@ export class JovoUser implements Plugin {
       sessionsCount: true,
     },
     sessionData: {
+      data: false,
       enabled: false,
       expireAfterSeconds: 300,
+      id: false,
     },
     updatedAt: false,
   };
@@ -309,7 +314,6 @@ export class JovoUser implements Plugin {
       throw new JovoError('user object is not initialized', ErrorCode.ERR, 'jovo-framework');
     }
     const userId = handleRequest.jovo.$user.getId();
-
     if (typeof userId === 'undefined') {
       throw new JovoError(`Can't load user with undefined userId`, ErrorCode.ERR, 'jovo-framework');
     }
@@ -347,17 +351,17 @@ export class JovoUser implements Plugin {
 
       const expireAfter = (this.config.sessionData.expireAfterSeconds || 300) * 1000;
 
-      let sessionData = {};
+      let sessionData: UserSessionData = {};
       if (serializedSessionData.lastUpdatedAt) {
         const expirationTime =
           new Date(serializedSessionData.lastUpdatedAt).getTime() + expireAfter;
 
         const isExpired = new Date().getTime() >= expirationTime;
         if (!isExpired) {
-          sessionData = serializedSessionData.data;
+          sessionData = serializedSessionData;
         }
       }
-      handleRequest.jovo.$user.$sessionData = sessionData;
+      handleRequest.jovo.$user.$session = sessionData;
     }
 
     // can't parse $user, so we parse object containing its data
@@ -365,7 +369,7 @@ export class JovoUser implements Plugin {
       context: handleRequest.jovo.$user.$context,
       data: handleRequest.jovo.$user.$data,
       metaData: handleRequest.jovo.$user.$metaData,
-      session: handleRequest.jovo.$user.$sessionData,
+      session: handleRequest.jovo.$user.$session,
     };
 
     this.updateDbLastState(handleRequest, userData);
@@ -377,8 +381,8 @@ export class JovoUser implements Plugin {
     Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$data, null, '\t'));
     Log.yellow().debug('this.$user.$metaData');
     Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$metaData, null, '\t'));
-    Log.yellow().debug('this.$user.$sessionData');
-    Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$sessionData, null, '\t'));
+    Log.yellow().debug('this.$user.$session');
+    Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$session, null, '\t'));
   };
 
   saveDb = async (handleRequest: HandleRequest, force = false) => {
@@ -422,15 +426,20 @@ export class JovoUser implements Plugin {
     }
 
     if (this.config.sessionData && this.config.sessionData.enabled) {
-      this.updateSessionData(handleRequest);
-      userData.session = {
-        data: handleRequest.jovo.$user.$sessionData,
-        lastUpdatedAt: new Date().toISOString(),
-      };
+      userData.session = {};
+      if (this.config.sessionData.data) {
+        this.updateSessionData(handleRequest);
+        userData.session.$data = handleRequest.jovo.$user.$session.$data;
+      }
+
+      if (this.config.sessionData.id) {
+        userData.session.id = handleRequest.jovo.$user.$session.id;
+      }
+
+      userData.session.lastUpdatedAt = new Date().toISOString();
     }
 
     const userId = handleRequest.jovo.$user.getId();
-
     if (typeof userId === 'undefined') {
       throw new JovoError(`Can't save user with undefined userId`, ErrorCode.ERR, 'jovo-framework');
     }
@@ -444,7 +453,7 @@ export class JovoUser implements Plugin {
           userId,
           this.config.columnName || 'userData',
           userData,
-          updatedAt,
+          updatedAt,  
         );
       }
     } else {
@@ -464,8 +473,8 @@ export class JovoUser implements Plugin {
     Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$data, null, '\t'));
     Log.yellow().debug(' this.$user.$metaData');
     Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$metaData, null, '\t'));
-    Log.yellow().debug(' this.$user.$sessionData');
-    Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$sessionData, null, '\t'));
+    Log.yellow().debug(' this.$user.$session');
+    Log.yellow().debug(JSON.stringify(handleRequest.jovo.$user.$session, null, '\t'));
   };
 
   /**
@@ -763,6 +772,6 @@ export class JovoUser implements Plugin {
     if (!handleRequest.jovo) {
       throw new JovoError('jovo object is not initialized.', ErrorCode.ERR, 'jovo-framework');
     }
-    handleRequest.jovo.$user.$sessionData = handleRequest.jovo.$session.$data || {};
+    handleRequest.jovo.$user.$session.$data = handleRequest.jovo.$session.$data || {};
   }
 }
