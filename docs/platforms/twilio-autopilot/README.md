@@ -2,6 +2,11 @@
 
 Learn more about Twilio Autopilot specific features that can be used with the Jovo Framework.
 
+* [Introduction](#introduction)
+* [Audioplayer - Play action](#audioplayer---play-action)
+* [Visual Output - Show action](#visual-output---show-action)
+* [New Session](#new-session)
+
 ## Introduction
 
 All of the Autopilot specific objects and functions are acessed using the `$autopilotBot` object:
@@ -177,6 +182,61 @@ Name | Description | Value | Required
 `image` | Either an image or an array of images | image | image[] | no
 `image.label` | Tag of the image | string | no
 `image.url` | The url to the hosted jpg or png file | string | yes
+
+## New Session
+
+Incoming requests from Twilio Autopilot don't specify wether the request is from a new session or an existing one. Parts of the Jovo functionality depends on that information, e.g. the `NEW_SESSION` intent.
+
+If you want to use these features, you have to save the session ID in the database. You can do it by adding the following configuration to your project:
+
+```js
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            id: true
+        },
+    },
+
+    // ...
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            id: true
+        },
+    },
+
+    // ...
+};
+```
+
+After that, entries in your database  will have the following schema:
+
+```js
+{
+    "userId": "...",
+    "userData": {
+        "data": {...}
+        "session": {
+            "lastUpdatedAt": "ISO 8601 string",
+            "id": "session ID"
+        }
+    }
+}
+```
 
 <!--[metadata]: {"description": "Build Twilio Autopilot bots with the Jovo Framework. Learn more about Twilio Autopilot specific features here",
 "route": "twilio-autopilot" }
