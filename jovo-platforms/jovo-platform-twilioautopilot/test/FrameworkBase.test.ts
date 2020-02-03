@@ -10,7 +10,7 @@ import {
 import { App, ExpressJS } from 'jovo-framework';
 import { FileDb } from 'jovo-db-filedb';
 import _set = require('lodash.set');
-import {writeFileSync} from 'fs';
+import { writeFileSync } from 'fs';
 
 import { Autopilot } from '../src';
 
@@ -29,15 +29,15 @@ beforeEach(() => {
     user: {
       sessionData: {
         enabled: true,
-        id: true
-      }
-    }
+        id: true,
+      },
+    },
   });
   const autopilot = new Autopilot();
   app.use(
     new FileDb({
       // path: PATH_TO_DB_DIR,
-      pathToFile: `${PATH_TO_DB_DIR}/db.json`
+      pathToFile: `${PATH_TO_DB_DIR}/db.json`,
     }),
     autopilot,
   );
@@ -283,8 +283,8 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       name: {
         name: 'name',
-        value: 'Joe'
-      }
+        value: 'Joe',
+      },
     });
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -306,8 +306,8 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       'given-name': {
         name: 'given-name',
-        value: 'Joe'
-      }
+        value: 'Joe',
+      },
     });
     app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
@@ -886,10 +886,10 @@ describe('test handleOnNewSession', () => {
           data: {},
           session: {
             id: intentRequest.getSessionId(),
-            lastUpdatedAt: new Date().toISOString()
-          }
-        }
-      }
+            lastUpdatedAt: new Date().toISOString(),
+          },
+        },
+      },
     ];
     writeFileSync(`${PATH_TO_DB_DIR}/db.json`, JSON.stringify(dbJson));
 

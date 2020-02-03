@@ -4,9 +4,9 @@ import { RequestBuilder } from 'jovo-core';
 import { AutopilotRequest, AutopilotInputs } from './AutopilotRequest';
 
 const samples: { [key: string]: string } = {
-  'LaunchRequest': 'LaunchRequest.json',
-  'IntentRequest': 'IntentRequest.json',
-  'EndRequest': 'EndRequest.json',
+  LaunchRequest: 'LaunchRequest.json',
+  IntentRequest: 'IntentRequest.json',
+  EndRequest: 'EndRequest.json',
 };
 
 export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest> {
@@ -17,8 +17,10 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
   }
 
   async intent(json?: object): Promise<AutopilotRequest>;
-  async intent(name?: string, slots?: any): Promise<AutopilotRequest>; // tslint:disable-line:no-any
-  async intent(obj?: any, inputs?: AutopilotInputs): Promise<AutopilotRequest> { // tslint:disable-line:no-any
+  // tslint:disable-next-line:no-any
+  async intent(name?: string, slots?: any): Promise<AutopilotRequest>;
+  // tslint:disable-next-line:no-any
+  async intent(obj?: any, inputs?: AutopilotInputs): Promise<AutopilotRequest> {
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(obj);
@@ -36,7 +38,6 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
   }
 
   async launchRequest(json?: object): Promise<AutopilotRequest> {
-    //tslint:disable-line
     if (json) {
       return AutopilotRequest.fromJSON(json);
     } else {
@@ -104,14 +105,14 @@ function getJsonFilePath(key: string): string {
 
 /**
  * Generates a random string [a-z][A-Z][0-9] with `length` number of characters.
- * @param {number} length 
+ * @param {number} length
  */
 function generateRandomString(length: number) {
   let randomString = '';
   const stringValues = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   for (let i = 0; i < length; i++) {
-      randomString += stringValues.charAt(Math.floor(Math.random() * stringValues.length));
+    randomString += stringValues.charAt(Math.floor(Math.random() * stringValues.length));
   }
 
   return randomString;

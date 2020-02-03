@@ -121,7 +121,8 @@ export class Autopilot extends Extensible implements Platform {
       return Promise.resolve();
     }
 
-    if (handleRequest.jovo.$user.$session) { // is undefined if no active DB
+    // is undefined if no active DB
+    if (handleRequest.jovo.$user.$session) {
       handleRequest.jovo.$user.$session.id = handleRequest.jovo.$request!.getSessionId();
     }
   }

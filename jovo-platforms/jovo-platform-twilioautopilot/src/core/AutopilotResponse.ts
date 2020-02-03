@@ -73,7 +73,8 @@ export class AutopilotResponse implements JovoResponse {
     return this;
   }
 
-  addSessionAttribute(key: string, value: any): this { // tslint:disable-line:no-any
+  // tslint:disable-next-line:no-any
+  addSessionAttribute(key: string, value: any): this {
     const rememberAction = this.actions.find((action) => {
       return action.remember;
     });
@@ -128,17 +129,18 @@ export class AutopilotResponse implements JovoResponse {
     return this.hasSessionData(SessionConstants.STATE, state);
   }
 
-  hasSessionData(name: string, value?: any): boolean { // tslint:disable-line:no-any
+  // tslint:disable-next-line:no-any
+  hasSessionData(name: string, value?: any): boolean {
     return this.hasSessionAttribute(name, value);
   }
 
-  hasSessionAttribute(name: string, value?: any): boolean { // tslint:disable-line:no-any
+  // tslint:disable-next-line:no-any
+  hasSessionAttribute(name: string, value?: any): boolean {
     if (value) {
       return this.getSessionAttribute(name) === value;
     } else {
       return this.getSessionAttribute(name) ? true : false;
     }
-    
   }
 
   hasSessionEnded(): boolean {

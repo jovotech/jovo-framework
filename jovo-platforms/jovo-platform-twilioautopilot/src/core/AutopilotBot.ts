@@ -20,7 +20,8 @@ export class AutopilotBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    if (this.$user.$session) { // undefined if no active DB
+    // undefined if no active DB
+    if (this.$user.$session) {
       return this.$user.$session.id !== this.$request!.getSessionId();
     } else {
       return false;
