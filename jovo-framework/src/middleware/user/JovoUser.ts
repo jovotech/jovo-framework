@@ -41,7 +41,7 @@ export interface MetaDataConfig {
 export interface SessionDataConfig {
   enabled?: boolean;
   data?: boolean;
-  id?: boolean
+  id?: boolean;
   expireAfterSeconds?: number;
 }
 
@@ -453,7 +453,7 @@ export class JovoUser implements Plugin {
           userId,
           this.config.columnName || 'userData',
           userData,
-          updatedAt,  
+          updatedAt,
         );
       }
     } else {
