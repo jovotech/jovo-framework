@@ -11,7 +11,7 @@
     "tsc": "tsc",
     "tscw": "tsc --watch",
     "typedoc": "typedoc --out ./docs ./ --mode file",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
