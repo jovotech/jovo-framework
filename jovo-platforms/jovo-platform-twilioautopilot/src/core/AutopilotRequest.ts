@@ -94,9 +94,7 @@ export class AutopilotRequest implements JovoRequest {
     return this.getSessionData();
   }
 
-  addSessionAttribute(key: string, value: any): this {
-    // tslint:disable-line:no-any
-    // tslint:disable-line
+  addSessionAttribute(key: string, value: any): this { // tslint:disable-line:no-any
     return this.addSessionData(key, value);
   }
 
@@ -104,7 +102,7 @@ export class AutopilotRequest implements JovoRequest {
     return this.Memory ? JSON.parse(this.Memory) : {};
   }
 
-  addSessionData(key: string, value: any): this {
+  addSessionData(key: string, value: any): this { // tslint:disable-line:no-any
     const memory = this.Memory ? JSON.parse(this.Memory) : {};
     memory[key] = value;
     this.Memory = JSON.stringify(memory);
