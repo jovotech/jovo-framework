@@ -20,7 +20,11 @@ export class AutopilotBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    return this.$request!.isNewSession();
+    if (this.$user.$session) { // undefined if no active DB
+      return this.$user.$session.id !== this.$request!.getSessionId();
+    } else {
+      return false;
+    }
   }
 
   hasAudioInterface(): boolean {

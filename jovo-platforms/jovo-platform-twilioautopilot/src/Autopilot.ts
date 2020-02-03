@@ -57,6 +57,7 @@ export class Autopilot extends Extensible implements Platform {
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('tts')!.use(this.tts.bind(this));
+    app.middleware('before.user.save')!.use(this.saveSessionId.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
@@ -113,6 +114,16 @@ export class Autopilot extends Extensible implements Platform {
       return Promise.resolve();
     }
     await this.middleware('$tts')!.run(handleRequest.jovo);
+  }
+
+  async saveSessionId(handleRequest: HandleRequest) {
+    if (handleRequest.jovo?.constructor.name !== 'AutopilotBot') {
+      return Promise.resolve();
+    }
+
+    if (handleRequest.jovo.$user.$session) { // is undefined if no active DB
+      handleRequest.jovo.$user.$session.id = handleRequest.jovo.$request!.getSessionId();
+    }
   }
 
   async output(handleRequest: HandleRequest) {
