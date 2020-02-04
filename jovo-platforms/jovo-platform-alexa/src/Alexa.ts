@@ -27,7 +27,7 @@ import { PlaybackController } from './modules/PlaybackController';
 import { SkillEvent } from './modules/SkillEvent';
 import { Cards } from './modules/Cards';
 import { DialogInterface } from './modules/DialogInterface';
-import { AlexaNLU } from './modules/AlexaNLU';
+import { AlexaNlu } from './modules/AlexaNlu';
 import { AlexaRequestBuilder } from './core/AlexaRequestBuilder';
 import { AlexaResponseBuilder } from './core/AlexaResponseBuilder';
 import { GadgetControllerPlugin } from './modules/GadgetControllerPlugin';
@@ -86,7 +86,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
 
     this.use(
       new AlexaCore(),
-      new AlexaNLU(),
+      new AlexaNlu(),
       new AudioPlayerPlugin(),
       new CanFulfillIntent(),
       new Display(),

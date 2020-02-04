@@ -51,7 +51,7 @@ export { SapCaiSpeechBuilder } from './core/SapCaiSpeechBuilder';
 export { SapCaiUser } from './core/SapCaiUser';
 
 export { SapCaiCore } from './modules/SapCaiCore';
-export { SapCaiNLU } from './modules/SapCaiNLU';
+export { SapCaiNlu } from './modules/SapCaiNlu';
 export { Cards } from './modules/Cards';
 
 export * from './response';

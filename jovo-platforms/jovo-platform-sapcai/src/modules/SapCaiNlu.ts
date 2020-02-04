@@ -2,7 +2,7 @@ import { SapCai } from '../SapCai';
 import { EnumRequestType, Plugin } from 'jovo-core';
 import { SapCaiRequest, SapCaiSkill } from '..';
 
-export class SapCaiNLU implements Plugin {
+export class SapCaiNlu implements Plugin {
   install(sapcai: SapCai) {
     sapcai.middleware('$nlu')!.use(this.nlu.bind(this));
     sapcai.middleware('$inputs')!.use(this.inputs.bind(this));
