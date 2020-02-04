@@ -1,6 +1,7 @@
 import { Plugin, HandleRequest, EnumRequestType } from 'jovo-core';
 import _set = require('lodash.set');
 import _get = require('lodash.get');
+import _unionWith = require('lodash.unionwith');
 
 import { GoogleAssistant } from '../GoogleAssistant';
 import { GoogleAction } from '../core/GoogleAction';
@@ -10,6 +11,8 @@ import { GoogleActionSpeechBuilder } from '../core/GoogleActionSpeechBuilder';
 import uuidv4 = require('uuid/v4');
 import { EnumGoogleAssistantRequestType } from '../core/google-assistant-enums';
 import { Item, RichResponse, SimpleResponse } from '../core/Interfaces';
+import { SessionEntity, SessionEntityType } from 'jovo-platform-dialogflow';
+import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
 
 export class GoogleAssistantCore implements Plugin {
   install(googleAssistant: GoogleAssistant) {
@@ -49,6 +52,93 @@ export class GoogleAssistantCore implements Plugin {
         simpleResponse,
       });
       return this;
+    };
+
+    /**
+     * Adds an array of session entities to the output object.
+     * @param {object} sessionEntityTypes
+     */
+    GoogleAction.prototype.addSessionEntityTypes = function(
+      sessionEntityTypes: SessionEntityType[],
+    ) {
+      if (!this.$output.GoogleAssistant) {
+        this.$output.GoogleAssistant = {};
+      }
+
+      if (!this.$output.GoogleAssistant.SessionEntityTypes) {
+        this.$output.GoogleAssistant.SessionEntityTypes = [];
+      }
+
+      sessionEntityTypes.forEach((el: SessionEntityType) => {
+        // Place session id in front of session entity name to accomodate to proper format
+        const sessionId = this.$request!.getSessionId();
+        const entityName = el.name;
+        el.name = `${sessionId}/entityTypes/${entityName}`;
+
+        // Set default override mode
+        if (!el.entityOverrideMode) {
+          el.entityOverrideMode = 'ENTITY_OVERRIDE_MODE_SUPPLEMENT';
+        }
+      });
+
+      // Merge existing entities with new ones provided as arguments with _.unionWith.
+      this.$output.GoogleAssistant.SessionEntityTypes = _unionWith(
+        this.$output.GoogleAssistant.SessionEntityTypes,
+        sessionEntityTypes,
+        (newEntry: SessionEntityType, original: SessionEntityType) => {
+          // If the new session entity does not yet exist by its name, just add it to the new array.
+          if (newEntry.name !== original.name) {
+            return false;
+          }
+
+          // If the session entity already exists by its name, check if its entity values already exist.
+          const entities = _unionWith(
+            newEntry.entities,
+            original.entities,
+            (n: SessionEntity, o: SessionEntity) => {
+              // If the current value is not yet present, just add it with a new entry.
+              if (n.value !== o.value) {
+                return false;
+              }
+
+              // Else merge the respective synonyms and unify them.
+              o.synonyms = _unionWith(o.synonyms, n.synonyms);
+              return true;
+            },
+          );
+
+          // Replace old entries with new, merged ones.
+          original.entities = entities;
+          return true;
+        },
+      );
+
+      return this;
+    };
+
+    /**
+     * Adds one session entity to the output object.
+     * @param {object} sessionEntityType
+     */
+    GoogleAction.prototype.addSessionEntityType = function(sessionEntityType: SessionEntityType) {
+      return this.addSessionEntityTypes([sessionEntityType]);
+    };
+
+    /**
+     * Adds one session entity to the output object by constructing it from provided arguments.
+     * @param {string} name: The identifier for the current session entity.
+     * @param {string} value: The key of the value for the current session entity.
+     * @param {object} synonyms: The actual values which can be used in prompts by the user.
+     * @param {object} entityOverrideMode: Optional. Specifies how to handle session entities.
+     */
+    GoogleAction.prototype.addSessionEntity = function(
+      name: string,
+      value: string,
+      synonyms: string[],
+      entityOverrideMode?: EntityOverrideMode,
+    ) {
+      const sessionEntityType = { name, entityOverrideMode, entities: [{ value, synonyms }] };
+      return this.addSessionEntityType(sessionEntityType);
     };
   }
 
@@ -155,6 +245,11 @@ export class GoogleAssistantCore implements Plugin {
       let responseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
       responseItems = responseItems.concat(output.GoogleAssistant.ResponseAppender);
       _set(googleAction.$originalResponse, 'richResponse.items', responseItems);
+    }
+
+    if (output.GoogleAssistant && output.GoogleAssistant.SessionEntityTypes) {
+      const responseItems = output.GoogleAssistant.SessionEntityTypes;
+      _set(googleAction.$originalResponse, 'sessionEntityTypes', responseItems);
     }
   }
   async userStorageGet(googleAction: GoogleAction) {

@@ -63,6 +63,7 @@ import { AlexaSpeechBuilder } from './core/AlexaSpeechBuilder';
 import { ProactiveEvent } from './modules/ProactiveEvent';
 
 import { Apl } from './modules/AplPlugin';
+import { EmotionName, EmotionIntensity } from './core/Interfaces';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
@@ -96,6 +97,14 @@ declare module 'jovo-core/dist/src/util/SpeechBuilder' {
       text: string | string[],
       condition?: boolean,
       probability?: number,
+    ): this;
+    addEmotion(
+      name: EmotionName,
+      intensity: EmotionIntensity,
+      text: string | string[],
+      condition?: boolean,
+      probability?: number,
+      surroundSsml?: SsmlElements,
     ): this;
   }
 }
@@ -354,6 +363,9 @@ declare module './core/AlexaSkill' {
      * @param dynamicEntityTypes
      */
     replaceDynamicEntities(dynamicEntityTypes: DynamicEntityType[]): this;
+
+    addDynamicEntityTypes(dynamicEntityTypes: DynamicEntityType[]): this;
+    addDynamicEntityType(dynamicEntityType: DynamicEntityType): this;
   }
 }
 // GadgetController

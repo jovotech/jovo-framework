@@ -16,6 +16,8 @@ export { Slack } from './integrations/Slack/Slack';
 export { Twilio } from './integrations/Twilio/Twilio';
 export { DialogflowPlugin } from './integrations/DialogflowPlugin';
 
+export { EntityOverrideMode, SessionEntity, SessionEntityType } from './core/Interfaces';
+
 export interface PlatformFactory<T extends Jovo = Jovo> {
   createPlatformRequest(app: BaseApp, host: Host, handleRequest?: HandleRequest): T;
 

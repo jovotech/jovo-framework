@@ -2,27 +2,27 @@
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
-* [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
-* [Routing](#routing)
-  * [Dialog Interface](#dialog-interface)
-* [Data](#data)
-  * [Shopping and To Do Lists](#shopping-and-to-do-lists)
-  * [Location](#location)
-  * [Contact information](#contact-information)
-* [Output](#output)
-  * [Progressive Responses](#progressive-responses)
-  * [Visual Output](#visual-output)
-* [AudioPlayer Skills](#audioplayer-skills)
-* [Skill Events](#skill-events)
-* [CanFulfillIntentRequest](#canfulfillintentrequest)
-* [GameEngine Interface](#gameengine-interface)
-* [GadgetController Interface](#gadgetcontroller-interface)
-* [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
-* [Amazon Pay](#amazon-pay)
-* [Reminders API](#reminders-api)
-* [Settings API](#settings-api)
-* [Proactive Events API](#proactive-events-api)
-* [Playback Controller](#playback-controller)
+- [Introduction to Alexa Specific Features](#introduction-to-alexa-specific-features)
+- [Routing](#routing)
+  - [Dialog Interface](#dialog-interface)
+- [Data](#data)
+  - [Shopping and To Do Lists](#shopping-and-to-do-lists)
+  - [Location](#location)
+  - [Contact information](#contact-information)
+- [Output](#output)
+  - [Progressive Responses](#progressive-responses)
+  - [Visual Output](#visual-output)
+- [AudioPlayer Skills](#audioplayer-skills)
+- [Skill Events](#skill-events)
+- [CanFulfillIntentRequest](#canfulfillintentrequest)
+- [GameEngine Interface](#gameengine-interface)
+- [GadgetController Interface](#gadgetcontroller-interface)
+- [In-Skill-Purchasing (ISP)](#in-skill-purchasing-isp)
+- [Amazon Pay](#amazon-pay)
+- [Reminders API](#reminders-api)
+- [Settings API](#settings-api)
+- [Proactive Events API](#proactive-events-api)
+- [Playback Controller](#playback-controller)
 
 ## Introduction to Alexa Specific Features
 
@@ -39,6 +39,7 @@ this.$alexaSkill
 
 this.$alexaSkill!
 ```
+
 ## Routing
 
 This section provides an overview of Alexa specific features for routing. For the basic concept, take a look here: [Basic Concepts > Routing](../../basic-concepts/routing './routing').
@@ -101,15 +102,83 @@ this.tell('Text after API call');
 
 > Find an example file here: [`appProgressiveResponse.js`](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/01_alexa/progressive-response/src/app.js).
 
+### Dynamic Entities
+
+If you want to augment your existing entities depending on a dynamic change in data or context, you can use Dynamic Entities to dynamically create new entities during your session. These will be resolved in addition to your static slot values and are valid for a total time of 30 minutes, even after the user session has ended, although we recommend to clear every dynamic entity as soon as the session ends.
+
+Here is the official reference by Amazon: [Dynamic Entities](https://developer.amazon.com/en-US/docs/alexa/custom-skills/use-dynamic-entities-for-customized-interactions.html).
+
+```javascript
+// You can use either of these functions, depending on your use case.
+
+// Adds a single dynamic entity.
+this.$alexaSkill.addDynamicEntityType({
+	name: 'FruitInput',
+	values: [
+		{
+			name: {
+				value: 'apple',
+				synonyms: ['red apple', 'sweet apple']
+			}
+		},
+		{
+			name: {
+				value: 'banana',
+				synonyms: ['yellow banana'],
+				id: 'banana'
+			}
+		}
+	]
+});
+
+// Adds an array of dynamic entities.
+this.$alexaSkill.addDynamicEntityTypes([
+	{
+		name: 'FruitInput',
+		values: [
+			{
+				name: {
+					value: 'peach'
+				}
+			}
+		]
+	}
+]);
+
+// Use this function to add one or multiple dynamic entities.
+this.$alexaSkill.replaceDynamicEntities({
+	name: 'FruitInput',
+	values: [
+		{
+			name: {
+				value: 'strawberry'
+			}
+		}
+	]
+});
+
+// Or
+this.$alexaSKill.replaceDynamicEntities([
+	{
+		name: 'FruitInput',
+		values: [
+			{
+				name: {
+					value: 'kiwi'
+				}
+			}
+		]
+	}
+]);
+```
+
 ### Visual Output
 
 > [You can find out more about visual output here](./visual.md './amazon-alexa/visual').
 
-
 ## AudioPlayer Skills
 
 > [You can find more about Jovo Audioplayer support here](./audioplayer.md './amazon-alexa/audioplayer').
-
 
 ## Skill Events
 
@@ -150,7 +219,6 @@ this.tell('Text after API call');
 ## Playback Controller
 
 > [Learn how to use the Playback Controller interface with Jovo here](./audioplayer.md#playback-controller './amazon-alexa/audioplayer#playback-controller')
-
 
 <!--[metadata]: {"description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",
                 "route": "amazon-alexa"}-->
