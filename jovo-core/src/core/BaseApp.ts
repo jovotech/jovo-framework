@@ -1,6 +1,7 @@
 import _cloneDeep = require('lodash.clonedeep');
 import _merge = require('lodash.merge');
 import { JovoError } from '../errors/JovoError';
+import { Project } from '../index';
 import { AppData, Db, Host } from '../Interfaces';
 import { ComponentConfig } from '../plugins/Component';
 import { ComponentPlugin } from '../plugins/ComponentPlugin';
@@ -354,6 +355,11 @@ export class BaseApp extends Extensible {
       }
     });
   }
+
+  getProject() {
+    return Project;
+  }
+
   /**
    * On request listener
    * @param {Function} callback
