@@ -1,6 +1,20 @@
 # Jovo Framework Changelog
 
 
+## 2.2.30 (2020-02-03)
+
+#### :rocket: New Feature
+* `jovo-platform-twilioautopilot` [#651](https://github.com/jovotech/jovo-framework/pull/651) Adds Twilio Autopilot integration  ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+* `jovo-platform-alexa` [#648](https://github.com/jovotech/jovo-framework/pull/648) Apply permission api fix to all endpoints  ([@gshenar](https://github.com/gshenar))
+
+
+ #### Committers: 3
+- gshenar ([@gshenar](https://github.com/gshenar))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+
+
 ## 2.2.25 (2020-01-14)
 
 #### :rocket: New Feature

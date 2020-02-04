@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-progressive-response",
-  "version": "2.2.30",
+  "version": "2.2.33",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,10 +17,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.2.20",
-    "jovo-framework": "^2.2.27",
-    "jovo-platform-alexa": "^2.2.30",
-    "jovo-plugin-debugger": "^2.2.22"
+    "jovo-db-filedb": "^2.2.21",
+    "jovo-framework": "^2.2.30",
+    "jovo-platform-alexa": "^2.2.33",
+    "jovo-plugin-debugger": "^2.2.23"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
