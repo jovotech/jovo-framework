@@ -1,6 +1,27 @@
 # Samsung Bixby
 
-Learn more about how Bixby works and how you can use it with the Jovo Framework. 
+Learn more about how Bixby works and how you can use it with the Jovo Framework.
+
+- [Introduction](#introduction)
+- [Bixby Basics](#bixby-basics)
+  - [Models](#models)
+    - [Primitives](#primitives)
+    - [Structures](#structures)
+    - [Actions](#actions)
+  - [Dialog and Views](#dialog-and-views)
+  - [Training](#training)
+  - [Configuration](#configuration)
+    - [Capsule Properties and Endpoints](#capsule-properties-and-endpoints)
+    - [Deployment Configuration](#deployment-configuration)
+- [Jovo Models](#jovo-models)
+  - [Jovo Primitives](#jovo-primitives)
+  - [Jovo Structures](#jovo-structures)
+    - [JovoLayout](#jovolayout)
+    - [JovoSessionData](#jovosessiondata)
+    - [JovoResponse](#jovoresponse)
+  - [Jovo Actions](#jovo-actions)
+- [Bixby AudioPlayer](#bixby-audioplayer)
+- [Bixby Layouts](#bixby-layouts)
 
 ## Introduction
 
@@ -68,7 +89,36 @@ An action can only provide one output, which can be a primitive or a structure, 
 
 ### Dialog and Views
 
+Bixby provides two ways of communicating with the user: dialog and views. While dialog is used to play speech output to the user, to inform them about certain results or to request additional information, Views form your capsule's visual user interface, capable of showing text, buttons, input fields and lists, for example.
+
+You can use the [SpeechBuilder](https://www.jovo.tech/docs/output/speechbuilder) to create rich responses, which will be returned to Bixby as a property of `JovoResponse`. If you want to use SSML, note that Bixby currently only supports the following SSML tags:
+
+- `<lang>`
+- `<audio>`
+
+> Learn more about dialog in Bixby [here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/refining-dialog.intro-dialog).
+
+> Learn more about using SSML with Bixby [here](https://bixbydevelopers.com/dev/docs/reference/ref-topics/ssml).
+
+> Learn more about the Jovo SpeechBuilder [here](https://www.jovo.tech/docs/output/speechbuilder).
+
+Bixby allows you to build a visual experience with views, either for showing results, confirming certain operations or for requesting additional input.
+
+> Learn more about views in Bixby [here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/building-views.views).
+
+> Learn more about using layouts [here](./layouts.md './samsung-bixby/layouts').
+
 ### Training
+
+Training Bixby is similar to Alexa's interactive model. You provide a number of training samples, or utterances, which will be used by Bixby to understand your user's intents and how to differentiate between inputs. For that process, Bixby offers a training tool, which provides you with a visual interface for entering and specifying user utterances. Every utterance is required to specify a goal and optional inputs. A goal must be a model, either a concept or an action, depending on your use case. To reach that goal, you might need a number of inputs to satisfy the action or concept. To mark a part of your utterance as an input parameter, you need to specify it's type, so Bixby can associate it with required inputs specified in your goal.
+
+![Training Example](../../img/bixby-training.png 'This is how an example utterance in the training tool looks like.')
+
+In this example training utterance, our goal will be `MyNameIsAction`, which requires an input primitive `NameInput` of type `text`.
+
+> Learn more about training [here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/training.intro-training).
+
+The `training` file contains all of your capsule's natural language models, which are being used by Bixby to understand your user prompts and how to differentiate between inputs. For every training sample, a goal must be specified, telling Bixby what action to execute on that sample. Furthermore, you can specify inputs with associated nodes or even routes for Bixby to collect additional information.
 
 ### Configuration
 
@@ -110,29 +160,74 @@ Last, but not least, `capsule.bxb` acts as a place for deployment configuration 
 
 ## Jovo Models
 
+When you start a new capsule with the intent of using the platform integration with the Jovo Framework, it is recommended to start with our [Jovo Bixby Capsule Example](https://github.com/jovotech/jovo-bixby-capsule-example). Not only does it come with our [Hello World Template](https://www.jovo.tech/templates/helloworld), it also includes all Jovo models required for the integration to work properly.
+
+Usually, all models have their respective folders, such as `actions/` for actions, `primitives/` for primitives and so on. However, in our example capsule, located inside `platforms/bixby/` in the example project, you will find another folder, `models/Jovo/`. This folder contains predefined models, required for the platform integration to work properly.
+
+### Jovo Primitives
+
+Inside `primitives/`, you will find three primitive concepts.
+
+`JovoSessionId` of type `text` acts as a unique identifier for the current session. Once your capsule is launched, a new session will be constructed, containing data for the entire session, such as data you set yourself in your voice app or context about the current user.
+
+> Learn more about session data in Jovo [here](https://www.jovo.tech/docs/data#session-data).
+
+`JovoSpeech` forms the speech output of your capsule. Unfortunately, there is no reprompt functionality, so you only have one dialog output. If you want to use SSML, note that Bixby currently supports the following SSML tags:
+
+- `<lang>`
+- `<audio>`
+
+> Learn more about using SSML with Bixby [here](https://bixbydevelopers.com/dev/docs/reference/ref-topics/ssml).
+
+> Learn more about the Jovo SpeechBuilder [here](https://www.jovo.tech/docs/output/speechbuilder).
+
+`JovoState` describes the current state of your voice app.
+
+> Learn more about states in Jovo [here](https://www.jovo.tech/docs/routing/states).
+
+### Jovo Structures
+
+#### JovoLayout
+
+`JovoLayout` is an experimental structure for the platform integration. Currently, there is no real functionality for creating a layout with the platform integration, but you can add your own properties to the structure to use in your capsule.
+
+> Learn more about layout [here](./layout.md './samsung-bixby/layout').
 
 #### JovoSessionData
 
-This structure describes session data, which will be passed between Bixby and your Jovo application. Mandatory properties are `_JOVO_SESSION_ID_` and `_JOVO_STATE_`, implementing the Jovo primitives we discussed before. As of `v0.0.1`, if you want to use your own session values, you need to manually create a respective primitive type and add the property in the `JovoSessionData` structure.
+This structure describes session data, which will be passed between Bixby and your Jovo application. Mandatory properties are `_JOVO_SESSION_ID_` and `_JOVO_STATE_`, implementing the Jovo primitives we discussed before. If you want to use your own session values, you need to manually create a respective concept type and add the property in the `JovoSessionData` structure.
 
-![Actions Example](./img/structure-sessiondata.png "This is an example for a primitive.")
+![JovoSessionData](../../img/bixby-structures-sessiondata.png 'JovoSessionData')
+
+Note that your own properties must be optional and of cardinality `One`.
+
+> Learn more about session data in Jovo [here](https://www.jovo.tech/docs/data#session-data).
 
 #### JovoResponse
 
-`JovoResponse` is perhaps the most important Jovo structure, as it describes an interface for the communication between your Jovo app and your Bixby capsule. Not only does in contain a property `_JOVO_SESSION_DATA_` of type `JovoSessionData`, but it also includes properties for dialog (`_JOVO_SPEECH_` of type `JovoSpeech`), layout (`_JOVO_LAYOUT_` of type `JovoLayout`) and audio (`_JOVO_AUDIO_` of type `audioPlayer.AudioInfo`).
+`JovoResponse` is a structure for the response object, which allows communication between your capsule and your Jovo app. It features all yet available functionality as properties, such as speech output `_JOVO_SPEECH_` of type `JovoSpeech`, `_JOVO_LAYOUT` for adding layouts to your capsule and `_JOVO_SESSION_DATA_` for session data.
 
-![Actions Example](./img/structure-response.png "This is an example for a primitive.")
+![JovoResponse](../../img/bixby-structures-response.png 'JovoResponse')
 
-### Actions
+The property `_JOVO_AUDIO_` can be used for playing a playlist of audio files.
 
-As of `v0.0.1`, there is only one action predefined in the `Jovo/` folder, `JovoPlayAudioAction`. This action allows Bixby to compute an input of type `audioPlayer.Result`, which can be used to play a playlist of audiofiles. You can learn more about how the Bixby Audioplayer works [here]().
+> Learn more about playing audio with Bixby [here](./audioplayer.md './samsung-bixby/audioplayer').
 
+### Jovo Actions
 
-## Advanced Concepts
+As of `v3.0.0`, there is only one action predefined in `models/Jovo/actions/`, `JovoPlayAudioAction`. This action features a computed input, meaning that this input does not come from the user directly, it rather derives from other inputs. In this case, a returned `JovoResponse` is used to compute the audio input of type `audioPlayer.Result` by accessing the response property `_JOVO_AUDIO_`.
 
-### AudioPlayer
+![JovoPlayAudioAction](../../img/bixby-actions-playaudio.png 'JovoPlayAudioAction')
 
-> [You can find more about Audioplayer support here](./audioplayer.md './samsung-bixby/audioplayer').
+> Learn more about playing audio with Bixby [here](./audioplayer).
 
+## Bixby AudioPlayer
 
-### Layout
+> [You can find more about Bixby Audioplayer support here](./audioplayer.md './samsung-bixby/audioplayer').
+
+## Bixby Layouts
+
+> [You can find more about Bixby Layouts support here](./layouts.md './samsung-bixby/layouts').
+
+<!--[metadata]: {"description": "Learn the essentials of Bixby and the new platform integration for the Jovo Framework.",
+		"route": "samsung-bixby"}-->
