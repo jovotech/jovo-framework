@@ -1,11 +1,11 @@
 import {
-  Card,
+  Action,
   Component,
   ComponentConfig,
+  CoreResponse,
   JovoWebClient,
   RepromptTimer,
   RequestEvents,
-  ResponseEvents,
 } from '../..';
 
 export interface ResponseComponentConfig extends ComponentConfig {
@@ -15,7 +15,6 @@ export interface ResponseComponentConfig extends ComponentConfig {
   };
 }
 
-// TODO refactor when TS 3.8 was introduced or workaround was done, that types only are imported from jovo-platform-core
 export class ResponseComponent extends Component<ResponseComponentConfig> {
   static DEFAULT_CONFIG: ResponseComponentConfig = {
     reprompt: {
@@ -23,8 +22,6 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
       maxAttempts: 3,
     },
   };
-
-  cardParent: HTMLElement | null = null;
 
   private readonly $repromptTimer: RepromptTimer;
   private $isRunning = false;
@@ -56,35 +53,25 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
     }
   }
 
-  // tslint:disable-next-line:no-any
-  private async onResponse(data: any) {
+  private async onResponse(data: CoreResponse) {
     this.$isRunning = true;
-    if (data && data.response && data.response.output) {
-      if (this.$client.$config.debugMode) {
-        // tslint:disable-next-line:no-console
-        console.log('[RES]', data);
-      }
-      if (data.response.output.card) {
-        this.handleCard(data.response.output.card);
-      }
+    if (this.$client.$config.debugMode) {
+      // tslint:disable-next-line:no-console
+      console.log('[RES]', data);
+    }
 
-      // if (data.response.output.speech && this.$isRunning) {
-      //   await this.handleSpeech(data.response.output.speech);
-      // }
-      //
-      // if (data.response.output.reprompt && this.$isRunning) {
-      //   await this.handleReprompt(data.response.output.reprompt);
-      // } else {
-      //   this.$repromptTimer.abort();
-      // }
-
-      this.$isRunning = false;
+    const actions = data.actions;
+    if (actions.length > 0) {
+      await this.handleActions(actions);
     }
   }
 
-  private handleCard(card: Card) {
-    this.$client.emit(ResponseEvents.Card, card);
-    this.$client.adaptiveCards.parse(card);
-    this.$client.adaptiveCards.render(this.cardParent || document.body);
+  private async handleActions(actions: Action[]) {
+    for (let i = 0, len = actions.length; i < len; i++) {
+      await this.handleAction(actions[i]);
+    }
+  }
+
+  private async handleAction(action: Action) {
   }
 }

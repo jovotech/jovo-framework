@@ -10,7 +10,7 @@ import '@/style/element-variables.scss';
 Vue.use(Element, { locale });
 Vue.use(JsonViewer);
 
-const WEBHOOK_URL = 'https://webhook.jovo.cloud/max-ripper';
+const WEBHOOK_URL = 'https://webhook.jovo.cloud/some-webhook-id';
 
 Vue.use(JovoClientWebVue, {
   url: WEBHOOK_URL,

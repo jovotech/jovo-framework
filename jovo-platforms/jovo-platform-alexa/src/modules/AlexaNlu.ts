@@ -3,7 +3,7 @@ import { Plugin, EnumRequestType, Input } from 'jovo-core';
 import { AlexaRequest } from '../core/AlexaRequest';
 import { AlexaSkill } from '../core/AlexaSkill';
 
-export class AlexaNLU implements Plugin {
+export class AlexaNlu implements Plugin {
   install(alexa: Alexa) {
     alexa.middleware('$nlu')!.use(this.nlu.bind(this));
     alexa.middleware('$inputs')!.use(this.inputs.bind(this));

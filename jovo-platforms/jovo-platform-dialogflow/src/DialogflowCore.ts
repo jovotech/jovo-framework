@@ -1,11 +1,10 @@
-import { NLUData, Plugin, BaseApp, PluginConfig, Util } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
-import { EnumRequestType } from 'jovo-core';
+import { BaseApp, EnumRequestType, NluData, Plugin, PluginConfig, Util } from 'jovo-core';
 import { Dialogflow } from './Dialogflow';
 import { DialogflowAgent } from './DialogflowAgent';
 import { Context, DialogflowRequest } from './core/DialogflowRequest';
 import { DialogflowResponse } from './core/DialogflowResponse';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export interface Config extends PluginConfig {
   sessionContextId?: string;
@@ -54,7 +53,7 @@ export class DialogflowCore implements Plugin {
 
   nlu(dialogflowAgent: DialogflowAgent) {
     const dialogflowRequest = dialogflowAgent.$request as DialogflowRequest;
-    const nluData: NLUData = {};
+    const nluData = new NluData();
     if (dialogflowAgent.$type.type === EnumRequestType.INTENT) {
       _set(nluData, 'intent.name', _get(dialogflowRequest, 'queryResult.intent.displayName'));
     }

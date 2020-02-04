@@ -461,21 +461,6 @@ export interface Host {
   fail(error: Error): void;
 }
 
-export interface ASRData {
-  text?: string;
-
-  [key: string]: any;
-}
-
-export interface NLUData {
-  intent?: {
-    name: string;
-  };
-  inputs?: Record<string, any>;
-
-  [key: string]: any;
-}
-
 export type HandlerReturnType = () =>
   | void
   | Promise<Function>

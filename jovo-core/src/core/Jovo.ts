@@ -1,8 +1,4 @@
 import { EventEmitter } from 'events';
-import _cloneDeep = require('lodash.clonedeep');
-import _get = require('lodash.get');
-import _sample = require('lodash.sample');
-import _set = require('lodash.set');
 import { BaseApp, BaseAppConfig } from './BaseApp';
 
 import {
@@ -18,20 +14,24 @@ import {
   Validator,
 } from '..';
 import {
-  ASRData,
   Host,
   Inputs,
   JovoData,
   JovoRequest,
   JovoResponse,
   JovoSession,
-  NLUData,
   Output,
   RequestType,
   SessionAttributes,
 } from '../Interfaces';
 import { HandleRequest } from './HandleRequest';
 import { User } from './User';
+import { AsrData } from './AsrData';
+import { NluData } from './NluData';
+import _cloneDeep = require('lodash.clonedeep');
+import _get = require('lodash.get');
+import _sample = require('lodash.sample');
+import _set = require('lodash.set');
 
 export abstract class Jovo extends EventEmitter {
   readonly $host: Host;
@@ -42,8 +42,8 @@ export abstract class Jovo extends EventEmitter {
   $handleRequest?: HandleRequest;
   $jovo: Jovo;
   $user: User;
-  $asr?: ASRData;
-  $nlu?: NLUData;
+  $asr: AsrData;
+  $nlu: NluData;
   $inputs: Inputs;
   readonly $output: Output;
   $request?: JovoRequest;
@@ -74,6 +74,8 @@ export abstract class Jovo extends EventEmitter {
       optional: true,
       type: EnumRequestType.UNKNOWN_REQUEST,
     };
+    this.$asr = new AsrData();
+    this.$nlu = new NluData();
     this.$inputs = {};
     this.$output = {};
     this.$request = undefined;

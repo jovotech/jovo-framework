@@ -33,7 +33,6 @@
     "@types/lodash.set": "^4.3.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.3.1",
-    "adaptivecards": "^1.2.0",
     "prettier": "1.19.1",
     "jest": "^24.9.0",
     "jovo-framework": "^2.2.7",

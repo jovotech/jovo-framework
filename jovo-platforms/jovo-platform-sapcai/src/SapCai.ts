@@ -15,7 +15,7 @@ import {
 import {
   Cards,
   SapCaiCore,
-  SapCaiNLU,
+  SapCaiNlu,
   SapCaiRequest,
   SapCaiRequestBuilder,
   SapCaiResponse,
@@ -70,7 +70,7 @@ export class SapCai extends Platform<SapCaiRequest, SapCaiResponse> {
       }
     });
 
-    this.use(new SapCaiCore(), new SapCaiNLU(), new Cards());
+    this.use(new SapCaiCore(), new SapCaiNlu(), new Cards());
 
     Jovo.prototype.$caiSkill = undefined;
     Jovo.prototype.caiSkill = function() {

@@ -1,5 +1,3 @@
-import * as AdaptiveCards from 'adaptivecards';
-import * as markdownit from 'markdown-it';
 import {
   AdvancedEventEmitter,
   assistantEvents,
@@ -46,7 +44,6 @@ export class JovoWebClient extends AdvancedEventEmitter {
   private readonly $audioPlayer: AudioPlayer;
   private readonly $speechSynthesizer: SpeechSynthesizer;
   private readonly $ssmlEvaluator: SSMLEvaluator;
-  private readonly $adaptiveCards: AdaptiveCards.AdaptiveCard;
 
   constructor(readonly url: string, config?: Partial<JovoWebClientConfig>) {
     super();
@@ -71,9 +68,6 @@ export class JovoWebClient extends AdvancedEventEmitter {
     this.$audioPlayer = new AudioPlayer(this);
     this.$speechSynthesizer = new SpeechSynthesizer(this);
     this.$ssmlEvaluator = new SSMLEvaluator(this);
-
-    this.$adaptiveCards = new AdaptiveCards.AdaptiveCard();
-    this.setupAdaptiveCards();
 
     this.on(assistantEvents.LaunchRequest, () => {
       this.launchRequestWasSent = true;
@@ -116,10 +110,6 @@ export class JovoWebClient extends AdvancedEventEmitter {
 
   get ssmlEvaluator(): SSMLEvaluator {
     return this.$ssmlEvaluator;
-  }
-
-  get adaptiveCards(): AdaptiveCards.AdaptiveCard {
-    return this.$adaptiveCards;
   }
 
   get volume(): number {
@@ -207,22 +197,4 @@ export class JovoWebClient extends AdvancedEventEmitter {
     }
   }
 
-  private setupAdaptiveCards() {
-    // this.$adaptiveCards.hostConfig = new AdaptiveCards.HostConfig();
-    // TODO allow setting hostconfig!
-
-    // enable markdown-it
-    AdaptiveCards.AdaptiveCard.onProcessMarkdown = (
-      text: string,
-      result: AdaptiveCards.IMarkdownProcessingResult,
-    ) => {
-      result.outputHtml = new markdownit().render(text);
-      result.didProcess = true;
-    };
-
-    // react to card-actions
-    this.$adaptiveCards.onExecuteAction = (action: any) => {
-      //   TODO implement
-    };
-  }
 }

@@ -5,7 +5,7 @@ import {
   HandleRequest,
   Jovo,
   Log,
-  NLUData,
+  NluData,
   Platform,
   Util,
 } from 'jovo-core';
@@ -118,7 +118,7 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
   };
 
   nlu = (jovo: Jovo) => {
-    let nluData: NLUData = {};
+    let nluData = new NluData();
     if (jovo.$type.type === EnumRequestType.INTENT) {
       nluData = {
         intent: {

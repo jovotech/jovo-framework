@@ -1,5 +1,14 @@
 export const VERSION = '0.1.0';
 
+export {
+  CorePlatformRequestJSON as CoreRequest,
+  CorePlatformResponseJSON as CoreResponse,
+  DeviceType,
+  RequestBody,
+  RequestType,
+  Action,
+} from 'jovo-platform-core/dist/src/Interfaces';
+
 export * from './events';
 export * from './core/CoreComponent';
 export * from './core/Component';
@@ -24,7 +33,6 @@ export * from './components/request/Interfaces';
 export * from './components/request/NetworkHandler';
 export * from './components/request/RequestComponent';
 export * from './components/request/adapters/AjaxAdapter';
-export * from './components/response/Interfaces';
 export * from './components/response/RepromptTimer';
 export * from './components/response/ResponseComponent';
 export { JovoWebClient } from './JovoWebClient';

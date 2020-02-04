@@ -1,24 +1,16 @@
+import { ActionSet, BaseApp, ExtensibleConfig, HandleRequest, Jovo, Platform, TestSuite } from 'jovo-core';
 import {
-  ActionSet,
-  BaseApp,
-  ExtensibleConfig,
-  HandleRequest,
-  Jovo,
-  Platform,
-  TestSuite,
-} from 'jovo-core';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
-import {
-  Cards,
   CorePlatformApp,
   CorePlatformCore,
   CorePlatformRequest,
   CorePlatformRequestBuilder,
   CorePlatformResponse,
-  CorePlatformResponseBuilder,
+  CorePlatformResponseBuilder
 } from '.';
+import { PlatformStorage } from 'jovo-db-platformstorage';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; // tslint:disable-line:no-any
@@ -73,9 +65,9 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
-    // app.use(new InUserDb());
+    app.use(new PlatformStorage());
 
-    this.use(new CorePlatformCore(), new Cards());
+    this.use(new CorePlatformCore());
 
     Jovo.prototype.$corePlatformApp = undefined;
     Jovo.prototype.corePlatformApp = function() {

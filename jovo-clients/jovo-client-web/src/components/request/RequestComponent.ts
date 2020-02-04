@@ -5,18 +5,21 @@ import {
   Base64Converter,
   Component,
   ComponentConfig,
+  CoreRequest,
+  DeviceType,
   InputEvents,
   InputRecordEvents,
   NetworkHandler,
   NetworkResponse,
   RequestEvents,
+  RequestType,
   VERSION,
 } from '../..';
+
 import { AjaxAdapter } from './adapters/AjaxAdapter';
 
 export interface RequestComponentConfig extends ComponentConfig {}
 
-// TODO link with types of core-platform as soon as TS 3.8 is released or do a workaround which breaks the conventions tho
 export class RequestComponent extends Component<RequestComponentConfig> {
   private $networkHandler!: NetworkHandler;
 
@@ -51,14 +54,14 @@ export class RequestComponent extends Component<RequestComponentConfig> {
 
   private async onFirstRequest() {
     if (!this.$client.hasSentLaunchRequest && this.shouldLaunchFirst) {
-      return this.send('LAUNCH');
+      return this.send(RequestType.Launch);
     }
   }
 
   private async onAudioRecorded(payload: AudioRecordedPayload) {
     if (payload.forward) {
       const base64EncodedAudio = await Base64Converter.blobToBase64(payload.raw);
-      return this.send('AUDIO', {
+      return this.send(RequestType.Audio, {
         audio: {
           sampleRate: payload.sampleRate,
           b64string: base64EncodedAudio,
@@ -69,21 +72,19 @@ export class RequestComponent extends Component<RequestComponentConfig> {
 
   private async onSpeechRecognized(event: SpeechRecognitionEvent) {
     if (!this.isPushToTalkUsed && event.results[0].isFinal) {
-      // TODO should be replaced with a request-type that shows that the value is derived from speech recognition
-      return this.send('TEXT', {
+      return this.send(RequestType.TranscribedText, {
         text: event.results[0][0].transcript,
       });
     }
   }
 
   private async onSendText(text: string) {
-    return this.send('TEXT', {
+    return this.send(RequestType.Text, {
       text,
     });
   }
 
-  // tslint:disable-next-line:no-any
-  private async handleSendRequest(data: any) {
+  private async handleSendRequest(data: CoreRequest) {
     try {
       const res = await this.sendRequest(data);
       this.$client.emit(RequestEvents.Result, res);
@@ -99,9 +100,9 @@ export class RequestComponent extends Component<RequestComponentConfig> {
   }
 
   // tslint:disable-next-line:no-any
-  private send(type: string, body: Record<string, any> = {}) {
+  private send(type: RequestType, body: Record<string, any> = {}) {
     // TODO fill missing data like appId and platform
-    const requestData = {
+    const requestData: CoreRequest = {
       version: VERSION,
       request: {
         id: uuid.v4(),
@@ -117,7 +118,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
         platform: 'CANNOT_BE_EMPTY',
         device: {
           id: '',
-          type: 'BROWSER',
+          type: DeviceType.Browser,
           capabilities: {
             AUDIO: '',
             HTML: '',
@@ -138,8 +139,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
     return this.handleSendRequest(requestData);
   }
 
-  // tslint:disable-next-line:no-any
-  private sendRequest(data: any): Promise<NetworkResponse> {
+  private sendRequest(data: CoreRequest): Promise<NetworkResponse> {
     const jsonData = JSON.stringify(data);
     return this.$networkHandler.post(this.url, jsonData, {
       headers: {

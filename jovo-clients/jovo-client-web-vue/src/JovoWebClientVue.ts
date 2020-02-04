@@ -102,11 +102,6 @@ export class JovoWebClientVue {
     return this;
   }
 
-  setCardParent(htmlElement: HTMLElement): JovoWebClientVue {
-    this.$assistant.component<ResponseComponent>('response')!.cardParent = htmlElement;
-    return this;
-  }
-
   // endregion
 
   // region output-related
