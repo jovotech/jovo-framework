@@ -67,7 +67,7 @@ export class FacebookMessengerCore implements Plugin {
     if (!messengerBot.$session) {
       messengerBot.$session = { $data: {} };
     }
-    messengerBot.$session.$data = { ...messengerBot.$user.$sessionData };
+    messengerBot.$session.$data = { ...messengerBot.$user.$session?.$data };
   }
 
   async output(messengerBot: MessengerBot) {
