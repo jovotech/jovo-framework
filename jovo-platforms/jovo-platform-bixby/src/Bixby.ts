@@ -1,6 +1,7 @@
 import {
   BaseApp,
   ErrorCode,
+  Extensible,
   ExtensibleConfig,
   HandleRequest,
   Jovo,
@@ -20,7 +21,7 @@ import { BixbyResponse } from '.';
 
 export interface Config extends ExtensibleConfig {}
 
-export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
+export class Bixby extends Extensible implements Platform {
   requestBuilder = new BixbyRequestBuilder();
   responseBuilder = new BixbyResponseBuilder();
 
