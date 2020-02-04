@@ -86,7 +86,6 @@ describe('test ON_SIGN_IN', () => {
       ON_SIGN_IN() {
         expect(this.$googleAction!.isSignInOk()).toBe(true);
         expect(this.$googleAction!.getSignInStatus()).toBe('OK');
-        //TODO: check for access token
         done();
       },
     });

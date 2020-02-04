@@ -20,9 +20,6 @@ export class AskFor implements Plugin {
     googleAssistant.middleware('$type')!.use(this.type.bind(this));
     googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
-    //TODO:
-    //askForNotificationPermission
-
     /**
      * Ask for name
      * @public

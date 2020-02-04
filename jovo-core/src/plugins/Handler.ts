@@ -145,16 +145,9 @@ export class Handler implements Plugin {
       return;
     }
 
+    // skip on non-existing AudioPlayer requests
     if (route.type === EnumRequestType.AUDIOPLAYER && !_get(jovo.$handlers, route.path)) {
-      // @deprecated
-      // TODO: Test me
-      const v1AudioPlayerPath = route.path.replace('AlexaSkill', 'AudioPlayer');
-      if (_get(jovo.$handlers, v1AudioPlayerPath)) {
-        route.path = v1AudioPlayerPath;
-        Log.warn('AudioPlayer.* is deprecated since v2. Please use AlexaSkill.*');
-      } else {
         return;
-      }
     }
 
     // throw error if no handler and no UNHANDLED on same level
