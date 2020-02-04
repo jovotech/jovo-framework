@@ -38,3 +38,6 @@ export enum AlexaDeviceName {
   ALEXA_UNSPECIFIED = 'ALEXA_UNSPECIFIED',
   ALEXA_UNSPECIFIED_SCREEN = 'ALEXA_UNSPECIFIED_SCREEN',
 }
+
+export type EmotionName = 'excited' | 'disappointed';
+export type EmotionIntensity = 'low' | 'medium' | 'high';

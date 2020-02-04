@@ -4,7 +4,6 @@ import {
   ExtensibleConfig,
   HandleRequest,
   Jovo,
-  Log,
   Platform,
   TestSuite,
 } from 'jovo-core';
@@ -88,21 +87,9 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     Jovo.prototype.isCorePlatformApp = function() {
       return this.constructor.name === 'CorePlatformApp';
     };
-
-    // tslint:disable-next-line:no-any
-    Jovo.prototype.action = function(key: string, value: any) {
-      const actions = this.$output.actions || [];
-
-      actions.push({ key, value });
-      this.$output.actions = actions;
-
-      return this;
-    };
   }
 
   async request(handleRequest: HandleRequest) {
-    Log.verbose('--------------------------------------------------------------');
-    Log.verbose('[CorePlatform] { request } ');
     const audioData = _get(handleRequest.host.$request, 'request.body.audio');
     if (audioData) {
       _set(handleRequest.host.$request, 'request.body.audio', this.getSamplesFromAudio(audioData));
@@ -110,7 +97,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async initialize(handleRequest: HandleRequest) {
-    Log.verbose('[CorePlatform] { platform.init }');
     handleRequest.platformClazz = CorePlatformApp;
     await this.middleware('$init')!.run(handleRequest);
 
@@ -135,7 +121,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { asr }');
     await this.middleware('$asr')!.run(handleRequest.jovo);
   }
 
@@ -143,7 +128,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { nlu }');
     await this.middleware('$nlu')!.run(handleRequest.jovo);
     await this.middleware('$inputs')!.run(handleRequest.jovo);
   }
@@ -152,7 +136,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { before.tts }');
     await this.middleware('$tts.before')!.run(handleRequest.jovo);
   }
 
@@ -160,7 +143,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { tts }');
     await this.middleware('$tts')!.run(handleRequest.jovo);
   }
 
@@ -168,7 +150,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { platform.output }');
     await this.middleware('$output')!.run(handleRequest.jovo);
   }
 
@@ -176,7 +157,6 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
       return Promise.resolve();
     }
-    Log.verbose('[CorePlatform] { response }');
     await this.middleware('$response')!.run(handleRequest.jovo);
 
     await handleRequest.host.setResponse(handleRequest.jovo.$response);

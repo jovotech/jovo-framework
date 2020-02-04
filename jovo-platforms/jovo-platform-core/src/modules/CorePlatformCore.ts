@@ -1,9 +1,16 @@
 import { EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import { CorePlatformApp, CorePlatformRequest, CorePlatformResponse, CorePlatformUser } from '..';
-import { RequestType } from '../core/CorePlatformRequest';
-import { ActionType, Reprompt, SpeechAction } from '../core/CorePlatformResponse';
+import {
+  Action,
+  ActionType,
+  CorePlatformApp,
+  CorePlatformRequest,
+  CorePlatformResponse,
+  CorePlatformUser,
+  RequestType,
+  SpeechAction,
+} from '..';
 import { CorePlatform } from '../CorePlatform';
 
 // TODO refactor to work with new request
@@ -13,7 +20,6 @@ export class CorePlatformCore implements Plugin {
     platform.middleware('$request')!.use(this.request.bind(this));
     platform.middleware('$type')!.use(this.type.bind(this));
     platform.middleware('$session')!.use(this.session.bind(this));
-    platform.middleware('$tts.before')!.use(this.beforeTTS.bind(this));
     platform.middleware('$output')!.use(this.output.bind(this));
   }
 
@@ -76,24 +82,6 @@ export class CorePlatformCore implements Plugin {
     corePlatformApp.$session.$data = sessionData;
   }
 
-  beforeTTS(corePlatformApp: CorePlatformApp) {
-    const tell = _get(corePlatformApp.$output, 'tell');
-    if (tell) {
-      corePlatformApp.$output.text = {
-        reprompt: '',
-        speech: SpeechBuilder.removeSSML(tell.speech.toString()),
-      };
-    }
-
-    const ask = _get(corePlatformApp.$output, 'ask');
-    if (ask) {
-      corePlatformApp.$output.text = {
-        reprompt: SpeechBuilder.removeSSML(ask.reprompt.toString()),
-        speech: SpeechBuilder.removeSSML(ask.speech.toString()),
-      };
-    }
-  }
-
   // TODO: refactor
   output(corePlatformApp: CorePlatformApp) {
     Log.verbose('[CorePlatformCore] ( $output )');
@@ -106,42 +94,31 @@ export class CorePlatformCore implements Plugin {
       return;
     }
 
+    const coreResponse = corePlatformApp.$response as CorePlatformResponse;
     const tell = _get(output, 'tell');
     if (tell) {
-      const action: SpeechAction = {
+      const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
         ssml: tell.speech.toString(),
         type: ActionType.Speech,
       };
-
-      (corePlatformApp.$response as CorePlatformResponse).actions.push(action);
+      coreResponse.actions.push(tellAction);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const action: SpeechAction = {
+      const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(ask.speech.toString()),
         ssml: ask.speech.toString(),
         type: ActionType.Speech,
       };
-      const reprompt: Reprompt = {
-        actions: [
-          {
-            plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
-            ssml: ask.reprompt.toString(),
-            type: ActionType.Speech,
-          },
-        ],
-        type: ActionType.SequenceContainer,
+      const repromptAction: Action = {
+        plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
+        ssml: ask.reprompt.toString(),
+        type: ActionType.Speech,
       };
-
-      (corePlatformApp.$response as CorePlatformResponse).actions.push(action);
-      (corePlatformApp.$response as CorePlatformResponse).reprompts.push(reprompt);
-    }
-
-    const actions = _get(output, 'actions');
-    if (actions) {
-      _set(corePlatformApp.$response, 'response.actions', actions);
+      coreResponse.actions.push(tellAction);
+      coreResponse.reprompts.push(repromptAction);
     }
 
     if (

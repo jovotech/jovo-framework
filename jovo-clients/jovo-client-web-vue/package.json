@@ -1,0 +1,40 @@
+{
+  "name": "jovo-client-web-vue",
+  "version": "1.0.0",
+  "main": "dist/src/index.common.js",
+  "browser": "dist/src/index.umd.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "tsc": "webpack --mode production",
+    "tscw": "webpack --mode development --watch",
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "rimraf": "rimraf ./dist",
+    "typedoc": "typedoc --out ./docs --mode file",
+    "test": "jest"
+  },
+  "dependencies": {
+    "jovo-client-web": "^1.0.0",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/webpack-env": "^1.15.1",
+    "@vue/test-utils": "^1.0.0-beta.30",
+    "jest": "^24.9.0",
+    "prettier": "1.19.1",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^24.0.1",
+    "ts-loader": "^6.2.1",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.15.6",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10"
+  },
+  "files": [
+    "dist"
+  ]
+}

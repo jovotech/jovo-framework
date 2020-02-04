@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"lerna": "lerna",
-		"init": "lerna bootstrap --hoist",
+		"init": "lerna bootstrap --hoist --nohoist=@types/dom-mediacapture-record",
 		"prettier": "lerna exec npm run prettier --ignore jovo-examples-*",
 		"rimraf": "lerna exec npm run rimraf --ignore jovo-examples-*",
 		"tsc": "lerna exec npm run tsc --ignore jovo-examples-*",
@@ -11,7 +11,7 @@
 		"test": "lerna exec npm test --ignore jovo-examples-*",
 		"clean": "lerna clean",
 		"list": "lerna list -l",
-		"bootstrap": "lerna bootstrap --hoist --no-ci",
+		"bootstrap": "lerna bootstrap --hoist --no-ci --nohoist=@types/dom-mediacapture-record",
 		"devsetup": "npm run bootstrap && npm run tsc",
 		"typedoc": "npm run lerna exec npm run typedoc",
 		"changelog": "lerna-changelog",

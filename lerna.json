@@ -4,6 +4,7 @@
     "jovo-core",
     "jovo-platforms/*",
     "jovo-integrations/*",
+    "jovo-clients/*",
     "e2e",
     "examples/**"
   ],

@@ -36,6 +36,9 @@ import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
 import { Order, ReservationUpdate } from './core/Interfaces';
 import { PaymentParameters, PresentationOptions } from './modules/Transaction';
 
+import { SessionEntityType } from 'jovo-platform-dialogflow';
+import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
+
 export {
   Transaction,
   RequirementsCheckResult,
@@ -320,6 +323,15 @@ declare module './core/GoogleAction' {
     richResponse(richResponse: RichResponse): this;
     appendResponse(responseItem: Item): this;
     appendSimpleResponse(simpleResponse: SimpleResponse): this;
+
+    addSessionEntity(
+      name: string,
+      value: string,
+      synonyms: string[],
+      entityOverrideMode?: EntityOverrideMode,
+    ): this;
+    addSessionEntityTypes(sessionEntityTypes: SessionEntityType[]): this;
+    addSessionEntityType(sessionEntityType: SessionEntityType): this;
   }
 }
 
@@ -464,6 +476,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
 
       RichResponse?: RichResponse;
       ResponseAppender?: Item[];
+
+      SessionEntityTypes?: SessionEntityType[];
     };
   }
 

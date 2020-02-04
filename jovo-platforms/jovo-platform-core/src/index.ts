@@ -1,8 +1,7 @@
 import { CorePlatformApp } from './core/CorePlatformApp';
-import { Action } from './Interfaces';
 import { AdaptiveCardOptions } from './response/visuals/AdaptiveCard';
 
-export { CorePlatform } from './CorePlatform';
+export * from './CorePlatform';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
@@ -11,42 +10,28 @@ declare module 'jovo-core/dist/src/core/Jovo' {
     corePlatformApp(): CorePlatformApp;
 
     isCorePlatformApp(): boolean;
-
-    action(key: string, value?: any): Jovo;
   }
 }
 
 declare module './core/CorePlatformApp' {
   interface CorePlatformApp {
     showAdaptiveCard(options: AdaptiveCardOptions): this;
-
-    showSuggestionChips(chips: string[]): this;
   }
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface Output {
-    actions?: Action[];
-    text?: {
-      speech: string;
-      reprompt: string;
-    };
-    CorePlatform?: {
-      SuggestionChips?: string[];
-    };
-  }
+  export interface Output {}
 }
 
-export * from './Interfaces';
-export { CorePlatformApp } from './core/CorePlatformApp';
-export { CorePlatformRequest, CorePlatformInput } from './core/CorePlatformRequest';
-export { CorePlatformRequestBuilder } from './core/CorePlatformRequestBuilder';
-export { CorePlatformResponse } from './core/CorePlatformResponse';
-export { CorePlatformResponseBuilder } from './core/CorePlatformResponseBuilder';
-export { CorePlatformSpeechBuilder } from './core/CorePlatformSpeechBuilder';
-export { CorePlatformUser } from './core/CorePlatformUser';
+export * from './core/CorePlatformApp';
+export * from './core/CorePlatformRequest';
+export * from './core/CorePlatformResponse';
+export * from './core/CorePlatformRequestBuilder';
+export * from './core/CorePlatformResponseBuilder';
+export * from './core/CorePlatformSpeechBuilder';
+export * from './core/CorePlatformUser';
 
-export { CorePlatformCore } from './modules/CorePlatformCore';
-export { Cards } from './modules/Cards';
+export * from './modules/CorePlatformCore';
+export * from './modules/Cards';
 
-export { AdaptiveCard, AdaptiveCardOptions } from './response/visuals/AdaptiveCard';
+export * from './response/visuals/AdaptiveCard';

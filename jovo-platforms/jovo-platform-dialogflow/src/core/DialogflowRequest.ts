@@ -217,11 +217,11 @@ export class DialogflowRequest<T extends JovoRequest = JovoRequest> implements J
       for (const key in parameters) {
         if (inputs[key]) {
           const originalKey = key + '.original';
-          inputs[originalKey] = {
-            name: originalKey,
+          inputs[key] = {
+            name: parameters[key],
             value: parameters[originalKey],
-            key: parameters[originalKey],
-            id: parameters[originalKey],
+            key: parameters[key],
+            id: parameters[key],
           };
         }
       }

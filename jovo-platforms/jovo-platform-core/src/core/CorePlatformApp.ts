@@ -1,9 +1,9 @@
 import { BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
+import _get = require('lodash.get');
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
 import { CorePlatformUser } from './CorePlatformUser';
-import _get = require('lodash.get');
 
 export class CorePlatformApp extends Jovo {
   $corePlatformApp: CorePlatformApp;

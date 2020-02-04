@@ -1,6 +1,6 @@
 import { EnumRequestType, JovoError, Plugin, PluginConfig } from 'jovo-core';
-import { CorePlatform, CorePlatformApp, CorePlatformRequest } from '../../src';
 import _get = require('lodash.get');
+import { CorePlatform, CorePlatformApp, CorePlatformRequest } from '../../src';
 
 interface Config extends PluginConfig {}
 

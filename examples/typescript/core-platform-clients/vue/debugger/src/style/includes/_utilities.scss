@@ -1,0 +1,13 @@
+$directions: left right top bottom;
+
+@each $dir in $directions {
+  @for $i from 0 through 10 {
+    .m#{str-slice($dir,0,1)}-#{$i} {
+      margin-#{$dir}: $i * $--space-base + 0px;
+    }
+
+    .p#{str-slice($dir,0,1)}-#{$i} {
+      padding-#{$dir}: $i * $--space-base + 0px;
+    }
+  }
+}

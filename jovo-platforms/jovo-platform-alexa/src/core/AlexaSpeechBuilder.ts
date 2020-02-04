@@ -2,6 +2,7 @@ import _sample = require('lodash.sample');
 import { SpeechBuilder } from 'jovo-core';
 import { AlexaSkill } from './AlexaSkill';
 import { SsmlElements } from 'jovo-core/dist/src/util/SpeechBuilder';
+import { EmotionIntensity, EmotionName } from './Interfaces';
 
 export class AlexaSpeechBuilder extends SpeechBuilder {
   static pollyVoice: string | undefined;
@@ -48,14 +49,12 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
     condition?: boolean,
     probability?: number,
   ): this {
-    if (Array.isArray(text)) {
-      return this.addText(
-        `<voice name="${pollyName}">${_sample(text)}</voice>`,
-        condition,
-        probability,
-      );
-    }
-    return this.addText(`<voice name="${pollyName}">${text}</voice>`, condition, probability);
+    const surroundSsml = {
+      voice: {
+        name: pollyName,
+      },
+    };
+    return this.addText(text, condition, probability, surroundSsml);
   }
 
   /**
@@ -71,15 +70,28 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
     probability?: number,
     surroundSsml?: SsmlElements,
   ): this {
-    let ssmlText = text;
     if (AlexaSpeechBuilder.pollyVoice) {
-      if (Array.isArray(text)) {
-        ssmlText = `<voice name="${AlexaSpeechBuilder.pollyVoice}">${_sample(text)}</voice>`;
-      } else {
-        ssmlText = `<voice name="${AlexaSpeechBuilder.pollyVoice}">${text}</voice>`;
+      if (!surroundSsml) {
+        surroundSsml = {};
       }
+
+      surroundSsml.voice = {
+        name: AlexaSpeechBuilder.pollyVoice,
+      };
     }
 
-    return super.addText(ssmlText, condition, probability, surroundSsml);
+    return super.addText(text, condition, probability, surroundSsml);
+  }
+
+  addEmotion(
+    name: EmotionName,
+    intensity: EmotionIntensity,
+    text: string | string[],
+    condition?: boolean,
+    probability?: number,
+    surroundSsml: SsmlElements = {},
+  ): this {
+    surroundSsml['amazon:emotion'] = { name, intensity };
+    return this.addText(text, condition, probability, surroundSsml);
   }
 }

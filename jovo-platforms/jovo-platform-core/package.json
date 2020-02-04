@@ -12,7 +12,7 @@
     "watch": "tsc-watch --onSuccess \"npm run start --prefix ../jovo-platform-webassistant-demo\"",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
-    "test": "jest"
+    "test": "jest --listTests"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
