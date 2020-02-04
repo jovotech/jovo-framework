@@ -7,7 +7,7 @@ import { BixbyAudioPlayer } from '../modules/BixbyAudioPlayer';
 export class BixbyCapsule extends Jovo {
   $bixbyCapsule: BixbyCapsule;
   $audioPlayer?: BixbyAudioPlayer;
-  // @tslint:disable:no-any
+  // tslint:disable:no-any
   $layout: {[key: string]: any} = {};
   // @ts-ignore
   $user: BixbyUser;
@@ -44,7 +44,7 @@ export class BixbyCapsule extends Jovo {
     return this.$user.getId();
   }
 
-  // @tslint:disable:no-any
+  // tslint:disable:no-any
   addLayoutAttribute(key: string, value: any) {
     this.$layout[key] = value;
   }

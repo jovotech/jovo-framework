@@ -6,7 +6,7 @@ export class BixbyResponse implements JovoResponse {
   _JOVO_SESSION_DATA_?: SessionData;
   _JOVO_SPEECH_?: string;
   _JOVO_AUDIO_?: string;
-  // @tslint:disable:no-any
+  // tslint:disable:no-any
   _JOVO_LAYOUT_?: { [key: string]: any };
 
   static fromJSON(jsonRaw: Response | string) {
