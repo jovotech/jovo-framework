@@ -46,6 +46,8 @@ export { Cms } from './util/Cms';
 export { BaseCmsPlugin } from './plugins/BaseCmsPlugin';
 export { JovoError, ErrorCode } from './errors/JovoError';
 export { HandleRequest } from './core/HandleRequest';
+export { AsrData } from './core/AsrData';
+export { NluData } from './core/NluData';
 
 export { InvalidValuesValidator } from './plugins/validators/InvalidValuesValidator';
 export { IsRequiredValidator } from './plugins/validators/IsRequiredValidator';

@@ -1,5 +1,5 @@
 import { JovoResponse, SessionConstants, SessionData } from 'jovo-core';
-import { Action, CorePlatformResponseJSON, Reprompt } from '..';
+import { Action, CorePlatformResponseJSON } from '..';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -30,7 +30,7 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
 
   version: string;
   actions: Action[];
-  reprompts: Reprompt[];
+  reprompts: Action[];
   user: {
     data: Data;
   };
