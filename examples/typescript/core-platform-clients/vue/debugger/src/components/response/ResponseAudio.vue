@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { AssistantResponse, RequestEvents } from 'jovo-client-web-vue';
+import { CoreRequest, RequestEvents } from 'jovo-client-web-vue';
 import get from 'lodash.get';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -19,7 +19,8 @@ export default class ResponseAudio extends Vue {
     this.$assistant.on(RequestEvents.Success, this.onResponse);
   }
 
-  private async onResponse(data: AssistantResponse) {
+  // TODO rework
+  private async onResponse(data: CoreRequest) {
     const audio = get(data, 'response.output.speech.audio');
     if (audio) {
       // const blob = await Base64Converter.base64ToBlob(audio, 'audio/mpeg');

@@ -1,4 +1,18 @@
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const analyzeBundle = process.env.ANALYZE_BUNDLE || false;
+
+const plugins = [];
+if (analyzeBundle) {
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      analyzerHost: 'localhost',
+      analyzerPort: 4000,
+    }),
+  );
+}
 
 function createConfig(target, targetName = target) {
   return {
@@ -15,14 +29,14 @@ function createConfig(target, targetName = target) {
         {
           test: /\.ts$/,
           use: 'ts-loader',
-          exclude: /node_modules/
-        }
+          exclude: /node_modules/,
+        },
       ],
     },
     resolve: {
       extensions: ['.ts', '.js'],
     },
-    plugins: []
+    plugins,
   };
 }
 

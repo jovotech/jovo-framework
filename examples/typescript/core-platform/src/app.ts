@@ -18,9 +18,9 @@ const credentials: AmazonCredentials = {
 };
 
 corePlatform.use(
-	new AmazonPollyTts({
-		credentials
-	}),
+	// new AmazonPollyTts({
+	// 	credentials
+	// }),
 	new AmazonLexSlu({
 		credentials,
 		botAlias: 'WebTest',

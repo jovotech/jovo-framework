@@ -1,6 +1,7 @@
 import uuid = require('uuid');
 import {
   CoreComponent,
+  CoreResponse,
   Data,
   JovoWebClient,
   RequestEvents,
@@ -39,18 +40,18 @@ export class Store extends CoreComponent {
     this.startNewSession(true);
   }
 
-  // TODO refactor when TS 3.8 or workaround
-  // tslint:disable-next-line:no-any
-  private onResponse(data: any) {
+  private onResponse(data: CoreResponse) {
     if (data.session.end) {
       this.startNewSession();
     } else {
       this.session.new = false;
-      this.session.data = data.sessionData;
+      this.session.data = data.session.data;
     }
 
-    this.user.data = data.user.data;
-    this.saveUser();
+    if (data.user) {
+      this.user.data = data.user.data;
+      this.saveUser();
+    }
   }
 
   private fillUserData() {
