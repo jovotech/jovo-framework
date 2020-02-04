@@ -5,6 +5,8 @@ Learn more about how to use the Bixby AudioPlayer functionality.
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
+  - [Play](#play)
+  - [Meta Data](#meta-data)
 
 ## Introduction
 
@@ -203,3 +205,6 @@ this.$bixbyCapsule!.$audioPlayer!.setMetaData({
 	title,
 });
 ```
+
+<!--[metadata]: {"description": "Learn more about how to use the Bixby AudioPlayer functionality.",
+"route": "samsung-bixby/audio-player" }-->
