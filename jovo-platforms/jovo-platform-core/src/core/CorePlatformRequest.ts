@@ -1,7 +1,7 @@
 import { Inputs, JovoRequest, SessionConstants, SessionData } from 'jovo-core';
-import { Context, CorePlatformRequestJSON, Request } from '../Interfaces';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import { Context, CorePlatformRequestJSON, Request } from '../Interfaces';
 
 export class CorePlatformRequest implements JovoRequest, CorePlatformRequestJSON {
   static fromJSON(json: CorePlatformRequestJSON | object | string): CorePlatformRequest {

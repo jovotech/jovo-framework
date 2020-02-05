@@ -11,6 +11,7 @@ export class ActionHandler extends CoreComponent {
 				// TODO handle other cases as well if ssml is not set.
 				return this.$client.ssmlEvaluator.evaluate((action as SpeechAction).ssml!);
 			default:
+				// tslint:disable-next-line:no-console
 				console.info(`ActionType '${action.type}' is not supported yet.`);
 		}
 	}

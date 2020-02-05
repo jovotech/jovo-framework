@@ -3,8 +3,8 @@ export const VERSION = '0.1.0';
 export {
   CorePlatformRequestJSON as CoreRequest,
   CorePlatformResponseJSON as CoreResponse,
-} from 'jovo-platform-core/dist/src/Interfaces';
-export * from 'jovo-platform-core/dist/src/Interfaces';
+} from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 
 export * from './events';
 export * from './core/CoreComponent';
