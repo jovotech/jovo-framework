@@ -1,5 +1,5 @@
 export type ConversationPartType = 'request' | 'response';
-export type ConversationPartSubType = 'speech' | 'reprompt' | 'start' | 'end' | 'text';
+export type ConversationPartSubType = 'audio' | 'start' | 'end' | 'text';
 
 export interface ConversationPart {
   value?: any;

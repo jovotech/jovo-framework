@@ -109,7 +109,7 @@ export class AudioPlayer extends CoreComponent {
         };
 
         await audio.play();
-        this.$client.emit(AudioPlayerEvents.Play, id);
+        this.$client.emit(AudioPlayerEvents.Play, id, audioSource);
 
         this.activePlaybacks.push({
           audio,

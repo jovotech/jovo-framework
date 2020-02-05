@@ -19,7 +19,6 @@ export * from './core/SSMLEvaluator';
 export * from './core/Store';
 export * from './components/conversation/ConversationComponent';
 export * from './components/conversation/Interfaces';
-export * from './components/input/AudioEncoder';
 export * from './components/input/AudioRecorder';
 export * from './components/input/AudioVisualizer';
 export * from './components/input/InputComponent';

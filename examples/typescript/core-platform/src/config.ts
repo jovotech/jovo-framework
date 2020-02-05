@@ -3,7 +3,8 @@ import { config } from 'jovo-framework';
 export = config({
 	logging: {
 		request: true,
-		response: true
+		maskRequestObjects: ['request.body.audio'],
+		response: true,
 	},
 
 	intentMap: {

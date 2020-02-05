@@ -1,33 +1,28 @@
 import {
+  AudioHelper,
+  AudioPlayerEvents,
+  Base64Converter,
   Component,
   ComponentConfig,
   ConversationEvents,
   ConversationPart,
-  InputRecordEvents,
+  CoreRequest,
   RequestEvents,
-  ResponseEvents,
+  RequestType,
+  SpeechSynthesizerEvents,
   StoreEvents,
 } from '../..';
 
 export interface ConversationComponentConfig extends ComponentConfig {}
 
-// TODO Rework when TS 3.8 was published or a workaround was developed for type-only imports.
 export class ConversationComponent extends Component<ConversationComponentConfig> {
   parts: ConversationPart[] = [];
-  addNextResponse = false;
   endSession = false;
-  endSpeechRecognition = false;
-  currentPart: ConversationPart | null = null;
 
   async onInit(): Promise<void> {
-    this.$client.on(InputRecordEvents.Started, () => {
-      this.currentPart = null;
-      this.addNextResponse = false;
-    });
     this.$client.on(RequestEvents.Data, this.onRequest.bind(this));
-    this.$client.on(RequestEvents.Success, this.onResponse.bind(this));
-    this.$client.on(ResponseEvents.Speech, this.onSpeech.bind(this));
-    this.$client.on(ResponseEvents.Reprompt, this.onReprompt.bind(this));
+    this.$client.on(SpeechSynthesizerEvents.Speak, this.onSpeak.bind(this));
+    this.$client.on(AudioPlayerEvents.Play, this.onAudioPlay.bind(this));
     this.$client.on(StoreEvents.NewSession, this.onNewSession.bind(this));
   }
 
@@ -35,60 +30,51 @@ export class ConversationComponent extends Component<ConversationComponentConfig
     return {};
   }
 
-  // tslint:disable-next-line:no-any
-  private onRequest(req: any) {
-    if (req.isLaunch) {
-      this.addPart({
-        label: 'LAUNCH',
+  private async onRequest(req: CoreRequest) {
+    const { body, type } = req.request;
+    if (type === RequestType.Launch) {
+      return this.addPart({
+        label: 'Started',
         subType: 'start',
         type: 'request',
       });
-    } else if (!req.text && req.audio) {
-      this.addNextResponse = true;
-    } else if (req.text) {
-      this.addPart({
-        label: req.text,
-        subType: req.fromVoice ? 'speech' : 'text',
+    }
+    if (type === RequestType.Audio && body.audio) {
+      const arrayBuffer = await Base64Converter.base64ToArrayBuffer(body.audio.b64string);
+      const bufferView = new Float32Array(arrayBuffer);
+      const blob = AudioHelper.toWavBlob(bufferView, body.audio.sampleRate);
+      const source = URL.createObjectURL(blob);
+      return this.addPart({
+        label: '',
+        subType: 'audio',
+        type: 'request',
+        value: source,
+      });
+    }
+    if (type === RequestType.Text || type === RequestType.TranscribedText) {
+      return this.addPart({
+        label: body.text,
+        subType: 'text',
         type: 'request',
       });
     }
-
-    if (this.currentPart) {
-      this.addPart(this.currentPart);
-      this.currentPart = null;
-    }
   }
 
-  // tslint:disable-next:no-any
-  private onResponse(res: any) {
-    // if (this.addNextResponse) {
-    //   this.addPart({
-    //     label: res.response.inputText!,
-    //     subType: 'speech',
-    //     type: 'request',
-    //     value: res,
-    //   });
-    // }
+  private onSpeak(utterance: SpeechSynthesisUtterance) {
+    this.addPart({
+      label: utterance.text,
+      subType: 'text',
+      type: 'response',
+    });
   }
 
-  // tslint:disable-next:no-any
-  private onSpeech(speech: any) {
-    // this.addPart({
-    //   label: speech.text,
-    //   subType: 'speech',
-    //   type: 'response',
-    //   value: speech,
-    // });
-  }
-
-  // tslint:disable-next:no-any
-  private onReprompt(reprompt: any) {
-    // this.addPart({
-    //   label: reprompt.text,
-    //   subType: 'reprompt',
-    //   type: 'response',
-    //   value: reprompt,
-    // });
+  private onAudioPlay(id: number, source: string) {
+    this.addPart({
+      label: '',
+      subType: 'audio',
+      type: 'response',
+      value: source,
+    });
   }
 
   private onNewSession(forced: boolean) {

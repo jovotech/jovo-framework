@@ -60,7 +60,8 @@ export class RequestComponent extends Component<RequestComponentConfig> {
 
   private async onAudioRecorded(payload: AudioRecordedPayload) {
     if (payload.forward) {
-      const base64EncodedAudio = await Base64Converter.blobToBase64(payload.raw);
+      const base64EncodedAudio = await Base64Converter.arrayBufferToBase64(payload.data.buffer);
+
       return this.send(RequestType.Audio, {
         audio: {
           sampleRate: payload.sampleRate,
