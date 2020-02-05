@@ -201,9 +201,9 @@ export class AudioRecorder {
     }
   }
 
-  private doProcessing() {
+  private doProcessing(bufferSize: number = this.bufferSize) {
     const analyser = this.$analyser;
-    analyser.fftSize = this.bufferSize;
+    analyser.fftSize = bufferSize;
     const bufferLength = analyser.frequencyBinCount;
     const data = new Uint8Array(bufferLength);
 
@@ -255,7 +255,7 @@ export class AudioRecorder {
     this.$startThresholdPassed = false;
 
     const scriptNode: ScriptProcessorNode = this.$context.createScriptProcessor(
-      this.bufferSize,
+      0,
       1,
       1,
     );
@@ -263,8 +263,8 @@ export class AudioRecorder {
     scriptNode.addEventListener('audioprocess', (evt: AudioProcessingEvent) => {
       if (this.$recording) {
         this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
-        this.$chunkLength += this.bufferSize;
-        this.doProcessing();
+        this.$chunkLength += scriptNode.bufferSize;
+        this.doProcessing(scriptNode.bufferSize);
       }
     });
 
