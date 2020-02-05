@@ -2,9 +2,9 @@
   "name": "jovo-client-web",
   "version": "1.0.0",
   "description": " ",
-  "main": "dist/src/index.common.js",
-  "browser": "dist/src/index.umd.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.common.js",
+  "browser": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "tsc": "webpack --mode production",
     "tscw": "webpack --mode development --watch",
@@ -35,6 +35,7 @@
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
+    "terser-webpack-plugin": "^2.3.4",
     "ts-jest": "^24.0.1",
     "ts-loader": "^6.2.1",
     "tslint": "^5.17.0",
@@ -62,7 +63,7 @@
     ]
   },
   "files": [
-    "dist/src/**/*"
+    "dist"
   ],
   "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
 }

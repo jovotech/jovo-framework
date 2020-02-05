@@ -17,6 +17,7 @@ import {
   SSMLEvaluator,
   Store,
 } from './';
+import { ActionHandler } from './core/ActionHandler';
 // tslint:disable-next-line
 import merge = require('lodash.merge');
 
@@ -44,6 +45,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
   private readonly $audioPlayer: AudioPlayer;
   private readonly $speechSynthesizer: SpeechSynthesizer;
   private readonly $ssmlEvaluator: SSMLEvaluator;
+  private readonly $actionHandler: ActionHandler;
 
   constructor(readonly url: string, config?: Partial<JovoWebClientConfig>) {
     super();
@@ -68,6 +70,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
     this.$audioPlayer = new AudioPlayer(this);
     this.$speechSynthesizer = new SpeechSynthesizer(this);
     this.$ssmlEvaluator = new SSMLEvaluator(this);
+    this.$actionHandler = new ActionHandler(this);
 
     this.on(assistantEvents.LaunchRequest, () => {
       this.launchRequestWasSent = true;
@@ -82,6 +85,10 @@ export class JovoWebClient extends AdvancedEventEmitter {
         this.logger.debug(`[${type.toString()}]`);
       };
     }
+  }
+
+  get actionHandler(): ActionHandler {
+    return this.$actionHandler;
   }
 
   get hasSentLaunchRequest(): boolean {
@@ -196,5 +203,4 @@ export class JovoWebClient extends AdvancedEventEmitter {
       this.$components.push(component);
     }
   }
-
 }
