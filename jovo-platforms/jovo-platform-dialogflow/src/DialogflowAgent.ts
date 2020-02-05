@@ -1,4 +1,4 @@
-import { BaseApp, Jovo, Host, SpeechBuilder, HandleRequest } from 'jovo-core';
+import { BaseApp, Jovo, Host, SpeechBuilder, HandleRequest, AudioData } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { DialogflowUser } from './DialogflowUser';
@@ -65,6 +65,15 @@ export class DialogflowAgent extends Jovo {
    */
   getRawText(): string | undefined {
     return _get(this.$request!, 'queryResult.queryText');
+  }
+
+  /**
+   * Returns audio data of request.
+   * Not supported by this platform.
+   * @return {undefined}
+   */
+  getAudioData(): AudioData | undefined {
+    return undefined;
   }
 
   /**

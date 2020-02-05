@@ -1,7 +1,10 @@
 import { EventEmitter } from 'events';
-import { BaseApp, BaseAppConfig } from './BaseApp';
-
+import _cloneDeep = require('lodash.clonedeep');
+import _get = require('lodash.get');
+import _sample = require('lodash.sample');
+import _set = require('lodash.set');
 import {
+  AudioData,
   Cms,
   EnumRequestType,
   ErrorCode,
@@ -11,7 +14,7 @@ import {
   SessionData,
   SpeechBuilder,
   ValidationError,
-  Validator,
+  Validator
 } from '..';
 import {
   Host,
@@ -22,16 +25,13 @@ import {
   JovoSession,
   Output,
   RequestType,
-  SessionAttributes,
+  SessionAttributes
 } from '../Interfaces';
-import { HandleRequest } from './HandleRequest';
-import { User } from './User';
 import { AsrData } from './AsrData';
+import { BaseApp, BaseAppConfig } from './BaseApp';
+import { HandleRequest } from './HandleRequest';
 import { NluData } from './NluData';
-import _cloneDeep = require('lodash.clonedeep');
-import _get = require('lodash.get');
-import _sample = require('lodash.sample');
-import _set = require('lodash.set');
+import { User } from './User';
 
 export abstract class Jovo extends EventEmitter {
   readonly $host: Host;
@@ -138,6 +138,12 @@ export abstract class Jovo extends EventEmitter {
    * @returns {string | undefined}
    */
   abstract getRawText(): string | undefined;
+
+  /**
+   * Returns audio data of request. Doesn't work with all platforms.
+   * @returns {AudioData | undefined}
+   */
+  abstract getAudioData(): AudioData | undefined;
 
   /**
    * Returns timestamp of a user's request

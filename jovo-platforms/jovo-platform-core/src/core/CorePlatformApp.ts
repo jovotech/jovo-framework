@@ -1,4 +1,4 @@
-import { BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
 import _get = require('lodash.get');
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
@@ -31,6 +31,10 @@ export class CorePlatformApp extends Jovo {
 
   getRawText(): string | undefined {
     return _get(this, `$request.request.body.text`);
+  }
+
+  getAudioData(): AudioData | undefined {
+    return _get(this, `$request.request.body.audio`);
   }
 
   getSelectedElementId(): string | undefined {

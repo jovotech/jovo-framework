@@ -1,4 +1,4 @@
-import { BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
 import _get = require('lodash.get');
 import { MessengerBotSpeechBuilder } from './MessengerBotSpeechBuilder';
 import { MessengerBotUser } from './MessengerBotUser';
@@ -31,6 +31,10 @@ export class MessengerBot extends Jovo {
       _get(this, '$request.messaging[0].message.text') ||
       _get(this, '$request.messaging[0].postback.title')
     );
+  }
+
+  getAudioData(): AudioData | undefined {
+    return undefined;
   }
 
   getSelectedElementId(): string | undefined {

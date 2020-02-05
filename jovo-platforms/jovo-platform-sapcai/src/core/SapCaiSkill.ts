@@ -1,4 +1,4 @@
-import { BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
 
 import { SapCaiResponse } from './SapCaiResponse';
 import { SapCaiSpeechBuilder } from './SapCaiSpeechBuilder';
@@ -137,10 +137,19 @@ export class SapCaiSkill extends Jovo {
   /**
    * Returns raw text.
    * Only available with catchAll slots
-   * @return {String} rawText
+   * @return {string | undefined}
    */
   getRawText() {
     // TODO
+    return undefined;
+  }
+
+  /**
+   * Returns audio data.
+   * Not supported by this platform.
+   * @Return {undefined}
+   */
+  getAudioData(): AudioData | undefined {
     return undefined;
   }
 }

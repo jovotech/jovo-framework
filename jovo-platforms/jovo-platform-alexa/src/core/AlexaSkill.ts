@@ -1,26 +1,6 @@
-import { BaseApp, Jovo, Host, SpeechBuilder, HandleRequest } from 'jovo-core';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
 import {
-  AlexaRequest,
-  Geolocation,
-  PermissionStatus,
-  LocationServices,
-  LocationServicesAccess,
-  LocationServicesStatus,
-  Coordinate,
-  Altitude,
-  Heading,
-  Speed,
-  AuthorityResolution,
-} from './AlexaRequest';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
-
-import { AlexaResponse } from './AlexaResponse';
-import { AlexaAPI } from '../services/AlexaAPI';
-import { AmazonProfileAPI } from '../services/AmazonProfileAPI';
-import { AlexaSpeechBuilder } from './AlexaSpeechBuilder';
-import { AlexaUser } from './AlexaUser';
-import {
+  AlexaAPI,
   BodyTemplate1,
   BodyTemplate2,
   BodyTemplate3,
@@ -29,8 +9,28 @@ import {
   ListTemplate1,
   ListTemplate2,
   ListTemplate3,
-} from '../index';
+} from '..';
+import { AmazonProfileAPI } from '../services/AmazonProfileAPI';
 import { EnumAlexaRequestType } from './alexa-enums';
+import {
+  AlexaRequest,
+  Altitude,
+  AuthorityResolution,
+  Coordinate,
+  Geolocation,
+  Heading,
+  LocationServices,
+  LocationServicesAccess,
+  LocationServicesStatus,
+  PermissionStatus,
+  Speed,
+} from './AlexaRequest';
+
+import { AlexaResponse } from './AlexaResponse';
+import { AlexaSpeechBuilder } from './AlexaSpeechBuilder';
+import { AlexaUser } from './AlexaUser';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export class AlexaSkill extends Jovo {
   $alexaSkill: AlexaSkill;
@@ -235,6 +235,7 @@ export class AlexaSkill extends Jovo {
   hasAPLTInterface() {
     return (this.$request! as AlexaRequest).hasAPLTInterface();
   }
+
   /**
    * Returns the amazon pay permission status
    * @public
@@ -485,6 +486,15 @@ export class AlexaSkill extends Jovo {
       throw new Error('Only available with catchAll slot');
     }
     return _get(this, '$inputs.catchAll.value');
+  }
+
+  /**
+   * Returns audio data of request.
+   * Not supported by this platform.
+   * @return {undefined}
+   */
+  getAudioData(): AudioData | undefined {
+    return undefined;
   }
 
   /**
