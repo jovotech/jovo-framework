@@ -1,7 +1,7 @@
 import { JovoResponse, SessionConstants, SessionData } from 'jovo-core';
-import { Action, CorePlatformResponseJSON } from '..';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import { Action, CorePlatformResponseJSON } from '..';
 
 // tslint:disable-next-line:no-any
 export type Data = Record<string, any>;

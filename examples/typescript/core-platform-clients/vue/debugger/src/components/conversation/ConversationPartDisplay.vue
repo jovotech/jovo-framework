@@ -1,7 +1,15 @@
 <template>
   <el-row class="conversation-part-container" type="flex">
     <div :class="classes" class="conversation-part">
-      {{ part.label }}
+      <template v-if="part.subType === 'audio'">
+        <audio controls="controls">
+          <source :src="part.value" type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
+      </template>
+      <template v-else>
+        {{ part.label }}
+      </template>
     </div>
   </el-row>
 </template>

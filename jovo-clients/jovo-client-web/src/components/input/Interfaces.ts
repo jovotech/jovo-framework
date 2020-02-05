@@ -1,14 +1,3 @@
-export type TypedArray =
-  | Int8Array
-  | Uint8Array
-  | Uint8ClampedArray
-  | Int16Array
-  | Uint16Array
-  | Int32Array
-  | Uint32Array
-  | Float32Array
-  | Float64Array;
-
 export interface AudioProcessingPayload {
   data: Uint8Array;
   bufferLength: number;
@@ -17,7 +6,7 @@ export interface AudioProcessingPayload {
 
 export interface AudioRecordedPayload {
   sampleRate: number;
-  raw: Blob;
+  data: Float32Array;
   forward: boolean;
 }
 
@@ -26,6 +15,7 @@ export type RecordMode = 'default' | 'push-to-talk';
 export interface RecordModeConfig {
   triggerKey: number | string;
 }
+
 export interface AudioAnalyserConfig {
   fftSize: number;
   minDecibels: number;

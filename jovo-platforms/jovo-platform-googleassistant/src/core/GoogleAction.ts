@@ -1,12 +1,12 @@
-import { BaseApp, Jovo, SpeechBuilder, Host, HandleRequest } from 'jovo-core';
-import _get = require('lodash.get');
-const _sample = require('lodash.sample');
-
-import { GoogleActionUser } from './GoogleActionUser';
-import { GoogleActionSpeechBuilder } from './GoogleActionSpeechBuilder';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import { DialogflowRequest } from 'jovo-platform-dialogflow';
 import { EnumGoogleAssistantRequestType } from './google-assistant-enums';
 import { GoogleActionRequest } from './GoogleActionRequest';
-import { DialogflowRequest } from 'jovo-platform-dialogflow';
+import { GoogleActionSpeechBuilder } from './GoogleActionSpeechBuilder';
+import { GoogleActionUser } from './GoogleActionUser';
+import _get = require('lodash.get');
+
+const _sample = require('lodash.sample');
 
 type reprompt = string | SpeechBuilder;
 
@@ -247,6 +247,15 @@ export class GoogleAction extends Jovo {
       _get(this.$originalRequest || this.$request, 'inputs[0].arguments[0].rawText') ||
       _get(this.$originalRequest || this.$request, 'inputs[0].rawInputs[0].query')
     );
+  }
+
+  /**
+   * Returns audio data of request.
+   * Not supported by this platform.
+   * @return {undefined}
+   */
+  getAudioData(): AudioData | undefined {
+    return undefined;
   }
 
   isInSandbox() {

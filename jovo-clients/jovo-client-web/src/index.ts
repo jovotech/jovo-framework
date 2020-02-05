@@ -3,8 +3,8 @@ export const VERSION = '0.1.0';
 export {
   CorePlatformRequestJSON as CoreRequest,
   CorePlatformResponseJSON as CoreResponse,
-} from 'jovo-platform-core/dist/src/Interfaces';
-export * from 'jovo-platform-core/dist/src/Interfaces';
+} from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 
 export * from './events';
 export * from './core/CoreComponent';
@@ -19,7 +19,6 @@ export * from './core/SSMLEvaluator';
 export * from './core/Store';
 export * from './components/conversation/ConversationComponent';
 export * from './components/conversation/Interfaces';
-export * from './components/input/AudioEncoder';
 export * from './components/input/AudioRecorder';
 export * from './components/input/AudioVisualizer';
 export * from './components/input/InputComponent';

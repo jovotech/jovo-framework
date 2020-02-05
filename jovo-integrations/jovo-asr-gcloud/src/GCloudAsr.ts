@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+import { JWT } from 'google-auth-library';
 import {
   AudioEncoder,
   AxiosRequestConfig,
@@ -11,11 +13,9 @@ import {
   Plugin,
   PluginConfig,
 } from 'jovo-core';
-import { auth, JWT } from 'google-auth-library';
 import { promisify } from 'util';
-import * as fs from 'fs';
-import _merge = require('lodash.merge');
 import { RecognitionRequest, RecognitionResult } from './Interfaces';
+import _merge = require('lodash.merge');
 
 const readFile = promisify(fs.readFile);
 
@@ -67,17 +67,10 @@ export class GCloudAsr implements Plugin {
 
   async asr(jovo: Jovo) {
     const text = jovo.getRawText();
+    const audio = jovo.getAudioData();
 
-    type AudioData = { data?: Float32Array | string; sampleRate?: number };
-    const audio: AudioData | undefined = (jovo.$request as any).audio; // tslint:disable-line:no-any
-    const isValidAudio = audio && audio.data instanceof Float32Array && audio.sampleRate;
-
-    if (isValidAudio) {
-      const downSampled = AudioEncoder.sampleDown(
-        audio!.data as Float32Array,
-        audio!.sampleRate!,
-        TARGET_SAMPLE_RATE,
-      );
+    if (audio) {
+      const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, TARGET_SAMPLE_RATE);
       const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
       const result = await this.speechToText(wavBuffer);

@@ -496,3 +496,8 @@ export interface AppPlatformConfig extends Record<string, any> {}
 export interface ExtensiblePluginConfigs {
   [key: string]: any;
 }
+
+export interface AudioData {
+  data: Float32Array;
+  sampleRate: number;
+}

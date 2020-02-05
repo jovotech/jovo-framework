@@ -1,12 +1,10 @@
 import { FileDb } from 'jovo-db-filedb';
-import { App, LogLevel } from 'jovo-framework';
+import { App } from 'jovo-framework';
 import { CorePlatform } from 'jovo-platform-core';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { AmazonCredentials, AmazonLexSlu } from 'jovo-slu-lex';
 import { AmazonPollyTts } from 'jovo-tts-polly';
-
-// process.env.JOVO_LOG_LEVEL = LogLevel.DEBUG as any;
 
 const app = new App();
 
@@ -18,9 +16,9 @@ const credentials: AmazonCredentials = {
 };
 
 corePlatform.use(
-	// new AmazonPollyTts({
-	// 	credentials
-	// }),
+	new AmazonPollyTts({
+		credentials
+	}),
 	new AmazonLexSlu({
 		credentials,
 		botAlias: 'WebTest',

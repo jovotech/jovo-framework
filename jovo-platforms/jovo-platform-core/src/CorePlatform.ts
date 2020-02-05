@@ -1,16 +1,25 @@
-import { ActionSet, BaseApp, ExtensibleConfig, HandleRequest, Jovo, Platform, TestSuite } from 'jovo-core';
+import {
+  ActionSet,
+  BaseApp,
+  ExtensibleConfig,
+  HandleRequest,
+  Jovo,
+  Platform,
+  TestSuite,
+} from 'jovo-core';
+import { PlatformStorage } from 'jovo-db-platformstorage';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import {
   CorePlatformApp,
   CorePlatformCore,
   CorePlatformRequest,
   CorePlatformRequestBuilder,
+  CorePlatformRequestJSON,
   CorePlatformResponse,
-  CorePlatformResponseBuilder
+  CorePlatformResponseBuilder,
 } from '.';
-import { PlatformStorage } from 'jovo-db-platformstorage';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; // tslint:disable-line:no-any
@@ -82,9 +91,11 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async request(handleRequest: HandleRequest) {
-    const audioData = _get(handleRequest.host.$request, 'request.body.audio');
-    if (audioData) {
-      _set(handleRequest.host.$request, 'request.body.audio', this.getSamplesFromAudio(audioData));
+    const audioBase64String = (handleRequest.host.$request as CorePlatformRequestJSON).request.body
+      .audio?.b64string;
+    if (audioBase64String) {
+      const samples = this.getSamplesFromAudio(audioBase64String);
+      _set(handleRequest.host.$request, 'request.body.audio.data', samples);
     }
   }
 

@@ -13,7 +13,6 @@ import {
 } from '..';
 import { CorePlatform } from '../CorePlatform';
 
-// TODO refactor to work with new request
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
     platform.middleware('$init')!.use(this.init.bind(this));
@@ -82,7 +81,7 @@ export class CorePlatformCore implements Plugin {
     corePlatformApp.$session.$data = sessionData;
   }
 
-  // TODO: refactor
+  // TODO: fully implement
   output(corePlatformApp: CorePlatformApp) {
     Log.verbose('[CorePlatformCore] ( $output )');
     const output = corePlatformApp.$output;
