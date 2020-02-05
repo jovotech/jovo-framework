@@ -20,7 +20,7 @@
     "jovo-plugin-debugger": "^2.2.23"
   },
   "devDependencies": {
-    "jest": "^24.9.0"
+    "jest": "^25.1.0"
   },
   "jest": {
     "testEnvironment": "node"

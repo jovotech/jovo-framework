@@ -5,7 +5,7 @@
 	"description": "A sample voice app that works with the Jovo Framework",
 	"main": "src/index.js",
 	"devDependencies": {
-		"jest": "^24.9.0"
+		"jest": "^25.1.0"
 	},
 	"repository": {
 		"type": "git",

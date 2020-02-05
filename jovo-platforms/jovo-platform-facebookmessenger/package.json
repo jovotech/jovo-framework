@@ -33,7 +33,7 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "jovo-db-filedb": "^2.2.21",
     "jovo-framework": "^2.2.30",
     "prettier": "1.19.1",
