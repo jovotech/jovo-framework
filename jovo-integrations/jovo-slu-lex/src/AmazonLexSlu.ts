@@ -75,17 +75,10 @@ export class AmazonLexSlu implements Plugin {
 
   async asr(jovo: Jovo) {
     const text = jovo.getRawText();
+    const audio = jovo.getAudioData();
 
-    type AudioData = { data?: Float32Array | string; sampleRate?: number };
-    const audio: AudioData | undefined = (jovo.$request as any).audio; // tslint:disable-line:no-any
-    const isValidAudio = audio && audio.data instanceof Float32Array && audio.sampleRate;
-
-    if (isValidAudio) {
-      const downSampled = AudioEncoder.sampleDown(
-        audio!.data as Float32Array,
-        audio!.sampleRate!,
-        TARGET_SAMPLE_RATE,
-      );
+    if (audio) {
+      const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, TARGET_SAMPLE_RATE);
       const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
       const result = await this.speechToText(jovo.$user.getId()!, wavBuffer);
