@@ -3,11 +3,8 @@ export const VERSION = '0.1.0';
 export {
   CorePlatformRequestJSON as CoreRequest,
   CorePlatformResponseJSON as CoreResponse,
-  DeviceType,
-  RequestBody,
-  RequestType,
-  Action,
 } from 'jovo-platform-core/dist/src/Interfaces';
+export * from 'jovo-platform-core/dist/src/Interfaces';
 
 export * from './events';
 export * from './core/CoreComponent';

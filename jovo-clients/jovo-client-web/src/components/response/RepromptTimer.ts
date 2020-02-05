@@ -1,4 +1,5 @@
 import {
+  Action,
   CoreComponent,
   InputRecordEvents,
   JovoWebClient,
@@ -7,9 +8,8 @@ import {
   ResponseEvents,
 } from '../..';
 
-// TODO refactor when TS 3.8 ... look at ResponseComponent
 export class RepromptTimer extends CoreComponent {
-  private $reprompt: any = null; // tslint:disable-line:no-any
+  private $actions: Action[] = [];
   private $attempts = 0;
   private $activeRepromptTimerId = -1;
   private $activeTimeoutTimerId = -1;
@@ -42,9 +42,8 @@ export class RepromptTimer extends CoreComponent {
     return this.$client.$config.InputComponent.mode === 'push-to-talk';
   }
 
-  // tslint:disable-next-line:no-any
-  handle(reprompt: any) {
-    this.$reprompt = reprompt;
+  handle(actions: Action[]) {
+    this.$actions = actions;
     this.startReprompt();
   }
 
@@ -60,16 +59,18 @@ export class RepromptTimer extends CoreComponent {
   }
 
   private onTimeout() {
-    if (!this.$reprompt) {
+    if (this.$actions.length === 0) {
       clearTimeout(this.$activeRepromptTimerId);
       this.$activeRepromptTimerId = -1;
       return;
     }
     if (this.maxAttempts === 0 || this.attempts < this.maxAttempts) {
       this.$activeRepromptTimerId = (setTimeout(async () => {
-        this.$client.emit(ResponseEvents.Reprompt, this.$reprompt);
+        this.$client.emit(ResponseEvents.Reprompt, this.$actions);
 
-        await this.$client.ssmlEvaluator.evaluate(this.$reprompt!.ssml);
+        for (let i = 0, len = this.$actions.length; i < len; i++) {
+          await this.$client.actionHandler.handleAction(this.$actions[i]);
+        }
 
         this.startReprompt();
 
@@ -82,7 +83,7 @@ export class RepromptTimer extends CoreComponent {
   }
 
   private startReprompt() {
-    if (this.$reprompt) {
+    if (this.$actions.length > 0) {
       if (this.isPushToTalkUsed) {
         this.$activeTimeoutTimerId = (setTimeout(() => {
           this.$client.emit(InputRecordEvents.Timeout);
@@ -98,7 +99,7 @@ export class RepromptTimer extends CoreComponent {
     this.$client.off(InputRecordEvents.Recorded, this.onInputRetrieved);
     this.$client.off(RequestEvents.Data, this.onInputRetrieved);
     this.$client.off(RequestEvents.Result, this.onInputRetrieved);
-    this.$reprompt = null;
+    this.$actions = [];
     this.$attempts = 0;
   }
 }

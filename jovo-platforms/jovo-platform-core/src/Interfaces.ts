@@ -109,11 +109,16 @@ export interface ContainerAction extends Action {
   actions: Action[];
 }
 
-export interface SequentialAction extends ContainerAction {}
+export interface SequentialAction extends ContainerAction {
+  type: ActionType.SequenceContainer;
+}
 
-export interface ParallelAction extends ContainerAction {}
+export interface ParallelAction extends ContainerAction {
+  type: ActionType.ParallelContainer;
+}
 
 export interface SpeechAction extends Action {
+  type: ActionType.Speech;
   ssml?: string;
   plain?: string;
   displayText?: string;
@@ -133,12 +138,14 @@ export interface AudioTrack {
 }
 
 export interface AudioAction extends Action {
+  type: ActionType.Audio;
   tracks: AudioTrack[];
 }
 
 export type VisualActionType = 'BASIC_CARD' | 'IMAGE_CARD' | '';
 
 export interface VisualAction extends Action {
+  type: ActionType.Visual;
   visualType: VisualActionType;
 }
 
@@ -156,6 +163,7 @@ export interface VisualActionImageCard extends VisualAction {
 export type ProcessingActionType = 'HIDDEN' | 'TYPING' | 'SPINNER';
 
 export interface ProcessingAction extends Action {
+  type: ActionType.Processing;
   processingType: ProcessingActionType;
   durationInMs: number;
   text?: string;
@@ -169,6 +177,7 @@ export interface QuickReply {
 }
 
 export interface QuickReplyAction extends Action {
+  type: ActionType.QuickReply;
   replies: QuickReply[];
 }
 
