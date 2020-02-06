@@ -279,6 +279,7 @@ export class AudioRecorder {
   private setupSpeechRecognition() {
     const recognition = this.$recognition!;
     recognition.lang = this.locale;
+    // TODO: check how it should be handled for mobile devices for example. Chrome for Android does not support continous and/or interimResults
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;

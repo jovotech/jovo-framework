@@ -1,6 +1,4 @@
-import { EnumRequestType, HandleRequest, Log, Plugin, SpeechBuilder } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
+import { EnumRequestType, HandleRequest, Plugin, SpeechBuilder } from 'jovo-core';
 import {
   Action,
   ActionType,
@@ -12,6 +10,8 @@ import {
   SpeechAction,
 } from '..';
 import { CorePlatform } from '../CorePlatform';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
@@ -23,7 +23,6 @@ export class CorePlatformCore implements Plugin {
   }
 
   async init(handleRequest: HandleRequest) {
-    Log.verbose('[CorePlatformCore] ( $init )');
     const requestObject = handleRequest.host.getRequestObject() as CorePlatformRequest;
 
     if (
@@ -41,7 +40,6 @@ export class CorePlatformCore implements Plugin {
   }
 
   async request(corePlatformApp: CorePlatformApp) {
-    Log.verbose('[CorePlatformCore] ( $request )');
     if (!corePlatformApp.$host) {
       throw new Error(`Could't access host object.`);
     }
@@ -53,7 +51,6 @@ export class CorePlatformCore implements Plugin {
   }
 
   async type(corePlatformApp: CorePlatformApp) {
-    Log.verbose('[CorePlatformCore] ( $type )');
     const request = corePlatformApp.$request as CorePlatformRequest;
     const requestType = _get(request, 'request.type');
 
@@ -71,7 +68,6 @@ export class CorePlatformCore implements Plugin {
   }
 
   async session(corePlatformApp: CorePlatformApp) {
-    Log.verbose('[CorePlatformCore] ( $session )');
     const request = corePlatformApp.$request as CorePlatformRequest;
     const sessionData = request.getSessionAttributes() || {};
     corePlatformApp.$requestSessionAttributes = sessionData;
@@ -81,9 +77,7 @@ export class CorePlatformCore implements Plugin {
     corePlatformApp.$session.$data = sessionData;
   }
 
-  // TODO: fully implement
   output(corePlatformApp: CorePlatformApp) {
-    Log.verbose('[CorePlatformCore] ( $output )');
     const output = corePlatformApp.$output;
     if (!corePlatformApp.$response) {
       corePlatformApp.$response = new CorePlatformResponse();
@@ -94,8 +88,10 @@ export class CorePlatformCore implements Plugin {
     }
 
     const coreResponse = corePlatformApp.$response as CorePlatformResponse;
-    const tell = _get(output, 'tell');
+    const { tell, ask } = output;
+
     if (tell) {
+      console.log('Handling tell');
       const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
         ssml: tell.speech.toString(),
@@ -104,7 +100,6 @@ export class CorePlatformCore implements Plugin {
       coreResponse.actions.push(tellAction);
     }
 
-    const ask = _get(output, 'ask');
     if (ask) {
       const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(ask.speech.toString()),
@@ -118,6 +113,16 @@ export class CorePlatformCore implements Plugin {
       };
       coreResponse.actions.push(tellAction);
       coreResponse.reprompts.push(repromptAction);
+    }
+
+    const actions = corePlatformApp.$actions.build();
+    if (actions.length > 0) {
+      coreResponse.actions.push(...actions);
+    }
+
+    const repromptActions = corePlatformApp.$repromptActions.build();
+    if (repromptActions.length > 0) {
+      coreResponse.reprompts.push(...repromptActions);
     }
 
     if (

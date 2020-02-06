@@ -1,13 +1,17 @@
 import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
-import _get = require('lodash.get');
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
 import { CorePlatformUser } from './CorePlatformUser';
+import { ActionBuilder } from '../ActionBuilder';
+import _get = require('lodash.get');
 
 export class CorePlatformApp extends Jovo {
   $corePlatformApp: CorePlatformApp;
   $user!: CorePlatformUser;
+
+  $actions: ActionBuilder;
+  $repromptActions: ActionBuilder;
 
   constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
     super(app, host, handleRequest);
@@ -15,6 +19,9 @@ export class CorePlatformApp extends Jovo {
     this.$response = new CorePlatformResponse();
     this.$speech = new CorePlatformSpeechBuilder(this);
     this.$reprompt = new CorePlatformSpeechBuilder(this);
+
+    this.$actions = new ActionBuilder();
+    this.$repromptActions = new ActionBuilder();
   }
 
   getDeviceId(): string | undefined {

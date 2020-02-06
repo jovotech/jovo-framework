@@ -80,7 +80,7 @@ export class SpeechBuilder {
 
   /**
    * Constructor
-   * @param {Jovo=} jovo instance
+   * @param {Jovo} jovo instance
    * @public
    */
   constructor(jovo?: Jovo) {
