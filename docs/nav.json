@@ -442,10 +442,6 @@
                             "route": "analytics/dashbot"
                         },
                         {
-                            "title": "Bespoken",
-                            "route": "analytics/bespoken"
-                        },
-                        {
                             "title": "Chatbase",
                             "route": "analytics/chatbase"
                         },
@@ -456,6 +452,10 @@
                         {
                             "title": "VoiceHero",
                             "route": "analytics/voicehero"
+                        },
+                        {
+                            "title": "Google Analytics",
+                            "route": "analytics/googleanalytics"
                         }
                     ]
                 }
