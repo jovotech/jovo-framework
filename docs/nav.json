@@ -358,6 +358,14 @@
                 {
                     "title": "Dialogflow Integrations",
                     "route": "dialogflow-integrations"
+                },
+                {
+                    "title": "Samsung Bixby",
+                    "route": "samsung-bixby"
+                },
+                {
+                    "title": "Twilio Autopilot",
+                    "route": "twilio-autopilot"
                 }
             ]
         },
