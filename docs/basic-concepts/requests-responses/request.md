@@ -12,10 +12,6 @@ Learn more about the Jovo `$request` object.
 
 ## Introduction
 
-
-
-## Introduction
-
 > [Learn more about the Request & Response Lifecycle here](./README.md '../').
 
 The `$request` object offers helpful features to access information about the incoming request from the platform (e.g. Amazon Alexa or Google Assistant).
