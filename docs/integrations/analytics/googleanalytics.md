@@ -11,8 +11,8 @@ Learn how to use Google Analytics for your Jovo application.
     * [Intent Data Tracking](#intent-data-tracking)
     * [User Id](#user-id)
     * [Data Source](#data-source)
-    * [Device Info & Screen Resolution](#device-info--screen-resolution)
-    * [Custom Dimensions & Custom Metrics](#custom-dimensions--custom-metrics)
+    * [Device Info and Screen Resolution](#device-info-and-screen-resolution)
+    * [Custom Dimensions and Custom Metrics](#custom-dimensions-and-custom-metrics)
         * [Custom Dimensions](#custom-dimensions)
         * [Custom Metrics](#custom-metrics)
     * [Custom Reports](#custom-reports)
@@ -187,11 +187,11 @@ All data is stored under a hashed user id generated from the according platform 
 
 The data source describes the platform your users operate on. To display data for this metric, you need to create a [Custom Report](#custom-reports).
 
-### Device Info & Screen Resolution
+### Device Info and Screen Resolution
 
 Device Info and Screen Resolution can be found under "Audience" > "Technology" > "Browser&OS".
 
-### Custom Dimensions & Custom Metrics
+### Custom Dimensions and Custom Metrics
 
 In Google Analytics, all data is captured under certain dimensions and metrics. You can think of dimensions as data attributes, for example the userId or the intent name. Metrics on the other hand are values that can be measured, for example the total number of sessions a user had. Custom dimensions and custom metrics work the same way. You can use them to capture data that otherwise wouldn't be captured. To create either, go to "Admin" > "Custom Definitions".
 
