@@ -25,6 +25,10 @@
                         {
                             "title": "Migrating from v1",
                             "route": "installation/v1-migration"
+                        },
+                        {
+                            "title": "Migrating from v2",
+                            "route": "installation/v2-migration"
                         }
                     ]
                 },
@@ -162,37 +166,24 @@
                     "route": "project-lifecycle"
                 },
                 {
-                    "title": "Jovo Webhook",
-                    "route": "jovo-webhook"
+                    "title": "Local Development",
+                    "route": "local-development"
                 },
                 {
-                    "title": "CLI Commands",
-                    "content": [
-                        {
-                            "title": "Jovo CLI",
-                            "route": "cli"
-                        },
-                        {
-                            "title": "new",
-                            "route": "cli/new"
-                        },
-                        {
-                            "title": "run",
-                            "route": "cli/run"
-                        },
-                        {
-                            "title": "build",
-                            "route": "cli/build"
-                        },
-                        {
-                            "title": "deploy",
-                            "route": "cli/deploy"
-                        },
-                        {
-                            "title": "get",
-                            "route": "cli/get"
-                        }
-                    ]
+                    "title": "Deployment",
+                    "route": "deployment"
+                },
+                {
+                    "title": "Staging",
+                    "route": "staging"
+                },
+                {
+                    "title": "Debugging",
+                    "route": "debugging"
+                },
+                {
+                    "title": "Unit Testing",
+                    "route": "unit-testing"
                 }
             ]
         },
@@ -366,6 +357,10 @@
                 {
                     "title": "Twilio Autopilot",
                     "route": "twilio-autopilot"
+                },
+                {
+                    "title": "SAP CAI",
+                    "route": "sap-cai"
                 }
             ]
         },
@@ -458,23 +453,106 @@
                             "route": "analytics/googleanalytics"
                         }
                     ]
+                },
+                {
+                    "title": "Text-to-Speech (TTS)",
+                    "content": [
+                        {
+                            "title": "Text-to-Speech (TTS)",
+                            "route": "tts"
+                        },
+                        {
+                            "title": "Amazon Polly",
+                            "route": "tts/amazon-polly"
+                        },
+                        {
+                            "title": "Google Cloud",
+                            "route": "tts/google-cloud"
+                        },
+                        {
+                            "title": "Microsoft Azure",
+                            "route": "tts/microsoft-azure"
+                        }
+                    ]
+                },
+                {
+                    "title": "Automatic Speech Recognition (ASR), Natural Language Understanding (NLU) & Spoken Language Understanding (SLU)",
+                    "content": [
+                        {
+                            "title": "Automatic Speech Recognition (ASR), Natural Language Understanding (NLU) & Spoken Language Understanding (SLU)",
+                            "route": "asr-nlu-slu"
+                        },
+                        {
+                            "title": "Amazon Lex",
+                            "route": "asr-nlu-slu/amazon-lex"
+                        },
+                        {
+                            "title": "Google Cloud",
+                            "route": "asr-nlu-slu/google-cloud"
+                        },
+                        {
+                            "title": "Microsoft Azure",
+                            "route": "asr-nlu-slu/microsoft-azure"
+                        },
+                        {
+                            "title": "Wit.AI",
+                            "route": "asr-nlu-slu/wit-ai"
+                        }
+                    ]
                 }
             ]
         },
-        {       
-            "title": "Testing",
+        {
+            "title": "Tools",
             "content": [
                 {
                     "title": "Overview",
-                    "route": "testing"
+                    "route": "tools"
+                },
+                {
+                    "title": "CLI Commands",
+                    "content": [
+                        {
+                            "title": "Jovo CLI",
+                            "route": "cli"
+                        },
+                        {
+                            "title": "new",
+                            "route": "cli/new"
+                        },
+                        {
+                            "title": "run",
+                            "route": "cli/run"
+                        },
+                        {
+                            "title": "build",
+                            "route": "cli/build"
+                        },
+                        {
+                            "title": "deploy",
+                            "route": "cli/deploy"
+                        },
+                        {
+                            "title": "get",
+                            "route": "cli/get"
+                        }
+                    ]
+                },
+                {
+                    "title": "Jovo Webhook",
+                    "route": "webhook"
                 },
                 {
                     "title": "Jovo Debugger",
                     "route": "debugger"
                 },
                 {
-                    "title": "Unit Testing",
-                    "route": "unit-testing"
+                    "title": "Jovo Audio Converter",
+                    "route": "audio-converter"
+                },
+                {
+                    "title": "Jovo Chrome Extension",
+                    "route": "chrome-extension"
                 }
             ]
         },
@@ -500,6 +578,10 @@
                 {
                     "title": "Contributing",
                     "route": "contributing"
+                },
+                {
+                    "title": "RIDR Pipeline",
+                    "route": "ridr-pipeline"
                 }
             ]
         }

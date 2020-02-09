@@ -15,7 +15,7 @@ To get started, use the following command:
 $ jovo run
 ```
 
-This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](../testing/debugger.md './debugger').
+This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](../tools/debugger.md './debugger').
 
 ![Jovo Debugger](../img/jovo-debugger-helloworld.gif)
 

@@ -2,6 +2,8 @@
 
 Learn more about the modular architecture of the Jovo Framework.
 
+> TODO: Explain Jovo code architecture to make it easier for people to extend it
+
 * [Introduction](#introduction)
 * [Packages](#packages)
    * [jovo-core](#jovo-core)

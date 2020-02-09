@@ -1,6 +1,6 @@
 # Jovo Language Model
 
-In this section, you will learn more about the Jovo Language Model, found in the `/models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../workflows/cli './cli').
+In this section, you will learn more about the Jovo Language Model, found in the `/models` folder of your project. It can be used to created platform specific language models with the [Jovo CLI](../tools/cli './cli').
 
 * [Introduction](#introduction)
 * [Language Model Elements](#language-model-elements)
@@ -20,7 +20,7 @@ In this section, you will learn more about the Jovo Language Model, found in the
   * [Dialogflow](#dialogflow)
 
 ## Introduction
-The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../workflows/cli './cli'). 
+The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../tools/cli './cli'). 
 
 You can find the language model files in the `/models` folder of your Jovo project:
 
