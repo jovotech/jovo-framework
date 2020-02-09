@@ -95,7 +95,6 @@ As you can see, a [Jovo Webhook](#jovo-webhook) URL is automatically created, wh
 Here are all the services that can point to your local development server:
 * [Jovo Webhook](#jovo-webhook) (default)
 * [Alternatives](#alternatives)
-   * [bst proxy](#bst-proxy)
    * [ngrok](#ngrok)
 
 
@@ -117,21 +116,6 @@ You can either use this link and paste it into the respective developer platform
 
 
 #### Alternatives
-
-##### bst proxy
-
-With the bst proxy by [Bespoken](https://bespoken.io/), you can create a link similar to the [Jovo Webhook](#jovo-webhook), but with additional features like logging.
-
-You can run the proxy with the `jovo run` command:
-
-```sh
-$ jovo run --bst-proxy
-```
-This is what the result looks like:
-
-![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
-
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../integrations/analytics/bespoken.md './analytics/bespoken').
 
 ##### ngrok
 

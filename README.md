@@ -184,7 +184,6 @@ See the [Jovo CLI Docs](./docs/workflows/cli) for more information on CLI featur
 
 Name | Description | Docs
 :--- | :--- | :---
-bst proxy &nbsp; &nbsp; &nbsp; &nbsp; | Proxy service that creates a webhook link for local prototyping, with additional logging and analytics features | [📝](./docs/workflows/cli/run.md#bst-proxy)
 nodemon | Monitor changes and automatically restart the server | [📝](./docs/workflows/cli/run.md#nodemon)
 
 
