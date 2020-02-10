@@ -83,5 +83,5 @@ export enum SpeechSynthesizerEvents {
 
 export enum ConversationEvents {
   Change = 'conversation.change',
-  AddPart = 'conversation.add-part'
+  AddPart = 'conversation.add-part',
 }

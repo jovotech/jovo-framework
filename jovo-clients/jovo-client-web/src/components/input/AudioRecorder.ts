@@ -1,10 +1,11 @@
 import {
-  assistantEvents, AudioHelper,
+  assistantEvents,
+  AudioHelper,
   AudioRecordedPayload,
   InputComponentConfig,
   InputRecordEvents,
   JovoWebClient,
-  RequestEvents
+  RequestEvents,
 } from '../..';
 
 declare global {
@@ -254,11 +255,7 @@ export class AudioRecorder {
     this.$chunkLength = 0;
     this.$startThresholdPassed = false;
 
-    const scriptNode: ScriptProcessorNode = this.$context.createScriptProcessor(
-      0,
-      1,
-      1,
-    );
+    const scriptNode: ScriptProcessorNode = this.$context.createScriptProcessor(0, 1, 1);
 
     scriptNode.addEventListener('audioprocess', (evt: AudioProcessingEvent) => {
       if (this.$recording) {
