@@ -5,7 +5,6 @@
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json",

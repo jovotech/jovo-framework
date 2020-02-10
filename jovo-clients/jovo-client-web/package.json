@@ -11,7 +11,6 @@
     "watch": "webpack --mode development --watch",
     "analyze": "webpack --mode production --env.ANALYZE_BUNDLE=true",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
-    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
