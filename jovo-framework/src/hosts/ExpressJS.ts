@@ -41,7 +41,9 @@ export class ExpressJS implements Host {
   setResponse(obj: any) {
     // tslint:disable-line
     return new Promise<void>((resolve) => {
-      this.res.json(obj);
+      if (this.res.headersSent === false) {
+        this.res.json(obj);
+      }
       resolve();
     });
   }

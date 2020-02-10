@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-pulselabs",
-  "version": "2.2.19",
+  "version": "2.2.22",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.18",
+    "jovo-core": "^2.2.21",
     "lodash.merge": "^4.6.2",
     "pulselabs-recorder": "^1.0.2"
   },
@@ -25,7 +25,7 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
     "@types/socket.io-client": "^1.4.32",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
@@ -53,5 +53,5 @@
     "sample-request-json",
     "sample-response-json"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }

@@ -24,7 +24,11 @@ export class AlexaReminder {
         json: reminder,
         method: 'POST',
       };
-      const response = await AlexaAPI.apiCall(options);
+      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
+      if (response.httpStatus === 401) {
+        return Promise.reject(new ApiError('Request Unauthorized', ApiError.NO_USER_PERMISSION));
+      }
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
@@ -58,7 +62,11 @@ export class AlexaReminder {
         permissionToken: this.apiAccessToken,
         method: 'GET',
       };
-      const response = await AlexaAPI.apiCall(options);
+      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
+      if (response.httpStatus === 401) {
+        return Promise.reject(new ApiError('Request Unauthorized', ApiError.NO_USER_PERMISSION));
+      }
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
@@ -94,7 +102,11 @@ export class AlexaReminder {
         json: reminder,
         method: 'PUT',
       };
-      const response = await AlexaAPI.apiCall(options);
+      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
+      if (response.httpStatus === 401) {
+        return Promise.reject(new ApiError('Request Unauthorized', ApiError.NO_USER_PERMISSION));
+      }
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
@@ -128,7 +140,11 @@ export class AlexaReminder {
         permissionToken: this.apiAccessToken,
         method: 'DELETE',
       };
-      const response = await AlexaAPI.apiCall(options);
+      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
+      if (response.httpStatus === 401) {
+        return Promise.reject(new ApiError('Request Unauthorized', ApiError.NO_USER_PERMISSION));
+      }
       if (response.status >= 400) {
         let apiError;
         if (response.data) {
@@ -160,7 +176,11 @@ export class AlexaReminder {
         permissionToken: this.apiAccessToken,
         method: 'GET',
       };
-      const response = await AlexaAPI.apiCall(options);
+      const response: any = await AlexaAPI.apiCall(options); // tslint:disable-line
+
+      if (response.httpStatus === 401) {
+        return Promise.reject(new ApiError('Request Unauthorized', ApiError.NO_USER_PERMISSION));
+      }
       if (response.status >= 400) {
         let apiError;
         if (response.data) {

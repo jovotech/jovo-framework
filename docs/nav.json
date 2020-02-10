@@ -305,7 +305,7 @@
                         },
                         {
                             "title": "Amazon Pay",
-                            "route": "amazon-alexa/pay"
+                            "route": "amazon-alexa/amazon-pay"
                         }
                     ]
                 },

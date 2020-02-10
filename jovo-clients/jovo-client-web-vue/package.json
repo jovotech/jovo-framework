@@ -20,7 +20,7 @@
     "@types/jest": "^24.0.11",
     "@types/webpack-env": "^1.15.1",
     "@vue/test-utils": "^1.0.0-beta.30",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

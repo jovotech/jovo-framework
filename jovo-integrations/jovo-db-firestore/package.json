@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-firestore",
-  "version": "2.2.18",
+  "version": "2.2.21",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "firebase-admin": "^6.5.0",
-    "jovo-core": "^2.2.18",
+    "jovo-core": "^2.2.21",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2"
   },
@@ -26,7 +26,7 @@
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.3.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "lodash.set": "^4.3.2",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
@@ -53,5 +53,5 @@
   "files": [
     "dist/src/**/*"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }
