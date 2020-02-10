@@ -19,7 +19,7 @@ Basic Concepts | [Requests & Responses](./basic-concepts/requests-responses) | [
 &nbsp; | [Output](./basic-concepts/output)  | [SpeechBuilder](./basic-concepts/output/speechbuilder.md), [Logging](./basic-concepts/output/logging.md), [SpeechBuilder](./basic-concepts/output/speechbuilder.md), [i18n](./basic-concepts/output/i18n.md), [i18n](./basic-concepts/output/i18n.md), [Visual Output](./basic-concepts/output/visual-output.md), [Output Object](./basic-concepts/output/object.md)
 Workflows | [Project Lifecycle](./workflows/project-lifecycle.md) | &nbsp;
 &nbsp;| [Jovo Webhook](./workflows/jovo-webhook.md) | &nbsp;
-&nbsp; | [CLI Commands](./workflows/cli)  | [new](./workflows/cli/new.md), [run](./workflows/cli/run.md), [build](./workflows/cli/build.md), [deploy](./workflows/cli/deploy.md), [get](./workflows/cli/get.md)
+&nbsp; | [CLI Commands](./tools/cli)  | [new](./tools/cli/new.md), [run](./tools/cli/run.md), [build](./tools/cli/build.md), [deploy](./tools/cli/deploy.md), [get](./tools/cli/get.md)
 Configuration | [Project Structure](./configuration/project-structure.md) | &nbsp;
 &nbsp; | [app.js](./configuration/app-js.md) | &nbsp;
 &nbsp; | [config.js](./configuration/config-js.md) | &nbsp;
@@ -31,8 +31,8 @@ Platforms | [Amazon Alexa](./platforms/amazon-alexa) | &nbsp;
 Integrations | [Databases](./integrations/databases) | &nbsp;
 &nbsp; | [CMS](./integrations/cms) | &nbsp;
 &nbsp; | [Analytics](./integrations/analytics) | &nbsp;
-Testing | [Jovo Debugger](./testing/debugger.md) | &nbsp;
-&nbsp; | [Unit Testing](./testing/unit-testing.md) | &nbsp;
+Testing | [Jovo Debugger](./tools/debugger.md) | &nbsp;
+&nbsp; | [Unit Testing](./workflows/unit-testing.md) | &nbsp;
 Advanced Concepts | [Framework Architecture](./advanced-concepts/architecture.md) | &nbsp;
 &nbsp; | [Hooks](./advanced-concepts/hooks.md) | &nbsp;
 &nbsp; | [Plugins](./advanced-concepts/plugins.md) | &nbsp;

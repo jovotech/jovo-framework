@@ -25,6 +25,7 @@ function createConfig(target, targetName = target) {
     },
     externals: {
       vue: {
+        amd: 'vue',
         commonjs: 'vue',
         commonjs2: 'vue',
         root: 'Vue',

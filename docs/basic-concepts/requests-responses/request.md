@@ -12,10 +12,6 @@ Learn more about the Jovo `$request` object.
 
 ## Introduction
 
-
-
-## Introduction
-
 > [Learn more about the Request & Response Lifecycle here](./README.md '../').
 
 The `$request` object offers helpful features to access information about the incoming request from the platform (e.g. Amazon Alexa or Google Assistant).
@@ -61,7 +57,7 @@ Here is a list of all available helper methods to get data from a request:
 
 ### Request Setters
 
-For some use cases (especially [Unit Testing](../../testing/unit-testing.md '../unit-testing')), it might be helpful to modify a request object, like `this.$request.setIntentName('HelloWorldIntent')`.
+For some use cases (especially [Unit Testing](../../workflows/unit-testing.md '../unit-testing')), it might be helpful to modify a request object, like `this.$request.setIntentName('HelloWorldIntent')`.
 
 Here is a list of all available helper methods:
 

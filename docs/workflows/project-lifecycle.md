@@ -81,7 +81,7 @@ $ npm run start
 
 Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. You can also use the `nodemon` Jovo CLI integration. 
 
-> [Find more information on the `jovo run` command here](../workflows/cli/run.md './cli/run').
+> [Find more information on the `jovo run` command here](../tools/cli/run.md './cli/run').
 
 `$ jovo run` should return this:
 
@@ -95,7 +95,6 @@ As you can see, a [Jovo Webhook](#jovo-webhook) URL is automatically created, wh
 Here are all the services that can point to your local development server:
 * [Jovo Webhook](#jovo-webhook) (default)
 * [Alternatives](#alternatives)
-   * [bst proxy](#bst-proxy)
    * [ngrok](#ngrok)
 
 
@@ -105,7 +104,7 @@ Here are all the services that can point to your local development server:
 
 The Jovo Webhook is a free service that creates a link to your local webserver. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time.
 
-By using the [`jovo run`](../workflows/cli/run './cli/run'), a unique, anonymized link is created that looks like this:
+By using the [`jovo run`](../tools/cli/run './cli/run'), a unique, anonymized link is created that looks like this:
 
 ```sh
 https://webhook.jovo.cloud/[your-id]
@@ -113,25 +112,10 @@ https://webhook.jovo.cloud/[your-id]
 
 This link simply makes it easier for you to prototype locally by being able to see the logs in your command line, and to make fast changes without uploading your code to AWS Lambda.
 
-You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../workflows/cli/deploy './cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../tools/cli/deploy './cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
 
 
 #### Alternatives
-
-##### bst proxy
-
-With the bst proxy by [Bespoken](https://bespoken.io/), you can create a link similar to the [Jovo Webhook](#jovo-webhook), but with additional features like logging.
-
-You can run the proxy with the `jovo run` command:
-
-```sh
-$ jovo run --bst-proxy
-```
-This is what the result looks like:
-
-![bst proxy result](https://www.jovo.tech/blog/wp-content/uploads/2017/10/terminal-bst-proxy-1.jpg)
-
-Now, you can not only use the link as an endpoint, but also use it to access [Bespoken Analytics](../integrations/analytics/bespoken.md './analytics/bespoken').
 
 ##### ngrok
 

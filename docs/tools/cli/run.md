@@ -5,7 +5,6 @@ Learn how to use the `jovo run` command of the Jovo CLI to test your code locall
 * [Introduction](#introduction)
 * [Options](#options)
 * [Integrations](#integrations)
-   * [bst proxy](#bst-proxy)
    * [nodemon](#nodemon)
 
 ## Introduction
@@ -66,23 +65,7 @@ Here is a list of integrations that work with `jovo run`:
 
 Command | Description 
 ------------ | ------------- 
-[`--bst-proxy`](#bst-proxy) | Creates a webhook URL for local testing and integrates with [Bespoken Analytics](../../integrations/analytics/bespoken.md '../analytics/bespoken')
 [`--watch`](#watch) | Uses `nodemon` to monitor changes and automatically restart the server
-
-
-### bst proxy
-
-You can use the bst proxy to create a webhook URL easily:
-
-```sh
-$ jovo run --bst-proxy
-```
-
-The result should look like this:
-
-![Jovo and bst proxy](../../img/terminal-bst-proxy-1.jpg)
-
-The URL also comes with logging and analytics capabilities for prototyping and testing.
 
 ### nodemons
 

@@ -2,15 +2,14 @@
 
 Get an overview on how to develop your own Conversational Components.
 
-* [Developing Conversational Components](#developing-conversational-components)
-  * [Handler](#handler)
-  * [Configuration](#configuration)
-  * [Models](#models)
-  * [i18n](#i18n)
-  * [Components using Components](#components-using-components)
-    * [Installation](#installation)
-    * [Configuration](#configuration-1)
-    * [General Usage](#general-usage)
+* [Handler](#handler)
+* [Configuration](#configuration)
+* [Models](#models)
+* [i18n](#i18n)
+* [Components using Components](#components-using-components)
+  * [Installation](#installation)
+  * [Configuration of Nested Components](#configuration-of-nested-components)
+  * [General Usage](#general-usage)
 
 You're component has to have the whole package of language model, handler, configuration and i18n for people to be able to use it. We will skip, the general description of each of these blocks and go into more detail about the small stuff that's important to develop components. You can revisit the basics [here](./README.md 'components').
 
@@ -332,7 +331,7 @@ module.exports = GetPhoneNumber;
 
 With all these set, the Jovo CLI and framework will load your component's component's files on `load` and add it to the project's active components.
 
-### Configuration
+### Configuration of Nested Components
 
 Configuration of n-th layer components work in a strict hierarchy. Let's say we have two components: component A and component B, where component A uses B.
 
