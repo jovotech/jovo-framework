@@ -9,7 +9,7 @@ export { BixbyUser } from './modules/BixbyUser';
 export * from './core/BixbyRequest';
 export * from './core/BixbyResponse';
 
-declare module 'jovo-core/dist/src/Jovo' {
+declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $bixbyCapsule?: BixbyCapsule;
     bixbyCapsule(): BixbyCapsule;

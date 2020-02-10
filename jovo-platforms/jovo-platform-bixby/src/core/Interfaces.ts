@@ -1,3 +1,7 @@
+import { TestSuite } from 'jovo-core';
+import { BixbyRequestBuilder } from './BixbyRequestBuilder';
+import { BixbyResponseBuilder } from './BixbyResponseBuilder';
+
 export interface VivContext {
   clientAppVersion: string;
   is24HourFormat: boolean;
@@ -36,3 +40,5 @@ export interface Response {
   _JOVO_SESSION_DATA_: SessionData;
   _JOVO_AUDIO_?: {};
 }
+
+export interface BixbyTestSuite extends TestSuite<BixbyRequestBuilder, BixbyResponseBuilder> {}

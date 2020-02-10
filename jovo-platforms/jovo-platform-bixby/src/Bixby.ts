@@ -18,10 +18,11 @@ import { BixbyNLU } from './modules/BixbyNLU';
 import { BixbyAudioPlayerPlugin } from './modules/BixbyAudioPlayer';
 import { BixbyRequest } from './core/BixbyRequest';
 import { BixbyResponse } from '.';
+import { BixbyTestSuite } from './core/Interfaces';
 
 export interface Config extends ExtensibleConfig {}
 
-export class Bixby extends Extensible implements Platform {
+export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
   requestBuilder = new BixbyRequestBuilder();
   responseBuilder = new BixbyResponseBuilder();
 
@@ -50,7 +51,7 @@ export class Bixby extends Extensible implements Platform {
     app.middleware('fail')!.use(this.fail.bind(this));
 
     this.use(
-      new BixbyCore(), 
+      new BixbyCore(),
       new BixbyNLU(),
       new BixbyAudioPlayerPlugin()
     );
@@ -73,7 +74,7 @@ export class Bixby extends Extensible implements Platform {
     };
   }
 
-  makeTestSuite() {
+  makeTestSuite(): BixbyTestSuite {
     return new TestSuite(new BixbyRequestBuilder(), new BixbyResponseBuilder());
   }
 
@@ -121,5 +122,13 @@ export class Bixby extends Extensible implements Platform {
 
   fail() {
     // TODO implement
+  }
+
+  supportsASR(): boolean {
+    return false;
+  }
+
+  supportsTTS(): boolean {
+    return false;
   }
 }

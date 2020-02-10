@@ -1,8 +1,8 @@
 import * as https from 'https';
 
 import { ApiError } from './ApiError';
-import { AlexaAPIResponse } from './AlexaAPIResponse';
 import { RequestOptions } from 'https';
+import { AlexaApiResponse } from './AlexaApiResponse';
 
 export interface AmazonPayApiRequestOptions {
   host?: AmazonPayApiHost;
@@ -109,20 +109,20 @@ export class AmazonPayAPI {
             let parsedData;
             if (res.statusCode === 204) {
               // no content
-              resolve(new AlexaAPIResponse(res.statusCode, {}));
+              resolve(new AlexaApiResponse(res.statusCode, {}));
               return;
             }
             try {
               if (rawData.length > 0) {
                 parsedData = JSON.parse(rawData);
-                return resolve(new AlexaAPIResponse(res.statusCode, parsedData));
+                return resolve(new AlexaApiResponse(res.statusCode, parsedData));
               }
             } catch (e) {
               return reject(
                 new ApiError(e.message || 'Something went wrong', e.code || ApiError.PARSE_ERROR),
               );
             }
-            resolve(new AlexaAPIResponse(res.statusCode, {}));
+            resolve(new AlexaApiResponse(res.statusCode, {}));
           });
         })
         .on('error', (e) => {

@@ -1,13 +1,12 @@
-import { Plugin, ErrorCode, JovoError } from 'jovo-core';
-import _set = require('lodash.set');
-import _get = require('lodash.get');
+import { ErrorCode, JovoError, Plugin } from 'jovo-core';
 
 import { GoogleAssistant } from '../GoogleAssistant';
 import { GoogleAction } from '../core/GoogleAction';
 import { GoogleActionResponse } from '..';
 import { GoogleActionAPI } from '../services/GoogleActionAPI';
-import { GoogleActionAPIResponse } from '../services/GoogleActionAPIResponse';
-import { Order, OrderUpdateV3, PaymentType, Reservation, ReservationUpdate } from '../core/Interfaces';
+import { Order, PaymentType, Reservation } from '../core/Interfaces';
+import _set = require('lodash.set');
+import _get = require('lodash.get');
 
 
 export interface PaymentParameters {
@@ -597,9 +596,7 @@ export class Transaction {
           null
         );
 
-        const token = await this.authorizePromise(jwtClient);
-
-        return token;
+        return await this.authorizePromise(jwtClient);
 
         // return resolve(token);
         // return jwtClient.then((client: any) => {
@@ -609,8 +606,6 @@ export class Transaction {
         // }) // tslint:disable-line
         //   .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
       } catch (e) {
-        console.log(e);
-        console.log(e.stack);
         if (e.message === "Cannot find module 'googleapis'") {
           return Promise.reject(
             new JovoError(
@@ -626,9 +621,9 @@ export class Transaction {
       }
   }
 
-  authorizePromise(jwtClient: any) {
+  authorizePromise(jwtClient: any) { // tslint:disable-line
     return new Promise((resolve, reject) => {
-      jwtClient.authorize((err: Error, tokens:any) => {
+      jwtClient.authorize((err: Error, tokens:any) => { // tslint:disable-line
         if (err) {
           return reject(err);
         }

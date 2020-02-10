@@ -1,5 +1,5 @@
 import { ApiError } from './ApiError';
-import { AlexaAPI } from './AlexaAPI';
+import { AlexaAPI, ApiCallOptions } from './AlexaAPI';
 
 export class AlexaReminder {
   apiEndpoint: string;

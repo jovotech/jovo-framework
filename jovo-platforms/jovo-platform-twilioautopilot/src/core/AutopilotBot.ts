@@ -1,4 +1,4 @@
-import { Jovo, BaseApp, Host, HandleRequest } from 'jovo-core';
+import { Jovo, BaseApp, Host, HandleRequest, AudioData } from 'jovo-core';
 import { AutopilotSpeechBuilder } from './AutopilotSpeechBuilder';
 import { AutopilotResponse } from './AutopilotResponse';
 import { AutopilotUser } from './AutopilotUser';
@@ -82,5 +82,9 @@ export class AutopilotBot extends Jovo {
     response.actions = actions;
 
     return this;
+  }
+
+  getAudioData(): AudioData | undefined {
+    return undefined;
   }
 }

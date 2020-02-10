@@ -1,8 +1,14 @@
 import { AutopilotBot } from './core/AutopilotBot';
 import { AudioPlayerItem, AudioPlayer } from './modules/AudioPlayer';
 import { StandardCard, ImageItem } from './modules/Cards';
+import { TestSuite } from 'jovo-core';
+import { AutopilotRequestBuilder } from './core/AutopilotRequestBuilder';
+import { AutopilotResponseBuilder } from './core/AutopilotResponseBuilder';
 
-declare module 'jovo-core/dist/src/Jovo' {
+export interface AutopilotTestSuite extends TestSuite<AutopilotRequestBuilder, AutopilotResponseBuilder> {}
+
+
+declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $autopilotBot?: AutopilotBot;
     autopilotBot(): AutopilotBot;

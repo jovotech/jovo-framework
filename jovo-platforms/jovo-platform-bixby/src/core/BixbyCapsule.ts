@@ -1,4 +1,4 @@
-import { Jovo, BaseApp, Host, HandleRequest } from 'jovo-core';
+import { Jovo, BaseApp, Host, HandleRequest, AudioData } from 'jovo-core';
 import { BixbyResponse } from './BixbyResponse';
 import { BixbySpeechBuilder } from './BixbySpeechBuilder';
 import { BixbyUser } from '../modules/BixbyUser';
@@ -84,6 +84,10 @@ export class BixbyCapsule extends Jovo {
 
   getRawText() {
     // TODO again, what does this do?
+    return undefined;
+  }
+
+  getAudioData(): AudioData | undefined {
     return undefined;
   }
 }

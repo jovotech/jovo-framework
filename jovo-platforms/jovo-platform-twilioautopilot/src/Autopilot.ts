@@ -1,5 +1,4 @@
 import {
-  Extensible,
   ExtensibleConfig,
   ActionSet,
   Platform,
@@ -9,8 +8,6 @@ import {
   JovoError,
   ErrorCode,
   HandleRequest,
-  RequestBuilder,
-  ResponseBuilder,
 } from 'jovo-core';
 import _merge = require('lodash.merge');
 
@@ -22,8 +19,11 @@ import { AutopilotCore } from './modules/AutopilotCore';
 import { AutopilotNLU } from './modules/AutopilotNLU';
 import { AudioPlayerPlugin } from './modules/AudioPlayer';
 import { Cards } from './modules/Cards';
+import { AutopilotRequest } from './core/AutopilotRequest';
+import { AutopilotResponse } from './core/AutopilotResponse';
+import { AutopilotTestSuite } from './index';
 
-export class Autopilot extends Extensible implements Platform {
+export class Autopilot extends Platform<AutopilotRequest, AutopilotResponse> {
   constructor(config?: ExtensibleConfig) {
     super(config);
 
@@ -76,7 +76,7 @@ export class Autopilot extends Extensible implements Platform {
     };
   }
 
-  makeTestSuite(): TestSuite<RequestBuilder, ResponseBuilder> {
+  makeTestSuite(): AutopilotTestSuite {
     return new TestSuite(new AutopilotRequestBuilder(), new AutopilotResponseBuilder());
   }
 
