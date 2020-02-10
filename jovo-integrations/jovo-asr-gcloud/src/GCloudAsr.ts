@@ -14,7 +14,7 @@ import {
   PluginConfig,
 } from 'jovo-core';
 import { promisify } from 'util';
-import { RecognitionRequest, RecognitionResult } from './Interfaces';
+import { RecognitionRequest, RecognitionResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 
 const readFile = promisify(fs.readFile);
@@ -76,7 +76,7 @@ export class GCloudAsr implements Plugin {
       const result = await this.speechToText(wavBuffer);
 
       jovo.$asr = {
-        text: result.alternatives[0].transcript,
+        text: result.results[0].alternatives[0].transcript,
         [this.name]: result,
       };
     } else if (!text && jovo.$type.type === EnumRequestType.INTENT) {
@@ -84,7 +84,7 @@ export class GCloudAsr implements Plugin {
     }
   }
 
-  private async speechToText(speech: Buffer): Promise<RecognitionResult> {
+  private async speechToText(speech: Buffer): Promise<RecognitionResponse> {
     const url = `https://speech.googleapis.com/v1/speech:recognize`;
 
     const accessTokenObj = await this.jwtClient?.getAccessToken();
@@ -109,9 +109,14 @@ export class GCloudAsr implements Plugin {
     };
 
     try {
-      const response = await HttpService.request(config);
-      console.log({ response });
+      const response = await HttpService.request<RecognitionResponse>(config);
       if (response.status === 200 && response.data) {
+        if (
+          response.data.results.length === 0 ||
+          (response.data.results.length > 0 && response.data.results[0].alternatives.length === 0)
+        ) {
+          throw new Error('ASR not successful. No text could be extracted.');
+        }
         return response.data;
       }
       throw new Error(
