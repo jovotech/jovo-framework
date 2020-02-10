@@ -17,10 +17,9 @@
 </p>
 <br/>
 
-# FileDB Database Integration
+# Platform-Storage Database Integration
 
 ```sh
-npm install jovo-db-filedb
+npm install jovo-db-platformstorage
 ```
 
-Find the docs here: https://www.jovo.tech/docs/databases/file-db

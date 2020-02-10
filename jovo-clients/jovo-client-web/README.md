@@ -17,13 +17,10 @@
 </p>
 <br/>
 
-# jovo-client-web
+# Jovo Web Client
+A web-based client that allows interacting with the Jovo Core-platform. \
+This package is written in JavaScript and can be easily embedded.
 
 ```sh
 npm install jovo-client-web
 ```
-
-## Events
-
-Name | Description 
---- | --- 

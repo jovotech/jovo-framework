@@ -17,7 +17,7 @@
 </p>
 <br/>
 
-# Jovo Dialogflow NLU Plugin
+# Jovo Dialogflow NLU Integration
 
 ```sh
 npm install jovo-nlu-dialogflow

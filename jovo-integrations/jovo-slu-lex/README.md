@@ -17,8 +17,8 @@
 </p>
 <br/>
 
-# Jovo Language Model Tester Plugin
+# Jovo Lex SLU Integration
 
 ```sh
-npm install jovo-plugin-lmtester
+npm install jovo-slu-lex
 ```
