@@ -14,7 +14,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.2.0",
     "jovo-core": "^2.2.21",
     "jovo-db-dynamodb": "^2.2.21",
     "jovo-db-filedb": "^2.2.21",
