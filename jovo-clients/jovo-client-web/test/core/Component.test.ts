@@ -10,6 +10,8 @@ class TestComponent extends Component<TestComponentConfig> {
     foo: 'bar',
   };
 
+  readonly name = 'TestComponent';
+
   async onInit(): Promise<void> {
     // tslint:disable-line
   }

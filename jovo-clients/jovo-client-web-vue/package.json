@@ -9,6 +9,7 @@
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
