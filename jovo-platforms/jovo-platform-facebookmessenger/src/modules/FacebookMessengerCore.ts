@@ -36,7 +36,6 @@ export class FacebookMessengerCore implements Plugin {
       requestObject.messaging[0]
     ) {
       handleRequest.jovo = new MessengerBot(handleRequest.app, handleRequest.host, handleRequest);
-      _set(handleRequest.jovo.$output, 'FacebookMessenger.Messages', []);
     }
   }
 
@@ -82,19 +81,26 @@ export class FacebookMessengerCore implements Plugin {
       return;
     }
 
-    const textOverride = _get(output, 'FacebookMessenger.OverrideText');
+    const overWriteText = _get(output, 'FacebookMessenger.Overwrite.Text');
+    const overWriteQuickReplies = _get(output, 'FacebookMessenger.Overwrite.QuickReplies');
 
     const tell = _get(output, 'tell');
     if (tell) {
-      const text = SpeechBuilder.removeSSML(textOverride || tell.speech.toString());
-      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      const text = overWriteText || tell.speech.toString();
+      const textMessage = new TextMessage(
+        { id: messengerBot.$user.getId()! },
+        { text, quickReplies: overWriteQuickReplies },
+      );
       response.messages.push(textMessage);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const text = SpeechBuilder.removeSSML(textOverride || ask.speech.toString());
-      const textMessage = new TextMessage({ id: messengerBot.$user.getId()! }, { text });
+      const text = overWriteText || ask.speech.toString();
+      const textMessage = new TextMessage(
+        { id: messengerBot.$user.getId()! },
+        { text, quickReplies: overWriteQuickReplies },
+      );
       response.messages.push(textMessage);
     }
 
