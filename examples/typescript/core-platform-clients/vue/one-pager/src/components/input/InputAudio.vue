@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { AudioRecordedPayload, InputRecordEvents } from 'jovo-client-web-vue';
+import { AudioRecordedPayload, InputRecordEvents, AudioHelper } from 'jovo-client-web-vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -19,7 +19,8 @@ export default class InputAudio extends Vue {
   }
 
   private onAudioRecorded(payload: AudioRecordedPayload) {
-    this.source = URL.createObjectURL(payload.raw);
+    const blob = AudioHelper.toWavBlob(payload.data, payload.sampleRate);
+    this.source = URL.createObjectURL(blob);
   }
 }
 </script>

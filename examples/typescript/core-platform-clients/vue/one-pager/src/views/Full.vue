@@ -16,19 +16,19 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import InputControlButtons from '@/components/input/InputControlButtons.vue';
-import InputAudio from '@/components/input/InputAudio.vue';
-import RequestProgress from '@/components/request/RequestProgress.vue';
-import LogConsole from '@/components/log/LogConsole.vue';
-import ResponseAudio from '@/components/response/ResponseAudio.vue';
-import ResponseProgress from '@/components/response/ResponseProgress.vue';
-import InputAudioTrackVisualizer from '@/components/input/InputAudioTrackVisualizer.vue';
+import InputControlButtons from '../../../debugger/src/components/input/InputControlButtons.vue';
+import InputAudio from '../../../debugger/src/components/input/InputAudio.vue';
+import RequestProgress from '../../../debugger/src/components/request/RequestProgress.vue';
+import LogConsole from '../../../debugger/src/components/log/LogConsole.vue';
+import ResponseAudio from '../../../debugger/src/components/response/ResponseAudio.vue';
+import ResponseProgress from '../../../debugger/src/components/response/ResponseProgress.vue';
+import InputAudioTrackVisualizer from '../../../debugger/src/components/input/InputAudioTrackVisualizer.vue';
 import { Card } from 'element-ui';
-import ConversationDisplay from '@/components/conversation/ConversationDisplay.vue';
-import StoreDisplay from '@/components/store/StoreDisplay.vue';
-import InputRecognizedSpeech from '@/components/input/InputRecognizedSpeech.vue';
-import RequestJsonDisplay from '@/components/request/RequestJsonDisplay.vue';
-import ResponseJsonDisplay from '@/components/response/ResponseJsonDisplay.vue';
+import ConversationDisplay from '../../../debugger/src/components/conversation/ConversationDisplay.vue';
+import StoreDisplay from '../../../debugger/src/components/store/StoreDisplay.vue';
+import InputRecognizedSpeech from '../../../debugger/src/components/input/InputRecognizedSpeech.vue';
+import RequestJsonDisplay from '../../../debugger/src/components/request/RequestJsonDisplay.vue';
+import ResponseJsonDisplay from '../../../debugger/src/components/response/ResponseJsonDisplay.vue';
 import {
   AudioHelper,
   InputRecordEvents,
