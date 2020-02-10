@@ -496,7 +496,7 @@
                         },
                         {
                             "title": "Wit.AI",
-                            "route": "asr-nlu-slu/wit-ai"
+                            "route": "asr-nlu-slu/wit.ai"
                         }
                     ]
                 }
