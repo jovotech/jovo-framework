@@ -259,7 +259,7 @@ ON_EVENT: {
 
 ### Proactive Subscription Changed
 
-Find a detailed description of the `Proactive Subscription Changed` event [here](./proactive-events.md#skill-event---proactivesubscriptionchanged './amazon-alexa/proactive-events#skill-event---proactivesubscriptionchange')
+Find a detailed description of the `Proactive Subscription Changed` event [here](./proactive-events.md#skill-event---proactivesubscriptionchanged './proactive-events#skill-event---proactivesubscriptionchanged').
 
 <!--[metadata]: {
 "description": "Build Alexa Skills with the Jovo Framework. Learn more about Alexa specific features here",

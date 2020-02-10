@@ -1,6 +1,35 @@
 # Jovo Framework Changelog
 
 
+## 2.2.30 (2020-02-03)
+
+#### :rocket: New Feature
+* `jovo-platform-twilioautopilot` [#651](https://github.com/jovotech/jovo-framework/pull/651) Adds Twilio Autopilot integration  ([@KaanKC](https://github.com/KaanKC))
+
+#### :bug: Bug Fix
+* `jovo-platform-alexa` [#648](https://github.com/jovotech/jovo-framework/pull/648) Apply permission api fix to all endpoints  ([@gshenar](https://github.com/gshenar))
+
+
+ #### Committers: 3
+- gshenar ([@gshenar](https://github.com/gshenar))
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+
+
+## 2.2.25 (2020-01-14)
+
+#### :rocket: New Feature
+* `jovo-platform-alexa` [#644](https://github.com/jovotech/jovo-framework/pull/644) Added Amazon Pay Integration  ([@KaanKC](https://github.com/KaanKC))
+* `jovo-platform-googleassistant` Added getGoogleProfile() helper 
+* `jovo-asr-azure` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Azure ASR implementation (WIP) ([@Veake](https://github.com/Veake)) 
+* `jovo-nlu-luis` [#635](https://github.com/jovotech/jovo-framework/pull/635) Added Microsoft LUIS implementation (WIP) ([@Veake](https://github.com/Veake)) 
+
+
+ #### Committers: 3
+- Kaan Kilic ([@KaanKC](https://github.com/KaanKC))
+- Max Ripper ([@Veake](https://github.com/Veake))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2.2.22 (2019-11-29)
 
 #### :rocket: New Feature

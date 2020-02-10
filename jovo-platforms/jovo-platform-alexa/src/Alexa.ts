@@ -34,6 +34,7 @@ import { GadgetControllerPlugin } from './modules/GadgetControllerPlugin';
 import { ProactiveEventPlugin } from './modules/ProactiveEvent';
 import { AplPlugin } from './modules/AplPlugin';
 import { AskFor } from './modules/AskFor';
+import { AmazonPayPlugin } from './modules/AmazonPay';
 
 export interface Config extends ExtensibleConfig {
   allowedSkillIds: string[];
@@ -101,6 +102,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
       new DialogInterface(),
       new ProactiveEventPlugin(),
       new AskFor(),
+      new AmazonPayPlugin(),
     );
 
     Jovo.prototype.$alexaSkill = undefined;

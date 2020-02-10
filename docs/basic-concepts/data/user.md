@@ -10,6 +10,7 @@ In this section, you will learn how to use the Jovo User class to persist user s
   * [Delete a User](#delete-a-user)
 * [Meta Data](#meta-data)
 * [Context](#context)
+* [Session Data](#session-data)
 * [UpdatedAt](#updatedat)
 * [User ID](#user-id)
 * [Locale](#locale)
@@ -444,6 +445,67 @@ const config = {
     // ...
 
 };
+```
+
+## Session Data
+
+Some platforms to not provide the ability to persist data throughout a session. In that case, you can save the data in the database. Other platforms, e.g. Twilio Autopilot, need to save the session ID in the database for the `NEW_SESSION` built-in intent to work.
+
+You can enable both in your project's configuration:
+
+```js
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            data: true,
+            id: true
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            data: true,
+            id: true
+        },
+    },
+
+    // ...
+
+};
+```
+
+If the feature is enabled, the database entry will have the following structure:
+
+```js
+{
+    "userId": "...",
+    "userData": {
+        "session": {
+            "lastUpdatedAt": "ISO 8601 string",
+            "data": {
+                ...
+            },
+            "id": "session ID"
+        }
+    }
+}
 ```
 
 ## UpdatedAt

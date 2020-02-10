@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-facebookmessenger",
-  "version": "2.0.6-alpha.0",
+  "version": "2.0.11-alpha.0",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -18,7 +18,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "form-data": "^2.5.1",
-    "jovo-core": "^2.2.18",
+    "jovo-core": "^2.2.21",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -33,9 +33,9 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
-    "jest": "^24.9.0",
-    "jovo-db-filedb": "^2.2.18",
-    "jovo-framework": "^2.2.25",
+    "jest": "^25.1.0",
+    "jovo-db-filedb": "^2.2.21",
+    "jovo-framework": "^2.2.30",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
@@ -70,5 +70,5 @@
   "files": [
     "dist/src/**/*"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }
