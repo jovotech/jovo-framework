@@ -49,6 +49,8 @@ export class InputComponent extends Component<InputComponentConfig> {
     startThreshold: 0.2,
     timeout: 3000,
   };
+  readonly name = 'InputComponent';
+
   private $recorder: AudioRecorder | null = null;
   private $visualizer: AudioVisualizer | null = null;
   private $keyPressFired = false;

@@ -21,6 +21,8 @@ import { AjaxAdapter } from './adapters/AjaxAdapter';
 export interface RequestComponentConfig extends ComponentConfig {}
 
 export class RequestComponent extends Component<RequestComponentConfig> {
+  readonly name = 'RequestComponent';
+
   private $networkHandler!: NetworkHandler;
 
   get url(): string {

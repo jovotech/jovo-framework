@@ -9,6 +9,8 @@ import {
 } from '../..';
 
 export class RepromptTimer extends CoreComponent {
+  readonly name = 'RepromptTimer';
+
   private $actions: Action[] = [];
   private $attempts = 0;
   private $activeRepromptTimerId = -1;

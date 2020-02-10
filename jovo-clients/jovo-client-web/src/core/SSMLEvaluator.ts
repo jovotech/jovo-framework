@@ -6,10 +6,6 @@ const TAG_BREAK = 'break';
 const SUPPORTED_TAGS = [TAG_AUDIO, TAG_BREAK];
 
 export class SSMLEvaluator extends CoreComponent {
-  get supportedTags(): string[] {
-    return SUPPORTED_TAGS;
-  }
-
   static ESCAPE_AMPERSAND = true;
 
   /**
@@ -126,6 +122,7 @@ export class SSMLEvaluator extends CoreComponent {
     return !/(?:(<[^>]*[/]>)|(<[^>]*>.*?<[/][^>]*>))/g.test(ssml);
   }
 
+  readonly name = 'SSMLEvaluator';
   private $isRunning = false;
 
   constructor(protected readonly $client: JovoWebClient) {
@@ -133,6 +130,10 @@ export class SSMLEvaluator extends CoreComponent {
     $client.on(RequestEvents.Data, () => {
       this.$isRunning = false;
     });
+  }
+
+  get supportedTags(): string[] {
+    return SUPPORTED_TAGS;
   }
 
   evaluate(ssml: string): Promise<void> {

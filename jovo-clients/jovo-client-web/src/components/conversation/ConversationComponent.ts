@@ -16,6 +16,8 @@ import {
 export interface ConversationComponentConfig extends ComponentConfig {}
 
 export class ConversationComponent extends Component<ConversationComponentConfig> {
+  readonly name = 'ConversationComponent';
+
   parts: ConversationPart[] = [];
   endSession = false;
 

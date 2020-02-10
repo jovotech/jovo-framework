@@ -2,6 +2,7 @@ import { AudioPlayerEvents, Base64Converter, CoreComponent } from '..';
 import { AudioPlayback } from './Interfaces';
 
 export class AudioPlayer extends CoreComponent {
+  readonly name = 'AudioPlayer';
   private $volume = 1.0;
   private activePlaybacks: AudioPlayback[] = [];
   private idCounter = 0;

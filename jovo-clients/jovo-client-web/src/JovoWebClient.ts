@@ -182,11 +182,11 @@ export class JovoWebClient extends AdvancedEventEmitter {
   }
 
   private handleUseComponent(component: Component) {
-    if (
-      this.$components.some((registeredComponent: Component) => {
-        return registeredComponent.name === component.name;
-      })
-    ) {
+    const componentExists = this.$components.some((registeredComponent: Component) => {
+      return registeredComponent.name === component.name;
+    });
+    if (componentExists) {
+
       // component with that name exists already -> merge $config
       if (component.initConfig) {
         this.$config[component.name] = merge(

@@ -16,6 +16,8 @@ export interface ResponseComponentConfig extends ComponentConfig {
 }
 
 export class ResponseComponent extends Component<ResponseComponentConfig> {
+  readonly name = 'ResponseComponent';
+
   static DEFAULT_CONFIG: ResponseComponentConfig = {
     reprompt: {
       interval: 2000,

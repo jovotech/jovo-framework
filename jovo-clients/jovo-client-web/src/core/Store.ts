@@ -14,6 +14,7 @@ import {
 const USER_DATA_STORAGE_KEY = 'user';
 
 export class Store extends CoreComponent {
+  readonly name = 'Store';
   data: Data = {};
   user!: UserData;
   session!: SessionData;
