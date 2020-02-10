@@ -20,5 +20,5 @@
 # Jovo Wit.ai SLU Integration
 
 ```sh
-npm install jovo-slu-wit.ai
+npm install jovo-slu-witai
 ```
