@@ -5,6 +5,7 @@
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
@@ -24,7 +25,7 @@
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
-    "ts-jest": "^24.0.1",
+    "ts-jest": "^25.2.0",
     "ts-loader": "^6.2.1",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
