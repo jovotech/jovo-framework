@@ -75,6 +75,8 @@ export interface Image {
 }
 
 export interface OrderUpdateV3 {
+  type?: string;
+  reason?: string;
   order: Order;
 }
 
@@ -88,7 +90,7 @@ export interface UserInfo {
   firstName: string;
   lastName: string;
   displayName: string;
-  phoneNumbers: PhoneNumber[];
+  phoneNumbers?: PhoneNumber[];
 }
 
 export interface Merchant {
@@ -416,25 +418,26 @@ export interface TicketOrderExtension {
   ticketEvent: TicketEvent;
 }
 
+
 export interface Order {
-  googleOrderId: string;
-  merchantOrderId: string;
-  userVisibleOrderId: string;
-  buyerInfo: UserInfo;
-  image: Image;
-  createTime: string;
-  lastUpdateTime: string;
-  transactionMerchant: Merchant;
-  contents: {
+  googleOrderId?: string;
+  merchantOrderId?: string;
+  userVisibleOrderId?: string;
+  buyerInfo?: UserInfo;
+  image?: Image;
+  createTime?: string;
+  lastUpdateTime?: string;
+  transactionMerchant?: Merchant;
+  contents?: {
     lineItems: LineItem[];
   };
-  priceAttributes: PriceAttribute[];
-  followUpActions: Action[];
-  paymentData: PaymentData;
-  termsOfServiceUrl: string;
-  note: string;
-  promotions: Promotion[];
-  disclosures: Disclosure[];
+  priceAttributes?: PriceAttribute[];
+  followUpActions?: Action[];
+  paymentData?: PaymentData;
+  termsOfServiceUrl?: string;
+  note?: string;
+  promotions?: Promotion[];
+  disclosures?: Disclosure[];
 
   // purchase OR ticket
   purchase?: PurchaseOrderExtension;
@@ -442,8 +445,15 @@ export interface Order {
 }
 
 export interface StructuredResponse {
-  orderUpdate: OrderUpdate;
-  orderUpdateV3: OrderUpdateV3;
+  orderUpdate?: OrderUpdate;
+  orderUpdateV3?: OrderUpdateV3;
+}
+export interface Reservation extends Order {
+
+}
+
+export interface ReservationUpdate extends OrderUpdateV3 {
+
 }
 
 export type MediaType = 'MEDIA_TYPE_UNSPECIFIED' | 'AUDIO';

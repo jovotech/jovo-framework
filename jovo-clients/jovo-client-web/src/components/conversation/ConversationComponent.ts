@@ -88,6 +88,7 @@ export class ConversationComponent extends Component<ConversationComponentConfig
   private addPart(part: Partial<ConversationPart>) {
     this.parts.push(part as ConversationPart);
     this.$client.emit(ConversationEvents.Change, this.parts);
+    this.$client.emit(ConversationEvents.AddPart, part);
 
     if (this.endSession) {
       this.endSession = false;

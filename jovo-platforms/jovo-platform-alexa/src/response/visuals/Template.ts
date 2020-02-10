@@ -197,7 +197,6 @@ export class Template {
       }
       return img;
     } else {
-      // TODO: there should be a better way
       if (_get(image, 'url')) {
         return Template.makeImage(_get(image, 'url'), _get(image, 'description'));
       } else {

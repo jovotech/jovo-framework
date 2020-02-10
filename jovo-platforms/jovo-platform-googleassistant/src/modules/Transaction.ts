@@ -7,6 +7,35 @@ import { GoogleAction } from '../core/GoogleAction';
 import { GoogleActionResponse } from '..';
 import { GoogleActionAPI } from '../services/GoogleActionAPI';
 import { GoogleActionAPIResponse } from '../services/GoogleActionAPIResponse';
+import { Order, OrderUpdateV3, PaymentType, Reservation, ReservationUpdate } from '../core/Interfaces';
+
+
+export interface PaymentParameters {
+  merchantPaymentOption: MerchantPaymentOption;
+}
+
+export interface MerchantPaymentOption {
+  defaultMerchantPaymentMethodId: string;
+  managePaymentMethodUrl: string;
+  merchantPaymentMethod: MerchantPaymentMethod[];
+}
+
+export interface MerchantPaymentMethod {
+  paymentMethodDisplayInfo: PaymentMethodDisplayInfo;
+}
+
+export interface PaymentMethodDisplayInfo {
+  paymentMethodDisplayName: string;
+  paymentType: PaymentType;
+  paymentMethodGroup: string;
+  paymentMethodId: string;
+  paymentMethodStatus: PaymentMethodStatus;
+}
+
+export interface PaymentMethodStatus {
+  status: 'STATUS_OK'; // TODO: what else ?
+  statusMessage: string;
+}
 
 export interface PaymentOptions {
   googleProvidedOptions: GoogleProvidedOptions;
@@ -26,7 +55,13 @@ export interface GoogleProvidedOptions {
 }
 
 export interface OrderOptions {
-  requestDeliveryAddress: boolean;
+  requestDeliveryAddress?: boolean;
+  userInfoOptions?: {
+    userInfoProperties: string[];
+  };
+}
+export interface PresentationOptions {
+  actionDisplayName: string;
 }
 
 export interface Requirements {
@@ -34,11 +69,17 @@ export interface Requirements {
   googleProvidedOptions: GoogleProvidedOptions;
 }
 
+// TODO changed check results?
 export type RequirementsCheckResult =
   | 'USER_ACTION_REQUIRED'
   | 'OK'
+  | 'CAN_TRANSACT'
   | 'ASSISTANT_SURFACE_NOT_SUPPORTED'
   | 'REGION_NOT_SUPPORTED';
+
+export type DigitalPurchaseRequirementsCheckResult =
+  | 'CAN_PURCHASE';
+
 export type DeliveryAddressDecision = 'ACCEPTED' | 'REJECTED';
 export type TransactionDecision =
   | 'ORDER_ACCEPTED'
@@ -113,18 +154,72 @@ export class Transaction {
 
   /**
    * Send check requirements
-   * @param {OrderOptions} orderOptions
-   * @param {PaymentOptions} paymentOptions
    * @returns {this}
    */
-  checkRequirements(orderOptions: OrderOptions, paymentOptions: PaymentOptions) {
+  checkRequirements() {
     this.googleAction.$output.GoogleAssistant = {
-      TransactionRequirementsCheck: {
-        orderOptions,
-        paymentOptions,
-      },
+      TransactionRequirementsCheck: {},
     };
     return this;
+  }
+
+  /**
+   * Send check requirements
+   * @returns {this}
+   */
+  checkDigitalPurchaseRequirements() {
+    this.googleAction.$output.GoogleAssistant = {
+      TransactionDigitalPurchaseRequirementsCheck: {},
+    };
+    return this;
+  }
+
+  buildOrder(
+    order: Order,
+    presentationOptions: PresentationOptions = { actionDisplayName: 'PLACE_ORDER' },
+    orderOptions: OrderOptions = { requestDeliveryAddress: false },
+    paymentParameters?: PaymentParameters
+  ) {
+    this.googleAction.$output.GoogleAssistant = {
+      TransactionOrder: {
+        order,
+        presentationOptions,
+        orderOptions,
+        paymentParameters
+      },
+    };
+  }
+
+  updateOrder(
+    order: Order,
+    reason: string,
+    type = 'SNAPSHOT'
+  ) {
+    this.googleAction.$output.GoogleAssistant = {
+      TransactionOrderUpdate: {
+        orderUpdate: {
+          order,
+          reason,
+          type
+        }
+      },
+    };
+  }
+
+  buildReservation(
+    reservation: Reservation,
+    presentationOptions: PresentationOptions = { actionDisplayName: 'RESERVE' },
+    orderOptions: OrderOptions = { requestDeliveryAddress: false },
+  ) {
+    this.buildOrder(reservation, presentationOptions, orderOptions);
+  }
+
+  updateReservation(
+    reservation: Reservation,
+    reason: string,
+    type = 'SNAPSHOT'
+  ) {
+    this.updateOrder(reservation, reason, type);
   }
 
   /**
@@ -144,11 +239,27 @@ export class Transaction {
   }
 
   /**
-   * Check if requirements result is OK
-   * @returns {boolean}
+   * Return requirements check result
+   * @returns {RequirementsCheckResult | undefined}
    */
-  isRequirementsCheckOk() {
-    return this.getRequirementsCheckResult() === 'OK';
+  getDigitalPurchaseRequirementsCheckResult(): DigitalPurchaseRequirementsCheckResult | undefined {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
+      if (argument.name === 'DIGITAL_PURCHASE_CHECK_RESULT') {
+        return _get(argument, 'extension.resultType');
+      }
+    }
+  }
+
+  canTransact() {
+    return this.getRequirementsCheckResult() === 'CAN_TRANSACT';
+  }
+
+  canPurchase() {
+    return this.getDigitalPurchaseRequirementsCheckResult() === 'CAN_PURCHASE';
   }
 
   /**
@@ -236,6 +347,37 @@ export class Transaction {
       }
     }
   }
+  /**
+   * Returns the process order.
+   * @returns {DeliveryAddressDecision | undefined}
+   */
+  getOrder(): Order | undefined {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
+      if (argument.name === 'TRANSACTION_DECISION_VALUE') {
+        return _get(argument, 'extension.order');
+      }
+    }
+  }
+
+  /**
+   * Returns the process order.
+   * @returns {DeliveryAddressDecision | undefined}
+   */
+  getReservation(): Reservation | undefined {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
+      if (argument.name === 'TRANSACTION_DECISION_VALUE') {
+        return _get(argument, 'extension.order');
+      }
+    }
+  }
 
   /**
    * Returns delivery address object.
@@ -303,7 +445,7 @@ export class Transaction {
       [],
     )) {
       if (argument.name === 'TRANSACTION_DECISION_VALUE') {
-        return _get(argument, 'extension.userDecision');
+        return _get(argument, 'extension.transactionDecision');
       }
     }
   }
@@ -317,10 +459,26 @@ export class Transaction {
   }
 
   /**
+   * Returns true if user accepted reservation
+   * @returns {boolean}
+   */
+  isReservationAccepted(): boolean {
+    return this.getTransactionDecisionResult() === 'ORDER_ACCEPTED';
+  }
+
+  /**
    * Returns true if user rejected transaction
    * @returns {boolean}
    */
   isOrderRejected(): boolean {
+    return this.getTransactionDecisionResult() === 'ORDER_REJECTED';
+  }
+
+  /**
+   * Returns true if user rejected transaction
+   * @returns {boolean}
+   */
+  isReservationRejected(): boolean {
     return this.getTransactionDecisionResult() === 'ORDER_REJECTED';
   }
 
@@ -370,12 +528,11 @@ export class Transaction {
     }
   }
   // tslint:disable-next-line
-  private getSkus(skus: string[], type: SkuType): Promise<any[]> {
+  async getSkus(skus: string[], type: SkuType) {
     const conversationId = _get(
       this.googleAction.$request,
       'originalDetectIntentRequest.payload.conversation.conversationId',
     );
-
     if (
       !this.googleAssistant.config.transactions ||
       !this.googleAssistant.config.transactions.androidPackageName
@@ -387,67 +544,97 @@ export class Transaction {
       );
     }
 
-    const promise = this.getGoogleApiAccessToken().then((accessToken: string) => {
-      return GoogleActionAPI.apiCall({
+    const accessToken = await this.getGoogleApiAccessToken();
+
+
+    try {
+      const response = await GoogleActionAPI.apiCall({
         endpoint: 'https://actions.googleapis.com',
         path: `/v3/packages/${
           this.googleAssistant.config.transactions!.androidPackageName
         }/skus:batchGet`,
         method: 'POST',
-        permissionToken: accessToken,
+        permissionToken: accessToken as string,
         json: {
           conversationId,
           skuType: type,
           ids: skus,
         },
-      }) as Promise<GoogleActionAPIResponse>;
-    });
+      });
 
-    return promise.then((response: GoogleActionAPIResponse) => response.data);
-  }
-
-  private getGoogleApiAccessToken(): Promise<string> {
-    if (
-      !this.googleAssistant.config.transactions ||
-      !this.googleAssistant.config.transactions.keyFile
-    ) {
-      throw new JovoError(
-        'Please add a valid keyFile object to the GoogleAssistant transaction config',
-        ErrorCode.ERR,
-        'jovo-platform-googleassistant',
-      );
-    }
-    /**
-     * DigitalGoods.ts needs the googleapis package to function.
-     * To reduce overall package size, googleapis wasn't added as a dependency.
-     * googleapis has to be manually installed
-     */
-    try {
-      const googleapis = require('googleapis').google;
-
-      return googleapis.auth
-        .getClient({
-          keyFile: this.googleAssistant.config.transactions!.keyFile,
-          scopes: ['https://www.googleapis.com/auth/actions.purchases.digital'],
-        })
-        .then((client: any) => client.authorize()) // tslint:disable-line
-        .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
+      return response.data;
+      console.log(response.data);
     } catch (e) {
       console.log(e);
-      console.log(e.stack);
-      if (e.message === "Cannot find module 'googleapis'") {
-        return Promise.reject(
-          new JovoError(
-            e.message,
-            ErrorCode.ERR,
-            'jovo-platform-googleassistant',
-            undefined,
-            'Please run `npm install googleapis`',
-          ),
+    }
+  }
+
+  async getGoogleApiAccessToken() {
+      if (
+        !this.googleAssistant.config.transactions ||
+        !this.googleAssistant.config.transactions.keyFile
+      ) {
+        throw new JovoError(
+          'Please add a valid keyFile object to the GoogleAssistant transaction config',
+          ErrorCode.ERR,
+          'jovo-platform-googleassistant',
         );
       }
-      return Promise.reject(new Error('Could not retrieve Google API access token'));
-    }
+      /**
+       * DigitalGoods.ts needs the googleapis package to function.
+       * To reduce overall package size, googleapis wasn't added as a dependency.
+       * googleapis has to be manually installed
+       */
+      try {
+        const {google} = require('googleapis');
+
+        // tslint:disable-next-line:no-any
+        const serviceAccount: any = this.googleAssistant.config.transactions!.keyFile;
+
+        const jwtClient = new google.auth.JWT(
+          serviceAccount.client_email, null, serviceAccount.private_key,
+          ['https://www.googleapis.com/auth/actions.purchases.digital'],
+          null
+        );
+
+        const token = await this.authorizePromise(jwtClient);
+
+        return token;
+
+        // return resolve(token);
+        // return jwtClient.then((client: any) => {
+        //
+        //   console.log(client);
+        //   return client.authorize();
+        // }) // tslint:disable-line
+        //   .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
+      } catch (e) {
+        console.log(e);
+        console.log(e.stack);
+        if (e.message === "Cannot find module 'googleapis'") {
+          return Promise.reject(
+            new JovoError(
+              e.message,
+              ErrorCode.ERR,
+              'jovo-platform-googleassistant',
+              undefined,
+              'Please run `npm install googleapis`',
+            ),
+          );
+        }
+        // return reject(new Error('Could not retrieve Google API access token'));
+      }
+  }
+
+  authorizePromise(jwtClient: any) {
+    return new Promise((resolve, reject) => {
+      jwtClient.authorize((err: Error, tokens:any) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(tokens.access_token as string);
+      });
+    });
   }
 }
 
@@ -473,26 +660,43 @@ export class TransactionsPlugin implements Plugin {
 
     if (
       _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
+      'actions.intent.DIGITAL_PURCHASE_CHECK'
+    ) {
+      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
+      _set(googleAction.$type, 'subType', 'DIGITAL_PURCHASE_CHECK');
+    }
+
+    if (
+      _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
       'actions.intent.DELIVERY_ADDRESS'
     ) {
       _set(googleAction.$type, 'type', 'ON_TRANSACTION');
       _set(googleAction.$type, 'subType', 'DELIVERY_ADDRESS');
     }
+    //
+    // if (
+    //   _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
+    //   'actions.intent.TRANSACTION_DECISION'
+    // ) {
+    //   _set(googleAction.$type, 'type', 'ON_TRANSACTION');
+    //   _set(googleAction.$type, 'subType', 'TRANSACTION_DECISION');
+    // }
 
     if (
       _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
       'actions.intent.TRANSACTION_DECISION'
     ) {
-      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
-      _set(googleAction.$type, 'subType', 'TRANSACTION_DECISION');
-    }
+      if (
+        _get(
+          googleAction.$originalRequest || googleAction.$request,
+          'inputs[0].arguments[0].name',
+        ) === 'TRANSACTION_DECISION_VALUE'
+      ) {
+        _set(googleAction.$type, 'type', 'ON_TRANSACTION');
 
-    if (
-      _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
-      'actions.intent.TRANSACTION_DECISION'
-    ) {
-      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
-      _set(googleAction.$type, 'subType', 'COMPLETE_PURCHASE');
+        // possible
+        _set(googleAction.$type, 'subType', 'TRANSACTION_DECISION');
+      }
     }
     googleAction.$transaction = new Transaction(googleAction, this.googleAssistant!);
   }
@@ -508,15 +712,62 @@ export class TransactionsPlugin implements Plugin {
       _set(googleAction.$originalResponse, 'systemIntent', {
         intent: 'actions.intent.TRANSACTION_REQUIREMENTS_CHECK',
         data: {
-          '@type': 'type.googleapis.com/google.actions.v2.TransactionRequirementsCheckSpec',
-          'paymentOptions': _get(
-            output,
-            'GoogleAssistant.TransactionRequirementsCheck.paymentOptions',
-          ),
+          '@type':
+            'type.googleapis.com/google.actions.transactions.v3.TransactionRequirementsCheckSpec',
         },
-        // TODO: orderOptions
       });
     }
+
+    if (_get(output, 'GoogleAssistant.TransactionDigitalPurchaseRequirementsCheck')) {
+      _set(googleAction.$originalResponse, 'expectUserResponse', true);
+      _set(googleAction.$originalResponse, 'systemIntent', {
+        intent: 'actions.intent.DIGITAL_PURCHASE_CHECK',
+        data: {
+          '@type':
+            'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec',
+        },
+      });
+    }
+
+    if (_get(output, 'GoogleAssistant.TransactionOrder')) {
+      _set(googleAction.$originalResponse, 'expectUserResponse', true);
+      _set(googleAction.$originalResponse, 'systemIntent', {
+        intent: 'actions.intent.TRANSACTION_DECISION',
+        data: {
+          '@type':
+            'type.googleapis.com/google.actions.transactions.v3.TransactionDecisionValueSpec',
+          'order': _get(output, 'GoogleAssistant.TransactionOrder.order'),
+          'orderOptions': _get(output, 'GoogleAssistant.TransactionOrder.orderOptions'),
+          'presentationOptions': _get(
+            output,
+            'GoogleAssistant.TransactionOrder.presentationOptions',
+          ),
+          'paymentParameters': _get(
+            output,
+            'GoogleAssistant.TransactionOrder.paymentParameters',
+          ),
+        },
+      });
+    }
+
+    if (_get(output, 'GoogleAssistant.TransactionOrderUpdate')) {
+      _set(googleAction.$originalResponse, 'expectUserResponse', true);
+      const richResponseItems = _get(googleAction.$originalResponse, 'richResponse.items', []);
+      richResponseItems.push({
+        structuredResponse: {
+          orderUpdateV3: {
+            type: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.type'),
+            reason: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.reason'),
+            order: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.order'),
+          }
+        },
+      });
+
+
+      _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
+
+    }
+
 
     if (_get(output, 'GoogleAssistant.AskForDeliveryAddress')) {
       _set(googleAction.$originalResponse, 'expectUserResponse', true);

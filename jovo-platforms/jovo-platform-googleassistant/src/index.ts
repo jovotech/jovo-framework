@@ -21,7 +21,7 @@ import { Table } from './response/Table';
 import { List } from './response/List';
 import { MediaResponse } from './modules/MediaResponse';
 import { Updates } from './modules/Updates';
-import { RichResponse } from './core/Interfaces';
+import { OrderUpdateV3, RichResponse } from './core/Interfaces';
 
 import { GoogleAction } from './core/GoogleAction';
 import { Handler } from 'jovo-core';
@@ -33,6 +33,8 @@ export { GoogleActionResponse } from './core/GoogleActionResponse';
 export { GoogleAssistantRequestBuilder } from './core/GoogleAssistantRequestBuilder';
 export { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBuilder';
 import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
+import { Order, ReservationUpdate } from './core/Interfaces';
+import { PaymentParameters, PresentationOptions } from './modules/Transaction';
 
 import { SessionEntityType } from 'jovo-platform-dialogflow';
 import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
@@ -379,6 +381,7 @@ export interface AppGoogleAssistantConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
+
   interface Output {
     GoogleAssistant: {
       AskForPermission?: {
@@ -435,8 +438,19 @@ declare module 'jovo-core/dist/src/Interfaces' {
       };
 
       TransactionRequirementsCheck?: {
+      };
+
+      TransactionDigitalPurchaseRequirementsCheck? : {}
+
+      TransactionOrder?: {
+        order: Order;
+        presentationOptions?: PresentationOptions;
         orderOptions?: OrderOptions;
-        paymentOptions: PaymentOptions;
+        paymentParameters?: PaymentParameters
+      };
+
+      TransactionOrderUpdate?: {
+        orderUpdate: OrderUpdateV3;
       };
 
       OrderUpdate?: {
