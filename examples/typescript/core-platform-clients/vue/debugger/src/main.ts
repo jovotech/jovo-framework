@@ -10,7 +10,7 @@ import '@/style/element-variables.scss';
 Vue.use(Element, { locale });
 Vue.use(JsonViewer);
 
-const WEBHOOK_URL = 'https://webhook.jovo.cloud/some-webhook-id';
+const WEBHOOK_URL = process.env.JOVO_WEBHOOK_URL;
 
 Vue.use(JovoClientWebVue, {
   url: WEBHOOK_URL,
