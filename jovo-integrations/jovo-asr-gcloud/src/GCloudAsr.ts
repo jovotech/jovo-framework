@@ -21,6 +21,7 @@ const readFile = promisify(fs.readFile);
 
 export interface Config extends PluginConfig {
   credentialsFile?: string;
+  locale?: string;
 }
 
 const TARGET_SAMPLE_RATE = 16000;
@@ -28,6 +29,7 @@ const TARGET_SAMPLE_RATE = 16000;
 export class GCloudAsr implements Plugin {
   config: Config = {
     credentialsFile: './credentials.json',
+    locale: 'en-US',
   };
 
   jwtClient?: JWT;
@@ -73,7 +75,8 @@ export class GCloudAsr implements Plugin {
       const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, TARGET_SAMPLE_RATE);
       const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
-      const result = await this.speechToText(wavBuffer);
+      const locale = jovo.$request!.getLocale() || this.config.locale!;
+      const result = await this.speechToText(wavBuffer, locale);
 
       jovo.$asr = {
         text: result.results[0].alternatives[0].transcript,
@@ -84,7 +87,7 @@ export class GCloudAsr implements Plugin {
     }
   }
 
-  private async speechToText(speech: Buffer): Promise<RecognitionResponse> {
+  private async speechToText(speech: Buffer, locale: string): Promise<RecognitionResponse> {
     const url = `https://speech.googleapis.com/v1/speech:recognize`;
 
     const accessTokenObj = await this.jwtClient?.getAccessToken();
@@ -92,7 +95,7 @@ export class GCloudAsr implements Plugin {
 
     const reqData: RecognitionRequest = {
       config: {
-        languageCode: 'en-US',
+        languageCode: locale,
       },
       audio: {
         content: speech.toString('base64'),
