@@ -16,7 +16,6 @@ export interface ResponseComponentConfig extends ComponentConfig {
 }
 
 export class ResponseComponent extends Component<ResponseComponentConfig> {
-  readonly name = 'ResponseComponent';
 
   static DEFAULT_CONFIG: ResponseComponentConfig = {
     reprompt: {
@@ -24,6 +23,7 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
       maxAttempts: 3,
     },
   };
+  readonly name = 'ResponseComponent';
 
   private readonly $repromptTimer: RepromptTimer;
 
