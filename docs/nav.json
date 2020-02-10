@@ -535,6 +535,10 @@
                         {
                             "title": "get",
                             "route": "cli/get"
+                        },
+                        {
+                            "title": "update",
+                            "route": "cli/update"
                         }
                     ]
                 },
