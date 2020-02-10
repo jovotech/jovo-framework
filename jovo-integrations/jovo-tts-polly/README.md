@@ -17,8 +17,8 @@
 </p>
 <br/>
 
-# Jovo Language Model Tester Plugin
+# Jovo Polly TTS Integration
 
 ```sh
-npm install jovo-plugin-lmtester
+npm install jovo-tts-polly
 ```

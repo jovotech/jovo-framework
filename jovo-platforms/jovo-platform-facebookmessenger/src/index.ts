@@ -9,6 +9,7 @@ import { ButtonTemplateOptions } from './responses/templates/ButtonTemplate';
 import { GenericTemplateOptions } from './responses/templates/GenericTemplate';
 import { MediaTemplateOptions } from './responses/templates/MediaTemplate';
 import { ReceiptTemplateOptions } from './responses/templates/ReceiptTemplate';
+import { QuickReply } from './Interfaces';
 
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
@@ -18,24 +19,8 @@ export const BASE_PATH = '/v5.0/me';
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $messengerBot?: MessengerBot;
-
     messengerBot(): MessengerBot;
-
     isMessengerBot(): boolean;
-
-    // replaces text of ask / tell with the given text
-    overrideText(text: string): Jovo;
-
-    text(options: TextMessageOptions): Jovo;
-    attachment(options: AttachmentMessageOptions): Jovo;
-
-    airlineTemplate(options: AirlineTemplateOptions): Jovo;
-    buttonTemplate(options: ButtonTemplateOptions): Jovo;
-    genericTemplate(options: GenericTemplateOptions): Jovo;
-    mediaTemplate(options: MediaTemplateOptions): Jovo;
-    receiptTemplate(options: ReceiptTemplateOptions): Jovo;
-
-    action(action: SenderActionType): Promise<boolean>;
   }
 }
 
@@ -47,7 +32,10 @@ declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
     FacebookMessenger: {
       Messages: Message[];
-      OverrideText?: string;
+      Overwrite?: {
+        Text?: string;
+        QuickReplies?: QuickReply[];
+      };
     };
   }
 

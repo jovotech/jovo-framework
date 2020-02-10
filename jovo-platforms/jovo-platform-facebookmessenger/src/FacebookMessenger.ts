@@ -8,6 +8,7 @@ import {
   HttpService,
   Jovo,
   JovoError,
+  Log,
   Platform,
   TestSuite,
 } from 'jovo-core';
@@ -113,7 +114,16 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     this.use(new FacebookMessengerCore());
 
-    this.augmentJovo();
+    Jovo.prototype.$messengerBot = undefined;
+    Jovo.prototype.messengerBot = function() {
+      if (this.constructor.name !== 'MessengerBot') {
+        throw Error(`Can't handle request. Please use this.isMessengerBot()`);
+      }
+      return this as MessengerBot;
+    };
+    Jovo.prototype.isMessengerBot = function() {
+      return this.constructor.name === 'MessengerBot';
+    };
 
     if (this.config.shouldOverrideAppHandle) {
       this.overrideAppHandle();
@@ -250,7 +260,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     for (const message of messages) {
       message.send(pageAccessToken).catch((e) => {
-        throw new JovoError(e, ErrorCode.ERR_PLUGIN, 'FacebookMessenger');
+        Log.error(`Error while sending message:\n${e}`);
       });
     }
   }
@@ -260,89 +270,6 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       new FacebookMessengerRequestBuilder(),
       new FacebookMessengerResponseBuilder(),
     );
-  }
-
-  private augmentJovo() {
-    Jovo.prototype.$messengerBot = undefined;
-    Jovo.prototype.messengerBot = function() {
-      if (this.constructor.name !== 'MessengerBot') {
-        throw Error(`Can't handle request. Please use this.isMessengerBot()`);
-      }
-      return this as MessengerBot;
-    };
-    Jovo.prototype.isMessengerBot = function() {
-      return this.constructor.name === 'MessengerBot';
-    };
-
-    Jovo.prototype.text = function(options: TextMessageOptions) {
-      const message = new TextMessage({ id: this.$user.getId()! }, options);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-    Jovo.prototype.attachment = function(options: AttachmentMessageOptions) {
-      const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-
-    Jovo.prototype.overrideText = function(text: string) {
-      this.$output.FacebookMessenger.OverrideText = text;
-      return this;
-    };
-
-    Jovo.prototype.airlineTemplate = function(options: AirlineTemplateOptions) {
-      const payload: AirlineTemplatePayload = {
-        ...options,
-        template_type: TemplateType.Airline,
-      };
-      const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-    Jovo.prototype.buttonTemplate = function(options: ButtonTemplateOptions) {
-      const payload: ButtonTemplatePayload = {
-        ...options,
-        template_type: TemplateType.Button,
-      };
-      const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-    Jovo.prototype.genericTemplate = function(options: GenericTemplateOptions) {
-      const payload: GenericTemplatePayload = {
-        ...options,
-        template_type: TemplateType.Generic,
-      };
-      const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-    Jovo.prototype.mediaTemplate = function(options: MediaTemplateOptions) {
-      const payload: MediaTemplatePayload = {
-        ...options,
-        template_type: TemplateType.Media,
-      };
-      const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-    Jovo.prototype.receiptTemplate = function(options: ReceiptTemplateOptions) {
-      const payload: ReceiptTemplatePayload = {
-        ...options,
-        template_type: TemplateType.Receipt,
-      };
-      const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
-      this.$output.FacebookMessenger.Messages.push(message);
-      return this;
-    };
-
-    Jovo.prototype.action = async function(action: SenderActionType) {
-      const message = new SenderAction({ id: this.$user.getId()! }, action);
-
-      const pageAccessToken = _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');
-      const result = await message.send(pageAccessToken);
-      return !!result;
-    };
   }
 
   private overrideAppHandle() {

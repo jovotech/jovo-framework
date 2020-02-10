@@ -1,6 +1,8 @@
 import { CoreComponent, JovoWebClient, SpeechSynthesizerEvents } from '..';
 
 export class SpeechSynthesizer extends CoreComponent {
+  readonly name = 'SpeechSynthesizer';
+
   private $volume = 1.0;
   private readonly $speechSynthesis: SpeechSynthesis | null = null;
 

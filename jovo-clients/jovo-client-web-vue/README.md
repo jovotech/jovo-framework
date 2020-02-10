@@ -17,8 +17,10 @@
 </p>
 <br/>
 
-# Jovo Google Cloud ASR Integration
+# Jovo Web Client - Vue
+A web-based client that allows interacting with the Jovo Core-platform. \
+This package is a plugin for Vue.js and does not work without it.
 
 ```sh
-npm install jovo-asr-gcloud
+npm install jovo-client-web-vue
 ```

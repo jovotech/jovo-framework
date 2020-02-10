@@ -1,5 +1,4 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 
 function createConfig(target, targetName = target) {
   return {
@@ -30,17 +29,6 @@ function createConfig(target, targetName = target) {
         commonjs2: 'vue',
         root: 'Vue',
       },
-    },
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            mangle: false,
-          },
-          extractComments: false,
-        }),
-      ],
     },
   };
 }

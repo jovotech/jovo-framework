@@ -2,6 +2,8 @@ import { Action, ActionType, ParallelAction, SequentialAction, SpeechAction } fr
 import { CoreComponent } from './CoreComponent';
 
 export class ActionHandler extends CoreComponent {
+  readonly name = 'ActionHandler';
+
   // tslint:disable-next-line:no-any
   async handleAction(action: Action): Promise<any> {
     if (action.delay) {
