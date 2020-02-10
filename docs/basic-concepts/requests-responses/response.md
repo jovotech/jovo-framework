@@ -37,7 +37,7 @@ The response gets assembled from the `$output` object in the [`platform.output` 
 
 ### Response Getters
 
-For some use cases (especially [Unit Testing](../../testing/unit-testing.md '../unit-testing')), it might be helpful to get information from a response object, like `this.$response.getSpeech()`.
+For some use cases (especially [Unit Testing](../../workflows/unit-testing.md '../unit-testing')), it might be helpful to get information from a response object, like `this.$response.getSpeech()`.
 
 You can use these cross-platform helper methods:
 

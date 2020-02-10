@@ -13,7 +13,7 @@ Learn how to bring your Jovo apps to platforms like Facebook Messenger and Slack
 
 ## Introduction to Dialogflow Integrations
 
-If you have an existing Dialogflow Agent (which you can set up using the [Jovo Language Model](../../basic-concepts/model './model') and the [Jovo CLI](../../workflows/cli './cli'), you can enable integrations in the [Dialogflow console](https://console.dialogflow.com/):
+If you have an existing Dialogflow Agent (which you can set up using the [Jovo Language Model](../../basic-concepts/model './model') and the [Jovo CLI](../../tools/cli './cli'), you can enable integrations in the [Dialogflow console](https://console.dialogflow.com/):
 
 ![Dialogflow Integrations](../../img/dialogflow-integrations.jpg "Integrations in the Dialogflow Console")
 

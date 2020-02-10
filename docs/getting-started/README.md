@@ -37,7 +37,7 @@ You can check the version number (and compare it to the [jovo-cli npm package](h
 $ jovo -v
 ```
 
-> [Find a full list of Jovo CLI Commands here](../workflows/cli './cli').
+> [Find a full list of Jovo CLI Commands here](../tools/cli './cli').
 
 
 ## Create a new Jovo Project
@@ -85,7 +85,7 @@ project.js
 
 ## Run and Test the Code
 
-To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](../testing/debugger.md './debugger'). 
+To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](../tools/debugger.md './debugger'). 
 
 To get started, use the following command:
 
@@ -104,7 +104,7 @@ $ npm run tsc
 $ jovo run
 ```
 
-This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](../testing/debugger.md './debugger').
+This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](../tools/debugger.md './debugger').
 
 ![Jovo Debugger](../img/jovo-debugger-helloworld.gif)
 

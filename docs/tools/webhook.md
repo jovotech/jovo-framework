@@ -43,9 +43,9 @@ Make sure that, with every file update, you terminate the server with `ctrl+c` a
 
 By copying the link of your webhook and opening it in your browser, you can access the Jovo Debugger, which makes it even easier to test and debug locally:
 
-[![Jovo Debugger](../img/jovo-debugger-helloworld.gif)](../testing/debugger.md './debugger')
+[![Jovo Debugger](../img/jovo-debugger-helloworld.gif)](../tools/debugger.md './debugger')
 
-> [Learn more about the Jovo Debugger here](../testing/debugger.md './debugger').
+> [Learn more about the Jovo Debugger here](../tools/debugger.md './debugger').
 
 
-<!--[metadata]: {"description": "Learn more about local development of Alexa Skills and Google Actions with the Jovo Webhook.", "route": "jovo-webhook"}-->
+<!--[metadata]: {"description": "Learn more about local development of Alexa Skills and Google Actions with the Jovo Webhook.", "route": "webhook"}-->

@@ -46,7 +46,7 @@ You can check the version number (and compare it to the [jovo-cli npm package](h
 $ jovo -v
 ```
 
-> [Find a full list of Jovo CLI Commands here](../workflows/cli './cli').
+> [Find a full list of Jovo CLI Commands here](../tools/cli './cli').
 
 #### Create a new Jovo Project
 

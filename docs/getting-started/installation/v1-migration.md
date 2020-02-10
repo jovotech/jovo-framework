@@ -325,7 +325,7 @@ this.$session.$data._JOVO_STATE_ = 'OrderState';
 
 ### Unit Testing
 
-> [Learn more about unit testing here](../../testing/unit-testing.md '../unit-testing').
+> [Learn more about unit testing here](../../workflows/unit-testing.md '../unit-testing').
 
 In `v1`, Jovo used a combination of `mocha` and `chai` for unit testing. In `v2`, we switched to `Jest` and provide a cleaner experience that leverages `async` and `await`.
 
