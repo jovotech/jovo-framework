@@ -1,10 +1,12 @@
+import { GCloudAsr } from 'jovo-asr-gcloud';
 import { FileDb } from 'jovo-db-filedb';
 import { App } from 'jovo-framework';
-import { ActionType, CorePlatform } from 'jovo-platform-core';
+import { CorePlatform } from 'jovo-platform-core';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { AmazonCredentials, AmazonLexSlu } from 'jovo-slu-lex';
-import { ActionBuilder } from 'jovo-platform-core/dist/src/ActionBuilder';
+import { AmazonPollyTts } from 'jovo-tts-polly';
+import { join } from 'path';
 
 const app = new App();
 
@@ -16,13 +18,16 @@ const credentials: AmazonCredentials = {
 };
 
 corePlatform.use(
-	// new AmazonPollyTts({
-	// 	credentials
-	// }),
+	new GCloudAsr({
+		credentialsFile: join(__dirname, '../..', 'credentials.json')
+	}),
 	new AmazonLexSlu({
 		credentials,
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
+	}),
+	new AmazonPollyTts({
+		credentials
 	})
 );
 
@@ -34,20 +39,6 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
-		if (this.$corePlatformApp) {
-			this.$corePlatformApp.$actions
-				.addSpeech({
-					ssml: 'testssml',
-					displayText: 'setValue'
-				})
-				.addContainer(
-					new ActionBuilder()
-						.addSpeech({ plain: 'plain' })
-						.addSpeech({ plain: 'another one' })
-						.build(),
-					ActionType.ParallelContainer
-				);
-		}
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 

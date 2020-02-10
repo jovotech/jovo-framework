@@ -91,7 +91,6 @@ export class CorePlatformCore implements Plugin {
     const { tell, ask } = output;
 
     if (tell) {
-      console.log('Handling tell');
       const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
         ssml: tell.speech.toString(),
