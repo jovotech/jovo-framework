@@ -9,7 +9,7 @@ import {
   SpeechBuilder,
   ValidationError,
   Validator,
-  ValidValuesValidator
+  ValidValuesValidator,
 } from '../src';
 
 process.env.NODE_ENV = 'UNIT_TEST';

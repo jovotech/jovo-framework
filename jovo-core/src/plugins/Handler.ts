@@ -147,7 +147,7 @@ export class Handler implements Plugin {
 
     // skip on non-existing AudioPlayer requests
     if (route.type === EnumRequestType.AUDIOPLAYER && !_get(jovo.$handlers, route.path)) {
-        return;
+      return;
     }
 
     // throw error if no handler and no UNHANDLED on same level

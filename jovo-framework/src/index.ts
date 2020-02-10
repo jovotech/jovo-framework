@@ -1,7 +1,12 @@
 import { Data, Log, LogLevel, Project, Util } from 'jovo-core';
 import { App } from './App';
 
-import { ContextPrevObject, UserContext, UserMetaData, UserSessionData } from './middleware/user/JovoUser';
+import {
+  ContextPrevObject,
+  UserContext,
+  UserMetaData,
+  UserSessionData,
+} from './middleware/user/JovoUser';
 
 import { Config as BasicLoggingConfig } from './middleware/logging/BasicLogging';
 

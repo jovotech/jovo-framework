@@ -8,7 +8,6 @@ import { Order, PaymentType, Reservation } from '../core/Interfaces';
 import _set = require('lodash.set');
 import _get = require('lodash.get');
 
-
 export interface PaymentParameters {
   merchantPaymentOption: MerchantPaymentOption;
 }
@@ -76,8 +75,7 @@ export type RequirementsCheckResult =
   | 'ASSISTANT_SURFACE_NOT_SUPPORTED'
   | 'REGION_NOT_SUPPORTED';
 
-export type DigitalPurchaseRequirementsCheckResult =
-  | 'CAN_PURCHASE';
+export type DigitalPurchaseRequirementsCheckResult = 'CAN_PURCHASE';
 
 export type DeliveryAddressDecision = 'ACCEPTED' | 'REJECTED';
 export type TransactionDecision =
@@ -177,30 +175,26 @@ export class Transaction {
     order: Order,
     presentationOptions: PresentationOptions = { actionDisplayName: 'PLACE_ORDER' },
     orderOptions: OrderOptions = { requestDeliveryAddress: false },
-    paymentParameters?: PaymentParameters
+    paymentParameters?: PaymentParameters,
   ) {
     this.googleAction.$output.GoogleAssistant = {
       TransactionOrder: {
         order,
         presentationOptions,
         orderOptions,
-        paymentParameters
+        paymentParameters,
       },
     };
   }
 
-  updateOrder(
-    order: Order,
-    reason: string,
-    type = 'SNAPSHOT'
-  ) {
+  updateOrder(order: Order, reason: string, type = 'SNAPSHOT') {
     this.googleAction.$output.GoogleAssistant = {
       TransactionOrderUpdate: {
         orderUpdate: {
           order,
           reason,
-          type
-        }
+          type,
+        },
       },
     };
   }
@@ -213,11 +207,7 @@ export class Transaction {
     this.buildOrder(reservation, presentationOptions, orderOptions);
   }
 
-  updateReservation(
-    reservation: Reservation,
-    reason: string,
-    type = 'SNAPSHOT'
-  ) {
+  updateReservation(reservation: Reservation, reason: string, type = 'SNAPSHOT') {
     this.updateOrder(reservation, reason, type);
   }
 
@@ -545,7 +535,6 @@ export class Transaction {
 
     const accessToken = await this.getGoogleApiAccessToken();
 
-
     try {
       const response = await GoogleActionAPI.apiCall({
         endpoint: 'https://actions.googleapis.com',
@@ -569,61 +558,65 @@ export class Transaction {
   }
 
   async getGoogleApiAccessToken() {
-      if (
-        !this.googleAssistant.config.transactions ||
-        !this.googleAssistant.config.transactions.keyFile
-      ) {
-        throw new JovoError(
-          'Please add a valid keyFile object to the GoogleAssistant transaction config',
-          ErrorCode.ERR,
-          'jovo-platform-googleassistant',
+    if (
+      !this.googleAssistant.config.transactions ||
+      !this.googleAssistant.config.transactions.keyFile
+    ) {
+      throw new JovoError(
+        'Please add a valid keyFile object to the GoogleAssistant transaction config',
+        ErrorCode.ERR,
+        'jovo-platform-googleassistant',
+      );
+    }
+    /**
+     * DigitalGoods.ts needs the googleapis package to function.
+     * To reduce overall package size, googleapis wasn't added as a dependency.
+     * googleapis has to be manually installed
+     */
+    try {
+      const { google } = require('googleapis');
+
+      // tslint:disable-next-line:no-any
+      const serviceAccount: any = this.googleAssistant.config.transactions!.keyFile;
+
+      const jwtClient = new google.auth.JWT(
+        serviceAccount.client_email,
+        null,
+        serviceAccount.private_key,
+        ['https://www.googleapis.com/auth/actions.purchases.digital'],
+        null,
+      );
+
+      return await this.authorizePromise(jwtClient);
+
+      // return resolve(token);
+      // return jwtClient.then((client: any) => {
+      //
+      //   console.log(client);
+      //   return client.authorize();
+      // }) // tslint:disable-line
+      //   .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
+    } catch (e) {
+      if (e.message === "Cannot find module 'googleapis'") {
+        return Promise.reject(
+          new JovoError(
+            e.message,
+            ErrorCode.ERR,
+            'jovo-platform-googleassistant',
+            undefined,
+            'Please run `npm install googleapis`',
+          ),
         );
       }
-      /**
-       * DigitalGoods.ts needs the googleapis package to function.
-       * To reduce overall package size, googleapis wasn't added as a dependency.
-       * googleapis has to be manually installed
-       */
-      try {
-        const {google} = require('googleapis');
-
-        // tslint:disable-next-line:no-any
-        const serviceAccount: any = this.googleAssistant.config.transactions!.keyFile;
-
-        const jwtClient = new google.auth.JWT(
-          serviceAccount.client_email, null, serviceAccount.private_key,
-          ['https://www.googleapis.com/auth/actions.purchases.digital'],
-          null
-        );
-
-        return await this.authorizePromise(jwtClient);
-
-        // return resolve(token);
-        // return jwtClient.then((client: any) => {
-        //
-        //   console.log(client);
-        //   return client.authorize();
-        // }) // tslint:disable-line
-        //   .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
-      } catch (e) {
-        if (e.message === "Cannot find module 'googleapis'") {
-          return Promise.reject(
-            new JovoError(
-              e.message,
-              ErrorCode.ERR,
-              'jovo-platform-googleassistant',
-              undefined,
-              'Please run `npm install googleapis`',
-            ),
-          );
-        }
-        // return reject(new Error('Could not retrieve Google API access token'));
-      }
+      // return reject(new Error('Could not retrieve Google API access token'));
+    }
   }
 
-  authorizePromise(jwtClient: any) { // tslint:disable-line
+  authorizePromise(jwtClient: any) {
+    // tslint:disable-line
     return new Promise((resolve, reject) => {
-      jwtClient.authorize((err: Error, tokens:any) => { // tslint:disable-line
+      jwtClient.authorize((err: Error, tokens: any) => {
+        // tslint:disable-line
         if (err) {
           return reject(err);
         }
@@ -718,8 +711,7 @@ export class TransactionsPlugin implements Plugin {
       _set(googleAction.$originalResponse, 'systemIntent', {
         intent: 'actions.intent.DIGITAL_PURCHASE_CHECK',
         data: {
-          '@type':
-            'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec',
+          '@type': 'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec',
         },
       });
     }
@@ -737,10 +729,7 @@ export class TransactionsPlugin implements Plugin {
             output,
             'GoogleAssistant.TransactionOrder.presentationOptions',
           ),
-          'paymentParameters': _get(
-            output,
-            'GoogleAssistant.TransactionOrder.paymentParameters',
-          ),
+          'paymentParameters': _get(output, 'GoogleAssistant.TransactionOrder.paymentParameters'),
         },
       });
     }
@@ -754,15 +743,12 @@ export class TransactionsPlugin implements Plugin {
             type: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.type'),
             reason: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.reason'),
             order: _get(output, 'GoogleAssistant.TransactionOrderUpdate.orderUpdate.order'),
-          }
+          },
         },
       });
 
-
       _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
-
     }
-
 
     if (_get(output, 'GoogleAssistant.AskForDeliveryAddress')) {
       _set(googleAction.$originalResponse, 'expectUserResponse', true);

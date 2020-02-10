@@ -7,7 +7,7 @@ import {
   Jovo,
   JovoError,
   TestSuite,
-  Platform
+  Platform,
 } from 'jovo-core';
 import _merge from 'lodash.merge';
 import { BixbyRequestBuilder } from './core/BixbyRequestBuilder';
@@ -50,11 +50,7 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
     app.middleware('response')!.use(this.response.bind(this));
     app.middleware('fail')!.use(this.fail.bind(this));
 
-    this.use(
-      new BixbyCore(),
-      new BixbyNLU(),
-      new BixbyAudioPlayerPlugin()
-    );
+    this.use(new BixbyCore(), new BixbyNLU(), new BixbyAudioPlayerPlugin());
 
     Jovo.prototype.$bixbyCapsule = undefined;
     Jovo.prototype.bixbyCapsule = function() {

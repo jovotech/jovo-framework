@@ -418,7 +418,6 @@ export interface TicketOrderExtension {
   ticketEvent: TicketEvent;
 }
 
-
 export interface Order {
   googleOrderId?: string;
   merchantOrderId?: string;
@@ -448,13 +447,9 @@ export interface StructuredResponse {
   orderUpdate?: OrderUpdate;
   orderUpdateV3?: OrderUpdateV3;
 }
-export interface Reservation extends Order {
+export interface Reservation extends Order {}
 
-}
-
-export interface ReservationUpdate extends OrderUpdateV3 {
-
-}
+export interface ReservationUpdate extends OrderUpdateV3 {}
 
 export type MediaType = 'MEDIA_TYPE_UNSPECIFIED' | 'AUDIO';
 

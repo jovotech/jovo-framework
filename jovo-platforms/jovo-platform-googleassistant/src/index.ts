@@ -381,7 +381,6 @@ export interface AppGoogleAssistantConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-
   interface Output {
     GoogleAssistant: {
       AskForPermission?: {
@@ -437,16 +436,15 @@ declare module 'jovo-core/dist/src/Interfaces' {
         proposedOrder: any; // tslint:disable-line
       };
 
-      TransactionRequirementsCheck?: {
-      };
+      TransactionRequirementsCheck?: {};
 
-      TransactionDigitalPurchaseRequirementsCheck? : {}
+      TransactionDigitalPurchaseRequirementsCheck?: {};
 
       TransactionOrder?: {
         order: Order;
         presentationOptions?: PresentationOptions;
         orderOptions?: OrderOptions;
-        paymentParameters?: PaymentParameters
+        paymentParameters?: PaymentParameters;
       };
 
       TransactionOrderUpdate?: {

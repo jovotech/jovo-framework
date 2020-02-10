@@ -79,7 +79,6 @@ export class DialogInterface implements Plugin {
       }
       return this.addDynamicEntityTypes(dynamicEntityTypes);
     };
-
   }
   uninstall(alexa: Alexa) {}
 

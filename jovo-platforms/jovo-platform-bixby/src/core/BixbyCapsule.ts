@@ -8,7 +8,7 @@ export class BixbyCapsule extends Jovo {
   $bixbyCapsule: BixbyCapsule;
   $audioPlayer?: BixbyAudioPlayer;
   // tslint:disable:no-any
-  $layout: {[key: string]: any} = {};
+  $layout: { [key: string]: any } = {};
   // @ts-ignore
   $user: BixbyUser;
 

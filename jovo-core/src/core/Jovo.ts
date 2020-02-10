@@ -14,7 +14,7 @@ import {
   SessionData,
   SpeechBuilder,
   ValidationError,
-  Validator
+  Validator,
 } from '..';
 import {
   Host,
@@ -25,7 +25,7 @@ import {
   JovoSession,
   Output,
   RequestType,
-  SessionAttributes
+  SessionAttributes,
 } from '../Interfaces';
 import { AsrData } from './AsrData';
 import { BaseApp, BaseAppConfig } from './BaseApp';

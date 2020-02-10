@@ -18,7 +18,7 @@ export class BixbyResponse implements JovoResponse {
   setSessionId(id: string) {
     if (!this._JOVO_SESSION_DATA_) {
       this._JOVO_SESSION_DATA_ = {
-        _JOVO_SESSION_ID_: ''
+        _JOVO_SESSION_ID_: '',
       };
     }
     this._JOVO_SESSION_DATA_._JOVO_SESSION_ID_ = id;
