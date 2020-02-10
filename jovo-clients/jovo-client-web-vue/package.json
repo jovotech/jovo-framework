@@ -5,8 +5,8 @@
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "tsc": "webpack --mode production",
-    "tscw": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
