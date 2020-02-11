@@ -16,7 +16,6 @@ beforeEach(() => {
   t = alexa.makeTestSuite();
 });
 
-// TODO what to test functions, Alexa.prototype functions?
 describe('test DialogDelegate functions', () => {
   describe('test getState', () => {
     test('to be STARTED', async (done) => {

@@ -1,6 +1,7 @@
 {
   "name": "jovo-examples-client-web-vue-debugger",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

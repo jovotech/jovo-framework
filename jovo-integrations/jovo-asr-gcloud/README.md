@@ -17,8 +17,8 @@
 </p>
 <br/>
 
-# Jovo Language Model Tester Plugin
+# Jovo Google Cloud ASR Integration
 
 ```sh
-npm install jovo-plugin-lmtester
+npm install jovo-asr-gcloud
 ```

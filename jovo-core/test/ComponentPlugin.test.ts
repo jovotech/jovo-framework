@@ -306,7 +306,7 @@ describe('test component session stack', () => {
       });
     });
 
-    test("should leave the other component's data unchanged", () => {
+    test(`should leave the other component's data unchanged`, () => {
       mockHandleRequest.jovo!.$session.$data[SessionConstants.COMPONENT].push([
         'SecondLayerComponent',
         {},

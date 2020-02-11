@@ -14,13 +14,14 @@ import {
   PluginConfig,
 } from 'jovo-core';
 import { promisify } from 'util';
-import { RecognitionRequest, RecognitionResult } from './Interfaces';
+import { RecognitionRequest, RecognitionResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 
 const readFile = promisify(fs.readFile);
 
 export interface Config extends PluginConfig {
   credentialsFile?: string;
+  locale?: string;
 }
 
 const TARGET_SAMPLE_RATE = 16000;
@@ -28,6 +29,7 @@ const TARGET_SAMPLE_RATE = 16000;
 export class GCloudAsr implements Plugin {
   config: Config = {
     credentialsFile: './credentials.json',
+    locale: 'en-US',
   };
 
   jwtClient?: JWT;
@@ -73,10 +75,11 @@ export class GCloudAsr implements Plugin {
       const downSampled = AudioEncoder.sampleDown(audio.data, audio.sampleRate, TARGET_SAMPLE_RATE);
       const wavBuffer = AudioEncoder.encodeToWav(downSampled, TARGET_SAMPLE_RATE);
 
-      const result = await this.speechToText(wavBuffer);
+      const locale = jovo.$request!.getLocale() || this.config.locale!;
+      const result = await this.speechToText(wavBuffer, locale);
 
       jovo.$asr = {
-        text: result.alternatives[0].transcript,
+        text: result.results[0].alternatives[0].transcript,
         [this.name]: result,
       };
     } else if (!text && jovo.$type.type === EnumRequestType.INTENT) {
@@ -84,7 +87,7 @@ export class GCloudAsr implements Plugin {
     }
   }
 
-  private async speechToText(speech: Buffer): Promise<RecognitionResult> {
+  private async speechToText(speech: Buffer, locale: string): Promise<RecognitionResponse> {
     const url = `https://speech.googleapis.com/v1/speech:recognize`;
 
     const accessTokenObj = await this.jwtClient?.getAccessToken();
@@ -92,7 +95,7 @@ export class GCloudAsr implements Plugin {
 
     const reqData: RecognitionRequest = {
       config: {
-        languageCode: 'en-US',
+        languageCode: locale,
       },
       audio: {
         content: speech.toString('base64'),
@@ -109,9 +112,14 @@ export class GCloudAsr implements Plugin {
     };
 
     try {
-      const response = await HttpService.request(config);
-      console.log({ response });
+      const response = await HttpService.request<RecognitionResponse>(config);
       if (response.status === 200 && response.data) {
+        if (
+          response.data.results.length === 0 ||
+          (response.data.results.length > 0 && response.data.results[0].alternatives.length === 0)
+        ) {
+          throw new Error('ASR not successful. No text could be extracted.');
+        }
         return response.data;
       }
       throw new Error(

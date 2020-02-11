@@ -22,6 +22,7 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
       maxAttempts: 3,
     },
   };
+  readonly name = 'ResponseComponent';
 
   private readonly $repromptTimer: RepromptTimer;
 

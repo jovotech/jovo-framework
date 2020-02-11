@@ -1,7 +1,7 @@
 {
   "name": "jovo-core",
-  "version": "2.2.18",
-  "description": " ",
+  "version": "2.2.21",
+  "description": "jovo-core",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
@@ -44,11 +44,11 @@
     "@types/lodash.set": "^4.3.6",
     "@types/lodash.transform": "^4.6.4",
     "@types/node": "^10.3.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
-    "ts-jest": "^24.0.1",
+    "ts-jest": "^25.2.0",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.6",
@@ -73,5 +73,5 @@
   "files": [
     "dist/src/**/*"
   ],
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176"
+  "gitHead": "85f493970553e479edcee02ad7037f617dd74fcd"
 }

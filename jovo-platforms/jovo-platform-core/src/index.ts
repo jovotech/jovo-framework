@@ -26,3 +26,4 @@ export * from './core/CorePlatformSpeechBuilder';
 export * from './core/CorePlatformUser';
 
 export * from './modules/CorePlatformCore';
+export * from './ActionBuilder';

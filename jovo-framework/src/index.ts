@@ -1,7 +1,12 @@
 import { Data, Log, LogLevel, Project, Util } from 'jovo-core';
 import { App } from './App';
 
-import { ContextPrevObject, UserContext, UserMetaData } from './middleware/user/JovoUser';
+import {
+  ContextPrevObject,
+  UserContext,
+  UserMetaData,
+  UserSessionData,
+} from './middleware/user/JovoUser';
 
 import { Config as BasicLoggingConfig } from './middleware/logging/BasicLogging';
 
@@ -52,7 +57,7 @@ declare module 'jovo-core/dist/src/core/User' {
     $metaData: UserMetaData;
     $data: Data;
     $context: UserContext;
-    $sessionData: Data;
+    $session: UserSessionData;
     isDeleted: boolean;
     db_cache_hash?: string;
 

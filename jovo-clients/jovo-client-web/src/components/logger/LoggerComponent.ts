@@ -26,6 +26,8 @@ export class LoggerComponent extends Component<LoggerComponentConfig> implements
     level: LogLevel.Verbose,
   };
 
+  readonly name = 'LoggerComponent';
+
   get level(): LogLevel {
     return this.$config.level;
   }

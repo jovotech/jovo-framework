@@ -18,6 +18,14 @@ import {
 } from '../services/AlexaReminder';
 import { ShoppingList, ShoppingListItem, ToDoList, ToDoListItem } from './Interfaces';
 import { AlexaSkill } from './AlexaSkill';
+import {
+  AmazonPayAPI,
+  BuyerIdResponse,
+  AmazonPayApiRequestOptions,
+  BuyerAddressRequestOptions,
+  BuyerAddressResponse,
+  BuyerAddress,
+} from '../services/AmazonPayAPI';
 
 export class AlexaUser extends User {
   alexaSkill: AlexaSkill;
@@ -350,5 +358,49 @@ export class AlexaUser extends User {
    */
   getAllReminders(): Promise<ReminderListResponse> {
     return this.alexaReminder.getAllReminders();
+  }
+
+  getBuyerId(options?: AmazonPayApiRequestOptions): Promise<BuyerIdResponse> {
+    if (!options) {
+      options = {};
+    }
+    const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
+    if (!options.apiAccessToken) {
+      options.apiAccessToken = alexaRequest.getApiAccessToken();
+    }
+
+    if (!options.host) {
+      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(
+        alexaRequest.getApiEndpoint(),
+      );
+    }
+
+    return AmazonPayAPI.getBuyerId(options);
+  }
+
+  getBuyerAddress(options: BuyerAddressRequestOptions): Promise<BuyerAddressResponse> {
+    const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
+    if (!options.apiAccessToken) {
+      options.apiAccessToken = alexaRequest.getApiAccessToken();
+    }
+
+    if (!options.host) {
+      options.host = AmazonPayAPI.mapAlexaApiEndpointToAmazonPayApiHost(
+        alexaRequest.getApiEndpoint(),
+      );
+    }
+
+    return AmazonPayAPI.getBuyerAddress(options);
+  }
+
+  async getDefaultBuyerAddress(
+    options: BuyerAddressRequestOptions,
+  ): Promise<BuyerAddress | undefined> {
+    const { addresses } = await this.getBuyerAddress(options);
+    const defaultAddress = addresses.find((address) => {
+      return address.addressType === 'DefaultOneClickShippingAddress';
+    });
+
+    return defaultAddress;
   }
 }

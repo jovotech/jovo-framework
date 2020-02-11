@@ -1,4 +1,6 @@
 import { EnumRequestType, HandleRequest, Plugin, SpeechBuilder } from 'jovo-core';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {
   Action,
   ActionType,
@@ -10,8 +12,6 @@ import {
   SpeechAction,
 } from '..';
 import { CorePlatform } from '../CorePlatform';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
@@ -91,7 +91,6 @@ export class CorePlatformCore implements Plugin {
     const { tell, ask } = output;
 
     if (tell) {
-      console.log('Handling tell');
       const tellAction: SpeechAction = {
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
         ssml: tell.speech.toString(),

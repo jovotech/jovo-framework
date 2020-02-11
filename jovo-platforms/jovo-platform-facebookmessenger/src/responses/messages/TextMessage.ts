@@ -1,4 +1,4 @@
-import { IdentityData, Message, MessageType, QuickReply } from '../..';
+import { IdentityData, Message, MessageType, MessengerBotSpeechBuilder, QuickReply } from '../..';
 
 export interface TextMessageOptions {
   text: string;
@@ -18,7 +18,7 @@ export class TextMessage extends Message {
 
     this.message = {
       quick_replies: options.quickReplies,
-      text: options.text,
+      text: MessengerBotSpeechBuilder.removeSSML(options.text),
     };
     this.message_type = options.messageType || MessageType.Response;
   }

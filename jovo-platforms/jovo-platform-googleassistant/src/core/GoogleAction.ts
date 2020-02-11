@@ -306,15 +306,6 @@ export class GoogleAction extends Jovo {
   }
 
   /**
-   * Returns true if user is not voice matched
-   * @return {string}
-   */
-  isVoiceMatchedUser() {
-    // TODO
-    // return _.isNumber(parseInt(this.getUserId()));
-  }
-
-  /**
    * Returns true if the current request is of type ON_SIGN_IN
    * @public
    * @return {boolean}

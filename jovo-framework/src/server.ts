@@ -10,7 +10,10 @@ const server: express.Application = express();
 
 server.jovoApp = undefined;
 server.ssl = undefined;
-server.use(bodyParser.json({ limit: '5mb' }));
+server.use(
+  bodyParser.urlencoded({ extended: true, limit: '5mb' }),
+  bodyParser.json({ limit: '5mb' }),
+);
 
 server.listen = function() {
   if (server.jovoApp) {

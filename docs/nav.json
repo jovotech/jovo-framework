@@ -305,7 +305,7 @@
                         },
                         {
                             "title": "Amazon Pay",
-                            "route": "amazon-alexa/pay"
+                            "route": "amazon-alexa/amazon-pay"
                         }
                     ]
                 },
@@ -495,8 +495,8 @@
                             "route": "asr-nlu-slu/microsoft-azure"
                         },
                         {
-                            "title": "Wit.AI",
-                            "route": "asr-nlu-slu/wit-ai"
+                            "title": "Wit.ai",
+                            "route": "asr-nlu-slu/witai"
                         }
                     ]
                 }

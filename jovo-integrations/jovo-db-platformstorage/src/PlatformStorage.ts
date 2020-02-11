@@ -1,7 +1,7 @@
 import { BaseApp, Db, Jovo, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 
-interface Config extends PluginConfig {}
+export interface Config extends PluginConfig {}
 
 export class PlatformStorage implements Db {
   needsWriteFileAccess = false;
