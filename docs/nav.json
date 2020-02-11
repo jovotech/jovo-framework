@@ -243,7 +243,7 @@
                             "route": "hosting/azure-functions"
                         },
                         {
-                            "title": "Http Host",
+                            "title": "HTTP Host",
                             "route": "hosting/http-host"
                         }
                     ]
