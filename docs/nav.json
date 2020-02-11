@@ -241,6 +241,10 @@
                         {
                             "title": "Azure Functions",
                             "route": "hosting/azure-functions"
+                        },
+                        {
+                            "title": "HTTP Host",
+                            "route": "hosting/http-host"
                         }
                     ]
                 }
