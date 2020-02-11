@@ -280,7 +280,7 @@ declare module './core/GoogleAction' {
      * @param {array} rowsText
      * @return {GoogleAction} this
      */
-    showSimpleTable(title: string, subtitle: string, columnHeaders: string[], rowsText: string[][]): this; // tslint:disable-line
+    showSimpleTable(title: string, subtitle: string, columnHeaders: string[], rowsText: string[][]): this;
 
     /**
      * Adds table to response
