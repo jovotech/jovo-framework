@@ -4,7 +4,7 @@
 // APP INITIALIZATION
 // ------------------------------------------------------------------
 
-const { App } = require('jovo-framework/dist/src');
+const { App } = require('jovo-framework');
 const { FacebookMessenger } = require('jovo-platform-facebookmessenger');
 const { LuisNlu } = require('jovo-nlu-luis');
 const { JovoDebugger } = require('jovo-plugin-debugger');

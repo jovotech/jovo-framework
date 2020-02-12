@@ -1,4 +1,4 @@
-const { config } = require('jovo-framework/dist/src');
+const { config } = require('jovo-framework');
 
 module.exports = config({
 	logging: true,

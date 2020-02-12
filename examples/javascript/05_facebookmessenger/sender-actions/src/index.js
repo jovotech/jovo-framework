@@ -3,7 +3,7 @@ const {
     Webhook,
     ExpressJS,
     Lambda
-} = require('jovo-framework/dist/src');
+} = require('jovo-framework');
 
 const {app} = require('./app.js');
 
