@@ -1,9 +1,9 @@
 # Natural Language Understanding (NLU)
 
-The following NLU-Integrations are available:
+Learn how to use NLU (Natural Language Understanding) services with the Jovo Framework.
 
-- [DialogflowNlu](./dialogflow-nlu.md)
-- [LuisNlu](./luis-nlu.md)
+- [Google Dialogflow](./dialogflow-nlu.md './nlu/dialogflow')
+- [Microsoft LUIS](./luis-nlu.md './nlu/microsoft-luis')
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+<!--[metadata]: {"description": "Learn how to use NLU (Natural Language Understanding) services with the Jovo Framework.",
 "route": "nlu" }-->

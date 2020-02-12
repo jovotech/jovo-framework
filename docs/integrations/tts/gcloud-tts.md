@@ -1,4 +1,6 @@
-# GCloud TTS
+# Google Cloud TTS
+
+Learn how to use the Google Cloud TTS (Text to Speech) service with the Jovo Framework.
 
 ## Installation
 
@@ -32,5 +34,5 @@ platform.use(
 );
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "tts/gcloud" }-->
+<!--[metadata]: {"description": "Learn how to use the Google Cloud TTS (Text to Speech) service with the Jovo Framework.",
+"route": "tts/google-cloud" }-->

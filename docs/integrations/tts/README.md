@@ -1,10 +1,10 @@
-# Text-to-Speech (TTS)
+# Text to Speech (TTS)
 
-The following TTS-Integrations are available:
+Learn how to use TTS (Text to Speech) services with the Jovo Framework.
 
-- [AzureTts](./azure-tts.md)
-- [GCloudTts](./gcloud-tts.md)
-- [AmazonPollyTts](./polly-tts.md)
+- [Microsoft Azure Text to Speech](./azure-tts.md './tts/microsoft-azure')
+- [Google Cloud Text to Speech](./gcloud-tts.md './tts/google-cloud')
+- [Amazon Polly Text to Speech](./polly-tts.md './tts/amazon-polly')
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+<!--[metadata]: {"description": "Learn how to use TTS (Text to Speech) services with the Jovo Framework.",
 "route": "tts" }-->

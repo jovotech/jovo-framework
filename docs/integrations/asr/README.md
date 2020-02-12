@@ -1,9 +1,9 @@
 # Automatic Speech Recognition (ASR)
 
-The following ASR-Integrations are available:
+Learn how to use ASR (Automatic Speech Recognition, also known as Speech to Text) services with the Jovo Framework.
 
-- [AzureAsr](./azure-asr.md)
-- [GCloudAsr](./gcloud-asr.md)
+- [Microsoft Azure Speech to Text](./azure-asr.md './asr/azure')
+- [Google Cloud Speech to Text](./gcloud-asr.md './asr/google-cloud-asr')
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+<!--[metadata]: {"description": "Learn how to use ASR (Automatic Speech Recognition, also known as Speech to Text) services with the Jovo Framework.",
 "route": "asr" }-->

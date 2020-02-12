@@ -1,4 +1,6 @@
-# Azure ASR
+# Microsoft Azure Speech to Text
+
+Learn how to use the Microsoft Azure Speech to Text service as ASR (Automatic Speech to Text) integration with the Jovo Framework.
 
 ## Installation
 
@@ -36,5 +38,5 @@ platform.use(
 );
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+<!--[metadata]: {"description": "Learn how to use the Microsoft Azure Speech to Text service as ASR (Automatic Speech to Text) integration with the Jovo Framework.",
 "route": "asr/azure" }-->

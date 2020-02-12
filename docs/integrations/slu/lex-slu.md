@@ -1,4 +1,6 @@
-# Lex SLU
+# Amazon Lex SLU
+
+Learn how to use Amazon Lex as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.
 
 ## Installation
 
@@ -38,5 +40,5 @@ platform.use(
 );
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "slu/lex" }-->
+<!--[metadata]: {"description": "Learn how to use Amazon Lex as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.",
+"route": "slu/amazon-lex" }-->

@@ -1,9 +1,9 @@
 # Spoken Language Understanding (SLU)
 
-The following SLU-Integrations are available:
+Learn how to use SLU (Spoken Language Understanding) services with the Jovo Framework. These services combine both [Automatic Speech Recognition (ASR)](../asr './asr') and [Natural Language Understanding (NLU)](../nlu './nlu').
 
-- [AmazonLexSlu](./lex-slu.md)
-- [WitAiSlu](./witai-slu.md)
+- [Amazon Lex](./lex-slu.md './slu/amazon-lex')
+- [Wit.ai](./witai-slu.md './slu/witai')
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
+<!--[metadata]: {"description": "Learn how to use SLU (Spoken Language Understanding) services with the Jovo Framework. These services combine both Automatic Speech Recognition (ASR) and Natural Language Understanding (NLU).",
 "route": "slu" }-->

@@ -1,4 +1,6 @@
-# Polly TTS
+# Amazon Polly TTS
+
+Learn how to use the Amazon Polly TTS (Text to Speech) service with the Jovo Framework.
 
 ## Installation
 
@@ -28,5 +30,5 @@ platform.use(
 // src/app.ts
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "tts/polly" }-->
+<!--[metadata]: {"description": "Learn how to use the Amazon Polly TTS (Text to Speech) service with the Jovo Framework.",
+"route": "tts/amazon-polly" }-->

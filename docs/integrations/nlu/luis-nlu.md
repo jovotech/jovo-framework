@@ -1,4 +1,6 @@
-# LUIS NLU
+# Microsoft LUIS NLU
+
+Learn how to use Microsoft LUIS as NLU (Natural Language Understanding) integration with the Jovo Framework.
 
 ## Installation
 
@@ -36,5 +38,5 @@ platform.use(
 );
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "nlu/luis" }-->
+<!--[metadata]: {"description": "Learn how to use Microsoft LUIS as NLU (Natural Language Understanding) integration with the Jovo Framework.",
+"route": "nlu/microsoft-luis" }-->

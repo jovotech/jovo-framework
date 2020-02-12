@@ -1,4 +1,6 @@
-# Azure TTS
+# Microsoft Azure TTS
+
+Learn how to use the Microsoft Azure TTS (Text to Speech) service with the Jovo Framework.
 
 ## Installation
 
@@ -36,5 +38,5 @@ platform.use(
 );
 ```
 
-<!--[metadata]: {"description": "Voice analytics, databases, and more third-party integrations for building voice apps with Jovo",
-"route": "tts/azure" }-->
+<!--[metadata]: {"description": "Learn how to use the Microsoft Azure TTS (Text to Speech) service with the Jovo Framework.",
+"route": "tts/microsoft-azure" }-->
