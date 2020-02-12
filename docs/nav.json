@@ -463,7 +463,7 @@
                     ]
                 },
                 {
-                    "title": "Automatic Speech Recognition (ASR)",
+                    "title": "ASR",
                     "content": [
                         {
                             "title": "Overview",
@@ -480,7 +480,7 @@
                     ]
                 },
                 {
-                    "title": "Natural Language Understanding (NLU)",
+                    "title": "NLU",
                     "content": [
                         {
                             "title": "Overview",
@@ -497,7 +497,7 @@
                     ]
                 },
                 {
-                    "title": "Spoken Language Understanding (SLU)",
+                    "title": "SLU",
                     "content": [
                         {
                             "title": "Overview",
@@ -514,7 +514,7 @@
                     ]
                 },
                 {
-                    "title": "Text-to-Speech (TTS)",
+                    "title": "TTS",
                     "content": [
                         {
                             "title": "Text-to-Speech (TTS)",
