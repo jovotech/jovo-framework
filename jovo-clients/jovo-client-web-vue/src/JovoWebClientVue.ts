@@ -92,6 +92,11 @@ export class JovoWebClientVue {
     return this;
   }
 
+  startConversation() {
+    this.$assistant.input.startConversation();
+    return this;
+  }
+
   abortRecording(): JovoWebClientVue {
     this.$assistant.input.abortRecording();
     return this;

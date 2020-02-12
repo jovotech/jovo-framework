@@ -80,6 +80,10 @@ export class InputComponent extends Component<InputComponentConfig> {
     }
   }
 
+  startConversation() {
+    this.$client.emit(assistantEvents.LaunchRequest);
+  }
+
   startRecording() {
     if (!this.$recorder) {
       AudioRecorder.new(this.$client).then((recorder: AudioRecorder) => {
