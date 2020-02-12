@@ -1,0 +1,24 @@
+{
+  "name": "jovo-examples-facebook-messenger-platform-hello-world",
+  "version": "2.2.28",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./dist",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "jovo-db-filedb": "^2.2.18",
+    "jovo-framework": "^2.2.25",
+    "jovo-platform-facebookmessenger": "^2.0.6-alpha.0",
+    "jovo-plugin-debugger": "^2.2.20",
+    "jovo-nlu-luis": "^2.2.8-alpha.0"
+  }
+}
