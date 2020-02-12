@@ -34,6 +34,7 @@ export interface JovoWebClientConfig {
   locale: string;
   launchFirst: boolean;
   speechSynthesis: {
+    enabled: boolean;
     automaticallySetLanguage: boolean;
   };
   initBaseComponents: boolean;

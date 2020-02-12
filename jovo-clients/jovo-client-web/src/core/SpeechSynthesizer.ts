@@ -25,6 +25,10 @@ export class SpeechSynthesizer extends CoreComponent {
     return this.$speechSynthesis !== null;
   }
 
+  get isSpeakEnabled(): boolean {
+    return this.$client.$config.speechSynthesis.enabled;
+  }
+
   get canSpeak(): boolean {
     return (
       this.$speechSynthesis !== null &&
@@ -61,9 +65,17 @@ export class SpeechSynthesizer extends CoreComponent {
     return this.$client.$config.speechSynthesis.automaticallySetLanguage;
   }
 
+
   speakText(text: string): Promise<void> {
+    const utterance = this.makeDefaultUtterance(text);
+
+    if (!this.isSpeakEnabled) { // TODO: find a better solution
+      this.$client.emit(SpeechSynthesizerEvents.Speak, utterance);
+      this.$client.emit(SpeechSynthesizerEvents.End);
+      return Promise.resolve();
+    }
+
     if (this.canSpeak) {
-      const utterance = this.makeDefaultUtterance(text);
       utterance.volume = this.volume;
       return this.speak(utterance);
     } else {

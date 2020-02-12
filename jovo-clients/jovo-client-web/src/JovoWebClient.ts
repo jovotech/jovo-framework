@@ -28,6 +28,7 @@ export function makeDefaultConfig(): Config {
     launchFirst: true,
     locale: navigator.language,
     speechSynthesis: {
+      enabled: true,
       automaticallySetLanguage: true,
     },
   };
