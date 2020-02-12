@@ -35,7 +35,7 @@ To use Google Analytics for your voice app, you need to complete the following s
 
 1. Create a Google Analytics Account
 2. Enable Google Analytics in your Jovo app
-4. Check Your App
+3. Check Your App
 
 ### Create a Google Analytics Account
 
@@ -43,7 +43,7 @@ To use Google Analytics for your voice app, you need to complete the following s
 
 2. Click "Set up for free" and fill in the form depending on your needs for your account. Select "Web" on your type of measurement. For property details, you can use the Jovo application name as the Website Name, and a placeholder for the Website URL.
 
-![Botanalytics Add a New Bot](../../img/google-analytics-start.png)
+![Google Analytics Add a New Bot](../../img/google-analytics-start.png)
 
 3. After clicking "Create" and confirming the terms of service, you will arrive at the admin section of your Google Analytics Account. Copy the Tracking ID which you will need to connect your Jovo app.
 

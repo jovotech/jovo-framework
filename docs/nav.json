@@ -63,11 +63,11 @@
                             "route": "requests-responses"
                         },
                         {
-                            "title": "Request Object",
+                            "title": "$request Object",
                             "route": "requests-responses/request"
                         },
                         {
-                            "title": "Response Object",
+                            "title": "$response Object",
                             "route": "requests-responses/response"
                         }
                     ]
@@ -147,7 +147,7 @@
                             "route": "output/visual-output"
                         },
                         {
-                            "title": "Output Object",
+                            "title": "$output Object",
                             "route": "output/object"
                         }
                     ]
@@ -232,6 +232,10 @@
                         {
                             "title": "Azure Functions",
                             "route": "hosting/azure-functions"
+                        },
+                        {
+                            "title": "HTTP Host",
+                            "route": "hosting/http-host"
                         }
                     ]
                 }
@@ -359,6 +363,10 @@
                     "route": "twilio-autopilot"
                 },
                 {
+                    "title": "Facebook Messenger",
+                    "route": "facebook-messenger"
+                },
+                {
                     "title": "SAP CAI",
                     "route": "sap-cai"
                 }
@@ -455,7 +463,58 @@
                     ]
                 },
                 {
-                    "title": "Text-to-Speech (TTS)",
+                    "title": "ASR",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "asr"
+                        },
+                        {
+                            "title": "Google Cloud ASR",
+                            "route": "slu/google-cloud"
+                        },
+                        {
+                            "title": "Microsoft Azure ASR",
+                            "route": "asr/microsoft-azure"
+                        }
+                    ]
+                },
+                {
+                    "title": "NLU",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "nlu"
+                        },
+                        {
+                            "title": "Microsoft LUIS",
+                            "route": "nlu/luis"
+                        },
+                        {
+                            "title": "Dialogflow",
+                            "route": "nlu/dialogflow"
+                        }
+                    ]
+                },
+                {
+                    "title": "SLU",
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "slu"
+                        },
+                        {
+                            "title": "Amazon Lex",
+                            "route": "slu/amazon-lex"
+                        },
+                        {
+                            "title": "Wit.ai",
+                            "route": "slu/witai"
+                        }
+                    ]
+                },
+                {
+                    "title": "TTS",
                     "content": [
                         {
                             "title": "Text-to-Speech (TTS)",
@@ -472,31 +531,6 @@
                         {
                             "title": "Microsoft Azure",
                             "route": "tts/microsoft-azure"
-                        }
-                    ]
-                },
-                {
-                    "title": "Automatic Speech Recognition (ASR), Natural Language Understanding (NLU) & Spoken Language Understanding (SLU)",
-                    "content": [
-                        {
-                            "title": "Automatic Speech Recognition (ASR), Natural Language Understanding (NLU) & Spoken Language Understanding (SLU)",
-                            "route": "asr-nlu-slu"
-                        },
-                        {
-                            "title": "Amazon Lex",
-                            "route": "asr-nlu-slu/amazon-lex"
-                        },
-                        {
-                            "title": "Google Cloud",
-                            "route": "asr-nlu-slu/google-cloud"
-                        },
-                        {
-                            "title": "Microsoft Azure",
-                            "route": "asr-nlu-slu/microsoft-azure"
-                        },
-                        {
-                            "title": "Wit.ai",
-                            "route": "asr-nlu-slu/witai"
                         }
                     ]
                 }

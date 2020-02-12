@@ -197,9 +197,16 @@ export class JovoWebClient extends AdvancedEventEmitter {
     } else {
       // component with that name does not exist -> add to array and add $config
       const defaultConfig = component.getDefaultConfig();
-      this.$config[component.name] = component.initConfig
-        ? merge(defaultConfig, component.initConfig)
-        : defaultConfig;
+      const clientConfig = this.$config[component.name];
+
+      let componentConfig = defaultConfig;
+      if (clientConfig) {
+        componentConfig = merge(componentConfig, clientConfig);
+      }
+      if (component.initConfig) {
+        componentConfig = merge(componentConfig, component.initConfig);
+      }
+      this.$config[component.name] = componentConfig;
       this.$components.push(component);
     }
   }

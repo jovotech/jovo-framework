@@ -21,7 +21,7 @@ With Chatbase Analytics, you can measure bot metrics, analyze user behavior, and
 To use Chatbase Analytics for your voice app, you need to complete the following steps:
 
 1. Create a Chatbase Bot
-2. Enable Chatbase Anaytics in your voice app
+2. Enable Chatbase Analytics in your voice app
 3. Test your app
 
 ### Create a Chatbase Account
