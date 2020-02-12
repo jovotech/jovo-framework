@@ -98,16 +98,16 @@ The returned object will be an instance of `MessengerBot` if the current request
 
 ## Output
 
-This sections provides an overview of Facebook Messenger specific features for output. \
+These sections provide an overview of Facebook Messenger specific features for output. \
 For the basic concept, take a look here: [Basic Concepts > Output](../../basic-concepts/output './output').
 
-### No Reprompt
+### No Reprompts
 
-Facebook Messenger does not supports reprompts. Any reprompt passed to `ask` will be ignored.
+Facebook Messenger does not support reprompts. Any reprompt passed to `ask` will be ignored.
 
 ### Multiple Messages
 
-Facebook Messenger does allow sending messages.
+Facebook Messenger allows sending multiple messages.
 Read more about sending messages [here](https://developers.facebook.com/docs/messenger-platform/send-messages).
 
 ### Overwrite default-output
@@ -122,7 +122,7 @@ if (this.$messengerBot) this.$messengerBot.overwriteText('someNewText');
 this.$messengerBot?.overwriteText('someNewText');
 ```
 
-Additionally quick-replies can be overwritten:
+Additionally, quick-replies can be overwritten:
 
 ```javascript
 // @language=javascript
