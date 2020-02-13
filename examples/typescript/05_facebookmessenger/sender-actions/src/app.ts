@@ -1,32 +1,46 @@
 import { FileDb } from 'jovo-db-filedb';
 import { App } from 'jovo-framework';
-import { LuisNlu } from 'jovo-nlu-luis';
-import { FacebookMessenger } from 'jovo-platform-facebookmessenger';
+import {
+	FacebookMessenger,
+	SenderActionType
+} from 'jovo-platform-facebookmessenger';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
+import { DialogflowNlu } from 'jovo-nlu-dialogflow';
 
 const app = new App();
 
 const messenger = new FacebookMessenger({
-	verifyToken: 'VerificationToken'
+	pageAccessToken: process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
 });
 
 messenger.use(
-	new LuisNlu({
-		appId: process.env.LUIS_APP_ID!,
-		endpointRegion: 'westus',
-		endpointKey: process.env.LUIS_ENDPOINT_KEY!
+	new DialogflowNlu({
+		credentialsFile: '../../credentials.json'
 	})
 );
 
 app.use(messenger, new JovoDebugger(), new FileDb());
+
+function delay(amountInMs: number) {
+	return new Promise(resolve => {
+		setTimeout(() => {
+			resolve();
+		}, amountInMs);
+	});
+}
 
 app.setHandler({
 	LAUNCH() {
 		return this.toIntent('HelloWorldIntent');
 	},
 
-	HelloWorldIntent() {
+	async HelloWorldIntent() {
+		await this.$messengerBot?.action(SenderActionType.MarkSeen);
+		await delay(100);
+		await this.$messengerBot?.action(SenderActionType.TypingOn);
+		await delay(1000);
+		await this.$messengerBot?.action(SenderActionType.TypingOff);
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 
