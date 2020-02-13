@@ -8,8 +8,6 @@ export interface LinkButtonOptions {
 }
 
 export class LinkButton extends Button {
-  [key: string]: any;
-
   constructor(public title: string, public url: string, options?: LinkButtonOptions) {
     super(ButtonType.Link);
 
