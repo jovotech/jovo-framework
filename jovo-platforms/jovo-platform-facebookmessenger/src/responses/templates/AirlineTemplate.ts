@@ -2,6 +2,12 @@ import { TemplateType } from '../../Enums';
 import { Field } from '../../Interfaces';
 import { Template, TemplatePayload } from '../Template';
 
+export function stringifyFacebookDate(date: Date): string {
+  const isoString = date.toISOString();
+  // remove ms & Z
+  return isoString.substr(0, isoString.length - 5);
+}
+
 export type AirlineTemplateOptions = Omit<AirlineTemplatePayload, 'template_type'>;
 
 export interface AirlineTemplatePayload extends TemplatePayload<TemplateType.Airline> {

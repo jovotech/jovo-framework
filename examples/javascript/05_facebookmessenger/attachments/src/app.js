@@ -5,22 +5,24 @@
 // ------------------------------------------------------------------
 
 const { App } = require('jovo-framework');
-const { FacebookMessenger } = require('jovo-platform-facebookmessenger');
-const { LuisNlu } = require('jovo-nlu-luis');
+const {
+	AttachmentType,
+	FacebookMessenger
+} = require('jovo-platform-facebookmessenger');
+const { DialogflowNlu } = require('jovo-nlu-dialogflow');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
+const { join } = require('path');
 
 const app = new App();
 
 const messenger = new FacebookMessenger({
-	verifyToken: 'VerificationToken'
+	pageAccessToken: process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
 });
 
 messenger.use(
-	new LuisNlu({
-		appId: process.env.LUIS_APP_ID,
-		endpointRegion: 'westus',
-		endpointKey: process.env.LUIS_ENDPOINT_KEY
+	new DialogflowNlu({
+		credentialsFile: '../credentials.json'
 	})
 );
 
@@ -37,12 +39,24 @@ app.setHandler({
 
 	HelloWorldIntent() {
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+		if (this.$messengerBot) {
+			this.$messengerBot.attachment({
+				type: AttachmentType.Image,
+				data: 'https://via.placeholder.com/150'
+			});
+		}
 	},
 
 	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+
+		const testFilePath = join(__dirname, '..', 'test-file.json');
+		if (this.$messengerBot) {
+			this.$messengerBot.attachment({
+				type: AttachmentType.File,
+				data: { path: testFilePath, fileName: 'test-file.json' }
+			});
+		}
 	}
 });
 

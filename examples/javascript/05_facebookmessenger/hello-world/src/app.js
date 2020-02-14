@@ -6,21 +6,19 @@
 
 const { App } = require('jovo-framework');
 const { FacebookMessenger } = require('jovo-platform-facebookmessenger');
-const { LuisNlu } = require('jovo-nlu-luis');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
+const { DialogflowNlu } = require('jovo-nlu-dialogflow');
 
 const app = new App();
 
 const messenger = new FacebookMessenger({
-	verifyToken: 'VerificationToken'
+	pageAccessToken: process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
 });
 
 messenger.use(
-	new LuisNlu({
-		appId: process.env.LUIS_APP_ID,
-		endpointRegion: 'westus',
-		endpointKey: process.env.LUIS_ENDPOINT_KEY
+	new DialogflowNlu({
+		credentialsFile: '../credentials.json'
 	})
 );
 

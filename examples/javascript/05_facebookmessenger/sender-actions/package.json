@@ -17,8 +17,8 @@
     "dotenv": "^8.2.0",
     "jovo-db-filedb": "^2.2.18",
     "jovo-framework": "^2.2.25",
-    "jovo-platform-facebookmessenger": "^2.0.6-alpha.0",
+    "jovo-platform-facebookmessenger": "^2.0.11-alpha.0",
     "jovo-plugin-debugger": "^2.2.20",
-    "jovo-nlu-luis": "^2.2.8-alpha.0"
+    "jovo-nlu-dialogflow": "^2.2.8-alpha.0"
   }
 }

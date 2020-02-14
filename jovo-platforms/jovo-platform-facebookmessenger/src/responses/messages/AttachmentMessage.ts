@@ -1,17 +1,17 @@
 import * as FormData from 'form-data';
 import { HttpService } from 'jovo-core';
-import {
-  AttachmentType,
-  BASE_URL,
-  IdentityData,
-  Message,
-  MessengerBotSpeechBuilder,
-  QuickReply,
-} from '../..';
+import { AttachmentType, BASE_URL, IdentityData, Message, QuickReply } from '../..';
+import { createReadStream } from 'fs';
+
+export interface AttachmentMessageFile {
+  path: string;
+  fileName: string;
+  mimeType?: string;
+}
 
 export interface AttachmentMessageOptions {
   type: AttachmentType;
-  data: Buffer | string | number;
+  data: AttachmentMessageFile | string | number;
   isReusable?: boolean;
   quickReplies?: QuickReply[];
 }
@@ -66,14 +66,19 @@ export class AttachmentMessage extends Message {
       quick_replies: this.options.quickReplies,
     };
 
+    const { path, mimeType, fileName } = this.options.data as AttachmentMessageFile;
+
     const form = new FormData();
     form.append('recipient', JSON.stringify(this.recipient));
     form.append('message', JSON.stringify(message));
-    form.append('filedata', this.options.data);
+    form.append('filedata', createReadStream(path), {
+      filename: fileName,
+      contentType: mimeType || undefined,
+    });
 
-    const url = `https://${BASE_URL}${this.getPath(pageAccessToken)}`;
+    const url = `${BASE_URL}${this.getPath(pageAccessToken)}`;
 
-    return HttpService.post(url, form.getBuffer(), form.getHeaders());
+    return HttpService.post(url, form, { headers: form.getHeaders() });
   }
 
   private isUrlData(): boolean {
@@ -85,6 +90,6 @@ export class AttachmentMessage extends Message {
   }
 
   private isFileData(): boolean {
-    return this.options.data instanceof Buffer;
+    return typeof this.options.data === 'object';
   }
 }

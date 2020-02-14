@@ -222,13 +222,19 @@ Facebook Messenger allows sending attachments, which includes audio, videos, ima
 if (this.$messengerBot)
 	this.$messengerBot.attachment({
 		type: AttachmentType.File,
-		data: someBufferVar
+		data: {
+			fileName: 'displayFileName',
+			path: 'localPathToFile'
+		}
 	});
 
 // @language=typescript
 this.$messengerBot?.attachment({
 	type: AttachmentType.File,
-	data: someBufferVar
+	data: {
+		fileName: 'displayFileName',
+		path: 'localPathToFile'
+	}
 });
 ```
 

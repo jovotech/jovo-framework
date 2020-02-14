@@ -6,7 +6,6 @@ export type GenericTemplateOptions = Omit<GenericTemplatePayload, 'template_type
 export interface GenericTemplatePayload extends TemplatePayload<TemplateType.Generic> {
   elements: GenericTemplateElement[];
 }
-
 export interface GenericTemplateElement {
   title: string;
   image_url?: string;
