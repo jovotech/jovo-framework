@@ -60,6 +60,7 @@ Jovo CLI commands can be divided into [basic commands](#basic-commands) (to crea
 ------------ | ------------ | ------------- 
 [Basic Commands](#basic-commands) | [`jovo new`](#jovo-new) | Creates a new Jovo project 
 | | [`jovo run`](#jovo-run) | Runs a local development server (webhook)
+| | [`jovo update`](#jovo-update) | Update all of the Jovo packages in your project
 [Platform Commands](#platform-commands) | [`jovo build`](#jovo-build) | Builds platform-specific language model files into `/platforms` based on  `/models` folder
 | | [`jovo get`](#jovo-get) | Downloads an existing platform project into the `/platforms` folder
 | | [`jovo deploy`](#jovo-deploy) | Deploys the `/platforms` project files to the voice platforms

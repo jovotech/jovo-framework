@@ -544,7 +544,7 @@
                     "route": "tools"
                 },
                 {
-                    "title": "CLI Commands",
+                    "title": "Jovo CLI",
                     "content": [
                         {
                             "title": "Jovo CLI",
@@ -569,6 +569,10 @@
                         {
                             "title": "get",
                             "route": "cli/get"
+                        },
+                        {
+                            "title": "update",
+                            "route": "cli/update"
                         }
                     ]
                 },

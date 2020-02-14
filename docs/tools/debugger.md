@@ -3,25 +3,26 @@
 Learn how to use the Jovo Debugger for simple testing and debugging of Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
-* [Configuration](#configuration)
+* [Getting Started](#getting-started)
+* [Features](#features)
+  * [Data](#data)
+  * [Request & Response](#request--response)
+  * [Console](#console)
+  * [Request Builder](#request-builder)
+    * [Locales](#locales)
+    * [Platforms](#platforms)
 
 ## Introduction
 
-To test the logic of your code, you can use the local development server provided by Jovo, and the Jovo Debugger. 
+The Jovo Debugger allows you to debug and quickly test your Jovo app by by displaying the most important information about each interaction in one place. That includes the current state of your app (e.g. route, state, inputs, etc.), the request & response and a console window for your logs.
 
-To get started, use the following command:
+To use the debugger you simply have to send requests to your Jovo Webhook endpoint. These can be sent from platforms like Alexa or Google Assistant as well as from the built-in request builder for quick prototyping.
 
-```sh
-$ jovo run
-```
+![Jovo Debugger](../img/jovo-debugger-basic-interaction.gif)
 
-This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](../tools/debugger.md './debugger').
+## Getting Started
 
-![Jovo Debugger](../img/jovo-debugger-helloworld.gif)
-
-In the Debugger, you can quickly test if the flow of your voice app works. For this example, click on the `LAUNCH` button, and then specify a name on the `MyNameIsIntent` button. The Debugger will create requests and run them agains your local webhook.
-
-## Configuration
+To be able to use the debugger, it has to be included as a plugin in your project:
 
 ```javascript
 // @language=javascript
@@ -41,8 +42,60 @@ import { JovoDebugger } from 'jovo-plugin-debugger';
 app.use(new JovoDebugger());
 ```
 
+After that, use the `jovo run` command to start your development server get the link to your Jovo Webhook endpoint:
 
+```sh
+$ jovo run
+```
 
+Now, simply press the `.` key on your keyboard to open up the Debugger web page.
+
+## Features
+
+### Data
+
+The **Data** window contains all the important information of the interaction. That includes the:
+
+* determined route e.g. `TestState.MyNameIsIntent`
+* origin of the request
+* type of the request (e.g. INTENT, LAUNCH, END, etc.)
+* inputs
+* state
+* session attributes
+
+### Request & Response
+
+The request and response windows have each three sub pages.
+
+First, the **JSON** tab that simply shows the raw request and response JSON.
+
+Second, the **Database** tab where you can see the database entry for the user at the time of the request and response. That allows you to see how the interaction changed the database entry.
+
+Third, the **Session Attributes** which gives the same functionality as the **Database** tab just for the session attributes.
+
+### Console
+
+The **Console** windows displays all of your logs.
+
+### Request Builder
+
+The request builder allows you to build custom requests to send to your Jovo Webhook endpoint for quick prototyping. You can customize the intent, the inputs as well as the utterance that should be used.
+
+![Jovo Debugger Request Builder](../img/jovo-debugger-request-builder.gif)
+
+#### Locales
+
+The Jovo Debugger also allows you to switch between multiple locales. These are determined by the language model files found in your project, e.g. for `de-DE` to appear in the debugger, you need to have a `de-DE.json` file in your `models/` folder.
+
+If you switch the locale, you will receive utterances from the respective language model and the incoming request will have the same locale.
+
+![Jovo Debugger Locale](../img/jovo-debugger-locale.gif)
+
+#### Platforms
+
+You can switch between Google Action and Alexa Skill request as well as choose different devices types:
+
+![Jovo Debugger Platform](../img/jovo-debugger-platform.gif)
 
 <!--[metadata]: { "description": "Learn how to debug Alexa Skills and Google Actions with the Jovo Debugger.", "route": "debugger"
                 }-->
