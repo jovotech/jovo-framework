@@ -11,7 +11,7 @@ Learn more about the Jovo Webhook for local development of Alexa Skills and Goog
 
 The Jovo Webhook is a free service that creates a link to your local webserver. This way, you can prototype locally without having to deal with servers or Lambda uploads all the time.
 
-By using the [`jovo run`](../workflows/cli/run './cli/run'), a unique, anonymized link is created that looks like this:
+By using the [`jovo run`](./cli/run './cli/run'), a unique, anonymized link is created that looks like this:
 
 ```sh
 https://webhook.jovo.cloud/[your-id]
@@ -37,15 +37,15 @@ As you can see, a [Jovo Webhook](#jovo-webhook) URL is automatically created, wh
 
 Make sure that, with every file update, you terminate the server with `ctrl+c` and run it again. You can also use the `nodemon` Jovo CLI integration. 
 
-> [Find more information on the `jovo run` command here](../workflows/cli/run.md './cli/run').
+> [Find more information on the `jovo run` command here](./cli/run.md './cli/run').
 
 ## Jovo Debugger
 
 By copying the link of your webhook and opening it in your browser, you can access the Jovo Debugger, which makes it even easier to test and debug locally:
 
-[![Jovo Debugger](../img/jovo-debugger-helloworld.gif)](../tools/debugger.md './debugger')
+[![Jovo Debugger](../img/jovo-debugger-basic-interaction.gif)](./debugger.md './debugger')
 
-> [Learn more about the Jovo Debugger here](../tools/debugger.md './debugger').
+> [Learn more about the Jovo Debugger here](./debugger.md './debugger').
 
 
 <!--[metadata]: {"description": "Learn more about local development of Alexa Skills and Google Actions with the Jovo Webhook.", "route": "webhook"}-->
