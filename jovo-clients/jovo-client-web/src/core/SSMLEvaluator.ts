@@ -6,6 +6,10 @@ const TAG_BREAK = 'break';
 const SUPPORTED_TAGS = [TAG_AUDIO, TAG_BREAK];
 
 export class SSMLEvaluator extends CoreComponent {
+  get supportedTags(): string[] {
+    return SUPPORTED_TAGS;
+  }
+
   static ESCAPE_AMPERSAND = true;
 
   /**
@@ -132,17 +136,13 @@ export class SSMLEvaluator extends CoreComponent {
     });
   }
 
-  get supportedTags(): string[] {
-    return SUPPORTED_TAGS;
-  }
-
   evaluate(ssml: string): Promise<void> {
     this.$isRunning = true;
     return new Promise(async (resolve, reject) => {
       const ssmlParts = SSMLEvaluator.getSSMLParts(ssml);
       for (const part of ssmlParts) {
         if (this.$isRunning) {
-          if (SSMLEvaluator.isPlainText(part)) {
+          if (this.$client.$config.speechSynthesis.enabled && SSMLEvaluator.isPlainText(part)) {
             await this.$client.speechSynthesizer.speakText(part);
           } else if (SSMLEvaluator.isSupportedTag(part)) {
             await this.evaluatePart(part);

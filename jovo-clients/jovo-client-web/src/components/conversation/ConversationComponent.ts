@@ -13,9 +13,17 @@ import {
   StoreEvents,
 } from '../..';
 
+declare module '../../core/Interfaces' {
+  interface Config {
+    ConversationComponent: ConversationComponentConfig;
+  }
+}
+
 export interface ConversationComponentConfig extends ComponentConfig {}
 
 export class ConversationComponent extends Component<ConversationComponentConfig> {
+  static DEFAULT_CONFIG: ConversationComponentConfig = {};
+
   readonly name = 'ConversationComponent';
 
   parts: ConversationPart[] = [];

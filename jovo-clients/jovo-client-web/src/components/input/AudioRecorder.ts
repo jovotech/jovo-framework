@@ -16,6 +16,49 @@ declare global {
 }
 
 export class AudioRecorder {
+  private readonly $context: AudioContext;
+  private readonly $source: MediaStreamAudioSourceNode;
+  private readonly $analyser: AnalyserNode;
+  private readonly $recognition: SpeechRecognition | null;
+  private readonly $sampleRate: number;
+  private $recorder: ScriptProcessorNode | null;
+  private $start: Date = new Date();
+  private $chunks: Float32Array[] = [];
+  private $chunkLength = 0;
+  private $recording = false;
+  private $speechRecognized = false;
+  private $startThresholdPassed = false;
+
+  private constructor(stream: MediaStream, private readonly $client: JovoWebClient) {
+    const context = new AudioContext();
+    const sourceNode: MediaStreamAudioSourceNode = context.createMediaStreamSource(stream);
+
+    const analyser = sourceNode.context.createAnalyser();
+    analyser.minDecibels = this.minDecibels;
+    analyser.maxDecibels = this.maxDecibels;
+    analyser.smoothingTimeConstant = this.smoothingConstant;
+
+    sourceNode.connect(analyser);
+
+    this.$context = context;
+    this.$source = sourceNode;
+    this.$analyser = analyser;
+    this.$recorder = null;
+
+    this.$sampleRate = sourceNode.context.sampleRate;
+
+    this.$recognition = null;
+    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    if (window.SpeechRecognition && this.speechRecognitionEnabled) {
+      this.$recognition = new window.SpeechRecognition();
+      this.setupSpeechRecognition();
+    }
+
+    this.$client.on(RequestEvents.Data, () => {
+      this.abort();
+    });
+  }
+
   get inputConfig(): InputComponentConfig {
     return this.$client.$config.InputComponent;
   }
@@ -82,50 +125,6 @@ export class AudioRecorder {
       } catch (e) {
         reject(e);
       }
-    });
-  }
-
-  private readonly $context: AudioContext;
-  private readonly $source: MediaStreamAudioSourceNode;
-
-  private readonly $analyser: AnalyserNode;
-  private readonly $recognition: SpeechRecognition | null;
-  private readonly $sampleRate: number;
-  private $recorder: ScriptProcessorNode | null;
-  private $start: Date = new Date();
-  private $chunks: Float32Array[] = [];
-  private $chunkLength = 0;
-  private $recording = false;
-  private $speechRecognized = false;
-  private $startThresholdPassed = false;
-
-  private constructor(stream: MediaStream, private readonly $client: JovoWebClient) {
-    const context = new AudioContext();
-    const sourceNode: MediaStreamAudioSourceNode = context.createMediaStreamSource(stream);
-
-    const analyser = sourceNode.context.createAnalyser();
-    analyser.minDecibels = this.minDecibels;
-    analyser.maxDecibels = this.maxDecibels;
-    analyser.smoothingTimeConstant = this.smoothingConstant;
-
-    sourceNode.connect(analyser);
-
-    this.$context = context;
-    this.$source = sourceNode;
-    this.$analyser = analyser;
-    this.$recorder = null;
-
-    this.$sampleRate = sourceNode.context.sampleRate;
-
-    this.$recognition = null;
-    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-    if (window.SpeechRecognition && this.speechRecognitionEnabled) {
-      this.$recognition = new window.SpeechRecognition();
-      this.setupSpeechRecognition();
-    }
-
-    this.$client.on(RequestEvents.Data, () => {
-      this.abort();
     });
   }
 

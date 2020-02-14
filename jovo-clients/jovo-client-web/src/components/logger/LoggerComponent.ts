@@ -1,5 +1,11 @@
 import { Component, ComponentConfig, Logger, LoggerEvents, LogPayload } from '../..';
 
+declare module '../../core/Interfaces' {
+  interface Config {
+    LoggerComponent: LoggerComponentConfig;
+  }
+}
+
 export interface LoggerComponentConfig extends ComponentConfig {
   level: LogLevel;
 }

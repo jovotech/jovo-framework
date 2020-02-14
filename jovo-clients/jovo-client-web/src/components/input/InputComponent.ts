@@ -15,6 +15,12 @@ import {
   SpeechRecognitionConfig,
 } from '../..';
 
+declare module '../../core/Interfaces' {
+  interface Config {
+    InputComponent: InputComponentConfig;
+  }
+}
+
 export interface InputComponentConfig extends ComponentConfig {
   timeout: number;
   startThreshold: number;

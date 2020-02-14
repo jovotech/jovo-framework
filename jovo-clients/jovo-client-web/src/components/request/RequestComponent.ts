@@ -18,9 +18,17 @@ import {
 
 import { AjaxAdapter } from './adapters/AjaxAdapter';
 
+declare module '../../core/Interfaces' {
+  interface Config {
+    RequestComponent: RequestComponentConfig;
+  }
+}
+
 export interface RequestComponentConfig extends ComponentConfig {}
 
 export class RequestComponent extends Component<RequestComponentConfig> {
+  static DEFAULT_CONFIG: RequestComponentConfig = {};
+
   readonly name = 'RequestComponent';
 
   private $networkHandler!: NetworkHandler;

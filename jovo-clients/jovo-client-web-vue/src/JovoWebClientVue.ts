@@ -5,9 +5,9 @@ import {
   Config,
   ConversationEvents,
   ConversationPart,
+  InitConfig,
   InputRecordEvents,
   JovoWebClient,
-  ResponseComponent,
   SpeechSynthesizerEvents,
   Store,
 } from 'jovo-client-web';
@@ -19,7 +19,7 @@ export class JovoWebClientVue {
   private readonly $assistant: JovoWebClient;
   private readonly $events: string[];
 
-  constructor(url: string, config?: Config) {
+  constructor(url: string, config?: InitConfig) {
     const data: Data = {
       isRecording: false,
       isFirstRequestDone: false,

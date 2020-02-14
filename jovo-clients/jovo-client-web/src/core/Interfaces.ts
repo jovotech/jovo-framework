@@ -1,4 +1,4 @@
-import { JovoWebClient } from '../JovoWebClient';
+import { JovoWebClient, ClientType } from '../JovoWebClient';
 import { Component } from './Component';
 
 // tslint:disable-next-line:no-any
@@ -29,14 +29,17 @@ export type ComponentConstructor = new (
   $initConfig?: ComponentConfig,
 ) => Component;
 
-export interface JovoWebClientConfig {
+export interface Config {
   debugMode: boolean;
   locale: string;
   launchFirst: boolean;
   speechSynthesis: {
+    enabled: boolean;
     automaticallySetLanguage: boolean;
   };
   initBaseComponents: boolean;
+  [key: string]: any;
 }
 
-export type Config = JovoWebClientConfig & Data;
+export type DeepPartial<T> = T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T;
+export type InitConfig = DeepPartial<Config> & { type?: ClientType };
