@@ -2,13 +2,15 @@
   <div class="wrapper">
     <input-control-buttons></input-control-buttons>
 
-    <div  v-if="false" class="speech"><div class="text">{{content}}</div></div>
+    <div v-if="false" class="speech">
+      <div class="text">{{ content }}</div>
+    </div>
     <div v-if="isRecording" class="modal-backdrop">
-      <div class="text">{{content}}</div>
+      <div class="text">{{ content }}</div>
       <input-audio-track-visualizer
-              :canvas-height="240"
-              :canvas-padding="canvas.padding"
-              :canvas-width="canvas.width"
+        :canvas-height="240"
+        :canvas-padding="canvas.padding"
+        :canvas-width="canvas.width"
       ></input-audio-track-visualizer>
     </div>
   </div>
@@ -16,34 +18,26 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import InputControlButtons from '../../../debugger/src/components/input/InputControlButtons.vue';
-import InputAudio from '../../../debugger/src/components/input/InputAudio.vue';
-import RequestProgress from '../../../debugger/src/components/request/RequestProgress.vue';
-import LogConsole from '../../../debugger/src/components/log/LogConsole.vue';
-import ResponseAudio from '../../../debugger/src/components/response/ResponseAudio.vue';
-import ResponseProgress from '../../../debugger/src/components/response/ResponseProgress.vue';
-import InputAudioTrackVisualizer from '../../../debugger/src/components/input/InputAudioTrackVisualizer.vue';
 import { Card } from 'element-ui';
-import ConversationDisplay from '../../../debugger/src/components/conversation/ConversationDisplay.vue';
-import StoreDisplay from '../../../debugger/src/components/store/StoreDisplay.vue';
-import InputRecognizedSpeech from '../../../debugger/src/components/input/InputRecognizedSpeech.vue';
-import RequestJsonDisplay from '../../../debugger/src/components/request/RequestJsonDisplay.vue';
-import ResponseJsonDisplay from '../../../debugger/src/components/response/ResponseJsonDisplay.vue';
-import {
-  AudioHelper,
-  InputRecordEvents,
-  RequestEvents,
-} from '../../../../../../../jovo-clients/jovo-client-web/dist/src';
+import ResponseJsonDisplay from '@/components/response/ResponseJsonDisplay.vue';
+import InputRecognizedSpeech from '@/components/input/InputRecognizedSpeech.vue';
+import ConversationDisplay from '@/components/conversation/ConversationDisplay.vue';
+import RequestJsonDisplay from '@/components/request/RequestJsonDisplay.vue';
+import ResponseAudio from '@/components/response/ResponseAudio.vue';
+import InputAudioTrackVisualizer from '@/components/input/InputAudioTrackVisualizer.vue';
+import RequestProgress from '@/components/request/RequestProgress.vue';
+import LogConsole from '@/components/log/LogConsole.vue';
+import InputAudio from '@/components/input/InputAudio.vue';
+import InputControlButtons from '@/components/input/InputControlButtons.vue';
+import { AudioHelper, RequestEvents, InputRecordEvents } from 'jovo-client-web-vue';
 
 @Component({
   components: {
     ResponseJsonDisplay,
     RequestJsonDisplay,
     InputRecognizedSpeech,
-    StoreDisplay,
     ConversationDisplay,
     InputAudioTrackVisualizer,
-    ResponseProgress,
     ResponseAudio,
     LogConsole,
     RequestProgress,
@@ -78,7 +72,6 @@ export default class Full extends Vue {
     this.volumeSliderValue = this.$assistant.volume;
   }
 
-
   private afterRequest() {
     this.content = '';
   }
@@ -109,9 +102,9 @@ export default class Full extends Vue {
 }
 </script>
 
-<style lang="scss" >
-  body {
-  }
+<style lang="scss">
+body {
+}
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -145,7 +138,7 @@ export default class Full extends Vue {
     position: absolute;
     bottom: 10px;
     color: white;
-    text-shadow: 2px 4px 3px rgba(0,0,0,0.1);
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.1);
     margin-left: auto;
     margin-right: auto;
     left: 0;

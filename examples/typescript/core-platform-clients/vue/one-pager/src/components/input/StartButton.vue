@@ -10,7 +10,6 @@
     >
       Start conversation
     </el-button>
-
   </div>
 </template>
 
@@ -46,18 +45,14 @@ export default class StartButton extends Vue {
   }
 
   handleStartConversation() {
-    this.$emit('startConversation')
+    this.$emit('startConversation');
   }
-
 
   handleStartRecording() {
     if (!this.isRecording) {
       this.$assistant.startRecording();
-      this.$assistant.on('request.success', (data: any) => {
-        console.log('request.success');
-        console.log(data);
-      })
-      this.$emit('startRecording')
+      this.$assistant.on('request.success', (data: any) => {});
+      // this.$emit('startRecording');
     }
   }
 
@@ -76,9 +71,9 @@ export default class StartButton extends Vue {
 </script>
 
 <style scoped>
-  .start-button {
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    font-size: 24px;
-  }
+.start-button {
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+}
 </style>

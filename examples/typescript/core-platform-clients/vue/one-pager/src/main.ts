@@ -18,27 +18,34 @@ Vue.use(JovoClientWebVue, {
   url: WEBHOOK_URL,
   client: {
     locale: 'en-US',
-
+    speechSynthesis: {
+      enabled: false,
+    },
     debugMode: true,
-    reprompt: {
-      maxAttempts: 1,
-      interval: 3000,
+    InputComponent: {
+      mode: 'push-to-talk',
+    },
+    ResponseComponent: {
+      reprompt: {
+        maxAttempts: 3,
+        interval: 3000,
+      },
     },
     recorder: {},
   },
 });
 
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: process.env.SOCKET_SERVER_URL,
-
-  // vuex: {
-  //   store,
-  //   actionPrefix: 'SOCKET_',
-  //   mutationPrefix: 'SOCKET_'
-  // },
-  // options: { path: "/my-app/" } //Optional options
-}));
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: process.env.SOCKET_SERVER_URL,
+//
+//   // vuex: {
+//   //   store,
+//   //   actionPrefix: 'SOCKET_',
+//   //   mutationPrefix: 'SOCKET_'
+//   // },
+//   // options: { path: "/my-app/" } //Optional options
+// }));
 
 Vue.config.productionTip = false;
 

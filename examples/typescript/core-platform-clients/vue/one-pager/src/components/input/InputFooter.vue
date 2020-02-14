@@ -1,0 +1,164 @@
+<template>
+  <div>
+    <quick-reply
+      v-for="quickReply in quickReplies"
+      :id="quickReply.id"
+      :label="quickReply.label"
+      :value="quickReply.value"
+      @clearQuickReplies="quickReplies = []"
+    >
+    </quick-reply>
+    <div class="text-input-container">
+
+
+
+          <el-input
+            type="textarea"
+            ref="textInput"
+            @keypress.native.prevent.enter="handleSendText"
+            size="large"
+            v-model="inputText"
+            placeholder="Type something..."
+            :autosize="{ minRows: 1, maxRows: 4 }"
+          >
+          </el-input>
+          <span v-if="inputText.length > 0">ENTER</span>
+          <el-button
+            v-if="!isRecording"
+            icon="el-icon-microphone"
+            type="default"
+            @click="handleStartRecording"
+            class="submit-button"
+            round
+          ></el-button>
+          <el-button
+            v-if="isRecording"
+            icon="el-icon-microphone"
+            type="default"
+            @click="handleStopRecording"
+            class="submit-button is-recording"
+            round
+          ></el-button>
+    </div>
+    <!--            <div  v-if="isRecording" class="speech"><div class="text">{{content}}</div></div>-->
+  </div>
+</template>
+
+<script lang="ts">
+import {
+  InputRecordEvents,
+  AudioHelper,
+  QuickReply as QR,
+  ResponseEvents,
+  RequestEvents,
+  ConversationEvents,
+  ConversationPart,
+} from 'jovo-client-web-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import QuickReply from '@/components/conversation/QuickReply.vue';
+
+@Component({
+  name: 'input-footer',
+  components: {
+    QuickReply
+  }
+})
+export default class InputFooter extends Vue {
+  quickReplies: QR[] = [];
+  inputText = '';
+  content: string = '';
+  mounted() {
+    this.$assistant.on(ResponseEvents.QuickReplies, (replies: QR[]) => {
+      this.quickReplies = replies;
+    });
+    this.$assistant.on(InputRecordEvents.SpeechRecognized, (event: SpeechRecognitionEvent) => {
+      this.content = AudioHelper.textFromSpeechRecognition(event);
+      this.inputText = AudioHelper.textFromSpeechRecognition(event);
+    });
+    this.$assistant.on(RequestEvents.Success, this.afterRequest);
+    this.$assistant.on(RequestEvents.Error, this.afterRequest);
+    this.$assistant.on(ConversationEvents.AddPart, (part: ConversationPart) => {
+      if (part.subType === 'start') {
+        this.focusTextInput();
+      }
+    });
+  }
+  handleSendText() {
+    if (this.inputText !== '') {
+      this.$assistant.sendText(this.inputText, false);
+      this.inputText = '';
+    }
+  }
+
+  private afterRequest() {
+    this.inputText = '';
+    this.focusTextInput();
+  }
+  get isRecording(): boolean {
+    return this.$assistant.data.isRecording;
+  }
+  handleStartRecording() {
+    if (!this.isRecording) {
+      this.$assistant.startRecording();
+    }
+  }
+  handleStopRecording() {
+    this.$assistant.stopRecording();
+  }
+  focusTextInput() {
+    let theField = <HTMLInputElement>this.$refs.textInput;
+    // theField.focus();
+  }
+}
+</script>
+
+<style lang="scss">
+  .el-footer {
+    padding: 0 !important;
+  }
+  .text-input-container {
+    padding: 10px;
+    display: flex;
+    .el-input--large {
+      flex-grow: 1;
+      -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      font-size: 1.25em;
+      border-radius: 20px;
+      margin-right: 10px;
+      input,
+      textarea {
+        border-radius: 20px;
+        line-height: 46px;
+        height: 46px;
+        resize: none;
+      }
+    }
+
+    .text-input {
+      position: relative;
+      span {
+        position: absolute;
+        right: 20px;
+        bottom: 14px;
+        padding: 5px;
+        font-size: 14px;
+        opacity: 0.15;
+        background: #ededed;
+        border: 1px solid #b3b3b3;
+      }
+    }
+  }
+  .submit-button {
+    /*position: absolute;*/
+    /*right: 13px;*/
+    /*bottom: 13px;*/
+    padding: 14px 17px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    i {
+      font-size: 28px;
+    }
+  }
+
+</style>
