@@ -11,43 +11,23 @@ import {
   Log,
   Platform,
   TestSuite,
+  AxiosError,
+  AxiosResponse,
 } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import {
-  AirlineTemplate,
-  AirlineTemplateOptions,
-  AirlineTemplatePayload,
-  AttachmentMessage,
-  AttachmentMessageOptions,
   BASE_PATH,
   BASE_URL,
-  ButtonTemplate,
-  ButtonTemplateOptions,
-  ButtonTemplatePayload,
   FacebookMessengerCore,
   FacebookMessengerRequestBuilder,
   FacebookMessengerResponseBuilder,
-  GenericTemplate,
-  GenericTemplateOptions,
-  GenericTemplatePayload,
-  MediaTemplate,
-  MediaTemplateOptions,
-  MediaTemplatePayload,
   Message,
   MessengerBot,
   MessengerBotEntry,
   MessengerBotRequest,
   MessengerBotResponse,
-  ReceiptTemplate,
-  ReceiptTemplateOptions,
-  ReceiptTemplatePayload,
-  SenderAction,
-  SenderActionType,
-  TemplateType,
-  TextMessage,
-  TextMessageOptions,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -259,9 +239,14 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     );
 
     for (const message of messages) {
-      message.send(pageAccessToken).catch((e) => {
-        Log.error(`Error while sending message:\n${e}`);
-      });
+      message
+        .send(pageAccessToken)
+        .then((res: AxiosResponse<any>) => {
+          Log.debug(res.data);
+        })
+        .catch((e: AxiosError) => {
+          Log.error(`Error while sending message:\n${e}`);
+        });
     }
   }
 

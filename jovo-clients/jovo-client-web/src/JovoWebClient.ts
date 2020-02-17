@@ -6,8 +6,8 @@ import {
   ComponentConstructor,
   Config,
   ConversationComponent,
+  InitConfig,
   InputComponent,
-  JovoWebClientConfig,
   Logger,
   LoggerComponent,
   LoggerEvents,
@@ -21,15 +21,31 @@ import { ActionHandler } from './core/ActionHandler';
 // tslint:disable-next-line
 import merge = require('lodash.merge');
 
-export function makeDefaultConfig(): Config {
+export enum ClientType {
+  VoiceAssistant = 'voice-assistant',
+  ChatBot = 'chat-bot',
+}
+
+export function makeDefaultConfig(type: ClientType = ClientType.VoiceAssistant): Config {
   return {
     debugMode: false,
     initBaseComponents: true,
     launchFirst: true,
     locale: navigator.language,
     speechSynthesis: {
-      enabled: true,
+      enabled: type === ClientType.VoiceAssistant,
       automaticallySetLanguage: true,
+    },
+    LoggerComponent: LoggerComponent.DEFAULT_CONFIG,
+    ConversationComponent: ConversationComponent.DEFAULT_CONFIG,
+    InputComponent: {
+      ...InputComponent.DEFAULT_CONFIG,
+      mode: type === ClientType.VoiceAssistant ? 'default' : 'push-to-talk',
+    },
+    RequestComponent: RequestComponent.DEFAULT_CONFIG,
+    ResponseComponent: {
+      ...ResponseComponent.DEFAULT_CONFIG,
+      reprompt: { ...ResponseComponent.DEFAULT_CONFIG.reprompt, enabled: false },
     },
   };
 }
@@ -48,10 +64,10 @@ export class JovoWebClient extends AdvancedEventEmitter {
   private readonly $ssmlEvaluator: SSMLEvaluator;
   private readonly $actionHandler: ActionHandler;
 
-  constructor(readonly url: string, config?: Partial<JovoWebClientConfig>) {
+  constructor(readonly url: string, config?: InitConfig) {
     super();
 
-    const defaultConfig = makeDefaultConfig();
+    const defaultConfig = makeDefaultConfig(config?.type);
     this.$config = config ? merge(defaultConfig, config) : defaultConfig;
 
     this.$components = [];

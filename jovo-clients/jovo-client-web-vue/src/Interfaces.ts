@@ -1,7 +1,7 @@
-import { Config, ConversationPart } from 'jovo-client-web';
+import { ConversationPart, InitConfig } from 'jovo-client-web';
 
 export interface PluginConfig {
-  client?: Config;
+  client?: InitConfig;
   url: string;
 }
 

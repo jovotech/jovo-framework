@@ -1,6 +1,8 @@
 import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
 import _get = require('lodash.get');
+import _set = require('lodash.set');
 import { ActionBuilder } from '../ActionBuilder';
+import { Action } from '../Interfaces';
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
@@ -22,6 +24,10 @@ export class CorePlatformApp extends Jovo {
 
     this.$actions = new ActionBuilder();
     this.$repromptActions = new ActionBuilder();
+    this.$output.CorePlatform = {
+      Actions: [],
+      RepromptActions: [],
+    };
   }
 
   getDeviceId(): string | undefined {
@@ -82,5 +88,26 @@ export class CorePlatformApp extends Jovo {
 
   getSpeechBuilder(): CorePlatformSpeechBuilder | undefined {
     return new CorePlatformSpeechBuilder(this);
+  }
+
+  // Output methods
+  setActions(actions: Action[]): CorePlatformApp {
+    this.$output.CorePlatform.Actions = actions;
+    return this;
+  }
+
+  addActions(...actions: Action[]): CorePlatformApp {
+    this.$output.CorePlatform.Actions.push(...actions);
+    return this;
+  }
+
+  setRepromptActions(actions: Action[]): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions = actions;
+    return this;
+  }
+
+  addRepromptActions(...actions: Action[]): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions.push(...actions);
+    return this;
   }
 }

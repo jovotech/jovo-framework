@@ -1,5 +1,5 @@
 import get = require('lodash.get');
-import { JovoWebClient, JovoWebClientConfig } from '../src';
+import { InitConfig, JovoWebClient } from '../src';
 
 export function expectClientOptionToBe<T = any>(
   client: JovoWebClient,
@@ -11,7 +11,7 @@ export function expectClientOptionToBe<T = any>(
 
 export function makeTestClient(
   url = '',
-  config: Partial<JovoWebClientConfig> = { initBaseComponents: false },
+  config: InitConfig = { initBaseComponents: false },
 ): JovoWebClient {
   return new JovoWebClient(url, config);
 }

@@ -8,8 +8,15 @@ import {
   RequestEvents,
 } from '../..';
 
+declare module '../../core/Interfaces' {
+  interface Config {
+    ResponseComponent: ResponseComponentConfig;
+  }
+}
+
 export interface ResponseComponentConfig extends ComponentConfig {
   reprompt: {
+    enabled: boolean;
     interval: number;
     maxAttempts: number;
   };
@@ -18,6 +25,7 @@ export interface ResponseComponentConfig extends ComponentConfig {
 export class ResponseComponent extends Component<ResponseComponentConfig> {
   static DEFAULT_CONFIG: ResponseComponentConfig = {
     reprompt: {
+      enabled: true,
       interval: 2000,
       maxAttempts: 3,
     },
@@ -62,8 +70,8 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
     }
 
     const repromptActions = data.reprompts;
-    if (repromptActions && repromptActions.length > 0) {
-      this.handleRepromptActions(repromptActions);
+    if (this.$config.reprompt.enabled && repromptActions && repromptActions.length > 0) {
+      this.$repromptTimer.handle(actions);
     }
   }
 
@@ -71,9 +79,5 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
     for (let i = 0, len = actions.length; i < len; i++) {
       await this.$client.actionHandler.handleAction(actions[i]);
     }
-  }
-
-  private handleRepromptActions(actions: Action[]) {
-    this.$repromptTimer.handle(actions);
   }
 }

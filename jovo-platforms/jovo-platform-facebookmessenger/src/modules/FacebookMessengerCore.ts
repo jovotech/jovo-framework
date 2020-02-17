@@ -81,12 +81,12 @@ export class FacebookMessengerCore implements Plugin {
       return;
     }
 
-    const overWriteText = _get(output, 'FacebookMessenger.Overwrite.Text');
+    const setText = _get(output, 'FacebookMessenger.Overwrite.Text');
     const overWriteQuickReplies = _get(output, 'FacebookMessenger.Overwrite.QuickReplies');
 
     const tell = _get(output, 'tell');
     if (tell) {
-      const text = overWriteText || tell.speech.toString();
+      const text = setText || tell.speech.toString();
       const textMessage = new TextMessage(
         { id: messengerBot.$user.getId()! },
         { text, quickReplies: overWriteQuickReplies },
@@ -96,7 +96,7 @@ export class FacebookMessengerCore implements Plugin {
 
     const ask = _get(output, 'ask');
     if (ask) {
-      const text = overWriteText || ask.speech.toString();
+      const text = setText || ask.speech.toString();
       const textMessage = new TextMessage(
         { id: messengerBot.$user.getId()! },
         { text, quickReplies: overWriteQuickReplies },
