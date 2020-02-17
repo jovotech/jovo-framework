@@ -15,7 +15,7 @@ To make local development easier, Jovo provides two tools. First, there is the J
 
 ## Jovo Webhook
 
-The Jovo Webhook is a quick and easy way to create a link to your local webserver which you can use as an endpoint to test your app. In addition to that, it allows you to use the [Jovo Debugger](../tools/debugger.md '../tools/debugger'), a tool to make debugging Jovo projects easier.
+The Jovo Webhook is a quick and easy way to create a link to your local webserver which you can use as an endpoint to test your app. In addition to that, it allows you to use the [Jovo Debugger](../tools/debugger.md '../debugger'), a tool to make debugging Jovo projects easier.
 
 Every client receives their very own static webhook ID in the following format:
 
@@ -36,7 +36,7 @@ module.exports = {
 
 > We provide an on-premise solution for enterprises who want to use the Jovo Webhook. Please use the contact form [here](TODO)
 
-Find out more about the Jovo Webhook [here](../tools/webhook.md '../tools/webhook').
+Find out more about the Jovo Webhook [here](../tools/webhook.md '../webhook').
 
 ## FileDb
 

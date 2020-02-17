@@ -43,7 +43,7 @@ module.exports = {
 }
 ```
 
-> You can find a detailed explanation about the `project.js` file's properties [here](../configuration/project-js.md '../configuration/project-js').
+> You can find a detailed explanation about the `project.js` file's properties [here](../configuration/project-js.md '../project-js').
 
 The defined stages can be referenced with the Jovo CLI while building the platforms files or deploying the project using the `--stage` option:
 
@@ -55,7 +55,7 @@ $ jovo build -p alexaSkill --stage test --deploy
 
 The app configuration stages are not defined in the same file as the project configuration. Here we use separate files for each stage with the following naming pattern: `config.<stage-name>.js`, e.g. `config.dev.js`.
 
-The stage configs can have the same attributes as the default `config.js` file. For a detailed explanation of each property check the app configuration documentation [here](../configuration/config-js.md '../configuration/config-js').
+The stage configs can have the same attributes as the default `config.js` file. For a detailed explanation of each property check the app configuration documentation [here](../configuration/config-js.md '../config-js').
 
 The current active stage config will overwrite the default configs (`config.js`) properties. 
 

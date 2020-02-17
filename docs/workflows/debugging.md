@@ -19,7 +19,7 @@ The Jovo Debugger allows you to debug and quickly test your Jovo app by displayi
 
 By having the request and the current state of both session attributes and database entries in one place, you can quickly see whether your bugs are caused by unexpected states of your data. 
 
-You can find the detailed explanation of the debugger, its features, and how to use it in the [tools section](../tools/debugger.md '../tools/debugger').
+You can find the detailed explanation of the debugger, its features, and how to use it in the [tools section](../tools/debugger.md '../debugger').
 
 ## Jovo Logger
 
@@ -27,7 +27,7 @@ The Jovo framework uses an internal logging class to log the whole process from 
 
 Throughout the whole process, the framework logs the key data of each step, but not all of it is shown by default. Depending on your log level some of the information is omitted.
 
-By utilizing the logger, you might find errors in your project's setup, the merging of each plugin's config, the parsing of the output object and more. To learn how to use the Jovo Logger effectively, check out the logging page in the [basic concepts section](../basic-concepts/data/logging.md#jovo-logger '../basic-concepts/data/logging#jovo-logger').
+By utilizing the logger, you might find errors in your project's setup, the merging of each plugin's config, the parsing of the output object and more. To learn how to use the Jovo Logger effectively, check out the logging page in the [basic concepts section](../basic-concepts/data/logging.md#jovo-logger '../data/logging#jovo-logger').
 
 ## Request & Response Logs: What's Important
 

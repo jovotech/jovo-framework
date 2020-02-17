@@ -12,7 +12,7 @@ Learn more about the deployment workflow and what options you have.
 
 Deployment of a Jovo project consists of deploying the logic as well as the platform files.
 
-To make deploying easier you can use the [Jovo CLI](../tools/cli/README.md '../tools/cli'). The CLI currently supports the deployment to AWS Lambda, Alexa Developer Console, Dialogflow.
+To make deploying easier you can use the [Jovo CLI](../tools/cli/README.md '../cli'). The CLI currently supports the deployment to AWS Lambda, Alexa Developer Console, Dialogflow.
 
 ## Deploying Platform Files
 
