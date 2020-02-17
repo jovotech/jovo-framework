@@ -40,7 +40,7 @@ app.setHandler({
 	HelloWorldIntent() {
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 		if (this.$messengerBot) {
-			this.$messengerBot.attachment({
+			this.$messengerBot.showAttachment({
 				type: AttachmentType.Image,
 				data: 'https://via.placeholder.com/150'
 			});
@@ -52,7 +52,7 @@ app.setHandler({
 
 		const testFilePath = join(__dirname, '..', 'test-file.json');
 		if (this.$messengerBot) {
-			this.$messengerBot.attachment({
+			this.$messengerBot.showAttachment({
 				type: AttachmentType.File,
 				data: { path: testFilePath, fileName: 'test-file.json' }
 			});

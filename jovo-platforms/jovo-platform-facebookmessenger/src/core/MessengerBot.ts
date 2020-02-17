@@ -25,6 +25,7 @@ import {
   TemplateType,
   TextMessage,
   TextMessageOptions,
+  TextQuickReply,
 } from '..';
 import { MessengerBotSpeechBuilder } from './MessengerBotSpeechBuilder';
 import { MessengerBotUser } from './MessengerBotUser';
@@ -101,29 +102,36 @@ export class MessengerBot extends Jovo {
   }
 
   // Output methods
-  overwriteText(text: string): MessengerBot {
+  setText(text: string): MessengerBot {
     _set(this.$output.FacebookMessenger, 'Overwrite.Text', text);
     return this;
   }
 
-  overwriteQuickReplies(quickReplies: QuickReply[]): MessengerBot {
+  setQuickReplies(quickReplies: Array<QuickReply | string>): MessengerBot {
     _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
     return this;
   }
 
-  text(options: TextMessageOptions): MessengerBot {
+  addQuickReply(quickReply: QuickReply | string): MessengerBot {
+    const quickReplies = _get(this.$output.FacebookMessenger, 'Overwrite.QuickReplies');
+    quickReplies.push(quickReply);
+    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
+    return this;
+  }
+
+  showText(options: TextMessageOptions): MessengerBot {
     const message = new TextMessage({ id: this.$user.getId()! }, { ...options });
     this.$output.FacebookMessenger.Messages.push(message);
     return this;
   }
 
-  attachment(options: AttachmentMessageOptions): MessengerBot {
+  showAttachment(options: AttachmentMessageOptions): MessengerBot {
     const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
     this.$output.FacebookMessenger.Messages.push(message);
     return this;
   }
 
-  airlineTemplate(options: AirlineTemplateOptions): MessengerBot {
+  showAirlineTemplate(options: AirlineTemplateOptions): MessengerBot {
     const payload: AirlineTemplatePayload = {
       ...options,
       template_type: TemplateType.Airline,
@@ -133,7 +141,7 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  buttonTemplate(options: ButtonTemplateOptions): MessengerBot {
+  showButtonTemplate(options: ButtonTemplateOptions): MessengerBot {
     const payload: ButtonTemplatePayload = {
       ...options,
       template_type: TemplateType.Button,
@@ -143,7 +151,7 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  genericTemplate(options: GenericTemplateOptions): MessengerBot {
+  showGenericTemplate(options: GenericTemplateOptions): MessengerBot {
     const payload: GenericTemplatePayload = {
       ...options,
       template_type: TemplateType.Generic,
@@ -153,7 +161,7 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  mediaTemplate(options: MediaTemplateOptions): MessengerBot {
+  showMediaTemplate(options: MediaTemplateOptions): MessengerBot {
     const payload: MediaTemplatePayload = {
       ...options,
       template_type: TemplateType.Media,
@@ -163,7 +171,7 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  receiptTemplate(options: ReceiptTemplateOptions): MessengerBot {
+  showReceiptTemplate(options: ReceiptTemplateOptions): MessengerBot {
     const payload: ReceiptTemplatePayload = {
       ...options,
       template_type: TemplateType.Receipt,
@@ -173,7 +181,7 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  async action(action: SenderActionType): Promise<boolean> {
+  async showAction(action: SenderActionType): Promise<boolean> {
     const message = new SenderAction({ id: this.$user.getId()! }, action);
 
     const pageAccessToken = _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');

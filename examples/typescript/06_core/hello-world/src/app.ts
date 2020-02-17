@@ -35,6 +35,7 @@ app.use(corePlatform, new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
+		
 		return this.toIntent('HelloWorldIntent');
 	},
 

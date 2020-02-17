@@ -36,11 +36,11 @@ app.setHandler({
 	},
 
 	async HelloWorldIntent() {
-		await this.$messengerBot?.action(SenderActionType.MarkSeen);
+		await this.$messengerBot?.showAction(SenderActionType.MarkSeen);
 		await delay(100);
-		await this.$messengerBot?.action(SenderActionType.TypingOn);
+		await this.$messengerBot?.showAction(SenderActionType.TypingOn);
 		await delay(1000);
-		await this.$messengerBot?.action(SenderActionType.TypingOff);
+		await this.$messengerBot?.showAction(SenderActionType.TypingOff);
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 

@@ -1,15 +1,7 @@
 import { MessengerBot } from './core/MessengerBot';
-import { SenderActionType } from './Enums';
 import { Config } from './FacebookMessenger';
-import { Message } from './responses/Message';
-import { AttachmentMessageOptions } from './responses/messages/AttachmentMessage';
-import { TextMessageOptions } from './responses/messages/TextMessage';
-import { AirlineTemplateOptions } from './responses/templates/AirlineTemplate';
-import { ButtonTemplateOptions } from './responses/templates/ButtonTemplate';
-import { GenericTemplateOptions } from './responses/templates/GenericTemplate';
-import { MediaTemplateOptions } from './responses/templates/MediaTemplate';
-import { ReceiptTemplateOptions } from './responses/templates/ReceiptTemplate';
 import { QuickReply } from './Interfaces';
+import { Message } from './responses/Message';
 
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
@@ -19,7 +11,9 @@ export const BASE_PATH = '/v5.0/me';
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $messengerBot?: MessengerBot;
+
     messengerBot(): MessengerBot;
+
     isMessengerBot(): boolean;
   }
 }
@@ -40,6 +34,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 
   export interface AppPlatformConfig extends AppFacebookMessengerConfig {}
+
   export interface ExtensiblePluginConfigs extends AppFacebookMessengerConfig {}
 }
 

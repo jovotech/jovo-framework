@@ -116,25 +116,27 @@ The speech of `tell` and `ask` can be overwritten:
 
 ```javascript
 // @language=javascript
-if (this.$messengerBot) this.$messengerBot.overwriteText('someNewText');
+if (this.$messengerBot) this.$messengerBot.setText('someNewText');
 
 // @language=typescript
-this.$messengerBot?.overwriteText('someNewText');
+this.$messengerBot?.setText('someNewText');
 ```
 
-Additionally, quick-replies can be overwritten:
+Additionally, quick-replies can be overwritten and added:
 
 ```javascript
 // @language=javascript
-if (this.$messengerBot)
-	this.$messengerBot.overwriteQuickReplies([
+if (this.$messengerBot) {
+	this.$messengerBot.setQuickReplies([
 		new TextQuickReply('someQuickReplyText')
 	]);
+	this.$messengerBot.addQuickReply('test');
+}
 
 // @language=typescript
-this.$messengerBot?.overwriteQuickReplies([
-	new TextQuickReply('someQuickReplyText')
-]);
+this.$messengerBot
+	?.setQuickReplies([new TextQuickReply('someQuickReplyText')])
+	.addQuickReply('test');
 ```
 
 ### Sending Text
@@ -143,10 +145,10 @@ The following example shows how to send a text-message:
 
 ```javascript
 // @language=javascript
-if (this.$messengerBot) this.$messengerBot.text({ text: 'text' });
+if (this.$messengerBot) this.$messengerBot.showText({ text: 'text' });
 
 // @language=typescript
-this.$messengerBot?.text({ text: 'text' });
+this.$messengerBot?.showText({ text: 'text' });
 ```
 
 > **INFO**: The text-message that was created by calling `tell` or `ask` will always be the first message to be displayed. Even if the `text`-method was called first.
@@ -155,11 +157,11 @@ this.$messengerBot?.text({ text: 'text' });
 
 When calling the `text`-method an object with the following properties can be passed:
 
-| property     | type           | description                                                              |
-| ------------ | -------------- | ------------------------------------------------------------------------ |
-| text         | `string`       | _Required_. The text that will be displayed                              |
-| quickReplies | `QuickReply[]` | _Optional_. Quick-Replies that will be shown below the text.             |
-| messageType  | `MessageType`  | _Optional_. The type of the message. Defaults to `MessageType.Response`. |
+| property     | type                                  | description                                                              |
+| ------------ | ------------------------------------- | ------------------------------------------------------------------------ |
+| text         | `string`                              | _Required_. The text that will be displayed                              |
+| quickReplies | <code>QuickReply &#124; string</code> | _Optional_. Quick-Replies that will be shown below the text.             |
+| messageType  | `MessageType`                         | _Optional_. The type of the message. Defaults to `MessageType.Response`. |
 
 ### Sending Quick Replies
 
@@ -167,18 +169,20 @@ Quick-replies can be sent by passing the `quickReplies` property to the options 
 
 ```javascript
 // @language=javascript
-this.$messengerBot.text({
+this.$messengerBot.showText({
 	text: 'someText',
 	quickReplies: [
-		{ content_type: QuickReplyContentType.Text, title: 'someTitle' }
+		{ content_type: QuickReplyContentType.Text, title: 'someTitle' },
+		'Text-only-QuickReply'
 	]
 });
 
 // @language=typescript
-this.$messengerBot?.text({
+this.$messengerBot?.showText({
 	text: 'someText',
 	quickReplies: [
-		{ content_type: QuickReplyContentType.Text, title: 'someTitle' }
+		{ content_type: QuickReplyContentType.Text, title: 'someTitle' },
+		'Text-only-QuickReply'
 	]
 });
 ```
@@ -186,6 +190,8 @@ this.$messengerBot?.text({
 Read more about quick-replies [here](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies).
 
 In addition to manually creating a `QuickReply`-object, the helper classes `TextQuickReply` and `BuiltInQuickReply` can be used.
+
+> **INFO**: When passing a string, a TextQuickReply will be created from that string.
 
 #### TextQuickReply
 
@@ -220,7 +226,7 @@ Facebook Messenger allows sending attachments, which includes audio, videos, ima
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.attachment({
+	this.$messengerBot.showAttachment({
 		type: AttachmentType.File,
 		data: {
 			fileName: 'displayFileName',
@@ -229,7 +235,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.attachment({
+this.$messengerBot?.showAttachment({
 	type: AttachmentType.File,
 	data: {
 		fileName: 'displayFileName',
@@ -263,10 +269,11 @@ The following actions are supported:
 
 ```javascript
 // @language=javascript
-if (this.$messengerBot) this.$messengerBot.action(SenderActionType.TypingOn);
+if (this.$messengerBot)
+	this.$messengerBot.showAction(SenderActionType.TypingOn);
 
 // @language=typescript
-this.$messengerBot?.action(SenderActionType.TypingOn);
+this.$messengerBot?.showAction(SenderActionType.TypingOn);
 ```
 
 Read more [here](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions).
@@ -284,7 +291,7 @@ The following example shows how to send a generic template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.genericTemplate({
+	this.$messengerBot.showGenericTemplate({
 		elements: [
 			{
 				title: 'someTitle'
@@ -293,7 +300,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.genericTemplate({
+this.$messengerBot?.showGenericTemplate({
 	elements: [
 		{
 			title: 'someTitle'
@@ -311,13 +318,13 @@ The following example shows how to send a button template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.buttonTemplate({
+	this.$messengerBot.showButtonTemplate({
 		text: 'someText',
 		buttons: [new PostbackButton('someTitle', 'somePayload')]
 	});
 
 // @language=typescript
-this.$messengerBot?.buttonTemplate({
+this.$messengerBot?.showButtonTemplate({
 	text: 'someText',
 	buttons: [new PostbackButton('someTitle', 'somePayload')]
 });
@@ -332,7 +339,7 @@ The following example shows how to send a media template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.mediaTemplate({
+	this.$messengerBot.showMediaTemplate({
 		elements: [
 			{
 				media_type: MediaType.Image,
@@ -343,7 +350,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot.mediaTemplate({
+this.$messengerBot.showMediaTemplate({
 	elements: [
 		{
 			media_type: MediaType.Image,
@@ -363,7 +370,7 @@ The following example shows how to send a receipt template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.receiptTemplate({
+	this.$messengerBot.showReceiptTemplate({
 		recipient_name: 'someName',
 		order_number: 'someId',
 		currency: 'EUR',
@@ -374,7 +381,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.receiptTemplate({
+this.$messengerBot?.showReceiptTemplate({
 	recipient_name: 'someName',
 	order_number: 'someId',
 	currency: 'EUR',
@@ -394,7 +401,7 @@ The following example shows how to send an airline template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.airlineTemplate({
+	this.$messengerBot.showAirlineTemplate({
 		intro_message: 'someMessage',
 		locale: 'someLocale',
 		boarding_pass: [
@@ -423,7 +430,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.airlineTemplate({
+this.$messengerBot?.showAirlineTemplate({
 	intro_message: 'someMessage',
 	locale: 'someLocale',
 	boarding_pass: [

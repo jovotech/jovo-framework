@@ -4,7 +4,6 @@
 // APP INITIALIZATION
 // ------------------------------------------------------------------
 
-
 const { App } = require('jovo-framework');
 const {
 	FacebookMessenger,
@@ -40,11 +39,9 @@ app.setHandler({
 	HelloWorldIntent() {
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 		if (this.$messengerBot) {
-			this.$messengerBot.overwriteQuickReplies([
-				new TextQuickReply('John'),
-				new TextQuickReply('Jack'),
-				new TextQuickReply('Anna')
-			]);
+			this.$messengerBot
+				.setQuickReplies([new TextQuickReply('John'), 'Jack', 'Anna'])
+				.addQuickReply('More');
 		}
 	},
 
@@ -53,9 +50,9 @@ app.setHandler({
 
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 		if (this.$messengerBot) {
-			this.$messengerBot.text({
+			this.$messengerBot.showText({
 				text: 'Is there anything else I can do for you?',
-				quickReplies: [new TextQuickReply('Exit')]
+				quickReplies: ['Exit']
 			});
 		}
 	}
