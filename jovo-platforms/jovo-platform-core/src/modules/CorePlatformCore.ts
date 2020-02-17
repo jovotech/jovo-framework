@@ -114,12 +114,12 @@ export class CorePlatformCore implements Plugin {
       coreResponse.reprompts.push(repromptAction);
     }
 
-    const actions = corePlatformApp.$actions.build();
+    const actions = output.CorePlatform.Actions;
     if (actions.length > 0) {
       coreResponse.actions.push(...actions);
     }
 
-    const repromptActions = corePlatformApp.$repromptActions.build();
+    const repromptActions = output.CorePlatform.RepromptActions;
     if (repromptActions.length > 0) {
       coreResponse.reprompts.push(...repromptActions);
     }
