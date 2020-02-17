@@ -45,7 +45,7 @@ export function makeDefaultConfig(type: ClientType = ClientType.VoiceAssistant):
     RequestComponent: RequestComponent.DEFAULT_CONFIG,
     ResponseComponent: {
       ...ResponseComponent.DEFAULT_CONFIG,
-      reprompt: { ...ResponseComponent.DEFAULT_CONFIG.reprompt, enabled: false },
+      reprompt: { ...ResponseComponent.DEFAULT_CONFIG.reprompt, enabled: type === ClientType.VoiceAssistant },
     },
   };
 }
