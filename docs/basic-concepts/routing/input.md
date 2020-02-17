@@ -11,8 +11,7 @@ In this section, you will learn how to deal with entities and slot values provid
 
 > [Learn how to add inputs to the Jovo Language Model here](../model '../model').
 
-We call user input any additional information your user provides besides an `intent`. On Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
-
+We call user input any additional information your user provides besides an `intent`. For example, on Amazon Alexa, input is usually called a `slot`, on Google Assistant/Dialogflow an `entity` or `parameter`.
 
 ## How to Access Input
 

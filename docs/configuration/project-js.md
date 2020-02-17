@@ -39,7 +39,7 @@ This is what the default `project.js` looks like:
 // JOVO PROJECT CONFIGURATION
 // ------------------------------------------------------------------
 
-{
+module.exports = {
 	alexaSkill: {
 		nlu: 'alexa',
 	},
@@ -65,7 +65,7 @@ These environment variables are usually stored in a `.env` file or in your cloud
 
 ## Platforms
 
-With the Jovo CLI, you can create and deploy project files (e.g. [language models](../basic-concepts/model './model')) that are specific to each voice platform. 
+With the Jovo CLI, you can create and deploy project files (e.g. [language models](../basic-concepts/model './model')) that are specific to each voice platform. Deployment of project files is currently only supported for Alexa Skills and Google Actions.
 
 The [introduction](#introduction) already shows how a freshly created `project.js` looks like for both platforms [`alexaSkill`](#alexaskill) and [`googleAction`](#googleaction). In the following section, you will learn about additional configurations to the voice platform projects.
 

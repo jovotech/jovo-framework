@@ -9,7 +9,25 @@ Learn more about Twilio Autopilot specific features that can be used with the Jo
 
 ## Introduction
 
-All of the Autopilot specific objects and functions are acessed using the `$autopilotBot` object:
+The [Twilio Autopilot platform](https://www.twilio.com/autopilot) allows you to build, train, and deploy bots that work across web and mobile chat, SMS, WhatsApp, and your contact center.
+
+The platform is not completely integrated into the Jovo ecosystem yet. While you can use the framework to provide the logic for your bot, the language model has to be created on the Autopilot Developer Platform.
+
+After creating your Autopilot bot, you simply have to set each task to redirect to the endpoint your Jovo project is running on:
+
+```js
+{
+	"actions": [
+		{
+			"redirect": "https://webhook.jovo.cloud/63709788-169b-4d6d-981c-d6ef9700bfad"
+		}
+	]
+}
+```
+
+## Basics
+
+All of the Autopilot specific objects and functions are accessed using the `$autopilotBot` object:
 
 ```js
 // @language=javascript

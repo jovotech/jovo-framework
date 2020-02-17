@@ -86,13 +86,8 @@ Important: Image files must be accessible by the public and support CORS (cross-
 
 You can find a troubleshooting guide by Amazon [here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/providing-home-cards-for-the-amazon-alexa-app#common-issues-when-including-images-in-standard-cards).
 
-## Alexa Specific Visual Output
+## Platform Specific Visual Output
 
-> You can find out more about Alexa specific cards and render templates for Amazon Echo Show here: [Platforms > Amazon Alexa](../../platforms/amazon-alexa/visual.md  '../amazon-alexa/visual-output').
-
-
-## Google Assistant Specific Visual Output
-
-You can find out more about Google Assistant specific cards and suggestion chips here: [Platforms > Google Assistant](../../platforms/google-assistant/visual.md  '../google-assistant/visual-output').
+Each platform might support other kinds of visual output besides the ones listed above. You can find the detailed list in each platform's documentation [here](../../platforms/README.md './platforms/).
 
 <!--[metadata]: {"description": "Learn how to create visual output for Alexa Skills and Google Actions with the Jovo Framework", "route": "output/visual-output"}-->
