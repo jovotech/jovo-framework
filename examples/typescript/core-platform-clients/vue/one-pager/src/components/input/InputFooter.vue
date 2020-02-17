@@ -1,44 +1,43 @@
 <template>
   <div>
-    <quick-reply
-      v-for="quickReply in quickReplies"
-      :id="quickReply.id"
-      :label="quickReply.label"
-      :value="quickReply.value"
-      @clearQuickReplies="quickReplies = []"
-    >
-    </quick-reply>
+    <div class="quick-reply-container">
+      <quick-reply
+        v-for="quickReply in quickReplies"
+        :id="quickReply.id"
+        :label="quickReply.label"
+        :value="quickReply.value"
+        @clearQuickReplies="quickReplies = []"
+      >
+      </quick-reply>
+    </div>
     <div class="text-input-container">
-
-
-
-          <el-input
-            type="textarea"
-            ref="textInput"
-            @keypress.native.prevent.enter="handleSendText"
-            size="large"
-            v-model="inputText"
-            placeholder="Type something..."
-            :autosize="{ minRows: 1, maxRows: 4 }"
-          >
-          </el-input>
-          <span v-if="inputText.length > 0">ENTER</span>
-          <el-button
-            v-if="!isRecording"
-            icon="el-icon-microphone"
-            type="default"
-            @click="handleStartRecording"
-            class="submit-button"
-            round
-          ></el-button>
-          <el-button
-            v-if="isRecording"
-            icon="el-icon-microphone"
-            type="default"
-            @click="handleStopRecording"
-            class="submit-button is-recording"
-            round
-          ></el-button>
+      <el-input
+        type="textarea"
+        ref="textInput"
+        @keypress.native.prevent.enter="handleSendText"
+        size="large"
+        v-model="inputText"
+        placeholder="Type something..."
+        :autosize="{ minRows: 1, maxRows: 4 }"
+      >
+      </el-input>
+      <span v-if="inputText.length > 0" class="enter">ENTER</span>
+      <el-button
+        v-if="!isRecording"
+        icon="el-icon-microphone"
+        type="default"
+        @click="handleStartRecording"
+        class="submit-button"
+        round
+      ></el-button>
+      <el-button
+        v-if="isRecording"
+        icon="el-icon-microphone"
+        type="default"
+        @click="handleStopRecording"
+        class="submit-button is-recording"
+        round
+      ></el-button>
     </div>
     <!--            <div  v-if="isRecording" class="speech"><div class="text">{{content}}</div></div>-->
   </div>
@@ -60,8 +59,8 @@ import QuickReply from '@/components/conversation/QuickReply.vue';
 @Component({
   name: 'input-footer',
   components: {
-    QuickReply
-  }
+    QuickReply,
+  },
 })
 export default class InputFooter extends Vue {
   quickReplies: QR[] = [];
@@ -90,10 +89,7 @@ export default class InputFooter extends Vue {
     }
   }
 
-  private afterRequest() {
-    this.inputText = '';
-    this.focusTextInput();
-  }
+
   get isRecording(): boolean {
     return this.$assistant.data.isRecording;
   }
@@ -106,59 +102,70 @@ export default class InputFooter extends Vue {
     this.$assistant.stopRecording();
   }
   focusTextInput() {
-    let theField = <HTMLInputElement>this.$refs.textInput;
-    // theField.focus();
+    const textField = this.$refs.textInput as HTMLInputElement;
+
+    if (textField) {
+      textField.focus();
+    }
+  }
+
+  private afterRequest() {
+    this.inputText = '';
+    this.focusTextInput();
   }
 }
 </script>
 
 <style lang="scss">
-  .el-footer {
-    padding: 0 !important;
-  }
-  .text-input-container {
-    padding: 10px;
-    display: flex;
-    .el-input--large {
-      flex-grow: 1;
-      -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      font-size: 1.25em;
-      border-radius: 20px;
-      margin-right: 10px;
-      input,
-      textarea {
-        border-radius: 20px;
-        line-height: 46px;
-        height: 46px;
-        resize: none;
-      }
-    }
-
-    .text-input {
-      position: relative;
-      span {
-        position: absolute;
-        right: 20px;
-        bottom: 14px;
-        padding: 5px;
-        font-size: 14px;
-        opacity: 0.15;
-        background: #ededed;
-        border: 1px solid #b3b3b3;
-      }
-    }
-  }
-  .submit-button {
-    /*position: absolute;*/
-    /*right: 13px;*/
-    /*bottom: 13px;*/
-    padding: 14px 17px !important;
+.el-footer {
+  padding: 0 !important;
+}
+.text-input-container {
+  padding: 10px;
+  display: flex;
+  .el-input--large {
+    flex-grow: 1;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-    i {
-      font-size: 28px;
+    font-size: 1.25em;
+    border-radius: 20px;
+    margin-right: 10px;
+    input,
+    textarea {
+      border-radius: 20px;
+      line-height: 46px;
+      height: 46px;
+      resize: none;
     }
   }
 
+  .text-input {
+    position: relative;
+  }
+  span.enter {
+    position: absolute;
+    right: 100px;
+    bottom: 23px;
+    padding: 5px;
+    font-size: 14px;
+    opacity: 0.15;
+    background: #ededed;
+    border: 1px solid #b3b3b3;
+  }
+}
+.submit-button {
+  /*position: absolute;*/
+  /*right: 13px;*/
+  /*bottom: 13px;*/
+  padding: 14px 17px !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  i {
+    font-size: 28px;
+  }
+}
+.quick-reply-container {
+  position: absolute;
+  bottom: 85px;
+}
 </style>

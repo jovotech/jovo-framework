@@ -51,8 +51,9 @@ export default class StartButton extends Vue {
   handleStartRecording() {
     if (!this.isRecording) {
       this.$assistant.startRecording();
-      this.$assistant.on('request.success', (data: any) => {});
-      // this.$emit('startRecording');
+      this.$assistant.on('request.success', (data: any) => {
+        // on success
+      });
     }
   }
 

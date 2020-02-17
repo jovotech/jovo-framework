@@ -12,17 +12,14 @@
 
 <script lang="ts">
 import ConversationPartDisplay from '@/components/conversation/ConversationPartDisplay.vue';
-import { ConversationPart } from 'jovo-client-web-vue';
+import { ConversationPart, ConversationEvents } from 'jovo-client-web-vue';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { ConversationEvents } from '../../../../../../../../jovo-clients/jovo-client-web/src';
 
 @Component({
   name: 'conversation-display',
   components: { ConversationPartDisplay },
 })
 export default class ConversationDisplay extends Vue {
-  @Prop({ required: false, type: String, default: '600px' })
-  maxHeight!: string;
 
   @Prop({ required: false, type: Array, default: [] })
   messages!: ConversationPart[];
@@ -48,18 +45,6 @@ export default class ConversationDisplay extends Vue {
       }
     });
   }
-
-  // get parts(): ConversationPart[] {
-  //   return this.$assistant.data.conversationParts;
-  // }
-
-  @Watch('parts')
-  onPartsChange() {
-    this.$nextTick(() => {
-      const container = this.$refs.container as Element;
-      container.scrollTop = container.scrollHeight;
-    });
-  }
 }
 </script>
 
@@ -67,7 +52,8 @@ export default class ConversationDisplay extends Vue {
 .conversation-display {
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1em;
+  padding: 20px;
+  padding-bottom: 72px;
 }
 
 

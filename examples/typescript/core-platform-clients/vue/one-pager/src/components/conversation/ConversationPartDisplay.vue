@@ -17,8 +17,6 @@ export default class ConversationPartDisplay extends Vue {
   @Prop({ required: true, type: Object })
   part!: ConversationPart;
 
-  mounted() {}
-
   get classes(): Record<string, any> {
     const classes = {
       [this.part.type]: true,
@@ -46,13 +44,13 @@ export default class ConversationPartDisplay extends Vue {
   & .conversation-part {
     border: 1px solid black;
     max-width: 55%;
-    padding: 25px;
+    padding: 15px;
     position: relative;
     background: #c0c0c0;
     border-radius: 0.4em;
     font-family: 'Roboto', sans-serif;
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
     &.request {
       margin-left: auto;

@@ -7,8 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { ConversationEvents, ConversationPart } from '../../../../../../../../jovo-clients/jovo-client-web/dist';
+import { Component, Vue } from 'vue-property-decorator';
+import { ConversationEvents, ConversationPart } from 'jovo-client-web-vue';
 
 @Component({
   name: 'loading-spinner',
@@ -31,59 +31,56 @@ export default class LoadingSpinner extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.spinner {
+  display: inline-block;
+  height: 50px;
+  margin-left: 15px;
+  vertical-align: middle;
+}
 
-  .spinner {
-    display: inline-block;
-    height: 50px;
-    margin-left: 15px;
-    vertical-align: middle;
+.spinner > div {
+  width: 14px;
+  height: 14px;
+  background-color: #333;
+  opacity: 0.5;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
   }
-
-  .spinner > div {
-    width: 14px;
-    height: 14px;
-    background-color: #333;
-    opacity: 0.5;
-
-    border-radius: 100%;
-    display: inline-block;
-    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  40% {
+    -webkit-transform: scale(1);
   }
+}
 
-  .spinner .bounce1 {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
   }
-
-  .spinner .bounce2 {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
-
-  @-webkit-keyframes sk-bouncedelay {
-    0%,
-    80%,
-    100% {
-      -webkit-transform: scale(0);
-    }
-    40% {
-      -webkit-transform: scale(1);
-    }
-  }
-
-  @keyframes sk-bouncedelay {
-    0%,
-    80%,
-    100% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    }
-    40% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-    }
-  }
-
-
+}
 </style>

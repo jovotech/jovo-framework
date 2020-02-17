@@ -12,7 +12,7 @@ import socketio from 'socket.io-client';
 Vue.use(Element, { locale });
 Vue.use(JsonViewer);
 
-const WEBHOOK_URL = process.env.JOVO_WEBHOOK_URL;
+const WEBHOOK_URL = 'https://webhook.jovo.cloud/alex';
 
 Vue.use(JovoClientWebVue, {
   url: WEBHOOK_URL,
@@ -34,18 +34,6 @@ Vue.use(JovoClientWebVue, {
     recorder: {},
   },
 });
-
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: process.env.SOCKET_SERVER_URL,
-//
-//   // vuex: {
-//   //   store,
-//   //   actionPrefix: 'SOCKET_',
-//   //   mutationPrefix: 'SOCKET_'
-//   // },
-//   // options: { path: "/my-app/" } //Optional options
-// }));
 
 Vue.config.productionTip = false;
 
