@@ -43,7 +43,7 @@ app.setHandler({
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 
 		if (this.$messengerBot) {
-			this.$messengerBot.genericTemplate({
+			this.$messengerBot.showGenericTemplate({
 				elements: [
 					{
 						title: 'Title',
@@ -61,12 +61,12 @@ app.setHandler({
 				]
 			});
 
-			// this.$messengerBot.buttonTemplate({
+			// this.$messengerBot.showButtonTemplate({
 			// 	text: 'Example',
 			// 	buttons: [new PostbackButton('Action 1'), new PostbackButton('Action 2')]
 			// });
 
-			// this.$messengerBot.mediaTemplate({
+			// this.$messengerBot.showMediaTemplate({
 			// 	elements: [
 			// 		{
 			// 			media_type: MediaType.Image,
@@ -76,7 +76,7 @@ app.setHandler({
 			// 	]
 			// });
 
-			// this.$messengerBot.receiptTemplate({
+			// this.$messengerBot.showReceiptTemplate({
 			// 	recipient_name: 'Some Name',
 			// 	order_number: 'uniqueOrderId',
 			// 	currency: 'EUR',
@@ -86,7 +86,7 @@ app.setHandler({
 			// 	}
 			// });
 
-			// this.$messengerBot.airlineTemplate({
+			// this.$messengerBot.showAirlineTemplate({
 			// 	intro_message: 'Some Message',
 			// 	locale: 'en_US',
 			// 	boarding_pass: [
