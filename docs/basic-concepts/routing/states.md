@@ -1,6 +1,6 @@
 # States
 
-Learn how to use states in your Alexa Skills and Google Actions built with the Jovo Framework.
+Learn how to use states in your apps built with the Jovo Framework.
 
 * [Introduction](#introduction)
 * [followUpState](#followupstate)
@@ -230,4 +230,4 @@ this.followUpState(null);
 ```
 
 
-<!--[metadata]: { "description": "Learn how to use states in your Alexa Skills and Google Actions built with the Jovo Framework.", "route": "routing/states" }-->
+<!--[metadata]: { "description": "Learn how to use states in your apps with the Jovo Framework.", "route": "routing/states" }-->

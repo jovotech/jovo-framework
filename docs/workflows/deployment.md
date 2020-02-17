@@ -16,6 +16,8 @@ To make deploying easier you can use the [Jovo CLI](../tools/cli/README.md '../t
 
 ## Deploying Platform Files
 
+> Note: Platform file are currently only supported for Alexa Skills and Google Actions.
+
 Platform files are split between the language model and general configuration files (e.g. app name, description, etc.) of your app. 
 
 Before being able to deploy the platform files, you first need to build them. In the build process, the following files are used:
