@@ -26,3 +26,17 @@ test('test hasSessionData', () => {
   expect(responseWithState.hasSessionData('session')).toBe(true);
   expect(responseWithState.hasSessionData('age')).toBe(false);
 });
+
+test('test isAsk', () => {
+  const response = DialogflowResponse.fromJSON(_cloneDeep(askJSON));
+
+  expect(response.isAsk()).toBe(true);
+  expect(response.isTell()).toBe(false);
+});
+
+test('test isTell', () => {
+  const response = DialogflowResponse.fromJSON(_cloneDeep(tellJSON));
+
+  expect(response.isTell()).toBe(true);
+  expect(response.isAsk()).toBe(false);
+});
