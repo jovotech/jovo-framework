@@ -1,8 +1,10 @@
-import _Vue from 'vue';
+import Vue from 'vue';
 import { PluginConfig } from './Interfaces';
 import { JovoWebClientVue } from './JovoWebClientVue';
 
 export * from 'jovo-client-web';
+export * from './Interfaces';
+export * from './JovoWebClientVue';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -10,7 +12,7 @@ declare module 'vue/types/vue' {
   }
 }
 
-export function JovoAssistantVuePlugin(vue: typeof _Vue, config?: PluginConfig) {
+export function JovoAssistantVuePlugin(vue: typeof Vue, config?: PluginConfig) {
   if (!config) {
     throw new Error(
       `At least the 'url' option has to be set in order to use the JovoWebClientPlugin.`,

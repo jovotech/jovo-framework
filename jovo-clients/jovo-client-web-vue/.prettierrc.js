@@ -7,6 +7,5 @@ module.exports = {
 	quoteProps: 'consistent',
 	trailingComma: 'all',
 	bracketSpacing: true,
-	arrowParens: 'always',
-	parser: 'typescript'
+	arrowParens: 'always'
 };

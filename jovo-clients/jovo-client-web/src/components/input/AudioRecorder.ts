@@ -1,5 +1,5 @@
 import {
-  assistantEvents,
+  AssistantEvents,
   AudioHelper,
   AudioRecordedPayload,
   InputComponentConfig,
@@ -131,7 +131,7 @@ export class AudioRecorder {
   start() {
     if (!this.$recording && !this.$recorder) {
       if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-        this.$client.emit(assistantEvents.LaunchRequest);
+        this.$client.emit(AssistantEvents.LaunchRequest);
       } else {
         this.setupRecorder();
 

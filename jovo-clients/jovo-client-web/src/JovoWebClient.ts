@@ -1,6 +1,6 @@
 import {
   AdvancedEventEmitter,
-  assistantEvents,
+  AssistantEvents,
   AudioPlayer,
   Component,
   ComponentConstructor,
@@ -21,31 +21,34 @@ import { ActionHandler } from './core/ActionHandler';
 // tslint:disable-next-line
 import merge = require('lodash.merge');
 
-export enum ClientType {
-  VoiceAssistant = 'voice-assistant',
-  ChatBot = 'chat-bot',
+export enum DefaultInputMode {
+  Voice = 'voice',
+  Text = 'text',
 }
 
-export function makeDefaultConfig(type: ClientType = ClientType.VoiceAssistant): Config {
+export function makeDefaultConfig(type: DefaultInputMode = DefaultInputMode.Voice): Config {
   return {
     debugMode: false,
     initBaseComponents: true,
     launchFirst: true,
     locale: navigator.language,
     speechSynthesis: {
-      enabled: type === ClientType.VoiceAssistant,
+      enabled: type === DefaultInputMode.Voice,
       automaticallySetLanguage: true,
     },
     LoggerComponent: LoggerComponent.DEFAULT_CONFIG,
     ConversationComponent: ConversationComponent.DEFAULT_CONFIG,
     InputComponent: {
       ...InputComponent.DEFAULT_CONFIG,
-      mode: type === ClientType.VoiceAssistant ? 'default' : 'push-to-talk',
+      mode: type === DefaultInputMode.Voice ? 'default' : 'push-to-talk',
     },
     RequestComponent: RequestComponent.DEFAULT_CONFIG,
     ResponseComponent: {
       ...ResponseComponent.DEFAULT_CONFIG,
-      reprompt: { ...ResponseComponent.DEFAULT_CONFIG.reprompt, enabled: type === ClientType.VoiceAssistant },
+      reprompt: {
+        ...ResponseComponent.DEFAULT_CONFIG.reprompt,
+        enabled: type === DefaultInputMode.Voice,
+      },
     },
   };
 }
@@ -67,7 +70,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
   constructor(readonly url: string, config?: InitConfig) {
     super();
 
-    const defaultConfig = makeDefaultConfig(config?.type);
+    const defaultConfig = makeDefaultConfig(config?.defaultInputType);
     this.$config = config ? merge(defaultConfig, config) : defaultConfig;
 
     this.$components = [];
@@ -89,7 +92,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
     this.$ssmlEvaluator = new SSMLEvaluator(this);
     this.$actionHandler = new ActionHandler(this);
 
-    this.on(assistantEvents.LaunchRequest, () => {
+    this.on(AssistantEvents.LaunchRequest, () => {
       this.launchRequestWasSent = true;
     });
 
@@ -183,7 +186,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
     for (const component of this.$components) {
       await component.onInit();
     }
-    this.emit(assistantEvents.Loaded);
+    this.emit(AssistantEvents.Loaded);
   }
 
   async stop() {

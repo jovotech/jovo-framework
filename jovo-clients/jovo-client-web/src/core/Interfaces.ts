@@ -1,4 +1,4 @@
-import { JovoWebClient, ClientType } from '../JovoWebClient';
+import { JovoWebClient, DefaultInputMode } from '../JovoWebClient';
 import { Component } from './Component';
 
 // tslint:disable-next-line:no-any
@@ -42,4 +42,4 @@ export interface Config {
 }
 
 export type DeepPartial<T> = T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T;
-export type InitConfig = DeepPartial<Config> & { type?: ClientType };
+export type InitConfig = DeepPartial<Config> & { defaultInputType?: DefaultInputMode };

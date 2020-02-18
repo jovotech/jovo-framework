@@ -5,7 +5,7 @@ export interface PluginConfig {
   url: string;
 }
 
-export interface Data {
+export interface PluginData {
   isRecording: boolean;
   isFirstRequestDone: boolean;
   isPlayingAudio: boolean;
