@@ -1,4 +1,4 @@
-import { Action, ActionType, ParallelAction, SequentialAction, SpeechAction } from '..';
+import { Action, ActionType, ParallelAction, ResponseEvents, SequentialAction, SpeechAction } from '..';
 import { CoreComponent } from './CoreComponent';
 
 export class ActionHandler extends CoreComponent {
@@ -33,6 +33,7 @@ export class ActionHandler extends CoreComponent {
         break;
 
       case ActionType.QuickReply:
+        this.$client.emit(ResponseEvents.QuickReplies, action.replies);
         break;
       default:
         // tslint:disable-next-line:no-console

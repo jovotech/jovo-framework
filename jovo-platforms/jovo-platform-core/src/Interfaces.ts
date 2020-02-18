@@ -180,8 +180,8 @@ export interface ProcessingAction extends Action {
 export type ProcessingActionData = Omit<ProcessingAction, 'type'>;
 
 export interface QuickReply {
-  id: string;
-  label: string;
+  id?: string;
+  label?: string;
   url?: string;
   value: any; // tslint:disable-line:no-any
 }
