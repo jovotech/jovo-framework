@@ -1,5 +1,5 @@
 import {
-  assistantEvents,
+  AssistantEvents,
   AudioPlayerEvents,
   AudioVisualizer,
   Config,
@@ -12,7 +12,7 @@ import {
   Store,
 } from 'jovo-client-web';
 import Vue from 'vue';
-import { Data } from './Interfaces';
+import { PluginData } from './Interfaces';
 
 export class JovoWebClientVue {
   private readonly $store: Vue;
@@ -20,7 +20,7 @@ export class JovoWebClientVue {
   private readonly $events: string[];
 
   constructor(url: string, config?: InitConfig) {
-    const data: Data = {
+    const data: PluginData = {
       isRecording: false,
       isFirstRequestDone: false,
       isPlayingAudio: false,
@@ -38,8 +38,8 @@ export class JovoWebClientVue {
     return this.$assistant;
   }
 
-  get data(): Data {
-    return this.$store.$data as Data;
+  get data(): PluginData {
+    return this.$store.$data as PluginData;
   }
 
   get store(): Store {
@@ -122,7 +122,7 @@ export class JovoWebClientVue {
   // endregion
 
   private setupListeners() {
-    this.on(assistantEvents.LaunchRequest, () => {
+    this.on(AssistantEvents.LaunchRequest, () => {
       this.data.isFirstRequestDone = false;
     });
 

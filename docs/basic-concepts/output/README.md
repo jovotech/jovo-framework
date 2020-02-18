@@ -129,7 +129,7 @@ let speech = this.t('WELCOME');
 
 
 ### Raw JSON Responses
-If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `$alexaSkill.setResponseObject` and `$googleAction.setResponseObject`.
+If you prefer to return some specific responses in a raw JSON format, you can do this with the platform-specific functions `this.<platform-name>.setResponseObject(obj)`.
 
 ```javascript
 // Set a Raw JSON Response for Alexa
@@ -137,9 +137,14 @@ this.$alexaSkill.setResponseObject(obj);
 
 // Set a Raw JSON Response for Google Assistant
 this.$googleAction.setResponseObject(obj);
+
+// Set a Raw JSON Response for Twilio Autopilot
+this.$autopilotBot.setResponseObject(obj);
+
+// ... all the other platforms
 ```
 
-> Learn more about platform-specific features and resonses here: [Platforms](../../platforms './platforms').
+> Learn more about platform-specific features and responses here: [Platforms](../../platforms './platforms').
 
 
 ## Visual Output
@@ -151,11 +156,7 @@ The Jovo framework, besides sound and voice output, can also be used for visual 
 
 ## No Speech Output
 
-Sometimes, you might want to end a session without speech output. You can use the `endSession` method for this case:
-
-```javascript
-this.endSession();
-```
+Sometimes, you might want to end a session without speech output. In that case, simply don't add any kind of output in your handler function.
 
 
 <!--[metadata]: {"description": "Learn how to create speech and visual responses for Alexa Skills and Google Actions with the Jovo Framework",

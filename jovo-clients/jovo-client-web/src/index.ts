@@ -31,4 +31,4 @@ export * from './components/request/RequestComponent';
 export * from './components/request/adapters/AjaxAdapter';
 export * from './components/response/RepromptTimer';
 export * from './components/response/ResponseComponent';
-export { JovoWebClient } from './JovoWebClient';
+export { JovoWebClient, DefaultInputMode } from './JovoWebClient';

@@ -19,7 +19,6 @@ The user first converses with a smart speaker (or other voice assistant enabled 
 
 In the next section, we will go a little deeper into the underlying principles of natural language processing and understanding:
 
-
 ### Natural Language Lingo
 
 In order to find out what a user wants when they're talking to your app, platforms like Alexa or Google Assistant do a lot of underlying work for you to interpret the natural language of user voice input. To build for these platforms, it's important to understand a few elements of natural language understanding. Simplified, a language model can be divided in "what the user wants" (`intent`) and "what the user says" (`utterances` and specific `entities` or `slots`).
@@ -47,9 +46,9 @@ This element has different wordings on various NLP platforms. It describes a spe
 Find more detailed information here: [App Logic > Data](../04_app-logic/02_data './data').
 
 
-## Voice Platforms
+## Platforms
 
-The Jovo framework currently supports Skills for Amazon Alexa and Apps for Google Assistant (on Google Home). In this section, you can learn more about what you need to set up on the respective Developer Consoles in order to make your voice apps work.
+The Jovo framework currently supports Amazon Alexa, Google Assistant, Samsung Bixby, Facebook Messenger, Twilio Autopilot, Dialogflow, and even your own web client. In this section, you can learn more about what you need to set up on the respective Developer Consoles in order to make your voice apps work.
 
 ### Amazon Alexa
 
@@ -91,6 +90,14 @@ Here is the official Google resource: [Invocation and Discovery](https://develop
 To build a voice app for Google Assistant and Google Home, you need to create a project on the [Actions on Google Console](https://console.actions.google.com/). For interpreting the natural language of your users' speech input, you can use different kinds of integrations. Most developers use [Dialogflow](https://dialogflow.com/) (formerly API.AI) for the language model.
 
 Here are some helpful guides to get started with Google Actions: [Overview](https://developers.google.com/actions/) and a [tutorial for Dialogflow](https://developers.google.com/actions/dialogflow/).
+
+### Samsung Bixby
+
+> See also: Beginner Tutorial: [How to use Samsung Bixby with the Jovo Framework](https://www.jovo.tech/tutorials/bixby).
+
+Apps for Samsung's Bixby are called Capsules. While Bixby shares many basic development concepts with Alexa and Google Assistant, Bixby Capsules follow a declarative driven development process.
+
+You can find out more about in our [Bixby documentation](../platforms/samsung-bixby/README.md './samsung-bixby').
 
 
 <!--[metadata]: {"description": "Learn the essentials of voice apps like Amazon Alexa and Google Assistant on Google Home.",

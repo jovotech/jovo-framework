@@ -144,7 +144,7 @@ $ npm test
 Tests can be run for each platform:
 
 ```javascript
-for (const p of [new Alexa(), new GoogleAssistant()]) {
+for (const p of [new Alexa(), new GoogleAssistant(), new Bixby(), new Autopilot()]) {
     // Initialize TestSuite for each platform
     const testSuite = p.makeTestSuite();
 

@@ -20,6 +20,9 @@ In this section, you will learn more about the Jovo Language Model, found in the
   * [Dialogflow](#dialogflow)
 
 ## Introduction
+
+> Note: The Jovo Language Model is currently only supported for Alexa Skills and Google Actions!
+
 The Jovo Language Model allows you to maintain only a single file, which can be used to create the platform language models with the help of the [`Jovo CLI`](../tools/cli './cli'). 
 
 You can find the language model files in the `/models` folder of your Jovo project:

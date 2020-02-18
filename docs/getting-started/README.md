@@ -1,6 +1,6 @@
 # Jovo Quickstart Guide
 
-Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms in simple steps. 
+Learn how to quickly get started with a Jovo project.
 
 * [Install the Jovo CLI](#install-the-jovo-cli)
 * [Create a new Jovo Project](#create-a-new-jovo-project)
@@ -171,4 +171,4 @@ Voice platforms offer different types of natural language understanding (NLU) se
 
 
 
-<!--[metadata]: {"description": "Learn how to quickly create a Jovo app for the Amazon Alexa and Google Assistant voice platforms.", "route": "quickstart"}-->
+<!--[metadata]: {"description": "Learn how to quickly get started with a Jovo project.", "route": "quickstart"}-->

@@ -1,6 +1,6 @@
 import uuid = require('uuid');
 import {
-  assistantEvents,
+  AssistantEvents,
   AudioRecordedPayload,
   Base64Converter,
   Component,
@@ -52,7 +52,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
   async onInit(): Promise<void> {
     const adapter = new AjaxAdapter(this.$client);
     this.$networkHandler = new NetworkHandler(adapter);
-    this.$client.prependListener(assistantEvents.LaunchRequest, this.onFirstRequest.bind(this));
+    this.$client.prependListener(AssistantEvents.LaunchRequest, this.onFirstRequest.bind(this));
     this.$client.on(InputEvents.Text, this.onSendText.bind(this));
     this.$client.on(InputRecordEvents.Recorded, this.onAudioRecorded.bind(this));
     this.$client.on(InputRecordEvents.SpeechRecognized, this.onSpeechRecognized.bind(this));

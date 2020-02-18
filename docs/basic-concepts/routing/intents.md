@@ -68,7 +68,7 @@ app.setHandler({
 
     LAUNCH() {
         // Triggered when people open the voice app without a specific query
-        // Groups LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow)
+        // e.g. the LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow), etc.
     },
 
     // Add more intents here
@@ -101,8 +101,6 @@ LAUNCH() {
     // Triggered when a user opens your app without a specific query
  },
 ```
-
-Usually, you would need to map the requests from Alexa and Google (as they have different names) to handle both in one intent block, but Jovo helps you there with a standard intent.
 
 ### NEW_SESSION
 
@@ -421,7 +419,7 @@ With Alexa Skills, you can use the `getError` method:
 // Example
 ON_ERROR() {
     console.log(`Error: ${JSON.stringify(this.$alexaSkill.getError())}`);
-    console.log(`Request: ${JSON.stringify(this.$alexaSkill.$request)}`);
+    console.log(`Request: ${JSON.stringify(this.$request)}`);
 
     this.ask('There was an error. Can I help you in any other way?');
 },
@@ -431,7 +429,7 @@ ON_ERROR() {
 // Example
 ON_ERROR() {
     console.log(`Error: ${JSON.stringify(this.$alexaSkill!.getError())}`);
-    console.log(`Request: ${JSON.stringify(this.$alexaSkill!.$request)}`);
+    console.log(`Request: ${JSON.stringify(this.$request)}`);
 
     this.ask('There was an error. Can I help you in any other way?');
 },

@@ -1,5 +1,5 @@
 import {
-  assistantEvents,
+  AssistantEvents,
   AudioAnalyserConfig,
   AudioHelper,
   AudioProcessingPayload,
@@ -80,7 +80,7 @@ export class InputComponent extends Component<InputComponentConfig> {
 
   sendText(text: string, fromVoice = true) {
     if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-      this.$client.emit(assistantEvents.LaunchRequest);
+      this.$client.emit(AssistantEvents.LaunchRequest);
     } else {
       this.$client.emit(InputEvents.Text, text, fromVoice);
     }
