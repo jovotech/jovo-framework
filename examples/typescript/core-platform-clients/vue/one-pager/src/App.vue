@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%;">
 <!--    <iframe-->
 <!--      src="https://www.jovo.tech"-->
 <!--    ></iframe>-->
@@ -25,6 +25,8 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+    $break-small: 320px;
+
 #app {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;

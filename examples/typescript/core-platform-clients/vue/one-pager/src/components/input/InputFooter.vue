@@ -6,6 +6,7 @@
         :id="quickReply.id"
         :label="quickReply.label"
         :value="quickReply.value"
+        v-bind:key="quickReply.value"
         @clearQuickReplies="quickReplies = []"
       >
       </quick-reply>
@@ -23,21 +24,21 @@
       </el-input>
       <span v-if="inputText.length > 0" class="enter">ENTER</span>
       <el-button
-        v-if="!isRecording"
         icon="el-icon-microphone"
         type="default"
-        @click="handleStartRecording"
+        @mousedown.native="handleStartRecording" @mouseleave.native="handleStopRecording" @mouseup.native="handleStopRecording" @touchstart.native="handleStartRecording" @touchend="handleStopRecording" @touchcancel.native="handleStopRecording"
         class="submit-button"
+        :class="{'is-recording': isRecording}"
         round
       ></el-button>
-      <el-button
-        v-if="isRecording"
-        icon="el-icon-microphone"
-        type="default"
-        @click="handleStopRecording"
-        class="submit-button is-recording"
-        round
-      ></el-button>
+<!--      <el-button-->
+<!--        v-if="isRecording"-->
+<!--        icon="el-icon-microphone"-->
+<!--        type="default"-->
+<!--        @click="handleStopRecording"-->
+<!--        class="submit-button is-recording"-->
+<!--        round-->
+<!--      ></el-button>-->
     </div>
     <!--            <div  v-if="isRecording" class="speech"><div class="text">{{content}}</div></div>-->
   </div>
@@ -94,11 +95,14 @@ export default class InputFooter extends Vue {
     return this.$assistant.data.isRecording;
   }
   handleStartRecording() {
+    console.log('start recording');
     if (!this.isRecording) {
       this.$assistant.startRecording();
     }
   }
   handleStopRecording() {
+    console.log('stop recording');
+
     this.$assistant.stopRecording();
   }
   focusTextInput() {
@@ -117,12 +121,25 @@ export default class InputFooter extends Vue {
 </script>
 
 <style lang="scss">
+  $break-small: 320px;
+  $break-large: 1200px;
+
 .el-footer {
   padding: 0 !important;
 }
+
 .text-input-container {
-  padding: 10px;
   display: flex;
+  padding: 10px;
+
+  @media screen and (max-width: $break-small) {
+    padding-bottom: 26px;
+  }
+
+  @media screen and (min-width: $break-large) {
+    padding: 10px;
+  }
+
   .el-input--large {
     flex-grow: 1;
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -136,6 +153,10 @@ export default class InputFooter extends Vue {
       line-height: 46px;
       height: 46px;
       resize: none;
+      &:focus {
+        outline: none;
+        border-color: #3c9bfc !important;
+      }
     }
   }
 
@@ -153,6 +174,9 @@ export default class InputFooter extends Vue {
     border: 1px solid #b3b3b3;
   }
 }
+
+
+
 .submit-button {
   /*position: absolute;*/
   /*right: 13px;*/
@@ -163,6 +187,16 @@ export default class InputFooter extends Vue {
   i {
     font-size: 28px;
   }
+
+  &:hover {
+    /*border: 1px solid #C0C4CC !important;*/
+    /*background-color: #f5f5f5 !important;*/
+    /*color: #2b2c2e !important;*/
+  }
+}
+.is-recording {
+  background: #ff362a !important;
+  color: white !important;
 }
 .quick-reply-container {
   position: absolute;
