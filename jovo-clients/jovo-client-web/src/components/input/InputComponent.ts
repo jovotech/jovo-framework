@@ -87,7 +87,7 @@ export class InputComponent extends Component<InputComponentConfig> {
   }
 
   startConversation() {
-    this.$client.emit(assistantEvents.LaunchRequest);
+    this.$client.emit(AssistantEvents.LaunchRequest);
   }
 
   startRecording() {
