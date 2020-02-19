@@ -9,6 +9,7 @@ Learn how to use the Jovo Debugger for simple testing and debugging of Alexa Ski
   * [Request & Response](#request--response)
   * [Console](#console)
   * [Request Builder](#request-builder)
+    * [Custom Sequences](#custom-sequences)
     * [Locales](#locales)
     * [Platforms](#platforms)
 
@@ -82,6 +83,52 @@ The **Console** windows displays all of your logs.
 The request builder allows you to build custom requests to send to your Jovo Webhook endpoint for quick prototyping. You can customize the intent, the inputs as well as the utterance that should be used.
 
 ![Jovo Debugger Request Builder](../img/jovo-debugger-request-builder.gif)
+
+#### Custom Sequences
+
+Testing an intent that depends on a handful of interactions before that can be quite tedious. Either you run through the interaction every time you want to test that intent, or you set up the correct environment for the intent to function correctly. Either way it's quite some work.
+
+The Jovo Debugger allows you to define sequences of intents (and their inputs) that can be automatically run by pressing the respective button. Here's a example:
+
+![Jovo Debugger Sequence](../img/jovo-debugger-sequence.gif)
+
+And here's the `debugger.json` file for the previous example:
+
+```js
+{
+  "requestBuilder": {
+    "selected": ["LAUNCH", "HelloWorldIntent", "SimpleSequence", "SimpleSequence2"],
+    "buttons": [
+      {
+        "name": "SimpleSequence",
+        "sequence": [
+          "LAUNCH",
+          "MyNameIsIntent name='Joe' age=33 city=''",
+          "END"
+        ]
+      },
+      {
+        "name": "SimpleSequence2",
+        "sequence": [
+          "LAUNCH",
+          "END"
+        ]
+      }
+    ]
+  }
+}
+```
+
+The JSON file has the following structure:
+
+Name | Description | Value
+:--- | :--- | :---
+`requestBuilder` | Configuration of the request builder. | object
+`requestBuilder.selected` | Array of strings specifying the request buttons you want to have selected by default. | string[]
+`requestBuilder.buttons` | Array of custom buttons. | object[]
+`requestBuilder.buttons[].button` | A custom button object. | object
+`requestBuilder.buttons[].button.name` | The name of the custom button. | string
+`requestBuilder.buttons[].button.sequence` | An array of strings representing the sequence of intents. Each string has the following format: `<intent-name> [<slot-name>=<slot-value>]`. You can define as many slots as you want. | string
 
 #### Locales
 
