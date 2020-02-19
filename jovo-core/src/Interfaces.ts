@@ -68,11 +68,14 @@ export interface RequestType {
 
 export interface TellOutput {
   speech: string | SpeechBuilder;
+  speechText?: string;
 }
 
 export interface AskOutput {
   speech: string | SpeechBuilder;
   reprompt: string | SpeechBuilder | string[];
+  speechText?: string;
+  repromptText?: string;
 }
 
 export interface Output {
