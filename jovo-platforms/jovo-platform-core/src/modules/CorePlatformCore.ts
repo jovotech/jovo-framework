@@ -88,6 +88,22 @@ export class CorePlatformCore implements Plugin {
     }
 
     const coreResponse = corePlatformApp.$response as CorePlatformResponse;
+    if (corePlatformApp.$asr.text) {
+      coreResponse.context.request.asr = { text: corePlatformApp.$asr.text };
+    }
+    if (
+      (corePlatformApp.$nlu.intent || corePlatformApp.$nlu.inputs) &&
+      !coreResponse.context.request.nlu
+    ) {
+      coreResponse.context.request.nlu = {};
+    }
+    if (corePlatformApp.$nlu.intent) {
+      coreResponse.context.request.nlu!.intent = corePlatformApp.$nlu.intent;
+    }
+    if (corePlatformApp.$nlu.inputs) {
+      coreResponse.context.request.nlu!.inputs = corePlatformApp.$nlu.inputs;
+    }
+
     const { tell, ask } = output;
 
     if (tell) {
