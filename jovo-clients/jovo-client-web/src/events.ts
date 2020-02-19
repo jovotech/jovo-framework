@@ -46,6 +46,7 @@ export enum RequestEvents {
 }
 
 export enum ResponseEvents {
+  Action = 'response.action',
   /** Called when a speech-output is about to be processed */
   Speech = 'response.speech',
   /** Called when a reprompt-output is about to be processed */

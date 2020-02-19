@@ -32,12 +32,18 @@ export function makeDefaultConfig(type: DefaultInputMode = DefaultInputMode.Voic
     initBaseComponents: true,
     launchFirst: true,
     locale: navigator.language,
+    audioPlayer: {
+      enabled: type === DefaultInputMode.Voice,
+    },
     speechSynthesis: {
       enabled: type === DefaultInputMode.Voice,
       automaticallySetLanguage: true,
     },
     LoggerComponent: LoggerComponent.DEFAULT_CONFIG,
-    ConversationComponent: ConversationComponent.DEFAULT_CONFIG,
+    ConversationComponent: {
+      ...ConversationComponent.DEFAULT_CONFIG,
+      showSessionEnd: type === DefaultInputMode.Voice,
+    },
     InputComponent: {
       ...InputComponent.DEFAULT_CONFIG,
       mode: type === DefaultInputMode.Voice ? 'default' : 'push-to-talk',

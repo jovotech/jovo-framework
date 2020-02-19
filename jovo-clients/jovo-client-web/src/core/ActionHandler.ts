@@ -1,4 +1,4 @@
-import { Action, ActionType, ParallelAction, SequentialAction, SpeechAction } from '..';
+import { Action, ActionType, ParallelAction, ResponseEvents, SequentialAction, SpeechAction } from '..';
 import { CoreComponent } from './CoreComponent';
 
 export class ActionHandler extends CoreComponent {
@@ -9,6 +9,8 @@ export class ActionHandler extends CoreComponent {
     if (action.delay) {
       await this.delay(action.delay);
     }
+
+    this.$client.emit(ResponseEvents.Action, action);
 
     switch (action.type) {
       case ActionType.Audio:

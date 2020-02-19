@@ -33,6 +33,9 @@ export interface Config {
   debugMode: boolean;
   locale: string;
   launchFirst: boolean;
+  audioPlayer: {
+    enabled: boolean;
+  },
   speechSynthesis: {
     enabled: boolean;
     automaticallySetLanguage: boolean;

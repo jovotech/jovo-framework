@@ -1,6 +1,4 @@
 import { EnumRequestType, HandleRequest, Plugin, SpeechBuilder } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 import {
   Action,
   ActionType,
@@ -12,6 +10,8 @@ import {
   SpeechAction,
 } from '..';
 import { CorePlatform } from '../CorePlatform';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export class CorePlatformCore implements Plugin {
   install(platform: CorePlatform) {
@@ -108,20 +108,24 @@ export class CorePlatformCore implements Plugin {
 
     if (tell) {
       const tellAction: SpeechAction = {
+        displayText: tell.speechText,
         plain: SpeechBuilder.removeSSML(tell.speech.toString()),
         ssml: tell.speech.toString(),
         type: ActionType.Speech,
       };
       coreResponse.actions.push(tellAction);
+      coreResponse.session.end = true;
     }
 
     if (ask) {
       const tellAction: SpeechAction = {
+        displayText: ask.speechText,
         plain: SpeechBuilder.removeSSML(ask.speech.toString()),
         ssml: ask.speech.toString(),
         type: ActionType.Speech,
       };
       const repromptAction: Action = {
+        displayText: ask.repromptText,
         plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
         ssml: ask.reprompt.toString(),
         type: ActionType.Speech,
@@ -140,10 +144,7 @@ export class CorePlatformCore implements Plugin {
       coreResponse.reprompts.push(...repromptActions);
     }
 
-    if (
-      _get(corePlatformApp.$response, 'response.shouldEndSession') === false ||
-      corePlatformApp.$app.config.keepSessionDataOnSessionEnded
-    ) {
+    if (!coreResponse.session.end || corePlatformApp.$config.keepSessionDataOnSessionEnded) {
       if (corePlatformApp.$session && corePlatformApp.$session.$data) {
         _set(corePlatformApp.$response, 'session.data', corePlatformApp.$session.$data);
       }

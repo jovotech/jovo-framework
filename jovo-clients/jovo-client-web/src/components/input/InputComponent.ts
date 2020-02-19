@@ -164,7 +164,7 @@ export class InputComponent extends Component<InputComponentConfig> {
   }
 
   private onRecordingStopped() {
-    if (this.isPushToTalkUsed) {
+    if (this.isPushToTalkUsed && this.$recognizedText !== '') {
       this.$client.emit(InputEvents.Text, this.$recognizedText);
       this.$recognizedText = '';
     }
