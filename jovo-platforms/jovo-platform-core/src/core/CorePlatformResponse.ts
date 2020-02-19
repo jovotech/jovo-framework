@@ -1,4 +1,4 @@
-import { JovoResponse, SessionConstants, SessionData } from 'jovo-core';
+import { AsrData, JovoResponse, NluData, SessionConstants, SessionData } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { Action, CorePlatformResponseJSON } from '..';
@@ -38,7 +38,12 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
     end: boolean;
     data: Data;
   };
-  context?: {};
+  context: {
+    request: {
+      asr?: AsrData;
+      nlu?: NluData;
+    };
+  };
 
   constructor() {
     this.version = '0.0.1';
@@ -50,6 +55,9 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
     this.session = {
       data: {},
       end: false,
+    };
+    this.context = {
+      request: {},
     };
   }
 

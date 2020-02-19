@@ -71,7 +71,7 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
 
     const repromptActions = data.reprompts;
     if (this.$config.reprompt.enabled && repromptActions && repromptActions.length > 0) {
-      this.$repromptTimer.handle(actions);
+      this.$repromptTimer.handle(repromptActions);
     }
   }
 

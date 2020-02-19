@@ -10,6 +10,8 @@ export class ActionHandler extends CoreComponent {
       await this.delay(action.delay);
     }
 
+    this.$client.emit(ResponseEvents.Action, action);
+
     switch (action.type) {
       case ActionType.Audio:
         // TODO check if this is needed: Currently all audio is embedded in audio tags by the tts providers and therefore evaluated as SpeechAction

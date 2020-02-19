@@ -1,15 +1,17 @@
 import {
+  Action,
+  ActionType,
   AudioHelper,
-  AudioPlayerEvents,
   Base64Converter,
   Component,
   ComponentConfig,
   ConversationEvents,
   ConversationPart,
   CoreRequest,
+  CoreResponse,
   RequestEvents,
   RequestType,
-  SpeechSynthesizerEvents,
+  ResponseEvents,
   StoreEvents,
 } from '../..';
 
@@ -19,10 +21,14 @@ declare module '../../core/Interfaces' {
   }
 }
 
-export interface ConversationComponentConfig extends ComponentConfig {}
+export interface ConversationComponentConfig extends ComponentConfig {
+  showSessionEnd: boolean;
+}
 
 export class ConversationComponent extends Component<ConversationComponentConfig> {
-  static DEFAULT_CONFIG: ConversationComponentConfig = {};
+  static DEFAULT_CONFIG: ConversationComponentConfig = {
+    showSessionEnd: true,
+  };
 
   readonly name = 'ConversationComponent';
 
@@ -31,13 +37,13 @@ export class ConversationComponent extends Component<ConversationComponentConfig
 
   async onInit(): Promise<void> {
     this.$client.on(RequestEvents.Data, this.onRequest.bind(this));
-    this.$client.on(SpeechSynthesizerEvents.Speak, this.onSpeak.bind(this));
-    this.$client.on(AudioPlayerEvents.Play, this.onAudioPlay.bind(this));
+    this.$client.prependListener(RequestEvents.Success, this.onResponse.bind(this));
+    this.$client.on(ResponseEvents.Action, this.onAction.bind(this));
     this.$client.on(StoreEvents.NewSession, this.onNewSession.bind(this));
   }
 
   getDefaultConfig(): ConversationComponentConfig {
-    return {};
+    return ConversationComponent.DEFAULT_CONFIG;
   }
 
   private async onRequest(req: CoreRequest) {
@@ -70,28 +76,37 @@ export class ConversationComponent extends Component<ConversationComponentConfig
     }
   }
 
-  private onSpeak(utterance: SpeechSynthesisUtterance) {
-    this.addPart({
-      label: utterance.text,
-      subType: 'text',
-      type: 'response',
-    });
+  private onResponse(res: CoreResponse) {
+    const lastPart = this.parts[this.parts.length - 1];
+    if (
+      lastPart &&
+      lastPart.type === 'request' &&
+      lastPart.subType === 'audio' &&
+      res.context.request.asr
+    ) {
+      this.parts[this.parts.length - 1].label = res.context.request.asr.text || '';
+    }
   }
 
-  private onAudioPlay(id: number, source: string) {
-    this.addPart({
-      label: '',
-      subType: 'audio',
-      type: 'response',
-      value: source,
-    });
+  private onAction(action: Action) {
+    // TODO finish implementation / check if works as expected
+    if (action.type === ActionType.Speech) {
+      return this.addPart({
+        label: action.displayText || action.plain || '',
+        value: action.ssml, // TODO check if the value should be set to ssml
+        type: 'response',
+        subType: 'text-audio',
+      });
+    }
   }
 
   private onNewSession(forced: boolean) {
-    if (forced) {
-      this.addSessionEndPart();
-    } else {
-      this.endSession = true;
+    if (this.$config.showSessionEnd) {
+      if (forced) {
+        this.addSessionEndPart();
+      } else {
+        this.endSession = true;
+      }
     }
   }
 

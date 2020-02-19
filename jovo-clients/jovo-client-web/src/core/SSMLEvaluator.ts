@@ -140,12 +140,15 @@ export class SSMLEvaluator extends CoreComponent {
     this.$isRunning = true;
     return new Promise(async (resolve, reject) => {
       const ssmlParts = SSMLEvaluator.getSSMLParts(ssml);
-      for (const part of ssmlParts) {
+      for (let i = 0, len = ssmlParts.length; i < len; i++) {
         if (this.$isRunning) {
-          if (this.$client.$config.speechSynthesis.enabled && SSMLEvaluator.isPlainText(part)) {
-            await this.$client.speechSynthesizer.speakText(part);
-          } else if (SSMLEvaluator.isSupportedTag(part)) {
-            await this.evaluatePart(part);
+          if (
+            this.$client.$config.speechSynthesis.enabled &&
+            SSMLEvaluator.isPlainText(ssmlParts[i])
+          ) {
+            await this.$client.speechSynthesizer.speakText(ssmlParts[i]);
+          } else if (SSMLEvaluator.isSupportedTag(ssmlParts[i])) {
+            await this.evaluatePart(ssmlParts[i]);
           }
         }
       }
@@ -159,7 +162,9 @@ export class SSMLEvaluator extends CoreComponent {
       switch (SSMLEvaluator.getTag(part)) {
         case TAG_AUDIO:
           const source = SSMLEvaluator.getAudioSource(part);
-          await this.$client.audioPlayer.play(source);
+          if (this.$client.$config.audioPlayer.enabled) {
+            await this.$client.audioPlayer.play(source);
+          }
           break;
         case TAG_BREAK:
           const amount = SSMLEvaluator.getBreakTime(part);

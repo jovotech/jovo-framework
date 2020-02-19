@@ -1,4 +1,4 @@
-import { Input } from 'jovo-core';
+import { AsrData, Input, NluData } from 'jovo-core';
 import { Data } from './core/CorePlatformResponse';
 
 // region request-types
@@ -203,6 +203,12 @@ export interface CorePlatformResponseJSON {
   session: {
     end: boolean;
     data: Data;
+  };
+  context: {
+    request: {
+      asr?: AsrData;
+      nlu?: NluData;
+    };
   };
 }
 
