@@ -68,9 +68,9 @@ this.$googleAction.showSimpleCard('Title', 'Content');
 this.$googleAction.showImageCard('Title', 'Content', 'imageURL');
 
 // Advanced
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, BasicCard } = require('jovo-platform-googleassistant');
 
-let basicCard = new GoogleAssistant.BasicCard()
+let basicCard = new BasicCard()
   .setTitle('Jovo')
   .setFormattedText('Welcome to the documentation of the Jovo framework')
   .setImage({
@@ -92,9 +92,9 @@ this.$googleAction!.showSimpleCard('Title', 'Content');
 this.$googleAction!.showImageCard('Title', 'Content', 'imageURL');
 
 // Advanced
-import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { GoogleAssistant, BasicCard } from 'jovo-platform-googleassistant';
 
-let basicCard = new GoogleAssistant.BasicCard()
+let basicCard = new BasicCard()
   .setTitle('Jovo')
   .setFormattedText('Welcome to the documentation of the Jovo framework')
   .setImage({
@@ -135,9 +135,9 @@ Method | Description
 this.$googleAction.showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
 
 // Advanced
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, Table } = require('jovo-platform-googleassistant');
 
-let tableCard = new GoogleAssistant.Table()
+let tableCard = new Table()
   .setTitle('Jovo')
   .setImage({
       url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
@@ -161,9 +161,9 @@ this.$googleAction.showTable(tableCard);
 this.$googleAction!.showSimpleTable('Table Title', 'Table Subtitle', ['header 1', 'header 2'], [['row 1 item 1', 'row 1 item 2'], ['row 2 item 1', 'row 2 item 2'], ['row 3 item 3', 'row 3 item 2']])
 
 // Advanced
-import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { GoogleAssistant, Table } from 'jovo-platform-googleassistant';
 
-let tableCard = new GoogleAssistant.Table()
+let tableCard = new Table()
   .setTitle('Jovo')
   .setImage({
       url: 'http://via.placeholder.com/350x150?text=Basic+Card', 
@@ -201,9 +201,9 @@ Method | Description
 ```javascript
 // @language=javascript
 
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, OptionItem } = require('jovo-platform-googleassistant');
 
-let itemOne = new GoogleAction.OptionItem();
+let itemOne = new OptionItem();
 
 itemOne
   .setTitle('Option 1')
@@ -213,9 +213,9 @@ itemOne
 
 // @language=typescript
 
-import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { GoogleAssistant, OptionItem } from 'jovo-platform-googleassistant';
 
-let itemOne = new GoogleAssistant.OptionItem();
+let itemOne = new OptionItem();
 
 itemOne
   .setTitle('Option 1')
@@ -239,10 +239,10 @@ Method | Description
 ```javascript
 // @language=javascript
 
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, List } = require('jovo-platform-googleassistant');
 
 // Create a list and name it
-let list = new GoogleAssistant.List();
+let list = new List();
 list.setTitle('Title');
 
 // Add Items
@@ -252,10 +252,10 @@ this.$googleAction.showList(list);
 
 // @language=typescript
 
-impot { GoogleAssistant } from 'jovo-platform-googleassistant';
+impot { GoogleAssistant, List } from 'jovo-platform-googleassistant';
 
 // Create a list and name it
-let list = new GoogleAssistant.List();
+let list = new List();
 list.setTitle('Title');
 
 // Add Items
@@ -279,9 +279,9 @@ Method | Description
 ```javascript
 // @language=javascript
 
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant, Carousel } = require('jovo-platform-googleassistant');
 
-let carousel = new GoogleAssistant.Carousel();
+let carousel = new Carousel();
 
 carousel.addItem(itemOne);
 
@@ -289,9 +289,9 @@ this.$googleAction.showCarousel(carousel);
 
 // @language=typescript
 
-import { GoogleAssistant } from 'jovo-platform-googleassistant';
+import { GoogleAssistant, Carousel } from 'jovo-platform-googleassistant';
 
-let carousel = new GoogleAssistant.Carousel();
+let carousel = new Carousel();
 
 carousel.addItem(itemOne);
 
