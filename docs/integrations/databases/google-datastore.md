@@ -42,7 +42,7 @@ import { DatastoreDb } from 'jovo-db-datastore';
 app.use(new DatastoreDb());
 ```
 
-In your `config.js` file, you can set the `db` configuration like this:
+The Jovo Datastore plugin and the official Google Datastore package ([Google Cloud Datastore Docs](https://googleapis.dev/nodejs/datastore/5.0.5/Datastore.html)) share the same configuration options. You can specify them in your `config.js` file the following way:
 
 ```javascript
 // @language=javascript
@@ -53,7 +53,9 @@ module.exports = {
     
     db: {
         DatastoreDb: {
-            entity: 'yourEntityName',
+            gCloudConfig: {
+				// Datastore configuration...
+			},
         },
     },
 
@@ -69,7 +71,9 @@ const config = {
     
     db: {
         DatastoreDb: {
-            entity: 'yourEntityName',
+            gCloudConfig: {
+				// Datastore configuration...
+			}
         },
     },
 
@@ -78,6 +82,45 @@ const config = {
 };
 ```
 
+It's important that you authenticate your client with the Google Cloud API. The recommended way is to use a Google service account. You can specify the path to the service account's JSON key file path in your `config.js` file:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				keyFilename: '<path-to-key-file>'
+			},
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				keyFilename: '<path-to-key-file>'
+			}
+        },
+    },
+
+    // ...
+
+};
+```
 
 <!--[metadata]: {"description": "Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Datastore.",
 "route": "databases/google-datastore" }-->
