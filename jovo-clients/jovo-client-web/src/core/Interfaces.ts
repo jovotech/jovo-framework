@@ -1,4 +1,4 @@
-import { JovoWebClient, DefaultInputMode } from '../JovoWebClient';
+import { DefaultInputMode, JovoWebClient } from '../JovoWebClient';
 import { Component } from './Component';
 
 // tslint:disable-next-line:no-any
@@ -35,7 +35,7 @@ export interface Config {
   launchFirst: boolean;
   audioPlayer: {
     enabled: boolean;
-  },
+  };
   speechSynthesis: {
     enabled: boolean;
     automaticallySetLanguage: boolean;

@@ -1,4 +1,11 @@
-import { Action, ActionType, ParallelAction, ResponseEvents, SequentialAction, SpeechAction } from '..';
+import {
+  Action,
+  ActionType,
+  ParallelAction,
+  ResponseEvents,
+  SequentialAction,
+  SpeechAction,
+} from '..';
 import { CoreComponent } from './CoreComponent';
 
 export class ActionHandler extends CoreComponent {

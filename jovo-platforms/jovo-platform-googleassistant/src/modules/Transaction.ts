@@ -611,7 +611,7 @@ export class Transaction {
       // return reject(new Error('Could not retrieve Google API access token'));
     }
   }
-// tslint:disable-next-line
+  // tslint:disable-next-line
   authorizePromise(jwtClient: any) {
     return new Promise((resolve, reject) => {
       // tslint:disable-next-line
