@@ -25,6 +25,12 @@ export interface GoogleProvidedOptions {
   };
 }
 
+export interface SkuId {
+  skuType: SkuType;
+  id: string;
+  packageName: string;
+}
+
 export interface OrderOptions {
   requestDeliveryAddress: boolean;
 }
@@ -34,6 +40,10 @@ export interface Requirements {
   googleProvidedOptions: GoogleProvidedOptions;
 }
 
+export type DigitalPurchaseCheckResult =
+  | 'RESULT_TYPE_UNSPECIFIED'
+  | 'CAN_PURCHASE'
+  | 'CANNOT_PURCHASE';
 export type RequirementsCheckResult =
   | 'USER_ACTION_REQUIRED'
   | 'OK'
@@ -351,13 +361,20 @@ export class Transaction {
     return this.getSkus(skus, 'SKU_TYPE_IN_APP');
   }
 
-  completePurchase(skuId: string) {
+  completePurchase(skuId: SkuId) {
     this.googleAction.$output.GoogleAssistant = {
       CompletePurchase: {
         skuId,
       },
     };
   }
+
+  digitalPurchaseCheck() {
+    this.googleAction.$output.GoogleAssistant = {
+      DigitalPurchaseCheck: true,
+    };
+  }
+
   getPurchaseStatus(): PurchaseStatus | undefined {
     for (const argument of _get(
       this.googleAction.$originalRequest || this.googleAction.$request,
@@ -369,6 +386,19 @@ export class Transaction {
       }
     }
   }
+
+  getDigitalPurchaseCheckResult(): DigitalPurchaseCheckResult | undefined {
+    for (const argument of _get(
+      this.googleAction.$originalRequest || this.googleAction.$request,
+      'inputs[0]["arguments"]',
+      [],
+    )) {
+      if (argument.name === 'DIGITAL_PURCHASE_CHECK_RESULT') {
+        return argument.extension.resultType;
+      }
+    }
+  }
+
   // tslint:disable-next-line
   private getSkus(skus: string[], type: SkuType): Promise<any[]> {
     const conversationId = _get(
@@ -489,10 +519,18 @@ export class TransactionsPlugin implements Plugin {
 
     if (
       _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
-      'actions.intent.TRANSACTION_DECISION'
+      'actions.intent.COMPLETE_PURCHASE'
     ) {
       _set(googleAction.$type, 'type', 'ON_TRANSACTION');
       _set(googleAction.$type, 'subType', 'COMPLETE_PURCHASE');
+    }
+
+    if (
+      _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
+      'actions.intent.DIGITAL_PURCHASE_CHECK'
+    ) {
+      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
+      _set(googleAction.$type, 'subType', 'DIGITAL_PURCHASE_CHECK');
     }
     googleAction.$transaction = new Transaction(googleAction, this.googleAssistant!);
   }
@@ -573,6 +611,26 @@ export class TransactionsPlugin implements Plugin {
         inputValueData: {
           '@type': 'type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec',
           'skuId': completePurchase.skuId,
+        },
+      });
+      _set(googleAction.$originalResponse, 'inputPrompt', {
+        initialPrompts: [
+          {
+            textToSpeech: 'PLACEHOLDER',
+          },
+        ],
+        noInputPrompts: [],
+      });
+    }
+
+    const digitalPurchaseCheck = _get(output, 'GoogleAssistant.DigitalPurchaseCheck');
+
+    if (digitalPurchaseCheck) {
+      _set(googleAction.$originalResponse, 'expectUserResponse', true);
+      _set(googleAction.$originalResponse, 'systemIntent', {
+        intent: 'actions.intent.DIGITAL_PURCHASE_CHECK',
+        inputValueData: {
+          '@type': 'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec',
         },
       });
       _set(googleAction.$originalResponse, 'inputPrompt', {
