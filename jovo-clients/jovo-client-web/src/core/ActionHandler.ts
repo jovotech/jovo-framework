@@ -35,6 +35,7 @@ export class ActionHandler extends CoreComponent {
         break;
 
       case ActionType.QuickReply:
+        this.$client.emit(ResponseEvents.QuickReplies, action.replies);
         break;
       default:
         // tslint:disable-next-line:no-console

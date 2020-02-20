@@ -46,7 +46,7 @@ export default class InputControlButtonsSimple extends Vue {
   handleStartRecording() {
     if (!this.isRecording) {
       this.$assistant.startRecording();
-      this.$emit('startRecording')
+      this.$emit('startRecording');
     }
   }
 

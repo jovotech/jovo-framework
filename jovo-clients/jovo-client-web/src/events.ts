@@ -55,6 +55,8 @@ export enum ResponseEvents {
   Card = 'response.card',
   /** Called when the suggestion chips are about to be processed */
   SuggestionChips = 'response.suggestion-chips',
+  QuickReplies = 'response.quick-replies',
+
   /** Called when the maximum amount of reprompts is reached */
   MaxRepromptsReached = 'response.max-reprompts',
 }

@@ -107,6 +107,10 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
+  showQuickReplies(quickReplies: Array<QuickReply | string>): MessengerBot {
+    return this.setQuickReplies(quickReplies);
+  }
+
   setQuickReplies(quickReplies: Array<QuickReply | string>): MessengerBot {
     _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
     return this;

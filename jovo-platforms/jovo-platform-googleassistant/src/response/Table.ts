@@ -135,10 +135,10 @@ export class Table {
    * @param {array} rowsText
    * @return {Table}
    */
-  addRows(rowsText: Row[]) {
-    // rowsText.map((cell) => {
-    //     this.addRow(cellText);
-    // });
+  addRows(rowsText: string[][]) {
+    rowsText.map((row: string[]) => {
+      this.addRow(row, false);
+    });
     return this;
   }
 
@@ -164,12 +164,12 @@ export class Table {
    * @param {array} columnHeaders
    * @return {Table}
    */
-  addColumns(columnHeaders: Column[]) {
+  addColumns(columnHeaders: string[]) {
     if (!columnHeaders) {
       throw new Error('columnHeaders cannot be empty');
     }
-    columnHeaders.map((columnHeader: Column) => {
-      this.addColumn(columnHeader.header, columnHeader.horizontalAlignment);
+    columnHeaders.map((columnHeader: string) => {
+      this.addColumn(columnHeader);
     });
     return this;
   }

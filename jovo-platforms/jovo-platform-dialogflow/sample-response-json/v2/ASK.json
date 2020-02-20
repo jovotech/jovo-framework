@@ -2,6 +2,13 @@
   "fulfillmentText": "Simple Ask",
   "outputContexts": [
     {
+      "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/_jovo_ask_umgxl",
+      "lifespanCount": 1,
+      "parameters": {
+        "ask": true
+      }
+    },
+    {
       "name": "projects/newagent-904be/agent/sessions/1526414104011/contexts/_jovo_session_pmfoz",
       "lifespanCount": 1,
       "parameters": {

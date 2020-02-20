@@ -111,8 +111,8 @@ export class Cards implements Plugin {
     GoogleAction.prototype.showSimpleTable = function(
       title: string,
       subtitle: string,
-      columnHeaders: any[], // tslint:disable-line
-      rowsText: any[], // tslint:disable-line
+      columnHeaders: string[],
+      rowsText: string[][],
     ) {
       // tslint:disable-line
       if (!this.$output.GoogleAssistant) {

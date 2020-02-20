@@ -18,33 +18,49 @@ const credentials: AmazonCredentials = {
 };
 
 corePlatform.use(
-	new GCloudAsr({
-		credentialsFile: join(__dirname, '../..', 'credentials.json')
-	}),
+	// new GCloudAsr({
+	// 	credentialsFile: join(__dirname, '../..', 'credentials.json')
+	// }),
 	new AmazonLexSlu({
 		credentials,
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
 	}),
-	new AmazonPollyTts({
-		credentials
-	})
+	// new AmazonPollyTts({
+	// 	credentials
+	// })
 );
 
 app.use(corePlatform, new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
-		
 		return this.toIntent('HelloWorldIntent');
 	},
 
 	HelloWorldIntent() {
+
+		const quickReplies = [
+			{
+				value: 'jeff'
+			},
+			{
+				value: 'alex'
+			},
+			{
+				value: 'my name is max'
+			}
+		];
+
+		this.$corePlatformApp!.$actions.addQuickReplies({delay: 2000, replies: quickReplies });
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 
 	MyNameIsIntent() {
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
+	DefaultFallbackIntent() {
+		this.tell('Good Bye!');
 	}
 });
 
