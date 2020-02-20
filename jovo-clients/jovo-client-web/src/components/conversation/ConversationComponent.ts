@@ -23,11 +23,13 @@ declare module '../../core/Interfaces' {
 
 export interface ConversationComponentConfig extends ComponentConfig {
   showSessionEnd: boolean;
+  showStart: boolean;
 }
 
 export class ConversationComponent extends Component<ConversationComponentConfig> {
   static DEFAULT_CONFIG: ConversationComponentConfig = {
     showSessionEnd: true,
+    showStart: true,
   };
 
   readonly name = 'ConversationComponent';
@@ -48,7 +50,7 @@ export class ConversationComponent extends Component<ConversationComponentConfig
 
   private async onRequest(req: CoreRequest) {
     const { body, type } = req.request;
-    if (type === RequestType.Launch) {
+    if (type === RequestType.Launch && this.$config.showStart) {
       return this.addPart({
         label: 'Started',
         subType: 'start',
