@@ -1,4 +1,5 @@
-import i18n from 'i18next';
+import i18n = require('i18next');
+
 import { BaseApp, Cms, HandleRequest } from 'jovo-core';
 import _cloneDeep = require('lodash.clonedeep');
 
@@ -131,7 +132,7 @@ describe('ResponsesSheet.parse()', () => {
     const responsesSheet = new ResponsesSheet({
       name: 'test',
     });
-
+    // @ts-ignore
     i18n.init({
       interpolation: {
         escapeValue: false,

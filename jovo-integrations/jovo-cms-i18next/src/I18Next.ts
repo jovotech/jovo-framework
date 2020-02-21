@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import i18next from 'i18next';
+import i18next, {InitOptions} from 'i18next';
 import i18n = require('i18next');
 import {
   BaseApp,
@@ -16,7 +16,7 @@ import * as path from 'path';
 
 import * as util from 'util';
 
-export interface Config extends i18next.InitOptions, PluginConfig {
+export interface Config extends InitOptions, PluginConfig {
   filesDir?: string;
 }
 
