@@ -38,7 +38,7 @@
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.isequal": "^4.5.3",
     "@types/lodash.map": "^4.6.13",
-    "@types/lodash.mapvalues": "^4.6.4",
+    "@types/lodash.mapvalues": "^4.6.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.sample": "^4.2.4",
     "@types/lodash.set": "^4.3.6",

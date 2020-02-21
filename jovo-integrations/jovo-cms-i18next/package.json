@@ -15,7 +15,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "i18next": "^15.0.8",
+    "i18next": "^19.0.2",
     "jovo-core": "^2.2.21",
     "lodash.merge": "^4.6.2"
   },

@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "googleapis": "^42.0.0",
-    "i18next": "^15.0.8",
+    "i18next": "^19.0.2",
     "jovo-core": "^2.2.21",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
