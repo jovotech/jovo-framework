@@ -150,7 +150,11 @@ describe.skip('test digital goods implementation', () => {
   test('test completePurschase', async (done) => {
     app.setHandler({
       LAUNCH() {
-        this.$googleAction!.$transaction!.completePurchase('com.sample.product');
+        this.$googleAction!.$transaction!.completePurchase({
+          packageName: 'com.sample.product',
+          id: "idXYZ",
+          skuType: 'SKU_TYPE_IN_APP'
+        });
         done();
       },
     });
@@ -168,7 +172,11 @@ describe.skip('test digital goods implementation', () => {
         intent: 'actions.intent.COMPLETE_PURCHASE',
         inputValueData: {
           '@type': 'type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec',
-          'skuId': 'com.sample.product',
+          'skuId': {
+            packageName: 'com.sample.product',
+            id: "idXYZ",
+            skuType: 'SKU_TYPE_IN_APP'
+          },
         },
       });
 
