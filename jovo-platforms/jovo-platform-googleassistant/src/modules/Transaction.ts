@@ -124,6 +124,25 @@ export interface UserNotification {
   title: string;
 }
 
+export interface Sku {
+  title: string;
+  description: string;
+  skuId: SkuId;
+  formattedPrice: string;
+  price: Price;
+}
+
+export interface Price {
+  currencyCode: string;
+  amountInMicros: string;
+}
+
+export interface SkuId {
+  skuType: SkuType;
+  id: string;
+  packageName: string;
+}
+
 export interface OrderUpdate {
   actionOrderId: string;
   orderState: {
@@ -487,18 +506,15 @@ export class Transaction {
     return this.getTransactionDecisionResult() === 'CART_CHANGE_REQUESTED';
   }
 
-  // tslint:disable-next-line
-  getSubscriptions(skus: string[]): Promise<any[]> {
+  getSubscriptions(skus: string[]): Promise<Sku[]> {
     return this.getSkus(skus, 'SKU_TYPE_SUBSCRIPTION');
   }
 
-  // tslint:disable-next-line
-  getConsumables(skus: string[]): Promise<any[]> {
-    // tslint:disable-line
+  getConsumables(skus: string[]): Promise<Sku[]> {
     return this.getSkus(skus, 'SKU_TYPE_IN_APP');
   }
 
-  completePurchase(skuId: string) {
+  completePurchase(skuId: SkuId) {
     this.googleAction.$output.GoogleAssistant = {
       CompletePurchase: {
         skuId,
@@ -516,7 +532,6 @@ export class Transaction {
       }
     }
   }
-  // tslint:disable-next-line
   async getSkus(skus: string[], type: SkuType) {
     const conversationId = _get(
       this.googleAction.$request,
@@ -550,10 +565,11 @@ export class Transaction {
         },
       });
 
-      return response.data;
-      console.log(response.data);
+      if (response.data?.skus) {
+        return response.data.skus;
+      }
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 
@@ -588,14 +604,6 @@ export class Transaction {
       );
 
       return await this.authorizePromise(jwtClient);
-
-      // return resolve(token);
-      // return jwtClient.then((client: any) => {
-      //
-      //   console.log(client);
-      //   return client.authorize();
-      // }) // tslint:disable-line
-      //   .then((authorization: any) => authorization.access_token as string); // tslint:disable-line
     } catch (e) {
       if (e.message === "Cannot find module 'googleapis'") {
         return Promise.reject(
@@ -661,13 +669,13 @@ export class TransactionsPlugin implements Plugin {
       _set(googleAction.$type, 'subType', 'DELIVERY_ADDRESS');
     }
     //
-    // if (
-    //   _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
-    //   'actions.intent.TRANSACTION_DECISION'
-    // ) {
-    //   _set(googleAction.$type, 'type', 'ON_TRANSACTION');
-    //   _set(googleAction.$type, 'subType', 'TRANSACTION_DECISION');
-    // }
+    if (
+      _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
+      'actions.intent.COMPLETE_PURCHASE'
+    ) {
+      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
+      _set(googleAction.$type, 'subType', 'ON_COMPLETE_PURCHASE');
+    }
 
     if (
       _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===

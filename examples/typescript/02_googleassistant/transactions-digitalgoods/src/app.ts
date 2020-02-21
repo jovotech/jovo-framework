@@ -3,18 +3,15 @@ import { App } from 'jovo-framework';
 import { GoogleAssistant } from 'jovo-platform-googleassistant';
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { FileDb } from 'jovo-db-filedb';
-import order from './order';
 
 const app = new App({ logging: true });
 
-const UNIQUE_MERCHANT_ORDER_ID = 'MerchantOrderId1';
-
 app.use(
 	new GoogleAssistant({
-		// transactions: {
-		//     androidPackageName: 'com.example.app',
-		//     keyFile: require('./keyfile.json')
-		// }
+		transactions: {
+		    // androidPackageName: '',
+		    // keyFile: require('keyfile.json')
+		}
 	}),
 	new JovoDebugger(),
 	new FileDb()
@@ -38,66 +35,28 @@ app.setHandler({
 	ON_TRANSACTION: {
 		async DIGITAL_PURCHASE_CHECK() {
 			if (this.$googleAction!.$transaction!.canPurchase()) {
-
 				try {
-					const result = await this.$googleAction!.$transaction!.getConsumables(['managedproduct1']);
+
+					const id = 'managedproduct1';
+
+					const result = await this.$googleAction!.$transaction!.getConsumables([id]);
+
+					return 	this.$googleAction!.$transaction!.completePurchase({
+						skuType: 'SKU_TYPE_IN_APP',
+						id,
+						packageName: '',
+					});
 
 				} catch(e) {
 					console.log(e);
 				}
-
-
-
-				return this.ask(
-					`Test`
-				);
 			}
 		},
-		DELIVERY_ADDRESS() {
-			if (this.$googleAction!.$transaction!.isDeliveryAddressAccepted()) {
-				console.log();
+		ON_COMPLETE_PURCHASE() {
+				const purchaseStatus = this.$googleAction!.$transaction!.getPurchaseStatus();
 
-				order.purchase.fulfillmentInfo.location = this.$googleAction!.$transaction!.getDeliveryAddress();
-				order.merchantOrderId = uniqueId();
-				order.userVisibleOrderId = order.merchantOrderId;
-				this.$session.$data.merchantOrderId = order.merchantOrderId;
-				const presentationOptions = {
-					actionDisplayName: 'PLACE_ORDER'
-				};
-
-				const orderOptions = {
-					userInfoOptions: {
-						userInfoProperties: ['EMAIL']
-					}
-				};
-
-				this.$googleAction!.$transaction!.buildOrder(
-					order,
-					presentationOptions,
-					orderOptions
-				);
-
-				this.ask('Thank you! We have your address now.');
-			} else if (
-				this.$googleAction!.$transaction!.isDeliveryAddressRejected()
-			) {
-				this.tell('We need your address to proceed.');
-			}
+				this.ask('Okay');
 		},
-		TRANSACTION_DECISION() {
-			if (this.$googleAction!.$transaction!.isOrderAccepted()) {
-				const order = this.$googleAction!.$transaction!.getOrder();
-				order!.purchase!.status = 'CONFIRMED';
-				order!.purchase!.userVisibleStatusLabel = 'Order confirmed';
-
-				order!.lastUpdateTime = new Date().toISOString();
-
-				this.$googleAction!.$transaction!.updateOrder(order!, 'Reason string');
-
-				this.ask('Completed');
-				console.log(this.$output);
-			}
-		}
 	}
 });
 

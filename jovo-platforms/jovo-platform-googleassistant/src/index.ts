@@ -35,6 +35,7 @@ export { GoogleAssistantResponseBuilder } from './core/GoogleAssistantResponseBu
 import { MediaObject, Item, SimpleResponse } from './core/Interfaces';
 import { Order, ReservationUpdate } from './core/Interfaces';
 import { PaymentParameters, PresentationOptions } from './modules/Transaction';
+import { SkuId } from './modules/Transaction';
 
 import { SessionEntityType } from 'jovo-platform-dialogflow';
 import { EntityOverrideMode } from 'jovo-platform-dialogflow/dist/src/core/Interfaces';
@@ -462,7 +463,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       };
 
       CompletePurchase?: {
-        skuId: string;
+        skuId: SkuId;
       };
 
       HtmlResponse?: {
