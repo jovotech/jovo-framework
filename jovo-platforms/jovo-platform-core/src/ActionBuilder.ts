@@ -3,6 +3,7 @@ import {
   ActionType,
   AudioActionData,
   ProcessingActionData,
+  QuickReply,
   QuickReplyActionData,
   SpeechActionData,
 } from './Interfaces';
@@ -39,8 +40,20 @@ export class ActionBuilder {
     return this;
   }
 
-  addQuickReplies(data: QuickReplyActionData): ActionBuilder {
-    this.actions.push({ type: ActionType.QuickReply, ...data });
+  addQuickReplies(quickReplies: Array<QuickReply | string>): ActionBuilder {
+    const replies = [];
+    for (let i = 0, len = replies.length; i < len; i++) {
+      replies.push(
+        typeof quickReplies[i] === 'string'
+          ? {
+              id: quickReplies[i],
+              label: quickReplies[i],
+              value: quickReplies[i],
+            }
+          : quickReplies[i],
+      );
+    }
+    this.actions.push({ type: ActionType.QuickReply, replies });
     return this;
   }
 
