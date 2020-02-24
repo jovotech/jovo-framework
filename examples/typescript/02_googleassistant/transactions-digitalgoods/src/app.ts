@@ -41,12 +41,11 @@ app.setHandler({
 
 					const result = await this.$googleAction!.$transaction!.getConsumables([id]);
 
-					return 	this.$googleAction!.$transaction!.completePurchase({
+					this.$googleAction!.$transaction!.completePurchase({
 						skuType: 'SKU_TYPE_IN_APP',
 						id,
 						packageName: '',
 					});
-
 				} catch(e) {
 					console.log(e);
 				}
