@@ -1,6 +1,6 @@
 # Jovo Core Platform
 
-Learn more about the Jovo Core Platform and it's platform-specific features that can be used with the Jovo Framework.
+Learn more about the Jovo Core Platform, which can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 
 ## Installation
 
