@@ -1,4 +1,4 @@
-import i18n = require('i18next');
+import * as i18n from 'i18next';
 
 import { BaseApp, Cms, HandleRequest } from 'jovo-core';
 import _cloneDeep = require('lodash.clonedeep');

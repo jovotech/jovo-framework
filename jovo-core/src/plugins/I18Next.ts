@@ -1,6 +1,5 @@
 import * as fs from 'fs';
-import { InitOptions } from 'i18next';
-import i18n = require('i18next');
+import * as i18next from 'i18next';
 import _merge = require('lodash.merge');
 import * as path from 'path';
 
@@ -9,7 +8,7 @@ import { BaseApp, Cms, HandleRequest, Jovo, Log, SpeechBuilder } from '..';
 import { PluginConfig } from '../Interfaces';
 import { BaseCmsPlugin } from './BaseCmsPlugin';
 
-export interface Config extends InitOptions, PluginConfig {
+export interface Config extends i18next.InitOptions, PluginConfig {
   filesDir?: string;
 }
 
@@ -152,7 +151,7 @@ export class I18Next extends BaseCmsPlugin {
     Log.debug(`Adding resources to $cms object:`);
     Log.debug(JSON.stringify(handleRequest.app.$cms.I18Next.resources, null, '\t'));
     // @ts-ignore
-    i18n.init(
+    i18next.init(
       _merge(
         {
           resources: handleRequest.app.$cms.I18Next.resources,
@@ -160,7 +159,7 @@ export class I18Next extends BaseCmsPlugin {
         this.config,
       ),
     );
-    handleRequest.app.$cms.I18Next.i18n = i18n;
+    handleRequest.app.$cms.I18Next.i18n = i18next;
   }
 }
 

@@ -1,4 +1,4 @@
-import i18n = require('i18next');
+import * as i18n from 'i18next';
 
 import { Cms, ErrorCode, Extensible, HandleRequest, JovoError } from 'jovo-core';
 import _get = require('lodash.get');
