@@ -352,7 +352,16 @@
                 },
                 {
                     "title": "Samsung Bixby",
-                    "route": "samsung-bixby"
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "samsung-bixby"
+                        },
+                        {
+                            "title": "Audioplayer Capsules",
+                            "route": "samsung-bixby/audioplayer"
+                        }
+                    ]
                 },
                 {
                     "title": "Twilio Autopilot",
