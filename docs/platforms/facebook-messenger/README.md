@@ -510,3 +510,6 @@ this.$messengerBot?.showAirlineTemplate({
 ```
 
 Read more [here](https://developers.facebook.com/docs/messenger-platform/send-messages/template/airline).
+
+<!--[metadata]: {"description": "Build Facebook Messenger chatbots with the Jovo Framework.",
+		"route": "facebook-messenger"}-->
