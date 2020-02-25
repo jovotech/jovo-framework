@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-twilioautopilot",
-  "version": "2.2.1-alpha.0",
+  "version": "2.2.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

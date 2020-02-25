@@ -14,7 +14,7 @@
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "vue": "^2.6.11",
-    "jovo-client-web-vue": "^1.0.0",
+    "jovo-client-web-vue": "^2.0.0",
     "vue-class-component": "^7.2.2",
     "vue-property-decorator": "^8.3.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-sapcai",
-  "version": "0.0.16",
+  "version": "2.0.16",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
