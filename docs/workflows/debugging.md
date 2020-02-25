@@ -5,7 +5,7 @@ Learn how to effectively debug your Jovo projects by learning which tools you ca
 * [Introduction](#introduction)
 * [Jovo Debugger](#jovo-debugger)
 * [Jovo Logger](#jovo-logger)
-* [Request & Response Logs: What's Important](#request--response-logs-whats-important)
+* [Request and Response Logs - What's Important](#request-and-response-logs--whats-important)
 
 ## Introduction
 
@@ -29,7 +29,7 @@ Throughout the whole process, the framework logs the key data of each step, but 
 
 By utilizing the logger, you might find errors in your project's setup, the merging of each plugin's config, the parsing of the output object and more. To learn how to use the Jovo Logger effectively, check out the logging page in the [basic concepts section](../basic-concepts/data/logging.md#jovo-logger '../data/logging#jovo-logger').
 
-## Request & Response Logs: What's Important
+## Request and Response Logs - What's Important
 
 The cause of many of the basic errors you might encounter can be identified by having a closer look at the request and response JSON.
 
