@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import i18next, {InitOptions} from 'i18next';
+import i18next, { InitOptions } from 'i18next';
 import i18n = require('i18next');
 import {
   BaseApp,

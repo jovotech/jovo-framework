@@ -152,8 +152,8 @@ describe.skip('test digital goods implementation', () => {
       LAUNCH() {
         this.$googleAction!.$transaction!.completePurchase({
           packageName: 'com.sample.product',
-          id: "idXYZ",
-          skuType: 'SKU_TYPE_IN_APP'
+          id: 'idXYZ',
+          skuType: 'SKU_TYPE_IN_APP',
         });
         done();
       },
@@ -174,8 +174,8 @@ describe.skip('test digital goods implementation', () => {
           '@type': 'type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec',
           'skuId': {
             packageName: 'com.sample.product',
-            id: "idXYZ",
-            skuType: 'SKU_TYPE_IN_APP'
+            id: 'idXYZ',
+            skuType: 'SKU_TYPE_IN_APP',
           },
         },
       });

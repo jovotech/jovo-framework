@@ -16,7 +16,7 @@
 		"typedoc": "npm run lerna exec npm run typedoc",
 		"changelog": "lerna-changelog",
 		"preparePublish": "npm run rimraf && npm run prettier && npm run tsc && npm run tslint && npm run test",
-		"publish": "lerna publish --registry http://localhost:4873 --no-push"
+		"publish": "lerna publish --no-push"
 	},
 	"devDependencies": {
 		"@azure/functions": "^1.0.1-beta2",
