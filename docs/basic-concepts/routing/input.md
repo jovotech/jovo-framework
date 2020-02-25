@@ -133,7 +133,7 @@ app.setHandler({
 
 ## Validation
 
-Since v2.3.0 we support input validation, which allows you to register multiple validators per input in your intent.
+Jovo input validation allows you to register multiple validators per input in your handlers.
 
 ```javascript
 // @language=javascript
