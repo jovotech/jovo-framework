@@ -207,4 +207,4 @@ this.$bixbyCapsule!.$audioPlayer!.setMetaData({
 ```
 
 <!--[metadata]: {"description": "Learn more about how to use the Bixby AudioPlayer functionality.",
-"route": "samsung-bixby/audio-player" }-->
+"route": "samsung-bixby/audioplayer" }-->

@@ -16,7 +16,7 @@ To make deploying easier you can use the [Jovo CLI](../tools/cli/README.md '../c
 
 ## Deploying Platform Files
 
-> Note: Platform file are currently only supported for Alexa Skills and Google Actions.
+> Note: Platform files are currently supported for Alexa Skills and Google Actions.
 
 Platform files are split between the language model and general configuration files (e.g. app name, description, etc.) of your app. 
 
@@ -105,4 +105,4 @@ If you have a Lambda endpoint defined in your `project.js` file, and your ask pr
 $ jovo deploy
 ```
 
-<!--[metadata]: {"description": "Learn how to deploy your Jovo projects.", "route": "deployment"}-->
+<!--[metadata]: {"description": "Learn how to deploy your Jovo projects to Alexa, Google Assistant, and more voice platforms.", "route": "deployment"}-->

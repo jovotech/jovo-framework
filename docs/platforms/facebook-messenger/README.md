@@ -1,6 +1,20 @@
 # Facebook Messenger
 
-Learn more about the Facebook Messenger Platform and it's platform-specific features that can be used with the Jovo Framework.
+Learn more about the Facebook Messenger Platform and its platform-specific features that can be used with the Jovo Framework.
+
+* [Installation](#installation)
+* [Configurations](#configurations)
+   * [Automatically set greeting-text](#automatically-set-greeting-text)
+   * [Automatically set launch-payload](#automatically-set-launch-payload)
+* [Introduction to Messenger specific features](#introduction-to-messenger-specific-features)
+* [Output](#output)
+   * [No Reprompts](#no-reprompts)
+   * [Multiple Messages](#multiple-messages)
+   * [Overwrite default-output](#overwrite-default-output)
+   * [Sending Text](#sending-text)
+   * [Sending Quick Replies](#sending-quick-replies)
+   * [Sending Attachments](#sending-attachments)
+   
 
 ## Installation
 
@@ -58,6 +72,8 @@ export = {
 };
 ```
 
+## Configurations
+
 ### Automatically set greeting-text
 
 To set the greeting-text on startup you have to set the following configuration:
@@ -66,6 +82,7 @@ To set the greeting-text on startup you have to set the following configuration:
 // @language=javascript
 
 // src/config.js
+
 module.exports = {
 	platform: {
 		FacebookMessenger: {
@@ -83,6 +100,7 @@ module.exports = {
 // @language=typescript
 
 // src/config.ts
+
 export = {
 	platform: {
 		FacebookMessenger: {
@@ -106,6 +124,7 @@ To set the launch-payload on startup you have to set the following configuration
 // @language=javascript
 
 // src/config.js
+
 module.exports = {
 	platform: {
 		FacebookMessenger: {
@@ -120,6 +139,7 @@ module.exports = {
 // @language=typescript
 
 // src/config.ts
+
 export = {
 	platform: {
 		FacebookMessenger: {
@@ -132,15 +152,17 @@ export = {
 };
 ```
 
-## Introduction to Facebook Messenger Specific Features
+## Introduction to Messenger Specific Features
 
 You can access the `messengerBot` object like this:
 
 ```javascript
 // @language=javascript
+
 this.$messengerBot
 
 // @language=typescript
+
 this.$messengerBot!
 ```
 
@@ -158,6 +180,7 @@ Facebook Messenger does not support reprompts. Any reprompt passed to `ask` will
 ### Multiple Messages
 
 Facebook Messenger allows sending multiple messages.
+
 Read more about sending messages [here](https://developers.facebook.com/docs/messenger-platform/send-messages).
 
 ### Overwrite default-output
@@ -166,9 +189,11 @@ The speech of `tell` and `ask` can be overwritten:
 
 ```javascript
 // @language=javascript
+
 if (this.$messengerBot) this.$messengerBot.setText('someNewText');
 
 // @language=typescript
+
 this.$messengerBot?.setText('someNewText');
 ```
 
@@ -176,6 +201,7 @@ Additionally, quick-replies can be overwritten and added:
 
 ```javascript
 // @language=javascript
+
 if (this.$messengerBot) {
 	this.$messengerBot.setQuickReplies([
 		new TextQuickReply('someQuickReplyText')
@@ -184,6 +210,7 @@ if (this.$messengerBot) {
 }
 
 // @language=typescript
+
 this.$messengerBot
 	?.setQuickReplies([new TextQuickReply('someQuickReplyText')])
 	.addQuickReply('test');
@@ -203,7 +230,7 @@ this.$messengerBot?.showText({ text: 'text' });
 
 > **INFO**: The text-message that was created by calling `tell` or `ask` will always be the first message to be displayed. Even if the `text`-method was called first.
 
-#### Options
+#### Text Message Options
 
 When calling the `text`-method an object with the following properties can be passed:
 
@@ -296,7 +323,7 @@ this.$messengerBot?.showAttachment({
 
 Read more about sending attachments [here](https://developers.facebook.com/docs/messenger-platform/send-messages#sending_attachments).
 
-#### Options
+#### Attachment Options
 
 | property     | type                                            | description                                                        |
 | ------------ | ----------------------------------------------- | ------------------------------------------------------------------ |
@@ -510,3 +537,6 @@ this.$messengerBot?.showAirlineTemplate({
 ```
 
 Read more [here](https://developers.facebook.com/docs/messenger-platform/send-messages/template/airline).
+
+<!--[metadata]: {"description": "Build Facebook Messenger chatbots with the Jovo Framework.",
+		"route": "facebook-messenger"}-->

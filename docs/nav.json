@@ -352,7 +352,16 @@
                 },
                 {
                     "title": "Samsung Bixby",
-                    "route": "samsung-bixby"
+                    "content": [
+                        {
+                            "title": "Overview",
+                            "route": "samsung-bixby"
+                        },
+                        {
+                            "title": "Audioplayer Capsules",
+                            "route": "samsung-bixby/audioplayer"
+                        }
+                    ]
                 },
                 {
                     "title": "Twilio Autopilot",
@@ -463,7 +472,7 @@
                         },
                         {
                             "title": "Google Cloud ASR",
-                            "route": "slu/google-cloud"
+                            "route": "asr/google-cloud"
                         },
                         {
                             "title": "Microsoft Azure ASR",
@@ -480,11 +489,11 @@
                         },
                         {
                             "title": "Microsoft LUIS",
-                            "route": "nlu/luis"
+                            "route": "nlu/microsoft-luis"
                         },
                         {
                             "title": "Dialogflow",
-                            "route": "nlu/dialogflow"
+                            "route": "nlu/google-dialogflow"
                         }
                     ]
                 },

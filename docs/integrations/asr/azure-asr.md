@@ -41,4 +41,4 @@ platform.use(
 > The configuration has to be passed to the constructor of `AzureAsr`. Setting the configuration inside the `config`-file does not work.
 
 <!--[metadata]: {"description": "Learn how to use the Microsoft Azure Speech to Text service as ASR (Automatic Speech to Text) integration with the Jovo Framework.",
-"route": "asr/azure" }-->
+"route": "asr/microsoft-azure" }-->
