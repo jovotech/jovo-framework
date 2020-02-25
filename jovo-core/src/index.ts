@@ -61,7 +61,13 @@ export { Util } from './util/Util';
 export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './util/Log';
 export { User } from './core/User';
 export { ComponentPlugin } from './plugins/ComponentPlugin';
-export { Component } from './plugins/Component';
+export {
+  Component,
+  ComponentConfig,
+  ComponentDelegationOptions,
+  ComponentResponse,
+  ComponentResponseStatus,
+} from './plugins/Component';
 export { Router } from './plugins/Router';
 export * from './Interfaces';
 
