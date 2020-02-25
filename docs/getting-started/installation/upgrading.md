@@ -14,14 +14,14 @@ Learn how to upgrade an existing Jovo Framework app. Also, take a look at our [I
 You can find the current version of your Jovo Framework installation in your `package-lock.json` file.
 
 You can do:
-* [Minor Updates](#minor-updates), e.g. from `2.0.x` to `2.1.x` or from `2.0.1` to `2.0.2`
-* [Major Updates](#major-updates), e.g. from `1.x` to `2.x`
+* [Minor Updates](#minor-updates), e.g. from `3.0.x` to `3.1.x`
+* [Major Updates](#major-updates), e.g. from `2.x` to `3.x`
 
 ### Minor Updates
 
 > Important: Updating by just using `$ npm install jovo-framework` can lead to errors. Make sure to use one of the commands provided below.
 
-To update to the latest minor update (updating either `x` or `y` in `1.x.y` or `2.x.y`) of the framework, use one of the following commands:
+To update to the latest minor update (updating either `x` or `y` in `3.x.y` or `2.x.y`) of the framework, use one of the following commands:
 
 ```sh
 # Update only Jovo packages
@@ -36,9 +36,18 @@ These commands are necessary (as opposed to `$ npm install jovo-framework`) beca
 
 ### Major Updates
 
-To learn more about how to do major updates (e.g. from version `1.x` to `2.x`), read the following migration guide:
+Jovo `v3` does not come with any breaking changes except that we dropped the node 8 support. This is why you can also use the
 
-> [Migrating to Jovo v2 from v1](./v1-migration.md './v1-migration').
+```sh
+# Update Jovo CLI to 3.x
+$ npm install -g jovo-cli@latest
+
+# Update all Jovo packages
+$ jovo update
+```
+
+Learn more here: [v2 Migration](./v2-migration.md './installation/v2-migration').
+
 
 ## Upgrading the Jovo CLI
 

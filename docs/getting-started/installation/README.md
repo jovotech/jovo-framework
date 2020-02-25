@@ -121,13 +121,13 @@ $ npm install
 If you want to upgrade your existing voice app that uses Jovo, take a look at the following guides:
 
 * [Upgrading](./upgrading.md './installation/upgrading'): General documentation about updating both the Jovo Framework and CLI.
-* [v1 Migration](./v1-migration.md './installation/v1-migration'): Learn how to migrate to Jovo `v2` from `v1`.
+* [v2 Migration](./v2-migration.md './installation/v2-migration'): Learn how to migrate to Jovo `v3` from `v2`.
 
 ## Technical Requirements
 
 First, make sure you have the following installed on your computer/development environment:
 
-* Node.js version 8.10 or later
+* Node.js version 10.8 or later
 * [npm](https://www.npmjs.com/) (node package manager)
 
 Need help with that? Here are some tutorials to install Node.js and npm: [Mac](http://blog.teamtreehouse.com/install-node-js-npm-mac), [Windows](http://blog.teamtreehouse.com/install-node-js-npm-windows).
