@@ -88,6 +88,6 @@ You can find a troubleshooting guide by Amazon [here](https://developer.amazon.c
 
 ## Platform Specific Visual Output
 
-Each platform might support other kinds of visual output besides the ones listed above. You can find the detailed list in each platform's documentation [here](../../platforms/README.md './platforms/).
+Each platform might support other kinds of visual output besides the ones listed above. You can find the detailed list in each platform's documentation [here](../../platforms/README.md './platforms/').
 
 <!--[metadata]: {"description": "Learn how to create visual output for Alexa Skills and Google Actions with the Jovo Framework", "route": "output/visual-output"}-->
