@@ -612,10 +612,6 @@
                 {
                     "title": "Contributing",
                     "route": "contributing"
-                },
-                {
-                    "title": "RIDR Pipeline",
-                    "route": "ridr-pipeline"
                 }
             ]
         }
