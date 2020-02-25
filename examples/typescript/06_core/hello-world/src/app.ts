@@ -1,12 +1,10 @@
-import { GCloudAsr } from 'jovo-asr-gcloud';
 import { FileDb } from 'jovo-db-filedb';
 import { App } from 'jovo-framework';
 import { CorePlatform } from 'jovo-platform-core';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
-import { AmazonCredentials, AmazonLexSlu } from 'jovo-slu-lex';
-import { AmazonPollyTts } from 'jovo-tts-polly';
-import { join } from 'path';
+import { AmazonCredentials, LexSlu } from 'jovo-slu-lex';
+import { PollyTts } from 'jovo-tts-polly';
 
 const app = new App();
 
@@ -18,15 +16,12 @@ const credentials: AmazonCredentials = {
 };
 
 corePlatform.use(
-	// new GCloudAsr({
-	// 	credentialsFile: join(__dirname, '../..', 'credentials.json')
-	// }),
-	new AmazonLexSlu({
+	new LexSlu({
 		credentials,
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
-	}),
-	// new AmazonPollyTts({
+	})
+	// new PollyTts({
 	// 	credentials
 	// })
 );
@@ -39,20 +34,10 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
-
-		const quickReplies = [
-			{
-				value: 'jeff'
-			},
-			{
-				value: 'alex'
-			},
-			{
-				value: 'my name is max'
-			}
-		];
-
-		this.$corePlatformApp!.$actions.addQuickReplies({delay: 2000, replies: quickReplies });
+		this.$corePlatformApp!.$actions.addQuickReplies({
+			delay: 2000,
+			replies: ['John', 'Jack', 'Joe']
+		});
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 

@@ -8,7 +8,7 @@ const { App } = require('jovo-framework');
 const { CorePlatform } = require('jovo-platform-core');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
-const { AmazonCredentials, AmazonLexSlu } = require('jovo-slu-lex');
+const { LexSlu } = require('jovo-slu-lex');
 require('dotenv').config();
 
 const app = new App();
@@ -21,7 +21,7 @@ const credentials = {
 };
 
 corePlatform.use(
-	new AmazonLexSlu({
+	new LexSlu({
 		credentials,
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
