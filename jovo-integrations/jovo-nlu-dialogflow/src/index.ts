@@ -8,6 +8,6 @@ interface AppDialogflowNluConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface AppNluConfig extends AppDialogflowNluConfig {}
-  export interface ExtensiblePluginConfigs extends AppDialogflowNluConfig {}
+  interface AppNluConfig extends AppDialogflowNluConfig {}
+  interface ExtensiblePluginConfigs extends AppDialogflowNluConfig {}
 }

@@ -1,23 +1,12 @@
-import { Config } from '../../jovo-tts-azure/src';
+import { Config } from './PollyTts';
 
-interface AppAzureTtsConfig {
-  AzureTts?: Config;
+interface AppPollyTtsConfig {
+  PollyTts?: Config;
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface ExtensiblePluginConfigs extends AppAzureTtsConfig {}
+  interface ExtensiblePluginConfigs extends AppPollyTtsConfig {}
 }
 
-declare module 'jovo-core/dist/src/Interfaces' {
-  interface TellOutput {
-    speechText?: string;
-  }
-
-  interface AskOutput {
-    speechText?: string;
-    repromptText?: string;
-  }
-}
-
-export { AmazonPollyTts } from './AmazonPollyTts';
+export { PollyTts } from './PollyTts';
 export * from './Interfaces';

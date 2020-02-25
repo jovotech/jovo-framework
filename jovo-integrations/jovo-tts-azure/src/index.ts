@@ -5,18 +5,7 @@ interface AppAzureTtsConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface ExtensiblePluginConfigs extends AppAzureTtsConfig {}
-}
-
-declare module 'jovo-core/dist/src/Interfaces' {
-  interface TellOutput {
-    speechText?: string;
-  }
-
-  interface AskOutput {
-    speechText?: string;
-    repromptText?: string;
-  }
+  interface ExtensiblePluginConfigs extends AppAzureTtsConfig {}
 }
 
 export * from './AzureTts';

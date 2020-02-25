@@ -30,7 +30,7 @@ export interface Config extends PluginConfig {
 
 const TARGET_SAMPLE_RATE = 16000;
 
-export class AmazonLexSlu implements Plugin {
+export class LexSlu implements Plugin {
   config: Config = {
     botAlias: process.env.LEX_BOT_ALIAS || '',
     botName: process.env.LEX_BOT_NAME || '',
