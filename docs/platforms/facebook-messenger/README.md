@@ -7,6 +7,7 @@ Learn more about the Facebook Messenger Platform and it's platform-specific feat
 ```sh
 npm install jovo-platform-facebookmessenger --save
 ```
+Import the installed module, initialize and add it to the `app` object. 
 
 ```javascript
 // @language=javascript

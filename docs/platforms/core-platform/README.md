@@ -4,10 +4,12 @@ Learn more about the Jovo Core Platform, which can be used to deploy a voice exp
 
 ## Installation
 
+Install the integration into your project directory.
 ```sh
 npm install jovo-platform-core --save
 ```
 
+Import the installed module, initialize and add it to the `app` object. 
 ```javascript
 // @language=javascript
 
