@@ -6,7 +6,7 @@ Learn how to use the Jovo Debugger for simple testing and debugging of Alexa Ski
 * [Getting Started](#getting-started)
 * [Features](#features)
   * [Data](#data)
-  * [Request & Response](#request--response)
+  * [Request and Response](#request-and-response)
   * [Console](#console)
   * [Request Builder](#request-builder)
     * [Custom Sequences](#custom-sequences)
@@ -64,7 +64,7 @@ The **Data** window contains all the important information of the interaction. T
 * state
 * session attributes
 
-### Request & Response
+### Request and Response
 
 The request and response windows have each three sub pages.
 
