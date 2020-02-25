@@ -34,7 +34,7 @@ module.exports = {
 };
 ```
 
-> We provide an on-premise solution for enterprises who want to use the Jovo Webhook. Please use the contact form [here](TODO)
+> We provide an on-premise solution for enterprises who want to use the Jovo Webhook. [Please use contact us here](https://www.jovo.tech/on-premise-deployment).
 
 Find out more about the Jovo Webhook [here](../tools/webhook.md '../webhook').
 
