@@ -4,7 +4,6 @@ import { CorePlatform } from 'jovo-platform-core';
 
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { AmazonCredentials, LexSlu } from 'jovo-slu-lex';
-import { PollyTts } from 'jovo-tts-polly';
 
 const app = new App();
 
@@ -21,9 +20,6 @@ corePlatform.use(
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
 	})
-	// new PollyTts({
-	// 	credentials
-	// })
 );
 
 app.use(corePlatform, new JovoDebugger(), new FileDb());
@@ -34,10 +30,7 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
-		this.$corePlatformApp!.$actions.addQuickReplies({
-			delay: 2000,
-			replies: ['John', 'Jack', 'Joe']
-		});
+		this.$corePlatformApp?.$actions.addQuickReplies(['John', 'Jack', 'Joe']);
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 

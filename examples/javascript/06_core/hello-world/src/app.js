@@ -41,13 +41,17 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
+		if (this.$corePlatformApp) {
+			this.$corePlatformApp.$actions.addQuickReplies(['John', 'Jack', 'Joe']);
+		}
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 
 	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
+	DefaultFallbackIntent() {
+		this.tell('Good Bye!');
 	}
 });
 
