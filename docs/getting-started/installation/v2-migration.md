@@ -5,7 +5,7 @@ We just released a huge update to the Jovo Framework: Version 3! Learn how to mi
 * [Breaking Changes in v3](#breaking-changes-in-v3)
 * [Getting Started with v3](#getting-started-with-v3)
 
-## Breaking Changes with v3
+## Breaking Changes in v3
 
 Although `v3` of Jovo was a big update, it was important to us to minimize the time it takes for our users to migrate existing projects to the new version.
 
