@@ -7,8 +7,6 @@ Learn how to upgrade an existing Jovo Framework app. Also, take a look at our [I
    * [Major Updates](#major-updates)
 * [Upgrading the Jovo CLI](#upgrading-the-jovo-cli)
 
-> [For the full v2 migration guide, take a look here](./v1-migration.md './v1-migration').
-
 ## Upgrading the Jovo Framework
 
 You can find the current version of your Jovo Framework installation in your `package-lock.json` file.

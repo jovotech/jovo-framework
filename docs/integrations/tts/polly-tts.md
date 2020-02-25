@@ -28,6 +28,18 @@ platform.use(
 // @language=typescript
 
 // src/app.ts
+
+import { PollyTts } from 'jovo-tts-polly';
+
+platform.use(
+	new PollyTts({
+		credentials: {
+			region: 'yourRegion',
+			accessKeyId: 'yourAccessKeyId',
+			secretAccessKey: 'yourSecretAccessKey'
+		}
+	})
+);
 ```
 
 > The configuration has to be passed to the constructor of `PollyTts`. Setting the configuration inside the `config`-file does not work.
