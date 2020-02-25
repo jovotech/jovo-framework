@@ -36,5 +36,8 @@ platform.use(
 );
 ```
 
+> The configuration has to be passed to the constructor of `GCloudAsr`. Setting the configuration inside the `config`-file does not work.
+
+
 <!--[metadata]: {"description": "Learn how to use the Google Cloud Speech to Text service as ASR (Automatic Speech to Text) integration with the Jovo Framework.",
 "route": "asr/google-cloud-asr" }-->

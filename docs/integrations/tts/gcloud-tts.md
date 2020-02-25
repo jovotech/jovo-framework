@@ -34,5 +34,8 @@ platform.use(
 );
 ```
 
+> The configuration has to be passed to the constructor of `GCloudTts`. Setting the configuration inside the `config`-file does not work.
+
+
 <!--[metadata]: {"description": "Learn how to use the Google Cloud TTS (Text to Speech) service with the Jovo Framework.",
 "route": "tts/google-cloud" }-->
