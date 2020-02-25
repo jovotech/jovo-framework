@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-core",
-  "version": "2.2.5",
+  "version": "3.0.0",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,8 +17,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.18",
-    "jovo-db-platformstorage": "^2.2.5",
+    "jovo-core": "^3.0.0",
+    "jovo-db-platformstorage": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -30,12 +30,12 @@
     "@types/jest": "^24.0.11",
     "@types/lodash.clonedeep": "^4.5.4",
     "@types/lodash.get": "^4.4.6",
-    "@types/lodash.set": "^4.3.6",
     "@types/lodash.merge": "^4.6.6",
+    "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
-    "prettier": "1.19.1",
     "jest": "^25.1.0",
-    "jovo-framework": "^2.2.7",
+    "jovo-framework": "^3.0.0",
+    "prettier": "1.19.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^25.2.0",
@@ -52,7 +52,6 @@
     "testPathIgnorePatterns": [
       "/dist/",
       "/node_modules/"
-
     ],
     "moduleFileExtensions": [
       "ts",

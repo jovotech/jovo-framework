@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-client-web-vue-debugger",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,10 +11,10 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "element-ui": "^2.13.0",
+    "jovo-client-web-vue": "^3.0.0",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "vue": "^2.6.11",
-    "jovo-client-web-vue": "^2.0.0",
     "vue-class-component": "^7.2.2",
     "vue-json-viewer": "^2.2.8",
     "vue-property-decorator": "^8.3.0"

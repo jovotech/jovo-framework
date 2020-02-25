@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-facebook-messenger-platform-quick-replies",
-  "version": "2.2.28",
+  "version": "3.0.0",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,11 +17,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^2.2.18",
-    "jovo-framework": "^2.2.25",
-    "jovo-platform-facebookmessenger": "^2.0.11-alpha.0",
-    "jovo-plugin-debugger": "^2.2.20",
-    "jovo-nlu-dialogflow": "^2.2.8-alpha.0"
+    "jovo-db-filedb": "^3.0.0",
+    "jovo-framework": "^3.0.0",
+    "jovo-nlu-dialogflow": "^3.0.0",
+    "jovo-platform-facebookmessenger": "^3.0.0",
+    "jovo-plugin-debugger": "^3.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-twilioautopilot",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,14 +16,14 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^2.2.15"
+    "jovo-core": "^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-db-filedb": "^2.2.20",
-    "jovo-framework": "^2.2.30",
+    "jovo-db-filedb": "^3.0.0",
+    "jovo-framework": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
