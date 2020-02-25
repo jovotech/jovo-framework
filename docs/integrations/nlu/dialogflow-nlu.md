@@ -9,7 +9,7 @@ npm install jovo-nlu-dialogflow --save
 ```
 
 ```javascript
-// language=javascript
+// @language=javascript
 
 // src/app.js
 
@@ -21,7 +21,7 @@ platform.use(
 	})
 );
 
-// language=typescript
+// @language=typescript
 
 // src/app.ts
 

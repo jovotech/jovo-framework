@@ -9,7 +9,7 @@ npm install jovo-slu-lex --save
 ```
 
 ```javascript
-// @language = javascript
+// @language=javascript
 
 // src/app.js
 const { LexSlu } = require('jovo-slu-lex');
@@ -24,7 +24,7 @@ platform.use(
 	})
 );
 
-// @language = typescript
+// @language=typescript
 
 // src/app.ts
 import { LexSlu } from 'jovo-slu-lex';
