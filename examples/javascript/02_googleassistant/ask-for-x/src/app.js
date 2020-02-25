@@ -17,15 +17,27 @@ app.setHandler({
         // return this.toIntent('AskForZipCodeAndCityIntent');
         // return this.toIntent('AskForPermissionIntent');
         // return this.toIntent('AskForConfirmationIntent');
-        return this.toIntent('AskForSignInIntent');
+        return this.toIntent('AskForNameAndPreciseLocationIntent');
         // return this.toIntent('AskForPlaceIntent');
     },
     AskForNameIntent() {
         this.$googleAction.askForName('Pre name text');
     },
+
     AskForPreciseLocationIntent() {
         this.$googleAction.askForPreciseLocation('Pre precise location text');
     },
+
+    AskForNameAndPreciseLocationIntent() {
+        const permissions = ['NAME'];
+        let context = 'To address you by name';
+        if (this.$googleAction.isVerifiedUser()) {
+            permissions.push('DEVICE_PRECISE_LOCATION');
+            context += ' and your location';
+        }
+        return this.$googleAction.askForPermission(permissions, context);
+    },
+
     AskForZipCodeAndCityIntent() {
         this.$googleAction.askForZipCodeAndCity('Pre zip location text');
     },
