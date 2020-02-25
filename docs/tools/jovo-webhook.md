@@ -48,4 +48,4 @@ By copying the link of your webhook and opening it in your browser, you can acce
 > [Learn more about the Jovo Debugger here](./debugger.md './debugger').
 
 
-<!--[metadata]: {"description": "Learn more about local development of Alexa Skills and Google Actions with the Jovo Webhook.", "route": "webhook"}-->
+<!--[metadata]: {"description": "Learn more about local development of Alexa Skills and Google Actions with the Jovo Webhook.", "route": "jovo-webhook"}-->
