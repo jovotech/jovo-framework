@@ -1,3 +1,4 @@
+import { Config } from './Bixby';
 import { BixbyCapsule } from './core/BixbyCapsule';
 
 export { BixbyCapsule };
@@ -15,4 +16,13 @@ declare module 'jovo-core/dist/src/core/Jovo' {
     bixbyCapsule(): BixbyCapsule;
     isBixbyCapsule(): boolean;
   }
+}
+
+interface AppBixbyConfig {
+  Bixby?: Config;
+}
+
+declare module 'jovo-core/dist/src/Interfaces' {
+  interface AppPlatformConfig extends AppBixbyConfig {}
+  interface ExtensiblePluginConfigs extends AppBixbyConfig {}
 }

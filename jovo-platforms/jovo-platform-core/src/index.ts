@@ -1,10 +1,11 @@
 import { CorePlatformApp } from './core/CorePlatformApp';
+import { Config } from './CorePlatform';
 import { Action } from './Interfaces';
 
 export * from './CorePlatform';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
-  export interface Jovo {
+  interface Jovo {
     $corePlatformApp?: CorePlatformApp;
 
     corePlatformApp(): CorePlatformApp;
@@ -13,13 +14,20 @@ declare module 'jovo-core/dist/src/core/Jovo' {
   }
 }
 
+interface AppCorePlatformConfig {
+  CorePlatform?: Config;
+}
+
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface Output {
+  interface Output {
     CorePlatform: {
       Actions: Action[];
       RepromptActions: Action[];
     };
   }
+
+  interface AppPlatformConfig extends AppCorePlatformConfig {}
+  interface ExtensiblePluginConfigs extends AppCorePlatformConfig {}
 }
 
 export * from './Interfaces';

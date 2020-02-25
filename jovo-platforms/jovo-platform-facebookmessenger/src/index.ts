@@ -34,7 +34,6 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 
   export interface AppPlatformConfig extends AppFacebookMessengerConfig {}
-
   export interface ExtensiblePluginConfigs extends AppFacebookMessengerConfig {}
 }
 
