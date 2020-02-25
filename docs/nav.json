@@ -472,7 +472,7 @@
                         },
                         {
                             "title": "Google Cloud ASR",
-                            "route": "slu/google-cloud"
+                            "route": "asr/google-cloud"
                         },
                         {
                             "title": "Microsoft Azure ASR",
@@ -489,11 +489,11 @@
                         },
                         {
                             "title": "Microsoft LUIS",
-                            "route": "nlu/luis"
+                            "route": "nlu/microsoft-luis"
                         },
                         {
                             "title": "Dialogflow",
-                            "route": "nlu/dialogflow"
+                            "route": "nlu/google-dialogflow"
                         }
                     ]
                 },

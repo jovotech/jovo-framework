@@ -37,4 +37,4 @@ platform.use(
 > The configuration has to be passed to the constructor of `DialogflowNlu`. Setting the configuration inside the `config`-file does not work.
 
 <!--[metadata]: {"description": "Learn how to use Google Dialogflow as NLU (Natural Language Understanding) integration with the Jovo Framework.",
-"route": "nlu/dialogflow" }-->
+"route": "nlu/google-dialogflow" }-->

@@ -40,4 +40,4 @@ platform.use(
 
 
 <!--[metadata]: {"description": "Learn how to use the Google Cloud Speech to Text service as ASR (Automatic Speech to Text) integration with the Jovo Framework.",
-"route": "asr/google-cloud-asr" }-->
+"route": "asr/google-cloud" }-->
