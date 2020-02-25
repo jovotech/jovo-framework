@@ -5,7 +5,7 @@ interface AppAzureAsrConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface ExtensiblePluginConfigs extends AppAzureAsrConfig {}
+  interface ExtensiblePluginConfigs extends AppAzureAsrConfig {}
 }
 
 export * from './AzureAsr';

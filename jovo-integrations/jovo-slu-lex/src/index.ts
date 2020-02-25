@@ -1,13 +1,13 @@
-import { Config } from './AmazonLexSlu';
+import { Config } from './LexSlu';
 
-interface AppAmazonLexSluConfig {
-  AmazonLexSlu?: Config;
+interface AppLexSluConfig {
+  LexSlu?: Config;
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface AppNluConfig extends AppAmazonLexSluConfig {}
-  export interface ExtensiblePluginConfigs extends AppAmazonLexSluConfig {}
+  interface AppNluConfig extends AppLexSluConfig {}
+  interface ExtensiblePluginConfigs extends AppLexSluConfig {}
 }
 
-export * from './AmazonLexSlu';
+export * from './LexSlu';
 export * from './Interfaces';

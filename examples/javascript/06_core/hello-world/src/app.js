@@ -8,7 +8,7 @@ const { App } = require('jovo-framework');
 const { CorePlatform } = require('jovo-platform-core');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
-const { AmazonCredentials, AmazonLexSlu } = require('jovo-slu-lex');
+const { LexSlu } = require('jovo-slu-lex');
 require('dotenv').config();
 
 const app = new App();
@@ -21,7 +21,7 @@ const credentials = {
 };
 
 corePlatform.use(
-	new AmazonLexSlu({
+	new LexSlu({
 		credentials,
 		botAlias: 'WebTest',
 		botName: 'WebAssistantTest'
@@ -41,13 +41,17 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
+		if (this.$corePlatformApp) {
+			this.$corePlatformApp.$actions.addQuickReplies(['John', 'Jack', 'Joe']);
+		}
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 
 	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
+	DefaultFallbackIntent() {
+		this.tell('Good Bye!');
 	}
 });
 

@@ -5,7 +5,7 @@ interface AppGCloudAsrConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface ExtensiblePluginConfigs extends AppGCloudAsrConfig {}
+  interface ExtensiblePluginConfigs extends AppGCloudAsrConfig {}
 }
 
 export * from './GCloudAsr';

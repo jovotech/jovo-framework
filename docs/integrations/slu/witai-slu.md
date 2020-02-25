@@ -34,5 +34,8 @@ platform.use(
 );
 ```
 
+> The configuration has to be passed to the constructor of `WitAiSlu`. Setting the configuration inside the `config`-file does not work.
+
+
 <!--[metadata]: {"description": "Learn how to use Wit.ai as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.",
 "route": "slu/witai" }-->

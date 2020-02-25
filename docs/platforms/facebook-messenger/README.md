@@ -4,10 +4,13 @@ Learn more about the Facebook Messenger Platform and it's platform-specific feat
 
 ## Installation
 
+Install the module:
+
 ```sh
 npm install jovo-platform-facebookmessenger --save
 ```
-Import the installed module, initialize and add it to the `app` object. 
+
+Import the installed module, initialize and add it to the `app` object:
 
 ```javascript
 // @language=javascript
@@ -15,72 +18,118 @@ Import the installed module, initialize and add it to the `app` object.
 // src/app.js
 const { FacebookMessenger } = require('jovo-platform-facebookmessenger');
 
-const fbMessenger = new FacebookMessenger({
-	pageAccessToken: 'yourPageAccessToken',
-	verifyToken: 'yourVerifyToken',
-	locale: 'yourLocale'
-});
-
-app.use(fbMessenger);
+app.use(new FacebookMessenger());
 
 // @language=typescript
 
 // src/app.ts
 import { FacebookMessenger } from 'jovo-platform-facebookmessenger';
 
-const fbMessenger = new FacebookMessenger({
-	pageAccessToken: 'yourPageAccessToken',
-	verifyToken: 'yourVerifyToken',
-	locale: 'yourLocale'
-});
+app.use(new FacebookMessenger());
+```
 
-app.use(fbMessenger);
+Configure the module:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+module.exports = {
+	platform: {
+		FacebookMessenger: {
+			pageAccessToken: 'yourPageAccessToken',
+			verifyToken: 'yourVerifyToken',
+			locale: 'yourLocale'
+		}
+	}
+};
+
+// @language=typescript
+
+// src/app.ts
+export = {
+	platform: {
+		FacebookMessenger: {
+			pageAccessToken: 'yourPageAccessToken',
+			verifyToken: 'yourVerifyToken',
+			locale: 'yourLocale'
+		}
+	}
+};
 ```
 
 ### Automatically set greeting-text
 
+To set the greeting-text on startup you have to set the following configuration:
+
 ```javascript
 // @language=javascript
-new FacebookMessenger({
-	greeting: {
-		updateOnSetup: true,
-		data: [
-			{ locale: 'en-US', text: 'Get Started' },
-			{ locale: 'de-DE', text: 'Loslegen' }
-		]
+
+// src/config.js
+module.exports = {
+	platform: {
+		FacebookMessenger: {
+			greeting: {
+				updateOnSetup: true,
+				data: [
+					{ locale: 'en-US', text: 'Get Started' },
+					{ locale: 'de-DE', text: 'Loslegen' }
+				]
+			}
+		}
 	}
-});
+};
 
 // @language=typescript
-new FacebookMessenger({
-	greeting: {
-		updateOnSetup: true,
-		data: [
-			{ locale: 'en-US', text: 'Get Started' },
-			{ locale: 'de-DE', text: 'Loslegen' }
-		]
+
+// src/config.ts
+export = {
+	platform: {
+		FacebookMessenger: {
+			greeting: {
+				updateOnSetup: true,
+				data: [
+					{ locale: 'en-US', text: 'Get Started' },
+					{ locale: 'de-DE', text: 'Loslegen' }
+				]
+			}
+		}
 	}
-});
+};
 ```
 
 ### Automatically set launch-payload
 
+To set the launch-payload on startup you have to set the following configuration:
+
 ```javascript
 // @language=javascript
-new FacebookMessenger({
-	launch: {
-		updateOnSetup: true,
-		data: 'someLaunchPayload'
+
+// src/config.js
+module.exports = {
+	platform: {
+		FacebookMessenger: {
+			launch: {
+        		updateOnSetup: true,
+        		data: 'someLaunchPayload'
+        	}
+		}
 	}
-});
+};
 
 // @language=typescript
-new FacebookMessenger({
-	launch: {
-		updateOnSetup: true,
-		data: 'someLaunchPayload'
+
+// src/config.ts
+export = {
+	platform: {
+		FacebookMessenger: {
+			launch: {
+				updateOnSetup: true,
+            	data: 'someLaunchPayload'
+			}
+		}
 	}
-});
+};
 ```
 
 ## Introduction to Facebook Messenger Specific Features

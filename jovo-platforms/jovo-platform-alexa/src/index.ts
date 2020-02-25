@@ -381,8 +381,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
     };
   }
 
-  export interface AppPlatformConfig extends AppAlexaConfig {}
-  export interface ExtensiblePluginConfigs extends AppAlexaConfig {}
+  interface AppPlatformConfig extends AppAlexaConfig {}
+  interface ExtensiblePluginConfigs extends AppAlexaConfig {}
 }
 
 export interface AskForPermissionDirective {

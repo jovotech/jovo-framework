@@ -5,8 +5,8 @@ interface AppWitAiSluConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface AppNluConfig extends AppWitAiSluConfig {}
-  export interface ExtensiblePluginConfigs extends AppWitAiSluConfig {}
+  interface AppNluConfig extends AppWitAiSluConfig {}
+  interface ExtensiblePluginConfigs extends AppWitAiSluConfig {}
 }
 
 export * from './WitAiSlu';

@@ -5,18 +5,7 @@ interface AppGCloudTtsConfig {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  export interface ExtensiblePluginConfigs extends AppGCloudTtsConfig {}
-}
-
-declare module 'jovo-core/dist/src/Interfaces' {
-  interface TellOutput {
-    speechText?: string;
-  }
-
-  interface AskOutput {
-    speechText?: string;
-    repromptText?: string;
-  }
+  interface ExtensiblePluginConfigs extends AppGCloudTtsConfig {}
 }
 
 export * from './GCloudTts';

@@ -23,10 +23,6 @@
                             "route": "installation/upgrading"
                         },
                         {
-                            "title": "Migrating from v1",
-                            "route": "installation/v1-migration"
-                        },
-                        {
                             "title": "Migrating from v2",
                             "route": "installation/v2-migration"
                         }
@@ -612,10 +608,6 @@
                 {
                     "title": "Contributing",
                     "route": "contributing"
-                },
-                {
-                    "title": "RIDR Pipeline",
-                    "route": "ridr-pipeline"
                 }
             ]
         }

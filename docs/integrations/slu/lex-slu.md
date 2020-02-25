@@ -12,10 +12,10 @@ npm install jovo-slu-lex --save
 // @language = javascript
 
 // src/app.js
-const { AmazonLexSlu } = require('jovo-slu-lex');
+const { LexSlu } = require('jovo-slu-lex');
 
 platform.use(
-	new AmazonLexSlu({
+	new LexSlu({
 		credentials: {
 			region: 'yourRegion',
 			secretAccessKey: 'yourSecretAccessKey',
@@ -27,10 +27,10 @@ platform.use(
 // @language = typescript
 
 // src/app.ts
-import { AmazonLexSlu } from 'jovo-slu-lex';
+import { LexSlu } from 'jovo-slu-lex';
 
 platform.use(
-	new AmazonLexSlu({
+	new LexSlu({
 		credentials: {
 			region: 'yourRegion',
 			secretAccessKey: 'yourSecretAccessKey',
@@ -39,6 +39,8 @@ platform.use(
 	})
 );
 ```
+
+> The configuration has to be passed to the constructor of `LexSlu`. Setting the configuration inside the `config`-file does not work.
 
 <!--[metadata]: {"description": "Learn how to use Amazon Lex as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.",
 "route": "slu/amazon-lex" }-->

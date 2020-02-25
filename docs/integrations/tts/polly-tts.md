@@ -30,5 +30,8 @@ platform.use(
 // src/app.ts
 ```
 
+> The configuration has to be passed to the constructor of `PollyTts`. Setting the configuration inside the `config`-file does not work.
+
+
 <!--[metadata]: {"description": "Learn how to use the Amazon Polly TTS (Text to Speech) service with the Jovo Framework.",
 "route": "tts/amazon-polly" }-->
