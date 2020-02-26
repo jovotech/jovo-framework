@@ -1,14 +1,12 @@
-'use strict';
+import { App } from 'jovo-framework';
+import { Alexa } from 'jovo-platform-alexa';
+import { Bixby } from 'jovo-platform-bixby';
+import { JovoDebugger } from 'jovo-plugin-debugger';
+import { FileDb } from 'jovo-db-filedb';
 
 // ------------------------------------------------------------------
 // APP INITIALIZATION
 // ------------------------------------------------------------------
-
-const { App } = require('jovo-framework');
-const { Alexa } = require('jovo-platform-alexa');
-const { Bixby } = require('jovo-platform-bixby');
-const { JovoDebugger } = require('jovo-plugin-debugger');
-const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
 
@@ -16,7 +14,7 @@ app.use(
     new Alexa(),
     new Bixby(),
     new JovoDebugger(),
-    new FileDb()
+    new FileDb(),
 );
 
 
@@ -48,4 +46,4 @@ app.setBixbyHandler({
     }
 });
 
-module.exports.app = app;
+export { app };
