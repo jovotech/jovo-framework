@@ -125,7 +125,7 @@ export class WitAiSlu implements Plugin {
       return;
     }
 
-    const response = jovo.$nlu!.WitAi as WitAiResponse;
+    const response = jovo.$nlu![this.name] as WitAiResponse;
 
     const inputs: Inputs = {};
     for (const entityName in response.entities) {
