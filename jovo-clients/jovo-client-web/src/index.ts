@@ -4,6 +4,8 @@ export {
   CorePlatformRequestJSON as CoreRequest,
   CorePlatformResponseJSON as CoreResponse,
 } from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+
+
 export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 
 export * from './events';
