@@ -1,3 +1,5 @@
+import { Handler } from 'jovo-core';
+
 import { Config } from './Bixby';
 import { BixbyCapsule } from './core/BixbyCapsule';
 
@@ -25,4 +27,15 @@ interface AppBixbyConfig {
 declare module 'jovo-core/dist/src/Interfaces' {
   interface AppPlatformConfig extends AppBixbyConfig {}
   interface ExtensiblePluginConfigs extends AppBixbyConfig {}
+}
+
+declare module 'jovo-core/dist/src/core/BaseApp' {
+  interface BaseApp {
+    /**
+     * Sets alexa handlers
+     * @public
+     * @param {*} handler
+     */
+    setBixbyHandler(...handler: Handler[]): this; // tslint:disable-line
+  }
 }

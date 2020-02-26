@@ -1,3 +1,5 @@
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 import {
   BaseApp,
   ErrorCode,
@@ -67,6 +69,18 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
 
     Jovo.prototype.isBixbyCapsule = function() {
       return this.constructor.name === 'BixbyCapsule';
+    };
+
+    BaseApp.prototype.setBixbyHandler = function(...handlers: any[]) {
+      for (const obj of handlers) {
+        if (typeof obj !== 'object') {
+          throw new JovoError('Handler must be of type object');
+        }
+
+        const sourceHandler = _get(this.config.plugin, 'Bixby.handlers');
+        _set(this.config, 'plugin.Bixby.handlers', _merge(sourceHandler, obj));
+      }
+      return this;
     };
   }
 
