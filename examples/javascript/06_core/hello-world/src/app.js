@@ -43,6 +43,7 @@ app.setHandler({
 	HelloWorldIntent() {
 		if (this.$corePlatformApp) {
 			this.$corePlatformApp.$actions.addQuickReplies(['John', 'Jack', 'Joe']);
+			this.$corePlatformApp.setActions(this.$corePlatformApp.$actions);
 		}
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},

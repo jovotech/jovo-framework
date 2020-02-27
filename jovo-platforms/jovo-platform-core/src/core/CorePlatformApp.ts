@@ -91,23 +91,29 @@ export class CorePlatformApp extends Jovo {
   }
 
   // Output methods
-  setActions(actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.Actions = actions;
+  setActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.Actions =
+      actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addActions(...actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.Actions.push(...actions);
+  addActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.Actions.push(
+      ...(actions instanceof ActionBuilder ? actions.build() : actions),
+    );
     return this;
   }
 
-  setRepromptActions(actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions = actions;
+  setRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions =
+      actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addRepromptActions(...actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions.push(...actions);
+  addRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions.push(
+      ...(actions instanceof ActionBuilder ? actions.build() : actions),
+    );
     return this;
   }
 }
