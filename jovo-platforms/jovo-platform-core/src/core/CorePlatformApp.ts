@@ -105,12 +105,15 @@ export class CorePlatformApp extends Jovo {
   }
 
   setRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions = actions instanceof ActionBuilder ? actions.build() : actions;
+    this.$output.CorePlatform.RepromptActions =
+      actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
   addRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions.push(...(actions instanceof ActionBuilder ? actions.build() : actions));
+    this.$output.CorePlatform.RepromptActions.push(
+      ...(actions instanceof ActionBuilder ? actions.build() : actions),
+    );
     return this;
   }
 }
