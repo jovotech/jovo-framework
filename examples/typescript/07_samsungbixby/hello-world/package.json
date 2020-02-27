@@ -1,0 +1,27 @@
+{
+  "name": "jovo-examples-bixby-hello-world-ts",
+  "version": "3.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./dist",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-core": "^3.0.2",
+    "jovo-db-filedb": "^3.0.2",
+    "jovo-framework": "^3.0.2",
+    "jovo-platform-alexa": "^3.0.2",
+    "jovo-platform-bixby": "^3.0.0",
+    "jovo-plugin-debugger": "^3.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.3"
+  }
+}

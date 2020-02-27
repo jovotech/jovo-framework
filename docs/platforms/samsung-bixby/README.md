@@ -51,7 +51,11 @@ Models can be split up into concepts and actions. A concept can be explained as 
 
 #### Primitives
 
-![Primitive Example](../../img/bixby-primitives-example.png 'This is an example for a primitive.')
+```bxb
+text (NameInput) {
+  description (A name to display in a welcome message.)
+}
+```
 
 Primitives are the simplest building blocks of a Bixby Capsule and are able to hold data like text, numbers or boolean values. Primitives can be used to form [structures](#structures), inputs or outputs for [actions](#actions), for example.
 
@@ -59,7 +63,35 @@ Primitives are the simplest building blocks of a Bixby Capsule and are able to h
 
 #### Structures
 
-![Primitive Example](../../img/bixby-structures-example.png 'This is an example for a primitive.')
+```bxb
+structure (JovoResponse) {
+  description (Response from Jovo Framework.)
+
+  property (_JOVO_SESSION_DATA_) {
+    type (JovoSessionData)
+    min (Optional)
+    max (One)
+  }
+
+  property(_JOVO_AUDIO_) {
+    type(audioPlayer.AudioInfo)
+    min (Optional)
+    max (One)
+  }
+
+  property(_JOVO_SPEECH_) {
+    type(JovoSpeech)
+    min (Optional)
+    max (One)
+  }
+
+  property (_JOVO_LAYOUT_) {
+    type(JovoLayout)
+    min (Optional)
+    max (One)
+  }
+}
+```
 
 While primitives describe very simple data types, structures form more complex data sets, containing any number of properties. Each property is a concept by itself, with a specific set of attributes, describing their role and behaviour.
 
@@ -67,17 +99,54 @@ Each property is required to define it's type, optionality and cardinality. The 
 
 If you want to enhance a structure, you can use the `extends` feature, which allows you to inherit the parent structure's properties and extend them by adding new properties.
 
-![Primitive Example](../../img/bixby-structures-extend.png 'This is an example for a primitive.')
+```bxb
+structure (MyOwnResponse) {
+  description (This response extends the JovoResponse with an additional property.)
+
+  extends (JovoResponse)
+
+  property (MyOwnProperty) {
+    type (MyOwnProperty)
+    min (Optional)
+    max (Many)
+  }
+}
+```
 
 If you want to assign a more specific role to your structure without altering any properties, you can use the `role-of` feature. This allows you to specialize a certain structure, so Bixby can distinguish between the same concept for different use cases.
 
-![Primitive Example](../../img/bixby-structures-roleof.png 'This is an example for a primitive.')
+```bxb
+structure (MyOwnResponse) {
+  description (This response is a specialization of the JovoResponse.)
+  role-of (JovoResponse)
+}
+```
 
 > Read more about structures [here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/modeling.modeling-concepts#structure-concepts).
 
 #### Actions
 
-![Primitive Example](../../img/bixby-actions-example.png 'This is an example for a primitive.')
+```bxb
+action (MyNameIsAction) {
+  description (Collects a name from the user and returns a welcome message.)
+  type (Search)
+
+  collect {
+    input (_JOVO_INPUT_name) {
+      type (NameInput)
+      min (Required)
+      max (One)
+    }
+
+    input (_JOVO_PREV_RESPONSE_) {
+      type(JovoResponse)
+      min (Required)
+      max (One)
+    }
+  }
+  output (JovoResponse)
+}
+```
 
 Actions help Bixby understand how to act upon a specific user prompt and what to expect as inputs and outputs. For the platform integration, actions are intent-oriented, meaning that for every intent in your Jovo app, you have to define an action with corresponding inputs and outputs. As for structures, actions require a specific set of attributes, such as it's type, a number of inputs and an output type. The default action type is `Search`, but there are numerous more types available, each with it's own specific use case.
 
@@ -130,7 +199,22 @@ In your Bixby capsule, you're most likely to come across a `capsule.properties` 
 
 As mentioned, Bixby uses your models to outline your capsule and to get an idea of what data to expect and how to handle it. To couple your models with your code logic, Bixby needs a way to know, which action model to associate with a certain part of your code. There are two ways to do this: local endpoints and remote endpoints. Per default, Bixby uses local endpoints in the form of javascript files, which export a single function executing your code and returning an output according to the associated model. Remote endpoints on the other hand allow you to outsource your code logic to a remote server and provide it's endpoint to Bixby, which, upon a user prompt, will send a post request to your server, where you can handle the action and return a valid response. The platform integration uses that feature to allow communication between the Jovo voice app and your capsule.
 
-![Primitive Example](../../img/bixby-endpoints.png 'This is an example for a primitive.')
+```bxb
+endpoints {
+  action-endpoints {
+    action-endpoint (LaunchAction) {
+      remote-endpoint ("{remote.url}") {
+        method (POST)
+      }
+    }
+    action-endpoint (MyNameIsAction) {
+      remote-endpoint ("{remote.url}?intent=MyNameIsIntent") {
+        method (POST)
+      }
+    }
+  }
+}
+```
 
 Note that we use the property `remote.url` as a prefix, which references the url we set in `capsule.properties`. Additionally, you have to specify which intent you want to trigger with your action by providing a query parameter `intent` in the endpoint's url. For your `LaunchAction`, you don't have to specify an intent.
 
@@ -140,19 +224,65 @@ Note that we use the property `remote.url` as a prefix, which references the url
 
 Bixby provides multiple ways of adding configuration to your capsule, and depending on it's use case, it will be located in different files.
 
-![Primitive Example](../../img/bixby-configuration-info.png 'This is an example for a primitive.')
+```bxb
+capsule-info {
+  display-name (Jovo Test Capsule)
+  developer-name (Jovo)
+  icon-asset (jovo-logo.png)
+  description ("An example capsule, that demonstrates how to integrate a Bixby capsule into a Jovo Application.")
+  website-url (https://jovo.tech)
+  terms-url (https://jovo.tech/terms)
+  search-keywords {
+    keyword(jovo)
+  }
+  dispatch-name (Jovo Test Capsule)
+}
+```
 
 `capsule-info.bxb` holds all of your capsule's information, such as it's display name, a description and certain search keywords.
 
 > Learn more about `capsule-info.bxb` [here](https://bixbydevelopers.com/dev/docs/reference/type/capsule-info).
 
-![Primitive Example](../../img/bixby-configuration-hints.png 'This is an example for a primitive.')
+```bxb
+hints {
+  uncategorized {
+    hint (start Jovo Test Capsule)
+    hint (with Jovo Test Capsule)
+    hint (ask Jovo Test Capsule)
+  }
+}
+```
 
 To be marketplace compliant, your capsule needs to provide hints in a `.hints.bxb` file. Hints are used by Bixby to provide your users with utterance suggestions, so they get an idea of how your capsule works and what they can achieve with it.
 
 > Learn more about hints [here](https://bixbydevelopers.com/dev/docs/reference/type/hints).
 
-![Primitive Example](../../img/bixby-configuration-capsule.png 'This is an example for a primitive.')
+```bxb
+capsule {
+  id (playground.jovo_test)
+  version (0.1.0)
+  format (3)
+  targets {
+    target (bixby-mobile-en-US)
+  }
+  runtime-version (3)
+  capsule-imports {
+    import (bixby.audioPlayer) {
+     	version (1.1.4)
+     	as (audioPlayer)
+    }
+  }
+	permissions {
+  	bixby-user-id-access
+	}
+	store-countries {
+    all
+  }
+  store-sections {
+    section (Utilities)
+  }
+}
+```
 
 Last, but not least, `capsule.bxb` acts as a place for deployment configuration for your capsule, such as it's version, library imports, runtime flags and deployment targets.
 
@@ -197,7 +327,30 @@ Inside `primitives/`, you will find three primitive concepts.
 
 This structure describes session data, which will be passed between Bixby and your Jovo application. Mandatory properties are `_JOVO_SESSION_ID_` and `_JOVO_STATE_`, implementing the Jovo primitives we discussed before. If you want to use your own session values, you need to manually create a respective concept type and add the property in the `JovoSessionData` structure.
 
-![JovoSessionData](../../img/bixby-structures-sessiondata.png 'JovoSessionData')
+```bxb
+structure (JovoSessionData) {
+  description (Session Data)
+
+  property(_JOVO_SESSION_ID_) {
+    type(JovoSessionId)
+    max (One)
+    min (Required)
+  }
+
+  property(_JOVO_STATE_) {
+    type(JovoState)
+    max (One)
+    min (Optional)
+  }
+
+  // Paste your own session properties here
+  property(name) {
+    type (NameInput)
+    max (One)
+    min (Optional)
+  }
+}
+```
 
 Note that your own properties must be optional and of cardinality `One`.
 
@@ -207,7 +360,35 @@ Note that your own properties must be optional and of cardinality `One`.
 
 `JovoResponse` is a structure for the response object, which allows communication between your capsule and your Jovo app. It features all yet available functionality as properties, such as speech output `_JOVO_SPEECH_` of type `JovoSpeech`, `_JOVO_LAYOUT` for adding layouts to your capsule and `_JOVO_SESSION_DATA_` for session data.
 
-![JovoResponse](../../img/bixby-structures-response.png 'JovoResponse')
+```bxb
+structure (JovoResponse) {
+  description (Response from Jovo Framework)
+
+  property (_JOVO_SESSION_DATA_) {
+    type (JovoSessionData)
+    min (Optional)
+    max (One)
+  }
+
+  property(_JOVO_AUDIO_) {
+    type(audioPlayer.AudioInfo)
+    min (Optional)
+    max (One)
+  }
+
+  property(_JOVO_SPEECH_) {
+    type(JovoSpeech)
+    min (Optional)
+    max (One)
+  }
+
+  property (_JOVO_LAYOUT_) {
+    type(JovoLayout)
+    min (Optional)
+    max (One)
+  }
+}
+```
 
 The property `_JOVO_AUDIO_` can be used for playing a playlist of audio files.
 
@@ -217,7 +398,31 @@ The property `_JOVO_AUDIO_` can be used for playing a playlist of audio files.
 
 As of `v3.0.0`, there is only one action predefined in `models/Jovo/actions/`, `JovoPlayAudioAction`. This action features a computed input, meaning that this input does not come from the user directly, it rather derives from other inputs. In this case, a returned `JovoResponse` is used to compute the audio input of type `audioPlayer.Result` by accessing the response property `_JOVO_AUDIO_`.
 
-![JovoPlayAudioAction](../../img/bixby-actions-playaudio.png 'JovoPlayAudioAction')
+```bxb
+action (JovoPlayAudioAction) {
+  description (Takes a JovoRespone as an input and computes a playable audio object.)
+  type(Search)
+
+  collect {
+    input (_JOVO_PREV_RESPONSE_) {
+      type(JovoResponse)
+      min (Required)
+      max (One)
+    }
+
+    computed-input (audio) {
+      type(audioPlayer.Result)
+      compute {
+        intent {
+          goal: audioPlayer.PlayAudio
+          value: $expr(_JOVO_PREV_RESPONSE_._JOVO_AUDIO_)
+        }
+      }
+    }
+  }
+  output (JovoResponse)
+}
+```
 
 > Learn more about playing audio with Bixby [here](./audioplayer).
 
@@ -227,7 +432,78 @@ As of `v3.0.0`, there is only one action predefined in `models/Jovo/actions/`, `
 
 ## Bixby Layouts
 
-> [You can find more about Bixby Layouts support here](./layouts.md './samsung-bixby/layouts').
+While dialogs contain speech output for your user, layouts allow you to display results or prompt the user for interaction, such as providing additional data by selecting an element from a list. Currently, we don't provide dedicated helper functions in the way we do for the Bixby AudioPlayer, but you can use `addLayoutAttribute(key, value)` to add any properties to the layout attribute in your response.
+
+```js
+// @language=javascript
+
+// app.js
+
+LAUNCH() {
+  // A property 'text' will be added to the 'JovoResponse' object inside '_JOVO_LAYOUT_'
+  this.$bixbyCapsule.addLayoutAttribute('text', 'Hello World.');
+
+  this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+}
+
+// @language=typescript
+
+// app.ts
+
+LAUNCH() {
+  // A property 'text' will be added to the 'JovoResponse' object inside '_JOVO_LAYOUT_'
+  this.$bixbyCapsule!.addLayoutAttribute('text', 'Hello World.');
+
+  this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
+}
+```
+
+Now, you have to provide Bixby with enough information, so it knows to expect a layout property `text`. Go ahead and add a primitive `LayoutText` to your `primitives/` folder, then add that property to the `JovoLayout` structure located inside `models/Jovo/structures/`.
+
+```bxb
+text (LayoutText) {
+  description (A text that will be displayed.)
+}
+```
+
+```bxb
+structure (JovoLayout) {
+  description (Layout structure. Add your fields for usage.)
+
+  // Paste your own layout properties here.
+  property (text) {
+    type(LayoutText)
+    min (Optional)
+    max (One)
+  }
+}
+```
+
+Finally, add the property to your layout file. If you are starting with our example capsule, it should be located in `resources/en/layouts/`.
+
+```bxb
+// Result.view.bxb
+
+render {
+  layout {
+    section {
+      content {
+        single-line {
+          text {
+            value("#{value (response._JOVO_LAYOUT_.text)}")
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+When you now launch your capsule, you should see your layout property displayed.
+
+![Layout Example](../../img/bixby-simulator-layout.png 'Your layout property is now being properly displayed.')
+
+> [You can find more about Bixby Layouts support here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/building-views.layouts).
 
 <!--[metadata]: {"description": "Learn the essentials of Bixby and the new platform integration for the Jovo Framework.",
 		"route": "samsung-bixby"}-->
