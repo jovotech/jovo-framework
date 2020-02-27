@@ -2,7 +2,7 @@ import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { ActionBuilder } from '../ActionBuilder';
-import { Action, ActionType } from '../Interfaces';
+import { Action, ActionType, QuickReply } from '../Interfaces';
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
@@ -117,14 +117,16 @@ export class CorePlatformApp extends Jovo {
     return this;
   }
 
-  showQuickReplies(replies: string[]): CorePlatformApp {
+  showQuickReplies(replies: Array<string | QuickReply>): CorePlatformApp {
     this.$output.CorePlatform.Actions.push({
       replies: replies.map((reply) => {
-        return {
-          id: reply,
-          label: reply,
-          value: reply,
-        };
+        return typeof reply === 'string'
+          ? {
+              id: reply,
+              label: reply,
+              value: reply,
+            }
+          : reply;
       }),
       type: ActionType.QuickReply,
     });
