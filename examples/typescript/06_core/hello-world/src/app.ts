@@ -30,7 +30,7 @@ app.setHandler({
 	},
 
 	HelloWorldIntent() {
-		this.$corePlatformApp?.$actions.addQuickReplies(['John', 'Jack', 'Max']);
+		this.$corePlatformApp?.$actions.addQuickReplies(['Joe', 'Jane', 'Max']);
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 
