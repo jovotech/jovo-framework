@@ -1,6 +1,5 @@
 import * as EventEmitter from 'events';
 import _cloneDeep = require('lodash.clonedeep');
-import _get = require('lodash.get');
 import _isEqual = require('lodash.isequal');
 import _merge = require('lodash.merge');
 import _transform = require('lodash.transform');
@@ -45,40 +44,23 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
       if (plugin.config) {
         const constructor = plugin.constructor as new () => Plugin;
         const emptyPluginObject = new constructor();
-        const pluginDefaultConfig = _cloneDeep(emptyPluginObject.config!);
 
-        if (typeof pluginDefaultConfig.enabled === 'undefined') {
-          pluginDefaultConfig.enabled = true;
+        const defaultConfig = _cloneDeep(emptyPluginObject.config!);
+
+        if (typeof defaultConfig.enabled === 'undefined') {
+          defaultConfig.enabled = true;
         }
 
         if (typeof plugin.config.enabled === 'undefined') {
           plugin.config.enabled = true;
         }
 
-        const appConfig = _cloneDeep(this.config);
+        const localAppConfig = _cloneDeep(this.config);
 
-        const constructorConfig = difference(plugin.config, pluginDefaultConfig);
+        const constructorConfig = difference(plugin.config, defaultConfig);
+        const appConfig = localAppConfig.plugin ? localAppConfig.plugin[name] : {};
 
-        for (const prop in plugin.config) {
-          if (plugin.config.hasOwnProperty(prop) && pluginDefaultConfig.hasOwnProperty(prop)) {
-            let val;
-            const appConfigVal = _get(appConfig, `plugin.${name}.${prop}`);
-            if (typeof constructorConfig[prop] !== 'undefined') {
-              val = plugin.config[prop];
-            } else if (typeof appConfigVal !== 'undefined') {
-              val = appConfigVal;
-            } else {
-              val = pluginDefaultConfig[prop];
-            }
-
-            plugin.config[prop] =
-              typeof val === 'object' ? (Array.isArray(val) ? [...val] : { ...val }) : val;
-          } else if (prop !== 'plugin') {
-            Log.verbose(
-              `[${name}] Property '${prop}' passed as config-option for plugin '${name}' but not defined in the default-config. Only properties that exist in the default-configuration can be set!`,
-            );
-          }
-        }
+        plugin.config = _merge(defaultConfig, appConfig, constructorConfig);
 
         if (!this.config.plugin) {
           this.config.plugin = {};
@@ -205,4 +187,5 @@ function difference(aObject: Record<string, any>, aBase: Record<string, any>): R
 
   return changes(aObject, aBase);
 }
+
 // tslint:enable:no-any
