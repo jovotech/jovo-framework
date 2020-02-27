@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-core-platform",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,10 +15,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jovo-db-filedb": "^3.0.4",
-    "jovo-framework": "^3.0.4",
-    "jovo-platform-core": "^3.0.4",
-    "jovo-plugin-debugger": "^3.0.4",
-    "jovo-slu-lex": "^3.0.4"
+    "jovo-db-filedb": "^3.0.5",
+    "jovo-framework": "^3.0.5",
+    "jovo-platform-core": "^3.0.5",
+    "jovo-plugin-debugger": "^3.0.5",
+    "jovo-slu-lex": "^3.0.5"
   }
 }

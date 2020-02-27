@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-videoapp",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.0.4",
-    "jovo-platform-alexa": "^3.0.4",
-    "jovo-plugin-debugger": "^3.0.4"
+    "jovo-framework": "^3.0.5",
+    "jovo-platform-alexa": "^3.0.5",
+    "jovo-plugin-debugger": "^3.0.5"
   }
 }
