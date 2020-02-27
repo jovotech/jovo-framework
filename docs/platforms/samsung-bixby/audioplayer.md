@@ -20,7 +20,7 @@ Go ahead and add the following action to your `actions/` folder:
 
 ```bxb
 action (PlayAudioAction) {
-  description (Collects audio information on endpoint and should pass it to Jvo)
+  description (Collects audio information on endpoint and should pass it to Jovo.)
   type(Search)
 
   collect {
