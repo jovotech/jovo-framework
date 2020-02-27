@@ -172,6 +172,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
  * @param  {Record<string, any>} aBase   Object to compare with
  * @return {Record<string, any>>}        Return a new object who represent the diff
  */
+
 // tslint:disable:no-any
 function difference(aObject: Record<string, any>, aBase: Record<string, any>): Record<string, any> {
   function changes(object: Record<string, any>, base: Record<string, any>): Record<string, any> {
@@ -187,5 +188,3 @@ function difference(aObject: Record<string, any>, aBase: Record<string, any>): R
 
   return changes(aObject, aBase);
 }
-
-// tslint:enable:no-any
