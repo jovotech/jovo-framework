@@ -432,7 +432,7 @@ action (JovoPlayAudioAction) {
 
 ## Bixby Layouts
 
-While dialogs contain speech output for your user, layouts allow you to display results or prompt the user for interaction, such as providing additional data by selecting an element from a list. Currently, we don't provide dedicated helper functions in the way we do for the Bixby AudioPlayer, but you can use `addLayoutAttribute(key, value)` to add any properties to your response.
+While dialogs contain speech output for your user, layouts allow you to display results or prompt the user for interaction, such as providing additional data by selecting an element from a list. Currently, we don't provide dedicated helper functions in the way we do for the Bixby AudioPlayer, but you can use `addLayoutAttribute(key, value)` to add any properties to the layout attribute in your response.
 
 ```js
 // @language=javascript
@@ -470,6 +470,7 @@ text (LayoutText) {
 structure (JovoLayout) {
   description (Layout structure. Add your fields for usage.)
 
+  // Paste your own layout properties here.
   property (text) {
     type(LayoutText)
     min (Optional)
@@ -481,6 +482,8 @@ structure (JovoLayout) {
 Finally, add the property to your layout file. If you are starting with our example capsule, it should be located in `resources/en/layouts/`.
 
 ```bxb
+// Result.view.bxb
+
 render {
   layout {
     section {
