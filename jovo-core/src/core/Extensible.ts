@@ -89,7 +89,7 @@ export abstract class Extensible extends EventEmitter.EventEmitter implements Pl
         plugin.install(this);
 
         if (this.constructor.name === 'App') {
-          Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name}) `);
+          Log.yellow().verbose(`Installed plugin: ${name} (${this.constructor.name})`);
           Log.debug(`${JSON.stringify(plugin.config || {}, null, '\t')}`);
           Log.debug();
         }
