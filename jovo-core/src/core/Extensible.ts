@@ -1,12 +1,12 @@
 import * as EventEmitter from 'events';
-import { ExtensiblePluginConfigs, Plugin, PluginConfig } from './../Interfaces';
-import { Log } from './../util/Log';
-import { ActionSet } from './ActionSet';
-import { Middleware } from './Middleware';
 import _cloneDeep = require('lodash.clonedeep');
 import _isEqual = require('lodash.isequal');
 import _merge = require('lodash.merge');
 import _transform = require('lodash.transform');
+import { ExtensiblePluginConfigs, Plugin, PluginConfig } from './../Interfaces';
+import { Log } from './../util/Log';
+import { ActionSet } from './ActionSet';
+import { Middleware } from './Middleware';
 
 export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfigs;
