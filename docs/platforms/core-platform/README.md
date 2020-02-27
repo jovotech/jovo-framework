@@ -114,6 +114,17 @@ this.$corePlatformApp?.$actions.addSpeech({
 });
 ```
 
+#### Showing Quick Replies
+
+```javascript
+// @language=javascript
+if (this.$corePlatformApp)
+	this.$corePlatformApp.showQuickReplies(['quickReply1', 'quickReply2']);
+
+// @language=typescript
+this.$corePlatformApp?.showQuickReplies(['quickReply1', 'quickReply2']);
+```
+
 #### Adding Actions
 
 Adds the given actions or actions of the given ActionBuilder.
