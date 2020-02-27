@@ -2,7 +2,7 @@ import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { ActionBuilder } from '../ActionBuilder';
-import { Action } from '../Interfaces';
+import { Action, ActionType, QuickReply } from '../Interfaces';
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
@@ -91,23 +91,46 @@ export class CorePlatformApp extends Jovo {
   }
 
   // Output methods
-  setActions(actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.Actions = actions;
+  setActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.Actions =
+      actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addActions(...actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.Actions.push(...actions);
+  addActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.Actions.push(
+      ...(actions instanceof ActionBuilder ? actions.build() : actions),
+    );
     return this;
   }
 
-  setRepromptActions(actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions = actions;
+  setRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions =
+      actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addRepromptActions(...actions: Action[]): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions.push(...actions);
+  addRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
+    this.$output.CorePlatform.RepromptActions.push(
+      ...(actions instanceof ActionBuilder ? actions.build() : actions),
+    );
+    return this;
+  }
+
+  showQuickReplies(replies: Array<string | QuickReply>): CorePlatformApp {
+    this.$output.CorePlatform.Actions.push({
+      replies: replies.map((reply) => {
+        return typeof reply === 'string'
+          ? {
+              id: reply,
+              label: reply,
+              value: reply,
+            }
+          : reply;
+      }),
+      type: ActionType.QuickReply,
+    });
+
     return this;
   }
 }

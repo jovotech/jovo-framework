@@ -5,11 +5,13 @@ Learn more about the Jovo Core Platform, which can be used to deploy a voice exp
 ## Installation
 
 Install the integration into your project directory.
+
 ```sh
 npm install jovo-platform-core --save
 ```
 
-Import the installed module, initialize and add it to the `app` object. 
+Import the installed module, initialize and add it to the `app` object.
+
 ```javascript
 // @language=javascript
 
@@ -46,7 +48,7 @@ The returned object will be an instance of `CorePlatformApp` if the current requ
 
 ## Output
 
-These sections provide an overview of Core Platform specific features for output. \
+These sections provide an overview of Core Platform specific features for output.
 For the basic concept, take a look here: [Basic Concepts > Output](../../basic-concepts/output './output').
 
 ### Actions and the ActionBuilder
@@ -112,66 +114,77 @@ this.$corePlatformApp?.$actions.addSpeech({
 });
 ```
 
-#### Adding Actions
+#### Showing Quick Replies
 
 ```javascript
 // @language=javascript
 if (this.$corePlatformApp)
-	this.$corePlatformApp.addActions({
-		type: ActionType.Speech,
-		plain: 'plainText'
-	});
+	this.$corePlatformApp.showQuickReplies(['quickReply1', 'quickReply2']);
 
 // @language=typescript
-this.$corePlatformApp?.addActions({
-	type: ActionType.Speech,
-	plain: 'plainText'
-});
+this.$corePlatformApp?.showQuickReplies(['quickReply1', 'quickReply2']);
+```
+
+#### Adding Actions
+
+Adds the given actions or actions of the given ActionBuilder.
+
+```javascript
+// @language=javascript
+if (this.$corePlatformApp)
+	this.$corePlatformApp.addActions(this.$corePlatformApp.$actions);
+
+// @language=typescript
+this.$corePlatformApp?.addActions(this.$corePlatformApp?.$actions);
 ```
 
 #### Setting Actions
 
+Sets the current actions to the given actions or to the actions of the given ActionBuilder.
+
+> **INFO** The actions generated for the speech of `tell` and `ask` will NOT be overwritten.
+
 ```javascript
 // @language=javascript
 if (this.$corePlatformApp)
-	this.$corePlatformApp.setActions(
-		this.$actions.addSpeech({ plain: 'text' }).build()
-	);
+	this.$corePlatformApp.setActions(this.$corePlatformApp.$actions);
 
 // @language=typescript
-this.$corePlatformApp?.setActions(
-	this.$actions.addSpeech({ plain: 'text' }).build()
-);
+this.$corePlatformApp?.setActions(this.$corePlatformApp?.$actions);
 ```
 
 #### Adding RepromptActions
 
+Adds the given actions or actions of the given ActionBuilder.
+
 ```javascript
 // @language=javascript
 if (this.$corePlatformApp)
-	this.$corePlatformApp.addRepromptActions({
-		type: ActionType.Speech,
-		plain: 'plainText'
-	});
+	this.$corePlatformApp.addRepromptActions(
+		this.$corePlatformApp.$repromptActions
+	);
 
 // @language=typescript
-this.$corePlatformApp?.addRepromptActions({
-	type: ActionType.Speech,
-	plain: 'plainText'
-});
+this.$corePlatformApp?.addRepromptActions(
+	this.$corePlatformApp?.$repromptActions
+);
 ```
 
 #### Setting RepromptActions
+
+Sets the reprompt actions to the given actions or to the actions of the given ActionBuilder.
+
+> **INFO** The action generated for the reprompt of `ask` will NOT be overwritten.
 
 ```javascript
 // @language=javascript
 if (this.$corePlatformApp)
 	this.$corePlatformApp.setRepromptActions(
-		this.$repromptActions.addSpeech({ plain: 'text' }).build()
+		this.$corePlatformApp.$repromptActions
 	);
 
 // @language=typescript
 this.$corePlatformApp?.setRepromptActions(
-	this.$repromptActions.addSpeech({ plain: 'text' }).build()
+	this.$corePlatformApp?.$repromptActions
 );
 ```

@@ -66,7 +66,7 @@ Every component can be configured using your project's root config file:
 module.exports = {
     // ...
     components: { // contains configuration of every component
-        GetPhoneNumber: { // configuration of `GetPhoneNumber` component
+        'jovo-component-get-phone-number': {
             numberOfFails: 5
         }
     }
@@ -78,7 +78,7 @@ module.exports = {
 const config = {
     // ...
     components: {
-        GetPhoneNumber: {
+        'jovo-component-get-phone-number': {
             numberOfFails: 2
         }
     }
@@ -133,7 +133,7 @@ HelloWorldIntent() {
         }
     };
 
-    this.delegate('ScheduleMeeting', delegationOptions);
+    this.delegate('jovo-component-schedule-meeting', delegationOptions);
 }
 
 // @language=typescript
@@ -147,7 +147,7 @@ HelloWorldIntent() {
         }
     };
 
-    this.delegate('ScheduleMeeting', delegationOptions);
+    this.delegate('jovo-component-schedule-meeting', delegationOptions);
 }
 ```
 
@@ -167,7 +167,7 @@ const delegationOptions = {
     }
 };
 
-this.delegate('ScheduleMeeting', delegationOptions);
+this.delegate('jovo-component-schedule-meeting', delegationOptions);
 
 // @language=typescript
 const delegationOptions: ComponentDelegationOptions = {
@@ -176,7 +176,7 @@ const delegationOptions: ComponentDelegationOptions = {
     }
 };
 
-this.delegate('ScheduleMeeting', delegationOptions);
+this.delegate('jovo-component-schedule-meeting', delegationOptions);
 ```
 
 ## $response
@@ -214,7 +214,7 @@ In your `onCompletedIntent` you have to be prepared to handle all three possible
 ```js
 // @language=javascript
 CompletedIntent() {
-    const response = this.$components.GetPhoneNumber.$response;
+    const response = this.$components['jovo-component-get-phone-number'].$response;
 
     if (response.status === 'REJECTED') {
         // handle REJECTED
@@ -229,7 +229,7 @@ CompletedIntent() {
 
 // @language=typescript
 CompletedIntent() {
-    const response = this.$components.GetPhoneNumber.$response;
+    const response = this.$components['jovo-component-get-phone-number'].$response;
 
     if (response.status === 'REJECTED') {
         // handle REJECTED
