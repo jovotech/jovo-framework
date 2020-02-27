@@ -4,7 +4,6 @@ import {
   AudioActionData,
   ProcessingActionData,
   QuickReply,
-  QuickReplyActionData,
   SpeechActionData,
 } from './Interfaces';
 
@@ -25,8 +24,12 @@ export class ActionBuilder {
     return this;
   }
 
-  addSpeech(data: SpeechActionData): ActionBuilder {
-    this.actions.push({ type: ActionType.Speech, ...data });
+  addSpeech(data: SpeechActionData | string): ActionBuilder {
+    const action =
+      typeof data === 'string'
+        ? { type: ActionType.Speech, plain: data }
+        : { type: ActionType.Speech, ...data };
+    this.actions.push(action);
     return this;
   }
 
