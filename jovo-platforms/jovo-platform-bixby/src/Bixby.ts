@@ -71,6 +71,7 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
       return this.constructor.name === 'BixbyCapsule';
     };
 
+    // tslint:disable-next-line
     BaseApp.prototype.setBixbyHandler = function(...handlers: any[]) {
       for (const obj of handlers) {
         if (typeof obj !== 'object') {
