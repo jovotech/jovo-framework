@@ -17,15 +17,20 @@ You're component has to have the whole package of language model, handler, confi
 
 ## Handler
 
-The component's handler has to be inside a state, which is named after the component, so you don't overwrite any of the user's own intents:
+The component's handler has to have a `START` intent at its root, which the system will route to on delegation. That intent can be used to initialize any kind of data you will need throughout the component as well as begin the conversation with the user:
 
 ```js
 // @language=javascript
 // src/handler.js
 
 module.exports = {
-    GetPhoneNumber: {
-        // intents and states
+    START() {
+        // initialize object which will be used to store session attributes needed for the component,
+        // so we don't overlap with the user's existing session attributes
+        this.$session.$data.[this.getActiveComponent().name] = {};
+        this.$speech.t('start');
+
+        this.ask(this.$speech);
     }
 };
 
@@ -33,29 +38,30 @@ module.exports = {
 // src/handler.ts
 
 const phoneNumberHandler: Handler = {
-    GetPhoneNumber: {
-        // intents and states
+    START() {
+        // initialize object which will be used to store session attributes needed for the component,
+        // so we don't overlap with the user's existing session attributes
+        this.$session.$data[this.getActiveComponent()!.name] = {};
+        this.$speech.t('start');
+
+        this.ask(this.$speech);
     }
 };
 
 export {phoneNumberHandler}; 
 ```
 
-Also, every component has to have a `START` intent at its root, which the system will route to on delegation. That intent can be used to initialize any kind of data you will need throughout the component as well as begin the conversation with the user:
+In the `START` intent you should check if the user has parsed existing data to your component. In the following example, the component checks whether the user has parsed an existing phone number:
 
 ```js
 // @language=javascript
 // src/handler.js
 
 module.exports = {
-    GetPhoneNumber: {
-        START() {
-            // initialize COMPONENT_GetPhoneNumber object which will be used to store session attributes needed for the component,
-            // so we don't overlap with the user's existing session attributes
-            this.$session.$data.COMPONENT_GetPhoneNumber = {};
-            this.$speech.t('start');
-
-            this.ask(this.$speech);
+    START() {
+        // ...
+        if (this.getActiveComponent()!.data.phoneNumber) {
+            // handle case
         }
     }
 };
@@ -64,19 +70,13 @@ module.exports = {
 // src/handler.ts
 
 const phoneNumberHandler: Handler = {
-    GetPhoneNumber: {
-        START() {
-            // initialize COMPONENT_GetPhoneNumber object which will be used to store session attributes needed for the component,
-            // so we don't overlap with the user's existing session attributes
-            this.$session.$data.COMPONENT_GetPhoneNumber = {};
-            this.$speech.t('start');
-
-            this.ask(this.$speech);
+    START() {
+        // ...
+        if (this.getActiveComponent()!.data.phoneNumber) {
+            // handle case
         }
     }
 };
-
-export {phoneNumberHandler}; 
 ```
 
 At the time the component finished, or if there was an error, or the user tried to stop the app, you have to send the component's response using `sendComponentResponse(response)` function. The `response` object has to have the following interface:
@@ -200,7 +200,7 @@ const config = {
         'StopIntent': 'END',
         'AMAZON.YesIntent': 'YesIntent'
     },
-    numberOfFails: 3
+    numberOfQuestions: 3
 };
 
 module.exports = config;
