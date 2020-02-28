@@ -174,7 +174,7 @@ this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
 // Set the display name
 this.$bixbyCapsule.$audioPlayer.setDisplayName(displayName);
 
-// Set whether to wait for TTS to finish, before playing audio. Default is false.
+// Set whether to wait for TTS to finish, before playing audio. Default is true.
 this.$bixbyCapsule.$audioPlayer.waitForTTS(false);
 
 // Or
