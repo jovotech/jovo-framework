@@ -74,7 +74,7 @@ export class BixbyAudioPlayer {
     albumArtUrl: '',
   };
   displayName = '';
-  doNotWaitForTTS?: boolean;
+  doNotWaitForTTS = true;
   repeatMode?: RepeatMode;
   startAudioItemIndex?: number;
 
