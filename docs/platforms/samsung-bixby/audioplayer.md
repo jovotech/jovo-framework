@@ -14,13 +14,15 @@ The AudioPlayer functionality can be used to stream any number of audio files, s
 
 ## Prerequisites
 
+### Provide AudioPlayer-specific Bixby structures
+
 To use the AudioPlayer functionality for Bixby, you need to add and train on a respective action, which will tell Bixby to expect required parameters to construct an audioplayer element.
 
 Go ahead and add the following action to your `actions/` folder:
 
 ```bxb
 action (PlayAudioAction) {
-  description (Collects audio information on endpoint and should pass it to Jvo)
+  description (Collects audio information on endpoint and should pass it to Jovo.)
   type(Search)
 
   collect {
@@ -41,6 +43,62 @@ Now, in your training tool, add a sample utterance for this action. As the goal,
 However, this won't work yet, as Bixby doesn't know where the `JovoResponse` comes from. We need a way of telling Bixby, that the goal is `JovoPlayAudioAction`, but the input property comes from our `PlayAudioAction` we just created. Fortunately, there is a way to achieve this. When editing the training phrase inside the training tool, there is a little grey bar on the left side of the input field. When you click on that, a new window appears, which allows you to create a route for your utterance, specifying what route to take when this utterance is triggered to achieve the desired goal.
 
 ![Training Example](../../img/bixby-training-audio.png 'This is how an example utterance in the training tool looks like.')
+
+### Add a directive to your handler
+
+As soon as your audio response is being handled by Bixby, it sends out a directive to your voice app, indicating that audio is about to be played. You must register that directive in your handler. If you want to return a response before the audio is being played, you need to do that in the directive.
+
+```js
+// @language=javascript
+
+// app.js
+
+app.setHandler({
+	// Handler logic
+
+	AUDIOPLAYER: {
+		'BixbyCapsule.AudioPlaying'() {
+			console.log('BixbyCapsule.AudioPlaying');
+
+			this.tell('Playing audio.');
+		}
+	}
+});
+
+// @language=typescript
+
+// app.ts
+
+app.setHandler({
+	// Handler logic
+
+	AUDIOPLAYER: {
+		'BixbyCapsule.AudioPlaying'() {
+			console.log('BixbyCapsule.AudioPlaying');
+
+			this.tell('Playing audio.');
+		}
+	}
+});
+```
+
+The last thing you need to do is to register that directive inside your `endpoints.bxb` file.
+
+```bxb
+// endpoints.bxb
+
+endpoints {
+  action-endpoints {
+	// Endpoints
+
+    action-endpoint (JovoPlayAudioAction) {
+      remote-endpoint ("{remote.url}?directive=AudioPlaying") {
+        method (POST)
+      }
+    }
+  }
+}
+```
 
 ## Usage
 
@@ -116,7 +174,7 @@ this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
 // Set the display name
 this.$bixbyCapsule.$audioPlayer.setDisplayName(displayName);
 
-// Set whether to wait for TTS to finish, before playing audio. Default is false.
+// Set whether to wait for TTS to finish, before playing audio. Default is true.
 this.$bixbyCapsule.$audioPlayer.waitForTTS(false);
 
 // Or
@@ -163,7 +221,7 @@ this.$bixbyCapsule.$audioPlayer.setMetaData({
 // Set the display name
 this.$bixbyCapsule!.$audioPlayer!.setDisplayName(displayName);
 
-// Set whether to wait for TTS to finish, before playing audio. Default is false.
+// Set whether to wait for TTS to finish, before playing audio. Default is true.
 this.$bixbyCapsule!.$audioPlayer!.waitForTTS(false);
 
 // Or

@@ -1,8 +1,9 @@
-import { Plugin } from 'jovo-core';
+import _set from 'lodash.set';
+import { Plugin, EnumRequestType } from 'jovo-core';
 import { Bixby } from '../Bixby';
 import { BixbyCapsule } from '..';
+import { BixbyRequest } from '../core/BixbyRequest';
 import { BixbyResponse } from '../core/BixbyResponse';
-import _set from 'lodash.set';
 
 export type RepeatMode = 'OFF' | 'ALL' | 'ONE';
 // TODO what formats are possible
@@ -28,8 +29,28 @@ export interface AudioInfo {
 
 export class BixbyAudioPlayerPlugin implements Plugin {
   install(bixby: Bixby) {
+    bixby.middleware('$type')!.use(this.type.bind(this));
+    bixby.middleware('$session')!.use(this.session.bind(this));
     bixby.middleware('$output')!.use(this.output.bind(this));
+
     BixbyCapsule.prototype.$audioPlayer = new BixbyAudioPlayer();
+  }
+
+  type(capsule: BixbyCapsule) {
+    const request = capsule.$request as BixbyRequest;
+    if (request.directive === 'AudioPlaying') {
+      capsule.$type = {
+        type: EnumRequestType.AUDIOPLAYER,
+        subType: 'BixbyCapsule.AudioPlaying',
+      };
+    }
+  }
+
+  session(capsule: BixbyCapsule) {
+    // Reset AudioPlayer on a new request.
+    if (capsule.$type && capsule.$type.type === EnumRequestType.LAUNCH) {
+      BixbyCapsule.prototype.$audioPlayer = new BixbyAudioPlayer();
+    }
   }
 
   output(capsule: BixbyCapsule) {
@@ -53,7 +74,7 @@ export class BixbyAudioPlayer {
     albumArtUrl: '',
   };
   displayName = '';
-  doNotWaitForTTS?: boolean;
+  doNotWaitForTTS = false;
   repeatMode?: RepeatMode;
   startAudioItemIndex?: number;
 

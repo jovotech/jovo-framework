@@ -5,7 +5,8 @@ import { VivContext, BixbyRequestJSON } from './Interfaces';
 export class BixbyRequest implements JovoRequest {
   vivContext?: VivContext;
   sessionData: SessionData = {};
-  intent = 'LAUNCH';
+  intent: string | undefined;
+  directive: string | undefined;
   inputs: { [key: string]: string } = {};
 
   toJSON() {
@@ -33,6 +34,8 @@ export class BixbyRequest implements JovoRequest {
       }
     }
     request.intent = _get(query, 'intent', 'LAUNCH');
+    request.directive = _get(query, 'directive');
+
     return request;
   }
 
