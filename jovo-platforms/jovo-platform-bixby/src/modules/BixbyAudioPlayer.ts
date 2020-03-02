@@ -104,7 +104,7 @@ export class BixbyAudioPlayer {
   }
 
   play(item: Stream) {
-    this.addAudioStream(item);
+    this.setAudioStream(item);
     return this;
   }
 
@@ -126,6 +126,11 @@ export class BixbyAudioPlayer {
       this.audioItem.stream = [];
     }
     this.audioItem.stream.push(...items);
+    return this;
+  }
+
+  setAudioStream(item: Stream) {
+    this.audioItem.stream = [item];
     return this;
   }
 

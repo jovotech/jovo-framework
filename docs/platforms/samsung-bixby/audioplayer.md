@@ -6,6 +6,7 @@ Learn more about how to use the Bixby AudioPlayer functionality.
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
   - [Play](#play)
+  - [Enqueue](#enqueue)
   - [Meta Data](#meta-data)
 
 ## Introduction
@@ -133,14 +134,7 @@ this.$bixbyCapsule.$audioPlayer.play({
 });
 
 // Alternative function headers
-this.$bixbyCapsule.$audioPlayer.enqueue({ url, format });
-this.$bixbyCapsule.$audioPlayer.addAudioStream({ url, format });
-
-// You can also add an array of audio items
-this.$bixbyCapsule.$audioPlayer.addAudioStreams([
-	{ url1, format },
-	{ url2, format }
-]);
+this.$bixbyCapsule.$audioPlayer.setAudioStream({ url, format });
 
 // @language=typescript
 
@@ -156,10 +150,51 @@ this.$bixbyCapsule!.$audioPlayer!.play({
 });
 
 // Alternative function headers
+this.$bixbyCapsule!.$audioPlayer!.setAudioStream({ url, format });
+```
+
+### Enqueue
+
+```javascript
+// @language=javascript
+
+// Enqueue an audio stream into an existing playlist.
+this.$bixbyCapsule.$audioPlayer.enqueue({ url, format });
+
+// You can optionally specify a token and an offset in ms.
+this.$bixbyCapsule.$audioPlayer.enqueue({
+	url,
+	format,
+	token,
+	offsetInMilliseconds
+});
+
+// Alternative function headers
+this.$bixbyCapsule.$audioPlayer.addAudioStream({ url, format });
+
+// You can also add an array of audio items.
+this.$bixbyCapsule.$audioPlayer.addAudioStreams([
+	{ url1, format },
+	{ url2, format }
+]);
+
+// @language=typescript
+
+// Enqueue an audio stream into an existing playlist.
 this.$bixbyCapsule!.$audioPlayer!.enqueue({ url, format });
+
+// You can optionally specify a token and an offset in ms.
+this.$bixbyCapsule!.$audioPlayer!.enqueue({
+	url,
+	format,
+	token,
+	offsetInMilliseconds
+});
+
+// Alternative function headers
 this.$bixbyCapsule!.$audioPlayer!.addAudioStream({ url, format });
 
-// You can also add an array of audio items
+// You can also add an array of audio items.
 this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
 	{ url1, format },
 	{ url2, format }
