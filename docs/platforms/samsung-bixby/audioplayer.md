@@ -6,6 +6,7 @@ Learn more about how to use the Bixby AudioPlayer functionality.
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
   - [Play](#play)
+  - [Enqueue](#enqueue)
   - [Meta Data](#meta-data)
 
 ## Introduction
@@ -121,48 +122,98 @@ this.$bixbyCapsule!.$audioPlayer!
 ```javascript
 // @language=javascript
 
-// Play audio file from url with specified format (e.g. audio/mp3)
-this.$bixbyCapsule.$audioPlayer.play({ url, format });
+// Play a single audio file from url with specified format (e.g. audio/mp3)
+this.$bixbyCapsule.$audioPlayer.play({ stream: { url } });
 
-// You can optionally specify a token and an offset in ms
+// You can optionally specify the following properties. If not given, default values will be used.
 this.$bixbyCapsule.$audioPlayer.play({
-	url,
-	format,
-	token,
-	offsetInMilliseconds
+	id,
+	stream: { url, format },
+	title,
+	subtitle,
+	artist,
+	albumArtUrl,
+	duration,
+	albumName
 });
 
 // Alternative function headers
-this.$bixbyCapsule.$audioPlayer.enqueue({ url, format });
-this.$bixbyCapsule.$audioPlayer.addAudioStream({ url, format });
+this.$bixbyCapsule.$audioPlayer.setAudioStream({ stream: { url } });
 
-// You can also add an array of audio items
+// @language=typescript
+
+// Play a single audio file from url with specified format (e.g. audio/mp3)
+this.$bixbyCapsule!.$audioPlayer!.play({ stream: { url } });
+
+// You can optionally specify the following properties. If not given, default values will be used.
+this.$bixbyCapsule!.$audioPlayer!.play({
+	id,
+	stream: { url, format },
+	title,
+	subtitle,
+	artist,
+	albumArtUrl,
+	duration,
+	albumName
+});
+
+// Alternative function headers
+this.$bixbyCapsule!.$audioPlayer!.setAudioStream({ stream: { url } });
+```
+
+### Enqueue
+
+```javascript
+// @language=javascript
+
+// Enqueue an audio stream into an existing playlist.
+this.$bixbyCapsule.$audioPlayer.enqueue({ stream: { url } });
+
+// You can optionally specify the following properties. If not given, default values will be used.
+this.$bixbyCapsule.$audioPlayer.enqueue({
+	id,
+	stream: { url, format },
+	title,
+	subtitle,
+	artist,
+	albumArtUrl,
+	duration,
+	albumName
+});
+
+// Alternative function headers
+this.$bixbyCapsule.$audioPlayer.addAudioStream({ stream: { url } });
+
+// You can also add an array of audio items.
 this.$bixbyCapsule.$audioPlayer.addAudioStreams([
-	{ url1, format },
-	{ url2, format }
+	{ stream: { url1 } },
+	{ stream: { url2 } },
 ]);
 
 // @language=typescript
 
-// Play audio file from url with specified format (e.g. audio/mp3)
-this.$bixbyCapsule!.$audioPlayer!.play({ url, format });
+// Enqueue an audio stream into an existing playlist.
+this.$bixbyCapsule!.$audioPlayer!.enqueue({ stream: { url } });
 
-// You can optionally specify a token and an offset in ms
-this.$bixbyCapsule!.$audioPlayer!.play({
-	url,
-	format,
-	token,
-	offsetInMilliseconds
+// You can optionally specify the following properties. If not given, default values will be used.
+this.$bixbyCapsule!.$audioPlayer!.enqueue({
+	id,
+	stream: { url, format },
+	title,
+	subtitle,
+	artist,
+	albumArtUrl,
+	duration,
+	albumName
 });
 
 // Alternative function headers
-this.$bixbyCapsule!.$audioPlayer!.enqueue({ url, format });
-this.$bixbyCapsule!.$audioPlayer!.addAudioStream({ url, format });
+this.$bixbyCapsule!.$audioPlayer!.addAudioStream({ stream: { url } });
 
-// You can also add an array of audio items
+// You can also add an array of audio items.
 this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
-	{ url1, format },
-	{ url2, format }
+	{ stream: { url1 } },
+	{ stream: { url2 } },
 ]);
 ```
 
@@ -171,7 +222,7 @@ this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
 ```javascript
 // @language=javascript
 
-// Set the display name
+// Set the display name.
 this.$bixbyCapsule.$audioPlayer.setDisplayName(displayName);
 
 // Set whether to wait for TTS to finish, before playing audio. Default is true.
@@ -183,38 +234,8 @@ this.$bixbyCapsule.$audioPlayer.setDoNotWaitForTTS(true);
 // If you have multiple audio items in the queue, you can specify a starting index, on which audio file the audioplayer is going to start
 this.$bixbyCapsule.$audioPlayer.setStartAudioItemIndex(index);
 
-// Sets an id for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setId(id);
-
-// Sets a title for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setTitle(title);
-
-// Sets subtitles for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setSubtitle(subtitle);
-
-// Sets the artist for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setArtist(artist);
-
-// Sets the album art for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setAlbumArt(url);
-
-// Sets an album name for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setAlbumName(name);
-
-// Sets a duration for the audio item containing your audio streams
-this.$bixbyCapsule.$audioPlayer.setDuration(duration);
-
-// You can also choose to set the whole audio item with it's metadata and audio streams
-this.$bixbyCapsule.$audioPlayer.setMetaData({
-	albumArtUrl,
-	albumName,
-	artist,
-	duration,
-	id,
-	stream,
-	subtitle,
-	title,
-});
+// Set a repeat mode for your playlist. Possible values include OFF, ALL and NONE.
+this.$bixbyCapsule.$audioPlayer.setRepeatMode(mode);
 
 // @language=typescript
 
@@ -230,38 +251,8 @@ this.$bixbyCapsule!.$audioPlayer!.setDoNotWaitForTTS(true);
 // If you have multiple audio items in the queue, you can specify a starting index, on which audio file the audioplayer is going to start
 this.$bixbyCapsule!.$audioPlayer!.setStartAudioItemIndex(index);
 
-// Sets an id for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setId(id);
-
-// Sets a title for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setTitle(title);
-
-// Sets subtitles for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setSubtitle(subtitle);
-
-// Sets the artist for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setArtist(artist);
-
-// Sets the album art for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setAlbumArt(url);
-
-// Sets an album name for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setAlbumName(name);
-
-// Sets a duration for the audio item containing your audio streams
-this.$bixbyCapsule!.$audioPlayer!.setDuration(duration);
-
-// You can also choose to set the whole audio item with it's metadata and audio streams
-this.$bixbyCapsule!.$audioPlayer!.setMetaData({
-	albumArtUrl,
-	albumName,
-	artist,
-	duration,
-	id,
-	stream,
-	subtitle,
-	title,
-});
+// Set a repeat mode for your playlist. Possible values include OFF, ALL and NONE.
+this.$bixbyCapsule!.$audioPlayer!.setRepeatMode(mode);
 ```
 
 <!--[metadata]: {"description": "Learn more about how to use the Bixby AudioPlayer functionality.",
