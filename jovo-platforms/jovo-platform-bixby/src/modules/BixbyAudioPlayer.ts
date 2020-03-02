@@ -17,12 +17,12 @@ export interface Stream {
 }
 
 export interface AudioInfo {
-  id: string;
-  stream?: Stream[];
-  title: string;
+  id?: string;
+  stream: Stream[];
+  title?: string;
   subtitle?: string;
-  artist: string;
-  albumArtUrl: string;
+  artist?: string;
+  albumArtUrl?: string;
   duration?: number;
   albumName?: string;
 }
@@ -59,7 +59,7 @@ export class BixbyAudioPlayerPlugin implements Plugin {
       capsule.$response = new BixbyResponse();
     }
 
-    if (capsule.$audioPlayer && capsule.$audioPlayer.audioItem.stream) {
+    if (capsule.$audioPlayer && capsule.$audioPlayer.audioItem.length > 0) {
       _set(capsule.$response, '_JOVO_AUDIO_', capsule.$audioPlayer);
     }
   }
@@ -67,13 +67,8 @@ export class BixbyAudioPlayerPlugin implements Plugin {
 
 export class BixbyAudioPlayer {
   readonly category = 'MUSIC';
-  audioItem: AudioInfo = {
-    id: '',
-    title: '',
-    artist: '',
-    albumArtUrl: '',
-  };
-  displayName = '';
+  audioItem: AudioInfo[] = [];
+  displayName = 'Jovo AudioStream';
   doNotWaitForTTS = false;
   repeatMode?: RepeatMode;
   startAudioItemIndex?: number;
@@ -103,75 +98,59 @@ export class BixbyAudioPlayer {
     return this;
   }
 
-  play(item: Stream) {
+  play(item: AudioInfo) {
     this.setAudioStream(item);
     return this;
   }
 
-  enqueue(item: Stream) {
+  enqueue(item: AudioInfo) {
     this.addAudioStream(item);
     return this;
   }
 
-  addAudioStream(item: Stream) {
-    if (!this.audioItem.stream) {
-      this.audioItem.stream = [];
+  addAudioStream(item: AudioInfo) {
+    // Create default values for obligatory properties.
+    if (!item.title) {
+      item.title = 'AudioStream';
     }
-    this.audioItem.stream.push(item);
-    return this;
-  }
 
-  addAudioStreams(items: Stream[]) {
-    if (!this.audioItem.stream) {
-      this.audioItem.stream = [];
+    if (!item.artist) {
+      item.artist = 'Bixby';
     }
-    this.audioItem.stream.push(...items);
+
+    if (!item.id) {
+      item.id = Date.now().toString();
+    }
+
+    if (!item.albumArtUrl) {
+      item.albumArtUrl = 'https://test.jpg';
+    }
+
+    if (item.stream) {
+      for (const audio of item.stream) {
+        if (!audio.format) {
+          audio.format = 'audio/mp3';
+        }
+      }
+    }
+
+    this.audioItem.push(item);
+
     return this;
   }
 
-  setAudioStream(item: Stream) {
-    this.audioItem.stream = [item];
+  addAudioStreams(items: AudioInfo[]) {
+    for (const item of items) {
+      this.addAudioStream(item);
+    }
+
     return this;
   }
 
-  // -- Helper functions for AudioItem MetaData --
-  setId(id: string) {
-    this.audioItem.id = id;
-    return this;
-  }
+  setAudioStream(item: AudioInfo) {
+    this.audioItem = [];
+    this.addAudioStream(item);
 
-  setTitle(title: string) {
-    this.audioItem.title = title;
-    return this;
-  }
-
-  setSubtitle(subtitle: string) {
-    this.audioItem.subtitle = subtitle;
-    return this;
-  }
-
-  setArtist(artist: string) {
-    this.audioItem.artist = artist;
-    return this;
-  }
-
-  setAlbumArt(url: string) {
-    this.audioItem.albumArtUrl = url;
-    return this;
-  }
-
-  setAlbumName(name: string) {
-    this.audioItem.albumName = name;
-    return this;
-  }
-
-  setDuration(duration: number) {
-    this.audioItem.duration = duration;
-    return this;
-  }
-
-  setMetaData(data: AudioInfo) {
-    Object.assign(this.audioItem, data);
     return this;
   }
 }
