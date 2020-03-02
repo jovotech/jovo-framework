@@ -6,7 +6,6 @@ interface AppDashbotConfig {
   DashbotAlexa?: AlexaConfig;
   DashbotGoogleAssistant?: GoogleAssistantConfig;
   DashbotDialogflow?: DialogflowConfig;
-
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
