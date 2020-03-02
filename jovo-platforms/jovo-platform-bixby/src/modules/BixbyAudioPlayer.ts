@@ -11,7 +11,7 @@ export type Format = '';
 
 export interface Stream {
   url: string;
-  format: string;
+  format?: string;
   token?: string;
   offsetInMilliseconds?: number;
 }
