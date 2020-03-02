@@ -123,12 +123,12 @@ this.$bixbyCapsule!.$audioPlayer!
 // @language=javascript
 
 // Play a single audio file from url with specified format (e.g. audio/mp3)
-this.$bixbyCapsule.$audioPlayer.play({ stream: [{ url }] });
+this.$bixbyCapsule.$audioPlayer.play({ stream: { url } });
 
 // You can optionally specify the following properties. If not given, default values will be used.
 this.$bixbyCapsule.$audioPlayer.play({
 	id,
-	stream: [{ url, format }],
+	stream: { url, format },
 	title,
 	subtitle,
 	artist,
@@ -138,17 +138,17 @@ this.$bixbyCapsule.$audioPlayer.play({
 });
 
 // Alternative function headers
-this.$bixbyCapsule.$audioPlayer.setAudioStream({ stream: [{ url }] });
+this.$bixbyCapsule.$audioPlayer.setAudioStream({ stream: { url } });
 
 // @language=typescript
 
 // Play a single audio file from url with specified format (e.g. audio/mp3)
-this.$bixbyCapsule!.$audioPlayer!.play({ stream: [{ url }] });
+this.$bixbyCapsule!.$audioPlayer!.play({ stream: { url } });
 
 // You can optionally specify the following properties. If not given, default values will be used.
 this.$bixbyCapsule!.$audioPlayer!.play({
 	id,
-	stream: [{ url, format }],
+	stream: { url, format },
 	title,
 	subtitle,
 	artist,
@@ -158,7 +158,7 @@ this.$bixbyCapsule!.$audioPlayer!.play({
 });
 
 // Alternative function headers
-this.$bixbyCapsule!.$audioPlayer!.setAudioStream({ stream: [{ url }] });
+this.$bixbyCapsule!.$audioPlayer!.setAudioStream({ stream: { url } });
 ```
 
 ### Enqueue
@@ -167,12 +167,12 @@ this.$bixbyCapsule!.$audioPlayer!.setAudioStream({ stream: [{ url }] });
 // @language=javascript
 
 // Enqueue an audio stream into an existing playlist.
-this.$bixbyCapsule.$audioPlayer.enqueue({ stream: [{ url }] });
+this.$bixbyCapsule.$audioPlayer.enqueue({ stream: { url } });
 
 // You can optionally specify the following properties. If not given, default values will be used.
 this.$bixbyCapsule.$audioPlayer.enqueue({
 	id,
-	stream: [{ url, format }],
+	stream: { url, format },
 	title,
 	subtitle,
 	artist,
@@ -182,23 +182,23 @@ this.$bixbyCapsule.$audioPlayer.enqueue({
 });
 
 // Alternative function headers
-this.$bixbyCapsule.$audioPlayer.addAudioStream({ stream: [{ url }] });
+this.$bixbyCapsule.$audioPlayer.addAudioStream({ stream: { url } });
 
 // You can also add an array of audio items.
 this.$bixbyCapsule.$audioPlayer.addAudioStreams([
-	{ stream: [{ url1 }] },
-	{ stream: [{ url2 }] },
+	{ stream: { url1 } },
+	{ stream: { url2 } },
 ]);
 
 // @language=typescript
 
 // Enqueue an audio stream into an existing playlist.
-this.$bixbyCapsule!.$audioPlayer!.enqueue({ stream: [{ url }] });
+this.$bixbyCapsule!.$audioPlayer!.enqueue({ stream: { url } });
 
 // You can optionally specify the following properties. If not given, default values will be used.
 this.$bixbyCapsule!.$audioPlayer!.enqueue({
 	id,
-	stream: [{ url, format }],
+	stream: { url, format },
 	title,
 	subtitle,
 	artist,
@@ -208,12 +208,12 @@ this.$bixbyCapsule!.$audioPlayer!.enqueue({
 });
 
 // Alternative function headers
-this.$bixbyCapsule!.$audioPlayer!.addAudioStream({ stream: [{ url }] });
+this.$bixbyCapsule!.$audioPlayer!.addAudioStream({ stream: { url } });
 
 // You can also add an array of audio items.
 this.$bixbyCapsule!.$audioPlayer!.addAudioStreams([
-	{ stream: [{ url1 }] },
-	{ stream: [{ url2 }] },
+	{ stream: { url1 } },
+	{ stream: { url2 } },
 ]);
 ```
 

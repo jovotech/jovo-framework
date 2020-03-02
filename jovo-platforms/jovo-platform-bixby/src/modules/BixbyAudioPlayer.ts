@@ -18,7 +18,7 @@ export interface Stream {
 
 export interface AudioInfo {
   id?: string;
-  stream: Stream[];
+  stream: Stream;
   title?: string;
   subtitle?: string;
   artist?: string;
@@ -125,13 +125,9 @@ export class BixbyAudioPlayer {
     if (!item.albumArtUrl) {
       item.albumArtUrl = 'https://test.jpg';
     }
-
+    
     if (item.stream) {
-      for (const audio of item.stream) {
-        if (!audio.format) {
-          audio.format = 'audio/mp3';
-        }
-      }
+      item.stream.format = 'audio/mp3';
     }
 
     this.audioItem.push(item);
