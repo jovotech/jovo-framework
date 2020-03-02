@@ -126,7 +126,7 @@ export class BixbyAudioPlayer {
       item.albumArtUrl = 'https://test.jpg';
     }
 
-    if (!item.stream.format) {
+    if (item.stream && !item.stream.format) {
       item.stream.format = 'audio/mp3';
     }
 
