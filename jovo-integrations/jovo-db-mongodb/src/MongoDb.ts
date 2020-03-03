@@ -27,7 +27,7 @@ export class MongoDb implements Db {
     }
   }
 
-  async install(app: BaseApp) {
+  install(app: BaseApp) {
     this.errorHandling();
 
     if (_get(app.config, 'db.default')) {
@@ -38,6 +38,7 @@ export class MongoDb implements Db {
       app.$db = this;
     }
   }
+
   async initClient() {
     if (!this.client && this.config.uri) {
       this.client = await this.getConnectedMongoClient(this.config.uri);

@@ -42,6 +42,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
 
     this.actionSet = new ActionSet(
       [
+        'setup',
         '$init',
         '$request',
         '$session',

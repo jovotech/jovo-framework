@@ -14,6 +14,7 @@ export abstract class Platform<
     super(config);
     this.actionSet = new ActionSet(
       [
+        'setup',
         '$init',
         '$request',
         '$session',

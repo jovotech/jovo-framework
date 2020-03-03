@@ -55,7 +55,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     this.actionSet = new ActionSet(['retrieve'], this);
   }
 
-  async install(app: BaseApp) {
+  install(app: BaseApp) {
     super.install(app);
     this.baseApp = app;
     app.middleware('setup')!.use(this.retrieveSpreadsheetData.bind(this));
