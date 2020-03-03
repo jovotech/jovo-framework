@@ -327,16 +327,22 @@ export class JovoDebugger implements Plugin {
 
     const files = await fsreaddir(this.config.languageModelDir);
     for (const file of files) {
-      if (!file.endsWith('.json')) {
+      if (!file.endsWith('.json') && !file.endsWith('.js')) {
         continue;
       }
-      const locale = file.substring(0, file.indexOf('.json'));
-      const fileContent: string = await fsreadFile(
-        path.join(this.config.languageModelDir, file),
-        'utf8',
-      );
 
-      languageModel[locale] = JSON.parse(fileContent);
+      if (file.endsWith('.json')) {
+        const locale = file.substring(0, file.indexOf('.json'));
+        const fileContent = await fsreadFile(path.join(this.config.languageModelDir, file), 'utf8');
+        languageModel[locale] = JSON.parse(fileContent);
+      } else if (file.endsWith('.js')) {
+        const locale = file.substring(0, file.indexOf('.js'));
+        languageModel[locale] = require(path.join(
+          process.cwd(),
+          this.config.languageModelDir,
+          file,
+        ));
+      }
     }
     this.socket.emit('languageModelEmit', languageModel);
 
