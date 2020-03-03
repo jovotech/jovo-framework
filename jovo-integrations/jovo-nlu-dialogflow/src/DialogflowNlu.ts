@@ -61,7 +61,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
     return this.constructor.name;
   }
 
-  async install(parent: Extensible) {
+  install(parent: Extensible) {
     if (!(parent instanceof Platform)) {
       throw new JovoError(
         `'${this.name}' has to be an immediate plugin of a platform!`,
@@ -69,12 +69,16 @@ export class DialogflowNlu extends Extensible implements Plugin {
         this.name,
       );
     }
+
+    parent.middleware('setup')!.use(this.setup.bind(this));
     parent.middleware('after.$init')!.use(this.afterInit.bind(this));
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
 
     this.parentName = (parent as Plugin).name || parent.constructor.name;
+  }
 
+  async setup(handleRequest: HandleRequest) {
     const jwtClient = await this.initializeJWT();
     if (jwtClient) {
       await jwtClient.authorize();

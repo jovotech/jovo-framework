@@ -1,7 +1,10 @@
+import * as fs from 'fs';
+import { JWT } from 'google-auth-library';
 import {
   AxiosRequestConfig,
   ErrorCode,
   Extensible,
+  HandleRequest,
   HttpService,
   Jovo,
   JovoError,
@@ -10,12 +13,10 @@ import {
   PluginConfig,
   SpeechBuilder,
 } from 'jovo-core';
-import { JWT } from 'google-auth-library';
 import { promisify } from 'util';
-import * as fs from 'fs';
 import { SynthesisRequest, SynthesisResponse } from './Interfaces';
-import _merge = require('lodash.merge');
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
 const readFile = promisify(fs.readFile);
@@ -39,7 +40,7 @@ export class GCloudTts implements Plugin {
     return this.constructor.name;
   }
 
-  async install(parent: Extensible) {
+  install(parent: Extensible) {
     if (!(parent instanceof Platform)) {
       throw new JovoError(
         `'${this.name}' has to be an immediate plugin of a platform!`,
@@ -55,8 +56,11 @@ export class GCloudTts implements Plugin {
       );
     }
 
+    parent.middleware('setup')!.use(this.setup.bind(this));
     parent.middleware('$tts')!.use(this.tts.bind(this));
+  }
 
+  async setup(handleRequest: HandleRequest) {
     const jwtClient = await this.initializeJWT();
     if (jwtClient) {
       await jwtClient.authorize();
