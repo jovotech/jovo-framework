@@ -33,6 +33,7 @@ export class Autopilot extends Platform<AutopilotRequest, AutopilotResponse> {
 
     this.actionSet = new ActionSet(
       [
+        'setup',
         '$init',
         '$request',
         '$session',

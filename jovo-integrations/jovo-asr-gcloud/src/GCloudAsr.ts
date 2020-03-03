@@ -6,6 +6,7 @@ import {
   EnumRequestType,
   ErrorCode,
   Extensible,
+  HandleRequest,
   HttpService,
   Jovo,
   JovoError,
@@ -42,7 +43,7 @@ export class GCloudAsr implements Plugin {
     return this.constructor.name;
   }
 
-  async install(parent: Extensible) {
+  install(parent: Extensible) {
     if (!(parent instanceof Platform)) {
       throw new JovoError(
         `'${this.name}' has to be an immediate plugin of a platform!`,
@@ -58,8 +59,11 @@ export class GCloudAsr implements Plugin {
       );
     }
 
+    parent.middleware('setup')!.use(this.setup.bind(this));
     parent.middleware('$asr')!.use(this.asr.bind(this));
+  }
 
+  async setup(handleRequest: HandleRequest) {
     const jwtClient = await this.initializeJWT();
     if (jwtClient) {
       await jwtClient.authorize();
