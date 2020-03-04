@@ -44,7 +44,7 @@ beforeEach(() => {
   t = autopilot.makeTestSuite();
 });
 
-beforeAll(() => {
+afterAll(() => {
   resetDatabase();
 });
 
