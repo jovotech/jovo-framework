@@ -1,4 +1,4 @@
-import { JovoResponse, SpeechBuilder, SessionConstants, SessionAttributes, SessionData } from 'jovo-core';
+import { JovoResponse, SpeechBuilder, SessionConstants, SessionData } from 'jovo-core';
 
 import { AutopilotSpeechBuilder } from './AutopilotSpeechBuilder';
 

@@ -3,7 +3,6 @@ import {
   HandleRequest,
   JovoError,
   ErrorCode,
-  JovoResponse,
   EnumRequestType,
 } from 'jovo-core';
 import { Autopilot } from '../Autopilot';
