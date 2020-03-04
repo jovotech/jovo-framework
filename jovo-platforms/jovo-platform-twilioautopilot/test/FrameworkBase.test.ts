@@ -44,8 +44,8 @@ beforeEach(() => {
   t = autopilot.makeTestSuite();
 });
 
-afterAll(() => {
-  // resetDatabase();
+beforeAll(() => {
+  resetDatabase();
 });
 
 describe('test request types', () => {
