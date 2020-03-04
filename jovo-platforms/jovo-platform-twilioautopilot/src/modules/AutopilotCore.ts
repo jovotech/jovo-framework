@@ -11,6 +11,7 @@ import { AutopilotBot } from '../core/AutopilotBot';
 import { AutopilotRequest } from '../core/AutopilotRequest';
 import { AutopilotResponse } from '../core/AutopilotResponse';
 import { AutopilotUser } from '../core/AutopilotUser';
+import { AutopilotSpeechBuilder } from '../core/AutopilotSpeechBuilder';
 
 export class AutopilotCore implements Plugin {
   install(autopilot: Autopilot) {
@@ -90,7 +91,7 @@ export class AutopilotCore implements Plugin {
     const tell = output.tell;
     if (tell) {
       const sayAction = {
-        say: tell.speech,
+        say: AutopilotSpeechBuilder.toSSML(tell.speech as string),
       };
       response.actions.unshift(sayAction);
     }
@@ -98,7 +99,7 @@ export class AutopilotCore implements Plugin {
     const ask = output.ask;
     if (ask) {
       const sayAction = {
-        say: ask.speech,
+        say: AutopilotSpeechBuilder.toSSML(ask.speech as string),
       };
       const listenAction = {
         listen: true,
