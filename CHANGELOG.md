@@ -1,7 +1,7 @@
 # Jovo Framework Changelog
 
 
-## 3.0.6 (2020-02-04)
+## 3.0.6 (2020-03-04)
 
 #### :bug: Bug Fix
  * `jovo-platform-bixby` [#680](https://github.com/jovotech/jovo-framework/pull/680) Adjust Bixby AudioPlayer Functionality ([@rubenaeg](https://github.com/rubenaeg))
