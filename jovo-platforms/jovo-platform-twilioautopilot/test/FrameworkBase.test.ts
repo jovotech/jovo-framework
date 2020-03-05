@@ -45,7 +45,7 @@ beforeEach(() => {
 });
 
 afterAll(() => {
-  // resetDatabase();
+  resetDatabase();
 });
 
 describe('test request types', () => {
