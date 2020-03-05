@@ -1,5 +1,6 @@
-import { JovoResponse, SpeechBuilder, SessionConstants } from 'jovo-core';
-import { SessionAttributes, SessionData } from 'jovo-core/dist/src/Interfaces';
+import { JovoResponse, SpeechBuilder, SessionConstants, SessionData } from 'jovo-core';
+
+import { AutopilotSpeechBuilder } from './AutopilotSpeechBuilder';
 
 /**
  * @see https://www.twilio.com/docs/autopilot/actions
@@ -107,22 +108,49 @@ export class AutopilotResponse implements JovoResponse {
   }
 
   isTell(speechText?: string | string[]): boolean {
-    // if it finds action with `listen` property that is set to `false`,
-    // find() will still return undefined
-    const listenAction = this.actions.find((action) => {
+    const hasListenAction = this.actions.some((action) => {
       return action.listen;
     });
+    // is ask()!
+    if (hasListenAction) return false;
 
-    if (listenAction?.listen) return false;
-    else return true;
+    const sayAction = this.actions.find((action) => {
+      return action.say;
+    });
+
+    // no speech output in response
+    if (!sayAction) return false;
+
+    if (Array.isArray(speechText)) {
+      for (const speech of speechText) {
+        if (AutopilotSpeechBuilder.toSSML(speech) === sayAction.say) return true;
+      }
+    }
+
+    return AutopilotSpeechBuilder.toSSML(speechText as string) === sayAction.say;
   }
 
   isAsk(speechText?: string | string[]): boolean {
-    if (this.isTell(speechText)) {
-      return false;
-    } else {
-      return true;
+    const hasListenAction = this.actions.some((action) => {
+      return action.listen;
+    });
+    // is tell()!
+    if (!hasListenAction) return false;
+
+    const sayAction = this.actions.find((action) => {
+      return action.say;
+    });
+
+    // no speech output in response
+    if (!sayAction) return false;
+
+    if (Array.isArray(speechText)) {
+      for (const speech of speechText) {
+        if (AutopilotSpeechBuilder.toSSML(speech) === sayAction.say) return true;
+      }
     }
+
+    return AutopilotSpeechBuilder.toSSML(speechText as string) === sayAction.say;
   }
 
   hasState(state: string): boolean | undefined {
@@ -148,6 +176,14 @@ export class AutopilotResponse implements JovoResponse {
   }
 
   static fromJSON(json: string) {
-    return new AutopilotResponse();
+    if (typeof json === 'string') {
+      // if it's a string, parse it first
+      return JSON.parse(json);
+    } else {
+      // create an instance of the User class
+      const autopilotResponse = Object.create(AutopilotResponse.prototype);
+      // copy all the fields from the json object
+      return Object.assign(autopilotResponse, json);
+    }  
   }
 }
