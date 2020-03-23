@@ -21,7 +21,8 @@
     "jovo-db-filedb": "^3.0.6",
     "jovo-framework": "^3.0.6",
     "jovo-platform-googleassistant": "^3.0.6",
-    "jovo-plugin-debugger": "^3.0.6"
+    "jovo-plugin-debugger": "^3.0.6",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
