@@ -1,0 +1,51 @@
+{
+	"invocation":"my timer api app",
+	"intents":[
+		{
+			"name":"HelloWorldIntent",
+			"phrases":[
+				"hello",
+				"say hello",
+				"say hello world"
+			]
+		},
+		{
+			"name":"SetTimerIntent",
+			"phrases":[
+				"Set a timer"
+			]
+		},
+		{
+			"name":"GetAllTimersIntent",
+			"phrases":[
+				"Show me my timers"
+			]
+		},
+		{
+			"name":"CancelAllTimersIntent",
+			"phrases":[
+				"Cancel all timers"
+			]
+		}
+	],
+	"alexa": {
+		"interactionModel": {
+			"languageModel": {
+				"intents": [
+					{
+						"name": "AMAZON.CancelIntent",
+						"samples": []
+					},
+					{
+						"name": "AMAZON.HelpIntent",
+						"samples": []
+					},
+					{
+						"name": "AMAZON.StopIntent",
+						"samples": []
+					}
+				]
+			}
+		}
+	}
+}
