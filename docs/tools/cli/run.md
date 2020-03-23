@@ -18,7 +18,7 @@ You can use the `jovo run` command to start the development server in your `inde
 $ jovo run
 
 # Options
-$ jovo run [-b | --bst-proxy] [-w | --watch] [-p, --port <port>] [--inspect] [--stage <stage>] [--webhook-only]
+$ jovo run [-b | --bst-proxy] [-w | --watch] [-p, --port <port>] [--inspect <port>] [--stage <stage>] [--webhook-only]
   [--disable-jovo-debugger] [--model-test] [--timeout <timeout>] [-r | --record <name>]
 ```
 
@@ -39,7 +39,7 @@ $ node src/index.js --webhook --cwd ./src
 
 `--port`, `-p`: Defines the port that will be used to run the local development server. Default: `3000`.
 
-`--inspect`: Run debugging mode.
+`--inspect`: Run debugging mode on a specified port.
 
 `--stage`: Specify the stage where the configuration will be taken from.
 
