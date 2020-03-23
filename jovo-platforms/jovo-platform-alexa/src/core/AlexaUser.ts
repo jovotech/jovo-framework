@@ -26,11 +26,20 @@ import {
   BuyerAddressResponse,
   BuyerAddress,
 } from '../services/AmazonPayAPI';
+import {
+  AlexaTimer,
+  AnnounceTimer,
+  LaunchTaskTimer,
+  NotifyOnlyTimer,
+  TimerListResponse,
+  TimerResponse,
+} from '../services/AlexaTimer';
 
 export class AlexaUser extends User {
   alexaSkill: AlexaSkill;
   alexaList: AlexaList;
   alexaReminder: AlexaReminder;
+  alexaTimer: AlexaTimer;
 
   constructor(alexaSkill: AlexaSkill) {
     super(alexaSkill);
@@ -38,6 +47,11 @@ export class AlexaUser extends User {
     const alexaRequest: AlexaRequest = this.alexaSkill.$request as AlexaRequest;
     this.alexaList = new AlexaList(alexaRequest.getApiEndpoint(), alexaRequest.getApiAccessToken());
     this.alexaReminder = new AlexaReminder(
+      alexaRequest.getApiEndpoint(),
+      alexaRequest.getApiAccessToken(),
+    );
+
+    this.alexaTimer = new AlexaTimer(
       alexaRequest.getApiEndpoint(),
       alexaRequest.getApiAccessToken(),
     );
@@ -358,6 +372,49 @@ export class AlexaUser extends User {
    */
   getAllReminders(): Promise<ReminderListResponse> {
     return this.alexaReminder.getAllReminders();
+  }
+
+
+  /**
+   * Sets timer
+   * @return {Promise<any>}
+   */
+  setTimer(timer: NotifyOnlyTimer | AnnounceTimer | LaunchTaskTimer): Promise<TimerResponse> {
+    return this.alexaTimer.setTimer(timer);
+  }
+
+  /**
+   * Gets specific timer
+   * @param {string} id
+   * @return {Promise<any>}
+   */
+  getTimer(id: string): Promise<TimerListResponse> {
+    return this.alexaTimer.getTimer(id);
+  }
+
+  /**
+   * Cancel timer
+   * @param {string} id
+   * @return {Promise<void>}
+   */
+  cancelTimer(id: string) {
+    return this.alexaTimer.cancelTimer(id);
+  }
+
+  /**
+   * Cancel all timers
+   * @return {Promise<void>}
+   */
+  cancelAllTimers() {
+    return this.alexaTimer.cancelAllTimers();
+  }
+
+  /**
+   * Retrieves all reminders
+   * @return {Promise<data>}
+   */
+  getAllTimers(): Promise<TimerListResponse> {
+    return this.alexaTimer.getAllTimers();
   }
 
   getBuyerId(options?: AmazonPayApiRequestOptions): Promise<BuyerIdResponse> {

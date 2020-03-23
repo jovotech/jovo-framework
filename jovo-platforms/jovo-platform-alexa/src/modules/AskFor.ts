@@ -30,6 +30,10 @@ export class AskFor implements Plugin {
       return this.askForPermission('alexa::alerts:reminders:skill:readwrite', token);
     };
 
+    AlexaSkill.prototype.askForTimers = function(token?: string) {
+      return this.askForPermission('alexa::alerts:timers:skill:readwrite', token);
+    };
+
     AlexaSkill.prototype.getPermissionStatus = function() {
       return _get(this.$request, 'request.payload.status');
     };
@@ -40,6 +44,10 @@ export class AskFor implements Plugin {
 
     AlexaSkill.prototype.hasPermissionDenied = function() {
       return _get(this.$request, 'request.payload.status') === 'DENIED';
+    };
+
+    AlexaSkill.prototype.hasPermissionNotAnswered = function() {
+      return _get(this.$request, 'request.payload.status') === 'NOT_ANSWERED';
     };
   }
   uninstall(alexa: Alexa) {}

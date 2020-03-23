@@ -9,6 +9,8 @@ export { AlexaTestSuite } from './core/Interfaces';
 export * from './core/AlexaRequest';
 export * from './modules/AmazonPay';
 export * from './services/AlexaReminder';
+export * from './services/AlexaTimer';
+
 export * from './services/AmazonPayAPI';
 
 export { AlexaResponse } from './core/AlexaResponse';
@@ -401,8 +403,12 @@ declare module './core/AlexaSkill' {
   interface AlexaSkill {
     askForPermission(permissionScope: string, token?: string): this;
     askForReminders(token?: string): this;
+    askForTimers(token?: string): this;
+
     getPermissionStatus(): string | undefined;
     hasPermissionAccepted(): boolean;
     hasPermissionDenied(): boolean;
+    hasPermissionNotAnswered(): boolean;
+
   }
 }
