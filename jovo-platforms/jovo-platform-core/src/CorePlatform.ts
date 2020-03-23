@@ -66,6 +66,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
 
   install(app: BaseApp): void {
     app.$platform.set(this.constructor.name, this);
+    app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('request')!.use(this.request.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('asr')!.use(this.asr.bind(this));
@@ -89,6 +90,10 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     Jovo.prototype.isCorePlatformApp = function() {
       return this.constructor.name === 'CorePlatformApp';
     };
+  }
+
+  async setup(handleRequest: HandleRequest) {
+    await this.middleware('setup')!.run(handleRequest);
   }
 
   async request(handleRequest: HandleRequest) {
