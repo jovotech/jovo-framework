@@ -23,7 +23,7 @@ There are several ways how you can install Jovo:
 * Download the [jovo-framework npm package](#jovo-framework-npm-package)
 * Clone a [Jovo Sample Voice App](#jovo-sample-voice-app)
 
-> You can also find tutorials and courses here: [jovo.tech/learn](https://www.jovo.tech/learn). Happy coding!
+> You can also find tutorials and courses here: [learn jovo](https://www.jovo.tech/learn). Happy coding!
 
 
 ### Jovo CLI Installation
