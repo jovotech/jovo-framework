@@ -2,6 +2,7 @@ import { Jovo, BaseApp, Host, HandleRequest, AudioData } from 'jovo-core';
 import { AutopilotSpeechBuilder } from './AutopilotSpeechBuilder';
 import { AutopilotResponse } from './AutopilotResponse';
 import { AutopilotUser } from './AutopilotUser';
+import { AutopilotRequest } from './AutopilotRequest';
 
 export class AutopilotBot extends Jovo {
   $autopilotBot: AutopilotBot;
@@ -53,8 +54,8 @@ export class AutopilotBot extends Jovo {
   }
 
   getRawText(): string {
-    // return this.$request!.getRawText();
-    return '';
+    const request = this.$request as AutopilotRequest;
+    return request.getRawText();
   }
 
   getTimestamp(): string {
