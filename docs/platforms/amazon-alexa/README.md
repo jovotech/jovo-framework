@@ -158,7 +158,7 @@ this.$alexaSkill.replaceDynamicEntities({
 });
 
 // Or
-this.$alexaSKill.replaceDynamicEntities([
+this.$alexaSkill.replaceDynamicEntities([
 	{
 		name: 'FruitInput',
 		values: [
