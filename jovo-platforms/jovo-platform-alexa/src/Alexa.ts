@@ -67,6 +67,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
 
   install(app: BaseApp) {
     app.$platform.set(this.constructor.name, this);
+    app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('tts')!.use(this.tts.bind(this));

@@ -53,6 +53,7 @@ export class SapCai extends Platform<SapCaiRequest, SapCaiResponse> {
 
   install(app: BaseApp) {
     app.$platform.set(this.constructor.name, this);
+    app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));

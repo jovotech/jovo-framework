@@ -2,6 +2,7 @@ import { JovoRequest, JovoResponse } from '../Interfaces';
 import { RequestBuilder, ResponseBuilder, TestSuite } from '../TestSuite';
 import { ActionSet } from './ActionSet';
 import { Extensible, ExtensibleConfig } from './Extensible';
+import { HandleRequest } from './HandleRequest';
 
 export abstract class Platform<
   REQ extends JovoRequest = JovoRequest,
@@ -39,5 +40,9 @@ export abstract class Platform<
 
   supportsTTS(): boolean {
     return this.actionSet.middleware.has('$tts');
+  }
+
+  protected setup(handleRequest: HandleRequest) {
+    return this.middleware('setup')!.run(handleRequest);
   }
 }
