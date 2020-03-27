@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-hooks",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,12 +14,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jovo-core": "^3.0.7",
-    "jovo-db-filedb": "^3.0.7",
-    "jovo-framework": "^3.0.7",
-    "jovo-platform-alexa": "^3.0.7",
-    "jovo-platform-dialogflow": "^3.0.7",
-    "jovo-platform-googleassistant": "^3.0.7",
-    "jovo-plugin-debugger": "^3.0.7"
+    "jovo-core": "^3.0.8",
+    "jovo-db-filedb": "^3.0.8",
+    "jovo-framework": "^3.0.8",
+    "jovo-platform-alexa": "^3.0.8",
+    "jovo-platform-dialogflow": "^3.0.8",
+    "jovo-platform-googleassistant": "^3.0.8",
+    "jovo-plugin-debugger": "^3.0.8"
   }
 }

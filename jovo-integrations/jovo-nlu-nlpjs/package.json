@@ -1,6 +1,6 @@
 {
   "name": "jovo-nlu-nlpjs",
-  "version": "3.0.1-alpha.0",
+  "version": "3.0.2-alpha.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@nlpjs/basic": "^4.2.1",
-    "jovo-core": "^3.0.7",
+    "jovo-core": "^3.0.8",
     "jovo-model": "^0.1.14",
     "jovo-model-nlpjs": "^0.1.1-alpha.0",
     "node-nlp": "^4.2.1"
