@@ -66,6 +66,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
 
   install(app: BaseApp): void {
     app.$platform.set(this.constructor.name, this);
+    app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('request')!.use(this.request.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('asr')!.use(this.asr.bind(this));
