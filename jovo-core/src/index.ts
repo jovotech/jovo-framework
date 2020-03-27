@@ -61,6 +61,7 @@ export { Util } from './util/Util';
 export { LogLevel, Log, Logger, Appender, Config, LogEvent } from './util/Log';
 export { User } from './core/User';
 export { ComponentPlugin } from './plugins/ComponentPlugin';
+
 export {
   Component,
   ComponentConfig,
