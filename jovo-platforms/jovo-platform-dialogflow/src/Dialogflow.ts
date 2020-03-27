@@ -48,6 +48,7 @@ export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> 
     app.$platform.set(this.constructor.name, this);
 
     // Register to BaseApp middleware
+    app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('tts')!.use(this.tts.bind(this));
