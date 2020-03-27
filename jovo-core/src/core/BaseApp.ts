@@ -206,7 +206,7 @@ export class BaseApp extends Extensible {
     const handleRequest: HandleRequest = new HandleRequest(this, host);
     try {
       Log.setRequestContext(host);
-      Log.verbose(Log.header('Start request', 'framework'));
+      Log.verbose(Log.header('Start request ', 'framework'));
 
       // initialize on first call only
       if (!this.initialized) {
