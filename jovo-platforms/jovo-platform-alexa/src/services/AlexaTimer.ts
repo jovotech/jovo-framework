@@ -282,13 +282,12 @@ export interface Timer {
       visibility: 'VISIBLE' | 'HIDDEN';
     };
   };
-
 }
 
 export interface NotifyOnlyTimer extends Timer {
   triggeringBehavior: {
     operation: {
-      type: 'NOTIFY_ONLY'
+      type: 'NOTIFY_ONLY';
     };
     notificationConfig: {
       playAudible: boolean;
@@ -304,7 +303,7 @@ export interface TextToAnnounce {
 export interface AnnounceTimer extends Timer {
   triggeringBehavior: {
     operation: {
-      type: 'ANNOUNCE',
+      type: 'ANNOUNCE';
       textToAnnounce: TextToAnnounce[];
     };
     notificationConfig: {
@@ -320,7 +319,7 @@ export interface TextToConfirm {
 export interface LaunchTaskTimer extends Timer {
   triggeringBehavior: {
     operation: {
-      type: 'LAUNCH_TASK',
+      type: 'LAUNCH_TASK';
       task: {
         name: string;
         version: string;

@@ -98,8 +98,6 @@ export class RasaNlu implements Plugin {
   }
 
   private async naturalLanguageProcessing(text: string): Promise<RasaResponse> {
-
-
     const url = `${this.config.endpoint}/model/parse`;
     const options: AxiosRequestConfig = {
       url,
@@ -108,8 +106,8 @@ export class RasaNlu implements Plugin {
         return true;
       },
       data: {
-        text
-      }
+        text,
+      },
     };
 
     try {

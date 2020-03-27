@@ -1,10 +1,4 @@
-import {
-  Plugin,
-  HandleRequest,
-  JovoError,
-  ErrorCode,
-  EnumRequestType,
-} from 'jovo-core';
+import { Plugin, HandleRequest, JovoError, ErrorCode, EnumRequestType } from 'jovo-core';
 import { Autopilot } from '../Autopilot';
 import { AutopilotBot } from '../core/AutopilotBot';
 import { AutopilotRequest } from '../core/AutopilotRequest';

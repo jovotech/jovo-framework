@@ -1,4 +1,3 @@
-
 export interface NlpJsClassification {
   intent: string;
   score: number;
@@ -43,7 +42,9 @@ export interface NlpjsResponse {
   // tslint:disable-next-line:no-any
   sourceEntities: any[];
   entities: NlpjsEntity[];
+  // tslint:disable-next-line:no-any
   answers: any[];
+  // tslint:disable-next-line:no-any
   actions: any[];
   sentiment: NlpjsSentiment;
 }

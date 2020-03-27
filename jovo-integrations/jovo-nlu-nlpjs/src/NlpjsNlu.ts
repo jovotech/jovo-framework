@@ -7,7 +7,8 @@ import {
   JovoError,
   Platform,
   Plugin,
-  PluginConfig, Project,
+  PluginConfig,
+  Project,
 } from 'jovo-core';
 import { NlpjsEntity, NlpjsResponse } from './Interfaces';
 import _merge = require('lodash.merge');
@@ -16,8 +17,8 @@ const { dockStart, NlpManager } = require('@nlpjs/basic');
 
 const fs = require('fs');
 import * as path from 'path';
-import {JovoModelNlpjs} from 'jovo-model-nlpjs';
-import {NativeFileInformation} from 'jovo-model';
+import { JovoModelNlpjs } from 'jovo-model-nlpjs';
+import { NativeFileInformation } from 'jovo-model';
 
 export interface Config extends PluginConfig {
   preTrainedModelFilePath?: string;
@@ -58,7 +59,7 @@ export class NlpjsNlu implements Plugin {
   }
 
   async setup() {
-    this.dock = await dockStart({ use: ['Basic'], nlp: { log: false }});
+    this.dock = await dockStart({ use: ['Basic'], nlp: { log: false } });
     this.nlp = this.dock.get('nlp');
     // this.nlp = new NlpManager({ languages: ['en'], nlu: { log: false } }); // <== from the docs
 
@@ -131,7 +132,7 @@ export class NlpjsNlu implements Plugin {
   }
 
   async train() {
-    this.dock = await dockStart({ use: ['Basic']});
+    this.dock = await dockStart({ use: ['Basic'] });
     this.nlp = this.dock.get('nlp');
     await this.addCorpus(this.config.modelsPath);
     await this.nlp.train();
@@ -140,7 +141,6 @@ export class NlpjsNlu implements Plugin {
   private addCorpus(dir: string) {
     return new Promise((resolve, reject) => {
       fs.readdir(dir, (err: ErrnoException, files: string[]) => {
-
         if (err) {
           return reject(err);
         }
@@ -152,20 +152,21 @@ export class NlpjsNlu implements Plugin {
           let jovoModelData;
 
           if (extension === 'js') {
-            jovoModelData = require(path.join(this.config.modelsPath, file ));
+            jovoModelData = require(path.join(this.config.modelsPath, file));
           } else if (extension === 'json') {
-            jovoModelData = JSON.parse(fs.readFileSync(path.join(this.config.modelsPath, file ), 'utf-8'));
+            jovoModelData = JSON.parse(
+              fs.readFileSync(path.join(this.config.modelsPath, file), 'utf-8'),
+            );
           }
           jovoModelInstance.importJovoModel(jovoModelData, locale);
           const nlpjsModelFiles = jovoModelInstance.exportNative() || [];
 
-          nlpjsModelFiles.forEach((model:NativeFileInformation) => {
+          nlpjsModelFiles.forEach((model: NativeFileInformation) => {
             this.nlp.addCorpus(model.content);
           });
         });
         resolve();
       });
-
     });
   }
 }

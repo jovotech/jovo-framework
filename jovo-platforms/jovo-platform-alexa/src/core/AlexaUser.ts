@@ -374,7 +374,6 @@ export class AlexaUser extends User {
     return this.alexaReminder.getAllReminders();
   }
 
-
   /**
    * Sets timer
    * @return {Promise<any>}

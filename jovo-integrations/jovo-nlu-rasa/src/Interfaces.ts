@@ -9,6 +9,7 @@ export interface RasaEntity {
   entity: string;
   extractor: string;
   confidence: number;
+  // tslint:disable-next-line:no-any
   processors: any[];
 }
 
@@ -17,10 +18,9 @@ export interface RasaResponseSelector {
     name: string;
     confidence: number;
   };
+  // tslint:disable-next-line:no-any
   ranking: any[];
 }
-
-
 
 export interface RasaResponse {
   text: string;
@@ -29,4 +29,3 @@ export interface RasaResponse {
   intent_ranking: RasaIntent[];
   response_selector: Record<string, RasaResponseSelector>;
 }
-

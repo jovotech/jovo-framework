@@ -184,6 +184,6 @@ export class AutopilotResponse implements JovoResponse {
       const autopilotResponse = Object.create(AutopilotResponse.prototype);
       // copy all the fields from the json object
       return Object.assign(autopilotResponse, json);
-    }  
+    }
   }
 }
