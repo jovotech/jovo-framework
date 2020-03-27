@@ -163,7 +163,15 @@ export class AutopilotRequest implements JovoRequest {
   }
 
   getIntentName(): string {
-    return this.CurrentTask || '';
+    return this.CurrentTask!;
+  }
+
+  getCurrentTaskConfidence(): string {
+    return this.CurrentTaskConfidence!;
+  }
+
+  getNextBestTask(): string {
+    return this.NextBestTask!;
   }
 
   setIntentName(intentName: string): this {
@@ -173,6 +181,16 @@ export class AutopilotRequest implements JovoRequest {
 
   setSessionId(id: string): this {
     this.DialogueSid = id;
+    return this;
+  }
+
+  setNextBestTask(task: string): this {
+    this.NextBestTask = task;
+    return this;
+  }
+
+  setCurrentTaskConfidence(confidence: string): this {
+    this.CurrentTaskConfidence = confidence;
     return this;
   }
 
