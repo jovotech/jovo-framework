@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-transactions",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,9 +14,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "googleapis": "^42.0.0",
-    "jovo-framework": "^3.0.8",
-    "jovo-platform-googleassistant": "^3.0.8",
-    "jovo-plugin-debugger": "^3.0.8",
+    "jovo-framework": "^3.0.9",
+    "jovo-platform-googleassistant": "^3.0.9",
+    "jovo-plugin-debugger": "^3.0.9",
     "request": "^2.88.0"
   }
 }
