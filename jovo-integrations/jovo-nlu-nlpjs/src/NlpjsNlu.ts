@@ -21,7 +21,7 @@ import * as path from 'path';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { NativeFileInformation } from 'jovo-model';
 
-export type PrepareModelFunction = (
+export type SetupModelFunction = (
   handleRequest: HandleRequest,
   nlpManager: any, // tslint:disable-line:no-any
 ) => void | Promise<void>;
@@ -30,7 +30,7 @@ export interface Config extends PluginConfig {
   preTrainedModelFilePath?: string;
   useModel?: boolean;
   modelsPath?: string;
-  prepareModelCallback?: PrepareModelFunction;
+  setupModelCallback?: SetupModelFunction;
 }
 
 export class NlpjsNlu implements Plugin {
@@ -38,7 +38,7 @@ export class NlpjsNlu implements Plugin {
     preTrainedModelFilePath: './model.nlp',
     useModel: false,
     modelsPath: Project.getModelsPath(),
-    prepareModelCallback: undefined,
+    setupModelCallback: undefined,
   };
   // tslint:disable-next-line:no-any
   dock: any;
@@ -71,9 +71,8 @@ export class NlpjsNlu implements Plugin {
     this.nlp = this.dock.get('nlp');
     // this.nlp = new NlpManager({ languages: ['en'], nlu: { log: false } }); // <== from the docs
 
-    if (this.config.prepareModelCallback) {
-      await this.config.prepareModelCallback(handleRequest, this.nlp);
-      await this.nlp.train();
+    if (this.config.setupModelCallback) {
+      await this.config.setupModelCallback(handleRequest, this.nlp);
     } else if (this.config.useModel) {
       await this.nlp.load(this.config.preTrainedModelFilePath);
     } else {
