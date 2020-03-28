@@ -107,27 +107,14 @@ export class AutopilotResponse implements JovoResponse {
     return this.setSessionAttributes(sessionData);
   }
 
-  isTell(speechText?: string | string[]): boolean {
+  isTell(): boolean {
     const hasListenAction = this.actions.some((action) => {
       return action.listen;
     });
     // is ask()!
     if (hasListenAction) return false;
 
-    const sayAction = this.actions.find((action) => {
-      return action.say;
-    });
-
-    // no speech output in response
-    if (!sayAction) return false;
-
-    if (Array.isArray(speechText)) {
-      for (const speech of speechText) {
-        if (AutopilotSpeechBuilder.toSSML(speech) === sayAction.say) return true;
-      }
-    }
-
-    return AutopilotSpeechBuilder.toSSML(speechText as string) === sayAction.say;
+    return true;
   }
 
   isAsk(speechText?: string | string[]): boolean {
