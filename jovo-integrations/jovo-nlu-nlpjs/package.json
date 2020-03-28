@@ -28,6 +28,7 @@
     "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.1",
+    "@types/tv4": "^1.2.29",
     "jest": "^25.1.0",
     "prettier": "1.19.1",
     "rimraf": "^2.6.2",
