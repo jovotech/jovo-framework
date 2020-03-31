@@ -17,7 +17,7 @@ export interface Config extends PluginConfig {
   key: string;
 }
 
-export class DashbotCore implements Analytics {
+export class DashbotUniversal implements Analytics {
   config: Config = {
     key: '',
   };
