@@ -61,22 +61,24 @@ Enable the plugin like this:
 
 // src/app.js
 
-const { ChatbaseAlexa, ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
+const { ChatbaseAlexa, ChatbaseGoogleAssistant, ChatbaseCore } = require('jovo-analytics-chatbase');
 
 app.use(
     new ChatbaseAlexa(),
-    new ChatbaseGoogleAssistant()
+    new ChatbaseGoogleAssistant(),
+    new ChatbaseCore() // used for jovo-platform-core
 );
 
 // @language=typescript
 
 // src/app.ts
 
-import { ChatbaseAlexa, ChatbaseGoogleAssistant } from 'jovo-analytics-chatbase';
+import { ChatbaseAlexa, ChatbaseGoogleAssistant, ChatbaseCore } from 'jovo-analytics-chatbase';
 
 app.use(
     new ChatbaseAlexa(),
-    new ChatbaseGoogleAssistant()
+    new ChatbaseGoogleAssistant(),
+    new ChatbaseCore(), // used for jovo-platform-core
 );
 ```
 
@@ -98,6 +100,10 @@ module.exports = {
             key: '<key>',
             version: '<version>', // Optional
         },
+        ChatbaseCore: {
+            key: '<key>',
+            version: '<version>', // Optional
+        }
     },
 
     // ...
@@ -119,6 +125,10 @@ const config = {
             key: '<key>',
             version: '<version>', // Optional
         },
+        ChatbaseCore: {
+            key: '<key>',
+            version: '<version>', // Optional
+        }
     },
 
     // ...
