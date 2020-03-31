@@ -8,5 +8,13 @@ declare module 'dashbot' {
 
   export interface Google extends Platform {}
 
-  export default function(key: string): { alexa: AmazonAlexa; google: Google };
+  export interface Universal extends Platform {
+    logOutgoing(response: object): void;
+  }
+
+  export default function(key: string): {
+    alexa: AmazonAlexa,
+    google: Google,
+    universal: Universal 
+  };
 }
