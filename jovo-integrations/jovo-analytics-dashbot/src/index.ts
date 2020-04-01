@@ -1,7 +1,7 @@
 import { Config as AlexaConfig } from './DashbotAlexa';
-import { Config as CoreConfig } from './DashbotUniversal';
 import { Config as DialogflowConfig } from './DashbotDialogflow';
 import { Config as GoogleAssistantConfig } from './DashbotGoogleAssistant';
+import { Config as CoreConfig } from './DashbotUniversal';
 
 interface AppDashbotConfig {
   DashbotAlexa?: AlexaConfig;
