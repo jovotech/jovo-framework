@@ -63,22 +63,24 @@ Enable the plugin like this:
 
 // src/app.js
 
-const { DashbotAlexa, DashbotGoogleAssistant } = require('jovo-analytics-dashbot');
+const { DashbotAlexa, DashbotGoogleAssistant, DashbotUniversal } = require('jovo-analytics-dashbot');
 
 app.use(
     new DashbotAlexa(),
-    new DashbotGoogleAssistant()
+    new DashbotGoogleAssistant(),
+    new DashbotUniversal()
 );
 
 // @language=typescript
 
 // src/app.ts
 
-import { DashbotAlexa, DashbotGoogleAssistant } from 'jovo-analytics-dashbot';
+import { DashbotAlexa, DashbotGoogleAssistant, DashbotUniversal } from 'jovo-analytics-dashbot';
 
 app.use(
     new DashbotAlexa(),
-    new DashbotGoogleAssistant()
+    new DashbotGoogleAssistant(),
+    new DashbotUniversal()
 );
 ```
 
@@ -98,6 +100,9 @@ module.exports = {
         DashbotGoogleAssistant: {
             key: '<key>',
         },
+        DashbotUniversal: {
+            key: '<key>',
+        },
     },
 
     // ...
@@ -115,6 +120,9 @@ const config = {
             key: '<key>',
         },
         DashbotGoogleAssistant: {
+            key: '<key>',
+        },
+         DashbotUniversal: {
             key: '<key>',
         },
     },

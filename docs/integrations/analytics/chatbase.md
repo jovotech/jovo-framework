@@ -65,7 +65,7 @@ const { ChatbaseAlexa, ChatbaseGoogleAssistant } = require('jovo-analytics-chatb
 
 app.use(
     new ChatbaseAlexa(),
-    new ChatbaseGoogleAssistant()
+    new ChatbaseGoogleAssistant(),
 );
 
 // @language=typescript
@@ -76,7 +76,7 @@ import { ChatbaseAlexa, ChatbaseGoogleAssistant } from 'jovo-analytics-chatbase'
 
 app.use(
     new ChatbaseAlexa(),
-    new ChatbaseGoogleAssistant()
+    new ChatbaseGoogleAssistant(),
 );
 ```
 

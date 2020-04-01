@@ -35,7 +35,7 @@
     "ts-jest": "^25.2.0",
     "tslint": "^5.17.0",
     "typedoc": "^0.15.6",
-    "typescript": "^3.7.3"
+    "typescript": "^3.8.3"
   },
   "jest": {
     "transform": {
