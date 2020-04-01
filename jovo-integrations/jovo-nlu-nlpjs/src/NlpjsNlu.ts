@@ -14,12 +14,12 @@ import {
 import { NlpjsEntity, NlpjsResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 import ErrnoException = NodeJS.ErrnoException;
-const { dockStart, NlpManager } = require('@nlpjs/basic');
-
-const fs = require('fs');
 import * as path from 'path';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { NativeFileInformation } from 'jovo-model';
+import { promises, readdir, readFileSync } from 'fs';
+const { Nlp } = require('@nlpjs/nlp');
+const { Ner } = require('@nlpjs/ner');
 
 export type SetupModelFunction = (
   handleRequest: HandleRequest,
@@ -27,6 +27,7 @@ export type SetupModelFunction = (
 ) => void | Promise<void>;
 
 export interface Config extends PluginConfig {
+  languages?: string[];
   preTrainedModelFilePath?: string;
   useModel?: boolean;
   modelsPath?: string;
@@ -35,13 +36,12 @@ export interface Config extends PluginConfig {
 
 export class NlpjsNlu implements Plugin {
   config: Config = {
+    languages: ['en'],
     preTrainedModelFilePath: './model.nlp',
     useModel: false,
     modelsPath: Project.getModelsPath(),
     setupModelCallback: undefined,
   };
-  // tslint:disable-next-line:no-any
-  dock: any;
   // tslint:disable-next-line:no-any
   nlp: any;
 
@@ -67,8 +67,19 @@ export class NlpjsNlu implements Plugin {
   }
 
   async setup(handleRequest: HandleRequest) {
-    this.dock = await dockStart({ use: ['Basic'], nlp: { log: false } });
-    this.nlp = this.dock.get('nlp');
+    const settings = { languages: this.config.languages || [] };
+    this.nlp = new Nlp({
+      ...settings,
+      autoLoad: this.config.useModel,
+      autoSave: handleRequest.host.hasWriteFileAccess && this.config.useModel,
+      modelFileName: this.config.preTrainedModelFilePath,
+    });
+    this.nlp.container.register('ner', new Ner(settings));
+
+    if (handleRequest.host.hasWriteFileAccess) {
+      this.nlp.container.register('fs', promises);
+    }
+
     // this.nlp = new NlpManager({ languages: ['en'], nlu: { log: false } }); // <== from the docs
 
     if (this.config.setupModelCallback) {
@@ -142,15 +153,15 @@ export class NlpjsNlu implements Plugin {
   }
 
   async train() {
-    this.dock = await dockStart({ use: ['Basic'] });
-    this.nlp = this.dock.get('nlp');
+    this.nlp = new Nlp({ languages: this.config.languages || [] });
+    this.nlp.container.register('fs', promises);
     await this.addCorpus(this.config.modelsPath!);
     await this.nlp.train();
     await this.nlp.load(this.config.preTrainedModelFilePath);
   }
   private addCorpus(dir: string) {
     return new Promise((resolve, reject) => {
-      fs.readdir(dir, (err: ErrnoException, files: string[]) => {
+      readdir(dir, (err: ErrnoException | null, files: string[]) => {
         if (err) {
           return reject(err);
         }
@@ -165,7 +176,7 @@ export class NlpjsNlu implements Plugin {
             jovoModelData = require(path.join(this.config.modelsPath!, file));
           } else if (extension === 'json') {
             jovoModelData = JSON.parse(
-              fs.readFileSync(path.join(this.config.modelsPath!, file), 'utf-8'),
+              readFileSync(path.join(this.config.modelsPath!, file), 'utf-8'),
             );
           }
           jovoModelInstance.importJovoModel(jovoModelData, locale);
