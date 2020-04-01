@@ -74,6 +74,11 @@ app.use(
 );
 ```
 
+You can generate the `./keyfile.json` file by following the instructions:
+* [Jovo Forum](https://community.jovo.tech/t/keyfile-google-assistant-transactions/992)
+* [Official Google Docs](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-consumables#create_a_digital_goods_api_key)
+
+
 ### Digital Goods Implementation
 
 To implement the transaction of digital goods in your Jovo project, there are few things you need to do (in line with the [transaction flow](https://developers.google.com/actions/transactions/digital/dev-guide-digital#types_of_digital_goods#transaction_flow) described in the Google docs):
