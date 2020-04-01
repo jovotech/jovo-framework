@@ -1,6 +1,6 @@
 {
   "name": "jovo-nlu-nlpjs",
-  "version": "3.0.4-alpha.0",
+  "version": "3.0.5-alpha.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
