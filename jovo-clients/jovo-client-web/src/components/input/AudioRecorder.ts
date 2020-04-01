@@ -284,7 +284,7 @@ export class AudioRecorder {
       this.$client.emit(InputRecordEvents.SpeechRecognized, event);
     };
 
-    recognition.onerror = (err: SpeechRecognitionError) => {
+    recognition.onerror = (err: Event) => {
       // tslint:disable-next-line:no-console
       console.error('[REC]', err);
       // TODO logic

@@ -1,11 +1,11 @@
 {
   "name": "jovo-analytics-dashbot",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
+    "prettier": "",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
     "rimraf": "rimraf ./dist",
