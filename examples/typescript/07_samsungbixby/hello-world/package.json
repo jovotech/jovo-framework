@@ -22,6 +22,6 @@
     "jovo-plugin-debugger": "^3.0.9"
   },
   "devDependencies": {
-    "typescript": "^3.7.3"
+    "typescript": "^3.8.3"
   }
 }
