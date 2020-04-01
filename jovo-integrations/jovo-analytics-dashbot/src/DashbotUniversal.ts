@@ -8,8 +8,8 @@ import type {
   SpeechAction,
   VisualAction,
   VisualActionBasicCard,
-  VisualActionImageCard
-} from 'jovo-platform-core' // tslint:disable-line
+  VisualActionImageCard,
+} from 'jovo-platform-core'; // tslint:disable-line
 import _merge = require('lodash.merge');
 import * as dashbot from 'dashbot'; // tslint:disable-line
 
@@ -42,7 +42,7 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * Sends the request & response logs to Dashbot
-   * @param {HandleRequest} handleRequest 
+   * @param {HandleRequest} handleRequest
    */
   track(handleRequest: HandleRequest) {
     if (!handleRequest.jovo) {
@@ -60,9 +60,9 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * returns the request log for Dashbot
-   * @param {HandleRequest} handleRequest 
+   * @param {HandleRequest} handleRequest
    */
-  private createRequestLog(handleRequest: HandleRequest): RequestLog  {
+  private createRequestLog(handleRequest: HandleRequest): RequestLog {
     /**
      * text (user utterance) can be either in the request if text input was used,
      * or in the response if an ASR plugin transcribed the incoming audio file.
@@ -72,11 +72,12 @@ export class DashbotUniversal implements Analytics {
     const text = request.request.body.text || response.context.request.asr?.text || '';
 
     const requestLog: RequestLog = {
-      platformJson: { // complete JSON request that will be visible in Dashbot console
+      platformJson: {
+        // complete JSON request that will be visible in Dashbot console
         asr: handleRequest.jovo!.$asr,
         nlu: handleRequest.jovo!.$nlu,
         request,
-      }, 
+      },
       text,
       userId: handleRequest.jovo!.$request!.getUserId(),
     };
@@ -98,7 +99,7 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * returns the response log for Dashbot
-   * @param {HandleRequest} handleRequest 
+   * @param {HandleRequest} handleRequest
    */
   private createResponseLog(handleRequest: HandleRequest): ResponseLog {
     const actions = (handleRequest.jovo!.$response! as CorePlatformResponse).actions;
@@ -107,8 +108,8 @@ export class DashbotUniversal implements Analytics {
       platformJson: { ...handleRequest.jovo!.$response },
       text,
       userId: handleRequest.jovo!.$request!.getUserId(),
-    }
-    
+    };
+
     const images = this.getImageLogs(actions);
     if (images.length > 0) {
       responseLog.images = images;
@@ -124,14 +125,14 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * returns an array of `Image` objects created from the VisualActions.
-   * @param {Action[]} actions 
+   * @param {Action[]} actions
    */
   private getImageLogs(actions: Action[]): Image[] {
     const images: Image[] = [];
 
     actions.forEach((action) => {
       if (action.type === 'VISUAL' && (action as VisualAction).visualType === 'IMAGE_CARD') {
-        images.push({url: (action as VisualActionImageCard).imageUrl});
+        images.push({ url: (action as VisualActionImageCard).imageUrl });
       }
     });
 
@@ -140,7 +141,7 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * returns an array of `Button` objects created form the QuickReplyActions.
-   * @param {Action[]} actions 
+   * @param {Action[]} actions
    */
   private getButtonLogs(actions: Action[]): Button[] {
     const buttons: Button[] = [];
@@ -152,8 +153,8 @@ export class DashbotUniversal implements Analytics {
             // use value as fallback, since empty strings are not shown in transcripts
             id: quickReply.id || quickReply.value,
             label: quickReply.label || quickReply.value,
-            value: quickReply.value
-          })
+            value: quickReply.value,
+          });
         });
       }
     });
@@ -188,9 +189,9 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * Will throw error if parsed any other action than of type `SpeechAction`
-   * 
-   * returns `SPEECH: ${action's plain text}` 
-   * @param {SpeechAction} action 
+   *
+   * returns `SPEECH: ${action's plain text}`
+   * @param {SpeechAction} action
    */
   private getSpeechActionText(action: SpeechAction): string {
     return 'SPEECH: ' + action.plain || '';
@@ -198,28 +199,30 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * Will throw error if parsed any other action than of type `AudioAction`
-   * 
+   *
    * Returns a string containing the `AUDIO: ` tag as well as each tracks filename.
-   * 
+   *
    * e.g. `AUDIO: {fileName} | {fileName2} | ...`
-   * @param {Action} action 
+   * @param {Action} action
    */
   private getAudioActionText(action: AudioAction): string {
-    const text = action.tracks.map((track) => {
-      return getFilenameFromUrl(track.src);
-    }).join(' | ');
-    
-    return 'AUDIO: ' + text;         
+    const text = action.tracks
+      .map((track) => {
+        return getFilenameFromUrl(track.src);
+      })
+      .join(' | ');
+
+    return 'AUDIO: ' + text;
   }
 
   /**
    * Will throw error if parsed any other action than of type `VisualAction`
-   * 
+   *
    * Returns a string containing the `VISUAL: ` tag as well as the cards title, body,
    * and image name (if defined).
-   * 
+   *
    * e.g. `VISUAL: ${title} | ${body} | ${filename} }
-   * @param {VisualAction} action 
+   * @param {VisualAction} action
    */
   private getVisualActionText(action: VisualAction): string {
     let text = 'VISUAL: ';
@@ -234,7 +237,7 @@ export class DashbotUniversal implements Analytics {
 
   /**
    * Returns the text for `VisualActionBasicCard`
-   * @param {VisualActionBasicCard} action 
+   * @param {VisualActionBasicCard} action
    */
   private getBasicCardText(action: VisualActionBasicCard): string {
     return `${action.title} | ${action.body}`;
@@ -258,7 +261,7 @@ export class DashbotUniversal implements Analytics {
   }
 
   /**
-   * Returns `PROCESSING: ${action.text}` 
+   * Returns `PROCESSING: ${action.text}`
    * @param {ProcessingAction} action
    */
   private getProcessingActionText(action: ProcessingAction): string {
@@ -318,7 +321,7 @@ interface Log {
   userId: string;
   platformJson: {
     [index: string]: any;
-  }
+  };
 }
 
 interface RequestLog extends Log {

@@ -21,7 +21,7 @@ export class Cards implements Plugin {
     /**
      * naming: twilio names it just `show`
      */
-    AutopilotBot.prototype.showStandardCard = function(
+    AutopilotBot.prototype.showStandardCard = function (
       content: string,
       images?: ImageItem[] | ImageItem,
     ) {

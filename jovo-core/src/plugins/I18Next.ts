@@ -75,18 +75,18 @@ export class I18Next extends BaseCmsPlugin {
 
     app.middleware('setup')!.use(this.loadFiles.bind(this));
 
-    Jovo.prototype.t = function() {
+    Jovo.prototype.t = function () {
       return getSpeech.call(this, arguments);
     };
 
-    SpeechBuilder.prototype.t = function() {
+    SpeechBuilder.prototype.t = function () {
       return this.addText(getSpeech.call(this, arguments));
     };
-    SpeechBuilder.prototype.addT = function() {
+    SpeechBuilder.prototype.addT = function () {
       return this.addText(getSpeech.call(this, arguments));
     };
 
-    Cms.prototype.t = function() {
+    Cms.prototype.t = function () {
       if (!this.$jovo) {
         return;
       }

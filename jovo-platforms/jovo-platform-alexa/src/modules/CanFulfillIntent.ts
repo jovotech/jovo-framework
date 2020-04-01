@@ -20,7 +20,7 @@ export class CanFulfillIntent implements Plugin {
      * Sets negative can fulfill request values.
      * @public
      */
-    AlexaSkill.prototype.cannotFulfillRequest = function() {
+    AlexaSkill.prototype.cannotFulfillRequest = function () {
       this.canFulfillRequest('NO');
       return this;
     };
@@ -29,7 +29,7 @@ export class CanFulfillIntent implements Plugin {
      * Sets possible can fulfill request values.
      * @public
      */
-    AlexaSkill.prototype.mayFulfillRequest = function() {
+    AlexaSkill.prototype.mayFulfillRequest = function () {
       this.canFulfillRequest('MAYBE');
       return this;
     };
@@ -39,7 +39,7 @@ export class CanFulfillIntent implements Plugin {
      * @public
      * @param {string} canFulfillRequest
      */
-    AlexaSkill.prototype.canFulfillRequest = function(canFulfillRequest = 'YES') {
+    AlexaSkill.prototype.canFulfillRequest = function (canFulfillRequest = 'YES') {
       if (!CanFulfillIntent.VALID_VALUES.includes(canFulfillRequest)) {
         throw new Error('canFulfill must be one the following values: YES | NO | MAYBE');
       }
@@ -54,7 +54,7 @@ export class CanFulfillIntent implements Plugin {
      * @param {string} canUnderstandSlot
      * @param {string} canFulfillSlot
      */
-    AlexaSkill.prototype.canFulfillSlot = function(
+    AlexaSkill.prototype.canFulfillSlot = function (
       slotName: string,
       canUnderstandSlot: string,
       canFulfillSlot: string,

@@ -42,7 +42,7 @@ export class ResponsesSheet extends DefaultSheet {
 
   install(extensible: Extensible) {
     super.install(extensible);
-    Cms.prototype.t = function() {
+    Cms.prototype.t = function () {
       if (!this.$jovo) {
         return;
       }

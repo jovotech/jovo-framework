@@ -257,7 +257,7 @@ export class Handler implements Plugin {
   }
 
   mixin(app: BaseApp) {
-    BaseApp.prototype.setHandler = function(...handlers: any[]): BaseApp {
+    BaseApp.prototype.setHandler = function (...handlers: any[]): BaseApp {
       // tslint:disable-line
       for (const obj of handlers) {
         // eslint-disable-line
@@ -278,7 +278,7 @@ export class Handler implements Plugin {
      * @public
      * @param {string} intent name of intent
      */
-    Jovo.prototype.toIntent = async function(intent: string): Promise<any> {
+    Jovo.prototype.toIntent = async function (intent: string): Promise<any> {
       // tslint:disable-line
       this.triggeredToIntent = true;
 
@@ -306,7 +306,7 @@ export class Handler implements Plugin {
      * @return {void}
      * @throws {JovoError}
      */
-    Jovo.prototype.checkStateForInitializedComponentName = function(
+    Jovo.prototype.checkStateForInitializedComponentName = function (
       state: string | undefined,
     ): void {
       if (state && this.$components) {
@@ -334,7 +334,7 @@ export class Handler implements Plugin {
      * @param {string} intent name of intent
      * @param {boolean} [validate=true] state validation toggle
      */
-    Jovo.prototype.toStateIntent = async function(
+    Jovo.prototype.toStateIntent = async function (
       state: string | undefined,
       intent: string,
       validate: boolean = true,
@@ -382,7 +382,7 @@ export class Handler implements Plugin {
      * @param {ComponentDelegationOptions} options
      * @returns {Promise<void>}
      */
-    Jovo.prototype.delegate = function(
+    Jovo.prototype.delegate = function (
       componentName: string,
       options: ComponentDelegationOptions,
     ): Promise<void> {
@@ -422,7 +422,7 @@ export class Handler implements Plugin {
      * Returns the active components root state value.
      * @return {string | undefined}
      */
-    Jovo.prototype.getActiveComponentsRootState = function(): string | undefined {
+    Jovo.prototype.getActiveComponentsRootState = function (): string | undefined {
       const currentState = this.getState();
 
       if (currentState && this.$components) {
@@ -440,7 +440,7 @@ export class Handler implements Plugin {
       return undefined;
     };
 
-    Jovo.prototype.getActiveComponent = function(): Component | undefined {
+    Jovo.prototype.getActiveComponent = function (): Component | undefined {
       const componentState = this.getActiveComponentsRootState();
 
       if (componentState) {
@@ -460,7 +460,7 @@ export class Handler implements Plugin {
      * and sets the component's $response object.
      * @param {ComponentResponse} response
      */
-    Jovo.prototype.sendComponentResponse = function(response: ComponentResponse): Promise<void> {
+    Jovo.prototype.sendComponentResponse = function (response: ComponentResponse): Promise<void> {
       const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[
         SessionConstants.COMPONENT
       ];
@@ -494,7 +494,7 @@ export class Handler implements Plugin {
      * @public
      * @param {string} intent name of intent
      */
-    Jovo.prototype.toStatelessIntent = async function(intent: string) {
+    Jovo.prototype.toStatelessIntent = async function (intent: string) {
       const componentState = this.getActiveComponentsRootState();
 
       // Check for Component Root State to prevent leaving any Active Components
@@ -520,7 +520,7 @@ export class Handler implements Plugin {
      * @param {string} state
      * @return {Jovo}
      */
-    Jovo.prototype.followUpState = function(state: string) {
+    Jovo.prototype.followUpState = function (state: string) {
       this.checkStateForInitializedComponentName(state);
 
       const componentState = this.getActiveComponentsRootState();
@@ -545,7 +545,7 @@ export class Handler implements Plugin {
      * @public
      * @return {string}
      */
-    Jovo.prototype.getHandlerPath = function(): string {
+    Jovo.prototype.getHandlerPath = function (): string {
       if (!this.$type || !this.$type.type) {
         return 'No type';
       }
@@ -572,7 +572,7 @@ export class Handler implements Plugin {
      * @public
      * @return {*}
      */
-    Jovo.prototype.skipIntentHandling = async function(): Promise<void> {
+    Jovo.prototype.skipIntentHandling = async function (): Promise<void> {
       this.triggeredToIntent = true;
     };
 
@@ -581,7 +581,7 @@ export class Handler implements Plugin {
      * @public
      * @return {*}
      */
-    Jovo.prototype.getMappedIntentName = function(): string {
+    Jovo.prototype.getMappedIntentName = function (): string {
       return this.$plugins.Router.route.intent;
     };
 
@@ -590,7 +590,7 @@ export class Handler implements Plugin {
      * @public
      * @return {*}
      */
-    Jovo.prototype.getRoute = function(): Route {
+    Jovo.prototype.getRoute = function (): Route {
       return this.$plugins.Router.route;
     };
   }

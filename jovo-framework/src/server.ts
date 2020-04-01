@@ -15,7 +15,7 @@ server.use(
   bodyParser.json({ limit: '5mb' }),
 );
 
-server.listen = function() {
+server.listen = function () {
   if (server.jovoApp) {
     server.jovoApp.initWebhook();
   }
@@ -29,7 +29,7 @@ const verifiedServer: express.Application = express();
 verifiedServer.jovoApp = undefined;
 verifiedServer.ssl = undefined;
 
-verifiedServer.listen = function() {
+verifiedServer.listen = function () {
   try {
     const verifier = require('alexa-verifier-middleware'); // tslint:disable-line:no-implicit-dependencies
 

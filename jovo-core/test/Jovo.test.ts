@@ -529,7 +529,7 @@ describe('test validateAsync()', () => {
     const schema = {
       name: [
         new IsRequiredValidator(),
-        async function(this: Jovo) {
+        async function (this: Jovo) {
           await jest.fn().mockResolvedValue(100);
           if (this.$inputs.name.value === 'test') {
             throw new ValidationError('Function');

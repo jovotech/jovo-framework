@@ -374,7 +374,7 @@ export class JovoDebugger implements Plugin {
     const oldConsoleLog = console.log; // tslint:disable-line:no-console
 
     // tslint:disable-next-line
-    console.log = function(message) {
+    console.log = function (message) {
       const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
       socket.emit('console.log', nMessage, new Error().stack!.toString());
       // @ts-ignore

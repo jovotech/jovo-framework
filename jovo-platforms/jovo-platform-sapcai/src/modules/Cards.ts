@@ -8,7 +8,7 @@ export class Cards implements Plugin {
   install(sapcai: SapCai) {
     sapcai.middleware('$output')!.use(this.output.bind(this));
 
-    SapCaiSkill.prototype.showQuickReplyCard = function(title: string, buttons: Button[]) {
+    SapCaiSkill.prototype.showQuickReplyCard = function (title: string, buttons: Button[]) {
       _set(
         this.$output,
         'SapCai.QuickReply',
@@ -20,7 +20,7 @@ export class Cards implements Plugin {
       return this;
     };
 
-    SapCaiSkill.prototype.showStandardCard = function(
+    SapCaiSkill.prototype.showStandardCard = function (
       title: string,
       subtitle: string,
       imageUrl: string,
@@ -39,7 +39,7 @@ export class Cards implements Plugin {
       return this;
     };
 
-    SapCaiSkill.prototype.showButtonsCard = function(title: string, buttons: Button[]) {
+    SapCaiSkill.prototype.showButtonsCard = function (title: string, buttons: Button[]) {
       _set(
         this.$output,
         'SapCai.ButtonList',
@@ -51,12 +51,12 @@ export class Cards implements Plugin {
       return this;
     };
 
-    SapCaiSkill.prototype.showCarouselCard = function(items: CardContent[]) {
+    SapCaiSkill.prototype.showCarouselCard = function (items: CardContent[]) {
       _set(this.$output, 'SapCai.Carousel', new Carousel(items));
       return this;
     };
 
-    SapCaiSkill.prototype.showListCard = function(elements: CardContent[], buttons: Button[]) {
+    SapCaiSkill.prototype.showListCard = function (elements: CardContent[], buttons: Button[]) {
       _set(
         this.$output,
         'SapCai.List',
@@ -68,7 +68,7 @@ export class Cards implements Plugin {
       return this;
     };
 
-    SapCaiSkill.prototype.showPictureCard = function(pictureUrl: string) {
+    SapCaiSkill.prototype.showPictureCard = function (pictureUrl: string) {
       _set(this.$output, 'SapCai.Picture', new Picture(pictureUrl));
       return this;
     };

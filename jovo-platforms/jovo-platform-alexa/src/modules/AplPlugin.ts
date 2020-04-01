@@ -86,7 +86,7 @@ export class AplPlugin implements Plugin {
      * @return {AlexaSkill}
      */
     // tslint:disable-next-line
-    AlexaSkill.prototype.addAplDirective = function(directive: any) {
+    AlexaSkill.prototype.addAplDirective = function (directive: any) {
       const directives = _get(this.$output, 'Alexa.Apl', []);
       directives.push(directive);
       _set(this.$output, 'Alexa.Apl', directives);
@@ -101,7 +101,7 @@ export class AplPlugin implements Plugin {
      * @return {AlexaSkill}
      */
     // tslint:disable-next-line
-    AlexaSkill.prototype.addAPLDirective = function(directive: any) {
+    AlexaSkill.prototype.addAPLDirective = function (directive: any) {
       const directives = _get(this.$output, 'Alexa.Apl', []);
       directives.push(directive);
       _set(this.$output, 'Alexa.Apl', directives);
@@ -117,7 +117,7 @@ export class AplPlugin implements Plugin {
      * @return {AlexaSkill}
      */
     // tslint:disable-next-line
-    AlexaSkill.prototype.addAPLDocument = function(documentDirective: any) {
+    AlexaSkill.prototype.addAPLDocument = function (documentDirective: any) {
       const document = {
         type: 'Alexa.Presentation.APL.RenderDocument',
         version: '1.0',
@@ -140,7 +140,7 @@ export class AplPlugin implements Plugin {
      * @return {AlexaSkill}
      */
     // tslint:disable-next-line
-    AlexaSkill.prototype.addAPLCommands = function(token: string, commands: any[]) {
+    AlexaSkill.prototype.addAPLCommands = function (token: string, commands: any[]) {
       const commandDirective = {
         type: 'Alexa.Presentation.APL.ExecuteCommands',
         token,

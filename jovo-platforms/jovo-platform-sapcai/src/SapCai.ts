@@ -74,18 +74,18 @@ export class SapCai extends Platform<SapCaiRequest, SapCaiResponse> {
     this.use(new SapCaiCore(), new SapCaiNlu(), new Cards());
 
     Jovo.prototype.$caiSkill = undefined;
-    Jovo.prototype.caiSkill = function() {
+    Jovo.prototype.caiSkill = function () {
       if (this.constructor.name !== 'SapCaiSkill') {
         throw Error(`Can't handle request. Please use this.isCaiSkill()`);
       }
       return this as SapCaiSkill;
     };
-    Jovo.prototype.isCaiSkill = function() {
+    Jovo.prototype.isCaiSkill = function () {
       return this.constructor.name === 'SapCaiSkill';
     };
 
     //tslint:disable-next-line:no-any
-    BaseApp.prototype.setCaiHandler = function(...handlers: any[]) {
+    BaseApp.prototype.setCaiHandler = function (...handlers: any[]) {
       // tslint:disable-line
       for (const obj of handlers) {
         // eslint-disable-line

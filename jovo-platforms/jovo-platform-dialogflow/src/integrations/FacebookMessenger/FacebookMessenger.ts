@@ -24,7 +24,7 @@ export class FacebookMessenger implements Plugin {
     dialogFlow.middleware('$output')!.use(this.output.bind(this));
     dialogFlow.middleware('$type')!.use(this.type.bind(this));
 
-    DialogflowAgent.prototype.isFacebookMessengerBot = function() {
+    DialogflowAgent.prototype.isFacebookMessengerBot = function () {
       return _get(this.$request, 'originalDetectIntentRequest.source') === 'facebook';
     };
   }
