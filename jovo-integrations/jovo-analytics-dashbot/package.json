@@ -5,7 +5,7 @@
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "prettier": "",
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
     "rimraf": "rimraf ./dist",
