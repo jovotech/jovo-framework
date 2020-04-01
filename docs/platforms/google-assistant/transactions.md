@@ -60,7 +60,7 @@ To use transactions for digital goods, you need to install the `googleapis` npm 
 $ npm install --save googleapis
 ```
 
-To use transactions for digital goods, you need to add the Android App package name:
+To use transactions for digital goods, you need to add the Android App package name in `src/app.js`:
 
 ```
 app.use(
