@@ -95,7 +95,7 @@ export class Handler implements Plugin {
     // no callback 'done' parameter
     if (params.length < 2) {
       const result = await func.apply(Object.assign(jovo, jovo.$handlers), [jovo]); // tslint:disable-line
-      if (typeof result === 'undefined') {
+      if (typeof result === 'undefined' || result === null) {
         return;
       } else if (result.constructor.name === 'Promise') {
         return result;
@@ -175,7 +175,7 @@ export class Handler implements Plugin {
       // no callback 'done' parameter
       if (params.length < 2) {
         const result = await func.apply(Object.assign(jovo, jovo.$handlers), [jovo]); // tslint:disable-line
-        if (typeof result === 'undefined') {
+        if (typeof result === 'undefined' || result === null) {
           return;
         } else if (result.constructor.name === 'Promise') {
           return result;
