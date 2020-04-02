@@ -248,10 +248,7 @@ describe('test ask', () => {
   test('ask ssml', async (done) => {
     app.setHandler({
       LAUNCH() {
-        this.ask(
-          'Hello <break time="100ms"/>',
-          'Reprompt <break time="100ms"/>',
-        );
+        this.ask('Hello <break time="100ms"/>', 'Reprompt <break time="100ms"/>');
       },
     });
 

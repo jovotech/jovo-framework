@@ -127,7 +127,7 @@ export class AutopilotResponse implements JovoResponse {
           if (speech === sayAction.say) return true;
         }
       }
-  
+
       return speechText === sayAction.say;
     }
 
@@ -146,7 +146,7 @@ export class AutopilotResponse implements JovoResponse {
       const sayAction = this.actions.find((action) => {
         return action.say;
       });
-  
+
       // Say action has no value but speechText does => it's not the correct ask()
       if (!sayAction) {
         return false;
@@ -157,7 +157,7 @@ export class AutopilotResponse implements JovoResponse {
           if (speech === sayAction.say) return true;
         }
       }
-  
+
       return speechText === sayAction.say;
     }
 
@@ -184,7 +184,7 @@ export class AutopilotResponse implements JovoResponse {
   }
 
   /**
-   * Returns true if there is no Listen, Collect, or Redirect action 
+   * Returns true if there is no Listen, Collect, or Redirect action
    */
   hasSessionEnded(): boolean {
     return !(this.isAsk() || this.hasCollect() || this.hasRedirect());
