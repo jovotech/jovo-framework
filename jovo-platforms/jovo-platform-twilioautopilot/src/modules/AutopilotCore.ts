@@ -84,7 +84,7 @@ export class AutopilotCore implements Plugin {
     const tell = output.tell;
     if (tell) {
       const sayAction = {
-        say: AutopilotSpeechBuilder.toSSML(tell.speech as string),
+        say: tell.speech,
       };
       response.actions.unshift(sayAction);
     }
@@ -92,7 +92,7 @@ export class AutopilotCore implements Plugin {
     const ask = output.ask;
     if (ask) {
       const sayAction = {
-        say: AutopilotSpeechBuilder.toSSML(ask.speech as string),
+        say: ask.speech,
       };
       const listenAction = {
         listen: true,
