@@ -67,7 +67,7 @@ app.use(
     new GoogleAssistant({
         transactions: {
             androidPackageName: 'com.example.app',
-            keyFile: './keyfile.json'
+            keyFile: require('./keyfile.json')
         }
     }),
     new JovoDebugger(),
