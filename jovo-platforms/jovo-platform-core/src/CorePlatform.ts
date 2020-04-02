@@ -81,13 +81,13 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     this.use(new CorePlatformCore());
 
     Jovo.prototype.$corePlatformApp = undefined;
-    Jovo.prototype.corePlatformApp = function() {
+    Jovo.prototype.corePlatformApp = function () {
       if (this.constructor.name !== 'CorePlatformApp') {
         throw Error(`Can't handle request. Please use this.isCorePlatformApp()`);
       }
       return this as CorePlatformApp;
     };
-    Jovo.prototype.isCorePlatformApp = function() {
+    Jovo.prototype.isCorePlatformApp = function () {
       return this.constructor.name === 'CorePlatformApp';
     };
   }

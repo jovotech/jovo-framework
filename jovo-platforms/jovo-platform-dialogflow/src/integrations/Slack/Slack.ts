@@ -24,7 +24,7 @@ export class Slack implements Plugin {
     dialogFlow.middleware('$type')!.use(this.type.bind(this));
 
     const source = this.config.source;
-    DialogflowAgent.prototype.isSlackBot = function() {
+    DialogflowAgent.prototype.isSlackBot = function () {
       return this.getSource() === source;
     };
   }

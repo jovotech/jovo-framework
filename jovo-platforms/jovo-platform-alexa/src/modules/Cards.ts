@@ -29,7 +29,7 @@ export class Cards implements Plugin {
      * @param {*} image object with secured image url
      * @return {AlexaSkill} this
      */
-    AlexaSkill.prototype.showStandardCard = function(
+    AlexaSkill.prototype.showStandardCard = function (
       title: string,
       text: string,
       image: { smallImageUrl: string; largeImageUrl: string },
@@ -51,7 +51,7 @@ export class Cards implements Plugin {
      * @public
      * @return {AlexaSkill}
      */
-    AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function() {
+    AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function () {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -65,7 +65,7 @@ export class Cards implements Plugin {
      * @public
      * @return {Jovo}
      */
-    AlexaSkill.prototype.showAskForAddressCard = function() {
+    AlexaSkill.prototype.showAskForAddressCard = function () {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -79,7 +79,7 @@ export class Cards implements Plugin {
      * @public
      * @return {AlexaSkill}
      */
-    AlexaSkill.prototype.showAskForGeoLocationCard = function() {
+    AlexaSkill.prototype.showAskForGeoLocationCard = function () {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -93,7 +93,7 @@ export class Cards implements Plugin {
      * @public
      * @return {AlexaSkill}
      */
-    AlexaSkill.prototype.showAskForAmazonPayPermissionCard = function() {
+    AlexaSkill.prototype.showAskForAmazonPayPermissionCard = function () {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -108,7 +108,7 @@ export class Cards implements Plugin {
      * @param {Array} types 'write' or 'read'
      * @return {Jovo}
      */
-    AlexaSkill.prototype.showAskForListPermissionCard = function(types: string[]) {
+    AlexaSkill.prototype.showAskForListPermissionCard = function (types: string[]) {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -123,7 +123,7 @@ export class Cards implements Plugin {
      * @param {Array} contactProperties name|given_name|email|mobile_number
      * @return {Jovo}
      */
-    AlexaSkill.prototype.showAskForContactPermissionCard = function(contactProperties: string[]) {
+    AlexaSkill.prototype.showAskForContactPermissionCard = function (contactProperties: string[]) {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -137,7 +137,7 @@ export class Cards implements Plugin {
      * @public
      * @return {Jovo}
      */
-    AlexaSkill.prototype.showAskForRemindersPermissionCard = function() {
+    AlexaSkill.prototype.showAskForRemindersPermissionCard = function () {
       _set(
         this.$output,
         'Alexa.AskForPermissionsConsentCard',
@@ -151,7 +151,7 @@ export class Cards implements Plugin {
      * @public
      * @param {Card} card
      */
-    AlexaSkill.prototype.showCard = function(card: Card) {
+    AlexaSkill.prototype.showCard = function (card: Card) {
       _set(this.$output, `Alexa.${card.constructor.name}`, card);
       return this;
     };

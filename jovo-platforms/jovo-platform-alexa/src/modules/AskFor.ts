@@ -13,7 +13,7 @@ export class AskFor implements Plugin {
     alexa.middleware('$type')!.use(this.type.bind(this));
     alexa.middleware('$output')!.use(this.output.bind(this));
 
-    AlexaSkill.prototype.askForPermission = function(permissionScope: string, token?: string) {
+    AlexaSkill.prototype.askForPermission = function (permissionScope: string, token?: string) {
       _set(this.$output, 'Alexa.AskForPermission', {
         type: 'Connections.SendRequest',
         name: 'AskFor',
@@ -26,27 +26,27 @@ export class AskFor implements Plugin {
       });
       return this;
     };
-    AlexaSkill.prototype.askForReminders = function(token?: string) {
+    AlexaSkill.prototype.askForReminders = function (token?: string) {
       return this.askForPermission('alexa::alerts:reminders:skill:readwrite', token);
     };
 
-    AlexaSkill.prototype.askForTimers = function(token?: string) {
+    AlexaSkill.prototype.askForTimers = function (token?: string) {
       return this.askForPermission('alexa::alerts:timers:skill:readwrite', token);
     };
 
-    AlexaSkill.prototype.getPermissionStatus = function() {
+    AlexaSkill.prototype.getPermissionStatus = function () {
       return _get(this.$request, 'request.payload.status');
     };
 
-    AlexaSkill.prototype.hasPermissionAccepted = function() {
+    AlexaSkill.prototype.hasPermissionAccepted = function () {
       return _get(this.$request, 'request.payload.status') === 'ACCEPTED';
     };
 
-    AlexaSkill.prototype.hasPermissionDenied = function() {
+    AlexaSkill.prototype.hasPermissionDenied = function () {
       return _get(this.$request, 'request.payload.status') === 'DENIED';
     };
 
-    AlexaSkill.prototype.hasPermissionNotAnswered = function() {
+    AlexaSkill.prototype.hasPermissionNotAnswered = function () {
       return _get(this.$request, 'request.payload.status') === 'NOT_ANSWERED';
     };
   }

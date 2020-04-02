@@ -155,7 +155,7 @@ export class GameEnginePlugin implements Plugin {
 
     alexa.middleware('$output')!.use(this.output.bind(this));
     AlexaSkill.prototype.$gameEngine = undefined;
-    AlexaSkill.prototype.gameEngine = function() {
+    AlexaSkill.prototype.gameEngine = function () {
       return this.$gameEngine;
     };
   }

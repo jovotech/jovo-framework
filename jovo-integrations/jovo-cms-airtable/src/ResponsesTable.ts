@@ -41,7 +41,7 @@ export class ResponsesTable extends DefaultTable {
 
   install(extensible: Extensible) {
     super.install(extensible);
-    Cms.prototype.t = function() {
+    Cms.prototype.t = function () {
       if (!this.$jovo) {
         return;
       }

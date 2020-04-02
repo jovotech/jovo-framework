@@ -33,7 +33,7 @@
     "@types/node": "^10.3.1",
     "@types/tv4": "^1.2.29",
     "jest": "^25.1.0",
-    "prettier": "1.19.1",
+    "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
     "ts-jest": "^25.2.0",

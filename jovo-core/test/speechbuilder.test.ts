@@ -17,18 +17,12 @@ test('is ssml string without duplicate <speak> tags', () => {
 
 test('setProsody', () => {
   const speechBuilder = new SpeechBuilder();
-  speechBuilder
-    .addText('text1')
-    .addText('text2')
-    .setProsody({ rate: 'fast' });
+  speechBuilder.addText('text1').addText('text2').setProsody({ rate: 'fast' });
   expect(speechBuilder.toString()).toBe('<prosody rate="fast">text1 text2</prosody>');
 
   // order shouldn't matter
   const speechBuilder2 = new SpeechBuilder();
-  speechBuilder2
-    .setProsody({ rate: 'fast' })
-    .addText('text1')
-    .addText('text2');
+  speechBuilder2.setProsody({ rate: 'fast' }).addText('text1').addText('text2');
   expect(speechBuilder2.toString()).toBe('<prosody rate="fast">text1 text2</prosody>');
 });
 

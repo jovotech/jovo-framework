@@ -38,7 +38,7 @@ export class AudioPlayerPlugin implements Plugin {
     autopilot.middleware('$output')!.use(this.output.bind(this));
 
     AutopilotBot.prototype.$audioPlayer = undefined;
-    AutopilotBot.prototype.audioPlayer = function() {
+    AutopilotBot.prototype.audioPlayer = function () {
       return this.$audioPlayer;
     };
   }

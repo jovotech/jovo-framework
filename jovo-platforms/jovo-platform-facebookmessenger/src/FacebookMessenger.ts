@@ -1,5 +1,7 @@
 import {
+  AxiosError,
   AxiosRequestConfig,
+  AxiosResponse,
   BaseApp,
   ErrorCode,
   ExtensibleConfig,
@@ -11,8 +13,6 @@ import {
   Log,
   Platform,
   TestSuite,
-  AxiosError,
-  AxiosResponse,
 } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
@@ -95,13 +95,13 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     this.use(new FacebookMessengerCore());
 
     Jovo.prototype.$messengerBot = undefined;
-    Jovo.prototype.messengerBot = function() {
+    Jovo.prototype.messengerBot = function () {
       if (this.constructor.name !== 'MessengerBot') {
         throw Error(`Can't handle request. Please use this.isMessengerBot()`);
       }
       return this as MessengerBot;
     };
-    Jovo.prototype.isMessengerBot = function() {
+    Jovo.prototype.isMessengerBot = function () {
       return this.constructor.name === 'MessengerBot';
     };
 
@@ -259,7 +259,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
   private overrideAppHandle() {
     const PROTOTYPE_BACKUP = BaseApp.prototype.handle;
-    BaseApp.prototype.handle = async function(host: Host) {
+    BaseApp.prototype.handle = async function (host: Host) {
       const request = host.getRequestObject();
       const isMessengerRequest: boolean =
         request &&
@@ -272,7 +272,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
           // tslint:disable-next-line
-          hostCopy.setResponse = async function(obj: any) {
+          hostCopy.setResponse = async function (obj: any) {
             return;
           };
           for (const key in host) {

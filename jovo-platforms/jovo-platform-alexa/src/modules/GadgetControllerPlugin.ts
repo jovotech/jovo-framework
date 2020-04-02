@@ -141,7 +141,7 @@ export class GadgetControllerPlugin implements Plugin {
     alexa.middleware('$output')!.use(this.output.bind(this));
 
     AlexaSkill.prototype.$gadgetController = undefined;
-    AlexaSkill.prototype.gadgetController = function() {
+    AlexaSkill.prototype.gadgetController = function () {
       return this.$gadgetController;
     };
   }

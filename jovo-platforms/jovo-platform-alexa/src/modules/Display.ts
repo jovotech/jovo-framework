@@ -21,7 +21,7 @@ export class Display implements Plugin {
      * @param {*} template
      * @return {AlexaSkill}
      */
-    AlexaSkill.prototype.showDisplayTemplate = function(template: Template) {
+    AlexaSkill.prototype.showDisplayTemplate = function (template: Template) {
       _set(this.$output, 'Alexa.DisplayTemplate', new DisplayRenderTemplateDirective(template));
       return this;
     };
@@ -32,7 +32,7 @@ export class Display implements Plugin {
      * @param {*} text
      * @return {AlexaSkill}
      */
-    AlexaSkill.prototype.showHint = function(text: string | string[]) {
+    AlexaSkill.prototype.showHint = function (text: string | string[]) {
       _set(
         this.$output,
         'Alexa.DisplayHint',
@@ -48,7 +48,7 @@ export class Display implements Plugin {
      * @param {string} title
      * @param {string} subtitle
      */
-    AlexaSkill.prototype.showVideo = function(url: string, title?: string, subtitle?: string) {
+    AlexaSkill.prototype.showVideo = function (url: string, title?: string, subtitle?: string) {
       _set(
         this.$output,
         'Alexa.VideoApp',

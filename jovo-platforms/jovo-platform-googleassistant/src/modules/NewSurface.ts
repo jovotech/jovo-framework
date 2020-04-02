@@ -12,7 +12,7 @@ export class NewSurface implements Plugin {
     googleAssistant.middleware('$type')!.use(this.type.bind(this));
     googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
-    GoogleAction.prototype.newSurface = function(
+    GoogleAction.prototype.newSurface = function (
       capabilities: string[],
       context: string,
       notificationTitle: string,
@@ -27,7 +27,7 @@ export class NewSurface implements Plugin {
       return this;
     };
 
-    GoogleAction.prototype.isNewSurfaceConfirmed = function() {
+    GoogleAction.prototype.isNewSurfaceConfirmed = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',

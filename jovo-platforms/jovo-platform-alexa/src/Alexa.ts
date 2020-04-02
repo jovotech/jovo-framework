@@ -107,17 +107,17 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
     );
 
     Jovo.prototype.$alexaSkill = undefined;
-    Jovo.prototype.alexaSkill = function() {
+    Jovo.prototype.alexaSkill = function () {
       if (this.constructor.name !== 'AlexaSkill') {
         throw Error(`Can't handle request. Please use this.isAlexaSkill()`);
       }
       return this as AlexaSkill;
     };
-    Jovo.prototype.isAlexaSkill = function() {
+    Jovo.prototype.isAlexaSkill = function () {
       return this.constructor.name === 'AlexaSkill';
     };
     // tslint:disable-next-line
-    BaseApp.prototype.setAlexaHandler = function(...handlers: any[]) {
+    BaseApp.prototype.setAlexaHandler = function (...handlers: any[]) {
       for (const obj of handlers) {
         // eslint-disable-line
         if (typeof obj !== 'object') {

@@ -24,17 +24,17 @@ export class GoogleAssistantCore implements Plugin {
     googleAssistant.middleware('$output')!.use(this.output.bind(this));
     googleAssistant.middleware('after.$output')!.use(this.userStorageStore.bind(this));
 
-    GoogleAction.prototype.displayText = function(displayText: string) {
+    GoogleAction.prototype.displayText = function (displayText: string) {
       _set(this.$output, 'GoogleAssistant.displayText', displayText);
       return this;
     };
 
-    GoogleAction.prototype.richResponse = function(richResponse: RichResponse) {
+    GoogleAction.prototype.richResponse = function (richResponse: RichResponse) {
       _set(this.$output, 'GoogleAssistant.RichResponse', richResponse);
       return this;
     };
 
-    GoogleAction.prototype.appendResponse = function(responseItem: Item) {
+    GoogleAction.prototype.appendResponse = function (responseItem: Item) {
       if (this.$output.GoogleAssistant && this.$output.GoogleAssistant.ResponseAppender) {
         this.$output.GoogleAssistant.ResponseAppender.push(responseItem);
       } else {
@@ -47,7 +47,7 @@ export class GoogleAssistantCore implements Plugin {
       return this;
     };
 
-    GoogleAction.prototype.appendSimpleResponse = function(simpleResponse: SimpleResponse) {
+    GoogleAction.prototype.appendSimpleResponse = function (simpleResponse: SimpleResponse) {
       this.appendResponse({
         simpleResponse,
       });
@@ -58,7 +58,7 @@ export class GoogleAssistantCore implements Plugin {
      * Adds an array of session entities to the output object.
      * @param {object} sessionEntityTypes
      */
-    GoogleAction.prototype.addSessionEntityTypes = function(
+    GoogleAction.prototype.addSessionEntityTypes = function (
       sessionEntityTypes: SessionEntityType[],
     ) {
       if (!this.$output.GoogleAssistant) {
@@ -120,7 +120,7 @@ export class GoogleAssistantCore implements Plugin {
      * Adds one session entity to the output object.
      * @param {object} sessionEntityType
      */
-    GoogleAction.prototype.addSessionEntityType = function(sessionEntityType: SessionEntityType) {
+    GoogleAction.prototype.addSessionEntityType = function (sessionEntityType: SessionEntityType) {
       return this.addSessionEntityTypes([sessionEntityType]);
     };
 
@@ -131,7 +131,7 @@ export class GoogleAssistantCore implements Plugin {
      * @param {object} synonyms: The actual values which can be used in prompts by the user.
      * @param {object} entityOverrideMode: Optional. Specifies how to handle session entities.
      */
-    GoogleAction.prototype.addSessionEntity = function(
+    GoogleAction.prototype.addSessionEntity = function (
       name: string,
       value: string,
       synonyms: string[],

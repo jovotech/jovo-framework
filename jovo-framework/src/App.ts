@@ -82,14 +82,14 @@ if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-
 
   const oldMiddlewareUse = Middleware.prototype.use;
 
-  Middleware.prototype.use = function(fns) {
+  Middleware.prototype.use = function (fns) {
     getInstallLocation(new Error().stack!, this.parent.constructor.name, this.name);
     oldMiddlewareUse.call(this, fns);
     return this;
   };
 
   const oldBaseAppHandle = BaseApp.prototype.handle;
-  BaseApp.prototype.handle = async function(host) {
+  BaseApp.prototype.handle = async function (host) {
     Log.info();
     Log.infoStart('Handle duration ');
     await oldBaseAppHandle.call(this, host);
@@ -98,7 +98,7 @@ if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-
 
   const oldMiddlewareRun = Middleware.prototype.run;
 
-  Middleware.prototype.run = async function(object, concurrent) {
+  Middleware.prototype.run = async function (object, concurrent) {
     const start = process.hrtime();
     await oldMiddlewareRun.call(this, object, concurrent);
     const end = process.hrtime();
