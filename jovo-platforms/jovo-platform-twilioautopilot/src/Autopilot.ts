@@ -66,7 +66,7 @@ export class Autopilot extends Platform<AutopilotRequest, AutopilotResponse> {
     this.use(new AutopilotCore(), new AutopilotNLU(), new AudioPlayerPlugin(), new Cards());
 
     Jovo.prototype.$autopilotBot = undefined;
-    Jovo.prototype.autopilotBot = function() {
+    Jovo.prototype.autopilotBot = function () {
       if (this.constructor.name !== 'AutopilotBot') {
         throw new JovoError(
           `Can't handle request. Please use this.isAutopilotBot()`,

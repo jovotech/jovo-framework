@@ -57,7 +57,7 @@ export class ProactiveEventPlugin implements Plugin {
     alexa.middleware('$type')!.use(this.type.bind(this));
 
     AlexaSkill.prototype.$proactiveEvent = undefined;
-    AlexaSkill.prototype.proactiveEvent = function() {
+    AlexaSkill.prototype.proactiveEvent = function () {
       return this.$proactiveEvent;
     };
   }

@@ -83,7 +83,7 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
      * Returns googleAction instance
      * @returns {GoogleAction}
      */
-    Jovo.prototype.googleAction = function() {
+    Jovo.prototype.googleAction = function () {
       if (this.constructor.name !== 'GoogleAction') {
         throw Error(`Can't handle request. Please use this.isGoogleAction()`);
       }
@@ -95,7 +95,7 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
      * @public
      * @return {boolean} isGoogleAction
      */
-    Jovo.prototype.isGoogleAction = function() {
+    Jovo.prototype.isGoogleAction = function () {
       return this.constructor.name === 'GoogleAction';
     };
 
@@ -105,7 +105,7 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
      * @param {*} handlers
      */
     // tslint:disable-next-line
-    BaseApp.prototype.setGoogleAssistantHandler = function(...handlers: any[]) {
+    BaseApp.prototype.setGoogleAssistantHandler = function (...handlers: any[]) {
       for (const obj of handlers) {
         // eslint-disable-line
         if (typeof obj !== 'object') {

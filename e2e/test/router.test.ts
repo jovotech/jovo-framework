@@ -980,12 +980,8 @@ const delay = (ms: number) => {
 const randomUserId = () => {
   return (
     'user-' +
-    Math.random()
-      .toString(36)
-      .substring(5) +
+    Math.random().toString(36).substring(5) +
     '-' +
-    Math.random()
-      .toString(36)
-      .substring(2)
+    Math.random().toString(36).substring(2)
   );
 };

@@ -25,7 +25,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForName = function(optContext = '') {
+    GoogleAction.prototype.askForName = function (optContext = '') {
       return this.askForNamePermission(optContext);
     };
 
@@ -34,7 +34,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForZipCodeAndCity = function(optContext = '') {
+    GoogleAction.prototype.askForZipCodeAndCity = function (optContext = '') {
       return this.askForCoarseLocation(optContext);
     };
 
@@ -43,7 +43,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForNamePermission = function(optContext = '') {
+    GoogleAction.prototype.askForNamePermission = function (optContext = '') {
       this.$output.GoogleAssistant = {
         AskForPermission: {
           permissions: ['NAME'],
@@ -58,7 +58,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForCoarseLocation = function(optContext = '') {
+    GoogleAction.prototype.askForCoarseLocation = function (optContext = '') {
       this.$output.GoogleAssistant = {
         AskForPermission: {
           permissions: ['DEVICE_COARSE_LOCATION'],
@@ -73,7 +73,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForPreciseLocation = function(optContext = '') {
+    GoogleAction.prototype.askForPreciseLocation = function (optContext = '') {
       this.$output.GoogleAssistant = {
         AskForPermission: {
           permissions: ['DEVICE_PRECISE_LOCATION'],
@@ -89,7 +89,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} intent // intent for which you want to send notifications
      */
-    GoogleAction.prototype.askForUpdate = function(intent: string) {
+    GoogleAction.prototype.askForUpdate = function (intent: string) {
       return this.askForNotification(intent);
     };
 
@@ -100,7 +100,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} intent // intent for which you want to send notifications
      */
-    GoogleAction.prototype.askForNotification = function(intent: string) {
+    GoogleAction.prototype.askForNotification = function (intent: string) {
       this.$output.GoogleAssistant = {
         AskForUpdatePermission: {
           // Google calls it UpdatePermission as well
@@ -116,7 +116,7 @@ export class AskFor implements Plugin {
      * @param {'NAME'|'DEVICE_COARSE_LOCATION'|'DEVICE_PRECISE_LOCATION'} permissions
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForPermission = function(permissions: string[], optContext = '') {
+    GoogleAction.prototype.askForPermission = function (permissions: string[], optContext = '') {
       this.$output.GoogleAssistant = {
         AskForPermission: {
           permissions,
@@ -130,7 +130,7 @@ export class AskFor implements Plugin {
      * Returns true if permission granted
      * @return {boolean}
      */
-    GoogleAction.prototype.isPermissionGranted = function() {
+    GoogleAction.prototype.isPermissionGranted = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',
@@ -148,7 +148,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {string} optContext
      */
-    GoogleAction.prototype.askForSignIn = function(optContext = '') {
+    GoogleAction.prototype.askForSignIn = function (optContext = '') {
       this.$output.GoogleAssistant = {
         AskForSignIn: {
           optContext,
@@ -162,7 +162,7 @@ export class AskFor implements Plugin {
      * @public
      * @return {boolean}
      */
-    GoogleAction.prototype.getSignInStatus = function() {
+    GoogleAction.prototype.getSignInStatus = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',
@@ -179,7 +179,7 @@ export class AskFor implements Plugin {
      * @public
      * @return {boolean}
      */
-    GoogleAction.prototype.isSignInCancelled = function() {
+    GoogleAction.prototype.isSignInCancelled = function () {
       return this.getSignInStatus() === 'CANCELLED';
     };
 
@@ -188,7 +188,7 @@ export class AskFor implements Plugin {
      * @public
      * @return {boolean}
      */
-    GoogleAction.prototype.isSignInDenied = function() {
+    GoogleAction.prototype.isSignInDenied = function () {
       return this.getSignInStatus() === 'DENIED';
     };
 
@@ -197,7 +197,7 @@ export class AskFor implements Plugin {
      * @public
      * @return {boolean}
      */
-    GoogleAction.prototype.isSignInOk = function() {
+    GoogleAction.prototype.isSignInOk = function () {
       return this.getSignInStatus() === 'OK';
     };
 
@@ -206,7 +206,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {*} questions
      */
-    GoogleAction.prototype.askForDateTime = function(questions: {
+    GoogleAction.prototype.askForDateTime = function (questions: {
       requestDatetimeText: string;
       requestDateText: string;
       requestTimeText: string;
@@ -221,7 +221,7 @@ export class AskFor implements Plugin {
      * Return date time confirmation value
      * @returns {string}
      */
-    GoogleAction.prototype.getDateTime = function() {
+    GoogleAction.prototype.getDateTime = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',
@@ -237,7 +237,7 @@ export class AskFor implements Plugin {
      * Return place confirmation value
      * @return {object | undefined}
      */
-    GoogleAction.prototype.getPlace = function() {
+    GoogleAction.prototype.getPlace = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',
@@ -253,7 +253,7 @@ export class AskFor implements Plugin {
      * Return device object
      * @returns {Device}
      */
-    GoogleAction.prototype.getDevice = function(): Device {
+    GoogleAction.prototype.getDevice = function (): Device {
       return _get(this.$originalRequest || this.$request, 'device');
     };
 
@@ -262,7 +262,7 @@ export class AskFor implements Plugin {
      * @public
      * @param {*} text
      */
-    GoogleAction.prototype.askForConfirmation = function(text: string) {
+    GoogleAction.prototype.askForConfirmation = function (text: string) {
       this.$output.GoogleAssistant = {
         AskForConfirmation: text,
       };
@@ -273,7 +273,7 @@ export class AskFor implements Plugin {
      * Return confirmation status
      * @returns {boolean}
      */
-    GoogleAction.prototype.isConfirmed = function() {
+    GoogleAction.prototype.isConfirmed = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',
@@ -291,7 +291,7 @@ export class AskFor implements Plugin {
      * @param {string} permissionContext
      * @returns {this}
      */
-    GoogleAction.prototype.askForPlace = function(
+    GoogleAction.prototype.askForPlace = function (
       requestPrompt: string,
       permissionContext: string,
     ) {

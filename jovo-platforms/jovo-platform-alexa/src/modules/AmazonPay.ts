@@ -24,7 +24,7 @@ export class AmazonPayPlugin implements Plugin {
   install(alexa: Alexa) {
     alexa.middleware('$type')!.use(this.type.bind(this));
     AlexaSkill.prototype.$pay = undefined;
-    AlexaSkill.prototype.pay = function() {
+    AlexaSkill.prototype.pay = function () {
       return new AmazonPay(this);
     };
   }

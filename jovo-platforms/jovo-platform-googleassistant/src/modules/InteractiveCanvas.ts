@@ -12,7 +12,7 @@ export class InteractiveCanvas implements Plugin {
   install(googleAssistant: GoogleAssistant) {
     googleAssistant.middleware('$output')!.use(this.output.bind(this));
 
-    GoogleAction.prototype.htmlResponse = function(obj: HtmlResponse) {
+    GoogleAction.prototype.htmlResponse = function (obj: HtmlResponse) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }

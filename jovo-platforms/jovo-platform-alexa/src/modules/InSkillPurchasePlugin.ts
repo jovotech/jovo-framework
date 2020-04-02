@@ -191,7 +191,7 @@ export class InSkillPurchasePlugin implements Plugin {
     alexa.middleware('$type')!.use(this.type.bind(this));
     alexa.middleware('$output')!.use(this.output.bind(this));
     AlexaSkill.prototype.$inSkillPurchase = undefined;
-    AlexaSkill.prototype.inSkillPurchase = function() {
+    AlexaSkill.prototype.inSkillPurchase = function () {
       return new InSkillPurchase(this);
     };
   }

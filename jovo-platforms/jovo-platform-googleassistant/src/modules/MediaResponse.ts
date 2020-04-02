@@ -46,11 +46,11 @@ export class MediaResponsePlugin implements Plugin {
     GoogleAction.prototype.$audioPlayer = undefined;
     GoogleAction.prototype.$mediaResponse = undefined;
 
-    GoogleAction.prototype.audioPlayer = function() {
+    GoogleAction.prototype.audioPlayer = function () {
       return this.$mediaResponse;
     };
 
-    GoogleAction.prototype.mediaResponse = function() {
+    GoogleAction.prototype.mediaResponse = function () {
       return this.$mediaResponse;
     };
   }

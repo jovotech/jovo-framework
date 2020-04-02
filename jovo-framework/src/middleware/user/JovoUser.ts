@@ -171,7 +171,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String}
      */
-    User.prototype.getPrevIntent = function(index: number): string | undefined {
+    User.prototype.getPrevIntent = function (index: number): string | undefined {
       return _get(this.$context, `prev[${index}].request.intent`);
     };
 
@@ -181,7 +181,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String}
      */
-    User.prototype.getPrevRequestState = function(index: number) {
+    User.prototype.getPrevRequestState = function (index: number) {
       return _get(this.$context, `prev[${index}].request.state`);
     };
 
@@ -191,7 +191,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String}
      */
-    User.prototype.getPrevResponseState = function(index: number) {
+    User.prototype.getPrevResponseState = function (index: number) {
       return _get(this.$context, `prev[${index}].response.state`);
     };
 
@@ -201,7 +201,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {*}
      */
-    User.prototype.getPrevInputs = function(index: number) {
+    User.prototype.getPrevInputs = function (index: number) {
       return _get(this.$context, `prev[${index}].request.inputs`);
     };
 
@@ -211,7 +211,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String|*}
      */
-    User.prototype.getPrevTimestamp = function(index: number) {
+    User.prototype.getPrevTimestamp = function (index: number) {
       return _get(this.$context, `prev[${index}].request.timestamp`);
     };
 
@@ -221,7 +221,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String}
      */
-    User.prototype.getPrevSpeech = function(index: number) {
+    User.prototype.getPrevSpeech = function (index: number) {
       return _get(this.$context, `prev[${index}].response.speech`);
     };
 
@@ -231,7 +231,7 @@ export class JovoUser implements Plugin {
      * @param {number} index
      * @return {String}
      */
-    User.prototype.getPrevReprompt = function(index: number) {
+    User.prototype.getPrevReprompt = function (index: number) {
       return _get(this.$context, `prev[${index}].response.reprompt`);
     };
 
@@ -239,7 +239,7 @@ export class JovoUser implements Plugin {
      * Explicit user deletion
      * @returns {Promise<void>}
      */
-    User.prototype.delete = async function() {
+    User.prototype.delete = async function () {
       const userId = this.getId();
 
       if (typeof userId === 'undefined') {
@@ -259,7 +259,7 @@ export class JovoUser implements Plugin {
      * Load user from db
      * @returns {Promise<any>}
      */
-    User.prototype.loadData = async function() {
+    User.prototype.loadData = async function () {
       if (!this.jovo) {
         throw new Error('Jovo object is not initialized.');
       }
@@ -270,7 +270,7 @@ export class JovoUser implements Plugin {
      * Save user to db
      * @returns {Promise<any>}
      */
-    User.prototype.saveData = async function() {
+    User.prototype.saveData = async function () {
       if (!this.jovo) {
         throw new Error('Jovo object is not initialized.');
       }
@@ -286,7 +286,7 @@ export class JovoUser implements Plugin {
      *      context: true
      * }
      */
-    Jovo.prototype.repeat = async function() {
+    Jovo.prototype.repeat = async function () {
       if (_get(this.$user, '$context.prev[0].response.output')) {
         this.setOutput(_get(this.$user, '$context.prev[0].response.output'));
       }
@@ -484,10 +484,7 @@ export class JovoUser implements Plugin {
    */
   private updateDbLastState(handleRequest: HandleRequest, data: object) {
     const stringifiedData = JSON.stringify(data);
-    const hashedUserData = crypto
-      .createHash('md5')
-      .update(stringifiedData)
-      .digest('hex');
+    const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex');
     handleRequest.jovo!.$user.db_cache_hash = hashedUserData;
   }
 
@@ -498,10 +495,7 @@ export class JovoUser implements Plugin {
    */
   private userDataIsEqualToLastState(handleRequest: HandleRequest, data: object): boolean {
     const stringifiedData = JSON.stringify(data);
-    const hashedUserData = crypto
-      .createHash('md5')
-      .update(stringifiedData)
-      .digest('hex'); // current user data
+    const hashedUserData = crypto.createHash('md5').update(stringifiedData).digest('hex'); // current user data
     const cachedHashedUserData = handleRequest.jovo!.$user.db_cache_hash; // cached user data
 
     return hashedUserData === cachedHashedUserData;

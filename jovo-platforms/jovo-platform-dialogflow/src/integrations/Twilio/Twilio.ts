@@ -15,7 +15,7 @@ export class Twilio implements Plugin {
   install(dialogFlow: Dialogflow) {
     dialogFlow.middleware('$type')!.use(this.type.bind(this));
 
-    DialogflowAgent.prototype.isTwilioBot = function() {
+    DialogflowAgent.prototype.isTwilioBot = function () {
       return _get(this.$request, 'originalDetectIntentRequest.source') === 'twilio';
     };
   }

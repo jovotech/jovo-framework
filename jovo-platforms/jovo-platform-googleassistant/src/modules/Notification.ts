@@ -116,7 +116,7 @@ export class NotificationPlugin implements Plugin {
     googleAssistant.middleware('$type')!.use(this.type.bind(this));
 
     GoogleAction.prototype.$notification = undefined;
-    GoogleAction.prototype.notification = function() {
+    GoogleAction.prototype.notification = function () {
       return this.$notification;
     };
   }

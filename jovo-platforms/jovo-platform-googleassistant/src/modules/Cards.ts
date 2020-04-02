@@ -19,7 +19,7 @@ export class Cards implements Plugin {
      * @param {BasicCard} basicCard
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showBasicCard = function(basicCard: BasicCard) {
+    GoogleAction.prototype.showBasicCard = function (basicCard: BasicCard) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -38,7 +38,7 @@ export class Cards implements Plugin {
      * @param {Array<String>} chips
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showSuggestionChips = function(chips: string[]) {
+    GoogleAction.prototype.showSuggestionChips = function (chips: string[]) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -54,7 +54,7 @@ export class Cards implements Plugin {
      * @param {string} url
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showLinkOutSuggestion = function(destinationName: string, url: string) {
+    GoogleAction.prototype.showLinkOutSuggestion = function (destinationName: string, url: string) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -73,7 +73,7 @@ export class Cards implements Plugin {
      * @param {Carousel} carousel
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showCarousel = function(carousel: Carousel) {
+    GoogleAction.prototype.showCarousel = function (carousel: Carousel) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -89,7 +89,7 @@ export class Cards implements Plugin {
      * @param {Carousel} carouselBrowse
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showCarouselBrowse = function(carouselBrowse: CarouselBrowse) {
+    GoogleAction.prototype.showCarouselBrowse = function (carouselBrowse: CarouselBrowse) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -108,7 +108,7 @@ export class Cards implements Plugin {
      * @param {array} rowsText
      * @return {GoogleAction} this
      */
-    GoogleAction.prototype.showSimpleTable = function(
+    GoogleAction.prototype.showSimpleTable = function (
       title: string,
       subtitle: string,
       columnHeaders: string[],
@@ -133,7 +133,7 @@ export class Cards implements Plugin {
      * @param {Table} table
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showTable = function(table: Table) {
+    GoogleAction.prototype.showTable = function (table: Table) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -148,7 +148,7 @@ export class Cards implements Plugin {
      * @param {List} list
      * @return {GoogleAction}
      */
-    GoogleAction.prototype.showList = function(list: List) {
+    GoogleAction.prototype.showList = function (list: List) {
       if (!this.$output.GoogleAssistant) {
         this.$output.GoogleAssistant = {};
       }
@@ -163,7 +163,7 @@ export class Cards implements Plugin {
      * @public
      * @return {*}
      */
-    GoogleAction.prototype.getSelectedElementId = function() {
+    GoogleAction.prototype.getSelectedElementId = function () {
       for (const argument of _get(
         this.$originalRequest || this.$request,
         'inputs[0]["arguments"]',

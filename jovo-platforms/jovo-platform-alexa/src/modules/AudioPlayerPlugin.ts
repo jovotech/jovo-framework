@@ -260,7 +260,7 @@ export class AudioPlayerPlugin implements Plugin {
 
     AlexaSkill.prototype.$audioPlayer = undefined;
 
-    AlexaSkill.prototype.audioPlayer = function() {
+    AlexaSkill.prototype.audioPlayer = function () {
       return this.$audioPlayer;
     };
   }

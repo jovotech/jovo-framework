@@ -9,10 +9,10 @@ import { Alexa } from '../Alexa';
 export class SkillEvent implements Plugin {
   install(alexa: Alexa) {
     alexa.middleware('$type')!.use(this.type.bind(this));
-    AlexaSkill.prototype.getBody = function() {
+    AlexaSkill.prototype.getBody = function () {
       return _get(this.$request, 'request.body');
     };
-    AlexaSkill.prototype.getSkillEventBody = function() {
+    AlexaSkill.prototype.getSkillEventBody = function () {
       return _get(this.$request, 'request.body');
     };
   }

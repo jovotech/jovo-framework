@@ -245,9 +245,7 @@ export class Conversation {
  * @returns {string}
  */
 function randomUserId(): string {
-  return Math.random()
-    .toString(36)
-    .substring(7);
+  return Math.random().toString(36).substring(7);
 }
 
 /**
@@ -255,8 +253,5 @@ function randomUserId(): string {
  * @returns {string}
  */
 function projectUserId(): string {
-  return `testuser-${crypto
-    .createHash('md5')
-    .update(__dirname)
-    .digest('hex')}`;
+  return `testuser-${crypto.createHash('md5').update(__dirname).digest('hex')}`;
 }

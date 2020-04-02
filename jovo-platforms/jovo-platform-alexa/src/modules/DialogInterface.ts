@@ -15,14 +15,14 @@ export class DialogInterface implements Plugin {
 
     AlexaSkill.prototype.$dialog = undefined;
 
-    AlexaSkill.prototype.dialog = function() {
+    AlexaSkill.prototype.dialog = function () {
       return this.$dialog;
     };
 
     /**
      * Clears temporary dynamic entities
      */
-    AlexaSkill.prototype.clearDynamicEntities = function() {
+    AlexaSkill.prototype.clearDynamicEntities = function () {
       if (!this.$output.Alexa) {
         this.$output.Alexa = {};
       }
@@ -41,7 +41,9 @@ export class DialogInterface implements Plugin {
     /**
      * Adds a given array of dynamic entity types to the output object.
      */
-    AlexaSkill.prototype.addDynamicEntityTypes = function(dynamicEntityTypes: DynamicEntityType[]) {
+    AlexaSkill.prototype.addDynamicEntityTypes = function (
+      dynamicEntityTypes: DynamicEntityType[],
+    ) {
       if (!this.$output.Alexa) {
         this.$output.Alexa = {};
       }
@@ -62,7 +64,7 @@ export class DialogInterface implements Plugin {
     /**
      * Adds a dynamic entity to the output object.
      */
-    AlexaSkill.prototype.addDynamicEntityType = function(dynamicEntityType: DynamicEntityType) {
+    AlexaSkill.prototype.addDynamicEntityType = function (dynamicEntityType: DynamicEntityType) {
       return this.addDynamicEntityTypes([dynamicEntityType]);
     };
 
@@ -71,7 +73,7 @@ export class DialogInterface implements Plugin {
      * ToDo: Change parameter to adjust to addDynamicEntityTypes()
      * @param dynamicEntityTypes
      */
-    AlexaSkill.prototype.replaceDynamicEntities = function(
+    AlexaSkill.prototype.replaceDynamicEntities = function (
       dynamicEntityTypes: DynamicEntityType[] | DynamicEntityType,
     ) {
       if (!Array.isArray(dynamicEntityTypes)) {

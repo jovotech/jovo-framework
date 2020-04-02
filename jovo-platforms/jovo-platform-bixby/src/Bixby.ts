@@ -56,7 +56,7 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
     this.use(new BixbyCore(), new BixbyNLU(), new BixbyAudioPlayerPlugin());
 
     Jovo.prototype.$bixbyCapsule = undefined;
-    Jovo.prototype.bixbyCapsule = function() {
+    Jovo.prototype.bixbyCapsule = function () {
       if (this.constructor.name !== 'BixbyCapsule') {
         throw new JovoError(
           "Can't handle request. Please use this.isBixbyCapsule()",
@@ -68,12 +68,12 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
       return this as BixbyCapsule;
     };
 
-    Jovo.prototype.isBixbyCapsule = function() {
+    Jovo.prototype.isBixbyCapsule = function () {
       return this.constructor.name === 'BixbyCapsule';
     };
 
     // tslint:disable-next-line
-    BaseApp.prototype.setBixbyHandler = function(...handlers: any[]) {
+    BaseApp.prototype.setBixbyHandler = function (...handlers: any[]) {
       for (const obj of handlers) {
         if (typeof obj !== 'object') {
           throw new JovoError('Handler must be of type object');
