@@ -60,6 +60,24 @@ To use transactions for digital goods, you need to install the `googleapis` npm 
 $ npm install --save googleapis
 ```
 
+To use transactions for digital goods, you need to add the Android App package name in `src/app.js`:
+
+```
+app.use(
+    new GoogleAssistant({
+        transactions: {
+            androidPackageName: 'com.example.app',
+            keyFile: './keyfile.json'
+        }
+    }),
+    new JovoDebugger(),
+);
+```
+
+You can generate the `./keyfile.json` file by following the instructions:
+* [Jovo Forum](https://community.jovo.tech/t/keyfile-google-assistant-transactions/992)
+* [Official Google Docs](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-consumables#create_a_digital_goods_api_key)
+
 
 ### Digital Goods Implementation
 
