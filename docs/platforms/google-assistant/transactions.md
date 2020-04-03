@@ -35,7 +35,7 @@ Learn more below:
 
 ## Digital Goods
 
-> Official Google Docs: [Build digital transactions](https://developers.google.com/actions/transactions/digital/dev-guide-digital)
+> Official Google Docs: [Build digital transactions](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables)
 
 Digital transactions allow you to sell in-app product in the Google Play store.
 
@@ -44,7 +44,7 @@ Digital transactions allow you to sell in-app product in the Google Play store.
 
 ### Digital Goods Configuration
 
-Learn more about configurations in the [official Google Docs](https://developers.google.com/actions/transactions/digital/dev-guide-digital).
+Learn more about configurations in the [official Google Docs](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables).
 
 Here are some of the steps that need to be taken:
 * Create a Google Developer account
@@ -76,12 +76,12 @@ app.use(
 
 You can generate the `./keyfile.json` file by following the instructions:
 * [Jovo Forum](https://community.jovo.tech/t/keyfile-google-assistant-transactions/992)
-* [Official Google Docs](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-consumables#create_a_digital_goods_api_key)
+* [Official Google Docs](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables#create_a_digital_goods_api_key)
 
 
 ### Digital Goods Implementation
 
-To implement the transaction of digital goods in your Jovo project, there are few things you need to do (in line with the [transaction flow](https://developers.google.com/actions/transactions/digital/dev-guide-digital#types_of_digital_goods#transaction_flow) described in the Google docs):
+To implement the transaction of digital goods in your Jovo project, there are few things you need to do (in line with the [transaction flow](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables#build_your_purchase_flow) described in the Google docs):
 
 * [Gather Information](#gather-information)
 * [Build the Order](#build-the-order)
@@ -91,10 +91,10 @@ To implement the transaction of digital goods in your Jovo project, there are fe
 
 #### Gather Information
 
-There are two types of digital goods that can be sold ([take a look at the official Google docs for more information](https://developers.google.com/actions/transactions/digital/dev-guide-digital#types_of_digital_goods)):
+There are two types of digital goods that can be sold:
 
-* `SKU_TYPE_IN_APP`: One-time in-app purchases
-* `SKU_TYPE_SUBSCRIPTION`: Auomatically charge users on a recurring schedule
+* [`SKU_TYPE_IN_APP`](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables): One-time in-app purchases
+* [`SKU_TYPE_SUBSCRIPTION`](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-subscriptions): Automatically charge users on a recurring schedule
 
 Depending on which type you want to use, you can use the following methods to query the Play store with a list of product IDs (SKUs):
 
@@ -118,7 +118,7 @@ this.$googleAction!.$transaction.getSubscriptions(skus: string[])
 
 #### Build the Order
 
-This part of the flow prompts the user to select an item. [Learn in the official docs by Google](https://developers.google.com/actions/transactions/digital/dev-guide-digital#types_of_digital_goods#build_fulfillment) how to create a rich response that describes the available items to the user.
+This part of the flow prompts the user to select an item. [Learn in the official docs by Google](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables#3) how to create a rich response that describes the available items to the user.
 
 
 #### Complete Purchase
