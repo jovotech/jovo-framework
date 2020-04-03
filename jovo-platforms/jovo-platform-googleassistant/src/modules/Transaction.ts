@@ -549,6 +549,11 @@ export class Transaction {
     }
 
     const accessToken = await this.getGoogleApiAccessToken();
+    console.log({
+      conversationId,
+      skuType: type,
+      ids: skus,
+    });
 
     try {
       const response = await GoogleActionAPI.apiCall({
@@ -565,10 +570,12 @@ export class Transaction {
         },
       });
 
+      console.log(response.data);
       if (response.data?.skus) {
         return response.data.skus;
       }
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
