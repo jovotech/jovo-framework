@@ -121,36 +121,48 @@ export class AutopilotResponse implements JovoResponse {
     // no speech output in response
     if (!sayAction) return false;
 
-    if (Array.isArray(speechText)) {
-      for (const speech of speechText) {
-        if (AutopilotSpeechBuilder.toSSML(speech) === sayAction.say) return true;
+    if (speechText) {
+      if (Array.isArray(speechText)) {
+        for (const speech of speechText) {
+          if (speech === sayAction.say) return true;
+        }
       }
+
+      return speechText === sayAction.say;
     }
 
-    return AutopilotSpeechBuilder.toSSML(speechText as string) === sayAction.say;
+    return true;
   }
 
   isAsk(speechText?: string | string[]): boolean {
     const hasListenAction = this.actions.some((action) => {
       return action.listen;
     });
-    // is tell()!
+    // can't be ask() without the Listen action
     if (!hasListenAction) return false;
 
-    const sayAction = this.actions.find((action) => {
-      return action.say;
-    });
+    if (speechText) {
+      // we only return true, if speechText and Say action have the same value
+      const sayAction = this.actions.find((action) => {
+        return action.say;
+      });
 
-    // no speech output in response
-    if (!sayAction) return false;
-
-    if (Array.isArray(speechText)) {
-      for (const speech of speechText) {
-        if (AutopilotSpeechBuilder.toSSML(speech) === sayAction.say) return true;
+      // Say action has no value but speechText does => it's not the correct ask()
+      if (!sayAction) {
+        return false;
       }
+
+      if (Array.isArray(speechText)) {
+        for (const speech of speechText) {
+          if (speech === sayAction.say) return true;
+        }
+      }
+
+      return speechText === sayAction.say;
     }
 
-    return AutopilotSpeechBuilder.toSSML(speechText as string) === sayAction.say;
+    // no speechText, and Listen action is present
+    return true;
   }
 
   hasState(state: string): boolean | undefined {
@@ -171,8 +183,29 @@ export class AutopilotResponse implements JovoResponse {
     }
   }
 
+  /**
+   * Returns true if there is no Listen, Collect, or Redirect action
+   */
   hasSessionEnded(): boolean {
-    return this.isTell();
+    return !(this.isAsk() || this.hasCollect() || this.hasRedirect());
+  }
+
+  /**
+   * Returns true if the `actions` array contains a Collect action
+   */
+  hasCollect(): boolean {
+    return this.actions.some((action) => {
+      return action.collect;
+    });
+  }
+
+  /**
+   * Returns true if the `actions` array contains a Redirect action
+   */
+  hasRedirect(): boolean {
+    return this.actions.some((action) => {
+      return action.redirect;
+    });
   }
 
   static fromJSON(json: string) {
