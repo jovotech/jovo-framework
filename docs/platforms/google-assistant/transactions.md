@@ -143,7 +143,7 @@ app.setHandler({
           this.tell("Digital Purchase Check");
       },
 
-      COMPLETE_PURCHASE() {
+      ON_COMPLETE_PURCHASE() {
          // Check purchase status
       }
    }
@@ -186,7 +186,7 @@ app.setHandler({
           this.tell("Digital Purchase Check");
       },
 
-      COMPLETE_PURCHASE() {
+      ON_COMPLETE_PURCHASE() {
          // Check purchase status
       }
    }
