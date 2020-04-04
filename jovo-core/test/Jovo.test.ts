@@ -700,13 +700,13 @@ describe('test parseForValidatorAsync()', () => {
 describe('test getActiveComponentsRootState', () => {
   beforeEach(() => {
     jovo.$session = {
-      $data: {}
+      $data: {},
     };
     jovo.$components = {
       'jovo-component-test': {
         config: {},
-        name: 'jovo-component-test',
         data: {},
+        name: 'jovo-component-test',
       },
     };
   });
