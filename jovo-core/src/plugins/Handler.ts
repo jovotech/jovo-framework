@@ -423,18 +423,22 @@ export class Handler implements Plugin {
      * @return {string | undefined}
      */
     Jovo.prototype.getActiveComponentsRootState = function (): string | undefined {
-      const currentState = this.getState();
+      const currentState: string = this.getState();
 
       if (currentState && this.$components) {
-        const components = Object.keys(this.$components || {});
-        let states = currentState.split('.');
+        const components = Object.keys(this.$components);
+        const states = currentState.split('.');
 
         // Remove last State until we hit a Component
-        while (!components.includes(states[states.length - 1])) {
-          states = states.slice(0, -1);
+        while (states.length > 0) {
+          if (components.includes(states[states.length - 1])) {
+            break;
+          } else {
+            states.pop();
+          }
         }
 
-        return states.join('.');
+        return states.length === 0 ? undefined : states.join('.');
       }
 
       return undefined;
