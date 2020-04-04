@@ -145,7 +145,6 @@ app.setHandler({
 
       COMPLETE_PURCHASE() {
          // Check purchase status
-         this.tell("Purchase Completed. Check Purchase status and play content.");
       }
    }
 });
@@ -189,7 +188,6 @@ app.setHandler({
 
       COMPLETE_PURCHASE() {
          // Check purchase status
-         this.tell("Purchase Completed. Check Purchase status and play content.");
       }
    }
 });
