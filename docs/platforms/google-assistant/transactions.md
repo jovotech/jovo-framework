@@ -60,7 +60,12 @@ To use transactions for digital goods, you need to install the `googleapis` npm 
 $ npm install --save googleapis
 ```
 
-To use transactions for digital goods, you need to add the Android App package name in `src/app.js`:
+Next, head to Google Cloud API Console to enable the Actions API:
+1. Visit Google Cloud Console -> [APIs & Services](https://console.cloud.google.com/apis/api/)
+2. Search "Actions API"
+3. Select "Enable"
+
+Then in `src/app.js` add the Android App package name you created earlier:
 
 ```
 app.use(
