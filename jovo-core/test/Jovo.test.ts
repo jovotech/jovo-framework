@@ -696,3 +696,48 @@ describe('test parseForValidatorAsync()', () => {
     expect(failedValidators[0]).toStrictEqual(['Validator', 'key', '']);
   });
 });
+
+describe('test getActiveComponentsRootState', () => {
+  beforeEach(() => {
+    jovo.$session = {
+      $data: {},
+    };
+    jovo.$components = {
+      'jovo-component-test': {
+        config: {},
+        data: {},
+        name: 'jovo-component-test',
+      },
+    };
+  });
+
+  test('state only has component state', () => {
+    jovo.$session.$data[SessionConstants.STATE] = 'jovo-component-test';
+
+    expect(jovo.getActiveComponentsRootState()).toBe('jovo-component-test');
+  });
+
+  test('component name is last one with depth = 3', () => {
+    jovo.$session.$data[SessionConstants.STATE] = 'state1.state2.jovo-component-test';
+
+    expect(jovo.getActiveComponentsRootState()).toBe('state1.state2.jovo-component-test');
+  });
+
+  test('component name is middle one with depth = 3', () => {
+    jovo.$session.$data[SessionConstants.STATE] = 'state1.jovo-component-test.state2';
+
+    expect(jovo.getActiveComponentsRootState()).toBe('state1.jovo-component-test');
+  });
+
+  test('component name is first one with depth = 3', () => {
+    jovo.$session.$data[SessionConstants.STATE] = 'jovo-component-test.state1.state2';
+
+    expect(jovo.getActiveComponentsRootState()).toBe('jovo-component-test');
+  });
+
+  test('there is no component name in state', () => {
+    jovo.$session.$data[SessionConstants.STATE] = 'state1.state2';
+
+    expect(jovo.getActiveComponentsRootState()).toBeUndefined();
+  });
+});
