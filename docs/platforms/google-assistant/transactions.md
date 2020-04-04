@@ -169,7 +169,7 @@ this.$googleAction.$transaction.completePurchase(skuId)
 this.$googleAction!.$transaction.completePurchase(skuId: string)
 ```
 
-The next request will then go into the `COMPLETE_PURCHASE()` inside the `ON_TRANSACTION` object in your handler:
+The next request will then go into the `ON_COMPLETE_PURCHASE()` inside the `ON_TRANSACTION` object in your handler:
 
 ```js
 // @language=javascript
