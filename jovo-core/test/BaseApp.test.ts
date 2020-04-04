@@ -1,5 +1,7 @@
 import { BaseApp, ComponentPlugin, Extensible, Host, Jovo } from '../src';
 
+process.env.NODE_ENV = 'UNIT_TEST';
+
 class Parent extends Extensible {
   /**
    * Empty install() implementation
