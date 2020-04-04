@@ -60,7 +60,12 @@ To use transactions for digital goods, you need to install the `googleapis` npm 
 $ npm install --save googleapis
 ```
 
-To use transactions for digital goods, you need to add the Android App package name in `src/app.js`:
+Next, head to Google Cloud API Console to enable the Actions API:
+1. Visit Google Cloud Console -> [APIs & Services](https://console.cloud.google.com/apis/api/)
+2. Search "Actions API"
+3. Select "Enable"
+
+Then in `src/app.js` add the Android App package name you created earlier:
 
 ```
 app.use(
@@ -116,6 +121,35 @@ this.$googleAction!.$transaction.getConsumables(skus: string[])
 this.$googleAction!.$transaction.getSubscriptions(skus: string[])
 ```
 
+Check the user has met all requirements for Digital Purchase:
+```
+this.$googleAction.$transaction.checkDigitalPurchaseRequirements();
+```
+
+The next request will then go into the `DIGITAL_PURCHASE_CHECK()` inside the `ON_TRANSACTION` object in your handler:
+
+```js
+// @language=javascript
+
+// src/app.js
+
+app.setHandler({
+
+   // ...
+
+   ON_TRANSACTION: {
+      DIGITAL_PURCHASE_CHECK(){
+          // Check Requirements Check status
+          this.tell("Digital Purchase Check");
+      },
+
+      ON_COMPLETE_PURCHASE() {
+         // Check purchase status
+      }
+   }
+});
+```
+
 #### Build the Order
 
 This part of the flow prompts the user to select an item. [Learn in the official docs by Google](https://developers.google.com/assistant/transactions/digital/dev-guide-digital-non-consumables#3) how to create a rich response that describes the available items to the user.
@@ -135,7 +169,7 @@ this.$googleAction.$transaction.completePurchase(skuId)
 this.$googleAction!.$transaction.completePurchase(skuId: string)
 ```
 
-The next request will then go into the `COMPLETE_PURCHASE()` inside the `ON_TRANSACTION` object in your handler:
+The next request will then go into the `ON_COMPLETE_PURCHASE()` inside the `ON_TRANSACTION` object in your handler:
 
 ```js
 // @language=javascript
@@ -147,7 +181,12 @@ app.setHandler({
    // ...
 
    ON_TRANSACTION: {
-      COMPLETE_PURCHASE() {
+      DIGITAL_PURCHASE_CHECK(){
+          // Check Requirements Check status
+          this.tell("Digital Purchase Check");
+      },
+
+      ON_COMPLETE_PURCHASE() {
          // Check purchase status
       }
    }
