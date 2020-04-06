@@ -1,6 +1,35 @@
 # Jovo Framework Changelog
 
 
+## 3.0.11 (2020-04-06)
+
+#### :sparkles: New Features
+ * `jovo-analytics` [#702](https://github.com/jovotech/jovo-framework/pull/702) Added Dashbot - Jovo Core Platform Integration ([@KaanKC](https://github.com/KaanKC))  
+
+#### :bug: Bug Fix
+ * `jovo-core` [#706](https://github.com/jovotech/jovo-framework/pull/706) Added additional condition to check if handler return type is null ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))  
+ * `jovo-framework` [#698](https://github.com/jovotech/jovo-framework/pull/698) Added missing setup-middleware calls ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-twilioautopilot` [#707](https://github.com/jovotech/jovo-framework/pull/707) Fixed multiple Autopilot bugs ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-core` [#711](https://github.com/jovotech/jovo-framework/pull/711) Fixed infinite loop in getActiveComponentsRootState() ([@KaanKC](https://github.com/KaanKC))  
+
+
+ #### :nail_care: Enhancement
+ * `jovo-nlu-nlpjs` [#699](https://github.com/jovotech/jovo-framework/pull/699) Implemented possibility to prepare model via callback ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-nlu-nlpjs` [#703](https://github.com/jovotech/jovo-framework/pull/703) Refactored NlpjsNlu dependencies ([@m-ripper](https://github.com/m-ripper))  
+
+
+* Updated Typescript to 3.8.x
+* Updated Prettier to 2.x
+
+
+ #### Committers: 3
+- RokasVaitkevicius ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+
+
+
+
 ## 3.0.6 (2020-03-04)
 
 #### :bug: Bug Fix
