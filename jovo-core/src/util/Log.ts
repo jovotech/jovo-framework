@@ -171,7 +171,7 @@ export class Logger {
       logLevel: LogLevel.DEBUG,
       trackRequest: false,
       write: (logEvent: LogEvent, breakline = true) => {
-        const msg = logEvent.msg || '';
+        const msg = String(logEvent.msg) || '';
         if (logEvent.isFormat) {
           process.stdout.write(msg);
         } else {
