@@ -246,7 +246,7 @@ export class Logger {
       if (appender.logLevel >= logLevel) {
         if (typeof msg === 'object') {
           msg = JSON.stringify(msg).trim();
-          msg = '\b\b';
+          msg += '\b\b';
         }
         appender.write(
           {
