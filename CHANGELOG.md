@@ -1,6 +1,23 @@
 # Jovo Framework Changelog
 
 
+## 3.0.12 (2020-04-09)
+
+#### :sparkles: New Features
+ * `jovo-plugin-auth` Added simple auth methods to secure the endpoint 
+
+#### :bug: Bug Fix
+ * `jovo-platform-googleassistant` [#716](https://github.com/jovotech/jovo-framework/pull/716) Corrected logic for retrieving project-ids in staged environments  ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-core` [#713](https://github.com/jovotech/jovo-framework/pull/713) Added log event message cast to string ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))  
+
+
+ #### Committers: 3
+- RokasVaitkevicius ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 3.0.11 (2020-04-06)
 
 #### :sparkles: New Features
