@@ -83,6 +83,8 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
   install(app: BaseApp): void {
     if (!_get(app.config, `user.sessionData`)) {
       _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.enabled', true);
+      _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.data', true);
+
     }
 
     app.$platform.set(this.constructor.name, this);
