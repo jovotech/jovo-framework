@@ -1,5 +1,7 @@
 import { QuickReplyContentType } from './Enums';
 
+export type ApiVersion = 'v5.0' | 'v6.0';
+
 export interface MessengerBotEntry {
   id: string;
   time: number;
