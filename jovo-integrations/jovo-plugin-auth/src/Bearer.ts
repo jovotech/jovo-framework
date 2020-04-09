@@ -7,7 +7,7 @@ export interface Config extends PluginConfig {
 
 export class Bearer implements Plugin {
   config: Config = {
-    bearer: ''
+    bearer: '',
   };
 
   constructor(config?: Config) {
@@ -21,8 +21,10 @@ export class Bearer implements Plugin {
   }
 
   async beforerequest(handleRequest: HandleRequest) {
-
-    const token = handleRequest.host.headers['Authorization'] || handleRequest.host.headers['authorization'] || '';
+    const token =
+      handleRequest.host.headers['Authorization'] ||
+      handleRequest.host.headers['authorization'] ||
+      '';
 
     const headerValue = `Bearer ${this.config.bearer}`;
     if (headerValue !== token) {

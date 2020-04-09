@@ -68,14 +68,14 @@ export class NlpjsNlu implements Plugin {
 
   async setup(handleRequest: HandleRequest) {
     const settings = {
-      languages: this.config.languages || []
+      languages: this.config.languages || [],
     };
     this.nlp = new Nlp({
       ...settings,
       autoLoad: this.config.useModel,
       autoSave: handleRequest.host.hasWriteFileAccess && this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
-      nlu: { log: false }
+      nlu: { log: false },
     });
     this.nlp.container.register('ner', new Ner(settings));
 
