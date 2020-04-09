@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-dashbot",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,14 +16,14 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dashbot": "^10.2.1",
-    "jovo-core": "^3.0.11",
+    "jovo-core": "^3.0.12",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-platform-core": "^3.0.11",
+    "jovo-platform-core": "^3.0.12",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

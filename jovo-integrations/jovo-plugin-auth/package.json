@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-auth",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.0.11"
+    "jovo-core": "^3.0.12"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

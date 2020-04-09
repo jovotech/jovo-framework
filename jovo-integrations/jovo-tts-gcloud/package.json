@@ -1,6 +1,6 @@
 {
   "name": "jovo-tts-gcloud",
-  "version": "3.0.11",
+  "version": "3.0.12",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "google-auth-library": "^5.5.1",
-    "jovo-core": "^3.0.11"
+    "jovo-core": "^3.0.12"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
