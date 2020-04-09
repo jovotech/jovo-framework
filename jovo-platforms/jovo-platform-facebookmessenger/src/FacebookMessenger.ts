@@ -20,6 +20,7 @@ import _set = require('lodash.set');
 import {
   ApiVersion,
   BASE_URL,
+  DEFAULT_VERSION,
   FacebookMessengerCore,
   FacebookMessengerRequestBuilder,
   FacebookMessengerResponseBuilder,
@@ -65,7 +66,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
     locale: process.env.FB_LOCALE || 'en-US',
-    version: 'v6.0',
+    version: DEFAULT_VERSION,
   };
 
   constructor(config?: Config) {
