@@ -355,7 +355,7 @@ export class GoogleAction extends Jovo {
    */
   getProjectId(): string | undefined {
     let sessionId = _get(this.$request, 'session') as string;
-    sessionId = sessionId.substring(9, sessionId.indexOf('/agent/sessions'));
+    sessionId = sessionId.substring(9, sessionId.indexOf('/agent/'));
     return sessionId;
   }
 }
