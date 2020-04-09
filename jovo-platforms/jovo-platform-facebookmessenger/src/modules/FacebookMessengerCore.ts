@@ -1,4 +1,5 @@
 import { EnumRequestType, HandleRequest, Plugin } from 'jovo-core';
+import _get = require('lodash.get');
 import {
   FacebookMessenger,
   MessengerBot,
@@ -7,7 +8,6 @@ import {
   MessengerBotUser,
   TextMessage,
 } from '..';
-import _get = require('lodash.get');
 
 export class FacebookMessengerCore implements Plugin {
   private launchPayload?: string;
