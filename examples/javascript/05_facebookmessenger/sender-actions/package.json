@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-facebook-messenger-platform-sender-actions",
-  "version": "3.0.12",
+  "version": "3.0.13",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,10 +15,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jovo-db-filedb": "^3.0.12",
-    "jovo-framework": "^3.0.12",
-    "jovo-nlu-dialogflow": "^3.0.12",
-    "jovo-platform-facebookmessenger": "^3.0.12",
-    "jovo-plugin-debugger": "^3.0.12"
+    "jovo-db-filedb": "^3.0.13",
+    "jovo-framework": "^3.0.13",
+    "jovo-nlu-dialogflow": "^3.0.13",
+    "jovo-platform-facebookmessenger": "^3.0.13",
+    "jovo-plugin-debugger": "^3.0.13"
   }
 }
