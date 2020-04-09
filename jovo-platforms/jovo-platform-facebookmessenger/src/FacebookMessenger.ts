@@ -18,7 +18,7 @@ import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import {
-  BASE_PATH,
+  ApiVersion,
   BASE_URL,
   FacebookMessengerCore,
   FacebookMessengerRequestBuilder,
@@ -47,6 +47,7 @@ export interface Config extends ExtensibleConfig {
   pageAccessToken?: string;
   verifyToken?: string;
   locale?: string;
+  version?: ApiVersion;
 }
 
 export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBotResponse> {
@@ -64,6 +65,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
     locale: process.env.FB_LOCALE || 'en-US',
+    version: 'v6.0',
   };
 
   constructor(config?: Config) {
@@ -111,7 +113,11 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
   }
 
   async setup(handleRequest: HandleRequest) {
-    const path = `${BASE_PATH}/messenger_profile?access_token=${this.config.pageAccessToken}`;
+    if (this.isVerifyRequest(handleRequest.host)) {
+      return;
+    }
+
+    const path = `/${this.config.version}/me/messenger_profile?access_token=${this.config.pageAccessToken}`;
     const url = BASE_URL + path;
     const data: any = {};
 
@@ -159,30 +165,38 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     try {
       await HttpService.request(config);
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, 'FacebookMessenger');
+      const errorMessage = e.response.data.error.message;
+
+      throw new JovoError(
+        `${e.message}: ${errorMessage}`,
+        ErrorCode.ERR_PLUGIN,
+        'FacebookMessenger',
+        errorMessage,
+        `The reason for that might be a missing 'pageAccessToken' or an invalid value for 'greeting' or 'launch'`,
+      );
     }
   }
 
   async request(handleRequest: HandleRequest) {
+    if (!this.isVerifyRequest(handleRequest.host)) {
+      return;
+    }
     const queryParams = handleRequest.host.getQueryParams();
 
-    const mode = queryParams['hub.mode'];
     const token = queryParams['hub.verify_token'];
     const challenge = queryParams['hub.challenge'];
 
-    if (mode && token) {
-      if (mode === 'subscribe' && token === this.config.verifyToken) {
-        handleRequest.stopMiddlewareExecution();
-        await handleRequest.host.setResponse(challenge);
-      } else {
-        throw new JovoError(
-          'The verify token that was set in the config does not match the verify token in the request!',
-          ErrorCode.ERR,
-          'FacebookMessenger',
-          `verify token in the config '${this.config.verifyToken}' does not match the passed verify token '${token}'!`,
-          'Check the verify token in the config and in the webhook-verification-form.',
-        );
-      }
+    if (token === this.config.verifyToken) {
+      handleRequest.stopMiddlewareExecution();
+      await handleRequest.host.setResponse(+challenge);
+    } else {
+      throw new JovoError(
+        'The verify token that was set in the config does not match the verify token in the request!',
+        ErrorCode.ERR,
+        'FacebookMessenger',
+        `verify token in the config '${this.config.verifyToken}' does not match the passed verify token '${token}'!`,
+        'Check the verify token in the config and in the webhook-verification-form.',
+      );
     }
   }
 
@@ -240,7 +254,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     for (const message of messages) {
       message
-        .send(pageAccessToken)
+        .send(pageAccessToken, this.config.version!)
         .then((res: AxiosResponse<any>) => {
           Log.debug(res.data);
         })
@@ -255,6 +269,16 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       new FacebookMessengerRequestBuilder(),
       new FacebookMessengerResponseBuilder(),
     );
+  }
+
+  private isVerifyRequest(host: Host): boolean {
+    const queryParams = host.getQueryParams();
+
+    const mode = queryParams['hub.mode'];
+    const token = queryParams['hub.verify_token'];
+    const challenge = queryParams['hub.challenge'];
+
+    return mode === 'subscribe' && !!token && !!challenge;
   }
 
   private overrideAppHandle() {

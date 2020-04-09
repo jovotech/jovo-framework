@@ -1,7 +1,15 @@
 import * as FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { HttpService } from 'jovo-core';
-import { AttachmentType, BASE_URL, IdentityData, Message, QuickReply, TextQuickReply } from '../..';
+import {
+  ApiVersion,
+  AttachmentType,
+  BASE_URL,
+  IdentityData,
+  Message,
+  QuickReply,
+  TextQuickReply,
+} from '../..';
 
 export interface AttachmentMessageFile {
   path: string;
@@ -24,13 +32,13 @@ export class AttachmentMessage extends Message {
     super(recipient);
   }
 
-  send(pageAccessToken: string): Promise<any> {
+  send(pageAccessToken: string, version: ApiVersion): Promise<any> {
     const isFile = this.isFileData();
     const isUrl = this.isUrlData();
     const isAttachmentId = this.isAttachmentIdData();
 
     if (isFile) {
-      return this.sendFile(pageAccessToken);
+      return this.sendFile(pageAccessToken, version);
     }
 
     const data = {
@@ -55,13 +63,13 @@ export class AttachmentMessage extends Message {
       (data.message.attachment.payload as any).attachment_id = this.options.data.toString();
     }
 
-    const config = this.getConfig(pageAccessToken);
+    const config = this.getConfig(pageAccessToken, version);
     config.data = data;
 
     return HttpService.request(config);
   }
 
-  private sendFile(pageAccessToken: string) {
+  private sendFile(pageAccessToken: string, version: ApiVersion) {
     const message = {
       attachment: {
         type: this.options.type,
@@ -84,8 +92,7 @@ export class AttachmentMessage extends Message {
       contentType: mimeType || undefined,
     });
 
-    const url = `${BASE_URL}${this.getPath(pageAccessToken)}`;
-
+    const url = `${BASE_URL}${this.getPath(pageAccessToken, version)}`;
     return HttpService.post(url, form, { headers: form.getHeaders() });
   }
 
