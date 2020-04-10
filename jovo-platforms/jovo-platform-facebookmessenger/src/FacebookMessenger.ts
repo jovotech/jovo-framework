@@ -115,6 +115,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
   }
 
   async setup(handleRequest: HandleRequest) {
+    await this.middleware('setup')!.run(handleRequest);
     if (this.isVerifyRequest(handleRequest.host)) {
       return;
     }
