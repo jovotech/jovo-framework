@@ -40,7 +40,7 @@ export class Project {
   }
 
   getStage() {
-    return process.env.JOVO_STAGE;
+    return process.env.JOVO_STAGE || process.env.STAGE || process.env.NODE_ENV;
   }
 
   isTypescript() {
