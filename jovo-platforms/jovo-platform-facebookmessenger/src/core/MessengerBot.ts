@@ -95,7 +95,10 @@ export class MessengerBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    return this.$user.isNew();
+    if (typeof this.$user.$session.isNew !== 'undefined') {
+      return this.$user.$session.isNew;
+    }
+    return true;
   }
 
   speechBuilder(): SpeechBuilder | undefined {

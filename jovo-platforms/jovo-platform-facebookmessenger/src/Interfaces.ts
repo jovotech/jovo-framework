@@ -44,3 +44,11 @@ export interface QuickReply {
   payload?: string | number;
   image_url?: string;
 }
+
+export interface UserProfile {
+  first_name?: string;
+  last_name?: string;
+  profile_pic?: string;
+  locale?: string;
+  id: string;
+}

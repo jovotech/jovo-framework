@@ -28,7 +28,7 @@ import {
   MessengerBot,
   MessengerBotEntry,
   MessengerBotRequest,
-  MessengerBotResponse,
+  MessengerBotResponse, MessengerBotUser,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -49,6 +49,8 @@ export interface Config extends ExtensibleConfig {
   verifyToken?: string;
   locale?: string;
   version?: ApiVersion;
+  userProfileFields?: string;
+  fetchUserProfile?: boolean;
 }
 
 export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBotResponse> {
@@ -67,6 +69,8 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
     locale: process.env.FB_LOCALE || 'en-US',
     version: DEFAULT_VERSION,
+    userProfileFields: process.env.FB_USER_PROFILE_FIELDS || 'first_name,last_name,profile_pic,locale',
+    fetchUserProfile: true,
   };
 
   constructor(config?: Config) {
@@ -93,6 +97,8 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('nlu')!.use(this.nlu.bind(this));
     app.middleware('after.user.load')!.use(this.afterUserLoad.bind(this));
+    app.middleware('before.handler')!.use(this.beforeHandler.bind(this));
+
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
@@ -231,7 +237,25 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     await this.middleware('$session')!.run(handleRequest.jovo);
   }
+  async beforeHandler(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
+      return Promise.resolve();
+    }
+    const user = (handleRequest.jovo.$user as MessengerBotUser);
 
+    if(handleRequest.jovo.$session.$data.userProfile) {
+      user.profile = handleRequest.jovo.$session.$data.userProfile;
+    } else if(this.config.fetchUserProfile && handleRequest.jovo.isNewSession()) {
+      await user.fetchAndSetProfile(this.config.userProfileFields);
+      handleRequest.jovo.$session.$data.userProfile = user.profile;
+    }
+
+    if (user.profile && user.profile.locale) {
+
+      const locale = user.profile.locale.replace('_', '-');
+      handleRequest.jovo.$request!.setLocale(locale);
+    }
+  }
   async output(handleRequest: HandleRequest) {
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
