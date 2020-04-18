@@ -454,10 +454,6 @@
                             "route": "analytics/botanalytics"
                         },
                         {
-                            "title": "VoiceHero",
-                            "route": "analytics/voicehero"
-                        },
-                        {
                             "title": "Google Analytics",
                             "route": "analytics/googleanalytics"
                         }
