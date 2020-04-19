@@ -1,24 +1,43 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+# Amazon Lex SLU Integration
 
-<p align="center">The development framework for cross-platform voice apps</p>
+Learn how to use Amazon Lex as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.
 
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
-# Jovo Lex SLU Integration
+## Installation
 
 ```sh
-npm install jovo-slu-lex
+npm install --save jovo-slu-lex
 ```
+
+```javascript
+// @language=javascript
+
+// src/app.js
+const { LexSlu } = require('jovo-slu-lex');
+
+platform.use(
+	new LexSlu({
+		credentials: {
+			region: 'yourRegion',
+			secretAccessKey: 'yourSecretAccessKey',
+			accessKeyId: 'yourAccessKeyId'
+		}
+	})
+);
+
+// @language=typescript
+
+// src/app.ts
+import { LexSlu } from 'jovo-slu-lex';
+
+platform.use(
+	new LexSlu({
+		credentials: {
+			region: 'yourRegion',
+			secretAccessKey: 'yourSecretAccessKey',
+			accessKeyId: 'yourAccessKeyId'
+		}
+	})
+);
+```
+
+> The configuration has to be passed to the constructor of `LexSlu`. Setting the configuration inside the `config`-file does not work.
