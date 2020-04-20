@@ -30,6 +30,7 @@ beforeEach(() => {
       data: 'LAUNCH_TEST',
     },
     shouldOverrideAppHandle: false,
+    fetchUserProfile: false
   });
   messenger.use(new FileDb(), new RequestSLU());
   app.use(messenger);

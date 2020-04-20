@@ -95,7 +95,7 @@ export class MessengerBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    if (typeof this.$user.$session.isNew !== 'undefined') {
+    if (this.$user.$session && typeof this.$user.$session.isNew !== 'undefined') {
       return this.$user.$session.isNew;
     }
     return true;
