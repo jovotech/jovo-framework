@@ -39,9 +39,11 @@ Check out the [`jovo build` documentation page](../tools/cli/build.md './cli/bui
 
 To be able to deploy your Alexa Skill, you have to set up the [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) first.
 
+> With the recent update to ASK CLI v2, Amazon made some changes to the Alexa Skill project structure. Until the next update of the Jovo CLI, we recommmend to install ASK CLI v1.7.
+
 ```sh
 # Install ASK CLI
-$ npm install -g ask-cli
+$ npm install -g ask-cli@1.7.23
 
 # Initialize a profile
 $ ask init
