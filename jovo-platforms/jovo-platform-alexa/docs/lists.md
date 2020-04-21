@@ -22,7 +22,7 @@ Users need to grant your Alexa Skill permission for `read` and/or `write` access
 
 In the Amazon Developer Portal, you can do this by checking the following permissions:
 
-![Alexa List Permissions](../../img/alexa-list-permissions.jpg)
+![Alexa List Permissions](../img/alexa-list-permissions.jpg)
 
 The same result is achieved by adding the following to the `manifest` in your `skill.json`:
 

@@ -565,4 +565,4 @@ With the Proactive Events API there was also a new Skill Event added. The `Proac
 
 The request will contain a `subscriptions` array, which will contain the events to which the user is currently subscribed to. That means, if an user unsubscribes you will have to compare the past subscribed events with the new array to find out, which one the user unsubscribed from. Also keep in mind, that these requests can arrive out of order, which is why you should always use the `timestamp` sent with the request to ensure, that you use the latest changes.
 
-> Learn how to enable Skill Events [here](./skillevents.md './skillevents')
+> Learn how to enable Skill Events [here](./skill-events.md './skill-events')
