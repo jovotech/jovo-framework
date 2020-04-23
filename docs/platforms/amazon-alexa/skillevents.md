@@ -117,7 +117,7 @@ And adding the `AlexaSkillEvent.SkillEnabled` inside your `ON_EVENT` state:
 ON_EVENT: {
     'AlexaSkillEvent.SkillEnabled'() {
 		console.log('AlexaSkillEvent.SkillEnabled');
-		console.log(`UserId: ${this.getUserId()}`);		
+		console.log(`UserId: ${this.$user.getId()}`);		
     },
 }
 ```
@@ -143,7 +143,7 @@ And adding the `AlexaSkillEvent.SkillDisabled` inside your `ON_EVENT` state:
 ON_EVENT: {
     'AlexaSkillEvent.SkillDisabled'() {
         console.log('AlexaSkillEvent.SkillDisabled');
-				console.log(`UserId: ${this.getUserId()}`);
+				console.log(`UserId: ${this.$user.getId()}`);
 				
 				// Remove user from the database when the skill is disabled
 				// if the user re-enables the skill, they will have a new userId anyway
@@ -173,7 +173,7 @@ And adding the `AlexaSkillEvent.SkillAccountLinked` inside your `ON_EVENT` state
 ON_EVENT: {
     'AlexaSkillEvent.SkillAccountLinked'() {
         console.log('AlexaSkillEvent.SkillAccountLinked');
-				console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`UserId: ${this.$user.getId()}`);		
     },
 }
 ```
@@ -201,7 +201,7 @@ And adding the `AlexaSkillEvent.SkillPermissionAccepted` inside your `ON_EVENT` 
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionAccepted'() {
         console.log('AlexaSkillEvent.SkillPermissionAccepted');
-				console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`UserId: ${this.$user.getId()}`);		
 				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
 	},
 }
@@ -211,7 +211,7 @@ ON_EVENT: {
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionAccepted'() {
         console.log('AlexaSkillEvent.SkillPermissionAccepted');
-				console.log(`UserId: ${this.getUserId()}`);		
+				console.log(`UserId: ${this.$user.getId()}`);		
 				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill!.getSkillEventBody().acceptedPermissions)}`);	
 	},
 }
@@ -238,7 +238,7 @@ And adding the `AlexaSkillEvent.SkillPermissionChanged` inside your `ON_EVENT` s
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionChanged'() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
-				console.log(`UserId: ${this.$user.Id()}`);		
+				console.log(`UserId: ${this.$user.getId()}`);		
 				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill.getSkillEventBody().acceptedPermissions)}`);	
     },
 }
@@ -248,7 +248,7 @@ ON_EVENT: {
 ON_EVENT: {
     'AlexaSkillEvent.SkillPermissionChanged'() {
         console.log('AlexaSkillEvent.SkillPermissionChanged');
-				console.log(`UserId: ${this.$user.Id()}`);		
+				console.log(`UserId: ${this.$user.getId()}`);		
 				console.log(`Permissions: ${JSON.stringify(this.$alexaSkill!.getSkillEventBody().acceptedPermissions)}`);	
     },
 }
