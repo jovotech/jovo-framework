@@ -1,26 +1,107 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+# FileDB Local JSON Database Integration
 
-<p align="center">The development framework for cross-platform voice apps</p>
+Learn more about the default database for prototyping with Jovo: A file based system that stores user specific data to a JSON file.
 
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
+* [Introduction](#introduction)
+* [Configuration](#configuration)
 
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
 
-# FileDB Database Integration
+## Introduction
 
-```sh
-npm install jovo-db-filedb
+> Note: This database type is not supposed to be used in production. See other [database integrations](https://www.jovo.tech/docs/databases) for options when the app is live. 
+
+The FileDB integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a `db.json` file that can be found in a `db` folder:
+
+```javascript
+db/
+  └── db.json
+models/
+src/
+project.js
 ```
 
-Find the docs here: https://www.jovo.tech/docs/databases/file-db
+This is an example how the file structure looks like, with the `userID` as a mainKey and some persisted data with `someKey` and `someValue`, which can be added with `this.$user.$data.someKey = 'someValue';`:
+
+```js
+// Example for Amazon Alexa
+[
+	{
+		"userId": "amzn1.ask.account.[some_user_id]",
+		"userData": {
+			"data": {
+				"someKey": "someValue"
+			},
+			"metaData": {
+				"createdAt": "2017-11-13T13:46:37.421Z",
+				"lastUsedAt": "2017-11-13T14:12:05.738Z",
+				"sessionsCount": 9
+			}
+		}
+	}
+]
+```
+
+## Configuration
+
+Most Jovo templates come with FileDB as default database integration.
+
+It can be enabled in the `src/app.js` file like this:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { FileDb } = require('jovo-db-filedb');
+
+// Enable DB after app initialization
+app.use(new FileDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { FileDb } from 'jovo-db-filedb';
+
+// Enable DB after app initialization
+app.use(new FileDb());
+```
+
+In your `config.js` file, you can set the `db` configuration like this:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
+
+    // ...
+
+};
+```
+
+
+Once the configuration is done, the File DB database integration will create a file in the specified folder (eg. `../db/db.json`) on the first read/write attempt. No need for you to create the file.

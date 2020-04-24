@@ -1,24 +1,41 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+# Microsoft Azure Speech to Text Integration
 
-<p align="center">The development framework for cross-platform voice apps</p>
+Learn how to use the Microsoft Azure Speech to Text service as ASR (automatic speech recognition) integration with the Jovo Framework.
 
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
-# Jovo Azure ASR Integration
+## Installation
 
 ```sh
-npm install jovo-asr-azure
+npm install --save jovo-asr-azure
 ```
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { AzureAsr } = require('jovo-asr-azure');
+
+platform.use(
+	new AzureAsr({
+		endpointKey: 'yourEndpointKey',
+		endpointRegion: 'yourEndpointRegion',
+		language: 'en-US'
+	})
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { AzureAsr } from 'jovo-asr-azure';
+
+platform.use(
+	new AzureAsr({
+		endpointKey: 'yourEndpointKey',
+		endpointRegion: 'yourEndpointRegion',
+		language: 'en-US'
+	})
+);
+```
+
+> The configuration has to be passed to the constructor of `AzureAsr`. Setting the configuration inside the `config`-file does not work.

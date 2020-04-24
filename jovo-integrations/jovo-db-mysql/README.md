@@ -1,26 +1,136 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # MySQL Database Integration
 
+Learn how to store user specific data of your Alexa Skills and Google Actions to a MySQL database.
+
+* [Introduction](#introduction)
+* [Configuration](#configuration)
+
+
+## Introduction
+
+The MySQL database integration allows you to store user specific data into this widely adopted relational database. 
+
+
+## Configuration
+
+Download the package like this:
+
 ```sh
-npm install jovo-db-mysql
+$ npm install --save jovo-db-mysql
 ```
 
-Find the docs here: https://www.jovo.tech/docs/databases/mysql
+MySQL database integration can be enabled in the `src/app.js` file like this:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { MySQL } = require('jovo-db-mysql');
+
+// Enable DB after app initialization
+app.use(new MySQL());
+
+// @language=typescript
+
+// src/app.ts
+
+import { MySQL } from 'jovo-db-mysql';
+
+// Enable DB after app initialization
+app.use(new MySQL());
+```
+
+In your `config.js` file, you can set the `db` configuration like this:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        MySQL: {
+            tableName: 'yourTableName',
+            connection: {
+                host: process.env.MYSQL_ADDR || 'localhost',
+                port:  process.env.MYSQL_PORT || '9000',
+                user: process.env.MYSQL_USER || 'user',
+                password: process.env.MYSQL_PASSWORD || 'password',
+                database: process.env.MYSQL_DATABASE || 'jovoapp',
+                },
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        MySQL: {
+            tableName: 'yourTableName',
+            connection: {
+                host: process.env.MYSQL_ADDR || 'localhost',
+                port:  process.env.MYSQL_PORT || '9000',
+                user: process.env.MYSQL_USER || 'user',
+                password: process.env.MYSQL_PASSWORD || 'password',
+                database: process.env.MYSQL_DATABASE || 'jovoapp',
+                },
+        },
+    },
+
+    // ...
+
+};
+```
+
+This is the default configuration for MySQL, if not specified otherwise:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        MySQL: {
+            tableName: 'users',
+            primaryKeyColumn: 'userId',
+            dataColumnName: 'userData',
+            connection: {},
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        MySQL: {
+            tableName: 'users',
+            primaryKeyColumn: 'userId',
+            dataColumnName: 'userData',
+            connection: {},
+        },
+    },
+
+    // ...
+
+};
+```
+
+Once the configuration is done, the MySQL database integration will create a table in your Database on the first read/write attempt. 
