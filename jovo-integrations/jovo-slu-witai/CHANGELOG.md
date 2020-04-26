@@ -1,15 +1,6 @@
-# Google Assistant Changelog
+# Wit.ai SLU Changelog
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
-
-## 3.0.12 (2020-04-09)
-
-#### :bug: Bug Fix
- * [#716](https://github.com/jovotech/jovo-framework/pull/716) Corrected logic for retrieving project-ids in staged environments  ([@m-ripper](https://github.com/m-ripper))  
-
-
-#### Committers: 3
-- Max Ripper ([@m-ripper](https://github.com/m-ripper))
 
 ## 3.0.11 (2020-04-06)
 
@@ -19,6 +10,16 @@ Current version might be higher than the latest changes displayed below because 
 #### Committers: 2
 - Alex ([@aswetlow](https://github.com/aswetlow))
 - Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+
+
+## 3.0.3 (2020-02-25)
+
+#### :bug: Bug Fix
+* `jovo-slu-witai` [#675](https://github.com/jovotech/jovo-framework/pull/675) Fixed bug in the witai integration ([@m-ripper](https://github.com/m-ripper))  
+
+
+ #### Committers: 1
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
 
 
 ## 2.x
