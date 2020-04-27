@@ -37,9 +37,9 @@ beforeEach(() => {
   const autopilot = new Autopilot();
   app.use(
     new FileDb2({
-      path: PATH_TO_DB_DIR
+      path: PATH_TO_DB_DIR,
     }),
-    autopilot
+    autopilot,
   );
   t = autopilot.makeTestSuite();
 });
