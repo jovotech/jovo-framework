@@ -1,11 +1,16 @@
 # Jovo Auth Integration
 
-Installation:
+* [Installation](#installation)
+* [Customization](#customization)
+
+## Installation
+
 ```sh
-npm install jovo-plugin-auth
+npm install --save jovo-plugin-auth
 ```
 
 Usage in the app:
+
 ```
 const { ApiKey } = require('jovo-plugin-auth');
 
@@ -18,7 +23,7 @@ app.use(
 
 There are two ways to pass the key to the app:
 
-Via header object
+Via header object:
 
 ```
 {
@@ -26,13 +31,15 @@ Via header object
 }
 ```
 
-Via query param
+Via query param:
+
 ```
 https://endpoint.example.com/user?x-api-key=foobar
 ```
 
 
-Customization:
+## Customization
+
 If you want to pass your custom api key variable name, use `customKeyName` and `customKeyValue`
 
 

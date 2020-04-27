@@ -1,26 +1,133 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # Chatbase Analytics Integration
 
+Learn how to use Chatbase Analytics for your Alexa Skills and Google Actions built with Jovo.
+
+* [About Chatbase](#about-chatbase)
+* [Installation](#installation)
+   * [Create a Chatbase Account](#create-a-chatbase-account)
+   * [Enable Chatbase Analytics in Jovo](#enable-chatbase-analytics-in-jovo)
+   * [Test Chatbase](#test-chatbase)
+
+## About Chatbase
+
+![Chatbase Website](./img/chatbase-home.jpg)
+
+[Chatbase](https://chatbase.com/) is an analytics offerin   g for conversational products that is built by Area 120, an incubator by Google.
+
+With Chatbase Analytics, you can measure bot metrics, analyze user behavior, and optimize the experience with transcripts and suggested intents.
+
+## Installation
+
+To use Chatbase Analytics for your voice app, you need to complete the following steps:
+
+1. Create a Chatbase Bot
+2. Enable Chatbase Analytics in your voice app
+3. Test your app
+
+### Create a Chatbase Account
+
+1. Create a Chatbase account or log in at https://chatbase.com/
+
+2. Create a new bot by clicking the "add your bot" button
+
+![Create a Chatbase Bot](./img/chatbase-dashboard.png)
+
+3. Fill in information like your bot's name, industry, and region
+
+![Chatbase Bot Name](./img/chatbase-new-bot.jpg)
+
+4. Copy API Key
+
+![Chatbase API Key](./img/chatbase-api-key.jpg)
+
+### Enable Chatbase Analytics in Jovo
+
+To add Chatbase Analytics to your voice app, do the following:
+
+* Download the npm package
+* Enable the plugin in `app.js`
+* Add configurations in `config.js`
+
+First, download the npm package:
+
 ```sh
-npm install jovo-analytics-chatbase
+$ npm install --save jovo-analytics-chatbase
 ```
 
-Find the docs here: https://www.jovo.tech/docs/analytics/chatbase
+Enable the plugin like this:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { ChatbaseAlexa, ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
+
+app.use(
+    new ChatbaseAlexa(),
+    new ChatbaseGoogleAssistant()
+);
+
+// @language=typescript
+
+// src/app.ts
+
+import { ChatbaseAlexa, ChatbaseGoogleAssistant } from 'jovo-analytics-chatbase';
+
+app.use(
+    new ChatbaseAlexa(),
+    new ChatbaseGoogleAssistant()
+);
+```
+
+Add configurations like this:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    analytics: {
+        ChatbaseAlexa: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+        ChatbaseGoogleAssistant: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        ChatbaseAlexa: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+        ChatbaseGoogleAssistant: {
+            key: '<key>',
+            version: '<version>', // Optional
+        },
+    },
+
+    // ...
+
+};
+```
+
+### Test Chatbase
+
+Test you voice app. It can take up to 6 hours until all the data can be seen in the Chatbase dashboard:
+
+![Chatbase Dashboard](./img/chatbase-result.png)

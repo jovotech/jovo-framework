@@ -1,26 +1,123 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # Google Cloud Datastore Database Integration
 
+Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Datastore.
+
+* [Introduction](#introduction)
+* [Configuration](#configuration)
+
+
+## Introduction
+
+The Google Cloud Datastore integration allows you to store user session data in the NoSQL service running on Google Cloud. This integration is especially convenient if you're running your voice app on Google Cloud Functions. You can find the official documentation about Google Cloud Datastore here: [cloud.google.com/datastore](https://cloud.google.com/datastore/).
+
+> [Learn more about hosting your application on Google Cloud Functions](https://www.jovo.tech/docs/hosting/google-cloud-functions').
+
+## Configuration
+
+Download the package like this:
+
 ```sh
-npm install jovo-db-datastore
+$ npm install --save jovo-db-datastore
 ```
 
-Find the docs here: https://www.jovo.tech/docs/databases/google-datastore
+Google Cloud Datastore can be enabled in the `src/app.js` file like this:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { DatastoreDb } = require('jovo-db-datastore');
+
+// Enable DB after app initialization
+app.use(new DatastoreDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { DatastoreDb } from 'jovo-db-datastore';
+
+// Enable DB after app initialization
+app.use(new DatastoreDb());
+```
+
+The Jovo Datastore plugin and the official Google Datastore package ([Google Cloud Datastore Docs](https://googleapis.dev/nodejs/datastore/5.0.5/Datastore.html)) share the same configuration options. You can specify them in your `config.js` file the following way:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				// Datastore configuration...
+			},
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				// Datastore configuration...
+			}
+        },
+    },
+
+    // ...
+
+};
+```
+
+It's important that you authenticate your client with the Google Cloud API. The recommended way is to use a Google service account. You can specify the path to the service account's JSON key file path in your `config.js` file:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				keyFilename: '<path-to-key-file>'
+			},
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        DatastoreDb: {
+            gCloudConfig: {
+				keyFilename: '<path-to-key-file>'
+			}
+        },
+    },
+
+    // ...
+
+};
+```

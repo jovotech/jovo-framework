@@ -1,26 +1,84 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # Azure CosmosDB Database Integration
 
+Learn how to store user specific data of your Alexa Skills and Google Actions to Cosmos DB.
+
+* [Introduction](#introduction)
+* [Configuration](#configuration)
+
+> Tutorial: [Deploy to Azure](https://www.jovo.tech/tutorials/deploy-to-azure)
+
+## Introduction
+
+The Cosmos DB integration allows you to store user session data in the NoSQL service running on Azure using their MongoDB API. This integration is especially convenient if you're running your voice app on Azure Functions. You can find the official documentation about Cosmos DB here: [docs.microsoft.com/cosmos-db](https://docs.microsoft.com/en-us/azure/cosmos-db/).
+
+> [Learn more about hosting your application on Azure Functions](https://www.jovo.tech/docs/hosting/azure-functions).
+
+## Configuration
+
+Download the package like this:
+
 ```sh
-npm install jovo-db-cosmosdb
+$ npm install --save jovo-db-cosmosdb
 ```
 
-Find the docs here: https://www.jovo.tech/docs/databases/cosmosdb
+Cosmos DB can be enabled in the `src/app.js` file like this:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+
+const { CosmosDb } = require('jovo-db-cosmosdb');
+
+// Enable DB after app initialization
+app.use(new CosmosDb());
+
+// @language=typescript
+
+// src/app.ts
+
+import { CosmosDb } from 'jovo-db-cosmosdb';
+
+// Enable DB after app initialization
+app.use(new CosmosDb());
+```
+
+Inside your `config.js` file you have to set your `primary connection string` and your database name. You can also optionally set the collection name (default is `UserData`):
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    db: {
+        CosmosDb: {
+            uri: '<primary_connection_string>',
+            databaseName: '<database_name>',
+            collectionName: '<collection_name>'
+        }
+    }
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    db: {
+        CosmosDb: {
+            uri: '<primary_connection_string>',
+            databaseName: '<database_name>',
+            collectionName: '<collection_name>'
+        }
+    }
+
+    // ...
+
+};
+```
