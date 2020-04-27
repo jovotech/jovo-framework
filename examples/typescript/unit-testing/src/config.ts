@@ -2,8 +2,10 @@ import { config } from 'jovo-framework';
 
 // tslint:disable-next-line
 export = config({
-	logging: true,
-
+	logging: false,
+	user: {
+		metaData: true
+	},
 	intentMap: {
 		'AMAZON.StopIntent': 'END'
 	},
