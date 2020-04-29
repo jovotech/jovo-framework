@@ -8,9 +8,10 @@ import {
   Jovo,
 } from 'jovo-core';
 import { App, ExpressJS } from 'jovo-framework';
-import { FileDb } from 'jovo-db-filedb';
+import { FileDb2 } from 'jovo-db-filedb';
 import _set = require('lodash.set');
-import { writeFileSync } from 'fs';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { Autopilot } from '../src';
 
@@ -35,9 +36,8 @@ beforeEach(() => {
   });
   const autopilot = new Autopilot();
   app.use(
-    new FileDb({
-      // path: PATH_TO_DB_DIR,
-      pathToFile: `${PATH_TO_DB_DIR}/db.json`,
+    new FileDb2({
+      path: PATH_TO_DB_DIR,
     }),
     autopilot,
   );
@@ -45,7 +45,7 @@ beforeEach(() => {
 });
 
 afterAll(() => {
-  resetDatabase();
+  clearDbFolder();
 });
 
 describe('test request types', () => {
@@ -876,19 +876,16 @@ describe('test handleOnNewSession', () => {
     });
     const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
     // session ID of the request and the one in DB have to be the same for NEW_SESSION to be skipped
-    const dbJson = [
-      {
-        userId: 'user',
-        userData: {
-          data: {},
-          session: {
-            id: intentRequest.getSessionId(),
-            lastUpdatedAt: new Date().toISOString(),
-          },
+    const dbJson = {
+      userData: {
+        data: {},
+        session: {
+          id: intentRequest.getSessionId(),
+          lastUpdatedAt: new Date().toISOString(),
         },
       },
-    ];
-    writeFileSync(`${PATH_TO_DB_DIR}/db.json`, JSON.stringify(dbJson));
+    };
+    fs.writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getUserId()}.json`, JSON.stringify(dbJson));
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -1014,13 +1011,27 @@ describe('test handleOnNewSession', () => {
 describe('test handleOnNewUser', () => {
   test('no NEW_USER', async (done) => {
     app.setHandler({
+      NEW_USER() {
+        this.$data.foo = 'bar';
+      },
       LAUNCH() {
         expect(this.$data.foo).toBe(undefined);
       },
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
+    // set db entry for the user
+    const dbJson = {
+      userData: {
+        data: {},
+        session: {
+          id: launchRequest.getSessionId(),
+          lastUpdatedAt: new Date().toISOString(),
+        },
+      },
+    };
+    fs.writeFileSync(`${PATH_TO_DB_DIR}/${launchRequest.getUserId()}.json`, JSON.stringify(dbJson));
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       done();
@@ -1039,7 +1050,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('NEW_USER asynchronous with promise', async (done) => {
@@ -1057,7 +1068,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('NEW_USER asynchronous with callback parameter', async (done) => {
@@ -1074,7 +1085,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       done();
@@ -1097,7 +1108,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('NEW_USER return and skip intent handling', async (done) => {
@@ -1112,7 +1123,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
       done();
@@ -1134,7 +1145,7 @@ describe('test handleOnNewUser', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
       done();
@@ -1168,7 +1179,7 @@ describe('test NEW_USER + NEW_SESSION + ON_REQUEST', () => {
     });
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
-    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 });
 
@@ -1374,17 +1385,10 @@ describe('test routing', () => {
   });
 });
 
-const randomUserId = () => {
-  return (
-    'user-' +
-    Math.random().toString(36).substring(5) +
-    '-' +
-    Math.random().toString(36).substring(2)
-  );
-};
+export function clearDbFolder() {
+  const files = fs.readdirSync(PATH_TO_DB_DIR);
 
-function resetDatabase() {
-  const data: [] = [];
-  const stringifiedData = JSON.stringify(data, null, '\t');
-  writeFileSync(`${PATH_TO_DB_DIR}/db.json`, stringifiedData);
+  files.forEach((file) => {
+    fs.unlinkSync(path.join(PATH_TO_DB_DIR, file));
+  });
 }

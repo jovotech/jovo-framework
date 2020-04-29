@@ -49,6 +49,10 @@ export class AskFor implements Plugin {
     AlexaSkill.prototype.hasPermissionNotAnswered = function () {
       return _get(this.$request, 'request.payload.status') === 'NOT_ANSWERED';
     };
+
+    AlexaSkill.prototype.getPermissionIsCardThrown = function () {
+      return _get(this.$request, 'request.payload.isCardThrown');
+    };
   }
   uninstall(alexa: Alexa) {}
   type(alexaSkill: AlexaSkill) {

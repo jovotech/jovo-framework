@@ -409,5 +409,6 @@ declare module './core/AlexaSkill' {
     hasPermissionAccepted(): boolean;
     hasPermissionDenied(): boolean;
     hasPermissionNotAnswered(): boolean;
+    getPermissionIsCardThrown(): boolean;
   }
 }
