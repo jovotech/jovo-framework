@@ -317,6 +317,9 @@ ON_ELEMENT_SELECTED() {
   }
 },
 ```
+
+You need to enable webhook fulfillment for you Default Fallback Intent for this to work.
+
 [Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L192) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L198)
 
 ## Suggestion Chips

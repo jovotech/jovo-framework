@@ -44,7 +44,8 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
       return AutopilotRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
-        .setSessionId(generateRandomString(12));
+        .setSessionId(generateRandomString(12))
+        .setUserId(getRandomUserId());
     }
   }
 
@@ -55,7 +56,8 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
       return AutopilotRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
-        .setSessionId(generateRandomString(12));
+        .setSessionId(generateRandomString(12))
+        .setUserId(getRandomUserId());
     }
   }
 
@@ -73,7 +75,8 @@ export class AutopilotRequestBuilder implements RequestBuilder<AutopilotRequest>
       const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
       return AutopilotRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
-        .setSessionId(generateRandomString(12));
+        .setSessionId(generateRandomString(12))
+        .setUserId(getRandomUserId());
     }
   }
 
@@ -116,4 +119,13 @@ function generateRandomString(length: number) {
   }
 
   return randomString;
+}
+
+function getRandomUserId() {
+  return (
+    'user-' +
+    Math.random().toString(36).substring(5) +
+    '-' +
+    Math.random().toString(36).substring(2)
+  );
 }
