@@ -50,10 +50,7 @@ export class ChatbaseGoogleAssistant implements Analytics {
   createChatbaseData(jovo: Jovo) {
     return {
       api_key: this.config.key,
-      intent:
-        jovo.$type.type !== 'INTENT'
-          ? jovo.$type.type
-          : jovo.$request!.getIntentName(),
+      intent: jovo.$type.type !== 'INTENT' ? jovo.$type.type : jovo.$request!.getIntentName(),
       platform: 'Actions',
       session_id: jovo.$request!.getSessionId(),
       time_stamp: Date.now(),
