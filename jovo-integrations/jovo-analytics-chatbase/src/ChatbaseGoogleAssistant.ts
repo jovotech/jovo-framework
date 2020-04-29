@@ -53,9 +53,9 @@ export class ChatbaseGoogleAssistant implements Analytics {
       intent:
         jovo.$type.type !== 'INTENT'
           ? jovo.$type.type
-          : jovo.$request!.toJSON().request.intent.name,
+          : jovo.$request!.getIntentName(),
       platform: 'Actions',
-      session_id: jovo.$request!.toJSON().session.sessionId,
+      session_id: jovo.$request!.getSessionId(),
       time_stamp: Date.now(),
       type: 'user',
       user_id: jovo.$request!.getUserId(),
