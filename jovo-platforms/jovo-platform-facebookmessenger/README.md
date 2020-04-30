@@ -171,7 +171,7 @@ The returned object will be an instance of `MessengerBot` if the current request
 ## Output
 
 These sections provide an overview of Facebook Messenger specific features for output.
-For the basic concept, take a look here: [Basic Concepts > Output](../../basic-concepts/output './output').
+For the basic concept, take a look here: [Docs: Basic Concepts > Output](https://www.jovo.tech/docs/output).
 
 ### No Reprompts
 
