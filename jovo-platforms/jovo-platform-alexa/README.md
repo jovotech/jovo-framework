@@ -13,6 +13,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
    * [Monetization](#monetization)
 
 
+## Introduction
 
 ### Installation
 
@@ -102,7 +103,7 @@ project.js
 > [Find out more about the Jovo project structure here](https://www.jovo.tech/docs/project-structure).
 
 
-## Run and Test the Code
+#### Run and Test the Code
 
 To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger). 
 
