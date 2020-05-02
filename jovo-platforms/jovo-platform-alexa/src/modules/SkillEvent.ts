@@ -6,6 +6,22 @@ import { EnumAlexaRequestType } from '../core/alexa-enums';
 import { Plugin } from 'jovo-core';
 import { Alexa } from '../Alexa';
 
+export interface EventSkillAccountLinkedBody {
+  accessToken: string;
+}
+
+export interface EventSkillEnabledBody {}
+
+export interface EventSkillDisabledBody {
+  userInformationPersistenceStatus: 'PERSISTED' | 'NOT_PERSISTED';
+}
+
+export interface AcceptedPermission {
+  scope: string;
+}
+export interface EventSkillPermissionAcceptedBody {
+  acceptedPermissions: AcceptedPermission[];
+}
 export class SkillEvent implements Plugin {
   install(alexa: Alexa) {
     alexa.middleware('$type')!.use(this.type.bind(this));
