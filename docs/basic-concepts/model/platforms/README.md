@@ -118,7 +118,7 @@ For more information about Alexa Interaction Models, please see the official ref
 
 #### skill.json
 
-`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../tools/cli/get.md '../cli/get') command). If you have v2 of the `ASK CLI` installed, the file's is `alexaSkill/skill-package/`, else it's located inside `alexaSkill/`.
+`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../tools/cli/get.md '../cli/get') command). If you have v2 of the `ASK CLI` installed, the file's location is `alexaSkill/skill-package/`, else it's located inside `alexaSkill/`.
 
 ```javascript
 {
