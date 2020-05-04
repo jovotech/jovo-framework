@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-core",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -34,7 +34,7 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-framework": "^3.0.14",
+    "jovo-framework": "^3.0.15",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
