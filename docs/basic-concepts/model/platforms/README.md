@@ -5,8 +5,9 @@ Learn more about the `platforms` folder, which represents the voice platform pro
 * [Introduction](#introduction)
 * [Alexa Skill](#alexa-skill)
     * [.ask](#.ask)
-    * [Models](#models)
+    * [interactionModels](#interactionmodels)
     * [skill.json](#skilljson)
+    * [ask-resources.json](#ask-resourcesjson)
 * [Google Action](#google-action)
     * [Dialogflow](#dialogflow)
 
