@@ -10,6 +10,7 @@ import {
   ButtonTemplate,
   ButtonTemplateOptions,
   ButtonTemplatePayload,
+  DEFAULT_VERSION,
   GenericTemplate,
   GenericTemplateOptions,
   GenericTemplatePayload,
@@ -94,7 +95,10 @@ export class MessengerBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    return this.$user.isNew();
+    if (this.$user.$session && typeof this.$user.$session.isNew !== 'undefined') {
+      return this.$user.$session.isNew;
+    }
+    return true;
   }
 
   speechBuilder(): SpeechBuilder | undefined {
@@ -189,7 +193,8 @@ export class MessengerBot extends Jovo {
     const message = new SenderAction({ id: this.$user.getId()! }, action);
 
     const pageAccessToken = _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');
-    const result = await message.send(pageAccessToken);
+    const version = _get(this.$config, 'plugin.FacebookMessenger.version', DEFAULT_VERSION);
+    const result = await message.send(pageAccessToken, version);
     return !!result;
   }
 }

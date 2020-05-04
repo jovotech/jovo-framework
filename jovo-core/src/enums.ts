@@ -4,6 +4,7 @@ export enum EnumRequestType {
   END = 'END',
   UNHANDLED = 'Unhandled',
   ON_ERROR = 'ON_ERROR',
+  ON_TEXT = 'ON_TEXT',
 
   ON_REQUEST = 'ON_REQUEST',
   NEW_USER = 'NEW_USER',

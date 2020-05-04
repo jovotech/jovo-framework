@@ -171,7 +171,7 @@ export class Logger {
       logLevel: LogLevel.DEBUG,
       trackRequest: false,
       write: (logEvent: LogEvent, breakline = true) => {
-        const msg = logEvent.msg || '';
+        const msg = String(logEvent.msg) || '';
         if (logEvent.isFormat) {
           process.stdout.write(msg);
         } else {
@@ -246,7 +246,7 @@ export class Logger {
       if (appender.logLevel >= logLevel) {
         if (typeof msg === 'object') {
           msg = JSON.stringify(msg).trim();
-          msg = '\b\b';
+          msg += '\b\b';
         }
         appender.write(
           {

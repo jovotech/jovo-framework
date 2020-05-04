@@ -33,7 +33,6 @@ app.use(corePlatform, new JovoDebugger(), new FileDb());
 // ------------------------------------------------------------------
 // APP LOGIC
 // ------------------------------------------------------------------
-console.log(process.env.AWS_ACCESS_KEY_ID);
 
 app.setHandler({
 	LAUNCH() {

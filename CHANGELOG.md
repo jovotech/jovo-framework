@@ -1,5 +1,41 @@
 # Jovo Framework Changelog
 
+## 3.0.13 - 3.0.14 (2020-05-03)
+
+#### :bug: Bug Fix
+ * `jovo-analytics-chatbase` [#735](https://github.com/jovotech/jovo-framework/pull/735) Access request using helper not directly ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-core` Fix getStage() order in Project helper #2a5498f3db73abcd8520123e11d90cba9ef65ab1
+ * `jovo-framework` Fix CORS issue in unit tests
+
+#### :nail_care: Enhancements
+ * `jovo-platform-alexa` [#734](https://github.com/jovotech/jovo-framework/pull/734) Add getPermissionIsCardThrown ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-platform-alexa` Add types for skill event body objects 
+ * `jovo-platform-facebookmessenger` Improve session handling
+ * `jovo-platform-facebookmessenger` Add configurable `fetchProfile` functionality 
+
+ #### Committers: 3
+- Mark Tucker ([@rmtuckerphx](https://github.com/rmtuckerphx))
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 3.0.12 (2020-04-09)
+
+#### :sparkles: New Features
+ * `jovo-plugin-auth` Added simple auth methods to secure the endpoint 
+
+#### :bug: Bug Fix
+ * `jovo-platform-googleassistant` [#716](https://github.com/jovotech/jovo-framework/pull/716) Corrected logic for retrieving project-ids in staged environments  ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-core` [#713](https://github.com/jovotech/jovo-framework/pull/713) Added log event message cast to string ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))  
+
+
+ #### Committers: 3
+- RokasVaitkevicius ([@RokasVaitkevicius](https://github.com/RokasVaitkevicius))
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 
 ## 3.0.11 (2020-04-06)
 
@@ -45,7 +81,6 @@
 - Max Ripper ([@m-ripper](https://github.com/m-ripper))
 - Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
 - Alex ([@aswetlow](https://github.com/aswetlow))
-
 
 
 ## 3.0.3 - 3.0.5 (2020-02-27) (broken builds)

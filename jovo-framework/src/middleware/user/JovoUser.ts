@@ -107,6 +107,7 @@ export interface UserSessionData {
   $data?: Record<string, any>;
   id?: string;
   lastUpdatedAt?: string;
+  isNew?: boolean;
 }
 
 export class JovoUser implements Plugin {
@@ -351,13 +352,16 @@ export class JovoUser implements Plugin {
 
       const expireAfter = (this.config.sessionData.expireAfterSeconds || 300) * 1000;
 
-      let sessionData: UserSessionData = {};
+      let sessionData: UserSessionData = {
+        isNew: true,
+      };
       if (serializedSessionData.lastUpdatedAt) {
         const expirationTime =
           new Date(serializedSessionData.lastUpdatedAt).getTime() + expireAfter;
 
         const isExpired = new Date().getTime() >= expirationTime;
         if (!isExpired) {
+          serializedSessionData.isNew = false;
           sessionData = serializedSessionData;
         }
       }
@@ -436,7 +440,11 @@ export class JovoUser implements Plugin {
         userData.session.id = handleRequest.jovo.$user.$session.id;
       }
 
-      userData.session.lastUpdatedAt = new Date().toISOString();
+      if (handleRequest.jovo.$output.tell) {
+        delete userData.session.lastUpdatedAt;
+      } else {
+        userData.session.lastUpdatedAt = new Date().toISOString();
+      }
     }
 
     const userId = handleRequest.jovo.$user.getId();

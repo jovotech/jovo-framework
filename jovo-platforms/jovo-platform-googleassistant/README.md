@@ -1,26 +1,181 @@
-[![Jovo Framework](../../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # Google Assistant Platform Integration
 
-```sh
-npm install jovo-platform-googleassistant
+Learn more about Google Assistant specific features that can be used with the Jovo Framework.
+
+- [Introduction to Google Assistant Specific Features](#introduction-to-google-assistant-specific-features)
+- [Output](#output)
+  - [Multiple Reprompts](#multiple-reprompts)
+  - [Screen Surfaces](#screen-surfaces)
+  - [Media Response](#media-response)
+- [Data](#data)
+  - [User ID](#user-id)
+- [Push Notifications](#push-notifications)
+- [Daily Update](#daily-update)
+- [Routine Suggestion](#routine-suggestion)
+- [Confirmation](#confirmation)
+- [Web Browser Interface](#web-browser-interface)
+
+## Introduction to Google Assistant Specific Features
+
+You can access the `googleAction` object like this:
+
+```javascript
+// @language=javascript
+
+this.$googleAction
+
+// @language=typescript
+
+this.$googleAction!
 ```
 
-Find the docs here: https://www.jovo.tech/docs/google-assistant
+## Output
+
+This section provides an overview of Google Assistant specific features for output. For the basic concept, take a look here: [Basic Concepts > Output](https://www.jovo.tech/docs/output).
+
+### Multiple Reprompts
+
+Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
+
+The reprompts can be added to the [`ask`](https://www.jovo.tech/docs/output#ask) method adding more parameters:
+
+```javascript
+this.ask(speech, reprompt1, reprompt2, goodbyeMessage);
+```
+
+The first two messages are usually reprompt messages, the third one is used to say goodbye to the user.
+
+### Session Entities
+
+Session Entities work similar to [Dynamic Entities](https://www.jovo.tech/docs/amazon-alexa#dynamic-entities) in that you can enhance your existing static entities with dynamic ones to react to changes in user data or context. You can even choose whether to supplement or replace existing entities by providing an optional `EntityOverrideMode`.
+
+Here is the official reference by Google: [Session Entities](https://cloud.google.com/dialogflow/docs/entities-session).
+
+Session Entities are stored for 20 minutes, although we recommend to clear every session entity as soon as the user session ends.
+
+```javascript
+// You can use either of these functions, depending on your use case.
+
+// Adds a single session entity.
+this.$googleAction.addSessionEntityType({
+	name: 'FruitInput',
+	entities: [
+		{
+			value: 'apple',
+			synonyms: ['red apple', 'sweet apple']
+		},
+		{
+			value: 'banana',
+			synonyms: ['yellow banana']
+		}
+	],
+	entityOverrideMode: 'ENTITY_OVERRIDE_MODE_SUPPLEMENT'
+});
+
+// Adds an array of session entities.
+this.$googleAction.addSessionEntityTypes([
+	{
+		name: 'FruitInput',
+		entities: [
+			{
+				value: 'peach',
+				synonyms: ['soft peach']
+			}
+		]
+	}
+]);
+
+// Add a single session entity by providing the most basic properties as arguments.
+this.$googleAction.addSessionEntity(
+    'FruitInput', 
+    'strawberry', 
+    [ 'red strawberry' ]
+);
+```
+
+### Screen Surfaces
+
+> [You can find out more about visual output here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output).
+
+### Media Response
+
+> [You can find out more about media responses here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/media-response).
+
+## Data
+
+> [You can find out more about your Google Action user's data here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data).
+
+### User ID
+
+In previous versions of Jovo, the `userId` for Google Actions was taken from the request's user ID. In 2018, Google [deprecated this element of the request JSON](https://developers.google.com/actions/identity/user-info) and recommended [webhook generated user IDs](https://developers.google.com/actions/identity/user-info#migrating_to_webhook-generated_ids) as an alternative way to store user data.
+
+Since Jovo `2.0`, a Google Action `userId` is created in the following process:
+
+- If there is a `userId` defined in the [userStorage](https://developers.google.com/actions/assistant/save-data), take this
+- If not, use the `userId` from the request (if there is one) and then save it in `userStorage`
+- If there is no `userId` in the request, generate one using `uuidv4`, and then save it to `userStorage`
+
+Note: `userStorage` only works for Google Assistant users who have voice match enabled. [Learn more in the official Google Docs](https://developers.google.com/actions/assistant/save-data#user_storage_expiration).
+
+## Push Notifications
+
+> [Find out how to send push notifications to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/notifications)
+
+## Daily Update
+
+> [You can find out more about Google Action routine suggestions here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/daily-update)
+
+## Routine Suggestion
+
+> [Find out how to send routine suggestions to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/routine-suggestion)
+
+## Confirmation
+
+You can ask your user to confirm something using the following method:
+
+```javascript
+// @language=javascript
+
+this.$googleAction.askForConfirmation(text);
+
+// Example
+this.$googleAction.askForConfirmation('Is this correct?');
+
+// @language=typescript
+
+this.$googleAction!.askForConfirmation(text: string);
+
+// Example
+this.$googleAction!.askForConfirmation('Is this correct?');
+```
+
+The question should be one which can be answered with yes or no.
+
+The user's response will be mapped to the `ON_CONFIRMATION` intent, where you can check wether they confirmed or not using `this.$googleAction.isConfirmed()`:
+
+```javascript
+// @language=javascript
+
+ON_CONFIRMATION() {
+    if (this.$googleAction.isConfirmed()) {
+        this.tell('Confirmed')
+    } else {
+        this.tell('Not confirmed');
+    }
+}
+
+// @language=typescript
+
+ON_CONFIRMATION() {
+    if (this.$googleAction!.isConfirmed()) {
+        this.tell('Confirmed')
+    } else {
+        this.tell('Not confirmed');
+    }
+}
+```
+
+## Web Browser Interface
+
+The web browser is a platform specific google action feature. Access it via:
+`this.$googleAction.hasWebBrowserInterface();`

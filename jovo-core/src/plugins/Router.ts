@@ -176,12 +176,11 @@ export class Router implements Plugin {
     if (handleRequest.jovo.$type.type && handleRequest.jovo.$type.subType) {
       route.path = `${handleRequest.jovo.$type.type}["${handleRequest.jovo.$type.subType}"]`;
     }
-    if (route.type === EnumRequestType.INTENT) {
-      // do intent stuff
-      if (!handleRequest.jovo.$nlu || !handleRequest.jovo.$nlu.intent) {
-        throw new Error(`Couldn't get route for intent request.`);
-      }
-
+    if (
+      (route.type === EnumRequestType.INTENT || route.type === EnumRequestType.ON_TEXT) &&
+      handleRequest.jovo.$nlu &&
+      handleRequest.jovo.$nlu.intent
+    ) {
       // parse component to `mapIntentName` only if it's active
       let activeComponent: Component | undefined;
       const componentSessionStack: Array<[string, ComponentSessionData]> =
@@ -205,6 +204,18 @@ export class Router implements Plugin {
         intent,
         handleRequest.jovo.$app.config.intentsToSkipUnhandled,
       );
+    } else if (
+      (route.type === EnumRequestType.INTENT || route.type === EnumRequestType.ON_TEXT) &&
+      (!handleRequest.jovo.$nlu || !handleRequest.jovo.$nlu.intent)
+    ) {
+      route.type = EnumRequestType.ON_TEXT;
+      route = Router.intentRoute(
+        handleRequest.jovo.$handlers,
+        handleRequest.jovo.getState(),
+        EnumRequestType.ON_TEXT,
+        handleRequest.jovo.$app.config.intentsToSkipUnhandled,
+      );
+      route.type = EnumRequestType.ON_TEXT;
     } else if (route.type === EnumRequestType.END) {
       route = Router.intentRoute(
         handleRequest.jovo.$handlers,

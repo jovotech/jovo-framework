@@ -4,7 +4,7 @@ import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as path from 'path';
 import * as util from 'util';
-import { BaseApp, ErrorCode, JovoError } from '..';
+import { BaseApp, ErrorCode, JovoError, Project } from '..';
 import { Data, JovoRequest, JovoResponse, SessionData } from '../Interfaces';
 import { TestHost } from '../TestHost';
 import { TestSuite } from '../TestSuite';
@@ -65,8 +65,7 @@ export class Conversation {
 
     if (this.config.runtime === 'app') {
       try {
-        // TODO: cleaner solution required
-        process.env.JOVO_CONFIG = process.cwd() + '/src/config.js';
+        process.env.JOVO_CONFIG = Project.getConfigPath();
         this.app = require(process.cwd() + '/src/app').app;
       } catch (e) {
         Log.error(e);

@@ -18,8 +18,9 @@ import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import {
-  BASE_PATH,
+  ApiVersion,
   BASE_URL,
+  DEFAULT_VERSION,
   FacebookMessengerCore,
   FacebookMessengerRequestBuilder,
   FacebookMessengerResponseBuilder,
@@ -28,6 +29,7 @@ import {
   MessengerBotEntry,
   MessengerBotRequest,
   MessengerBotResponse,
+  MessengerBotUser,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -47,6 +49,9 @@ export interface Config extends ExtensibleConfig {
   pageAccessToken?: string;
   verifyToken?: string;
   locale?: string;
+  version?: ApiVersion;
+  userProfileFields?: string;
+  fetchUserProfile?: boolean;
 }
 
 export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBotResponse> {
@@ -64,6 +69,10 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
     locale: process.env.FB_LOCALE || 'en-US',
+    version: DEFAULT_VERSION,
+    userProfileFields:
+      process.env.FB_USER_PROFILE_FIELDS || 'first_name,last_name,profile_pic,locale',
+    fetchUserProfile: true,
   };
 
   constructor(config?: Config) {
@@ -81,6 +90,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
   install(app: BaseApp): void {
     if (!_get(app.config, `user.sessionData`)) {
       _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.enabled', true);
+      _set(app.$plugins.get('JovoUser')!.config!, 'sessionData.data', true);
     }
 
     app.$platform.set(this.constructor.name, this);
@@ -89,6 +99,8 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('nlu')!.use(this.nlu.bind(this));
     app.middleware('after.user.load')!.use(this.afterUserLoad.bind(this));
+    app.middleware('before.handler')!.use(this.beforeHandler.bind(this));
+
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
@@ -111,7 +123,12 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
   }
 
   async setup(handleRequest: HandleRequest) {
-    const path = `${BASE_PATH}/messenger_profile?access_token=${this.config.pageAccessToken}`;
+    await this.middleware('setup')!.run(handleRequest);
+    if (this.isVerifyRequest(handleRequest.host)) {
+      return;
+    }
+
+    const path = `/${this.config.version}/me/messenger_profile?access_token=${this.config.pageAccessToken}`;
     const url = BASE_URL + path;
     const data: any = {};
 
@@ -159,30 +176,38 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     try {
       await HttpService.request(config);
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, 'FacebookMessenger');
+      const errorMessage = e.response.data.error.message;
+
+      throw new JovoError(
+        `${e.message}: ${errorMessage}`,
+        ErrorCode.ERR_PLUGIN,
+        'FacebookMessenger',
+        errorMessage,
+        `The reason for that might be a missing 'pageAccessToken' or an invalid value for 'greeting' or 'launch'`,
+      );
     }
   }
 
   async request(handleRequest: HandleRequest) {
+    if (!this.isVerifyRequest(handleRequest.host)) {
+      return;
+    }
     const queryParams = handleRequest.host.getQueryParams();
 
-    const mode = queryParams['hub.mode'];
     const token = queryParams['hub.verify_token'];
     const challenge = queryParams['hub.challenge'];
 
-    if (mode && token) {
-      if (mode === 'subscribe' && token === this.config.verifyToken) {
-        handleRequest.stopMiddlewareExecution();
-        await handleRequest.host.setResponse(challenge);
-      } else {
-        throw new JovoError(
-          'The verify token that was set in the config does not match the verify token in the request!',
-          ErrorCode.ERR,
-          'FacebookMessenger',
-          `verify token in the config '${this.config.verifyToken}' does not match the passed verify token '${token}'!`,
-          'Check the verify token in the config and in the webhook-verification-form.',
-        );
-      }
+    if (token === this.config.verifyToken) {
+      handleRequest.stopMiddlewareExecution();
+      await handleRequest.host.setResponse(+challenge);
+    } else {
+      throw new JovoError(
+        'The verify token that was set in the config does not match the verify token in the request!',
+        ErrorCode.ERR,
+        'FacebookMessenger',
+        `verify token in the config '${this.config.verifyToken}' does not match the passed verify token '${token}'!`,
+        'Check the verify token in the config and in the webhook-verification-form.',
+      );
     }
   }
 
@@ -214,7 +239,24 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     await this.middleware('$session')!.run(handleRequest.jovo);
   }
+  async beforeHandler(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
+      return Promise.resolve();
+    }
+    const user = handleRequest.jovo.$user as MessengerBotUser;
 
+    if (handleRequest.jovo.$session.$data.userProfile) {
+      user.profile = handleRequest.jovo.$session.$data.userProfile;
+    } else if (this.config.fetchUserProfile && handleRequest.jovo.isNewSession()) {
+      await user.fetchAndSetProfile(this.config.userProfileFields);
+      handleRequest.jovo.$session.$data.userProfile = user.profile;
+    }
+
+    if (user.profile && user.profile.locale) {
+      const locale = user.profile.locale.replace('_', '-');
+      handleRequest.jovo.$request!.setLocale(locale);
+    }
+  }
   async output(handleRequest: HandleRequest) {
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
@@ -240,7 +282,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     for (const message of messages) {
       message
-        .send(pageAccessToken)
+        .send(pageAccessToken, this.config.version!)
         .then((res: AxiosResponse<any>) => {
           Log.debug(res.data);
         })
@@ -255,6 +297,16 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       new FacebookMessengerRequestBuilder(),
       new FacebookMessengerResponseBuilder(),
     );
+  }
+
+  private isVerifyRequest(host: Host): boolean {
+    const queryParams = host.getQueryParams();
+
+    const mode = queryParams['hub.mode'];
+    const token = queryParams['hub.verify_token'];
+    const challenge = queryParams['hub.challenge'];
+
+    return mode === 'subscribe' && !!token && !!challenge;
   }
 
   private overrideAppHandle() {

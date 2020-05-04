@@ -1,6 +1,5 @@
-import { EnumRequestType, HandleRequest, Plugin, SpeechBuilder } from 'jovo-core';
+import { EnumRequestType, HandleRequest, Plugin } from 'jovo-core';
 import _get = require('lodash.get');
-import _set = require('lodash.set');
 import {
   FacebookMessenger,
   MessengerBot,

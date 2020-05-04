@@ -45,8 +45,8 @@ export class NlpjsNlu implements Plugin {
   // tslint:disable-next-line:no-any
   nlp: any;
 
-  constructor(config: Config) {
-    this.config = _merge(this.config, config);
+  constructor(config?: Config) {
+    this.config = _merge(this.config, config || {});
   }
 
   get name(): string {
@@ -67,12 +67,15 @@ export class NlpjsNlu implements Plugin {
   }
 
   async setup(handleRequest: HandleRequest) {
-    const settings = { languages: this.config.languages || [] };
+    const settings = {
+      languages: this.config.languages || [],
+    };
     this.nlp = new Nlp({
       ...settings,
       autoLoad: this.config.useModel,
       autoSave: handleRequest.host.hasWriteFileAccess && this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
+      nlu: { log: false },
     });
     this.nlp.container.register('ner', new Ner(settings));
 
