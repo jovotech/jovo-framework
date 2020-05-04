@@ -445,7 +445,6 @@ export class JovoUser implements Plugin {
       } else {
         userData.session.lastUpdatedAt = new Date().toISOString();
       }
-
     }
 
     const userId = handleRequest.jovo.$user.getId();
