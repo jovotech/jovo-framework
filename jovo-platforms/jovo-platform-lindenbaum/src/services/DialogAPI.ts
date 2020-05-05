@@ -18,7 +18,7 @@ export class DialogAPI {
     const url = `${options.url}/dialog/${options.resellerToken}/${options.dialogId}`;
 
     try {
-      const response = await HttpService.get(url);
+      const response = await HttpService.delete(url);
       return response;
     } catch (e) {
       throw e;
