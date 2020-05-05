@@ -12,14 +12,16 @@ Learn how to build your Lindenbaum Cognitive Voice bot with the Jovo Framework.
 
 ## Getting Started
 
-Lindenbaum Cognitive Voice is a European platform that allows you to create voice bots that are deployable as smart IVR systems.
+Lindenbaum Cognitive Voice is a European platform to create voice bots that are deployable as smart IVR systems. The platform offers the possibility to choose from a wide stack of NLUs, TTS, and STT engines as well as integrations for multiple European contact center platforms.
+
+The Jovo Lindenbaum integration covers both the platform's Core and Dialog API to handle incoming requests and send out the correct responses.
 
 ## Installation
 
 First, you have to install the npm package:
 
 ```sh
-npm install --save jovo-platform-lindenbaum
+$ npm install --save jovo-platform-lindenbaum
 ```
 
 After that, initialize it in your project the following way:
@@ -36,7 +38,7 @@ import { Lindenbaum } from 'jovo-platform-lindenbaum';
 app.use(new Lindenbaum());
 ```
 
-Besides that, you have to add a NLU. Jovo provides integrations for a big variety of NLUs from Dialogflow to Rasa and more.
+Besides that, you have to add an NLU. Jovo provides integrations for a big variety of NLUs from Dialogflow to Rasa and more.
 
 The NLU has to be added as a plugin to the platform:
 
@@ -64,7 +66,7 @@ lindenbaum.use(new DialogflowNlu({
 app.use(lindenbaum);
 ```
 
-The Lindenbaum platform sends requests to three separate endpoints. The ExpressJS server of a default Jovo project only supports one endpoint. Because of that, we add a middleware which redirects all of the 3 endpoints to the single default one.
+The Lindenbaum platform sends requests to three separate endpoints. The ExpressJS server of a default Jovo project only supports one endpoint. Because of that, we add a middleware which redirects all of the 3 endpoints to the single default one. The integration already provides the necessary middleware function. You simply have to import and it to your project's ExpressJs instance.
 
 For that, add the following piece of code to your project's `index.js` file:
 
@@ -95,7 +97,7 @@ this.$lindenbaumBot
 this.$lindenbaumBot
 ```
 
-The object will only be defined if the incoming request is from Autopilot. Because of that, you should first check wether it's defined or not before accessing it:
+The object will only be defined if the incoming request is from Autopilot. Because of that, you should first check whether it's defined or not before accessing it:
 
 ```js
 // @language=javascript
@@ -115,11 +117,11 @@ if (this.$lindenbaumBot) {
 
 The Lindenbaum platform does not offer a distinct user ID. The reason being that the only identifier for each user (their phone number) is not always present, for example through anonymous calls.
 
-Because of that we use the session ID as the user ID at the same time. 
+Because of that, we use the session ID as the user ID at the same time. 
 
 ## Requests
 
-As described earlier, the Lindenbaum platform sends requests to three different endpoint. Each endpoint has a different request schema.
+As described earlier, the Lindenbaum platform sends requests to three different endpoints. Each endpoint has a different request schema.
 
 The first request is sent when the user calls the bot's number. It is automatically mapped to Jovo's LAUNCH intent and has the following scheme:
 
@@ -157,7 +159,37 @@ Last but not least, the request that is sent when the user ends the call. It is 
 }
 ```
 
-Since the Lindenbaum platform doesn't use a NLU, it also doesn't parse any kind of NLU data with its requests (intent, inputs). That means some of the functions like `this.$request.getIntentName()` don't work. In that case, the framework will put out a warning and tell you how to access the data correctly.
+Since the Lindenbaum platform doesn't use an NLU, it also doesn't parse any kind of NLU data with its requests (intent, inputs). That means some of the functions like `this.$request.getIntentName()` don't work. In that case, the framework will put out a warning and tell you how to access the data correctly.
+
+### ON_DTMF
+
+The platform allows the user to use the phone's keypad. In that case you receive a intent request with the `type` property set to `DTMF` and the `text` property being the pressed button:
+
+```js
+{
+  "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
+  "timestamp": "1587057946",
+  "text": "4",
+  "type": "DTMF",
+  "language": "en-US",
+  "confidence": 100,
+  "callback": "https://callback.com/restbot"
+}
+```
+
+These requests are automatically routed to the `ON_DTMF` intent:
+
+```js
+// @language=javascript
+ON_DTMF() {
+  const text = this.$request.getRawText(); // "4"
+}
+
+// @language=typescript
+ON_DTMF() {
+  const text = this.$request!.getRawText();
+}
+```
 
 ### $request
 
@@ -168,13 +200,13 @@ Here's the complete interface of the class:
 Name | Description | Value
 :--- | :--- | :---
 `callback` | the base URL which will be used to send out the response | string
-`confidence` | describes how confident the platform is with the ASR | number - 0 <= x <= 1
+`confidence` | describes how confident the platform is with the ASR | number - 0 <= x <= 100
 `dialogId` | the id that is used as both session ID and user ID | string
 `language` | the locale of the incoming request, e.g. `en-US` | string
 `local` | the phone number of the bot | string
 `remote` | the phone number of the caller. Could be undefined if it's an anonymous call | string
 `text` | the user's input | string
-`timestamp` | the timestamp of the request in unix time | string
+`timestamp` | the timestamp of the request in UNIX time | string
 `type` | the type of input. Either `SPEECH` or `DTMF` | enum
 
 Besides that the integration offers you the following getters/setters (depending on the request, some getters might return undefined):
@@ -204,7 +236,7 @@ Name | Description | Return Value
 
 The Lindenbaum platform doesn't follow the usual JSON response path. Although you do receive requests, you don't send out one single response, but call multiple API endpoints for each type of response (e.g. speech output, audio, etc.).
 
-While that is different from what you're probably used to, it allows you to create more creative responses, for example first speech output then play an audio file followed by another speech output. That wouldn't be possible with Alexa.
+While that is different from what you're probably used to, it allows you to create more creative responses, for example, first the speech output then an audio file followed by another speech output. That wouldn't be possible with Alexa.
 
 The following responses are supported:
 
@@ -216,9 +248,7 @@ Function | Description | Return Value | Endpoint
 `addForward(destinationNumber: string)` | forward the call to the `destinationNumber` parameter | this | `/call/forward`
 `tell(text: string)` / `ask(text: string)` | standard speech output. If you use drop, the framework will also add an API call to the `/call/drop` endpoint at the end to terminate the conversation | this | `/call/say`
 
-### Order of the Responses
-
-Since we send out multiple API calls with each request & response cycle, the order in which these API calls are made are important. 
+If you add a call to the `bridge` or `forward` endpoint and want to add additional speech output, you have to use `ask()`. The `tell()` function automatically adds a call to the `drop` endpoint which terminates the whole session and with that blocks `bridge` and `forward`.
 
 Since the Jovo Framework was first built for Alexa & Google Assistant, it is not perfectly fit to accommodate the wide range of response possibilities. One such limitation would be, that the Jovo Framework only allows a single speech output per response. If you want to create more complex responses, we allow you to set the response yourself using the `setResponses(responses: Responses[])` function:
 
@@ -237,20 +267,19 @@ this.$lindenbaumBot.setResponses([
     }
   },
   {
-    '/call/play': {
-      dialogId,
-      url: 'https://test.com/test.mp3',
-      bargeIn: false
-    }
-  },
-  {
     '/call/say': {
       dialogId,
       language,
       text: 'Hello World Again!',
       bargeIn: false
     }
-  }
+  },
+  {
+    '/call/forward': {
+      dialogId,
+      destinationNumber: '+4972112345678',
+    }
+  },
 ]);
 
 // @language=typescript
@@ -267,20 +296,19 @@ this.$lindenbaumBot!.setResponses([
     }
   },
   {
-    '/call/play': {
-      dialogId,
-      url: 'https://test.com/test.mp3',
-      bargeIn: false
-    }
-  },
-  {
     '/call/say': {
       dialogId,
       language,
       text: 'Hello World Again!',
       bargeIn: false
     }
-  }
+  },
+  {
+    '/call/forward': {
+      dialogId,
+      destinationNumber: '+4972112345678',
+    }
+  },
 ]);
 ```
 
@@ -311,15 +339,6 @@ interface ForwardResponse {
   }
 }
 
-// play audio file
-interface PlayResponse {
-  '/call/play': {
-    dialogId: string;
-    url: string;
-    bargeIn: boolean;
-  }
-}
-
 // simple text output
 interface SayResponse {
   '/call/say': {
@@ -331,10 +350,9 @@ interface SayResponse {
 }
 ```
 
-One of the consequences of the way responses work with Lindenbaum is the importance of the order in which the framework sends the API requests.
+### Order of the Responses
+
+Since we send out multiple API calls with each request & response cycle, the order in which these API calls are made is important. 
 
 If you use the `setResponses()` function we follow the principle of what you see is what you get, meaning the API calls will be made in the order of the array, starting from index 0 and ending with n - 1.
-
-For more simple responses you can still use the Jovo built-in functions, e.g. `tell()` or `ask()` as well as Lindenbaum function, e.g. `addForward()`, `addBridge()`, etc.
-
-In that case, we have the following order `ask`/`tell`/`audio` -> `forward`/`bridge`/`data` 
+For more simple responses using the Jovo built-in functions, e.g. `tell()` or `ask()` as well as Lindenbaum function, e.g. `addForward()`, `addBridge()`, etc., we have the following order `ask`/`tell` -> `forward`/`bridge`/`data` 
