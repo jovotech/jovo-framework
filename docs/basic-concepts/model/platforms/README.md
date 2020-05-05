@@ -5,8 +5,9 @@ Learn more about the `platforms` folder, which represents the voice platform pro
 * [Introduction](#introduction)
 * [Alexa Skill](#alexa-skill)
     * [.ask](#.ask)
-    * [Models](#models)
+    * [interactionModels](#interactionmodels)
     * [skill.json](#skilljson)
+    * [ask-resources.json](#ask-resourcesjson)
 * [Google Action](#google-action)
     * [Dialogflow](#dialogflow)
 
@@ -21,18 +22,34 @@ At the beginning of a new project, the folder doesn't exist until you either imp
 
 If you only want to work with a platform specific model, for example, you want to create just an Alexa Skill, you don't necessarily need the `/models` folder: The `/platforms` folder and the [`jovo deploy`](../../../tools/cli/deploy.md '../cli/deploy') command are enough. Go to [Jovo CLI Commands](../../../tools/cli '../cli') to learn more about all commands.
 
-
-
 ## Alexa Skill
 
-The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon Developer Portal using the [`Jovo CLI`](../../../tools/cli '../cli').
+The `alexaSkill` folder contains all the information of your Alexa Skill needed to deploy the skill to the Amazon Developer Portal using the [`Jovo CLI`](../../../tools/cli '../cli'). The `Jovo CLI` supports both `ASK CLI v2` and `ASK CLI v1`, each requiring a slightly different project structure. Read more about the migration [here](https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-v1-to-v2-migration-guide.html).
 
-![Alexa Skill Folder in a Jovo Project](../../../img/folder-structure-alexaSkill.png "Alexa Skill Folder in a Jovo Project" )
+#### .ask
 
-### .ask
-The `.ask` folder contains the `config` file, which has the basic deploy settings of your skill. We recommend you to not make any changes to this file.
+The `.ask` folder contains the basic deploy settings of your skill, such as your project's `skillId`, inside a single file, `ask-states.json` for v2 of the `ASK CLI`, `config` for v1. We recommend you to not make any changes to these files.
 
+##### `ask-cli@v2`:
+```js
+// ask-states.json
+{
+	"askcliStatesVersion": "2020-03-31",
+	"profiles": {
+		"default": {
+			"skillId": "[Your Skill ID]",
+			"skillMetadata": {
+				"lastDeployHash": ""
+			},
+			"code": {}
+		}
+	}
+}
+```
+
+##### `ask-cli@v1`:
 ```javascript
+// config
 {
 	"deploy_settings": {
 		"default": {
@@ -43,9 +60,11 @@ The `.ask` folder contains the `config` file, which has the basic deploy setting
 }
 ```
 
-### models
+#### interactionModels
 
-The Alexa Interaction Model is stored in this folder. It can either be built by the [`jovo build`](../../../tools/cli/build.md '../cli/build') command (if you're making use of the [Jovo Language Model](../ '../')), updated manually, or updated in the Amazon Developer Portal and then imported with [`jovo get`](../../../tools/cli/get.md '../cli/get').
+Since version 2 of the `ask-cli` integrates an implementation of the [SMAPI](https://developer.amazon.com/en-US/docs/alexa/smapi/smapi-overview.html), most of the skill's data is organized in the `skill-package` folder. A skill package might consist of your skill's manifest, interaction models and optional account-linking information.
+
+The Alexa Interaction Models are stored inside `alexaSkill/skill-package/interactionModels/custom/`. For v1 of the ASK CLI, the models are located at `alexaSkill/models/`. They can either be built by the [`jovo build`](../../../tools/cli/build.md '../cli/build') command (if you're making use of the [Jovo Language Model](../ '../')), updated manually, or updated in the Amazon Developer Portal and then imported with [`jovo get`](../../../tools/cli/get.md '../cli/get').
 
 For more information about Alexa Interaction Models, please see the official reference by Amazon: [Custom Interaction Model Reference (Intents, Slots, Sample Utterances)](https://developer.amazon.com/docs/custom-skills/custom-interaction-model-reference.html).
 
@@ -97,9 +116,9 @@ For more information about Alexa Interaction Models, please see the official ref
 }
 ```
 
-### skill.json
+#### skill.json
 
-`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../tools/cli/get.md '../cli/get') command).
+`skill.json` contains the publication and configuration information of your Skill. This can be either updated manually or in the Amazon Developer Portal (and then imported with the [`jovo get`](../../../tools/cli/get.md '../cli/get') command). If you have v2 of the `ASK CLI` installed, the file's location is `alexaSkill/skill-package/`, else it's located inside `alexaSkill/`.
 
 ```javascript
 {
@@ -124,6 +143,23 @@ For more information about Alexa Interaction Models, please see the official ref
 			"custom": {}
 		},
 		"manifestVersion": "1.0"
+	}
+}
+```
+
+#### ask-resources.json
+
+V2 of the `ASK CLI` requires an additional file, `ask-resources.json`. This file contains your project's configuration for use with the Skill Management API.
+
+```js
+{
+	"askcliResourcesVersion": "2020-03-31",
+	"profiles": {
+		"default": {
+			"skillMetadata": {
+				"src": "./skill-package"
+			}
+		}
 	}
 }
 ```

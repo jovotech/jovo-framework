@@ -15,9 +15,12 @@ server.use(
   bodyParser.json({ limit: '5mb' }),
 );
 
-const corsJest = (req: any, res: any, next:Function) => {
-  if (req.headers['jovo-test'] ||
-    (req.headers['access-control-request-headers'] && req.headers['access-control-request-headers'].includes('jovo-test'))) {
+const corsJest = (req: any, res: any, next: Function) => {
+  if (
+    req.headers['jovo-test'] ||
+    (req.headers['access-control-request-headers'] &&
+      req.headers['access-control-request-headers'].includes('jovo-test'))
+  ) {
     res.header('Access-Control-Allow-Origin', 'http://localhost');
     res.header('Access-Control-Allow-Methods', 'OPTIONS,POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type, jovo-test');

@@ -67,7 +67,7 @@ this.tell('Enjoy the song!');
 
 If you use `tell()` it will be handled as a [final response](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#finalresponse) and you won't receive a callback that the audio playback is completed. 
 
-The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](./visual.md#suggestion-chips './visual#suggestion-chips') to your response.
+The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output#suggestion-chips) to your response.
 
 
 ```javascript

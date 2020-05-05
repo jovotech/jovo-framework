@@ -2,6 +2,14 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+## 3.0.14 (2020-05-04)
+
+#### :bug: Bug Fix
+ * `jovo-analytics-chatbase` [#735](https://github.com/jovotech/jovo-framework/pull/735) Access request using helper not directly ([@KaanKC](https://github.com/KaanKC))  
+
+#### Committers: 1
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

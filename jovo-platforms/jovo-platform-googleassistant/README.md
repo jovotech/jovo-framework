@@ -95,15 +95,15 @@ this.$googleAction.addSessionEntity(
 
 ### Screen Surfaces
 
-> [You can find out more about visual output here](./visual.md './visual-output').
+> [You can find out more about visual output here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output).
 
 ### Media Response
 
-> [You can find out more about media responses here](./media-response.md './media-response').
+> [You can find out more about media responses here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/media-response).
 
 ## Data
 
-> [You can find out more about your Google Action user's data here](./data.md './data').
+> [You can find out more about your Google Action user's data here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data).
 
 ### User ID
 
@@ -119,15 +119,15 @@ Note: `userStorage` only works for Google Assistant users who have voice match e
 
 ## Push Notifications
 
-> [Find out how to send push notifications to your Google Action's users here](./notifications.md './notifications')
+> [Find out how to send push notifications to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/notifications)
 
 ## Daily Update
 
-> [You can find out more about Google Action routine suggestions here](./daily-update.md './daily-update')
+> [You can find out more about Google Action routine suggestions here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/daily-update)
 
 ## Routine Suggestion
 
-> [Find out how to send routine suggestions to your Google Action's users here](./routine-suggestion.md './routine-suggestion')
+> [Find out how to send routine suggestions to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/routine-suggestion)
 
 ## Confirmation
 
