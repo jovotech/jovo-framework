@@ -143,7 +143,6 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
   }
 
   async response(handleRequest: HandleRequest) {
-    console.log('INSIDE RESPONSE');
     if (handleRequest.jovo?.constructor.name !== Lindenbaum.appType) {
       return Promise.resolve();
     }
@@ -153,10 +152,10 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
 
     const baseUrl = (lindenbaumBot.$request as LindenbaumRequest).getCallbackUrl();
     const $response = lindenbaumBot.$response as LindenbaumResponse;
-    console.log('test');
     if (baseUrl) {
       $response.responses.forEach(async (res) => {
         const endpoint: string = Object.keys(res)[0]; // object only has one key
+
         await HttpService.post(baseUrl + endpoint, res[endpoint]);
       });
     }
