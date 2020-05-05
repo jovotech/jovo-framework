@@ -27,6 +27,20 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
   static type = 'Lindenbaum';
   static appType = 'LindenbaumBot';
 
+  static lindenbaumExpressJsMiddleware() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      if (
+        req.originalUrl.startsWith('/webhook/session') ||
+        req.originalUrl.startsWith('/webhook/message') ||
+        req.originalUrl.startsWith('/webhook/terminated')
+      ) {
+        await res.redirect('/webhook');
+      } else {
+        next();
+      }
+    };
+  }
+
   constructor(config?: ExtensibleConfig) {
     super(config);
 
@@ -163,19 +177,5 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
 
   makeTestSuite(): LindenbaumTestSuite {
     return new TestSuite(new LindenbaumRequestBuilder(), new LindenbaumResponseBuilder());
-  }
-
-  lindenbaumExpressJsMiddleware(app: BaseApp) {
-    return async (req: Request, res: Response, next: NextFunction) => {
-      if (
-        req.originalUrl.startsWith('/webhook/session') ||
-        req.originalUrl.startsWith('/webhook/message') ||
-        req.originalUrl.startsWith('/webhook/terminated')
-      ) {
-        res.redirect('/webhook');
-      } else {
-        next();
-      }
-    };
   }
 }
