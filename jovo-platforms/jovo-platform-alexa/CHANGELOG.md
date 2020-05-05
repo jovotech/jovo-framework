@@ -5,7 +5,7 @@ Current version might be higher than the latest changes displayed below because 
 ## 3.0.13 (2020-05-04)
 
 #### :nail_care: Enhancements
- * `jovo-platform-alexa` [#734](https://github.com/jovotech/jovo-framework/pull/734) Add getPermissionIsCardThrown ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-platform-alexa` [#734](https://github.com/jovotech/jovo-framework/pull/734) Add getPermissionIsCardThrown ([@rmtuckerphx](https://github.com/rmtuckerphx))  
  * `jovo-platform-alexa` Add types for skill event body objects 
 
 #### Committers: 2
