@@ -12,7 +12,7 @@ import {
 export class LindenbaumRequestBuilder implements RequestBuilder<LindenbaumRequest> {
   type = Lindenbaum.appType;
 
-  async launch(json: LindenbaumSessionRequestJSON): Promise<LindenbaumRequest> {
+  async launch(json?: LindenbaumSessionRequestJSON): Promise<LindenbaumRequest> {
     return await this.launchRequest(json);
   }
 
