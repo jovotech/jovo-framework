@@ -26,8 +26,11 @@ export class LindenbaumCore implements Plugin {
   uninstall(lindenbaum: Lindenbaum) {}
 
   async init(handleRequest: HandleRequest) {
-    const requestObject = handleRequest.host.getRequestObject();
-    if (requestObject.dialogId) {
+    const requestObject: LindenbaumRequest = handleRequest.host.getRequestObject();
+    if (
+      requestObject.dialogId &&
+      requestObject.timestamp
+    ) {
       handleRequest.jovo = new LindenbaumBot(handleRequest.app, handleRequest.host, handleRequest);
     }
   }
@@ -49,17 +52,20 @@ export class LindenbaumCore implements Plugin {
   }
 
   async type(lindenbaumBot: LindenbaumBot) {
-    const webhookPath = lindenbaumBot.$host.headers['webhook_path'];
-    if (webhookPath === '/session') {
+    const request = lindenbaumBot.$request as LindenbaumRequest;
+    /**
+     * Instead of working with the request paths to determine what kind of request it is,
+     * e.g. /session -> LAUNCH,
+     * we can use the different request schemes of each path to determine the request type,
+     * e.g. only LAUNCH has `remote` property
+     * 
+     * Differences between ExpressJs & cloud providers make this solution easier
+     */
+    if (request.remote) {
       lindenbaumBot.$type = {
         type: EnumRequestType.LAUNCH,
       };
-    } else if (webhookPath === '/terminated') {
-      lindenbaumBot.$type = {
-        type: EnumRequestType.END,
-      };
-    } else if (webhookPath === '/message') {
-      const request = lindenbaumBot.$request as LindenbaumRequest;
+    } else if (request.text) {
       if (request.type === 'DTMF') {
         lindenbaumBot.$type = {
           type: EnumRequestType.ON_DTMF,
@@ -70,7 +76,9 @@ export class LindenbaumCore implements Plugin {
         };
       }
     } else {
-      lindenbaumBot.$type = {};
+      lindenbaumBot.$type = {
+        type: EnumRequestType.END,
+      };
     }
   }
 
