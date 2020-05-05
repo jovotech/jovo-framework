@@ -74,7 +74,7 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
-    this.use(new LindenbaumCore(), new AudioPlayerPlugin());
+    this.use(new LindenbaumCore());
 
     Jovo.prototype.$lindenbaumBot = undefined;
     Jovo.prototype.lindenbaumBot = function () {
