@@ -22,7 +22,6 @@ import { LindenbaumResponse } from './core/LindenbaumResponse';
 import { LindenbaumRequestBuilder } from './core/LindenbaumRequestBuilder';
 import { LindenbaumResponseBuilder } from './core/LindenbaumResponseBuilder';
 import { LindenbaumCore } from './modules/LindenbaumCore';
-import { AudioPlayerPlugin } from './modules/AudioPlayer';
 
 export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> {
   static type = 'Lindenbaum';
