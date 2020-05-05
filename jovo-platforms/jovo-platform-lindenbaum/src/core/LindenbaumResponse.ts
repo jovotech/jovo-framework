@@ -227,15 +227,6 @@ export interface SayResponse {
   };
 }
 
-// play audio file
-export interface PlayResponse {
-  '/call/play': {
-    dialogId: string;
-    url: string;
-    bargeIn: boolean;
-  };
-}
-
 // end call
 export interface DropResponse {
   '/call/drop': {
