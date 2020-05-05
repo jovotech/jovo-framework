@@ -265,7 +265,6 @@ export interface DataResponse {
 
 export type Responses =
   | SayResponse
-  | PlayResponse
   | DropResponse
   | BridgeResponse
   | ForwardResponse
