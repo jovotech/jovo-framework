@@ -1,35 +1,27 @@
 import { HttpService, AxiosResponse } from 'jovo-core';
 
 export class DialogAPI {
+  static baseUrl = 'https://cognitivevoice.io/dialog';
   static async getDialogData(
     options: DialogAPIRequestOptions,
   ): Promise<AxiosResponse<DialogAPIData>> {
-    const url = `${options.url}/dialog/${options.resellerToken}/${options.dialogId}`;
+    const url = `${this.baseUrl}/dialog/${options.resellerToken}/${options.dialogId}`;
 
-    try {
-      const response = await HttpService.get(url);
-      return response;
-    } catch (e) {
-      throw e;
-    }
+    const response = await HttpService.get(url);
+    return response;
   }
 
   static async deleteDialogData(options: DialogAPIRequestOptions): Promise<AxiosResponse> {
-    const url = `${options.url}/dialog/${options.resellerToken}/${options.dialogId}`;
+    const url = `${this.baseUrl}/dialog/${options.resellerToken}/${options.dialogId}`;
 
-    try {
-      const response = await HttpService.delete(url);
-      return response;
-    } catch (e) {
-      throw e;
-    }
+    const response = await HttpService.delete(url);
+    return response;
   }
 }
 
 export interface DialogAPIRequestOptions {
   dialogId: string;
   resellerToken: string;
-  url: string;
 }
 
 export interface DialogAPIData {

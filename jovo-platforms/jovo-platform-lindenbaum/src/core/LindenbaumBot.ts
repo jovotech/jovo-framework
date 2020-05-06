@@ -186,7 +186,6 @@ export class LindenbaumBot extends Jovo {
     const options: DialogAPIRequestOptions = {
       resellerToken,
       dialogId: dialogId || request.dialogId,
-      url: request.callback,
     };
 
     return DialogAPI.getDialogData(options);
@@ -212,7 +211,6 @@ export class LindenbaumBot extends Jovo {
     const options: DialogAPIRequestOptions = {
       resellerToken,
       dialogId: dialogId || request.dialogId,
-      url: request.callback,
     };
 
     return DialogAPI.deleteDialogData(options);
