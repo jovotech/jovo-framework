@@ -117,6 +117,13 @@ export class LindenbaumCore implements Plugin {
 
     // the objects inside the Lindenbaum array are already in the correct format
     response.responses.push(...output.Lindenbaum);
+
+    // /call/data has to be first else throws error
+    const dataIndex = response.responses.findIndex((value) => value['/call/data']);
+    if (dataIndex > -1) {
+      const dataObject = response.responses.splice(dataIndex, 1)[0];
+      response.responses.unshift(dataObject);  
+    }
   }
 
   /**
