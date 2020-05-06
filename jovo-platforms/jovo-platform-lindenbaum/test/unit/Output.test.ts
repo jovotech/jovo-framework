@@ -166,7 +166,7 @@ describe('test creation of final response from $output object', () => {
         '/call/data': {
           dialogId: '000',
           key: 'test',
-          value: 'testValue'
+          value: 'testValue',
         },
       },
     ];

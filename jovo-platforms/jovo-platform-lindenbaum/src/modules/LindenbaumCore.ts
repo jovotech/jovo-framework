@@ -122,7 +122,7 @@ export class LindenbaumCore implements Plugin {
     const dataIndex = response.responses.findIndex((value) => value['/call/data']);
     if (dataIndex > -1) {
       const dataObject = response.responses.splice(dataIndex, 1)[0];
-      response.responses.unshift(dataObject);  
+      response.responses.unshift(dataObject);
     }
   }
 
