@@ -363,7 +363,7 @@ interface SayResponse {
 Since we send out multiple API calls with each request & response cycle, the order in which these API calls are made is important. 
 
 If you use the `setResponses()` function we follow the principle of what you see is what you get, meaning the API calls will be made in the order of the array, starting from index 0 and ending with n - 1.
-For more simple responses using the Jovo built-in functions, e.g. `tell()` or `ask()` as well as Lindenbaum function, e.g. `addForward()`, `addBridge()`, etc., we have the following order `ask`/`tell` -> `forward`/`bridge`/`data` 
+For more simple responses using the Jovo built-in functions, e.g. `tell()` or `ask()` as well as Lindenbaum function, e.g. `addForward()`, `addBridge()`, etc., we have the following order `data` -> `ask`/`tell` -> `forward`/`bridge`
 
 ## Dialog API
 
