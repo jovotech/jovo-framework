@@ -128,7 +128,7 @@ The first request is sent when the user calls the bot's number. It is automatica
 ```js
 {
   "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
-  "timestamp": "1587057946",
+  "timestamp": 1587057946,
   "local": "+4972112345678",
   "remote": "+4972110203040",
   "language": "en-US",
@@ -141,7 +141,7 @@ The second endpoint receives the requests containing the user's input (either sp
 ```js
 {
   "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
-  "timestamp": "1587057946",
+  "timestamp": 1587057946,
   "text": "Hello World",
   "type": "SPEECH",
   "language": "en-US",
@@ -155,7 +155,7 @@ Last but not least, the request that is sent when the user ends the call. It is 
 ```js
 {
   "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
-  "timestamp": "1587057946"
+  "timestamp": 1587057946
 }
 ```
 
@@ -168,7 +168,7 @@ The platform allows the user to use the phone's keypad. In that case you receive
 ```js
 {
   "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
-  "timestamp": "1587057946",
+  "timestamp": 1587057946,
   "text": "4",
   "type": "DTMF",
   "language": "en-US",
@@ -206,7 +206,7 @@ Name | Description | Value
 `local` | the phone number of the bot | string
 `remote` | the phone number of the caller. Could be undefined if it's an anonymous call | string
 `text` | the user's input | string
-`timestamp` | the timestamp of the request in UNIX time | string
+`timestamp` | the timestamp of the request in UNIX time | number
 `type` | the type of input. Either `SPEECH` or `DTMF` | enum
 
 Besides that the integration offers you the following getters/setters (depending on the request, some getters might return undefined):
