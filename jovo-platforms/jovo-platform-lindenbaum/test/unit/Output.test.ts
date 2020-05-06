@@ -128,7 +128,7 @@ describe('test creation of final response from $output object', () => {
   /**
    * The order HAS to be SayResponse (speech output) before Bridge-, Forward-
    */
-  test('speech output before forward/bridge/data etc.', () => {
+  test('speech output before forward/bridge etc.', () => {
     lindenbaumBot.$output.tell = {
       speech: 'Hello World',
     };
@@ -155,5 +155,28 @@ describe('test creation of final response from $output object', () => {
     const forwardIndex = response.responses.findIndex((value) => value['/call/forward']);
     expect(sayIndex).toBeLessThan(bridgeIndex);
     expect(sayIndex).toBeLessThan(forwardIndex);
+  });
+
+  test('data output before speech output', () => {
+    lindenbaumBot.$output.tell = {
+      speech: 'Hello World',
+    };
+    lindenbaumBot.$output.Lindenbaum = [
+      {
+        '/call/data': {
+          dialogId: '000',
+          key: 'test',
+          value: 'testValue'
+        },
+      },
+    ];
+
+    lindenbaumCore.output(lindenbaumBot);
+
+    const response = lindenbaumBot.$response as LindenbaumResponse;
+    const sayIndex = response.responses.findIndex((value) => value['/call/say']);
+    const dataIndex = response.responses.findIndex((value) => value['/call/data']);
+
+    expect(dataIndex).toBeLessThan(sayIndex);
   });
 });
