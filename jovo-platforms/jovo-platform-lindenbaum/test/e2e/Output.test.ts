@@ -7,10 +7,9 @@ import {
   SessionConstants,
   TestSuite,
 } from 'jovo-core';
-import { App } from 'jovo-framework';
+import { App, ExpressJS } from 'jovo-framework';
 import { FileDb2 } from 'jovo-db-filedb';
 import { Lindenbaum } from '../../src';
-import { LindenbaumExpressJS } from './helper/LindenbaumExpressJS';
 import { LindenbaumMockNlu } from './helper/LindenbaumMockNlu';
 import { PATH_TO_DB_DIR, clearDbFolder } from './helper/Utils';
 
@@ -68,7 +67,7 @@ describe('test tell', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
@@ -85,7 +84,7 @@ describe('test tell', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isTell('Hello World!')).toBe(true);
@@ -101,7 +100,7 @@ describe('test tell', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isTell('Hello <break time="100ms"/>')).toBe(true);
@@ -119,7 +118,7 @@ describe('test ask', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isAsk('Hello World!', 'Reprompt')).toBe(true);
@@ -137,7 +136,7 @@ describe('test ask', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isAsk('Hello World!')).toBe(true);
@@ -156,7 +155,7 @@ describe('test ask', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.isAsk('Hello <break time="100ms"/>')).toBe(true);

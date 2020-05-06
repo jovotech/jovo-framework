@@ -1,8 +1,7 @@
 import { HandleRequest, JovoRequest, LogLevel, TestSuite } from 'jovo-core';
-import { App } from 'jovo-framework';
+import { App, ExpressJS } from 'jovo-framework';
 import { FileDb2 } from 'jovo-db-filedb';
 import { Lindenbaum } from '../../src';
-import { LindenbaumExpressJS } from './helper/LindenbaumExpressJS';
 import { LindenbaumMockNlu } from './helper/LindenbaumMockNlu';
 import { clearDbFolder, setDbSessionData } from './helper/Utils';
 
@@ -69,7 +68,7 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       name: 'Joe',
     });
-    app.handle(LindenbaumExpressJS.dummyIntentRequest(intentRequest));
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test mapInputs', async (done) => {
@@ -89,7 +88,7 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       'given-name': 'Joe',
     });
-    app.handle(LindenbaumExpressJS.dummyIntentRequest(intentRequest));
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 });
 
@@ -108,7 +107,7 @@ describe('test intentMap', () => {
     });
 
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
-    app.handle(LindenbaumExpressJS.dummyIntentRequest(intentRequest));
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 
   test('test inputMap with predefined handler path', async (done) => {
@@ -125,7 +124,7 @@ describe('test intentMap', () => {
     });
 
     const intentRequest: JovoRequest = await t.requestBuilder.intent('Stop.Intent', {});
-    app.handle(LindenbaumExpressJS.dummyIntentRequest(intentRequest));
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 });
 
@@ -144,7 +143,7 @@ describe('test $data', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$app.$data.appData).toBe('appData');
@@ -173,7 +172,7 @@ describe('test session attributes', () => {
       sessionName2: 'sessionValue2',
     });
 
-    app.handle(LindenbaumExpressJS.dummyIntentRequest(intentRequest));
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test set session', async (done) => {
@@ -187,7 +186,7 @@ describe('test session attributes', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$session.$data['sessionName1']).toBe('sessionValue1');
@@ -210,7 +209,7 @@ describe('test session attributes', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$session.$data['sessionName1']).toBe('sessionValue1');
@@ -235,7 +234,7 @@ describe('test app listener', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('test onResponse', async (done) => {
@@ -250,7 +249,7 @@ describe('test app listener', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('test onFail', async (done) => {
@@ -269,7 +268,7 @@ describe('test app listener', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('test onError', async (done) => {
@@ -288,7 +287,7 @@ describe('test app listener', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 });
 
@@ -302,7 +301,7 @@ describe('test app config', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$response!.hasSessionAttribute('foo')).toBe(false);
@@ -320,7 +319,7 @@ describe('test app config', () => {
     app.config.keepSessionDataOnSessionEnded = true;
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(LindenbaumExpressJS.dummyLaunchRequest(launchRequest));
+    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$session.$data.foo).toBe('bar');
