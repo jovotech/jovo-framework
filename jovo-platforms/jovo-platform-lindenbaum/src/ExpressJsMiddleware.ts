@@ -11,7 +11,6 @@ export const expressJsMiddleware = (app: BaseApp) => {
     ) {
       await app.handle(new ExpressJS(req, res));
     } else {
-      console.log('in next()');
       next();
     }
   };
