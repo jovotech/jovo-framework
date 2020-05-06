@@ -22,6 +22,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
 }
 
 export * from './Lindenbaum';
+export * from './ExpressJsMiddleware';
 export * from './core/LindenbaumBot';
 export * from './core/LindenbaumRequest';
 export * from './core/LindenbaumResponse';

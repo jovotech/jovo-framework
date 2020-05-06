@@ -13,8 +13,6 @@ import {
 } from 'jovo-core';
 import _merge = require('lodash.merge');
 
-import type { Request, Response, NextFunction } from 'express';
-
 import { LindenbaumTestSuite } from './index';
 import { LindenbaumBot } from './core/LindenbaumBot';
 import { LindenbaumRequest } from './core/LindenbaumRequest';
@@ -26,20 +24,6 @@ import { LindenbaumCore } from './modules/LindenbaumCore';
 export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> {
   static type = 'Lindenbaum';
   static appType = 'LindenbaumBot';
-
-  static lindenbaumExpressJsMiddleware() {
-    return async (req: Request, res: Response, next: NextFunction) => {
-      if (
-        req.originalUrl.startsWith('/webhook/session') ||
-        req.originalUrl.startsWith('/webhook/message') ||
-        req.originalUrl.startsWith('/webhook/terminated')
-      ) {
-        await res.redirect('/webhook');
-      } else {
-        next();
-      }
-    };
-  }
 
   constructor(config?: ExtensibleConfig) {
     super(config);
