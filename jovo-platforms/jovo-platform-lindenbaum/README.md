@@ -5,10 +5,9 @@ Learn how to build your Lindenbaum Cognitive Voice bot with the Jovo Framework.
 * [Getting Started](#getting-started)
 * [Installation](#installation)
 * [Basics](#basics)
-  * [User ID](#user-id)
 * [Requests](#requests)
-  * [$request](#request)
 * [Responses](#responses)
+* [Dialog API](#dialog-api)
 
 ## Getting Started
 
@@ -324,6 +323,15 @@ interface BridgeResponse {
   }
 }
 
+// store data which can be later on retrieved using the Dialog API
+interface DataResponse {
+  '/call/data': {
+    dialogId: string;
+    key: string;
+    value: string;
+  };
+}
+
 // end call
 interface DropResponse {
   '/call/drop': {
@@ -356,3 +364,35 @@ Since we send out multiple API calls with each request & response cycle, the ord
 
 If you use the `setResponses()` function we follow the principle of what you see is what you get, meaning the API calls will be made in the order of the array, starting from index 0 and ending with n - 1.
 For more simple responses using the Jovo built-in functions, e.g. `tell()` or `ask()` as well as Lindenbaum function, e.g. `addForward()`, `addBridge()`, etc., we have the following order `ask`/`tell` -> `forward`/`bridge`/`data` 
+
+## Dialog API
+
+Using the Dialog API you can retrieve data about the session for up to 10 minutes after it is finished. Besides a complete transcription of the session, you can also add your own data using the `/call/data` endpoint.
+
+Using the `getDialogData(resellerToken: string, dialogId?: string)` method you can retrieve the data from the Dialog API. If you don't parse the `dialogId`, the framework will use the current request's id.
+
+```js
+// @language=javascript
+const response = await this.$lindenbaumBot.getDialogData('ncus8w1s92-sev4-zxc8-zch2-s92nbc81es21');
+
+// @language=typescript
+const response = await this.$lindenbaumBot!.getDialogData('ncus8w1s92-sev4-zxc8-zch2-s92nbc81es21');
+```
+
+If the API request was successful, you will receive a response with the following properties:
+
+Name | Description | Value
+:--- | :--- | :---
+`dialogId` | the `dialogId` to which the data belongs to | string
+`callId` | the call ID | string
+`data` | an array of objects representing the complete session | object[]
+
+You can also delete saved data using the `deleteDialogData(resellerToken: string, dialogId?: string)` method:
+
+```js
+// @language=javascript
+const response = await this.$lindenbaumBot.deleteDialogData('ncus8w1s92-sev4-zxc8-zch2-s92nbc81es21');
+
+// @language=typescript
+const response = await this.$lindenbaumBot!.deleteDialogData('ncus8w1s92-sev4-zxc8-zch2-s92nbc81es21');
+```
