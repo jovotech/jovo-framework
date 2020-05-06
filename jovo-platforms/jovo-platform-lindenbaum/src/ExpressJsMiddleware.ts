@@ -15,4 +15,4 @@ export const expressJsMiddleware = (app: BaseApp) => {
       next();
     }
   };
-}
+};

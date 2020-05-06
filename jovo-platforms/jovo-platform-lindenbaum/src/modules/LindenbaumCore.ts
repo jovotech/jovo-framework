@@ -27,10 +27,7 @@ export class LindenbaumCore implements Plugin {
 
   async init(handleRequest: HandleRequest) {
     const requestObject: LindenbaumRequest = handleRequest.host.getRequestObject();
-    if (
-      requestObject.dialogId &&
-      requestObject.timestamp
-    ) {
+    if (requestObject.dialogId && requestObject.timestamp) {
       handleRequest.jovo = new LindenbaumBot(handleRequest.app, handleRequest.host, handleRequest);
     }
   }
@@ -58,7 +55,7 @@ export class LindenbaumCore implements Plugin {
      * e.g. /session -> LAUNCH,
      * we can use the different request schemes of each path to determine the request type,
      * e.g. only LAUNCH has `remote` property
-     * 
+     *
      * Differences between ExpressJs & cloud providers make this solution easier
      */
     if (request.remote) {
