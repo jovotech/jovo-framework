@@ -1,24 +1,13 @@
 import { ExpressJS, Lambda, Webhook, App } from 'jovo-framework';
+import { expressJsMiddleware } from 'jovo-platform-lindenbaum';
 import { app } from './app';
 
-import type { Request, Response, NextFunction } from 'express';
 
 // ------------------------------------------------------------------
 // HOST CONFIGURATION
 // ------------------------------------------------------------------
 
-const lindenbaumMiddleware = (app: App) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        if (req.originalUrl.startsWith('/webhook/session') ||
-            req.originalUrl.startsWith('/webhook/message') ||
-            req.originalUrl.startsWith('/webhook/terminated')) {
-            await app.handle(new ExpressJS(req, res));
-        } else {
-            next();
-        }
-    };
-};
-Webhook.use(lindenbaumMiddleware(app));
+Webhook.use(expressJsMiddleware(app));
 
 // ExpressJS (Jovo Webhook)
 if (process.argv.indexOf('--webhook') > -1) {

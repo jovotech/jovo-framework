@@ -4,21 +4,11 @@ const {
     ExpressJS,
     Lambda
 } = require('jovo-framework');
+const { expressJsMiddleware } = require('jovo-platform-lindenbaum');
 
 const { app } = require('./app.js');
 
-const lindenbaumMiddleware = (app) => {
-    return async (req, res, next) => {
-        if (req.originalUrl.startsWith('/webhook/session') ||
-            req.originalUrl.startsWith('/webhook/message') ||
-            req.originalUrl.startsWith('/webhook/terminated')) {
-            await app.handle(new ExpressJS(req, res));
-        } else {
-            next();
-        }
-    };
-};
-Webhook.use(lindenbaumMiddleware(app));
+Webhook.use(expressJsMiddleware(app));
 
 if (process.argv.indexOf('--webhook') > -1) {
     const port = process.env.JOVO_PORT || 3000;
