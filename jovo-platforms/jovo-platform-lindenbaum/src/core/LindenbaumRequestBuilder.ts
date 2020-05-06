@@ -43,7 +43,7 @@ export class LindenbaumRequestBuilder implements RequestBuilder<LindenbaumReques
     } else {
       const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
       return LindenbaumRequest.fromJSON(JSON.parse(request))
-        .setTimestamp((new Date().getTime() * 1000).toString())
+        .setTimestamp(new Date().toISOString())
         .setUserId(randomUserId());
     }
   }
@@ -54,7 +54,7 @@ export class LindenbaumRequestBuilder implements RequestBuilder<LindenbaumReques
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
       return LindenbaumRequest.fromJSON(JSON.parse(request))
-        .setTimestamp((new Date().getTime() * 1000).toString())
+        .setTimestamp(new Date().toISOString())
         .setUserId(randomUserId());
     }
   }
@@ -65,7 +65,7 @@ export class LindenbaumRequestBuilder implements RequestBuilder<LindenbaumReques
     } else {
       const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
       return LindenbaumRequest.fromJSON(JSON.parse(request))
-        .setTimestamp((new Date().getTime() * 1000).toString())
+        .setTimestamp(new Date().toISOString())
         .setUserId(randomUserId());
     }
   }
