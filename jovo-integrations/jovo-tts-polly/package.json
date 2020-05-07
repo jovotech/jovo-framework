@@ -1,6 +1,6 @@
 {
   "name": "jovo-tts-polly",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.477.0",
-    "jovo-core": "^3.0.13"
+    "jovo-core": "^3.0.14"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
@@ -29,7 +29,7 @@
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
-    "ts-jest": "^25.2.0",
+    "ts-jest": "^25.4.0",
     "tslint": "^5.17.0",
     "typedoc": "^0.15.6",
     "typescript": "^3.8.3"

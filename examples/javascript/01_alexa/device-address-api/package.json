@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-device-address-api",
-  "version": "3.0.13",
+  "version": "3.0.15",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.0.13",
-    "jovo-platform-alexa": "^3.0.13"
+    "jovo-framework": "^3.0.15",
+    "jovo-platform-alexa": "^3.0.15"
   }
 }

@@ -28,7 +28,8 @@ import {
   MessengerBot,
   MessengerBotEntry,
   MessengerBotRequest,
-  MessengerBotResponse, MessengerBotUser,
+  MessengerBotResponse,
+  MessengerBotUser,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -69,7 +70,8 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     verifyToken: process.env.FB_VERIFY_TOKEN || '',
     locale: process.env.FB_LOCALE || 'en-US',
     version: DEFAULT_VERSION,
-    userProfileFields: process.env.FB_USER_PROFILE_FIELDS || 'first_name,last_name,profile_pic,locale',
+    userProfileFields:
+      process.env.FB_USER_PROFILE_FIELDS || 'first_name,last_name,profile_pic,locale',
     fetchUserProfile: true,
   };
 
@@ -241,17 +243,16 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
-    const user = (handleRequest.jovo.$user as MessengerBotUser);
+    const user = handleRequest.jovo.$user as MessengerBotUser;
 
-    if(handleRequest.jovo.$session.$data.userProfile) {
+    if (handleRequest.jovo.$session.$data.userProfile) {
       user.profile = handleRequest.jovo.$session.$data.userProfile;
-    } else if(this.config.fetchUserProfile && handleRequest.jovo.isNewSession()) {
+    } else if (this.config.fetchUserProfile && handleRequest.jovo.isNewSession()) {
       await user.fetchAndSetProfile(this.config.userProfileFields);
       handleRequest.jovo.$session.$data.userProfile = user.profile;
     }
 
     if (user.profile && user.profile.locale) {
-
       const locale = user.profile.locale.replace('_', '-');
       handleRequest.jovo.$request!.setLocale(locale);
     }

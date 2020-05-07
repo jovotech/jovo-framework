@@ -1,6 +1,6 @@
 {
   "name": "jovo-core",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "jovo-core",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -48,7 +48,7 @@
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
-    "ts-jest": "^25.2.0",
+    "ts-jest": "^25.4.0",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.6",

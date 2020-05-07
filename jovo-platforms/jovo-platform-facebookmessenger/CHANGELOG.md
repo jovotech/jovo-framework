@@ -2,6 +2,15 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+## 3.0.15 (2020-05-04)
+
+ * `jovo-platform-facebookmessenger` Improve session handling
+ * `jovo-platform-facebookmessenger` Add configurable `fetchProfile` functionality 
+
+#### Committers: 1
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

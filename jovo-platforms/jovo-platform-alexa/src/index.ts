@@ -69,7 +69,12 @@ import { ProactiveEvent } from './modules/ProactiveEvent';
 import { Apl } from './modules/AplPlugin';
 import { EmotionName, EmotionIntensity } from './core/Interfaces';
 import { AmazonPay } from './modules/AmazonPay';
-
+import {
+  EventSkillAccountLinkedBody,
+  EventSkillDisabledBody,
+  EventSkillEnabledBody,
+  EventSkillPermissionAcceptedBody,
+} from './modules/SkillEvent';
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
     $alexaSkill?: AlexaSkill;
@@ -286,8 +291,15 @@ declare module './core/AlexaSkill' {
 // SkillEvent
 declare module './core/AlexaSkill' {
   interface AlexaSkill {
-    getBody(): object;
-    getSkillEventBody(): object;
+    // tslint:disable-next-line:no-any
+    getBody(): any;
+    getSkillEventBody():
+      | EventSkillAccountLinkedBody
+      | EventSkillEnabledBody
+      | EventSkillDisabledBody
+      | EventSkillPermissionAcceptedBody
+      // tslint:disable-next-line:no-any
+      | any;
   }
 }
 
