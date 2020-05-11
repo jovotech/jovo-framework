@@ -175,14 +175,6 @@ export class LindenbaumBot extends Jovo {
     dialogId?: string,
   ): Promise<AxiosResponse<DialogAPIData>> {
     const request = this.$request as LindenbaumRequest;
-    if (!request.callback) {
-      throw new JovoError(
-        "Can't retrieve data from the Dialog API without the callback URL from the request",
-        ErrorCode.ERR_PLUGIN,
-        'jovo-platform-lindenbaum',
-        'The current request doesn\'t have a "callback" property',
-      );
-    }
     const options: DialogAPIRequestOptions = {
       resellerToken,
       dialogId: dialogId || request.dialogId,
@@ -200,14 +192,6 @@ export class LindenbaumBot extends Jovo {
    */
   async deleteDialogData(resellerToken: string, dialogId?: string): Promise<AxiosResponse> {
     const request = this.$request as LindenbaumRequest;
-    if (!request.callback) {
-      throw new JovoError(
-        "Can't retrieve data from the Dialog API without the callback URL from the request",
-        ErrorCode.ERR_PLUGIN,
-        'jovo-platform-lindenbaum',
-        'The current request doesn\'t have a "callback" property',
-      );
-    }
     const options: DialogAPIRequestOptions = {
       resellerToken,
       dialogId: dialogId || request.dialogId,
