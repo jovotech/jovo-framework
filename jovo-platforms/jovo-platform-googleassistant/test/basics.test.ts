@@ -54,6 +54,8 @@ test('test generated id (no userId)', async (done) => {
   app.handle(ExpressJS.dummyRequest(launchRequest));
 
   // @ts-ignore
+  delete launchRequest.originalDetectIntentRequest.payload.user.userStorage;
+  // @ts-ignore
   delete launchRequest.originalDetectIntentRequest.payload.user.userId;
 
   app.on('response', (handleRequest: HandleRequest) => {
@@ -79,6 +81,8 @@ test('test generated id (existing userId)', async (done) => {
   const launchRequest: JovoRequest = await t.requestBuilder.launch();
   app.handle(ExpressJS.dummyRequest(launchRequest));
 
+  // @ts-ignore
+  delete launchRequest.originalDetectIntentRequest.payload.user.userStorage;
   // @ts-ignore
   _set(launchRequest, 'originalDetectIntentRequest.payload.user.userId', 'abcdef');
 
