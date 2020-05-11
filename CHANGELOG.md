@@ -8,7 +8,7 @@
  * `jovo-framework` Fix CORS issue in unit tests
 
 #### :nail_care: Enhancements
- * `jovo-platform-alexa` [#734](https://github.com/jovotech/jovo-framework/pull/734) Add getPermissionIsCardThrown ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-platform-alexa` [#734](https://github.com/jovotech/jovo-framework/pull/734) Add getPermissionIsCardThrown ([@rmtuckerphx](https://github.com/rmtuckerphx))  
  * `jovo-platform-alexa` Add types for skill event body objects 
  * `jovo-platform-facebookmessenger` Improve session handling
  * `jovo-platform-facebookmessenger` Add configurable `fetchProfile` functionality 
