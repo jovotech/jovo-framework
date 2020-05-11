@@ -101,8 +101,7 @@
                                     "UPDATE",
                                     "DEVICE_PRECISE_LOCATION"
                             ],
-                            "locale": "en-US",
-                            "userId": "ABwppHEQSzwUcHZQ39qIuk2kzopSAoPjK2_BKfvXm89IQ9Q0XPu2FZM6kVQ66v-BEDaWjgq4Vm99Vdlfxw"
+                            "locale": "en-US"
                     },
                     "device": {
                             "location": {
