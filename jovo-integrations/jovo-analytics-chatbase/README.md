@@ -92,11 +92,11 @@ module.exports = {
     analytics: {
         ChatbaseAlexa: {
             key: '<key>',
-            version: '<version>', // Optional
+            appVersion: '<version>', // Optional
         },
         ChatbaseGoogleAssistant: {
             key: '<key>',
-            version: '<version>', // Optional
+            appVersion: '<version>', // Optional
         },
     },
 
@@ -113,11 +113,11 @@ const config = {
     analytics: {
         ChatbaseAlexa: {
             key: '<key>',
-            version: '<version>', // Optional
+            appVersion: '<version>', // Optional
         },
         ChatbaseGoogleAssistant: {
             key: '<key>',
-            version: '<version>', // Optional
+            appVersion: '<version>', // Optional
         },
     },
 
