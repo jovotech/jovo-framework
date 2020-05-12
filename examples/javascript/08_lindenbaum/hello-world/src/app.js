@@ -14,7 +14,9 @@ const app = new App();
 
 const lindenbaum = new Lindenbaum();
 lindenbaum.use(
-    new NlpjsNlu(),
+    new NlpjsNlu({
+        languages: ['de', 'en'],
+    }),
 );
 app.use(
     lindenbaum,
