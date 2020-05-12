@@ -97,11 +97,11 @@ export class InputComponent extends Component<InputComponentConfig> {
   }
 
   startRecording() {
-    // if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-    //   this.$client.emit(AssistantEvents.LaunchRequest);
-    // } else {
-    this.$recorder.start();
-    // }
+    if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
+      this.$client.emit(AssistantEvents.LaunchRequest);
+    } else {
+      this.$recorder.start();
+    }
   }
 
   stopRecording() {
