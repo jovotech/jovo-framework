@@ -29,7 +29,7 @@ export class AudioPlayer extends CoreComponent {
       .then(() => {
         audio.pause();
       })
-      .catch((e) => {});
+      .catch((e) => {}); // tslint:disable-line
 
     audio.onended = () => {
       this.isAudioPlaying = false;
