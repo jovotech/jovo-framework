@@ -55,7 +55,7 @@ export class ChatbaseGoogleAssistant implements Analytics {
       session_id: jovo.$request!.getSessionId(),
       time_stamp: Date.now(),
       type: 'user',
-      user_id: jovo.$request!.getUserId(),
+      user_id: jovo.$user.getId(),
       version: this.config.appVersion,
     };
   }

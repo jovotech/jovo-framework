@@ -239,6 +239,14 @@ export class Router implements Plugin {
       if (typeof _get(handleRequest.jovo.$handlers, route.path) === 'object') {
         route.path += '.' + handleRequest.jovo.$type.subType;
       }
+    } else if (route.type === EnumRequestType.ON_DTMF) {
+      route = Router.intentRoute(
+        handleRequest.jovo.$handlers,
+        handleRequest.jovo.getState(),
+        EnumRequestType.ON_DTMF,
+        handleRequest.jovo.$app.config.intentsToSkipUnhandled,
+      );
+      route.type = EnumRequestType.ON_DTMF;
     }
 
     _set(handleRequest.jovo.$plugins, 'Router.route', route);

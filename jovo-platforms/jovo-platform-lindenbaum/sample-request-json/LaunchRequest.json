@@ -1,0 +1,8 @@
+{
+  "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
+  "timestamp": 1587057946,
+  "local": "+4972112345678",
+  "remote": "+4972110203040",
+  "language": "en-US",
+  "callback": "https://callback.com/restbot"
+}

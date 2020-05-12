@@ -120,6 +120,7 @@ Name | Description | Value | Required
 `options` | The options for the delegation | `object` | Yes
 `options.onCompletedIntent` | The name of the intent to which the component should route to as soon as it finished the task | `string` | Yes
 `options.data` | The data object will be filled by the component with the data it is supposed to collect. For example, the `ScheduleMeeting` component would need the users email to finish its task.. It offers the possibility to provide data you've already collected, so the component doesn't have to ask for it again. See more [here](#parsing-existing-data) | `object` | No
+`options.stateBeforeDelegate` | The state to which the framework will route back to after the component is finished | `string` | No
 
 ```js
 // @language=javascript

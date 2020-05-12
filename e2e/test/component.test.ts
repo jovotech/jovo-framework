@@ -322,6 +322,68 @@ for (const p of [new Alexa(), new GoogleAssistant()]) {
         done();
       });
     });
+
+    test('parse stateBeforeDelegate', async (done) => {
+      app.setHandler({
+        LAUNCH() {
+          return this.delegate('FirstLayerComponent', {
+            onCompletedIntent: 'test',
+            stateBeforeDelegate: 'TestState',
+          });
+        },
+      });
+      app.useComponents(firstLayerComponent);
+
+      const request = await t.requestBuilder.launch();
+      app.handle(ExpressJS.dummyRequest(request));
+
+      app.on('response', (handleRequest: HandleRequest) => {
+        const activeComponent = handleRequest.jovo!.$session.$data[
+          SessionConstants.COMPONENT
+        ].pop();
+
+        expect(activeComponent).toEqual([
+          'FirstLayerComponent',
+          {
+            data: {},
+            onCompletedIntent: 'test',
+            stateBeforeDelegate: 'TestState',
+          },
+        ]);
+        done();
+      });
+    });
+
+    test('should use current state as stateBeforeDelegate if not parsed', async (done) => {
+      app.setHandler({
+        TestState: {
+          TestIntent() {
+            return this.delegate('FirstLayerComponent', { onCompletedIntent: 'test' });
+          },
+        },
+      });
+      app.useComponents(firstLayerComponent);
+
+      const request = await (await t.requestBuilder.intent('TestIntent')).setState('TestState');
+      app.handle(ExpressJS.dummyRequest(request));
+
+      app.on('response', (handleRequest: HandleRequest) => {
+        const activeComponent = handleRequest.jovo!.$session.$data[
+          SessionConstants.COMPONENT
+        ].pop();
+
+        expect(activeComponent).toEqual([
+          'FirstLayerComponent',
+          {
+            data: {},
+            onCompletedIntent: 'test',
+            stateBeforeDelegate: 'TestState',
+          },
+        ]);
+        done();
+      });
+    });
+
     describe('test delegation from within component', () => {
       test('should delegate from component to component', async (done) => {
         // Setup where LAUNCH delegates to FirstLayerComponent, which delegates to SecondLayerComponent.
