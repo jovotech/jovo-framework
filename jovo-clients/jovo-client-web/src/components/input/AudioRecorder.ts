@@ -113,14 +113,20 @@ export class AudioRecorder {
     if (this.$recording) {
       return;
     }
-
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error('The device or browser does not support recording audio!');
     }
 
     const ctx = new AudioContext();
     this.$audioNodes.inputGain = ctx.createGain();
-    this.$audioNodes.processor = ctx.createScriptProcessor(2048, 1, 1);
+
+    const analyser = ctx.createAnalyser();
+    analyser.minDecibels = this.minDecibels;
+    analyser.maxDecibels = this.maxDecibels;
+    analyser.smoothingTimeConstant = this.smoothingConstant;
+    this.$audioNodes.analyser = analyser;
+
+    this.$audioNodes.processor = ctx.createScriptProcessor();
     this.$audioNodes.destination = ctx.destination;
     this.$audioCtx = ctx;
 
@@ -130,12 +136,13 @@ export class AudioRecorder {
       },
     };
 
-    navigator.mediaDevices
+    return navigator.mediaDevices
       .getUserMedia(constraints)
       .then((stream) => {
         this.startRecording(stream);
       })
       .catch((e) => {
+        alert(e);
         throw e;
       });
   }
@@ -186,34 +193,18 @@ export class AudioRecorder {
     nodes.inputStream.connect(nodes.inputGain);
     nodes.inputGain.gain.setValueAtTime(1.0, this.$audioCtx.currentTime);
 
-    const analyser = this.$audioCtx.createAnalyser();
-    analyser.minDecibels = this.minDecibels;
-    analyser.maxDecibels = this.maxDecibels;
-    analyser.smoothingTimeConstant = this.smoothingConstant;
-    nodes.analyser = analyser;
+    nodes.inputGain.connect(nodes.analyser);
+    nodes.inputGain.connect(nodes.processor);
 
-    nodes.inputStream.connect(nodes.analyser);
-
+    nodes.processor.connect(nodes.destination);
     nodes.processor.onaudioprocess = (evt) => {
       if (this.$recording) {
         this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
         this.$chunkLength += nodes.processor.bufferSize;
         this.doProcessing(nodes.processor.bufferSize);
       }
-
-      // TODO remove after development, this is only used to playback the recorded audio!
-      if (this.$audioCtx) {
-        const source = this.$audioCtx.createBufferSource();
-        source.buffer = evt.inputBuffer;
-        source.connect(this.$audioCtx.destination);
-        source.start();
-      }
     };
 
-    nodes.inputGain.connect(nodes.processor);
-    nodes.processor.connect(nodes.destination);
-
-    // TODo check if this should be executed right after connecting the processorNode
     this.$start = new Date();
     this.$recording = true;
 
@@ -236,10 +227,9 @@ export class AudioRecorder {
       }
     };
 
-    disconnectNode('destination');
     disconnectNode('processor');
-    disconnectNode('inputGain');
     disconnectNode('analyser');
+    disconnectNode('inputGain');
     disconnectNode('inputStream');
 
     if (this.$audioStream) {
