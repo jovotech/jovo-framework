@@ -15,7 +15,7 @@ declare module 'vue/types/vue' {
 export function JovoAssistantVuePlugin(vue: typeof Vue, config?: PluginConfig) {
   if (!config) {
     throw new Error(
-      `At least the 'url' option has to be set in order to use the JovoWebClientPlugin.`,
+      `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
     );
   }
   vue.prototype.$assistant = new JovoWebClientVue(config.url, config.client);

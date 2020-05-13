@@ -46,7 +46,7 @@ export class ActionHandler extends CoreComponent {
         break;
       default:
         // tslint:disable-next-line:no-console
-        console.info(`ActionType '${action.type}' is not supported yet.`);
+        console.info(`ActionType '${action.type}' is not supported yet. `);
     }
   }
 
