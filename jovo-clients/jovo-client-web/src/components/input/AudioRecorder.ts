@@ -12,7 +12,16 @@ declare global {
   interface Window {
     webkitSpeechRecognition?: new () => SpeechRecognition;
     SpeechRecognition?: new () => SpeechRecognition;
+    webkitAudioContext?: new () => AudioContext;
   }
+}
+
+interface AudioRecorderNodes {
+  inputStream?: MediaStreamAudioSourceNode;
+  analyser?: AnalyserNode;
+  inputGain?: GainNode;
+  processor?: ScriptProcessorNode;
+  destination?: AudioDestinationNode;
 }
 
 export class AudioRecorder {
@@ -20,12 +29,12 @@ export class AudioRecorder {
     return this.$client.$config.InputComponent;
   }
 
-  get speechRecognitionEnabled(): boolean {
-    return this.inputConfig.speechRecognition.enabled;
-  }
-
   get locale(): string {
     return this.$client.$config.locale;
+  }
+
+  get speechRecognitionEnabled(): boolean {
+    return this.inputConfig.speechRecognition.enabled;
   }
 
   get minDecibels(): number {
@@ -68,28 +77,12 @@ export class AudioRecorder {
     return this.$recording;
   }
 
-  get shouldLaunchFirst(): boolean {
-    return this.$client.$config.launchFirst;
-  }
+  private $audioCtx: AudioContext | null;
+  private readonly $audioNodes: AudioRecorderNodes;
+  private $audioStream: MediaStream | null;
 
-  static new(client: JovoWebClient): Promise<AudioRecorder> {
-    return new Promise<AudioRecorder>(async (resolve, reject) => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        resolve(new AudioRecorder(stream, client));
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-  private readonly $context: AudioContext;
-  private readonly $source: MediaStreamAudioSourceNode;
-  private readonly $analyser: AnalyserNode;
   private readonly $recognition: SpeechRecognition | null;
-  private readonly $sampleRate: number;
-  private $recorder: ScriptProcessorNode | null;
+  private $sampleRate: number = 16000;
   private $start: Date = new Date();
   private $chunks: Float32Array[] = [];
   private $chunkLength = 0;
@@ -97,26 +90,15 @@ export class AudioRecorder {
   private $speechRecognized = false;
   private $startThresholdPassed = false;
 
-  private constructor(stream: MediaStream, private readonly $client: JovoWebClient) {
-    const context = new AudioContext();
-    const sourceNode: MediaStreamAudioSourceNode = context.createMediaStreamSource(stream);
+  constructor(private readonly $client: JovoWebClient) {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    const analyser = sourceNode.context.createAnalyser();
-    analyser.minDecibels = this.minDecibels;
-    analyser.maxDecibels = this.maxDecibels;
-    analyser.smoothingTimeConstant = this.smoothingConstant;
-
-    sourceNode.connect(analyser);
-
-    this.$context = context;
-    this.$source = sourceNode;
-    this.$analyser = analyser;
-    this.$recorder = null;
-
-    this.$sampleRate = sourceNode.context.sampleRate;
-
+    this.$audioCtx = null;
+    this.$audioNodes = {};
+    this.$audioStream = null;
     this.$recognition = null;
-    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+
     if (window.SpeechRecognition && this.speechRecognitionEnabled) {
       this.$recognition = new window.SpeechRecognition();
       this.setupSpeechRecognition();
@@ -128,54 +110,154 @@ export class AudioRecorder {
   }
 
   start() {
-    if (!this.$recording && !this.$recorder) {
-      if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
-        this.$client.emit(AssistantEvents.LaunchRequest);
-      } else {
-        this.setupRecorder();
-
-        if (this.$recognition) {
-          this.$recognition.start();
-        }
-
-        if (!this.isPushToTalkUsed) {
-          this.startTimeoutListener();
-        }
-
-        this.$client.emit(InputRecordEvents.Started);
-      }
+    if (this.$recording) {
+      return;
     }
+    if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('The device or browser does not support recording audio!');
+    }
+
+    const ctx = new AudioContext();
+    this.$audioNodes.inputGain = ctx.createGain();
+
+    const analyser = ctx.createAnalyser();
+    analyser.minDecibels = this.minDecibels;
+    analyser.maxDecibels = this.maxDecibels;
+    analyser.smoothingTimeConstant = this.smoothingConstant;
+    this.$audioNodes.analyser = analyser;
+
+    this.$audioNodes.processor = ctx.createScriptProcessor();
+    this.$audioNodes.destination = ctx.destination;
+    this.$audioCtx = ctx;
+
+    const constraints: MediaStreamConstraints = {
+      audio: {
+        echoCancellation: true,
+      },
+    };
+
+    return navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream) => {
+        this.startRecording(stream);
+      })
+      .catch((e) => {
+        alert(e);
+        throw e;
+      });
   }
 
   stop() {
-    if (this.$recorder && this.$recording) {
-      this.stopRecording();
-
-      const data = AudioHelper.mergeChunks(this.$chunks, this.$chunkLength);
-      const payload: AudioRecordedPayload = {
-        forward: this.$recognition === null || (this.$recognition && !this.$speechRecognized),
-        data,
-        sampleRate: this.$sampleRate,
-      };
-      this.$client.emit(InputRecordEvents.Recorded, payload);
-      this.$client.emit(InputRecordEvents.Stopped);
+    if (!this.$recording) {
+      return;
     }
+
+    this.stopRecording();
+
+    const data = AudioHelper.mergeChunks(this.$chunks, this.$chunkLength);
+    const payload: AudioRecordedPayload = {
+      forward: this.$recognition === null || (this.$recognition && !this.$speechRecognized),
+      data,
+      sampleRate: this.$sampleRate,
+    };
+    this.$client.emit(InputRecordEvents.Recorded, payload);
+    this.$client.emit(InputRecordEvents.Stopped);
   }
 
   abort() {
-    if (this.$recorder && this.$recording) {
-      this.stopRecording();
-      this.$client.emit(InputRecordEvents.Aborted);
-      this.$client.emit(InputRecordEvents.Stopped);
+    if (!this.$recording) {
+      return;
     }
+    this.stopRecording();
+    this.$client.emit(InputRecordEvents.Aborted);
+    this.$client.emit(InputRecordEvents.Stopped);
+  }
+
+  private startRecording(stream: MediaStream) {
+    if (!this.$audioCtx) {
+      throw new Error('Unexpected error occurred');
+    }
+
+    this.$chunks = [];
+    this.$chunkLength = 0;
+    this.$startThresholdPassed = false;
+
+    this.$audioStream = stream;
+
+    const nodes = this.$audioNodes as Required<AudioRecorderNodes>;
+
+    nodes.inputStream = this.$audioCtx.createMediaStreamSource(stream);
+    this.$audioCtx = nodes.inputStream.context as AudioContext;
+    this.$sampleRate = this.$audioCtx.sampleRate;
+
+    nodes.inputStream.connect(nodes.inputGain);
+    nodes.inputGain.gain.setValueAtTime(1.0, this.$audioCtx.currentTime);
+
+    nodes.inputGain.connect(nodes.analyser);
+    nodes.inputGain.connect(nodes.processor);
+
+    nodes.processor.connect(nodes.destination);
+    nodes.processor.onaudioprocess = (evt) => {
+      if (this.$recording) {
+        this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
+        this.$chunkLength += nodes.processor.bufferSize;
+        this.doProcessing(nodes.processor.bufferSize);
+      }
+    };
+
+    this.$start = new Date();
+    this.$recording = true;
+
+    if (this.$recognition) {
+      this.$recognition.start();
+    }
+
+    if (!this.isPushToTalkUsed) {
+      this.startTimeoutListener();
+    }
+
+    this.$client.emit(InputRecordEvents.Started);
+  }
+
+  private stopRecording() {
+    const disconnectNode = (key: keyof AudioRecorderNodes) => {
+      if (this.$audioNodes[key]) {
+        this.$audioNodes[key]!.disconnect();
+        this.$audioNodes[key] = undefined;
+      }
+    };
+
+    disconnectNode('processor');
+    disconnectNode('analyser');
+    disconnectNode('inputGain');
+    disconnectNode('inputStream');
+
+    if (this.$audioStream) {
+      this.$audioStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.$audioStream = null;
+    }
+
+    if (this.$audioCtx) {
+      this.$audioCtx.close();
+      this.$audioCtx = null;
+    }
+
+    if (this.$recognition) {
+      this.$recognition.stop();
+    }
+
+    this.$recording = false;
   }
 
   private onTimeout() {
-    if (this.$recorder && this.$recording) {
-      this.stopRecording();
-      this.$client.emit(InputRecordEvents.Timeout);
-      this.$client.emit(InputRecordEvents.Stopped);
+    if (!this.$recording) {
+      return;
     }
+    this.stopRecording();
+    this.$client.emit(InputRecordEvents.Timeout);
+    this.$client.emit(InputRecordEvents.Stopped);
   }
 
   private startTimeoutListener() {
@@ -186,22 +268,8 @@ export class AudioRecorder {
     }, this.timeout);
   }
 
-  private stopRecording() {
-    if (this.$recorder) {
-      this.$recorder.disconnect(this.$context.destination);
-      this.$source.disconnect(this.$recorder);
-
-      if (this.$recognition) {
-        this.$recognition.stop();
-      }
-
-      this.$recording = false;
-      this.$recorder = null;
-    }
-  }
-
   private doProcessing(bufferSize: number = this.bufferSize) {
-    const analyser = this.$analyser;
+    const analyser = this.$audioNodes.analyser as AnalyserNode;
     analyser.fftSize = bufferSize;
     const bufferLength = analyser.frequencyBinCount;
     const data = new Uint8Array(bufferLength);
@@ -246,29 +314,6 @@ export class AudioRecorder {
         this.$startThresholdPassed = true;
       }
     }
-  }
-
-  private setupRecorder() {
-    this.$chunks = [];
-    this.$chunkLength = 0;
-    this.$startThresholdPassed = false;
-
-    const scriptNode: ScriptProcessorNode = this.$context.createScriptProcessor(0, 1, 1);
-
-    scriptNode.addEventListener('audioprocess', (evt: AudioProcessingEvent) => {
-      if (this.$recording) {
-        this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
-        this.$chunkLength += scriptNode.bufferSize;
-        this.doProcessing(scriptNode.bufferSize);
-      }
-    });
-
-    this.$source.connect(scriptNode);
-    scriptNode.connect(this.$context.destination);
-
-    this.$recorder = scriptNode;
-    this.$start = new Date();
-    this.$recording = true;
   }
 
   private setupSpeechRecognition() {

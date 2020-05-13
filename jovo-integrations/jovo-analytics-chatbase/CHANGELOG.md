@@ -2,6 +2,15 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+## 3.0.16 (2020-05-13)
+
+#### :bug: Bug Fix
+ * `jovo-analytics-chatbase` [#743](https://github.com/jovotech/jovo-framework/pull/743) Chatbase: used wrong helper to access google user id ([@KaanKC](https://github.com/KaanKC))  
+
+#### Committers: 1
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+
+
 ## 3.0.14 (2020-05-04)
 
 #### :bug: Bug Fix

@@ -1,5 +1,23 @@
 # Jovo Framework Changelog
 
+
+## 3.0.17 (2020-05-13)
+
+#### :bug: Bug Fix
+ * `jovo-analytics-chatbase` [#743](https://github.com/jovotech/jovo-framework/pull/743) Chatbase: used wrong helper to access google user id ([@KaanKC](https://github.com/KaanKC))  
+ * `jovo-client-web` [#745](https://github.com/jovotech/jovo-framework/pull/745) Fixed Safari-related bugs for the web-client ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-dialogflow` Fix missing handleRequest parameter 
+ * `jovo-platform-alexa` Fix http status in ReminderAPI 
+
+#### :nail_care: Enhancements
+ * `jovo-core` [#742](https://github.com/jovotech/jovo-framework/pull/742) Components: parse stateBeforeDelegate in delegate() ([@KaanKC](https://github.com/KaanKC))  
+
+ #### Committers: 3
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 3.0.13 - 3.0.14 (2020-05-03)
 
 #### :bug: Bug Fix

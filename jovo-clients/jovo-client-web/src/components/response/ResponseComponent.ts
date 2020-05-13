@@ -53,7 +53,7 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
 
   private async onRequest() {
     this.$repromptTimer.abort();
-    this.$client.audioPlayer.stopAll();
+    this.$client.audioPlayer.stop();
     this.$client.speechSynthesizer.stop();
     this.$client.input.abortRecording();
   }
