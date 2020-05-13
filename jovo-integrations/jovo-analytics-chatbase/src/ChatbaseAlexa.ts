@@ -49,8 +49,7 @@ export class ChatbaseAlexa implements Analytics {
   }
 
   createChatbaseData(jovo: Jovo) {
-    const outputSpeech = jovo.$response!.getSpeech();
-    const responseMessage = outputSpeech!.replace(/<[^>]*>/g, '');
+    const responseMessage = jovo.$response!.getSpeechPlain() || '';
     const timeStamp = Date.parse(jovo.$request!.getTimestamp());
 
     return this.buildMessages(
