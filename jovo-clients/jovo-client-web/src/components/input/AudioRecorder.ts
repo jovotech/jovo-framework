@@ -190,7 +190,7 @@ export class AudioRecorder {
 
   private startRecording(stream: MediaStream) {
     if (!this.$audioCtx) {
-      throw new Error('Unexpected error occurred');
+      throw new Error('The AudioRecorder has to be initialized before it can be used!');
     }
 
     this.$chunks = [];
@@ -228,17 +228,10 @@ export class AudioRecorder {
   }
 
   private stopRecording() {
-    const disconnectNode = (key: keyof AudioRecorderNodes) => {
-      if (this.$audioNodes[key]) {
-        this.$audioNodes[key]!.disconnect();
-        // this.$audioNodes[key] = undefined;
-      }
-    };
-
-    disconnectNode('processor');
-    disconnectNode('analyser');
-    disconnectNode('inputGain');
-    disconnectNode('inputStream');
+    this.$audioNodes.processor?.disconnect();
+    this.$audioNodes.analyser?.disconnect();
+    this.$audioNodes.inputGain?.disconnect();
+    this.$audioNodes.inputStream?.disconnect();
 
     if (this.$audioStream) {
       this.$audioStream.getTracks().forEach((track) => {
@@ -246,11 +239,6 @@ export class AudioRecorder {
       });
       this.$audioStream = null;
     }
-
-    // if (this.$audioCtx) {
-    //   this.$audioCtx.close();
-    //   this.$audioCtx = null;
-    // }
 
     if (this.$recognition) {
       this.$recognition.stop();
