@@ -112,7 +112,7 @@ export class JovoWebClientVue {
   // region output-related
   stopAudioOutput() {
     if (this.data.isPlayingAudio) {
-      this.$assistant.audioPlayer.stopAll();
+      this.$assistant.audioPlayer.stop();
     }
     if (this.data.isSpeakingText) {
       this.$assistant.speechSynthesizer.stop();
