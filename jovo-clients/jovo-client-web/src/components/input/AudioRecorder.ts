@@ -109,10 +109,7 @@ export class AudioRecorder {
     });
   }
 
-  start() {
-    if (this.$recording) {
-      return;
-    }
+  init() {
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error('The device or browser does not support recording audio!');
     }
@@ -127,12 +124,30 @@ export class AudioRecorder {
     this.$audioNodes.analyser = analyser;
 
     this.$audioNodes.processor = ctx.createScriptProcessor();
+    this.$audioNodes.processor.onaudioprocess = (evt) => {
+      if (this.$recording) {
+        this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
+        this.$chunkLength += this.$audioNodes.processor!.bufferSize;
+        this.doProcessing(this.$audioNodes.processor!.bufferSize);
+      }
+    };
+
     this.$audioNodes.destination = ctx.destination;
     this.$audioCtx = ctx;
+  }
+
+  start() {
+    if (this.$recording) {
+      return;
+    }
+    if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('The device or browser does not support recording audio!');
+    }
 
     const constraints: MediaStreamConstraints = {
       audio: {
         echoCancellation: true,
+        noiseSuppression: true,
       },
     };
 
@@ -197,13 +212,6 @@ export class AudioRecorder {
     nodes.inputGain.connect(nodes.processor);
 
     nodes.processor.connect(nodes.destination);
-    nodes.processor.onaudioprocess = (evt) => {
-      if (this.$recording) {
-        this.$chunks.push(new Float32Array(evt.inputBuffer.getChannelData(0)));
-        this.$chunkLength += nodes.processor.bufferSize;
-        this.doProcessing(nodes.processor.bufferSize);
-      }
-    };
 
     this.$start = new Date();
     this.$recording = true;
@@ -223,7 +231,7 @@ export class AudioRecorder {
     const disconnectNode = (key: keyof AudioRecorderNodes) => {
       if (this.$audioNodes[key]) {
         this.$audioNodes[key]!.disconnect();
-        this.$audioNodes[key] = undefined;
+        // this.$audioNodes[key] = undefined;
       }
     };
 
@@ -239,10 +247,10 @@ export class AudioRecorder {
       this.$audioStream = null;
     }
 
-    if (this.$audioCtx) {
-      this.$audioCtx.close();
-      this.$audioCtx = null;
-    }
+    // if (this.$audioCtx) {
+    //   this.$audioCtx.close();
+    //   this.$audioCtx = null;
+    // }
 
     if (this.$recognition) {
       this.$recognition.stop();

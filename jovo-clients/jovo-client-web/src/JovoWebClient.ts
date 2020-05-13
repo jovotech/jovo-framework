@@ -190,6 +190,7 @@ export class JovoWebClient extends AdvancedEventEmitter {
 
   async start() {
     this.$audioPlayer.init();
+    this.input.init();
     for (const component of this.$components) {
       await component.onInit();
     }

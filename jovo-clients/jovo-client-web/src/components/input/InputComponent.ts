@@ -84,6 +84,10 @@ export class InputComponent extends Component<InputComponentConfig> {
     return this.$config.modeConfig.triggerKey;
   }
 
+  init() {
+    this.$recorder.init();
+  }
+
   sendText(text: string, fromVoice = true) {
     if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
       this.$client.emit(AssistantEvents.LaunchRequest);
