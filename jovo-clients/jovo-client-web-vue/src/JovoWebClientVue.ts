@@ -31,7 +31,6 @@ export class JovoWebClientVue {
     this.$assistant = new JovoWebClient(url, config);
     this.$events = [];
     this.setupListeners();
-    this.$assistant.start();
   }
 
   get instance(): JovoWebClient {
@@ -60,6 +59,15 @@ export class JovoWebClientVue {
 
   set config(config: Config) {
     this.$assistant.$config = config;
+  }
+
+  // Has to be called synchronously in a click handler due to safari's handling of audio
+  start() {
+    return this.$assistant.start();
+  }
+
+  stop() {
+    return this.$assistant.stop();
   }
 
   // tslint:disable-next-line:no-any
