@@ -30,11 +30,6 @@ export class AudioPlayer extends CoreComponent {
         audio.pause();
       })
       .catch((e) => {}); // tslint:disable-line
-
-    audio.onended = () => {
-      this.isAudioPlaying = false;
-      this.$client.emit(AudioPlayerEvents.End);
-    };
     this.audio = audio;
   }
 
@@ -50,7 +45,6 @@ export class AudioPlayer extends CoreComponent {
   pause() {
     if (this.audio && !this.audio.paused && !this.audio.ended) {
       this.audio.pause();
-      this.isAudioPlaying = false;
       this.$client.emit(AudioPlayerEvents.Pause);
     }
   }
@@ -59,23 +53,46 @@ export class AudioPlayer extends CoreComponent {
     if (this.audio && !this.audio.ended) {
       this.audio.pause();
       this.audio.currentTime = 0;
-      this.isAudioPlaying = false;
       this.$client.emit(AudioPlayerEvents.Stop);
     }
   }
 
-  async play(audioSource: string, contentType = 'audio/mpeg'): Promise<void> {
-    if (!this.audio) {
-      throw new Error('The AudioPlayer has to be initialized before being able to play audio.');
-    }
-    if (!audioSource.startsWith('https://')) {
-      const blob = await Base64Converter.base64ToBlob(audioSource, contentType);
-      audioSource = URL.createObjectURL(blob);
-    }
+  play(audioSource: string, contentType = 'audio/mpeg'): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      if (!this.audio) {
+        throw new Error('The AudioPlayer has to be initialized before being able to play audio.');
+      }
 
-    this.audio.src = audioSource;
-    await this.audio.play();
-    this.isAudioPlaying = true;
-    this.$client.emit(AudioPlayerEvents.Play, audioSource);
+      if (!audioSource.startsWith('https://')) {
+        const blob = await Base64Converter.base64ToBlob(audioSource, contentType);
+        audioSource = URL.createObjectURL(blob);
+      }
+
+      this.audio.onerror = (e) => {
+        this.isAudioPlaying = false;
+        this.$client.emit(AudioPlayerEvents.Error, e);
+        return reject(e);
+      };
+
+      this.audio.onpause = () => {
+        this.isAudioPlaying = false;
+        this.$client.emit(AudioPlayerEvents.Pause);
+        return resolve();
+      };
+
+      this.audio.onended = () => {
+        this.isAudioPlaying = false;
+        this.$client.emit(AudioPlayerEvents.End);
+        this.audio!.onerror = null;
+        this.audio!.onpause = null;
+        this.audio!.onended = null;
+        return resolve();
+      };
+
+      this.audio.src = audioSource;
+      await this.audio.play();
+      this.isAudioPlaying = true;
+      this.$client.emit(AudioPlayerEvents.Play, audioSource);
+    });
   }
 }
