@@ -353,8 +353,8 @@ async RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     try {
         const product = await this.$alexaSkill.$inSkillPurchase.getProductByReferenceName(productReferenceName);
-        if (product.entitled === 'ENTITLED') {
-            return this.tell('You have already bought this item.');
+        if (product.entitled === 'NOT_ENTITLED') {
+            return this.tell('No need to refund. You do not own this item.');
         } else {
             let token = 'testToken';
             this.$alexaSkill.$inSkillPurchase.cancel(product.productId, token);
@@ -370,8 +370,8 @@ async RefundSkillItemIntent() {
     let productReferenceName = this.$inputs.productName.id;
     try {
         const product = await this.$alexaSkill!.$inSkillPurchase.getProductByReferenceName(productReferenceName);
-        if (product.entitled === 'ENTITLED') {
-            return this.tell('You have already bought this item.');
+        if (product.entitled === 'NOT_ENTITLED') {
+            return this.tell('No need to refund. You do not own this item.');
         } else {
             let token = 'testToken';
             this.$alexaSkill!.$inSkillPurchase.cancel(product.productId, token);
