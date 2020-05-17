@@ -9,6 +9,9 @@ export interface Config extends PluginConfig {
   tableName?: string;
   createTableOnInit?: boolean;
   primaryKeyColumn?: string;
+  primaryKeyPrefix?: string;
+  sortKeyColumn?: string;
+  sortKey?: string;
   dynamoDbConfig?: AWS.DynamoDB.Types.ClientConfiguration;
   documentClientConfig?: DocumentClient.DocumentClientOptions &
     AWS.DynamoDB.Types.ClientConfiguration;
@@ -31,6 +34,9 @@ export class DynamoDb implements Db {
     },
     dynamoDbConfig: {},
     primaryKeyColumn: 'userId',
+    sortKeyColumn: undefined,
+    primaryKeyPrefix: undefined,
+    sortKey: 'USER#jovo.user.data',
     tableName: undefined,
   };
   needsWriteFileAccess = false;
@@ -127,10 +133,15 @@ export class DynamoDb implements Db {
     const getDataMapParams: DocumentClient.GetItemInput = {
       ConsistentRead: true,
       Key: {
-        [this.config.primaryKeyColumn!]: primaryKey,
+        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
       },
       TableName: this.config.tableName!,
     };
+
+    if (this.config.sortKeyColumn) {
+      getDataMapParams.Key[this.config.sortKeyColumn!] = this.config.sortKey!
+    }
+
 
     try {
       const result: GetItemOutput = await this.docClient!.get(getDataMapParams).promise();
@@ -171,6 +182,13 @@ export class DynamoDb implements Db {
         'jovo-db-dynamodb',
       );
     }
+    if (this.config.sortKeyColumn && !this.config.sortKey) {
+      throw new JovoError(
+        `Couldn't use DynamoDB. when using sortKeyColumn, sortKey has to be set.`,
+        ErrorCode.ERR_PLUGIN,
+        'jovo-db-dynamodb',
+      );
+    }
   }
 
   async save(primaryKey: string, key: string, data: any, updatedAt?: string) {
@@ -179,13 +197,17 @@ export class DynamoDb implements Db {
 
     const getDataMapParams: DocumentClient.PutItemInput = {
       Item: {
-        [this.config.primaryKeyColumn!]: primaryKey,
+        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
         [key]: data,
       },
       TableName: this.config.tableName!,
     };
     if (updatedAt) {
       getDataMapParams.Item.updatedAt = updatedAt;
+    }
+
+    if (this.config.sortKeyColumn) {
+      getDataMapParams.Item[this.config.sortKeyColumn!] = this.config.sortKey!
     }
 
     if (!this.isCreating) {
@@ -198,10 +220,14 @@ export class DynamoDb implements Db {
 
     const deleteItemInput: DocumentClient.DeleteItemInput = {
       Key: {
-        [this.config.primaryKeyColumn!]: primaryKey,
+        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
       },
       TableName: this.config.tableName!,
     };
+
+    if (this.config.sortKeyColumn) {
+      deleteItemInput.Key[this.config.sortKeyColumn!] = this.config.sortKey!
+    }
 
     return this.docClient!.delete(deleteItemInput).promise();
   }
@@ -234,6 +260,18 @@ export class DynamoDb implements Db {
       },
       TableName: this.config.tableName!,
     };
+
+    if (this.config.sortKeyColumn) {
+      newTableParams.AttributeDefinitions.push({
+        AttributeName: this.config.sortKeyColumn!,
+        AttributeType: 'S',
+      });
+
+      newTableParams.KeySchema.push({
+        AttributeName: this.config.sortKeyColumn!,
+        KeyType: 'RANGE',
+      });
+    }
 
     try {
       const result = await this.dynamoClient!.createTable(newTableParams).promise();
