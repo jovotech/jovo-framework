@@ -10,6 +10,7 @@ export interface Config extends PluginConfig {
   createTableOnInit?: boolean;
   primaryKeyColumn?: string;
   primaryKeyPrefix?: string;
+  prefixPrimaryKeyWithPlatform?: boolean;
   sortKeyColumn?: string;
   sortKey?: string;
   dynamoDbConfig?: AWS.DynamoDB.Types.ClientConfiguration;
@@ -33,10 +34,11 @@ export class DynamoDb implements Db {
       convertEmptyValues: true,
     },
     dynamoDbConfig: {},
+    prefixPrimaryKeyWithPlatform: false,
     primaryKeyColumn: 'userId',
-    sortKeyColumn: undefined,
-    primaryKeyPrefix: undefined,
+    primaryKeyPrefix: '',
     sortKey: 'USER#jovo.user.data',
+    sortKeyColumn: undefined,
     tableName: undefined,
   };
   needsWriteFileAccess = false;
@@ -133,7 +135,7 @@ export class DynamoDb implements Db {
     const getDataMapParams: DocumentClient.GetItemInput = {
       ConsistentRead: true,
       Key: {
-        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
       },
       TableName: this.config.tableName!,
     };
@@ -197,7 +199,7 @@ export class DynamoDb implements Db {
 
     const getDataMapParams: DocumentClient.PutItemInput = {
       Item: {
-        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
         [key]: data,
       },
       TableName: this.config.tableName!,
@@ -220,7 +222,7 @@ export class DynamoDb implements Db {
 
     const deleteItemInput: DocumentClient.DeleteItemInput = {
       Key: {
-        [this.config.primaryKeyColumn!]: `${this.config.primaryKeyPrefix!}${primaryKey}`,
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
       },
       TableName: this.config.tableName!,
     };
@@ -293,5 +295,19 @@ export class DynamoDb implements Db {
     } catch (err) {
       throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-db-dynamodb');
     }
+  }
+
+  private formatPrimaryKey(primaryKey: string) {
+    let key = primaryKey;
+
+    if (this.config.prefixPrimaryKeyWithPlatform) {
+
+      // TODO: How do you get platform type? AlexaSkill? GoogleAction? SamsungBixby?
+      const platform = '';
+
+      key = `${platform}::${key}`;
+    }
+
+    return `${this.config.primaryKeyPrefix!}${key}`;
   }
 }
