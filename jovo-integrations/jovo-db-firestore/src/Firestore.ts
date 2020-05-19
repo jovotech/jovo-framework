@@ -1,5 +1,5 @@
 import firebase = require('firebase-admin');
-import { BaseApp, Db, ErrorCode, JovoError, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
@@ -121,7 +121,10 @@ export class Firestore implements Db {
    * @param {string} primaryKey
    * @return {Promise<object>}
    */
-  async load(primaryKey: string): Promise<firebase.firestore.DocumentData | undefined> {
+  async load(
+    primaryKey: string,
+    jovo?: Jovo,
+  ): Promise<firebase.firestore.DocumentData | undefined> {
     this.errorHandling();
 
     const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(
@@ -137,7 +140,13 @@ export class Firestore implements Db {
    * @param {string} key
    * @param {any} data
    */
-  async save(primaryKey: string, key: string, data: any, updatedAt?: string): Promise<void> {
+  async save(
+    primaryKey: string,
+    key: string,
+    data: any,
+    updatedAt?: string,
+    jovo?: Jovo,
+  ): Promise<void> {
     // tslint:disable-line
     this.errorHandling();
 
@@ -158,7 +167,7 @@ export class Firestore implements Db {
    * Deletes document referred to by primaryKey
    * @param {string} primaryKey
    */
-  async delete(primaryKey: string): Promise<void> {
+  async delete(primaryKey: string, jovo?: Jovo): Promise<void> {
     this.errorHandling();
 
     const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(

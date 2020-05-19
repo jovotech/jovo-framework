@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, Log, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import * as path from 'path';
@@ -77,7 +77,7 @@ export class FileDb2 implements Db {
    * @param {string} primaryKey
    * @return {Promise<any>}
    */
-  async load(primaryKey: string) {
+  async load(primaryKey: string, jovo?: Jovo) {
     this.errorHandling();
 
     const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);
@@ -90,7 +90,7 @@ export class FileDb2 implements Db {
     return Promise.resolve(JSON.parse(data));
   }
 
-  async save(primaryKey: string, key: string, data: any, updatedAt?: string) {
+  async save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo) {
     // tslint:disable-line
     this.errorHandling();
 
@@ -115,7 +115,7 @@ export class FileDb2 implements Db {
     }
   }
 
-  async delete(primaryKey: string) {
+  async delete(primaryKey: string, jovo?: Jovo) {
     this.errorHandling();
 
     const pathToFile = path.join(this.config.path!, `${primaryKey}.json`);

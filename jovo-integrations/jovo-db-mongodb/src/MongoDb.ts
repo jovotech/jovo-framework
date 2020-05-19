@@ -1,4 +1,4 @@
-import { BaseApp, Db, ErrorCode, JovoError, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import { MongoClient } from 'mongodb';
@@ -100,7 +100,7 @@ export class MongoDb implements Db {
    * @param {string} primaryKey
    * @return {Promise<any>}
    */
-  async load(primaryKey: string): Promise<any> {
+  async load(primaryKey: string, jovo?: Jovo): Promise<any> {
     // tslint:disable-line
     try {
       await this.initClient();
@@ -121,7 +121,7 @@ export class MongoDb implements Db {
     }
   }
 
-  async save(primaryKey: string, key: string, data: any, updatedAt?: string) {
+  async save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo) {
     // tslint:disable-line
     this.errorHandling();
 
@@ -153,7 +153,7 @@ export class MongoDb implements Db {
     }
   }
 
-  async delete(primaryKey: string) {
+  async delete(primaryKey: string, jovo?: Jovo) {
     try {
       await this.initClient();
       const collection = this.client!.db(this.config.databaseName!).collection(
