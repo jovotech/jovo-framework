@@ -45,7 +45,7 @@ export class ActionBuilder {
 
   addQuickReplies(quickReplies: Array<QuickReply | string>): ActionBuilder {
     const replies = [];
-    for (let i = 0, len = replies.length; i < len; i++) {
+    for (let i = 0, len = quickReplies.length; i < len; i++) {
       replies.push(
         typeof quickReplies[i] === 'string'
           ? {
