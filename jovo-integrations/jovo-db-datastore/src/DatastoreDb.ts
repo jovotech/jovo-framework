@@ -1,5 +1,5 @@
 import { Datastore } from '@google-cloud/datastore';
-import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, Log, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
@@ -84,7 +84,7 @@ export class DatastoreDb implements Db {
    * @param {string} primaryKey
    * @return {Promise<any>}
    */
-  async load(primaryKey: string): Promise<any> {
+  async load(primaryKey: string, jovo?: Jovo): Promise<any> {
     // tslint:disable-line
     this.errorHandling();
 
@@ -94,7 +94,7 @@ export class DatastoreDb implements Db {
     return entity ? entity.data : {};
   }
 
-  async save(primaryKey: string, key: string, data: any, updatedAt?: string) {
+  async save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo) {
     // tslint:disable-line
     this.errorHandling();
 
@@ -127,7 +127,7 @@ export class DatastoreDb implements Db {
     await this.datastore!.save(dataStoreDataObject);
   }
 
-  async delete(primaryKey: string) {
+  async delete(primaryKey: string, jovo?: Jovo) {
     this.errorHandling();
 
     const entityKey = this.datastore!.key([this.config.entity!, primaryKey]);
