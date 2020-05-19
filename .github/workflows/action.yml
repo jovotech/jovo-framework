@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, windows-latest, macos-latest]
 
     strategy:
       matrix:
@@ -26,3 +26,6 @@ jobs:
       - run: npm install
       - run: npm run bootstrap
       - run: npm run prettier
+      - run: npm run tslint
+      - run: npm run tsc
+      - run: npm run test
