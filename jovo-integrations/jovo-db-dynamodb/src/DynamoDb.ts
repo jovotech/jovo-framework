@@ -297,7 +297,7 @@ export class DynamoDb implements Db {
     }
   }
 
-  formatPrimaryKey(primaryKey: string, jovo?: Jovo) {
+  formatPrimaryKey(primaryKey: string, jovo?: Jovo, includePrefix = true) {
     let key = primaryKey;
 
     if (this.config.prefixPrimaryKeyWithPlatform && jovo) {
@@ -307,6 +307,10 @@ export class DynamoDb implements Db {
       key = `${platform}::${key}`;
     }
 
-    return `${this.config.primaryKeyPrefix!}${key}`;
+    if (includePrefix) {
+      key = `${this.config.primaryKeyPrefix!}${key}`;
+    }
+
+    return key;
   }
 }
