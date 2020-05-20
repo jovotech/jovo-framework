@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import { GetItemOutput } from 'aws-sdk/clients/dynamodb'; // tslint:disable-line:no-submodule-imports
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client'; // tslint:disable-line:no-submodule-imports
-import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, Log, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
@@ -128,7 +128,7 @@ export class DynamoDb implements Db {
    * @param {string} primaryKey
    * @return {Promise<any>}
    */
-  async load(primaryKey: string): Promise<any> {
+  async load(primaryKey: string, jovo?: Jovo): Promise<any> {
     // tslint:disable-line
     this.errorHandling();
 
@@ -193,7 +193,7 @@ export class DynamoDb implements Db {
     }
   }
 
-  async save(primaryKey: string, key: string, data: any, updatedAt?: string) {
+  async save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo) {
     // tslint:disable-line
     this.errorHandling();
 
@@ -217,7 +217,7 @@ export class DynamoDb implements Db {
     }
   }
 
-  async delete(primaryKey: string) {
+  async delete(primaryKey: string, jovo?: Jovo) {
     this.errorHandling();
 
     const deleteItemInput: DocumentClient.DeleteItemInput = {

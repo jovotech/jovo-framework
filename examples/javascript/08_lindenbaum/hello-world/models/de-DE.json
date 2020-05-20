@@ -1,0 +1,46 @@
+{
+	"invocation":"my test app",
+	"intents": [
+		{
+			"name": "HelloWorldIntent",
+			"phrases": [
+				"hallo",
+				"sag hallo",
+				"hallo welt"
+			]
+		},
+		{
+			"name": "MyNameIsIntent",
+			"phrases": [
+				"{name}",
+				"mein name ist {name}",
+				"ich bin {name}",
+				"du kannst mich {name} nennen"
+			],
+			"inputs": [
+				{
+					"name": "name",
+					"type": {
+						"nlpjs": "NameInputType"
+					}
+				}
+			]
+		}
+	],
+	"inputTypes": [
+		{
+			"name": "NameInputType",
+			"values": [
+				{
+					"value": "max"
+				},
+				{
+					"value": "jane"
+				},
+				{
+					"value": "joe"
+				}
+			]
+		}
+	]
+}

@@ -89,10 +89,9 @@
         }
       ],
       "user": {
-        "userStorage": "{}",
         "lastSeen": "2019-01-03T08:59:25Z",
         "locale": "de-DE",
-        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+        "userStorage": "{\"userId\":\"ABwppHEQSzwUcHZQ39qIuk2kzopSAoPjK2_BKfvXm89IQ9Q0XPu2FZM6kVQ66v-BEDaWjgq4Vm99Vdlfxw\"}"
       },
       "conversation": {
         "conversationId": "ABwppHF6B_ep7zCk43UzspUHF-vpHHu0r9zXTl7k2kjCIMCDt-TFblKwm_brFt1EZZ2tfchL94F6l6ke7tg",

@@ -248,7 +248,7 @@ export class JovoUser implements Plugin {
       }
 
       if (this.jovo.$app!.$db) {
-        await this.jovo.$app!.$db.delete(userId);
+        await this.jovo.$app!.$db.delete(userId, this.jovo);
         this.isDeleted = true;
         Log.verbose(`User with id ${userId} has been deleted.`);
       } else {
@@ -319,7 +319,7 @@ export class JovoUser implements Plugin {
       throw new JovoError(`Can't load user with undefined userId`, ErrorCode.ERR, 'jovo-framework');
     }
 
-    const data = await handleRequest.app.$db.load(userId);
+    const data = await handleRequest.app.$db.load(userId, handleRequest.jovo);
 
     Log.verbose(Log.header('Jovo user (load)', 'framework'));
     Log.yellow().verbose(`this.$user.getId(): ${userId}`);
@@ -445,7 +445,6 @@ export class JovoUser implements Plugin {
       } else {
         userData.session.lastUpdatedAt = new Date().toISOString();
       }
-
     }
 
     const userId = handleRequest.jovo.$user.getId();
@@ -463,6 +462,7 @@ export class JovoUser implements Plugin {
           this.config.columnName || 'userData',
           userData,
           updatedAt,
+          handleRequest.jovo,
         );
       }
     } else {
@@ -471,6 +471,7 @@ export class JovoUser implements Plugin {
         this.config.columnName || 'userData',
         userData,
         updatedAt,
+        handleRequest.jovo,
       );
     }
 

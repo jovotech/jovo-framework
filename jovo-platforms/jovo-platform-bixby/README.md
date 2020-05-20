@@ -175,7 +175,7 @@ Bixby allows you to build a visual experience with views, either for showing res
 
 > Learn more about views in Bixby [here](https://bixbydevelopers.com/dev/docs/dev-guide/developers/building-views.views).
 
-> Learn more about using layouts [here](./layouts.md './layouts').
+> Learn more about using layouts [here](https://www.jovo.tech/marketplace/jovo-platform-bixby/layouts).
 
 ### Training
 
@@ -325,7 +325,7 @@ Inside `primitives/`, you will find three primitive concepts.
 
 `JovoLayout` is an experimental structure for the platform integration. Currently, there is no real functionality for creating a layout with the platform integration, but you can add your own properties to the structure to use in your capsule.
 
-> Learn more about layout [here](./layout.md './layout').
+> Learn more about layout [here](https://www.jovo.tech/marketplace/jovo-platform-bixby/layout).
 
 #### JovoSessionData
 
@@ -396,7 +396,7 @@ structure (JovoResponse) {
 
 The property `_JOVO_AUDIO_` can be used for playing a playlist of audio files.
 
-> Learn more about playing audio with Bixby [here](./audioplayer.md './audioplayer').
+> Learn more about playing audio with Bixby [here](https://www.jovo.tech/marketplace/jovo-platform-bixby/audioplayer).
 
 ### Jovo Actions
 
@@ -428,11 +428,11 @@ action (JovoPlayAudioAction) {
 }
 ```
 
-> Learn more about playing audio with Bixby [here](./audioplayer).
+> Learn more about playing audio with Bixby [here](https://www.jovo.tech/marketplace/jovo-platform-bixby/audioplayer).
 
 ## Bixby AudioPlayer
 
-> [You can find more about Bixby Audioplayer support here](./audioplayer.md './audioplayer').
+> [You can find more about Bixby Audioplayer support here](https://www.jovo.tech/marketplace/jovo-platform-bixby/audioplayer).
 
 ## Bixby Layouts
 

@@ -44,7 +44,15 @@ beforeEach(() => {
   t = autopilot.makeTestSuite();
 });
 
-afterAll(() => {
+afterAll(async () => {
+  /**
+   * Tests finish before the last FileDb JSON file is saved in the `db` folder.
+   * That resulted in JSON files still being present after tests were finished.
+   * Since the tests don't depend on the JSOn files being saved, it doesn't really matter,
+   * but to always keep the db folder clear,
+   * we set a small delay (500ms) before we clear the folder.
+   */
+  await delay(500);
   clearDbFolder();
 });
 

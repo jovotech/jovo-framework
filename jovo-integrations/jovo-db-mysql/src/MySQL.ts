@@ -1,4 +1,4 @@
-import { BaseApp, Db, ErrorCode, JovoError, Log, PluginConfig } from 'jovo-core';
+import { BaseApp, Db, ErrorCode, Jovo, JovoError, Log, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import * as mysql from 'mysql';
@@ -97,7 +97,7 @@ export class MySQL implements Db {
    * @param {string} primaryKey
    * @return {Promise<any>}
    */
-  async load(primaryKey: string) {
+  async load(primaryKey: string, jovo?: Jovo) {
     try {
       return await this.select(primaryKey);
     } catch (err) {
@@ -109,7 +109,7 @@ export class MySQL implements Db {
     }
   }
 
-  save(primaryKey: string, key: string, data: any, updatedAt?: string) {
+  save(primaryKey: string, key: string, data: any, updatedAt?: string, jovo?: Jovo) {
     // tslint:disable-line
     this.errorHandling();
 
@@ -144,7 +144,7 @@ export class MySQL implements Db {
     });
   }
 
-  async delete(primaryKey: string) {
+  async delete(primaryKey: string, jovo?: Jovo) {
     this.errorHandling();
 
     return new Promise(async (resolve, reject) => {

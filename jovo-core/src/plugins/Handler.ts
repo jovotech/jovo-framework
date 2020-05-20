@@ -405,7 +405,7 @@ export class Handler implements Plugin {
         {
           data: options.data || {},
           onCompletedIntent: options.onCompletedIntent,
-          stateBeforeDelegate: this.getState(),
+          stateBeforeDelegate: options.stateBeforeDelegate || this.getState(),
         },
       ]);
 
