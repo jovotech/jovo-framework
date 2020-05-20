@@ -135,7 +135,7 @@ export class DynamoDb implements Db {
     const getDataMapParams: DocumentClient.GetItemInput = {
       ConsistentRead: true,
       Key: {
-        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey, jovo),
       },
       TableName: this.config.tableName!,
     };
@@ -199,7 +199,7 @@ export class DynamoDb implements Db {
 
     const getDataMapParams: DocumentClient.PutItemInput = {
       Item: {
-        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey, jovo),
         [key]: data,
       },
       TableName: this.config.tableName!,
@@ -222,7 +222,7 @@ export class DynamoDb implements Db {
 
     const deleteItemInput: DocumentClient.DeleteItemInput = {
       Key: {
-        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey),
+        [this.config.primaryKeyColumn!]: this.formatPrimaryKey(primaryKey, jovo),
       },
       TableName: this.config.tableName!,
     };
@@ -297,13 +297,12 @@ export class DynamoDb implements Db {
     }
   }
 
-  private formatPrimaryKey(primaryKey: string) {
+  formatPrimaryKey(primaryKey: string, jovo: Jovo) {
     let key = primaryKey;
 
     if (this.config.prefixPrimaryKeyWithPlatform) {
 
-      // TODO: How do you get platform type? AlexaSkill? GoogleAction? SamsungBixby?
-      const platform = '';
+      const platform = jovo.getType();
 
       key = `${platform}::${key}`;
     }
