@@ -297,10 +297,10 @@ export class DynamoDb implements Db {
     }
   }
 
-  formatPrimaryKey(primaryKey: string, jovo: Jovo) {
+  formatPrimaryKey(primaryKey: string, jovo?: Jovo) {
     let key = primaryKey;
 
-    if (this.config.prefixPrimaryKeyWithPlatform) {
+    if (this.config.prefixPrimaryKeyWithPlatform && jovo) {
 
       const platform = jovo.getType();
 
