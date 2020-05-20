@@ -31,7 +31,7 @@ export class ExpressJS implements Host {
   }
 
   getQueryParams(): Record<string, string> {
-    return this.req.query || {};
+    return (this.req.query as Record<string, string>) || {};
   }
 
   getRequestObject() {

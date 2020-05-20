@@ -88,8 +88,7 @@
         "permissions": [
           "DEVICE_PRECISE_LOCATION"
         ],
-        "locale": "en-US",
-        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+        "locale": "en-US"
       },
       "device": {
         "location": {

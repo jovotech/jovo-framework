@@ -72,7 +72,11 @@ export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> 
       (!requestObject.originalDetectIntentRequest.source ||
         requestObject.originalDetectIntentRequest.source !== 'google')
     ) {
-      handleRequest.jovo = new DialogflowAgent(handleRequest.app, handleRequest.host);
+      handleRequest.jovo = new DialogflowAgent(
+        handleRequest.app,
+        handleRequest.host,
+        handleRequest,
+      );
     }
     if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
       return Promise.resolve();

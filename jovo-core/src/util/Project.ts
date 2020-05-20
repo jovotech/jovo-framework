@@ -8,13 +8,15 @@ export class Project {
 
       if (process.env.JEST_WORKER_ID) {
         Project.instance.projectPath = process.cwd();
-      } else if(process.cwd().endsWith(path.sep + 'dist' + path.sep + 'src')) {
-        Project.instance.projectPath = process.cwd().replace(path.sep + 'dist' + path.sep + 'src', '');
-      } else if(process.cwd().endsWith(path.sep + 'src')) {
+      } else if (process.cwd().endsWith(path.sep + 'dist' + path.sep + 'src')) {
+        Project.instance.projectPath = process
+          .cwd()
+          .replace(path.sep + 'dist' + path.sep + 'src', '');
+      } else if (process.cwd().endsWith(path.sep + 'src')) {
         Project.instance.projectPath = process.cwd().replace(path.sep + 'src', '');
       }
 
-      if(fs.existsSync(path.join(Project.instance.projectPath, 'src', 'index.ts'))) {
+      if (fs.existsSync(path.join(Project.instance.projectPath, 'src', 'index.ts'))) {
         Project.instance.isTypescriptProject = true;
       }
 
@@ -52,10 +54,10 @@ export class Project {
     }
 
     if (this.isTypescript()) {
-      return path.join(this.projectPath, 'dist', 'src', 'config.js')
+      return path.join(this.projectPath, 'dist', 'src', 'config.js');
     }
 
-    return path.join(this.projectPath, 'src', 'config.js')
+    return path.join(this.projectPath, 'src', 'config.js');
   }
 
   getProjectJsPath() {

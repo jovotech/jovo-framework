@@ -16,7 +16,8 @@ import {
   Log,
   Logger,
   LogLevel,
-  Middleware, Project,
+  Middleware,
+  Project,
 } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 import _merge = require('lodash.merge');
@@ -161,7 +162,7 @@ export class App extends BaseApp {
       process.chdir(process.env.JOVO_CWD);
     }
 
-    const pathToConfig = Project.getConfigPath();
+    const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js');
     if (fs.existsSync(pathToConfig)) {
       const fileConfig = require(pathToConfig) || {};
       this.config = _merge(fileConfig, this.config);

@@ -102,8 +102,7 @@
           "givenName": "John",
           "familyName": "Doe"
         },
-        "locale": "de-DE",
-        "userId": "ABwppHE9i0O0ysjd40Re3Q5ZqH6_icm-pbI8e6Q0kg0XL7Q1aphiVYWnzkqOc4WrgCf5H2mebLtoBU7jxOE"
+        "locale": "de-DE"
       },
       "conversation": {
         "conversationId": "ABwppHFoj9pF7a3SUCh3tmdW5PURESMCFqdYu0N3mBPlrdMtGhZ7GDZG8YNtkC31YzatRf6xikck1ofLn4Q",

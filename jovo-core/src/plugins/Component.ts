@@ -41,6 +41,7 @@ interface ConstructorOptions {
 interface DelegationOptions {
   data?: ComponentData;
   onCompletedIntent: string;
+  stateBeforeDelegate?: string;
 }
 
 interface Response {

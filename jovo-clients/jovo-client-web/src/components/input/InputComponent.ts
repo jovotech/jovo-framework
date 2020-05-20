@@ -9,6 +9,7 @@ import {
   ComponentConfig,
   InputEvents,
   InputRecordEvents,
+  JovoWebClient,
   RecordMode,
   RecordModeConfig,
   SilenceDetectionConfig,
@@ -57,10 +58,15 @@ export class InputComponent extends Component<InputComponentConfig> {
   };
   readonly name = 'InputComponent';
 
-  private $recorder: AudioRecorder | null = null;
+  private readonly $recorder: AudioRecorder;
   private $visualizer: AudioVisualizer | null = null;
   private $keyPressFired = false;
   private $recognizedText = '';
+
+  constructor($client: JovoWebClient, $initConfig?: Partial<InputComponentConfig>) {
+    super($client, $initConfig);
+    this.$recorder = new AudioRecorder($client);
+  }
 
   get isRecording(): boolean {
     return this.$recorder ? this.$recorder.isRecording : false;
@@ -78,6 +84,10 @@ export class InputComponent extends Component<InputComponentConfig> {
     return this.$config.modeConfig.triggerKey;
   }
 
+  init() {
+    this.$recorder.init();
+  }
+
   sendText(text: string, fromVoice = true) {
     if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
       this.$client.emit(AssistantEvents.LaunchRequest);
@@ -91,26 +101,19 @@ export class InputComponent extends Component<InputComponentConfig> {
   }
 
   startRecording() {
-    if (!this.$recorder) {
-      AudioRecorder.new(this.$client).then((recorder: AudioRecorder) => {
-        this.$recorder = recorder;
-        this.$recorder.start();
-      });
+    if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
+      this.$client.emit(AssistantEvents.LaunchRequest);
     } else {
       this.$recorder.start();
     }
   }
 
   stopRecording() {
-    if (this.$recorder) {
-      this.$recorder.stop();
-    }
+    this.$recorder.stop();
   }
 
   abortRecording() {
-    if (this.$recorder) {
-      this.$recorder.abort();
-    }
+    this.$recorder.abort();
   }
 
   setVisualizer(visualizer: AudioVisualizer) {
