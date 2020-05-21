@@ -120,9 +120,9 @@ Because of that, we use the session ID as the user ID at the same time.
 
 ## Requests
 
-As described earlier, the Lindenbaum platform sends requests to three different endpoints. Each endpoint has a different request schema.
+As described earlier, the Lindenbaum platform sends requests to four different endpoints. Each endpoint has a different request schema.
 
-The first request is sent when the user calls the bot's number. It is automatically mapped to Jovo's LAUNCH intent and has the following scheme:
+The first request is sent to the `/session` endpoint when the user calls the bot's number. It is automatically mapped to Jovo's LAUNCH intent and has the following scheme:
 
 ```js
 {
@@ -135,7 +135,7 @@ The first request is sent when the user calls the bot's number. It is automatica
 }
 ```
 
-The second endpoint receives the requests containing the user's input (either speech or DTMF). It is always handled as an intent, with the NLU determining which intent to route to.
+The second endpoint, `/message`, receives the requests containing the user's input (either speech or DTMF). It is always handled as an intent, with the NLU determining which intent to route to.
 
 ```js
 {
@@ -149,13 +149,32 @@ The second endpoint receives the requests containing the user's input (either sp
 }
 ```
 
-Last but not least, the request that is sent when the user ends the call. It is automatically routed to the `END` intent:
+Third, the `/terminated` endpoint which receives the request that is sent when the user ends the call. It is automatically routed to the `END` intent:
 
 ```js
 {
   "dialogId": "574255f8-2650-49ea-99bc-3edc4b89369b",
   "timestamp": 1587057946
 }
+```
+
+Last but not least, the `/inactivity` endpoint which receives a request after the user hasn't responded for X seconds. The request is automatically routed to the `ON_INACTIVITY` intent:
+
+```js
+{
+  "dialogId": "09e59647-5c77-4c02-a1c5-7fb2b47060f1",
+  "timestamp": 1535546718115,
+  "duration": 60000,
+  "callback": "https://callback.com/restbot"
+}
+```
+
+```js
+app.setHandler({
+  ON_INACTIVITY() {
+
+  }
+});
 ```
 
 Since the Lindenbaum platform doesn't use an NLU, it also doesn't parse any kind of NLU data with its requests (intent, inputs). That means some of the functions like `this.$request.getIntentName()` don't work. In that case, the framework will put out a warning and tell you how to access the data correctly.
