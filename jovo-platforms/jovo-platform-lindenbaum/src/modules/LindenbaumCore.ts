@@ -75,7 +75,7 @@ export class LindenbaumCore implements Plugin {
     } else if (request.duration) {
       lindenbaumBot.$type = {
         type: EnumRequestType.ON_INACTIVITY,
-      }
+      };
     } else {
       lindenbaumBot.$type = {
         type: EnumRequestType.END,
