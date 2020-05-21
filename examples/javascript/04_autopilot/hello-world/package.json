@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-autopilot-hello-world",
-  "version": "3.0.16",
+  "version": "3.0.17",
   "private": true,
   "description": "",
   "main": "src/index.js",
@@ -14,9 +14,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^3.0.15",
-    "jovo-framework": "^3.0.16",
-    "jovo-platform-twilioautopilot": "^3.0.16",
+    "jovo-db-filedb": "^3.0.16",
+    "jovo-framework": "^3.0.17",
+    "jovo-platform-twilioautopilot": "^3.0.17",
     "jovo-plugin-debugger": "^3.0.15"
   },
   "devDependencies": {

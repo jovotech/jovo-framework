@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-lindenbaum-hello-world",
-  "version": "3.0.11",
+  "version": "3.0.12",
   "private": true,
   "description": "",
   "main": "src/index.js",
@@ -14,10 +14,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^3.0.15",
-    "jovo-framework": "^3.0.16",
+    "jovo-db-filedb": "^3.0.16",
+    "jovo-framework": "^3.0.17",
     "jovo-nlu-nlpjs": "^3.0.11-alpha.0",
-    "jovo-platform-lindenbaum": "^3.0.13",
+    "jovo-platform-lindenbaum": "^3.0.14",
     "jovo-plugin-debugger": "^3.0.15"
   },
   "devDependencies": {
