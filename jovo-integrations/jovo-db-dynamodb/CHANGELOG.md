@@ -2,6 +2,16 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+## 3.0.16 (2020-05-21)
+
+#### :nail_care: Enhancements
+ * `jovo-db-dynamodb` [#751](https://github.com/jovotech/jovo-framework/pull/751) Add advanced config to support key overloading ([@rmtuckerphx](https://github.com/rmtuckerphx))  
+
+ #### Committers: 1
+- Mark Tucker ([@rmtuckerphx](https://github.com/rmtuckerphx))
+
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x
