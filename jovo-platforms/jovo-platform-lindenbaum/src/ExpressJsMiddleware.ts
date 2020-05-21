@@ -7,7 +7,8 @@ export const expressJsMiddleware = (app: BaseApp) => {
     if (
       req.originalUrl.endsWith('/webhook/session?') ||
       req.originalUrl.endsWith('/webhook/message?') ||
-      req.originalUrl.endsWith('/webhook/terminated?')
+      req.originalUrl.endsWith('/webhook/terminated?') ||
+      req.originalUrl.endsWith('/webhook/inactivity?')
     ) {
       await app.handle(new ExpressJS(req, res));
     } else {

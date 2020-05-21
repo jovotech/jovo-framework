@@ -16,6 +16,7 @@ export class LindenbaumRequest implements JovoRequest {
   callback?: string; // in /session & /message
   confidence?: number; // in /message
   dialogId: string; // in all
+  duration?: number; // in /inactivity
   language?: string; // in /session & /message
   local?: string; // in /session
   remote?: string; // in /session
@@ -311,6 +312,13 @@ export interface LindenbaumMessageRequestJSON {
 export interface LindenbaumTerminatedRequestJSON {
   dialogId: string;
   timestamp: number; // unix time
+}
+
+export interface LindenbaumInactivityRequestJSON {
+  dialogId: string;
+  timestamp: number; // unix time
+  duration: number; // last activity occurred at timestamp - duration
+  callback: string;
 }
 
 type MessageType = 'SPEECH' | 'DTMF';
