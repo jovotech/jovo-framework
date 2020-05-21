@@ -141,9 +141,8 @@ export class DynamoDb implements Db {
     };
 
     if (this.config.sortKeyColumn) {
-      getDataMapParams.Key[this.config.sortKeyColumn!] = this.config.sortKey!
+      getDataMapParams.Key[this.config.sortKeyColumn!] = this.config.sortKey!;
     }
-
 
     try {
       const result: GetItemOutput = await this.docClient!.get(getDataMapParams).promise();
@@ -209,7 +208,7 @@ export class DynamoDb implements Db {
     }
 
     if (this.config.sortKeyColumn) {
-      getDataMapParams.Item[this.config.sortKeyColumn!] = this.config.sortKey!
+      getDataMapParams.Item[this.config.sortKeyColumn!] = this.config.sortKey!;
     }
 
     if (!this.isCreating) {
@@ -228,7 +227,7 @@ export class DynamoDb implements Db {
     };
 
     if (this.config.sortKeyColumn) {
-      deleteItemInput.Key[this.config.sortKeyColumn!] = this.config.sortKey!
+      deleteItemInput.Key[this.config.sortKeyColumn!] = this.config.sortKey!;
     }
 
     return this.docClient!.delete(deleteItemInput).promise();
@@ -301,7 +300,6 @@ export class DynamoDb implements Db {
     let key = primaryKey;
 
     if (this.config.prefixPrimaryKeyWithPlatform && jovo) {
-
       const platform = jovo.getType();
 
       key = `${platform}::${key}`;
