@@ -326,4 +326,5 @@ type MessageType = 'SPEECH' | 'DTMF';
 export type LindenbaumRequestJSON =
   | LindenbaumSessionRequestJSON
   | LindenbaumMessageRequestJSON
-  | LindenbaumTerminatedRequestJSON;
+  | LindenbaumTerminatedRequestJSON
+  | LindenbaumInactivityRequestJSON;
