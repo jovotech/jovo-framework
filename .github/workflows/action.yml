@@ -1,5 +1,5 @@
 
-name: Framework CI
+name: jovo-framework workflow
 
 on: [push, pull_request]
 
