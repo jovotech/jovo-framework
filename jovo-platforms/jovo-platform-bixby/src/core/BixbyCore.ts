@@ -1,4 +1,4 @@
-import { Plugin, HandleRequest, EnumRequestType, JovoError, ErrorCode } from 'jovo-core';
+import { Plugin, HandleRequest, EnumRequestType, JovoError, ErrorCode, SpeechBuilder } from 'jovo-core';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 
@@ -77,11 +77,17 @@ export class BixbyCore implements Plugin {
     const tell = _get(output, 'Bixby.tell') || _get(output, 'tell');
     if (tell) {
       _set(capsule.$response, '_JOVO_SPEECH_', tell.speech);
+
+      const text =  tell.speech ? SpeechBuilder.removeSSML(tell.speech) : '';
+      _set(capsule.$response, '_JOVO_TEXT_', text);
     }
 
     const ask = _get(output, 'Bixby.ask') || _get(output, 'ask');
     if (ask) {
       _set(capsule.$response, '_JOVO_SPEECH_', ask.speech);
+
+      const text =  ask.speech ? SpeechBuilder.removeSSML(ask.speech) : '';
+      _set(capsule.$response, '_JOVO_TEXT_', text);
     }
 
     if (capsule.$session && capsule.$session.$data) {

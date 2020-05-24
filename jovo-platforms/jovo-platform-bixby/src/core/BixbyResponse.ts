@@ -5,6 +5,7 @@ import { Response, SessionData } from './Interfaces';
 export class BixbyResponse implements JovoResponse {
   _JOVO_SESSION_DATA_?: SessionData;
   _JOVO_SPEECH_?: string;
+  _JOVO_TEXT_?: string;
   _JOVO_AUDIO_?: string;
   // tslint:disable:no-any
   _JOVO_LAYOUT_?: { [key: string]: any };
@@ -41,11 +42,12 @@ export class BixbyResponse implements JovoResponse {
   }
 
   getSpeechPlain(): string | undefined {
-    throw new Error('Method not implemented.');
+    return this._JOVO_TEXT_;
   }
 
   getRepromptPlain(): string | undefined {
-    throw new Error('Method not implemented.');
+    // TODO: implement reprompt
+    return this._JOVO_TEXT_;
   }
 
   getSessionAttributes(): SessionData | undefined {
