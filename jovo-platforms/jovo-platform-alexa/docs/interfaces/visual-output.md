@@ -147,6 +147,15 @@ Alternatively, you can enable it in the Interfaces tab in the Amazon Developer C
 
 ![Alexa Console: Enable Display Interface](../img/alexa-enable-display-interface.jpg)
 
+You can check whether the current device supports the Display interface using the following helper method:
+
+```js
+// @language=javascript
+this.$alexaSkill.$request.hasDisplayInterface();
+
+// @language=typescript
+this.$alexaSkill?.$request?.hasDisplayInterface();
+```
 
 ### Body Templates
 
@@ -466,6 +475,18 @@ $ jovo build
 
 # Upload to Alexa
 $ jovo deploy
+```
+
+You can check whether the current device supports the APL interface using the following helper method:
+
+```js
+// @language=javascript
+this.$alexaSkill.$request.hasAPLInterface();
+this.$alexaSkill.$request.hasAPLTInterface();
+
+// @language=typescript
+this.$alexaSkill?.$request?.hasAPLInterface();
+this.$alexaSkill?.$request?.hasAPLTInterface();
 ```
 
 ## Video App Interface

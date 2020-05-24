@@ -6,9 +6,6 @@ Learn more about the Jovo `$request` object.
 * [Cross-Platform Methods](#cross-platform-methods)
    * [Request Getters](#request-getters)
    * [Request Setters](#request-setters)
-* [Platform Specific Methods](#platform-specific-methods)
-   * [Alexa Methods](#alexa-methods)
-      * [Alexa Request Getters](#alexa-request-getters)
 
 ## Introduction
 
@@ -80,17 +77,6 @@ Here is a list of all available helper methods:
 Note: "New Session" requests can't have any Session Data or States.
 
 You can also modify the request objects by directly writing into them. This, however, would require to make different adjustments for each platforms, as paths and namings differ.
-
-## Platform Specific Methods
-
-### Alexa Methods
-
-#### Alexa Request Getters
-
-| Method        | Description        |
-| ------------- |-------------|
-| `hasAutomotive(): boolean` | returns true if automotive request |
-
 
 <!--[metadata]: {"description": "Learn more about the Jovo $request object.",
 		        "route": "requests-responses/request"}-->
