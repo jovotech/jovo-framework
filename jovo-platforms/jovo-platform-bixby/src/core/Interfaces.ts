@@ -37,6 +37,7 @@ export interface SessionData {
 
 export interface Response {
   _JOVO_SPEECH_: string;
+  _JOVO_TEXT_: string;
   _JOVO_SESSION_DATA_: SessionData;
   _JOVO_AUDIO_?: {};
 }

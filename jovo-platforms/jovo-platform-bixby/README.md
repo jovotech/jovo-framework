@@ -85,6 +85,12 @@ structure (JovoResponse) {
     max (One)
   }
 
+  property(_JOVO_TEXT_) {
+    type(JovoText)
+    min (Optional)
+    max (One)
+  }
+
   property (_JOVO_LAYOUT_) {
     type(JovoLayout)
     min (Optional)
@@ -310,10 +316,16 @@ Inside `primitives/`, you will find three primitive concepts.
 
 - `<lang>`
 - `<audio>`
+- `<say-as>`
+- `<s>`
+- `<p>`
+- `<sub>`
 
 > Learn more about using SSML with Bixby [here](https://bixbydevelopers.com/dev/docs/reference/ref-topics/ssml).
 
 > Learn more about the Jovo SpeechBuilder [here](https://www.jovo.tech/docs/output/speechbuilder).
+
+`JovoText` same as JovoSpeech but with SSML removed.
 
 `JovoState` describes the current state of your voice app.
 
@@ -362,7 +374,7 @@ Note that your own properties must be optional and of cardinality `One`.
 
 #### JovoResponse
 
-`JovoResponse` is a structure for the response object, which allows communication between your capsule and your Jovo app. It features all yet available functionality as properties, such as speech output `_JOVO_SPEECH_` of type `JovoSpeech`, `_JOVO_LAYOUT` for adding layouts to your capsule and `_JOVO_SESSION_DATA_` for session data.
+`JovoResponse` is a structure for the response object, which allows communication between your capsule and your Jovo app. It features all yet available functionality as properties, such as speech SSML output `_JOVO_SPEECH_` of type `JovoSpeech`, text output `_JOVO_TEXT_` of type `JovoText`, `_JOVO_LAYOUT` for adding layouts to your capsule and `_JOVO_SESSION_DATA_` for session data.
 
 ```bxb
 structure (JovoResponse) {
@@ -382,6 +394,12 @@ structure (JovoResponse) {
 
   property(_JOVO_SPEECH_) {
     type(JovoSpeech)
+    min (Optional)
+    max (One)
+  }
+
+  property(_JOVO_TEXT_) {
+    type(JovoText)
     min (Optional)
     max (One)
   }
