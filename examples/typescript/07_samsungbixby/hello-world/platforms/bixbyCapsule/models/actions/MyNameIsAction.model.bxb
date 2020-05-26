@@ -1,0 +1,20 @@
+action (MyNameIsAction) {
+  description (Collects a name from the user and returns a welcome message.)
+  type (Search)
+
+  collect {
+    input (_JOVO_INPUT_name) {
+      type (NameInput)
+      min (Required) 
+      max (One)
+    }
+
+    input (_JOVO_PREV_RESPONSE_) {
+      type(JovoResponse)
+      min (Required)
+      max (One)
+    }
+  }
+  output (JovoResponse)
+}
+

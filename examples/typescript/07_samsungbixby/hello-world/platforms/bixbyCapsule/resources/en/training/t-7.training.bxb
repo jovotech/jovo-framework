@@ -1,0 +1,10 @@
+train (t-7g5q9m894osc44x6f6uof2qll) {
+  utterance ("[g:MyNameIsAction] my name is (paul)[v:NameInput]")
+  plan (Y2BhUCzISaxML8ovzUvRy8ovy48vSS0u0fMCsoJSiwvy84pTGZSxKvGt9EvMTfUsdkwuyczPI8YcOaxKwKbkFZSWMDAzMDIwAUkGIA2CEMAEZAHFAA==)
+  last-modified (1580654090327)
+}
+train (t-7lljzcz28wvxhiv242avuw4m2) {
+  utterance ("[g:MyNameIsAction] my name is (ruben)[v:NameInput]")
+  plan (Y2BhUCzISaxML8ovzUvRy8ovy48vSS0u0fMCsoJSiwvy84pTGZSxKvGt9EvMTfUsdkwuyczPI8YcOaxKwKbkFZSWMDAzMDIwAUkGIA2CEMAEZAHFAA==)
+  last-modified (1580819039785)
+}
