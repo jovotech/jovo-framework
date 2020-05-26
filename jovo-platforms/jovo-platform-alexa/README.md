@@ -330,7 +330,6 @@ There are a lot of Alexa specific permissions and data that a Skill can use, suc
 * Reminders
 * Settings
 * Skill Events
-* CanFulfillIntentRequest
 
 > [You can find more about Alexa Permissions and Data here](https://www.jovo.tech/marketplace/jovo-platform-alexa/permissions-data).
 
