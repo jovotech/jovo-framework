@@ -1,0 +1,5 @@
+train (t-znvq2370wdynlubi4y97trf09) {
+  utterance ("[g:MyNameIsAction] my name is (max)[v:NameInput]")
+  plan (Y2BhUCzISaxML8ovzUvRy8ovy48vSS0u0fMCsoJSiwvy84pTGZSxKvGt9EvMTfUsdkwuyczPI8YcOaxKwKbkFZSWMDAzMDIwAUkGIA2CEMAEZAHFAA==)
+  last-modified (1580654133228)
+}

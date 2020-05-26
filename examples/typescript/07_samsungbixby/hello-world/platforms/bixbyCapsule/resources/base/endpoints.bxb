@@ -1,0 +1,15 @@
+endpoints {
+  action-endpoints {
+    action-endpoint (LaunchAction) {
+      remote-endpoint ("{remote.url}") {
+        method (POST)
+      }
+    }
+
+    action-endpoint (MyNameIsAction) {
+      remote-endpoint ("{remote.url}?intent=MyNameIsIntent") {
+        method (POST)
+      }
+    }
+  }
+}

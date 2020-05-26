@@ -1,0 +1,27 @@
+structure (JovoResponse) {
+  description (Response from Jovo Framework)
+  
+  property (_JOVO_SESSION_DATA_) {
+    type (JovoSessionData)
+    min (Optional) 
+    max (One)
+  }
+  
+  property(_JOVO_SPEECH_) {
+    type(JovoSpeech)
+    min (Optional)
+    max (One)
+  }
+
+  property (_JOVO_TEXT_) {
+    type(JovoText)
+    min (Optional)
+    max (One)
+  }
+  
+  property (_JOVO_LAYOUT_) {
+    type(JovoLayout)
+    min (Optional)
+    max (One)
+  }
+}

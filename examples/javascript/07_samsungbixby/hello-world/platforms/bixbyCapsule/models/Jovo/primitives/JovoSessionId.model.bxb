@@ -1,0 +1,3 @@
+text (JovoSessionId) {
+  description (Defines a unique session id.)
+}
