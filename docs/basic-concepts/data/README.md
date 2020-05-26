@@ -80,20 +80,6 @@ The other method returns you the access token, which will be added to every requ
 this.$request.getAccessToken();
 ```
 
-On Google Action, after the user has responded to your account linking request, you will receive a request to notify you about the result, which will be mapped to the Jovo built-in `ON_SIGN_IN` intent. Using the `getSignInStatus()` method you can get the result:
-
-```javascript
-ON_SIGN_IN() {
-  if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
-    this.tell('Please sign in.');
-  } else if (this.$googleAction.getSignInStatus() === 'OK') {
-    this.tell('You are signed in now.');
-  } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
-    this.tell('There was an error');
-  }
-},
-```
-
 For more information on Account Linking, check out our blogposts:
 * [Alexa Skill Account Linking](https://www.jovo.tech/tutorials/alexa-account-linking-auth0/)
 * [Google Actions Account Linking](https://www.jovo.tech/tutorials/google-action-account-linking-auth0/)
