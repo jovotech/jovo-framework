@@ -32,6 +32,14 @@ export class PulseLabs implements Plugin {
   }
 
   async logData(handleRequest: HandleRequest) {
-    await this.pulse.logData(handleRequest.jovo!.$request, handleRequest.jovo!.$response);
+    if (handleRequest.jovo!.$alexaSkill) {
+      await this.pulse.logData(handleRequest.jovo!.$request, handleRequest.jovo!.$response);
+    } else if (handleRequest.jovo!.$googleAction) {
+      await this.pulse.logGoogleData(
+        handleRequest.jovo!.$request,
+        handleRequest.jovo!.$response,
+        handleRequest.jovo!.$user.getId(),
+      );
+    }
   }
 }
