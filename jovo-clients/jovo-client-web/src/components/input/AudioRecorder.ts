@@ -89,6 +89,7 @@ export class AudioRecorder {
   private $recording = false;
   private $speechRecognized = false;
   private $startThresholdPassed = false;
+  private $recordOnly = false;
 
   constructor(private readonly $client: JovoWebClient) {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -136,7 +137,7 @@ export class AudioRecorder {
     this.$audioCtx = ctx;
   }
 
-  start() {
+  start(recordOnly = false) {
     if (this.$recording) {
       return;
     }
@@ -151,6 +152,7 @@ export class AudioRecorder {
       },
     };
 
+    this.$recordOnly = recordOnly;
     return navigator.mediaDevices
       .getUserMedia(constraints)
       .then((stream) => {
@@ -171,10 +173,13 @@ export class AudioRecorder {
 
     const data = AudioHelper.mergeChunks(this.$chunks, this.$chunkLength);
     const payload: AudioRecordedPayload = {
-      forward: this.$recognition === null || (this.$recognition && !this.$speechRecognized),
+      forward:
+        (this.$recognition === null || (this.$recognition && !this.$speechRecognized)) &&
+        !this.$recordOnly,
       data,
       sampleRate: this.$sampleRate,
     };
+    this.$recordOnly = false;
     this.$client.emit(InputRecordEvents.Recorded, payload);
     this.$client.emit(InputRecordEvents.Stopped);
   }
@@ -184,6 +189,7 @@ export class AudioRecorder {
       return;
     }
     this.stopRecording();
+    this.$recordOnly = false;
     this.$client.emit(InputRecordEvents.Aborted);
     this.$client.emit(InputRecordEvents.Stopped);
   }
@@ -220,7 +226,7 @@ export class AudioRecorder {
       this.$recognition.start();
     }
 
-    if (!this.isPushToTalkUsed) {
+    if (!this.isPushToTalkUsed && !this.$recordOnly) {
       this.startTimeoutListener();
     }
 
@@ -252,6 +258,7 @@ export class AudioRecorder {
       return;
     }
     this.stopRecording();
+    this.$recordOnly = false;
     this.$client.emit(InputRecordEvents.Timeout);
     this.$client.emit(InputRecordEvents.Stopped);
   }
@@ -277,7 +284,7 @@ export class AudioRecorder {
       data,
     });
 
-    if (!this.isPushToTalkUsed) {
+    if (!this.isPushToTalkUsed && !this.$recordOnly) {
       if (this.$startThresholdPassed) {
         this.detectSilence(bufferLength, data);
       } else {
@@ -321,8 +328,10 @@ export class AudioRecorder {
     recognition.maxAlternatives = 1;
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      this.$speechRecognized = true;
-      this.$client.emit(InputRecordEvents.SpeechRecognized, event);
+      if (!this.$recordOnly) {
+        this.$speechRecognized = true;
+        this.$client.emit(InputRecordEvents.SpeechRecognized, event);
+      }
     };
 
     recognition.onerror = (err: Event) => {

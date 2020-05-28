@@ -90,8 +90,8 @@ export class JovoWebClientVue {
     return this;
   }
 
-  startRecording(): JovoWebClientVue {
-    this.$assistant.input.startRecording();
+  startRecording(recordOnly = false): JovoWebClientVue {
+    this.$assistant.input.startRecording(recordOnly);
     return this;
   }
 

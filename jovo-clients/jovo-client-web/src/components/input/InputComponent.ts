@@ -100,11 +100,11 @@ export class InputComponent extends Component<InputComponentConfig> {
     this.$client.emit(AssistantEvents.LaunchRequest);
   }
 
-  startRecording() {
-    if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest) {
+  startRecording(recordOnly = false) {
+    if (this.shouldLaunchFirst && !this.$client.hasSentLaunchRequest && !recordOnly) {
       this.$client.emit(AssistantEvents.LaunchRequest);
     } else {
-      this.$recorder.start();
+      this.$recorder.start(recordOnly);
     }
   }
 
