@@ -1,0 +1,3 @@
+text (NameInput) {
+  description (A name to display in a welcome message.)
+}

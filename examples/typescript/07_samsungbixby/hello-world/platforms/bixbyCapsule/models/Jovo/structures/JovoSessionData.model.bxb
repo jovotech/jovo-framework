@@ -1,0 +1,22 @@
+structure (JovoSessionData) {
+  description (Session Data)
+
+  property(_JOVO_SESSION_ID_) {
+    type(JovoSessionId)
+    max (One)
+    min (Required)
+  }
+
+  property(_JOVO_STATE_) {
+    type(JovoState) 
+    max (One)
+    min (Optional)
+  }
+
+  // Paste your own session properties here.
+  property(name) {
+    type (NameInput)
+    max (One) 
+    min (Optional)
+  }
+}

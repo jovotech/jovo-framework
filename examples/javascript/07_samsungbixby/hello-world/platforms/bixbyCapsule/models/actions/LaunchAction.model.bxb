@@ -1,0 +1,5 @@
+action (LaunchAction) {
+  description (Opens the voice application for the first time.)
+  type (Search)
+  output (JovoResponse)
+}

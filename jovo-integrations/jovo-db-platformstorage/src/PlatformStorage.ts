@@ -26,9 +26,11 @@ export class PlatformStorage implements Db {
 
     // tslint:disable-next-line:no-any
     const request = jovo.$request as any;
-    return request.user && request.user.storage
-      ? { userData: request.user.storage }
-      : { userData: { data: {} } };
+    const userData =
+      request.context && request.context.user
+        ? { data: {}, ...request.context.user }
+        : { data: {} };
+    return { userData };
   }
 
   async save(
@@ -44,14 +46,15 @@ export class PlatformStorage implements Db {
 
     // tslint:disable-next-line:no-any
     const request = jovo.$request as any;
-    const userData = request.user!.storage.userData;
+    const userData =
+      request.context && request.context.user
+        ? { data: {}, ...request.context.user }
+        : { data: {} };
     Object.assign(userData, data);
 
     // tslint:disable-next-line:no-any
     (jovo.$response as any).user = {
-      storage: {
-        userData,
-      },
+      data: userData,
     };
     return;
   }
@@ -63,9 +66,7 @@ export class PlatformStorage implements Db {
 
     // tslint:disable-next-line:no-any
     (jovo.$response as any).user = {
-      storage: {
-        userData: {},
-      },
+      data: {},
     };
     return;
   }

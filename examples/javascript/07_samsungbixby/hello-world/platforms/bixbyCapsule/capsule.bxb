@@ -1,0 +1,18 @@
+capsule {
+  id (playground.jovo_test)
+  version (0.1.0)
+  format (3)
+  targets {
+    target (bixby-mobile-en-US)
+  }
+  runtime-version (3)
+	permissions {
+  	bixby-user-id-access
+	}
+	store-countries {
+    all
+  }
+  store-sections {
+    section (Utilities)
+  }
+}

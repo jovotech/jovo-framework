@@ -15,6 +15,7 @@ export enum EnumRequestType {
   UNDEFINED = 'UNDEFINED',
   UNKNOWN_REQUEST = 'UNKNOWN_REQUEST',
   ON_DTMF = 'ON_DTMF',
+  ON_INACTIVITY = 'ON_INACTIVITY',
 }
 
 export enum SessionConstants {

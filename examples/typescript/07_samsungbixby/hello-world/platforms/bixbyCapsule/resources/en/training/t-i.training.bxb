@@ -1,0 +1,5 @@
+train (t-irdukn06pb503lwdbs3vt8wl6) {
+  utterance ([g:LaunchAction] open jovo test capsule)
+  plan (Y2BiUCzISaxML8ovzUvRy8ovy48vSS0u0fMCsoJSiwvy84pTcSjxSSzNS85wTC7JzM9jYARCBigGkgA=)
+  last-modified (1580658764910)
+}
