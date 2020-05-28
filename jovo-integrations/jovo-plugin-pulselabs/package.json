@@ -17,7 +17,7 @@
   "dependencies": {
     "jovo-core": "^3.0.15",
     "lodash.merge": "^4.6.2",
-    "pulselabs-recorder": "^1.0.2"
+    "pulselabs-recorder": "^1.1.2"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
