@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-lindenbaum",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,15 +17,15 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.0.15"
+    "jovo-core": "^3.0.16"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/jest": "^24.0.11",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-db-filedb": "^3.0.16",
-    "jovo-framework": "^3.0.17",
+    "jovo-db-filedb": "^3.0.17",
+    "jovo-framework": "^3.0.18",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
