@@ -51,6 +51,20 @@ export class Cards implements Plugin {
      * @public
      * @return {AlexaSkill}
      */
+    AlexaSkill.prototype.showAskForPermissionsCard = function (permissions: string[]) {
+      _set(
+        this.$output,
+        'Alexa.AskForPermissionsConsentCard',
+        new AskForPermissionsConsentCard().setPermissions(permissions),
+      );
+      return this;
+    };
+
+    /**
+     * Shows ask for country and postal code card
+     * @public
+     * @return {AlexaSkill}
+     */
     AlexaSkill.prototype.showAskForCountryAndPostalCodeCard = function () {
       _set(
         this.$output,

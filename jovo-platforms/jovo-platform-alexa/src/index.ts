@@ -185,6 +185,13 @@ declare module './core/AlexaSkill' {
     ): this;
 
     /**
+     * Shows AskForPermission card for given permissions
+     * @public
+     * @return {AlexaSkill}
+     */
+    showAskForPermissionsCard(permissions: string[]): this;
+
+    /**
      * Shows ask for country and postal code card
      * @public
      * @return {AlexaSkill}
