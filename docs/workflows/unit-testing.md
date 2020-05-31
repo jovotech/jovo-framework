@@ -48,7 +48,7 @@ $ npm install jest --save-dev
 
 ### Create Test File
 
-> [You can find an example test project here](https://github.com/jovotech/jovo-framework-nodejs/tree/master/examples/unit-testing).
+> [You can find an example test project here for Typescript](https://github.com/jovotech/jovo-framework/tree/master/examples/typescript/unit-testing). [Javascript Here](https://github.com/jovotech/jovo-framework/tree/master/examples/javascript/unit-testing).
 
 Unit tests are usually located in a `test` folder of your Jovo project. Naming conventions are `<name>.test.js`.
 
