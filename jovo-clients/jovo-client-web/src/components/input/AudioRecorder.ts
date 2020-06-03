@@ -1,10 +1,10 @@
 import {
-  AssistantEvents,
   AudioHelper,
   AudioRecordedPayload,
   InputComponentConfig,
   InputRecordEvents,
   JovoWebClient,
+  OSHelper,
   RequestEvents,
 } from '../..';
 
@@ -135,6 +135,17 @@ export class AudioRecorder {
 
     this.$audioNodes.destination = ctx.destination;
     this.$audioCtx = ctx;
+
+    if (OSHelper.isWindows) {
+      navigator.mediaDevices
+        .getUserMedia(this.mediaConstraints)
+        .then((stream) => {
+          this.$audioStream = stream;
+        })
+        .catch((e) => {
+          throw e;
+        });
+    }
   }
 
   start(recordOnly = false) {
@@ -145,21 +156,18 @@ export class AudioRecorder {
       throw new Error('The device or browser does not support recording audio!');
     }
 
-    const constraints: MediaStreamConstraints = {
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-      },
-    };
-
     this.$recordOnly = recordOnly;
+
+    if (OSHelper.isWindows) {
+      return this.startRecording(this.$audioStream!);
+    }
+
     return navigator.mediaDevices
-      .getUserMedia(constraints)
+      .getUserMedia(this.mediaConstraints)
       .then((stream) => {
         this.startRecording(stream);
       })
       .catch((e) => {
-        alert(e);
         throw e;
       });
   }
@@ -233,13 +241,22 @@ export class AudioRecorder {
     this.$client.emit(InputRecordEvents.Started);
   }
 
+  private get mediaConstraints(): MediaStreamConstraints {
+    return {
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+      },
+    };
+  }
+
   private stopRecording() {
     this.$audioNodes.processor?.disconnect();
     this.$audioNodes.analyser?.disconnect();
     this.$audioNodes.inputGain?.disconnect();
     this.$audioNodes.inputStream?.disconnect();
 
-    if (this.$audioStream) {
+    if (this.$audioStream && !OSHelper.isWindows) {
       this.$audioStream.getTracks().forEach((track) => {
         track.stop();
       });
