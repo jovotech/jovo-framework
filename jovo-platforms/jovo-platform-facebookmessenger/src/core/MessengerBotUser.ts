@@ -14,9 +14,9 @@ export class MessengerBotUser extends User {
 
   async fetchProfile(fields?: string): Promise<UserProfile> {
     try {
-      const fieldsValue = fields || this.messengerBot.$app.config.userProfileFields;
+      const fieldsValue = fields || this.messengerBot.$config.userProfileFields;
       const url = `https://graph.facebook.com/${this.getId()}?fields=${fieldsValue}&access_token=${
-        this.messengerBot.$app.config.plugin!.FacebookMessenger!.pageAccessToken
+        this.messengerBot.$config.plugin!.FacebookMessenger!.pageAccessToken
       }`;
       const response = await HttpService.get<UserProfile>(url);
       if (response.status === 200 && response.data) {
