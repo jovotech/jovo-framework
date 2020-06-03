@@ -10,6 +10,7 @@ export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 export * from './events';
 export * from './core/CoreComponent';
 export * from './core/Component';
+export * from './util/OSHelper';
 export * from './util/AudioHelper';
 export * from './util/Base64Converter';
 export * from './core/AdvancedEventEmitter';
