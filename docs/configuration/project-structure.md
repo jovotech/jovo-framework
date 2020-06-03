@@ -33,9 +33,9 @@ Project files include:
 
 ### project.js - Project Configuration
 
-The `project.js` file stores all the necessary information for your Jovo project, for example which voice platforms are built for.
+The `/project.js` file stores all the necessary information for your Jovo project, for example which voice platforms are built for.
 
-Here is the `project.js` file of the [Jovo Sample App](https://github.com/jovotech/jovo-sample-voice-app-nodejs):
+Here is the `/project.js` file of the [Jovo Sample App](https://github.com/jovotech/jovo-sample-voice-app-nodejs):
 
 ```javascript
 // ------------------------------------------------------------------
