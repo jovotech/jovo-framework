@@ -1,6 +1,7 @@
-import { ErrorCode, HttpService, JovoError, User } from 'jovo-core';
+import { ErrorCode, HttpService, JovoError, Log, User } from 'jovo-core';
 import { UserProfile } from '../Interfaces';
 import { MessengerBot } from './MessengerBot';
+
 export class MessengerBotUser extends User {
   profile?: UserProfile;
 
@@ -12,25 +13,24 @@ export class MessengerBotUser extends User {
     return this.messengerBot.$request!.getUserId();
   }
 
-  async fetchProfile(fields?: string): Promise<UserProfile> {
-    try {
-      const fieldsValue = fields || this.messengerBot.$config.userProfileFields;
-      const url = `https://graph.facebook.com/${this.getId()}?fields=${fieldsValue}&access_token=${
-        this.messengerBot.$config.plugin!.FacebookMessenger!.pageAccessToken
-      }`;
-      const response = await HttpService.get<UserProfile>(url);
-      if (response.status === 200 && response.data) {
-        return response.data;
-      }
-
-      throw new Error(
-        `Could not retrieve user profile. status: ${response.status}, data: ${
-          response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
-        }`,
-      );
-    } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN);
+  async fetchProfile(fields?: string): Promise<UserProfile | undefined> {
+    const fieldsValue = fields || this.messengerBot.$config.userProfileFields;
+    const pageAccessToken = this.messengerBot.$config.plugin!.FacebookMessenger!.pageAccessToken;
+    if (!fieldsValue || !pageAccessToken) {
+      return;
     }
+    const url = `https://graph.facebook.com/${this.getId()}?fields=${fieldsValue}&access_token=${pageAccessToken}`;
+    const response = await HttpService.get<UserProfile>(url, { validateStatus: (_) => true });
+    if (response.status === 200 && response.data) {
+      return response.data;
+    }
+
+    Log.error(
+      `Could not retrieve user profile. status: ${response.status}, data: ${
+        response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
+      }`,
+    );
+    return;
   }
 
   async fetchAndSetProfile(fields?: string) {
