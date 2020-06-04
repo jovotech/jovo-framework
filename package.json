@@ -15,6 +15,7 @@
 		"devsetup": "npm run bootstrap && npm run tsc",
 		"typedoc": "npm run lerna exec npm run typedoc",
 		"changelog": "lerna-changelog",
+		"build": "npm run rimraf && npm run tsc",
 		"preparePublish": "npm run rimraf && npm run prettier && npm run tsc && npm run tslint && npm run test",
 		"publish": "lerna publish --no-push"
 	},
