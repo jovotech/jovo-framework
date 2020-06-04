@@ -16,8 +16,7 @@ declare module 'jovo-core/dist/src/core/Jovo' {
 
 declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
-    // tslint:disable-next-line:no-any
-    Lindenbaum: any[];
+    Lindenbaum: any[]; // tslint:disable-line:no-any
   }
 }
 
