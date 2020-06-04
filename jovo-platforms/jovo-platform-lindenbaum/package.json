@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-lindenbaum",
-  "version": "3.0.15",
+  "version": "3.0.16",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
