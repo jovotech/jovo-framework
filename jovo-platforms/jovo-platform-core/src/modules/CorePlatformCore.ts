@@ -27,6 +27,7 @@ export class CorePlatformCore implements Plugin {
 
     if (
       requestObject.version &&
+      requestObject.type === 'jovo-platform-core' &&
       requestObject.request &&
       requestObject.context &&
       requestObject.context.platform
