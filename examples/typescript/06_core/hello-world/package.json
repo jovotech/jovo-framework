@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-core-platform",
-  "version": "3.0.19",
+  "version": "3.0.20",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -21,7 +21,7 @@
     "jovo-asr-gcloud": "^3.0.16",
     "jovo-db-filedb": "^3.0.17",
     "jovo-framework": "^3.0.18",
-    "jovo-platform-core": "^3.0.18",
+    "jovo-platform-core": "^3.0.19",
     "jovo-plugin-debugger": "^3.0.16",
     "jovo-slu-lex": "^3.0.16",
     "jovo-tts-polly": "^3.0.16"

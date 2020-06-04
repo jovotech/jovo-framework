@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-core",
-  "version": "3.0.18",
+  "version": "3.0.19",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

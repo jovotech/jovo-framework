@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-bixby-hello-world-ts",
-  "version": "3.0.19",
+  "version": "3.0.20",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -17,7 +17,7 @@
     "jovo-core": "^3.0.16",
     "jovo-db-filedb": "^3.0.17",
     "jovo-framework": "^3.0.18",
-    "jovo-platform-alexa": "^3.0.20",
+    "jovo-platform-alexa": "^3.0.21",
     "jovo-platform-bixby": "^3.0.19",
     "jovo-plugin-debugger": "^3.0.16"
   },
