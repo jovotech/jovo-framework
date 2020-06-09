@@ -299,41 +299,6 @@ If you only want to use certain features for one of the platforms, you can also 
 
 For Alexa Skills, Jovo currently supports the built-in NLU (natural language understanding) [`alexa`](#alexa), while for Google Assistant, [`dialogflow`](#dialogflow) is supported.
 
-### Alexa
-
-Some of the features Alexa provides have to be implemented separately in the `alexa` nlu section. 
-
-Here are some examples:
-* Built-in intents and slots (the ones with `AMAZON.` prepended to their names)
-* Other Alexa-specific features like the Dialog Interface
-
-This is how it looks like:
-
-```javascript
-"alexa": {
-    "interactionModel": {
-        "languageModel": {
-            "intents": [
-                {
-                    "name": "AMAZON.CancelIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.HelpIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.StopIntent",
-                    "samples": []
-                }
-            ]
-        }
-    }
-}
-```
-
-The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder and copy-paste the stuff that you need into this part of the Jovo Language Model file.
-
 ### Dialogflow
 
 There are two ways you can add `dialogflow` specific elements:

@@ -2,22 +2,139 @@
 
 Learn more about Google Assistant specific features that can be used with the Jovo Framework.
 
-- [Introduction to Google Assistant Specific Features](#introduction-to-google-assistant-specific-features)
-- [Output](#output)
-  - [Multiple Reprompts](#multiple-reprompts)
-  - [Screen Surfaces](#screen-surfaces)
-  - [Media Response](#media-response)
-- [Data](#data)
-  - [User ID](#user-id)
-- [Push Notifications](#push-notifications)
-- [Daily Update](#daily-update)
-- [Routine Suggestion](#routine-suggestion)
-- [Confirmation](#confirmation)
-- [Web Browser Interface](#web-browser-interface)
+* [Introduction](#introduction)
+	* [Installation](#installation)
+	* [Quickstart](#quickstart)
+* [$googleAction Object](#googleaction-object)
+* [Jovo Language Model](#jovo-language-model)
+* [User Data & Permissions](#user-data--permissions)
+* [Google Action Interfaces](#google-action-interfaces)
+* [Google Transactions](#google-transactions)
+* [Output](#output)
+	* [Multiple Reprompts](#multiple-reprompts)
+	* [Confirmation](#confirmation)
 
-## Introduction to Google Assistant Specific Features
+## Introduction
 
-You can access the `googleAction` object like this:
+### Installation
+
+```sh
+$ npm install --save jovo-platform-googleassistant
+```
+
+Import the installed module, initialize and add it to the `app` object:
+
+```javascript
+// @language=javascript
+
+// src/app.js
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+
+app.use(new GoogleAssistant());
+
+// @language=typescript
+
+// src/app.ts
+import { GoogleAssistant } from 'jovo-platform-googleassistant';
+
+app.use(new GoogleAssistant());
+```
+
+### Quickstart
+
+#### Install the Jovo CLI
+
+We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. You can learn more and find alternatives on our [installation page](https://www.jovo.tech/docs/installation).
+
+```sh
+$ npm install -g jovo-cli
+```
+
+
+#### Create a new Jovo Project
+
+You can create a Jovo project into a new directory with the following command:
+
+```sh
+// @language=javascript
+
+# Create default Jovo project (Alexa and Google Assistant)
+$ jovo new <directory>
+
+# Create Google Assistant only Jovo project
+$ jovo new <directory> --template google
+
+
+// @language=typescript
+
+# Create default Jovo project (Alexa and Google Assistant)
+$ jovo new <directory> --language typescript
+
+# Create Google Assistant only Jovo project
+$ jovo new <directory> --template google --language typescript
+```
+
+This will create a new folder, download the [Jovo "Hello World" template](https://www.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
+
+This is how a typical Jovo project looks like:
+
+```javascript
+// @language=javascript
+
+models/
+  └── en-US.json
+src/
+  |── app.js
+  |── config.js
+  └── index.js
+project.js
+
+// @language=typescript
+
+models/
+  └── en-US.json
+src/
+  |── app.ts
+  |── config.ts
+  └── index.ts
+project.js
+```
+
+> [Find out more about the Jovo project structure here](https://www.jovo.tech/docs/project-structure).
+
+
+#### Run and Test the Code
+
+To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger). 
+
+To get started, use the following command:
+
+```sh
+// @language=javascript
+
+# Run local development server
+$ jovo run
+
+// @language=typescript
+
+# Run compiler
+$ npm run tsc
+
+# Run local development server
+$ jovo run
+```
+
+This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger).
+
+![Jovo Debugger](https://www.jovo.tech/img/docs/v3/jovo-debugger-helloworld.gif)
+
+In the Debugger, you can quickly test if the flow of your voice app works. For this example, click on the `LAUNCH` button, and then specify a name on the `MyNameIsIntent` button. The Debugger will create requests and run them against your local webhook.
+ 
+> [Find out more about requests and responses here](https://www.jovo.tech/docs/requests-responses).
+
+## $googleAction Object
+
+The `$googleAction` object holds references to every Google Action specific feature:
 
 ```javascript
 // @language=javascript
@@ -29,25 +146,38 @@ this.$googleAction
 this.$googleAction!
 ```
 
-## Output
+## Jovo Language Model
 
-This section provides an overview of Google Assistant specific features for output. For the basic concept, take a look here: [Basic Concepts > Output](https://www.jovo.tech/docs/output).
+> For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://www.jovo.tech/docs/model)
 
-### Multiple Reprompts
+You can add a `dialogflow` object at the root of the Jovo Language Model to add Dialogflow specific stuff using their original syntax. While building, it will be merged with the platform-independent stuff:
 
-Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
-
-The reprompts can be added to the [`ask`](https://www.jovo.tech/docs/output#ask) method adding more parameters:
-
-```javascript
-this.ask(speech, reprompt1, reprompt2, goodbyeMessage);
+```js
+"dialogflow": {
+	"intents": [
+		{
+			"name": "Default Fallback Intent",
+			"auto": true,
+			"webhookUsed": true,
+			"fallbackIntent": true
+		},
+		{
+			"name": "Default Welcome Intent",
+			"auto": true,
+			"webhookUsed": true,
+			"events": [
+				{
+					"name": "WELCOME"
+				}
+			]
+		}
+	]
+},
 ```
-
-The first two messages are usually reprompt messages, the third one is used to say goodbye to the user.
 
 ### Session Entities
 
-Session Entities work similar to [Dynamic Entities](https://www.jovo.tech/docs/amazon-alexa#dynamic-entities) in that you can enhance your existing static entities with dynamic ones to react to changes in user data or context. You can even choose whether to supplement or replace existing entities by providing an optional `EntityOverrideMode`.
+Session Entities work similar to [Dynamic Entities](https://www.jovo.tech/marketplace/jovo-platform-alexa#dynamic-entities) in that you can enhance your existing static entities with dynamic ones to react to changes in user data or context. You can even choose whether to supplement or replace existing entities by providing an optional `EntityOverrideMode`.
 
 Here is the official reference by Google: [Session Entities](https://cloud.google.com/dialogflow/docs/entities-session).
 
@@ -93,43 +223,47 @@ this.$googleAction.addSessionEntity(
 );
 ```
 
-### Screen Surfaces
+## User Data & Permissions
 
-> [You can find out more about visual output here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output).
+There are a lot of Google Action specific user data and permissions that your voice app can use, such as:
 
-### Media Response
-
-> [You can find out more about media responses here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/media-response).
-
-## Data
+* Contact Information
+* Location
+* Date and Time
+* Account Linking
 
 > [You can find out more about your Google Action user's data here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data).
 
-### User ID
 
-In previous versions of Jovo, the `userId` for Google Actions was taken from the request's user ID. In 2018, Google [deprecated this element of the request JSON](https://developers.google.com/actions/identity/user-info) and recommended [webhook generated user IDs](https://developers.google.com/actions/identity/user-info#migrating_to_webhook-generated_ids) as an alternative way to store user data.
+## Google Action Interfaces
 
-Since Jovo `2.0`, a Google Action `userId` is created in the following process:
+* [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response)
+* [Daily Update](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/daily-update)
+* [Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications)
+* [Routine Suggestions](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/routine-suggestions)
+* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output)
 
-- If there is a `userId` defined in the [userStorage](https://developers.google.com/actions/assistant/save-data), take this
-- If not, use the `userId` from the request (if there is one) and then save it in `userStorage`
-- If there is no `userId` in the request, generate one using `uuidv4`, and then save it to `userStorage`
+## Google Transactions
 
-Note: `userStorage` only works for Google Assistant users who have voice match enabled. [Learn more in the official Google Docs](https://developers.google.com/actions/assistant/save-data#user_storage_expiration).
+The Google Transactions feature allows you to sell digital and physical goods in your Google Actions. You can find the documentation [here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/transactions).
 
-## Push Notifications
+## Output
 
-> [Find out how to send push notifications to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/notifications)
+Besides the platform independent [basic output](https://www.jovo.tech/docs/output) capabilities and the ones specified in the *Interfaces* section of the docs, the Google Action platform supports the following two features:
 
-## Daily Update
+### Multiple Reprompts
 
-> [You can find out more about Google Action routine suggestions here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/daily-update)
+Google Assistant allows to add multiple reprompts that are spoken out in order if there is no response by the user. Here is the official reference by Google: [Static Reprompts](https://developers.google.com/actions/assistant/reprompts#static_reprompts).
 
-## Routine Suggestion
+The reprompts can be added to the [`ask`](https://www.jovo.tech/docs/output#ask) method adding more parameters:
 
-> [Find out how to send routine suggestions to your Google Action's users here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/routine-suggestion)
+```javascript
+this.ask(speech, reprompt1, reprompt2, goodbyeMessage);
+```
 
-## Confirmation
+The first two messages are usually reprompt messages, the third one is used to say goodbye to the user.
+
+### Confirmation
 
 You can ask your user to confirm something using the following method:
 
@@ -174,8 +308,3 @@ ON_CONFIRMATION() {
     }
 }
 ```
-
-## Web Browser Interface
-
-The web browser is a platform specific google action feature. Access it via:
-`this.$googleAction.hasWebBrowserInterface();`

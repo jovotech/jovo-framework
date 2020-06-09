@@ -43,35 +43,16 @@ You can use these cross-platform helper methods:
 
 | Method        | Description        |
 | ------------- |-------------|
-| `getSpeech(): string` | Returns speech text without "speak" tags. |
-| `getReprompt(): string` | Returns reprompt text without "speak" tags. |
+| `getSpeech(): string | undefined` | Returns speech text without "speak" tags. |
+| `getSpeechPlain(): string | undefined` | Returns the speech text without ssml |
+| `getReprompt(): string | undefined` | Returns reprompt text without "speak" tags. |
+| `getRepromptPlain(): string | undefined` | Returns the reprompt text without ssml | 
 | `hasSessionData(name: string, value?: any): boolean` | Checks if response has a specific session attribute in it.
 | `getSessionData(): SessionData | undefined` | Returns session data. [Learn more about session data here](../../basic-concepts/data#session-data '../data#session-data'). |
 | `hasSessionEnded(): boolean` | Returns `true` if session ended |
 | `hasState(state: string): boolean` | Checks if response has state in it |
 
 ## Platform Specific Methods
-
-### Alexa Methods
-
-#### Alexa Response Getters
-
-| Method        | Description        |
-| ------------- |-------------|
-| `hasAskForAddressCard(): boolean` | Checks that Alexa permissions card is present and contains `read::alexa:device:all:address` |
-| `hasAskForCountryAndPostalCodeCard(): boolean` | Checks that Alexa permissions card is present and contains `read::alexa:device:all:address:country_and_postal_code` |
-| `hasLinkAccountCard(): boolean` | Checks that Alexa `LinkAcount` card is present. |
-| `hasStandardCard(title?: string, text?: string, smallImageUrl?: string, largeImageUrl?: string): boolean` | Checks if response has a standard Alexa card. |
-| `hasSimpleCard(title?: string, text?: string): boolean` | Checks if response has a simple Alexa card.|
-| `hasAplDirective(): boolean` | Checks if response APL directive.|
-| `hasDisplayDirective(): boolean` | Checks if response has display template directive.|
-| `hasAudioDirective(): boolean` | Checks if response has audio directive.|
-| `hasVideoDirective(): boolean` | Checks if response has video directive.|
-| `getDirectives(): Directives object | undefind` | Returns entire directives object from response.|
-| `getAplDirective(): APL object | undefind` | Returns APL object from response.|
-| `getDisplayDirective(): Display object |undefind` | Returns Display Template object from response.|
-| `getAudioDirective(): Audio object | undefind` | Returns Audio Player object from response.|
-| `getVideoDirective(): Video object | undefind` | Returns Video Player object from response.|
 
 ### Google Assistant Methods
 Google Assistant responses are an object within the Dialogflow response and need to be accessed with an additional method. You can use the additional method `getPlatformResponse()` in the following ways:
