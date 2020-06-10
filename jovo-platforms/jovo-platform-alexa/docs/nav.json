@@ -1,0 +1,59 @@
+{
+    "categories": [
+        {
+            "title": "Requests & Responses",
+            "content": [
+                {
+                    "title": "Request",
+                    "route": "request-response/request"
+                },
+                {
+                    "title": "Response",
+                    "route": "request-response/response"
+                }
+            ]
+        },
+        {
+            "title": "Interfaces",
+            "content": [
+                {
+                    "title": "Audio Player Skills",
+                    "route": "interfaces/audio-player"
+                },
+                {
+                    "title": "Dialog Interface",
+                    "route": "interfaces/dialog"
+                },
+                {
+                    "title": "Echo Button and Gadget Skills",
+                    "route": "interfaces/game-engine-gadget-controller"
+                },
+                {
+                    "title": "Proactive Events",
+                    "route": "interfaces/proactive-events"
+                },
+                {
+                    "title": "Alexa Visual Output",
+                    "route": "interfaces/visual-output"
+                }
+            ]
+        },
+        {
+            "title": "User Data and Permissions",
+            "route": "permissions-data"
+        },
+        {
+            "title": "Monetization",
+            "content": [
+                {
+                    "title": "Alexa In-Skill Purchases (ISP)",
+                    "route": "monetization/in-skill-purchases"
+                },
+                {
+                    "title": "Amazon Pay",
+                    "route": "monetization/amazon-pay"
+                }
+            ]
+        }
+    ]
+}
