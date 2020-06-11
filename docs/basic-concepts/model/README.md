@@ -268,7 +268,7 @@ To learn more about how these input values and synonyms can be accessed, take a 
 
 #### Platform-specific Additions to Input Types
 
-On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow automated expansion](https://dialogflow.com/docs/entities#allow_automated_expansion) like :
+On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow automated expansion](https://cloud.google.com/dialogflow/docs/entities-options#expansion) like :
 
 ```javascript
 "inputTypes": [
