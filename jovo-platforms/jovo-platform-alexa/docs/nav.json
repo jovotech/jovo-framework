@@ -1,6 +1,7 @@
 [
     {
         "title": "Requests & Responses",
+        "route": "request-response",
         "content": [
             {
                 "title": "Request",
@@ -14,6 +15,7 @@
     },
     {
         "title": "Interfaces",
+        "route": "interfaces",
         "content": [
             {
                 "title": "Audio Player Skills",
@@ -43,6 +45,7 @@
     },
     {
         "title": "Monetization",
+        "route": "monetization",
         "content": [
             {
                 "title": "Alexa In-Skill Purchases (ISP)",
