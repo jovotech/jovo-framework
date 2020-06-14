@@ -145,7 +145,7 @@ $ jovo deploy
 
 Alternatively, you can enable it in the Interfaces tab in the Amazon Developer Console:
 
-![Alexa Console: Enable Display Interface](../img/alexa-enable-display-interface.jpg)
+![Alexa Console: Enable Display Interface](../../img/alexa-enable-display-interface.jpg)
 
 You can check whether the current device supports the Display interface using the following helper method:
 

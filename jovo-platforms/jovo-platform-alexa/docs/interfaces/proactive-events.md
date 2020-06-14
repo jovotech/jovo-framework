@@ -83,7 +83,7 @@ $ jovo build -p alexaSkill --deploy --target info
 
 After the deployment finished, you can find the `clientId` and `clientSecret` on the `PERMISSIONS` tab of your Skill on the Alexa Developer Console, which you will need later on:
 
-![Proactive Events API Client ID and Client Secret](../img/proactive_events_clientid_clientsecret.png)
+![Proactive Events API Client ID and Client Secret](../../img/proactive_events_clientid_clientsecret.png)
 
 
 ## Proactive Event Object

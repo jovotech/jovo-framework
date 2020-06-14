@@ -341,7 +341,7 @@ There are a lot of Alexa specific permissions and data that a Skill can use, suc
 * [Proactive Events](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events)
 * [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output)
 
-Learn more about the different Alexa Skill Interface types hers: [Alexa Skill Interfaces](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces).
+Learn more about the different Alexa Skill Interface types here: [Alexa Skill Interfaces](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces).
 
 ## Monetization
 

@@ -15,7 +15,7 @@ Learn more about how to let your users do In-Skill Purchases (ISP) with your Ale
 
 In May 2018, Amazon [introduced](https://developer.amazon.com/blogs/alexa/post/5d852c9c-8cdf-45c1-9b68-e2f02af26c89/make-money-with-alexa-skills) the ability for Skill developers to make money through in-skill purchasing. It allows you to sell items either through one-time purchases or subscriptions. Take a look at the [official reference by Amazon: In-Skill Purchasing Overview](https://developer.amazon.com/docs/in-skill-purchase/isp-overview.html). 
 
-![Workflow for Alexa In-Skill-Purchases](../img/workflow-in-skill-purchases.png "What to do to get In-Skill Purchases to work")
+![Workflow for Alexa In-Skill-Purchases](../../img/workflow-in-skill-purchases.png "What to do to get In-Skill Purchases to work")
 
 There are three things that need to be done to successfully implement in-skill purchasing for your Alexa Skill with Jovo:
 

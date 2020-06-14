@@ -56,7 +56,7 @@ $ jovo deploy
 
 Alternatively, you can also go to the Alexa Developer Console and enable AudioPlayer in the interfaces tab:
 
-![Alexa Console: Enable Audio Player Interface](../img/alexa-enable-audioplayer-interface.jpg)
+![Alexa Console: Enable Audio Player Interface](../../img/alexa-enable-audioplayer-interface.jpg)
 
 ## Audio Player Features
 
