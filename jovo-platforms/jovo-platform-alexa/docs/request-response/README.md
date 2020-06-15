@@ -10,7 +10,7 @@ Learn more about Alexa Skill request and response lifecycle.
 
 A typical interaction between a user and your Alexa Skill consists of a request (what the user wants) and a response (what the Skill replies).
 
-Learn more in the Jovo Docs: [Basic Concepst > Request & Response Lifecycle](https://www.jovo.tech/docs/requests-responses).
+Learn more in the Jovo Docs: [Basic Concepts > Request & Response Lifecycle](https://www.jovo.tech/docs/requests-responses).
 
 
 ## Request
