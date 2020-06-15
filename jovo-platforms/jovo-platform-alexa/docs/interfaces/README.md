@@ -1,5 +1,7 @@
 # Alexa Skill Interfaces
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces
+
 Learn more about the different types of interfaces that can be used when developing an Alexa Skill with the Jovo Framework.
 
 * [Introduction](#introduction)

@@ -1,5 +1,7 @@
 # Microsoft LUIS NLU Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-nlu-luis
+
 Learn how to use Microsoft LUIS as NLU (Natural Language Understanding) integration with the Jovo Framework.
 
 ## Installation

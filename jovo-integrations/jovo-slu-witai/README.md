@@ -1,5 +1,7 @@
 # Wit.ai SLU Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-slu-witai
+
 Learn how to use Wit.ai as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.
 
 ## Installation

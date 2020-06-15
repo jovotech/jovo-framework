@@ -1,5 +1,7 @@
 # Proactive Events
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events
+
 The Proactive Events API allows you to send out events to your user, which work as notifications.
 
 There are four steps to send out events:

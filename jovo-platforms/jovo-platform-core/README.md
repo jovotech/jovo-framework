@@ -1,5 +1,7 @@
 # Jovo Core Platform Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-core
+
 Learn more about the Jovo Core Platform, which can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 
 ## Installation

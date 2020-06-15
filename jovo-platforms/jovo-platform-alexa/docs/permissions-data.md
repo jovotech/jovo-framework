@@ -1,5 +1,7 @@
 # User Data and Permissions
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/permissions-data
+
 Learn more about how to get access to Alexa Skill user information, permissions, and other data.
 
 * [Location](#location)

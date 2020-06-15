@@ -1,5 +1,7 @@
 # Requests & Responses
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/request-response
+
 Learn more about Alexa Skill request and response lifecycle.
 
 * [Introduction](#introduction)

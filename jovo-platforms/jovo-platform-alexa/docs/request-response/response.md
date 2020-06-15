@@ -1,5 +1,7 @@
 # Response
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/request-response/response
+
 * [Introduction](#introduction)
 * [$response Object](#response-object)
 

@@ -1,5 +1,7 @@
 # Google Cloud TTS Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-tts-gcloud
+
 Learn how to use the Google Cloud TTS (Text to Speech) service with the Jovo Framework.
 
 ## Installation

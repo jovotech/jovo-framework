@@ -1,5 +1,7 @@
 # Google Cloud Datastore Database Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-datastore
+
 Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Datastore.
 
 * [Introduction](#introduction)

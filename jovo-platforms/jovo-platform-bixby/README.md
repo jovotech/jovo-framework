@@ -1,5 +1,7 @@
 # Samsung Bixby Platform Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-bixby
+
 Learn more about how Bixby works and how you can use it with the Jovo Framework.
 
 - [Introduction](#introduction)

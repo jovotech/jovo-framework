@@ -1,5 +1,7 @@
 # Chatbase Analytics Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-analytics-chatbase
+
 Learn how to use Chatbase Analytics for your Alexa Skills and Google Actions built with Jovo.
 
 * [About Chatbase](#about-chatbase)

@@ -1,5 +1,7 @@
 # Requests
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/request-response/request
+
 * [Introduction](#introduction)
 * [Basic Request Types](#basic-request-types)
   * [LaunchRequest](#launchrequest)

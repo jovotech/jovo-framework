@@ -1,5 +1,7 @@
 # Alexa Visual Output
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
+
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
 * [Introduction to Alexa Visual Output](#introduction-to-alexa-visual-output)

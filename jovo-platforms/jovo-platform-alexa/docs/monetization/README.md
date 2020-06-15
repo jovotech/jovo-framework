@@ -1,5 +1,7 @@
 # Alexa Skill Monetization
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/monetization
+
 Learn how to make money with your Alexa Skills and Jovo.
 
 * [Introduction](#introduction)

@@ -1,5 +1,7 @@
 # Microsoft Azure Speech to Text Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-asr-azure
+
 Learn how to use the Microsoft Azure Speech to Text service as ASR (automatic speech recognition) integration with the Jovo Framework.
 
 ## Installation

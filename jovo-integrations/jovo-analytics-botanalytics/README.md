@@ -1,5 +1,7 @@
 # Botanalytics Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-analytics-botanalytics
+
 Learn how to use Botanalytics for your Alexa Skills and Google Actions built with Jovo.
 
 * [About Botanalytics](#about-botanalytics)

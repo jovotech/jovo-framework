@@ -1,5 +1,7 @@
 # Amazon DynamoDB Database Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-dynamodb
+
 Learn how to store user specific data of your Alexa Skills and Google Actions to AWS DynamoDB.
 
 * [Introduction](#introduction)

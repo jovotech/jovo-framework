@@ -1,5 +1,7 @@
 # Echo Button and Gadget Skills
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller
+
 * [GadgetController Interface](#gadgetcontroller-interface)
   * [Set Light](#set-light)
     * [Animations](#animations)
