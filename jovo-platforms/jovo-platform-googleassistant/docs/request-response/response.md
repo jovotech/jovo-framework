@@ -1,5 +1,7 @@
 # Response
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/response
+
 ## Introduction
 
 The response is the data that you send to the platform after processing the request. It consists of information like:

@@ -1,5 +1,7 @@
 # User Data & Permissions
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data-permissions
+
 Learn more about how to get access to Google Action user information.
 
 * [Introduction](#introduction)
@@ -18,7 +20,7 @@ User information is mainly used to offer a more personalized experience, but you
 
 In previous versions of Jovo, the `userId` for Google Actions was taken from the request's user ID. In 2018, Google [deprecated this element of the request JSON](https://developers.google.com/actions/identity/user-info) and recommended [webhook generated user IDs](https://developers.google.com/actions/identity/user-info#migrating_to_webhook-generated_ids) as an alternative way to store user data.
 
-Since Jovo `2.0`, a Google Action `userId` is created in the following process:
+In Jovo, a Google Action `userId` is created in the following process:
 
 - If there is a `userId` defined in the [userStorage](https://developers.google.com/actions/assistant/save-data), take this
 - If not, use the `userId` from the request (if there is one) and then save it in `userStorage`

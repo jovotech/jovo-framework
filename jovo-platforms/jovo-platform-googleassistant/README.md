@@ -1,5 +1,7 @@
 # Google Assistant Platform Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant
+
 Learn more about Google Assistant specific features that can be used with the Jovo Framework.
 
 * [Introduction](#introduction)
@@ -177,7 +179,7 @@ You can add a `dialogflow` object at the root of the Jovo Language Model to add 
 
 ### Session Entities
 
-Session Entities work similar to [Dynamic Entities](https://www.jovo.tech/marketplace/jovo-platform-alexa#dynamic-entities) in that you can enhance your existing static entities with dynamic ones to react to changes in user data or context. You can even choose whether to supplement or replace existing entities by providing an optional `EntityOverrideMode`.
+Session Entities work similar to [Alexa Dynamic Entities](https://www.jovo.tech/marketplace/jovo-platform-alexa#dynamic-entities) in that you can enhance your existing static entities with dynamic ones to react to changes in user data or context. You can even choose whether to supplement or replace existing entities by providing an optional `EntityOverrideMode`.
 
 Here is the official reference by Google: [Session Entities](https://cloud.google.com/dialogflow/docs/entities-session).
 
@@ -232,13 +234,13 @@ There are a lot of Google Action specific user data and permissions that your vo
 * Date and Time
 * Account Linking
 
-> [You can find out more about your Google Action user's data here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data).
+> [You can find out more about your Google Action user's data here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data-permissions).
 
 
 ## Google Action Interfaces
 
 * [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response)
-* [Daily Update](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/daily-update)
+* [Daily Update](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/daily-updates)
 * [Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications)
 * [Routine Suggestions](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/routine-suggestions)
 * [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output)
