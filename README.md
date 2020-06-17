@@ -37,9 +37,9 @@ Jovo is the first open source framework that lets you build voice apps for both 
 
 The main features of the Jovo ecosystem are:
 * [**Jovo Framework**](#features): Build voice apps for both Amazon Alexa and Google Assistant
-* [**Jovo CLI**](./docs/workflows/cli): Create, build, and deploy Jovo projects (including [staging](./docs/configuration/project-js.md#stages))
+* [**Jovo CLI**](https://www.jovo.tech/marketplace/jovo-cli): Create, build, and deploy Jovo projects (including [staging](./docs/configuration/project-js.md#stages))
 * [**Jovo Webhook**](./docs/workflows/jovo-webhook.md): Develop and debug voice apps on your local computer
-* [**Jovo Debugger**](https://www.jovo.tech/debugger): Test and debug voice apps in your browser
+* [**Jovo Debugger**](https://www.jovo.tech/marketplace/jovo-plugin-debugger): Test and debug voice apps in your browser
 * [**Jovo Language Model**](./docs/basic-concepts/model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
 
 > 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
