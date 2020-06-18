@@ -20,8 +20,8 @@ Here is a list of all available CMS integrations for Jovo:
 
 Name | Description
 ------------ | -------------
-[Google Sheets](./google-sheets.md './cms/google-sheets') | Manage content in a Google Spreadsheet
-[Airtable](./airtable.md './cms/airtable') | Manage content using Airtable
+[Google Sheets](https://www.jovo.tech/marketplace/jovo-cms-googlesheets) | Manage content in a Google Spreadsheet
+[Airtable](https://www.jovo.tech/marketplace/jovo-cms-airtable) | Manage content using Airtable
 
 ## Features
 
@@ -37,7 +37,7 @@ For all features of a CMS integration, take a look at the specific docs of the [
 
 > [Learn more about Jovo i18n here](../../basic-concepts/output/i18n.md './output/i18n').
 
-This feature uses the [Jovo `i18next` integration](../../basic-concepts/output/i18n.md './output/i18n') to creat localized content with specific features for voice and conversational experiences:
+This feature uses the [Jovo `i18next` integration](https://www.jovo.tech/marketplace/jovo-cms-i18next) to creat localized content with specific features for voice and conversational experiences:
 
 * multilingual apps
 * randomized output

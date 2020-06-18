@@ -54,10 +54,10 @@ More detailed step-by-step guides for each service can be found in the [Availabl
 
 Name | Description
 ------------ | -------------
-[Botanalytics](./botanalytics.md './analytics/botanalytics') | Conversational Analytics
-[Chatbase](./chatbase.md './analytics/chatbase') | Virtual Agent Analytics
-[Dashbot](./dashbot.md './analytics/dashbot') | Conversational Analytics
-[GoogleAnalytics](./googleanalytics.md './analytics/googleanalytics') | GoogleAnalytics
+[Botanalytics](https://www.jovo.tech/marketplace/jovo-analytics-botanalytics) | Conversational Analytics
+[Chatbase](https://www.jovo.tech/marketplace/jovo-analytics-chatbase) | Virtual Agent Analytics
+[Dashbot](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | Conversational Analytics
+[GoogleAnalytics](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | GoogleAnalytics
 
 
 <!--[metadata]: {"description": "Analytics for Alexa Skills and Google Actions with Jovo Integrations",
