@@ -1369,7 +1369,7 @@ alexaSkill: {
 	manifest: {
 		events: {
 			endpoint: {
-				uri: '<your-endpoint-for-events>', // Needs to be Lambda!
+				uri: '<your-endpoint-for-events>', // Can be Lambda, your https endpoint or ${JOVO_WEBHOOK_URL}
 			},
 			subscriptions: [
 				{
