@@ -126,11 +126,8 @@ export class GoogleAnalytics implements Analytics {
   sendError(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
-      throw new JovoError(
-        'Jovo object is not set',
-        ErrorCode.ERR_PLUGIN,
-        'jovo-analytics-googleanalytics',
-      );
+      // don't send anything
+      return;
     }
 
     // Stop the current tracking session.
