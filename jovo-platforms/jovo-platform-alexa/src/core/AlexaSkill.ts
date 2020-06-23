@@ -1,4 +1,4 @@
-import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import { AudioData, BaseApp, HandleRequest, Host, Jovo, Log, SpeechBuilder } from 'jovo-core';
 import {
   AlexaAPI,
   BodyTemplate1,
@@ -152,6 +152,16 @@ export class AlexaSkill extends Jovo {
    */
   progressiveResponse(speech: string | SpeechBuilder, callback?: Function) {
     const alexaRequest: AlexaRequest = this.$request as AlexaRequest;
+    if (this.isJovoDebuggerRequest()) {
+      Log.warn(
+        `progressiveResponse isn't supported by the JovoDebugger. The speech is ignored here.`,
+      );
+      if (callback) {
+        callback();
+      }
+      return;
+    }
+
     if (callback) {
       AlexaAPI.progressiveResponse(
         speech,
