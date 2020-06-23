@@ -1,6 +1,8 @@
 import { Config } from './GoogleAssistant';
 
 export { GoogleAssistant, Config } from './GoogleAssistant';
+export { GoogleAction } from './core/GoogleAction';
+
 export { GoogleAssistantTestSuite } from './core/Interfaces';
 export { BasicCard } from './response/BasicCard';
 export { Carousel } from './response/Carousel';
