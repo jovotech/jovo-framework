@@ -39,7 +39,8 @@
     "ts-jest": "^25.4.0",
     "tslint": "^5.17.0",
     "typedoc": "^0.15.6",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "jovo-platform-bixby": "^3.0.19"
   },
   "jest": {
     "transform": {
