@@ -1,5 +1,7 @@
 # i18next CMS Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-cms-i18next
+
 In this section, you will learn how to build voice applications that support multiple languages.
 
 * [Introduction to i18n](#introduction-to-i18n)

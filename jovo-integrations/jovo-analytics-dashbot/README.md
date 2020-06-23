@@ -1,5 +1,7 @@
 # Dashbot Analytics Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-analytics-dashbot
+
 Learn how to use Dashbot Analytics for your Alexa Skills and Google Actions built with Jovo.
 
 * [About Dashbot](#about-dashbot)

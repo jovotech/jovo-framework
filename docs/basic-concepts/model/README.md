@@ -268,7 +268,7 @@ To learn more about how these input values and synonyms can be accessed, take a 
 
 #### Platform-specific Additions to Input Types
 
-On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow automated expansion](https://dialogflow.com/docs/entities#allow_automated_expansion) like :
+On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow automated expansion](https://cloud.google.com/dialogflow/docs/entities-options#expansion) like :
 
 ```javascript
 "inputTypes": [
@@ -298,41 +298,6 @@ On `Dialogflow` you can add a specific parameter `automatedExpansion` to [allow 
 If you only want to use certain features for one of the platforms, you can also add objects for their natural language understanding tools (`nlu`) to the model.
 
 For Alexa Skills, Jovo currently supports the built-in NLU (natural language understanding) [`alexa`](#alexa), while for Google Assistant, [`dialogflow`](#dialogflow) is supported.
-
-### Alexa
-
-Some of the features Alexa provides have to be implemented separately in the `alexa` nlu section. 
-
-Here are some examples:
-* Built-in intents and slots (the ones with `AMAZON.` prepended to their names)
-* Other Alexa-specific features like the Dialog Interface
-
-This is how it looks like:
-
-```javascript
-"alexa": {
-    "interactionModel": {
-        "languageModel": {
-            "intents": [
-                {
-                    "name": "AMAZON.CancelIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.HelpIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.StopIntent",
-                    "samples": []
-                }
-            ]
-        }
-    }
-}
-```
-
-The `alexa` object contains the `interactionModel` in its original syntax. For example, you can go to the Code Editor in the Skill Builder and copy-paste the stuff that you need into this part of the Jovo Language Model file.
 
 ### Dialogflow
 

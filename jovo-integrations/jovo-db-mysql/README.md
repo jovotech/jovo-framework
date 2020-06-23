@@ -1,5 +1,7 @@
 # MySQL Database Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-mysql
+
 Learn how to store user specific data of your Alexa Skills and Google Actions to a MySQL database.
 
 * [Introduction](#introduction)

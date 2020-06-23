@@ -1,4 +1,6 @@
-# Media Response
+# Media Response API
+
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response
 
 Learn how to use the Google Action Media Response with Jovo.
 

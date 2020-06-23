@@ -17,13 +17,13 @@ Here is a list of all available database integrations for Jovo:
 
 Name | Description
 ------------ | -------------
-[File DB](./file-db.md './databases/file-db') | File-based system for local prototyping. Default.
-[DynamoDB](./dynamodb.md './databases/dynamodb') | NoSQL database by AWS
-[Google Cloud Datastore](./google-datastore.md './databases/google-datastore') | NoSQL database by Google Cloud
-[MySQL](./mysql.md './databases/mysql') | The open source relational database
-[MongoDB](./mongodb.md './databases/mongodb') | widely supported documented-oriented NoSQL-database
-[Cosmos DB](./cosmosdb.md './databases/cosmosdb') | Database service by Azure
-[Firestore](./firestore.md './databases/firestore') | NoSQL database by Google Firebase
+[File DB](https://www.jovo.tech/marketplace/jovo-db-filedb) | File-based system for local prototyping. Default.
+[DynamoDB](https://www.jovo.tech/marketplace/jovo-db-dynamodb) | NoSQL database by AWS
+[Google Cloud Datastore](https://www.jovo.tech/marketplace/jovo-db-datastore) | NoSQL database by Google Cloud
+[MySQL](https://www.jovo.tech/marketplace/jovo-db-mysql) | The open source relational database
+[MongoDB](https://www.jovo.tech/marketplace/jovo-db-mongodb) | Widely supported documented-oriented NoSQL-database
+[Cosmos DB](https://www.jovo.tech/marketplace/jovo-db-cosmosdb) | Database service by Azure
+[Firestore](https://www.jovo.tech/marketplace/jovo-db-firestore) | NoSQL database by Google Firebase
 
 
 <!--[metadata]: {"description": "Learn how to store user specific data to different types of databases with the Jovo Framework",

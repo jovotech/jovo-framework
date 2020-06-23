@@ -1,4 +1,6 @@
-# Permissions and Data
+# User Data and Permissions
+
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/permissions-data
 
 Learn more about how to get access to Alexa Skill user information, permissions, and other data.
 
@@ -20,11 +22,6 @@ Learn more about how to get access to Alexa Skill user information, permissions,
 * [Skill Events](#skill-events)
    * [Skill Event Requirements](#skill-event-requirements)
    * [Events](#events)
-* [CanFulfillIntentRequest](#canfulfillintentrequest)
-   * [CanFulfillIntentRequest Requirements](#canfulfillintentrequest-requirements)
-   * [CanFulfillIntentRequest Implementation](#canfulfillintentrequest-implementation)
-
-
 
 ## Location
 
@@ -549,7 +546,7 @@ Users need to grant your Alexa Skill permission for `read` and/or `write` access
 
 In the Amazon Developer Portal, you can do this by checking the following permissions:
 
-![Alexa List Permissions](./img/alexa-list-permissions.jpg)
+![Alexa List Permissions](../img/alexa-list-permissions.jpg)
 
 The same result is achieved by adding the following to the `manifest` in your `skill.json` via the `project.js` file:
 
@@ -625,11 +622,11 @@ this.$alexaSkill!.showAskforListPermissionCard(['read', 'write'])
 
 This is what it looks like in the Alexa app:
 
-![Alexa List Permission Card in the Alexa App](./img/alexa-list-permission-card.jpg)
+![Alexa List Permission Card in the Alexa App](../img/alexa-list-permission-card.jpg)
 
 Users can then update the permissions in the Skill's settings:
 
-![Update List Permissions in the Alexa App](./img/alexa-list-permissions-app.jpg)
+![Update List Permissions in the Alexa App](../img/alexa-list-permissions-app.jpg)
 
 
 ### Shopping List
@@ -1372,7 +1369,7 @@ alexaSkill: {
 	manifest: {
 		events: {
 			endpoint: {
-				uri: '<your-endpoint-for-events>', // Needs to be Lambda!
+				uri: '<your-endpoint-for-events>', // Can be Lambda, your https endpoint or ${JOVO_WEBHOOK_URL}
 			},
 			subscriptions: [
 				{
@@ -1602,82 +1599,3 @@ ON_EVENT: {
 #### Proactive Subscription Changed
 
 Find a detailed description of the `Proactive Subscription Changed` event [here](https://www.jovo.tech/marketplace/jovo-platform-alexa#skill-event---proactivesubscriptionchanged).
-
-
-## CanFulfillIntentRequest
-
-The name-free interaction allows Amazon to map user requests, which don't specify a skill and can't be handled by Alexa's built in features, to be mapped to a developer's skill that can handle it.
-
-For example, the user might make the following request: **Alexa, play relaxing sounds with crickets**. Alexa's built-in features can't handle the request so the system looks for third party skills to fulfill it.
-
-The system will then send `CanFullIntentRequests` the skills it believes might be able to fulfill the request. According to the response to that requests (`yes`, `no` or `maybe`) your skill will receive an `IntentRequest` just as if it the skill was invoked my the customer directly.
-
-### CanFulfillIntentRequest Requirements
-
-To enable the `CanFulfillIntentRequest` feature you have to enable the interface in your skill's information. You can do that either in the Alexa Developer Console in the `Interfaces` subcategory or you do it with the Jovo CLI.
-
-Open your `project.js` file and add the following to your `alexaSkill` object:
-
-```javascript
-alexaSkill: {
-	manifest: {
-		apis: {
-			custom: {
-				interfaces: [
-					{
-						type: 'CAN_FULFILL_INTENT_REQUEST',
-					}
-				],
-			},
-		},
-	},
-},
-```
-Don't forget to build and deploy your project after you've added the interface:
-
-```sh
-# Build platform specific files
-$ jovo build
-
-# Deploy to platforms
-$ jovo deploy
-```
-
-### CanFulfillIntentRequest Implementation
-
-Incoming `CanFulfillIntentRequests` will be mapped to the Jovo built in `CAN_FULFILL_INTENT`.
-
-```javascript
-CAN_FULFILL_INTENT() {
-
-},
-```
-After receiving an `CanFulfillIntentRequest` you have to answer the following question: _**Can my skill understand and fulfill every slot as well as understand and fulfill the whole request?**_.
-
-Since every Skill is different, there is no universal recipe to use. You have to come up with our own way to handle these requests, which suits your skill, but there is a rough guideline:
-
-#### Intent
-
-The first step should be to check if the incoming intent is one, that your skill can handle. You can get the incoming intent name using `this.getIntentName()`
-
-#### Slots
-
-You also have to go over every slot in the request and decide if you can **understand** (`YES`, `NO` or `MAYBE`) and **fulfill** (`YES` or `NO`) the slot.
-
-Use `this.$inputs` to get an object containing every slot. Iterate over the object and decide for each slot if you can understand it or not using: 
-```javascript
-this.canFulfillSlot(slotName, canUnderstandSlot, canFulfillSlot);
-```
-
-#### Request
-
-After going through the slots, you have to decide if you can also handle the whole request (`YES`, `NO` or `MAYBE`):
-```javascript
-this.canFulfillRequest();
-// or
-this.cannotFulfillRequest();
-// or
-this.mayFulfillRequest();
-```
-
-It is recommended to go over the official Amazon documentation ([here](https://developer.amazon.com/docs/custom-skills/request-types-reference.html#CanFulfillIntentRequest) and [here](https://developer.amazon.com/docs/custom-skills/understand-name-free-interaction-for-custom-skills.html)) to get a better grasp about when to respond with `YES`, `NO` or `MAYBE` as well as other guidelines.

@@ -1,5 +1,7 @@
 # Google Sheets CMS Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-cms-googlesheets
+
 Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)

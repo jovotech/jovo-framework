@@ -1,18 +1,18 @@
 # Visual Output
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output
+
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
-- [Visual Output](#visual-output)
-  - [Introduction to Visual Output](#introduction-to-visual-output)
-  - [Display Text](#display-text)
-  - [Basic Card](#basic-card)
-  - [Table Card](#table-card)
-  - [Option Item](#option-item)
-    - [List Selector](#list-selector)
-    - [Carousel Selector](#carousel-selector)
-    - [ON_ELEMENT_SELECTED](#onelementselected)
-  - [Suggestion Chips](#suggestion-chips)
-
+- [Introduction to Visual Output](#introduction-to-visual-output)
+- [Display Text](#display-text)
+- [Basic Card](#basic-card)
+- [Table Card](#table-card)
+- [Option Item](#option-item)
+  - [List Selector](#list-selector)
+  - [Carousel Selector](#carousel-selector)
+  - [ON_ELEMENT_SELECTED](#onelementselected)
+- [Suggestion Chips](#suggestion-chips)
 
 ## Introduction to Visual Output
 

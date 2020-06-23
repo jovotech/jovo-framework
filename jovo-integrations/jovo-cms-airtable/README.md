@@ -1,5 +1,7 @@
 # Airtable CMS Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-cms-airtable
+
 Learn how to use Airtable as CMS for your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)

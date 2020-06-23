@@ -1,5 +1,7 @@
 # Dialogflow Platform Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-dialogflow
+
 Learn how to bring your Jovo apps to platforms like Facebook Messenger and Slack by using Dialogflow integrations.
 
 * [Introduction to Dialogflow Integrations](#introduction-to-dialogflow-integrations)

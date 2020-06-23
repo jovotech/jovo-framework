@@ -1,5 +1,7 @@
 # Facebook Messenger Platform Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger
+
 Learn more about the Facebook Messenger Platform and its platform-specific features that can be used with the Jovo Framework.
 
 * [Installation](#installation)

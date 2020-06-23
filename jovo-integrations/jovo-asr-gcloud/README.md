@@ -1,5 +1,7 @@
 # Google Cloud Speech to Text Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-asr-gcloud
+
 Learn how to use the Google Cloud Speech to Text service as ASR (automatic speech recognition) integration with the Jovo Framework.
 
 ## Installation

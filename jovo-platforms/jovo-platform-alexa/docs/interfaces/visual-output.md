@@ -1,5 +1,7 @@
 # Alexa Visual Output
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
+
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
 * [Introduction to Alexa Visual Output](#introduction-to-alexa-visual-output)
@@ -145,8 +147,17 @@ $ jovo deploy
 
 Alternatively, you can enable it in the Interfaces tab in the Amazon Developer Console:
 
-![Alexa Console: Enable Display Interface](../img/alexa-enable-display-interface.jpg)
+![Alexa Console: Enable Display Interface](../../img/alexa-enable-display-interface.jpg)
 
+You can check whether the current device supports the Display interface using the following helper method:
+
+```js
+// @language=javascript
+this.$alexaSkill.$request.hasDisplayInterface();
+
+// @language=typescript
+this.$alexaSkill?.$request?.hasDisplayInterface();
+```
 
 ### Body Templates
 
@@ -466,6 +477,18 @@ $ jovo build
 
 # Upload to Alexa
 $ jovo deploy
+```
+
+You can check whether the current device supports the APL interface using the following helper method:
+
+```js
+// @language=javascript
+this.$alexaSkill.$request.hasAPLInterface();
+this.$alexaSkill.$request.hasAPLTInterface();
+
+// @language=typescript
+this.$alexaSkill?.$request?.hasAPLInterface();
+this.$alexaSkill?.$request?.hasAPLTInterface();
 ```
 
 ## Video App Interface

@@ -1,5 +1,7 @@
 # Google Transactions
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/transactions
+
 Learn how to sell digital and physical goods in your Google Actions by using Google Transactions.
 
 * [Introduction](#introduction)

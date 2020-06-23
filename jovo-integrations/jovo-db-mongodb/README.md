@@ -1,5 +1,7 @@
 # MongoDB Database Integration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-mongodb
+
 Learn how to store user specific data of your Alexa Skills and Google Actions to a MongoDb database.
 
 * [Introduction](#introduction)

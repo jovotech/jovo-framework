@@ -60,7 +60,7 @@ Result in the Actions on Google simulator:
 You can also pass an object as `imageUrl` to provide a `smallImageUrl`and `largeImageUrl` (for Alexa Skills):
 
 ```javascript
-this.showImageCard('Card Title', ' Card Content', {
+this.$alexaSkill.showStandardCard('Card Title', ' Card Content', {
         smallImageUrl: 'https://via.placeholder.com/720x480',
         largeImageUrl: 'https://via.placeholder.com/1200x800',
     })
