@@ -268,6 +268,7 @@ export class JovoDebugger implements Plugin {
     }
 
     delete conv.config.httpOptions.headers['jovo-test'];
+    conv.config.httpOptions.headers['jovo-debugger'] = true;
     const response = await conv.send(req);
 
     _set(this, `conversations.${userId}`, conv);
