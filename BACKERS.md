@@ -14,13 +14,13 @@ Thank you to all our existing sponsors and supporters! <3
 
 ## Silver Sponsors
 
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=36&width=600" /></a>
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=50&width=600" /></a>
 
 ## Bronze Sponsors
 
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/bronze-sponsors.svg?avatarHeight=36&width=600" /></a>
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/bronze-sponsors.svg?avatarHeight=50&width=600" /></a>
 
 ## Backers
 
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/backers.svg?avatarHeight=36&width=600" /></a>
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/backers.svg?avatarHeight=50&width=600" /></a>
 
