@@ -26,7 +26,31 @@ Learn more about how to get access to Alexa Skill user information, permissions,
 ## Location
 
 You can use the user's address data to provide location specific features, but you have to obtain their permission first.
-`permission card` will do the job:
+
+First add it to your skill's permission. You can do that in your `project.js` file:
+
+```javascript
+// project.js
+
+module.exports = {
+  alexaSkill: {
+    nlu: 'alexa',
+    manifest: {
+      permissions: [
+        {
+          name: 'read::alexa:device:all:address' // only needed if you want to access the address
+        },
+        {
+          name: 'read::alexa:device:all:address:country_and_postal_code' // needed if you want to access the country and postal code
+        }
+      ]
+    }
+  }
+
+  // ...
+};
+```
+After that you have to send the user a `permission card` for them to grant you access to the data:
 
 ```javascript
 // @language=javascript
