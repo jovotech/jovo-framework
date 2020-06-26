@@ -186,43 +186,43 @@ const conversation = testSuite.conversation();
 You can also add certain configurations to the constructor of your `conversation` object.
 
 ```javascript
-// Initialize Conversation
 const conversationConfig = {
     // Overwrite default configurations here
 };
 const conversation = testSuite.conversation(conversationConfig);
-
-// Example: Use different PORT for the Jovo Webhook
-const conversationConfig = {
-    httpOptions: { 
-        port: PORT,
-    },
-};
-const conversation = testSuite.conversation(conversationConfig);
-
-// Example in short
-const conversation = testSuite.conversation({httpOptions: { port: PORT }});
 ```
+
+Here are the configuration options:
+
+Name | Description | Value
+:--- | :--- | :---
+`userId` | The userId of the requests. Random by default | string
+`locale` | The locale of the requests, e.g. `en-US` | string
+`defaultDbDirectory` | The path to the db directory for the jovo-db-filedb integration | string
+`deleteDbOnSessionEnded` | Determines whether the db folder should be deleted after all the tests are done | boolean
+`runtime` | Either `server` or `app`. If it's set to `server` the requests will be sent to the server (`http://localhost:3000/webhook` by default). With the option set to `app` the requests will be sent to the project's app object directly. That means you don't have to start server before you run your tests. | enum - `server` or `app`
+`httpOptions` | The options with which the request will be sent to your server. See [AxionsRequestConfig](https://github.com/axios/axios#request-config) for details. | object
+
 Here is a list of the default configurations of the `conversation` object:
 
 ```javascript
 // Default Config
 
 config: ConversationConfig = {
-    userId: randomUserId(),
-    locale: 'en-US',
     defaultDbDirectory: './db/tests/',
+    deleteDbOnSessionEnded: false,
     httpOptions: {
-        host: 'localhost',
-        port: 3000,
-        path: '/webhook',
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'content-type': 'application/json',
-            'jovo-test': 'true'
-        },
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'jovo-test': 'true',
+      },
+      method: 'POST',
+      url: `http://localhost:${process.env.JOVO_PORT || 3000}/webhook`,
     },
+    locale: 'en-US',
+    runtime: 'server',
+    userId: randomUserId(),
 };
 ```
 
