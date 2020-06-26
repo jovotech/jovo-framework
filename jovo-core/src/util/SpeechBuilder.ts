@@ -98,15 +98,29 @@ export class SpeechBuilder {
    */
   addAudio(
     url: string | string[],
-    text: string = '',
+    text?: string,
     condition?: boolean,
     probability?: number,
   ): this {
-    if (Array.isArray(url)) {
-      return this.addText(`<audio src="${_sample(url)}">${text}</audio>`, condition, probability);
+    let finalConditional=condition;
+    let finalProbability=probability;
+    const finalText=(typeof(text)==='string')?text:"";
+    if(typeof(text)==='boolean')
+    {
+      finalConditional=text;
+      finalProbability=1;
     }
-    return this.addText(`<audio src="${url}">${text}</audio>`, condition, probability);
+    if(typeof(text)==='number')
+    {
+      finalProbability=text;
+      finalConditional=true;
+    }
+    if (Array.isArray(url)) {
+      return this.addText(`<audio src="${_sample(url)}">${finalText}</audio>`, finalConditional, finalProbability);
+    }
+    return this.addText(`<audio src="${url}">${finalText}</audio>`, finalConditional, finalProbability);
   }
+
 
   /**
    * Adds text surrounded by <s> tags
