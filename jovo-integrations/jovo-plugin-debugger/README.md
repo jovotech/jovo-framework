@@ -53,6 +53,12 @@ $ jovo run
 
 Now, simply press the `.` key on your keyboard to open up the Debugger web page.
 
+If you ever need to know in your app whether the current request comes from the Jovo Debugger, you can use the following helper:
+
+```js
+this.isJovoDebuggerRequest();
+```
+
 ## Features
 
 ### Data
