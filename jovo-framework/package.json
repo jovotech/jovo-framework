@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "3.0.18",
+  "version": "3.0.19",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -19,8 +19,8 @@
     "@azure/functions": "^1.0.1-beta2",
     "body-parser": "^1.19.0",
     "express": "^4.16.3",
-    "jovo-core": "^3.0.16",
-    "jovo-db-filedb": "^3.0.17",
+    "jovo-core": "^3.0.17",
+    "jovo-db-filedb": "^3.0.18",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",

@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-filedb",
-  "version": "3.0.17",
+  "version": "3.0.18",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.0.16",
+    "jovo-core": "^3.0.17",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2"
