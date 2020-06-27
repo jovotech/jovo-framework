@@ -55,23 +55,11 @@ We're glad to be supported by respected companies and individuals in the voice-f
 
 <a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=50&width=600" /></a>
 
-* [Dabble Lab](https://www.dabblelab.com/)
-* [Labworks.io](https://www.labworks.io/)
-* [Matchbox.io](https://matchbox.io/)
-* [Volley](https://volleythat.com/)
-
 
 **Bronze Sponsors**
 
 <a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/bronze-sponsors.svg?avatarHeight=35&width=600" /></a>
 
-* [169 Labs](https://www.169labs.com/)
-* [Witlingo](https://www.witlingo.com/)
-* [Rabbit & Pork](https://wearerabbitandpork.com/)
-* [Die Lautmaler](https://www.die-lautmaler.de/)
-* [ONSEI](https://www.onsei.de/)
-* [Jargon](https://jargon.com/)
-* [Node Kitchen](https://node.kitchen/)
 
 Find all supporters in our [`BACKERS.md`](./BACKERS.md) file.
 
