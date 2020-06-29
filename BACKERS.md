@@ -33,6 +33,7 @@ Thank you to all our existing sponsors and supporters! <3
 * [ONSEI](https://www.onsei.de/)
 * [Jargon](https://jargon.com/)
 * [Node Kitchen](https://node.kitchen/)
+* [ShirkaLab](https://www.shirkalab.io/)
 
 ## Backers
 
