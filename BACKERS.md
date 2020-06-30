@@ -11,6 +11,12 @@ If you run a business and are building on top of Jovo, it makes business sense t
 
 Thank you to all our existing sponsors and supporters! <3
 
+## Gold Sponsors
+
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/gold-sponsors.svg?avatarHeight=50&width=600" /></a>
+* [Skilled Creative](https://www.skilledcreative.com/)
+
+
 
 ## Silver Sponsors
 
