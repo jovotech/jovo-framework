@@ -22,8 +22,10 @@ export class RasaNlu implements Plugin {
     endpoint: 'http://localhost:5000/parse',
   };
 
-  constructor(config: Config) {
-    this.config = _merge(this.config, config);
+  constructor(config?: Config) {
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
   }
 
   get name(): string {
@@ -31,7 +33,6 @@ export class RasaNlu implements Plugin {
   }
 
   install(parent: Extensible) {
-    console.log('installing rasa nlu');
     parent.middleware('$nlu')!.use(this.nlu.bind(this));
     parent.middleware('$inputs')!.use(this.inputs.bind(this));
   }
@@ -39,7 +40,6 @@ export class RasaNlu implements Plugin {
   async nlu(jovo: Jovo) {
     const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
 
-    console.log(text);
     let response: RasaResponse | null = null;
     if (text) {
       response = await this.naturalLanguageProcessing(text);
@@ -98,6 +98,8 @@ export class RasaNlu implements Plugin {
   }
 
   private async naturalLanguageProcessing(text: string): Promise<RasaResponse> {
+    this.validateConfig();
+
     const url = `${this.config.endpoint}/model/parse`;
     const options: AxiosRequestConfig = {
       url,
@@ -115,13 +117,35 @@ export class RasaNlu implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       }
-      throw new Error(
-        `Could not retrieve NLU data. status: ${response.status}, data: ${
+      throw new JovoError(
+        `Could not retrieve NLU data!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Response: ${response.status} ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      throw new JovoError(
+        e.message || e,
+        ErrorCode.ERR_PLUGIN,
+        e.module || this.name,
+        e.details,
+        e.hint,
+        e.seeMore,
+      );
+    }
+  }
+
+  private validateConfig() {
+    if (!this.config.endpoint) {
+      throw new JovoError(
+        `Invalid configuration!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`,
+        `Make sure 'endpoint' is set and valid.`,
+      );
     }
   }
 }

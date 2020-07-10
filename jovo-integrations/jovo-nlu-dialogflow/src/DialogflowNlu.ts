@@ -35,7 +35,7 @@ export interface Config extends PluginConfig {
   requireCredentialsFile?: boolean;
 }
 
-export class DialogflowNlu extends Extensible implements Plugin {
+export class DialogflowNlu implements Plugin {
   config: Config = {
     defaultIntent: 'Default Fallback Intent',
     defaultLocale: 'en-US',
@@ -47,8 +47,6 @@ export class DialogflowNlu extends Extensible implements Plugin {
   };
 
   constructor(config?: Config) {
-    super(config);
-
     if (config) {
       this.config = _merge(this.config, config);
     }
@@ -186,7 +184,13 @@ export class DialogflowNlu extends Extensible implements Plugin {
       if (this.config.requireCredentialsFile === false) {
         return;
       } else {
-        throw new JovoError('Credentials file is mandatory', ErrorCode.ERR_PLUGIN, this.name);
+        throw new JovoError(
+          'Invalid configuration: Credentials file is not set!',
+          ErrorCode.ERR_PLUGIN,
+          this.name,
+          'Credentials file is mandatory',
+          `Make sure 'credentialsFile' is set.`,
+        );
       }
     }
 
@@ -196,9 +200,11 @@ export class DialogflowNlu extends Extensible implements Plugin {
         return;
       } else {
         throw new JovoError(
-          `Credentials file doesn't exist in ${this.config.credentialsFile}`,
+          'Invalid configuration: Credentials file does not exist!',
           ErrorCode.ERR_PLUGIN,
           this.name,
+          `Credentials file does not exist in '${this.config.credentialsFile}'`,
+          `Make sure 'credentialsFile' points to a valid GCloud credentials file.`,
         );
       }
     }
@@ -238,7 +244,7 @@ export class DialogflowNlu extends Extensible implements Plugin {
     const hasProjectId = projectId && projectId.length > 0;
 
     if (!hasAuthToken || !hasProjectId) {
-      let reasons = '';
+      let reasons = 'Reasons:';
       if (!hasProjectId) {
         reasons += '\nNo valid project-id was given.';
       }
@@ -247,9 +253,10 @@ export class DialogflowNlu extends Extensible implements Plugin {
       }
 
       throw new JovoError(
-        `Can not access Dialogflow-API, because: ${reasons}`,
+        `Can not access Dialogflow-API!`,
         ErrorCode.ERR_PLUGIN,
         this.name,
+        reasons,
       );
     }
 
@@ -282,13 +289,23 @@ export class DialogflowNlu extends Extensible implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       }
-      throw new Error(
-        `Could not retrieve NLU data. status: ${response.status}, data: ${
+      throw new JovoError(
+        'Could not retrieve NLU data!',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Response: ${response.status} ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      throw new JovoError(
+        e.message || e,
+        ErrorCode.ERR_PLUGIN,
+        e.module || this.name,
+        e.details,
+        e.hint,
+        e.seeMore,
+      );
     }
   }
 }
