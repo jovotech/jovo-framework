@@ -1,5 +1,6 @@
 import _merge = require('lodash.merge');
 import _sample = require('lodash.sample');
+import _zip = require('lodash.zip');
 import { Jovo } from '../core/Jovo';
 
 export interface SsmlElements {
@@ -90,53 +91,77 @@ export class SpeechBuilder {
   /**
    * Adds audio tag to speech
    * @public
-   * @param {string} url secure url to audio
-   * @param {string} text
-   * @param {boolean} condition
-   * @param {number} probability
+   * @param {string | string[]} url secure url to audio
    * @return {SpeechBuilder}
    */
   addAudio(
     url: string | string[],
-    text?: string,
+    textOrConditionOrProbability?: string | string[] | boolean | number,
+  ): this;
+  addAudio(
+    url: string | string[],
+    text?: string | string[],
+    conditionOrProbability?: boolean | number,
+  ): this;
+  addAudio(url: string | string[], condition?: boolean, probability?: number): this;
+  addAudio(
+    url: string | string[],
+    text?: string | string[],
     condition?: boolean,
     probability?: number,
+  ): this;
+  addAudio(
+    url: string | string[],
+    textOrConditionOrProbability?: string | string[] | boolean | number,
+    conditionOrProbability?: boolean | number,
+    probability?: number,
   ): this {
-    let finalConditional=condition;
-    let finalProbability=probability;
-    const finalText=(typeof(text)==='string')?text:"";
-    if(typeof(text)==='boolean')
-    {
-      finalConditional=text;
-      finalProbability=1;
-    }
-    if(typeof(text)==='number')
-    {
-      finalProbability=text;
-      finalConditional=true;
-    }
-    if (Array.isArray(url)) {
-      return this.addText(`<audio src="${_sample(url)}">${finalText}</audio>`, finalConditional, finalProbability);
-    }
-    return this.addText(`<audio src="${url}">${finalText}</audio>`, finalConditional, finalProbability);
-  }
+    const parsed = this.parseAudioArguments(
+      url,
+      textOrConditionOrProbability,
+      conditionOrProbability,
+      probability,
+    );
+    const text = `<audio src="${parsed.url}">${parsed.text || ''}</audio>`;
 
+    return this.addText(text, parsed.condition, parsed.probability);
+  }
 
   /**
    * Adds text surrounded by <s> tags
-   * @param {string} text
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {string | string[]} text
    * @return {SpeechBuilder}
    */
+  addSentence(
+    text: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addSentence(
+    text: string | string[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addSentence(text: string | string[], probability?: number, surroundSsml?: SsmlElements): this;
   addSentence(
     text: string | string[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addSentence(
+    text: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
     return this.addText(
-      Array.isArray(text) ? _sample(text)! : text,
+      text,
       condition,
       probability,
       _merge(
@@ -150,17 +175,37 @@ export class SpeechBuilder {
 
   /**
    * Adds <say-as> tags with interpret-as cardinal
-   * @param {string} n
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {number | number[]} n
    * @return {SpeechBuilder}
    */
+  addSayAsCardinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addSayAsCardinal(
+    n: number | number[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addSayAsCardinal(n: number | number[], probability?: number, surroundSsml?: SsmlElements): this;
   addSayAsCardinal(
     n: number | number[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addSayAsCardinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
     return this.addText(
       String(Array.isArray(n) ? _sample(n) : n),
       condition,
@@ -178,33 +223,73 @@ export class SpeechBuilder {
 
   /**
    * Adds <say-as> tags with interpret-as ordinal
-   * @param {string} n
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {number | number[]} n
    * @return {SpeechBuilder}
    */
+  addCardinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addCardinal(
+    n: number | number[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addCardinal(n: number | number[], probability?: number, surroundSsml?: SsmlElements): this;
   addCardinal(
     n: number | number[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addCardinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
-    return this.addSayAsCardinal(n, condition, probability);
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
+    return this.addSayAsCardinal(n, condition, probability, surroundSsml);
   }
 
   /**
    * Adds <say-as> tags with interpret-as ordinal
-   * @param {string} n
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {number | number[]} n
    * @return {SpeechBuilder}
    */
+  addSayAsOrdinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addSayAsOrdinal(
+    n: number | number[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addSayAsOrdinal(n: number | number[], probability?: number, surroundSsml?: SsmlElements): this;
   addSayAsOrdinal(
     n: number | number[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addSayAsOrdinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
     return this.addText(
       String(Array.isArray(n) ? _sample(n) : n),
       condition,
@@ -222,35 +307,79 @@ export class SpeechBuilder {
 
   /**
    * Adds <say-as> tags with interpret-as ordinal
-   * @param {string} n
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {number | number[]} n
    * @return {SpeechBuilder}
    */
+  addOrdinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addOrdinal(
+    n: number | number[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addOrdinal(n: number | number[], probability?: number, surroundSsml?: SsmlElements): this;
   addOrdinal(
     n: number | number[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addOrdinal(
+    n: number | number[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
-    return this.addSayAsOrdinal(n, condition, probability);
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
+    return this.addSayAsOrdinal(n, condition, probability, surroundSsml);
   }
 
   /**
    * Adds <say-as> tags with interpret-as characters
-   * @param {string} characters
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {string | string[]} characters
    * @return {SpeechBuilder}
    */
+  addSayAsCharacters(
+    characters: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addSayAsCharacters(
+    characters: string | string[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addSayAsCharacters(
+    characters: string | string[],
+    probability?: number,
+    surroundSsml?: SsmlElements,
+  ): this;
   addSayAsCharacters(
     characters: string | string[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addSayAsCharacters(
+    characters: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
     return this.addText(
-      Array.isArray(characters) ? _sample(characters)! : characters,
+      characters,
       condition,
       probability,
       _merge(
@@ -266,37 +395,80 @@ export class SpeechBuilder {
 
   /**
    * Adds <say-as> tags with interpret-as characters
-   * @param {string} characters
-   * @param {boolean} condition
-   * @param {number} probability
+   * @public
+   * @param {string | string[]} characters
    * @return {SpeechBuilder}
    */
+  addCharacters(
+    characters: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addCharacters(
+    characters: string | string[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addCharacters(
+    characters: string | string[],
+    probability?: number,
+    surroundSsml?: SsmlElements,
+  ): this;
   addCharacters(
     characters: string | string[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addCharacters(
+    characters: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
-    return this.addSayAsCharacters(characters, condition, probability);
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
+    return this.addSayAsCharacters(characters, condition, probability, surroundSsml);
   }
 
   /**
    * Adds break tag to speech obj
    * @public
-   * @param {string} time timespan like 3s, 500ms etc
-   * @param {boolean} condition
-   * @param {number} probability
+   * @param {string | string[]} time timespan like 3s, 500ms etc
    * @return {SpeechBuilder}
    */
+  addBreak(
+    time: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addBreak(
+    time: string | string[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addBreak(time: string | string[], probability?: number, surroundSsml?: SsmlElements): this;
   addBreak(
     time: string | string[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addBreak(
+    time: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
     const strengthValues = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
     const breakTime = Array.isArray(time) ? _sample(time)! : time;
     const attributeName = strengthValues.indexOf(breakTime) > -1 ? 'strength' : 'time';
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
     return this.addText(
       '',
       condition,
@@ -315,19 +487,37 @@ export class SpeechBuilder {
   /**
    * Adds text to speech
    * @public
-   * @param {string} text
-   * @param {boolean} condition
-   * @param {number} probability
-   * @param {SsmlElement}  ssml element description
+   * @param {string | string[]} text
    * @return {SpeechBuilder}
    */
+  addText(
+    text: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+  ): this;
+  addText(
+    text: string | string[],
+    condition?: boolean,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+  ): this;
+  addText(text: string | string[], probability?: number, surroundSsml?: SsmlElements): this;
   addText(
     text: string | string[],
     condition?: boolean,
     probability?: number,
     surroundSsml?: SsmlElements,
+  ): this;
+  addText(
+    text: string | string[],
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundBySsml?: SsmlElements,
   ): this {
-    if (typeof condition === 'boolean' && condition === false) {
+    const { condition, probability, surroundSsml } = this.parseArguments(
+      conditionOrProbabilityOrSurroundSsml,
+      probabilityOrSurroundSsml,
+      surroundBySsml,
+    );
+    if (typeof condition === 'boolean' && !condition) {
       return this;
     }
     if (typeof probability === 'number') {
@@ -447,5 +637,71 @@ export class SpeechBuilder {
       this.speech = this.wrapInSsmlElement(this.speech, 'prosody', this.prosody);
     }
     return this.speech;
+  }
+
+  protected parseArguments(
+    conditionOrProbabilityOrSurroundSsml?: boolean | number | SsmlElements,
+    probabilityOrSurroundSsml?: number | SsmlElements,
+    surroundSsml?: SsmlElements,
+  ): { condition?: boolean; probability?: number; surroundSsml?: SsmlElements } {
+    return {
+      condition:
+        typeof conditionOrProbabilityOrSurroundSsml === 'boolean'
+          ? conditionOrProbabilityOrSurroundSsml
+          : undefined,
+      probability:
+        typeof conditionOrProbabilityOrSurroundSsml === 'number'
+          ? conditionOrProbabilityOrSurroundSsml
+          : typeof probabilityOrSurroundSsml === 'number'
+          ? probabilityOrSurroundSsml
+          : undefined,
+      surroundSsml:
+        typeof conditionOrProbabilityOrSurroundSsml === 'object'
+          ? conditionOrProbabilityOrSurroundSsml
+          : typeof probabilityOrSurroundSsml === 'object'
+          ? probabilityOrSurroundSsml
+          : surroundSsml,
+    };
+  }
+
+  protected parseAudioArguments(
+    url: string | string[],
+    textOrConditionOrProbability?: string | string[] | boolean | number,
+    conditionOrProbability?: boolean | number,
+    probability?: number,
+  ): { url?: string; text?: string; condition?: boolean; probability?: number } {
+    let text: string | undefined = '';
+    if (
+      Array.isArray(url) &&
+      Array.isArray(textOrConditionOrProbability) &&
+      url.length === textOrConditionOrProbability.length
+    ) {
+      [url, text] = _sample(_zip(url, textOrConditionOrProbability)) as [string, string];
+    } else {
+      url = Array.isArray(url) ? _sample(url)! : url;
+
+      text =
+        typeof textOrConditionOrProbability === 'string'
+          ? textOrConditionOrProbability
+          : Array.isArray(textOrConditionOrProbability)
+          ? _sample(textOrConditionOrProbability)
+          : '';
+    }
+    return {
+      condition:
+        typeof textOrConditionOrProbability === 'boolean'
+          ? textOrConditionOrProbability
+          : typeof conditionOrProbability === 'boolean'
+          ? conditionOrProbability
+          : undefined,
+      probability:
+        typeof textOrConditionOrProbability === 'number'
+          ? textOrConditionOrProbability
+          : typeof conditionOrProbability === 'number'
+          ? conditionOrProbability
+          : probability,
+      text,
+      url,
+    };
   }
 }
