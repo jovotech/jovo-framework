@@ -249,7 +249,7 @@ export class BusinessMessagesRequest implements JovoRequest {
     return this;
   }
 
-  getIntentName(): string | undefined {
+  getIntentName(): string {
     if (process.env.NODE_ENV === 'UNIT_TEST') {
       return this.nlu?.intentName || '';
     } else {
