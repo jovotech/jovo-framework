@@ -11,7 +11,7 @@
     "tscw": "tsc --watch",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
-    "test": "jest --listTests"
+    "test": "jest --runInBand"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
@@ -24,6 +24,7 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
+    "jovo-db-filedb": "^3.0.18",
     "jovo-framework": "^3.0.18",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
