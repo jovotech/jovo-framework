@@ -65,6 +65,7 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
     app.middleware('setup')!.use(this.setup.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
+    app.middleware('after.user.load')!.use(this.session.bind(this));
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
@@ -111,6 +112,14 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
 
     await this.middleware('$nlu')!.run(handleRequest.jovo);
     await this.middleware('$inputs')!.run(handleRequest.jovo);
+  }
+
+  async session(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo!.$session) {
+      handleRequest.jovo!.$session = { $data: {} };
+    }
+    // @ts-ignore for some reason $session doesn't exist on $user. Works on all the other packages.
+    handleRequest.jovo!.$session.$data = { ...handleRequest.jovo!.$user.$session.$data };
   }
 
   async tts(handleRequest: HandleRequest) {
