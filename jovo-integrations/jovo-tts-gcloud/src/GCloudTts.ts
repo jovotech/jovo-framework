@@ -33,7 +33,9 @@ export class GCloudTts implements Plugin {
   jwtClient?: JWT;
 
   constructor(config?: Config) {
-    this.config = _merge(this.config, config);
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
   }
 
   get name(): string {
@@ -149,19 +151,35 @@ export class GCloudTts implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       }
-      throw new Error(
-        `Could not retrieve TTS data. status: ${response.status}, data: ${
+      throw new JovoError(
+        'Could not retrieve ASR data!',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Response: ${response.status} ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      throw new JovoError(
+        e.message || e,
+        ErrorCode.ERR_PLUGIN,
+        e.module || this.name,
+        e.details,
+        e.hint,
+        e.seeMore,
+      );
     }
   }
 
   private async initializeJWT(): Promise<JWT> {
     if (!this.config.credentialsFile) {
-      throw new JovoError('Credentials file is mandatory', ErrorCode.ERR_PLUGIN, this.name);
+      throw new JovoError(
+        'Invalid configuration: Credentials file is not set!',
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        'Credentials file is mandatory',
+        `Make sure 'credentialsFile' is set.`,
+      );
     }
 
     try {
@@ -175,9 +193,11 @@ export class GCloudTts implements Plugin {
       return jwtClient;
     } catch (e) {
       throw new JovoError(
-        `Credentials file doesn't exist in ${this.config.credentialsFile}`,
+        'Invalid configuration: Credentials file does not exist!',
         ErrorCode.ERR_PLUGIN,
         this.name,
+        `Credentials file does not exist in '${this.config.credentialsFile}'`,
+        `Make sure 'credentialsFile' points to a valid GCloud credentials file.`,
       );
     }
   }
