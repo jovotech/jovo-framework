@@ -121,7 +121,7 @@ export class BusinessMessagesRequest implements JovoRequest {
   }
 
   getUserId(): string {
-    Log.warn("Google Business Messages doesn't parse an user ID in the request.");
+    Log.warn("Google Business Messages doesn't parse an user ID in the request. Please use this.$user.getId()");
     return '';
   }
 
