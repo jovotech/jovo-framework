@@ -1,4 +1,4 @@
-import { EnumRequestType, ErrorCode, HandleRequest, JovoError, Plugin } from 'jovo-core';
+import { EnumRequestType, ErrorCode, HandleRequest, JovoError, Plugin, Util} from 'jovo-core';
 
 import { BusinessMessages } from '../BusinessMessages';
 import { BusinessMessagesBot } from '../core/BusinessMessagesBot';
@@ -6,7 +6,6 @@ import { BusinessMessagesRequest } from '../core/BusinessMessagesRequest';
 import { BusinessMessagesResponse } from '../core/BusinessMessagesResponse';
 import { BusinessMessagesUser } from '../core/BusinessMessagesUser';
 import { TextResponse } from '../Interfaces';
-import { Util } from '../Util';
 
 export class BusinessMessagesCore implements Plugin {
   install(businessMessages: BusinessMessages) {
@@ -63,7 +62,7 @@ export class BusinessMessagesCore implements Plugin {
     }
     const response = businessMessagesBot.$response as BusinessMessagesResponse;
     const request = businessMessagesBot.$request as BusinessMessagesRequest;
-    const messageId = Util.generateRandomString(12);
+    const messageId = Util.randomStr(12);
 
     // might have been initialized by Cards.ts already
     if (!response.response) {

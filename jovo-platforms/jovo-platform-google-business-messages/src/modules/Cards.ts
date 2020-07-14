@@ -1,4 +1,4 @@
-import { Plugin } from 'jovo-core';
+import { Plugin, Util } from 'jovo-core';
 import { BusinessMessages } from '../BusinessMessages';
 import { BusinessMessagesBot } from '../core/BusinessMessagesBot';
 import { BusinessMessagesRequest } from '../core/BusinessMessagesRequest';
@@ -9,7 +9,6 @@ import {
   RichCard,
   StandaloneCardResponse,
 } from '../Interfaces';
-import { Util } from '../Util';
 
 export class Cards implements Plugin {
   install(businessMessages: BusinessMessages) {
@@ -39,7 +38,7 @@ export class Cards implements Plugin {
 
     if (!response.response) {
       const request = businessMessagesBot.$request as BusinessMessagesRequest;
-      const messageId = Util.generateRandomString(12);
+      const messageId = Util.randomStr(12);
 
       response.response = {
         messageId,
