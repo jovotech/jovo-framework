@@ -23,13 +23,11 @@ export class BusinessMessagesBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    // if (this.$user.$session) {
-    //   return this.$user.$session.id !== this.$request!.getSessionId();
-    // } else {
-    //   return false;
-    // }
-
-    return false;
+    if (this.$user.$session) {
+      return this.$user.$session.id !== this.$request!.getSessionId();
+    } else {
+      return false;
+    }
   }
 
   hasAudioInterface(): boolean {

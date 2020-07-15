@@ -118,7 +118,7 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
     if (!handleRequest.jovo!.$session) {
       handleRequest.jovo!.$session = { $data: {} };
     }
-    // @ts-ignore for some reason $session doesn't exist on $user. Works on all the other packages.
+
     handleRequest.jovo!.$session.$data = { ...handleRequest.jovo!.$user.$session.$data };
   }
 
