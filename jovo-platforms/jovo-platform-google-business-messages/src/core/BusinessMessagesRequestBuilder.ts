@@ -43,8 +43,7 @@ export class BusinessMessagesRequestBuilder implements RequestBuilder<BusinessMe
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
       return BusinessMessagesRequest.fromJSON(JSON.parse(request))
-        .setTimestamp(new Date().toISOString())
-        .setUserId(randomUserId());
+        .setTimestamp(new Date().toISOString());
     }
   }
 
