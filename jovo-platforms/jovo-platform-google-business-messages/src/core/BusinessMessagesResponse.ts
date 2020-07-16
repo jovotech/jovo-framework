@@ -104,13 +104,13 @@ export class BusinessMessagesResponse implements JovoResponse {
       if (speechText) {
         if (Array.isArray(speechText)) {
           for (const speechTextElement of speechText) {
-            if (SpeechBuilder.toSSML(speechTextElement) === response) {
+            if (speechTextElement === response) {
               return true;
             }
           }
           return false;
         } else {
-          return response === SpeechBuilder.toSSML(speechText);
+          return response === speechText;
         }
       }
       return true;
