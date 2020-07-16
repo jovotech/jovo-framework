@@ -328,4 +328,9 @@ export class BusinessMessagesRequest implements JovoRequest {
   getSessionId(): string {
     return this.conversationId;
   }
+
+  setSessionId(id: string): this {
+    this.conversationId = id;
+    return this;
+  }
 }
