@@ -1,4 +1,4 @@
-import { Inputs, Log, RequestBuilder } from 'jovo-core';
+import { Inputs, Log, RequestBuilder, Util } from 'jovo-core';
 import * as path from 'path';
 
 import { BusinessMessages } from '../BusinessMessages';
@@ -43,7 +43,8 @@ export class BusinessMessagesRequestBuilder implements RequestBuilder<BusinessMe
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
       return BusinessMessagesRequest.fromJSON(JSON.parse(request))
-        .setTimestamp(new Date().toISOString());
+        .setTimestamp(new Date().toISOString())
+        .setSessionId(Util.randomStr(12));
     }
   }
 
