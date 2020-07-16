@@ -1,11 +1,9 @@
-import {
-  HandleRequest,
-} from 'jovo-core';
-import { App, ExpressJS } from 'jovo-framework';
+import { HandleRequest } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
-import { BusinessMessages, BusinessMessagesTestSuite, BusinessMessagesRequest } from '../../src';
-import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';;
-import { PATH_TO_DB_DIR, clearDbFolder } from './helper/Utils';
+import { App, ExpressJS } from 'jovo-framework';
+import { BusinessMessages, BusinessMessagesRequest, BusinessMessagesTestSuite } from '../../src';
+import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';
+import { clearDbFolder, PATH_TO_DB_DIR } from './helper/Utils';
 
 // BusinessMessagesRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
 process.env.NODE_ENV = 'UNIT_TEST';

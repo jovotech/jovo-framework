@@ -51,7 +51,7 @@ export class BusinessMessagesBot extends Jovo {
   }
 
   getDeviceId(): string | undefined {
-    Log.warn("Google Business Messages doesn't provide a device ID");
+    Log.warn('Google Business Messages doesn\'t provide a device ID');
     return;
   }
 

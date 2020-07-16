@@ -1,4 +1,4 @@
-import { EnumRequestType, ErrorCode, HandleRequest, JovoError, Plugin, Util} from 'jovo-core';
+import { EnumRequestType, ErrorCode, HandleRequest, JovoError, Plugin, Util } from 'jovo-core';
 
 import { BusinessMessages } from '../BusinessMessages';
 import { BusinessMessagesBot } from '../core/BusinessMessagesBot';
@@ -34,7 +34,7 @@ export class BusinessMessagesCore implements Plugin {
   async request(businessMessagesBot: BusinessMessagesBot) {
     if (!businessMessagesBot.$host) {
       throw new JovoError(
-        "Couldn't access $host object",
+        'Couldn\'t access $host object',
         ErrorCode.ERR_PLUGIN,
         'jovo-platform-google-business-messages',
         'The $host object is necessary to initialize both $request and $user',

@@ -34,18 +34,18 @@ export class BusinessMessagesResponse implements JovoResponse {
   }
 
   getReprompt(): undefined {
-    Log.warn("Google Business Messages doesn't support reprompts.");
+    Log.warn('Google Business Messages doesn\'t support reprompts.');
     return;
   }
 
   getRepromptPlain(): undefined {
-    Log.warn("Google Business Messages doesn't support reprompts.");
+    Log.warn('Google Business Messages doesn\'t support reprompts.');
     return;
   }
 
   getSessionAttributes(): SessionData | undefined {
     Log.warn(
-      "Google Business Messages doesn't parse session data in the response. Please use this.$session",
+      'Google Business Messages doesn\'t parse session data in the response. Please use this.$session',
     );
 
     return;
@@ -53,7 +53,7 @@ export class BusinessMessagesResponse implements JovoResponse {
 
   setSessionAttributes(sessionAttributes: SessionData): this {
     Log.warn(
-      "Google Business Messages doesn't parse session data in the response. Please use this.$session",
+      'Google Business Messages doesn\'t parse session data in the response. Please use this.$session',
     );
 
     return this;
@@ -69,14 +69,14 @@ export class BusinessMessagesResponse implements JovoResponse {
 
   hasState(state: string): boolean | undefined {
     Log.warn(
-      "Google Business Messages doesn't parse the state in the response. Please use this.getState() instead and check manually.",
+      'Google Business Messages doesn\'t parse the state in the response. Please use this.getState() instead and check manually.',
     );
     return false;
   }
 
   hasSessionAttribute(name: string, value?: any): boolean {
     Log.warn(
-      "Google Business Messages doesn't parse session data in the response. Please use this.$session and check manually",
+      'Google Business Messages doesn\'t parse session data in the response. Please use this.$session and check manually',
     );
 
     return false;
@@ -88,7 +88,7 @@ export class BusinessMessagesResponse implements JovoResponse {
 
   hasSessionEnded(): boolean {
     Log.warn(
-      "Google Business Message's response doesn't contain a flag that defines whether the session has ended or not.",
+      'Google Business Message\'s response doesn\'t contain a flag that defines whether the session has ended or not.',
     );
 
     return false;

@@ -50,13 +50,13 @@ export class BusinessMessagesRequestBuilder implements RequestBuilder<BusinessMe
 
   async end(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
     Log.warn(
-      "Google Business Messages doesn't have a separate request type marking the end of a session.",
+      'Google Business Messages doesn\'t have a separate request type marking the end of a session.',
     );
     return this.intentRequest(json);
   }
 
   async audioPlayerRequest(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
-    Log.warn("Google Business Messages doesn't have audio player requests.");
+    Log.warn('Google Business Messages doesn\'t have audio player requests.');
     return this.intentRequest(json);
   }
 

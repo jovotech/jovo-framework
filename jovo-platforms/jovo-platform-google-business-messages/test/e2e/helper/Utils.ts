@@ -25,8 +25,8 @@ export function setDbSessionData(userId: string, data: any) {
     userData: {
       data: {},
       session: {
-        lastUpdatedAt: new Date().toISOString(),
         $data: data,
+        lastUpdatedAt: new Date().toISOString(),
       },
     },
   };

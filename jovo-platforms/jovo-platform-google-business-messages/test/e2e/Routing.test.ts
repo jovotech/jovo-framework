@@ -1,16 +1,10 @@
 import { writeFileSync } from 'fs';
-import {
-  EnumRequestType,
-  HandleRequest,
-  Jovo,
-  SessionConstants,
-  Util,
-} from 'jovo-core';
-import { App, ExpressJS } from 'jovo-framework';
+import { EnumRequestType, HandleRequest, Jovo, SessionConstants, Util } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
+import { App, ExpressJS } from 'jovo-framework';
 import { BusinessMessages, BusinessMessagesRequest, BusinessMessagesTestSuite } from '../../src';
 import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';
-import { PATH_TO_DB_DIR, clearDbFolder, setDbSessionData } from './helper/Utils';
+import { clearDbFolder, PATH_TO_DB_DIR, setDbSessionData } from './helper/Utils';
 
 // BusinessMessagesRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
 process.env.NODE_ENV = 'UNIT_TEST';
@@ -106,7 +100,10 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('SessionIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'SessionIntent',
+      {},
+    );
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
     });
@@ -123,7 +120,10 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('SessionIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'SessionIntent',
+      {},
+    );
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
@@ -146,7 +146,10 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('SessionIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'SessionIntent',
+      {},
+    );
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
@@ -169,7 +172,10 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('SessionIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'SessionIntent',
+      {},
+    );
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
@@ -725,9 +731,9 @@ describe('test handleOnNewUser', () => {
       },
     };
     writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getSessionId()}.json`, JSON.stringify(dbJson));
-    
+
     app.handle(ExpressJS.dummyRequest(intentRequest));
-    
+
     app.on('response', (handleRequest: HandleRequest) => {
       done();
     });

@@ -1,4 +1,4 @@
-import { Plugin, EnumRequestType } from 'jovo-core';
+import { EnumRequestType, Plugin } from 'jovo-core';
 import { BusinessMessages, BusinessMessagesBot, BusinessMessagesRequest } from '../../../src';
 
 export class BusinessMessagesMockNlu implements Plugin {
@@ -6,8 +6,6 @@ export class BusinessMessagesMockNlu implements Plugin {
     businessMessages.middleware('$nlu')!.use(this.nlu.bind(this));
     businessMessages.middleware('$inputs')!.use(this.inputs.bind(this));
   }
-
-  uninstall(lindenbaum: BusinessMessages) {}
 
   async nlu(businessMessagesBot: BusinessMessagesBot) {
     const request = businessMessagesBot.$request as BusinessMessagesRequest;

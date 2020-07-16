@@ -1,7 +1,7 @@
 import { HandleRequest, LogLevel } from 'jovo-core';
-import { App, ExpressJS } from 'jovo-framework';
 import { FileDb2 } from 'jovo-db-filedb';
-import { BusinessMessages, BusinessMessagesTestSuite, BusinessMessagesRequest } from '../../src';
+import { App, ExpressJS } from 'jovo-framework';
+import { BusinessMessages, BusinessMessagesRequest, BusinessMessagesTestSuite } from '../../src';
 import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';
 import { clearDbFolder, setDbSessionData } from './helper/Utils';
 
@@ -55,9 +55,12 @@ describe('test $inputs', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent', {
-      name: 'Joe',
-    });
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'HelloWorldIntent',
+      {
+        name: 'Joe',
+      },
+    );
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
@@ -75,9 +78,12 @@ describe('test $inputs', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent', {
-      'given-name': 'Joe',
-    });
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'HelloWorldIntent',
+      {
+        'given-name': 'Joe',
+      },
+    );
     app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 });
@@ -96,7 +102,10 @@ describe('test intentMap', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'HelloWorldIntent',
+      {},
+    );
     app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 
@@ -156,7 +165,10 @@ describe('test session attributes', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('SessionIntent', {});
+    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+      'SessionIntent',
+      {},
+    );
     // Business Messages uses the session ID as the user ID
     setDbSessionData(intentRequest.getSessionId(), {
       sessionName1: 'sessionValue1',
@@ -180,9 +192,9 @@ describe('test session attributes', () => {
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
-      expect(handleRequest.jovo!.$session.$data['sessionName1']).toBe('sessionValue1');
-      expect(handleRequest.jovo!.$session.$data['sessionName2']).toBe('sessionValue2');
-      expect(handleRequest.jovo!.$session.$data['sessionName3']).toBe('sessionValue3');
+      expect(handleRequest.jovo!.$session.$data.sessionName1).toBe('sessionValue1');
+      expect(handleRequest.jovo!.$session.$data.sessionName2).toBe('sessionValue2');
+      expect(handleRequest.jovo!.$session.$data.sessionName3).toBe('sessionValue3');
       done();
     });
   });
@@ -203,9 +215,9 @@ describe('test session attributes', () => {
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
-      expect(handleRequest.jovo!.$session.$data['sessionName1']).toBe('sessionValue1');
-      expect(handleRequest.jovo!.$session.$data['sessionName2']).toBe('sessionValue2');
-      expect(handleRequest.jovo!.$session.$data['sessionName3']).toBe('sessionValue3');
+      expect(handleRequest.jovo!.$session.$data.sessionName1).toBe('sessionValue1');
+      expect(handleRequest.jovo!.$session.$data.sessionName2).toBe('sessionValue2');
+      expect(handleRequest.jovo!.$session.$data.sessionName3).toBe('sessionValue3');
       done();
     });
   });
