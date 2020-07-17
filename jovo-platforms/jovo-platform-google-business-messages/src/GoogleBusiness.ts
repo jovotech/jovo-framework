@@ -17,8 +17,8 @@ import { GoogleBusinessRequestBuilder } from './core/GoogleBusinessRequestBuilde
 import { GoogleBusinessResponse } from './core/GoogleBusinessResponse';
 import { GoogleBusinessResponseBuilder } from './core/GoogleBusinessResponseBuilder';
 import { GoogleBusinessTestSuite } from './index';
-import { GoogleBusinessCore } from './modules/GoogleBusinessCore';
 import { Cards } from './modules/Cards';
+import { GoogleBusinessCore } from './modules/GoogleBusinessCore';
 import { ApiCallOptions, GoogleBusinessAPI } from './services/GoogleBusinessAPI';
 
 export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusinessResponse> {
@@ -162,9 +162,6 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
   }
 
   makeTestSuite(): GoogleBusinessTestSuite {
-    return new TestSuite(
-      new GoogleBusinessRequestBuilder(),
-      new GoogleBusinessResponseBuilder(),
-    );
+    return new TestSuite(new GoogleBusinessRequestBuilder(), new GoogleBusinessResponseBuilder());
   }
 }

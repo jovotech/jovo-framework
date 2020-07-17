@@ -100,10 +100,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'SessionIntent',
-      {},
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('SessionIntent', {});
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
     });
@@ -120,10 +117,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'SessionIntent',
-      {},
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('SessionIntent', {});
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
@@ -146,10 +140,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'SessionIntent',
-      {},
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('SessionIntent', {});
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',
@@ -172,10 +163,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'SessionIntent',
-      {},
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('SessionIntent', {});
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'TestState',

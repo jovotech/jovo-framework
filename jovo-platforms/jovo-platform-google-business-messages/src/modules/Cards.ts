@@ -1,8 +1,8 @@
 import { Plugin, Util } from 'jovo-core';
-import { GoogleBusiness } from '../GoogleBusiness';
 import { GoogleBusinessBot } from '../core/GoogleBusinessBot';
 import { GoogleBusinessRequest } from '../core/GoogleBusinessRequest';
 import { GoogleBusinessResponse } from '../core/GoogleBusinessResponse';
+import { GoogleBusiness } from '../GoogleBusiness';
 import {
   CarouselCard,
   CarouselCardResponse,

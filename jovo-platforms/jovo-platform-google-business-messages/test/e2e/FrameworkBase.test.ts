@@ -55,12 +55,9 @@ describe('test $inputs', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'HelloWorldIntent',
-      {
-        name: 'Joe',
-      },
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('HelloWorldIntent', {
+      name: 'Joe',
+    });
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
@@ -78,12 +75,9 @@ describe('test $inputs', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'HelloWorldIntent',
-      {
-        'given-name': 'Joe',
-      },
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('HelloWorldIntent', {
+      'given-name': 'Joe',
+    });
     app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 });
@@ -165,10 +159,7 @@ describe('test session attributes', () => {
       },
     });
 
-    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
-      'SessionIntent',
-      {},
-    );
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('SessionIntent', {});
     // Business Messages uses the session ID as the user ID
     setDbSessionData(intentRequest.getSessionId(), {
       sessionName1: 'sessionValue1',

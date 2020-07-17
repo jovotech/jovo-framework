@@ -1,10 +1,10 @@
 import { EnumRequestType, ErrorCode, HandleRequest, JovoError, Plugin, Util } from 'jovo-core';
 
-import { GoogleBusiness } from '../GoogleBusiness';
 import { GoogleBusinessBot } from '../core/GoogleBusinessBot';
 import { GoogleBusinessRequest } from '../core/GoogleBusinessRequest';
 import { GoogleBusinessResponse } from '../core/GoogleBusinessResponse';
 import { GoogleBusinessUser } from '../core/GoogleBusinessUser';
+import { GoogleBusiness } from '../GoogleBusiness';
 import { TextResponse } from '../Interfaces';
 
 export class GoogleBusinessCore implements Plugin {
