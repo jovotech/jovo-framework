@@ -1,22 +1,22 @@
 import { Inputs, Log, RequestBuilder, Util } from 'jovo-core';
 import * as path from 'path';
 
-import { BusinessMessages } from '../BusinessMessages';
-import { BusinessMessagesBaseRequest } from '../Interfaces';
-import { BusinessMessagesRequest } from './BusinessMessagesRequest';
+import { GoogleBusiness } from '../GoogleBusiness';
+import { GoogleBusinessBaseRequest } from '../Interfaces';
+import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 
-export class BusinessMessagesRequestBuilder implements RequestBuilder<BusinessMessagesRequest> {
-  type = BusinessMessages.appType;
+export class GoogleBusinessRequestBuilder implements RequestBuilder<GoogleBusinessRequest> {
+  type = GoogleBusiness.appType;
 
-  async launch(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
+  async launch(json?: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
     return this.launchRequest(json);
   }
 
-  async intent(json?: object): Promise<BusinessMessagesRequest>;
+  async intent(json?: object): Promise<GoogleBusinessRequest>;
   // tslint:disable-next-line:no-any
-  async intent(name?: string, slots?: any): Promise<BusinessMessagesRequest>;
+  async intent(name?: string, slots?: any): Promise<GoogleBusinessRequest>;
   // tslint:disable-next-line:no-any
-  async intent(obj?: any, inputs?: Inputs): Promise<BusinessMessagesRequest> {
+  async intent(obj?: any, inputs?: Inputs): Promise<GoogleBusinessRequest> {
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(obj);
@@ -33,40 +33,40 @@ export class BusinessMessagesRequestBuilder implements RequestBuilder<BusinessMe
     }
   }
 
-  async launchRequest(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
+  async launchRequest(json?: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
     return this.intentRequest(json);
   }
 
-  async intentRequest(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
+  async intentRequest(json?: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
     if (json) {
-      return BusinessMessagesRequest.fromJSON(json);
+      return GoogleBusinessRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
-      return BusinessMessagesRequest.fromJSON(JSON.parse(request))
+      return GoogleBusinessRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
         .setSessionId(Util.randomStr(12));
     }
   }
 
-  async end(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
+  async end(json?: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
     Log.warn(
       'Google Business Messages doesn\'t have a separate request type marking the end of a session.',
     );
     return this.intentRequest(json);
   }
 
-  async audioPlayerRequest(json?: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
+  async audioPlayerRequest(json?: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
     Log.warn('Google Business Messages doesn\'t have audio player requests.');
     return this.intentRequest(json);
   }
 
-  async rawRequest(json: BusinessMessagesBaseRequest): Promise<BusinessMessagesRequest> {
-    return BusinessMessagesRequest.fromJSON(json);
+  async rawRequest(json: GoogleBusinessBaseRequest): Promise<GoogleBusinessRequest> {
+    return GoogleBusinessRequest.fromJSON(json);
   }
 
-  async rawRequestByKey(key: string): Promise<BusinessMessagesRequest> {
+  async rawRequestByKey(key: string): Promise<GoogleBusinessRequest> {
     const req = JSON.stringify(require(getJsonFilePath(key)));
-    return BusinessMessagesRequest.fromJSON(JSON.parse(req));
+    return GoogleBusinessRequest.fromJSON(JSON.parse(req));
   }
 }
 

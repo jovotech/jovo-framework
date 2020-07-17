@@ -6,13 +6,13 @@ import {
   TextResponse,
 } from '../Interfaces';
 
-export class BusinessMessagesResponse implements JovoResponse {
-  static fromJSON(json: string): BusinessMessagesResponse {
+export class GoogleBusinessResponse implements JovoResponse {
+  static fromJSON(json: string): GoogleBusinessResponse {
     if (typeof json === 'string') {
       return JSON.parse(json);
     } else {
-      const businessMessagesResponse = Object.create(BusinessMessagesResponse.prototype);
-      return Object.assign(businessMessagesResponse, json);
+      const googleBusinessResponse = Object.create(GoogleBusinessResponse.prototype);
+      return Object.assign(googleBusinessResponse, json);
     }
   }
 

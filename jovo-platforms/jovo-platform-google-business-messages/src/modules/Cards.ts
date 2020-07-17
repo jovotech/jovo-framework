@@ -1,8 +1,8 @@
 import { Plugin, Util } from 'jovo-core';
-import { BusinessMessages } from '../BusinessMessages';
-import { BusinessMessagesBot } from '../core/BusinessMessagesBot';
-import { BusinessMessagesRequest } from '../core/BusinessMessagesRequest';
-import { BusinessMessagesResponse } from '../core/BusinessMessagesResponse';
+import { GoogleBusiness } from '../GoogleBusiness';
+import { GoogleBusinessBot } from '../core/GoogleBusinessBot';
+import { GoogleBusinessRequest } from '../core/GoogleBusinessRequest';
+import { GoogleBusinessResponse } from '../core/GoogleBusinessResponse';
 import {
   CarouselCard,
   CarouselCardResponse,
@@ -11,33 +11,33 @@ import {
 } from '../Interfaces';
 
 export class Cards implements Plugin {
-  install(businessMessages: BusinessMessages) {
-    businessMessages.middleware('$output')!.use(this.output.bind(this));
+  install(googleBusiness: GoogleBusiness) {
+    googleBusiness.middleware('$output')!.use(this.output.bind(this));
 
     /**
      * Adds carousel to response
      * @public
      * @see https://developers.google.com/business-communications/business-messages/guides/build/send#rich-card-carousels
      * @param {CarouselCard} carousel
-     * @return {BusinessMessagesBot}
+     * @return {GoogleBusinessBot}
      */
-    BusinessMessagesBot.prototype.showCarousel = function (carousel: CarouselCard) {
-      this.$output.BusinessMessages.Carousel = carousel;
+    GoogleBusinessBot.prototype.showCarousel = function (carousel: CarouselCard) {
+      this.$output.GoogleBusiness.Carousel = carousel;
       return this;
     };
 
-    BusinessMessagesBot.prototype.showRichCard = function (richCard: RichCard) {
-      this.$output.BusinessMessages.RichCard = richCard;
+    GoogleBusinessBot.prototype.showRichCard = function (richCard: RichCard) {
+      this.$output.GoogleBusiness.RichCard = richCard;
       return this;
     };
   }
 
-  output(businessMessagesBot: BusinessMessagesBot) {
-    // might have been initialized by BusinessMessagesCore.ts already
-    const response = businessMessagesBot.$response as BusinessMessagesResponse;
+  output(googleBusinessBot: GoogleBusinessBot) {
+    // might have been initialized by GoogleBusinessCore.ts already
+    const response = googleBusinessBot.$response as GoogleBusinessResponse;
 
     if (!response.response) {
-      const request = businessMessagesBot.$request as BusinessMessagesRequest;
+      const request = googleBusinessBot.$request as GoogleBusinessRequest;
       const messageId = Util.randomStr(12);
 
       response.response = {
@@ -49,14 +49,14 @@ export class Cards implements Plugin {
       };
     }
 
-    const carousel = businessMessagesBot.$output.BusinessMessages.Carousel;
+    const carousel = googleBusinessBot.$output.GoogleBusiness.Carousel;
     if (carousel) {
       (response.response as CarouselCardResponse).richCard = {
         carouselCard: carousel,
       };
     }
 
-    const richCard = businessMessagesBot.$output.BusinessMessages.RichCard;
+    const richCard = googleBusinessBot.$output.GoogleBusiness.RichCard;
     if (richCard) {
       (response.response as StandaloneCardResponse).richCard = {
         standaloneCard: richCard,

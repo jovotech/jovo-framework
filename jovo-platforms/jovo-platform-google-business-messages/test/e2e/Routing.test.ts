@@ -2,15 +2,15 @@ import { writeFileSync } from 'fs';
 import { EnumRequestType, HandleRequest, Jovo, SessionConstants, Util } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 import { App, ExpressJS } from 'jovo-framework';
-import { BusinessMessages, BusinessMessagesRequest, BusinessMessagesTestSuite } from '../../src';
-import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';
+import { GoogleBusiness, GoogleBusinessRequest, GoogleBusinessTestSuite } from '../../src';
+import { GoogleBusinessMockNlu } from './helper/GoogleBusinessMockNlu';
 import { clearDbFolder, PATH_TO_DB_DIR, setDbSessionData } from './helper/Utils';
 
-// BusinessMessagesRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
+// GoogleBusinessRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
 process.env.NODE_ENV = 'UNIT_TEST';
 
 let app: App;
-let t: BusinessMessagesTestSuite;
+let t: GoogleBusinessTestSuite;
 jest.setTimeout(550);
 
 /**
@@ -24,16 +24,16 @@ jest.setTimeout(550);
 
 beforeEach(() => {
   app = new App();
-  const businessMessages = new BusinessMessages();
-  businessMessages.response = jest.fn(); // mock function so no actual API calls are made
-  businessMessages.use(new BusinessMessagesMockNlu());
+  const googleBusiness = new GoogleBusiness();
+  googleBusiness.response = jest.fn(); // mock function so no actual API calls are made
+  googleBusiness.use(new GoogleBusinessMockNlu());
   app.use(
-    businessMessages,
+    googleBusiness,
     new FileDb2({
       path: PATH_TO_DB_DIR,
     }),
   );
-  t = businessMessages.makeTestSuite();
+  t = googleBusiness.makeTestSuite();
 });
 
 afterAll(() => {
@@ -48,7 +48,7 @@ describe('test request types', () => {
   //     LAUNCH() {},
   //   });
 
-  //   const launchRequest: BusinessMessagesRequest = await t.requestBuilder.launch();
+  //   const launchRequest: GoogleBusinessRequest = await t.requestBuilder.launch();
   //   app.handle(ExpressJS.dummyRequest(launchRequest));
 
   //   app.on('response', (handleRequest: HandleRequest) => {
@@ -63,7 +63,7 @@ describe('test request types', () => {
       HelloWorldIntent() {},
     });
 
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
     app.handle(ExpressJS.dummyRequest(request));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -79,7 +79,7 @@ describe('test request types', () => {
   //     END() {},
   //   });
 
-  //   const request: BusinessMessagesRequest = await t.requestBuilder.end();
+  //   const request: GoogleBusinessRequest = await t.requestBuilder.end();
   //   app.handle(ExpressJS.dummyRequest(request));
 
   //   app.on('response', (handleRequest: HandleRequest) => {
@@ -100,7 +100,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
       'SessionIntent',
       {},
     );
@@ -120,7 +120,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
       'SessionIntent',
       {},
     );
@@ -146,7 +146,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
       'SessionIntent',
       {},
     );
@@ -172,7 +172,7 @@ describe('test state', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent(
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent(
       'SessionIntent',
       {},
     );
@@ -200,7 +200,7 @@ describe('test toIntent', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -217,7 +217,7 @@ describe('test toIntent', () => {
         this.tell('to intent');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -237,7 +237,7 @@ describe('test toIntent', () => {
         this.tell('to intent after delay');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -258,7 +258,7 @@ describe('test toIntent', () => {
         },
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('IntentA');
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('IntentA');
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'State1',
@@ -283,7 +283,7 @@ describe('test toIntent', () => {
         this.tell('Hello IntentB');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('IntentA');
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('IntentA');
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'State1',
@@ -308,7 +308,7 @@ describe('test toIntent', () => {
         this.tell('Hello IntentB');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -331,7 +331,7 @@ describe('test toIntent', () => {
   //       this.tell('Hello toIntent');
   //     },
   //   });
-  //   const launchRequest: BusinessMessagesRequest = await t.requestBuilder.launch();
+  //   const launchRequest: GoogleBusinessRequest = await t.requestBuilder.launch();
 
   //   app.handle(ExpressJS.dummyRequest(launchRequest));
 
@@ -353,7 +353,7 @@ describe('test toStateIntent', () => {
         },
       }, // tslint:disable-line
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -373,7 +373,7 @@ describe('test toStateIntent', () => {
         },
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -394,7 +394,7 @@ describe('test followUpState', () => {
         IntentA() {},
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -418,7 +418,7 @@ describe('test removeState', () => {
         },
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('IntentA');
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('IntentA');
     // Business Messages integration uses session ID as user ID
     setDbSessionData(intentRequest.getSessionId(), {
       [SessionConstants.STATE]: 'State1',
@@ -435,7 +435,7 @@ describe('test handleOnRequest', () => {
         expect(this.$data.foo).toBe(undefined);
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -453,7 +453,7 @@ describe('test handleOnRequest', () => {
         expect(this.$data.foo).toBe('bar');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -474,7 +474,7 @@ describe('test handleOnRequest', () => {
         expect(this.$data.foo).toBe('bar2');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -495,7 +495,7 @@ describe('test handleOnRequest', () => {
         expect(this.$data.foo).toBe('bar3');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -514,7 +514,7 @@ describe('test handleOnRequest', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -536,7 +536,7 @@ describe('test handleOnRequest', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -553,7 +553,7 @@ describe('test handleOnNewSession', () => {
         expect(this.$data.foo).toBe(undefined);
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -572,7 +572,7 @@ describe('test handleOnNewSession', () => {
         expect(this.$data.foo).toBe(undefined);
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('IntentA');
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('IntentA');
     // session ID of the request and the one in DB have to be the same for NEW_SESSION to be skipped
     const dbJson = {
       userData: {
@@ -603,7 +603,7 @@ describe('test handleOnNewSession', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
@@ -620,7 +620,7 @@ describe('test handleOnNewSession', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -637,7 +637,7 @@ describe('test handleOnNewSession', () => {
         expect(this.$data.foo).toBe('bar3');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -660,7 +660,7 @@ describe('test handleOnNewSession', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -675,7 +675,7 @@ describe('test handleOnNewSession', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -697,7 +697,7 @@ describe('test handleOnNewSession', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -719,7 +719,7 @@ describe('test handleOnNewUser', () => {
         expect(this.$data.foo).toBe(undefined);
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     // add a database entry for the user (same session ID), so NEW_USER won't be triggered
     const dbJson = {
       userData: {
@@ -749,7 +749,7 @@ describe('test handleOnNewUser', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -767,7 +767,7 @@ describe('test handleOnNewUser', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -784,7 +784,7 @@ describe('test handleOnNewUser', () => {
         expect(this.$data.foo).toBe('bar3');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -807,7 +807,7 @@ describe('test handleOnNewUser', () => {
         done();
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -822,7 +822,7 @@ describe('test handleOnNewUser', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -844,7 +844,7 @@ describe('test handleOnNewUser', () => {
         this.tell('LAUNCH');
       },
     });
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
 
     app.handle(ExpressJS.dummyRequest(intentRequest));
     app.on('response', (handleRequest: HandleRequest) => {
@@ -864,7 +864,7 @@ describe('test routing', () => {
     app.config.plugin!.Router!.intentMap = {
       HelloWorldIntent: 'HelloIntent',
     };
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent');
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -884,7 +884,7 @@ describe('test routing', () => {
     app.config.plugin!.Router!.intentMap = {
       HelloWorldIntent: 'HelloIntent',
     };
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('HelloWorldIntent');
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('HelloWorldIntent');
     app.handle(ExpressJS.dummyRequest(request));
   });
 
@@ -897,7 +897,7 @@ describe('test routing', () => {
         done();
       },
     });
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(request));
   });
   test('test getRoute with toIntent', async (done) => {
@@ -915,7 +915,7 @@ describe('test routing', () => {
         done();
       },
     });
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(request));
   });
 
@@ -937,7 +937,7 @@ describe('test routing', () => {
         done();
       },
     });
-    const request: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const request: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(request));
   });
 });
