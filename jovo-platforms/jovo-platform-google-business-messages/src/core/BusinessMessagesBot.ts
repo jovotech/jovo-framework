@@ -5,6 +5,7 @@ import { BusinessMessagesRequest } from './BusinessMessagesRequest';
 import { BusinessMessagesResponse } from './BusinessMessagesResponse';
 import { BusinessMessagesSpeechBuilder } from './BusinessMessagesSpeechBuilder';
 import { BusinessMessagesUser } from './BusinessMessagesUser';
+import { Suggestion } from '../Interfaces';
 
 export class BusinessMessagesBot extends Jovo {
   $businessMessagesBot: BusinessMessagesBot;
@@ -81,5 +82,10 @@ export class BusinessMessagesBot extends Jovo {
 
   getSelectedElementId(): string | undefined {
     return undefined;
+  }
+
+  addSuggestionChips(suggestions: Suggestion[]): this {
+    this.$output.BusinessMessages.Suggestions = suggestions;
+    return this;
   }
 }
