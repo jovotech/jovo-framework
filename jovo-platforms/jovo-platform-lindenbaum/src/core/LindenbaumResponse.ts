@@ -105,7 +105,7 @@ export class LindenbaumResponse implements JovoResponse {
 
   hasState(state: string): boolean {
     Log.warn(
-      "Lindenbaum doesn't parse session data in the request. Please use this.getState() instead and check manually.",
+      "Lindenbaum doesn't parse the state in the request. Please use this.getState() instead and check manually.",
     );
     return false;
   }
