@@ -19,6 +19,7 @@ import { BusinessMessagesResponseBuilder } from './core/BusinessMessagesResponse
 import { BusinessMessagesTestSuite } from './index';
 import { BusinessMessagesCore } from './modules/BusinessMessagesCore';
 import { Cards } from './modules/Cards';
+import { ApiCallOptions, BusinessMessagesAPI } from './services/BusinessMessagesAPI';
 
 export class BusinessMessages extends Platform<BusinessMessagesRequest, BusinessMessagesResponse> {
   static type = 'BusinessMessages';
@@ -142,7 +143,20 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
 
-    // TODO: add API call for response
+    const options: ApiCallOptions = {
+      data: (handleRequest.jovo.$response as BusinessMessagesResponse).response,
+      endpoint: 'https://businessmessages.googleapis.com/v1',
+      path: `/conversations/${handleRequest.jovo.$request?.getSessionId()}/messages`,
+      serviceAccount: this.config.serviceAccount,
+    };
+
+    try {
+      await BusinessMessagesAPI.apiCall(options);
+    } catch (e) {
+      Promise.reject(
+        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages')
+      );
+    }
 
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
