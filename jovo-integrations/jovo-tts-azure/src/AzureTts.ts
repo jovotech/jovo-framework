@@ -10,13 +10,13 @@ import {
   PluginConfig,
   SpeechBuilder,
 } from 'jovo-core';
-import _merge = require('lodash.merge');
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
 export interface Config extends PluginConfig {
-  endpointKey: string;
-  endpointRegion: string;
+  endpointKey?: string;
+  endpointRegion?: string;
   locale?: string;
 }
 
@@ -31,8 +31,10 @@ export class AzureTts implements Plugin {
 
   currentToken?: { value: string; expiresAt: Date };
 
-  constructor(config: Config) {
-    this.config = _merge(this.config, config);
+  constructor(config?: Config) {
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
   }
 
   get name(): string {
@@ -106,6 +108,7 @@ export class AzureTts implements Plugin {
   }
 
   private async textToSpeech(ssml: string): Promise<Buffer> {
+    this.validateConfig();
     await this.updateTokenIfNecessary();
 
     const ssmlContent = SpeechBuilder.removeSpeakTags(ssml);
@@ -132,13 +135,24 @@ export class AzureTts implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       }
-      throw new Error(
-        `Could not retrieve TTS data. status: ${response.status}, data: ${
+      throw new JovoError(
+        `Could not retrieve TTS data!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Response: ${response.status} ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      const configText = `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`;
+      throw new JovoError(
+        e.message || e,
+        ErrorCode.ERR_PLUGIN,
+        e.module || this.name,
+        e.details ? `${e.details}\n${configText}` : configText,
+        e.hint,
+        e.seeMore,
+      );
     }
   }
 
@@ -180,7 +194,19 @@ export class AzureTts implements Plugin {
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      throw new JovoError(e.message || e, ErrorCode.ERR_PLUGIN, this.name);
+    }
+  }
+
+  private validateConfig() {
+    if (!this.config.endpointKey || !this.config.endpointRegion || !this.config.locale) {
+      throw new JovoError(
+        `Invalid configuration!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`,
+        `Make sure 'endpointKey', 'endpointRegion' and 'locale' are set and valid.`,
+      );
     }
   }
 }

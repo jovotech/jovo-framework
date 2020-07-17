@@ -39,5 +39,3 @@ platform.use(
 	})
 );
 ```
-
-> The configuration has to be passed to the constructor of `LuisNlu`. Setting the configuration inside the `config`-file does not work.

@@ -1,3 +1,4 @@
+import { promises, readdir, readFileSync } from 'fs';
 import {
   EnumRequestType,
   ErrorCode,
@@ -11,13 +12,13 @@ import {
   PluginConfig,
   Project,
 } from 'jovo-core';
+import { NativeFileInformation } from 'jovo-model';
+import { JovoModelNlpjs } from 'jovo-model-nlpjs';
+import * as path from 'path';
 import { NlpjsEntity, NlpjsResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 import ErrnoException = NodeJS.ErrnoException;
-import * as path from 'path';
-import { JovoModelNlpjs } from 'jovo-model-nlpjs';
-import { NativeFileInformation } from 'jovo-model';
-import { promises, readdir, readFileSync } from 'fs';
+
 const { Nlp } = require('@nlpjs/nlp');
 const { Ner } = require('@nlpjs/ner');
 
@@ -82,8 +83,6 @@ export class NlpjsNlu implements Plugin {
     if (handleRequest.host.hasWriteFileAccess) {
       this.nlp.container.register('fs', promises);
     }
-
-    // this.nlp = new NlpManager({ languages: ['en'], nlu: { log: false } }); // <== from the docs
 
     if (this.config.setupModelCallback) {
       await this.config.setupModelCallback(handleRequest, this.nlp);
@@ -162,6 +161,7 @@ export class NlpjsNlu implements Plugin {
     await this.nlp.train();
     await this.nlp.load(this.config.preTrainedModelFilePath);
   }
+
   private addCorpus(dir: string) {
     return new Promise((resolve, reject) => {
       readdir(dir, (err: ErrnoException | null, files: string[]) => {

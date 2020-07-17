@@ -43,5 +43,3 @@ platform.use(
 	})
 );
 ```
-
-> The configuration has to be passed to the constructor of `PollyTts`. Setting the configuration inside the `config`-file does not work.

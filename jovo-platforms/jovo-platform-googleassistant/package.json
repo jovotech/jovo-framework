@@ -22,7 +22,6 @@
     "lodash.sample": "^4.2.1",
     "lodash.set": "^4.3.2",
     "lodash.unionwith": "^4.6.0",
-    "lodash.zip": "^4.2.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -30,7 +29,6 @@
     "@types/lodash.clonedeep": "^4.5.4",
     "@types/lodash.find": "^4.6.6",
     "@types/lodash.unionwith": "^4.6.6",
-    "@types/lodash.zip": "^4.2.6",
     "@types/node": "^10.3.1",
     "googleapis": "^42.0.0",
     "jest": "^25.1.0",
