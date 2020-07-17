@@ -154,7 +154,7 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
       await BusinessMessagesAPI.apiCall(options);
     } catch (e) {
       Promise.reject(
-        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages')
+        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages'),
       );
     }
 

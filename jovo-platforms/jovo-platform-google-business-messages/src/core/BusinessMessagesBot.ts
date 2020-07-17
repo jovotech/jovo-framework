@@ -1,11 +1,11 @@
 import { BaseApp, HandleRequest, Host, Jovo, Log } from 'jovo-core';
 
 import { BusinessMessages } from '../BusinessMessages';
+import { Suggestion } from '../Interfaces';
 import { BusinessMessagesRequest } from './BusinessMessagesRequest';
 import { BusinessMessagesResponse } from './BusinessMessagesResponse';
 import { BusinessMessagesSpeechBuilder } from './BusinessMessagesSpeechBuilder';
 import { BusinessMessagesUser } from './BusinessMessagesUser';
-import { Suggestion } from '../Interfaces';
 
 export class BusinessMessagesBot extends Jovo {
   $businessMessagesBot: BusinessMessagesBot;
