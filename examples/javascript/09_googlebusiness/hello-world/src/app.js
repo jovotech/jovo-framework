@@ -6,20 +6,20 @@
 
 const { App } = require('jovo-framework');
 const { JovoDebugger } = require('jovo-plugin-debugger');
-const { BusinessMessages } = require('jovo-platform-google-business-messages');
+const { GoogleBusiness } = require('jovo-platform-googlebusiness');
 const { FileDb } = require('jovo-db-filedb');
 const { NlpjsNlu } = require('jovo-nlu-nlpjs');
 
 const app = new App();
 
-const businessMessages = new BusinessMessages();
-businessMessages.use(
+const googleBusiness = new GoogleBusiness();
+googleBusiness.use(
     new NlpjsNlu({
         languages: ['en'],
     }),
 )
 app.use(
-    businessMessages,
+    googleBusiness,
     new JovoDebugger(),
     new FileDb()
 );

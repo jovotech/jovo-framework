@@ -1,27 +1,27 @@
 import { TestSuite } from 'jovo-core';
-import { BusinessMessagesBot } from './core/BusinessMessagesBot';
-import { BusinessMessagesRequestBuilder } from './core/BusinessMessagesRequestBuilder';
-import { BusinessMessagesResponseBuilder } from './core/BusinessMessagesResponseBuilder';
+import { GoogleBusinessBot } from './core/GoogleBusinessBot';
+import { GoogleBusinessRequestBuilder } from './core/GoogleBusinessRequestBuilder';
+import { GoogleBusinessResponseBuilder } from './core/GoogleBusinessResponseBuilder';
 import { CarouselCard, RichCard, Suggestion } from './Interfaces';
 
-export interface BusinessMessagesTestSuite
-  extends TestSuite<BusinessMessagesRequestBuilder, BusinessMessagesResponseBuilder> {}
+export interface GoogleBusinessTestSuite
+  extends TestSuite<GoogleBusinessRequestBuilder, GoogleBusinessResponseBuilder> {}
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
-    $businessMessagesBot?: BusinessMessagesBot;
-    businessMessagesBot(): BusinessMessagesBot;
+    $googleBusinessBot?: GoogleBusinessBot;
+    googleBusinessBot(): GoogleBusinessBot;
   }
 }
 
-declare module './core/BusinessMessagesBot' {
-  interface BusinessMessagesBot {
+declare module './core/GoogleBusinessBot' {
+  interface GoogleBusinessBot {
     /**
      * Adds carousel to response
      * @public
      * @see https://developers.google.com/business-communications/business-messages/guides/build/send#rich-card-carousels
      * @param {CarouselCard} carousel
-     * @return {BusinessMessagesBot}
+     * @return {GoogleBusinessBot}
      */
     showCarousel(carousel: CarouselCard): this;
     showRichCard(card: RichCard): this;
@@ -30,7 +30,7 @@ declare module './core/BusinessMessagesBot' {
 
 declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
-    BusinessMessages: {
+    GoogleBusiness: {
       Suggestions?: Suggestion[];
       Carousel?: CarouselCard;
       RichCard?: RichCard;
@@ -38,10 +38,10 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 }
 
-export { BusinessMessages } from './BusinessMessages';
+export { GoogleBusiness } from './GoogleBusiness';
 export * from './Interfaces';
-export * from './core/BusinessMessagesBot';
-export * from './core/BusinessMessagesRequest';
-export * from './core/BusinessMessagesResponse';
-export * from './core/BusinessMessagesSpeechBuilder';
-export * from './core/BusinessMessagesUser';
+export * from './core/GoogleBusinessBot';
+export * from './core/GoogleBusinessRequest';
+export * from './core/GoogleBusinessResponse';
+export * from './core/GoogleBusinessSpeechBuilder';
+export * from './core/GoogleBusinessUser';

@@ -1,15 +1,15 @@
 import { HandleRequest } from 'jovo-core';
 import { FileDb2 } from 'jovo-db-filedb';
 import { App, ExpressJS } from 'jovo-framework';
-import { BusinessMessages, BusinessMessagesRequest, BusinessMessagesTestSuite } from '../../src';
-import { BusinessMessagesMockNlu } from './helper/BusinessMessagesMockNlu';
+import { GoogleBusiness, GoogleBusinessRequest, GoogleBusinessTestSuite } from '../../src';
+import { GoogleBusinessMockNlu } from './helper/GoogleBusinessMockNlu';
 import { clearDbFolder, PATH_TO_DB_DIR } from './helper/Utils';
 
-// BusinessMessagesRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
+// GoogleBusinessRequest can be used to add NLU data only if the NODE_ENV is set to "UNIT_TEST"
 process.env.NODE_ENV = 'UNIT_TEST';
 
 let app: App;
-let t: BusinessMessagesTestSuite;
+let t: GoogleBusinessTestSuite;
 jest.setTimeout(550);
 
 /**
@@ -22,16 +22,16 @@ jest.setTimeout(550);
  */
 beforeEach(() => {
   app = new App();
-  const businessMessages = new BusinessMessages();
-  businessMessages.response = jest.fn(); // mock function so no actual API calls are made
-  businessMessages.use(new BusinessMessagesMockNlu());
+  const googleBusiness = new GoogleBusiness();
+  googleBusiness.response = jest.fn(); // mock function so no actual API calls are made
+  googleBusiness.use(new GoogleBusinessMockNlu());
   app.use(
-    businessMessages,
+    googleBusiness,
     new FileDb2({
       path: PATH_TO_DB_DIR,
     }),
   );
-  t = businessMessages.makeTestSuite();
+  t = googleBusiness.makeTestSuite();
 });
 
 afterAll(() => {
@@ -46,7 +46,7 @@ describe('test tell', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -63,7 +63,7 @@ describe('test tell', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -79,7 +79,7 @@ describe('test tell', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -97,7 +97,7 @@ describe('test ask', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -115,7 +115,7 @@ describe('test ask', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -134,7 +134,7 @@ describe('test ask', () => {
       },
     });
 
-    const intentRequest: BusinessMessagesRequest = await t.requestBuilder.intent('TestIntent', {});
+    const intentRequest: GoogleBusinessRequest = await t.requestBuilder.intent('TestIntent', {});
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {

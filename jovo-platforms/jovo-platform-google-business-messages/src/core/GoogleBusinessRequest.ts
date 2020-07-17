@@ -1,20 +1,20 @@
 import { Input, Inputs, JovoRequest, Log, SessionData } from 'jovo-core';
 
-import { BusinessMessagesBaseRequest, BusinessMessagesMessageRequest } from '../Interfaces';
+import { GoogleBusinessBaseRequest, GoogleBusinessMessageRequest } from '../Interfaces';
 
-export class BusinessMessagesRequest implements JovoRequest {
-  static fromJSON(json: BusinessMessagesBaseRequest | string): BusinessMessagesRequest {
+export class GoogleBusinessRequest implements JovoRequest {
+  static fromJSON(json: GoogleBusinessBaseRequest | string): GoogleBusinessRequest {
     if (typeof json === 'string') {
-      return JSON.parse(json, BusinessMessagesRequest.reviver);
+      return JSON.parse(json, GoogleBusinessRequest.reviver);
     } else {
-      const corePlatformRequest = Object.create(BusinessMessagesRequest.prototype);
+      const corePlatformRequest = Object.create(GoogleBusinessRequest.prototype);
       return Object.assign(corePlatformRequest, json);
     }
   }
 
   // tslint:disable-next-line:no-any
   static reviver(key: string, value: any): any {
-    return key === '' ? BusinessMessagesRequest.fromJSON(value) : value;
+    return key === '' ? GoogleBusinessRequest.fromJSON(value) : value;
   }
 
   // https://developers.google.com/business-communications/business-messages/reference/rest/v1/UserMessage
@@ -63,7 +63,7 @@ export class BusinessMessagesRequest implements JovoRequest {
     this.sendTime = '';
   }
 
-  toJSON(): BusinessMessagesBaseRequest {
+  toJSON(): GoogleBusinessBaseRequest {
     return Object.assign({}, this);
   }
 
@@ -256,7 +256,7 @@ export class BusinessMessagesRequest implements JovoRequest {
       return this.nlu?.intentName || '';
     } else {
       Log.warn(
-        'Google Business Messages doesn\'t parse an intent in the request. Please use $businessMessagesBot.$nlu.intent.name to get the intent name',
+        'Google Business Messages doesn\'t parse an intent in the request. Please use $googleBusinessBot.$nlu.intent.name to get the intent name',
       );
       return '';
     }
