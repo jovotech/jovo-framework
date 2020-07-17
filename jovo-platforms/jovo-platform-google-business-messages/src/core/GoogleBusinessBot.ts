@@ -1,26 +1,26 @@
 import { BaseApp, HandleRequest, Host, Jovo, Log } from 'jovo-core';
 
-import { BusinessMessages } from '../BusinessMessages';
+import { GoogleBusiness } from '../GoogleBusiness';
 import { Suggestion } from '../Interfaces';
-import { BusinessMessagesRequest } from './BusinessMessagesRequest';
-import { BusinessMessagesResponse } from './BusinessMessagesResponse';
-import { BusinessMessagesSpeechBuilder } from './BusinessMessagesSpeechBuilder';
-import { BusinessMessagesUser } from './BusinessMessagesUser';
+import { GoogleBusinessRequest } from './GoogleBusinessRequest';
+import { GoogleBusinessResponse } from './GoogleBusinessResponse';
+import { GoogleBusinessSpeechBuilder } from './GoogleBusinessSpeechBuilder';
+import { GoogleBusinessUser } from './GoogleBusinessUser';
 
-export class BusinessMessagesBot extends Jovo {
-  $businessMessagesBot: BusinessMessagesBot;
-  $user: BusinessMessagesUser;
+export class GoogleBusinessBot extends Jovo {
+  $googleBusinessBot: GoogleBusinessBot;
+  $user: GoogleBusinessUser;
 
   constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest) {
     super(app, host, handleRequest);
-    this.$businessMessagesBot = this;
-    this.$response = new BusinessMessagesResponse();
-    this.$speech = new BusinessMessagesSpeechBuilder(this);
+    this.$googleBusinessBot = this;
+    this.$response = new GoogleBusinessResponse();
+    this.$speech = new GoogleBusinessSpeechBuilder(this);
     // $reprompt object has to be added even if the platform doesn't use it.
     // Is used by users as platform independent feature
-    this.$reprompt = new BusinessMessagesSpeechBuilder(this);
-    this.$user = new BusinessMessagesUser(this);
-    this.$output.BusinessMessages = {};
+    this.$reprompt = new GoogleBusinessSpeechBuilder(this);
+    this.$user = new GoogleBusinessUser(this);
+    this.$output.GoogleBusiness = {};
   }
 
   isNewSession(): boolean {
@@ -43,11 +43,11 @@ export class BusinessMessagesBot extends Jovo {
     return this.$request!.hasVideoInterface();
   }
 
-  getSpeechBuilder(): BusinessMessagesSpeechBuilder {
-    return new BusinessMessagesSpeechBuilder(this);
+  getSpeechBuilder(): GoogleBusinessSpeechBuilder {
+    return new GoogleBusinessSpeechBuilder(this);
   }
 
-  speechBuilder(): BusinessMessagesSpeechBuilder {
+  speechBuilder(): GoogleBusinessSpeechBuilder {
     return this.getSpeechBuilder();
   }
 
@@ -57,7 +57,7 @@ export class BusinessMessagesBot extends Jovo {
   }
 
   getRawText(): string | undefined {
-    return (this.$request! as BusinessMessagesRequest).getRawText();
+    return (this.$request! as GoogleBusinessRequest).getRawText();
   }
 
   getAudioData(): undefined {
@@ -73,11 +73,11 @@ export class BusinessMessagesBot extends Jovo {
   }
 
   getType(): string | undefined {
-    return BusinessMessages.appType;
+    return GoogleBusiness.appType;
   }
 
   getPlatformType(): string {
-    return BusinessMessages.type;
+    return GoogleBusiness.type;
   }
 
   getSelectedElementId(): string | undefined {
@@ -85,7 +85,7 @@ export class BusinessMessagesBot extends Jovo {
   }
 
   addSuggestionChips(suggestions: Suggestion[]): this {
-    this.$output.BusinessMessages.Suggestions = suggestions;
+    this.$output.GoogleBusiness.Suggestions = suggestions;
     return this;
   }
 }

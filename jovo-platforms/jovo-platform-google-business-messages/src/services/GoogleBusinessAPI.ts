@@ -3,7 +3,7 @@ import { AxiosRequestConfig, ErrorCode, HttpService, JovoError, Method } from 'j
 
 import { GoogleServiceAccount } from '../Interfaces';
 
-export class BusinessMessagesAPI {
+export class GoogleBusinessAPI {
   static async apiCall(options: ApiCallOptions) {
     const token = await this.getApiAccessToken(options.serviceAccount);
 
@@ -35,7 +35,7 @@ export class BusinessMessagesAPI {
       return token.access_token;
     } catch (e) {
       return Promise.reject(
-        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages'),
+        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-googlebusiness'),
       );
     }
   }

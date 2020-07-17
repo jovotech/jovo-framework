@@ -1,4 +1,4 @@
-export interface BusinessMessagesBaseRequest {
+export interface GoogleBusinessBaseRequest {
   agent: string;
   conversationId: string;
   customAgentId: string;
@@ -13,7 +13,7 @@ export interface BusinessMessagesBaseRequest {
   sendTime: string; // RFC3339 UTC "Zulu" format
 }
 
-export interface BusinessMessagesMessageRequest extends BusinessMessagesBaseRequest {
+export interface GoogleBusinessMessageRequest extends GoogleBusinessBaseRequest {
   message: {
     messageId: string;
     name: string;
@@ -22,7 +22,7 @@ export interface BusinessMessagesMessageRequest extends BusinessMessagesBaseRequ
   };
 }
 
-export interface BusinessMessagesSuggestionRequest extends BusinessMessagesBaseRequest {
+export interface GoogleBusinessSuggestionRequest extends GoogleBusinessBaseRequest {
   suggestionResponse: {
     message: string;
     postbackData: string;

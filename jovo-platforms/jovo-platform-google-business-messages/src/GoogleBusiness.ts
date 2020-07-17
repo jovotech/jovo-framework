@@ -11,19 +11,19 @@ import {
 } from 'jovo-core';
 import _merge = require('lodash.merge');
 
-import { BusinessMessagesBot } from './core/BusinessMessagesBot';
-import { BusinessMessagesRequest } from './core/BusinessMessagesRequest';
-import { BusinessMessagesRequestBuilder } from './core/BusinessMessagesRequestBuilder';
-import { BusinessMessagesResponse } from './core/BusinessMessagesResponse';
-import { BusinessMessagesResponseBuilder } from './core/BusinessMessagesResponseBuilder';
-import { BusinessMessagesTestSuite } from './index';
-import { BusinessMessagesCore } from './modules/BusinessMessagesCore';
+import { GoogleBusinessBot } from './core/GoogleBusinessBot';
+import { GoogleBusinessRequest } from './core/GoogleBusinessRequest';
+import { GoogleBusinessRequestBuilder } from './core/GoogleBusinessRequestBuilder';
+import { GoogleBusinessResponse } from './core/GoogleBusinessResponse';
+import { GoogleBusinessResponseBuilder } from './core/GoogleBusinessResponseBuilder';
+import { GoogleBusinessTestSuite } from './index';
 import { Cards } from './modules/Cards';
-import { ApiCallOptions, BusinessMessagesAPI } from './services/BusinessMessagesAPI';
+import { GoogleBusinessCore } from './modules/GoogleBusinessCore';
+import { ApiCallOptions, GoogleBusinessAPI } from './services/GoogleBusinessAPI';
 
-export class BusinessMessages extends Platform<BusinessMessagesRequest, BusinessMessagesResponse> {
-  static type = 'BusinessMessages';
-  static appType = 'BusinessMessagesBot';
+export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusinessResponse> {
+  static type = 'GoogleBusiness';
+  static appType = 'GoogleBusinessBot';
 
   constructor(config?: ExtensibleConfig) {
     super(config);
@@ -51,7 +51,7 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
   }
 
   getAppType(): string {
-    return BusinessMessages.appType;
+    return GoogleBusiness.appType;
   }
 
   install(app: BaseApp) {
@@ -71,26 +71,26 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
 
-    this.use(new BusinessMessagesCore(), new Cards());
+    this.use(new GoogleBusinessCore(), new Cards());
 
-    Jovo.prototype.$businessMessagesBot = undefined;
-    Jovo.prototype.businessMessagesBot = function () {
-      if (this.constructor.name !== BusinessMessages.appType) {
+    Jovo.prototype.$googleBusinessBot = undefined;
+    Jovo.prototype.googleBusinessBot = function () {
+      if (this.constructor.name !== GoogleBusiness.appType) {
         throw new JovoError(
           `Can't handle request. Please use this.isLindenbaumBot()`,
           ErrorCode.ERR_PLUGIN,
           'jovo-platform-lindenbaum',
         );
       }
-      return this as BusinessMessagesBot;
+      return this as GoogleBusinessBot;
     };
   }
 
   async initialize(handleRequest: HandleRequest) {
-    handleRequest.platformClazz = BusinessMessages;
+    handleRequest.platformClazz = GoogleBusiness;
     await this.middleware('$init')!.run(handleRequest);
 
-    if (handleRequest.jovo?.constructor.name !== BusinessMessages.appType) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
 
@@ -107,7 +107,7 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
   }
 
   async nlu(handleRequest: HandleRequest) {
-    if (handleRequest.jovo?.constructor.name !== BusinessMessages.appType) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
 
@@ -124,47 +124,44 @@ export class BusinessMessages extends Platform<BusinessMessagesRequest, Business
   }
 
   async tts(handleRequest: HandleRequest) {
-    if (handleRequest.jovo?.constructor.name !== BusinessMessages.appType) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
     await this.middleware('$tts')!.run(handleRequest.jovo);
   }
 
   async output(handleRequest: HandleRequest) {
-    if (handleRequest.jovo?.constructor.name !== BusinessMessages.appType) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
     await this.middleware('$output')!.run(handleRequest.jovo);
   }
 
   async response(handleRequest: HandleRequest) {
-    if (handleRequest.jovo?.constructor.name !== BusinessMessages.appType) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
 
     const options: ApiCallOptions = {
-      data: (handleRequest.jovo.$response as BusinessMessagesResponse).response,
+      data: (handleRequest.jovo.$response as GoogleBusinessResponse).response,
       endpoint: 'https://businessmessages.googleapis.com/v1',
       path: `/conversations/${handleRequest.jovo.$request?.getSessionId()}/messages`,
       serviceAccount: this.config.serviceAccount,
     };
 
     try {
-      await BusinessMessagesAPI.apiCall(options);
+      await GoogleBusinessAPI.apiCall(options);
     } catch (e) {
       Promise.reject(
-        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages'),
+        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-googlebusiness'),
       );
     }
 
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 
-  makeTestSuite(): BusinessMessagesTestSuite {
-    return new TestSuite(
-      new BusinessMessagesRequestBuilder(),
-      new BusinessMessagesResponseBuilder(),
-    );
+  makeTestSuite(): GoogleBusinessTestSuite {
+    return new TestSuite(new GoogleBusinessRequestBuilder(), new GoogleBusinessResponseBuilder());
   }
 }

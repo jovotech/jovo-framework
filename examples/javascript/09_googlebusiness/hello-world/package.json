@@ -1,5 +1,5 @@
 {
-  "name": "jovo-examples-google-business-messages-hello-world",
+  "name": "jovo-examples-googlebusiness-hello-world",
   "version": "3.0.21",
   "private": true,
   "description": "",
@@ -18,7 +18,7 @@
     "jovo-db-filedb": "^3.0.17",
     "jovo-nlu-nlpjs": "^3.0.12-alpha.0",
     "jovo-framework": "^3.0.18",
-    "jovo-platform-google-business-messages": "^3.0.19",
+    "jovo-platform-googlebusiness": "^3.0.19",
     "jovo-plugin-debugger": "^3.0.16"
   }
 }
