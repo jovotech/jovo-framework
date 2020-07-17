@@ -154,7 +154,7 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
       await GoogleBusinessAPI.apiCall(options);
     } catch (e) {
       Promise.reject(
-        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-google-business-messages'),
+        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-googlebusiness'),
       );
     }
 

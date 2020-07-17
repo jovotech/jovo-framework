@@ -36,7 +36,7 @@ export class GoogleBusinessCore implements Plugin {
       throw new JovoError(
         'Couldn\'t access $host object',
         ErrorCode.ERR_PLUGIN,
-        'jovo-platform-google-business-messages',
+        'jovo-platform-googlebusiness',
         'The $host object is necessary to initialize both $request and $user',
       );
     }
