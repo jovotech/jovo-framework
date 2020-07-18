@@ -14,7 +14,7 @@ Thank you to all our existing sponsors and supporters! <3
 
 ## Platinum Sponsors
 
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/gold-sponsors.svg?avatarHeight=75&width=600" /></a>
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/platinum-sponsors.svg?avatarHeight=75&width=600" /></a>
 * [Spokestack](https://www.spokestack.io/)
 
 
