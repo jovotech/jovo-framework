@@ -6,7 +6,7 @@ import { GoogleBusiness } from '../GoogleBusiness';
 import {
   CarouselCard,
   CarouselCardResponse,
-  RichCard,
+  StandaloneCard,
   StandaloneCardResponse,
 } from '../Interfaces';
 
@@ -26,14 +26,17 @@ export class Cards implements Plugin {
       return this;
     };
 
-    GoogleBusinessBot.prototype.showRichCard = function (richCard: RichCard) {
-      this.$output.GoogleBusiness.RichCard = richCard;
+    GoogleBusinessBot.prototype.showStandaloneCard = function (card: StandaloneCard) {
+      this.$output.GoogleBusiness.StandaloneCard = card;
       return this;
     };
   }
 
-  output(googleBusinessBot: GoogleBusinessBot) {
+  async output(googleBusinessBot: GoogleBusinessBot) {
     // might have been initialized by GoogleBusinessCore.ts already
+    if (!googleBusinessBot.$response) {
+      googleBusinessBot.$response = new GoogleBusinessResponse();
+    }
     const response = googleBusinessBot.$response as GoogleBusinessResponse;
 
     if (!response.response) {
@@ -56,10 +59,10 @@ export class Cards implements Plugin {
       };
     }
 
-    const richCard = googleBusinessBot.$output.GoogleBusiness.RichCard;
-    if (richCard) {
+    const standaloneCard = googleBusinessBot.$output.GoogleBusiness.StandaloneCard;
+    if (standaloneCard) {
       (response.response as StandaloneCardResponse).richCard = {
-        standaloneCard: richCard,
+        standaloneCard,
       };
     }
   }
