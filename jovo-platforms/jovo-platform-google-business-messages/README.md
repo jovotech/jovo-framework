@@ -14,7 +14,7 @@ Learn how to build your Google Business Messages bot with the Jovo Framework.
 
 ## Getting Started
 
-[Google Business Messages](https://developers.google.com/business-communications/business-messages) allows the user to chat with a business within Google Maps and Search. It is an asynchronous chat platform where business can either let a bot answer or a customer service worker. The platform doesn't provide a built-in NLU, so you are free to choose one of the many integrations in the [Jovo Marketplace](https://www.jovo.tech/marketplace/tag/nlu).
+[Google Business Messages](https://developers.google.com/business-communications/business-messages) allows the user to chat with a business within Google Maps and Search. It is an asynchronous chat platform where businesses can either let a bot answer or a customer service worker. The platform doesn't provide a built-in NLU, so you are free to choose one of the many integrations in the [Jovo Marketplace](https://www.jovo.tech/marketplace/tag/nlu).
 
 ## Installation
 
@@ -104,11 +104,11 @@ if (this.$googleBusinessBot) {
 
 ### LAUNCH and END Intent
 
-Sadly, the Google Business Messages doesn't provide a separate request to mark the start and end of an session. Therefore, both the LAUNCH and END intent are not usable.
+Sadly, the Google Business Messages don't provide a separate request to mark the start and end of a session. Therefore, both the LAUNCH and END intent are not usable.
 
 ## Requests
 
-The integration currenlty supports two different request types. First, the standard text request:
+The integration currently supports two different request types. First, the standard text request:
 
 ```js
 {
@@ -247,7 +247,7 @@ Second, the carousel card using `showCarousel(carousel)`:
 // @language=javascript
 
 this.$googleBusinessBot.showRichCard({
-  cardWith: 'MEDIUM',
+  cardWidth: 'MEDIUM',
   cardContents: [
     {
       title: 'Test Title',
@@ -278,7 +278,7 @@ this.$googleBusinessBot.showRichCard({
 // @language=typescript
 
 this.$googleBusinessBot!.showRichCard({
-  cardWith: 'MEDIUM',
+  cardWidth: 'MEDIUM',
   cardContents: [
     {
       title: 'Test Title',
