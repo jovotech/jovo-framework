@@ -32,8 +32,11 @@ export class Cards implements Plugin {
     };
   }
 
-  output(googleBusinessBot: GoogleBusinessBot) {
+  async output(googleBusinessBot: GoogleBusinessBot) {
     // might have been initialized by GoogleBusinessCore.ts already
+    if (!googleBusinessBot.$response) {
+      googleBusinessBot.$response = new GoogleBusinessResponse();
+    }
     const response = googleBusinessBot.$response as GoogleBusinessResponse;
 
     if (!response.response) {
