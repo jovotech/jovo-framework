@@ -77,12 +77,16 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     Jovo.prototype.googleBusinessBot = function () {
       if (this.constructor.name !== GoogleBusiness.appType) {
         throw new JovoError(
-          `Can't handle request. Please use this.isLindenbaumBot()`,
+          `Can't handle request. Please use this.isGoogleBusinessBot()`,
           ErrorCode.ERR_PLUGIN,
-          'jovo-platform-lindenbaum',
+          'jovo-platform-googlebusiness',
         );
       }
       return this as GoogleBusinessBot;
+    };
+
+    Jovo.prototype.isGoogleBusinessBot = function () {
+      return this.constructor.name === GoogleBusiness.appType;
     };
   }
 

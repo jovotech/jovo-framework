@@ -11,6 +11,7 @@ declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $googleBusinessBot?: GoogleBusinessBot;
     googleBusinessBot(): GoogleBusinessBot;
+    isGoogleBusinessBot(): boolean;
   }
 }
 
