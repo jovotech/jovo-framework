@@ -78,11 +78,11 @@ export interface TextResponse extends BaseResponse {
 
 export interface StandaloneCardResponse extends BaseResponse {
   richCard: {
-    standaloneCard: RichCard;
+    standaloneCard: StandaloneCard;
   };
 }
 
-export interface RichCard {
+export interface StandaloneCard {
   cardContent: Card;
 }
 

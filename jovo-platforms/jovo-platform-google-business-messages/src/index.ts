@@ -2,7 +2,7 @@ import { TestSuite } from 'jovo-core';
 import { GoogleBusinessBot } from './core/GoogleBusinessBot';
 import { GoogleBusinessRequestBuilder } from './core/GoogleBusinessRequestBuilder';
 import { GoogleBusinessResponseBuilder } from './core/GoogleBusinessResponseBuilder';
-import { CarouselCard, RichCard, Suggestion } from './Interfaces';
+import { CarouselCard, StandaloneCard, Suggestion } from './Interfaces';
 
 export interface GoogleBusinessTestSuite
   extends TestSuite<GoogleBusinessRequestBuilder, GoogleBusinessResponseBuilder> {}
@@ -25,7 +25,7 @@ declare module './core/GoogleBusinessBot' {
      * @return {GoogleBusinessBot}
      */
     showCarousel(carousel: CarouselCard): this;
-    showRichCard(card: RichCard): this;
+    showStandaloneCard(card: StandaloneCard): this;
   }
 }
 
@@ -34,7 +34,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
     GoogleBusiness: {
       Suggestions?: Suggestion[];
       Carousel?: CarouselCard;
-      RichCard?: RichCard;
+      StandaloneCard?: StandaloneCard;
     };
   }
 }

@@ -179,12 +179,12 @@ Name | Description | Return Value
 
 Besides the generic text response using [`ask()`](https://www.jovo.tech/docs/output#ask), you can also add cards to your responses.
 
-First, the standalone card using the `showRichCard(card)` method:
+First, the standalone card using the `showStandaloneCard(card)` method:
 
 ```js
 // @language=javascript
 
-this.$googleBusinessBot.showRichCard({
+this.$googleBusinessBot.showStandaloneCard({
   cardContent: {
     title: 'Test Title',
     description: 'test description',
@@ -212,7 +212,7 @@ this.$googleBusinessBot.showRichCard({
 
 // @language=typescript
 
-this.$googleBusinessBot!.showRichCard({
+this.$googleBusinessBot!.showStandaloneCard({
   cardContent: {
     title: 'Test Title',
     description: 'test description',
