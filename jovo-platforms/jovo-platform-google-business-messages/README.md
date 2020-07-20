@@ -246,7 +246,7 @@ Second, the carousel card using `showCarousel(carousel)`:
 ```javascript
 // @language=javascript
 
-this.$googleBusinessBot.showRichCard({
+this.$googleBusinessBot.showCarousel({
   cardWidth: 'MEDIUM',
   cardContents: [
     {
@@ -277,7 +277,7 @@ this.$googleBusinessBot.showRichCard({
 
 // @language=typescript
 
-this.$googleBusinessBot!.showRichCard({
+this.$googleBusinessBot!.showCarousel({
   cardWidth: 'MEDIUM',
   cardContents: [
     {
