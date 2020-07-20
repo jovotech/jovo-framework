@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-progressive-response",
-  "version": "3.0.22",
+  "version": "3.0.23",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.0.19",
-    "jovo-platform-alexa": "^3.0.22"
+    "jovo-framework": "^3.0.20",
+    "jovo-platform-alexa": "^3.0.23"
   }
 }
