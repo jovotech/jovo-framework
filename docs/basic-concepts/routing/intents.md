@@ -90,7 +90,7 @@ You can learn more about Jovo standard intents in the following sections:
 * [NEW_USER Intent](#new_user-intent)
 * [ON_REQUEST Intent](#on_request-intent)
 * [END Intent](#end-intent)
-* [Unhandled Intent](#unhandled-intent)
+* [Unhandled Intent](#unhandled)
 
 ### LAUNCH
 
