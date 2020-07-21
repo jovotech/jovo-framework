@@ -21,7 +21,7 @@ Learn how to build your Google Business Messages bot with the Jovo Framework.
 Install the module:
 
 ```sh
-$ npm install jovo-platform-gogolebusiness --save
+$ npm install jovo-platform-googlebusiness --save
 ```
 
 Import the installed module, initialize and add it to the `app` object:
