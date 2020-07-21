@@ -168,4 +168,35 @@ export class AlexaSpeechBuilder extends SpeechBuilder {
     surroundSsml['amazon:emotion'] = { name, intensity };
     return this.addText(text, parsed.condition, parsed.probability, surroundSsml);
   }
+
+  addAudio(
+    url: string | string[],
+    textOrConditionOrProbability?: string | string[] | boolean | number,
+  ): this;
+  addAudio(
+    url: string | string[],
+    text?: string | string[],
+    conditionOrProbability?: boolean | number,
+  ): this;
+  addAudio(url: string | string[], condition?: boolean, probability?: number): this;
+  addAudio(
+    url: string | string[],
+    text?: string | string[],
+    condition?: boolean,
+    probability?: number,
+  ): this;
+  addAudio(
+    url: string | string[],
+    textOrConditionOrProbability?: string | string[] | boolean | number,
+    conditionOrProbability?: boolean | number,
+    probability?: number,
+  ): this {
+    const parsed = this.parseAudioArguments(
+      url,
+      textOrConditionOrProbability,
+      conditionOrProbability,
+      probability,
+    );
+    return super.addAudio(url, undefined, parsed.condition, parsed.probability);
+  }
 }
