@@ -2,6 +2,16 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+## 3.0.20 (2020-05-28)
+
+#### :nail_care: Enhancements
+ * `jovo-platform-bixby` [#742](https://github.com/jovotech/jovo-framework/pull/742) Add _JOVO_TEXT_ to return non SSML text ([@KaanKC](https://github.com/KaanKC))  
+
+ #### Committers: 3
+- Mark Tucker ([@rmtuckerphx](https://github.com/rmtuckerphx))
+
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

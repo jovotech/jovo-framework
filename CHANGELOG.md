@@ -1,6 +1,40 @@
 # Jovo Framework Changelog
 
 
+## 3.0.20 (2020-07-21)
+
+#### :sparkles: New Features
+ * `jovo-platform-googlebusiness` [#786](https://github.com/jovotech/jovo-framework/pull/786) Adds Google Business Messages integration ([@KaanKC](https://github.com/KaanKC))  
+
+ #### Committers: 1
+- Kaan Killic ([@KaanKC](https://github.com/KaanKC))
+
+## 3.0.18 (2020-05-28)
+
+#### :bug: Bug Fix
+ * `jovo-db-platformstorage` [#755](https://github.com/jovotech/jovo-framework/pull/755) Fixed PlatformStorage bug ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-client-web` [#749](https://github.com/jovotech/jovo-framework/pull/749) Fixed web client bug ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-client-web` [#764](https://github.com/jovotech/jovo-framework/pull/764) Added fix for windows bug that would cause first second to be omitted ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-facebookmessenger` [#764](https://github.com/jovotech/jovo-framework/pull/764) Fixed bug that wrong config would be used ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-facebookmessenger` [#766](https://github.com/jovotech/jovo-framework/pull/766) Improved profile-loading ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-core` [#767](https://github.com/jovotech/jovo-framework/pull/767) Fixed bug that would cause CorePlatformRequests to be handled by Alexa ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-framework` [#775](https://github.com/jovotech/jovo-framework/pull/775) Unexpected .addAudio() behaviour ([@AndresContreras96](https://github.com/AndresContreras96), [@m-ripper](https://github.com/m-ripper))  
+
+
+#### :nail_care: Enhancements
+ * `jovo-platform-bixby` [#742](https://github.com/jovotech/jovo-framework/pull/742) Add _JOVO_TEXT_ to return non SSML text ([@rmtuckerphx](https://github.com/rmtuckerphx))  
+ * `jovo-db-dynamodb` [#751](https://github.com/jovotech/jovo-framework/pull/751) Add advanced config to support key overloading ([@rmtuckerphx](https://github.com/rmtuckerphx))  
+ * `jovo-framework` [#781](https://github.com/jovotech/jovo-framework/pull/781) Normalize configuration-handling & error-messages of ASR-, NLU-, SLU- and TTS-integrations ([@m-ripper](https://github.com/m-ripper))  
+
+
+ #### Committers: 3
+- Mark Tucker ([@rmtuckerphx](https://github.com/rmtuckerphx))
+- AndresContreras96 ([@AndresContreras96](https://github.com/AndresContreras96))
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ## 3.0.17 (2020-05-13)
 
 #### :bug: Bug Fix
