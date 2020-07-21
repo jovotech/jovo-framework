@@ -1,4 +1,4 @@
-import { google } from 'googleapis';
+import { JWT } from 'google-auth-library';
 import { AxiosRequestConfig, ErrorCode, HttpService, JovoError, Method } from 'jovo-core';
 
 import { GoogleServiceAccount } from '../Interfaces';
@@ -23,7 +23,7 @@ export class GoogleBusinessAPI {
 
   static async getApiAccessToken(serviceAccount: GoogleServiceAccount) {
     try {
-      const jwtClient = new google.auth.JWT(
+      const jwtClient = new JWT(
         serviceAccount.client_email,
         undefined,
         serviceAccount.private_key,
