@@ -120,6 +120,9 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
   }
 
   async session(handleRequest: HandleRequest) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
+      return Promise.resolve();
+    }
     if (!handleRequest.jovo!.$session) {
       handleRequest.jovo!.$session = { $data: {} };
     }
