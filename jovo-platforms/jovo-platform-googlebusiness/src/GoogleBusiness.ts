@@ -21,11 +21,19 @@ import { Cards } from './modules/Cards';
 import { GoogleBusinessCore } from './modules/GoogleBusinessCore';
 import { ApiCallOptions, GoogleBusinessAPI } from './services/GoogleBusinessAPI';
 
+export interface Config extends ExtensibleConfig {
+  locale?: string;
+}
+
 export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusinessResponse> {
   static type = 'GoogleBusiness';
   static appType = 'GoogleBusinessBot';
 
-  constructor(config?: ExtensibleConfig) {
+  config: Config = {
+    locale: 'en'
+  }
+
+  constructor(config?: Config) {
     super(config);
 
     if (config) {

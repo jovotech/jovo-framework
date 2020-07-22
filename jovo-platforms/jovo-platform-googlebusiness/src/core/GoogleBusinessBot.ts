@@ -1,6 +1,6 @@
 import { BaseApp, HandleRequest, Host, Jovo, Log } from 'jovo-core';
 
-import { GoogleBusiness } from '../GoogleBusiness';
+import { Config, GoogleBusiness } from '../GoogleBusiness';
 import { Suggestion } from '../Interfaces';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessResponse } from './GoogleBusinessResponse';
@@ -69,7 +69,7 @@ export class GoogleBusinessBot extends Jovo {
   }
 
   getLocale(): string | undefined {
-    return this.$request?.getLocale();
+    return (this.$config as Config).locale;
   }
 
   getType(): string | undefined {
