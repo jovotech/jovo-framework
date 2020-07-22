@@ -69,7 +69,7 @@ export class GoogleBusinessBot extends Jovo {
   }
 
   getLocale(): string | undefined {
-    return (this.$config as Config).locale;
+    return this.$config.plugin?.GoogleBusiness?.locale;
   }
 
   getType(): string | undefined {
