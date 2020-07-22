@@ -1,6 +1,6 @@
 {
   "name": "jovo-slu-witai",
-  "version": "3.0.19",
+  "version": "3.0.20",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.0.18"
+    "jovo-core": "^3.0.19"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
