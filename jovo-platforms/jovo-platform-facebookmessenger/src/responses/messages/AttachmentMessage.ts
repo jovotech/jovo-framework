@@ -41,17 +41,19 @@ export class AttachmentMessage extends Message {
       return this.sendFile(pageAccessToken, version);
     }
 
+    const quickReplies = this.options.quickReplies
+      ? this.options.quickReplies.map((quickReply) => {
+          return typeof quickReply === 'string' ? new TextQuickReply(quickReply) : quickReply;
+        })
+      : undefined;
+
     const data = {
       message: {
         attachment: {
           payload: {},
           type: this.options.type,
         },
-        quick_replies: this.options.quickReplies
-          ? this.options.quickReplies.map((quickReply) => {
-              return typeof quickReply === 'string' ? new TextQuickReply(quickReply) : quickReply;
-            })
-          : undefined,
+        quick_replies: quickReplies?.length ? quickReplies : undefined,
       },
       recipient: this.recipient,
     };
