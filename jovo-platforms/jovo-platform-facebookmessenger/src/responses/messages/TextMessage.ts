@@ -23,12 +23,14 @@ export class TextMessage extends Message {
   constructor(readonly recipient: IdentityData, options: TextMessageOptions) {
     super(recipient);
 
+    const quickReplies = options.quickReplies
+      ? options.quickReplies.map((quickReply) => {
+          return typeof quickReply === 'string' ? new TextQuickReply(quickReply) : quickReply;
+        })
+      : undefined;
+
     this.message = {
-      quick_replies: options.quickReplies
-        ? options.quickReplies.map((quickReply) => {
-            return typeof quickReply === 'string' ? new TextQuickReply(quickReply) : quickReply;
-          })
-        : undefined,
+      quick_replies: quickReplies?.length ? quickReplies : undefined,
       text: MessengerBotSpeechBuilder.removeSSML(options.text),
     };
     this.message_type = options.messageType || MessageType.Response;
