@@ -33,6 +33,7 @@ export interface Config extends PluginConfig {
   authToken?: string;
   projectId?: string;
   requireCredentialsFile?: boolean;
+  getSessionIdCallback?: (jovo: Jovo) => string | Promise<string>;
 }
 
 export class DialogflowNlu implements Plugin {
@@ -44,6 +45,7 @@ export class DialogflowNlu implements Plugin {
     authToken: '',
     projectId: '',
     requireCredentialsFile: true,
+    getSessionIdCallback: undefined,
   };
 
   constructor(config?: Config) {
@@ -108,15 +110,12 @@ export class DialogflowNlu implements Plugin {
   }
 
   async nlu(jovo: Jovo) {
-    const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
+    const text = jovo.$asr?.text || jovo.getRawText();
     let response: DialogflowResponse | null = null;
 
     if (text) {
-      // for now every session id will just be random
-      const session = `${new Date().getTime()}-${jovo.$user.getId()}`;
-      const languageCode =
-        (jovo.$request && jovo.$request.getLocale()) || this.config.defaultLocale!;
-      response = await this.naturalLanguageProcessing(jovo, session, {
+      const languageCode = jovo.$request?.getLocale() || this.config.defaultLocale!;
+      response = await this.naturalLanguageProcessing(jovo, {
         text,
         languageCode,
       });
@@ -226,9 +225,11 @@ export class DialogflowNlu implements Plugin {
 
   private async naturalLanguageProcessing(
     jovo: Jovo,
-    session: string,
     textInput: DialogflowTextInput,
   ): Promise<DialogflowResponse> {
+    const sessionId = this.config.getSessionIdCallback
+      ? await this.config.getSessionIdCallback(jovo)
+      : jovo.$request?.getSessionId() || jovo.$user.getId();
     const authToken = _get(
       jovo.$config,
       `plugin.${this.parentName}.plugin.DialogflowNlu.authToken`,
@@ -240,18 +241,16 @@ export class DialogflowNlu implements Plugin {
       '',
     );
 
-    const hasAuthToken = authToken && authToken.length > 0;
-    const hasProjectId = projectId && projectId.length > 0;
-
-    if (!hasAuthToken || !hasProjectId) {
+    if (!authToken || !projectId || !sessionId) {
       let reasons = 'Reasons:';
-      if (!hasProjectId) {
-        reasons += '\nNo valid project-id was given.';
-      }
-      if (!hasAuthToken) {
-        reasons += '\nNo authentication-token was provided.';
-      }
-
+      const addToReasonsIfNotValid = (val: string | undefined, text: string) => {
+        if (!val) {
+          reasons += `\n${text}`;
+        }
+      };
+      addToReasonsIfNotValid(projectId, 'No valid project-id was given.');
+      addToReasonsIfNotValid(sessionId, 'No valid session-id was given.');
+      addToReasonsIfNotValid(authToken, 'No authentication-token was provided.');
       throw new JovoError(
         `Can not access Dialogflow-API!`,
         ErrorCode.ERR_PLUGIN,
@@ -260,7 +259,7 @@ export class DialogflowNlu implements Plugin {
       );
     }
 
-    const path = `/v2/projects/${projectId}/agent/sessions/${session}:detectIntent`;
+    const path = `/v2/projects/${projectId}/agent/sessions/${sessionId}:detectIntent`;
     const headers: Record<string, string> = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
