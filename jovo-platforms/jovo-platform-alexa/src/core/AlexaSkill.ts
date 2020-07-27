@@ -158,8 +158,9 @@ export class AlexaSkill extends Jovo {
       );
       if (callback) {
         callback();
+      } else {
+        return Promise.resolve();
       }
-      return;
     }
 
     if (callback) {
