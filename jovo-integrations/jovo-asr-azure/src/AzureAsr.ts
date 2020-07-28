@@ -86,7 +86,7 @@ export class AzureAsr implements Plugin {
       language: this.config.language,
     })}`;
 
-    const url = `https://${this.config.endpointRegion}.sst.speech.microsoft.com${path}`;
+    const url = `https://${this.config.endpointRegion}.stt.speech.microsoft.com${path}`;
     const config: AxiosRequestConfig = {
       url,
       data: speech,
