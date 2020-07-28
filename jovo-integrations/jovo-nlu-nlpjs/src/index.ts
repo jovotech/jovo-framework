@@ -1,12 +1,12 @@
 import { Config } from './NlpjsNlu';
 
-interface AppLuisNluConfig {
-  LuisNlu?: Config;
+interface AppNlpjsNluConfig {
+  NlpjsNlu?: Config;
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  interface AppNluConfig extends AppLuisNluConfig {}
-  interface ExtensiblePluginConfigs extends AppLuisNluConfig {}
+  interface AppNluConfig extends AppNlpjsNluConfig {}
+  interface ExtensiblePluginConfigs extends AppNlpjsNluConfig {}
 }
 export * from './NlpjsNlu';
 export * from './Interfaces';
