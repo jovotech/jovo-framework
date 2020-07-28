@@ -2,6 +2,15 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+## 3.0.17 (2020-05-28)
+
+#### :bug: Bug Fix
+ * `jovo-platform-facebookmessenger` [#764](https://github.com/jovotech/jovo-framework/pull/764) Fixed bug that wrong config would be used ([@m-ripper](https://github.com/m-ripper))  
+ * `jovo-platform-facebookmessenger` [#766](https://github.com/jovotech/jovo-framework/pull/766) Improved profile-loading ([@m-ripper](https://github.com/m-ripper))  
+
+ #### Committers: 1
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+
 ## 3.0.15 (2020-05-04)
 
  * `jovo-platform-facebookmessenger` Improve session handling

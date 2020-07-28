@@ -2,6 +2,14 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+## 3.0.17 (2020-05-28)
+
+#### :bug: Bug Fix
+ * `jovo-platform-core` [#767](https://github.com/jovotech/jovo-framework/pull/767) Fixed bug that would cause CorePlatformRequests to be handled by Alexa ([@m-ripper](https://github.com/m-ripper))  
+
+ #### Committers: 1
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

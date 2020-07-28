@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-session-attributes",
-  "version": "3.0.21",
+  "version": "3.0.25",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,11 +17,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^3.0.17",
-    "jovo-framework": "^3.0.18",
-    "jovo-platform-alexa": "^3.0.21",
-    "jovo-platform-googleassistant": "^3.0.18",
-    "jovo-plugin-debugger": "^3.0.16"
+    "jovo-db-filedb": "^3.0.20",
+    "jovo-framework": "^3.0.21",
+    "jovo-platform-alexa": "^3.0.25",
+    "jovo-platform-googleassistant": "^3.0.21",
+    "jovo-plugin-debugger": "^3.0.19"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

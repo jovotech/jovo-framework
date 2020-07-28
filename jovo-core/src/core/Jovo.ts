@@ -706,6 +706,6 @@ export abstract class Jovo extends EventEmitter {
   }
 
   isJovoDebuggerRequest() {
-    return !!this.$host.headers['jovo-debugger'];
+    return this.$host.headers && !!this.$host.headers['jovo-debugger'];
   }
 }

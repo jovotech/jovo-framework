@@ -173,7 +173,7 @@ function getSpeech(this: any, args: any) {
     jovo = this.$jovo;
   }
 
-  jovo.$app!.$cms.I18Next.i18n.changeLanguage(jovo.$request!.getLocale());
+  jovo.$app.$cms.I18Next.i18n.changeLanguage(jovo.$request?.getLocale() || jovo.getLocale());
 
   if (jovo.$app.config.platformSpecificResponses) {
     const platform = jovo.getType();

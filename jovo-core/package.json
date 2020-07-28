@@ -1,6 +1,6 @@
 {
   "name": "jovo-core",
-  "version": "3.0.16",
+  "version": "3.0.19",
   "description": "jovo-core",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -28,7 +28,8 @@
     "lodash.merge": "^4.6.2",
     "lodash.sample": "^4.2.1",
     "lodash.set": "^4.3.2",
-    "lodash.transform": "^4.6.0"
+    "lodash.transform": "^4.6.0",
+    "lodash.zip": "^4.2.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -43,6 +44,7 @@
     "@types/lodash.sample": "^4.2.4",
     "@types/lodash.set": "^4.3.6",
     "@types/lodash.transform": "^4.6.4",
+    "@types/lodash.zip": "^4.2.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
     "prettier": "2.0.2",
