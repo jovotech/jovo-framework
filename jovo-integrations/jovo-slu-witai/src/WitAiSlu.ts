@@ -16,8 +16,14 @@ import { WitAiInput, WitAiIntent, WitAiResponse } from './Interfaces';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
-  token: string;
+  token?: string;
   minConfidence?: number;
+  asr?: {
+    enabled?: boolean;
+  };
+  nlu?: {
+    enabled?: boolean;
+  };
 }
 
 const BASE_URL = `https://api.wit.ai`;
@@ -27,6 +33,12 @@ export class WitAiSlu implements Plugin {
   config: Config = {
     token: '',
     minConfidence: 0,
+    asr: {
+      enabled: true,
+    },
+    nlu: {
+      enabled: true,
+    },
   };
 
   constructor(config?: Config) {
@@ -55,6 +67,10 @@ export class WitAiSlu implements Plugin {
   }
 
   async asr(jovo: Jovo) {
+    if (this.config.asr?.enabled === false) {
+      return;
+    }
+
     const text = jovo.getRawText();
     const audio = jovo.getAudioData();
 
@@ -73,6 +89,10 @@ export class WitAiSlu implements Plugin {
   }
 
   async nlu(jovo: Jovo) {
+    if (this.config.nlu?.enabled === false) {
+      return;
+    }
+
     const text = (jovo.$asr && jovo.$asr.text) || jovo.getRawText();
 
     let response: WitAiResponse | null = null;
@@ -111,7 +131,9 @@ export class WitAiSlu implements Plugin {
   }
 
   async inputs(jovo: Jovo) {
-    console.log('[WitAiSLU] ( $inputs )');
+    if (this.config.nlu?.enabled === false) {
+      return;
+    }
 
     if ((!jovo.$nlu || !jovo.$nlu[this.name]) && jovo.$type.type === EnumRequestType.INTENT) {
       throw new JovoError(
