@@ -476,6 +476,7 @@ export class AlexaSkill extends Jovo {
     const directives = _get(this.$output, 'Alexa.Directives', []);
     directives.push(directive);
     _set(this.$output, 'Alexa.Directives', directives);
+    return this;
   }
 
   /**
