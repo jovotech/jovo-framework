@@ -83,7 +83,8 @@ export class BixbyCore implements Plugin {
 
     const tell = _get(output, 'Bixby.tell') || _get(output, 'tell');
     if (tell) {
-      _set(capsule.$response, '_JOVO_SPEECH_', tell.speech);
+      const speech = tell.speech ? SpeechBuilder.toSSML(tell.speech) : '';
+      _set(capsule.$response, '_JOVO_SPEECH_', speech);
 
       const text = tell.speech ? SpeechBuilder.removeSSML(tell.speech) : '';
       _set(capsule.$response, '_JOVO_TEXT_', text);
@@ -91,7 +92,8 @@ export class BixbyCore implements Plugin {
 
     const ask = _get(output, 'Bixby.ask') || _get(output, 'ask');
     if (ask) {
-      _set(capsule.$response, '_JOVO_SPEECH_', ask.speech);
+      const speech = ask.speech ? SpeechBuilder.toSSML(ask.speech) : '';
+      _set(capsule.$response, '_JOVO_SPEECH_', speech);
 
       const text = ask.speech ? SpeechBuilder.removeSSML(ask.speech) : '';
       _set(capsule.$response, '_JOVO_TEXT_', text);

@@ -46,6 +46,7 @@ Thank you to all our existing sponsors and supporters! <3
 * [Jargon](https://jargon.com/)
 * [Node Kitchen](https://node.kitchen/)
 * [ShirkaLab](https://www.shirkalab.io/)
+* [Future of Voice](https://www.futureofvoice.com/)
 
 
 ## Backers
