@@ -33,8 +33,10 @@ export class LuisNlu implements Plugin {
     slot: 'staging',
   };
 
-  constructor(config: Config) {
-    this.config = _merge(this.config, config);
+  constructor(config?: Config) {
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
   }
 
   get name(): string {
@@ -119,6 +121,8 @@ export class LuisNlu implements Plugin {
   }
 
   private async naturalLanguageProcessing(text: string): Promise<LuisResponse> {
+    this.validateConfig();
+
     const queryParams = {
       'show-all-intents': true,
       'verbose': this.config.verbose || false,
@@ -143,13 +147,41 @@ export class LuisNlu implements Plugin {
       if (response.status === 200 && response.data) {
         return response.data;
       }
-      throw new Error(
-        `Could not retrieve NLU data. status: ${response.status}, data: ${
+      throw new JovoError(
+        `Could not retrieve NLU data!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Response: ${response.status} ${
           response.data ? JSON.stringify(response.data, undefined, 2) : 'undefined'
         }`,
       );
     } catch (e) {
-      throw new JovoError(e, ErrorCode.ERR_PLUGIN, this.name);
+      const configText = `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`;
+      throw new JovoError(
+        e.message || e,
+        ErrorCode.ERR_PLUGIN,
+        e.module || this.name,
+        e.details ? `${e.details}\n${configText}` : configText,
+        e.hint,
+        e.seeMore,
+      );
+    }
+  }
+
+  private validateConfig() {
+    if (
+      !this.config.endpointKey ||
+      !this.config.endpointRegion ||
+      !this.config.appId ||
+      !this.config.slot
+    ) {
+      throw new JovoError(
+        `Invalid configuration!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`,
+        `Make sure 'endpointRegion', 'endpointKey', 'appId' and 'slot' are set and valid.`,
+      );
     }
   }
 }

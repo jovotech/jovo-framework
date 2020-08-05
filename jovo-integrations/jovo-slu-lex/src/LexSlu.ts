@@ -5,7 +5,6 @@ import {
   PostTextRequest,
   PostTextResponse,
 } from 'aws-sdk/clients/lexruntime';
-import { AWSError } from 'aws-sdk/lib/error';
 import {
   AudioEncoder,
   EnumRequestType,
@@ -24,7 +23,7 @@ import _merge = require('lodash.merge');
 export interface Config extends PluginConfig {
   botAlias?: string;
   botName?: string;
-  credentials?: AmazonCredentials;
+  credentials?: Partial<AmazonCredentials>;
   defaultIntent?: string;
 }
 
@@ -32,12 +31,12 @@ const TARGET_SAMPLE_RATE = 16000;
 
 export class LexSlu implements Plugin {
   config: Config = {
-    botAlias: process.env.LEX_BOT_ALIAS || '',
-    botName: process.env.LEX_BOT_NAME || '',
+    botAlias: '',
+    botName: '',
     credentials: {
-      region: process.env.AMAZON_REGION || 'us-east-1',
-      accessKeyId: process.env.AMAZON_ACCESS_KEY_ID || '',
-      secretAccessKey: process.env.AMAZON_SECRET_ACCESS_KEY || '',
+      region: process.env.AWS_REGION || 'us-east-1',
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     },
     defaultIntent: 'DefaultFallbackIntent',
   };
@@ -48,8 +47,9 @@ export class LexSlu implements Plugin {
     if (config) {
       this.config = _merge(this.config, config);
     }
+    this.validateConfig();
     this.$lex = new LexRuntime({
-      credentials: this.config.credentials,
+      credentials: this.config.credentials as AmazonCredentials,
       region: this.config.credentials!.region,
     });
   }
@@ -155,40 +155,49 @@ export class LexSlu implements Plugin {
   }
 
   private speechToText(userId: string, speech: Buffer): Promise<PostContentResponse> {
-    return new Promise((resolve, reject) => {
-      const params: PostContentRequest = {
-        botAlias: this.config.botAlias || '',
-        botName: this.config.botName || '',
-        contentType: 'audio/x-l16; sample-rate=16000; channel-count=1',
-        inputStream: speech,
-        userId,
-        accept: 'text/plain; charset=utf-8',
-      };
-
-      this.$lex.postContent(params, (err: AWSError, data: PostContentResponse) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(data);
-      });
-    });
+    const params: PostContentRequest = {
+      botAlias: this.config.botAlias || '',
+      botName: this.config.botName || '',
+      contentType: 'audio/x-l16; sample-rate=16000; channel-count=1',
+      inputStream: speech,
+      userId,
+      accept: 'text/plain; charset=utf-8',
+    };
+    try {
+      return this.$lex.postContent(params).promise();
+    } catch (e) {
+      throw new JovoError(`Could not retrieve ASR data!`, ErrorCode.ERR_PLUGIN, this.name, e);
+    }
   }
 
   private naturalLanguageProcessing(userId: string, text: string): Promise<PostTextResponse> {
-    return new Promise((resolve, reject) => {
-      const params: PostTextRequest = {
-        botAlias: this.config.botAlias || '',
-        botName: this.config.botName || '',
-        userId,
-        inputText: text,
-      };
+    const params: PostTextRequest = {
+      botAlias: this.config.botAlias || '',
+      botName: this.config.botName || '',
+      userId,
+      inputText: text,
+    };
+    try {
+      return this.$lex.postText(params).promise();
+    } catch (e) {
+      throw new JovoError(`Could not retrieve NLU data!`, ErrorCode.ERR_PLUGIN, this.name, e);
+    }
+  }
 
-      this.$lex.postText(params, (err: AWSError, data: PostTextResponse) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(data);
-      });
-    });
+  private validateConfig() {
+    if (
+      !this.config.credentials?.region ||
+      !this.config.credentials?.accessKeyId ||
+      !this.config.credentials?.secretAccessKey ||
+      !this.config.credentials?.sessionToken
+    ) {
+      throw new JovoError(
+        `Invalid configuration!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`,
+        `Make sure 'credentials.region', 'credentials.accessKeyId' and 'credentials.secretAccessKey' are set and valid.`,
+      );
+    }
   }
 }

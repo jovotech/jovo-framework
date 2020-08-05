@@ -1,6 +1,4 @@
-import './';
-import { Extensible, Jovo, Plugin, PluginConfig, SpeechBuilder } from 'jovo-core';
-import { AmazonCredentials } from './Interfaces';
+import { Polly } from 'aws-sdk/clients/all';
 import {
   LanguageCode,
   OutputFormat,
@@ -9,14 +7,24 @@ import {
   SynthesizeSpeechOutput,
   VoiceId,
 } from 'aws-sdk/clients/polly';
-import { Polly } from 'aws-sdk/clients/all';
 import { AWSError } from 'aws-sdk/lib/error';
-import _merge = require('lodash.merge');
+import {
+  ErrorCode,
+  Extensible,
+  Jovo,
+  JovoError,
+  Plugin,
+  PluginConfig,
+  SpeechBuilder,
+} from 'jovo-core';
+import './';
+import { AmazonCredentials } from './Interfaces';
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 
 export interface Config extends PluginConfig {
-  credentials: AmazonCredentials;
+  credentials?: Partial<AmazonCredentials>;
   lexiconNames?: string[];
   outputFormat?: OutputFormat;
   sampleRate?: number;
@@ -28,9 +36,10 @@ export interface Config extends PluginConfig {
 export class PollyTts implements Plugin {
   config: Config = {
     credentials: {
-      region: 'us-east-1',
-      accessKeyId: '',
-      secretAccessKey: '',
+      region: process.env.AWS_REGION || 'us-east-1',
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      sessionToken: process.env.AWS_SESSION_TOKEN,
     },
     languageCode: undefined,
     lexiconNames: undefined,
@@ -42,12 +51,19 @@ export class PollyTts implements Plugin {
 
   private $polly: Polly;
 
-  constructor(config: Config) {
-    this.config = _merge(this.config, config);
+  constructor(config?: Config) {
+    if (config) {
+      this.config = _merge(this.config, config);
+    }
+    this.validateConfig();
     this.$polly = new Polly({
-      credentials: this.config.credentials,
-      region: this.config.credentials.region,
+      credentials: this.config.credentials as AmazonCredentials,
+      region: this.config.credentials!.region,
     });
+  }
+
+  get name() {
+    return this.constructor.name;
   }
 
   install(parent: Extensible): void {
@@ -133,5 +149,22 @@ export class PollyTts implements Plugin {
         resolve(data);
       });
     });
+  }
+
+  private validateConfig() {
+    if (
+      !this.config.credentials?.region ||
+      !this.config.credentials?.accessKeyId ||
+      !this.config.credentials?.secretAccessKey ||
+      !this.config.credentials?.sessionToken
+    ) {
+      throw new JovoError(
+        `Invalid configuration!`,
+        ErrorCode.ERR_PLUGIN,
+        this.name,
+        `Current configuration: ${JSON.stringify(this.config, undefined, 2)}`,
+        `Make sure 'credentials.region', 'credentials.accessKeyId' and 'credentials.secretAccessKey' are set and valid.`,
+      );
+    }
   }
 }
