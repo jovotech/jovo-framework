@@ -1,6 +1,6 @@
 {
   "name": "jovo-slu-witai",
-  "version": "3.0.21",
+  "version": "3.0.22",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
