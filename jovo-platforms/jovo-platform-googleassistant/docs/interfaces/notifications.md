@@ -32,29 +32,29 @@ First of all, you have to make the necessary configurations to send out notifica
 
 You have to specify the intents, which support notifications, by first adding them to the set of intents, which can be triggered by implicit invocations inside your Dialogflow Agent:
 
-![Dialogflow Implicit Invocation](../img/dialogflow-implicit-invocation.png)
+![Dialogflow Implicit Invocation](../../img/dialogflow-implicit-invocation.png)
 
 After you've done that, you can find the intent as one of your `Actions` on your Google Actions `Actions` tab:
 
-![Google Action Actions](../img/google-action-actions.png)
+![Google Action Actions](../../img/google-action-actions.png)
 
 Select the intent and at the bottom of the tab you will find the `User engagement` section, where you can enable the push notifications as well as set a content title:
 
-![Google Action Action User Engagement](../img/google-action-action-user-engagement.png)
+![Google Action Action User Engagement](../../img/google-action-action-user-engagement.png)
 
 After you've done that, you have to get a service account key for your Google Action as you will need it later on to get the access token needed to send out notifications.
 
 For that, you have to first go the following url (replace the `your-project-id` part with your project's id) and enable the `Actions API`: https://console.developers.google.com/apis/api/actions.googleapis.com/overview?project=your-project-id. 
 
-![Google Actions API](../img/google-actions-api.png)
+![Google Actions API](../../img/google-actions-api.png)
 
 Now, go over to https://console.developers.google.com/apis/credentials?project=your-project-id, again replace the `your-project-id` part, and create a new service account key:
 
-![Google Service Account](../img/google-service-account.png)
+![Google Service Account](../../img/google-service-account.png)
 
 Select `Project Owner` as the role and `JSON` as the key type:
 
-![Google Create Service Account](../img/google-create-service-account.png)
+![Google Create Service Account](../../img/google-create-service-account.png)
 
 Now that you got your service account key as well, all the preparation is done.
 
