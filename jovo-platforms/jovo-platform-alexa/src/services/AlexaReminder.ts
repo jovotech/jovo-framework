@@ -219,7 +219,7 @@ export interface AbsoluteReminder extends Reminder {
     type: 'SCHEDULED_ABSOLUTE'; // Indicates type of trigger
     scheduledTime: string; // valid ISO 8601 format - Intended trigger time
     timeZoneId?: string; // def
-    recurrence: {
+    recurrence?: {
       freq: string;
       byDay?: string[];
     };
