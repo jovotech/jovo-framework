@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-settings-api",
-  "version": "3.0.27",
+  "version": "3.0.28",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -19,7 +19,7 @@
   "dependencies": {
     "jovo-db-filedb": "^3.0.21",
     "jovo-framework": "^3.0.22",
-    "jovo-platform-alexa": "^3.0.27",
+    "jovo-platform-alexa": "^3.0.28",
     "jovo-plugin-debugger": "^3.0.20",
     "moment-timezone": "^0.5.23"
   },
