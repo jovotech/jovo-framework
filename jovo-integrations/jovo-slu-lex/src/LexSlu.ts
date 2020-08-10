@@ -214,8 +214,7 @@ export class LexSlu implements Plugin {
     if (
       !this.config.credentials?.region ||
       !this.config.credentials?.accessKeyId ||
-      !this.config.credentials?.secretAccessKey ||
-      !this.config.credentials?.sessionToken
+      !this.config.credentials?.secretAccessKey
     ) {
       throw new JovoError(
         `Invalid configuration!`,

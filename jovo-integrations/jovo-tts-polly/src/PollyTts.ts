@@ -39,7 +39,6 @@ export class PollyTts implements Plugin {
       region: process.env.AWS_REGION || 'us-east-1',
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      sessionToken: process.env.AWS_SESSION_TOKEN,
     },
     languageCode: undefined,
     lexiconNames: undefined,
@@ -156,8 +155,7 @@ export class PollyTts implements Plugin {
     if (
       !this.config.credentials?.region ||
       !this.config.credentials?.accessKeyId ||
-      !this.config.credentials?.secretAccessKey ||
-      !this.config.credentials?.sessionToken
+      !this.config.credentials?.secretAccessKey
     ) {
       throw new JovoError(
         `Invalid configuration!`,
