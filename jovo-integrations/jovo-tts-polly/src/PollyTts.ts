@@ -39,7 +39,6 @@ export class PollyTts implements Plugin {
       region: process.env.AWS_REGION || 'us-east-1',
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      sessionToken: process.env.AWS_SESSION_TOKEN,
     },
     languageCode: undefined,
     lexiconNames: undefined,
@@ -49,17 +48,12 @@ export class PollyTts implements Plugin {
     voiceId: 'Matthew',
   };
 
-  private $polly: Polly;
+  private $polly!: Polly;
 
   constructor(config?: Config) {
     if (config) {
       this.config = _merge(this.config, config);
     }
-    this.validateConfig();
-    this.$polly = new Polly({
-      credentials: this.config.credentials as AmazonCredentials,
-      region: this.config.credentials!.region,
-    });
   }
 
   get name() {
@@ -67,6 +61,12 @@ export class PollyTts implements Plugin {
   }
 
   install(parent: Extensible): void {
+    this.validateConfig();
+    this.$polly = new Polly({
+      credentials: this.config.credentials as AmazonCredentials,
+      region: this.config.credentials!.region,
+    });
+
     parent.middleware('$tts')!.use(this.tts.bind(this));
   }
 
@@ -155,8 +155,7 @@ export class PollyTts implements Plugin {
     if (
       !this.config.credentials?.region ||
       !this.config.credentials?.accessKeyId ||
-      !this.config.credentials?.secretAccessKey ||
-      !this.config.credentials?.sessionToken
+      !this.config.credentials?.secretAccessKey
     ) {
       throw new JovoError(
         `Invalid configuration!`,
