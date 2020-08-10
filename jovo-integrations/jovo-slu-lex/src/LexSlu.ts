@@ -53,17 +53,12 @@ export class LexSlu implements Plugin {
     },
   };
 
-  private $lex: LexRuntime;
+  private $lex!: LexRuntime;
 
   constructor(config?: Config) {
     if (config) {
       this.config = _merge(this.config, config);
     }
-    this.validateConfig();
-    this.$lex = new LexRuntime({
-      credentials: this.config.credentials as AmazonCredentials,
-      region: this.config.credentials!.region,
-    });
   }
 
   get name(): string {
@@ -78,6 +73,13 @@ export class LexSlu implements Plugin {
         this.name,
       );
     }
+
+    this.validateConfig();
+    this.$lex = new LexRuntime({
+      credentials: this.config.credentials as AmazonCredentials,
+      region: this.config.credentials!.region,
+    });
+
     if (parent.supportsASR()) {
       parent.middleware('$asr')!.use(this.asr.bind(this));
     }
