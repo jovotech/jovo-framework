@@ -62,7 +62,6 @@ export class GoogleBusinessCore implements Plugin {
     }
     const response = googleBusinessBot.$response as GoogleBusinessResponse;
 
-    // might have been initialized by Cards.ts already
     if (!response.response) {
       response.response = googleBusinessBot.makeBaseResponse();
     }
