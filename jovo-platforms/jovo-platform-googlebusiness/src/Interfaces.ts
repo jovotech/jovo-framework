@@ -32,15 +32,18 @@ export interface GoogleBusinessSuggestionRequest extends GoogleBusinessBaseReque
   };
 }
 
-export interface BaseResponse {
-  name: string;
+export interface ResponseOptions {
+  suggestions?: Suggestion[];
+  fallback?: string;
+}
+
+
+export interface BaseResponse extends ResponseOptions {
   messageId: string;
   representative: {
     displayName?: string;
     representativeType: 'REPRESENTATIVE_TYPE_UNSPECIFIED' | 'BOT' | 'HUMAN';
   };
-  suggestions?: Suggestion[];
-  fallback?: string;
 }
 
 export type Suggestion = SuggestedReply | SuggestActionUrl | SuggestActionDial;

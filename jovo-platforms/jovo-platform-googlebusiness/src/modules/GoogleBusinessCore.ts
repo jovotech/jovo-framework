@@ -34,7 +34,7 @@ export class GoogleBusinessCore implements Plugin {
   async request(googleBusinessBot: GoogleBusinessBot) {
     if (!googleBusinessBot.$host) {
       throw new JovoError(
-        'Couldn\'t access $host object',
+        "Couldn't access $host object",
         ErrorCode.ERR_PLUGIN,
         'jovo-platform-googlebusiness',
         'The $host object is necessary to initialize both $request and $user',
@@ -61,18 +61,10 @@ export class GoogleBusinessCore implements Plugin {
       googleBusinessBot.$response = new GoogleBusinessResponse();
     }
     const response = googleBusinessBot.$response as GoogleBusinessResponse;
-    const request = googleBusinessBot.$request as GoogleBusinessRequest;
-    const messageId = Util.randomStr(12);
 
     // might have been initialized by Cards.ts already
     if (!response.response) {
-      response.response = {
-        messageId,
-        name: `conversations/${request.getSessionId()}/messages/${messageId}`,
-        representative: {
-          representativeType: 'BOT',
-        },
-      };
+      response.response = googleBusinessBot.makeBaseResponse();
     }
 
     if (Object.keys(output).length === 0) {
@@ -95,7 +87,7 @@ export class GoogleBusinessCore implements Plugin {
     }
 
     const fallback = output.GoogleBusiness.Fallback;
-    if(fallback) {
+    if (fallback) {
       response.response.fallback = fallback;
     }
   }
