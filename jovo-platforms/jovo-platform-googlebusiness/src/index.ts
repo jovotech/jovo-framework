@@ -35,6 +35,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       Suggestions?: Suggestion[];
       Carousel?: CarouselCard;
       StandaloneCard?: StandaloneCard;
+      Fallback?: string;
     };
   }
 }

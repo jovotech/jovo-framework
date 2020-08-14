@@ -1,7 +1,7 @@
 import { BaseApp, HandleRequest, Host, Jovo, Log } from 'jovo-core';
 
-import { Config, GoogleBusiness } from '../GoogleBusiness';
-import { Suggestion } from '../Interfaces';
+import { GoogleBusiness } from '../GoogleBusiness';
+import { ResponseOptions, Suggestion } from '../Interfaces';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { GoogleBusinessSpeechBuilder } from './GoogleBusinessSpeechBuilder';
@@ -52,7 +52,7 @@ export class GoogleBusinessBot extends Jovo {
   }
 
   getDeviceId(): string | undefined {
-    Log.warn('Google Business Messages doesn\'t provide a device ID');
+    Log.warn(`Google Business Messages doesn't provide a device ID`);
     return;
   }
 
@@ -86,6 +86,11 @@ export class GoogleBusinessBot extends Jovo {
 
   addSuggestionChips(suggestions: Suggestion[]): this {
     this.$output.GoogleBusiness.Suggestions = suggestions;
+    return this;
+  }
+
+  setFallback(fallback: string): this {
+    this.$output.GoogleBusiness.Fallback = fallback;
     return this;
   }
 }

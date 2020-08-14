@@ -93,5 +93,10 @@ export class GoogleBusinessCore implements Plugin {
     if (suggestions) {
       response.response.suggestions = suggestions;
     }
+
+    const fallback = output.GoogleBusiness.Fallback;
+    if(fallback) {
+      response.response.fallback = fallback;
+    }
   }
 }
