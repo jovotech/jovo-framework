@@ -107,7 +107,7 @@ export interface Card {
     height: 'HEIGHT_UNSPECIFIED' | 'SHORT' | 'MEDIUM' | 'TALL';
     contentInfo: {
       fileUrl: string;
-      thumbnailUrl: string;
+      thumbnailUrl?: string;
       forceRefresh?: boolean;
       altText: string;
     };
