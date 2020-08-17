@@ -34,4 +34,5 @@ export interface Config extends PluginConfig {
   trackingId: string;
   trackDirectives?: boolean;
   enableAutomaticEvents?: boolean;
+  trackEndReasons?: boolean;
 }
