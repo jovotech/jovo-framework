@@ -19,7 +19,7 @@
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
 		"murmurhash": "0.0.2",
-		"universal-analytics": "^0.4.20"
+		"universal-analytics": "^0.4.23"
 	},
 	"devDependencies": {
 		"@types/express": "^4.16.0",
