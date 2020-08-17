@@ -2,26 +2,28 @@
 
 Learn how to use Google Analytics in your Jovo application.
 
-* [About Google Analytics](#about-google-analytics)
-* [Installation](#installation)
-   * [Create a Google Analytics Account](#create-a-google-analytics-account)
-   * [Enable Google Analytics in your Jovo app](#enable-google-analytics-in-your-jovo-app)
-   * [Check Your App](#check-your-app)
-* [Usage](#usage)
-    * [Intent Data Tracking](#intent-data-tracking)
-    * [User Id](#user-id)
-    * [Data Source](#data-source)
-    * [Device Info and Screen Resolution](#device-info-and-screen-resolution)
-    * [Custom Dimensions and Custom Metrics](#custom-dimensions-and-custom-metrics)
-        * [Custom Dimensions](#custom-dimensions)
-        * [Custom Metrics](#custom-metrics)
-    * [Custom Reports](#custom-reports)
-    * [Developer Methods](#developer-methods)
-        * [sendEvent()](#sendevent)
-        * [sendTransaction()](#sendTransaction)
-        * [sendItem()](#senditem)
-        * [sendUserEvent()](#senduserevent)
-        * [setCustomMetric()](#setcustommetric)
+- [Google Analytics for Voice Apps](#google-analytics-for-voice-apps)
+  - [About Google Analytics](#about-google-analytics)
+  - [Installation](#installation)
+    - [Create a Google Analytics Account](#create-a-google-analytics-account)
+    - [Enable Google Analytics in your Jovo app](#enable-google-analytics-in-your-jovo-app)
+    - [Check Your App](#check-your-app)
+  - [Usage](#usage)
+    - [Intent Data Tracking](#intent-data-tracking)
+    - [User Id](#user-id)
+    - [Data Source](#data-source)
+    - [Device Info and Screen Resolution](#device-info-and-screen-resolution)
+    - [Custom Dimensions and Custom Metrics](#custom-dimensions-and-custom-metrics)
+      - [Custom Dimensions](#custom-dimensions)
+      - [Custom Metrics](#custom-metrics)
+    - [Custom Reports](#custom-reports)
+    - [Developer Methods](#developer-methods)
+      - [sendEvent()](#sendevent)
+      - [sendTransaction()](#sendtransaction)
+      - [sendItem()](#senditem)
+      - [sendUserEvent()](#senduserevent)
+      - [setCustomMetric()](#setcustommetric)
+      - [Setup endReason metrics in the gooogle analytics console](#setup-endreason-metrics-in-the-gooogle-analytics-console)
 
 ## About Google Analytics
 
@@ -112,7 +114,7 @@ app.use(
     new GoogleAnalyticsGoogleAssistant()
 );
 ```
-For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked.
+For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values.
 
 ```javascript
 // @language=javascript
@@ -126,6 +128,8 @@ module.exports = {
         GoogleAnalytics: {
             trackingId: '',
             trackDirectives: true   // Optional
+            enableAutomaticEvents: true // Optional - set to false to disable
+            trackEndReasons: false // Optional - when set to true the custom metrics 1-6 are used to track endReasons
         },
         // Configurations for platform-specific plugins
         GoogleAnalyticsAlexa: {
@@ -197,6 +201,7 @@ In Google Analytics, all data is captured under certain dimensions and metrics. 
 
 ![Custom Definitions](./img/google-analytics-custom.png)
 
+
 #### Custom Dimensions
 
 If you want to create a custom dimension, you need to set some properties first. The name of your dimension is up to you, whatever suits you best. The scope determines how the analytics data will be associated with a particular custom-dimension value . There are four levels of scope: product, hit, session, and user:
@@ -214,6 +219,8 @@ Defining custom metrics requires a little more effort. Again, you can assign a c
 
 Keep in mind, that both custom dimensions and custom metrics are managed on indexes. The specific index will show up once you created them. If you want to track data for a specific dimension/metric, you have to include it in the tracking request. More on this [here](#setcustommetric()).
 
+You can enable tracking custom metrics for endReasons by setting trackEndReasons to true. More info upon the setup process is described [here](#setup-endreason-metrics-in-the-gooogle-analytics-console).
+
 ### Custom Reports
 
 Not every dimension/metric has a report out of the box. For example, [Exceptions]() need a custom report, before being displayed in Google Analytics. The same goes for custom dimensions/metrics. To create a custom report, go to "Customization" > "Custom Reports". There, you can add a new custom reports with your own attributes, such as the title, the dimensions/metrics you want to track and the report type.
@@ -227,7 +234,8 @@ The Google Analytics plugin offers developer methods for sending data (like Even
 * sendItem(itemParams)
 * sendUserEvent (eventCategory, eventElement)
 * sendUserTransaction (transactionId)
-* sendCustomMetric (index, value)
+* setCustomMetric (index, value)
+* setCustomDimension (index, value)
 
 All these methods are available on the Jovo object in your code and accessible by calling `this.$googleAnalytics.sendEvent(eventParameters)` in your code's handler, for example.
 
@@ -405,3 +413,15 @@ LAUNCH() {
     this.$googleAnalytics.setCustomMetric(1, 100);
 }
 ``` 
+
+#### Setup endReason metrics in the gooogle analytics console
+for tracking end reasons create custom metrics in this order:
+Stop, Error, EXCEEDED_MAX_REPROMPTS, PlayTimeLimitReached, USER_INITIATED, undefined
+
+...example creating custom metric:
+
+![create custom metric](img/setupGoogleAnalytics_createCMetric.png)
+
+...finally it should look like this:
+
+![complete metric list](img/setupGoogleAnalytics_createCMetric_Final.png)
