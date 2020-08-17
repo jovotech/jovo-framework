@@ -6,6 +6,8 @@ import { Jovo } from 'jovo-framework';
 import { Config, Event, TransactionItem, Transaction } from './interfaces';
 import { Helper } from './helper';
 
+type validEndReasons = 'Stop' | 'ERROR' | 'EXCEEDED_MAX_REPROMPTS' | 'PLAYTIME_LIMIT_REACHED' | 'PlayTimeLimitReached' | 'USER_INITIATED' | 'undefined';
+
 export class GoogleAnalytics implements Analytics {
 
   /**
@@ -24,13 +26,35 @@ export class GoogleAnalytics implements Analytics {
       jovo.$data.lastUsedAt = jovo?.$user.$metaData.lastUsedAt;
     }
   }
+
+  /**
+   * Get end reason from session variables
+   *
+   * @param jovo - unser liebes Jovo objekt.
+   * @returns - the endreason saved in the session data.
+   */
+  static getEndReason(jovo: Jovo): validEndReasons | undefined {
+    const endReason: validEndReasons | undefined = jovo.$session.$data.endReason;
+    return endReason;
+  }
   readonly sessionTimeoutInMinutes = 5;
 
   config: Config = {
     trackingId: '',
     enableAutomaticEvents: true,
+    trackEndReasons: false,
   };
   visitor: ua.Visitor | undefined;
+
+  // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
+  readonly endReasonGoogleAnalyticsMap = new Map<validEndReasons, number>([
+    ['Stop', 1],
+    ['ERROR', 2],
+    ['EXCEEDED_MAX_REPROMPTS', 3],
+    ['PlayTimeLimitReached', 4],
+    ['USER_INITIATED', 5],
+    ['undefined', 6],
+  ]);
 
   constructor(config?: Config) {
     if (config) {
@@ -54,6 +78,35 @@ export class GoogleAnalytics implements Analytics {
     app.middleware('after.platform.init')!.use(this.setGoogleAnalyticsObject.bind(this));
     app.middleware('after.response')!.use(this.track.bind(this));
     app.middleware('fail')!.use(this.sendError.bind(this));
+  }
+
+
+  /**
+   * Sets end reason to session variables + updates google analytics metric
+   *
+   * @param jovo - unser liebes Jovo objekt
+   * @param endReason - grund für session ende
+   */
+  setEndReason(jovo: Jovo, endReason: validEndReasons): void {
+    jovo.$session.$data.endReason = endReason;
+    const gaMetricNumber = this.endReasonGoogleAnalyticsMap.get(endReason);
+    console.log(`[GOOGLE ANALYTICS 169] Der EndReason ist _${endReason}_ und indexGa _${gaMetricNumber}_.`);
+    if (gaMetricNumber) {
+      jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
+    } else {
+      const undefinedMetricNumber = this.endReasonGoogleAnalyticsMap.get('undefined');
+      if (undefinedMetricNumber) {
+        jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
+        // @ts-ignore
+        jovo.util169.toSlack169(`[GOOGLE ANALYTICS 169] Der Endreason _${endReason}_ wurde nicht als valide befunden.\n *[STAGE]* ${process.env.STAGE}`);
+      } else {
+        // @ts-ignore
+        jovo.util169.toSlack169(
+          `[GOOGLE ANALYTICS 169] Der Endreason _${endReason}_ wurde nicht als valide befunden.\n *[STAGE]* ${process.env.STAGE}. 
+            Der Versuch ihn auf undefined zu setzen schlug fehl. Überprüfe, ob die endReasonGoogleAnalyticsMap mit falschen Werten überschrieben wurde.`,
+        );
+      }
+    }
   }
 
   /**
@@ -202,12 +255,27 @@ export class GoogleAnalytics implements Analytics {
    * @returns {object} pageParameters: Intent data to track
    */
   getPageParameters(jovo: Jovo) {
-    const { intent, path, type } = jovo.getRoute();
+    const intentType = jovo.$type.type ?? 'fallBackType';
+    const intentName = jovo.$request?.getIntentName();
     return {
-      documentPath: path,
-      documentHostName: type,
-      documentTitle: intent || type,
+      documentPath: this.getPageName(jovo),
+      documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',  
+      documentTitle: intentName || intentType,
     };
+  }
+
+  /**
+   * Change state to startState + root intent (not mappedIntent)
+   *
+   * @param jovo - unser liebes Jovo objekt
+   * @override
+   */
+  getPageName(jovo: Jovo): string {
+    const endReason = this.getSessionTag(jovo) === 'end' && GoogleAnalytics.getEndReason(jovo) ? GoogleAnalytics.getEndReason(jovo) : jovo.$type.type;
+
+    const intentName = jovo.$request?.getIntentName() ? jovo.$request?.getIntentName() : endReason;
+    const state = jovo.$data.startState ? jovo.$data.startState : '/';
+    return `${state}.${intentName}`;
   }
 
   /**
