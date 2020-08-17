@@ -1,5 +1,6 @@
 import * as ua from 'universal-analytics';
 import _merge = require('lodash.merge');
+import * as crypto from 'crypto';
 import * as murmurhash from 'murmurhash';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, Jovo, JovoError } from 'jovo-core';
 import { Config, Event, TransactionItem, Transaction } from './interfaces';
@@ -180,9 +181,9 @@ export class GoogleAnalytics implements Analytics {
    * @returns {string} uuid: Hashed user id
    */
   getUserId(jovo: Jovo): string {
-    const idHash = murmurhash.v3(jovo.$user.getId()!);
-    const uuid = idHash.toString();
-    return uuid;
+    
+    const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
+    return idHash;
   }
 
   /**
