@@ -16,6 +16,7 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"jovo-core": "^3.0.20",
+		"jovo-framework": "^3.0.22",
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
 		"murmurhash": "0.0.2",

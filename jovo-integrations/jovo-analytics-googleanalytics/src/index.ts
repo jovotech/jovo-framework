@@ -23,6 +23,7 @@ declare module 'jovo-core/dist/src/core/Jovo' {
       sendItem: (params: TransactionItem) => void;
       sendUserEvent: Function;
       setCustomMetric: (index: number, value: string | number) => void;
+      setCustomDimension: (index: number, value: string | number) => void;
     };
 
     getRoute(): { intent: string; path: string; type: string };
