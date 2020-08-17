@@ -28,6 +28,7 @@ export class GoogleAnalytics implements Analytics {
 
   config: Config = {
     trackingId: '',
+    enableAutomaticEvents: true,
   };
   visitor: ua.Visitor | undefined;
 
@@ -80,7 +81,7 @@ export class GoogleAnalytics implements Analytics {
       return;
     }
 
-    // Eiter start or stop the session. If sessionTag is undefined, it will be ignored.
+    // Either start or stop the session. If sessionTag is undefined, it will be ignored.
     const sessionTag = this.getSessionTag(jovo);
     this.visitor!.set('sessionControl', sessionTag);
 
@@ -99,31 +100,10 @@ export class GoogleAnalytics implements Analytics {
       }
     }).send();
 
-    // Detect and send FlowErrors
-    this.sendUnhandledEvents(jovo);
-
-    if (jovo.$inputs) {
-      for (const [key, value] of Object.entries(jovo.$inputs)) {
-        if (!value.key) {
-          continue;
-        }
-
-        const params: Event = {
-          eventCategory: 'Inputs',
-          eventAction: value.key, // Input value
-          eventLabel: key, // Input key
-          documentPath: jovo.getRoute().path,
-        };
-        this.visitor!.event(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      }
+    if (this.config.enableAutomaticEvents) {
+      // Detect and send FlowErrors
+      this.sendUnhandledEvents(jovo);
+      this.sendIntentInputEvents(jovo);
     }
   }
 
@@ -187,6 +167,36 @@ export class GoogleAnalytics implements Analytics {
   }
 
   /**
+   * Extract input from intent + send to googleAnalytics via events
+   * @param jovo Jovo object
+   */
+  sendIntentInputEvents(jovo: Jovo) {
+    if (jovo.$inputs) {
+      for (const [key, value] of Object.entries(jovo.$inputs)) {
+        if (!value.key) {
+          continue;
+        }
+
+        const params: Event = {
+          eventCategory: 'Inputs',
+          eventAction: value.key, // Input value
+          eventLabel: key, // Input key
+          documentPath: jovo.getRoute().path,
+        };
+        this.visitor!.event(params, (err: any) => {
+          if (err) {
+            throw new JovoError(
+              err.message,
+              ErrorCode.ERR_PLUGIN,
+              'jovo-analytics-googleanalytics',
+            );
+          }
+        }).send();
+      }
+    }
+  }
+
+  /**
    * Construct pageview parameters, a.k.a intent tracking data.
    * @param {object} jovo: Jovo object
    * @returns {object} pageParameters: Intent data to track
@@ -206,7 +216,7 @@ export class GoogleAnalytics implements Analytics {
    * @returns {string} uuid: Hashed user id
    */
   getUserId(jovo: Jovo): string {
-    
+
     const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
     return idHash;
   }
