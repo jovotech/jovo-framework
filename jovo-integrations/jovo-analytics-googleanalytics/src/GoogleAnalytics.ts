@@ -1,11 +1,31 @@
 import * as ua from 'universal-analytics';
 import _merge = require('lodash.merge');
 import * as crypto from 'crypto';
-import * as murmurhash from 'murmurhash';
-import { Analytics, BaseApp, ErrorCode, HandleRequest, Jovo, JovoError } from 'jovo-core';
+import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError } from 'jovo-core';
+import { Jovo } from 'jovo-framework';
 import { Config, Event, TransactionItem, Transaction } from './interfaces';
+import { Helper } from './helper';
 
 export class GoogleAnalytics implements Analytics {
+
+  /**
+   * Need to save start state -\> will change during handling
+   * Need to save lastUsed for calculation timeouts (sessionEnded bug display devices)
+   *
+   * @param handleRequest - jovo HandleRequest objekt
+   */
+  static saveStartStateAndLastUsed(handleRequest: HandleRequest): void {
+    const { jovo } = handleRequest;
+
+    if (jovo) {
+      const stateString: string = jovo.getState() ? jovo.getState() : '/';
+
+      jovo.$data.startState = stateString;
+      jovo.$data.lastUsedAt = jovo?.$user.$metaData.lastUsedAt;
+    }
+  }
+  readonly sessionTimeoutInMinutes = 5;
+
   config: Config = {
     trackingId: '',
   };
@@ -29,6 +49,7 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
+    app.middleware('before.handler')!.use(GoogleAnalytics.saveStartStateAndLastUsed.bind(this));
     app.middleware('after.platform.init')!.use(this.setGoogleAnalyticsObject.bind(this));
     app.middleware('after.response')!.use(this.track.bind(this));
     app.middleware('fail')!.use(this.sendError.bind(this));
@@ -48,6 +69,10 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
+    if (Helper.getDiffToLastVisitInMinutes(jovo) > this.sessionTimeoutInMinutes && !jovo.isNewSession()) {
+      return;
+    }
+
     // Validate current request type
     const { type: requestType } = jovo.getRoute();
     const invalidRequestTypes = ['AUDIOPLAYER'];
@@ -59,10 +84,10 @@ export class GoogleAnalytics implements Analytics {
     const sessionTag = this.getSessionTag(jovo);
     this.visitor!.set('sessionControl', sessionTag);
 
-    // Track custom set data as custom metrics.
+    // Track custom set data as custom metrics or dimensions.
     const customData = jovo.$googleAnalytics.$data;
     for (const [key, value] of Object.entries(customData)) {
-      if (key.startsWith('cm')) {
+      if (key.startsWith('cm') || key.startsWith('dm')) {
         this.visitor!.set(key, value);
       }
     }
@@ -285,6 +310,9 @@ export class GoogleAnalytics implements Analytics {
       setCustomMetric(index: number, value: string | number) {
         this.$data[`cm${index}`] = value;
       },
+      setCustomDimension(index: number, value: string | number): void {
+        this.$data[`dm${index}`] = value;
+      }
     };
   }
 }
