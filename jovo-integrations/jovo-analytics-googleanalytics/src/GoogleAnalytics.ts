@@ -37,12 +37,12 @@ export class GoogleAnalytics implements Analytics {
     const endReason: validEndReasons | undefined = jovo.$session.$data.endReason;
     return endReason;
   }
-  readonly sessionTimeoutInMinutes = 5;
 
   config: Config = {
     trackingId: '',
     enableAutomaticEvents: true,
     trackEndReasons: false,
+    sessionTimeoutInMinutes: 5,
   };
   visitor: ua.Visitor | undefined;
 
@@ -114,7 +114,7 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-    if (Helper.getDiffToLastVisitInMinutes(jovo) > this.sessionTimeoutInMinutes && !jovo.isNewSession()) {
+    if (Helper.getDiffToLastVisitInMinutes(jovo) > this.config.sessionTimeoutInMinutes && !jovo.isNewSession()) {
       return;
     }
 

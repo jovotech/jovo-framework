@@ -114,7 +114,7 @@ app.use(
     new GoogleAnalyticsGoogleAssistant()
 );
 ```
-For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values.
+For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications).
 
 ```javascript
 // @language=javascript
@@ -130,6 +130,7 @@ module.exports = {
             trackDirectives: true   // Optional
             enableAutomaticEvents: true // Optional - set to false to disable
             trackEndReasons: false // Optional - when set to true the custom metrics 1-6 are used to track endReasons
+            sessionTimeoutInMinutes: 5 // Optional - default is 5
         },
         // Configurations for platform-specific plugins
         GoogleAnalyticsAlexa: {
