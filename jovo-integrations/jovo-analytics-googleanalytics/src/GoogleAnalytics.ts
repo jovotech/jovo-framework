@@ -90,21 +90,12 @@ export class GoogleAnalytics implements Analytics {
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
     const gaMetricNumber = this.endReasonGoogleAnalyticsMap.get(endReason);
-    console.log(`[GOOGLE ANALYTICS 169] Der EndReason ist _${endReason}_ und indexGa _${gaMetricNumber}_.`);
     if (gaMetricNumber) {
       jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
     } else {
       const undefinedMetricNumber = this.endReasonGoogleAnalyticsMap.get('undefined');
       if (undefinedMetricNumber) {
         jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
-        // @ts-ignore
-        jovo.util169.toSlack169(`[GOOGLE ANALYTICS 169] Der Endreason _${endReason}_ wurde nicht als valide befunden.\n *[STAGE]* ${process.env.STAGE}`);
-      } else {
-        // @ts-ignore
-        jovo.util169.toSlack169(
-          `[GOOGLE ANALYTICS 169] Der Endreason _${endReason}_ wurde nicht als valide befunden.\n *[STAGE]* ${process.env.STAGE}. 
-            Der Versuch ihn auf undefined zu setzen schlug fehl. Überprüfe, ob die endReasonGoogleAnalyticsMap mit falschen Werten überschrieben wurde.`,
-        );
       }
     }
   }
