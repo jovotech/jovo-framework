@@ -35,4 +35,5 @@ export interface Config extends PluginConfig {
   trackDirectives?: boolean;
   enableAutomaticEvents?: boolean;
   trackEndReasons?: boolean;
+  sessionTimeoutInMinutes: number;
 }
