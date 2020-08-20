@@ -17,7 +17,10 @@
   "dependencies": {
     "dashbot": "^10.2.1",
     "jovo-core": "^3.0.20",
-    "lodash.merge": "^4.6.2"
+    "lodash.merge": "^4.6.2",
+    "lodash.set": "^4.3.2",
+    "lodash.get": "^4.4.2"
+
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
