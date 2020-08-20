@@ -366,6 +366,7 @@ export class JovoUser implements Plugin {
         }
       }
       handleRequest.jovo.$user.$session = sessionData;
+      handleRequest.jovo.$session.$data = { ...handleRequest.jovo.$user.$session?.$data };
     }
 
     // can't parse $user, so we parse object containing its data
