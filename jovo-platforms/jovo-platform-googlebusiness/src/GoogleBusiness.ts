@@ -9,20 +9,28 @@ import {
   Platform,
   TestSuite,
 } from 'jovo-core';
-import _merge = require('lodash.merge');
 
+import _merge = require('lodash.merge');
 import { GoogleBusinessBot } from './core/GoogleBusinessBot';
 import { GoogleBusinessRequest } from './core/GoogleBusinessRequest';
 import { GoogleBusinessRequestBuilder } from './core/GoogleBusinessRequestBuilder';
 import { GoogleBusinessResponse } from './core/GoogleBusinessResponse';
 import { GoogleBusinessResponseBuilder } from './core/GoogleBusinessResponseBuilder';
-import { GoogleBusinessTestSuite } from './index';
+import {
+  GoogleBusinessTestSuite,
+  GoogleServiceAccount,
+  BaseResponse,
+  TextResponse,
+  StandaloneCardResponse,
+  CarouselCardResponse,
+} from './index';
 import { Cards } from './modules/Cards';
 import { GoogleBusinessCore } from './modules/GoogleBusinessCore';
-import { ApiCallOptions, GoogleBusinessAPI } from './services/GoogleBusinessAPI';
+import { GoogleBusinessAPI, SendResponseOptions } from './services/GoogleBusinessAPI';
 
 export interface Config extends ExtensibleConfig {
   locale?: string;
+  serviceAccount?: GoogleServiceAccount;
 }
 
 export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusinessResponse> {
@@ -30,8 +38,9 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
   static appType = 'GoogleBusinessBot';
 
   config: Config = {
-    locale: 'en'
-  }
+    locale: 'en',
+    serviceAccount: undefined,
+  };
 
   constructor(config?: Config) {
     super(config);
@@ -158,19 +167,17 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
 
-    const options: ApiCallOptions = {
-      data: (handleRequest.jovo.$response as GoogleBusinessResponse).response,
-      endpoint: 'https://businessmessages.googleapis.com/v1',
-      path: `/conversations/${handleRequest.jovo.$request?.getSessionId()}/messages`,
-      serviceAccount: this.config.serviceAccount,
+    const options: SendResponseOptions<BaseResponse> = {
+      data: (handleRequest.jovo.$response as GoogleBusinessResponse).response!,
+      serviceAccount: this.config.serviceAccount!,
+      sessionId: handleRequest.jovo.$request?.getSessionId() || '',
     };
 
-    try {
-      await GoogleBusinessAPI.apiCall(options);
-    } catch (e) {
-      Promise.reject(
-        new JovoError(e.message, ErrorCode.ERR_PLUGIN, 'jovo-platform-googlebusiness'),
-      );
+    if (
+      (options.data as TextResponse).text ||
+      (options.data as StandaloneCardResponse | CarouselCardResponse).richCard
+    ) {
+      await GoogleBusinessAPI.sendResponse(options);
     }
 
     await handleRequest.host.setResponse(handleRequest.jovo.$response);

@@ -17,15 +17,8 @@ declare module 'jovo-core/dist/src/core/Jovo' {
 
 declare module './core/GoogleBusinessBot' {
   interface GoogleBusinessBot {
-    /**
-     * Adds carousel to response
-     * @public
-     * @see https://developers.google.com/business-communications/business-messages/guides/build/send#rich-card-carousels
-     * @param {CarouselCard} carousel
-     * @return {GoogleBusinessBot}
-     */
-    showCarousel(carousel: CarouselCard): this;
-    showStandaloneCard(card: StandaloneCard): this;
+    showCarousel(carousel: CarouselCard, fallback?: string): Promise<void>;
+    showStandaloneCard(card: StandaloneCard, fallback?: string): Promise<void>;
   }
 }
 
@@ -35,6 +28,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       Suggestions?: Suggestion[];
       Carousel?: CarouselCard;
       StandaloneCard?: StandaloneCard;
+      Fallback?: string;
     };
   }
 }

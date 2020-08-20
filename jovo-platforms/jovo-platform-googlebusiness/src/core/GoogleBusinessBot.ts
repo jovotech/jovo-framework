@@ -1,7 +1,14 @@
-import { BaseApp, HandleRequest, Host, Jovo, Log } from 'jovo-core';
+import { BaseApp, HandleRequest, Host, Jovo, Log, Util } from 'jovo-core';
 
-import { Config, GoogleBusiness } from '../GoogleBusiness';
-import { Suggestion } from '../Interfaces';
+import { GoogleBusiness } from '../GoogleBusiness';
+import {
+  BaseResponse,
+  GoogleServiceAccount,
+  ResponseOptions,
+  Suggestion,
+  TextResponse,
+} from '../Interfaces';
+import { GoogleBusinessAPI } from '../services/GoogleBusinessAPI';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { GoogleBusinessSpeechBuilder } from './GoogleBusinessSpeechBuilder';
@@ -52,7 +59,7 @@ export class GoogleBusinessBot extends Jovo {
   }
 
   getDeviceId(): string | undefined {
-    Log.warn('Google Business Messages doesn\'t provide a device ID');
+    Log.warn(`Google Business Messages doesn't provide a device ID`);
     return;
   }
 
@@ -87,5 +94,37 @@ export class GoogleBusinessBot extends Jovo {
   addSuggestionChips(suggestions: Suggestion[]): this {
     this.$output.GoogleBusiness.Suggestions = suggestions;
     return this;
+  }
+
+  setFallback(fallback: string): this {
+    this.$output.GoogleBusiness.Fallback = fallback;
+    return this;
+  }
+
+  async showText(text: string, options: ResponseOptions = {}): Promise<void> {
+    const data: TextResponse = {
+      ...this.makeBaseResponse(),
+      ...options,
+      text,
+    };
+    await GoogleBusinessAPI.sendResponse({
+      data,
+      serviceAccount: this.serviceAccount!,
+      sessionId: this.$request!.getSessionId()!,
+    });
+  }
+
+  makeBaseResponse(): BaseResponse {
+    const messageId = Util.randomStr(12);
+    return {
+      messageId,
+      representative: {
+        representativeType: 'BOT',
+      },
+    };
+  }
+
+  private get serviceAccount(): GoogleServiceAccount | undefined {
+    return this.$config.plugin?.GoogleBusiness.serviceAccount;
   }
 }
