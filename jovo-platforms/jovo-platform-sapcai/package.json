@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-sapcai",
-  "version": "3.0.22",
+  "version": "3.0.23",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -38,7 +38,7 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-framework": "^3.0.22",
+    "jovo-framework": "^3.0.23",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
