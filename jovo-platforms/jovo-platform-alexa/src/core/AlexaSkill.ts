@@ -567,7 +567,7 @@ export class AlexaSkill extends Jovo {
    * @returns {string | undefined}
    */
   getSkillId(): string | undefined {
-    return _get(this.$request, 'session.application.applicationId');
+    return _get(this.$request, 'session.application.applicationId') || _get(this.$request, 'context.System.application.applicationId');
   }
 
   /**

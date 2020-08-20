@@ -1,7 +1,9 @@
 import { Google } from 'dashbot';
 import * as dashbot from 'dashbot'; // tslint:disable-line
-import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, Log, PluginConfig } from 'jovo-core';
+import _get = require('lodash.get');
 import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 export interface Config extends PluginConfig {
   key: string;
@@ -37,9 +39,25 @@ export class DashbotGoogleAssistant implements Analytics {
 
     if (handleRequest.jovo.constructor.name === 'GoogleAction') {
       this.dashbot.logIncoming(handleRequest.host.getRequestObject());
+
+      const responseObj = {...handleRequest.jovo.$response};
+
+      // @ts-ignore
+      let userStorage: Record<string, any> = {};
+
+      try {
+        userStorage = JSON.parse(_get(responseObj, 'payload.google.userStorage', {}));
+        userStorage.dashbotUser = {
+          userId: handleRequest.jovo.$user.getId()
+        };
+        _set(responseObj, 'payload.google.userStorage', JSON.stringify(userStorage, null, ''));
+      } catch(e) {
+        Log.error(e);
+      }
+
       this.dashbot.logOutgoing(
         handleRequest.host.getRequestObject(),
-        handleRequest.jovo.$response!,
+        responseObj,
       );
     }
   }
