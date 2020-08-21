@@ -1,6 +1,16 @@
 # Dashbot Changelog
 
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
+
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+
+### 2020-08-21  [3.0.26]
+
+### :nail_care: Enhancements
+* [#806](https://github.com/jovotech/jovo-framework/pull/806) Add dashbotUser to userStorage ([@aswetlow](https://github.com/aswetlow))   
+
+
 
 ## 3.0.11 (2020-04-06)
 
