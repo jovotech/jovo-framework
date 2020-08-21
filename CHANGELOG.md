@@ -3,7 +3,10 @@
 
 ### Latest Framework Version: 3.0.23
 
+<br> 
+
 ### 2020-08-21
+
 
 ### :sparkles: New Features
 
@@ -13,7 +16,7 @@
 ##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
 * [#803](https://github.com/jovotech/jovo-framework/pull/803) Implement asynchronous responses for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))   
 
-
+<br><br>
 ### :nail_care: Enhancements
 
 ##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
@@ -26,8 +29,9 @@
 * [#806](https://github.com/jovotech/jovo-framework/pull/806) Add dashbotUser to userStorage ([@aswetlow](https://github.com/aswetlow))   
 
 
+<br>
 
- ### :bug: Bug Fix
+### :bug: Bug Fix
  
 ##### `jovo-platform-facebookmessenger [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-facebookmessenger) | [npm](https://www.npmjs.com/package/jovo-platform-facebookmessenger)
 * [#792](https://github.com/jovotech/jovo-framework/pull/792) Fix FacebookMessenger bug ([@m-ripper](https://github.com/m-ripper))   
