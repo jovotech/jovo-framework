@@ -17,10 +17,12 @@
 	"dependencies": {
 		"jovo-core": "^3.0.20",
 		"jovo-framework": "^3.0.22",
+		"jovo-platform-dialogflow": "^3.0.20",
+		"lodash": "^4.17.20",
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
-    "universal-analytics": "^0.4.20",
-    "moment-timezone": "^0.5.31"
+		"moment-timezone": "^0.5.31",
+		"universal-analytics": "^0.4.20"
 	},
 	"devDependencies": {
 		"@types/express": "^4.16.0",
