@@ -138,17 +138,18 @@ export class GoogleAnalytics implements Analytics {
     }
 
     // Track intent data.
-    this.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    }).send();
+    const pageview = this.visitor!.pageview(this.getPageParameters(jovo));
 
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
       this.sendUnhandledEvents(jovo);
       this.sendIntentInputEvents(jovo);
     }
+    this.visitor?.send((err: any) => {
+      if (err) {
+        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+      }
+    });
   }
 
   /**
@@ -225,17 +226,8 @@ export class GoogleAnalytics implements Analytics {
           eventCategory: 'Inputs',
           eventAction: value.key, // Input value
           eventLabel: key, // Input key
-          documentPath: jovo.getRoute().path,
         };
-        this.visitor!.event(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
+        this.visitor!.event(params);
       }
     }
   }
@@ -313,11 +305,7 @@ export class GoogleAnalytics implements Analytics {
       documentPath: jovo.getRoute().path,
     };
 
-    this.visitor!.event(params, (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    }).send();
+    this.visitor!.event(params);
   }
 
   /**
