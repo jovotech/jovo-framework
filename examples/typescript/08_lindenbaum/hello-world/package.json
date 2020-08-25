@@ -1,15 +1,15 @@
 {
   "name": "jovo-examples-ts-lindenbaum-hello-world",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "private": true,
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "dependencies": {
     "jovo-db-filedb": "^3.0.21",
-    "jovo-framework": "^3.0.22",
+    "jovo-framework": "^3.0.23",
     "jovo-nlu-nlpjs": "^3.0.16-alpha.0",
-    "jovo-platform-lindenbaum": "^3.0.20",
+    "jovo-platform-lindenbaum": "^3.0.21",
     "jovo-plugin-debugger": "^3.0.20"
   },
   "devDependencies": {

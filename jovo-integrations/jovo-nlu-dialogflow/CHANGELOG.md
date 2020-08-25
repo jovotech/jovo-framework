@@ -1,6 +1,15 @@
 # Dialogflow NLU Changelog
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-nlu-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-nlu-dialogflow) | [npm](https://www.npmjs.com/package/jovo-nlu-dialogflow)
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+
+### 2020-08-21 [3.0.21]
+
+### :nail_care: Enhancements
+
+* [#793](https://github.com/jovotech/jovo-framework/pull/793) Improve DialogflowNlu session-id for detectIntent-requests ([@m-ripper](https://github.com/m-ripper))   
+
 
 ## 3.0.11 (2020-04-06)
 

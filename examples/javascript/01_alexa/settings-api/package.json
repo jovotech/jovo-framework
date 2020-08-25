@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-settings-api",
-  "version": "3.0.29",
+  "version": "3.0.30",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.0.22",
-    "jovo-platform-alexa": "^3.0.29",
+    "jovo-framework": "^3.0.23",
+    "jovo-platform-alexa": "^3.0.30",
     "moment-timezone": "^0.5.23"
   }
 }
