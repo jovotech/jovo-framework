@@ -18,9 +18,11 @@
 <br/>
 
 # Jovo Web Client - Vue
-A web-based client that allows interacting with the Jovo Core-platform. \
+A web-based client that allows interacting with the Jovo Core-platform. 
+
 This package is a plugin for Vue.js and does not work without it.
+> `vue` is a peer-dependency of this package and therefore needs to be installed as well.
 
 ```sh
-npm install jovo-client-web-vue
+npm install jovo-client-web-vue vue
 ```
