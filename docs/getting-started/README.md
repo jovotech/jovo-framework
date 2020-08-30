@@ -11,6 +11,7 @@ Learn how to quickly get started with a Jovo project.
 
 Watch the video here:
 
+
 [![Video: Jovo v2 Quickstart Guide](../img/video-quickstart-guide.jpg 'youtube-video')] (https://www.youtube.com/watch?v=DsVVek8exAs)
 
 > [For the full installation guide, take a look here](./installation './installation').
