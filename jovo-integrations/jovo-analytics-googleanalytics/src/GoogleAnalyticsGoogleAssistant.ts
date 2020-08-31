@@ -27,10 +27,12 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       return;
     }
 
-    const userVerificationStatus: string | undefined = get(dialogFlowRequest.originalDetectIntentRequest!.payload, 'user.userVerificationStatus');//  inputs[0].rawInputs[0].inputType');
-    const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
-    if (!isVoiceMatchUser) {
-      return;
+    if (!this.config.skipUnverifiedUser) {
+      const userVerificationStatus: string | undefined = get(dialogFlowRequest.originalDetectIntentRequest!.payload, 'user.userVerificationStatus');//  inputs[0].rawInputs[0].inputType');
+      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+      if (!isVoiceMatchUser) {
+        return;
+      }
     }
     super.track(handleRequest);
   }

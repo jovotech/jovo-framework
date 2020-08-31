@@ -114,7 +114,7 @@ app.use(
     new GoogleAnalyticsGoogleAssistant()
 );
 ```
-For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications).
+For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications). By default users with disabled voice match are ignored in Google Analytics because each of their sessions will be counted as separate user. You can enable tracking them by setting "skipUnverifiedUser" to false.
 
 ```javascript
 // @language=javascript
@@ -127,10 +127,11 @@ module.exports = {
         // Configuration for generic tracking plugin
         GoogleAnalytics: {
             trackingId: '',
-            trackDirectives: true   // Optional
-            enableAutomaticEvents: true // Optional - set to false to disable
-            trackEndReasons: false // Optional - when set to true the custom metrics 1-6 are used to track endReasons
-            sessionTimeoutInMinutes: 5 // Optional - default is 5
+            trackDirectives: true,   // Optional
+            enableAutomaticEvents: true, // Optional - set to false to disable
+            trackEndReasons: false, // Optional - when set to true the custom metrics 1-6 are used to track endReasons
+            sessionTimeoutInMinutes: 5, // Optional - default is 5
+            skipUnverifiedUser: true, // Optional - default is true
         },
         // Configurations for platform-specific plugins
         GoogleAnalyticsAlexa: {

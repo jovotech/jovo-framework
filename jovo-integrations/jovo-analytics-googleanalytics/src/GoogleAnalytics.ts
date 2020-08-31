@@ -43,6 +43,7 @@ export class GoogleAnalytics implements Analytics {
     enableAutomaticEvents: true,
     trackEndReasons: false,
     sessionTimeoutInMinutes: 5,
+    skipUnverifiedUser: true,
   };
   visitor: ua.Visitor | undefined;
 

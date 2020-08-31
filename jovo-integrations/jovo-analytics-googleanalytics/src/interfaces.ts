@@ -36,4 +36,5 @@ export interface Config extends PluginConfig {
   enableAutomaticEvents?: boolean;
   trackEndReasons?: boolean;
   sessionTimeoutInMinutes: number;
+  skipUnverifiedUser: boolean;
 }
