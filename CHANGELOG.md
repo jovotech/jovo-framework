@@ -1,9 +1,22 @@
 # Jovo Framework Changelog
 
 
-### Latest Framework Version: 3.0.23
+### Latest Framework Version: 3.0.24
+
+
 
 <br> 
+
+## 2020-08-31
+
+### :sparkles: New Features
+
+##### `jovo-analytics-googleanalytics [3.0.31]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#804](https://github.com/jovotech/jovo-framework/pull/804) Google Analytics Features and Fixes ([@freiSMS](https://github.com/freiSMS))
+
+##### `jovo-client-web-vue [3.0.32]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-client-web-vue) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-clients/jovo-client-web-vue) | [npm](https://www.npmjs.com/package/jovo-client-web-vue)
+* [#808](https://github.com/jovotech/jovo-framework/pull/808) Move Vue to peerDependencies ([@m-ripper](https://github.com/m-ripper))
+
 
 ## 2020-08-21
 

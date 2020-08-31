@@ -1,6 +1,12 @@
 # Google Analytics Changelog
 
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+### 2020-08-31 [3.0.31]
+ 
+* [#804](https://github.com/jovotech/jovo-framework/pull/804) Google Analytics Features and Fixes ([@freiSMS](https://github.com/freiSMS))
 
 ## 3.0.11 (2020-04-06)
 
