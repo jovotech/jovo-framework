@@ -6,10 +6,16 @@ import { Jovo } from 'jovo-framework';
 import { Config, Event, TransactionItem, Transaction } from './interfaces';
 import { Helper } from './helper';
 
-type validEndReasons = 'Stop' | 'ERROR' | 'EXCEEDED_MAX_REPROMPTS' | 'PLAYTIME_LIMIT_REACHED' | 'PlayTimeLimitReached' | 'USER_INITIATED' | 'undefined';
+type validEndReasons =
+  | 'Stop'
+  | 'ERROR'
+  | 'EXCEEDED_MAX_REPROMPTS'
+  | 'PLAYTIME_LIMIT_REACHED'
+  | 'PlayTimeLimitReached'
+  | 'USER_INITIATED'
+  | 'undefined';
 
 export class GoogleAnalytics implements Analytics {
-
   /**
    * Need to save start state -\> will change during handling
    * Need to save lastUsed for calculation timeouts (sessionEnded bug display devices)
@@ -81,7 +87,6 @@ export class GoogleAnalytics implements Analytics {
     app.middleware('fail')!.use(this.sendError.bind(this));
   }
 
-
   /**
    * Sets end reason to session variables + updates google analytics metric
    *
@@ -115,7 +120,10 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-    if (Helper.getDiffToLastVisitInMinutes(jovo) > this.config.sessionTimeoutInMinutes && !jovo.isNewSession()) {
+    if (
+      Helper.getDiffToLastVisitInMinutes(jovo) > this.config.sessionTimeoutInMinutes &&
+      !jovo.isNewSession()
+    ) {
       return;
     }
 
@@ -243,7 +251,7 @@ export class GoogleAnalytics implements Analytics {
     const intentName = jovo.$request?.getIntentName();
     return {
       documentPath: this.getPageName(jovo),
-      documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',  
+      documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',
       documentTitle: intentName || intentType,
     };
   }
@@ -255,7 +263,10 @@ export class GoogleAnalytics implements Analytics {
    * @override
    */
   getPageName(jovo: Jovo): string {
-    const endReason = this.getSessionTag(jovo) === 'end' && GoogleAnalytics.getEndReason(jovo) ? GoogleAnalytics.getEndReason(jovo) : jovo.$type.type;
+    const endReason =
+      this.getSessionTag(jovo) === 'end' && GoogleAnalytics.getEndReason(jovo)
+        ? GoogleAnalytics.getEndReason(jovo)
+        : jovo.$type.type;
 
     const intentName = jovo.$request?.getIntentName() ? jovo.$request?.getIntentName() : endReason;
     const state = jovo.$data.startState ? jovo.$data.startState : '/';
@@ -268,7 +279,6 @@ export class GoogleAnalytics implements Analytics {
    * @returns {string} uuid: Hashed user id
    */
   getUserId(jovo: Jovo): string {
-
     const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
     return idHash;
   }
@@ -370,7 +380,7 @@ export class GoogleAnalytics implements Analytics {
       },
       setCustomDimension(index: number, value: string | number): void {
         this.$data[`cd${index}`] = value;
-      }
+      },
     };
   }
 }

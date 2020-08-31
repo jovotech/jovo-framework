@@ -116,30 +116,30 @@ export class GoogleBusinessRequest implements JovoRequest {
   }
 
   getDeviceName(): string | undefined {
-    Log.warn('Google Business Messages doesn\'t parse a device name in the request.');
+    Log.warn("Google Business Messages doesn't parse a device name in the request.");
     return;
   }
 
   getUserId(): string {
     Log.warn(
-      'Google Business Messages doesn\'t parse an user ID in the request. Please use this.$user.getId()',
+      "Google Business Messages doesn't parse an user ID in the request. Please use this.$user.getId()",
     );
     return '';
   }
 
   getAccessToken(): string | undefined {
-    Log.warn('Google Business Messages doesn\'t parse an access token in the request.');
+    Log.warn("Google Business Messages doesn't parse an access token in the request.");
     return;
   }
 
   getLocale(): string {
-    Log.warn('Google Business Messages doesn\'t parse a locale in the request.');
+    Log.warn("Google Business Messages doesn't parse a locale in the request.");
     return '';
   }
 
   isNewSession(): boolean {
     Log.warn(
-      'Google Business Messages doesn\'t parse a flag for new sessions in the request. Please use this.isNewSession() instead.',
+      "Google Business Messages doesn't parse a flag for new sessions in the request. Please use this.isNewSession() instead.",
     );
     return false;
   }
@@ -149,23 +149,23 @@ export class GoogleBusinessRequest implements JovoRequest {
   }
 
   hasAudioInterface(): boolean {
-    Log.warn('Google Business Messages doesn\'t support multiple interfaces.');
+    Log.warn("Google Business Messages doesn't support multiple interfaces.");
     return false;
   }
 
   hasScreenInterface(): boolean {
-    Log.warn('Google Business Messages doesn\'t support multiple interfaces.');
+    Log.warn("Google Business Messages doesn't support multiple interfaces.");
     return false;
   }
 
   hasVideoInterface(): boolean {
-    Log.warn('Google Business Messages doesn\'t support multiple interfaces.');
+    Log.warn("Google Business Messages doesn't support multiple interfaces.");
     return false;
   }
 
   getSessionAttributes(): SessionData {
     Log.warn(
-      'Google Business Messages doesn\'t parse session data in the request. Please use this.$session',
+      "Google Business Messages doesn't parse session data in the request. Please use this.$session",
     );
     return {};
   }
@@ -176,7 +176,7 @@ export class GoogleBusinessRequest implements JovoRequest {
 
   addSessionAttribute(key: string, value: any): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse session data in the request. Please use this.$session',
+      "Google Business Messages doesn't parse session data in the request. Please use this.$session",
     );
     return this;
   }
@@ -191,51 +191,51 @@ export class GoogleBusinessRequest implements JovoRequest {
   }
 
   setLocale(locale: string): this {
-    Log.warn('Google Business Messages doesn\'t parse a locale in the request.');
+    Log.warn("Google Business Messages doesn't parse a locale in the request.");
     return this;
   }
 
   setUserId(userId: string): this {
-    Log.warn('Google Business Messages doesn\'t parse an user ID in the request.');
+    Log.warn("Google Business Messages doesn't parse an user ID in the request.");
     return this;
   }
 
   setAccessToken(accessToken: string): this {
-    Log.warn('Google Business Messages doesn\'t parse an access token in the request.');
+    Log.warn("Google Business Messages doesn't parse an access token in the request.");
     return this;
   }
 
   setNewSession(isNew: boolean): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse a flag for new sessions in the request. Simply use a unique conversationId in your request instead.',
+      "Google Business Messages doesn't parse a flag for new sessions in the request. Simply use a unique conversationId in your request instead.",
     );
     return this;
   }
 
   setAudioInterface(): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse the interfaces of the current device in the request.',
+      "Google Business Messages doesn't parse the interfaces of the current device in the request.",
     );
     return this;
   }
 
   setVideoInterface(): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse the interfaces of the current device in the request.',
+      "Google Business Messages doesn't parse the interfaces of the current device in the request.",
     );
     return this;
   }
 
   setScreenInterface(): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse the interfaces of the current device in the request.',
+      "Google Business Messages doesn't parse the interfaces of the current device in the request.",
     );
     return this;
   }
 
   setSessionAttributes(attributes: SessionData): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse session data in the request. Please use this.$session',
+      "Google Business Messages doesn't parse session data in the request. Please use this.$session",
     );
     return this;
   }
@@ -246,7 +246,7 @@ export class GoogleBusinessRequest implements JovoRequest {
 
   setState(state: string): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse state data in the request. Please use this.setState() instead.',
+      "Google Business Messages doesn't parse state data in the request. Please use this.setState() instead.",
     );
     return this;
   }
@@ -256,7 +256,7 @@ export class GoogleBusinessRequest implements JovoRequest {
       return this.nlu?.intentName || '';
     } else {
       Log.warn(
-        'Google Business Messages doesn\'t parse an intent in the request. Please use $googleBusinessBot.$nlu.intent.name to get the intent name',
+        "Google Business Messages doesn't parse an intent in the request. Please use $googleBusinessBot.$nlu.intent.name to get the intent name",
       );
       return '';
     }
@@ -270,7 +270,7 @@ export class GoogleBusinessRequest implements JovoRequest {
       this.nlu.intentName = intentName;
     } else {
       Log.warn(
-        'Google Business Messages doesn\'t parse the intent in the request. Please use this.$nlu.intent.name to set the intent name.',
+        "Google Business Messages doesn't parse the intent in the request. Please use this.$nlu.intent.name to set the intent name.",
       );
     }
     return this;
@@ -281,7 +281,7 @@ export class GoogleBusinessRequest implements JovoRequest {
       return this.nlu?.inputs || {};
     } else {
       Log.warn(
-        'Google Business Messages doesn\'t parse inputs in the request. Please use this.$inputs to get the inputs directly',
+        "Google Business Messages doesn't parse inputs in the request. Please use this.$inputs to get the inputs directly",
       );
       return {};
     }
@@ -307,7 +307,7 @@ export class GoogleBusinessRequest implements JovoRequest {
       }
     } else {
       Log.warn(
-        'Google Business Messages doesn\'t parse inputs in the request. Please use this.$inputs to assign the inputs directly',
+        "Google Business Messages doesn't parse inputs in the request. Please use this.$inputs to assign the inputs directly",
       );
     }
     return this;
@@ -315,14 +315,14 @@ export class GoogleBusinessRequest implements JovoRequest {
 
   getState(): string | undefined {
     Log.warn(
-      'Google Business Messages doesn\'t parse state data in the request. Please use this.setState() instead.',
+      "Google Business Messages doesn't parse state data in the request. Please use this.setState() instead.",
     );
     return;
   }
 
   setInputs(inputs: Inputs): this {
     Log.warn(
-      'Google Business Messages doesn\'t parse inputs in the request. Please use this.$inputs to assign the inputs directly',
+      "Google Business Messages doesn't parse inputs in the request. Please use this.$inputs to assign the inputs directly",
     );
     return this;
   }

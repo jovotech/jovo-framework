@@ -40,7 +40,7 @@ export class DashbotGoogleAssistant implements Analytics {
     if (handleRequest.jovo.constructor.name === 'GoogleAction') {
       this.dashbot.logIncoming(handleRequest.host.getRequestObject());
 
-      const responseObj = {...handleRequest.jovo.$response};
+      const responseObj = { ...handleRequest.jovo.$response };
 
       // @ts-ignore
       let userStorage: Record<string, any> = {};
@@ -48,17 +48,14 @@ export class DashbotGoogleAssistant implements Analytics {
       try {
         userStorage = JSON.parse(_get(responseObj, 'payload.google.userStorage', {}));
         userStorage.dashbotUser = {
-          userId: handleRequest.jovo.$user.getId()
+          userId: handleRequest.jovo.$user.getId(),
         };
         _set(responseObj, 'payload.google.userStorage', JSON.stringify(userStorage, null, ''));
-      } catch(e) {
+      } catch (e) {
         Log.error(e);
       }
 
-      this.dashbot.logOutgoing(
-        handleRequest.host.getRequestObject(),
-        responseObj,
-      );
+      this.dashbot.logOutgoing(handleRequest.host.getRequestObject(), responseObj);
     }
   }
 }
