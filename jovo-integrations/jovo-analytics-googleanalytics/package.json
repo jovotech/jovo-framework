@@ -16,10 +16,13 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"jovo-core": "^3.0.20",
+		"jovo-framework": "^3.0.22",
+		"jovo-platform-dialogflow": "^3.0.20",
+		"lodash": "^4.17.20",
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
-		"murmurhash": "0.0.2",
-		"universal-analytics": "^0.4.23"
+		"universal-analytics": "^0.4.23",
+		"moment-timezone": "^0.5.31"
 	},
 	"devDependencies": {
 		"@types/express": "^4.16.0",
@@ -27,7 +30,6 @@
 		"@types/jest": "^24.0.11",
 		"@types/lodash.get": "^4.4.6",
 		"@types/lodash.merge": "^4.6.6",
-		"@types/murmurhash": "0.0.1",
 		"@types/node": "^10.3.1",
 		"@types/universal-analytics": "^0.4.2",
 		"jest": "^25.1.0",
