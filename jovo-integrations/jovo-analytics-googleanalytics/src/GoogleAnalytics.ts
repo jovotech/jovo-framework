@@ -369,7 +369,7 @@ export class GoogleAnalytics implements Analytics {
         this.$data[`cm${index}`] = value;
       },
       setCustomDimension(index: number, value: string | number): void {
-        this.$data[`dm${index}`] = value;
+        this.$data[`cd${index}`] = value;
       }
     };
   }
