@@ -7,6 +7,13 @@
 
 <br> 
 
+## 2020-09-01
+
+### :bug: Bug Fix
+
+##### `jovo-platform-googlebusiness [3.0.9]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
+* [#810](https://github.com/jovotech/jovo-framework/pull/810) Implement check for duplicated messages for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))
+
 ## 2020-08-31
 
 ### :sparkles: New Features
