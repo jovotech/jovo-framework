@@ -145,6 +145,25 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     }
 
     handleRequest.jovo!.$session.$data = { ...handleRequest.jovo!.$user.$session.$data };
+
+    // check for duplicated messages and ignore the request if a message with the id was handled already
+    const request = handleRequest.jovo.$request as GoogleBusinessRequest;
+    const messageId =
+      request.message?.messageId ||
+      request.suggestionResponse?.message?.match(/messages[/](.*)/)?.[1] ||
+      undefined;
+
+    if (messageId) {
+      const processedMessages: string[] = handleRequest.jovo.$session.$data.processedMessages || [];
+      if (processedMessages.includes(messageId)) {
+        handleRequest.stopMiddlewareExecution();
+        return handleRequest.host.setResponse({});
+      } else {
+        processedMessages.push(messageId);
+      }
+      handleRequest.jovo.$session.$data.processedMessages = processedMessages;
+      await handleRequest.jovo.$user.saveData();
+    }
   }
 
   async tts(handleRequest: HandleRequest) {
