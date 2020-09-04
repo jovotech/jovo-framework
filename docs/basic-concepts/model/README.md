@@ -204,7 +204,7 @@ While defining your `inputs` (slots on Alexa and entities in Dialogflow) you can
 ```
 In the upper part of the example above, for the `name` input, we distinguish between input types for `alexa` and `dialogflow`. Learn more about their built-in input types here:
 * Amazon Alexa: [Slot Type Reference](https://developer.amazon.com/docs/custom-skills/slot-type-reference.html)
-* Dialogflow: [System Entities](https://dialogflow.com/docs/reference/system-entities)
+* Dialogflow: [System Entities](https://cloud.google.com/dialogflow/es/docs/entities-system)
 
 In the lower part, we reference a new input type called `myCityInputType`, which we need to define outside the `intents` array of the overall model.
 
