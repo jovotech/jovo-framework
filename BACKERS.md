@@ -12,11 +12,6 @@ If you run a business and are building on top of Jovo, it makes business sense t
 Thank you to all our existing sponsors and supporters! <3
 
 
-## Platinum Sponsors
-
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/platinum-sponsors.svg?avatarHeight=75&width=600" /></a>
-* [Spokestack](https://www.spokestack.io/)
-
 
 ## Gold Sponsors
 
@@ -70,3 +65,4 @@ Thank you to all our existing sponsors and supporters! <3
 * Jeff Kinsey
 * Stoked Skills
 * Mario Menti
+* Spokestack
