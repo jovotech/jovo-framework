@@ -1,5 +1,7 @@
 # Installation
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/installation
+
 Learn about different options to install the Jovo Framework and Jovo CLI.
 
 * [Introduction](#introduction)

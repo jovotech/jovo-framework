@@ -1,6 +1,8 @@
 # Integrations
 
-With third-party integrations, you can add more functionality to your voice apps.
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/integrations
+
+With third-party integrations, you can add more functionality to your voice apps. You can find all integrations in the [Jovo Marketplace](https://www.jovo.tech/marketplace).
 
 * [Databases](#databases)
 * [Analytics](#analytics)

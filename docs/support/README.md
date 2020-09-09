@@ -1,5 +1,7 @@
 # Support
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/support
+
 Any questions with the framework? Just let us know, we're happy to help!
 
 * [How to Reach Us](#how-to-reach-us)

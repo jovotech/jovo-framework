@@ -1,5 +1,7 @@
 # config.js - App Configuration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/config-js
+
 In this section, you will learn more about the essential configurations of a Jovo Voice App.
 
 * [Overview](#overview)

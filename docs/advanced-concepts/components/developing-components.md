@@ -1,5 +1,7 @@
 # Developing Conversational Components
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/components/developing-components
+
 Get an overview on how to develop your own Conversational Components.
 
 * [Handler](#handler)

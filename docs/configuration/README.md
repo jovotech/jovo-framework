@@ -1,5 +1,7 @@
 # Configuration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/configuration
+
 Learn more about how to configure your Jovo project
 
 * [Overview](#overview)

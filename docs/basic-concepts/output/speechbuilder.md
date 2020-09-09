@@ -1,5 +1,7 @@
 # SpeechBuilder
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/output/speechbuilder
+
 In this section, you will learn how to use the Jovo SpeechBuilder, a helper class that makes it easier to build speech responses and add variety to your voice app.
 
 * [Introduction to the SpeechBuilder](#introduction-to-the-speechbuilder)

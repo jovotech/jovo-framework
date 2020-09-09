@@ -1,5 +1,7 @@
 # User
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/data/user
+
 In this section, you will learn how to use the Jovo User class to persist user specific data and create contextual experiences for your voice apps.
 
 * [Introduction to the User Class](#introduction-to-the-user-class)

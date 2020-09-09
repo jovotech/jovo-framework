@@ -1,5 +1,7 @@
 # Requests and Responses
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/requests-responses
+
 Learn more about the general architecture and lifecycle of voice app requests and responses.
 
 * [Introduction to Voice Interactions](#introduction-to-voice-interactions)

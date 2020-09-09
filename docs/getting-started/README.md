@@ -1,5 +1,7 @@
 # Jovo Quickstart Guide
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/quickstart
+
 Learn how to quickly get started with a Jovo project.
 
 * [Install the Jovo CLI](#install-the-jovo-cli)

@@ -1,5 +1,7 @@
 # Jovo v2 Migration Guide
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/installation/v2-migration
+
 We just released a huge update to the Jovo Framework: Version 3! Learn how to migrate from a Jovo v2 project to the new v3 of the Jovo Framework, or [check out our Quickstart guide](../README.md '../quickstart').
 
 * [Breaking Changes in v3](#breaking-changes-in-v3)

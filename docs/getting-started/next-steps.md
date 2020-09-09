@@ -1,5 +1,7 @@
 # Next Steps
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/next-steps
+
 After successfully installing your first Jovo project, here's how we recommend you to dive into voice app development.
 
 * [Basic Concepts](#basic-concepts)

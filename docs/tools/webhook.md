@@ -1,5 +1,7 @@
 # Jovo Webhook
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/webhook
+
 Learn more about the Jovo Webhook for local development of Alexa Skills and Google Actions
 
 * [Introduction](#introduction)

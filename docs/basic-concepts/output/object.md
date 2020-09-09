@@ -1,5 +1,7 @@
 # Jovo Output Object
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/output/object
+
 Learn more about the Jovo `$output` object.
 
 * [Introduction](#introduction)

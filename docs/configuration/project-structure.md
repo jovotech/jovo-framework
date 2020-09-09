@@ -1,5 +1,7 @@
 # Project Structure
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-structure
+
 In this section, you will learn more about the project structure of a Jovo Voice App.
 
 * [Overview](#overview)

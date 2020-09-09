@@ -1,5 +1,7 @@
 # Voice App Basics
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/voice-app-basics
+
 This section provides an overview of how voice applications work, and the differences between voice platforms. Currently, Jovo supports [Amazon Alexa](#amazon-alexa) and [Google Assistant](#google-assistant).
 
 * [How Voice Apps Work](#how-voice-apps-work)
