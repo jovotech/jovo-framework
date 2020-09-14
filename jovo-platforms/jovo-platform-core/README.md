@@ -25,7 +25,7 @@ To make the process easier, we created the Jovo Core Platform which comes with i
 
 ### How it works
 
-![alt text](./img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
+![Jovo Client and Jovo Core Platform](./img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
 
 The Jovo Core Platform can be connected to any client (the "frontend" that records speech or text input and passes it to the Jovo app). You can either implement your own client or use existing [Jovo Clients](https://www.jovo.tech/marketplace/tag/clients).
 
@@ -292,22 +292,6 @@ this.$corePlatformApp?.$actions.addSpeech({
 	plain: 'text',
 	ssml: '<s>text</s>'
 });
-```
-
-You can add RepromptActions like this:
-
-```javascript
-// @language=javascript
-
-this.$corePlatformApp.addRepromptActions(
-	this.$corePlatformApp.$repromptActions
-);
-
-// @language=typescript
-
-this.$corePlatformApp?.addRepromptActions(
-	this.$corePlatformApp?.$repromptActions
-);
 ```
 
 ### Showing Quick Replies
