@@ -141,7 +141,7 @@ export class GoogleAnalytics implements Analytics {
     // Track custom set data as custom metrics or dimensions.
     const customData = jovo.$googleAnalytics.$data;
     for (const [key, value] of Object.entries(customData)) {
-      if (key.startsWith('cm') || key.startsWith('dm')) {
+      if (key.startsWith('cm') || key.startsWith('cd')) {
         this.visitor!.set(key, value);
       }
     }
