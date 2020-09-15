@@ -1,7 +1,7 @@
 {
   "name": "jovo-analytics-onedash",
   "version": "2.0.0",
-  "main": "src/index.js",
+  "main": "dist/src/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +10,7 @@
     "onedash"
   ],
   "author": "EORA.ai",
-  "license": "GPL-3.0-or-later",
+  "license": "Apache-2.0",
   "description": "",
   "dependencies": {
     "jovo-core": "^3.0.21",

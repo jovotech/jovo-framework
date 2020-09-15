@@ -62,6 +62,16 @@ const { OneDashAlexa } = require('jovo-analytics-onedash');
 app.use(
     new OneDashAlexa()
 );
+
+// @language=typescript
+
+// src/app.ts
+
+import { OneDashAlexa } from 'jovo-analytics-onedash';
+
+app.use(
+    new OneDashAlexa()
+);
 ```
 
 Add configurations like this:
@@ -82,6 +92,23 @@ module.exports = {
     // ...
 
 };
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    analytics: {
+        OneDashAlexa: {
+            key: '<key>',
+        },
+    },
+
+    // ...
+
+};
+
 ```
 
 ### Test OneDash
