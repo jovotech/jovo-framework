@@ -350,8 +350,8 @@ export class Transaction {
       'inputs[0]["arguments"]',
       [],
     )) {
-      if (argument.name === 'TRANSACTION_REQUIREMENTS_CHECK_RESULT') {
-        return _get(argument, 'extension.resultType');
+      if (argument.name === 'DELIVERY_ADDRESS_VALUE') {
+        return _get(argument, 'extension.location');
       }
     }
   }
