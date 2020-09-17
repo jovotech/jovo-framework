@@ -3,6 +3,15 @@
 
 ### Latest Framework Version: 3.0.24
 
+## 2020-09-17
+
+### :bug: Bug Fix
+
+##### `jovo-analytics-googleanalytics [3.0.32]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#812](https://github.com/jovotech/jovo-framework/pull/812) Fix endreason for "stop" not set ([@freiSMS](https://github.com/freiSMS))
+
+##### `jovo-platform-googleassistant [3.0.30]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant)
+* Fix getDeliveryAddress in Transactions API ([@aswetlow](https://github.com/aswetlow))   
 
 
 <br> 
