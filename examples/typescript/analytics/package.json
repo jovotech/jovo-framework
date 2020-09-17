@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-analytics",
-  "version": "3.0.34",
+  "version": "3.0.35",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -20,12 +20,12 @@
     "jovo-analytics-bespoken": "^3.0.21",
     "jovo-analytics-botanalytics": "^3.0.21",
     "jovo-analytics-chatbase": "^3.0.22",
-    "jovo-analytics-dashbot": "^3.0.27",
-    "jovo-analytics-googleanalytics": "^3.0.31",
+    "jovo-analytics-dashbot": "^3.0.28",
+    "jovo-analytics-googleanalytics": "^3.0.32",
     "jovo-db-filedb": "^3.0.22",
     "jovo-framework": "^3.0.24",
-    "jovo-platform-alexa": "^3.0.31",
-    "jovo-platform-googleassistant": "^3.0.24",
+    "jovo-platform-alexa": "^3.0.32",
+    "jovo-platform-googleassistant": "^3.0.25",
     "jovo-plugin-debugger": "^3.0.21"
   },
   "devDependencies": {
