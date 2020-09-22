@@ -44,6 +44,7 @@ export interface GreetingElement {
 
 export interface Config extends ExtensibleConfig {
   shouldOverrideAppHandle?: boolean;
+  shouldIgnoreSynchronousResponse?: boolean;
   greeting?: UpdateConfig<GreetingElement[]>;
   launch?: UpdateConfig<string>;
   pageAccessToken?: string;
@@ -60,6 +61,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
   config: Config = {
     shouldOverrideAppHandle: true,
+    shouldIgnoreSynchronousResponse: false,
     greeting: {
       updateOnSetup: false,
     },
@@ -274,7 +276,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     await this.middleware('$response')!.run(messengerBot);
 
     const message: Message | undefined = _get(messengerBot, '$response.message', undefined);
-    if (message) {
+    if (message && this.config.shouldIgnoreSynchronousResponse !== true) {
       const pageAccessToken = _get(
         handleRequest.jovo.$config,
         'plugin.FacebookMessenger.pageAccessToken',
