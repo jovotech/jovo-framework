@@ -1,4 +1,12 @@
-import { AudioData, BaseApp, HandleRequest, Host, Jovo, SpeechBuilder } from 'jovo-core';
+import {
+  AudioData,
+  AxiosResponse,
+  BaseApp,
+  HandleRequest,
+  Host,
+  Jovo,
+  SpeechBuilder,
+} from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import {
@@ -23,10 +31,10 @@ import {
   ReceiptTemplatePayload,
   SenderAction,
   SenderActionType,
+  SendMessageResponse,
   TemplateType,
   TextMessage,
   TextMessageOptions,
-  TextQuickReply,
 } from '..';
 import { MessengerBotSpeechBuilder } from './MessengerBotSpeechBuilder';
 import { MessengerBotUser } from './MessengerBotUser';
@@ -40,7 +48,6 @@ export class MessengerBot extends Jovo {
     this.$speech = new MessengerBotSpeechBuilder(this);
     this.$reprompt = new MessengerBotSpeechBuilder(this);
     this.$user = new MessengerBotUser(this);
-    _set(this.$output, 'FacebookMessenger.Messages', []);
   }
 
   getDeviceId(): string | undefined {
@@ -127,74 +134,83 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
-  showText(options: TextMessageOptions): MessengerBot {
+  async showText(options: TextMessageOptions): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new TextMessage({ id: this.$user.getId()! }, { ...options });
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showAttachment(options: AttachmentMessageOptions): MessengerBot {
+  async showAttachment(
+    options: AttachmentMessageOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showAirlineTemplate(options: AirlineTemplateOptions): MessengerBot {
+  async showAirlineTemplate(
+    options: AirlineTemplateOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const payload: AirlineTemplatePayload = {
       ...options,
       template_type: TemplateType.Airline,
     };
     const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showButtonTemplate(options: ButtonTemplateOptions): MessengerBot {
+  async showButtonTemplate(
+    options: ButtonTemplateOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const payload: ButtonTemplatePayload = {
       ...options,
       template_type: TemplateType.Button,
     };
     const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showGenericTemplate(options: GenericTemplateOptions): MessengerBot {
+  async showGenericTemplate(
+    options: GenericTemplateOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const payload: GenericTemplatePayload = {
       ...options,
       template_type: TemplateType.Generic,
     };
     const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showMediaTemplate(options: MediaTemplateOptions): MessengerBot {
+  async showMediaTemplate(
+    options: MediaTemplateOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const payload: MediaTemplatePayload = {
       ...options,
       template_type: TemplateType.Media,
     };
     const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  showReceiptTemplate(options: ReceiptTemplateOptions): MessengerBot {
+  async showReceiptTemplate(
+    options: ReceiptTemplateOptions,
+  ): Promise<AxiosResponse<SendMessageResponse>> {
     const payload: ReceiptTemplatePayload = {
       ...options,
       template_type: TemplateType.Receipt,
     };
     const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
-    this.$output.FacebookMessenger.Messages.push(message);
-    return this;
+    return message.send(this.pageAccessToken, this.version);
   }
 
-  async showAction(action: SenderActionType): Promise<boolean> {
+  async showAction(action: SenderActionType): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new SenderAction({ id: this.$user.getId()! }, action);
+    return message.send(this.pageAccessToken, this.version);
+  }
 
-    const pageAccessToken = _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');
-    const version = _get(this.$config, 'plugin.FacebookMessenger.version', DEFAULT_VERSION);
-    const result = await message.send(pageAccessToken, version);
-    return !!result;
+  get version(): string {
+    return _get(this.$config, 'plugin.FacebookMessenger.version', DEFAULT_VERSION);
+  }
+
+  get pageAccessToken(): string {
+    return _get(this.$config, 'plugin.FacebookMessenger.pageAccessToken', '');
   }
 }

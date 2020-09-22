@@ -1,10 +1,10 @@
-import { AxiosRequestConfig, HttpService } from 'jovo-core';
-import { ApiVersion, BASE_URL, IdentityData } from '..';
+import { AxiosRequestConfig, AxiosResponse, HttpService } from 'jovo-core';
+import { ApiVersion, BASE_URL, IdentityData, SendMessageResponse } from '..';
 
 export abstract class Message {
   protected constructor(readonly recipient: IdentityData) {}
 
-  send(pageAccessToken: string, version: ApiVersion): Promise<any> {
+  send(pageAccessToken: string, version: ApiVersion): Promise<AxiosResponse<SendMessageResponse>> {
     return HttpService.request(this.getConfig(pageAccessToken, version));
   }
 
@@ -21,9 +21,6 @@ export abstract class Message {
         'Content-Type': 'application/json',
       },
       data: this,
-      validateStatus: (status: number) => {
-        return true;
-      },
     };
   }
 }
