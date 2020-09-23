@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "response": {
+    "shouldEndSession": false,
+    "output": {
+      "speech": {
+        "text": "Sample text"
+      },
+      "reprompt": {
+        "text": "Sample reprompt text"
+      }
+    },
+    "inputText": "sample"
+  },
+  "sessionData": {
+  },
+  "userData": {
+  }
+}
