@@ -117,7 +117,6 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
 
     await this.middleware('$request')!.run(handleRequest.jovo);
     await this.middleware('$type')!.run(handleRequest.jovo);
-    await this.middleware('$session')!.run(handleRequest.jovo);
 
     if (this.config.handlers) {
       handleRequest.app.config.handlers = _merge(
@@ -140,11 +139,6 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
       return Promise.resolve();
     }
-    if (!handleRequest.jovo!.$session) {
-      handleRequest.jovo!.$session = { $data: {} };
-    }
-
-    handleRequest.jovo!.$session.$data = { ...handleRequest.jovo!.$user.$session.$data };
 
     // check for duplicated messages and ignore the request if a message with the id was handled already
     const request = handleRequest.jovo.$request as GoogleBusinessRequest;
@@ -164,6 +158,7 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
       handleRequest.jovo.$session.$data.processedMessages = processedMessages;
       await handleRequest.jovo.$user.saveData();
     }
+    await this.middleware('$session')!.run(handleRequest.jovo);
   }
 
   async tts(handleRequest: HandleRequest) {
