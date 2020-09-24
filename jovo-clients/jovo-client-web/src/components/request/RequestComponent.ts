@@ -115,7 +115,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
     // TODO fill missing data like appId and platform
     const requestData: CoreRequest = {
       version: VERSION,
-      type: 'jovo-platform-core',
+      type: this.$client.$config.client,
       request: {
         id: uuid.v4(),
         timestamp: new Date().toISOString(),
