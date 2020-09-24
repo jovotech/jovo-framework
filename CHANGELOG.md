@@ -40,7 +40,7 @@
 ### :sparkles: New Features
 
 ##### `jovo-platform-bixby [3.0.25]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-bixby) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-bixby) | [npm](https://www.npmjs.com/package/jovo-platform-bixby)
-* [#799](https://github.com/jovotech/jovo-framework/pull/799) Fix FacebookMessenger bug ([@rubenaeg](https://github.com/rubenaeg))
+* [#799](https://github.com/jovotech/jovo-framework/pull/799) Add SSML Support for Bixby ([@rubenaeg](https://github.com/rubenaeg))
 
 ##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
 * [#803](https://github.com/jovotech/jovo-framework/pull/803) Implement asynchronous responses for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))   
