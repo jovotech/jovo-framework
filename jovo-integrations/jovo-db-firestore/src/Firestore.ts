@@ -160,7 +160,8 @@ export class Firestore implements Db {
     const docRef: firebase.firestore.DocumentReference = this.firestore!.collection(
       this.config.collectionName,
     ).doc(primaryKey);
-    await docRef.set(userData, { merge: true });
+    // remove custom prototypes
+    await docRef.set(JSON.parse(JSON.stringify(userData)), { merge: true });
   }
 
   /**
