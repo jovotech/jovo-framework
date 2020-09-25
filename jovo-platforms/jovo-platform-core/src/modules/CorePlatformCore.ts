@@ -14,24 +14,33 @@ import {
 import { CorePlatform } from '../CorePlatform';
 
 export class CorePlatformCore implements Plugin {
+  // Bind before and set as variable in order to be able to properly remove the fns
+  protected initFn = this.init.bind(this);
+  protected requestFn = this.request.bind(this);
+  protected typeFn = this.type.bind(this);
+  protected sessionFn = this.session.bind(this);
+  protected outputFn = this.output.bind(this);
+
   install(platform: CorePlatform) {
-    platform.middleware('$init')!.use(this.init.bind(this));
-    platform.middleware('$request')!.use(this.request.bind(this));
-    platform.middleware('$type')!.use(this.type.bind(this));
-    platform.middleware('$session')!.use(this.session.bind(this));
-    platform.middleware('$output')!.use(this.output.bind(this));
+    platform.middleware('$init')!.use(this.initFn);
+    platform.middleware('$request')!.use(this.requestFn);
+    platform.middleware('$type')!.use(this.typeFn);
+    platform.middleware('$session')!.use(this.sessionFn);
+    platform.middleware('$output')!.use(this.outputFn);
+  }
+
+  uninstall(platform?: CorePlatform) {
+    platform?.middleware('$init')!.remove(this.initFn);
+    platform?.middleware('$request')!.remove(this.requestFn);
+    platform?.middleware('$type')!.remove(this.typeFn);
+    platform?.middleware('$session')!.remove(this.sessionFn);
+    platform?.middleware('$output')!.remove(this.outputFn);
   }
 
   async init(handleRequest: HandleRequest) {
     const requestObject = handleRequest.host.getRequestObject() as CorePlatformRequest;
 
-    if (
-      requestObject.version &&
-      requestObject.type === 'jovo-platform-core' &&
-      requestObject.request &&
-      requestObject.context &&
-      requestObject.context.platform
-    ) {
+    if (this.isCoreRequest(requestObject) && requestObject.type === 'jovo-platform-core') {
       handleRequest.jovo = new CorePlatformApp(
         handleRequest.app,
         handleRequest.host,
@@ -42,7 +51,7 @@ export class CorePlatformCore implements Plugin {
 
   async request(corePlatformApp: CorePlatformApp) {
     if (!corePlatformApp.$host) {
-      throw new Error(`Could't access host object.`);
+      throw new Error(`Couldn't access host object.`);
     }
 
     corePlatformApp.$request = CorePlatformRequest.fromJSON(
@@ -135,13 +144,14 @@ export class CorePlatformCore implements Plugin {
       coreResponse.reprompts.push(repromptAction);
     }
 
-    const actions = output.CorePlatform.Actions;
-    if (actions.length > 0) {
+    const platformType = this.getPlatformType();
+    const actions = output[platformType]?.Actions;
+    if (actions?.length) {
       coreResponse.actions.push(...actions);
     }
 
-    const repromptActions = output.CorePlatform.RepromptActions;
-    if (repromptActions.length > 0) {
+    const repromptActions = output[platformType]?.RepromptActions;
+    if (repromptActions?.length) {
       coreResponse.reprompts.push(...repromptActions);
     }
 
@@ -150,5 +160,13 @@ export class CorePlatformCore implements Plugin {
         _set(corePlatformApp.$response, 'session.data', corePlatformApp.$session.$data);
       }
     }
+  }
+
+  protected getPlatformType(): 'CorePlatform' | string {
+    return 'CorePlatform';
+  }
+
+  protected isCoreRequest(request: any): boolean {
+    return request.version && request.type && request.request && request.context?.platform;
   }
 }

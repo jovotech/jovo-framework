@@ -1,15 +1,14 @@
 import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 import { ActionBuilder } from '../ActionBuilder';
 import { Action, ActionType, QuickReply } from '../Interfaces';
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformResponse } from './CorePlatformResponse';
 import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
 import { CorePlatformUser } from './CorePlatformUser';
+import _get = require('lodash.get');
 
 export class CorePlatformApp extends Jovo {
-  $corePlatformApp: CorePlatformApp;
+  $corePlatformApp?: CorePlatformApp;
   $user!: CorePlatformUser;
 
   $actions: ActionBuilder;
@@ -24,10 +23,18 @@ export class CorePlatformApp extends Jovo {
 
     this.$actions = new ActionBuilder();
     this.$repromptActions = new ActionBuilder();
-    this.$output.CorePlatform = {
+    this.$output[this.getPlatformType()] = {
       Actions: [],
       RepromptActions: [],
     };
+  }
+
+  getType(): string {
+    return 'CorePlatformApp';
+  }
+
+  getPlatformType(): 'CorePlatform' | string {
+    return 'CorePlatform';
   }
 
   getDeviceId(): string | undefined {
@@ -36,10 +43,6 @@ export class CorePlatformApp extends Jovo {
 
   getLocale(): string | undefined {
     return this.$request ? this.$request.getLocale() : undefined;
-  }
-
-  getPlatformType(): string {
-    return 'CorePlatform';
   }
 
   getRawText(): string | undefined {
@@ -56,10 +59,6 @@ export class CorePlatformApp extends Jovo {
 
   getTimestamp(): string | undefined {
     return this.$request ? this.$request.getTimestamp() : undefined;
-  }
-
-  getType(): string | undefined {
-    return 'CorePlatformApp';
   }
 
   hasAudioInterface(): boolean {
@@ -91,34 +90,34 @@ export class CorePlatformApp extends Jovo {
   }
 
   // Output methods
-  setActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.Actions =
+  setActions(actions: Action[] | ActionBuilder): this {
+    this.$output[this.getPlatformType()].Actions =
       actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.Actions.push(
+  addActions(actions: Action[] | ActionBuilder): this {
+    this.$output[this.getPlatformType()].Actions.push(
       ...(actions instanceof ActionBuilder ? actions.build() : actions),
     );
     return this;
   }
 
-  setRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions =
+  setRepromptActions(actions: Action[] | ActionBuilder): this {
+    this.$output[this.getPlatformType()].RepromptActions =
       actions instanceof ActionBuilder ? actions.build() : actions;
     return this;
   }
 
-  addRepromptActions(actions: Action[] | ActionBuilder): CorePlatformApp {
-    this.$output.CorePlatform.RepromptActions.push(
+  addRepromptActions(actions: Action[] | ActionBuilder): this {
+    this.$output[this.getPlatformType()].RepromptActions.push(
       ...(actions instanceof ActionBuilder ? actions.build() : actions),
     );
     return this;
   }
 
-  showQuickReplies(replies: Array<string | QuickReply>): CorePlatformApp {
-    this.$output.CorePlatform.Actions.push({
+  showQuickReplies(replies: Array<string | QuickReply>): this {
+    this.$output[this.getPlatformType()].Actions.push({
       replies: replies.map((reply) => {
         return typeof reply === 'string'
           ? {

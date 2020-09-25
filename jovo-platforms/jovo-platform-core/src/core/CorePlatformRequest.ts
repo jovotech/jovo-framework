@@ -19,7 +19,7 @@ export class CorePlatformRequest implements JovoRequest, CorePlatformRequestJSON
   }
 
   version = '0.0.1';
-  type: 'jovo-platform-core' = 'jovo-platform-core';
+  type: 'jovo-platform-core' | string = 'jovo-platform-core';
   request!: Request;
   context!: Context;
 
