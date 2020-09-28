@@ -130,7 +130,7 @@ export class OneDashAlexa implements Analytics {
   buildMessageSlotString(intentSlots: Inputs): string {
     const slots = [];
     for (const name in intentSlots) {
-      if (intentSlots[name] !== undefined) {
+      if (intentSlots.hasOwnProperty(name) && intentSlots[name]) {
         slots.push(`${name}: ${intentSlots[name]}`);
       }
     }
@@ -138,7 +138,6 @@ export class OneDashAlexa implements Analytics {
   }
 
   sendDataToOneDash(data: Record<string, any>) {
-
     const config: AxiosRequestConfig = {
       data,
       headers: {

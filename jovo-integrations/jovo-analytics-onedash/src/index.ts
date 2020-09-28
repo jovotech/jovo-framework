@@ -11,4 +11,3 @@ declare module 'jovo-core/dist/src/Interfaces' {
 }
 
 export { OneDashAlexa, Config as AlexaConfig } from './OneDashAlexa';
-
