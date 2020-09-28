@@ -13,12 +13,10 @@ import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
   key: string;
-  appVersion: string;
 }
 
 export class OneDashAlexa implements Analytics {
   config: Config = {
-    appVersion: '',
     key: '',
   };
 
@@ -80,7 +78,6 @@ export class OneDashAlexa implements Analytics {
       time_stamp: Date.now(),
       type: 'agent',
       user_id: userId,
-      version: this.config.appVersion,
     };
   }
 
@@ -112,7 +109,6 @@ export class OneDashAlexa implements Analytics {
       time_stamp: timeStamp,
       type: 'user',
       user_id: userId,
-      version: this.config.appVersion,
     };
   }
 
@@ -142,7 +138,6 @@ export class OneDashAlexa implements Analytics {
   }
 
   sendDataToOneDash(data: Record<string, any>) {
-    const multiple = typeof data.messages !== 'undefined';
 
     const config: AxiosRequestConfig = {
       data,
