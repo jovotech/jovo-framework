@@ -36,7 +36,12 @@ export = config({
 			appVersion: ''
 		},
 		GoogleAnalytics: {
-			trackingId: ''
+			trackingId: '',
+			sessionTimeoutInMinutes: 5,
+			skipUnverifiedUser: true,
+		},
+		OneDashAlexa: {
+			key: 'alexaKey'
 		}
 	},
 	db: {

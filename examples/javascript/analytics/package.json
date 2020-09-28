@@ -18,6 +18,7 @@
     "jovo-analytics-chatbase": "^3.0.22",
     "jovo-analytics-dashbot": "^3.0.27",
     "jovo-analytics-googleanalytics": "^3.0.31",
+    "jovo-analytics-onedash": "^3.0.0",
     "jovo-framework": "^3.0.24",
     "jovo-platform-alexa": "^3.0.31",
     "jovo-platform-googleassistant": "^3.0.24"
