@@ -30,6 +30,7 @@ export type ComponentConstructor = new (
 ) => Component;
 
 export interface Config {
+  client: 'jovo-platform-core' | 'jovo-platform-web' | string;
   debugMode: boolean;
   locale: string;
   launchFirst: boolean;

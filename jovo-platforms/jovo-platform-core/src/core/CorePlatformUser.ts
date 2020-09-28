@@ -1,16 +1,15 @@
-import { User } from 'jovo-core';
-import { CorePlatformApp } from './CorePlatformApp';
+import { Jovo, User } from 'jovo-core';
 
 export class CorePlatformUser extends User {
-  constructor(private readonly assistantSkill: CorePlatformApp) {
-    super(assistantSkill);
+  constructor(jovo: Jovo) {
+    super(jovo);
   }
 
   getAccessToken(): string | undefined {
-    return this.assistantSkill.$request!.getAccessToken();
+    return this.jovo.$request!.getAccessToken();
   }
 
   getId(): string | undefined {
-    return this.assistantSkill.$request!.getUserId();
+    return this.jovo.$request!.getUserId();
   }
 }

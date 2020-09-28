@@ -3,7 +3,7 @@ import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { DialogflowUser } from './DialogflowUser';
 
-export type SupportedIntegration = 'FacebookMessenger' | 'Slack';
+export type SupportedIntegration = 'FacebookMessenger' | 'Slack' | 'DialogflowPhoneGateway';
 
 export class DialogflowAgent extends Jovo {
   $dialogflowAgent: DialogflowAgent;

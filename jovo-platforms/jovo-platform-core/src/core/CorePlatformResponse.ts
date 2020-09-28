@@ -8,18 +8,12 @@ export type Data = Record<string, any>;
 
 // TODO fully implement methods.
 export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJSON {
-  // reviver can be passed as the second parameter to JSON.parse
-  // to automatically call User.fromJSON on the resulting value.
   // tslint:disable-next-line:no-any
   static reviver(key: string, value: any): any {
-    // tslint:disable-line
     return key === '' ? CorePlatformResponse.fromJSON(value) : value;
   }
 
-  // fromJSON is used to convert an serialized version
-  // of the User to an instance of the class
   static fromJSON(json: CorePlatformResponseJSON | string): CorePlatformResponse {
-    // if it's a string, parse it first
     if (typeof json === 'string') {
       return JSON.parse(json, CorePlatformResponse.reviver);
     } else {

@@ -3,6 +3,15 @@
 
 ### Latest Framework Version: 3.0.24
 
+## 2020-09-17
+
+### :bug: Bug Fix
+
+##### `jovo-analytics-googleanalytics [3.0.32]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#812](https://github.com/jovotech/jovo-framework/pull/812) Fix endreason for "stop" not set ([@freiSMS](https://github.com/freiSMS))
+
+##### `jovo-platform-googleassistant [3.0.30]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant)
+* Fix getDeliveryAddress in Transactions API ([@aswetlow](https://github.com/aswetlow))   
 
 
 <br> 
@@ -31,7 +40,7 @@
 ### :sparkles: New Features
 
 ##### `jovo-platform-bixby [3.0.25]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-bixby) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-bixby) | [npm](https://www.npmjs.com/package/jovo-platform-bixby)
-* [#799](https://github.com/jovotech/jovo-framework/pull/799) Fix FacebookMessenger bug ([@rubenaeg](https://github.com/rubenaeg))
+* [#799](https://github.com/jovotech/jovo-framework/pull/799) Add SSML Support for Bixby ([@rubenaeg](https://github.com/rubenaeg))
 
 ##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
 * [#803](https://github.com/jovotech/jovo-framework/pull/803) Implement asynchronous responses for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))   
