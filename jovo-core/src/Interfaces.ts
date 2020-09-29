@@ -13,6 +13,8 @@ export interface AppData extends Data {}
 
 export interface SessionData extends Data {}
 
+export interface UserData extends Data {}
+
 export interface Plugin {
   /**
    * Default name is plugin's class name
