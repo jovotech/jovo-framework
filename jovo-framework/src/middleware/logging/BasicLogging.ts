@@ -1,10 +1,10 @@
-import { request } from 'express';
+import chalk = require('chalk');
 import { BaseApp, HandleRequest, Log, Logger, LogLevel, Plugin, PluginConfig } from 'jovo-core';
+import colorize = require('json-colorizer');
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 import _set = require('lodash.set');
 import _unset = require('lodash.unset');
-
 export interface Config extends PluginConfig {
   logging?: boolean;
   request?: boolean;
@@ -18,6 +18,19 @@ export interface Config extends PluginConfig {
   excludeResponseObjects?: string[];
   space?: string;
   styling?: boolean;
+  colorizeSettings?: {
+    colors: {
+      BRACE?: string;
+      BRACKET?: string;
+      COLON?: string;
+      COMMA?: string;
+      STRING_KEY?: string;
+      STRING_LITERAL?: string;
+      NUMBER_LITERAL?: string;
+      BOOLEAN_LITERAL?: string;
+      NULL_LITERAL?: string;
+    };
+  };
 }
 
 export class BasicLogging implements Plugin {
@@ -34,8 +47,16 @@ export class BasicLogging implements Plugin {
     maskResponseObjects: [],
     excludeResponseObjects: [],
     responseObjects: [],
-    space: '\t',
-    styling: false,
+    space: '   ',
+    styling: true,
+    colorizeSettings: {
+      colors: {
+        STRING_KEY: 'white',
+        STRING_LITERAL: 'green',
+        NUMBER_LITERAL: 'yellow',
+        BRACE: 'white.bold',
+      },
+    },
   };
   // tslint:enable
   constructor(config?: Config) {
@@ -44,6 +65,7 @@ export class BasicLogging implements Plugin {
     }
     // tslint:disable
     this.requestLogger = this.requestLogger.bind(this);
+    this.routingLogger = this.routingLogger.bind(this);
     this.responseLogger = this.responseLogger.bind(this);
     // tslint:enable
   }
@@ -58,13 +80,28 @@ export class BasicLogging implements Plugin {
     }
 
     app.on('request', this.requestLogger);
+    app.on('after.router', this.routingLogger);
     app.on('after.response', this.responseLogger);
   }
 
   uninstall(app: BaseApp) {
     app.removeListener('request', this.requestLogger);
+    app.removeListener('after.router', this.routingLogger);
     app.removeListener('after.response', this.responseLogger);
   }
+
+  // WIP: needs to be configurable
+  routingLogger = (handleRequest: HandleRequest) => {
+    const route = `${chalk.bgWhite.black(' Route: ')} ${chalk(
+      handleRequest.jovo!.getRoute().path,
+    )}`;
+    const type = `${chalk.bgWhite.black(' Type: ')} ${chalk(handleRequest.jovo!.getRoute().type)}`;
+
+    const state = `${chalk.bgWhite.black(' State: ')} ${chalk(
+      handleRequest.jovo!.getState() ? handleRequest.jovo!.getState() : '-',
+    )}`;
+
+  };
 
   requestLogger = (handleRequest: HandleRequest) => {
     if (Logger.isLogLevel(LogLevel.VERBOSE)) {
@@ -100,6 +137,13 @@ export class BasicLogging implements Plugin {
       });
     }
 
+    // tslint:disable-next-line:no-console
+    console.log();
+    if (this.config.styling) {
+      // tslint:disable-next-line:no-console
+      console.log(chalk.bgWhite.black(' >>>>> Request - ' + new Date().toISOString() + ' '));
+    }
+
     if (this.config.requestObjects && this.config.requestObjects.length > 0) {
       this.config.requestObjects.forEach((path: string) => {
         // tslint:disable-next-line
@@ -107,7 +151,10 @@ export class BasicLogging implements Plugin {
       });
     } else {
       // tslint:disable-next-line
-      console.log(JSON.stringify(requestCopy, null, this.config.space));
+      console.log(this.style(JSON.stringify(requestCopy, null, this.config.space)));
+
+      // tslint:disable-next-line:no-console
+      console.log();
     }
   };
 
@@ -145,7 +192,13 @@ export class BasicLogging implements Plugin {
         _unset(responseCopy, excludePath);
       });
     }
+    // tslint:disable-next-line:no-console
+    console.log();
 
+    if (this.config.styling) {
+      // tslint:disable-next-line:no-console
+      console.log(chalk.bgWhite.black(' <<<<< Response - ' + new Date().toISOString() + ' '));
+    }
     if (this.config.responseObjects && this.config.responseObjects.length > 0) {
       this.config.responseObjects.forEach((path: string) => {
         if (!handleRequest.jovo) {
@@ -162,8 +215,9 @@ export class BasicLogging implements Plugin {
 
   style(text: string) {
     if (this.config.styling) {
-      text = text.replace(/<speak>(.+?)<\/speak>/g, `<speak>\x1b[36m$1\x1b[0m</speak>`);
-      text = text.replace(/"_JOVO_STATE_": "(.+?)"/g, `"_JOVO_STATE_": "\x1b[33m$1\x1b[0m"`);
+      text = colorize(text, this.config.colorizeSettings);
+      // text = text.replace(/<speak>(.+?)<\/speak>/g, `<speak>\x1b[1m$1\x1b[0m\x1b[32m</speak>`);
+      // text = text.replace(/"_JOVO_STATE_": "(.+?)"/g, `"_JOVO_STdsfATE_": "\x1b[33m$1\x1b[0m"`);
     }
     return text;
   }
