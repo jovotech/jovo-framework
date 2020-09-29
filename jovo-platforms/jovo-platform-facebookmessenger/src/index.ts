@@ -6,7 +6,7 @@ import { Message } from './responses/Message';
 export { FacebookMessenger, Config } from './FacebookMessenger';
 
 export const BASE_URL = 'https://graph.facebook.com';
-export const DEFAULT_VERSION: ApiVersion = 'v6.0';
+export const DEFAULT_VERSION: ApiVersion = 'v8.0';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   export interface Jovo {
@@ -25,7 +25,7 @@ interface AppFacebookMessengerConfig {
 declare module 'jovo-core/dist/src/Interfaces' {
   export interface Output {
     FacebookMessenger: {
-      Messages: Message[];
+      Message?: Message;
       Overwrite?: {
         Text?: string;
         QuickReplies?: QuickReply[];
@@ -34,6 +34,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 
   export interface AppPlatformConfig extends AppFacebookMessengerConfig {}
+
   export interface ExtensiblePluginConfigs extends AppFacebookMessengerConfig {}
 }
 

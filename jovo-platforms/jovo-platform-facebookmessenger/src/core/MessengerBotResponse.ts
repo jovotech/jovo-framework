@@ -2,7 +2,7 @@ import { JovoResponse, SessionData, SpeechBuilder } from 'jovo-core';
 import { Message, TextMessage } from '..';
 
 export interface MessengerBotResponseJSON {
-  messages: Message[];
+  message?: Message;
 }
 
 export class MessengerBotResponse implements JovoResponse {
@@ -19,11 +19,7 @@ export class MessengerBotResponse implements JovoResponse {
     const response = Object.create(MessengerBotResponse.prototype);
     return Object.assign(response, json);
   }
-  messages: Message[];
-
-  constructor() {
-    this.messages = [];
-  }
+  message?: Message;
 
   getReprompt(): string | undefined {
     return undefined;
@@ -46,10 +42,7 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   getSpeechPlain(): string | undefined {
-    const firstTextMessage = this.messages.find((message: Message) => {
-      return message instanceof TextMessage;
-    });
-    return firstTextMessage ? (firstTextMessage as TextMessage).message.text : undefined;
+    return this.message instanceof TextMessage ? this.message.message.text : undefined;
   }
 
   hasSessionAttribute(name: string, value?: any): boolean {
@@ -73,24 +66,16 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   isTell(speechText?: string | string[]): boolean {
-    if (speechText) {
-      return this.messages.some((message: Message) => {
-        let hasSpeechText = false;
-        if (message instanceof TextMessage) {
-          if (typeof speechText === 'string') {
-            hasSpeechText = SpeechBuilder.removeSSML(speechText) === message.message.text;
-          } else {
-            hasSpeechText = speechText.some((text: string) => {
-              return SpeechBuilder.removeSSML(text) === message.message.text;
-            });
-          }
-        }
-
-        return hasSpeechText;
-      });
+    if (speechText && this.message) {
+      return this.message instanceof TextMessage
+        ? typeof speechText === 'string'
+          ? SpeechBuilder.removeSSML(speechText) === this.message.message.text
+          : speechText.some((text) => {
+              return SpeechBuilder.removeSSML(text) === (this.message as TextMessage).message.text;
+            })
+        : false;
     }
-
-    return true;
+    return this.message instanceof TextMessage;
   }
 
   setSessionAttributes(sessionAttributes: SessionData): this {

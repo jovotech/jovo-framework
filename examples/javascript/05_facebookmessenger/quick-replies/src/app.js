@@ -4,10 +4,10 @@
 // APP INITIALIZATION
 // ------------------------------------------------------------------
 
-const { App } = require('jovo-framework');
+const { App, Log } = require('jovo-framework');
 const {
 	FacebookMessenger,
-	TextQuickReply
+	TextQuickReply,
 } = require('jovo-platform-facebookmessenger');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
@@ -16,12 +16,12 @@ const { DialogflowNlu } = require('jovo-nlu-dialogflow');
 const app = new App();
 
 const messenger = new FacebookMessenger({
-	pageAccessToken: process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
+	pageAccessToken: process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN,
 });
 
 messenger.use(
 	new DialogflowNlu({
-		credentialsFile: '../credentials.json'
+		credentialsFile: '../credentials.json',
 	})
 );
 
@@ -45,17 +45,9 @@ app.setHandler({
 		}
 	},
 
-	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
+	async MyNameIsIntent() {
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-		if (this.$messengerBot) {
-			this.$messengerBot.showText({
-				text: 'Is there anything else I can do for you?',
-				quickReplies: ['Exit']
-			});
-		}
-	}
+	},
 });
 
 module.exports.app = app;
