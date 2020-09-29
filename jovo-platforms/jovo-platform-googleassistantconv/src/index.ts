@@ -63,7 +63,6 @@ declare module './core/GoogleAction' {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-
   interface Output {
     GoogleAssistant: {
       tell?: TellOutput;

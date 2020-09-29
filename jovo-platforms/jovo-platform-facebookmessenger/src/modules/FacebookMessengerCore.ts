@@ -6,7 +6,7 @@ import {
   MessengerBotRequest,
   MessengerBotResponse,
   MessengerBotUser,
-  TextMessage
+  TextMessage,
 } from '..';
 
 export class FacebookMessengerCore implements Plugin {
