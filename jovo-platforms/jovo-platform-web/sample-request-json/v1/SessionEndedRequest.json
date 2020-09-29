@@ -1,0 +1,18 @@
+{
+  "isEnd": true,
+  "request": {
+    "locale": "en-US",
+    "timestamp": "2019-07-01T08:17:36.843Z"
+  },
+  "session": {
+    "data": {},
+    "id": "2b6f7378-4252-47b5-837a-da56fc73ebfd",
+    "new": true
+  },
+  "user": {
+    "id": "2f416861-94aa-424b-b9f2-ac5f83a36fa0",
+    "data": {
+    }
+  },
+  "$version": "1.0.0"
+}

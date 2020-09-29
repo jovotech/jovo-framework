@@ -1,26 +1,32 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
-
-<p align="center">The development framework for cross-platform voice apps</p>
-
-<p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
-<a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
-<a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
-<br/>
-
-<p align="center">
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-<a href="https://slackin-uwinbxqkfx.now.sh" target="_blank"><img src="https://slackin-uwinbxqkfx.now.sh/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 Build cross-platform voice apps for Alexa and Google Assistant with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
-</p>
-<br/>
-
 # Jovo Web Client
-A web-based client that allows interacting with the Jovo Core-platform. \
-This package is written in JavaScript and can be easily embedded.
+
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-client-web
+
+The Jovo Web Client enables you to build voice and conversational experiences for the web. Use this package (vanilla JavaScript, [find the Vue.js client here](https://www.jovo.tech/marketplace/jovo-client-web-vue)) in your frontend web app and connect it to your Jovo backend using the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core).
+
+* [Introduction](#introduction)
+   * [Installation](#installation)
+   * [Quickstart](#quickstart)
+
+
+
+## Introduction
+
+![Jovo Client and Jovo Core Platform](https://raw.githubusercontent.com/jovotech/jovo-framework/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
+
+[Jovo Clients](https://www.jovo.tech/marketplace/tag/clients) are used as a frontend that collects user input. This input (e.g. speech or text) is then passed to the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) that handles the conversational logic.
+
+The "Jovo for Web" client can be used on websites and web apps. It comes with helpful features that make it easier to capture speech input, detect when a user stops speaking, and display information that is returned from the Jovo app. The client is open source and fully customizable.
+
+
+### Installation
+
+Install the client into your web project like this:
 
 ```sh
-npm install jovo-client-web
+$ npm install jovo-client-web
 ```
+
+### Quickstart
+
+You can find starters for our [Vue.js client](https://www.jovo.tech/marketplace/jovo-client-web-vue) at [github.com/jovotech/jovo-client-web-starters](https://github.com/jovotech/jovo-client-web-starters).

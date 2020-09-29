@@ -14,6 +14,7 @@ export { DialogflowTestSuite } from './core/Interfaces';
 export { FacebookMessenger } from './integrations/FacebookMessenger/FacebookMessenger';
 export { Slack } from './integrations/Slack/Slack';
 export { Twilio } from './integrations/Twilio/Twilio';
+export { DialogflowPhoneGateway } from './integrations/DialogflowPhoneGateway/DialogflowPhoneGateway';
 export { DialogflowPlugin } from './integrations/DialogflowPlugin';
 
 export { EntityOverrideMode, SessionEntity, SessionEntityType } from './core/Interfaces';
@@ -33,6 +34,8 @@ declare module './DialogflowAgent' {
     isSlackBot(): boolean;
 
     isTwilioBot(): boolean;
+
+    isDialogflowPhoneGateway(): boolean;
   }
 }
 declare module 'jovo-core/dist/src/core/Jovo' {

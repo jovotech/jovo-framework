@@ -28,6 +28,7 @@ export enum DefaultInputMode {
 
 export function makeDefaultConfig(type: DefaultInputMode = DefaultInputMode.Voice): Config {
   return {
+    client: 'jovo-platform-core',
     debugMode: false,
     initBaseComponents: true,
     launchFirst: true,

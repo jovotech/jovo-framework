@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-core",
-  "version": "3.0.25",
+  "version": "3.0.26",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -9,7 +9,6 @@
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "tsc": "tsc",
     "tscw": "tsc --watch",
-    "watch": "tsc-watch --onSuccess \"npm run start --prefix ../jovo-platform-webassistant-demo\"",
     "rimraf": "rimraf ./dist",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest --listTests"

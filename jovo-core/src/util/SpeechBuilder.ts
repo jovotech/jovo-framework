@@ -33,6 +33,15 @@ export class SpeechBuilder {
   }
 
   /**
+   * Returns true if string is SSML
+   * @param {string} text
+   * @returns {boolean}
+   */
+  static isSSML(text: string): boolean {
+    return text.startsWith('<speak>');
+  }
+
+  /**
    * Removes everything that is surrounded by <>
    * @param {string} ssml
    * @returns {string}

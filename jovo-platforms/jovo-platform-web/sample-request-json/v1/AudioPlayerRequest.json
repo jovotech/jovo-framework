@@ -1,0 +1,19 @@
+{
+  "request": {
+    "locale": "en-US",
+    "timestamp": "2019-07-01T08:23:06.441Z"
+  },
+  "session": {
+    "data": {
+    },
+    "id": "92dd969e-024a-4bd1-9aee-29d39daaa61f",
+    "new": false
+  },
+  "user": {
+    "id": "2f416861-94aa-424b-b9f2-ac5f83a36fa0",
+    "data": {
+    }
+  },
+  "$version": "1.0.0",
+  "text": "my name is Max"
+}

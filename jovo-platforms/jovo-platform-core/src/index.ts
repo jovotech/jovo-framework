@@ -20,6 +20,7 @@ interface AppCorePlatformConfig {
 
 declare module 'jovo-core/dist/src/Interfaces' {
   interface Output {
+    [key: string]: any;
     CorePlatform: {
       Actions: Action[];
       RepromptActions: Action[];

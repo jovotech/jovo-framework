@@ -82,7 +82,7 @@ export interface Context {
 
 export interface CorePlatformRequestJSON {
   version: string;
-  type: 'jovo-platform-core';
+  type: 'jovo-platform-core' | string;
   request: Request;
   context: Context;
 }

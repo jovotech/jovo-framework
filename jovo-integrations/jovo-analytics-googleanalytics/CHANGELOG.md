@@ -4,6 +4,12 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+### 2020-08-31 [3.0.32]
+ 
+* [#812](https://github.com/jovotech/jovo-framework/pull/812) :bug: fix endreason for "stop" not set ([@freiSMS](https://github.com/freiSMS))
+
+
 ### 2020-08-31 [3.0.31]
  
 * [#804](https://github.com/jovotech/jovo-framework/pull/804) Google Analytics Features and Fixes ([@freiSMS](https://github.com/freiSMS))

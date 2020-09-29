@@ -367,7 +367,7 @@ export class JovoUser implements Plugin {
       }
       handleRequest.jovo.$user.$session = sessionData;
       if (this.config.sessionData && this.config.sessionData.data) {
-        handleRequest.jovo.$session.$data = { ...handleRequest.jovo.$user.$session?.$data };
+        handleRequest.jovo.$session.$data = { ...(handleRequest.jovo.$user.$session?.$data || {}) };
       }
     }
 
@@ -439,8 +439,9 @@ export class JovoUser implements Plugin {
         userData.session.$data = handleRequest.jovo.$user.$session.$data;
       }
 
-      if (this.config.sessionData.id) {
-        userData.session.id = handleRequest.jovo.$user.$session.id;
+      const sessionId = handleRequest.jovo.$request?.getSessionId();
+      if (this.config.sessionData.id && sessionId) {
+        userData.session.id = sessionId;
       }
 
       if (handleRequest.jovo.$output.tell) {

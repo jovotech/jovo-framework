@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "response": {
+    "shouldEndSession": true,
+    "output": {
+      "speech": {
+        "text": "Sample response text"
+      },
+      "actions": [
+        {
+          "key": "name.set",
+          "value": "Chris"
+        }
+      ]
+    },
+    "inputText": "my name is Chris"
+  },
+  "sessionData": {},
+  "userData": {
+  }
+}
