@@ -1,4 +1,4 @@
-import { Data, Log, LogLevel, Project, Util } from 'jovo-core';
+import { Log, LogLevel, Project, UserData, Util } from 'jovo-core';
 import { App } from './App';
 
 import {
@@ -55,7 +55,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
 declare module 'jovo-core/dist/src/core/User' {
   interface User {
     $metaData: UserMetaData;
-    $data: Data;
+    $data: UserData;
     $context: UserContext;
     $session: UserSessionData;
     isDeleted: boolean;

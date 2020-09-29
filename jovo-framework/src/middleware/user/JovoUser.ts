@@ -1,7 +1,6 @@
 import crypto = require('crypto');
 import {
   BaseApp,
-  Data,
   EnumRequestType,
   ErrorCode,
   HandleRequest,
@@ -13,8 +12,10 @@ import {
   Plugin,
   PluginConfig,
   SessionConstants,
+  SessionData,
   SpeechBuilder,
   User,
+  UserData,
 } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
@@ -104,7 +105,7 @@ export interface UserMetaData {
 
 export interface UserSessionData {
   // tslint:disable-next-line:no-any
-  $data?: Record<string, any>;
+  $data?: SessionData;
   id?: string;
   lastUpdatedAt?: string;
   isNew?: boolean;
@@ -413,7 +414,7 @@ export class JovoUser implements Plugin {
       return Promise.resolve();
     }
     const userData: {
-      data?: Data;
+      data?: UserData;
       context?: UserContext;
       metaData?: UserMetaData;
       session?: UserSessionData;
