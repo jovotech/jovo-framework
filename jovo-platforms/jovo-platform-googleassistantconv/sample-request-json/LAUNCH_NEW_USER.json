@@ -1,0 +1,38 @@
+{
+  "handler": {
+    "name": "start"
+  },
+  "intent": {
+    "name": "actions.intent.MAIN",
+    "params": {},
+    "query": "Talk to action demo"
+  },
+  "scene": {
+    "name": "actions.scene.START_CONVERSATION",
+    "slotFillingStatus": "UNSPECIFIED",
+    "slots": {}
+  },
+  "session": {
+    "id": "ABwppHFhNCQBhtdhHJo8KxcDSsoCaMeZl4nZIcGHZ8Pqv63L8TDogehT8MwuWguYy-O8SYH691zBllT2RmvHp0FRDQ",
+    "params": {},
+    "typeOverrides": [],
+    "languageCode": ""
+  },
+  "user": {
+    "locale": "en-US",
+    "params": {},
+    "accountLinkingStatus": "ACCOUNT_LINKING_STATUS_UNSPECIFIED",
+    "verificationStatus": "VERIFIED",
+    "packageEntitlements": []
+  },
+  "home": {
+    "params": {}
+  },
+  "device": {
+    "capabilities": [
+      "SPEECH",
+      "RICH_RESPONSE",
+      "LONG_FORM_AUDIO"
+    ]
+  }
+}

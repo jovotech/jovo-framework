@@ -1,7 +1,11 @@
 const { config } = require('jovo-framework');
 
 module.exports = config({
-	logging: true,
+	logging: {
+		request: true,
+		response: true,
+		styling: false,
+	},
 	intentMap: {
 		'AMAZON.HelpIntent': 'HelpIntent'
 	},
@@ -9,5 +13,5 @@ module.exports = config({
 		FileDb: {
 			pathToFile: './../db/db.json'
 		}
-	}
+	},
 });
