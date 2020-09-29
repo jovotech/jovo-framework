@@ -1,7 +1,40 @@
 # Jovo Framework Changelog
 
+### Latest Framework Version: 3.1.0
 
-### Latest Framework Version: 3.0.24
+## 2020-09-29
+
+### :boom: Breaking Changes
+
+##### `jovo-platform-messenger [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-messenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-messenger) | [npm](https://www.npmjs.com/package/jovo-platform-messenger)
+
+- [#817](https://github.com/jovotech/jovo-framework/pull/817) :recycle: :sparkles: Refactor Facebook Messenger platform - asynchronous Responses ([@m-ripper](https://github.com/m-ripper))
+
+### :sparkles: New Features
+
+##### `jovo-platform-dialogflow [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow)
+
+- [#820](https://github.com/jovotech/jovo-framework/pull/820) :sparkles: Add Dialogflow Phone Gateway integration ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+##### `jovo-platform-web [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web) | [npm](https://www.npmjs.com/package/jovo-platform-web)
+- [#824](https://github.com/jovotech/jovo-framework/pull/824) :sparkles: Implement web-platform ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-framework [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-framework) | [npm](https://www.npmjs.com/package/jovo-framework)
+- [#827](https://github.com/jovotech/jovo-framework/pull/827) :sparkles: Make fancy JSON output ([@aswetlow](https://github.com/aswetlow))
+- [#828](https://github.com/jovotech/jovo-framework/pull/828) :label: Add type for user-data ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-platform-googleassistantconv [3.1.0-alpha.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#829](https://github.com/jovotech/jovo-framework/pull/829) :sparkles: Work In Progress: Google Assistant Conversational Actions ([@aswetlow](https://github.com/aswetlow))
+
+### :bug: Bug Fixes
+
+##### `jovo-framework [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-framework) | [npm](https://www.npmjs.com/package/jovo-framework)
+- [#818](https://github.com/jovotech/jovo-framework/pull/818) :bug: Fix saving of user-session-id ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-db-firestore [3.1.0-alpha.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-firestore) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-firestore) | [npm](https://www.npmjs.com/package/jovo-db-firestore)
+- [#822](https://github.com/jovotech/jovo-framework/pull/822) :bug: Fix potential bug for Firestore ([@m-ripper](https://github.com/m-ripper))
+
+<br>
 
 ## 2020-09-17
 
