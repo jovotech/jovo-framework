@@ -11,7 +11,7 @@ import {
   Image,
   Intent,
   List,
-  PermissionType,
+  PermissionResult,
   Simple,
   Table,
   TypeOverride,
@@ -101,7 +101,7 @@ export class ConversationalActionsCore implements Plugin {
       for (const [key, value] of Object.entries(intent.params)) {
         if (key.startsWith('NotificationSlot_')) {
           return (
-            (value.resolved as PermissionType)['@type'] ===
+            (value.resolved as PermissionResult)['@type'] ===
             'type.googleapis.com/google.actions.conversation.v3.PermissionValue'
           );
         }

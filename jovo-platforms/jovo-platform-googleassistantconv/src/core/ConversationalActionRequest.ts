@@ -114,9 +114,9 @@ export class ConversationalActionRequest implements JovoRequest {
       for (const param in this.intent?.params) {
         if (this.intent?.params.hasOwnProperty(param)) {
           inputs[param] = {
-            id: this.intent?.params[param].resolved,
+            id: this.intent?.params[param].resolved as string, // TODO: temporary, object handling necessary
             value: this.intent?.params[param].original,
-            key: this.intent?.params[param].resolved,
+            key: this.intent?.params[param].resolved as string, // TODO: temporary, object handling necessary
             name: param,
           };
         }

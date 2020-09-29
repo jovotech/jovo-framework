@@ -88,7 +88,7 @@ export class MediaResponsePlugin implements Plugin {
       _set(googleAction.$type, 'type', EnumRequestType.AUDIOPLAYER);
 
       const status = (googleAction.$request as ConversationalActionRequest).intent!.params
-        .MEDIA_STATUS.resolved;
+        .MEDIA_STATUS.resolved as string;
 
       const toCapitalCase = (str: string) => {
         str = str.toLowerCase();

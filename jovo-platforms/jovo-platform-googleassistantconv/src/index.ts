@@ -14,6 +14,7 @@ import { AskOutput, Handler, TellOutput } from 'jovo-core';
 import { MediaResponse } from './modules/MediaResponse';
 export { GoogleAssistant, Config } from './GoogleAssistant';
 export { GoogleAssistantTestSuite, Suggestion } from './core/Interfaces';
+import { NextScene } from './core/Interfaces';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
@@ -62,7 +63,6 @@ declare module './core/GoogleAction' {
 }
 
 declare module 'jovo-core/dist/src/Interfaces' {
-  import { NextScene } from './core/Interfaces';
 
   interface Output {
     GoogleAssistant: {
