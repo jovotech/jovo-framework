@@ -18,6 +18,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "lodash.defaults": "^4.2.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
+    "@types/lodash.defaults": "^4.2.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",

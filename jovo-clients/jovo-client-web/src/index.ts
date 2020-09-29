@@ -1,3 +1,15 @@
+declare global {
+  interface Window {
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitAudioContext?: new () => AudioContext;
+  }
+}
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
+
 export const VERSION = '0.1.0';
 
 export {
