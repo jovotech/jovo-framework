@@ -104,7 +104,6 @@ export interface UserMetaData {
 }
 
 export interface UserSessionData {
-  // tslint:disable-next-line:no-any
   $data?: SessionData;
   id?: string;
   lastUpdatedAt?: string;
