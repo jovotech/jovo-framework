@@ -1,11 +1,7 @@
 const { config } = require('jovo-framework');
 
 module.exports = config({
-	logging: {
-		request: true,
-		response: true,
-		styling: false,
-	},
+	logging: true,
 	intentMap: {
 		'AMAZON.HelpIntent': 'HelpIntent'
 	},
