@@ -3,6 +3,8 @@ declare global {
     webkitSpeechRecognition?: new () => SpeechRecognition;
     SpeechRecognition?: new () => SpeechRecognition;
     webkitAudioContext?: new () => AudioContext;
+    SpeechGrammarList?: new () => SpeechGrammarList;
+    webkitSpeechGrammarList?: new () => SpeechGrammarList;
   }
 }
 
@@ -17,6 +19,7 @@ export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 
 
 export * as StandaloneRecorder from './standalone/AudioRecorder';
+export * as StandaloneSpeechRecognizer from './standalone/SpeechRecognizer';
 export * from './types';
 
 
