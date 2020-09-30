@@ -1,0 +1,52 @@
+{
+  "handler": {
+    "name": "jovo"
+  },
+  "intent": {
+    "name": "actions.intent.CANCEL",
+    "params": {},
+    "query": "cancel"
+  },
+  "scene": {
+    "name": "actions.scene.START_CONVERSATION",
+    "slotFillingStatus": "UNSPECIFIED",
+    "slots": {},
+    "next": {
+      "name": "actions.scene.END_CONVERSATION"
+    }
+  },
+  "session": {
+    "id": "ABwppHHvXaq3u53OnHpo9UHt9mfIH_Ikip_DNqSws0H127HFkGLMRbL6L6OzRwUKN8IfOz4sR9ZFu49nGNDqsmyaVQ",
+    "params": {
+      "_JOVO_SESSION_": {
+        "new": true,
+        "createdAt": "2020-06-30T14:17:44.070Z",
+        "reprompts": {
+          "NO_INPUT1": "Hello World! What's your name?"
+        }
+      }
+    },
+    "typeOverrides": [],
+    "languageCode": ""
+  },
+  "user": {
+    "locale": "en-US",
+    "params": {
+      "userId": "5aab7198-8d71-4465-8a50-07ee9273c42c"
+    },
+    "accountLinkingStatus": "ACCOUNT_LINKING_STATUS_UNSPECIFIED",
+    "verificationStatus": "VERIFIED",
+    "packageEntitlements": [],
+    "lastSeenTime": "2020-06-30T14:01:42Z"
+  },
+  "home": {
+    "params": {}
+  },
+  "device": {
+    "capabilities": [
+      "SPEECH",
+      "RICH_RESPONSE",
+      "LONG_FORM_AUDIO"
+    ]
+  }
+}

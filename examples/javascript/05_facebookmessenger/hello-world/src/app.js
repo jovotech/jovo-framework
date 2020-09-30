@@ -38,8 +38,6 @@ app.setHandler({
 	},
 
 	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 	}
 });

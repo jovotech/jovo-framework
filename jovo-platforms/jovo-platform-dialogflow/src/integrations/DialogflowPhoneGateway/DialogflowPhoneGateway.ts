@@ -4,7 +4,7 @@ import _get = require('lodash.get');
 import { Config } from '../../DialogflowCore';
 import { Dialogflow } from '../../Dialogflow';
 import { DialogflowAgent } from '../../DialogflowAgent';
-import { DialogflowPhoneGatewayUser as DialogflowPhoneGatewayUser } from './DialogflowPhoneGatewayUser';
+import { DialogflowPhoneGatewayUser } from './DialogflowPhoneGatewayUser';
 import { DialogflowResponse } from '../..';
 
 /*
@@ -53,18 +53,16 @@ export class DialogflowPhoneGateway implements Plugin {
           response.fulfillmentMessages = [];
         }
 
-        response.fulfillmentMessages.push(
-          {
-            platform: 'TELEPHONY',
-            telephonySynthesizeSpeech: {
-              ssml,
-            }
-          }
-        );
+        response.fulfillmentMessages.push({
+          platform: 'TELEPHONY',
+          telephonySynthesizeSpeech: {
+            ssml,
+          },
+        });
 
         response.fulfillmentText = SpeechBuilder.removeSSML(response.fulfillmentText);
       } else {
-        Log.info("Response does not contain SSML");
+        Log.info('Response does not contain SSML');
       }
     }
   }

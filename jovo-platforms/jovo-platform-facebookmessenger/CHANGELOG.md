@@ -2,6 +2,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2020-09-29 [3.1.0]
+
+- [#817](https://github.com/jovotech/jovo-framework/pull/817) :recycle: :sparkles: Refactor Facebook Messenger platform - asynchronous Responses ([@m-ripper](https://github.com/m-ripper))
+
 ## 3.0.17 (2020-05-28)
 
 #### :bug: Bug Fix
