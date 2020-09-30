@@ -6,10 +6,6 @@ declare global {
   }
 }
 
-export type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
-
 export const VERSION = '0.1.0';
 
 export {
@@ -18,6 +14,11 @@ export {
 } from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
 
 export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+
+
+export * as StandaloneRecorder from './standalone/AudioRecorder';
+export * from './types';
+
 
 export * from './events';
 export * from './core/CoreComponent';
