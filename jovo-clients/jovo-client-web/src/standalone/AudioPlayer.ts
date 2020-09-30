@@ -38,6 +38,18 @@ export class AudioPlayer extends EventEmitter {
     }
   }
 
+  get canResume(): boolean {
+    return !!this.audio && !this.audio.ended && this.audio.paused;
+  }
+
+  get canPause(): boolean {
+    return !!this.audio && !this.audio.ended && !this.audio.paused;
+  }
+
+  get canStop(): boolean {
+    return !!this.audio && !this.audio.ended;
+  }
+
   addListener(event: AudioPlayerVoidEvents, listener: VoidListener): this;
   addListener(event: AudioPlayerEvent.Play, listener: AudioPlayerPlayListener): this;
   addListener(event: AudioPlayerEvent.Error, listener: ErrorListener): this;
@@ -91,8 +103,8 @@ export class AudioPlayer extends EventEmitter {
 
   resume() {
     this.checkForInitialization();
-    if (this.audio && !this.audio.ended && this.audio.paused) {
-      this.audio.play().then(() => {
+    if (this.canResume) {
+      this.audio!.play().then(() => {
         this.isAudioPlaying = true;
         this.emit(AudioPlayerEvent.Resume);
       });
@@ -101,17 +113,17 @@ export class AudioPlayer extends EventEmitter {
 
   pause() {
     this.checkForInitialization();
-    if (this.audio && !this.audio.paused && !this.audio.ended) {
-      this.audio.pause();
+    if (this.canPause) {
+      this.audio!.pause();
       this.emit(AudioPlayerEvent.Pause);
     }
   }
 
   stop() {
     this.checkForInitialization();
-    if (this.audio && !this.audio.ended) {
-      this.audio.pause();
-      this.audio.currentTime = 0;
+    if (this.canStop) {
+      this.audio!.pause();
+      this.audio!.currentTime = 0;
       this.emit(AudioPlayerEvent.Stop);
     }
   }
