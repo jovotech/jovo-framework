@@ -9,5 +9,5 @@ module.exports = config({
 		FileDb: {
 			pathToFile: './../db/db.json'
 		}
-	}
+	},
 });

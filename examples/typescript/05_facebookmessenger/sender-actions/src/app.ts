@@ -1,5 +1,5 @@
 import { FileDb } from 'jovo-db-filedb';
-import { App } from 'jovo-framework';
+import { App, Log } from 'jovo-framework';
 import {
 	FacebookMessenger,
 	SenderActionType
@@ -36,11 +36,15 @@ app.setHandler({
 	},
 
 	async HelloWorldIntent() {
-		await this.$messengerBot?.showAction(SenderActionType.MarkSeen);
-		await delay(100);
-		await this.$messengerBot?.showAction(SenderActionType.TypingOn);
-		await delay(1000);
-		await this.$messengerBot?.showAction(SenderActionType.TypingOff);
+		try {
+			await this.$messengerBot?.showAction(SenderActionType.MarkSeen);
+			await delay(100);
+			await this.$messengerBot?.showAction(SenderActionType.TypingOn);
+			await delay(1000);
+			await this.$messengerBot?.showAction(SenderActionType.TypingOff);
+		} catch (e) {
+			Log.error(e.response?.data || e.message);
+		}
 		this.ask("Hello World! What's your name?", 'Please tell me your name.');
 	},
 

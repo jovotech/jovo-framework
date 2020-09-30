@@ -86,26 +86,19 @@ export class FacebookMessengerCore implements Plugin {
     const tell = _get(output, 'tell');
     if (tell) {
       const text = setText || tell.speech.toString();
-      const textMessage = new TextMessage(
+      response.message = new TextMessage(
         { id: messengerBot.$user.getId()! },
         { text, quickReplies: overWriteQuickReplies },
       );
-      response.messages.push(textMessage);
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
       const text = setText || ask.speech.toString();
-      const textMessage = new TextMessage(
+      response.message = new TextMessage(
         { id: messengerBot.$user.getId()! },
         { text, quickReplies: overWriteQuickReplies },
       );
-      response.messages.push(textMessage);
-    }
-
-    const messages = _get(output, 'FacebookMessenger.Messages');
-    if (messages && messages.length > 0) {
-      response.messages.push(...messages);
     }
   }
 }

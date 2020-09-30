@@ -100,7 +100,6 @@ export class BasicLogging implements Plugin {
     const state = `${chalk.bgWhite.black(' State: ')} ${chalk(
       handleRequest.jovo!.getState() ? handleRequest.jovo!.getState() : '-',
     )}`;
-
   };
 
   requestLogger = (handleRequest: HandleRequest) => {

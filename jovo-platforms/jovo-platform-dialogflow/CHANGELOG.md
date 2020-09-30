@@ -2,6 +2,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2020-09-29 [3.1.0]
+
+- [#820](https://github.com/jovotech/jovo-framework/pull/820) :sparkles: Add Dialogflow Phone Gateway integration ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
 ## 3.0.17 (2020-05-13)
 
 #### :bug: Bug fix
