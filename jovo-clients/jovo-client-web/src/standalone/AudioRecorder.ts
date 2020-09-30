@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
-import defaults = require('lodash.defaults');
-import { DeepPartial, OSHelper } from '..';
+import defaults from 'lodash.defaults';
+import { OSHelper } from '..';
+import { DeepPartial, VoidListener } from '../types';
 
 interface AudioRecorderNodes {
   inputStream?: MediaStreamAudioSourceNode;
@@ -52,7 +53,6 @@ export interface AudioRecorderConfig {
   silenceDetection: AudioRecorderDetectionConfig;
 }
 
-export type AudioRecorderVoidListener = () => void;
 export type AudioRecorderStopListener = (result: AudioRecorderResult) => void;
 export type AudioRecorderProcessingListener = (data: AudioRecorderProcessingData) => void;
 export type AudioRecorderVoidEvents =
@@ -138,7 +138,7 @@ export class AudioRecorder extends EventEmitter {
     this.audioStream = null;
   }
 
-  addListener(event: AudioRecorderVoidEvents, listener: AudioRecorderVoidListener): this;
+  addListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
   addListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
   addListener(
     event: AudioRecorderEvent.Processing,
@@ -148,21 +148,21 @@ export class AudioRecorder extends EventEmitter {
     return super.addListener(event, listener);
   }
 
-  on(event: AudioRecorderVoidEvents, listener: AudioRecorderVoidListener): this;
+  on(event: AudioRecorderVoidEvents, listener: VoidListener): this;
   on(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
   on(event: AudioRecorderEvent.Processing, listener: AudioRecorderProcessingListener): this;
   on(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.on(event, listener);
   }
 
-  once(event: AudioRecorderVoidEvents, listener: AudioRecorderVoidListener): this;
+  once(event: AudioRecorderVoidEvents, listener: VoidListener): this;
   once(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
   once(event: AudioRecorderEvent.Processing, listener: AudioRecorderProcessingListener): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.once(event, listener);
   }
 
-  prependListener(event: AudioRecorderVoidEvents, listener: AudioRecorderVoidListener): this;
+  prependListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
   prependListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
   prependListener(
     event: AudioRecorderEvent.Processing,
@@ -172,7 +172,7 @@ export class AudioRecorder extends EventEmitter {
     return super.prependListener(event, listener);
   }
 
-  prependOnceListener(event: AudioRecorderVoidEvents, listener: AudioRecorderVoidListener): this;
+  prependOnceListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
   prependOnceListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
   prependOnceListener(
     event: AudioRecorderEvent.Processing,
@@ -238,7 +238,6 @@ export class AudioRecorder extends EventEmitter {
     }
     this.stopRecording();
 
-    // TODO emit actual events
     const data = this.mergeChunks(this.chunks, this.chunkLength);
     const result: AudioRecorderResult = {
       data,

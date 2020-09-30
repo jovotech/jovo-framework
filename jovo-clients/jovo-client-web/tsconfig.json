@@ -12,6 +12,7 @@
     "resolveJsonModule": true,
     "noImplicitReturns": true,
     "preserveConstEnums": true,
+    "esModuleInterop": true,
     "declaration": true,
     "strict": true,
     "outDir": "./dist",
