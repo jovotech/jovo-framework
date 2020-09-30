@@ -63,26 +63,6 @@ export interface AudioRecorderConfig {
 }
 
 export class AudioRecorder extends EventEmitter {
-  get isRecording(): boolean {
-    return this.recording;
-  }
-
-  get startDetectionEnabled(): boolean {
-    return !!(
-      this.config.startDetection.enabled &&
-      this.config.startDetection.threshold &&
-      this.config.startDetection.timeoutInMs
-    );
-  }
-
-  get silenceDetectionEnabled(): boolean {
-    return !!(
-      this.config.silenceDetection.enabled &&
-      this.config.silenceDetection.threshold &&
-      this.config.silenceDetection.timeoutInMs
-    );
-  }
-
   static getDefaultConfig(): AudioRecorderConfig {
     return {
       sampleRate: 16000,
@@ -136,6 +116,26 @@ export class AudioRecorder extends EventEmitter {
     this.audioNodes = {};
     this.audioCtx = null;
     this.audioStream = null;
+  }
+
+  get isRecording(): boolean {
+    return this.recording;
+  }
+
+  get startDetectionEnabled(): boolean {
+    return !!(
+      this.config.startDetection.enabled &&
+      this.config.startDetection.threshold &&
+      this.config.startDetection.timeoutInMs
+    );
+  }
+
+  get silenceDetectionEnabled(): boolean {
+    return !!(
+      this.config.silenceDetection.enabled &&
+      this.config.silenceDetection.threshold &&
+      this.config.silenceDetection.timeoutInMs
+    );
   }
 
   addListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
