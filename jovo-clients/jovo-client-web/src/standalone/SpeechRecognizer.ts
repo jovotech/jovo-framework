@@ -35,15 +35,6 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
 
 // TODO determine how to handle case where recognition is not available (Safari for example)
 export class SpeechRecognizer extends EventEmitter {
-  get silenceDetectionEnabled(): boolean {
-    return !!(
-      this.config.continuous &&
-      this.config.interimResults &&
-      this.config.silenceDetection.enabled &&
-      this.config.silenceDetection.timeoutInMs
-    );
-  }
-
   static getDefaultConfig(): SpeechRecognizerConfig {
     return {
       // TODO maybe replace with browser lang
@@ -80,6 +71,15 @@ export class SpeechRecognizer extends EventEmitter {
       this.recognition = new window.SpeechRecognition();
       this.setupSpeechRecognition(this.recognition);
     }
+  }
+
+  get silenceDetectionEnabled(): boolean {
+    return !!(
+      this.config.continuous &&
+      this.config.interimResults &&
+      this.config.silenceDetection.enabled &&
+      this.config.silenceDetection.timeoutInMs
+    );
   }
 
   addListener(
