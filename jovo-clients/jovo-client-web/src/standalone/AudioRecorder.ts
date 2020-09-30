@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import defaults from 'lodash.defaults';
+import _defaults from 'lodash.defaults';
 import { OSHelper } from '..';
 import { DeepPartial, VoidListener } from '../types';
 
@@ -31,6 +31,15 @@ export enum AudioRecorderEvent {
   Stop = 'stop',
 }
 
+export type AudioRecorderStopListener = (result: AudioRecorderResult) => void;
+export type AudioRecorderProcessingListener = (data: AudioRecorderProcessingData) => void;
+export type AudioRecorderVoidEvents =
+  | AudioRecorderEvent.Start
+  | AudioRecorderEvent.Abort
+  | AudioRecorderEvent.StartDetected
+  | AudioRecorderEvent.SilenceDetected
+  | AudioRecorderEvent.Timeout;
+
 export interface AudioRecorderDetectionConfig {
   enabled: boolean;
   /** Value between 0 and 1 */
@@ -52,15 +61,6 @@ export interface AudioRecorderConfig {
   startDetection: AudioRecorderDetectionConfig;
   silenceDetection: AudioRecorderDetectionConfig;
 }
-
-export type AudioRecorderStopListener = (result: AudioRecorderResult) => void;
-export type AudioRecorderProcessingListener = (data: AudioRecorderProcessingData) => void;
-export type AudioRecorderVoidEvents =
-  | AudioRecorderEvent.Start
-  | AudioRecorderEvent.Abort
-  | AudioRecorderEvent.StartDetected
-  | AudioRecorderEvent.SilenceDetected
-  | AudioRecorderEvent.Timeout;
 
 export class AudioRecorder extends EventEmitter {
   get isRecording(): boolean {
@@ -131,7 +131,7 @@ export class AudioRecorder extends EventEmitter {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     const defaultConfig = AudioRecorder.getDefaultConfig();
-    this.config = config ? defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
 
     this.audioNodes = {};
     this.audioCtx = null;
