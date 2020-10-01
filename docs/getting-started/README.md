@@ -117,7 +117,7 @@ In the Debugger, you can quickly test if the flow of your voice app works. For t
 
 After getting your first "Hello World," here are the next steps to get started with the Jovo Framework and voice app development.
 
-### Routing and App Logic
+### Routing and App Logic:
 
 Take a look at the `app.js` file in the `src` folder to get an understanding of how the app logic is built:
 
@@ -160,8 +160,7 @@ app.setHandler({
 ```
 
 > [Find out more about routing here](../basic-concepts/routing './routing').
-
-### Language Model
+### Language Model:
 
 The handler methods that are referenced in the app logic, e.g. `HelloWorldIntent` and `MyNameIsIntent`, are so called intents that are defined in the app's language model.
 
