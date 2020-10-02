@@ -16,7 +16,7 @@ export { GoogleAssistant, Config } from './GoogleAssistant';
 export { GoogleAssistantTestSuite, Suggestion } from './core/Interfaces';
 import { NextScene } from './core/Interfaces';
 import { Prompt } from './core/Interfaces';
-export * from './Core/Interfaces';
+export * from './core/Interfaces';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
