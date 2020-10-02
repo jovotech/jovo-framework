@@ -131,7 +131,7 @@ export class OneDashAlexa implements Analytics {
     const slots = [];
     for (const name in intentSlots) {
       if (intentSlots.hasOwnProperty(name) && intentSlots[name]) {
-        slots.push(`${name}: ${intentSlots[name]}`);
+        slots.push(`${name}: ${JSON.stringify(intentSlots[name], undefined, 1)}`);
       }
     }
     return slots.join('\n').trim();
