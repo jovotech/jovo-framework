@@ -1,12 +1,21 @@
-import { App } from 'jovo-framework';
+'use strict';
 
-import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
-import { JovoDebugger } from 'jovo-plugin-debugger';
-import { FileDb } from 'jovo-db-filedb';
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+const { App } = require('jovo-framework');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { JovoDebugger } = require('jovo-plugin-debugger');
+const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
 
 app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
+
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
 
 // behavior on Android phones
 // copied from https://developers.google.com/assistant/conversational/prompts-media#behavior_on_android_phones
@@ -16,7 +25,7 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	async LAUNCH() {
-		this.$googleAction!.$audioPlayer!.playAudio({
+		this.$googleAction.$audioPlayer.playAudio({
 			name: 'Media name',
 			description: 'Media description',
 			url: 'https://storage.googleapis.com/automotive-media/Jazz_In_Paris.mp3',
@@ -33,12 +42,12 @@ app.setHandler({
 	},
 	AUDIOPLAYER: {
 		'GoogleAction.Paused'() {
-			const progress = this.$googleAction!.$audioPlayer!.getProgress();
+			const progress = this.$googleAction.$audioPlayer.getProgress();
 			// this will close the session
 			this.tell('Playback paused');
 		},
 		'GoogleAction.Stopped'() {
-			const progress = this.$googleAction!.$audioPlayer!.getProgress();
+			const progress = this.$googleAction.$audioPlayer.getProgress();
 			// no response possible
 		},
 		'GoogleAction.Finished'() {
@@ -50,12 +59,10 @@ app.setHandler({
 	},
 
 	END() {
-		const progress = this.$googleAction!.$audioPlayer!.getProgress();
-
+		const progress = this.$googleAction.$audioPlayer.getProgress();
 		// save progress to db
-
 		return this.tell('bye');
 	},
 });
 
-export { app };
+module.exports.app = app;

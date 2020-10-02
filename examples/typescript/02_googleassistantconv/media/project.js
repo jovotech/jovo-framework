@@ -4,7 +4,7 @@
 
 module.exports = {
 	googleAction: {
-		projectId: '<PROJECT ID>',
+		projectId: 'actionbuilder-d8f7c',
 	},
 	endpoint: '${JOVO_WEBHOOK_URL}',
 };

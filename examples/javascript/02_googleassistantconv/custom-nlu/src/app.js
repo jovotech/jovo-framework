@@ -5,13 +5,16 @@
 // ------------------------------------------------------------------
 
 const { App } = require('jovo-framework');
-const { GoogleAssistant } = require('jovo-platform-googleassistantconv');
+const { Alexa } = require('jovo-platform-alexa');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
+const { NlpjsNlu } = require('jovo-nlu-nlpjs');
 
 const app = new App();
-
-app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
+const googleAssistant = new GoogleAssistant();
+app.use(googleAssistant, new JovoDebugger(), new FileDb());
+googleAssistant.use(new NlpjsNlu());
 
 // ------------------------------------------------------------------
 // APP LOGIC

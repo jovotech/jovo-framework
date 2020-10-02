@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------
 
 const { App } = require('jovo-framework');
-const { GoogleAssistant } = require('jovo-platform-googleassistantconv');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 
@@ -27,8 +27,6 @@ app.setHandler({
 	},
 
 	MyNameIsIntent() {
-		console.log(this.$request.getInputs());
-
 		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
 	},
 });

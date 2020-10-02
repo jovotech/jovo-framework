@@ -1,24 +1,33 @@
-import { App, SpeechBuilder } from 'jovo-framework';
+'use strict';
 
-import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
-import { JovoDebugger } from 'jovo-plugin-debugger';
-import { FileDb } from 'jovo-db-filedb';
+// ------------------------------------------------------------------
+// APP INITIALIZATION
+// ------------------------------------------------------------------
+
+const { App, SpeechBuilder } = require('jovo-framework');
+const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { JovoDebugger } = require('jovo-plugin-debugger');
+const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
 
 app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
+// ------------------------------------------------------------------
+// APP LOGIC
+// ------------------------------------------------------------------
+
 app.setHandler({
 	LAUNCH() {
-		// return this.toIntent('BasicCardIntent');
+		return this.toIntent('BasicCardIntent');
 		// return this.toIntent('ImageCardIntent');
 		// return this.toIntent('TableIntent');
 		// return this.toIntent('SuggestionsIntent');
 		// return this.toIntent('RichIntent');
-		return this.toIntent('RichIntentEndConversation');
+		// return this.toIntent('RichIntentEndConversation');
 	},
 	BasicCardIntent() {
-		this.$googleAction!.addBasicCard({
+		this.$googleAction.addBasicCard({
 			title: 'Title',
 			subtitle: 'Subtitle',
 			text: 'Text',
@@ -30,14 +39,14 @@ app.setHandler({
 		this.tell('Basic card');
 	},
 	ImageCardIntent() {
-		this.$googleAction!.addImageCard({
+		this.$googleAction.addImageCard({
 			url: 'https://via.placeholder.com/450x350?text=Basic+Card',
 			alt: 'Image text',
 		});
 		this.tell('Image card');
 	},
 	TableIntent() {
-		this.$googleAction!.addTable({
+		this.$googleAction.addTable({
 			columns: [
 				{
 					header: 'Column A',
@@ -102,11 +111,11 @@ app.setHandler({
 		this.tell('Response with table');
 	},
 	SuggestionsIntent() {
-		this.$googleAction!.showSuggestions(['Yes', 'No']);
+		this.$googleAction.showSuggestions(['Yes', 'No']);
 		this.ask('Say yes or no');
 	},
 	RichIntent() {
-		this.$googleAction!.prompt({
+		this.$googleAction.prompt({
 			firstSimple: {
 				speech: SpeechBuilder.toSSML('Hello World!'),
 				text: `I'm only visible on a smartphone.`,
@@ -138,7 +147,7 @@ app.setHandler({
 		});
 	},
 	RichIntentEndConversation() {
-		this.$googleAction!.prompt({
+		this.$googleAction.prompt({
 			firstSimple: {
 				speech: SpeechBuilder.toSSML('Hello World!'),
 				text: `I'm only visible on a smartphone.`,
@@ -155,8 +164,8 @@ app.setHandler({
 				},
 			},
 		});
-		this.$googleAction!.endConversation();
+		this.$googleAction.endConversation();
 	},
 });
 
-export { app };
+module.exports.app = app;

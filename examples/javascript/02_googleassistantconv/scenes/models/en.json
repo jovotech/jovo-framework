@@ -1,0 +1,92 @@
+{
+	"invocation": "my test app",
+	"intents": [],
+	"inputTypes": [
+		{
+			"name": "nameInput",
+			"values": [
+				{
+					"key": "jane",
+					"value": "jane",
+					"synonyms": []
+				},
+				{
+					"key": "jeff",
+					"value": "jeff",
+					"synonyms": []
+				},
+				{
+					"key": "joe",
+					"value": "joe",
+					"synonyms": []
+				},
+				{
+					"key": "max",
+					"value": "max",
+					"synonyms": []
+				},
+				{
+					"key": "sam",
+					"value": "sam",
+					"synonyms": []
+				}
+			]
+		}
+	],
+	"googleAssistant": {
+		"custom": {
+			"scenes": {
+				"CollectingDataScene": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "name"
+							},
+							"name": "name",
+							"promptSettings": {
+								"initialPrompt": {
+									"webhookHandler": "Jovo"
+								}
+							},
+							"required": true,
+							"type": {
+								"name": "nameInput"
+							}
+						},
+						{
+							"commitBehavior": {
+								"writeSessionParam": "age"
+							},
+							"name": "age",
+							"promptSettings": {
+								"initialPrompt": {
+									"webhookHandler": "Jovo"
+								}
+							},
+							"required": true,
+							"type": {
+								"name": "actions.type.Number"
+							}
+						}
+					]
+				}
+			},
+			"global": {
+				"actions.intent.MAIN": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					},
+					"transitionToScene": "CollectingDataScene"
+				}
+			}
+		}
+	}
+}

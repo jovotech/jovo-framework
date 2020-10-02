@@ -1,5 +1,5 @@
 {
-  "name": "jovo-examples-ts-googleassistantconv-selection",
+  "name": "jovo-examples-ts-googleassistantconv-custom-nlu",
   "version": "3.1.0",
   "private": true,
   "description": "",
@@ -20,7 +20,8 @@
     "jovo-db-filedb": "^3.1.0",
     "jovo-framework": "^3.1.0",
     "jovo-platform-googleassistantconv": "^3.1.0-alpha.0",
-    "jovo-plugin-debugger": "^3.1.0"
+    "jovo-plugin-debugger": "^3.1.0",
+    "jovo-nlu-nlpjs": "^3.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
