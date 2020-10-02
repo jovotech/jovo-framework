@@ -8,6 +8,7 @@ import {
   Reprompt,
   Suggestion,
   PermissionResult,
+  Prompt,
 } from './Interfaces';
 import { ConversationalActionUser } from './ConversationalActionUser';
 import { ConversationalActionResponse } from './ConversationalActionResponse';
@@ -166,6 +167,16 @@ export class GoogleAction extends Jovo {
 
   setNextScene(scene: string) {
     _set(this.$output, 'GoogleAssistant.nextScene', scene);
+    return this;
+  }
+
+  endConversation() {
+    this.setNextScene('actions.scene.END_CONVERSATION');
+    return this;
+  }
+
+  endSession() {
+    return this.endConversation();
   }
 
   /**
@@ -320,5 +331,9 @@ export class GoogleAction extends Jovo {
 
   getNotifcationsUserId() {
     return this.getPermissionResult()?.additionalUserData.updateUserId;
+  }
+  prompt(prompt: Prompt): this {
+    this.$output.GoogleAssistant.prompt = prompt;
+    return this;
   }
 }

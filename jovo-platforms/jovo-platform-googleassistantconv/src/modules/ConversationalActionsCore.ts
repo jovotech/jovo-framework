@@ -138,8 +138,9 @@ export class ConversationalActionsCore implements Plugin {
         type: EnumGoogleAssistantRequestType.ON_PERMISSION,
       };
     } else if (
-      request.intent?.name === '' &&
-      googleAction.$config.handlers[EnumGoogleAssistantRequestType.ON_SCENE]
+      request.intent?.name === '' ||
+      (request.intent?.name === 'actions.intent.MAIN' &&
+        googleAction.$config.handlers[EnumGoogleAssistantRequestType.ON_SCENE])
     ) {
       googleAction.$type = {
         type: EnumGoogleAssistantRequestType.ON_SCENE,
@@ -430,6 +431,14 @@ export class ConversationalActionsCore implements Plugin {
         googleAction.$response as ConversationalActionResponse,
         'prompt.content.collection',
         output.GoogleAssistant.collection,
+      );
+    }
+
+    if (output.GoogleAssistant?.prompt) {
+      _set(
+        googleAction.$response as ConversationalActionResponse,
+        'prompt',
+        output.GoogleAssistant.prompt,
       );
     }
 
