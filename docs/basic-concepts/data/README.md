@@ -1,5 +1,7 @@
 # Data
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/data
+
 Learn more about different data types that can be used in a Jovo project.
 
 * [Introduction](#introduction)

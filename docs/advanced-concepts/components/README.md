@@ -1,5 +1,8 @@
 # Conversational Components
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/components
+
+
 * [Introduction](#introduction)
 * [Component Structure](#component-structure)
   * [handler](#handler)

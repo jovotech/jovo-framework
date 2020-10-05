@@ -1,5 +1,133 @@
 # Jovo Framework Changelog
 
+### Latest Framework Version: 3.1.0
+
+## 2020-09-29
+
+### :boom: Breaking Changes
+
+##### `jovo-platform-messenger [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-messenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-messenger) | [npm](https://www.npmjs.com/package/jovo-platform-messenger)
+
+- [#817](https://github.com/jovotech/jovo-framework/pull/817) :recycle: :sparkles: Refactor Facebook Messenger platform - asynchronous Responses ([@m-ripper](https://github.com/m-ripper))
+
+### :sparkles: New Features
+
+##### `jovo-platform-dialogflow [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow)
+
+- [#820](https://github.com/jovotech/jovo-framework/pull/820) :sparkles: Add Dialogflow Phone Gateway integration ([@stephen-wilcox](https://github.com/stephen-wilcox))
+
+##### `jovo-platform-web [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web) | [npm](https://www.npmjs.com/package/jovo-platform-web)
+- [#824](https://github.com/jovotech/jovo-framework/pull/824) :sparkles: Implement web-platform ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-framework [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-framework) | [npm](https://www.npmjs.com/package/jovo-framework)
+- [#827](https://github.com/jovotech/jovo-framework/pull/827) :sparkles: Make fancy JSON output ([@aswetlow](https://github.com/aswetlow))
+- [#828](https://github.com/jovotech/jovo-framework/pull/828) :label: Add type for user-data ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-platform-googleassistantconv [3.1.0-alpha.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#829](https://github.com/jovotech/jovo-framework/pull/829) :sparkles: Work In Progress: Google Assistant Conversational Actions ([@aswetlow](https://github.com/aswetlow))
+
+### :bug: Bug Fixes
+
+##### `jovo-framework [3.1.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-framework) | [npm](https://www.npmjs.com/package/jovo-framework)
+- [#818](https://github.com/jovotech/jovo-framework/pull/818) :bug: Fix saving of user-session-id ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-db-firestore [3.1.0-alpha.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-firestore) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-firestore) | [npm](https://www.npmjs.com/package/jovo-db-firestore)
+- [#822](https://github.com/jovotech/jovo-framework/pull/822) :bug: Fix potential bug for Firestore ([@m-ripper](https://github.com/m-ripper))
+
+<br>
+
+## 2020-09-17
+
+### :bug: Bug Fix
+
+##### `jovo-analytics-googleanalytics [3.0.32]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#812](https://github.com/jovotech/jovo-framework/pull/812) Fix endreason for "stop" not set ([@freiSMS](https://github.com/freiSMS))
+
+##### `jovo-platform-googleassistant [3.0.30]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant)
+* Fix getDeliveryAddress in Transactions API ([@aswetlow](https://github.com/aswetlow))   
+
+
+<br> 
+
+## 2020-09-01
+
+### :bug: Bug Fix
+
+##### `jovo-platform-googlebusiness [3.0.9]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
+* [#810](https://github.com/jovotech/jovo-framework/pull/810) Implement check for duplicated messages for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))
+
+## 2020-08-31
+
+### :sparkles: New Features
+
+##### `jovo-analytics-googleanalytics [3.0.31]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#804](https://github.com/jovotech/jovo-framework/pull/804) Google Analytics Features and Fixes ([@freiSMS](https://github.com/freiSMS))
+
+##### `jovo-client-web-vue [3.0.32]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-client-web-vue) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-clients/jovo-client-web-vue) | [npm](https://www.npmjs.com/package/jovo-client-web-vue)
+* [#808](https://github.com/jovotech/jovo-framework/pull/808) Move Vue to peerDependencies ([@m-ripper](https://github.com/m-ripper))
+
+
+## 2020-08-21
+
+
+### :sparkles: New Features
+
+##### `jovo-platform-bixby [3.0.25]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-bixby) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-bixby) | [npm](https://www.npmjs.com/package/jovo-platform-bixby)
+* [#799](https://github.com/jovotech/jovo-framework/pull/799) Add SSML Support for Bixby ([@rubenaeg](https://github.com/rubenaeg))
+
+##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
+* [#803](https://github.com/jovotech/jovo-framework/pull/803) Implement asynchronous responses for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))   
+
+<br><br>
+### :nail_care: Enhancements
+
+##### `jovo-platform-googlebusiness [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
+* [#791](https://github.com/jovotech/jovo-framework/pull/791) Replace `googleapis` with `google-auth-library` ([@m-ripper](https://github.com/m-ripper))   
+
+##### `jovo-nlu-dialogflow [3.0.21]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-nlu-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-nlu-dialogflow) | [npm](https://www.npmjs.com/package/jovo-nlu-dialogflow)
+* [#793](https://github.com/jovotech/jovo-framework/pull/793) Improve DialogflowNlu session-id for detectIntent-requests ([@m-ripper](https://github.com/m-ripper))   
+
+##### `jovo-analytics-dashbot [3.0.26]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
+* [#806](https://github.com/jovotech/jovo-framework/pull/806) Add dashbotUser to userStorage ([@aswetlow](https://github.com/aswetlow))   
+
+
+<br>
+
+### :bug: Bug Fix
+ 
+##### `jovo-platform-facebookmessenger [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-facebookmessenger) | [npm](https://www.npmjs.com/package/jovo-platform-facebookmessenger)
+* [#792](https://github.com/jovotech/jovo-framework/pull/792) Fix FacebookMessenger bug ([@m-ripper](https://github.com/m-ripper))   
+
+
+##### `jovo-asr-azure [3.0.21]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-asr-azure) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-asr-azure) | [npm](https://www.npmjs.com/package/jovo-asr-azure)
+* [#792](https://github.com/jovotech/jovo-framework/pull/792) Fix FacebookMessenger bug ([@m-ripper](https://github.com/m-ripper))   
+
+
+##### `jovo-slu-lex [3.0.23]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-slu-lex) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-slu-lex) | [npm](https://www.npmjs.com/package/jovo-slu-lex)
+* [#802](https://github.com/jovotech/jovo-framework/pull/802) Fix initialization bug ([@m-ripper](https://github.com/m-ripper))   
+
+##### `jovo-tts-polly [3.0.22]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-tts-polly) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-tts-polly) | [npm](https://www.npmjs.com/package/jovo-tts-polly)
+* [#802](https://github.com/jovotech/jovo-framework/pull/802) Fix configuration bug ([@m-ripper](https://github.com/m-ripper))   
+
+
+##### `jovo-platform-facebookmessenger [3.0.7]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-facebookmessenger) | [npm](https://www.npmjs.com/package/jovo-platform-facebookmessenger)
+* [#792](https://github.com/jovotech/jovo-framework/pull/792) Fix FacebookMessenger bug ([@m-ripper](https://github.com/m-ripper))   
+
+##### `jovo-platform-alexa [3.0.30]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
+* [#806](https://github.com/jovotech/jovo-framework/pull/806) Fix getSkillId with audio player requests ([@aswetlow](https://github.com/aswetlow))   
+
+##### `jovo-framework [3.0.23]` [Jovo Marketplace](https://www.jovo.tech/marketplace) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-framework) | [npm](https://www.npmjs.com/package/jovo-framework)
+* [#806](https://github.com/jovotech/jovo-framework/pull/806) Fix store sessionData in DB ([@aswetlow](https://github.com/aswetlow))   
+
+
+ ### Committers: 3
+- Max Ripper ([@m-ripper](https://github.com/m-ripper))
+- Ruben A. ([@rubenaeg](https://github.com/rubenaeg))
+- Alex ([@aswetlow](https://github.com/aswetlow))
+
+
+---
+
 
 ## 3.0.20 (2020-07-21)
 

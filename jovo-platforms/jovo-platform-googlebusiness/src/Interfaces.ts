@@ -1,10 +1,12 @@
+export type EntryPoint = 'ENTRY_POINT_UNSPECIFIED' | 'PLACESHEET' | 'MAPS';
+
 export interface GoogleBusinessBaseRequest {
   agent: string;
   conversationId: string;
   customAgentId: string;
   requestId: string;
   context?: {
-    entryPoint: 'ENTRY_POINT_UNSPECIFIED' | 'PLACESHEET' | 'MAPS';
+    entryPoint: EntryPoint;
     placeId: string;
     userInfo: {
       displayName: string;
@@ -22,25 +24,31 @@ export interface GoogleBusinessMessageRequest extends GoogleBusinessBaseRequest 
   };
 }
 
+export type SuggestionType = 'UNKNOWN' | 'ACTION' | 'REPLY';
+
 export interface GoogleBusinessSuggestionRequest extends GoogleBusinessBaseRequest {
   suggestionResponse: {
     message: string;
     postbackData: string;
     createTime: string; // RFC3339 UTC "Zulu" format
     text: string;
-    suggestionType: 'UNKNOWN' | 'ACTION' | 'REPLY';
+    suggestionType: SuggestionType;
   };
 }
 
-export interface BaseResponse {
-  name: string;
+export interface ResponseOptions {
+  suggestions?: Suggestion[];
+  fallback?: string;
+}
+
+export type RepresentativeType = 'REPRESENTATIVE_TYPE_UNSPECIFIED' | 'BOT' | 'HUMAN';
+
+export interface BaseResponse extends ResponseOptions {
   messageId: string;
   representative: {
     displayName?: string;
-    representativeType: 'REPRESENTATIVE_TYPE_UNSPECIFIED' | 'BOT' | 'HUMAN';
+    representativeType: RepresentativeType;
   };
-  suggestions?: Suggestion[];
-  fallback?: string;
 }
 
 export type Suggestion = SuggestedReply | SuggestActionUrl | SuggestActionDial;
@@ -92,8 +100,11 @@ export interface CarouselCardResponse extends BaseResponse {
   };
 }
 
+export type CardWidth = 'CARD_WIDTH_UNSPECIFIED' | 'SMALL' | 'MEDIUM';
+export type CardHeight = 'HEIGHT_UNSPECIFIED' | 'SHORT' | 'MEDIUM' | 'TALL';
+
 export interface CarouselCard {
-  cardWidth: 'CARD_WIDTH_UNSPECIFIED' | 'SMALL' | 'MEDIUM';
+  cardWidth: CardWidth;
   cardContents: Card[];
 }
 
@@ -101,10 +112,10 @@ export interface Card {
   title?: string;
   description?: string;
   media?: {
-    height: 'HEIGHT_UNSPECIFIED' | 'SHORT' | 'MEDIUM' | 'TALL';
+    height: CardHeight;
     contentInfo: {
       fileUrl: string;
-      thumbnailUrl: string;
+      thumbnailUrl?: string;
       forceRefresh?: boolean;
       altText: string;
     };

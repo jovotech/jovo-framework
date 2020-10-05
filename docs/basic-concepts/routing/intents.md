@@ -1,5 +1,7 @@
 # Intents
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing/intents
+
 In this section, you will learn more about how to use intents to route your users through your voice app.
 
 * [Introduction](#introduction)

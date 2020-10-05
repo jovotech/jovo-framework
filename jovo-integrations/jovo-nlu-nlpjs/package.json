@@ -1,6 +1,6 @@
 {
   "name": "jovo-nlu-nlpjs",
-  "version": "3.0.15-alpha.0",
+  "version": "3.1.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,12 +16,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@nlpjs/core-loader": "^4.3.0",
-    "@nlpjs/evaluator": "^4.3.0",
-    "@nlpjs/logger": "^4.0.0-rc.12",
-    "@nlpjs/ner": "^4.3.0",
-    "@nlpjs/nlp": "^4.3.0",
-    "jovo-core": "^3.0.19",
+    "@nlpjs/core-loader": "^4.9.3",
+    "@nlpjs/evaluator": "^4.9.1",
+    "@nlpjs/logger": "^4.8.4",
+    "@nlpjs/ner": "^4.9.3",
+    "@nlpjs/nlp": "^4.9.3",
+    "jovo-core": "^3.1.0",
     "jovo-model": "^0.1.14",
     "jovo-model-nlpjs": "^0.1.1-alpha.0"
   },

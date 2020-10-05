@@ -24,6 +24,9 @@ Install the module:
 $ npm install jovo-platform-googlebusiness --save
 ```
 
+> Make sure, that you have a database-integration enabled because this platform needs [User-Session Data](https://www.jovo.tech/docs/data/user#session-data). 
+> You do not have to change the config because `GoogleBusiness` will enable the feature when it is installed.
+
 Import the installed module, initialize and add it to the `app` object:
 
 ```javascript

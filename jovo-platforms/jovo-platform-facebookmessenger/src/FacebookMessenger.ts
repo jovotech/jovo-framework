@@ -44,6 +44,7 @@ export interface GreetingElement {
 
 export interface Config extends ExtensibleConfig {
   shouldOverrideAppHandle?: boolean;
+  shouldIgnoreSynchronousResponse?: boolean;
   greeting?: UpdateConfig<GreetingElement[]>;
   launch?: UpdateConfig<string>;
   pageAccessToken?: string;
@@ -60,6 +61,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
   config: Config = {
     shouldOverrideAppHandle: true,
+    shouldIgnoreSynchronousResponse: false,
     greeting: {
       updateOnSetup: false,
     },
@@ -273,22 +275,18 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     const messengerBot = handleRequest.jovo;
     await this.middleware('$response')!.run(messengerBot);
 
-    const messages: Message[] = _get(messengerBot, '$response.messages', []);
-    const pageAccessToken = _get(
-      handleRequest.jovo.$config,
-      'plugin.FacebookMessenger.pageAccessToken',
-      '',
-    );
-
-    for (const message of messages) {
-      message
-        .send(pageAccessToken, this.config.version!)
-        .then((res: AxiosResponse<any>) => {
-          Log.debug(res.data);
-        })
-        .catch((e: AxiosError) => {
-          Log.error(`Error while sending message:\n${e}`);
-        });
+    const message: Message | undefined = _get(messengerBot, '$response.message', undefined);
+    if (message && this.config.shouldIgnoreSynchronousResponse !== true) {
+      const pageAccessToken = _get(
+        handleRequest.jovo.$config,
+        'plugin.FacebookMessenger.pageAccessToken',
+        '',
+      );
+      try {
+        await message.send(pageAccessToken, this.config.version || DEFAULT_VERSION);
+      } catch (e) {
+        Log.error(e.response?.data);
+      }
     }
   }
 

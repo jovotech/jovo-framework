@@ -1,5 +1,7 @@
 # Google Cloud
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/google-cloud-functions
+
 [Google Cloud Functions](https://cloud.google.com/functions/) is a serverless hosting solution by Google Cloud. Find the [official documentation here](https://cloud.google.com/functions/docs/).
 
 * [Google Cloud Functions Configuration](#google-cloud-functions-configuration)

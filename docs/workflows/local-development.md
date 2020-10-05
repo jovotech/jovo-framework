@@ -1,5 +1,7 @@
 # Local Development
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/local-development
+
 Learn more about local development of Jovo projects.
 
 * [Introduction](#introduction)

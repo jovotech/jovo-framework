@@ -476,6 +476,7 @@ export class AlexaSkill extends Jovo {
     const directives = _get(this.$output, 'Alexa.Directives', []);
     directives.push(directive);
     _set(this.$output, 'Alexa.Directives', directives);
+    return this;
   }
 
   /**
@@ -566,7 +567,10 @@ export class AlexaSkill extends Jovo {
    * @returns {string | undefined}
    */
   getSkillId(): string | undefined {
-    return _get(this.$request, 'session.application.applicationId');
+    return (
+      _get(this.$request, 'session.application.applicationId') ||
+      _get(this.$request, 'context.System.application.applicationId')
+    );
   }
 
   /**

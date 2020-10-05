@@ -213,16 +213,22 @@ export interface Reminder {
     status: string; // if a push notification should be sent or not [default = ENABLED]
   };
 }
+export interface RecurrenceWithFreq {
+  freq: string;
+  byDay?: string[];
+}
 
+export interface RecurrenceWithRules {
+  startDateTime: string; // valid ISO 8601 format - Intended trigger time
+  endDateTime: string;
+  recurrenceRules: string[];
+}
 export interface AbsoluteReminder extends Reminder {
   trigger: {
     type: 'SCHEDULED_ABSOLUTE'; // Indicates type of trigger
     scheduledTime: string; // valid ISO 8601 format - Intended trigger time
     timeZoneId?: string; // def
-    recurrence: {
-      freq: string;
-      byDay?: string[];
-    };
+    recurrence?: RecurrenceWithFreq | RecurrenceWithRules;
   };
 }
 
@@ -250,5 +256,6 @@ export interface ReminderListResponse {
 }
 interface SpokenInfoContent {
   locale: string; // locale in which value is specified
-  text: string; // text that will be used for display and spoken purposes
+  text?: string; // text that will be used for display and spoken purposes
+  ssml?: string;
 }

@@ -1,5 +1,7 @@
 # Jovo Plugins
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/plugins
+
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
 * [Introduction](#introduction)
 * [Using Plugins](#using-plugins)

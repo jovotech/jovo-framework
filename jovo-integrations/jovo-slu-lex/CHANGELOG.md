@@ -1,6 +1,12 @@
 # Amazon Lex SLU Changelog
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-slu-lex) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-slu-lex) | [npm](https://www.npmjs.com/package/jovo-slu-lex)
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+### 2020-08-21 [3.0.23]
+* [#802](https://github.com/jovotech/jovo-framework/pull/802) Fix initialization bug ([@m-ripper](https://github.com/m-ripper))   
+
+
 
 ## 3.0.11 (2020-04-06)
 

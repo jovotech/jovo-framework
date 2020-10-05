@@ -1,5 +1,7 @@
 # AWS Lambda
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/aws-lambda
+
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 * [Lambda Configuration](#lambda-configuration)

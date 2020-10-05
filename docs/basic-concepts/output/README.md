@@ -1,5 +1,7 @@
 # Output
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/output
+
 In this section, you will learn how to use Jovo to craft a response to your users.
 
 * [Introduction to Output Types](#introduction-to-output-types)

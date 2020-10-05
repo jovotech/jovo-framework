@@ -1,5 +1,7 @@
 # Using Conversational Components
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/components/using-components
+
 Get an overview on how to use Conversational Components in your Jovo project.
 
 * [Installation](#installation)

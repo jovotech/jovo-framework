@@ -1,5 +1,7 @@
 # Contributing to Jovo
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/contributing
+
 Thank you for choosing to fix bugs or add new features to the Jovo Framework! This doc will walk you through the process.
 
 * [Prepare your Workspace](#prepare-your-workspace)

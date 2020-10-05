@@ -1,5 +1,7 @@
 # app.js - App Initialization and Logic
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/app-js
+
 Learn how to use the app.js file of the Jovo Framework.
 
 * [Overview](#overview)

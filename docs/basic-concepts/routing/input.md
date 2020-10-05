@@ -1,5 +1,7 @@
 # Input
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing/input
+
 In this section, you will learn how to deal with entities and slot values provided by your users.
 
 * [Introduction to User Input](#introduction-to-user-input)

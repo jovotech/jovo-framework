@@ -1,5 +1,7 @@
 # Jovo Hooks
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hooks
+
 Middleware hooks are the easiest way to extend certain parts of the Jovo Framework. You can see them as a lightweigt version of [Jovo Plugins](./plugins.md './plugins').
 
 * [Introduction](#introduction)

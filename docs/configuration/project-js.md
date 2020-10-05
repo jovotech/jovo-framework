@@ -1,5 +1,7 @@
 # project.js - Project Configuration
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-js
+
 The `project.js` is an essential file that stores a lot of important project information that is used for deployment.
 
 * [Introduction](#introduction)

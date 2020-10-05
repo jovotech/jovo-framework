@@ -1,5 +1,7 @@
 # Chrome Extension
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/chrome-extension
+
 Speed up Alexa Skill testing in the Alexa Skill Console
 
 ![Alexa Skill Developer Console Simulator Chrome Extension](https://www.jovo.tech/img/github/ask-console-chrome-extension.gif)

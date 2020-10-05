@@ -1,5 +1,7 @@
 # Project Structure
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-structure
+
 In this section, you will learn more about the project structure of a Jovo Voice App.
 
 * [Overview](#overview)
@@ -14,8 +16,6 @@ In this section, you will learn more about the project structure of a Jovo Voice
   
 
 ## Overview
-
-![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
 
 A Jovo project is divided into two main building blocks:
 * [Project Files](#project-files): Overall project related files, e.g. language models and platform project information 

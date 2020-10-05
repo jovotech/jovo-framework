@@ -1,5 +1,7 @@
 # Routing
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing
+
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
 * [Introduction to Routing](#introduction-to-routing)

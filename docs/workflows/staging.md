@@ -1,5 +1,7 @@
 # Staging
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/staging
+
 Learn more about the Jovo framework's staging feature.
 
 * [Introduction](#introduction)

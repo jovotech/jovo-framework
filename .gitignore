@@ -63,3 +63,4 @@ coverage
 .changelog
 000_debug
 credentials.json
+.history/

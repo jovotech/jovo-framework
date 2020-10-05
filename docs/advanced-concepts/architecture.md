@@ -1,5 +1,7 @@
 # Jovo Framework Architecture
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/architecture
+
 Learn more about the modular architecture of the Jovo Framework.
 
 * [Introduction](#introduction)

@@ -1,5 +1,7 @@
 # Logging
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/data/logging
+
 In this section, you will learn how to log certain data in your Jovo app.
 
 * [Introduction](#introduction)

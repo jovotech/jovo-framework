@@ -5,6 +5,8 @@ import {
   HandleRequest,
   Jovo,
   Platform,
+  RequestBuilder,
+  ResponseBuilder,
   TestSuite,
 } from 'jovo-core';
 import { PlatformStorage } from 'jovo-db-platformstorage';
@@ -16,7 +18,6 @@ import {
   CorePlatformCore,
   CorePlatformRequest,
   CorePlatformRequestBuilder,
-  CorePlatformRequestJSON,
   CorePlatformResponse,
   CorePlatformResponseBuilder,
 } from '.';
@@ -25,9 +26,12 @@ export interface Config extends ExtensibleConfig {
   handlers?: any; // tslint:disable-line:no-any
 }
 
-export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResponse> {
-  requestBuilder: CorePlatformRequestBuilder = new CorePlatformRequestBuilder();
-  responseBuilder: CorePlatformResponseBuilder = new CorePlatformResponseBuilder();
+export class CorePlatform<
+  REQ extends CorePlatformRequest = CorePlatformRequest,
+  RES extends CorePlatformResponse = CorePlatformResponse
+> extends Platform<REQ, RES> {
+  requestBuilder = this.getRequestBuilder();
+  responseBuilder = this.getResponseBuilder();
 
   config: Config = {
     enabled: true,
@@ -80,16 +84,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
 
     this.use(new CorePlatformCore());
 
-    Jovo.prototype.$corePlatformApp = undefined;
-    Jovo.prototype.corePlatformApp = function () {
-      if (this.constructor.name !== 'CorePlatformApp') {
-        throw Error(`Can't handle request. Please use this.isCorePlatformApp()`);
-      }
-      return this as CorePlatformApp;
-    };
-    Jovo.prototype.isCorePlatformApp = function () {
-      return this.constructor.name === 'CorePlatformApp';
-    };
+    this.augmentJovoPrototype();
   }
 
   async setup(handleRequest: HandleRequest) {
@@ -97,8 +92,7 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async request(handleRequest: HandleRequest) {
-    const audioBase64String = (handleRequest.host.$request as CorePlatformRequestJSON).request.body
-      .audio?.b64string;
+    const audioBase64String = (handleRequest.host.$request as REQ).request.body.audio?.b64string;
     if (audioBase64String) {
       const samples = this.getSamplesFromAudio(audioBase64String);
       _set(handleRequest.host.$request, 'request.body.audio.data', samples);
@@ -106,10 +100,10 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async initialize(handleRequest: HandleRequest) {
-    handleRequest.platformClazz = CorePlatformApp;
+    handleRequest.platformClazz = this.appClass;
     await this.middleware('$init')!.run(handleRequest);
 
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
 
@@ -127,14 +121,14 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async asr(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$asr')!.run(handleRequest.jovo);
   }
 
   async nlu(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$nlu')!.run(handleRequest.jovo);
@@ -142,28 +136,28 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
   }
 
   async beforeTTS(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$tts.before')!.run(handleRequest.jovo);
   }
 
   async tts(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$tts')!.run(handleRequest.jovo);
   }
 
   async output(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$output')!.run(handleRequest.jovo);
   }
 
   async response(handleRequest: HandleRequest) {
-    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'CorePlatformApp') {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
@@ -171,11 +165,36 @@ export class CorePlatform extends Platform<CorePlatformRequest, CorePlatformResp
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 
-  makeTestSuite(): TestSuite<CorePlatformRequestBuilder, CorePlatformResponseBuilder> {
-    return new TestSuite(new CorePlatformRequestBuilder(), new CorePlatformResponseBuilder());
+  makeTestSuite(): TestSuite<RequestBuilder<REQ>, ResponseBuilder<RES>> {
+    return new TestSuite(this.getRequestBuilder(), this.getResponseBuilder());
   }
 
-  private getSamplesFromAudio(base64: string): Float32Array {
+  protected get appClass() {
+    return CorePlatformApp;
+  }
+
+  protected augmentJovoPrototype() {
+    Jovo.prototype.$corePlatformApp = undefined;
+    Jovo.prototype.corePlatformApp = function (this: Jovo) {
+      if (this.constructor.name !== 'CorePlatformApp') {
+        throw Error(`Can't handle request. Please use this.isCorePlatformApp()`);
+      }
+      return this as CorePlatformApp;
+    };
+    Jovo.prototype.isCorePlatformApp = function (this: Jovo) {
+      return this.constructor.name === 'CorePlatformApp';
+    };
+  }
+
+  protected getRequestBuilder(): RequestBuilder<REQ> {
+    return (new CorePlatformRequestBuilder() as unknown) as RequestBuilder<REQ>;
+  }
+
+  protected getResponseBuilder(): ResponseBuilder<RES> {
+    return (new CorePlatformResponseBuilder() as unknown) as ResponseBuilder<RES>;
+  }
+
+  protected getSamplesFromAudio(base64: string): Float32Array {
     const binaryBuffer = Buffer.from(base64, 'base64').toString('binary');
     const length = binaryBuffer.length / Float32Array.BYTES_PER_ELEMENT;
     const view = new DataView(new ArrayBuffer(Float32Array.BYTES_PER_ELEMENT));

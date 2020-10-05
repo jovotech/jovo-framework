@@ -1,7 +1,6 @@
 import crypto = require('crypto');
 import {
   BaseApp,
-  Data,
   EnumRequestType,
   ErrorCode,
   HandleRequest,
@@ -13,8 +12,10 @@ import {
   Plugin,
   PluginConfig,
   SessionConstants,
+  SessionData,
   SpeechBuilder,
   User,
+  UserData,
 } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
@@ -103,8 +104,7 @@ export interface UserMetaData {
 }
 
 export interface UserSessionData {
-  // tslint:disable-next-line:no-any
-  $data?: Record<string, any>;
+  $data?: SessionData;
   id?: string;
   lastUpdatedAt?: string;
   isNew?: boolean;
@@ -366,6 +366,9 @@ export class JovoUser implements Plugin {
         }
       }
       handleRequest.jovo.$user.$session = sessionData;
+      if (this.config.sessionData && this.config.sessionData.data) {
+        handleRequest.jovo.$session.$data = { ...(handleRequest.jovo.$user.$session?.$data || {}) };
+      }
     }
 
     // can't parse $user, so we parse object containing its data
@@ -410,7 +413,7 @@ export class JovoUser implements Plugin {
       return Promise.resolve();
     }
     const userData: {
-      data?: Data;
+      data?: UserData;
       context?: UserContext;
       metaData?: UserMetaData;
       session?: UserSessionData;
@@ -436,8 +439,9 @@ export class JovoUser implements Plugin {
         userData.session.$data = handleRequest.jovo.$user.$session.$data;
       }
 
-      if (this.config.sessionData.id) {
-        userData.session.id = handleRequest.jovo.$user.$session.id;
+      const sessionId = handleRequest.jovo.$request?.getSessionId();
+      if (this.config.sessionData.id && sessionId) {
+        userData.session.id = sessionId;
       }
 
       if (handleRequest.jovo.$output.tell) {

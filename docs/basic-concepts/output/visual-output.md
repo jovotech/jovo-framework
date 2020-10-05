@@ -1,5 +1,7 @@
 # Visual Output
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/output/visual-output
+
 In this section, you will learn about the different ways to add visual output to your voice application.
 
 * [Cards](#cards)

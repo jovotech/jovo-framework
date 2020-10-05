@@ -1,5 +1,7 @@
 # Platforms
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/platforms
+
 Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
 
 * [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)

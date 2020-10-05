@@ -26,6 +26,8 @@ export class DialogflowResponse implements JovoResponse {
   payload?: Payload;
   outputContexts?: Context[];
   sessionEntityTypes?: SessionEntityType[];
+  end_interaction: boolean; // tslint:disable-line
+  fulfillmentMessages?: any[]; // tslint:disable-line
 
   getContext(name: string) {
     return this.outputContexts?.find((context: Context) => {
@@ -189,13 +191,13 @@ export class DialogflowResponse implements JovoResponse {
   }
 
   // fromJSON is used to convert an serialized version
-  // of the User to an instance of the class
+  // of the response to an instance of the class
   static fromJSON(json: DialogflowResponseJSON | string) {
     if (typeof json === 'string') {
       // if it's a string, parse it first
       return JSON.parse(json, DialogflowResponse.reviver);
     } else {
-      // create an instance of the User class
+      // create an instance of the class
       const response = Object.create(DialogflowResponse.prototype);
       // copy all the fields from the json object
       return Object.assign(response, json);

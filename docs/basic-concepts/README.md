@@ -1,5 +1,7 @@
 # Basic Concepts
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/basic-concepts
+
 In this section, you will learn more about the essentials of building the logic of your Jovo Voice App.
 
 * [Requests and Responses](#requests-and-responses)

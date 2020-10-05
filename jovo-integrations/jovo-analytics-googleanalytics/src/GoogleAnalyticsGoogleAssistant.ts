@@ -1,6 +1,8 @@
 import { GoogleAnalytics } from './GoogleAnalytics';
 import { GoogleActionRequest } from 'jovo-platform-googleassistant';
+import { DialogflowRequest } from 'jovo-platform-dialogflow';
 import { HandleRequest, Jovo, JovoError, ErrorCode } from 'jovo-core';
+import { get } from 'lodash';
 
 export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
   track(handleRequest: HandleRequest) {
@@ -17,6 +19,27 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       return;
     }
 
+    const dialogFlowRequest = jovo.$request as DialogflowRequest;
+
+    const userName: string | undefined = get(
+      dialogFlowRequest.originalDetectIntentRequest!.payload,
+      'user.profile.familyName',
+    );
+    const isCrawler = userName && userName === 'Crawler';
+    if (isCrawler) {
+      return;
+    }
+
+    if (!this.config.skipUnverifiedUser) {
+      const userVerificationStatus: string | undefined = get(
+        dialogFlowRequest.originalDetectIntentRequest!.payload,
+        'user.userVerificationStatus',
+      ); //  inputs[0].rawInputs[0].inputType');
+      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+      if (!isVoiceMatchUser) {
+        return;
+      }
+    }
     super.track(handleRequest);
   }
 

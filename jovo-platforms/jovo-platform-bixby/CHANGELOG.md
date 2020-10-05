@@ -1,6 +1,15 @@
 # Samsung Bixby Changelog
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-bixby) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-bixby) | [npm](https://www.npmjs.com/package/jovo-platform-bixby)
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+
+### 2020-08-21 [3.0.25]
+
+### :sparkles: New Features
+
+* [#799](https://github.com/jovotech/jovo-framework/pull/799) Fix FacebookMessenger bug ([@rubenaeg](https://github.com/rubenaeg))
+
 
 
 ## 3.0.20 (2020-05-28)

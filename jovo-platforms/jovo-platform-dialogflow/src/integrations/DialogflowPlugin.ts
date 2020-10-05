@@ -165,10 +165,12 @@ export class DialogflowPlugin<T extends Extensible> extends Extensible {
 
     if (output.tell) {
       response.fulfillmentText = output.tell.speech.toString();
+      response.end_interaction = true;
     }
 
     if (output.ask) {
       response.fulfillmentText = output.ask.speech.toString();
+      response.end_interaction = false;
     }
 
     // TODO: testme

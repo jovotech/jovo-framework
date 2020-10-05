@@ -2,27 +2,38 @@ import { RequestBuilder } from 'jovo-core';
 import * as path from 'path';
 import { CorePlatformRequest } from './CorePlatformRequest';
 
-export class CorePlatformRequestBuilder implements RequestBuilder<CorePlatformRequest> {
+export interface CorePlatformRequestConstructor<T extends CorePlatformRequest> {
+  new (): T;
+  fromJSON(json: any): T;
+  reviver(key: string, value: any): any;
+}
+
+export class CorePlatformRequestBuilder<REQ extends CorePlatformRequest = CorePlatformRequest>
+  implements RequestBuilder<REQ> {
   type = 'CorePlatformApp';
 
-  async launch(json?: object): Promise<CorePlatformRequest> {
+  protected requestClass: CorePlatformRequestConstructor<
+    REQ
+  > = CorePlatformRequest as CorePlatformRequestConstructor<REQ>;
+
+  async launch(json?: object): Promise<REQ> {
     return this.launchRequest(json);
   }
 
-  async launchRequest(json?: object): Promise<CorePlatformRequest> {
+  async launchRequest(json?: object): Promise<REQ> {
     if (json) {
-      return CorePlatformRequest.fromJSON(json);
+      return this.requestClass.fromJSON(json);
     } else {
       const req = JSON.stringify(this.loadJson('LaunchRequest'));
-      return CorePlatformRequest.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
+      return this.requestClass.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
     }
   }
 
-  async intent(json?: object): Promise<CorePlatformRequest>;
+  async intent(json?: object): Promise<REQ>;
   // tslint:disable-next-line:no-any
-  async intent(name?: string, inputs?: any): Promise<CorePlatformRequest>;
+  async intent(name?: string, inputs?: any): Promise<REQ>;
   // tslint:disable-next-line:no-any
-  async intent(obj?: any, inputs?: any): Promise<CorePlatformRequest> {
+  async intent(obj?: any, inputs?: any): Promise<REQ> {
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(obj);
@@ -39,45 +50,43 @@ export class CorePlatformRequestBuilder implements RequestBuilder<CorePlatformRe
     }
   }
 
-  async intentRequest(json?: object): Promise<CorePlatformRequest> {
+  async intentRequest(json?: object): Promise<REQ> {
     if (json) {
-      return CorePlatformRequest.fromJSON(json);
+      return this.requestClass.fromJSON(json);
     } else {
       const req = JSON.stringify(this.loadJson('IntentRequest'));
-      return CorePlatformRequest.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
+      return this.requestClass.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
     }
   }
 
-  async rawRequest(json: object): Promise<CorePlatformRequest> {
-    return CorePlatformRequest.fromJSON(json);
+  async rawRequest(json: object): Promise<REQ> {
+    return this.requestClass.fromJSON(json);
   }
 
-  async rawRequestByKey(key: string): Promise<CorePlatformRequest> {
+  async rawRequestByKey(key: string): Promise<REQ> {
     const req = JSON.stringify(this.loadJson(key));
-    return CorePlatformRequest.fromJSON(JSON.parse(req));
+    return this.requestClass.fromJSON(JSON.parse(req));
   }
 
-  async audioPlayerRequest(json?: object): Promise<CorePlatformRequest> {
+  async audioPlayerRequest(json?: object): Promise<REQ> {
     if (json) {
-      return CorePlatformRequest.fromJSON(json);
+      return this.requestClass.fromJSON(json);
     } else {
       const req = JSON.stringify(this.loadJson('AudioPlayerRequest'));
-      return CorePlatformRequest.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
+      return this.requestClass.fromJSON(JSON.parse(req)).setTimestamp(new Date().toISOString());
     }
   }
 
-  async end(json?: object): Promise<CorePlatformRequest> {
+  async end(json?: object): Promise<REQ> {
     if (json) {
-      return CorePlatformRequest.fromJSON(json);
+      return this.requestClass.fromJSON(json);
     } else {
       const request = JSON.stringify(this.loadJson('SessionEndedRequest'));
-      return CorePlatformRequest.fromJSON(JSON.parse(request)).setTimestamp(
-        new Date().toISOString(),
-      );
+      return this.requestClass.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
     }
   }
 
-  private getJsonPath(key: string, version: string): string {
+  protected getJsonPath(key: string, version: string): string {
     let folder = './../../../';
 
     if (process.env.NODE_ENV === 'UNIT_TEST') {
@@ -94,7 +103,7 @@ export class CorePlatformRequestBuilder implements RequestBuilder<CorePlatformRe
   }
 
   // tslint:disable-next-line:no-any
-  private loadJson(key: string, version = 'v1'): any {
+  protected loadJson(key: string, version = 'v1'): any {
     return require(this.getJsonPath(key, version));
   }
 }

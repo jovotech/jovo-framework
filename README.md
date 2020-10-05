@@ -51,10 +51,6 @@ The main features of the Jovo ecosystem are:
 ---
 We're glad to be supported by respected companies and individuals in the voice-first industry. [See our Open Collective to learn more](https://opencollective.com/jovo-framework).
 
-**Platinum Sponsors**
-
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/platinum-sponsors.svg?avatarHeight=75&width=600" /></a>
-
 **Gold Sponsors**
 
 <a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/gold-sponsors.svg?avatarHeight=50&width=600" /></a>

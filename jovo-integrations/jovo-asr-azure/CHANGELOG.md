@@ -1,6 +1,12 @@
 # Azure ASR Changelog
+[Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-asr-azure) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-asr-azure) | [npm](https://www.npmjs.com/package/jovo-asr-azure)
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
+
+### 2020-08-21 [3.0.21]
+
+* [#792](https://github.com/jovotech/jovo-framework/pull/792) Fix FacebookMessenger bug ([@m-ripper](https://github.com/m-ripper))   
+
 
 ## 3.0.11 (2020-04-06)
 

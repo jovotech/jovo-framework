@@ -1,5 +1,7 @@
 # Workflows
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/workflows
+
 This section shows an overview of workflows that can be used with the Jovo Framework and CLI.
 
 * [Project Lifecycle](#project-lifecycle)

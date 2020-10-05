@@ -1,5 +1,7 @@
 # Azure Functions
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/azure-functions
+
 [Azure Functions](https://azure.microsoft.com/en-us/services/functions/) is a serverless compute service by Microsoft. Find the [official documentation here](https://docs.microsoft.com/en-us/azure/azure-functions/).
 
 * [Function Configuration](#function-configuration)

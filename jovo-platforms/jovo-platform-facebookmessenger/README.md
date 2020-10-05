@@ -154,6 +154,38 @@ export = {
 };
 ```
 
+### Disable synchronous response
+By default, `tell` and `ask` generate a message that will be sent shortly before responding to the initial request.
+As a consequence, this message will **always** be the **last** message sent.
+
+If you do not like this behavior, you can disable it by setting the `shouldIgnoreSynchronousResponse`-property to `true` in the configuration: 
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+	platform: {
+		FacebookMessenger: {
+			shouldIgnoreSynchronousResponse: true
+		}
+	}
+};
+
+// @language=typescript
+
+// src/config.ts
+
+export = {
+	platform: {
+		FacebookMessenger: {
+			shouldIgnoreSynchronousResponse: true
+		}
+	}
+};
+```
+
 ## Introduction to Messenger Specific Features
 
 You can access the `messengerBot` object like this:
@@ -179,11 +211,15 @@ For the basic concept, take a look here: [Docs: Basic Concepts > Output](https:/
 
 Facebook Messenger does not support reprompts. Any reprompt passed to `ask` will be ignored.
 
-### Multiple Messages
+### Asynchronous Responses
 
-Facebook Messenger allows sending multiple messages.
+Facebook Messenger allows sending multiple messages asynchronously. 
 
-Read more about sending messages [here](https://developers.facebook.com/docs/messenger-platform/send-messages).
+All asynchronous methods for sending messages return a `AxiosResponse`. It is recommended to wrap these call in a `try-catch`-block to catch possible errors thrown by the API. 
+
+> **INFO**: The message that results from calling `tell` or `ask` will be the last message sent! This behavior can be disabled, read more [here](#Disable-synchronous-response).
+
+You can read more about sending messages [here](https://developers.facebook.com/docs/messenger-platform/send-messages).
 
 ### Overwrite default-output
 
@@ -224,13 +260,13 @@ The following example shows how to send a text-message:
 
 ```javascript
 // @language=javascript
-if (this.$messengerBot) this.$messengerBot.showText({ text: 'text' });
+if (this.$messengerBot) await this.$messengerBot.showText({ text: 'text' });
 
 // @language=typescript
-this.$messengerBot?.showText({ text: 'text' });
+await this.$messengerBot?.showText({ text: 'text' });
 ```
 
-> **INFO**: The text-message that was created by calling `tell` or `ask` will always be the first message to be displayed. Even if the `text`-method was called first.
+> **INFO**: The message that was created by calling `tell` or `ask` will **always** be the **last** message to be displayed. Even if the `showText`-method was called after. Read more about disabling that behavior [here](#Disable-synchronous-response).
 
 #### Text Message Options
 
@@ -239,16 +275,16 @@ When calling the `text`-method an object with the following properties can be pa
 | property     | type                                  | description                                                              |
 | ------------ | ------------------------------------- | ------------------------------------------------------------------------ |
 | text         | `string`                              | _Required_. The text that will be displayed                              |
-| quickReplies | <code>QuickReply &#124; string</code> | _Optional_. Quick-Replies that will be shown below the text.             |
+| quickReplies | <code>Array<QuickReply &#124; string></code> | _Optional_. Quick-Replies that will be shown below the text.             |
 | messageType  | `MessageType`                         | _Optional_. The type of the message. Defaults to `MessageType.Response`. |
 
 ### Sending Quick Replies
 
-Quick-replies can be sent by passing the `quickReplies` property to the options of the `text`- or `attachment`-method:
+Quick-replies can be sent by passing the `quickReplies` property to the options of the `showText`- or `showAttachment`-method:
 
 ```javascript
 // @language=javascript
-this.$messengerBot.showText({
+await this.$messengerBot.showText({
 	text: 'someText',
 	quickReplies: [
 		{ content_type: QuickReplyContentType.Text, title: 'someTitle' },
@@ -257,7 +293,7 @@ this.$messengerBot.showText({
 });
 
 // @language=typescript
-this.$messengerBot?.showText({
+await this.$messengerBot?.showText({
 	text: 'someText',
 	quickReplies: [
 		{ content_type: QuickReplyContentType.Text, title: 'someTitle' },
@@ -305,7 +341,7 @@ Facebook Messenger allows sending attachments, which includes audio, videos, ima
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showAttachment({
+	await this.$messengerBot.showAttachment({
 		type: AttachmentType.File,
 		data: {
 			fileName: 'displayFileName',
@@ -314,7 +350,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.showAttachment({
+await this.$messengerBot?.showAttachment({
 	type: AttachmentType.File,
 	data: {
 		fileName: 'displayFileName',
@@ -331,7 +367,7 @@ Read more about sending attachments [here](https://developers.facebook.com/docs/
 | ------------ | ----------------------------------------------- | ------------------------------------------------------------------ |
 | type         | `AttachmentType`                                | _Required_. The type of the attachment.                            |
 | data         | <code>Buffer &#124; string &#124; number</code> | _Required_. The data to be sent with the attachment.               |
-| quickReplies | `QuickReply[]`                                  | _Optional_. Quick-Replies that will be shown below the attachment. |
+| quickReplies | <code>Array<QuickReply &#124; string></code>                                  | _Optional_. Quick-Replies that will be shown below the attachment. |
 | isReusable   | `boolean`                                       | _Optional_. Determines whether the resource is reusable.           |
 
 ### Sending an Action
@@ -349,10 +385,10 @@ The following actions are supported:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showAction(SenderActionType.TypingOn);
+	await this.$messengerBot.showAction(SenderActionType.TypingOn);
 
 // @language=typescript
-this.$messengerBot?.showAction(SenderActionType.TypingOn);
+await this.$messengerBot?.showAction(SenderActionType.TypingOn);
 ```
 
 Read more [here](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions).
@@ -370,7 +406,7 @@ The following example shows how to send a generic template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showGenericTemplate({
+	await this.$messengerBot.showGenericTemplate({
 		elements: [
 			{
 				title: 'someTitle'
@@ -379,7 +415,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.showGenericTemplate({
+await this.$messengerBot?.showGenericTemplate({
 	elements: [
 		{
 			title: 'someTitle'
@@ -397,13 +433,13 @@ The following example shows how to send a button template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showButtonTemplate({
+	await this.$messengerBot.showButtonTemplate({
 		text: 'someText',
 		buttons: [new PostbackButton('someTitle', 'somePayload')]
 	});
 
 // @language=typescript
-this.$messengerBot?.showButtonTemplate({
+await this.$messengerBot?.showButtonTemplate({
 	text: 'someText',
 	buttons: [new PostbackButton('someTitle', 'somePayload')]
 });
@@ -418,7 +454,7 @@ The following example shows how to send a media template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showMediaTemplate({
+	await this.$messengerBot.showMediaTemplate({
 		elements: [
 			{
 				media_type: MediaType.Image,
@@ -429,7 +465,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot.showMediaTemplate({
+await this.$messengerBot.showMediaTemplate({
 	elements: [
 		{
 			media_type: MediaType.Image,
@@ -449,7 +485,7 @@ The following example shows how to send a receipt template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showReceiptTemplate({
+	await this.$messengerBot.showReceiptTemplate({
 		recipient_name: 'someName',
 		order_number: 'someId',
 		currency: 'EUR',
@@ -460,7 +496,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.showReceiptTemplate({
+await this.$messengerBot?.showReceiptTemplate({
 	recipient_name: 'someName',
 	order_number: 'someId',
 	currency: 'EUR',
@@ -480,7 +516,7 @@ The following example shows how to send an airline template:
 ```javascript
 // @language=javascript
 if (this.$messengerBot)
-	this.$messengerBot.showAirlineTemplate({
+	await this.$messengerBot.showAirlineTemplate({
 		intro_message: 'someMessage',
 		locale: 'someLocale',
 		boarding_pass: [
@@ -509,7 +545,7 @@ if (this.$messengerBot)
 	});
 
 // @language=typescript
-this.$messengerBot?.showAirlineTemplate({
+await this.$messengerBot?.showAirlineTemplate({
 	intro_message: 'someMessage',
 	locale: 'someLocale',
 	boarding_pass: [

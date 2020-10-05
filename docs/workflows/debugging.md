@@ -1,5 +1,7 @@
 # Debugging
 
+> To view this page on the Jovo website, visit https://www.jovo.tech/docs/debugging
+
 Learn how to effectively debug your Jovo projects by learning which tools you can use and what to look out for.
 
 * [Introduction](#introduction)
