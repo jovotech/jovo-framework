@@ -96,3 +96,4 @@ export class AudioPlayer extends CoreComponent {
     });
   }
 }
+

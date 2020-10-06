@@ -10,25 +10,25 @@ declare global {
 
 export const VERSION = '0.1.0';
 
-export {
-  CorePlatformRequestJSON as CoreRequest,
-  CorePlatformResponseJSON as CoreResponse,
-} from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+export type {
+  CorePlatformRequestJSON as WebRequest,
+  CorePlatformResponseJSON as WebResponse,
+} from 'jovo-platform-core';
+// tslint:disable-next-line
+export * from 'jovo-platform-core/dist/src/Interfaces';
 
-export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
-
-
-export * as StandaloneRecorder from './standalone/AudioRecorder';
+export * as StandaloneAudioPlayer from './standalone/AudioPlayer';
+export * as StandaloneAudioRecorder from './standalone/AudioRecorder';
 export * as StandaloneSpeechRecognizer from './standalone/SpeechRecognizer';
+export * as StandaloneSpeechSynthesizer from './standalone/SpeechSynthesizer';
+export * as StandaloneStore from './standalone/Store';
 export * from './types';
-
+export * as StandaloneClient from './Client';
+export * from './util';
 
 export * from './events';
 export * from './core/CoreComponent';
 export * from './core/Component';
-export * from './util/OSHelper';
-export * from './util/AudioHelper';
-export * from './util/Base64Converter';
 export * from './core/AdvancedEventEmitter';
 export * from './core/AudioPlayer';
 export * from './core/Interfaces';

@@ -12,6 +12,7 @@ module.exports = (env, ctx) => {
         new HtmlWebpackPlugin({
           title: 'Jovo Web Client',
           template: 'index.html',
+          inject: false,
         }),
       );
     }
@@ -51,6 +52,7 @@ module.exports = (env, ctx) => {
       resolve: {
         extensions: ['.ts', '.js'],
       },
+      externals: {},
       plugins,
     };
   }

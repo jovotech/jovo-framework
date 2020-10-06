@@ -73,5 +73,11 @@ export class Store {
       : _defaults(persistedData.session, defaultSessionData);
   }
 
-  save() {}
+  save() {
+    const persistedData: Partial<PersistedData> = {
+      user: this.userData,
+      session: this.config.shouldPersistSession ? this.sessionData : undefined,
+    };
+    localStorage.setItem(this.config.storageKey, JSON.stringify(persistedData));
+  }
 }

@@ -5,7 +5,6 @@ import {
   Base64Converter,
   Component,
   ComponentConfig,
-  CoreRequest,
   DeviceType,
   InputEvents,
   InputRecordEvents,
@@ -14,6 +13,7 @@ import {
   RequestEvents,
   RequestType,
   VERSION,
+  WebRequest,
 } from '../..';
 
 import { AjaxAdapter } from './adapters/AjaxAdapter';
@@ -95,7 +95,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
     });
   }
 
-  private async handleSendRequest(data: CoreRequest) {
+  private async handleSendRequest(data: WebRequest) {
     try {
       const res = await this.sendRequest(data);
       this.$client.emit(RequestEvents.Result, res);
@@ -113,7 +113,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
   // tslint:disable-next-line:no-any
   private send(type: RequestType, body: Record<string, any> = {}) {
     // TODO fill missing data like appId and platform
-    const requestData: CoreRequest = {
+    const requestData: WebRequest = {
       version: VERSION,
       type: this.$client.$config.client,
       request: {
@@ -151,7 +151,7 @@ export class RequestComponent extends Component<RequestComponentConfig> {
     return this.handleSendRequest(requestData);
   }
 
-  private sendRequest(data: CoreRequest): Promise<NetworkResponse> {
+  private sendRequest(data: WebRequest): Promise<NetworkResponse> {
     const jsonData = JSON.stringify(data);
     return this.$networkHandler.post(this.url, jsonData, {
       headers: {

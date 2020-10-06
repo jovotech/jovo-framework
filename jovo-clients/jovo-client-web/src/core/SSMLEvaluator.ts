@@ -170,7 +170,7 @@ export class SSMLEvaluator extends CoreComponent {
           const amount = SSMLEvaluator.getBreakTime(part);
           await new Promise((resolveBreak) => {
             setTimeout(() => {
-              resolveBreak();
+              return resolveBreak();
             }, amount);
           });
           break;

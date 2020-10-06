@@ -1,7 +1,7 @@
 import uuid = require('uuid');
 import {
   CoreComponent,
-  CoreResponse,
+  WebResponse,
   Data,
   JovoWebClient,
   RequestEvents,
@@ -41,7 +41,7 @@ export class Store extends CoreComponent {
     this.startNewSession(true);
   }
 
-  private onResponse(data: CoreResponse) {
+  private onResponse(data: WebResponse) {
     if (data.session.end) {
       this.startNewSession();
     } else {

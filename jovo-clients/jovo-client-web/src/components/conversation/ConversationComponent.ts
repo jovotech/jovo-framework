@@ -7,12 +7,12 @@ import {
   ComponentConfig,
   ConversationEvents,
   ConversationPart,
-  CoreRequest,
-  CoreResponse,
   RequestEvents,
   RequestType,
   ResponseEvents,
   StoreEvents,
+  WebRequest,
+  WebResponse,
 } from '../..';
 
 declare module '../../core/Interfaces' {
@@ -48,7 +48,7 @@ export class ConversationComponent extends Component<ConversationComponentConfig
     return ConversationComponent.DEFAULT_CONFIG;
   }
 
-  private async onRequest(req: CoreRequest) {
+  private async onRequest(req: WebRequest) {
     const { body, type } = req.request;
     if (type === RequestType.Launch && this.$config.showStart) {
       return this.addPart({
@@ -78,7 +78,7 @@ export class ConversationComponent extends Component<ConversationComponentConfig
     }
   }
 
-  private onResponse(res: CoreResponse) {
+  private onResponse(res: WebResponse) {
     const lastPart = this.parts[this.parts.length - 1];
     if (
       lastPart &&

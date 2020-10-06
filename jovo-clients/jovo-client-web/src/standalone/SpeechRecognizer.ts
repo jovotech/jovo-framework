@@ -36,6 +36,7 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
 // TODO determine how to handle case where recognition is not available (Safari for example)
 export class SpeechRecognizer extends EventEmitter {
   static getDefaultConfig(): SpeechRecognizerConfig {
+    window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     return {
       // TODO maybe replace with browser lang
       lang: 'en-US',
@@ -60,7 +61,6 @@ export class SpeechRecognizer extends EventEmitter {
 
   constructor(config?: DeepPartial<SpeechRecognizerConfig>) {
     super();
-    window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     // TODO determine how to handle case when SpeechGrammarList is not defined, maybe just make it optional in the config

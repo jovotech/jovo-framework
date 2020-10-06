@@ -19,9 +19,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.19.0",
+    "jovo-platform-core": "^3.1.2",
     "lodash.defaults": "^4.2.0",
     "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "uuid": "^3.3.2"
   },
@@ -35,7 +35,6 @@
     "@types/uuid": "^3.4.4",
     "clean-webpack-plugin": "^3.0.0",
     "jest": "^25.1.0",
-    "jovo-platform-core": "^3.1.0",
     "html-webpack-plugin": "^4.5.0",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",

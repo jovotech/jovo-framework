@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { Base64Converter, ErrorListener, VoidListener } from '..';
+import _defaults from 'lodash.defaults';
+import { Base64Converter, DeepPartial, ErrorListener, VoidListener } from '..';
 
 export enum AudioPlayerEvent {
   Play = 'play',
@@ -17,11 +18,26 @@ export type AudioPlayerVoidEvents =
   | AudioPlayerEvent.Pause
   | AudioPlayerEvent.Stop;
 
+export interface AudioPlayerConfig {}
+
 export class AudioPlayer extends EventEmitter {
+  static getDefaultConfig(): AudioPlayerConfig {
+    return {};
+  }
+
+  readonly config: AudioPlayerConfig;
+
   private $volume = 1.0;
   private audio: HTMLAudioElement | null = null;
   private isAudioPlaying: boolean = false;
   private initialized = false;
+
+  constructor(config?: DeepPartial<AudioPlayerConfig>) {
+    super();
+
+    const defaultConfig = AudioPlayer.getDefaultConfig();
+    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+  }
 
   get isPlaying(): boolean {
     return this.isAudioPlaying;

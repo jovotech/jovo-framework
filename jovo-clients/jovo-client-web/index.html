@@ -5,5 +5,70 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
+    <div id="wrapper">
+      <button id="primaryButton">Primary</button>
+      <button id="secondaryButton">Secondary</button>
+      <button id="tertiaryButton">Tertiary</button>
+    </div>
+
+    <%= htmlWebpackPlugin.tags.bodyTags %>
+    <script>
+      const primaryButton = document.getElementById('primaryButton');
+      const secondaryButton = document.getElementById('secondaryButton');
+      const tertiaryButton = document.getElementById('tertiaryButton');
+
+      // State-enum
+      const State = {
+        Initial: 'initial',
+        Ready: 'ready',
+      };
+
+      const client = new window.JovoWebClient.StandaloneClient.Client(
+        'https://webhook.jovo.cloud/max-ripper',
+        {
+          audioRecorder: {
+            sampleRate: 8000,
+          },
+        },
+      );
+
+      console.log(client);
+
+      const STATE_MAP = {
+        [State.Initial]: () => {
+          primaryButton.innerText = 'Initialize';
+          primaryButton.onclick = async () => {
+            await client.initialize();
+            await (client.input({type: 'LAUNCH'})).send();
+            changeState(State.Ready);
+          };
+          secondaryButton.style.display = 'none';
+          tertiaryButton.style.display = 'none';
+        },
+        [State.Ready]: () => {
+          primaryButton.innerText = 'Start';
+          primaryButton.onclick = async () => {
+            const test = client.input({ type: 'TEXT', body: { text: 'My name is max' } });
+            const res = await test.send();
+          };
+          secondaryButton.style.display = null;
+          secondaryButton.innerText = 'Stop';
+          secondaryButton.onclick = () => {};
+          tertiaryButton.style.display = null;
+          tertiaryButton.innerText = 'Abort';
+          tertiaryButton.onclick = () => {};
+        },
+      };
+
+      let state;
+      function changeState(toState) {
+        state = toState;
+        if (STATE_MAP[toState]) {
+          STATE_MAP[toState]();
+        }
+      }
+
+      changeState(State.Initial);
+    </script>
   </body>
 </html>

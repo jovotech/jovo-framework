@@ -2,7 +2,7 @@ import {
   Action,
   Component,
   ComponentConfig,
-  CoreResponse,
+  WebResponse,
   JovoWebClient,
   RepromptTimer,
   RequestEvents,
@@ -58,7 +58,7 @@ export class ResponseComponent extends Component<ResponseComponentConfig> {
     this.$client.input.abortRecording();
   }
 
-  private async onResponse(data: CoreResponse) {
+  private async onResponse(data: WebResponse) {
     if (this.$client.$config.debugMode) {
       // tslint:disable-next-line:no-console
       console.log('[RES]', data);
