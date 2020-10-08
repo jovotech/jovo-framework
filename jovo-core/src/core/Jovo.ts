@@ -360,9 +360,7 @@ export abstract class Jovo extends EventEmitter {
     }
 
     delete this.$output.ask;
-    this.$output.tell = {
-      speech: speech.toString(),
-    };
+    _set(this.$output, 'tell.speech', speech.toString());
     return this;
   }
 
@@ -393,10 +391,8 @@ export abstract class Jovo extends EventEmitter {
       reprompt = speech;
     }
 
-    this.$output.ask = {
-      speech: speech.toString(),
-      reprompt: reprompt.toString(), // tslint:disable-line:object-literal-sort-keys
-    };
+    _set(this.$output, 'ask.speech', speech.toString());
+    _set(this.$output, 'ask.reprompt', reprompt.toString());
 
     return this;
   }
