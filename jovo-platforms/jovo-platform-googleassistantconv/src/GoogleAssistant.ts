@@ -21,10 +21,6 @@ import { MediaResponsePlugin } from './modules/MediaResponse';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line
-  transactions?: {
-    androidPackageName?: string;
-    keyFile?: object;
-  };
 }
 
 export class GoogleAssistant extends Platform<
@@ -33,7 +29,6 @@ export class GoogleAssistant extends Platform<
 > {
   config: Config = {
     enabled: true,
-    conversationalActions: false,
     plugin: {},
   };
 

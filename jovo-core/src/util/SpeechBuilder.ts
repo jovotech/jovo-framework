@@ -98,6 +98,13 @@ export class SpeechBuilder {
   }
 
   /**
+   * Wraps speak tags around the speech text
+   */
+  buildSSML(): string {
+    return SpeechBuilder.toSSML(this.speech);
+  }
+
+  /**
    * Adds audio tag to speech
    * @public
    * @param {string | string[]} url secure url to audio
