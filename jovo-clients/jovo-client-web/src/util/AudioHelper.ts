@@ -1,4 +1,20 @@
+import { Base64Converter, RequestBody } from '..';
+
+import { AudioRecorderResult } from '../standalone/AudioRecorder';
+
 export class AudioHelper {
+  static getRequestBodyFromAudioRecorderResult({
+    data,
+    sampleRate,
+  }: AudioRecorderResult): RequestBody {
+    return {
+      audio: {
+        b64string: Base64Converter.arrayBufferToBase64(data.buffer),
+        sampleRate,
+      },
+    };
+  }
+
   static textFromSpeechRecognition(event: SpeechRecognitionEvent): string {
     let text = '';
     for (let i = 0, len = event.results.length; i < len; i++) {

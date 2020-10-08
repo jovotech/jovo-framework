@@ -32,14 +32,21 @@
         },
       );
 
-      console.log(client);
+      client.$audioRecorder.on('stop', async (result) => {
+        await client
+          .input({
+            type: 'AUDIO',
+            body: window.JovoWebClient.AudioHelper.getRequestBodyFromAudioRecorderResult(result),
+          })
+          .send();
+      });
 
       const STATE_MAP = {
         [State.Initial]: () => {
           primaryButton.innerText = 'Initialize';
           primaryButton.onclick = async () => {
             await client.initialize();
-            await (client.input({type: 'LAUNCH'})).send();
+            await client.input({ type: 'LAUNCH' }).send();
             changeState(State.Ready);
           };
           secondaryButton.style.display = 'none';
@@ -48,8 +55,7 @@
         [State.Ready]: () => {
           primaryButton.innerText = 'Start';
           primaryButton.onclick = async () => {
-            const test = client.input({ type: 'TEXT', body: { text: 'My name is max' } });
-            const res = await test.send();
+            await client.$audioRecorder.start();
           };
           secondaryButton.style.display = null;
           secondaryButton.innerText = 'Stop';

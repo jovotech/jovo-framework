@@ -2,10 +2,10 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
 import { v4 as uuidV4 } from 'uuid';
-import { ActionHandler } from './new-core/ActionHandler';
-import { RepromptHandler } from './new-core/RepromptHandler';
-import { SSMLHandler } from './new-core/SSMLHandler';
 import { DeviceType, RequestBody, RequestType, VERSION, WebRequest, WebResponse } from './index';
+import { ActionHandler } from './new-core/ActionHandler';
+import { RepromptHandler, RepromptHandlerConfig } from './new-core/RepromptHandler';
+import { SSMLHandler } from './new-core/SSMLHandler';
 import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
 import { AudioRecorder, AudioRecorderConfig } from './standalone/AudioRecorder';
 import { SpeechRecognizer, SpeechRecognizerConfig } from './standalone/SpeechRecognizer';
@@ -30,6 +30,7 @@ export interface Config {
   locale: string;
   audioPlayer: AudioPlayerConfig;
   audioRecorder: AudioRecorderConfig;
+  repromptHandler: RepromptHandlerConfig;
   speechRecognizer: SpeechRecognizerConfig;
   speechSynthesizer: SpeechSynthesizerConfig;
   store: StoreConfig;
@@ -42,6 +43,7 @@ export class Client extends EventEmitter {
       locale: 'en',
       audioPlayer: AudioPlayer.getDefaultConfig(),
       audioRecorder: AudioRecorder.getDefaultConfig(),
+      repromptHandler: RepromptHandler.getDefaultConfig(),
       speechRecognizer: SpeechRecognizer.getDefaultConfig(),
       speechSynthesizer: SpeechSynthesizer.getDefaultConfig(),
       store: Store.getDefaultConfig(),
@@ -128,7 +130,10 @@ export class Client extends EventEmitter {
   }
 
   input({ type, body = {} }: ClientInputObject): ClientWebRequest {
-    const decorateWithSendMethod = (req: WebRequest & { send?: ClientWebRequestSendMethod }) => {
+    const decorateRequestWithSendMethod = (
+      req: WebRequest & { send?: ClientWebRequestSendMethod },
+    ) => {
+      // TODO maybe give the option to pass a send method to make it easy to allow sending to websockets for example
       req.send = async (config: AxiosRequestConfig = {}) => {
         config = _defaults(config, {
           method: 'POST',
@@ -142,7 +147,7 @@ export class Client extends EventEmitter {
       };
       return req as ClientWebRequest;
     };
-    return decorateWithSendMethod({
+    return decorateRequestWithSendMethod({
       version: VERSION,
       type: 'jovo-platform-web',
       request: {
@@ -176,5 +181,9 @@ export class Client extends EventEmitter {
   protected async handleResponse(res: WebResponse): Promise<void> {
     // TODO fully implement
     await this.$actionHandler.handleActions(res.actions);
+
+    if (res.reprompts?.length) {
+      await this.$repromptHandler.handleReprompts(res.reprompts);
+    }
   }
 }
