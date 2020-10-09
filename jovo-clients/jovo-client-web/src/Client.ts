@@ -70,7 +70,7 @@ export class Client extends EventEmitter {
     const defaultConfig = Client.getDefaultConfig();
     this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
 
-    this.$audioPlayer = new AudioPlayer();
+    this.$audioPlayer = new AudioPlayer(this.config.audioPlayer);
     this.$audioRecorder = new AudioRecorder(this.config.audioRecorder);
     this.$speechRecognizer = new SpeechRecognizer(this.config.speechRecognizer);
     this.$speechSynthesizer = new SpeechSynthesizer(this.config.speechSynthesizer);
@@ -129,7 +129,8 @@ export class Client extends EventEmitter {
     this.initialized = true;
   }
 
-  input({ type, body = {} }: ClientInputObject): ClientWebRequest {
+  // allow direct passing of AudioRecorderResult
+  createRequest({ type, body = {} }: ClientInputObject): ClientWebRequest {
     const decorateRequestWithSendMethod = (
       req: WebRequest & { send?: ClientWebRequestSendMethod },
     ) => {

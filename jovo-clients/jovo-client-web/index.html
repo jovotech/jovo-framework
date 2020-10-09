@@ -29,17 +29,22 @@
           audioRecorder: {
             sampleRate: 8000,
           },
+          speechRecognizer: {
+          	locale: 'en',
+          }
         },
       );
 
       client.$audioRecorder.on('stop', async (result) => {
         await client
-          .input({
+          .createRequest({
             type: 'AUDIO',
             body: window.JovoWebClient.AudioHelper.getRequestBodyFromAudioRecorderResult(result),
           })
           .send();
       });
+
+
 
       const STATE_MAP = {
         [State.Initial]: () => {

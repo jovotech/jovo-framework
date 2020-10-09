@@ -352,6 +352,23 @@ export class AudioRecorder extends EventEmitter {
     }
   }
 
+  private detectStart(bufferLength: number, data: Uint8Array) {
+    for (let i = 0; i < bufferLength; i++) {
+      const current = data[i] / 128 - 1.0;
+      if (this.startThresholdPassed) {
+        return;
+      }
+      if (
+        current >= this.config.startDetection.threshold ||
+        current <= -1 * this.config.startDetection.threshold
+      ) {
+        this.startThresholdPassed = true;
+        this.emit(AudioRecorderEvent.StartDetected);
+        return;
+      }
+    }
+  }
+
   private detectSilence(bufferLength: number, data: Uint8Array) {
     for (let i = 0; i < bufferLength; i++) {
       // normalize
@@ -370,23 +387,6 @@ export class AudioRecorder extends EventEmitter {
     if (elapsedTime > this.config.silenceDetection.timeoutInMs) {
       this.emit(AudioRecorderEvent.SilenceDetected);
       this.stop();
-    }
-  }
-
-  private detectStart(bufferLength: number, data: Uint8Array) {
-    for (let i = 0; i < bufferLength; i++) {
-      const current = data[i] / 128 - 1.0;
-      if (this.startThresholdPassed) {
-        return;
-      }
-      if (
-        current >= this.config.startDetection.threshold ||
-        current <= -1 * this.config.startDetection.threshold
-      ) {
-        this.startThresholdPassed = true;
-        this.emit(AudioRecorderEvent.StartDetected);
-        return;
-      }
     }
   }
 

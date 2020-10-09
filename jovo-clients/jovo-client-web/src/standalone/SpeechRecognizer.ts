@@ -2,12 +2,15 @@ import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
 import { DeepPartial, ErrorListener, VoidListener } from '../types';
 
+// TODO maybe rename SpeechRecognized to Processing to have almost identical events as the AudioRecorder
 export enum SpeechRecognizerEvent {
   Start = 'start',
   Stop = 'stop',
   Abort = 'abort',
+  StartDetected = 'startDetected',
   SpeechRecognized = 'speechRecognized',
   SilenceDetected = 'silenceDetected',
+  Timeout = 'timeout',
   Error = 'error',
   End = 'end',
 }
@@ -17,9 +20,12 @@ export type SpeechRecognizerVoidEvents =
   | SpeechRecognizerEvent.Start
   | SpeechRecognizerEvent.Stop
   | SpeechRecognizerEvent.Abort
+  | SpeechRecognizerEvent.StartDetected
   | SpeechRecognizerEvent.SilenceDetected
+  | SpeechRecognizerEvent.Timeout
   | SpeechRecognizerEvent.End;
-export interface SpeechRecognizerSilenceDetectionConfig {
+
+export interface SpeechRecognizerDetectionConfig {
   enabled: boolean;
   timeoutInMs: number;
 }
@@ -30,7 +36,8 @@ export type SpeechRecognitionConfig = Pick<
 >;
 
 export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
-  silenceDetection: SpeechRecognizerSilenceDetectionConfig;
+  startDetection: SpeechRecognizerDetectionConfig;
+  silenceDetection: SpeechRecognizerDetectionConfig;
 }
 
 // TODO determine how to handle case where recognition is not available (Safari for example)
@@ -45,8 +52,12 @@ export class SpeechRecognizer extends EventEmitter {
       maxAlternatives: 1,
       grammars: new window.SpeechGrammarList(),
       silenceDetection: {
-        enabled: false,
+        enabled: true,
         timeoutInMs: 1500,
+      },
+      startDetection: {
+        enabled: true,
+        timeoutInMs: 3000,
       },
     };
   }
@@ -57,7 +68,7 @@ export class SpeechRecognizer extends EventEmitter {
 
   private recording = false;
 
-  private silenceDetectionTimeoutId?: number;
+  private timeoutId?: number;
 
   constructor(config?: DeepPartial<SpeechRecognizerConfig>) {
     super();
@@ -71,6 +82,15 @@ export class SpeechRecognizer extends EventEmitter {
       this.recognition = new window.SpeechRecognition();
       this.setupSpeechRecognition(this.recognition);
     }
+  }
+
+  get startDetectionEnabled(): boolean {
+    return !!(
+      this.config.continuous &&
+      this.config.interimResults &&
+      this.config.startDetection.enabled &&
+      this.config.startDetection.timeoutInMs
+    );
   }
 
   get silenceDetectionEnabled(): boolean {
@@ -164,6 +184,16 @@ export class SpeechRecognizer extends EventEmitter {
     recognition.maxAlternatives = this.config.maxAlternatives;
 
     recognition.onaudiostart = (event: Event) => {
+      if (this.startDetectionEnabled) {
+        this.scheduleStartDetectionTimeout();
+      }
+    };
+
+    recognition.onspeechstart = (event: Event) => {
+      if (this.startDetectionEnabled && this.timeoutId) {
+        this.emit(SpeechRecognizerEvent.StartDetected);
+        clearTimeout(this.timeoutId);
+      }
       if (this.silenceDetectionEnabled) {
         this.scheduleSilenceDetectionTimeout();
       }
@@ -183,21 +213,33 @@ export class SpeechRecognizer extends EventEmitter {
     recognition.onend = (event: Event) => {
       this.recording = false;
       this.emit(SpeechRecognizerEvent.End);
-      if (this.silenceDetectionTimeoutId) {
-        clearTimeout(this.silenceDetectionTimeoutId);
-      }
+      this.clearTimeout();
     };
   }
 
+  private scheduleStartDetectionTimeout() {
+    this.clearTimeout();
+    this.timeoutId = (setTimeout(() => {
+      if (this.startDetectionEnabled) {
+        this.emit(SpeechRecognizerEvent.Timeout);
+        this.abort();
+      }
+    }, this.config.silenceDetection.timeoutInMs) as unknown) as number;
+  }
+
   private scheduleSilenceDetectionTimeout() {
-    if (this.silenceDetectionTimeoutId) {
-      clearTimeout(this.silenceDetectionTimeoutId);
-    }
-    this.silenceDetectionTimeoutId = (setTimeout(() => {
+    this.clearTimeout();
+    this.timeoutId = (setTimeout(() => {
       if (this.silenceDetectionEnabled) {
         this.emit(SpeechRecognizerEvent.SilenceDetected);
         this.stop();
       }
     }, this.config.silenceDetection.timeoutInMs) as unknown) as number;
+  }
+
+  private clearTimeout() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
   }
 }

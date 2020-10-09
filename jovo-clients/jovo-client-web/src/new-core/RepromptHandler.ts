@@ -3,7 +3,6 @@ import { Client } from '../Client';
 import { AudioRecorderEvent } from '../standalone/AudioRecorder';
 
 export interface RepromptHandlerConfig {
-  timeoutInMs: number;
   maxAttempts: number;
 }
 
@@ -15,7 +14,6 @@ export class RepromptHandler {
 
   static getDefaultConfig(): RepromptHandlerConfig {
     return {
-      timeoutInMs: 2000,
       maxAttempts: 1,
     };
   }
