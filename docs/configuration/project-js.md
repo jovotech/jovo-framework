@@ -73,99 +73,11 @@ The [introduction](#introduction) already shows how a freshly created `project.j
 
 ### alexaSkill
 
-The following elements can be added to the `alexaSkill` object:
-
-```javascript
-{
-    alexaSkill: {
-        nlu: {
-            name: 'alexa',
-        },
-        skillId: '<your-skill-id>',
-        askProfile: '<your-ask-cli-profile>'
-    },
-}
-```
-
-In the deployment process with the Jovo CLI ([`jovo deploy`](../basic-concepts/cli/deploy './cli/deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `project.js` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
-
-#### skill.json Overrides
-
-You can also add information to go into the `skill.json`. You can basically add or override any element that you can find in the skill manifest:
-
-```javascript
-{
-    alexaSkill: {
-        manifest: {
-            // Add element to override here
-        }
-    },
-}
-```
-
-To add an object, make sure to add the same path it has in the `skill.json`. The below example (from our [Alexa Audioplayer Template](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer)) adds the Audioplayer Directive to the Alexa Skill:
-
-```javascript
-{
-    alexaSkill: {
-        manifest: {
-			apis: {
-				custom: {
-				  interfaces: [
-					{
-					  type: 'AUDIO_PLAYER',
-					}
-				  ]
-				}
-			}
-		}
-	},
-}
-```
-
+> [Find out more about configuration for your Alexa skill here.](https://www.jovo.tech/marketplace/jovo-platform-alexa/#configuration)
 
 ### googleAction
 
-The deployment communication between the Jovo CLI and the Google Action is going through a Dialogflow agent. This is why project configuration settings are added to a `dialogflow` object inside the `googleAction` block:
-
-```javascript
-googleAction: {
-    dialogflow: {
-        projectId: '<your-project-id>',
-        keyFile: './path/to/key-file',
-    }
-}
-```
-
-Updating a Dialogflow Agent through the Jovo CLI needs an authentication process with a `keyFile`, which can be downloaded and placed in your project directory. For more information, take a look at the example in our [Tutorial: Deploy a Dialogflow Agent with the Jovo CLI](https://www.jovo.tech/tutorials/deploy-dialogflow-agent).
-
-Similar to additional elements that go into the `skill.json` for the [`alexaSkill` object](#alexaSkill), you can also add specific elements to a Dialogflow agent by adding the whole in the the `agent.json` file, like so: 
-
-```javascript
-googleAction: {
-    dialogflow: {
-        agent: {
-            // Add element to override here
-        }
-    }
-}
-```
-
-For example, you can add a header to your `webhook` like this:
-
-```javascript
-googleAction: {
-	dialogflow: {
-		agent: {
-			webhook: {
-				headers: {
-					headerKey: 'headerValue',
-				}
-			}
-		}
-	}
-}
-```
+> [Find out more about configuration for your Google Action here.](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/#configuration)
 
 ### nlu
 
