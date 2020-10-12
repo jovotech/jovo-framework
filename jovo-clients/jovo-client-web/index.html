@@ -49,7 +49,7 @@
           primaryButton.innerText = 'Initialize';
           primaryButton.onclick = async () => {
             await client.initialize();
-            // await client.createRequest({ type: 'LAUNCH' }).send();
+            await client.createRequest({ type: 'LAUNCH' }).send();
             changeState(State.Ready);
           };
           secondaryButton.style.display = 'none';
