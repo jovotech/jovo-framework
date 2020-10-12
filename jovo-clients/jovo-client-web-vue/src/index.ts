@@ -1,27 +1,27 @@
-import Vue from 'vue';
-import { PluginConfig } from './Interfaces';
-import { JovoWebClientVue } from './JovoWebClientVue';
+import { Client, Config } from 'jovo-client-web';
+import { PluginObject } from 'vue';
 
 export * from 'jovo-client-web';
-export * from './Interfaces';
-export * from './JovoWebClientVue';
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $assistant: JovoWebClientVue;
+    $client: Client;
   }
 }
 
-export function JovoAssistantVuePlugin(vue: typeof Vue, config?: PluginConfig) {
-  if (!config) {
-    throw new Error(
-      `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
-    );
-  }
-  vue.prototype.$assistant = new JovoWebClientVue(config.url, config.client);
+export interface JovoWebClientVueConfig {
+  url: string;
+  client?: Config;
 }
 
-// tslint:disable-next-line
-export default {
-  install: JovoAssistantVuePlugin,
+const plugin: PluginObject<JovoWebClientVueConfig> = {
+  install: (vue, config) => {
+    if (!config) {
+      throw new Error(
+        `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
+      );
+    }
+    vue.prototype.$client = new Client(config.url, config.client);
+  },
 };
+export default plugin;
