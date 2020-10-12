@@ -1,7 +1,7 @@
 import bent from 'bent';
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
-import { v4 as uuidV4 } from 'uuid';
+import uuidV4 from 'uuid/v4'; //tslint:disable-line
 import { ActionHandler } from './core/ActionHandler';
 import { RepromptHandler, RepromptHandlerConfig } from './core/RepromptHandler';
 import { SSMLHandler } from './core/SSMLHandler';

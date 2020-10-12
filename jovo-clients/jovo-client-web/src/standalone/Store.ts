@@ -1,5 +1,5 @@
 import _defaults from 'lodash.defaults';
-import { v4 as uuidV4 } from 'uuid';
+import uuidV4 from 'uuid/v4'; //tslint:disable-line
 import { DeepPartial } from '../types';
 
 export type Data = Record<string, any>;
