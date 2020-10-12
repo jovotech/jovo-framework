@@ -1,6 +1,21 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.1.0
+### Latest Framework Version: 3.1.3
+
+## 2020-10-08
+
+### :nail_care: Enhancements
+
+##### `jovo-platform-googleassistantconv [3.1.3]` 
+- [#831](https://github.com/jovotech/jovo-framework/pull/831) :recycle: Enhance Google AssisConversational Actions ([@maswetlow](https://github.com/aswetlow))
+
+
+## 2020-10-02
+
+### :sparkles: New Features
+
+##### `jovo-platform-googleassistantconv [3.1.2-alpha.0]` 
+- [#829](https://github.com/jovotech/jovo-framework/pull/829) :sparkles: Work In Progress: Google Assistant Conversational Actions ([@maswetlow](https://github.com/aswetlow))
 
 ## 2020-09-29
 
