@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
-import { DeepPartial, ErrorListener, SpeechSynthesizerEvents, VoidListener } from '..';
+import { DeepPartial, ErrorListener, VoidListener } from '..';
 
 export enum SpeechSynthesizerEvent {
   Speak = 'speak',
@@ -23,7 +23,6 @@ export interface SpeechSynthesizerConfig {
   voice?: SpeechSynthesisVoice;
 }
 
-// TODO determine whether getter/setter for volume is needed, might be useful for clamping
 export class SpeechSynthesizer extends EventEmitter {
   static getDefaultConfig(): SpeechSynthesizerConfig {
     return {

@@ -1,60 +1,46 @@
+import { Client, ClientEvent } from '../Client';
 import {
   Action,
   ActionType,
+  delay,
   ParallelAction,
-  ResponseEvents,
   SequentialAction,
   SpeechAction,
-} from '..';
-import { CoreComponent } from './CoreComponent';
+} from '../index';
 
-export class ActionHandler extends CoreComponent {
-  readonly name = 'ActionHandler';
+export class ActionHandler {
+  constructor(readonly $client: Client) {}
 
-  // tslint:disable-next-line:no-any
-  async handleAction(action: Action): Promise<any> {
+  async handleActions(actions: Action[]): Promise<void> {
+    for (let i = 0, len = actions.length; i < len; i++) {
+      await this.handleAction(actions[i]);
+    }
+  }
+
+  async handleAction(action: Action): Promise<void> {
     if (action.delay) {
-      await this.delay(action.delay);
+      await delay(action.delay);
     }
 
-    this.$client.emit(ResponseEvents.Action, action);
+    this.$client.emit(ClientEvent.Action, action);
 
     switch (action.type) {
-      case ActionType.Audio:
-        // TODO check if this is needed: Currently all audio is embedded in audio tags by the tts providers and therefore evaluated as SpeechAction
-        break;
-      case ActionType.Speech:
-        const { ssml, plain, displayText } = action as SpeechAction;
-        // TODO: decide what to do when neither ssml nor plain is set.
-        return this.$client.ssmlEvaluator.evaluate(ssml || plain || '');
       case ActionType.SequenceContainer:
-        for (let i = 0, len = (action as SequentialAction).actions.length; i < len; i++) {
-          await this.handleAction((action as SequentialAction).actions[i]);
-        }
-        break;
+        return this.handleActions((action as SequentialAction).actions);
       case ActionType.ParallelContainer:
         const promises = [];
         for (let i = 0, len = (action as ParallelAction).actions.length; i < len; i++) {
           promises.push(this.handleAction((action as ParallelAction).actions[i]));
         }
-        return Promise.all(promises);
-      case ActionType.Processing:
+        await Promise.all(promises);
         break;
-
+      case ActionType.Speech:
+        const { ssml, plain, displayText } = action as SpeechAction;
+        return this.$client.$ssmlHandler.handleSSML(ssml || plain || displayText || '');
       case ActionType.QuickReply:
-        this.$client.emit(ResponseEvents.QuickReplies, action.replies);
         break;
       default:
-        // tslint:disable-next-line:no-console
-        console.info(`ActionType '${action.type}' is not supported yet. `);
+        console.info(`ActionType ${action.type} is not supported currently.`);
     }
-  }
-
-  private delay(amountInMs: number): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, amountInMs);
-    });
   }
 }

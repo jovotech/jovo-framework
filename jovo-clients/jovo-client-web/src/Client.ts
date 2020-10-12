@@ -1,7 +1,10 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import bent from 'bent';
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
 import { v4 as uuidV4 } from 'uuid';
+import { ActionHandler } from './core/ActionHandler';
+import { RepromptHandler, RepromptHandlerConfig } from './core/RepromptHandler';
+import { SSMLHandler } from './core/SSMLHandler';
 import {
   Action,
   AudioHelper,
@@ -13,9 +16,6 @@ import {
   WebRequest,
   WebResponse,
 } from './index';
-import { ActionHandler } from './new-core/ActionHandler';
-import { RepromptHandler, RepromptHandlerConfig } from './new-core/RepromptHandler';
-import { SSMLHandler } from './new-core/SSMLHandler';
 import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
 import {
   AudioRecorder,
@@ -62,7 +62,6 @@ export interface Config {
   store: StoreConfig;
 }
 
-// TODO rename soon
 export class Client extends EventEmitter {
   get isInitialized(): boolean {
     return this.initialized;
@@ -115,6 +114,10 @@ export class Client extends EventEmitter {
 
     this.on(ClientEvent.Response, (res) => {
       return this.handleResponse(res);
+    });
+    this.on(ClientEvent.RepromptLimitReached, () => {
+      this.$store.resetSession();
+      this.$store.save();
     });
   }
 
@@ -213,21 +216,16 @@ export class Client extends EventEmitter {
     this.isCapturingInput = false;
   }
 
-  // allow direct passing of AudioRecorderResult
+  // TODO allow direct passing of AudioRecorderResult
   createRequest({ type, body = {} }: ClientInputObject): ClientWebRequest {
     const decorateRequestWithSendMethod = (
       req: WebRequest & { send?: ClientWebRequestSendMethod },
     ) => {
-      // TODO maybe give the option to pass a send method to make it easy to allow sending to websockets for example
-      req.send = async (config: AxiosRequestConfig = {}) => {
-        config = _defaults(config, {
-          method: 'POST',
-          url: this.endpointUrl,
-          data: req,
-        });
+      req.send = async () => {
         this.emit(ClientEvent.Request, req);
-        const res = await axios.request<WebResponse>(config);
-        this.emit(ClientEvent.Response, res?.data);
+        const post = bent<WebResponse>('json', 'POST', 200);
+        const res = await post(this.endpointUrl, req);
+        this.emit(ClientEvent.Response, res);
         return res;
       };
       return req as ClientWebRequest;
@@ -263,6 +261,17 @@ export class Client extends EventEmitter {
   }
 
   protected async handleResponse(res: WebResponse): Promise<void> {
+    if (res.session.end) {
+      this.$store.resetSession();
+    } else {
+      this.$store.sessionData.new = false;
+      this.$store.sessionData.data = res.session.data;
+    }
+    if (res.user) {
+      this.$store.userData.data = res.user.data;
+    }
+    this.$store.save();
+
     if (res.actions?.length) {
       await this.$actionHandler.handleActions(res.actions);
     }
@@ -280,12 +289,11 @@ export class Client extends EventEmitter {
     await this.createRequest({ type: RequestType.TranscribedText, body: { text } }).send();
     this.onSpeechRecognizerAbort();
   };
-
   private onSpeechRecognizerAbort = () => {
+    this.isCapturingInput = false;
     this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
   };
-
   private onAudioRecorderStop: AudioRecorderStopListener = async (result) => {
     await this.createRequest({
       type: RequestType.Audio,
@@ -293,8 +301,8 @@ export class Client extends EventEmitter {
     }).send();
     this.onAudioRecorderAbort();
   };
-
   private onAudioRecorderAbort = () => {
+    this.isCapturingInput = false;
     this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
     this.$audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
   };

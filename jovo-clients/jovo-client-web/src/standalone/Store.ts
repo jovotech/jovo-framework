@@ -27,7 +27,7 @@ export interface StoreConfig {
   sessionExpirationInSeconds: number;
 }
 
-// TODO find a better name
+// TODO Could be improved/changed
 export class Store {
   static getDefaultConfig(): StoreConfig {
     return {
@@ -48,6 +48,10 @@ export class Store {
     this.load();
   }
 
+  resetSession() {
+    this.sessionData = this.newSessionData();
+  }
+
   load() {
     const rawPersistedData = localStorage.getItem(this.config.storageKey) || '{}';
     const persistedData: Partial<PersistedData> = JSON.parse(rawPersistedData);
@@ -58,12 +62,7 @@ export class Store {
     };
     this.userData = _defaults(persistedData.user, defaultUserData);
 
-    const defaultSessionData: SessionData = {
-      id: uuidV4(),
-      data: {},
-      new: true,
-      lastUpdatedAt: new Date().getTime(),
-    };
+    const defaultSessionData: SessionData = this.newSessionData();
     const sessionExpirationDate = persistedData.session?.lastUpdatedAt
       ? this.config.sessionExpirationInSeconds * 1000 + persistedData.session.lastUpdatedAt
       : undefined;
@@ -79,5 +78,14 @@ export class Store {
       session: this.config.shouldPersistSession ? this.sessionData : undefined,
     };
     localStorage.setItem(this.config.storageKey, JSON.stringify(persistedData));
+  }
+
+  private newSessionData(): SessionData {
+    return {
+      id: uuidV4(),
+      data: {},
+      new: true,
+      lastUpdatedAt: new Date().getTime(),
+    };
   }
 }

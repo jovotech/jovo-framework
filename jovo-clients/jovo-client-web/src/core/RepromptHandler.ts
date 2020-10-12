@@ -62,6 +62,7 @@ export class RepromptHandler {
   }
 
   private async startReprompt() {
+    console.log('start reprompt');
     const useSpeechRecognition =
       this.useSpeechRecognition && this.$client.$speechRecognizer.isAvailable;
 

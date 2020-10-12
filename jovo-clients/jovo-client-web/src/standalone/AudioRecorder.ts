@@ -270,7 +270,6 @@ export class AudioRecorder extends EventEmitter {
 
     nodes.inputStream = this.audioCtx.createMediaStreamSource(stream);
     this.audioCtx = nodes.inputStream.context as AudioContext;
-    // TODO determine whether this should be removed
     this.config.sampleRate = this.audioCtx.sampleRate;
 
     nodes.inputStream.connect(nodes.inputGain);

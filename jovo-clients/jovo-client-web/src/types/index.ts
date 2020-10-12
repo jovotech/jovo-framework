@@ -1,4 +1,3 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { RequestBody, RequestType, WebRequest, WebResponse } from '../index';
 
 export type DeepPartial<T> = {
@@ -13,9 +12,7 @@ export interface ClientInputObject {
   body?: RequestBody;
 }
 
-export type ClientWebRequestSendMethod = (
-  config?: AxiosRequestConfig,
-) => Promise<AxiosResponse<WebResponse>>;
+export type ClientWebRequestSendMethod = () => Promise<WebResponse>;
 
 export interface ClientWebRequest extends WebRequest {
   send: ClientWebRequestSendMethod;

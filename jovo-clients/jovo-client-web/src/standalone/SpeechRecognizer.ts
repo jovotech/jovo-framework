@@ -40,7 +40,6 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
   silenceDetection: SpeechRecognizerDetectionConfig;
 }
 
-// TODO determine how to handle case where recognition is not available (Safari for example)
 export class SpeechRecognizer extends EventEmitter {
   static isSupported(): boolean {
     return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
@@ -49,8 +48,7 @@ export class SpeechRecognizer extends EventEmitter {
   static getDefaultConfig(): SpeechRecognizerConfig {
     window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     return {
-      // TODO maybe replace with browser lang
-      lang: 'en-US',
+      lang: navigator.language,
       continuous: true,
       interimResults: true,
       maxAlternatives: 1,
@@ -79,7 +77,6 @@ export class SpeechRecognizer extends EventEmitter {
     super();
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    // TODO determine how to handle case when SpeechGrammarList is not defined, maybe just make it optional in the config
     const defaultConfig = SpeechRecognizer.getDefaultConfig();
     this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
 
