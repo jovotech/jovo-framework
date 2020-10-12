@@ -2,13 +2,33 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
 import { v4 as uuidV4 } from 'uuid';
-import { DeviceType, RequestBody, RequestType, VERSION, WebRequest, WebResponse } from './index';
+import {
+  Action,
+  AudioHelper,
+  DeviceType,
+  RequestBody,
+  RequestType,
+  VERSION,
+  VoidListener,
+  WebRequest,
+  WebResponse,
+} from './index';
 import { ActionHandler } from './new-core/ActionHandler';
 import { RepromptHandler, RepromptHandlerConfig } from './new-core/RepromptHandler';
 import { SSMLHandler } from './new-core/SSMLHandler';
 import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
-import { AudioRecorder, AudioRecorderConfig } from './standalone/AudioRecorder';
-import { SpeechRecognizer, SpeechRecognizerConfig } from './standalone/SpeechRecognizer';
+import {
+  AudioRecorder,
+  AudioRecorderConfig,
+  AudioRecorderEvent,
+  AudioRecorderStopListener,
+} from './standalone/AudioRecorder';
+import {
+  SpeechRecognizer,
+  SpeechRecognizerConfig,
+  SpeechRecognizerEvent,
+  SpeechRecognizerStopListener,
+} from './standalone/SpeechRecognizer';
 import { SpeechSynthesizer, SpeechSynthesizerConfig } from './standalone/SpeechSynthesizer';
 import { Store, StoreConfig } from './standalone/Store';
 import {
@@ -21,10 +41,16 @@ import {
 export enum ClientEvent {
   Request = 'request',
   Response = 'response',
+  Action = 'action',
+  Reprompt = 'reprompt',
+  RepromptLimitReached = 'reprompt-limit-reached',
 }
 
 export type ClientRequestListener = (request: WebRequest) => void;
 export type ClientResponseListener = (response: WebResponse) => void;
+export type ClientActionListener = (action: Action) => void;
+export type ClientRepromptListener = (repromptActions: Action[]) => void;
+export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
 
 export interface Config {
   locale: string;
@@ -38,6 +64,10 @@ export interface Config {
 
 // TODO rename soon
 export class Client extends EventEmitter {
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
   static getDefaultConfig(): Config {
     return {
       locale: 'en',
@@ -62,6 +92,8 @@ export class Client extends EventEmitter {
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
 
+  private isUsingSpeechRecognition = false;
+  private isCapturingInput = false;
   private initialized = false;
 
   constructor(readonly endpointUrl: string, config?: DeepPartial<Config>) {
@@ -86,36 +118,47 @@ export class Client extends EventEmitter {
     });
   }
 
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
   addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
   addListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
+  addListener(event: ClientEvent.Action, listener: ClientActionListener): this;
+  addListener(event: ClientEvent.Reprompt, listener: ClientRepromptListener): this;
+  addListener(event: ClientVoidEvents, listener: VoidListener): this;
   addListener(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.addListener(event, listener);
   }
 
   on(event: ClientEvent.Request, listener: ClientRequestListener): this;
   on(event: ClientEvent.Response, listener: ClientResponseListener): this;
+  on(event: ClientEvent.Action, listener: ClientActionListener): this;
+  on(event: ClientEvent.Reprompt, listener: ClientRepromptListener): this;
+  on(event: ClientVoidEvents, listener: VoidListener): this;
   on(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.on(event, listener);
   }
 
   once(event: ClientEvent.Request, listener: ClientRequestListener): this;
   once(event: ClientEvent.Response, listener: ClientResponseListener): this;
+  once(event: ClientEvent.Action, listener: ClientActionListener): this;
+  once(event: ClientEvent.Reprompt, listener: ClientRepromptListener): this;
+  once(event: ClientVoidEvents, listener: VoidListener): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.once(event, listener);
   }
 
   prependListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
   prependListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
+  prependListener(event: ClientEvent.Action, listener: ClientActionListener): this;
+  prependListener(event: ClientEvent.Reprompt, listener: ClientRepromptListener): this;
+  prependListener(event: ClientVoidEvents, listener: VoidListener): this;
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.prependListener(event, listener);
   }
 
   prependOnceListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
   prependOnceListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
+  prependOnceListener(event: ClientEvent.Action, listener: ClientActionListener): this;
+  prependOnceListener(event: ClientEvent.Reprompt, listener: ClientRepromptListener): this;
+  prependOnceListener(event: ClientVoidEvents, listener: VoidListener): this;
   prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this {
     return super.prependOnceListener(event, listener);
   }
@@ -127,6 +170,47 @@ export class Client extends EventEmitter {
     await this.$audioPlayer.initialize();
     await this.$audioRecorder.initialize();
     this.initialized = true;
+  }
+
+  async startInputCapturing(useSpeechRecognizerIfAvailable = true): Promise<void> {
+    if (this.isCapturingInput) {
+      return;
+    }
+    this.isUsingSpeechRecognition = useSpeechRecognizerIfAvailable;
+    if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
+      this.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
+      this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
+      this.$speechRecognizer.start();
+    } else {
+      this.$audioRecorder.on(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
+      this.$audioRecorder.on(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
+      await this.$audioRecorder.start();
+    }
+    this.isCapturingInput = true;
+  }
+
+  stopInputCapturing() {
+    if (!this.isCapturingInput) {
+      return;
+    }
+    if (this.isUsingSpeechRecognition && this.$speechRecognizer.isAvailable) {
+      this.$speechRecognizer.stop();
+    } else {
+      this.$audioRecorder.stop();
+    }
+    this.isCapturingInput = false;
+  }
+
+  abortInputCapturing() {
+    if (!this.isCapturingInput) {
+      return;
+    }
+    if (this.isUsingSpeechRecognition && this.$speechRecognizer.isAvailable) {
+      this.$speechRecognizer.abort();
+    } else {
+      this.$audioRecorder.abort();
+    }
+    this.isCapturingInput = false;
   }
 
   // allow direct passing of AudioRecorderResult
@@ -178,13 +262,40 @@ export class Client extends EventEmitter {
     });
   }
 
-  // TODO determine whether there is a better solution
   protected async handleResponse(res: WebResponse): Promise<void> {
-    // TODO fully implement
-    await this.$actionHandler.handleActions(res.actions);
+    if (res.actions?.length) {
+      await this.$actionHandler.handleActions(res.actions);
+    }
 
     if (res.reprompts?.length) {
-      await this.$repromptHandler.handleReprompts(res.reprompts);
+      await this.$repromptHandler.handleReprompts(res.reprompts, this.isUsingSpeechRecognition);
     }
   }
+
+  private onSpeechRecognizerStop: SpeechRecognizerStopListener = async (event) => {
+    if (!event) {
+      return;
+    }
+    const text = AudioHelper.textFromSpeechRecognition(event);
+    await this.createRequest({ type: RequestType.TranscribedText, body: { text } }).send();
+    this.onSpeechRecognizerAbort();
+  };
+
+  private onSpeechRecognizerAbort = () => {
+    this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
+    this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
+  };
+
+  private onAudioRecorderStop: AudioRecorderStopListener = async (result) => {
+    await this.createRequest({
+      type: RequestType.Audio,
+      body: AudioHelper.getRequestBodyFromAudioRecorderResult(result),
+    }).send();
+    this.onAudioRecorderAbort();
+  };
+
+  private onAudioRecorderAbort = () => {
+    this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
+    this.$audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
+  };
 }

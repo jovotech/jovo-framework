@@ -1,12 +1,12 @@
 import { Action } from '..';
-import { Client } from '../Client';
+import { Client, ClientEvent } from '../Client';
 import { AudioRecorderEvent } from '../standalone/AudioRecorder';
+import { SpeechRecognizerEvent } from '../standalone/SpeechRecognizer';
 
 export interface RepromptHandlerConfig {
   maxAttempts: number;
 }
 
-// TODO refactor to work with SpeechRecognizer as well & add events
 export class RepromptHandler {
   get config(): RepromptHandlerConfig {
     return this.$client.config.repromptHandler;
@@ -22,42 +22,60 @@ export class RepromptHandler {
   private attempts = 0;
   private hasAddedEvents = false;
 
+  private useSpeechRecognition = false;
+
   private timeoutFn = this.onInputTimeout.bind(this);
   private endFn = this.onInputEnd.bind(this);
 
   constructor(readonly $client: Client) {}
 
-  async handleReprompts(repromptActions: Action[]) {
+  async handleReprompts(repromptActions: Action[], useSpeechRecognition: boolean) {
     this.actions = repromptActions;
+    this.useSpeechRecognition = useSpeechRecognition;
     this.hasAddedEvents = false;
     return this.startReprompt();
   }
 
   async onInputTimeout() {
     if (this.attempts < this.config.maxAttempts) {
+      this.$client.emit(ClientEvent.Reprompt, this.actions);
       await this.$client.$actionHandler.handleActions(this.actions);
       await this.startReprompt();
       this.attempts++;
     } else {
+      this.$client.emit(ClientEvent.RepromptLimitReached);
       return this.onInputEnd();
     }
   }
 
   async onInputEnd() {
-    this.$client.$audioRecorder.off(AudioRecorderEvent.Stop, this.endFn);
-    this.$client.$audioRecorder.off(AudioRecorderEvent.Timeout, this.timeoutFn);
+    if (this.useSpeechRecognition && this.$client.$speechRecognizer.isAvailable) {
+      this.$client.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.endFn);
+      this.$client.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.timeoutFn);
+    } else {
+      this.$client.$audioRecorder.off(AudioRecorderEvent.Stop, this.endFn);
+      this.$client.$audioRecorder.off(AudioRecorderEvent.Timeout, this.timeoutFn);
+    }
+
     this.actions = [];
     this.attempts = 0;
   }
 
   private async startReprompt() {
-    // start input recording and add event listeners
-    // TODO refactor, just experimental (doesn't work with SpeechRecognizer)
+    const useSpeechRecognition =
+      this.useSpeechRecognition && this.$client.$speechRecognizer.isAvailable;
+
     if (!this.hasAddedEvents) {
-      this.$client.$audioRecorder.on(AudioRecorderEvent.Stop, this.endFn);
-      this.$client.$audioRecorder.on(AudioRecorderEvent.Timeout, this.timeoutFn);
+      if (useSpeechRecognition) {
+        this.$client.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.endFn);
+        this.$client.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.timeoutFn);
+      } else {
+        this.$client.$audioRecorder.on(AudioRecorderEvent.Stop, this.endFn);
+        this.$client.$audioRecorder.on(AudioRecorderEvent.Timeout, this.timeoutFn);
+      }
       this.hasAddedEvents = true;
     }
-    return this.$client.$audioRecorder.start();
+
+    return this.$client.startInputCapturing(useSpeechRecognition);
   }
 }

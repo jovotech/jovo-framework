@@ -1,4 +1,4 @@
-import { Client } from '../Client';
+import { Client, ClientEvent } from '../Client';
 import {
   Action,
   ActionType,
@@ -18,9 +18,13 @@ export class ActionHandler {
   }
 
   async handleAction(action: Action): Promise<void> {
+
+
     if (action.delay) {
       await delay(action.delay);
     }
+
+    this.$client.emit(ClientEvent.Action, action);
 
     switch (action.type) {
       case ActionType.SequenceContainer:

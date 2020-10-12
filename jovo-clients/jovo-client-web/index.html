@@ -30,8 +30,8 @@
             sampleRate: 8000,
           },
           speechRecognizer: {
-          	locale: 'en',
-          }
+            locale: 'en',
+          },
         },
       );
 
@@ -44,14 +44,12 @@
           .send();
       });
 
-
-
       const STATE_MAP = {
         [State.Initial]: () => {
           primaryButton.innerText = 'Initialize';
           primaryButton.onclick = async () => {
             await client.initialize();
-            await client.input({ type: 'LAUNCH' }).send();
+            // await client.createRequest({ type: 'LAUNCH' }).send();
             changeState(State.Ready);
           };
           secondaryButton.style.display = 'none';
@@ -60,14 +58,18 @@
         [State.Ready]: () => {
           primaryButton.innerText = 'Start';
           primaryButton.onclick = async () => {
-            await client.$audioRecorder.start();
+            await client.startInputCapturing();
           };
           secondaryButton.style.display = null;
           secondaryButton.innerText = 'Stop';
-          secondaryButton.onclick = () => {};
+          secondaryButton.onclick = async () => {
+            await client.stopInputCapturing();
+          };
           tertiaryButton.style.display = null;
           tertiaryButton.innerText = 'Abort';
-          tertiaryButton.onclick = () => {};
+          tertiaryButton.onclick = async () => {
+            await client.abortInputCapturing();
+          };
         },
       };
 

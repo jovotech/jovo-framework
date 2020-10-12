@@ -24,8 +24,8 @@ export interface AudioRecorderProcessingData {
 export enum AudioRecorderEvent {
   Start = 'start',
   Processing = 'processing',
-  StartDetected = 'startDetected',
-  SilenceDetected = 'silenceDetected',
+  StartDetected = 'start-detected',
+  SilenceDetected = 'silenced-detected',
   Timeout = 'timeout',
   Abort = 'abort',
   Stop = 'stop',

@@ -7,18 +7,18 @@ export enum SpeechRecognizerEvent {
   Start = 'start',
   Stop = 'stop',
   Abort = 'abort',
-  StartDetected = 'startDetected',
-  SpeechRecognized = 'speechRecognized',
-  SilenceDetected = 'silenceDetected',
+  StartDetected = 'start-detected',
+  SpeechRecognized = 'speech-recognized',
+  SilenceDetected = 'silence-detected',
   Timeout = 'timeout',
   Error = 'error',
   End = 'end',
 }
 
+export type SpeechRecognizerStopListener = (event?: SpeechRecognitionEvent) => void;
 export type SpeechRecognizerSpeechRecognizedListener = (event: SpeechRecognitionEvent) => void;
 export type SpeechRecognizerVoidEvents =
   | SpeechRecognizerEvent.Start
-  | SpeechRecognizerEvent.Stop
   | SpeechRecognizerEvent.Abort
   | SpeechRecognizerEvent.StartDetected
   | SpeechRecognizerEvent.SilenceDetected
@@ -42,6 +42,10 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
 
 // TODO determine how to handle case where recognition is not available (Safari for example)
 export class SpeechRecognizer extends EventEmitter {
+  static isSupported(): boolean {
+    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  }
+
   static getDefaultConfig(): SpeechRecognizerConfig {
     window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     return {
@@ -67,6 +71,7 @@ export class SpeechRecognizer extends EventEmitter {
   private readonly recognition: SpeechRecognition | null = null;
 
   private recording = false;
+  private lastRecognitionEvent?: SpeechRecognitionEvent;
 
   private timeoutId?: number;
 
@@ -82,6 +87,10 @@ export class SpeechRecognizer extends EventEmitter {
       this.recognition = new window.SpeechRecognition();
       this.setupSpeechRecognition(this.recognition);
     }
+  }
+
+  get isAvailable(): boolean {
+    return !!this.recognition;
   }
 
   get startDetectionEnabled(): boolean {
@@ -106,6 +115,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
+  addListener(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
   addListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   addListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   addListener(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -116,6 +126,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
+  on(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
   on(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   on(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   on(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -126,6 +137,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
+  once(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
   once(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   once(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -136,6 +148,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
+  prependListener(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
   prependListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   prependListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -146,6 +159,10 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
+  prependOnceListener(
+    event: SpeechRecognizerEvent.Stop,
+    listener: SpeechRecognizerStopListener,
+  ): this;
   prependOnceListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   prependOnceListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -153,7 +170,7 @@ export class SpeechRecognizer extends EventEmitter {
   }
 
   start() {
-    if (this.recording) {
+    if (this.recording || !this.isAvailable) {
       return;
     }
     this.recognition?.start();
@@ -162,15 +179,15 @@ export class SpeechRecognizer extends EventEmitter {
   }
 
   stop() {
-    if (!this.recording) {
+    if (!this.recording || !this.isAvailable) {
       return;
     }
-    this.emit(SpeechRecognizerEvent.Stop);
+    this.emit(SpeechRecognizerEvent.Stop, this.lastRecognitionEvent);
     this.recognition?.stop();
   }
 
   abort() {
-    if (!this.recording) {
+    if (!this.recording || !this.isAvailable) {
       return;
     }
     this.emit(SpeechRecognizerEvent.Abort);
@@ -200,13 +217,17 @@ export class SpeechRecognizer extends EventEmitter {
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
+      this.lastRecognitionEvent = event;
       if (this.silenceDetectionEnabled) {
         this.scheduleSilenceDetectionTimeout();
       }
       this.emit(SpeechRecognizerEvent.SpeechRecognized, event);
     };
 
-    recognition.onerror = (err: Event) => {
+    recognition.onerror = (err: any) => {
+      if (err.error === 'aborted') {
+        return;
+      }
       this.emit(SpeechRecognizerEvent.Error, err);
     };
 
