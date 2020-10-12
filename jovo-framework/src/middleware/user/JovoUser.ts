@@ -42,6 +42,7 @@ export interface MetaDataConfig {
 export interface SessionDataConfig {
   enabled?: boolean;
   data?: boolean;
+  dataKey?: string;
   id?: boolean;
   expireAfterSeconds?: number;
 }
@@ -104,6 +105,7 @@ export interface UserMetaData {
 }
 
 export interface UserSessionData {
+  [key: string]: any;
   $data?: SessionData;
   id?: string;
   lastUpdatedAt?: string;
@@ -350,6 +352,11 @@ export class JovoUser implements Plugin {
         {},
       );
 
+      if(this.config.sessionData.dataKey) {
+        serializedSessionData.$data = serializedSessionData[this.config.sessionData.dataKey];
+        delete serializedSessionData[this.config.sessionData.dataKey];
+      }
+
       const expireAfter = (this.config.sessionData.expireAfterSeconds || 300) * 1000;
 
       let sessionData: UserSessionData = {
@@ -434,9 +441,11 @@ export class JovoUser implements Plugin {
 
     if (this.config.sessionData && this.config.sessionData.enabled) {
       userData.session = {};
+
       if (this.config.sessionData.data) {
         this.updateSessionData(handleRequest);
-        userData.session.$data = handleRequest.jovo.$user.$session.$data;
+        const dataKey = this.config.sessionData.dataKey || '$data';
+        userData.session[dataKey] = handleRequest.jovo.$user.$session.$data;
       }
 
       const sessionId = handleRequest.jovo.$request?.getSessionId();
