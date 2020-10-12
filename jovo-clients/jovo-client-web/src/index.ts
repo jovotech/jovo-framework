@@ -8,14 +8,6 @@ declare global {
   }
 }
 
-import { EventEmitter } from 'events';
-
-const TEST_FN = EventEmitter.prototype.emit;
-EventEmitter.prototype.emit = function (event, args) {
-  console.debug(`[${event.toString()}] ${JSON.stringify(args, undefined, 1)}`);
-  return TEST_FN.call(this, event, args);
-};
-
 export const VERSION = '0.1.0';
 
 export type {
