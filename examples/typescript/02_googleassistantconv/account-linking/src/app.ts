@@ -10,18 +10,23 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
-		// return this.ask('Do you want to link you account?');
-		return this.toIntent('HelloWorldIntent');
+		return this.ask('Do you want to link your account?');
 	},
 
-	HelloWorldIntent() {
-		// @ts-ignore
-		this.$googleAction!.setNextScene('AccountLinking');
-		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	YesIntent() {
+		this.$googleAction!.setNextScene('AccountLinkingScene');
+		this.ask('Great!');
 	},
 
-	MyNameIsIntent() {
-		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	async ON_SIGN_IN() {
+		if (this.$googleAction!.isAccountLinkingLinked()) {
+			const profile = await this.$googleAction!.$user.getGoogleProfile();
+			this.tell(`Hi ${profile.given_name}`);
+		} else if (this.$googleAction!.isAccountLinkingRejected()) {
+			this.tell('Too bad. Good bye');
+		} else {
+			this.tell('Something went wrong');
+		}
 	},
 });
 

@@ -198,6 +198,7 @@ export interface OpenUrl {
 
 export interface Link {
   name: string;
+  open: OpenUrl;
 }
 export interface Card {
   title: string;

@@ -15,6 +15,9 @@ import { MediaResponse } from './modules/MediaResponse';
 export { GoogleAssistant, Config } from './GoogleAssistant';
 export { GoogleAssistantTestSuite, Suggestion } from './core/Interfaces';
 import { NextScene } from './core/Interfaces';
+import { Prompt } from './core/Interfaces';
+export * from './core/Interfaces';
+export * from './services/PushNotificationsApi';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
@@ -78,6 +81,11 @@ declare module 'jovo-core/dist/src/Interfaces' {
       media?: Media;
       suggestions?: Suggestion[];
       nextScene?: NextScene;
+      prompt?: Prompt;
+      askPrompt?: {
+        prompt: Prompt;
+        reprompts?: Prompt[];
+      };
     };
   }
 }

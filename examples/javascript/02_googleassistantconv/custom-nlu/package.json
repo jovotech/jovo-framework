@@ -1,0 +1,26 @@
+{
+  "name": "jovo-examples-googleassistantconv-custom-nlu",
+  "version": "3.1.3",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./dist",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "jovo-core": "^3.1.3",
+    "jovo-db-dynamodb": "^3.1.3",
+    "jovo-db-filedb": "^3.1.3",
+    "jovo-framework": "^3.1.3",
+    "jovo-nlu-nlpjs": "^3.1.3",
+    "jovo-platform-googleassistantconv": "^3.1.3",
+    "jovo-plugin-debugger": "^3.1.3"
+  }
+}

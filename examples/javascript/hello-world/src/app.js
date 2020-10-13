@@ -5,39 +5,32 @@
 // ------------------------------------------------------------------
 
 const { App } = require('jovo-framework');
-const { Alexa } = require('jovo-platform-alexa');
-const { GoogleAssistant } = require('jovo-platform-googleassistant');
+const { GoogleAssistant } = require('jovo-platform-googleassistantconv');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
 
-app.use(
-    new Alexa(),
-    new GoogleAssistant(),
-    new JovoDebugger(),
-    new FileDb()
-);
-
+app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 // ------------------------------------------------------------------
 // APP LOGIC
 // ------------------------------------------------------------------
 
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 
-    MyNameIsIntent() {
-        console.log(this.$request.getInputs());
+	MyNameIsIntent() {
+		console.log(this.$request.getInputs());
 
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 
 module.exports.app = app;
