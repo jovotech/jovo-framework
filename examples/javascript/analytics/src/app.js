@@ -5,6 +5,7 @@ const { Alexa } = require('jovo-platform-alexa');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { BotAnalyticsAlexa } = require('jovo-analytics-botanalytics');
 const { GoogleAnalytics } = require('jovo-analytics-googleanalytics');
+const { OneDashAlexa } = require('jovo-analytics-onedash');
 
 const app = new App();
 app.use(
@@ -12,7 +13,8 @@ app.use(
     new Alexa(),
     new JovoDebugger(),
     // new BotAnalyticsAlexa(),
-    new GoogleAnalytics()
+    // new GoogleAnalytics()
+    new OneDashAlexa()
 );
 
 app.setHandler({

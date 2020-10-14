@@ -31,6 +31,9 @@ module.exports = config({
 		},
 		GoogleAnalytics: {
 			trackingId: ''
+		},
+		OneDashAlexa: {
+			key: 'keyAlexa'
 		}
 	}
 });
