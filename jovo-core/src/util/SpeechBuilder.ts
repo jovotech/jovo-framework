@@ -26,7 +26,7 @@ export class SpeechBuilder {
 
     if (SpeechBuilder.ESCAPE_AMPERSAND) {
       // workaround (v1 compatibility)
-      text = text.replace(/&/g, 'and');
+      text = text.replace(/(&)(?=(?:[^"]|"[^"]*")*$)/g, 'and');
     }
 
     return text;
