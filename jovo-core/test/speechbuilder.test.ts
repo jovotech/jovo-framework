@@ -191,7 +191,9 @@ test('test escapeXML', () => {
 });
 
 test('test replace ampersand ', () => {
-  expect(SpeechBuilder.toSSML('Jack & jane <audio src="foo&bar"/>')).toBe('<speak>Jack and jane <audio src="foo&bar"/></speak>');
+  expect(SpeechBuilder.toSSML('Jack & jane <audio src="foo&bar"/>')).toBe(
+    '<speak>Jack and jane <audio src="foo&bar"/></speak>',
+  );
 });
 
 test('test build()', () => {

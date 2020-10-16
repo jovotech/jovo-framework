@@ -147,7 +147,7 @@ export class OneDashAlexa implements Analytics {
       url: 'https://app.onedash.cc/api/insert/record/jovo',
     };
 
-    return HttpService.request(config).catch((e) => {
+    return HttpService.request(config).catch((e: Error) => {
       Log.error('Error while logging to OneDash Services');
       Log.error(e);
     });

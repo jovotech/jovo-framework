@@ -352,7 +352,7 @@ export class JovoUser implements Plugin {
         {},
       );
 
-      if(this.config.sessionData.dataKey) {
+      if (this.config.sessionData.dataKey) {
         serializedSessionData.$data = serializedSessionData[this.config.sessionData.dataKey];
         delete serializedSessionData[this.config.sessionData.dataKey];
       }
