@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistantconv-media",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,11 +15,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jovo-core": "^3.1.3",
-    "jovo-db-dynamodb": "^3.1.3",
-    "jovo-db-filedb": "^3.1.3",
-    "jovo-framework": "^3.1.3",
-    "jovo-platform-googleassistantconv": "^3.1.3",
-    "jovo-plugin-debugger": "^3.1.3"
+    "jovo-core": "^3.1.4",
+    "jovo-db-dynamodb": "^3.1.4",
+    "jovo-db-filedb": "^3.1.4",
+    "jovo-framework": "^3.1.4",
+    "jovo-platform-googleassistantconv": "^3.1.4",
+    "jovo-plugin-debugger": "^3.1.4"
   }
 }
