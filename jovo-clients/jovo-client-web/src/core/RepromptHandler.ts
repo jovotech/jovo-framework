@@ -1,6 +1,7 @@
 import { Action, AudioRecorderEvent, Client, ClientEvent, SpeechRecognizerEvent } from '..';
 
 export interface RepromptHandlerConfig {
+  enabled: boolean;
   maxAttempts: number;
 }
 
@@ -11,6 +12,7 @@ export class RepromptHandler {
 
   static getDefaultConfig(): RepromptHandlerConfig {
     return {
+      enabled: true,
       maxAttempts: 1,
     };
   }
@@ -27,6 +29,9 @@ export class RepromptHandler {
   constructor(readonly $client: Client) {}
 
   async handleReprompts(repromptActions: Action[], useSpeechRecognition: boolean) {
+    if (!this.config.enabled) {
+      return;
+    }
     this.attempts = 0;
     this.actions = repromptActions;
     this.useSpeechRecognition = useSpeechRecognition;
@@ -62,6 +67,10 @@ export class RepromptHandler {
   }
 
   private async startReprompt() {
+    if (!this.config.enabled) {
+      return;
+    }
+
     const useSpeechRecognition =
       this.useSpeechRecognition && this.$client.$speechRecognizer.isAvailable;
 
