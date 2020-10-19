@@ -27,6 +27,7 @@ export class RepromptHandler {
   constructor(readonly $client: Client) {}
 
   async handleReprompts(repromptActions: Action[], useSpeechRecognition: boolean) {
+    this.attempts = 0;
     this.actions = repromptActions;
     this.useSpeechRecognition = useSpeechRecognition;
     this.hasAddedEvents = false;
@@ -47,9 +48,11 @@ export class RepromptHandler {
 
   async onInputEnd() {
     if (this.useSpeechRecognition && this.$client.$speechRecognizer.isAvailable) {
+      this.$client.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.endFn);
       this.$client.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.endFn);
       this.$client.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.timeoutFn);
     } else {
+      this.$client.$audioRecorder.off(AudioRecorderEvent.Abort, this.endFn);
       this.$client.$audioRecorder.off(AudioRecorderEvent.Stop, this.endFn);
       this.$client.$audioRecorder.off(AudioRecorderEvent.Timeout, this.timeoutFn);
     }
@@ -64,9 +67,11 @@ export class RepromptHandler {
 
     if (!this.hasAddedEvents) {
       if (useSpeechRecognition) {
+        this.$client.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.endFn);
         this.$client.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.endFn);
         this.$client.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.timeoutFn);
       } else {
+        this.$client.$audioRecorder.on(AudioRecorderEvent.Abort, this.endFn);
         this.$client.$audioRecorder.on(AudioRecorderEvent.Stop, this.endFn);
         this.$client.$audioRecorder.on(AudioRecorderEvent.Timeout, this.timeoutFn);
       }
