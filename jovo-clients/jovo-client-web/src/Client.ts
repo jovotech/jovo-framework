@@ -60,10 +60,6 @@ export interface Config {
 }
 
 export class Client extends EventEmitter {
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
   static getDefaultConfig(): Config {
     return {
       locale: 'en',
@@ -88,8 +84,8 @@ export class Client extends EventEmitter {
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
 
-  private isUsingSpeechRecognition = true;
-  private isCapturingInput = false;
+  private useSpeechRecognition = true;
+  private capturingInput = false;
   private initialized = false;
 
   constructor(readonly endpointUrl: string, config?: DeepPartial<Config>) {
@@ -109,6 +105,13 @@ export class Client extends EventEmitter {
     this.$repromptHandler = new RepromptHandler(this);
     this.$ssmlHandler = new SSMLHandler(this);
 
+    // TODO determine whether the block below should be handled by the library or by the consumer instead (might be bad for use-cases with sockets for example)
+    this.on(ClientEvent.Request, (req) => {
+      this.$audioRecorder.abort();
+      this.$speechRecognizer.abort();
+      this.$audioPlayer.stop();
+      this.$speechSynthesizer.stop();
+    });
     this.on(ClientEvent.Response, (res) => {
       return this.handleResponse(res);
     });
@@ -116,6 +119,18 @@ export class Client extends EventEmitter {
       this.$store.resetSession();
       this.$store.save();
     });
+  }
+
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isCapturingInput(): boolean {
+    return this.capturingInput;
+  }
+
+  get isUsingSpeechRecognition(): boolean {
+    return this.useSpeechRecognition;
   }
 
   addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
@@ -173,10 +188,10 @@ export class Client extends EventEmitter {
   }
 
   async startInputCapturing(useSpeechRecognizerIfAvailable = true): Promise<void> {
-    if (this.isCapturingInput) {
+    if (this.capturingInput) {
       return;
     }
-    this.isUsingSpeechRecognition = useSpeechRecognizerIfAvailable;
+    this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
     if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
       this.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
@@ -188,31 +203,31 @@ export class Client extends EventEmitter {
       this.$audioRecorder.on(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
       await this.$audioRecorder.start();
     }
-    this.isCapturingInput = true;
+    this.capturingInput = true;
   }
 
   stopInputCapturing() {
-    if (!this.isCapturingInput) {
+    if (!this.capturingInput) {
       return;
     }
-    if (this.isUsingSpeechRecognition && this.$speechRecognizer.isAvailable) {
+    if (this.useSpeechRecognition && this.$speechRecognizer.isAvailable) {
       this.$speechRecognizer.stop();
     } else {
       this.$audioRecorder.stop();
     }
-    this.isCapturingInput = false;
+    this.capturingInput = false;
   }
 
   abortInputCapturing() {
-    if (!this.isCapturingInput) {
+    if (!this.capturingInput) {
       return;
     }
-    if (this.isUsingSpeechRecognition && this.$speechRecognizer.isAvailable) {
+    if (this.useSpeechRecognition && this.$speechRecognizer.isAvailable) {
       this.$speechRecognizer.abort();
     } else {
       this.$audioRecorder.abort();
     }
-    this.isCapturingInput = false;
+    this.capturingInput = false;
   }
 
   // TODO allow direct passing of AudioRecorderResult
@@ -279,7 +294,7 @@ export class Client extends EventEmitter {
     }
 
     if (res.reprompts?.length) {
-      await this.$repromptHandler.handleReprompts(res.reprompts, this.isUsingSpeechRecognition);
+      await this.$repromptHandler.handleReprompts(res.reprompts, this.useSpeechRecognition);
     }
   }
 
@@ -293,7 +308,7 @@ export class Client extends EventEmitter {
   };
 
   private onSpeechRecognizerAbort = () => {
-    this.isCapturingInput = false;
+    this.capturingInput = false;
     this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
@@ -308,7 +323,7 @@ export class Client extends EventEmitter {
   };
 
   private onAudioRecorderAbort = () => {
-    this.isCapturingInput = false;
+    this.capturingInput = false;
     this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
     this.$audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
     this.$audioRecorder.off(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
