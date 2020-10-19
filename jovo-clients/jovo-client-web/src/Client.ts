@@ -8,31 +8,34 @@ import { SSMLHandler } from './core/SSMLHandler';
 import {
   Action,
   AudioHelper,
-  AudioRecorderEvent,
   DeviceType,
   RequestType,
-  SpeechRecognizerEvent,
   VERSION,
   VoidListener,
   WebRequest,
-  WebResponse
+  WebResponse,
 } from './index';
 import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
 import {
   AudioRecorder,
   AudioRecorderConfig,
   AudioRecorderEvent,
-  AudioRecorderStopListener
+  AudioRecorderStopListener,
 } from './standalone/AudioRecorder';
 import {
   SpeechRecognizer,
   SpeechRecognizerConfig,
   SpeechRecognizerEvent,
-  SpeechRecognizerStopListener
+  SpeechRecognizerStopListener,
 } from './standalone/SpeechRecognizer';
 import { SpeechSynthesizer, SpeechSynthesizerConfig } from './standalone/SpeechSynthesizer';
 import { Store, StoreConfig } from './standalone/Store';
-import { ClientInputObject, ClientWebRequest, ClientWebRequestSendMethod, DeepPartial } from './types';
+import {
+  ClientInputObject,
+  ClientWebRequest,
+  ClientWebRequestSendMethod,
+  DeepPartial,
+} from './types';
 
 export enum ClientEvent {
   Request = 'request',
@@ -184,7 +187,7 @@ export class Client extends EventEmitter {
     } else {
       this.$audioRecorder.on(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
       this.$audioRecorder.on(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
-      this.$audioRecorder.on(AudioRecorderEvent.Timeout, , this.onAudioRecorderAbort)
+      this.$audioRecorder.on(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
       await this.$audioRecorder.start();
     }
     this.isCapturingInput = true;
