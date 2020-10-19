@@ -8,35 +8,31 @@ import { SSMLHandler } from './core/SSMLHandler';
 import {
   Action,
   AudioHelper,
+  AudioRecorderEvent,
   DeviceType,
-  RequestBody,
   RequestType,
+  SpeechRecognizerEvent,
   VERSION,
   VoidListener,
   WebRequest,
-  WebResponse,
+  WebResponse
 } from './index';
 import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
 import {
   AudioRecorder,
   AudioRecorderConfig,
   AudioRecorderEvent,
-  AudioRecorderStopListener,
+  AudioRecorderStopListener
 } from './standalone/AudioRecorder';
 import {
   SpeechRecognizer,
   SpeechRecognizerConfig,
   SpeechRecognizerEvent,
-  SpeechRecognizerStopListener,
+  SpeechRecognizerStopListener
 } from './standalone/SpeechRecognizer';
 import { SpeechSynthesizer, SpeechSynthesizerConfig } from './standalone/SpeechSynthesizer';
 import { Store, StoreConfig } from './standalone/Store';
-import {
-  ClientInputObject,
-  ClientWebRequest,
-  ClientWebRequestSendMethod,
-  DeepPartial,
-} from './types';
+import { ClientInputObject, ClientWebRequest, ClientWebRequestSendMethod, DeepPartial } from './types';
 
 export enum ClientEvent {
   Request = 'request',
@@ -183,10 +179,12 @@ export class Client extends EventEmitter {
     if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
       this.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
+      this.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
       this.$speechRecognizer.start();
     } else {
       this.$audioRecorder.on(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
       this.$audioRecorder.on(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
+      this.$audioRecorder.on(AudioRecorderEvent.Timeout, , this.onAudioRecorderAbort)
       await this.$audioRecorder.start();
     }
     this.isCapturingInput = true;
@@ -293,6 +291,7 @@ export class Client extends EventEmitter {
     this.isCapturingInput = false;
     this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
+    this.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
   };
   private onAudioRecorderStop: AudioRecorderStopListener = async (result) => {
     await this.createRequest({
@@ -305,5 +304,6 @@ export class Client extends EventEmitter {
     this.isCapturingInput = false;
     this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
     this.$audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
+    this.$audioRecorder.off(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
   };
 }

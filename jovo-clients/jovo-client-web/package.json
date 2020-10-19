@@ -8,6 +8,7 @@
   "scripts": {
     "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "build": "webpack --mode production",
+    "watch": "webpack --watch --mode development",
     "rimraf": "",
     "start:dev": "webpack-dev-server --mode development",
     "analyze": "webpack --mode production --env.ANALYZE_BUNDLE=true",
