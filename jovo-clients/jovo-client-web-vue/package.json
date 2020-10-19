@@ -6,8 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack --mode production",
-    "rimraf": "",
     "watch": "webpack --mode development --watch",
+    "rimraf": "",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "typedoc": "typedoc --out ./docs --mode file",

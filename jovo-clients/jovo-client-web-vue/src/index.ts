@@ -1,4 +1,4 @@
-import { Client, Config } from 'jovo-client-web';
+import { Client, Config, DeepPartial } from 'jovo-client-web';
 import { PluginObject } from 'vue';
 
 export * from 'jovo-client-web';
@@ -11,7 +11,7 @@ declare module 'vue/types/vue' {
 
 export interface JovoWebClientVueConfig {
   url: string;
-  client?: Config;
+  client?: DeepPartial<Config>;
 }
 
 const plugin: PluginObject<JovoWebClientVueConfig> = {

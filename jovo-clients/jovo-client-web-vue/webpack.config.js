@@ -3,7 +3,7 @@ const path = require('path');
 function createConfig(target, targetName = target) {
   return {
     entry: './src/index.ts',
-    devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : '',
+    devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: `index.${targetName}.js`,
