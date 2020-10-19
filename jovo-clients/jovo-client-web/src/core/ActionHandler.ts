@@ -1,12 +1,13 @@
-import { Client, ClientEvent } from '../Client';
 import {
   Action,
   ActionType,
+  Client,
+  ClientEvent,
   delay,
   ParallelAction,
   SequentialAction,
   SpeechAction,
-} from '../index';
+} from '..';
 
 export class ActionHandler {
   constructor(readonly $client: Client) {}

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
-import { DeepPartial, ErrorListener, VoidListener } from '../types';
+import { DeepPartial, ErrorListener, VoidListener } from '..';
 
 // TODO maybe rename SpeechRecognized to Processing to have almost identical events as the AudioRecorder
 export enum SpeechRecognizerEvent {

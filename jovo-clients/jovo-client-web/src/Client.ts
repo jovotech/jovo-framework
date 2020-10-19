@@ -2,40 +2,38 @@ import bent from 'bent';
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
 import uuidV4 from 'uuid/v4'; //tslint:disable-line
-import { ActionHandler } from './core/ActionHandler';
-import { RepromptHandler, RepromptHandlerConfig } from './core/RepromptHandler';
-import { SSMLHandler } from './core/SSMLHandler';
 import {
   Action,
+  ActionHandler,
   AudioHelper,
+  AudioPlayer,
+  AudioPlayerConfig,
+  AudioRecorder,
+  AudioRecorderConfig,
+  AudioRecorderEvent,
+  AudioRecorderStopListener,
+  ClientInputObject,
+  ClientWebRequest,
+  ClientWebRequestSendMethod,
+  DeepPartial,
   DeviceType,
+  RepromptHandler,
+  RepromptHandlerConfig,
   RequestType,
+  SpeechRecognizer,
+  SpeechRecognizerConfig,
+  SpeechRecognizerEvent,
+  SpeechRecognizerStopListener,
+  SpeechSynthesizer,
+  SpeechSynthesizerConfig,
+  SSMLHandler,
+  Store,
+  StoreConfig,
   VERSION,
   VoidListener,
   WebRequest,
   WebResponse,
 } from './index';
-import { AudioPlayer, AudioPlayerConfig } from './standalone/AudioPlayer';
-import {
-  AudioRecorder,
-  AudioRecorderConfig,
-  AudioRecorderEvent,
-  AudioRecorderStopListener,
-} from './standalone/AudioRecorder';
-import {
-  SpeechRecognizer,
-  SpeechRecognizerConfig,
-  SpeechRecognizerEvent,
-  SpeechRecognizerStopListener,
-} from './standalone/SpeechRecognizer';
-import { SpeechSynthesizer, SpeechSynthesizerConfig } from './standalone/SpeechSynthesizer';
-import { Store, StoreConfig } from './standalone/Store';
-import {
-  ClientInputObject,
-  ClientWebRequest,
-  ClientWebRequestSendMethod,
-  DeepPartial,
-} from './types';
 
 export enum ClientEvent {
   Request = 'request',
@@ -290,12 +288,14 @@ export class Client extends EventEmitter {
     await this.createRequest({ type: RequestType.TranscribedText, body: { text } }).send();
     this.onSpeechRecognizerAbort();
   };
+
   private onSpeechRecognizerAbort = () => {
     this.isCapturingInput = false;
     this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
   };
+
   private onAudioRecorderStop: AudioRecorderStopListener = async (result) => {
     await this.createRequest({
       type: RequestType.Audio,
@@ -303,6 +303,7 @@ export class Client extends EventEmitter {
     }).send();
     this.onAudioRecorderAbort();
   };
+
   private onAudioRecorderAbort = () => {
     this.isCapturingInput = false;
     this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);

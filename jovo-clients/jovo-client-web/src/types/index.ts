@@ -1,4 +1,4 @@
-import { RequestBody, RequestType, WebRequest, WebResponse } from '../index';
+import { RequestBody, RequestType, WebRequest, WebResponse } from '..';
 
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;

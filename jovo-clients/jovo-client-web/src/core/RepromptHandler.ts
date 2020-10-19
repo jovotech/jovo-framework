@@ -1,7 +1,4 @@
-import { Action } from '..';
-import { Client, ClientEvent } from '../Client';
-import { AudioRecorderEvent } from '../standalone/AudioRecorder';
-import { SpeechRecognizerEvent } from '../standalone/SpeechRecognizer';
+import { Action, AudioRecorderEvent, Client, ClientEvent, SpeechRecognizerEvent } from '..';
 
 export interface RepromptHandlerConfig {
   maxAttempts: number;

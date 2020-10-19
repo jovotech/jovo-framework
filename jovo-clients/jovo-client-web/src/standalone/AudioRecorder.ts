@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import _defaults from 'lodash.defaults';
-import { OSHelper } from '..';
-import { DeepPartial, VoidListener } from '../types';
+import { DeepPartial, OSHelper, VoidListener } from '..';
 
 interface AudioRecorderNodes {
   inputStream?: MediaStreamAudioSourceNode;

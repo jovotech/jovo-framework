@@ -1,5 +1,4 @@
-import { Client } from '../Client';
-import { delay } from '../util';
+import { Client, delay } from '..';
 
 export const TAG_AUDIO = 'audio';
 export const TAG_BREAK = 'break';

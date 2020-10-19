@@ -1,6 +1,4 @@
-import { Base64Converter, RequestBody } from '..';
-
-import { AudioRecorderResult } from '../standalone/AudioRecorder';
+import { AudioRecorderResult, Base64Converter, RequestBody } from '..';
 
 export class AudioHelper {
   static getRequestBodyFromAudioRecorderResult({
