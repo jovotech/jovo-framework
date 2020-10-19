@@ -88,7 +88,7 @@ export class Client extends EventEmitter {
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
 
-  private isUsingSpeechRecognition = false;
+  private isUsingSpeechRecognition = true;
   private isCapturingInput = false;
   private initialized = false;
 
@@ -224,6 +224,9 @@ export class Client extends EventEmitter {
         this.emit(ClientEvent.Request, req);
         const post = bent<WebResponse>('json', 'POST', 200);
         const res = await post(this.endpointUrl, req);
+        if (!res.version || !res.context) {
+          throw new Error('Response is not in the correct format.');
+        }
         this.emit(ClientEvent.Response, res);
         return res;
       };

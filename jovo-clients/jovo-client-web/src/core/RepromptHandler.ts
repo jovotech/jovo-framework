@@ -19,7 +19,7 @@ export class RepromptHandler {
   private attempts = 0;
   private hasAddedEvents = false;
 
-  private useSpeechRecognition = false;
+  private useSpeechRecognition = true;
 
   private timeoutFn = this.onInputTimeout.bind(this);
   private endFn = this.onInputEnd.bind(this);
