@@ -250,7 +250,12 @@ export class SpeechRecognizer extends EventEmitter {
     this.timeoutId = (setTimeout(() => {
       if (this.silenceDetectionEnabled) {
         this.emit(SpeechRecognizerEvent.SilenceDetected);
-        this.stop();
+        if (this.lastRecognitionEvent) {
+          this.stop();
+        } else {
+          this.emit(SpeechRecognizerEvent.Timeout);
+          this.abort();
+        }
       }
     }, this.config.silenceDetection.timeoutInMs) as unknown) as number;
   }
