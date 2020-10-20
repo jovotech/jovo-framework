@@ -29,6 +29,21 @@ export class SSMLHandler {
     }
   }
 
+  removeSSML(ssml: string, keepTags?: string[]): string {
+    let noSSMLText = ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
+
+    let regexPattern = '<[^>]*>';
+    if (keepTags && keepTags.length > 0) {
+      let exclusionPattern = '';
+      keepTags.forEach((tag: string) => {
+        exclusionPattern += `(?![/]?${tag})`;
+      });
+      regexPattern = `<${exclusionPattern}[^>]*[^>]*>`;
+    }
+    noSSMLText = noSSMLText.replace(new RegExp(regexPattern, 'g'), '');
+    return noSSMLText;
+  }
+
   private async handleSSMLPart(part: string) {
     switch (this.getTag(part)) {
       case TAG_AUDIO:
@@ -71,26 +86,11 @@ export class SSMLHandler {
     return 0;
   }
 
-  private removeSSML(ssml: string, keepTags?: string[]): string {
-    let noSSMLText = ssml.replace(/<speak>/g, '').replace(/<\/speak>/g, '');
-
-    let regexPattern = '<[^>]*>';
-    if (keepTags && keepTags.length > 0) {
-      let exclusionPattern = '';
-      keepTags.forEach((tag: string) => {
-        exclusionPattern += `(?![/]?${tag})`;
-      });
-      regexPattern = `<${exclusionPattern}[^>]*[^>]*>`;
-    }
-    noSSMLText = noSSMLText.replace(new RegExp(regexPattern, 'g'), '');
-    return noSSMLText;
-  }
-
   private getSSMLParts(ssml: string): string[] {
     const regex = /(?:(<[^>]*[/]>)|(<[^>]*>.*?<[/][^>]*>))/g;
     const supportedSSMLOnly = this.removeSSML(ssml, SUPPORTED_TAGS);
     return supportedSSMLOnly.split(regex).filter((part) => {
-      return part && part.trim().length;
+      return part?.trim().length;
     });
   }
 }
