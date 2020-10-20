@@ -19,6 +19,7 @@ export type SpeechSynthesizerVoidEvents =
   | SpeechSynthesizerEvent.End;
 
 export interface SpeechSynthesizerConfig {
+  enabled: boolean;
   language: string;
   voice?: SpeechSynthesisVoice;
 }
@@ -26,6 +27,7 @@ export interface SpeechSynthesizerConfig {
 export class SpeechSynthesizer extends EventEmitter {
   static getDefaultConfig(): SpeechSynthesizerConfig {
     return {
+      enabled: true,
       language: '',
     };
   }
@@ -116,6 +118,9 @@ export class SpeechSynthesizer extends EventEmitter {
   }
 
   resume() {
+    if (!this.config.enabled) {
+      return;
+    }
     if (this.canResume) {
       this.synthesis!.resume();
       this.emit(SpeechSynthesizerEvent.Resume);
@@ -123,6 +128,9 @@ export class SpeechSynthesizer extends EventEmitter {
   }
 
   pause() {
+    if (!this.config.enabled) {
+      return;
+    }
     if (this.canPause) {
       this.synthesis!.pause();
       this.emit(SpeechSynthesizerEvent.Pause);
@@ -130,6 +138,9 @@ export class SpeechSynthesizer extends EventEmitter {
   }
 
   stop() {
+    if (!this.config.enabled) {
+      return;
+    }
     if (this.canStop) {
       this.synthesis!.cancel();
       this.emit(SpeechSynthesizerEvent.Stop);
@@ -137,6 +148,9 @@ export class SpeechSynthesizer extends EventEmitter {
   }
 
   speak(utterance: SpeechSynthesisUtterance | string, forceVolume = true): Promise<void> {
+    if (!this.config.enabled) {
+      return Promise.resolve();
+    }
     return new Promise(async (resolve, reject) => {
       if (!this.synthesis) {
         return;

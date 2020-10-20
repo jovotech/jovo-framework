@@ -18,11 +18,15 @@ export type AudioPlayerVoidEvents =
   | AudioPlayerEvent.Pause
   | AudioPlayerEvent.Stop;
 
-export interface AudioPlayerConfig {}
+export interface AudioPlayerConfig {
+  enabled: boolean;
+}
 
 export class AudioPlayer extends EventEmitter {
   static getDefaultConfig(): AudioPlayerConfig {
-    return {};
+    return {
+      enabled: true,
+    };
   }
 
   readonly config: AudioPlayerConfig;
@@ -118,6 +122,9 @@ export class AudioPlayer extends EventEmitter {
   }
 
   resume() {
+    if (!this.config.enabled) {
+      return;
+    }
     this.checkForInitialization();
     if (this.canResume) {
       this.audio!.play().then(() => {
@@ -128,6 +135,9 @@ export class AudioPlayer extends EventEmitter {
   }
 
   pause() {
+    if (!this.config.enabled) {
+      return;
+    }
     this.checkForInitialization();
     if (this.canPause) {
       this.audio!.pause();
@@ -136,6 +146,9 @@ export class AudioPlayer extends EventEmitter {
   }
 
   stop() {
+    if (!this.config.enabled) {
+      return;
+    }
     this.checkForInitialization();
     if (this.canStop) {
       this.audio!.pause();
@@ -145,6 +158,9 @@ export class AudioPlayer extends EventEmitter {
   }
 
   play(audioSource: string, contentType = 'audio/mpeg'): Promise<void> {
+    if (!this.config.enabled) {
+      return Promise.resolve();
+    }
     this.checkForInitialization();
     return new Promise(async (resolve, reject) => {
       if (!this.audio) {
