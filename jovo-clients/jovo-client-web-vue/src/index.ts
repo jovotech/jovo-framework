@@ -14,12 +14,14 @@ export interface JovoWebClientVueConfig {
 
 const plugin: PluginObject<JovoWebClientVueConfig> = {
   install: (vue, config) => {
-    if (!config) {
+    if (!config?.url) {
       throw new Error(
         `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
       );
     }
-    vue.prototype.$client = new Client(config.url, config.client);
+    const client = new Client(config.url, config.client);
+    // make the client reactive
+    vue.prototype.$client = vue.observable(client);
   },
 };
 
