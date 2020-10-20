@@ -244,13 +244,18 @@ export class Client extends EventEmitter {
         const post = bent<WebResponse>('json', 'POST', 200);
         const res = await post(this.endpointUrl, req);
         if (!res.version || !res.context) {
-          throw new Error('Response is not in the correct format.');
+          throw {
+            message: 'Response is not in the correct format.',
+            name: 'InvalidResponseError',
+            data: res,
+          };
         }
         this.emit(ClientEvent.Response, res);
         return res;
       };
       return req as ClientWebRequest;
     };
+    // TODO allow setting of data below, theoretically possible right now, but maybe a config-option should exist that will automatically inject the relevant data
     return decorateRequestWithSendMethod({
       version: VERSION,
       type: 'jovo-platform-web',
