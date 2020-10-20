@@ -86,6 +86,10 @@ export class SpeechRecognizer extends EventEmitter {
     }
   }
 
+  get isRecording(): boolean {
+    return this.recording;
+  }
+
   get isAvailable(): boolean {
     return !!this.recognition;
   }

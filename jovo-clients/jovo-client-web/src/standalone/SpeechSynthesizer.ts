@@ -155,16 +155,24 @@ export class SpeechSynthesizer extends EventEmitter {
       }
 
       utterance.onerror = (e) => {
+        this.isSpeakingUtterance = false;
         this.emit(SpeechSynthesizerEvent.Error, e);
-        reject(e);
+        return reject(e);
+      };
+
+      utterance.onpause = () => {
+        this.isSpeakingUtterance = false;
+        return resolve();
       };
 
       utterance.onend = () => {
+        this.isSpeakingUtterance = false;
         this.emit(SpeechSynthesizerEvent.End);
-        resolve();
+        return resolve();
       };
 
       this.synthesis?.speak(utterance);
+      this.isSpeakingUtterance = true;
       this.emit(SpeechSynthesizerEvent.Speak, utterance);
     });
   }
