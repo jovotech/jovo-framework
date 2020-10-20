@@ -58,17 +58,17 @@
         [State.Ready]: () => {
           primaryButton.innerText = 'Start';
           primaryButton.onclick = async () => {
-            await client.startInputCapturing();
+            await client.startInputRecording();
           };
           secondaryButton.style.display = null;
           secondaryButton.innerText = 'Stop';
           secondaryButton.onclick = async () => {
-            await client.stopInputCapturing();
+            await client.stopInputRecording();
           };
           tertiaryButton.style.display = null;
           tertiaryButton.innerText = 'Abort';
           tertiaryButton.onclick = async () => {
-            await client.abortInputCapturing();
+            await client.abortInputRecording();
           };
         },
       };

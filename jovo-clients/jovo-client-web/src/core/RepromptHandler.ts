@@ -87,6 +87,6 @@ export class RepromptHandler {
       this.hasAddedEvents = true;
     }
 
-    return this.$client.startInputCapturing(useSpeechRecognition);
+    return this.$client.startInputRecording(useSpeechRecognition);
   }
 }

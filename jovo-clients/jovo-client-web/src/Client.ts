@@ -85,7 +85,7 @@ export class Client extends EventEmitter {
   readonly $ssmlHandler: SSMLHandler;
 
   private useSpeechRecognition = true;
-  private isCaptureProcessOngoing = false;
+  private isInputProcessOngoing = false;
   private initialized = false;
 
   constructor(readonly endpointUrl: string, config?: DeepPartial<Config>) {
@@ -125,11 +125,11 @@ export class Client extends EventEmitter {
     return this.initialized;
   }
 
-  get isOutputtingAudio(): boolean {
+  get isPlayingAudio(): boolean {
     return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
   }
 
-  get isCapturingInput(): boolean {
+  get isRecordingInput(): boolean {
     return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
   }
 
@@ -191,8 +191,8 @@ export class Client extends EventEmitter {
     this.initialized = true;
   }
 
-  async startInputCapturing(useSpeechRecognizerIfAvailable = true): Promise<void> {
-    if (this.isCaptureProcessOngoing) {
+  async startInputRecording(useSpeechRecognizerIfAvailable = true): Promise<void> {
+    if (this.isInputProcessOngoing) {
       return;
     }
     this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
@@ -207,11 +207,11 @@ export class Client extends EventEmitter {
       this.$audioRecorder.on(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
       await this.$audioRecorder.start();
     }
-    this.isCaptureProcessOngoing = true;
+    this.isInputProcessOngoing = true;
   }
 
-  stopInputCapturing() {
-    if (!this.isCaptureProcessOngoing) {
+  stopInputRecording() {
+    if (!this.isInputProcessOngoing) {
       return;
     }
     if (this.useSpeechRecognition && this.$speechRecognizer.isAvailable) {
@@ -219,11 +219,11 @@ export class Client extends EventEmitter {
     } else {
       this.$audioRecorder.stop();
     }
-    this.isCaptureProcessOngoing = false;
+    this.isInputProcessOngoing = false;
   }
 
-  abortInputCapturing() {
-    if (!this.isCaptureProcessOngoing) {
+  abortInputRecording() {
+    if (!this.isInputProcessOngoing) {
       return;
     }
     if (this.useSpeechRecognition && this.$speechRecognizer.isAvailable) {
@@ -231,7 +231,7 @@ export class Client extends EventEmitter {
     } else {
       this.$audioRecorder.abort();
     }
-    this.isCaptureProcessOngoing = false;
+    this.isInputProcessOngoing = false;
   }
 
   // TODO allow direct passing of AudioRecorderResult
@@ -312,7 +312,7 @@ export class Client extends EventEmitter {
   };
 
   private onSpeechRecognizerAbort = () => {
-    this.isCaptureProcessOngoing = false;
+    this.isInputProcessOngoing = false;
     this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
@@ -327,7 +327,7 @@ export class Client extends EventEmitter {
   };
 
   private onAudioRecorderAbort = () => {
-    this.isCaptureProcessOngoing = false;
+    this.isInputProcessOngoing = false;
     this.$audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
     this.$audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
     this.$audioRecorder.off(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
