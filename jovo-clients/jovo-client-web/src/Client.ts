@@ -309,6 +309,7 @@ export class Client extends EventEmitter {
 
   private onSpeechRecognizerStop: SpeechRecognizerStopListener = async (event) => {
     if (!event) {
+      this.onSpeechRecognizerAbort();
       return;
     }
     const text = AudioHelper.textFromSpeechRecognition(event);
