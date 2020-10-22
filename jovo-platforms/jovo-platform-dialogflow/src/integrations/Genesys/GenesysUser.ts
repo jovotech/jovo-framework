@@ -23,7 +23,7 @@ export class GenesysUser extends DialogflowUser {
     return _get(this.jovo.$request, 'originalDetectIntentRequest.payload.Genesys-No-Input-Limit');
   }
 
-  getConversattionId(): number | undefined {
+  getConversationId(): number | undefined {
     return _get(this.jovo.$request, 'originalDetectIntentRequest.payload.Genesys-Conversation-Id');
   }
 
