@@ -41,6 +41,7 @@ export class ActionHandler {
       case ActionType.QuickReply:
         break;
       default:
+        // tslint:disable-next-line
         console.info(`ActionType ${action.type} is not supported currently.`);
     }
   }
