@@ -107,10 +107,18 @@ export class Client extends EventEmitter {
 
     // TODO determine whether the block below should be handled by the library or by the consumer instead (might be bad for use-cases with sockets for example)
     this.on(ClientEvent.Request, (req) => {
-      this.$audioRecorder.abort();
-      this.$speechRecognizer.abort();
-      this.$audioPlayer.stop();
-      this.$speechSynthesizer.stop();
+      if (this.$audioRecorder.isRecording) {
+        this.$audioRecorder.abort();
+      }
+      if (this.$speechRecognizer.isRecording) {
+        this.$speechRecognizer.abort();
+      }
+      if (this.$audioPlayer.isPlaying) {
+        this.$audioPlayer.stop();
+      }
+      if (this.$speechSynthesizer.isSpeaking) {
+        this.$speechSynthesizer.stop();
+      }
     });
     this.on(ClientEvent.Response, (res) => {
       return this.handleResponse(res);
