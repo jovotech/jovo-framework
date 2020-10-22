@@ -1,6 +1,6 @@
 {
   "name": "jovo-framework",
-  "version": "3.1.0",
+  "version": "3.1.4",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -20,8 +20,8 @@
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
     "express": "^4.16.3",
-    "jovo-core": "^3.1.0",
-    "jovo-db-filedb": "^3.1.0",
+    "jovo-core": "^3.1.4",
+    "jovo-db-filedb": "^3.1.4",
     "json-colorizer": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",

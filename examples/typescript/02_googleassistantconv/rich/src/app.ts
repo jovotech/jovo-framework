@@ -1,4 +1,4 @@
-import { App } from 'jovo-framework';
+import { App, SpeechBuilder } from 'jovo-framework';
 
 import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
 import { JovoDebugger } from 'jovo-plugin-debugger';
@@ -11,12 +11,11 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 app.setHandler({
 	LAUNCH() {
 		// return this.toIntent('BasicCardIntent');
+		// return this.toIntent('ImageCardIntent');
 		// return this.toIntent('TableIntent');
 		// return this.toIntent('SuggestionsIntent');
-		return this.toIntent('ListIntent');
-		// return this.toIntent('CarouselIntent');
-		// return this.toIntent('CarouselBrowseWeblinksIntent');
-		// return this.toIntent('CarouselBrowseAmpIntent');
+		// return this.toIntent('RichIntent');
+		return this.toIntent('RichIntentEndConversation');
 	},
 	BasicCardIntent() {
 		this.$googleAction!.addBasicCard({
@@ -28,18 +27,17 @@ app.setHandler({
 				alt: 'Image text',
 			},
 		});
-		this.ask('Basic card');
+		this.tell('Basic card');
 	},
 	ImageCardIntent() {
 		this.$googleAction!.addImageCard({
 			url: 'https://via.placeholder.com/450x350?text=Basic+Card',
 			alt: 'Image text',
 		});
-		this.ask('Image card');
+		this.tell('Image card');
 	},
 	TableIntent() {
 		this.$googleAction!.addTable({
-			button: {},
 			columns: [
 				{
 					header: 'Column A',
@@ -101,20 +99,63 @@ app.setHandler({
 			subtitle: 'Table Subtitle',
 			title: 'Table Title',
 		});
-		this.ask('Response with table', '?');
+		this.tell('Response with table');
 	},
-	SuggestionsIntent() {},
-	ListIntent() {},
-	CarouselIntent() {},
-	CarouselBrowseWeblinksIntent() {
-		this.ask('Click on the link', 'Click on the link');
+	SuggestionsIntent() {
+		this.$googleAction!.showSuggestions(['Yes', 'No']);
+		this.ask('Say yes or no');
 	},
-	CarouselBrowseAmpIntent() {
-		this.ask('Click on the link', 'Click on the link');
+	RichIntent() {
+		this.$googleAction!.prompt({
+			firstSimple: {
+				speech: SpeechBuilder.toSSML('Hello World!'),
+				text: `I'm only visible on a smartphone.`,
+			},
+			content: {
+				card: {
+					title: 'Title',
+					subtitle: 'Subtitle',
+					text: 'Text',
+					image: {
+						url: 'https://via.placeholder.com/450x350?text=Basic+Card',
+						alt: 'Image text',
+					},
+				},
+			},
+			lastSimple: {
+				speech: SpeechBuilder.toSSML('Say yes or no'),
+				text: `Choose wisely. I'm also only visible on a smartphone`,
+			},
+			suggestions: [
+				// suggestions work only for sessions that kept open
+				{
+					title: 'Yes',
+				},
+				{
+					title: 'No',
+				},
+			],
+		});
 	},
-
-	ON_ELEMENT_SELECTED() {
-		this.tell(this.getSelectedElementId() + ' selected');
+	RichIntentEndConversation() {
+		this.$googleAction!.prompt({
+			firstSimple: {
+				speech: SpeechBuilder.toSSML('Hello World!'),
+				text: `I'm only visible on a smartphone.`,
+			},
+			content: {
+				card: {
+					title: 'Title',
+					subtitle: 'Subtitle',
+					text: 'Text',
+					image: {
+						url: 'https://via.placeholder.com/450x350?text=Basic+Card',
+						alt: 'Image text',
+					},
+				},
+			},
+		});
+		this.$googleAction!.endConversation();
 	},
 });
 

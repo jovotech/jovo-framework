@@ -17,8 +17,6 @@ In this section, you will learn more about the project structure of a Jovo Voice
 
 ## Overview
 
-![Jovo Folder Structure](../img/folder-structure-simple.png "Jovo Folder Structure")
-
 A Jovo project is divided into two main building blocks:
 * [Project Files](#project-files): Overall project related files, e.g. language models and platform project information 
 * [Source Files](#source-files): The actual code of your app. Can be found in the `src` folder

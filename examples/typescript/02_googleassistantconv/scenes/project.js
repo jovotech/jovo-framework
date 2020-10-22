@@ -3,6 +3,8 @@
 // ------------------------------------------------------------------
 
 module.exports = {
-	googleAction: {},
+	googleAction: {
+		projectId: '<PROJECT ID>',
+	},
 	endpoint: '${JOVO_WEBHOOK_URL}',
 };

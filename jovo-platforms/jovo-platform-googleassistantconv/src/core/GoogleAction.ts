@@ -8,6 +8,7 @@ import {
   Reprompt,
   Suggestion,
   PermissionResult,
+  Prompt,
 } from './Interfaces';
 import { ConversationalActionUser } from './ConversationalActionUser';
 import { ConversationalActionResponse } from './ConversationalActionResponse';
@@ -115,13 +116,11 @@ export class GoogleAction extends Jovo {
       reprompt = speech;
     }
 
-    this.$output.ask = {
-      speech: speech.toString(),
-      reprompt: reprompt.toString(),
-    };
+    _set(this.$output, 'ask.speech', speech.toString());
+    _set(this.$output, 'ask.reprompt', reprompt.toString());
 
     if (reprompts) {
-      this.$output.ask.reprompt = [reprompt.toString()];
+      this.$output.ask!.reprompt = [reprompt.toString()];
       reprompts.forEach((repr: string | SpeechBuilder) => {
         (this.$output.ask!.reprompt as string[]).push(repr.toString());
       });
@@ -166,6 +165,16 @@ export class GoogleAction extends Jovo {
 
   setNextScene(scene: string) {
     _set(this.$output, 'GoogleAssistant.nextScene', scene);
+    return this;
+  }
+
+  endConversation() {
+    this.setNextScene('actions.scene.END_CONVERSATION');
+    return this;
+  }
+
+  endSession() {
+    return this.endConversation();
   }
 
   /**
@@ -297,7 +306,7 @@ export class GoogleAction extends Jovo {
     for (const [key, value] of Object.entries(
       (this.$request! as ConversationalActionRequest).intent!.params,
     )) {
-      if (key.startsWith('NotificationSlot_')) {
+      if (key.startsWith('NotificationsSlot_')) {
         return value.resolved as PermissionResult;
       }
     }
@@ -320,5 +329,17 @@ export class GoogleAction extends Jovo {
 
   getNotifcationsUserId() {
     return this.getPermissionResult()?.additionalUserData.updateUserId;
+  }
+  prompt(prompt: Prompt): this {
+    this.$output.GoogleAssistant.prompt = prompt;
+    return this;
+  }
+
+  promptAsk(prompt: Prompt, ...reprompts: Prompt[]): this {
+    this.$output.GoogleAssistant.askPrompt = {
+      prompt,
+      reprompts,
+    };
+    return this;
   }
 }

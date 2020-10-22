@@ -453,7 +453,7 @@ export class Transaction {
       [],
     )) {
       if (argument.name === 'TRANSACTION_DECISION_VALUE') {
-        return _get(argument, 'extension.transactionDecision');
+        return _get(argument, 'extension.userDecision');
       }
     }
   }
