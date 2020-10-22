@@ -117,6 +117,10 @@ export class AudioRecorder extends EventEmitter {
     this.audioStream = null;
   }
 
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
   get isRecording(): boolean {
     return this.recording;
   }
@@ -205,11 +209,6 @@ export class AudioRecorder extends EventEmitter {
     this.audioNodes.destination = ctx.destination;
     this.audioCtx = ctx;
 
-    if (OSHelper.isWindows) {
-      this.audioStream = await navigator.mediaDevices.getUserMedia({
-        audio: this.config.audioConstraints,
-      });
-    }
     this.initialized = true;
   }
 
@@ -221,6 +220,11 @@ export class AudioRecorder extends EventEmitter {
     this.checkForBrowserCompatibility();
 
     if (OSHelper.isWindows) {
+      if (!this.audioStream) {
+        this.audioStream = await navigator.mediaDevices.getUserMedia({
+          audio: this.config.audioConstraints,
+        });
+      }
       return this.startRecording(this.audioStream!);
     }
 

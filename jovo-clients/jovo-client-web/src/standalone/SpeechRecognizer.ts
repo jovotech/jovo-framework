@@ -32,12 +32,13 @@ export interface SpeechRecognizerDetectionConfig {
 
 export type SpeechRecognitionConfig = Pick<
   SpeechRecognition,
-  'continuous' | 'grammars' | 'interimResults' | 'lang' | 'maxAlternatives'
+  'continuous' | 'interimResults' | 'lang' | 'maxAlternatives'
 >;
 
 export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
   startDetection: SpeechRecognizerDetectionConfig;
   silenceDetection: SpeechRecognizerDetectionConfig;
+  grammars?: SpeechGrammarList;
 }
 
 export class SpeechRecognizer extends EventEmitter {
@@ -52,7 +53,7 @@ export class SpeechRecognizer extends EventEmitter {
       continuous: true,
       interimResults: true,
       maxAlternatives: 1,
-      grammars: new window.SpeechGrammarList(),
+      grammars: window.SpeechGrammarList ? new window.SpeechGrammarList() : undefined,
       silenceDetection: {
         enabled: true,
         timeoutInMs: 1500,

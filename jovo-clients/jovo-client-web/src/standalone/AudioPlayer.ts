@@ -43,6 +43,10 @@ export class AudioPlayer extends EventEmitter {
     this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
   }
 
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
   get isPlaying(): boolean {
     return this.isAudioPlaying;
   }
