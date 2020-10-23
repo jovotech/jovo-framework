@@ -1,4 +1,4 @@
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import uuidV4 from 'uuid/v4'; //tslint:disable-line
 import { DeepPartial } from '..';
 
@@ -44,7 +44,7 @@ export class Store {
 
   constructor(config?: DeepPartial<StoreConfig>) {
     const defaultConfig = Store.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
     this.load();
   }
 
@@ -60,7 +60,7 @@ export class Store {
       id: uuidV4(),
       data: {},
     };
-    this.userData = _defaults(persistedData.user, defaultUserData);
+    this.userData = _defaultsDeep(persistedData.user, defaultUserData);
 
     const defaultSessionData: SessionData = this.newSessionData();
     const sessionExpirationDate = persistedData.session?.lastUpdatedAt
@@ -69,7 +69,7 @@ export class Store {
     const isExpired = sessionExpirationDate && sessionExpirationDate < new Date().getTime();
     this.sessionData = isExpired
       ? defaultSessionData
-      : _defaults(persistedData.session, defaultSessionData);
+      : _defaultsDeep(persistedData.session, defaultSessionData);
   }
 
   save() {

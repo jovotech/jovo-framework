@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import { DeepPartial, OSHelper, VoidListener } from '..';
 
 interface AudioRecorderNodes {
@@ -110,7 +110,7 @@ export class AudioRecorder extends EventEmitter {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     const defaultConfig = AudioRecorder.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
     this.audioNodes = {};
     this.audioCtx = null;

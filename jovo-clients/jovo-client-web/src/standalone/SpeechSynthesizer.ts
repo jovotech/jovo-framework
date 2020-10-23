@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import { DeepPartial, ErrorListener, VoidListener } from '..';
 
 export enum SpeechSynthesizerEvent {
@@ -43,7 +43,7 @@ export class SpeechSynthesizer extends EventEmitter {
     super();
 
     const defaultConfig = SpeechSynthesizer.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
     this.synthesis = window.speechSynthesis || null;
   }

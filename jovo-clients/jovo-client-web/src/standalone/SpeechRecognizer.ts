@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import { DeepPartial, ErrorListener, VoidListener } from '..';
 
 // TODO maybe rename SpeechRecognized to Processing to have almost identical events as the AudioRecorder
@@ -79,7 +79,7 @@ export class SpeechRecognizer extends EventEmitter {
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     const defaultConfig = SpeechRecognizer.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
     if (window.SpeechRecognition) {
       this.recognition = new window.SpeechRecognition();

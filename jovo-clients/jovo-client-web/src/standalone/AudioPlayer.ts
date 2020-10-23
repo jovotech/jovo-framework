@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import { Base64Converter, DeepPartial, ErrorListener, VoidListener } from '..';
 
 export enum AudioPlayerEvent {
@@ -40,7 +40,7 @@ export class AudioPlayer extends EventEmitter {
     super();
 
     const defaultConfig = AudioPlayer.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
   }
 
   get isInitialized(): boolean {
