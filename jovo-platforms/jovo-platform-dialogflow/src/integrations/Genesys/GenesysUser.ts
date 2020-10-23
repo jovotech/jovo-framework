@@ -16,7 +16,7 @@ export class GenesysUser extends DialogflowUser {
     // TODO: A call to the Genesys API can get us caller ID
     // purecloud-platform-client-v2.ConversationsApi.getAnalyticsConversationDetails(conversationId);
     // ani: response.participants[0].sessions[0].ani
-    return "GenericGenesysUser"
+    return 'GenericGenesysUser';
   }
 
   getNoInputLimit(): number | undefined {
