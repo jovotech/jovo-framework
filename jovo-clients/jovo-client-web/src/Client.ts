@@ -254,6 +254,7 @@ export class Client extends EventEmitter {
           headers: {
             'Content-Type': 'application/json',
           },
+          mode: 'cors',
         });
 
         const response = await fetch(this.endpointUrl, config);
