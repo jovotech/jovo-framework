@@ -1,6 +1,5 @@
-import bent from 'bent';
 import { EventEmitter } from 'events';
-import _defaults from 'lodash.defaults';
+import _defaultsDeep from 'lodash.defaultsdeep';
 import uuidV4 from 'uuid/v4'; //tslint:disable-line
 import {
   Action,
@@ -92,7 +91,7 @@ export class Client extends EventEmitter {
     super();
 
     const defaultConfig = Client.getDefaultConfig();
-    this.config = config ? _defaults(config, defaultConfig) : defaultConfig;
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
     this.$audioPlayer = new AudioPlayer(this.config.audioPlayer);
     this.$audioRecorder = new AudioRecorder(this.config.audioRecorder);
@@ -247,19 +246,27 @@ export class Client extends EventEmitter {
     const decorateRequestWithSendMethod = (
       req: WebRequest & { send?: ClientWebRequestSendMethod },
     ) => {
-      req.send = async () => {
+      req.send = async (config?: RequestInit) => {
         this.emit(ClientEvent.Request, req);
-        const post = bent<WebResponse>('json', 'POST', 200);
-        const res = await post(this.endpointUrl, req);
-        if (!res.version || !res.context) {
+        config = _defaultsDeep(config || {}, {
+          method: 'POST',
+          body: JSON.stringify(req),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const response = await fetch(this.endpointUrl, config);
+        const data = await response.json();
+        if (!data.version || !data.context) {
           throw {
             message: 'Response is not in the correct format.',
             name: 'InvalidResponseError',
-            data: res,
+            data,
           };
         }
-        this.emit(ClientEvent.Response, res);
-        return res;
+        this.emit(ClientEvent.Response, data);
+        return data;
       };
       return req as ClientWebRequest;
     };

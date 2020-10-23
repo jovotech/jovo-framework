@@ -12,7 +12,7 @@ export interface ClientInputObject {
   body?: RequestBody;
 }
 
-export type ClientWebRequestSendMethod = () => Promise<WebResponse>;
+export type ClientWebRequestSendMethod = (config?: RequestInit) => Promise<WebResponse>;
 
 export interface ClientWebRequest extends WebRequest {
   send: ClientWebRequestSendMethod;

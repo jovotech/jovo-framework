@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 declare global {
   interface Window {
     webkitSpeechRecognition?: new () => SpeechRecognition;
