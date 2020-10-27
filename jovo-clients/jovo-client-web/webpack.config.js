@@ -1,11 +1,24 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const rimraf = require('rimraf');
 
-module.exports = (env, ctx) => {
+function asyncRimraf(removePath, opts = {}) {
+  return new Promise((resolve, reject) => {
+    rimraf(removePath, opts, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve();
+    });
+  });
+}
+
+module.exports = async (env, ctx) => {
+  await asyncRimraf('dist');
+
   function createConfig(target, targetName = target) {
-    const plugins = [new CleanWebpackPlugin({ cleanStaleWebpackAssets: false })];
+    const plugins = [];
 
     if (ctx.mode === 'development' && target === 'umd') {
       plugins.push(

@@ -39,6 +39,7 @@ export class ActionHandler {
         const { ssml, plain, displayText } = action as SpeechAction;
         return this.$client.$ssmlHandler.handleSSML(ssml || plain || displayText || '');
       case ActionType.QuickReply:
+      case ActionType.Custom:
         break;
       default:
         // tslint:disable-next-line
