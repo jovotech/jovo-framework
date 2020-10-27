@@ -15,9 +15,9 @@ export const VERSION = '0.1.0';
 export type {
   CorePlatformRequestJSON as WebRequest,
   CorePlatformResponseJSON as WebResponse,
-} from 'jovo-platform-core';
+} from 'jovo-platform-web';
 // tslint:disable-next-line
-export * from 'jovo-platform-core/dist/src/Interfaces';
+export * from 'jovo-platform-core/dist/src/Interfaces'; // ugly fix but best way to only re-export what is needed
 
 export * from './types';
 export * from './util';
