@@ -70,7 +70,7 @@ export class SpeechRecognizer extends EventEmitter {
   private readonly recognition: SpeechRecognition | null = null;
 
   private recording = false;
-  private lastRecognitionEvent?: SpeechRecognitionEvent;
+  private lastRecognitionEvent: SpeechRecognitionEvent | null = null;
 
   private timeoutId?: number;
 
@@ -175,6 +175,7 @@ export class SpeechRecognizer extends EventEmitter {
     if (this.recording || !this.isAvailable) {
       return;
     }
+    this.lastRecognitionEvent = null;
     this.recognition?.start();
     this.recording = true;
     this.emit(SpeechRecognizerEvent.Start);
