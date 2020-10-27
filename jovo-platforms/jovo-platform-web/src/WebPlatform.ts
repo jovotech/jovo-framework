@@ -1,5 +1,5 @@
-import { ExtensibleConfig, Jovo, BaseApp } from 'jovo-core';
-import { Config as CorePlatformConfig, CorePlatform } from 'jovo-platform-core';
+import { BaseApp, Jovo } from 'jovo-core';
+import { Config, CorePlatform } from 'jovo-platform-core';
 import _merge = require('lodash.merge');
 import { WebApp } from './core/WebApp';
 import { WebAppRequest } from './core/WebAppRequest';
@@ -8,10 +8,8 @@ import { WebPlatformRequestBuilder } from './core/WebPlatformRequestBuilder';
 import { WebPlatformResponseBuilder } from './core/WebPlatformResponseBuilder';
 import { WebPlatformCore } from './modules/WebPlatformCore';
 
-export interface Config extends CorePlatformConfig {}
-
 export class WebPlatform extends CorePlatform<WebAppRequest, WebAppResponse> {
-  constructor(config?: ExtensibleConfig) {
+  constructor(config?: Config) {
     super(config);
 
     if (config) {
