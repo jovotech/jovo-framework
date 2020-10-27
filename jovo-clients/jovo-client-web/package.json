@@ -1,6 +1,6 @@
 {
   "name": "jovo-client-web",
-  "version": "3.1.5-alpha.0",
+  "version": "3.1.5-alpha.1",
   "description": " ",
   "main": "dist/index.common.js",
   "browser": "dist/index.umd.js",
