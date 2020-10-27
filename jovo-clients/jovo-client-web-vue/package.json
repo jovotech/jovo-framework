@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "jovo-client-web": "^3.1.5"
+    "jovo-client-web": "^3.1.5-alpha.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
