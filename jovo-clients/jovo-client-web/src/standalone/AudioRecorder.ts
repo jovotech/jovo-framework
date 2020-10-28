@@ -411,8 +411,13 @@ export class AudioRecorder extends EventEmitter {
   }
 
   private checkForBrowserCompatibility() {
+    if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
+      throw new Error('Recording is only allowed on https-sites except for localhost.');
+    }
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error('The device or browser does not support recording audio!');
+      throw new Error(
+        '`navigator.mediaDevices.getUserMedia` is not available - recording is not supported',
+      );
     }
   }
 }
