@@ -49,7 +49,7 @@ export class SpeechRecognizer extends EventEmitter {
   static getDefaultConfig(): SpeechRecognizerConfig {
     window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     return {
-      lang: navigator.language,
+      lang: 'en',
       continuous: true,
       interimResults: true,
       maxAlternatives: 1,

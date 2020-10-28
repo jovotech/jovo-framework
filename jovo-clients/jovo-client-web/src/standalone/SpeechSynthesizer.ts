@@ -28,7 +28,7 @@ export class SpeechSynthesizer extends EventEmitter {
   static getDefaultConfig(): SpeechSynthesizerConfig {
     return {
       enabled: true,
-      language: '',
+      language: 'en',
     };
   }
 
