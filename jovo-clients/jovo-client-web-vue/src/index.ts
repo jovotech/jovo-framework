@@ -1,6 +1,12 @@
 import { Client, Config, DeepPartial } from 'jovo-client-web';
 import { PluginObject } from 'vue';
 
+declare global {
+  interface Window {
+    JovoWebClientVue?: typeof import('.');
+  }
+}
+
 declare module 'vue/types/vue' {
   interface Vue {
     $client: Client;

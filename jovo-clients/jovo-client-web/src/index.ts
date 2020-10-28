@@ -7,10 +7,10 @@ declare global {
     webkitAudioContext?: new () => AudioContext;
     SpeechGrammarList?: new () => SpeechGrammarList;
     webkitSpeechGrammarList?: new () => SpeechGrammarList;
+
+    JovoWebClient: typeof import('.');
   }
 }
-
-export const VERSION = '0.1.0';
 
 export type {
   CorePlatformRequestJSON as WebRequest,

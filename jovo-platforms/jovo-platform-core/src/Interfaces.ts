@@ -2,7 +2,6 @@ import { AsrData, Input, NluData } from 'jovo-core';
 import { Data } from './core/CorePlatformResponse';
 
 // region request-types
-
 export enum RequestType {
   Launch = 'LAUNCH',
   Intent = 'INTENT',
@@ -67,14 +66,14 @@ export interface User {
 }
 
 export interface Device {
-  id: string;
+  id?: string;
   type: DeviceType;
-  capabilities: Record<Capability, string>;
+  capabilities: Record<Capability, string | boolean>;
 }
 
 export interface Context {
-  appId: string;
-  platform: string;
+  appId?: string;
+  platform?: string;
   device: Device;
   session: Session;
   user: User;
@@ -92,6 +91,7 @@ export interface CorePlatformRequestJSON {
 // region response-types
 
 export enum ActionType {
+  Text = 'TEXT',
   Speech = 'SPEECH',
   Audio = 'AUDIO',
   Visual = 'VISUAL',
@@ -121,6 +121,13 @@ export interface SequentialAction extends ContainerAction {
 export interface ParallelAction extends ContainerAction {
   type: ActionType.ParallelContainer;
 }
+
+export interface TextAction extends Action {
+  type: ActionType.Text;
+  text: string;
+}
+
+export type TextActionData = Omit<TextAction, 'type'>;
 
 export interface SpeechAction extends Action {
   type: ActionType.Speech;

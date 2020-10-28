@@ -15,6 +15,7 @@ import {
   ClientWebRequest,
   ClientWebRequestSendMethod,
   DeepPartial,
+  Device,
   DeviceType,
   RepromptHandler,
   RepromptHandlerConfig,
@@ -28,7 +29,6 @@ import {
   SSMLHandler,
   Store,
   StoreConfig,
-  VERSION,
   VoidListener,
   WebRequest,
   WebResponse,
@@ -38,6 +38,7 @@ export enum ClientEvent {
   Request = 'request',
   Response = 'response',
   Action = 'action',
+  ActionsHandled = 'actions-handled',
   Reprompt = 'reprompt',
   RepromptLimitReached = 'reprompt-limit-reached',
 }
@@ -45,10 +46,17 @@ export enum ClientEvent {
 export type ClientRequestListener = (request: WebRequest) => void;
 export type ClientResponseListener = (response: WebResponse) => void;
 export type ClientActionListener = (action: Action) => void;
+export type ClientActionsHandledListener = (actions: Action[]) => void;
 export type ClientRepromptListener = (repromptActions: Action[]) => void;
 export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
 
+export type SupportedVersion = '3.1.5' | string;
+
 export interface Config {
+  version: SupportedVersion;
+  appId: string;
+  platform: string;
+  device: Device;
   locale: string;
   audioPlayer: AudioPlayerConfig;
   audioRecorder: AudioRecorderConfig;
@@ -61,6 +69,18 @@ export interface Config {
 export class Client extends EventEmitter {
   static getDefaultConfig(): Config {
     return {
+      version: '3.1.5',
+      appId: '',
+      platform: '',
+      device: {
+        id: '',
+        type: DeviceType.Browser,
+        capabilities: {
+          AUDIO: true,
+          HTML: true,
+          TEXT: true,
+        },
+      },
       locale: 'en',
       audioPlayer: AudioPlayer.getDefaultConfig(),
       audioRecorder: AudioRecorder.getDefaultConfig(),
@@ -119,9 +139,34 @@ export class Client extends EventEmitter {
         this.$speechSynthesizer.stop();
       }
     });
+    this.$audioRecorder.on(AudioRecorderEvent.Start, () => {
+      if (this.$speechRecognizer.isRecording) {
+        this.$speechRecognizer.abort();
+      }
+      if (this.$audioPlayer.isPlaying) {
+        this.$audioPlayer.stop();
+      }
+      if (this.$speechSynthesizer.isSpeaking) {
+        this.$speechSynthesizer.stop();
+      }
+    });
+
+    this.$speechRecognizer.on(SpeechRecognizerEvent.Start, () => {
+      if (this.$audioRecorder.isRecording) {
+        this.$audioRecorder.abort();
+      }
+      if (this.$audioPlayer.isPlaying) {
+        this.$audioPlayer.stop();
+      }
+      if (this.$speechSynthesizer.isSpeaking) {
+        this.$speechSynthesizer.stop();
+      }
+    });
+
     this.on(ClientEvent.Response, (res) => {
       return this.handleResponse(res);
     });
+
     this.on(ClientEvent.RepromptLimitReached, () => {
       this.$store.resetSession();
       this.$store.save();
@@ -243,63 +288,55 @@ export class Client extends EventEmitter {
 
   // TODO allow direct passing of AudioRecorderResult
   createRequest({ type, body = {} }: ClientInputObject): ClientWebRequest {
-    const decorateRequestWithSendMethod = (
-      req: WebRequest & { send?: ClientWebRequestSendMethod },
-    ) => {
-      req.send = async (config?: RequestInit) => {
-        this.emit(ClientEvent.Request, req);
-        config = _defaultsDeep(config || {}, {
-          method: 'POST',
-          body: JSON.stringify(req),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          mode: 'cors',
-        });
-
-        const response = await fetch(this.endpointUrl, config);
-        const data = await response.json();
-        if (!data.version || !data.context) {
-          throw {
-            message: 'Response is not in the correct format.',
-            name: 'InvalidResponseError',
-            data,
-          };
-        }
-        this.emit(ClientEvent.Response, data);
-        return data;
-      };
-      return req as ClientWebRequest;
-    };
-    // TODO allow setting of data below, theoretically possible right now, but maybe a config-option should exist that will automatically inject the relevant data
-    return decorateRequestWithSendMethod({
-      version: VERSION,
+    const req: WebRequest & { send?: ClientWebRequestSendMethod } = {
+      version: this.config.version,
       type: 'jovo-platform-web',
       request: {
         id: uuidV4(),
         timestamp: new Date().toISOString(),
         type,
         body,
-        locale: '',
-        nlu: {},
+        locale: this.config.locale,
         data: {},
       },
       context: {
-        appId: '',
-        platform: 'CANNOT_BE_EMPTY',
-        device: {
-          id: '',
-          type: DeviceType.Browser,
-          capabilities: {
-            AUDIO: '',
-            HTML: '',
-            TEXT: '',
-          },
-        },
+        appId: this.config.appId,
+        platform: this.config.platform,
+        device: this.config.device,
         session: this.$store.sessionData,
         user: this.$store.userData,
       },
-    });
+    };
+
+    req.send = async (config?: RequestInit) => {
+      this.emit(ClientEvent.Request, req);
+      config = _defaultsDeep(config || {}, {
+        method: 'POST',
+        // skip all empty values
+        body: JSON.stringify(req, (key: string, value: any) => {
+          if (value) {
+            return value;
+          }
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const response = await fetch(this.endpointUrl, config);
+      const data = await response.json();
+      if (!data.version || !data.context) {
+        throw {
+          message: 'Response is not in the correct format.',
+          name: 'InvalidResponseError',
+          data,
+        };
+      }
+      this.emit(ClientEvent.Response, data);
+      return data;
+    };
+
+    return req as ClientWebRequest;
   }
 
   protected async handleResponse(res: WebResponse): Promise<void> {
@@ -316,6 +353,7 @@ export class Client extends EventEmitter {
 
     if (res.actions?.length) {
       await this.$actionHandler.handleActions(res.actions);
+      this.emit(ClientEvent.ActionsHandled, res.actions);
     }
 
     if (res.reprompts?.length) {

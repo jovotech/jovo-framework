@@ -10,10 +10,8 @@ import {
   TestSuite,
 } from 'jovo-core';
 import { PlatformStorage } from 'jovo-db-platformstorage';
-import _get = require('lodash.get');
-import _merge = require('lodash.merge');
-import _set = require('lodash.set');
 import {
+  ActionType,
   CorePlatformApp,
   CorePlatformCore,
   CorePlatformRequest,
@@ -21,9 +19,13 @@ import {
   CorePlatformResponse,
   CorePlatformResponseBuilder,
 } from '.';
+import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; // tslint:disable-line:no-any
+  defaultOutputAction: ActionType.Text | ActionType.Speech;
 }
 
 export class CorePlatform<
@@ -34,6 +36,7 @@ export class CorePlatform<
   responseBuilder = this.getResponseBuilder();
 
   config: Config = {
+    defaultOutputAction: ActionType.Speech,
     enabled: true,
   };
 

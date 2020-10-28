@@ -8,7 +8,7 @@ export interface SessionData {
   id: string;
   data: Data;
   new: boolean;
-  lastUpdatedAt: number;
+  lastUpdatedAt: Date;
 }
 
 export interface UserData {
@@ -64,7 +64,8 @@ export class Store {
 
     const defaultSessionData: SessionData = this.newSessionData();
     const sessionExpirationDate = persistedData.session?.lastUpdatedAt
-      ? this.config.sessionExpirationInSeconds * 1000 + persistedData.session.lastUpdatedAt
+      ? this.config.sessionExpirationInSeconds * 1000 +
+        new Date(persistedData.session.lastUpdatedAt).getTime()
       : undefined;
     const isExpired = sessionExpirationDate && sessionExpirationDate < new Date().getTime();
     this.sessionData = isExpired
@@ -85,7 +86,7 @@ export class Store {
       id: uuidV4(),
       data: {},
       new: true,
-      lastUpdatedAt: new Date().getTime(),
+      lastUpdatedAt: new Date(),
     };
   }
 }
