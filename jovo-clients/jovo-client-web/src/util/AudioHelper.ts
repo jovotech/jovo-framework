@@ -16,9 +16,9 @@ export class AudioHelper {
   static textFromSpeechRecognition(event: SpeechRecognitionEvent): string {
     let text = '';
     for (let i = 0, len = event.results.length; i < len; i++) {
-      text += event.results[i][0].transcript;
+      text = event.results[i][0].transcript;
     }
-    return text;
+    return event.results[event.results.length - 1]?.[0]?.transcript || '';
   }
 
   static mergeChunks(chunks: Float32Array[], chunkLength: number): Float32Array {
