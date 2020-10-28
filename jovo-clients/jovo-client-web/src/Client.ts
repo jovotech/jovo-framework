@@ -22,8 +22,8 @@ import {
   RequestType,
   SpeechRecognizer,
   SpeechRecognizerConfig,
+  SpeechRecognizerEndListener,
   SpeechRecognizerEvent,
-  SpeechRecognizerStopListener,
   SpeechSynthesizer,
   SpeechSynthesizerConfig,
   SSMLHandler,
@@ -71,7 +71,7 @@ export class Client extends EventEmitter {
     return {
       version: '3.1.5',
       appId: '',
-      platform: '',
+      platform: 'PLACEHOLDER', // TODO: replace placeholder with empty value as soon as new core/web-platform was published
       device: {
         id: '',
         type: DeviceType.Browser,
@@ -249,7 +249,7 @@ export class Client extends EventEmitter {
     }
     this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
     if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
-      this.$speechRecognizer.on(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
+      this.$speechRecognizer.on(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
       this.$speechRecognizer.start();
@@ -361,7 +361,7 @@ export class Client extends EventEmitter {
     }
   }
 
-  private onSpeechRecognizerStop: SpeechRecognizerStopListener = async (event) => {
+  private onSpeechRecognizerEnd: SpeechRecognizerEndListener = async (event) => {
     if (!event) {
       this.onSpeechRecognizerAbort();
       return;
@@ -373,7 +373,7 @@ export class Client extends EventEmitter {
 
   private onSpeechRecognizerAbort = () => {
     this.isInputProcessOngoing = false;
-    this.$speechRecognizer.off(SpeechRecognizerEvent.Stop, this.onSpeechRecognizerStop);
+    this.$speechRecognizer.off(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
     this.$speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
   };

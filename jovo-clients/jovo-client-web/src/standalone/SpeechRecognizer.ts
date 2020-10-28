@@ -15,7 +15,7 @@ export enum SpeechRecognizerEvent {
   End = 'end',
 }
 
-export type SpeechRecognizerStopListener = (event?: SpeechRecognitionEvent) => void;
+export type SpeechRecognizerEndListener = (event?: SpeechRecognitionEvent) => void;
 export type SpeechRecognizerSpeechRecognizedListener = (event: SpeechRecognitionEvent) => void;
 export type SpeechRecognizerVoidEvents =
   | SpeechRecognizerEvent.Start
@@ -23,7 +23,7 @@ export type SpeechRecognizerVoidEvents =
   | SpeechRecognizerEvent.StartDetected
   | SpeechRecognizerEvent.SilenceDetected
   | SpeechRecognizerEvent.Timeout
-  | SpeechRecognizerEvent.End;
+  | SpeechRecognizerEvent.Stop;
 
 export interface SpeechRecognizerDetectionConfig {
   enabled: boolean;
@@ -73,6 +73,7 @@ export class SpeechRecognizer extends EventEmitter {
   private lastRecognitionEvent: SpeechRecognitionEvent | null = null;
 
   private timeoutId?: number;
+  private ignoreNextEnd = false;
 
   constructor(config?: DeepPartial<SpeechRecognizerConfig>) {
     super();
@@ -117,7 +118,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
-  addListener(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
+  addListener(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
   addListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   addListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   addListener(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -128,7 +129,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
-  on(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
+  on(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
   on(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   on(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   on(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -139,7 +140,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
-  once(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
+  once(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
   once(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   once(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -150,7 +151,7 @@ export class SpeechRecognizer extends EventEmitter {
     event: SpeechRecognizerEvent.SpeechRecognized,
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
-  prependListener(event: SpeechRecognizerEvent.Stop, listener: SpeechRecognizerStopListener): this;
+  prependListener(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
   prependListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   prependListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this {
@@ -162,8 +163,8 @@ export class SpeechRecognizer extends EventEmitter {
     listener: SpeechRecognizerSpeechRecognizedListener,
   ): this;
   prependOnceListener(
-    event: SpeechRecognizerEvent.Stop,
-    listener: SpeechRecognizerStopListener,
+    event: SpeechRecognizerEvent.End,
+    listener: SpeechRecognizerEndListener,
   ): this;
   prependOnceListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
   prependOnceListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
@@ -185,7 +186,7 @@ export class SpeechRecognizer extends EventEmitter {
     if (!this.recording || !this.isAvailable) {
       return;
     }
-    this.emit(SpeechRecognizerEvent.Stop, this.lastRecognitionEvent);
+    this.emit(SpeechRecognizerEvent.Stop);
     this.recognition?.stop();
   }
 
@@ -194,6 +195,7 @@ export class SpeechRecognizer extends EventEmitter {
       return;
     }
     this.emit(SpeechRecognizerEvent.Abort);
+    this.ignoreNextEnd = true;
     this.recognition?.abort();
   }
 
@@ -236,8 +238,12 @@ export class SpeechRecognizer extends EventEmitter {
 
     recognition.onend = (event: Event) => {
       this.recording = false;
-      this.emit(SpeechRecognizerEvent.End);
       this.clearTimeout();
+      if (this.ignoreNextEnd) {
+        this.ignoreNextEnd = false;
+        return;
+      }
+      this.emit(SpeechRecognizerEvent.End, this.lastRecognitionEvent);
     };
   }
 
