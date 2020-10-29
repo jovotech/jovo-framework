@@ -50,7 +50,7 @@ export type ClientActionsHandledListener = (actions: Action[]) => void;
 export type ClientRepromptListener = (repromptActions: Action[]) => void;
 export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
 
-export type SupportedVersion = '3.1.5' | string;
+export type SupportedVersion = '3.2.0' | '3.2.1' | string;
 
 export interface Config {
   version: SupportedVersion;
@@ -69,7 +69,7 @@ export interface Config {
 export class Client extends EventEmitter {
   static getDefaultConfig(): Config {
     return {
-      version: '3.1.5',
+      version: '3.2.1',
       appId: '',
       platform: '',
       device: {
