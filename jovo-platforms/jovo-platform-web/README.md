@@ -2,7 +2,43 @@
 
 > To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-web
 
-Learn more about the Jovo Web Platform, which can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
+Learn more about the Jovo Web Platform, which can be used to build fully customized voice and chat experiences that work in the browser.
+
+- [Introduction](#introduction)
+  - [How it works](#how-it-works)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Requests and Responses](#requests-and-responses)
+  - [Adding Integrations](#adding-integrations)
+  - [Responding with Actions](#responding-with-actions)
+  - [Using the ActionBuilder](#using-the-actionbuilder)
+  - [Showing Quick Replies](#showing-quick-replies)
+
+## Introduction
+
+Besides integrations with major platforms like [Alexa](https://www.jovo.tech/marketplace/jovo-platform-alexa), [Google Assistant](https://www.jovo.tech/marketplace/jovo-platform-googleassistant), or [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), Jovo also enables you to connect your own clients to build fully custom conversational experiences for both voice and chat.
+
+The Jovo Web Platform helps you connect your Jovo app to various web frontends. You can check out one of these starter templates to get a first impression how it looks like:
+* [Standalone Voice Experience](https://github.com/jovotech/jovo-starter-web-standalone)
+* [Voice Overlay](https://github.com/jovotech/jovo-starter-web-overlay)
+* [Chat Widget](https://github.com/jovotech/jovo-starter-web-chatwidget)
+* [Embedded Chat](https://github.com/jovotech/jovo-starter-web-embeddedchat)
+
+
+### How it works
+
+![Jovo Client and Jovo Core Platform](./img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
+
+The Jovo Web Platform can be connected to any web client (the "frontend" that records speech or text input and passes it to the Jovo app). You can either implement your own client or use existing [Jovo Clients](https://www.jovo.tech/marketplace/tag/clients).
+
+The client sends a request to the Jovo app that may contain audio, text, or other input. The Jovo Core Platform then deals with this information and returns a response back to the client. [Learn more about the Core Platform request and response structures below](#requests-and-responses).
+
+Depending on the client, it may be necessary to add integrations to the platform to convert the input to structured data:
+
+* [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr) to turn spoken audio into transcribed text
+* [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) to turn raw text into meaning
+
+After these integrations are added, building a Jovo app for custom clients is similar to building for platforms like Alexa and Google Assistant. [Take a look at the Jovo Docs to learn more](https://www.jovo.tech/docs).
 
 
 ### Installation
@@ -19,6 +55,7 @@ Import the installed module, initialize and add it to the `app` object.
 // @language=javascript
 
 // src/app.js
+
 const { WebPlatform } = require('jovo-platform-web');
 
 const webPlatform = new WebPlatform();
@@ -28,6 +65,7 @@ app.use(webPlatform);
 // @language=typescript
 
 // src/app.ts
+
 import { WebPlatform } from 'jovo-platform-web';
 
 const webPlatform = new WebPlatform();
@@ -83,25 +121,31 @@ The response contains all the information that is needed by the client to displa
 
 ```js
 {
-  "version": "1.0",
-  "response": {
-    "shouldEndSession": true,
-    "output": {
-      "speech": {
-        "text": "Sample response text"
-      },
-      "actions": [
-        {
-          "key": "name.set",
-          "value": "Chris"
-        }
-      ]
-    },
-    "inputText": "my name is Chris"
-  },
-  "sessionData": {},
-  "userData": {
-  }
+   "version": "3.2.0",
+   "actions": [
+      {
+         "plain": "Alright!",
+         "ssml": "Alright!",
+         "type": "SPEECH"
+      }
+   ],
+   "reprompts": [],
+   "user": {
+      "data": {}
+   },
+   "session": {
+      "data": {},
+      "end": true
+   },
+   "context": {
+      "request": {
+         "nlu": {
+            "intent": {
+               "name": "None"
+            }
+         }
+      }
+   }
 }
 ```
 
