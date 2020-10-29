@@ -4,15 +4,22 @@
 
 Learn more about the Jovo Web Platform, which can be used to build fully customized voice and chat experiences that work in the browser.
 
-- [Introduction](#introduction)
-  - [How it works](#how-it-works)
-  - [Installation](#installation)
-- [Usage](#usage)
-  - [Requests and Responses](#requests-and-responses)
-  - [Adding Integrations](#adding-integrations)
-  - [Responding with Actions](#responding-with-actions)
-  - [Using the ActionBuilder](#using-the-actionbuilder)
-  - [Showing Quick Replies](#showing-quick-replies)
+* [Introduction](#introduction)
+   * [How it works](#how-it-works)
+   * [Installation](#installation)
+* [Usage](#usage)
+   * [Requests and Responses](#requests-and-responses)
+   * [Adding Integrations](#adding-integrations)
+   * [Responding with Actions](#responding-with-actions)
+     * [SpeechAction](#speechaction)
+     * [AudioAction](#audioaction)
+     * [VisualAction](#visualaction)
+     * [ProcessingAction](#processingaction)
+     * [QuickReplyAction](#quickreplyaction)
+     * [CustomAction](#customaction)
+     * [SequenceContainerAction](#sequencecontaineraction)
+     * [ParallelContainerAction](#parallelcontaineraction)
+   * [Using the ActionBuilder](#using-the-actionbuilder)
 
 ## Introduction
 
@@ -244,6 +251,7 @@ There are several action types available:
 * [AudioAction](#audioaction)
 * [VisualAction](#visualaction)
 * [ProcessingAction](#processingaction)
+* [QuickReplyAction](#quickreplyaction)
 * [CustomAction](#customaction)
 
 There are also containers that can be used to nest actions:
@@ -254,19 +262,67 @@ There are also containers that can be used to nest actions:
 
 #### SpeechAction
 
-The SpeechAction can be used to display text and synthesize text.
+The SpeechAction can be used to display text and synthesize text. The SpeechAction has the following interface:
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `SPEECH` | yes
+`ssml` | the SSML string | string | no
+`plain` | the plain speech string | string | no
+`displayText` | the text that will only be displayed on the screen | string | no
 
 #### AudioAction
 
 The AudioAction can be used to play an audio file.
 
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `AUDIO` | yes
+`tracks[]` | an array containing the audio tracks | object[] | yes
+`tracks[].src` | the url where the audio file is stored | string | yes
+`tracks[].id` | the id of the audio track | string | no
+`tracks[].offsetInMs` | the timestamp from which the playback will begin specified in milliseconds. Omitting the value or setting it to `0` will start the playback from the beginning | number | no
+`tracks[].durationInMs` | the duration of the playback in milliseconds. If the value is smaller than the audio tracks actual duration, the playback will be stopped at the specified time | number | no
+`tracks[].metaData` | an object containing the audio track's metadata | object | no
+`tracks[].metaData.title` | the title of the track | string | no
+`tracks[].metaData.description` | the description of the track | string | no
+`tracks[].metaData.coverImageUrl` | the url to the cover image | string | no
+`tracks[].metaData.backgroundImageUrl` | the url to the background image | string | no
+
 #### VisualAction
 
 The VisualAction can be used for visual output like cards.
 
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `VISUAL` | yes
+`visualType` | the type of visual output | `BASIC_CARD` or `IMAGE_CARD` | yes
+`title` | the title of the card. Optional if `visualType` is `IMAGE_CARD` | string | yes
+`body` | the body of the card. Optional if `visualType` is `IMAGE_CARD` | string | yes
+`imageUrl` | the url to the image you want to display. Can only be used if `visualType` is `IMAGE_CARD` and is in that case a required parameter | no
+
 #### ProcessingAction
 
 The ProcessingAction can be used to display processing information.
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `PROCESSING` | yes
+`processingType` | the type of the processing action | `HIDDEN`, `TYPING`, or `SPINNER` | yes
+`durationInMs` | the duration of the action in milliseconds | number | no
+`text` | the text that should be displayed | string | no
+
+#### QuickReplyAction
+
+The QuickReplyAction can be used to provide the user with suggested replies.
+
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `QUICK_REPLY` | yes
+`replies[]` | an array containing the quick replies | object[] | yes
+`replies[].id` | the id of the quick reply | string | no
+`replies[].label` | the label of the quick reply | string | no
+`replies[].value` | the value of the quick reply | string | yes
 
 #### CustomAction
 
@@ -276,10 +332,19 @@ The CustomAction can be used to send a custom payload that can be handled by the
 
 The SequenceContainer can be used to nest actions. All actions inside this container will be processed after another.
 
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `SEQ_CONTAINER` | yes
+`actions[]` | the array of actions inside the container | yes
+
 #### ParallelContainerAction
 
 The ParallelContainer can be used to nest actions. All actions inside this container will be processed simultaneously.
 
+Name | Description | Value | Required
+:--- | :--- | :--- | :---
+`type` | the type of the action | `PAR_CONTAINER` | yes
+`actions[]` | the array of actions inside the container | yes
 
 ### Using the ActionBuilder
 
@@ -304,14 +369,12 @@ this.$webApp?.$actions.addSpeech({
 });
 ```
 
-### Showing Quick Replies
+The `ActionBuilder` has the following helper functions:
 
-```javascript
-// @language=javascript
-
-this.$webApp.showQuickReplies(['quickReply1', 'quickReply2']);
-
-// @language=typescript
-
-this.$webApp?.showQuickReplies(['quickReply1', 'quickReply2']);
-```
+Name | Description | Return Type
+:--- | :--- | :---
+`addSpeech(data: SpeechAction | string)` | adds a SpeechAction to the `actions` array. If `data` is only a string, it will be added as the `plain` property to a new SpeechAction | `ActionBuilder`
+`addAudio(data: AudioAction)` | adds an AudioAction to the `actions` array | `ActionBuilder`
+`addProcessingInformation(data: ProcessingAction)` | adds a ProcessingAction to the `actions` array | `ActionBuilder`
+`addQuickReplies(data: Array<QuickReply | string>)` | adds a QuickReplyAction to the `actions` array. The `data` parameter can either be an array of QuickReplies (same interface as the `replies` array in the QuickReplyAction) or an array of strings | `ActionBuilder`
+`addContainer(actions: Action[], type: 'SEQ_CONTAINER' | PAR_CONTAINER')` | adds a ContainerAction of the parsed type including the parsed actions to the `actions` array | `ActionBuilder`
