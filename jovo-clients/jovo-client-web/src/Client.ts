@@ -71,7 +71,7 @@ export class Client extends EventEmitter {
     return {
       version: '3.1.5',
       appId: '',
-      platform: 'PLACEHOLDER', // TODO: replace placeholder with empty value as soon as new core/web-platform was published
+      platform: '',
       device: {
         id: '',
         type: DeviceType.Browser,
