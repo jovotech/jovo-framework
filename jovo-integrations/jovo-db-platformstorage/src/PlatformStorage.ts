@@ -45,7 +45,7 @@ export class PlatformStorage implements Db {
     }
 
     // tslint:disable-next-line:no-any
-    (jovo.$response as any).user =  {...data};
+    (jovo.$response as any).user = { ...data };
     return;
   }
 
