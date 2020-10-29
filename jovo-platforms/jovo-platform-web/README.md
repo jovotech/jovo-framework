@@ -373,8 +373,8 @@ The `ActionBuilder` has the following helper functions:
 
 Name | Description | Return Type
 :--- | :--- | :---
-`addSpeech(data: SpeechAction | string)` | adds a SpeechAction to the `actions` array. If `data` is only a string, it will be added as the `plain` property to a new SpeechAction | `ActionBuilder`
+`addSpeech(data: SpeechAction \| string)` | adds a SpeechAction to the `actions` array. If `data` is only a string, it will be added as the `plain` property to a new SpeechAction | `ActionBuilder`
 `addAudio(data: AudioAction)` | adds an AudioAction to the `actions` array | `ActionBuilder`
 `addProcessingInformation(data: ProcessingAction)` | adds a ProcessingAction to the `actions` array | `ActionBuilder`
-`addQuickReplies(data: Array<QuickReply | string>)` | adds a QuickReplyAction to the `actions` array. The `data` parameter can either be an array of QuickReplies (same interface as the `replies` array in the QuickReplyAction) or an array of strings | `ActionBuilder`
-`addContainer(actions: Action[], type: 'SEQ_CONTAINER' | PAR_CONTAINER')` | adds a ContainerAction of the parsed type including the parsed actions to the `actions` array | `ActionBuilder`
+`addQuickReplies(data: Array<QuickReply \| string>)` | adds a QuickReplyAction to the `actions` array. The `data` parameter can either be an array of QuickReplies (same interface as the `replies` array in the QuickReplyAction) or an array of strings | `ActionBuilder`
+`addContainer(actions: Action[], type: 'SEQ_CONTAINER' \| PAR_CONTAINER')` | adds a ContainerAction of the parsed type including the parsed actions to the `actions` array | `ActionBuilder`
