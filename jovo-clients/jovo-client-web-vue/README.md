@@ -21,7 +21,7 @@ Build voice and conversational experiences for the web with Vue.js and Jovo. You
 
 The "Jovo for Web" client can be used on websites and web apps built with Vue.js. It comes with helpful features that make it easier to capture speech input, detect when a user stops speaking, and display information that is returned from the Jovo app. The client is open source and fully customizable.
 
-You can check out one of these starter templates to get a first impression how it looks like:
+You can check out one of these starter templates to get a first impression of how it looks like:
 * [Standalone Voice Experience](https://github.com/jovotech/jovo-starter-web-standalone)
 * [Voice Overlay](https://github.com/jovotech/jovo-starter-web-overlay)
 * [Chat Widget](https://github.com/jovotech/jovo-starter-web-chatwidget)
@@ -63,7 +63,7 @@ this.$client.createRequest({ type: RequestType.Text, body: { 'Hello World' } }).
 
 ## Recording Voice Input
 
-To record the user's voice input and automatically send it to the Jovo app, you can use the `startInputRecording()` and `stopInputRecording()` methods. Here's a sample implementation of a microphone button that will record the audio as long as button is pushed down and send the audio as soon as it's released:
+To record the user's voice input and automatically send it to the Jovo app, you can use the `startInputRecording()` and `stopInputRecording()` methods. Here's a sample implementation of a microphone button that will record the audio as long as the button is pushed down and send the audio as soon as it's released:
 
 ```html
 <button
