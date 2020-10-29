@@ -1,6 +1,6 @@
 # Jovo Framework
 
-> [**NEWS: We just launched "Jovo for Web" with 4 starter templates**](https://www.jovo.tech/news/2020-19-29-jovo-vor-web-v3-2/)
+> [**NEWS: We just launched "Jovo for Web" with 4 starter templates**](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2/)
 
 [![Jovo Framework](./docs/img/jovo-header.jpg)](https://www.jovo.tech)
 
