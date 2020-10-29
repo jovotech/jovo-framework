@@ -1,6 +1,6 @@
 {
   "name": "jovo-client-web",
-  "version": "3.1.5-alpha.2",
+  "version": "3.2.0",
   "description": " ",
   "main": "dist/index.common.js",
   "browser": "dist/index.umd.js",
@@ -19,7 +19,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-platform-web": "^3.1.5",
+    "jovo-platform-web": "^3.2.0",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
@@ -34,8 +34,8 @@
     "@types/lodash.set": "^4.3.6",
     "@types/markdown-it": "^0.0.8",
     "@types/uuid": "^3.4.4",
-    "jest": "^25.1.0",
     "html-webpack-plugin": "^4.5.0",
+    "jest": "^25.1.0",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",
