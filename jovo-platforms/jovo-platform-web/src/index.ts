@@ -1,5 +1,4 @@
-import { Config } from 'jovo-core';
-import { Action } from 'jovo-platform-core';
+import { Action, Config } from 'jovo-platform-core';
 import { WebApp } from './core/WebApp';
 
 export * from 'jovo-platform-core';

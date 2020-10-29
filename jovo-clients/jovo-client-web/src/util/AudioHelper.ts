@@ -1,10 +1,24 @@
+import { AudioRecorderResult, Base64Converter, RequestBody } from '..';
+
 export class AudioHelper {
+  static getRequestBodyFromAudioRecorderResult({
+    data,
+    sampleRate,
+  }: AudioRecorderResult): RequestBody {
+    return {
+      audio: {
+        b64string: Base64Converter.arrayBufferToBase64(data.buffer),
+        sampleRate,
+      },
+    };
+  }
+
   static textFromSpeechRecognition(event: SpeechRecognitionEvent): string {
     let text = '';
     for (let i = 0, len = event.results.length; i < len; i++) {
-      text += event.results[i][0].transcript;
+      text = event.results[i][0].transcript;
     }
-    return text;
+    return event.results[event.results.length - 1]?.[0]?.transcript || '';
   }
 
   static mergeChunks(chunks: Float32Array[], chunkLength: number): Float32Array {
