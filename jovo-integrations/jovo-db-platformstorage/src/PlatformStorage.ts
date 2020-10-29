@@ -45,17 +45,7 @@ export class PlatformStorage implements Db {
     }
 
     // tslint:disable-next-line:no-any
-    const request = jovo.$request as any;
-    const userData =
-      request.context && request.context.user
-        ? { data: {}, ...request.context.user }
-        : { data: {} };
-    Object.assign(userData, data);
-
-    // tslint:disable-next-line:no-any
-    (jovo.$response as any).user = {
-      data: userData,
-    };
+    (jovo.$response as any).user =  {...data};
     return;
   }
 

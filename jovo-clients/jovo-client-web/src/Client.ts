@@ -307,7 +307,6 @@ export class Client extends EventEmitter {
         user: this.$store.userData,
       },
     };
-
     req.send = async (config?: RequestInit) => {
       this.emit(ClientEvent.Request, req);
       config = _defaultsDeep(config || {}, {
@@ -346,7 +345,7 @@ export class Client extends EventEmitter {
       this.$store.sessionData.new = false;
       this.$store.sessionData.data = res.session.data;
     }
-    if (res.user) {
+    if (res.user?.data) {
       this.$store.userData.data = res.user.data;
     }
     this.$store.save();
