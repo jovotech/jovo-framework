@@ -1,6 +1,27 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.1.4
+### Latest Framework Version: 3.2.0
+
+
+## 2020-10-29
+
+## 3.2 Jovo for Web [Announcement](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2) 
+
+
+
+## 2020-10-23
+
+### :sparkles: New Features
+
+##### `jovo-platform-dialogflow [3.1.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow) 
+- [#838](https://github.com/jovotech/jovo-framework/pull/838) Genesys integration ([@dominik-meissner](https://github.com/StepanU), [@dominik-meissner](https://github.com/dominik-meissner))
+
+### :nail_care: Enhancements
+
+##### `jovo-dialogflow-web [3.1.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web) | [npm](https://www.npmjs.com/package/jovo-platform-web) 
+- [#839](https://github.com/jovotech/jovo-framework/pull/839) Add re-export to jovo-platform-web ([@m-ripper](https://github.com/m-ripper))
+
+
 
 ## 2020-10-16
 
