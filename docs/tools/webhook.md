@@ -20,7 +20,7 @@ https://webhook.jovo.cloud/[your-id]
 ```
 
 
-You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](../workflows/cli/deploy '../cli/deploy') command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](https://www.jovo.tech/marketplace/jovo-cli/deploy) command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
 
 ## Getting Started
 
