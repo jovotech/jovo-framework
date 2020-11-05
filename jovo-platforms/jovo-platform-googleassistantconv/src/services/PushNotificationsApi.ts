@@ -52,7 +52,7 @@ export class PushNotificationsApi {
       target: {
         intent: notification.intent,
         userId: notification.userId,
-        locale: notification.locale || 'en'
+        locale: notification.locale || 'en',
       },
       userNotification: {
         title: notification.title,
