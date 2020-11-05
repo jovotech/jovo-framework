@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-dialogflow-platforms",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -20,7 +20,7 @@
     "jovo-framework": "^3.2.0",
     "jovo-platform-alexa": "^3.2.0",
     "jovo-platform-dialogflow": "^3.2.0",
-    "jovo-platform-googleassistant": "^3.2.0",
+    "jovo-platform-googleassistant": "^3.2.1",
     "jovo-plugin-debugger": "^3.2.0"
   }
 }
