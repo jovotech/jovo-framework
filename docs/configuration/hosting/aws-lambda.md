@@ -4,6 +4,7 @@
 
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
+- [Introduction](#introduction)
 - [Lambda Configuration](#lambda-configuration)
 - [Deployment](#deployment)
   - [Creating a Lambda Function](#creating-a-lambda-function)
@@ -19,7 +20,7 @@
 
 ![AWS Lambda Stack](../../img/jovo-aws-lambda.png)
 
-- [API Gateway](https://aws.amazon.com/api-gateway/): Let's you create an API to proxy requests to your Lambda function. Learn more about the setup [here](#api-gateway).
+- [API Gateway](https://aws.amazon.com/api-gateway/): Lets you create an API to proxy requests to your Lambda function. Learn more about the setup [here](#api-gateway).
 - [CloudWatch](https://aws.amazon.com/cloudwatch/): Collects monitoring data in the form of logs and metrics.
 - [DynamoDb](https://aws.amazon.com/dynamodb/): Database integration, allowing you to store user data in a NoSQL environment. Learn more about DynamoDb [here](https://www.jovo.tech/marketplace/jovo-db-dynamodb).
 - [S3](https://aws.amazon.com/s3/): Storage service, allowing you to store any amount of data in buckets.
