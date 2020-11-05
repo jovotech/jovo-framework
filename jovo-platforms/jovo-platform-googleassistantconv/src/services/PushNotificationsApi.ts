@@ -4,6 +4,7 @@ export interface Notification {
   title: string;
   userId: string;
   intent: string;
+  locale?: string;
 }
 
 export interface NotificationFull {
@@ -13,6 +14,7 @@ export interface NotificationFull {
   target: {
     userId: string;
     intent: string;
+    locale: string;
   };
 }
 
@@ -22,7 +24,7 @@ export interface Config {
 
 export class PushNotificationsApi {
   config: Config = {
-    isInSandbox: false,
+    isInSandbox: true,
   };
 
   // tslint:disable-next-line:no-any
@@ -50,6 +52,7 @@ export class PushNotificationsApi {
       target: {
         intent: notification.intent,
         userId: notification.userId,
+        locale: notification.locale || 'en',
       },
       userNotification: {
         title: notification.title,
