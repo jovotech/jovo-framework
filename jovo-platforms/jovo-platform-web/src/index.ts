@@ -1,6 +1,7 @@
 import { Action, Config } from 'jovo-platform-core';
 import { WebApp } from './core/WebApp';
 
+export * from './Interfaces';
 export * from 'jovo-platform-core';
 export * from './WebPlatform';
 
