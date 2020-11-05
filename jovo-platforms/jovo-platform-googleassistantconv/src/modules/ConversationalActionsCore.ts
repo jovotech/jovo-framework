@@ -99,7 +99,7 @@ export class ConversationalActionsCore implements Plugin {
 
     const hasNotificationSlot = (intent: Intent) => {
       for (const [key, value] of Object.entries(intent.params)) {
-        if (key.startsWith('NotificationSlot_')) {
+        if (key.startsWith('NotificationsSlot_')) {
           return (
             (value.resolved as PermissionResult)['@type'] ===
             'type.googleapis.com/google.actions.conversation.v3.PermissionValue'
@@ -305,6 +305,14 @@ export class ConversationalActionsCore implements Plugin {
         'prompt.firstSimple.speech',
         GoogleActionSpeechBuilder.toSSML(tell.speech as string),
       );
+
+      if (tell.speechText) {
+        _set(
+          googleAction.$response as ConversationalActionResponse,
+          'prompt.firstSimple.text',
+          tell.speechText,
+        );
+      }
       _set(
         googleAction.$response as ConversationalActionResponse,
         'scene.next.name',
@@ -320,6 +328,14 @@ export class ConversationalActionsCore implements Plugin {
         'prompt.firstSimple.speech',
         GoogleActionSpeechBuilder.toSSML(ask.speech as string),
       );
+
+      if (ask.speechText) {
+        _set(
+          googleAction.$response as ConversationalActionResponse,
+          'prompt.firstSimple.text',
+          ask.speechText,
+        );
+      }
 
       if (!googleAction.$conversationalSession.reprompts) {
         let input1, input2, final;
@@ -439,6 +455,14 @@ export class ConversationalActionsCore implements Plugin {
         googleAction.$response as ConversationalActionResponse,
         'prompt',
         output.GoogleAssistant.prompt,
+      );
+    }
+
+    if (output.GoogleAssistant?.askPrompt) {
+      _set(
+        googleAction.$response as ConversationalActionResponse,
+        'prompt',
+        output.GoogleAssistant.askPrompt.prompt,
       );
     }
 

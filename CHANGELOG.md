@@ -1,6 +1,61 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.1.0
+### Latest Framework Version: 3.2.0
+
+
+## 2020-10-29
+
+## 3.2 Jovo for Web [Announcement](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2) 
+
+
+
+## 2020-10-23
+
+### :sparkles: New Features
+
+##### `jovo-platform-dialogflow [3.1.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow) 
+- [#838](https://github.com/jovotech/jovo-framework/pull/838) Genesys integration ([@dominik-meissner](https://github.com/StepanU), [@dominik-meissner](https://github.com/dominik-meissner))
+
+### :nail_care: Enhancements
+
+##### `jovo-dialogflow-web [3.1.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web) | [npm](https://www.npmjs.com/package/jovo-platform-web) 
+- [#839](https://github.com/jovotech/jovo-framework/pull/839) Add re-export to jovo-platform-web ([@m-ripper](https://github.com/m-ripper))
+
+
+
+## 2020-10-16
+
+### :sparkles: New Features
+
+##### `jovo-analytics-onedash [3.1.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-onedash) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-analytics-onedash) | [npm](https://www.npmjs.com/package/jovo-analytics-onedash) 
+- [#826](https://github.com/jovotech/jovo-framework/pull/826) OneDash analytics ([@StepanU](https://github.com/StepanU), [@m-ripper](https://github.com/m-ripper))
+
+
+### :nail_care: Enhancements
+
+##### `jovo-framework [3.1.4]` 
+- [#835](https://github.com/jovotech/jovo-framework/pull/835) ✨ Implement configurable user-session-data-key ([@m-ripper](https://github.com/m-ripper))
+
+### :bug: Bug Fixes
+
+##### `jovo-core [3.1.4]`
+- Fix escaping ampersand in urls in SpeechBuilder  (Fixes #823 and #816)
+
+
+## 2020-10-08
+
+### :nail_care: Enhancements
+
+##### `jovo-platform-googleassistantconv [3.1.3]` 
+- [#831](https://github.com/jovotech/jovo-framework/pull/831) :recycle: Enhance Google AssisConversational Actions ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2020-10-02
+
+### :sparkles: New Features
+
+##### `jovo-platform-googleassistantconv [3.1.2-alpha.0]` 
+- [#829](https://github.com/jovotech/jovo-framework/pull/829) :sparkles: Work In Progress: Google Assistant Conversational Actions ([@aswetlow](https://github.com/aswetlow))
 
 ## 2020-09-29
 

@@ -4,7 +4,10 @@ import {
   AudioActionData,
   ProcessingActionData,
   QuickReply,
+  SpeechAction,
   SpeechActionData,
+  TextAction,
+  TextActionData,
 } from './Interfaces';
 
 export class ActionBuilder {
@@ -24,8 +27,20 @@ export class ActionBuilder {
     return this;
   }
 
+  addText(data: TextActionData | string): ActionBuilder {
+    const action: TextAction =
+      typeof data === 'string'
+        ? {
+            text: data,
+            type: ActionType.Text,
+          }
+        : { type: ActionType.Text, text: data.text, ...data };
+    this.actions.push(action);
+    return this;
+  }
+
   addSpeech(data: SpeechActionData | string): ActionBuilder {
-    const action =
+    const action: SpeechAction =
       typeof data === 'string'
         ? { type: ActionType.Speech, plain: data }
         : { type: ActionType.Speech, ...data };

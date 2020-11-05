@@ -190,6 +190,12 @@ test('test escapeXML', () => {
   expect(SpeechBuilder.escapeXml('')).toBe('');
 });
 
+test('test replace ampersand ', () => {
+  expect(SpeechBuilder.toSSML('Jack & jane <audio src="foo&bar"/>')).toBe(
+    '<speak>Jack and jane <audio src="foo&bar"/></speak>',
+  );
+});
+
 test('test build()', () => {
   const speechBuilder = new SpeechBuilder();
   expect(speechBuilder.build()).toBe('');

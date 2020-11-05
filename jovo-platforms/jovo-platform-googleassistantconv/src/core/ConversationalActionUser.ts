@@ -65,4 +65,13 @@ export class ConversationalActionUser extends User {
       throw e;
     }
   }
+  isAccountLinked() {
+    const request = this.conversationalAction.$request! as ConversationalActionRequest;
+    return request.user?.accountLinkingStatus === 'LINKED';
+  }
+
+  isVerified() {
+    const request = this.conversationalAction.$request! as ConversationalActionRequest;
+    return request.user?.verificationStatus === 'VERIFIED';
+  }
 }

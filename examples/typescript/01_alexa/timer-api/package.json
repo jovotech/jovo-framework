@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-timer-api",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,10 +17,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^3.1.0",
-    "jovo-framework": "^3.1.0",
-    "jovo-platform-alexa": "^3.1.0",
-    "jovo-plugin-debugger": "^3.1.0"
+    "jovo-db-filedb": "^3.2.0",
+    "jovo-framework": "^3.2.0",
+    "jovo-platform-alexa": "^3.2.0",
+    "jovo-plugin-debugger": "^3.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

@@ -1,6 +1,11 @@
-import { EnumRequestType, HandleRequest, Plugin, SpeechBuilder } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
+import {
+  AskOutput,
+  EnumRequestType,
+  HandleRequest,
+  Plugin,
+  SpeechBuilder,
+  TellOutput,
+} from 'jovo-core';
 import {
   Action,
   ActionType,
@@ -10,8 +15,11 @@ import {
   CorePlatformUser,
   RequestType,
   SpeechAction,
+  TextAction,
 } from '..';
 import { CorePlatform } from '../CorePlatform';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export class CorePlatformCore implements Plugin {
   // Bind before and set as variable in order to be able to properly remove the fns
@@ -114,37 +122,47 @@ export class CorePlatformCore implements Plugin {
       coreResponse.context.request.nlu!.inputs = corePlatformApp.$nlu.inputs;
     }
 
+    const platformType = this.getPlatformType();
+    const defaultOutputAction =
+      corePlatformApp.$config.plugin?.[platformType]?.defaultOutputAction || ActionType.Speech;
+
+    const actionFromSpeech: (tellOrAsk: TellOutput | AskOutput) => TextAction | SpeechAction = (
+      tellOrAsk: TellOutput | AskOutput,
+    ) => {
+      return defaultOutputAction === ActionType.Speech
+        ? {
+            displayText: tellOrAsk.speechText,
+            plain: SpeechBuilder.removeSSML(tellOrAsk.speech.toString()),
+            ssml: SpeechBuilder.toSSML(tellOrAsk.speech.toString()),
+            type: ActionType.Speech,
+          }
+        : {
+            text: tellOrAsk.speechText || tellOrAsk.speech.toString(),
+            type: ActionType.Text,
+          };
+    };
+
     const { tell, ask } = output;
 
     if (tell) {
-      const tellAction: SpeechAction = {
-        displayText: tell.speechText,
-        plain: SpeechBuilder.removeSSML(tell.speech.toString()),
-        ssml: tell.speech.toString(),
-        type: ActionType.Speech,
-      };
-      coreResponse.actions.push(tellAction);
+      coreResponse.actions.push(actionFromSpeech(tell));
       coreResponse.session.end = true;
     }
 
     if (ask) {
-      const tellAction: SpeechAction = {
-        displayText: ask.speechText,
-        plain: SpeechBuilder.removeSSML(ask.speech.toString()),
-        ssml: ask.speech.toString(),
-        type: ActionType.Speech,
-      };
-      const repromptAction: Action = {
-        displayText: ask.repromptText,
-        plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
-        ssml: ask.reprompt.toString(),
-        type: ActionType.Speech,
-      };
-      coreResponse.actions.push(tellAction);
-      coreResponse.reprompts.push(repromptAction);
+      coreResponse.actions.push(actionFromSpeech(ask));
+
+      if (defaultOutputAction === ActionType.Speech) {
+        const repromptAction: Action = {
+          displayText: ask.repromptText,
+          plain: SpeechBuilder.removeSSML(ask.reprompt.toString()),
+          ssml: SpeechBuilder.toSSML(ask.reprompt.toString()),
+          type: ActionType.Speech,
+        };
+        coreResponse.reprompts.push(repromptAction);
+      }
     }
 
-    const platformType = this.getPlatformType();
     const actions = output[platformType]?.Actions;
     if (actions?.length) {
       coreResponse.actions.push(...actions);
@@ -167,6 +185,6 @@ export class CorePlatformCore implements Plugin {
   }
 
   protected isCoreRequest(request: any): boolean {
-    return request.version && request.type && request.request && request.context?.platform;
+    return request.version && request.type && request.request?.type;
   }
 }
