@@ -19,6 +19,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "detect-browser": "^5.2.0",
     "jovo-platform-web": "^3.2.2",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.get": "^4.4.2",

@@ -67,6 +67,22 @@ export interface Config {
 }
 
 export class Client extends EventEmitter {
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isPlayingAudio(): boolean {
+    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
+  }
+
+  get isRecordingInput(): boolean {
+    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
+  }
+
+  get isUsingSpeechRecognition(): boolean {
+    return this.useSpeechRecognition;
+  }
+
   static getDefaultConfig(): Config {
     return {
       version: '3.2.1',
@@ -90,19 +106,15 @@ export class Client extends EventEmitter {
       store: Store.getDefaultConfig(),
     };
   }
-
   readonly $audioPlayer: AudioPlayer;
   readonly $audioRecorder: AudioRecorder;
   readonly $speechRecognizer: SpeechRecognizer;
   readonly $speechSynthesizer: SpeechSynthesizer;
   readonly $store: Store;
-
   readonly config: Config;
-
   readonly $actionHandler: ActionHandler;
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
-
   private useSpeechRecognition = true;
   private isInputProcessOngoing = false;
   private initialized = false;
@@ -173,22 +185,6 @@ export class Client extends EventEmitter {
     });
   }
 
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
-  get isPlayingAudio(): boolean {
-    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
-  }
-
-  get isRecordingInput(): boolean {
-    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
-  }
-
-  get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition;
-  }
-
   addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
   addListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
   addListener(event: ClientEvent.Action, listener: ClientActionListener): this;
@@ -248,7 +244,11 @@ export class Client extends EventEmitter {
       return;
     }
     this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
-    if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
+    if (
+      useSpeechRecognizerIfAvailable &&
+      SpeechRecognizer.isSupported() &&
+      this.$speechRecognizer.isAvailable
+    ) {
       this.$speechRecognizer.on(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
