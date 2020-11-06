@@ -36,7 +36,6 @@ export class Store {
       sessionExpirationInSeconds: 1800,
     };
   }
-
   readonly config: StoreConfig;
   data: Data = {};
   sessionData!: SessionData;

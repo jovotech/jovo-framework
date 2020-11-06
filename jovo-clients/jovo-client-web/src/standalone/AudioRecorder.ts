@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { DeepPartial, OSHelper, VoidListener } from '..';
+import { DeepPartial, OSDetector, VoidListener } from '..';
 
 interface AudioRecorderNodes {
   inputStream?: MediaStreamAudioSourceNode;
@@ -62,6 +62,30 @@ export interface AudioRecorderConfig {
 }
 
 export class AudioRecorder extends EventEmitter {
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isRecording(): boolean {
+    return this.recording;
+  }
+
+  get startDetectionEnabled(): boolean {
+    return !!(
+      this.config.startDetection.enabled &&
+      this.config.startDetection.threshold &&
+      this.config.startDetection.timeoutInMs
+    );
+  }
+
+  get silenceDetectionEnabled(): boolean {
+    return !!(
+      this.config.silenceDetection.enabled &&
+      this.config.silenceDetection.threshold &&
+      this.config.silenceDetection.timeoutInMs
+    );
+  }
+
   static getDefaultConfig(): AudioRecorderConfig {
     return {
       sampleRate: 16000,
@@ -89,19 +113,14 @@ export class AudioRecorder extends EventEmitter {
       },
     };
   }
-
   readonly config: AudioRecorderConfig;
-
   private readonly audioNodes: AudioRecorderNodes;
   private audioCtx: AudioContext | null;
   private audioStream: MediaStream | null;
-
   private initialized = false;
-
   private recording = false;
   private recordingStartedAt?: Date;
   private startThresholdPassed = false;
-
   private chunks: Float32Array[] = [];
   private chunkLength = 0;
 
@@ -115,30 +134,6 @@ export class AudioRecorder extends EventEmitter {
     this.audioNodes = {};
     this.audioCtx = null;
     this.audioStream = null;
-  }
-
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
-  get isRecording(): boolean {
-    return this.recording;
-  }
-
-  get startDetectionEnabled(): boolean {
-    return !!(
-      this.config.startDetection.enabled &&
-      this.config.startDetection.threshold &&
-      this.config.startDetection.timeoutInMs
-    );
-  }
-
-  get silenceDetectionEnabled(): boolean {
-    return !!(
-      this.config.silenceDetection.enabled &&
-      this.config.silenceDetection.threshold &&
-      this.config.silenceDetection.timeoutInMs
-    );
   }
 
   addListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
@@ -219,7 +214,7 @@ export class AudioRecorder extends EventEmitter {
     }
     this.checkForBrowserCompatibility();
 
-    if (OSHelper.isWindows) {
+    if (OSDetector.isWindows()) {
       if (!this.audioStream) {
         this.audioStream = await navigator.mediaDevices.getUserMedia({
           audio: this.config.audioConstraints,
@@ -307,7 +302,7 @@ export class AudioRecorder extends EventEmitter {
     this.audioNodes.inputGain?.disconnect();
     this.audioNodes.inputStream?.disconnect();
 
-    if (this.audioStream && !OSHelper.isWindows) {
+    if (this.audioStream && !OSDetector.isWindows) {
       this.audioStream.getTracks().forEach((track) => {
         track.stop();
       });

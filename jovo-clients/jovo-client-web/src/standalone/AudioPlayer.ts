@@ -23,26 +23,6 @@ export interface AudioPlayerConfig {
 }
 
 export class AudioPlayer extends EventEmitter {
-  static getDefaultConfig(): AudioPlayerConfig {
-    return {
-      enabled: true,
-    };
-  }
-
-  readonly config: AudioPlayerConfig;
-
-  private $volume = 1.0;
-  private audio: HTMLAudioElement | null = null;
-  private isAudioPlaying: boolean = false;
-  private initialized = false;
-
-  constructor(config?: DeepPartial<AudioPlayerConfig>) {
-    super();
-
-    const defaultConfig = AudioPlayer.getDefaultConfig();
-    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
-  }
-
   get isInitialized(): boolean {
     return this.initialized;
   }
@@ -72,6 +52,24 @@ export class AudioPlayer extends EventEmitter {
 
   get canStop(): boolean {
     return !!this.audio && !this.audio.ended;
+  }
+
+  static getDefaultConfig(): AudioPlayerConfig {
+    return {
+      enabled: true,
+    };
+  }
+  readonly config: AudioPlayerConfig;
+  private $volume = 1.0;
+  private audio: HTMLAudioElement | null = null;
+  private isAudioPlaying: boolean = false;
+  private initialized = false;
+
+  constructor(config?: DeepPartial<AudioPlayerConfig>) {
+    super();
+
+    const defaultConfig = AudioPlayer.getDefaultConfig();
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
   }
 
   addListener(event: AudioPlayerVoidEvents, listener: VoidListener): this;
