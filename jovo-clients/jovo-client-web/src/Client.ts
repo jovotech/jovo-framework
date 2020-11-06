@@ -106,6 +106,7 @@ export class Client extends EventEmitter {
       store: Store.getDefaultConfig(),
     };
   }
+
   readonly $audioPlayer: AudioPlayer;
   readonly $audioRecorder: AudioRecorder;
   readonly $speechRecognizer: SpeechRecognizer;
@@ -244,11 +245,7 @@ export class Client extends EventEmitter {
       return;
     }
     this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
-    if (
-      useSpeechRecognizerIfAvailable &&
-      SpeechRecognizer.isSupported() &&
-      this.$speechRecognizer.isAvailable
-    ) {
+    if (useSpeechRecognizerIfAvailable && this.$speechRecognizer.isAvailable) {
       this.$speechRecognizer.on(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
       this.$speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);

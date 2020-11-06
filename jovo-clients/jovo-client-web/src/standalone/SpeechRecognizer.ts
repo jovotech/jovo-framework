@@ -92,6 +92,7 @@ export class SpeechRecognizer extends EventEmitter {
       },
     };
   }
+
   readonly config: SpeechRecognizerConfig;
   private readonly recognition: SpeechRecognition | null = null;
   private recording = false;
@@ -106,7 +107,7 @@ export class SpeechRecognizer extends EventEmitter {
     const defaultConfig = SpeechRecognizer.getDefaultConfig();
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
-    if (window.SpeechRecognition) {
+    if (SpeechRecognizer.isSupported()) {
       this.recognition = new window.SpeechRecognition();
       this.setupSpeechRecognition(this.recognition);
     }
@@ -171,7 +172,7 @@ export class SpeechRecognizer extends EventEmitter {
   }
 
   start() {
-    if (this.recording || !this.isAvailable || !SpeechRecognizer.isSupported()) {
+    if (this.recording || !this.isAvailable) {
       return;
     }
     this.lastRecognitionEvent = null;
@@ -181,7 +182,7 @@ export class SpeechRecognizer extends EventEmitter {
   }
 
   stop() {
-    if (!this.recording || !this.isAvailable || !SpeechRecognizer.isSupported()) {
+    if (!this.recording || !this.isAvailable) {
       return;
     }
     this.emit(SpeechRecognizerEvent.Stop);
@@ -189,7 +190,7 @@ export class SpeechRecognizer extends EventEmitter {
   }
 
   abort() {
-    if (!this.recording || !this.isAvailable || !SpeechRecognizer.isSupported()) {
+    if (!this.recording || !this.isAvailable) {
       return;
     }
     this.emit(SpeechRecognizerEvent.Abort);
