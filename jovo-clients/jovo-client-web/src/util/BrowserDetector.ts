@@ -12,7 +12,7 @@ export interface CustomBrowserInfo {
 export class BrowserDetector {
   static detect(): CustomBrowserInfo | null {
     if (!this.detectedData) {
-      const detectedData = detect() as BrowserInfo | null;
+      const detectedData = detect() as CustomBrowserInfo | null;
 
       if (detectedData?.name === 'chrome' && (navigator as any).brave) {
         (detectedData as any).name = 'brave';
@@ -30,5 +30,5 @@ export class BrowserDetector {
     }
     return detectedData.name === 'chrome';
   }
-  private static detectedData: BrowserInfo | null = null;
+  private static detectedData: CustomBrowserInfo | null = null;
 }
