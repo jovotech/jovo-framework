@@ -220,7 +220,7 @@ export class GoogleAction extends Jovo {
    * @return {string}
    */
   getType() {
-    return 'ConversationalAction';
+    return 'GoogleAction';
   }
 
   /**

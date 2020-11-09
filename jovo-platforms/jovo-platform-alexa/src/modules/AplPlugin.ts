@@ -182,96 +182,28 @@ export class AplPlugin implements Plugin {
   output(alexaSkill: AlexaSkill) {
     const output = alexaSkill.$output;
     const response = alexaSkill.$response as AlexaResponse;
+    const request = alexaSkill.$request! as AlexaRequest;
+    const apl = _get(output, 'Alexa.Apl');
 
-    if ((alexaSkill.$request! as AlexaRequest).hasAPLInterface()) {
-      if (_get(output, 'Alexa.Apl')) {
-        let directives = _get(response, 'response.directives', []);
+    if (apl) {
+      let directives = _get(response, 'response.directives', []);
 
-        if (Array.isArray(_get(output, 'Alexa.Apl'))) {
-          directives = directives.concat(_get(output, 'Alexa.Apl'));
-        } else {
-          directives.push(_get(output, 'Alexa.Apl'));
+      if (Array.isArray(apl)) {
+        apl.forEach((directive: any) => {
+          if (request.hasAPLInterface() || isAplA(directive)) {
+            directives.push(directive);
+          }
+        });
+      } else {
+        if (request.hasAPLInterface() || isAplA(apl)) {
+          directives.push(apl);
         }
-        _set(response, 'response.directives', directives);
       }
+      _set(response, 'response.directives', directives);
     }
   }
 }
 
-abstract class DisplayDirective {
-  type: string;
-
-  constructor(type: string) {
-    this.type = type;
-  }
-}
-
-class DisplayRenderTemplateDirective extends DisplayDirective {
-  template?: Template;
-  constructor(template?: Template) {
-    super('Display.RenderTemplate');
-    this.template = template;
-  }
-
-  setTemplate(template: Template) {
-    this.template = template;
-    return this;
-  }
-}
-
-class DisplayHintDirective extends DisplayDirective {
-  hint?: {
-    type: string;
-    text: string;
-  };
-
-  constructor(text?: string) {
-    super('Hint');
-    if (text) {
-      this.setHint(text);
-    }
-  }
-
-  setHint(text: string) {
-    this.hint = {
-      type: 'PlainText',
-      text,
-    };
-    return this;
-  }
-}
-
-interface VideoItem {
-  source: string;
-  metadata?: {
-    title?: string;
-    subtitle?: string;
-  };
-}
-
-class VideoAppLaunchDirective extends DisplayDirective {
-  videoItem?: VideoItem;
-  constructor() {
-    super('VideoApp.Launch');
-  }
-
-  setVideoItem(videoItem: VideoItem) {
-    this.videoItem = videoItem;
-  }
-
-  setData(url: string, title?: string, subtitle?: string) {
-    this.videoItem = {
-      source: url,
-    };
-    if (title) {
-      this.videoItem.metadata = {
-        title,
-      };
-
-      if (subtitle) {
-        this.videoItem.metadata.subtitle = subtitle;
-      }
-    }
-    return this;
-  }
+function isAplA(directive: any) {
+  return directive.type.startsWith('Alexa.Presentation.APLA');
 }
