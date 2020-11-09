@@ -114,6 +114,11 @@ export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> 
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
+
+    handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson
+      ? this.responseBuilder.create(handleRequest.jovo.$rawResponseJson)
+      : handleRequest.jovo.$response;
+
     handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 }
