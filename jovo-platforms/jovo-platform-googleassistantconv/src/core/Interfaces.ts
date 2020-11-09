@@ -265,8 +265,6 @@ export interface Canvas {
   // tslint:disable-next-line:no-any
   data: any;
   suppressMic?: boolean;
-  continuousMatchConfig?: ContinuousMatchConfig;
-  sendStateDataToCanvasApp: boolean;
 }
 
 export interface CollectionItem {
