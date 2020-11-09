@@ -186,9 +186,10 @@ export class AplPlugin implements Plugin {
     const apl = _get(output, 'Alexa.Apl');
 
     if (apl) {
-      let directives = _get(response, 'response.directives', []);
+      const directives = _get(response, 'response.directives', []);
 
       if (Array.isArray(apl)) {
+        // tslint:disable-next-line
         apl.forEach((directive: any) => {
           if (request.hasAPLInterface() || isAplA(directive)) {
             directives.push(directive);
@@ -204,6 +205,7 @@ export class AplPlugin implements Plugin {
   }
 }
 
+// tslint:disable-next-line
 function isAplA(directive: any) {
   return directive.type.startsWith('Alexa.Presentation.APLA');
 }
