@@ -67,6 +67,22 @@ export interface Config {
 }
 
 export class Client extends EventEmitter {
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isPlayingAudio(): boolean {
+    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
+  }
+
+  get isRecordingInput(): boolean {
+    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
+  }
+
+  get isUsingSpeechRecognition(): boolean {
+    return this.useSpeechRecognition;
+  }
+
   static getDefaultConfig(): Config {
     return {
       version: '3.2.1',
@@ -96,13 +112,10 @@ export class Client extends EventEmitter {
   readonly $speechRecognizer: SpeechRecognizer;
   readonly $speechSynthesizer: SpeechSynthesizer;
   readonly $store: Store;
-
   readonly config: Config;
-
   readonly $actionHandler: ActionHandler;
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
-
   private useSpeechRecognition = true;
   private isInputProcessOngoing = false;
   private initialized = false;
@@ -171,22 +184,6 @@ export class Client extends EventEmitter {
       this.$store.resetSession();
       this.$store.save();
     });
-  }
-
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
-  get isPlayingAudio(): boolean {
-    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
-  }
-
-  get isRecordingInput(): boolean {
-    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
-  }
-
-  get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition;
   }
 
   addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;

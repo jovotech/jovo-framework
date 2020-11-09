@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { DeepPartial, ErrorListener, VoidListener } from '..';
+import { BrowserDetector, DeepPartial, ErrorListener, VoidListener } from '..';
 
 // TODO maybe rename SpeechRecognized to Processing to have almost identical events as the AudioRecorder
 export enum SpeechRecognizerEvent {
@@ -42,52 +42,6 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
 }
 
 export class SpeechRecognizer extends EventEmitter {
-  static isSupported(): boolean {
-    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
-  }
-
-  static getDefaultConfig(): SpeechRecognizerConfig {
-    window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
-    return {
-      lang: 'en',
-      continuous: true,
-      interimResults: true,
-      maxAlternatives: 1,
-      grammars: window.SpeechGrammarList ? new window.SpeechGrammarList() : null,
-      silenceDetection: {
-        enabled: true,
-        timeoutInMs: 1500,
-      },
-      startDetection: {
-        enabled: true,
-        timeoutInMs: 3000,
-      },
-    };
-  }
-
-  readonly config: SpeechRecognizerConfig;
-
-  private readonly recognition: SpeechRecognition | null = null;
-
-  private recording = false;
-  private lastRecognitionEvent: SpeechRecognitionEvent | null = null;
-
-  private timeoutId?: number;
-  private ignoreNextEnd = false;
-
-  constructor(config?: DeepPartial<SpeechRecognizerConfig>) {
-    super();
-    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    const defaultConfig = SpeechRecognizer.getDefaultConfig();
-    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
-
-    if (window.SpeechRecognition) {
-      this.recognition = new window.SpeechRecognition();
-      this.setupSpeechRecognition(this.recognition);
-    }
-  }
-
   get isRecording(): boolean {
     return this.recording;
   }
@@ -112,6 +66,51 @@ export class SpeechRecognizer extends EventEmitter {
       this.config.silenceDetection.enabled &&
       this.config.silenceDetection.timeoutInMs
     );
+  }
+
+  static isSupported(): boolean {
+    return (
+      !!(window.SpeechRecognition || window.webkitSpeechRecognition) && BrowserDetector.isChrome()
+    );
+  }
+
+  static getDefaultConfig(): SpeechRecognizerConfig {
+    window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    return {
+      lang: 'en',
+      continuous: true,
+      interimResults: true,
+      maxAlternatives: 1,
+      grammars: window.SpeechGrammarList ? new window.SpeechGrammarList() : null,
+      silenceDetection: {
+        enabled: true,
+        timeoutInMs: 1500,
+      },
+      startDetection: {
+        enabled: true,
+        timeoutInMs: 3000,
+      },
+    };
+  }
+
+  readonly config: SpeechRecognizerConfig;
+  private readonly recognition: SpeechRecognition | null = null;
+  private recording = false;
+  private lastRecognitionEvent: SpeechRecognitionEvent | null = null;
+  private timeoutId?: number;
+  private ignoreNextEnd = false;
+
+  constructor(config?: DeepPartial<SpeechRecognizerConfig>) {
+    super();
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const defaultConfig = SpeechRecognizer.getDefaultConfig();
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
+
+    if (SpeechRecognizer.isSupported()) {
+      this.recognition = new window.SpeechRecognition();
+      this.setupSpeechRecognition(this.recognition);
+    }
   }
 
   addListener(

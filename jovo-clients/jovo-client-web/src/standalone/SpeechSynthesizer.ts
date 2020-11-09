@@ -25,29 +25,6 @@ export interface SpeechSynthesizerConfig {
 }
 
 export class SpeechSynthesizer extends EventEmitter {
-  static getDefaultConfig(): SpeechSynthesizerConfig {
-    return {
-      enabled: true,
-      language: 'en',
-    };
-  }
-
-  readonly config: SpeechSynthesizerConfig;
-
-  private $volume = 1.0;
-  private readonly synthesis: SpeechSynthesis | null;
-
-  private isSpeakingUtterance = false;
-
-  constructor(config?: DeepPartial<SpeechSynthesizerConfig>) {
-    super();
-
-    const defaultConfig = SpeechSynthesizer.getDefaultConfig();
-    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
-
-    this.synthesis = window.speechSynthesis || null;
-  }
-
   get volume(): number {
     return this.$volume;
   }
@@ -74,6 +51,26 @@ export class SpeechSynthesizer extends EventEmitter {
 
   get canStop(): boolean {
     return !!this.synthesis && this.synthesis.speaking;
+  }
+
+  static getDefaultConfig(): SpeechSynthesizerConfig {
+    return {
+      enabled: true,
+      language: 'en',
+    };
+  }
+  readonly config: SpeechSynthesizerConfig;
+  private $volume = 1.0;
+  private readonly synthesis: SpeechSynthesis | null;
+  private isSpeakingUtterance = false;
+
+  constructor(config?: DeepPartial<SpeechSynthesizerConfig>) {
+    super();
+
+    const defaultConfig = SpeechSynthesizer.getDefaultConfig();
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
+
+    this.synthesis = window.speechSynthesis || null;
   }
 
   addListener(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
