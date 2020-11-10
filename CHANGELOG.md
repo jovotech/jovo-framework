@@ -1,11 +1,40 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.2.0
+### Latest Framework Version: 3.2.1
+
+
+## 2020-11-10
+
+##### `jovo-platform-alexa [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
+- [#855](https://github.com/jovotech/jovo-framework/pull/855) :bug: Fix ignored APL-A directive ([@aswetlow](https://github.com/aswetlow))
+
+
+##### `jovo-platform-googleassistantconv [3.2.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#856](https://github.com/jovotech/jovo-framework/pull/856) Fixes several Google Conversational Actions issues ([@aswetlow](https://github.com/aswetlow))
+
+
+##### `jovo-platform-dialogflow [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow) 
+- [#857](https://github.com/jovotech/jovo-framework/pull/857) Fixes missing $rawResponseJson handling ([@aswetlow](https://github.com/aswetlow))
+
+
+
+## 2020-11-05
+
+
+##### `jovo-client-web [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-client-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-client-web) | [npm](https://www.npmjs.com/package/jovo-client-web)
+[#848](https://github.com/jovotech/jovo-framework/pull/848) Improve Web-Client browser-detection ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-platform-googleassistant [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant) 
+- Fix Transaction API v2/v3 incomptibility 
+
+##### `jovo-platform-googleassistantconv [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- Fix missing locale in push notifications object
 
 
 ## 2020-10-29
 
-## 3.2 Jovo for Web [Announcement](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2) 
+## 3.2 Jovo for Web 
+[Announcement](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2) 
 
 
 
@@ -14,7 +43,7 @@
 ### :sparkles: New Features
 
 ##### `jovo-platform-dialogflow [3.1.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-dialogflow) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow) | [npm](https://www.npmjs.com/package/jovo-platform-dialogflow) 
-- [#838](https://github.com/jovotech/jovo-framework/pull/838) Genesys integration ([@dominik-meissner](https://github.com/StepanU), [@dominik-meissner](https://github.com/dominik-meissner))
+- [#838](https://github.com/jovotech/jovo-framework/pull/838) Genesys integration [@dominik-meissner](https://github.com/dominik-meissner))
 
 ### :nail_care: Enhancements
 

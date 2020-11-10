@@ -2,7 +2,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
-## 3.0.12 (2020-04-09)
+##### 2020-11-05 [3.2.1]
+* Fix Transaction API v2/v3 incomptibility 
+
+
 
 #### :bug: Bug Fix
  * [#716](https://github.com/jovotech/jovo-framework/pull/716) Corrected logic for retrieving project-ids in staged environments  ([@m-ripper](https://github.com/m-ripper))  
