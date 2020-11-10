@@ -1,6 +1,6 @@
 import { Inputs, RequestBuilder } from 'jovo-core';
 import { ConversationalActionRequest } from './ConversationalActionRequest';
-import * as path from "path";
+import * as path from 'path';
 const samples: { [key: string]: string } = {
   LaunchRequest: './../../sample-request-json/LAUNCH.json',
   IntentRequest: './../../sample-request-json/IntentRequest.json',
@@ -21,6 +21,15 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<Conversatio
     if (typeof obj === 'string') {
       const req = await this.intentRequest();
       req.setIntentName(obj);
+      const jovoInputs: Inputs = {};
+      if (inputs) {
+        for (const [key, value] of Object.entries(inputs)) {
+          jovoInputs[key] = {
+            value,
+          };
+        }
+      }
+      req.setInputs(jovoInputs);
       return req;
     } else {
       return await this.intentRequest(obj);
@@ -34,7 +43,9 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<Conversatio
     } else {
       // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
       const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
-      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(
+        new Date().toISOString(),
+      );
     }
   }
   async intentRequest(json?: object): Promise<ConversationalActionRequest> {
@@ -43,8 +54,10 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<Conversatio
       return ConversationalActionRequest.fromJSON(json);
     } else {
       // const request = await fsreadFile(getJsonFilePath('LAUNCH'], 'utf8');
-      const request = JSON.stringify(require(getJsonFilePath('IntentRequest1')));
-      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
+      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(
+        new Date().toISOString(),
+      );
     }
   }
 
@@ -64,7 +77,9 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<Conversatio
       return ConversationalActionRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('AudioPlayer.PlaybackStarted')));
-      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(
+        new Date().toISOString(),
+      );
     }
   }
   /**
@@ -77,8 +92,10 @@ export class GoogleAssistantRequestBuilder implements RequestBuilder<Conversatio
     if (json) {
       return ConversationalActionRequest.fromJSON(json);
     } else {
-      const request = JSON.stringify(require(getJsonFilePath('SessionEndedRequest')));
-      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+      const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
+      return ConversationalActionRequest.fromJSON(JSON.parse(request)).setTimestamp(
+        new Date().toISOString(),
+      );
     }
   }
 }
@@ -92,7 +109,7 @@ function getJsonFilePath(key: string, version = 'v1'): string {
   const fileName = samples[key];
 
   if (!fileName) {
-    throw new Error(`Can't find file.`);
+    throw new Error(`${key} Can't find file.`);
   }
 
   return path.join(folder, 'sample-request-json', version, fileName);
