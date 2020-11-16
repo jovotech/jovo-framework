@@ -766,3 +766,10 @@ export interface ConversationalSession {
   // tslint:disable-next-line:no-any
   reprompts?: any;
 }
+
+export interface HtmlResponse {
+  url?: string;
+  // tslint:disable-next-line:no-any
+  data?: Record<string, any>;
+  suppressMic?: boolean;
+}

@@ -18,6 +18,7 @@ import { ConversationalActionsCore } from './modules/ConversationalActionsCore';
 import { GoogleAssistantTestSuite } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { MediaResponsePlugin } from './modules/MediaResponse';
+import { InteractiveCanvas } from './modules/InteractiveCanvas';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line
@@ -94,7 +95,7 @@ export class GoogleAssistant extends Platform<
       }
       return this;
     };
-    this.use(new ConversationalActionsCore(), new MediaResponsePlugin());
+    this.use(new ConversationalActionsCore(), new MediaResponsePlugin(), new InteractiveCanvas());
   }
 
   makeTestSuite(): GoogleAssistantTestSuite {

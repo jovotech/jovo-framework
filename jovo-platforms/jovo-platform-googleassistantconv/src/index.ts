@@ -8,6 +8,7 @@ import {
   Image,
   Media,
   Suggestion,
+  HtmlResponse,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
@@ -82,11 +83,18 @@ declare module 'jovo-core/dist/src/Interfaces' {
       suggestions?: Suggestion[];
       nextScene?: NextScene;
       prompt?: Prompt;
+      htmlResponse?: HtmlResponse;
       askPrompt?: {
         prompt: Prompt;
         reprompts?: Prompt[];
       };
     };
+  }
+}
+
+declare module './core/GoogleAction' {
+  interface GoogleAction {
+    htmlResponse(obj: HtmlResponse): this;
   }
 }
 
