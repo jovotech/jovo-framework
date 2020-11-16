@@ -1,4 +1,4 @@
-import { App, HandleRequest, Project } from 'jovo-framework';
+import { App } from 'jovo-framework';
 
 import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
 import { JovoDebugger } from 'jovo-plugin-debugger';
@@ -20,9 +20,7 @@ app.setHandler({
 	MyNameIsIntent() {
 		this.$googleAction!.htmlResponse({
 			data: {
-				// @ts-ignore
 				state: 'MyNameIsIntent',
-				// @ts-ignore
 				text: 'Hey ' + this.$inputs.name.value + ', nice to meet you!',
 			},
 			suppressMic: false,
