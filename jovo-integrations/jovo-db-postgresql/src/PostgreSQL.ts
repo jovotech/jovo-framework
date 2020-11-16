@@ -73,7 +73,7 @@ export class PostgreSQL implements Db {
           [this.config.dataColumnName!]: JSON.parse(result.rows[0][this.config.dataColumnName!]),
         };
       } else {
-        return;
+        return {};
       }
     } catch (err) {
       /**
