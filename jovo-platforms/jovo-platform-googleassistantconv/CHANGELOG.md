@@ -2,6 +2,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+##### 2020-11-16 [3.2.3]
+- Adds Interactive Canvas to Google Conversational Actions ([@aswetlow](https://github.com/aswetlow))
+
 ##### 2020-11-10 [3.2.2]
 - [#856](https://github.com/jovotech/jovo-framework/pull/856) Fixes several Google Conversational Actions issues ([@aswetlow](https://github.com/aswetlow))
 

@@ -3,6 +3,18 @@
 ### Latest Framework Version: 3.2.1
 
 
+## 2020-11-16
+
+##### `jovo-platform-googleassistantconv [3.2.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- Adds Interactive Canvas to Google Conversational Actions ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2020-11-10
+
+##### `jovo-platform-alexa [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
+- [#855](https://github.com/jovotech/jovo-framework/pull/855) :bug: Fix ignored APL-A directive ([@aswetlow](https://github.com/aswetlow))
+
+
 ## 2020-11-10
 
 ##### `jovo-platform-alexa [3.2.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
