@@ -474,10 +474,12 @@ export class ConversationalActionsCore implements Plugin {
 
     if (!tell || _get(googleAction.$app.config, 'keepSessionDataOnSessionEnded')) {
       // TODO: needs to be tested
+      console.log(googleAction.$session.$data);
       response.session = {
         id: request.session?.id!,
         params: {
           _JOVO_SESSION_: googleAction.$conversationalSession,
+          _JOVO_STATE_: null,
           ...googleAction.$session.$data,
         },
       };
