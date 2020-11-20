@@ -169,7 +169,8 @@ export class GoogleActionRequest implements JovoRequest {
   }
 
   getUserId(): string {
-    return _get(this, 'user.userId');
+    const userStorage = JSON.parse(_get(this, 'user.userStorage', '{}'));
+    return _get(userStorage, 'userId');
   }
 
   getUserStorage(): string {

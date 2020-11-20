@@ -71,7 +71,8 @@ test('test generated id (no userId)', async (done) => {
   });
 });
 
-test('test generated id (existing userId)', async (done) => {
+// deprecated after Google Action removed user.userId
+test.skip('test generated id (existing userId)', async (done) => {
   app.setHandler({
     LAUNCH() {
       this.tell('Hello World!');

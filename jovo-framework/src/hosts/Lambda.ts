@@ -28,6 +28,7 @@ export class Lambda implements Host {
     this.callback = callback;
     if (typeof event.body !== 'undefined') {
       this.isApiGateway = true;
+      this.headers = event.headers;
       this.$request = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
     } else {
       this.$request = event;
