@@ -2,9 +2,12 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+##### 2020-11-20 [3.2.3]
+- [#862](https://github.com/jovotech/jovo-framework/pull/862) Fix getUserId() in GoogleActionRequest class ([@aswetlow](https://github.com/aswetlow))
+
+
 ##### 2020-11-05 [3.2.1]
 * Fix Transaction API v2/v3 incomptibility 
-
 
 
 #### :bug: Bug Fix

@@ -2,6 +2,17 @@
 
 ### Latest Framework Version: 3.2.1
 
+## 2020-11-20
+
+##### `jovo-platform-googleassistantconv [3.2.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#862](https://github.com/jovotech/jovo-framework/pull/862) Fix removeState ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-platform-googleassistant [3.2.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant) 
+- [#862](https://github.com/jovotech/jovo-framework/pull/862) Fix getUserId() in GoogleActionRequest class ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-framework [3.2.2]` 
+- [#862](https://github.com/jovotech/jovo-framework/pull/862) Fix error in passing headers from AWS API Gateway ([@aswetlow](https://github.com/aswetlow))
+
 
 ## 2020-11-16
 
