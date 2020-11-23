@@ -1,19 +1,20 @@
 {
-  "version": "1.0",
-  "response": {
-    "shouldEndSession": false,
-    "output": {
-      "speech": {
-        "text": "Sample text"
-      },
-      "reprompt": {
-        "text": "Sample reprompt text"
-      }
-    },
-    "inputText": "sample"
-  },
-  "sessionData": {
-  },
-  "userData": {
-  }
+  "version": "3.2.3",
+  "actions": [
+    {
+      "plain": "Hello World! What's your name?",
+      "ssml": "<speak>Hello World! What's your name?</speak>",
+      "type": "SPEECH"
+    }
+  ],
+  "reprompts": [
+    {
+      "plain": "Please tell me your name.",
+      "ssml": "<speak>Please tell me your name.</speak>",
+      "type": "SPEECH"
+    }
+  ],
+  "user": { "data": {} },
+  "session": { "data": {}, "end": false },
+  "context": { "request": { "nlu": { "intent": { "name": "LAUNCH" } } } }
 }

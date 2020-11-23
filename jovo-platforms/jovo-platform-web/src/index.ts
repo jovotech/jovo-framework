@@ -28,6 +28,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 
   interface AppPlatformConfig extends AppWebPlatformConfig {}
+
   interface ExtensiblePluginConfigs extends AppWebPlatformConfig {}
 }
 

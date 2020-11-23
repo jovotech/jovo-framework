@@ -14,6 +14,7 @@ export enum RequestType {
 }
 
 export enum DeviceType {
+  Unspecified = 'UNSPECIFIED',
   Audio = 'AUDIO',
   Browser = 'BROWSER',
 }

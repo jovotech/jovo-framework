@@ -15,6 +15,7 @@ declare global {
 export type {
   CorePlatformRequestJSON as WebRequest,
   CorePlatformResponseJSON as WebResponse,
+  Version,
 } from 'jovo-platform-web';
 // tslint:disable-next-line
 export * from 'jovo-platform-web/dist/src/Interfaces'; // ugly fix but best way to only re-export what is needed

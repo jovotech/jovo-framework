@@ -1,7 +1,7 @@
 import { AsrData, JovoResponse, NluData, SessionConstants, SessionData } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import { Action, CorePlatformResponseJSON } from '..';
+import { Action, CorePlatformResponseJSON, Version } from '..';
 
 // tslint:disable-next-line:no-any
 export type Data = Record<string, any>;
@@ -22,7 +22,7 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
     }
   }
 
-  version: string;
+  version: Version;
   actions: Action[];
   reprompts: Action[];
   user: {
@@ -40,7 +40,7 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
   };
 
   constructor() {
-    this.version = '0.0.1';
+    this.version = '3.2.3';
     this.actions = [];
     this.reprompts = [];
     this.user = {
