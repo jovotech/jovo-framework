@@ -1,18 +1,22 @@
 {
+  "version": "3.2.3",
+  "type": "jovo-platform-core",
   "request": {
-    "locale": "en-US",
-    "timestamp": "2019-07-01T08:17:36.843Z"
+    "id": "7bd31461-0211-4c92-b642-69a978c2f18c",
+    "timestamp": "2020-11-23T12:35:36.368Z",
+    "type": "LAUNCH",
+    "body": {},
+    "locale": "en",
+    "data": {}
   },
-  "session": {
-    "data": {},
-    "id": "2b6f7378-4252-47b5-837a-da56fc73ebfd",
-    "new": true
-  },
-  "user": {
-    "id": "2f416861-94aa-424b-b9f2-ac5f83a36fa0",
-    "data": {
-    }
-  },
-  "$version": "1.0.0",
-  "isLaunch": true
+  "context": {
+    "device": { "type": "UNSPECIFIED", "capabilities": { "AUDIO": true, "HTML": true, "TEXT": true } },
+    "session": {
+      "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
+      "data": {},
+      "new": true,
+      "lastUpdatedAt": "2020-11-23T12:35:21.345Z"
+    },
+    "user": { "id": "67fed000-9f11-4acf-bbbc-1e52e5ea22a9", "data": {} }
+  }
 }

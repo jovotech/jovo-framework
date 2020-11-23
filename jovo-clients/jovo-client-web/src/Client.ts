@@ -29,6 +29,7 @@ import {
   SSMLHandler,
   Store,
   StoreConfig,
+  Version,
   VoidListener,
   WebRequest,
   WebResponse,
@@ -50,10 +51,8 @@ export type ClientActionsHandledListener = (actions: Action[]) => void;
 export type ClientRepromptListener = (repromptActions: Action[]) => void;
 export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
 
-export type SupportedVersion = '3.2.0' | '3.2.1' | '3.2.2' | string;
-
 export interface Config {
-  version: SupportedVersion;
+  version: Version;
   appId: string;
   platform: string;
   device: Device;
