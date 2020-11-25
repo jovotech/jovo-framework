@@ -384,7 +384,7 @@ export class JovoDebugger implements Plugin {
 
       const message = stripAnsi(rawMessage);
       socket.emit('console.log', message, new Error().stack!.toString());
-      oldConsoleLog.call(console, ...args);
+      oldConsoleLog.call(this, ...args);
     };
     this.consoleLogOverriden = true;
   }
