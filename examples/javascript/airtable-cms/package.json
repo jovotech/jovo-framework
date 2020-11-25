@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-airtable-cms",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -17,6 +17,6 @@
     "jovo-cms-airtable": "^3.2.2",
     "jovo-framework": "^3.2.3",
     "jovo-platform-alexa": "^3.2.3",
-    "jovo-plugin-debugger": "^3.2.3"
+    "jovo-plugin-debugger": "^3.2.4"
   }
 }
