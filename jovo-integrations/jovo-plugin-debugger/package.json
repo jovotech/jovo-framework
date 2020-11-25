@@ -20,7 +20,8 @@
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "strip-ansi": "^6.0.0"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
