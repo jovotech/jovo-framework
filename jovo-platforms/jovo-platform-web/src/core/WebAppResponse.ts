@@ -16,9 +16,8 @@ export class WebAppResponse extends CorePlatformResponse implements JovoResponse
     }
   }
 
-
   constructor() {
     super();
-    this.version = '3.2.4';
+    this.version = '3.2.5';
   }
 }

@@ -40,7 +40,7 @@ export class CorePlatformResponse implements JovoResponse, CorePlatformResponseJ
   };
 
   constructor() {
-    this.version = '3.2.3';
+    this.version = '3.2.4';
     this.actions = [];
     this.reprompts = [];
     this.user = {
