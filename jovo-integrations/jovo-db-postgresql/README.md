@@ -48,11 +48,11 @@ module.exports = {
     PostgreSQL: {
       tableName: 'yourTableName',
       connection: {
-        host: process.env.POSTGRESQL_ADDR || 'localhost',
-        port:  process.env.POSTGRESQL_PORT || '9000',
-        user: process.env.POSTGRESQL_USER || 'user',
-        password: process.env.POSTGRESQL_PASSWORD || 'password',
-        database: process.env.POSTGRESQL_DATABASE || 'jovoapp',
+        host: '',
+        port: 3000,
+        user: '',
+        password: '',
+        database: '',
       },
     },
   },
@@ -69,11 +69,11 @@ const config = {
     PostgreSQL: {
       tableName: 'yourTableName',
       connection: {
-        host: process.env.POSTGRESQL_ADDR || 'localhost',
-        port:  process.env.POSTGRESQL_PORT || '9000',
-        user: process.env.POSTGRESQL_USER || 'user',
-        password: process.env.POSTGRESQL_PASSWORD || 'password',
-        database: process.env.POSTGRESQL_DATABASE || 'jovoapp',
+        host: '',
+        port: 3000,
+        user: '',
+        password: '',
+        database: '',
       },
     },
   },
