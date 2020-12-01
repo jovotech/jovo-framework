@@ -91,14 +91,14 @@ declare module './../core/BaseApp' {
 
     /**
      * Sets handlers
-     * @param {...Object} handlers Handler-object
+     * @param {...Object} handlers Handler-objects
      */
     setHandler(...handlers: Handler[]): this;
 
     /**
      * Sets platform-specific handlers
-     * @param {string} platformName
-     * @param {...Object} handlers
+     * @param {string} platformName Name of a platform that is installed.
+     * @param {...Object} handlers Handler-objects
      */
     setPlatformHandler(platformName: string, ...handlers: Handler[]): this;
   }
