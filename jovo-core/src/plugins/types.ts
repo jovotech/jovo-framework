@@ -90,10 +90,17 @@ declare module './../core/BaseApp' {
     };
 
     /**
-     * Sets handler object
-     * @param {Object} handlers
+     * Sets handlers
+     * @param {...Object} handlers Handler-object
      */
-    setHandler(...handler: Handler[]): this;
+    setHandler(...handlers: Handler[]): this;
+
+    /**
+     * Sets platform-specific handlers
+     * @param {string} platformName
+     * @param {...Object} handlers
+     */
+    setPlatformHandler(platformName: string, ...handlers: Handler[]): this;
   }
 }
 declare module './../core/Jovo' {
