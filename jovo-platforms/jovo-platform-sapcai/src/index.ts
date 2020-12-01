@@ -33,6 +33,10 @@ declare module './core/SapCaiSkill' {
 }
 
 declare module 'jovo-core/dist/src/core/BaseApp' {
+  /**
+   * Sets sap-cai handlers
+   * @deprecated use this.setPlatformHandler() instead
+   */
   export interface BaseApp {
     setCaiHandler(...handler: Handler[]): this;
   }

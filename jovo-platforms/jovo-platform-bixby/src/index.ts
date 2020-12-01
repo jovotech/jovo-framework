@@ -32,7 +32,8 @@ declare module 'jovo-core/dist/src/Interfaces' {
 declare module 'jovo-core/dist/src/core/BaseApp' {
   interface BaseApp {
     /**
-     * Sets alexa handlers
+     * Sets bixby handlers
+     * @deprecated use this.setPlatformHandler() instead
      * @public
      * @param {*} handler
      */

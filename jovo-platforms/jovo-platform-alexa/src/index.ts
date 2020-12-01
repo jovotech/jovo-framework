@@ -87,10 +87,11 @@ declare module 'jovo-core/dist/src/core/BaseApp' {
   interface BaseApp {
     /**
      * Sets alexa handlers
+     * @deprecated use this.setPlatformHandler() instead
      * @public
      * @param {*} handler
      */
-    setAlexaHandler(...handler: Handler[]): this; // tslint:disable-line
+    setAlexaHandler(...handler: Handler[]): this;
   }
 }
 
