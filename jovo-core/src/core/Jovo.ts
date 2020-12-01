@@ -10,6 +10,7 @@ import {
   ErrorCode,
   JovoError,
   Log,
+  QuickReply,
   SessionConstants,
   SessionData,
   SpeechBuilder,
@@ -394,6 +395,11 @@ export abstract class Jovo extends EventEmitter {
     _set(this.$output, 'ask.speech', speech.toString());
     _set(this.$output, 'ask.reprompt', reprompt.toString());
 
+    return this;
+  }
+
+  showQuickReplies(quickReplies: Array<QuickReply | string>) {
+    _set(this.$output, 'quickReplies', quickReplies);
     return this;
   }
 

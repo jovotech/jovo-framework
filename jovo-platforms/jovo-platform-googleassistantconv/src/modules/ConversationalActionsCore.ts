@@ -399,11 +399,18 @@ export class ConversationalActionsCore implements Plugin {
       });
     }
 
-    if (output.GoogleAssistant?.suggestions) {
+    const suggestions = output.GoogleAssistant?.suggestions;
+    const quickReplies = output.quickReplies;
+    if (suggestions?.length || quickReplies?.length) {
+      const newSuggestions = suggestions?.length
+        ? suggestions
+        : quickReplies!.map((quickReply) => ({
+            title: typeof quickReply !== 'string' ? quickReply.value : quickReply,
+          }));
       _set(
         googleAction.$response as ConversationalActionResponse,
         'prompt.suggestions',
-        output.GoogleAssistant.suggestions,
+        newSuggestions,
       );
     }
 
