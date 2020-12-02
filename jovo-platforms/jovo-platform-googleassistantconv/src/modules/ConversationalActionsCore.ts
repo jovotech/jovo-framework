@@ -76,6 +76,10 @@ export class ConversationalActionsCore implements Plugin {
       _set(this.$output, 'GoogleAssistant.typeOverrides', typeOverrides);
       return this;
     };
+
+    GoogleAction.prototype.showBasicCard = function (basicCard: Card) {
+      return this.addCard(basicCard);
+    };
   }
 
   async init(handleRequest: HandleRequest) {

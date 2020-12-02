@@ -251,7 +251,7 @@ export class GoogleAction extends Jovo {
   }
 
   isInSandbox() {
-    // TODO:
+    throw new Error('Not supported anymore');
   }
 
   /**
@@ -259,7 +259,6 @@ export class GoogleAction extends Jovo {
    */
   isVerifiedUser(): boolean {
     const request = this.$request! as ConversationalActionRequest;
-
     return request.user?.verificationStatus === 'VERIFIED';
   }
 
@@ -273,7 +272,6 @@ export class GoogleAction extends Jovo {
    */
   getProjectId(): string {
     const queryParams = this.$host.getQueryParams();
-    // TODO: pass projectID via query param?
     return queryParams['projectId'];
   }
 

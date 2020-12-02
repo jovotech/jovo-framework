@@ -19,6 +19,7 @@ import { NextScene } from './core/Interfaces';
 import { Prompt } from './core/Interfaces';
 export * from './core/Interfaces';
 export * from './services/PushNotificationsApi';
+export * from './visuals/BasicCard';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
@@ -63,6 +64,8 @@ declare module './core/GoogleAction' {
     addCollection(collection: Collection): this;
 
     addTypeOverrides(typeOverrides: TypeOverride[]): this;
+
+    showBasicCard(basicCard: Card): this;
   }
 }
 
