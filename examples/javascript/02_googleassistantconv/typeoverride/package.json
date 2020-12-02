@@ -1,0 +1,25 @@
+{
+  "name": "jovo-examples-googleassistantconv-typeoverride",
+  "version": "3.2.6",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./dist",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "jovo-core": "^3.2.2",
+    "jovo-db-dynamodb": "^3.2.4",
+    "jovo-db-filedb": "^3.2.2",
+    "jovo-framework": "^3.2.3",
+    "jovo-platform-googleassistantconv": "^3.2.6",
+    "jovo-plugin-debugger": "^3.2.4"
+  }
+}

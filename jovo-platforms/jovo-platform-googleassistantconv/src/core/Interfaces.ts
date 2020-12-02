@@ -372,6 +372,11 @@ export interface Home {
 export interface Device {
   capabilities: Capability[];
 }
+export interface Expected {
+  speech: string[];
+  languageCode: string;
+}
+
 export interface MediaContext {
   progress: string; // Example: "3.5s
 }

@@ -8,13 +8,13 @@ import {
   Image,
   Media,
   Suggestion,
-  HtmlResponse,
+  HtmlResponse, Expected,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
 import { MediaResponse } from './modules/MediaResponse';
 export { GoogleAssistant, Config } from './GoogleAssistant';
-export { GoogleAssistantTestSuite, Suggestion } from './core/Interfaces';
+export { GoogleAssistantTestSuite, Suggestion, Expected } from './core/Interfaces';
 import { NextScene } from './core/Interfaces';
 import { Prompt } from './core/Interfaces';
 export * from './core/Interfaces';
@@ -64,6 +64,7 @@ declare module './core/GoogleAction' {
     addCollection(collection: Collection): this;
 
     addTypeOverrides(typeOverrides: TypeOverride[]): this;
+    setTypeOverrides(typeOverrides: TypeOverride[]): this;
 
     showBasicCard(basicCard: Card): this;
   }
@@ -91,6 +92,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
         prompt: Prompt;
         reprompts?: Prompt[];
       };
+      expected?: Expected;
     };
   }
 }
