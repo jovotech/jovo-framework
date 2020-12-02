@@ -333,6 +333,13 @@ export class GoogleAction extends Jovo {
     return this;
   }
 
+  /**
+   * @deprecated See https://github.com/jovotech/jovo-framework/tree/master/examples/typescript/02_googleassistantconv/account-linking
+   */
+  showAccountLinkingCard(): this {
+    throw new Error('Not supported in Google Assistant Conversation Actions. ');
+  }
+
   promptAsk(prompt: Prompt, ...reprompts: Prompt[]): this {
     this.$output.GoogleAssistant.askPrompt = {
       prompt,
