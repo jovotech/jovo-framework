@@ -1,6 +1,6 @@
 import { Plugin } from 'jovo-core';
-import { Button, ButtonList, Card, CardContent, Carousel, List, Picture } from '../response';
 import { Message, QuickReply, SapCai, SapCaiResponse, SapCaiSkill } from '..';
+import { Button, ButtonList, Card, CardContent, Carousel, List, Picture } from '../response';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -73,13 +73,11 @@ export class Cards implements Plugin {
       return this;
     };
 
-    // Note supported yet by SAP CAI
-    /*SapCaiSkill.prototype.showVideoCard = function(videoUrl: string) {
-                    _set(this.$output, 'SapCai.Video',
-                        new Video(videoUrl)
-                    );
-                    return this;
-                };*/
+    // Not supported yet by SAP CAI
+    // SapCaiSkill.prototype.showVideoCard = function (videoUrl: string) {
+    //   _set(this.$output, 'SapCai.Video', new Video(videoUrl));
+    //   return this;
+    // };
   }
 
   uninstall(sapcai: SapCai) {}
@@ -98,8 +96,18 @@ export class Cards implements Plugin {
     }
 
     const quickReply = _get(output, 'SapCai.QuickReply');
+    const quickReplies = output.quickReplies;
     if (quickReply) {
       replies.push(quickReply);
+    } else if (quickReplies?.length) {
+      replies.push(
+        new QuickReply({
+          buttons: quickReplies.map((reply) => ({
+            title: typeof reply === 'string' ? reply : reply.label || reply.value,
+            value: typeof reply === 'string' ? reply : reply.value,
+          })),
+        }),
+      );
     }
 
     const buttonList = _get(output, 'SapCai.ButtonList');

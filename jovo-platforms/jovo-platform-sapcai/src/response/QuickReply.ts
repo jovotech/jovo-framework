@@ -7,7 +7,7 @@ export class QuickReplyContent {
 }
 
 export class QuickReply extends BasicCard {
-  content?: QuickReplyContent;
+  content: QuickReplyContent;
 
   constructor(content: QuickReplyContent) {
     super('quickReplies');

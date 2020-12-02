@@ -80,9 +80,16 @@ export interface AskOutput {
   repromptText?: string;
 }
 
+export interface QuickReply {
+  label?: string;
+  value: string;
+}
+
 export interface Output {
   tell?: TellOutput;
   ask?: AskOutput;
+
+  quickReplies?: Array<QuickReply | string>;
 
   card?: {
     SimpleCard?: {

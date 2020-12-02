@@ -81,8 +81,18 @@ export class GoogleBusinessCore implements Plugin {
     }
 
     const suggestions = output.GoogleBusiness.Suggestions;
-    if (suggestions) {
-      response.response.suggestions = suggestions;
+    const quickReplies = output.quickReplies;
+    if (suggestions?.length || quickReplies?.length) {
+      const newSuggestions = suggestions?.length
+        ? suggestions
+        : quickReplies!.map((quickReply) => ({
+            reply: {
+              postbackData: typeof quickReply === 'string' ? quickReply : quickReply.value,
+              text:
+                typeof quickReply === 'string' ? quickReply : quickReply.label || quickReply.value,
+            },
+          }));
+      response.response.suggestions = newSuggestions;
     }
 
     const fallback = output.GoogleBusiness.Fallback;
