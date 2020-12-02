@@ -42,7 +42,7 @@ declare module 'jovo-core/dist/src/core/Jovo' {
 declare module 'jovo-core/dist/src/core/BaseApp' {
   /**
    * Sets google-assistant-conv handlers
-   * @deprecated use this.setPlatformHandler() instead
+   * @deprecated use this.setPlatformHandler('GoogleAssistant', ...handler) instead
    * @public
    * @param {*} handler
    */

@@ -87,7 +87,7 @@ declare module 'jovo-core/dist/src/core/BaseApp' {
   interface BaseApp {
     /**
      * Sets alexa handlers
-     * @deprecated use this.setPlatformHandler() instead
+     * @deprecated use this.setPlatformHandler('Alexa', ...handler) instead
      * @public
      * @param {*} handler
      */

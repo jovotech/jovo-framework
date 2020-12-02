@@ -33,7 +33,7 @@ declare module 'jovo-core/dist/src/core/BaseApp' {
   interface BaseApp {
     /**
      * Sets bixby handlers
-     * @deprecated use this.setPlatformHandler() instead
+     * @deprecated use this.setPlatformHandler('Bixby', ...handler) instead
      * @public
      * @param {*} handler
      */
