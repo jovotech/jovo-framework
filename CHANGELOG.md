@@ -1,6 +1,25 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.2.1
+### Latest Framework Version: 3.3.0
+
+## 2020-12-03
+
+##### `jovo-framework [3.3.0]` 
+- [#868](https://github.com/jovotech/jovo-framework/pull/868) Abstract the initialization of the platform handlers into a single function ([@m-ripper](https://github.com/m-ripper))
+- [#869](https://github.com/jovotech/jovo-framework/pull/869) Abstract quick replies ([@m-ripper](https://github.com/m-ripper))
+
+##### `jovo-db-postgres [3.3.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-postgres) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-postgres) | [npm](https://www.npmjs.com/package/jovo-db-postgres)
+- [#859](https://github.com/jovotech/jovo-framework/pull/859) Adds PostgreSQL integration ([@KaanKC](https://github.com/KaanKC))
+
+##### `jovo-platform-googlebusiness [3.3.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googlebusiness) | [npm](https://www.npmjs.com/package/jovo-platform-googlebusiness)
+- [#870](https://github.com/jovotech/jovo-framework/pull/870) Use postbackData of suggestions if possible ([@KaanKC](https://github.com/KaanKC))
+
+##### `jovo-platform-googleassistantconv [3.3.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#871](https://github.com/jovotech/jovo-framework/pull/871) Add missing and broken Google Conversational Action features ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-plugin-debugger [3.3.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-debugger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-debugger) | [npm](https://www.npmjs.com/package/jovo-plugin-debugger)
+- [#866](https://github.com/jovotech/jovo-framework/pull/866) Add `strip-ansi` to remove ANSI-codes from messages that are sent to the Jovo-Debugger ([@m-ripper](https://github.com/m-ripper))
+
 
 ## 2020-11-20
 

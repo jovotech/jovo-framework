@@ -2,6 +2,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+##### 2020-12-03 [3.3.0]
+- [#871](https://github.com/jovotech/jovo-framework/pull/871) Add missing and broken Google Conversational Action features ([@aswetlow](https://github.com/aswetlow))
+
 ##### 2020-11-20 [3.2.4]
 - [#862](https://github.com/jovotech/jovo-framework/pull/862) Fix removeState ([@aswetlow](https://github.com/aswetlow))
 
