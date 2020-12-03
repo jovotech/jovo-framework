@@ -73,8 +73,20 @@ export class ConversationalActionsCore implements Plugin {
     };
 
     GoogleAction.prototype.addTypeOverrides = function (typeOverrides: TypeOverride[]) {
+      let currentTypeOverrides: TypeOverride[] = _get(this.$output, 'GoogleAssistant.typeOverrides', []);
+      currentTypeOverrides = currentTypeOverrides.concat(typeOverrides);
+      _set(this.$output, 'GoogleAssistant.typeOverrides', currentTypeOverrides);
+      return this;
+    };
+
+    GoogleAction.prototype.setTypeOverrides = function (typeOverrides: TypeOverride[]) {
       _set(this.$output, 'GoogleAssistant.typeOverrides', typeOverrides);
       return this;
+    };
+
+
+    GoogleAction.prototype.showBasicCard = function (basicCard: Card) {
+      return this.addCard(basicCard);
     };
   }
 
@@ -481,7 +493,6 @@ export class ConversationalActionsCore implements Plugin {
 
     if (!tell || _get(googleAction.$app.config, 'keepSessionDataOnSessionEnded')) {
       // TODO: needs to be tested
-      console.log(googleAction.$session.$data);
       response.session = {
         id: request.session?.id!,
         params: {
@@ -505,6 +516,14 @@ export class ConversationalActionsCore implements Plugin {
         googleAction.$response as ConversationalActionResponse,
         'scene.next.name',
         output.GoogleAssistant.nextScene,
+      );
+    }
+
+    if (output.GoogleAssistant?.expected) {
+      _set(
+          googleAction.$response as ConversationalActionResponse,
+          'expected',
+          output.GoogleAssistant.expected,
       );
     }
   }

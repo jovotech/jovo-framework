@@ -7,7 +7,7 @@ import _get = require('lodash.get');
 import {
   Capability,
   Context,
-  Device,
+  Device, GoogleAssistantDeviceName,
   Handler,
   Home,
   Intent,
@@ -42,8 +42,16 @@ export class ConversationalActionRequest implements JovoRequest {
     return this.session?.id;
   }
 
-  getDeviceName() {
-    return '';
+  getDeviceName(): GoogleAssistantDeviceName {
+    if (this.hasScreenInterface()) {
+      if (this.hasWebBrowserInterface()) {
+        return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_PHONE;
+      } else {
+        return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_SMARTDISPLAY;
+      }
+    } else {
+      return GoogleAssistantDeviceName.GOOGLE_ASSISTANT_SPEAKER;
+    }
   }
 
   getIntentName(): string | undefined {

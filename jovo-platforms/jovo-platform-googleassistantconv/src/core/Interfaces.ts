@@ -179,7 +179,11 @@ export interface PermissionResult {
     updateUserId: string;
   };
 }
-
+export enum GoogleAssistantDeviceName {
+  GOOGLE_ASSISTANT_SPEAKER = 'GOOGLE_ASSISTANT_SPEAKER',
+  GOOGLE_ASSISTANT_PHONE = 'GOOGLE_ASSISTANT_PHONE',
+  GOOGLE_ASSISTANT_SMARTDISPLAY = 'GOOGLE_ASSISTANT_SMARTDISPLAY',
+}
 export interface Simple {
   speech?: string;
   text?: string;
@@ -368,6 +372,11 @@ export interface Home {
 export interface Device {
   capabilities: Capability[];
 }
+export interface Expected {
+  speech: string[];
+  languageCode: string;
+}
+
 export interface MediaContext {
   progress: string; // Example: "3.5s
 }
