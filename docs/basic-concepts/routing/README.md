@@ -280,7 +280,7 @@ module.exports = {
 
 ### Platform Handlers
 
-For cases where the experience differs on Alexa and Google Assistant, you can use the methods `setAlexaHandler` and `setGoogleActionHandler` to overwrite the default handlers.
+For cases where the experience differs on each platform, you can use the methods `setPlatformHandler` to overwrite the default handlers.
 
 Here is an example that offers different output for the two platforms:
 
@@ -304,9 +304,11 @@ const googleAssistantHandlers = {
 };
 
 app.setHandler(handlers);
-app.setAlexaHandler(alexaHandlers);
-app.setGoogleAssistantHandler(googleAssistantHandlers);
+app.setPlatformHandler('Alexa', alexaHandlers);
+app.setPlatformHandler('GoogleAssistant', googleAssistantHandlers);
 ```
+
+It is important to note that the first parameter of `setPlatformHandler` has to be the name of an installed platform, otherwise an error will be thrown.
 
 
 ### Event Listeners
