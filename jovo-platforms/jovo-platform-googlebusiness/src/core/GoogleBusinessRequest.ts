@@ -89,7 +89,12 @@ export class GoogleBusinessRequest implements JovoRequest {
   }
 
   getRawText(): string {
-    return this.message?.text || this.suggestionResponse?.postbackData || this.suggestionResponse?.text || '';
+    return (
+      this.message?.text ||
+      this.suggestionResponse?.postbackData ||
+      this.suggestionResponse?.text ||
+      ''
+    );
   }
 
   /**

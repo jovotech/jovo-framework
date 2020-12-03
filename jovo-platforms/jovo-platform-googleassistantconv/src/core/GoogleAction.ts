@@ -354,7 +354,9 @@ export class GoogleAction extends Jovo {
    */
   // tslint:disable-next-line:no-any
   addSessionEntityTypes(sessionEntityTypes: any) {
-    throw new Error(`Not supported in Google Assistant Conversational Actions. Please use addTypeOverrides(typeOverrides: TypeOverride[])`);
+    throw new Error(
+      `Not supported in Google Assistant Conversational Actions. Please use addTypeOverrides(typeOverrides: TypeOverride[])`,
+    );
   }
 
   /**
@@ -374,11 +376,10 @@ export class GoogleAction extends Jovo {
     return this.addSessionEntityTypes(sessionEntity);
   }
 
-
   setExpected(expectedSpeech: string[], languageCode?: string) {
     this.$output.GoogleAssistant.expected = {
       speech: expectedSpeech,
-      languageCode: languageCode || this.$request!.getLocale()
+      languageCode: languageCode || this.$request!.getLocale(),
     };
   }
 }

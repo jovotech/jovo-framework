@@ -2,7 +2,7 @@ import { JovoResponse, SpeechBuilder, SessionData, SessionConstants } from 'jovo
 import _get = require('lodash.get');
 import _isMatch = require('lodash.ismatch');
 
-import {Card, Device, Expected, Home, Prompt, Scene, Session, User} from './Interfaces';
+import { Card, Device, Expected, Home, Prompt, Scene, Session, User } from './Interfaces';
 
 export interface ConversationalGoogleActionResponseJSON {
   prompt?: Prompt;

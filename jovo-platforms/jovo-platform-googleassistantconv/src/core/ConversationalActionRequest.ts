@@ -7,7 +7,8 @@ import _get = require('lodash.get');
 import {
   Capability,
   Context,
-  Device, GoogleAssistantDeviceName,
+  Device,
+  GoogleAssistantDeviceName,
   Handler,
   Home,
   Intent,

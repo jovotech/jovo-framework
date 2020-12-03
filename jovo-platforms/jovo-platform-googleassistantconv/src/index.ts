@@ -8,7 +8,8 @@ import {
   Image,
   Media,
   Suggestion,
-  HtmlResponse, Expected,
+  HtmlResponse,
+  Expected,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
