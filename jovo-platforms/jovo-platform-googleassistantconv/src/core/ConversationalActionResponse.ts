@@ -2,7 +2,7 @@ import { JovoResponse, SpeechBuilder, SessionData, SessionConstants } from 'jovo
 import _get = require('lodash.get');
 import _isMatch = require('lodash.ismatch');
 
-import { Card, Device, Home, Prompt, Scene, Session, User } from './Interfaces';
+import { Card, Device, Expected, Home, Prompt, Scene, Session, User } from './Interfaces';
 
 export interface ConversationalGoogleActionResponseJSON {
   prompt?: Prompt;
@@ -13,8 +13,7 @@ export interface ConversationalGoogleActionResponseJSON {
   device?: Device;
   // tslint:disable-next-line:no-any
   metadata?: any;
-  // tslint:disable-next-line:no-any
-  expected?: any;
+  expected?: Expected;
   // tslint:disable-next-line:no-any
   logging?: any;
 }
@@ -32,8 +31,7 @@ export class ConversationalActionResponse implements JovoResponse {
   device?: Device;
   // tslint:disable-next-line:no-any
   metadata?: any;
-  // tslint:disable-next-line:no-any
-  expected?: any;
+  expected?: Expected;
   // tslint:disable-next-line:no-any
   logging?: any;
 

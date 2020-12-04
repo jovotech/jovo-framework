@@ -5,10 +5,9 @@ import {
   HandleRequest,
   Host,
   Jovo,
+  QuickReply as GenericQuickReply,
   SpeechBuilder,
 } from 'jovo-core';
-import _get = require('lodash.get');
-import _set = require('lodash.set');
 import {
   AirlineTemplate,
   AirlineTemplateOptions,
@@ -35,9 +34,12 @@ import {
   TemplateType,
   TextMessage,
   TextMessageOptions,
+  TextQuickReply,
 } from '..';
 import { MessengerBotSpeechBuilder } from './MessengerBotSpeechBuilder';
 import { MessengerBotUser } from './MessengerBotUser';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
 export class MessengerBot extends Jovo {
   $messengerBot: MessengerBot;
@@ -113,23 +115,32 @@ export class MessengerBot extends Jovo {
   }
 
   // Output methods
-  setText(text: string): MessengerBot {
+  setText(text: string): this {
     _set(this.$output.FacebookMessenger, 'Overwrite.Text', text);
     return this;
   }
 
-  showQuickReplies(quickReplies: Array<QuickReply | string>): MessengerBot {
+  showQuickReplies(quickReplies: Array<QuickReply | GenericQuickReply | string>): this {
     return this.setQuickReplies(quickReplies);
   }
 
-  setQuickReplies(quickReplies: Array<QuickReply | string>): MessengerBot {
-    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
+  setQuickReplies(quickReplies: Array<QuickReply | GenericQuickReply | string>): this {
+    const facebookQuickReplies: Array<QuickReply | string> = quickReplies.map((quickReply) => {
+      return typeof quickReply === 'object' && 'value' in quickReply
+        ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
+        : quickReply;
+    });
+    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', facebookQuickReplies);
     return this;
   }
 
-  addQuickReply(quickReply: QuickReply | string): MessengerBot {
+  addQuickReply(quickReply: QuickReply | GenericQuickReply | string): this {
     const quickReplies = _get(this.$output.FacebookMessenger, 'Overwrite.QuickReplies');
-    quickReplies.push(quickReply);
+    quickReplies.push(
+      typeof quickReply === 'object' && 'value' in quickReply
+        ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
+        : quickReply,
+    );
     _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
     return this;
   }

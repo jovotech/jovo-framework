@@ -73,8 +73,23 @@ export class ConversationalActionsCore implements Plugin {
     };
 
     GoogleAction.prototype.addTypeOverrides = function (typeOverrides: TypeOverride[]) {
+      let currentTypeOverrides: TypeOverride[] = _get(
+        this.$output,
+        'GoogleAssistant.typeOverrides',
+        [],
+      );
+      currentTypeOverrides = currentTypeOverrides.concat(typeOverrides);
+      _set(this.$output, 'GoogleAssistant.typeOverrides', currentTypeOverrides);
+      return this;
+    };
+
+    GoogleAction.prototype.setTypeOverrides = function (typeOverrides: TypeOverride[]) {
       _set(this.$output, 'GoogleAssistant.typeOverrides', typeOverrides);
       return this;
+    };
+
+    GoogleAction.prototype.showBasicCard = function (basicCard: Card) {
+      return this.addCard(basicCard);
     };
   }
 
@@ -99,7 +114,7 @@ export class ConversationalActionsCore implements Plugin {
 
     const hasNotificationSlot = (intent: Intent) => {
       for (const [key, value] of Object.entries(intent.params)) {
-        if (key.startsWith('NotificationSlot_')) {
+        if (key.startsWith('NotificationsSlot_')) {
           return (
             (value.resolved as PermissionResult)['@type'] ===
             'type.googleapis.com/google.actions.conversation.v3.PermissionValue'
@@ -305,6 +320,14 @@ export class ConversationalActionsCore implements Plugin {
         'prompt.firstSimple.speech',
         GoogleActionSpeechBuilder.toSSML(tell.speech as string),
       );
+
+      if (tell.speechText) {
+        _set(
+          googleAction.$response as ConversationalActionResponse,
+          'prompt.firstSimple.text',
+          tell.speechText,
+        );
+      }
       _set(
         googleAction.$response as ConversationalActionResponse,
         'scene.next.name',
@@ -320,6 +343,14 @@ export class ConversationalActionsCore implements Plugin {
         'prompt.firstSimple.speech',
         GoogleActionSpeechBuilder.toSSML(ask.speech as string),
       );
+
+      if (ask.speechText) {
+        _set(
+          googleAction.$response as ConversationalActionResponse,
+          'prompt.firstSimple.text',
+          ask.speechText,
+        );
+      }
 
       if (!googleAction.$conversationalSession.reprompts) {
         let input1, input2, final;
@@ -383,11 +414,18 @@ export class ConversationalActionsCore implements Plugin {
       });
     }
 
-    if (output.GoogleAssistant?.suggestions) {
+    const suggestions = output.GoogleAssistant?.suggestions;
+    const quickReplies = output.quickReplies;
+    if (suggestions?.length || quickReplies?.length) {
+      const newSuggestions = suggestions?.length
+        ? suggestions
+        : quickReplies!.map((quickReply) => ({
+            title: typeof quickReply !== 'string' ? quickReply.value : quickReply,
+          }));
       _set(
         googleAction.$response as ConversationalActionResponse,
         'prompt.suggestions',
-        output.GoogleAssistant.suggestions,
+        newSuggestions,
       );
     }
 
@@ -442,6 +480,14 @@ export class ConversationalActionsCore implements Plugin {
       );
     }
 
+    if (output.GoogleAssistant?.askPrompt) {
+      _set(
+        googleAction.$response as ConversationalActionResponse,
+        'prompt',
+        output.GoogleAssistant.askPrompt.prompt,
+      );
+    }
+
     response.user = {
       params: {
         ...(googleAction.$user as ConversationalActionUser).$params,
@@ -454,6 +500,7 @@ export class ConversationalActionsCore implements Plugin {
         id: request.session?.id!,
         params: {
           _JOVO_SESSION_: googleAction.$conversationalSession,
+          _JOVO_STATE_: null,
           ...googleAction.$session.$data,
         },
       };
@@ -472,6 +519,14 @@ export class ConversationalActionsCore implements Plugin {
         googleAction.$response as ConversationalActionResponse,
         'scene.next.name',
         output.GoogleAssistant.nextScene,
+      );
+    }
+
+    if (output.GoogleAssistant?.expected) {
+      _set(
+        googleAction.$response as ConversationalActionResponse,
+        'expected',
+        output.GoogleAssistant.expected,
       );
     }
   }

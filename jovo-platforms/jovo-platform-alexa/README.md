@@ -7,6 +7,7 @@ Learn more about Alexa specific features that can be used with the Jovo Framewor
 * [Introduction](#introduction)
 	* [Installation](#installation)
 	* [Quickstart](#quickstart)
+* [Configuration](#configuration)
 * [$alexaSkill Object](#alexaskill-object)
 * [Jovo Language Model](#jovo-language-model)
 	* [Dynamic Entities](#dynamic-entities)
@@ -134,6 +135,56 @@ In the Debugger, you can quickly test if the flow of your voice app works. For t
  
 > [Find out more about requests and responses here](https://www.jovo.tech/docs/requests-responses).
 
+## Configuration
+
+Using the `project.js` in your project directory, you can configure your skill specifically for your needs. Using [stages](https://www.jovo.tech/docs/project-js#stages), you can also utilize different configurations for different environments.
+
+The following elements can be added to the `alexaSkill` object:
+
+```js
+{
+  alexaSkill: {
+    skillId: '<your-skill-id>',
+    askProfile: '<your-ask-cli-profile>'
+  },
+}
+```
+
+In the deployment process with the Jovo CLI ([`jovo deploy`](../basic-concepts/cli/deploy './cli/deploy')), `skillId` and `askProfile` are by default taken from the existing `config` in the `/platforms/alexaSkill/.ask` folder. Specifying those in the `project.js` to override the existing platform files is especially useful if you have different versions of the Alexa Skill in separate developer accounts (see [Stages](#stages)).
+
+### skill.json Overrides
+
+You can also add information to go into the `skill.json`. You can basically add or override any element that you can find in the skill manifest:
+
+```js
+{
+  alexaSkill: {
+    manifest: {
+      // Add elements to override here.
+    }
+  },
+}
+```
+
+To add an object, make sure to add the same path it has in the `skill.json`. The below example (from our [Alexa Audioplayer Template](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer)) adds the Audioplayer Directive to the Alexa Skill:
+
+```js
+{
+  alexaSkill: {
+    manifest: {
+      apis: {
+        custom: {
+          interfaces: [
+            {
+              type: 'AUDIO_PLAYER',
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
 
 ## $alexaSkill Object
 

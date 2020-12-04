@@ -4,8 +4,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
-### 2020-09-01 [3.0.9]
+### 2020-12-03 [3.3.0]
+- [#870](https://github.com/jovotech/jovo-framework/pull/870) Use postbackData of suggestions if possible ([@KaanKC](https://github.com/KaanKC))
 
+### 2020-09-01 [3.0.9]
 * [#810](https://github.com/jovotech/jovo-framework/pull/810) Implement check for duplicated messages for GoogleBusiness ([@m-ripper](https://github.com/m-ripper))
 
 ### 2020-08-21 [3.0.7]

@@ -501,7 +501,68 @@ If the feature is enabled, the database entry will have the following structure:
     "userData": {
         "session": {
             "lastUpdatedAt": "ISO 8601 string",
-            "data": {
+            "$data": {
+                ...
+            },
+            "id": "session ID"
+        }
+    }
+}
+```
+
+It is also possible to provide `dataKey` which changes the key under which the data gets saved:
+
+> This is helpful, because some database-integrations like MongoDB do not allow special characters like `$` as field names.
+
+```js
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            data: true,
+            dataKey: 'customData',
+            id: true
+        },
+    },
+
+    // ...
+
+};
+
+// @language=typescript
+
+// src/config.ts
+
+const config = {
+    
+    user: {
+        sessionData: {
+            enabled: true,
+            data: true,
+            dataKey: 'customData',
+            id: true
+        },
+    },
+
+    // ...
+
+};
+```
+
+This will cause the database-entry to have the following structure:
+
+```js
+{
+    "userId": "...",
+    "userData": {
+        "session": {
+            "lastUpdatedAt": "ISO 8601 string",
+            "customData": {
                 ...
             },
             "id": "session ID"

@@ -47,7 +47,9 @@ export class ConversationalActionUser extends User {
   }
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {
-    const token = this.conversationalAction.$host.headers['authorization'];
+    const token =
+      this.conversationalAction.$host.headers['Authorization'] ||
+      this.conversationalAction.$host.headers['authorization'];
 
     if (!token) {
       throw new JovoError('No valid authorization token found. Make sure account linking worked!');
@@ -64,5 +66,14 @@ export class ConversationalActionUser extends User {
     } catch (e) {
       throw e;
     }
+  }
+  isAccountLinked() {
+    const request = this.conversationalAction.$request! as ConversationalActionRequest;
+    return request.user?.accountLinkingStatus === 'LINKED';
+  }
+
+  isVerified() {
+    const request = this.conversationalAction.$request! as ConversationalActionRequest;
+    return request.user?.verificationStatus === 'VERIFIED';
   }
 }

@@ -116,13 +116,11 @@ export class GoogleAction extends Jovo {
       reprompt = speech;
     }
 
-    this.$output.ask = {
-      speech: speech.toString(),
-      reprompt: reprompt.toString(),
-    };
+    _set(this.$output, 'ask.speech', speech.toString());
+    _set(this.$output, 'ask.reprompt', reprompt.toString());
 
     if (reprompts) {
-      this.$output.ask.reprompt = [reprompt.toString()];
+      this.$output.ask!.reprompt = [reprompt.toString()];
       reprompts.forEach((repr: string | SpeechBuilder) => {
         (this.$output.ask!.reprompt as string[]).push(repr.toString());
       });
@@ -222,7 +220,7 @@ export class GoogleAction extends Jovo {
    * @return {string}
    */
   getType() {
-    return 'ConversationalAction';
+    return 'GoogleAction';
   }
 
   /**
@@ -253,7 +251,7 @@ export class GoogleAction extends Jovo {
   }
 
   isInSandbox() {
-    // TODO:
+    throw new Error('Not supported anymore');
   }
 
   /**
@@ -261,7 +259,6 @@ export class GoogleAction extends Jovo {
    */
   isVerifiedUser(): boolean {
     const request = this.$request! as ConversationalActionRequest;
-
     return request.user?.verificationStatus === 'VERIFIED';
   }
 
@@ -275,7 +272,6 @@ export class GoogleAction extends Jovo {
    */
   getProjectId(): string {
     const queryParams = this.$host.getQueryParams();
-    // TODO: pass projectID via query param?
     return queryParams['projectId'];
   }
 
@@ -308,7 +304,7 @@ export class GoogleAction extends Jovo {
     for (const [key, value] of Object.entries(
       (this.$request! as ConversationalActionRequest).intent!.params,
     )) {
-      if (key.startsWith('NotificationSlot_')) {
+      if (key.startsWith('NotificationsSlot_')) {
         return value.resolved as PermissionResult;
       }
     }
@@ -335,5 +331,55 @@ export class GoogleAction extends Jovo {
   prompt(prompt: Prompt): this {
     this.$output.GoogleAssistant.prompt = prompt;
     return this;
+  }
+
+  /**
+   * @deprecated See https://github.com/jovotech/jovo-framework/tree/master/examples/typescript/02_googleassistantconv/account-linking
+   */
+  showAccountLinkingCard(): this {
+    throw new Error('Not supported in Google Assistant Conversational Actions. ');
+  }
+
+  promptAsk(prompt: Prompt, ...reprompts: Prompt[]): this {
+    this.$output.GoogleAssistant.askPrompt = {
+      prompt,
+      reprompts,
+    };
+    return this;
+  }
+
+  /**
+   * @deprecated Please use addTypeOverrides(typeOverrides: TypeOverride[])
+   * @param sessionEntityTypes
+   */
+  // tslint:disable-next-line:no-any
+  addSessionEntityTypes(sessionEntityTypes: any) {
+    throw new Error(
+      `Not supported in Google Assistant Conversational Actions. Please use addTypeOverrides(typeOverrides: TypeOverride[])`,
+    );
+  }
+
+  /**
+   * @deprecated Please use addTypeOverrides(typeOverrides: TypeOverride[])
+   * @param sessionEntityType
+   */
+  // tslint:disable-next-line:no-any
+  addSessionEntityType(sessionEntityType: any) {
+    return this.addSessionEntityTypes(sessionEntityType);
+  }
+  /**
+   * @deprecated Please use addTypeOverrides(typeOverrides: TypeOverride[])
+   * @param sessionEntity
+   */
+  // tslint:disable-next-line:no-any
+  addSessionEntity(sessionEntity: any) {
+    return this.addSessionEntityTypes(sessionEntity);
+  }
+
+  setExpected(expectedSpeech: string[], languageCode?: string) {
+    this.$output.GoogleAssistant.expected = {
+      speech: expectedSpeech,
+      languageCode: languageCode || this.$request!.getLocale(),
+    };
   }
 }

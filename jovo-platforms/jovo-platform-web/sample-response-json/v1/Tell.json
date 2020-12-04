@@ -1,21 +1,14 @@
 {
-  "version": "1.0",
-  "response": {
-    "shouldEndSession": true,
-    "output": {
-      "speech": {
-        "text": "Sample response text"
-      },
-      "actions": [
-        {
-          "key": "name.set",
-          "value": "Chris"
-        }
-      ]
-    },
-    "inputText": "my name is Chris"
-  },
-  "sessionData": {},
-  "userData": {
-  }
+  "version": "3.2.4",
+  "actions": [
+    {
+      "plain": "Hey John, nice to meet you!",
+      "ssml": "<speak>Hey John, nice to meet you!</speak>",
+      "type": "SPEECH"
+    }
+  ],
+  "reprompts": [],
+  "user": { "data": {} },
+  "session": { "data": {}, "end": true },
+  "context": { "request": { "nlu": { "intent": { "name": "MyNameIsIntent" } } } }
 }

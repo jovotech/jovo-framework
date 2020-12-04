@@ -26,7 +26,7 @@ export class SpeechBuilder {
 
     if (SpeechBuilder.ESCAPE_AMPERSAND) {
       // workaround (v1 compatibility)
-      text = text.replace(/&/g, 'and');
+      text = text.replace(/(&)(?=(?:[^"]|"[^"]*")*$)/g, 'and');
     }
 
     return text;
@@ -95,6 +95,13 @@ export class SpeechBuilder {
    */
   constructor(jovo?: Jovo) {
     this.jovo = jovo;
+  }
+
+  /**
+   * Wraps speak tags around the speech text
+   */
+  buildSSML(): string {
+    return SpeechBuilder.toSSML(this.speech);
   }
 
   /**

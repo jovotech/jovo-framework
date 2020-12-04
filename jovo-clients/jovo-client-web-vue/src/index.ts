@@ -1,27 +1,36 @@
-import Vue from 'vue';
-import { PluginConfig } from './Interfaces';
-import { JovoWebClientVue } from './JovoWebClientVue';
+import { Client, Config, DeepPartial } from 'jovo-client-web';
+import { PluginObject } from 'vue';
 
-export * from 'jovo-client-web';
-export * from './Interfaces';
-export * from './JovoWebClientVue';
+declare global {
+  interface Window {
+    JovoWebClientVue?: typeof import('.');
+  }
+}
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $assistant: JovoWebClientVue;
+    $client: Client;
   }
 }
 
-export function JovoAssistantVuePlugin(vue: typeof Vue, config?: PluginConfig) {
-  if (!config) {
-    throw new Error(
-      `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
-    );
-  }
-  vue.prototype.$assistant = new JovoWebClientVue(config.url, config.client);
+export interface JovoWebClientVueConfig {
+  url: string;
+  client?: DeepPartial<Config>;
 }
 
-// tslint:disable-next-line
-export default {
-  install: JovoAssistantVuePlugin,
+const plugin: PluginObject<JovoWebClientVueConfig> = {
+  install: (vue, config) => {
+    if (!config?.url) {
+      throw new Error(
+        `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
+      );
+    }
+    const client = new Client(config.url, config.client);
+    // make the client reactive
+    vue.prototype.$client = vue.observable(client);
+  },
 };
+
+export default plugin;
+
+export * from 'jovo-client-web';

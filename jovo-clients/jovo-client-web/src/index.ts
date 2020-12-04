@@ -1,36 +1,34 @@
-export const VERSION = '0.1.0';
+import 'whatwg-fetch';
 
-export {
-  CorePlatformRequestJSON as CoreRequest,
-  CorePlatformResponseJSON as CoreResponse,
-} from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+declare global {
+  interface Window {
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitAudioContext?: new () => AudioContext;
+    SpeechGrammarList?: new () => SpeechGrammarList;
+    webkitSpeechGrammarList?: new () => SpeechGrammarList;
 
-export * from 'jovo-platform-core/dist/src/Interfaces'; // tslint:disable-line
+    JovoWebClient: typeof import('.');
+  }
+}
 
-export * from './events';
-export * from './core/CoreComponent';
-export * from './core/Component';
-export * from './util/OSHelper';
-export * from './util/AudioHelper';
-export * from './util/Base64Converter';
-export * from './core/AdvancedEventEmitter';
-export * from './core/AudioPlayer';
-export * from './core/Interfaces';
-export * from './core/SpeechSynthesizer';
-export * from './core/SSMLEvaluator';
-export * from './core/Store';
-export * from './components/conversation/ConversationComponent';
-export * from './components/conversation/Interfaces';
-export * from './components/input/AudioRecorder';
-export * from './components/input/AudioVisualizer';
-export * from './components/input/InputComponent';
-export * from './components/input/Interfaces';
-export * from './components/logger/Interfaces';
-export * from './components/logger/LoggerComponent';
-export * from './components/request/Interfaces';
-export * from './components/request/NetworkHandler';
-export * from './components/request/RequestComponent';
-export * from './components/request/adapters/AjaxAdapter';
-export * from './components/response/RepromptTimer';
-export * from './components/response/ResponseComponent';
-export { JovoWebClient, DefaultInputMode } from './JovoWebClient';
+export type {
+  CorePlatformRequestJSON as WebRequest,
+  CorePlatformResponseJSON as WebResponse,
+  Version,
+} from 'jovo-platform-web';
+// tslint:disable-next-line
+export * from 'jovo-platform-web/dist/src/Interfaces'; // ugly fix but best way to only re-export what is needed
+
+export * from './types';
+export * from './util';
+export * from './core/ActionHandler';
+export * from './core/RepromptHandler';
+export * from './core/SSMLHandler';
+export * from './standalone/AudioPlayer';
+export * from './standalone/AudioRecorder';
+export * from './standalone/SpeechRecognizer';
+export * from './standalone/SpeechSynthesizer';
+export * from './standalone/Store';
+
+export * from './Client';

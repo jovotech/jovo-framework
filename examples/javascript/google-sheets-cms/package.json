@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-google-sheets-cms",
-  "version": "3.1.0",
+  "version": "3.3.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,13 +14,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-cms-googlesheets": "^3.1.0",
-    "jovo-db-dynamodb": "^3.1.0",
-    "jovo-db-filedb": "^3.1.0",
-    "jovo-framework": "^3.1.0",
-    "jovo-platform-alexa": "^3.1.0",
-    "jovo-platform-dialogflow": "^3.1.0",
-    "jovo-platform-googleassistant": "^3.1.0",
-    "jovo-plugin-debugger": "^3.1.0"
+    "jovo-cms-googlesheets": "^3.3.0",
+    "jovo-db-dynamodb": "^3.3.0",
+    "jovo-db-filedb": "^3.3.0",
+    "jovo-framework": "^3.3.0",
+    "jovo-platform-alexa": "^3.3.0",
+    "jovo-platform-dialogflow": "^3.3.0",
+    "jovo-platform-googleassistant": "^3.3.0",
+    "jovo-plugin-debugger": "^3.3.0"
   }
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <button id="primaryButton">Primary</button>
+      <button id="secondaryButton">Secondary</button>
+      <button id="tertiaryButton">Tertiary</button>
+    </div>
+
+    <%= htmlWebpackPlugin.tags.bodyTags %>
+    <script>
+      const primaryButton = document.getElementById('primaryButton');
+      const secondaryButton = document.getElementById('secondaryButton');
+      const tertiaryButton = document.getElementById('tertiaryButton');
+
+      // State-enum
+      const State = {
+        Initial: 'initial',
+        Ready: 'ready',
+      };
+
+      const client = new window.JovoWebClient.Client(
+        'http://localhost:3000/webhook',
+        {
+          audioRecorder: {
+            sampleRate: 8000,
+          },
+          speechRecognizer: {
+            locale: 'en',
+          },
+        },
+      );
+
+      client.$audioRecorder.on('stop', async (result) => {
+        await client
+          .createRequest({
+            type: 'AUDIO',
+            body: window.JovoWebClient.AudioHelper.getRequestBodyFromAudioRecorderResult(result),
+          })
+          .send();
+      });
+
+      const STATE_MAP = {
+        [State.Initial]: () => {
+          primaryButton.innerText = 'Initialize';
+          primaryButton.onclick = async () => {
+            await client.initialize();
+            await client.createRequest({ type: 'LAUNCH' }).send();
+            changeState(State.Ready);
+          };
+          secondaryButton.style.display = 'none';
+          tertiaryButton.style.display = 'none';
+        },
+        [State.Ready]: () => {
+          primaryButton.innerText = 'Start';
+          primaryButton.onclick = async () => {
+            await client.startInputRecording();
+          };
+          secondaryButton.style.display = null;
+          secondaryButton.innerText = 'Stop';
+          secondaryButton.onclick = async () => {
+            await client.stopInputRecording();
+          };
+          tertiaryButton.style.display = null;
+          tertiaryButton.innerText = 'Abort';
+          tertiaryButton.onclick = async () => {
+            await client.abortInputRecording();
+          };
+        },
+      };
+
+      let state;
+      function changeState(toState) {
+        state = toState;
+        if (STATE_MAP[toState]) {
+          STATE_MAP[toState]();
+        }
+      }
+
+      changeState(State.Initial);
+    </script>
+  </body>
+</html>

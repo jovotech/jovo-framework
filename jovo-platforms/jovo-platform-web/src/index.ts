@@ -1,7 +1,8 @@
-import { Action } from 'jovo-platform-core';
+import { Action, Config } from 'jovo-platform-core';
 import { WebApp } from './core/WebApp';
-import { Config } from './WebPlatform';
 
+export * from './Interfaces';
+export * from 'jovo-platform-core';
 export * from './WebPlatform';
 
 declare module 'jovo-core/dist/src/core/Jovo' {
@@ -27,6 +28,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
   }
 
   interface AppPlatformConfig extends AppWebPlatformConfig {}
+
   interface ExtensiblePluginConfigs extends AppWebPlatformConfig {}
 }
 

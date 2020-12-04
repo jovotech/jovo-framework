@@ -2,6 +2,14 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2020-11-10 [3.2.1]
+- [#857](https://github.com/jovotech/jovo-framework/pull/857) Fixes missing $rawResponseJson handling ([@aswetlow](https://github.com/aswetlow))
+
+
+### 2020-10-23 [3.1.5]
+- [#838](https://github.com/jovotech/jovo-framework/pull/838) Genesys integration ([@dominik-meissner](https://github.com/StepanU), [@dominik-meissner](https://github.com/dominik-meissner))
+
+
 ### 2020-09-29 [3.1.0]
 
 - [#820](https://github.com/jovotech/jovo-framework/pull/820) :sparkles: Add Dialogflow Phone Gateway integration ([@stephen-wilcox](https://github.com/stephen-wilcox))

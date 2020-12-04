@@ -1,20 +1,20 @@
 {
   "name": "jovo-client-web-vue",
-  "version": "3.1.0",
+  "version": "3.3.0",
   "main": "dist/index.common.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack --mode production",
-    "rimraf": "",
     "watch": "webpack --mode development --watch",
+    "rimraf": "",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
     "typedoc": "typedoc --out ./docs --mode file",
     "test": "jest"
   },
   "dependencies": {
-    "jovo-client-web": "^3.1.0"
+    "jovo-client-web": "^3.3.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
@@ -32,7 +32,6 @@
     "typescript": "^3.8.3",
     "vue": "^2.6.12",
     "webpack": "^4.41.5",
-    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10"
   },
   "peerDependencies": {

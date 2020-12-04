@@ -34,27 +34,23 @@ export class Base64Converter {
     });
   }
 
-  static arrayBufferToBase64(buffer: ArrayBuffer): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      let binary = '';
-      const bytes = new Uint8Array(buffer);
-      const length = bytes.byteLength;
-      for (let i = 0; i < length; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      resolve(btoa(binary));
-    });
+  static arrayBufferToBase64(buffer: ArrayBuffer): string {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const length = bytes.byteLength;
+    for (let i = 0; i < length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
   }
 
-  static base64ToArrayBuffer(base64String: string): Promise<ArrayBuffer> {
-    return new Promise<ArrayBuffer>((resolve, reject) => {
-      const binaryString = atob(base64String);
-      const length = binaryString.length;
-      const bytes = new Uint8Array(length);
-      for (let i = 0; i < length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      resolve(bytes.buffer);
-    });
+  static base64ToArrayBuffer(base64String: string): ArrayBuffer {
+    const binaryString = atob(base64String);
+    const length = binaryString.length;
+    const bytes = new Uint8Array(length);
+    for (let i = 0; i < length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 }

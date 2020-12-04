@@ -72,7 +72,8 @@ declare module 'jovo-core/dist/src/core/Jovo' {
 
 declare module 'jovo-core/dist/src/core/BaseApp' {
   /**
-   * Sets alexa handlers
+   * Sets google-assistant handlers
+   * @deprecated use this.setPlatformHandler('GoogleAssistant', ...handler) instead
    * @public
    * @param {*} handler
    */

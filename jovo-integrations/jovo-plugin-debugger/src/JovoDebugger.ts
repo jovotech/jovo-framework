@@ -1,4 +1,6 @@
 import * as crypto from 'crypto';
+
+import * as fs from 'fs';
 import {
   BaseApp,
   HandleRequest,
@@ -10,14 +12,12 @@ import {
   SessionData,
   Util,
 } from 'jovo-core';
-
 import _get = require('lodash.get');
-import _set = require('lodash.set');
-
-import * as fs from 'fs';
 import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 import * as path from 'path';
 import * as io from 'socket.io-client';
+import stripAnsi = require('strip-ansi');
 import * as util from 'util';
 
 const fsreadFile = util.promisify(fs.readFile);
@@ -375,11 +375,16 @@ export class JovoDebugger implements Plugin {
     const oldConsoleLog = console.log; // tslint:disable-line:no-console
 
     // tslint:disable-next-line
-    console.log = function (message) {
-      const nMessage = typeof message !== 'string' ? JSON.stringify(message) : message;
-      socket.emit('console.log', nMessage, new Error().stack!.toString());
-      // @ts-ignore
-      oldConsoleLog.apply(console, arguments); // eslint-disable-line
+    console.log = function (...args: any[]) {
+      const rawMessage: string = args.reduce((prev, current, index) => {
+        return `${prev}${index === 0 ? '' : '  '}${
+          typeof current !== 'string' ? JSON.stringify(current) : current
+        }`;
+      }, '');
+
+      const message = stripAnsi(rawMessage);
+      socket.emit('console.log', message, new Error().stack!.toString());
+      oldConsoleLog.call(this, ...args);
     };
     this.consoleLogOverriden = true;
   }
