@@ -385,19 +385,9 @@ export class GoogleAnalytics implements Analytics {
       setCustomDimension(index: number, value: string | number): void {
         this.$data[`cd${index}`] = value;
       },
-      /**
-       * Set a custom Google Analytics parameter
-       *
-       * @ref https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
-       */
       setParameter(parameter: string, value: string | number): void {
         this.$parameters[parameter] = value;
       },
-      /**
-       * Set Google Optimize experiment parameters
-       *
-       * @ref https://developers.google.com/optimize/devguides/experiments
-       */
       setOptimizeExperiment(experimentId: string, variation: string | number): void {
         this.$parameters[`exp`] = `${experimentId}.${variation}`;
       },
