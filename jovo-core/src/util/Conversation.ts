@@ -217,14 +217,21 @@ export class Conversation {
           metaData: this.$user.$metaData,
         },
       };
-
       const pathToDb = path.join(this.config.defaultDbDirectory!, this.config.userId! + '.json');
-      await fswriteFile(pathToDb, JSON.stringify(userDataObj, null, '\t'));
+      const dbExists = await fsexists(pathToDb);
+      if (dbExists) {
+        const fileContent = await fsreadFile(pathToDb);
+        const parsedContent = JSON.parse(fileContent.toString());
+        const joinedUserDbObj = _merge(parsedContent, userDataObj);
+        await fswriteFile(pathToDb, JSON.stringify(joinedUserDbObj, null, '\t'));
+      } else {
+        await fswriteFile(pathToDb, JSON.stringify(userDataObj, null, '\t'));
+      }
     }
   }
 
   /**
-   * Updates conversation.$data and conversation.$meta from file db json.
+   * Updates conversation.$data, conversation.$meta  and conversation.$context from file db json.
    * @returns {Promise<void>}
    */
   private async updateUserData() {
