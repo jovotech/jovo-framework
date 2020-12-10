@@ -17,12 +17,15 @@ Learn how to use Google Analytics in your Jovo application.
       - [Custom Dimensions](#custom-dimensions)
       - [Custom Metrics](#custom-metrics)
     - [Custom Reports](#custom-reports)
+    - [Optimize Experiments](#optimize-experiments)
     - [Developer Methods](#developer-methods)
       - [sendEvent()](#sendevent)
       - [sendTransaction()](#sendtransaction)
       - [sendItem()](#senditem)
       - [sendUserEvent()](#senduserevent)
       - [setCustomMetric()](#setcustommetric)
+      - [setParameter()](#setparameter)
+      - [setOptimizeExperiment()](#setoptimizeexperiment)
       - [Setup endReason metrics in the gooogle analytics console](#setup-endreason-metrics-in-the-gooogle-analytics-console)
 
 ## About Google Analytics
@@ -223,9 +226,14 @@ Keep in mind, that both custom dimensions and custom metrics are managed on inde
 
 You can enable tracking custom metrics for endReasons by setting trackEndReasons to true. More info upon the setup process is described [here](#setup-endreason-metrics-in-the-gooogle-analytics-console).
 
+
 ### Custom Reports
 
 Not every dimension/metric has a report out of the box. For example, [Exceptions]() need a custom report, before being displayed in Google Analytics. The same goes for custom dimensions/metrics. To create a custom report, go to "Customization" > "Custom Reports". There, you can add a new custom reports with your own attributes, such as the title, the dimensions/metrics you want to track and the report type.
+
+### Optimize Experiments
+
+You can setup A/B testing using Google Optimize and Google Analytics. A detailed guide on creating a server-side experiment can be found [here](https://developers.google.com/optimize/devguides/experiments). 
 
 ### Developer Methods
 
@@ -238,6 +246,8 @@ The Google Analytics plugin offers developer methods for sending data (like Even
 * sendUserTransaction (transactionId)
 * setCustomMetric (index, value)
 * setCustomDimension (index, value)
+* setParameter (parameter, value)
+* setOptimizeExperiment (experimentId, variation)
 
 All these methods are available on the Jovo object in your code and accessible by calling `this.$googleAnalytics.sendEvent(eventParameters)` in your code's handler, for example.
 
@@ -414,6 +424,54 @@ LAUNCH() {
 LAUNCH() {
     this.$googleAnalytics.setCustomMetric(1, 100);
 }
+``` 
+
+
+#### setParameter
+
+If you want to set a specific parameter in the page view events, like overriding your user's geographical location, you can set it with the `setParameter` method. You can find details on all available parameters [here](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters)
+
+```javascript
+// @language=javascript
+
+// app.js
+
+app.hook("before.response", (error, host, jovo) => {
+  jovo.$googleAnalytics.setParameter("geoid", "1017527");
+});
+
+// @language=typescript
+
+// app.js
+
+app.hook("before.response", (error: Error, host: Host, jovo: Jovo) => {
+  jovo.$googleAnalytics.setParameter("geoid", "1017527");
+});
+``` 
+
+
+#### setOptimizeExperiment
+
+`setOptimizeExperiment()` allows you to run A/B testing using Google Optimize. First setup a server-side experiment in Optimize, randomly assign your users to a group, then use `setOptimizeExperiment()` to provide the data. More details on setting up your experiment can be found [here](https://developers.google.com/optimize/devguides/experiments)
+
+```javascript
+// @language=javascript
+
+// app.js
+
+app.hook("before.response", (error, host, jovo) => {
+  const variationId = jovo.$user.$data.variationId;
+  jovo.$googleAnalytics.setOptimizeExperiment("16iQisXuS1qwXDixwB-EWgQ", variationId);
+});
+
+// @language=typescript
+
+// app.js
+
+app.hook("before.response", (error: Error, host: Host, jovo: Jovo) => {
+  const variationId = jovo.$user.$data.variationId;
+  jovo.$googleAnalytics.setOptimizeExperiment("16iQisXuS1qwXDixwB-EWgQ", variationId);
+});
 ``` 
 
 #### Setup endReason metrics in the gooogle analytics console
