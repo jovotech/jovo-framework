@@ -21,7 +21,7 @@ import { Prompt } from './core/Interfaces';
 export * from './core/Interfaces';
 export * from './services/PushNotificationsApi';
 export * from './visuals/BasicCard';
-
+export { GoogleAction } from './core/GoogleAction';
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $googleAction?: GoogleAction;
