@@ -16,6 +16,8 @@ export class WebPlatformCore extends CorePlatformCore {
       throw new Error(`Couldn't access host object.`);
     }
 
+    this.overwriteRequestAudioData(webApp.$host);
+
     webApp.$request = WebAppRequest.fromJSON(webApp.$host.getRequestObject()) as WebAppRequest;
     webApp.$user = new WebAppUser(webApp);
   }

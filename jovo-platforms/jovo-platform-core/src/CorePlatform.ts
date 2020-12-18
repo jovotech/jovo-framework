@@ -74,7 +74,6 @@ export class CorePlatform<
   install(app: BaseApp): void {
     app.$platform.set(this.constructor.name, this);
     app.middleware('setup')!.use(this.setup.bind(this));
-    app.middleware('request')!.use(this.request.bind(this));
     app.middleware('platform.init')!.use(this.initialize.bind(this));
     app.middleware('asr')!.use(this.asr.bind(this));
     app.middleware('nlu')!.use(this.nlu.bind(this));
@@ -92,14 +91,6 @@ export class CorePlatform<
 
   async setup(handleRequest: HandleRequest) {
     await this.middleware('setup')!.run(handleRequest);
-  }
-
-  async request(handleRequest: HandleRequest) {
-    const audioBase64String = (handleRequest.host.$request as REQ).request.body.audio?.b64string;
-    if (audioBase64String) {
-      const samples = this.getSamplesFromAudio(audioBase64String);
-      _set(handleRequest.host.$request, 'request.body.audio.data', samples);
-    }
   }
 
   async initialize(handleRequest: HandleRequest) {
@@ -197,19 +188,5 @@ export class CorePlatform<
     return (new CorePlatformResponseBuilder() as unknown) as ResponseBuilder<RES>;
   }
 
-  protected getSamplesFromAudio(base64: string): Float32Array {
-    const binaryBuffer = Buffer.from(base64, 'base64').toString('binary');
-    const length = binaryBuffer.length / Float32Array.BYTES_PER_ELEMENT;
-    const view = new DataView(new ArrayBuffer(Float32Array.BYTES_PER_ELEMENT));
-    const samples = new Float32Array(length);
-    for (let i = 0; i < length; i++) {
-      const p = i * 4;
-      view.setUint8(0, binaryBuffer.charCodeAt(p));
-      view.setUint8(1, binaryBuffer.charCodeAt(p + 1));
-      view.setUint8(2, binaryBuffer.charCodeAt(p + 2));
-      view.setUint8(3, binaryBuffer.charCodeAt(p + 3));
-      samples[i] = view.getFloat32(0, true);
-    }
-    return samples;
-  }
+
 }
