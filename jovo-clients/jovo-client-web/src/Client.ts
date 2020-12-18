@@ -84,7 +84,7 @@ export class Client extends EventEmitter {
 
   static getDefaultConfig(): Config {
     return {
-      version: '3.2.5',
+      version: '3.3.1',
       appId: '',
       platform: '',
       device: {
