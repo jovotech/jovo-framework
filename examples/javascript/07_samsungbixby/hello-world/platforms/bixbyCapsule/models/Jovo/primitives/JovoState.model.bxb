@@ -1,3 +1,0 @@
-text (JovoState) {
-  description (The current state of the Jovo handler.)
-}

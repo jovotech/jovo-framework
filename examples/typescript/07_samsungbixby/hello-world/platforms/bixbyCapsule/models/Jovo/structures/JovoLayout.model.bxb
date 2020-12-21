@@ -1,6 +1,0 @@
-structure (JovoLayout) {
-  description (Layout structure. Add your fields for usage.)
-
-  // Paste your own layout properties here.
-  
-}

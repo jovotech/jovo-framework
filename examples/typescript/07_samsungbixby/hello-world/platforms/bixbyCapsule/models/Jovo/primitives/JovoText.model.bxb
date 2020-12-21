@@ -1,3 +1,0 @@
-text (JovoText) {
-  description (The returned Jovo output as plain text without SSML.)
-}
