@@ -1,0 +1,40 @@
+{
+  "name": "jovo-examples-js-hello-world",
+  "version": "4.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "bundle": "ncc build ./src/index.ts",
+    "bundle:lambda": "ncc build src/host/lambda.ts && cd dist/ && bestzip ./../bundle.zip index.js",
+    "bundle:fastify": "ncc build src/host/fastify.js",
+
+    "bundle:express": "ncc build src/host/express.ts",
+    "bundle:browser": "browserify src/host/browser.ts -p [ tsify --noImplicitAny ] > bundle.js",
+    "start": "npm run start:fastify",
+    "start:fastify": "cd dist/src/host && node fastify.js",
+    "start:express": "cd dist/src/host && node express.js",
+    "start:socketio": "cd dist/src/host && node socketio.js",
+    "launch": "npm start -- --launch",
+    "webpack": "webpack --entry ./src/host/fastify.js --mode=development --progress --watch",
+    "babel": "./node_modules/.bin/babel ./src --out-dir ./dist"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "babel-loader": "^8.2.2"
+  }
+}

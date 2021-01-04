@@ -1,0 +1,58 @@
+{
+  "name": "jovo-examples-ts-hello-world",
+  "version": "4.0.0",
+  "private": true,
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "bundle": "ncc build ./src/index.ts",
+    "bundle:lambda": "ncc build src/host/lambda.ts && cd dist/ && bestzip ./../bundle.zip index.js",
+    "bundle:fastify": "ncc build src/host/fastify.ts",
+    "bundle:express": "ncc build src/host/express.ts",
+    "bundle:browser": "browserify src/host/browser.ts -p [ tsify --noImplicitAny ] > bundle.js",
+    "start": "npm run start:fastify",
+    "start:fastify": "cd dist/src/host && node fastify.js",
+    "start:express": "cd dist/src/host && node express.js",
+    "start:socketio": "cd dist/src/host && node socketio.js",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-framework": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.6",
+    "@types/express": "^4.17.8",
+    "jest": "^26.6.3",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.3",
+    "typescript": "^4.0.5",
+    "eslint": "^7.12.1",
+    "ncc": "^0.3.6",
+    "tsify": "^5.0.2",
+    "browserify": "^17.0.0",
+    "bestzip": "^2.1.7",
+    "fastify": "^3.7.0",
+    "express": "^4.17.1",
+    "socket.io": "^3.0.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  },
+  "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
+}
