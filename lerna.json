@@ -2,10 +2,6 @@
   "packages": [
     "jovo-framework",
     "jovo-core",
-    "jovo-platforms/*",
-    "jovo-integrations/*",
-    "jovo-clients/*",
-    "e2e",
     "examples/**"
   ],
   "ignoreChanges": [
@@ -14,10 +10,5 @@
     "*.txt",
     "test/**"
   ],
-  "command": {
-    "publish": {
-      "message": ":bookmark: Publish"
-    }
-  },
   "version": "independent"
 }
