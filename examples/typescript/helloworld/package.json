@@ -3,8 +3,8 @@
   "version": "4.0.0",
   "private": true,
   "description": "",
-  "main": "dist/src/index",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "bundle": "ncc build ./src/index.ts",
@@ -24,35 +24,26 @@
     "jovo-framework": "^4.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.6",
-    "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.19",
+    "@types/node": "^10.17.50",
+    "@types/express": "^4.17.9",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "@vercel/ncc": "^0.26.1",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.4.3",
-    "typescript": "^4.0.5",
-    "eslint": "^7.12.1",
-    "ncc": "^0.3.6",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3",
     "tsify": "^5.0.2",
     "browserify": "^17.0.0",
     "bestzip": "^2.1.7",
     "fastify": "^3.7.0",
     "express": "^4.17.1",
     "socket.io": "^3.0.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testURL": "http://localhost/",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ]
   },
   "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
 }
