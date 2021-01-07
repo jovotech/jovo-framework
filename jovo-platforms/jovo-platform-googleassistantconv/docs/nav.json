@@ -1,0 +1,50 @@
+[
+    {
+        "title": "Requests & Responses",
+        "route": "request-response",
+        "content": [
+            {
+                "title": "Request",
+                "route": "request-response/request"
+            },
+            {
+                "title": "Response",
+                "route": "request-response/response"
+            }
+        ]
+    },
+    {
+        "title": "Interfaces",
+        "route": "interfaces",
+        "content": [
+            {
+                "title": "Daily Updates",
+                "route": "interfaces/daily-updates"
+            },
+            {
+                "title": "Media Response API",
+                "route": "interfaces/media-response"
+            },
+            {
+                "title": "Push Notifications",
+                "route": "interfaces/notifications"
+            },
+            {
+                "title": "Routine Suggestions",
+                "route": "interfaces/routine-suggestions"
+            },
+            {
+                "title": "Assistant Visual Output",
+                "route": "interfaces/visual-output"
+            }
+        ]
+    },
+    {
+        "title": "User Data and Permissions",
+        "route": "data-permissions"
+    },
+    {
+        "title": "Google Transactions",
+        "route": "transactions"
+    }
+]
