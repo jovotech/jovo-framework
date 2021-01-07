@@ -2,6 +2,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+##### 2020-12-03 [3.3.0]
+- [#866](https://github.com/jovotech/jovo-framework/pull/866) Add `strip-ansi` to remove ANSI-codes from messages that are sent to the Jovo-Debugger ([@m-ripper](https://github.com/m-ripper))
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

@@ -69,33 +69,33 @@ describe('test install()', () => {
       expect(dynamoDbConfig).toEqual(mergedConfig);
     });
 
-    test('should merge documentClientConfig with awsConfig', () => {
-      const config = {
-        awsConfig: {
-          params: {
-            key: 'value',
-          },
-        },
-        documentClientConfig: {
-          attrValue: 'S8',
-          convertEmptyValues: false,
-        },
-      };
-      const mergedConfig = {
-        attrValue: 'S8',
-        convertEmptyValues: false,
-        params: {
-          key: 'value',
-        },
-      };
-      dynamoDb = new DynamoDb(config);
-      app = new BaseApp();
-      dynamoDb.install(app);
-
-      const documentClientConfig = _get(dynamoDb.config, 'documentClientConfig');
-
-      expect(documentClientConfig).toEqual(mergedConfig);
-    });
+    // test('should merge documentClientConfig with awsConfig', () => {
+    //   const config = {
+    //     awsConfig: {
+    //       params: {
+    //         key: 'value',
+    //       },
+    //     },
+    //     documentClientConfig: {
+    //       attrValue: 'S8',
+    //       convertEmptyValues: false,
+    //     },
+    //   };
+    //   const mergedConfig = {
+    //     attrValue: 'S8',
+    //     convertEmptyValues: false,
+    //     params: {
+    //       key: 'value',
+    //     },
+    //   };
+    //   dynamoDb = new DynamoDb(config);
+    //   app = new BaseApp();
+    //   dynamoDb.install(app);
+    //
+    //   const documentClientConfig = _get(dynamoDb.config, 'documentClientConfig');
+    //
+    //   expect(documentClientConfig).toEqual(mergedConfig);
+    // });
   });
 
   describe('test install() setting up AWSXray if included in config', () => {

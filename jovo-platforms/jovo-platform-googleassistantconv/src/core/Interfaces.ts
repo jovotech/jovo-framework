@@ -179,7 +179,11 @@ export interface PermissionResult {
     updateUserId: string;
   };
 }
-
+export enum GoogleAssistantDeviceName {
+  GOOGLE_ASSISTANT_SPEAKER = 'GOOGLE_ASSISTANT_SPEAKER',
+  GOOGLE_ASSISTANT_PHONE = 'GOOGLE_ASSISTANT_PHONE',
+  GOOGLE_ASSISTANT_SMARTDISPLAY = 'GOOGLE_ASSISTANT_SMARTDISPLAY',
+}
 export interface Simple {
   speech?: string;
   text?: string;
@@ -265,8 +269,6 @@ export interface Canvas {
   // tslint:disable-next-line:no-any
   data: any;
   suppressMic?: boolean;
-  continuousMatchConfig?: ContinuousMatchConfig;
-  sendStateDataToCanvasApp: boolean;
 }
 
 export interface CollectionItem {
@@ -370,6 +372,11 @@ export interface Home {
 export interface Device {
   capabilities: Capability[];
 }
+export interface Expected {
+  speech: string[];
+  languageCode: string;
+}
+
 export interface MediaContext {
   progress: string; // Example: "3.5s
 }
@@ -767,4 +774,11 @@ export interface ConversationalSession {
   createdAt?: string;
   // tslint:disable-next-line:no-any
   reprompts?: any;
+}
+
+export interface HtmlResponse {
+  url?: string;
+  // tslint:disable-next-line:no-any
+  data?: Record<string, any>;
+  suppressMic?: boolean;
 }

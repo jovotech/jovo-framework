@@ -8,17 +8,20 @@ import {
   Image,
   Media,
   Suggestion,
+  HtmlResponse,
+  Expected,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
 import { MediaResponse } from './modules/MediaResponse';
 export { GoogleAssistant, Config } from './GoogleAssistant';
-export { GoogleAssistantTestSuite, Suggestion } from './core/Interfaces';
+export { GoogleAssistantTestSuite, Suggestion, Expected } from './core/Interfaces';
 import { NextScene } from './core/Interfaces';
 import { Prompt } from './core/Interfaces';
 export * from './core/Interfaces';
 export * from './services/PushNotificationsApi';
-
+export * from './visuals/BasicCard';
+export { GoogleAction } from './core/GoogleAction';
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $googleAction?: GoogleAction;
@@ -40,7 +43,8 @@ declare module 'jovo-core/dist/src/core/Jovo' {
 
 declare module 'jovo-core/dist/src/core/BaseApp' {
   /**
-   * Sets alexa handlers
+   * Sets google-assistant-conv handlers
+   * @deprecated use this.setPlatformHandler('GoogleAssistant', ...handler) instead
    * @public
    * @param {*} handler
    */
@@ -62,6 +66,9 @@ declare module './core/GoogleAction' {
     addCollection(collection: Collection): this;
 
     addTypeOverrides(typeOverrides: TypeOverride[]): this;
+    setTypeOverrides(typeOverrides: TypeOverride[]): this;
+
+    showBasicCard(basicCard: Card): this;
   }
 }
 
@@ -82,11 +89,19 @@ declare module 'jovo-core/dist/src/Interfaces' {
       suggestions?: Suggestion[];
       nextScene?: NextScene;
       prompt?: Prompt;
+      htmlResponse?: HtmlResponse;
       askPrompt?: {
         prompt: Prompt;
         reprompts?: Prompt[];
       };
+      expected?: Expected;
     };
+  }
+}
+
+declare module './core/GoogleAction' {
+  interface GoogleAction {
+    htmlResponse(obj: HtmlResponse): this;
   }
 }
 

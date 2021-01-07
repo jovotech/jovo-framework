@@ -16,13 +16,10 @@ export class RepromptHandler {
       maxAttempts: 1,
     };
   }
-
   private actions: Action[] = [];
   private attempts = 0;
   private hasAddedEvents = false;
-
   private useSpeechRecognition = true;
-
   private timeoutFn = this.onInputTimeout.bind(this);
   private endFn = this.onInputEnd.bind(this);
 

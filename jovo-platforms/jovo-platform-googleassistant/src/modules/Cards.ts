@@ -261,15 +261,24 @@ export class Cards implements Plugin {
       _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);
     }
 
-    if (_get(output, 'GoogleAssistant.SuggestionChips')) {
-      const suggestionChips = _get(googleAction.$originalResponse, 'richResponse.suggestions', []);
+    const suggestionChips: string[] | undefined = _get(output, 'GoogleAssistant.SuggestionChips');
+    const quickReplies = output.quickReplies;
+    if (suggestionChips?.length || quickReplies?.length) {
+      const newSuggestionChips = _get(
+        googleAction.$originalResponse,
+        'richResponse.suggestions',
+        [],
+      );
 
-      _get(output, 'GoogleAssistant.SuggestionChips').forEach((chip: string) => {
-        suggestionChips.push({
-          title: chip,
-        });
-      });
-      _set(googleAction.$originalResponse, 'richResponse.suggestions', suggestionChips);
+      const suggestionChipsToAdd = suggestionChips?.length
+        ? suggestionChips.map((chip) => ({ title: chip }))
+        : quickReplies!.map((quickReply) => ({
+            title: typeof quickReply !== 'string' ? quickReply.value : quickReply,
+          }));
+
+      newSuggestionChips.push(...suggestionChipsToAdd);
+
+      _set(googleAction.$originalResponse, 'richResponse.suggestions', newSuggestionChips);
     }
 
     if (_get(output, 'GoogleAssistant.LinkOutSuggestion')) {

@@ -1,6 +1,6 @@
 import { App, SpeechBuilder } from 'jovo-framework';
 
-import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
+import { GoogleAssistant, BasicCard } from 'jovo-platform-googleassistantconv';
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { FileDb } from 'jovo-db-filedb';
 
@@ -10,15 +10,16 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
-		// return this.toIntent('BasicCardIntent');
+		return this.toIntent('BasicCardIntent');
 		// return this.toIntent('ImageCardIntent');
 		// return this.toIntent('TableIntent');
 		// return this.toIntent('SuggestionsIntent');
 		// return this.toIntent('RichIntent');
-		return this.toIntent('RichIntentEndConversation');
+		// return this.toIntent('RichIntentEndConversation');
 	},
 	BasicCardIntent() {
-		this.$googleAction!.addBasicCard({
+
+		this.$googleAction!.showBasicCard({
 			title: 'Title',
 			subtitle: 'Subtitle',
 			text: 'Text',
@@ -27,7 +28,20 @@ app.setHandler({
 				alt: 'Image text',
 			},
 		});
-		this.tell('Basic card');
+
+		// or
+
+		const basicCard = new BasicCard()
+			.setTitle('Title')
+			.setImage({
+				url: 'http://via.placeholder.com/450x350?text=Basic+Card',
+				alt: 'accessibilityText'})
+			.setText('Formatted Text')
+			.setImageDisplay('WHITE');
+
+		this.$googleAction!.showBasicCard(basicCard);
+
+		this.ask('Basic card');
 	},
 	ImageCardIntent() {
 		this.$googleAction!.addImageCard({

@@ -2,6 +2,8 @@ import { CorePlatformApp } from './core/CorePlatformApp';
 import { Config } from './CorePlatform';
 import { Action } from './Interfaces';
 
+export type Version = '3.2.0' | '3.2.1' | '3.2.2' | '3.2.4' | string;
+
 export * from './CorePlatform';
 
 declare module 'jovo-core/dist/src/core/Jovo' {

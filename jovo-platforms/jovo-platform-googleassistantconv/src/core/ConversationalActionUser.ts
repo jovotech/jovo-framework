@@ -47,7 +47,9 @@ export class ConversationalActionUser extends User {
   }
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {
-    const token = this.conversationalAction.$host.headers['authorization'];
+    const token =
+      this.conversationalAction.$host.headers['Authorization'] ||
+      this.conversationalAction.$host.headers['authorization'];
 
     if (!token) {
       throw new JovoError('No valid authorization token found. Make sure account linking worked!');

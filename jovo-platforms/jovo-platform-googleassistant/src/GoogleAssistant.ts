@@ -99,11 +99,6 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
       return this.constructor.name === 'GoogleAction';
     };
 
-    /**
-     * Sets alexa handlers
-     * @public
-     * @param {*} handlers
-     */
     // tslint:disable-next-line
     BaseApp.prototype.setGoogleAssistantHandler = function (...handlers: any[]) {
       for (const obj of handlers) {

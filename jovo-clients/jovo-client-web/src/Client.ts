@@ -29,6 +29,7 @@ import {
   SSMLHandler,
   Store,
   StoreConfig,
+  Version,
   VoidListener,
   WebRequest,
   WebResponse,
@@ -50,10 +51,8 @@ export type ClientActionsHandledListener = (actions: Action[]) => void;
 export type ClientRepromptListener = (repromptActions: Action[]) => void;
 export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
 
-export type SupportedVersion = '3.2.0' | '3.2.1' | string;
-
 export interface Config {
-  version: SupportedVersion;
+  version: Version;
   appId: string;
   platform: string;
   device: Device;
@@ -67,9 +66,25 @@ export interface Config {
 }
 
 export class Client extends EventEmitter {
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isPlayingAudio(): boolean {
+    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
+  }
+
+  get isRecordingInput(): boolean {
+    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
+  }
+
+  get isUsingSpeechRecognition(): boolean {
+    return this.useSpeechRecognition;
+  }
+
   static getDefaultConfig(): Config {
     return {
-      version: '3.2.1',
+      version: '3.2.5',
       appId: '',
       platform: '',
       device: {
@@ -96,13 +111,10 @@ export class Client extends EventEmitter {
   readonly $speechRecognizer: SpeechRecognizer;
   readonly $speechSynthesizer: SpeechSynthesizer;
   readonly $store: Store;
-
   readonly config: Config;
-
   readonly $actionHandler: ActionHandler;
   readonly $repromptHandler: RepromptHandler;
   readonly $ssmlHandler: SSMLHandler;
-
   private useSpeechRecognition = true;
   private isInputProcessOngoing = false;
   private initialized = false;
@@ -171,22 +183,6 @@ export class Client extends EventEmitter {
       this.$store.resetSession();
       this.$store.save();
     });
-  }
-
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
-  get isPlayingAudio(): boolean {
-    return this.$audioPlayer.isPlaying || this.$speechSynthesizer.isSpeaking;
-  }
-
-  get isRecordingInput(): boolean {
-    return this.$audioRecorder.isRecording || this.$speechRecognizer.isRecording;
-  }
-
-  get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition;
   }
 
   addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;

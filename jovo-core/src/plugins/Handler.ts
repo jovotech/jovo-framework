@@ -1,4 +1,6 @@
 import _get = require('lodash.get');
+import _merge = require('lodash.merge');
+import _set = require('lodash.set');
 
 import {
   BaseApp,
@@ -257,18 +259,35 @@ export class Handler implements Plugin {
   }
 
   mixin(app: BaseApp) {
-    BaseApp.prototype.setHandler = function (...handlers: any[]): BaseApp {
-      // tslint:disable-line
-      for (const obj of handlers) {
-        // eslint-disable-line
-        if (typeof obj !== 'object') {
+    BaseApp.prototype.setHandler = function (...handlers: unknown[]): BaseApp {
+      for (const handler of handlers) {
+        if (typeof handler !== 'object') {
           throw new Error('Handler must be of type object.');
         }
-        this.config.handlers = Object.assign(
-          // tslint:disable-line:prefer-object-spread
-          this.config.handlers || {},
-          obj,
+        this.config.handlers = _merge(this.config.handlers || {}, handler);
+      }
+      return this;
+    };
+
+    BaseApp.prototype.setPlatformHandler = function (
+      platformName,
+      ...handlers: unknown[]
+    ): BaseApp {
+      if (!this.$platform.has(platformName)) {
+        throw new JovoError(
+          `Can not set handlers for ${platformName}. No platform with the name ${platformName} is installed.`,
+          ErrorCode.ERR,
+          'Handler',
+          `Installed platforms: ${Array.from(this.$platform.keys()).join(', ')}.`,
         );
+      }
+      for (const handler of handlers) {
+        if (typeof handler !== 'object') {
+          throw new Error('Handler must be of type object.');
+        }
+        const handlersPath = `plugin.${platformName}.handlers`;
+        const sourceHandler = _get(this.config, handlersPath);
+        _set(this.config, handlersPath, _merge(sourceHandler, handler));
       }
       return this;
     };

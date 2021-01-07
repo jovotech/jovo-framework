@@ -102,58 +102,55 @@ In a Jovo app, each interaction goes through a [request & response cycle](https:
 
 The request usually contains data like an audio file or raw text ([find all sample request JSONs here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web/sample-request-json/v1)):
 
-```js
+```json
 {
+  "version": "3.2.4",
+  "type": "jovo-platform-web",
   "request": {
-    "locale": "en-US",
-    "timestamp": "2019-07-01T08:23:06.441Z"
+    "id": "d86f9fdf-6762-4acf-8d1d-ce330a29d592",
+    "timestamp": "2020-11-23T12:50:21.009Z",
+    "type": "TRANSCRIBED_TEXT",
+    "body": { "text": "hello world" },
+    "locale": "en",
+    "data": {}
   },
-  "session": {
-    "data": {
+  "context": {
+    "device": { "type": "BROWSER", "capabilities": { "AUDIO": true, "HTML": true, "TEXT": true } },
+    "session": {
+      "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
+      "data": {},
+      "lastUpdatedAt": "2020-11-23T12:35:21.345Z"
     },
-    "id": "92dd969e-024a-4bd1-9aee-29d39daaa61f",
-    "new": false
-  },
-  "user": {
-    "id": "2f416861-94aa-424b-b9f2-ac5f83a36fa0",
-    "data": {
-    }
-  },
-  "$version": "1.0.0",
-  "text": "my name is Max"
+    "user": { "id": "67fed000-9f11-4acf-bbbc-1e52e5ea22a9", "data": {} }
+  }
 }
+
 ```
 
 The response contains all the information that is needed by the client to display content ([find all sample response JSONs here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web/sample-response-json/v1)):
 
-```js
+```json
 {
-   "version": "3.2.0",
-   "actions": [
-      {
-         "plain": "Alright!",
-         "ssml": "Alright!",
-         "type": "SPEECH"
-      }
-   ],
-   "reprompts": [],
-   "user": {
-      "data": {}
-   },
-   "session": {
-      "data": {},
-      "end": true
-   },
-   "context": {
-      "request": {
-         "nlu": {
-            "intent": {
-               "name": "None"
-            }
-         }
-      }
-   }
+  "version": "3.2.4",
+  "actions": [
+    {
+      "plain": "Hello World! What's your name?",
+      "ssml": "<speak>Hello World! What's your name?</speak>",
+      "type": "SPEECH"
+    }
+  ],
+  "reprompts": [
+    {
+      "plain": "Please tell me your name.",
+      "ssml": "<speak>Please tell me your name.</speak>",
+      "type": "SPEECH"
+    }
+  ],
+  "user": { "data": {} },
+  "session": { "data": {}, "end": false },
+  "context": { "request": { "nlu": { "intent": { "name": "LAUNCH" } } } }
 }
+
 ```
 
 
@@ -201,22 +198,6 @@ app.use(webPlatform);
 
 
 ### Responding with Actions
-
-The `output` object in the JSON response can contain both `speech` output and `actions`:
-
-```javascript
-"output": {
-	"speech": {
-		"text": "Sample response text"
-	},
-	"actions": [
-		{
-			"key": "name.set",
-			"value": "Chris"
-		}
-	]
-},
-```
 
 Actions are additional ways (beyond speech output) how the client can respond to the user. You can add or set Actions like this:
 
