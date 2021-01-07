@@ -261,7 +261,7 @@ this.$googleAction!
 
 > For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://www.jovo.tech/docs/model).
 
-You can add a `googleAssistant` object at the root of the Jovo Language Model to add Google Assistant specific stuff using their original syntax. While building, it will be merged with the platform-independent stuff:
+You can add a `googleAssistant` object at the root of the Jovo Language Model to add Google Assistant specific stuff using their original syntax. While building, it will be merged with the platform-independent configuration:
 
 ```js
 "googleAssistant": {
