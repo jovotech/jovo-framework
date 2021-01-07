@@ -3,7 +3,8 @@ import _merge from 'lodash.merge';
 import _set from 'lodash.set';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
-import { Plugin, PluginConstructor, PluginDefinition } from './Plugin';
+import { DeepPartial } from './index';
+import { Plugin, PluginConstructor, PluginDefinition, PluginDefinitionInput } from './Plugin';
 
 export interface AppConfig extends ExtensibleConfig {
   test: string;
@@ -14,7 +15,7 @@ export class App extends Extensible<AppConfig> {
     test: '',
   };
 
-  private pluginDefinitions: Array<PluginConstructor | PluginDefinition> = [];
+  private pluginDefinitions: PluginDefinitionInput[] = [];
 
   constructor(config?: AppConfig) {
     super({});
@@ -38,8 +39,32 @@ export class App extends Extensible<AppConfig> {
     return;
   }
 
-  use(...pluginDefinitions: Array<PluginConstructor | PluginDefinition>) {
-    this.pluginDefinitions.push(...pluginDefinitions);
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  use<C extends object = object, T extends Plugin<C> = Plugin<C>>(
+    constructor: PluginConstructor<C, T>,
+    configOrPlugins?: DeepPartial<C> | PluginDefinitionInput[],
+    plugins?: PluginDefinitionInput[],
+  ) {
+    if (
+      (!configOrPlugins || typeof configOrPlugins !== 'object' || Array.isArray(configOrPlugins)) &&
+      plugins
+    ) {
+      throw new Error('Second parameter has to be an object when passing a third parameter.');
+    }
+    const config =
+      configOrPlugins && typeof configOrPlugins === 'object' && !Array.isArray(configOrPlugins)
+        ? configOrPlugins
+        : undefined;
+    plugins =
+      configOrPlugins && typeof configOrPlugins === 'object' && Array.isArray(configOrPlugins)
+        ? configOrPlugins
+        : plugins;
+
+    this.pluginDefinitions.push({
+      constructor,
+      config,
+      plugins,
+    });
   }
 
   async handle() {
@@ -48,18 +73,18 @@ export class App extends Extensible<AppConfig> {
     const handleRequest = new HandleRequest(JSON.parse(JSON.stringify(this.config)));
     await this.installPlugins(handleRequest, handleRequest, this.plugins);
 
-    handleRequest.config.test = 'edited';
-    if (handleRequest.config.plugin?.Example) {
-      handleRequest.config.plugin.Example.test = 'edited';
-    }
-
-    if (handleRequest.config.plugin?.CorePlatform) {
-      handleRequest.config.plugin.CorePlatform.foo = 'edited';
-
-      if (handleRequest.config.plugin.CorePlatform.plugin?.DialogflowNlu) {
-        handleRequest.config.plugin.CorePlatform.plugin.DialogflowNlu.bar = 'edited';
-      }
-    }
+    // handleRequest.config.test = 'edited';
+    // if (handleRequest.config.plugin?.Example) {
+    //   handleRequest.config.plugin.Example.test = 'edited';
+    // }
+    //
+    // if (handleRequest.config.plugin?.CorePlatform) {
+    //   handleRequest.config.plugin.CorePlatform.foo = 'edited';
+    //
+    //   if (handleRequest.config.plugin.CorePlatform.plugin?.DialogflowNlu) {
+    //     handleRequest.config.plugin.CorePlatform.plugin.DialogflowNlu.bar = 'edited';
+    //   }
+    // }
 
     console.log('App', JSON.stringify(this, undefined, 2));
     console.log('HandleRequest', JSON.stringify(handleRequest, undefined, 2));
@@ -73,7 +98,7 @@ export class App extends Extensible<AppConfig> {
     for (let i = 0, len = definitions.length; i < len; i++) {
       if (typeof definitions[i] === 'function') {
         const name = (definitions[i] as PluginConstructor).name;
-        const config = {};
+        const config = parent.config.plugin?.[name] || {};
         const instance = new (definitions[i] as PluginConstructor)(config);
         if (instance.initialize) {
           await instance.initialize(parent);
@@ -81,16 +106,16 @@ export class App extends Extensible<AppConfig> {
         parent.plugins[name] = instance;
         _set(this.config, `${path}.${name}`, config);
       } else {
-        const { resolve, plugins, config } = definitions[i] as PluginDefinition;
-        const requiredConfig = config || {};
-        const instance = new resolve(requiredConfig);
+        const { constructor, plugins, config } = definitions[i] as PluginDefinition;
+        const requiredConfig = config || parent.config.plugin?.[constructor.name] || {};
+        const instance = new constructor(requiredConfig);
         if (instance.initialize) {
           await instance.initialize(parent);
         }
-        parent.plugins[resolve.name] = instance;
-        _set(this.config, `${path}.${resolve.name}`, requiredConfig);
+        parent.plugins[constructor.name] = instance;
+        _set(this.config, `${path}.${constructor.name}`, requiredConfig);
         if (plugins?.length && instance instanceof Extensible) {
-          await this.initializePlugins(plugins, instance, `${path}.${resolve.name}.plugin`);
+          await this.initializePlugins(plugins, instance, `${path}.${constructor.name}.plugin`);
         }
       }
     }
