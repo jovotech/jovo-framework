@@ -3,6 +3,9 @@ import { Extensible, ExtensibleConfig } from './Extensible';
 
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
+// TODO: Usages of .constructor.name cause errors in webpack, because the name is not the class-name mostly when minimizing.
+// It has to be checked whether constructor is valid and can be used to instantiate a new instance for example.
+
 interface ExampleConfig extends ExtensibleConfig {
   test: string;
 }
@@ -17,6 +20,8 @@ class Example extends Extensible<ExampleConfig> {
   getDefaultConfig() {
     return { test: 'default' };
   }
+
+  test() {}
 
   install(parent: App): Promise<void> | void {
     return;
@@ -159,44 +164,23 @@ class DeepNested extends Extensible<{ deepNested: string } & ExtensibleConfig> {
 
 const app = new App();
 
-// simple w/o options
-app.use(Example);
-// simple w/ options
-app.use(Example2, {
-  help: 'defined',
-});
+// always include parent first
 
-// nested w/o options
-app.use(GoogleBusiness, [DialogflowNlu]);
-
-// nested w/o nested options
-app.use(FacebookMessenger, { pageAccessToken: '' }, [DialogflowNlu]);
-
-// nested w/ nested options
-app.use(CorePlatform, { foo: '', plugin: { DialogflowNlu: { bar: '' } } }, [DialogflowNlu]);
-
-// deep nested w/ nested options
 app.use(
-  Root,
-  {
-    root: 'overwritten',
-    plugin: {
-      Nested: {
-        nested: 'overwritten',
-        plugin: {
-          DeepNested: {
-            deepNested: 'overwritten',
-          },
-        },
-      },
-    },
-  },
-  [
-    {
-      constructor: Nested,
-      plugins: [DeepNested],
-    },
-  ],
+  new Example({
+    test: 'overwritten',
+  }),
+  new CorePlatform({
+    foo: 'overwritten',
+    plugins: [new DialogflowNlu()],
+  }),
+  new FacebookMessenger({
+    plugins: [
+      new DialogflowNlu({
+        bar: 'overwritten',
+      }),
+    ],
+  }),
 );
 
 (async () => {

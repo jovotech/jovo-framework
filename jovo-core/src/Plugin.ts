@@ -1,32 +1,32 @@
+import _merge from 'lodash.merge';
 import { DeepPartial } from '.';
 import { Extensible } from './Extensible';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type PluginConstructor<C extends object = object, T extends Plugin<C> = Plugin<C>> = new (
-  config: DeepPartial<C>,
+export type PluginConstructor<T extends Plugin = Plugin> = new (
+  config?: DeepPartial<T['config']>,
+  ...args: unknown[]
 ) => T;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export interface PluginDefinition<C extends object = object, T extends Plugin<C> = Plugin<C>> {
-  constructor: PluginConstructor<C, T>;
-  plugins?: PluginDefinitionInput[];
-  config?: C;
+export interface PluginConfig {
+  [key: string]: unknown;
+  enabled?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type PluginDefinitionInput<C extends object = object, T extends Plugin<C> = Plugin<C>> =
-  | PluginConstructor<C, T>
-  | PluginDefinition<C, T>;
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export interface Plugin<C extends object = object> {
+export abstract class Plugin<C extends PluginConfig = PluginConfig> {
   readonly config: C;
+  readonly initConfig?: DeepPartial<C>;
 
-  getDefaultConfig(): C;
+  constructor(config?: DeepPartial<C>) {
+    this.initConfig = config;
+    const defaultConfig = this.getDefaultConfig();
+    this.config = config ? _merge(defaultConfig, config) : defaultConfig;
+  }
+
+  abstract getDefaultConfig(): C;
 
   initialize?(parent: Extensible): Promise<void>;
 
-  install(parent: Extensible): Promise<void> | void;
+  abstract install(parent: Extensible): Promise<void> | void;
 
   uninstall?(parent?: Extensible): Promise<void> | void;
 }
