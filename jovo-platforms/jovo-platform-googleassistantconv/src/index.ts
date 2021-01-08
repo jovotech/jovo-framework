@@ -10,6 +10,7 @@ import {
   Suggestion,
   HtmlResponse,
   Expected,
+  CollectionBrowse,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
@@ -64,6 +65,7 @@ declare module './core/GoogleAction' {
     addTable(table: Table): this;
     addList(list: List): this;
     addCollection(collection: Collection): this;
+    addCollectionBrowse(collectionBrowse: CollectionBrowse): this;
 
     addTypeOverrides(typeOverrides: TypeOverride[]): this;
     setTypeOverrides(typeOverrides: TypeOverride[]): this;
@@ -84,6 +86,7 @@ declare module 'jovo-core/dist/src/Interfaces' {
       table?: Table;
       list?: List;
       collection?: Collection;
+      collectionBrowse?: CollectionBrowse;
       typeOverrides?: TypeOverride[];
       media?: Media;
       suggestions?: Suggestion[];
