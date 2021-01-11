@@ -26,7 +26,6 @@ export abstract class Plugin<C extends PluginConfig = PluginConfig> {
 
   initialize?(parent: Extensible): Promise<void>;
 
-  abstract install(parent: Extensible): Promise<void> | void;
-
-  uninstall?(parent?: Extensible): Promise<void> | void;
+  abstract mounted(parent: Extensible): Promise<void> | void;
+  demounted?(parent?: Extensible): Promise<void> | void;
 }

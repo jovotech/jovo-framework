@@ -23,7 +23,7 @@ class Example extends Extensible<ExampleConfig> {
 
   test() {}
 
-  install(parent: App): Promise<void> | void {
+  mounted(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -43,7 +43,7 @@ class Example2 extends Extensible<Example2Config> {
     return { help: 'default' };
   }
 
-  install(parent: App): Promise<void> | void {
+  mounted(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -63,7 +63,7 @@ class CorePlatform extends Extensible<CorePlatformConfig> {
     return { foo: 'default' };
   }
 
-  install(parent: App): Promise<void> | void {
+  mounted(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -83,7 +83,7 @@ class FacebookMessenger extends Extensible<FacebookMessengerConfig> {
     return { pageAccessToken: 'default' };
   }
 
-  install(parent: App): Promise<void> | void {
+  mounted(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -103,7 +103,7 @@ class DialogflowNlu extends Extensible<DialogflowNluConfig> {
     return { bar: 'default' };
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mounted(parent: Extensible): Promise<void> | void {
     return;
   }
 }
@@ -123,7 +123,7 @@ class GoogleBusiness extends Extensible<GoogleBusinessConfig> {
     return { customAgentId: 'default' };
   }
 
-  install(parent: App): Promise<void> | void {
+  mounted(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -133,7 +133,7 @@ class Root extends Extensible<{ root: string } & ExtensibleConfig> {
     return { root: 'default' };
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mounted(parent: Extensible): Promise<void> | void {
     return undefined;
   }
 }
@@ -145,7 +145,7 @@ class Nested extends Extensible<{ nested: string } & ExtensibleConfig> {
     };
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mounted(parent: Extensible): Promise<void> | void {
     return undefined;
   }
 }
@@ -157,7 +157,7 @@ class DeepNested extends Extensible<{ deepNested: string } & ExtensibleConfig> {
     };
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mounted(parent: Extensible): Promise<void> | void {
     return undefined;
   }
 }

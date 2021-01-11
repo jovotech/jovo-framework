@@ -1,3 +1,4 @@
+import _merge from 'lodash.merge';
 import { DeepPartial } from '.';
 import { Plugin, PluginConfig } from './Plugin';
 
@@ -44,17 +45,16 @@ export abstract class Extensible<C extends ExtensibleConfig = ExtensibleConfig> 
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
 
-        // TODO determine whether this is the way we want to retrieve the config
-        // maybe a merge should happen here instead
-        const config = {
-          ...(plugin.initConfig
-            ? plugin.config
-            : this.config.plugin?.[key]
-            ? this.config.plugin[key]
-            : plugin.config),
-        };
+        // merge config, priority: 1. constructor, 2. parent-config, 3. default-config
+        const config = plugin.initConfig
+          ? _merge({}, this.config.plugin?.[key] || {}, plugin.config)
+          : _merge({}, plugin.config, this.config.plugin?.[key] || {});
 
-        Object.assign(plugin, { config });
+        Object.defineProperty(plugin, 'config', {
+          enumerable: true,
+          value: config,
+          writable: false,
+        });
         if (!this.config.plugin) {
           this.config.plugin = {};
         }

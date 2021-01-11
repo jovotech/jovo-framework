@@ -26,13 +26,15 @@ export class App extends Extensible<AppConfig> {
     return this.initializePlugins();
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mounted(parent: Extensible): Promise<void> | void {
     return;
   }
 
   async handle() {
     const handleRequest = new HandleRequest(_cloneDeep(this.config));
     await this.installPlugins(handleRequest, handleRequest, this.plugins);
+
+    // begin of RIDR-pipeline
 
     handleRequest.config.test = 'edited';
     if (handleRequest.config.plugin?.Example) {
@@ -68,7 +70,12 @@ export class App extends Extensible<AppConfig> {
           config.plugin = {};
         }
         const pluginCopy = Object.create(plugins[key].constructor.prototype);
-        Object.assign(pluginCopy, plugins[key], { config, plugins: {} });
+        Object.assign(pluginCopy, plugins[key], { plugins: {} });
+        Object.defineProperty(pluginCopy, 'config', {
+          enumerable: true,
+          value: config,
+          writable: false,
+        });
 
         await pluginCopy.install(installTo === handleRequest ? this : installTo);
 
