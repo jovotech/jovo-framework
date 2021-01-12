@@ -1,0 +1,12 @@
+accountLinking:
+  appClientId: "1234"
+  authGrantType: AUTH_CODE
+  authorizationUrl: https://test.com/auth
+  linkingType: OAUTH_AND_GOOGLE_SIGN_IN
+  tokenUrl: https://test.com/token
+defaultLocale: en
+localizedSettings:
+  displayName: my test app
+  pronunciation: my test app
+projectId: helloworld-71cf8
+testingInstructions: test

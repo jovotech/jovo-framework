@@ -1,0 +1,10 @@
+parameters:
+- name: name
+  type:
+    name: NameInput
+trainingPhrases:
+- i am ($name 'alex' auto=true)
+- the name is ($name 'alex' auto=true)
+- ($name 'alex' auto=true)
+- my name is ($name 'alex' auto=true)
+- name is ($name 'alex' auto=true)

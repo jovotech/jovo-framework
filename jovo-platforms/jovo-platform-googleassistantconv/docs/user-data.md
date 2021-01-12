@@ -164,5 +164,3 @@ async ON_SIGN_IN() {
 	}
 }
 ```
-
-> For a complete walk-through, check out our tutorial: [Google Actions Account Linking](https://www.jovo.tech/tutorials/google-action-account-linking-auth0/)

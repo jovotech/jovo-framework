@@ -1,0 +1,23 @@
+synonym:
+  entities:
+    alex:
+      synonyms:
+      - alex
+    jan:
+      synonyms:
+      - jan
+    jim:
+      synonyms:
+      - jim
+    john:
+      synonyms:
+      - john
+    kaan:
+      synonyms:
+      - kaan
+    max:
+      synonyms:
+      - max
+    ruben:
+      synonyms:
+      - ruben
