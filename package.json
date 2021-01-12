@@ -8,7 +8,8 @@
     "bootstrap": "lerna bootstrap --hoist --no-ci",
     "build": "lerna exec npm run build --ignore jovo-examples-* --ignore jovo-client-*",
     "prettier": "lerna exec npm run prettier --ignore jovo-examples-*",
-    "eslint": "lerna exec npm run eslint --ignore jovo-examples-*"
+    "eslint": "lerna exec npm run eslint --ignore jovo-examples-*",
+    "test": "lerna exec npm run test --ignore jovo-examples-*"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
