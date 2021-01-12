@@ -1,5 +1,10 @@
+import { MiddlewareCollection } from './MiddlewareCollection';
 import { App } from './App';
 import { Extensible, ExtensibleConfig } from './Extensible';
+import { JovoRequest } from './JovoRequest';
+import { JovoResponse } from './JovoResponse';
+import { DEFAULT_PLATFORM_MIDDLEWARES, Platform } from './Platform';
+import { Plugin } from './Plugin';
 
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
@@ -16,34 +21,12 @@ declare module './Extensible' {
   }
 }
 
-class Example extends Extensible<ExampleConfig> {
+class Example extends Plugin<ExampleConfig> {
   getDefaultConfig() {
     return { test: 'default' };
   }
 
-  test() {}
-
-  mounted(parent: App): Promise<void> | void {
-    return;
-  }
-}
-
-interface Example2Config extends ExtensibleConfig {
-  help: string;
-}
-
-declare module './Extensible' {
-  interface ExtensiblePluginConfig {
-    Example2?: Example2Config;
-  }
-}
-
-class Example2 extends Extensible<Example2Config> {
-  getDefaultConfig() {
-    return { help: 'default' };
-  }
-
-  mounted(parent: App): Promise<void> | void {
+  mount(parent: App): Promise<void> | void {
     return;
   }
 }
@@ -58,13 +41,18 @@ declare module './Extensible' {
   }
 }
 
-class CorePlatform extends Extensible<CorePlatformConfig> {
+class CorePlatform extends Platform<JovoRequest, JovoResponse, CorePlatformConfig> {
   getDefaultConfig() {
     return { foo: 'default' };
   }
 
-  mounted(parent: App): Promise<void> | void {
+  mount(parent: App): Promise<void> | void {
     return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isPlatformRequest(req: Record<string, any>): boolean {
+    return req.version && req.request?.type && req.type === 'jovo-platform-core';
   }
 }
 
@@ -78,13 +66,18 @@ declare module './Extensible' {
   }
 }
 
-class FacebookMessenger extends Extensible<FacebookMessengerConfig> {
+class FacebookMessenger extends Platform<JovoRequest, JovoResponse, FacebookMessengerConfig> {
   getDefaultConfig() {
     return { pageAccessToken: 'default' };
   }
 
-  mounted(parent: App): Promise<void> | void {
+  mount(parent: App): Promise<void> | void {
     return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isPlatformRequest(req: Record<string, any>): boolean {
+    return req.id && req.time && req.messaging && req.messaging[0];
   }
 }
 
@@ -103,63 +96,11 @@ class DialogflowNlu extends Extensible<DialogflowNluConfig> {
     return { bar: 'default' };
   }
 
-  mounted(parent: Extensible): Promise<void> | void {
+  mount(parent: Extensible): Promise<void> | void {
     return;
   }
-}
 
-interface GoogleBusinessConfig extends ExtensibleConfig {
-  customAgentId: string;
-}
-
-declare module './Extensible' {
-  interface ExtensiblePluginConfig {
-    GoogleBusiness?: GoogleBusinessConfig;
-  }
-}
-
-class GoogleBusiness extends Extensible<GoogleBusinessConfig> {
-  getDefaultConfig() {
-    return { customAgentId: 'default' };
-  }
-
-  mounted(parent: App): Promise<void> | void {
-    return;
-  }
-}
-
-class Root extends Extensible<{ root: string } & ExtensibleConfig> {
-  getDefaultConfig() {
-    return { root: 'default' };
-  }
-
-  mounted(parent: Extensible): Promise<void> | void {
-    return undefined;
-  }
-}
-
-class Nested extends Extensible<{ nested: string } & ExtensibleConfig> {
-  getDefaultConfig() {
-    return {
-      nested: 'default',
-    };
-  }
-
-  mounted(parent: Extensible): Promise<void> | void {
-    return undefined;
-  }
-}
-
-class DeepNested extends Extensible<{ deepNested: string } & ExtensibleConfig> {
-  getDefaultConfig() {
-    return {
-      deepNested: 'default',
-    };
-  }
-
-  mounted(parent: Extensible): Promise<void> | void {
-    return undefined;
-  }
+  middlewareCollection = new MiddlewareCollection();
 }
 
 const app = new App();
@@ -185,5 +126,12 @@ app.use(
 
 (async () => {
   await app.initialize();
-  await app.handle();
+
+  await app.handle({
+    version: '1.0.0',
+    request: {
+      type: 'abc',
+    },
+    type: 'jovo-platform-core',
+  });
 })();

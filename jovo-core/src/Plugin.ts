@@ -13,6 +13,8 @@ export interface PluginConfig {
 }
 
 export abstract class Plugin<C extends PluginConfig = PluginConfig> {
+  [key: string]: unknown;
+
   readonly config: C;
   readonly initConfig?: DeepPartial<C>;
 
@@ -26,6 +28,6 @@ export abstract class Plugin<C extends PluginConfig = PluginConfig> {
 
   initialize?(parent: Extensible): Promise<void>;
 
-  abstract mounted(parent: Extensible): Promise<void> | void;
-  demounted?(parent?: Extensible): Promise<void> | void;
+  abstract mount(parent: Extensible): Promise<void> | void;
+  dismount?(parent?: Extensible): Promise<void> | void;
 }
