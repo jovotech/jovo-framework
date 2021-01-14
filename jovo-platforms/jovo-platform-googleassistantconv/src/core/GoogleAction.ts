@@ -325,7 +325,7 @@ export class GoogleAction extends Jovo {
     return this.getPermissionStatus() === 'ALREADY_GRANTED';
   }
 
-  getNotifcationsUserId() {
+  getNotificationsUserId() {
     return this.getPermissionResult()?.additionalUserData.updateUserId;
   }
   prompt(prompt: Prompt): this {

@@ -132,9 +132,11 @@ To trigger Account Linking, you can instruct your Google Action to handle the ne
 ```javascript
 // @language=javascript
 this.$googleAction.setNextScene('AccountLinkingScene');
+this.ask('Great!');
 
 // @language=typescript
 this.$googleAction!.setNextScene('AccountLinkingScene');
+this.ask('Great!');
 ```
 
 After the user has responded to your account linking request, you will receive a request to notify you about the result, which will be mapped to the Jovo built-in `ON_SIGN_IN` intent:

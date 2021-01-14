@@ -1,7 +1,10 @@
 'use strict';
 
 const { App } = require('jovo-framework');
-const { GoogleAssistant } = require('jovo-platform-googleassistantconv');
+const {
+	GoogleAssistant,
+	PushNotificationsApi,
+} = require('jovo-platform-googleassistantconv');
 const { JovoDebugger } = require('jovo-plugin-debugger');
 const { FileDb } = require('jovo-db-filedb');
 
@@ -11,28 +14,44 @@ const { FileDb } = require('jovo-db-filedb');
 
 const app = new App();
 
-app.use(
-  new GoogleAssistant(),
-  new JovoDebugger(),
-  new FileDb()
-);
+app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 // ------------------------------------------------------------------
 // APP LOGIC
 // ------------------------------------------------------------------
 
 app.setHandler({
-  LAUNCH() {
-    return this.toIntent('HelloWorldIntent');
-  },
+	LAUNCH() {
+		this.$googleAction.setNextScene('PushNotificationScene');
+		this.ask('If you want me to send you notifications, just say "notify me".');
+	},
 
-  HelloWorldIntent() {
-    this.ask("Hello World! What's your name?", 'Please tell me your name.');
-  },
+	PushNotificationsClickedIntent() {
+		this.tell('Hello World!');
+	},
 
-  MyNameIsIntent() {
-    this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-  },
+	async ON_PERMISSION() {
+		if (
+			this.$googleAction.isPermissionGranted() ||
+			this.$googleAction.isPermissionAlreadyGranted()
+		) {
+      const credentials = require('../credentials.json');
+			const reminderUserId = this.$googleAction.getNotificationsUserId();
+
+			const api = new PushNotificationsApi(credentials);
+
+			await api.sendPushNotification({
+				userId: reminderUserId,
+				intent: 'PushNotificationsClickedIntent',
+				title: 'Click me!',
+				locale: 'en',
+			});
+
+			this.ask('Great!');
+		} else {
+			this.ask('Ok.');
+		}
+	},
 });
 
 module.exports = { app };

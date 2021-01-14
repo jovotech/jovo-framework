@@ -1,4 +1,0 @@
-handlers:
-- name: Jovo
-httpsEndpoint:
-  baseUrl: https://webhook.jovo.cloud/ruben
