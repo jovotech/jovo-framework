@@ -1,37 +1,70 @@
 {
-  "invocation": "my test app",
-  "intents": [
-    {
-      "name": "HelloWorldIntent",
-      "phrases": ["hello", "say hello", "say hello world"]
-    },
-    {
-      "name": "MyNameIsIntent",
-      "phrases": ["{name}", "my name is {name}", "i am {name}", "you can call me {name}"],
-      "inputs": [
-        {
-          "name": "name",
-          "type": {
-            "googleAssistant": "NameInputType"
-          }
-        }
-      ]
-    }
-  ],
-  "inputTypes": [
-    {
-      "name": "NameInputType",
-      "values": [
-        {
-          "value": "max"
-        },
-        {
-          "value": "jane"
-        },
-        {
-          "value": "joe"
-        }
-      ]
-    }
-  ]
+	"invocation": "my test app",
+	"intents": [
+		{
+			"name": "PushNotificationsIntent",
+			"phrases": ["notify me"]
+		},
+		{
+			"name": "PushNotificationsClickedIntent",
+			"phrases": []
+		}
+	],
+	"googleAssistant": {
+		"custom": {
+			"scenes": {
+				"PushNotificationsScene": {
+					"intentEvents": [
+						{
+							"intent": "PushNotificationsIntent",
+							"transitionToScene": "PushNotificationScene_Notifications"
+						}
+					]
+				},
+				"PushNotificationsScene_Notifications": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\" && (session.params.NotificationsSlot_PushNotificationsClickedIntent.permissionStatus == \"PERMISSION_GRANTED\" || session.params.NotificationsSlot_PushNotificationsClickedIntent.permissionStatus == \"ALREADY_GRANTED\")",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						},
+						{
+							"condition": "scene.slots.status == \"FINAL\" && session.params.NotificationsSlot_PushNotificationsClickedIntent.permissionStatus != \"PERMISSION_GRANTED\" && session.params.NotificationsSlot_PushNotificationsClickedIntent.permissionStatus != \"ALREADY_GRANTED\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "NotificationsSlot_PushNotificationsClickedIntent"
+							},
+							"config": {
+								"intent": {
+									"intentName": "PushNotificationsClickedIntent"
+								}
+							},
+							"defaultValue": {
+								"sessionParam": "NotificationsSlot_PushNotificationsClickedIntent"
+							},
+							"name": "NotificationsSlot_PushNotificationsClickedIntent",
+							"required": true,
+							"type": {
+								"name": "actions.type.Notifications"
+							}
+						}
+					]
+				}
+			},
+			"global": {
+				"actions.intent.MAIN": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				}
+			}
+		}
+	}
 }
