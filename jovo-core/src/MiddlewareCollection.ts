@@ -12,42 +12,48 @@ export class MiddlewareCollection<N extends string[] = string[]> {
     }
   }
 
-  add(name: string): void;
-  add(middleware: Middleware): void;
-  add(nameOrMiddleware: Middleware | string): void {
-    if (typeof nameOrMiddleware === 'string') {
-      this.middlewares[nameOrMiddleware] = new Middleware(nameOrMiddleware);
-    } else {
-      this.middlewares[nameOrMiddleware.name] = nameOrMiddleware;
+  add(...names: string[]): this;
+  add(...middlewares: Middleware[]): this;
+  add(...namesOrMiddlewares: Array<Middleware | string>): this {
+    for (let i = 0, len = namesOrMiddlewares.length; i < len; i++) {
+      const nameOrMiddleware = namesOrMiddlewares[i];
+      if (typeof nameOrMiddleware === 'string') {
+        this.middlewares[nameOrMiddleware] = new Middleware(nameOrMiddleware);
+      } else {
+        this.middlewares[nameOrMiddleware.name] = nameOrMiddleware;
+      }
     }
+    return this;
   }
 
-  has<M extends ArrayElement<N>>(name: M): boolean;
-  has<M extends string>(name: M): boolean;
-  has(name: string): boolean {
+  has(name: ArrayElement<N>): boolean;
+  has(name: string): boolean;
+  has(name: string | ArrayElement<N>): boolean {
     return !!this.middlewares[name] && this.middlewares[name] instanceof Middleware;
   }
 
   get<M extends ArrayElement<N>>(name: M): Middleware<M> | undefined;
   get<M extends string>(name: M): Middleware<M> | undefined;
-  get(name: string): Middleware | undefined {
+  get(name: string | ArrayElement<N>): Middleware | undefined {
     return this.middlewares[name];
   }
 
-  remove<M extends ArrayElement<N>>(name: M): void;
-  remove<M extends string>(name: M): void;
-  remove(name: string): void {
-    if (this.has(name)) {
-      delete this.middlewares[name];
+  remove(...names: ArrayElement<N>[]): this;
+  remove(...names: string[]): this;
+  remove(...names: Array<string | ArrayElement<N>>): this {
+    for (let i = 0, len = names.length; i < len; i++) {
+      if (this.has(names[i])) {
+        delete this.middlewares[names[i]];
+      }
     }
+    return this;
   }
 
-  // TODO determine better type for data
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  async run<M extends ArrayElement<N>, T extends any[]>(name: M, ...args: T): Promise<void>;
-  async run<M extends string, T extends any[]>(name: M, ...args: T): Promise<void>;
-  async run<T extends any[]>(name: string, ...args: T): Promise<void> {
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+  async run<T extends any[]>(name: ArrayElement<N>, ...args: T): Promise<void>;
+  async run<T extends any[]>(name: string, ...args: T): Promise<void>;
+  async run<T extends any[]>(name: string | ArrayElement<N>, ...args: T): Promise<void> {
+    /*  eslint-enable @typescript-eslint/no-explicit-any */
     const middleware = this.get(name);
     if (!middleware) {
       return;
@@ -65,14 +71,27 @@ export class MiddlewareCollection<N extends string[] = string[]> {
     }
   }
 
-  clone(): MiddlewareCollection<N> {
-    const collection = new MiddlewareCollection<N>(...(Object.keys(this.middlewares) as N));
-    for (const name in this.middlewares) {
-      if (this.middlewares.hasOwnProperty(name)) {
-        collection.middlewares[name].fns.push(...this.middlewares[name].fns);
-        collection.middlewares[name].enabled = this.middlewares[name].enabled;
+  disable(...names: ArrayElement<N>[]): this;
+  disable(...names: string[]): this;
+  disable(...names: Array<string | ArrayElement<N>>): this {
+    for (let i = 0, len = names.length; i < len; i++) {
+      const middleware = this.get(names[i]);
+      if (middleware) {
+        middleware.enabled = false;
       }
     }
-    return collection;
+    return this;
+  }
+
+  enable(...names: ArrayElement<N>[]): this;
+  enable(...names: string[]): this;
+  enable(...names: Array<string | ArrayElement<N>>): this {
+    for (let i = 0, len = names.length; i < len; i++) {
+      const middleware = this.get(names[i]);
+      if (middleware) {
+        middleware.enabled = true;
+      }
+    }
+    return this;
   }
 }

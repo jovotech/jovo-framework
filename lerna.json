@@ -2,7 +2,9 @@
   "packages": [
     "jovo-framework",
     "jovo-core",
-    "examples/**"
+    "examples/**",
+    "../jovo-output/jovo-output",
+    "../jovo-output/packages/**"
   ],
   "ignoreChanges": [
     "*.md",

@@ -8,8 +8,9 @@ export type PluginConstructor<T extends Plugin = Plugin> = new (
 ) => T;
 
 export interface PluginConfig {
-  [key: string]: unknown;
   enabled?: boolean;
+
+  [key: string]: unknown;
 }
 
 export abstract class Plugin<C extends PluginConfig = PluginConfig> {
@@ -29,5 +30,6 @@ export abstract class Plugin<C extends PluginConfig = PluginConfig> {
   initialize?(parent: Extensible): Promise<void>;
 
   abstract mount(parent: Extensible): Promise<void> | void;
+
   dismount?(parent?: Extensible): Promise<void> | void;
 }

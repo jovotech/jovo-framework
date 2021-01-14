@@ -9,7 +9,7 @@
     "gulpfile.js"
   ],
   "scripts": {
-    "start": "node dist",
+    "start": "node dist/_e2e.js",
     "build": "tsc",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
@@ -23,7 +23,9 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
-    "lodash.set": "^4.3.2"
+    "lodash.set": "^4.3.2",
+    "jovo-output": "^4.0.0",
+    "jovo-output-alexa": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",

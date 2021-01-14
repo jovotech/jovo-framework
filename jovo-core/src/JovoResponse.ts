@@ -1,2 +1,1 @@
-export class JovoResponse {
-}
+export class JovoResponse {}

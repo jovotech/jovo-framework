@@ -1,20 +1,15 @@
 import _cloneDeep from 'lodash.clonedeep';
+import _merge from 'lodash.merge';
 import { App, AppConfig } from './App';
 import { Extensible } from './Extensible';
 import { DeepPartial } from './index';
-import { MiddlewareCollection } from './MiddlewareCollection';
 
 export class HandleRequest extends Extensible<AppConfig> {
-  readonly middlewareCollection: MiddlewareCollection;
+  readonly middlewareCollection!: App['middlewareCollection'];
 
-  constructor({ config, middlewareCollection, plugins }: App) {
-    super(_cloneDeep(config) as DeepPartial<AppConfig>);
-    this.middlewareCollection = middlewareCollection.clone();
-    for (const key in plugins) {
-      if (plugins.hasOwnProperty(key)) {
-        this.plugins[key] = plugins[key];
-      }
-    }
+  constructor(app: App) {
+    super(_cloneDeep(app.config) as DeepPartial<AppConfig>);
+    _merge(this, _cloneDeep(app));
   }
 
   getDefaultConfig(): AppConfig {
@@ -23,7 +18,7 @@ export class HandleRequest extends Extensible<AppConfig> {
     };
   }
 
-  mount(): Promise<void> | void {
-    return;
+  mount(): Promise<void> {
+    return this.mountPlugins();
   }
 }

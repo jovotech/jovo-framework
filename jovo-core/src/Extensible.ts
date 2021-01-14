@@ -1,4 +1,3 @@
-import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { DeepPartial } from '.';
 import { MiddlewareCollection } from './MiddlewareCollection';
@@ -40,7 +39,7 @@ export abstract class Extensible<
     }
   }
 
-  use<T extends Plugin[]>(...plugins: T): this {
+  use(...plugins: Plugin[]): this {
     for (let i = 0, len = plugins.length; i < len; i++) {
       const name = plugins[i].constructor.name;
       this.plugins[name] = plugins[i];
@@ -79,34 +78,27 @@ export abstract class Extensible<
     }
   }
 
-  protected async mountPluginsTo(mountTo: Extensible): Promise<void> {
+  protected async mountPlugins(): Promise<void> {
     for (const key in this.plugins) {
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
 
-        const config = _cloneDeep(plugin.config);
-        const pluginCopy: Plugin | Extensible = Object.create(plugin.constructor.prototype);
-        Object.assign(pluginCopy, plugin, { plugins: {} });
-        Object.defineProperty(pluginCopy, 'config', {
+        const config = plugin.config;
+
+        Object.defineProperty(plugin, 'config', {
           enumerable: true,
           value: config,
           writable: false,
         });
+        await plugin.mount(this);
 
-        await pluginCopy.mount(mountTo);
-
-        mountTo.plugins[key] = pluginCopy;
-        if (!mountTo.config.plugin) {
-          mountTo.config.plugin = {};
+        if (!this.config.plugin) {
+          this.config.plugin = {};
         }
-        mountTo.config.plugin[key] = config;
+        this.config.plugin[key] = config;
 
-        if (
-          plugin instanceof Extensible &&
-          (plugin as Extensible).plugins &&
-          pluginCopy instanceof Extensible
-        ) {
-          await plugin.mountPluginsTo(pluginCopy);
+        if (plugin instanceof Extensible && (plugin as Extensible).plugins) {
+          await plugin.mountPlugins();
         }
       }
     }
