@@ -31,7 +31,7 @@ export type Capability =
   | 'HOME_STORAGE';
 export type AccountLinkingStatus = 'ACCOUNT_LINKING_STATUS_UNSPECIFIED' | 'NOT_LINKED' | 'LINKED';
 export type UserVerificationStatus = 'USER_VERIFICATION_STATUS_UNSPECIFIED' | 'GUEST' | 'VERIFIED';
-export type SkuType = 'SKU_TYPE_UNSPECIFIED' | 'IN_APP' | 'SUBSCRIPTION' | 'APP';
+export type SkuType = 'SKU_TYPE_UNSPECIFIED' | 'SKU_TYPE_IN_APP' | 'SKU_TYPE_SUBSCRIPTION' | 'APP';
 export type UrlTypeHint = 'URL_TYPE_HINT_UNSPECIFIED' | 'AMP_CONTENT';
 export type Type =
   | 'TYPE_UNSPECIFIED'
@@ -45,6 +45,12 @@ export type Type =
   | 'CUSTOMER_SERVICE'
   | 'FIX_ISSUE'
   | 'DIRECTION';
+
+export type PaymentMethodStatusType =
+  | 'STATUS_UNSPECIFIED'
+  | 'STATUS_OK'
+  | 'STATUS_REQUIRE_FIX'
+  | 'STATUS_INAPPLICABLE';
 
 export type PaymentType =
   | 'PAYMENT_TYPE_UNSPECIFIED'
@@ -139,6 +145,14 @@ export type ErrorType =
   | 'MERCHANT_UNREACHABLE'
   | 'ACCOUNT_LINKING_FAILED';
 
+export type TransactionDecisionType =
+  | 'ORDER_ACCEPTED'
+  | 'ORDER_REJECTED'
+  | 'CART_CHANGE_REQUESTED'
+  | 'USER_CANNOT_TRANSACT';
+
+export type TransactionDeliveryAddressUserDecisionType = 'ACCEPTED' | 'REJECTED' | string;
+
 export type EventType = 'EVENT_TYPE_UNKNOWN' | 'MOVIE' | 'CONCERT' | 'SPORTS';
 export type PermissionStatus = 'PERMISSION_DENIED' | 'PERMISSION_GRANTED' | 'ALREADY_GRANTED';
 
@@ -168,7 +182,13 @@ export interface Intent {
 
 export interface IntentParameterValue {
   original: string;
-  resolved: string | PermissionResult;
+  resolved:
+    | string
+    | PermissionResult
+    | TransactionRequirementsCheckResult
+    | TransactionDecisionResult
+    | TransactionDeliveryAddressResult
+    | TransactionDigitalPurchaseCheckResult;
 }
 
 export interface PermissionResult {
@@ -179,6 +199,43 @@ export interface PermissionResult {
     updateUserId: string;
   };
 }
+
+export interface TransactionRequirementsCheckResult {
+  '@type': 'type.googleapis.com/google.actions.transactions.v3.TransactionRequirementsCheckResult';
+  'resultType': RequirementsCheckResultType;
+}
+
+export interface TransactionDecisionResult {
+  '@type': 'type.googleapis.com/google.actions.transactions.v3.TransactionDecisionValue';
+  'transactionDecision': TransactionDecisionType;
+  'order': Order;
+}
+
+export interface TransactionDeliveryAddressResult {
+  '@type': 'type.googleapis.com/google.actions.v2.DeliveryAddressValue';
+  'userDecision': TransactionDeliveryAddressUserDecisionType;
+  'location': Location;
+}
+
+export interface TransactionDigitalPurchaseCheckResult {
+  '@type': 'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckResult';
+  'resultType': DigitalPurchaseCheckResultType;
+}
+
+export interface SkuId {
+  skuType: SkuType;
+  id: string;
+  packageName: string;
+}
+
+export interface Sku {
+  title: string;
+  description: string;
+  skuId: SkuId;
+  formattedPrice: string;
+  price: Money;
+}
+
 export enum GoogleAssistantDeviceName {
   GOOGLE_ASSISTANT_SPEAKER = 'GOOGLE_ASSISTANT_SPEAKER',
   GOOGLE_ASSISTANT_PHONE = 'GOOGLE_ASSISTANT_PHONE',
@@ -432,11 +489,15 @@ export interface Context {
   media: MediaContext;
 }
 
+export interface UpdateMask {
+  paths: string[];
+}
+
 export interface OrderUpdate {
   type?: string;
   reason?: string;
   order: Order;
-  updateMask: string;
+  updateMask: UpdateMask | string;
   userNotification?: UserNotification;
 }
 export interface UserNotification {
@@ -489,12 +550,12 @@ export interface EventCharacter {
 }
 
 export interface PurchaseOrderExtension {
-  status: PurchaseStatus;
-  userVisibleStatusLabel: string;
-  type: PurchaseType;
-  returnsInfo: PurchaseReturnsInfo;
-  fulfillmentInfo: PurchaseFulfillmentInfo;
-  purchaseLocationType: PurchaseLocationType;
+  status?: PurchaseStatus;
+  userVisibleStatusLabel?: string;
+  type?: PurchaseType;
+  returnsInfo?: PurchaseReturnsInfo;
+  fulfillmentInfo?: PurchaseFulfillmentInfo;
+  purchaseLocationType?: PurchaseLocationType;
   errors?: PurchaseError[];
 }
 export interface PurchaseError {
@@ -564,8 +625,8 @@ export interface PostalAddress {
 }
 
 export interface LineItem {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   description?: string;
   provider?: Merchant;
   priceAttributes?: PriceAttribute[];
@@ -740,13 +801,13 @@ export interface ProductDetails {
 }
 
 export interface ReservationItemExtension {
-  status: ReservationStatus;
-  userVisibleStatusLabel: string;
-  type: ReservationType;
-  reservationTime: Time;
-  userAcceptableTimeRange: Time;
+  status?: ReservationStatus;
+  userVisibleStatusLabel?: string;
+  type?: ReservationType;
+  reservationTime?: Time;
+  userAcceptableTimeRange?: Time;
   confirmationCode?: string;
-  partySize: number;
+  partySize?: number;
   staffFacilitators?: StaffFacilitator[];
   location?: Location;
 }
@@ -768,7 +829,12 @@ export interface OrderOptions {
 }
 
 export interface PaymentParameters {
-  merchantPaymentOption: MerchantPaymentOption;
+  merchantPaymentOption?: MerchantPaymentOption;
+  googlePaymentOption?: GooglePaymentOption;
+}
+
+export interface GooglePaymentOption {
+  facilitationSpec: string;
 }
 
 export interface MerchantPaymentOption {
@@ -778,28 +844,31 @@ export interface MerchantPaymentOption {
 }
 
 export interface MerchantPaymentMethod {
-  paymentMethodDisplayInfo: PaymentMethodDisplayInfo;
-}
-
-export interface PaymentMethodDisplayInfo {
-  paymentMethodDisplayName?: string;
-  paymentType?: PaymentType;
   paymentMethodGroup?: string;
   paymentMethodId?: string;
+  paymentMethodDisplayInfo?: PaymentMethodDisplayInfo;
   paymentMethodStatus?: PaymentMethodStatus;
 }
-
 export interface PaymentMethodStatus {
-  status: 'STATUS_OK'; // TODO: what else ?
+  status: PaymentMethodStatusType;
   statusMessage: string;
 }
 
-export type RequirementsCheckResult =
+export interface PaymentMethodDisplayInfo {
+  paymentType?: PaymentType;
+  paymentMethodVoiceName?: string;
+  paymentMethodDisplayName?: string;
+}
+
+export type RequirementsCheckResultType =
   | 'USER_ACTION_REQUIRED'
   | 'OK'
   | 'CAN_TRANSACT'
   | 'ASSISTANT_SURFACE_NOT_SUPPORTED'
   | 'REGION_NOT_SUPPORTED';
+
+export type DigitalPurchaseCheckResultType = 'CAN_PURCHASE' | 'CANNOT_PURCHASE' | string;
+
 export interface Reservation extends Order {}
 export enum EnumGoogleAssistantRequestType {
   ON_PERMISSION = 'ON_PERMISSION',
