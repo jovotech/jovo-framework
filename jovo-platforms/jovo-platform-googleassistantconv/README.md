@@ -343,6 +343,8 @@ If you choose to enhance your Conversational Action with scenes, you can specify
 
 The syntax is the same as in your Action's `.yaml` files, but in JSON format.
 
+> Learn more about scenes [here]().
+
 ### Global Intents
 
 As mentioned, the Jovo CLI automatically creates an entry for the Jovo Webhook and registers it for every intent. However, if you choose to use customized webhooks, you'll need to overwrite the global intents as well.
