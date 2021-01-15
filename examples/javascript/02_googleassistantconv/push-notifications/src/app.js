@@ -22,7 +22,7 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
-		this.$googleAction.setNextScene('PushNotificationScene');
+		this.$googleAction.setNextScene('PushNotificationsScene');
 		this.ask('If you want me to send you notifications, just say "notify me".');
 	},
 

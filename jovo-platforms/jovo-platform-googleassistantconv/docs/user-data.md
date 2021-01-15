@@ -6,10 +6,7 @@ Learn more about how to get access to Google Action user information.
 
 * [Introduction](#introduction)
 * [User ID](#user-id)
-* [ON_PERMISSION](#onpermission)
-* [Name](#name)
-* [Location](#location)
-* [Date and Time](#date-and-time)
+* [Google Profile](#google-profile)
 * [Account Linking](#account-linking)
 
 ## Introduction
