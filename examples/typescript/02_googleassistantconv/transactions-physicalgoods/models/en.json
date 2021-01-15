@@ -1,0 +1,146 @@
+{
+	"invocation": "my test app",
+	"intents": [
+		{
+			"name": "HelloWorldIntent",
+			"phrases": [
+				"hello",
+				"say hello",
+				"say hello world"
+			]
+		},
+		{
+			"name": "MyNameIsIntent",
+			"phrases": [
+				"{name}",
+				"my name is {name}",
+				"i am {name}",
+				"you can call me {name}"
+			],
+			"inputs": [
+				{
+					"name": "name",
+					"type": "NameInputType"
+				}
+			]
+		},
+		{
+			"name": "YesIntent",
+			"phrases": [
+				"Yo",
+				"Yeah",
+				"Yes"
+			]
+		}
+	],
+	"inputTypes": [
+		{
+			"name": "NameInputType",
+			"values": []
+		}
+	],
+	"googleAssistant": {
+		"custom": {
+			"scenes": {
+				"TransactionDecision": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "TransactionDecision"
+							},
+							"config": "$session.params.order",
+							"name": "TransactionDecision",
+							"required": true,
+							"type": {
+								"name": "actions.type.TransactionDecisionValue"
+							}
+						}
+					]
+				},
+				"TransactionDeliveryAddress": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "TransactionDeliveryAddressResult"
+							},
+							"config": "$session.params.TransactionDeliveryAddress",
+							"name": "TransactionDeliveryAddress",
+							"required": true,
+							"type": {
+								"name": "actions.type.DeliveryAddressValue"
+							}
+						}
+					]
+				},
+				"TransactionRequirementsCheck": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "TransactionRequirementsCheck"
+							},
+							"config": {
+								"@type": "type.googleapis.com/google.actions.transactions.v3.TransactionRequirementsCheckSpec"
+							},
+							"name": "TransactionRequirementsCheck",
+							"required": true,
+							"type": {
+								"name": "actions.type.TransactionRequirementsCheckResult"
+							}
+						}
+					]
+				}
+			},
+			"global": {
+				"actions.intent.CANCEL": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.MAIN": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_1": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_2": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_FINAL": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				}
+			}
+		}
+	}
+}
