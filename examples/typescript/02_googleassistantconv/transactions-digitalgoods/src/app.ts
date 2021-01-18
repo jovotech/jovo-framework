@@ -43,9 +43,6 @@ app.setHandler({
 	},
 
 	ON_TRANSACTION: {
-		TRANSACTION_DECISION() {
-			//
-		},
 		async DIGITAL_PURCHASE_CHECK() {
 			if (this.$googleAction!.$transaction!.canPurchase()) {
 			} else {
@@ -60,6 +57,14 @@ app.setHandler({
 			if (skus.length > 0) {
 				this.$session.$data.skuId = skus[0].skuId;
 				this.ask(`Do you want to buy ${skus[0].title}?`);
+			}
+		},
+		ON_COMPLETE_PURCHASE() {
+			if (
+				this.$googleAction!.$transaction!.getPurchaseCompleteStatus() ===
+				'PURCHASE_STATUS_OK'
+			) {
+				this.tell('Thank you for the purchase.');
 			}
 		},
 	},

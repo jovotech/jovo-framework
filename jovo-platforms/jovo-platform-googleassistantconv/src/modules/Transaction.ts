@@ -3,6 +3,7 @@ import { ErrorCode, HttpService, JovoError, Plugin } from 'jovo-core';
 import { GoogleAssistant } from '../GoogleAssistant';
 import { GoogleAction } from '../core/GoogleAction';
 import {
+  CompletePurchaseType,
   DigitalPurchaseCheckResultType,
   Location,
   Order,
@@ -22,6 +23,7 @@ import {
   TransactionDeliveryAddressResult,
   TransactionDeliveryAddressUserDecisionType,
   TransactionDigitalPurchaseCheckResult,
+  TransactionDigitalPurchaseCompleteResult,
   TransactionRequirementsCheckResult,
 } from '../core/Interfaces';
 import _set = require('lodash.set');
@@ -350,9 +352,13 @@ export class Transaction {
     };
   }
 
-  // TODO: Implement getPurchaseStatus
-  getPurchaseStatus(): PurchaseStatus | undefined {
-    return;
+  // TODO: Couldn't test in my region :(
+  getPurchaseCompleteStatus(): CompletePurchaseType | undefined {
+    const conversationalRequest: ConversationalActionRequest = this.googleAction
+      .$request as ConversationalActionRequest;
+
+    return (conversationalRequest.intent?.params?.CompletePurchase
+      ?.resolved as TransactionDigitalPurchaseCompleteResult).purchaseStatus;
   }
   async getSkus(skus: string[], type: SkuType): Promise<Sku[]> {
     const conversationId = (this.googleAction.$request as ConversationalActionRequest).session?.id;
@@ -492,16 +498,11 @@ export class TransactionsPlugin implements Plugin {
       _set(googleAction.$type, 'subType', 'DIGITAL_PURCHASE_CHECK');
     }
 
-    //TODO: Implement ON_COMPLETE_PURCHASE
-    //
-    // if (
-    //   _get(googleAction.$originalRequest || googleAction.$request, 'inputs[0].intent') ===
-    //   'actions.intent.COMPLETE_PURCHASE'
-    // ) {
-    //   _set(googleAction.$type, 'type', 'ON_TRANSACTION');
-    //   _set(googleAction.$type, 'subType', 'ON_COMPLETE_PURCHASE');
-    // }
-    //
+    // TODO: Couldn't test in my region :(
+    if (conversationalRequest.intent?.params?.CompletePurchase) {
+      _set(googleAction.$type, 'type', 'ON_TRANSACTION');
+      _set(googleAction.$type, 'subType', 'ON_COMPLETE_PURCHASE');
+    }
 
     googleAction.$transaction = new Transaction(googleAction, this.googleAssistant!);
   }

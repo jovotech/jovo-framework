@@ -92,6 +92,15 @@ export type PurchaseType =
   | 'MOBILE_RECHARGE';
 export type Unit = 'UNIT_UNSPECIFIED' | 'MILLIGRAM' | 'GRAM' | 'KILOGRAM' | 'OUNCE' | 'POUND';
 
+export type CompletePurchaseType =
+  | 'PURCHASE_STATUS_OK'
+  | 'PURCHASE_STATUS_ALREADY_OWNED'
+  | 'PURCHASE_STATUS_ITEM_UNAVAILABLE'
+  | 'PURCHASE_STATUS_ITEM_CHANGE_REQUESTED'
+  | 'PURCHASE_STATUS_USER_CANCELLED'
+  | 'PURCHASE_STATUS_ERROR'
+  | 'PURCHASE_STATUS_UNSPECIFIED';
+
 export type FulfillmentType = 'TYPE_UNSPECIFIED' | 'DELIVERY' | 'PICKUP';
 export type PickupType = 'UNSPECIFIED' | 'INSTORE' | 'CURBSIDE';
 export type CurbsideFulfillmentType = 'UNSPECIFIED' | 'VEHICLE_DETAIL';
@@ -188,7 +197,8 @@ export interface IntentParameterValue {
     | TransactionRequirementsCheckResult
     | TransactionDecisionResult
     | TransactionDeliveryAddressResult
-    | TransactionDigitalPurchaseCheckResult;
+    | TransactionDigitalPurchaseCheckResult
+    | TransactionDigitalPurchaseCompleteResult;
 }
 
 export interface PermissionResult {
@@ -220,6 +230,10 @@ export interface TransactionDeliveryAddressResult {
 export interface TransactionDigitalPurchaseCheckResult {
   '@type': 'type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckResult';
   'resultType': DigitalPurchaseCheckResultType;
+}
+
+export interface TransactionDigitalPurchaseCompleteResult {
+  purchaseStatus: CompletePurchaseType;
 }
 
 export interface SkuId {
