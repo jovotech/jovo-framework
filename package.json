@@ -6,7 +6,7 @@
     "postinstall": "npm run bootstrap",
     "setup:dev": "npm run bootstrap && npm run build",
     "bootstrap": "lerna bootstrap --hoist --no-ci",
-    "build": "lerna exec npm run build --ignore jovo-examples-* --ignore jovo-client-*",
+    "build": "lerna exec npm run build --ignore jovo-examples-* --ignore jovo-client-* --ignore jovo-e2e",
     "prettier": "lerna exec npm run prettier --ignore jovo-examples-*",
     "eslint": "lerna exec npm run eslint --ignore jovo-examples-*",
     "test": "lerna exec npm run test --ignore jovo-examples-*"

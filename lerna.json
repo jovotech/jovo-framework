@@ -1,5 +1,6 @@
 {
   "packages": [
+    "e2e",
     "jovo-framework",
     "jovo-core",
     "jovo-platforms/**",
