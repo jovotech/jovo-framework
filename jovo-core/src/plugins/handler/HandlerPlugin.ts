@@ -1,37 +1,43 @@
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
-import { DeepPartial } from '../..';
+import { DeepPartial, ExtensibleConfig } from '../..';
 import { App } from '../../App';
 import { HandleRequest } from '../../HandleRequest';
 import { Jovo } from '../../Jovo';
-import { Plugin, PluginConfig } from '../../Plugin';
-import { HandlerMetadataStorage } from './metadata/HandlerMetadataStorage';
+import { Plugin } from '../../Plugin';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type JovoHandler = (this: Jovo) => Promise<any> | any;
 
 export interface JovoHandlerObject {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: JovoHandlerObject | JovoHandler;
 }
 
 export interface HandlerMixin {
   handler: JovoHandlerObject;
-
-  setHandlers(...handlers: JovoHandlerObject[]): this;
+  setHandlers<T extends JovoHandlerObject[]>(...handlers: T): this;
 }
 
 declare module '../../App' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface App extends HandlerMixin {}
 }
 declare module '../../HandleRequest' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface HandleRequest extends HandlerMixin {}
 }
 
-export class HandlerPlugin extends Plugin {
-  constructor(config?: DeepPartial<PluginConfig>) {
+export interface HandlerPluginConfig extends ExtensibleConfig {}
+
+declare module '../../Extensible' {
+  interface ExtensiblePluginConfig {
+    HandlerPlugin?: HandlerPluginConfig;
+  }
+  interface ExtensiblePlugins {
+    HandlerPlugin?: HandlerPlugin;
+  }
+}
+
+export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
+  constructor(config?: DeepPartial<HandlerPluginConfig>) {
     super(config);
     this.mixin(App);
     this.mixin(HandleRequest);
@@ -47,7 +53,6 @@ export class HandlerPlugin extends Plugin {
   }
 
   private async handle(handleRequest: HandleRequest, jovo: Jovo) {
-    console.log(HandlerMetadataStorage.getInstance().metadata);
     const route = 'LAUNCH';
     const fn = _get(handleRequest.handler, route);
     if (typeof fn === 'function') {

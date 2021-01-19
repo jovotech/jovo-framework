@@ -36,7 +36,7 @@ export class ExamplePlatform extends Platform<JovoRequest, ExamplePlatformRespon
     return {};
   }
 
-  isPlatformRequest(request: Record<string, any>): boolean {
+  isRequestRelated(request: Record<string, any>): boolean {
     return true;
   }
 
@@ -58,7 +58,7 @@ export class EmptyPlatform extends Platform<JovoRequest, ExamplePlatformResponse
     return {};
   }
 
-  isPlatformRequest(request: Record<string, any>): boolean {
+  isRequestRelated(request: Record<string, any>): boolean {
     return true;
   }
 

@@ -1,9 +1,21 @@
 import { OutputConverter } from 'jovo-output';
 import { HandleRequest } from '../../HandleRequest';
 import { Jovo } from '../../Jovo';
-import { Plugin } from '../../Plugin';
+import { Plugin, PluginConfig } from '../../Plugin';
 
-export class OutputPlugin extends Plugin {
+export interface OutputPluginConfig extends PluginConfig {}
+
+declare module '../../Extensible' {
+  interface ExtensiblePluginConfig {
+    OutputPlugin?: OutputPluginConfig;
+  }
+
+  interface ExtensiblePlugins {
+    OutputPlugin?: OutputPlugin;
+  }
+}
+
+export class OutputPlugin extends Plugin<OutputPluginConfig> {
   getDefaultConfig() {
     return {};
   }
@@ -13,7 +25,7 @@ export class OutputPlugin extends Plugin {
   }
 
   private async handle(handleRequest: HandleRequest, jovo: Jovo) {
-    const converter = new OutputConverter(jovo.platform.outputConverterStrategy);
+    const converter = new OutputConverter(jovo.$platform.outputConverterStrategy);
     // TODO: catch toResponse possible error
     jovo.$response = await converter.toResponse(jovo.$output);
   }

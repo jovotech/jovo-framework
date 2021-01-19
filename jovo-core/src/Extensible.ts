@@ -8,6 +8,10 @@ export interface ExtensiblePluginConfig {
   [key: string]: object | undefined;
 }
 
+export interface ExtensiblePlugins {
+  [key: string]: Plugin | undefined;
+}
+
 export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
@@ -21,7 +25,7 @@ export abstract class Extensible<
   C extends ExtensibleConfig = ExtensibleConfig,
   N extends string[] = string[]
 > extends Plugin<C> {
-  readonly plugins: Record<string, Plugin>;
+  readonly plugins: ExtensiblePlugins;
 
   abstract readonly middlewareCollection: MiddlewareCollection<N>;
 
@@ -51,6 +55,9 @@ export abstract class Extensible<
     for (const key in this.plugins) {
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
+        if (!plugin) {
+          continue;
+        }
 
         // merge config, priority: 1. constructor, 2. parent-config, 3. default-config
         const config = plugin.initConfig
@@ -82,6 +89,9 @@ export abstract class Extensible<
     for (const key in this.plugins) {
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
+        if (!plugin) {
+          continue;
+        }
 
         const config = plugin.config;
 

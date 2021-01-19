@@ -1,7 +1,19 @@
 import { App } from '../../App';
-import { Plugin } from '../../Plugin';
+import { Plugin, PluginConfig } from '../../Plugin';
 
-export class RouterPlugin extends Plugin {
+export interface RouterPluginConfig extends PluginConfig {}
+
+declare module '../../Extensible' {
+  interface ExtensiblePluginConfig {
+    RouterPlugin?: RouterPluginConfig;
+  }
+
+  interface ExtensiblePlugins {
+    RouterPlugin?: RouterPlugin;
+  }
+}
+
+export class RouterPlugin extends Plugin<RouterPluginConfig> {
   getDefaultConfig() {
     return {};
   }

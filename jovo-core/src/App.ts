@@ -1,6 +1,7 @@
 import { DeepPartial } from '.';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
+import { Host } from './Host';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Platform } from './Platform';
 import { HandlerPlugin } from './plugins/handler/HandlerPlugin';
@@ -52,14 +53,15 @@ export class App extends Extensible<AppConfig> {
     return;
   }
 
+  // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(req: Record<string, any>): Promise<any> {
-    const handleRequest = new HandleRequest(this);
+  async handle(request: Record<string, any>): Promise<any> {
+    const handleRequest = new HandleRequest(this, request, new Host());
     await handleRequest.mount();
 
     await handleRequest.middlewareCollection.run('request', handleRequest);
 
-    const relatedPlatform = this.platforms.find((platform) => platform.isPlatformRequest(req));
+    const relatedPlatform = this.platforms.find((platform) => platform.isRequestRelated(request));
     if (!relatedPlatform) {
       // TODO improve error
       throw new Error('No matching platform');
@@ -67,7 +69,6 @@ export class App extends Extensible<AppConfig> {
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
@@ -76,6 +77,6 @@ export class App extends Extensible<AppConfig> {
     await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
-    console.log(JSON.stringify(jovo, undefined, 2));
+    return jovo.$response;
   }
 }
