@@ -1,0 +1,209 @@
+export interface Session {
+  new: boolean;
+  sessionId: string;
+  application: Application;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  attributes: Record<string, any>;
+  user: User;
+  person: Person;
+}
+
+export interface Context {
+  System: System;
+  Viewport?: Viewport;
+  AudioPlayer?: AudioPlayerContext;
+  Geolocation?: Geolocation;
+}
+
+export interface AudioPlayerContext {
+  token: string;
+  offsetInMilliseconds: number;
+  playerActivity: string;
+}
+
+export interface Geolocation {
+  // Either "locationServices" or "coordinate" will be present
+  locationServices?: LocationServices;
+  timestamp: string; // ISO 8601
+  coordinate?: Coordinate;
+  altitude?: Altitude;
+  heading?: Heading;
+  speed?: Speed;
+}
+
+export type LocationServicesAccess = 'ENABLED' | 'DISABLED';
+export type LocationServicesStatus = 'RUNNING' | 'STOPPED';
+
+export interface LocationServices {
+  access: LocationServicesAccess;
+  status: LocationServicesStatus;
+}
+
+export interface Coordinate {
+  latitudeInDegrees: number; // [-90.0, 90.0]
+  longitudeInDegrees: number; // [-180.0, 190.0]
+  accuracyInMeters: number; // [0, MAX_INTEGER]
+}
+
+export interface Altitude {
+  altitudeInMeters?: number; // [-6350, 18000]
+  accuracyInMeters?: number; // [0, MAX_INTEGER]
+}
+
+export interface Heading {
+  directionInDegrees?: number; // (0, 360.0]
+  accuracyInDegrees?: number; // [0, MAX_INTEGER]
+}
+
+export interface Speed {
+  speedInMetersPerSecond?: number; // [0, 1900] not optional if automotive
+  accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
+}
+
+export type PermissionStatus = 'GRANTED' | 'DENIED';
+
+export interface System {
+  application: Application;
+  user: User;
+  person: Person;
+  device: Device;
+  apiEndpoint: string;
+  apiAccessToken?: string;
+}
+
+export interface Viewport {
+  experiences: Experience[];
+  shape: 'RECTANGLE' | 'ROUND';
+  pixelWidth: number;
+  pixelHeight: number;
+  dpi: number;
+  currentPixelWidth: number;
+  currentPixelHeight: number;
+
+  touch?: TouchMethod[];
+  keyboard?: InputMechanism[];
+  video?: { codecs: string[] };
+}
+
+export interface Experience {
+  arcMinuteWidth: number;
+  arcMinuteHeight: number;
+  canRotate: boolean;
+  canResize: boolean;
+}
+
+export type TouchMethod = 'SINGLE';
+export type InputMechanism = 'DIRECTION';
+
+export interface Device {
+  deviceId: string;
+}
+
+export interface User {
+  userId: string;
+  accessToken: string;
+  permissions: Permission;
+}
+
+export interface Person {
+  personId: string;
+  accessToken: string;
+}
+
+export interface Permission {
+  consentToken: string;
+}
+
+export interface Application {
+  applicationId: string;
+}
+
+export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
+
+export interface Slot {
+  name: string;
+  confirmationStatus?: ConfirmationStatus;
+  value: string;
+  source?: string;
+  resolutions?: Resolutions;
+}
+
+export interface Resolutions {
+  resolutionsPerAuthority: AuthorityResolution[];
+}
+
+export type AuthorityResolutionStatusCode =
+  | 'ER_SUCCESS_MATCH'
+  | 'ER_SUCCESS_NO_MATCH'
+  | 'ER_ERROR_TIMEOUT'
+  | 'ER_ERROR_EXCEPTION';
+
+export interface AuthorityResolution {
+  authority: string;
+  status: {
+    code: AuthorityResolutionStatusCode;
+  };
+  values: AuthorityResolutionValueItem[];
+}
+
+export interface AuthorityResolutionValueItem {
+  value: AuthorityResolutionValue;
+}
+
+export interface AuthorityResolutionValue {
+  name: string;
+  id: string;
+}
+
+export interface Intent {
+  name: string;
+  confirmationStatus: ConfirmationStatus;
+  slots?: { [key: string]: Slot };
+}
+
+export interface Request {
+  type: string;
+  requestId: string;
+  timestamp: string;
+  locale: string;
+  token?: string;
+  offsetInMilliseconds?: number;
+  intent?: Intent;
+  status?: {
+    // Connections.Response
+    code: string;
+    message: string;
+  };
+  name?: string; // Connections.Response
+  payload?: {
+    // Connections.Response
+    purchaseResult?: string;
+    productId?: string;
+  };
+  error?: {
+    // System.ExceptionEncountered
+    type: string;
+    message: string;
+  };
+  cause?: {
+    // System.ExceptionEncountered
+    requestId: string;
+  };
+  originatingRequestId?: string; // GameEngine.InputHandlerEvent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  events: any[];
+  reason?: string; // SessionEndedRequest
+  eventCreationTime?: string; // AlexaSkillEvent.*
+  eventPublishingTime?: string; // AlexaSkillEvent.*
+  dialogState?: string;
+}
+
+// export interface AlexaInput extends Input {
+//   alexaSkill: {
+//     name?: string;
+//     value?: string;
+//     confirmationStatus?: string;
+//     source?: string;
+//     resolutions?: Resolutions;
+//   };
+// }

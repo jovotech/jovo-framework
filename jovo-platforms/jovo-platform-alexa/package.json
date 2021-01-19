@@ -18,9 +18,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "lodash.merge": "^4.6.2",
     "jovo-output-alexa": "^4.0.0"
   },
   "devDependencies": {
+    "@types/lodash.merge": "^4.6.6",
     "@types/jest": "^26.0.19",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
