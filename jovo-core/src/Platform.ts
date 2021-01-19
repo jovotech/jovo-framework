@@ -1,6 +1,6 @@
 import { OutputConverterStrategy } from 'jovo-output';
-import { App, DeepPartial, HandleRequest, Jovo } from '.';
-import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
+import { App, HandleRequest, Jovo } from '.';
+import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
 import { JovoResponse } from './JovoResponse';
 import { MiddlewareCollection } from './MiddlewareCollection';
@@ -36,10 +36,6 @@ export abstract class Platform<
   readonly middlewareCollection = new MiddlewareCollection(...DEFAULT_PLATFORM_MIDDLEWARES);
 
   abstract outputConverterStrategy: OutputConverterStrategy<Record<string, unknown>>;
-
-  constructor(config?: DeepPartial<Omit<C & ExtensibleInitConfig, 'plugin'>>) {
-    super(config);
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isPlatformRequest(request: Record<string, any>): boolean;
