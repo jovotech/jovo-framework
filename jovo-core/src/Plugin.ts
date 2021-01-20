@@ -2,30 +2,27 @@ import _merge from 'lodash.merge';
 import { DeepPartial } from '.';
 import { Extensible } from './Extensible';
 
-export type PluginConstructor<T extends Plugin = Plugin> = new (
-  config?: DeepPartial<T['config']>,
-  ...args: unknown[]
-) => T;
-
 export interface PluginConfig {
-  enabled?: boolean;
-
   [key: string]: unknown;
+
+  enabled?: boolean;
 }
 
-export abstract class Plugin<C extends PluginConfig = PluginConfig> {
+export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
   [key: string]: unknown;
 
-  readonly config: C;
-  readonly initConfig?: DeepPartial<C>;
+  readonly config: CONFIG;
+  readonly initConfig?: DeepPartial<CONFIG>;
 
-  constructor(config?: DeepPartial<C>) {
+  constructor(config?: DeepPartial<CONFIG>) {
     this.initConfig = config;
     const defaultConfig = this.getDefaultConfig();
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
   }
 
-  abstract getDefaultConfig(): C;
+  abstract getDefaultConfig(): CONFIG;
+
+  install?(parent: Extensible): void;
 
   initialize?(parent: Extensible): Promise<void>;
 

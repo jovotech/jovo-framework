@@ -1,4 +1,8 @@
-import { DeepPartial } from '.';
+import {
+  ComponentConstructor,
+  ComponentDeclaration,
+  DeepPartial,
+} from '.';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
@@ -52,6 +56,8 @@ export class App extends Extensible<AppConfig> {
   mount(): Promise<void> | void {
     return;
   }
+
+  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(...components: T) {}
 
   // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -22,14 +22,14 @@ export interface ExtensibleInitConfig {
 }
 
 export abstract class Extensible<
-  C extends ExtensibleConfig = ExtensibleConfig,
-  N extends string[] = string[]
-> extends Plugin<C> {
+  CONFIG extends ExtensibleConfig = ExtensibleConfig,
+  MIDDLEWARES extends string[] = string[]
+> extends Plugin<CONFIG> {
   readonly plugins: ExtensiblePlugins;
 
-  abstract readonly middlewareCollection: MiddlewareCollection<N>;
+  abstract readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
 
-  constructor(config?: DeepPartial<Omit<C & ExtensibleInitConfig, 'plugin'>>) {
+  constructor(config?: DeepPartial<Omit<CONFIG & ExtensibleInitConfig, 'plugin'>>) {
     super(config ? { ...config, plugins: undefined } : config);
     this.plugins = {};
     if (this.config && 'plugins' in this.config) {
@@ -47,6 +47,9 @@ export abstract class Extensible<
     for (let i = 0, len = plugins.length; i < len; i++) {
       const name = plugins[i].constructor.name;
       this.plugins[name] = plugins[i];
+      if (plugins[i].install) {
+        plugins[i].install?.(this);
+      }
     }
     return this;
   }

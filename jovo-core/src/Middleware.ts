@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MiddlewareFunction<T extends any[] = any[]> = (...args: T) => Promise<any> | any;
 
-export class Middleware<N extends string = string> {
+export class Middleware<NAME extends string = string> {
   readonly fns: MiddlewareFunction[];
   enabled = true;
 
-  constructor(readonly name: N) {
+  constructor(readonly name: NAME) {
     this.fns = [];
   }
 

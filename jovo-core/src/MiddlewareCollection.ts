@@ -1,11 +1,11 @@
 import { Middleware } from './Middleware';
 
-type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];
+type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 
-export class MiddlewareCollection<N extends string[] = string[]> {
+export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   readonly middlewares: Record<string, Middleware>;
 
-  constructor(...names: N) {
+  constructor(...names: MIDDLEWARES) {
     this.middlewares = {};
     for (let i = 0, len = names.length; i < len; i++) {
       this.middlewares[names[i]] = new Middleware(names[i]);
@@ -26,21 +26,23 @@ export class MiddlewareCollection<N extends string[] = string[]> {
     return this;
   }
 
-  has(name: ArrayElement<N>): boolean;
+  has(name: ArrayElement<MIDDLEWARES>): boolean;
   has(name: string): boolean;
-  has(name: string | ArrayElement<N>): boolean {
+  has(name: string | ArrayElement<MIDDLEWARES>): boolean {
     return !!this.middlewares[name] && this.middlewares[name] instanceof Middleware;
   }
 
-  get<M extends ArrayElement<N>>(name: M): Middleware<M> | undefined;
-  get<M extends string>(name: M): Middleware<M> | undefined;
-  get(name: string | ArrayElement<N>): Middleware | undefined {
+  get<MIDDLEWARE extends ArrayElement<MIDDLEWARES>>(
+    name: MIDDLEWARE,
+  ): Middleware<MIDDLEWARE> | undefined;
+  get<MIDDLEWARE extends string>(name: MIDDLEWARE): Middleware<MIDDLEWARE> | undefined;
+  get(name: string | ArrayElement<MIDDLEWARES>): Middleware | undefined {
     return this.middlewares[name];
   }
 
-  remove(...names: ArrayElement<N>[]): this;
+  remove(...names: ArrayElement<MIDDLEWARES>[]): this;
   remove(...names: string[]): this;
-  remove(...names: Array<string | ArrayElement<N>>): this {
+  remove(...names: Array<string | ArrayElement<MIDDLEWARES>>): this {
     for (let i = 0, len = names.length; i < len; i++) {
       if (this.has(names[i])) {
         delete this.middlewares[names[i]];
@@ -50,9 +52,9 @@ export class MiddlewareCollection<N extends string[] = string[]> {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  async run<T extends any[]>(name: ArrayElement<N>, ...args: T): Promise<void>;
+  async run<T extends any[]>(name: ArrayElement<MIDDLEWARES>, ...args: T): Promise<void>;
   async run<T extends any[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends any[]>(name: string | ArrayElement<N>, ...args: T): Promise<void> {
+  async run<T extends any[]>(name: string | ArrayElement<MIDDLEWARES>, ...args: T): Promise<void> {
     /*  eslint-enable @typescript-eslint/no-explicit-any */
     const middleware = this.get(name);
     if (!middleware) {
@@ -71,9 +73,9 @@ export class MiddlewareCollection<N extends string[] = string[]> {
     }
   }
 
-  disable(...names: ArrayElement<N>[]): this;
+  disable(...names: ArrayElement<MIDDLEWARES>[]): this;
   disable(...names: string[]): this;
-  disable(...names: Array<string | ArrayElement<N>>): this {
+  disable(...names: Array<string | ArrayElement<MIDDLEWARES>>): this {
     for (let i = 0, len = names.length; i < len; i++) {
       const middleware = this.get(names[i]);
       if (middleware) {
@@ -83,9 +85,9 @@ export class MiddlewareCollection<N extends string[] = string[]> {
     return this;
   }
 
-  enable(...names: ArrayElement<N>[]): this;
+  enable(...names: ArrayElement<MIDDLEWARES>[]): this;
   enable(...names: string[]): this;
-  enable(...names: Array<string | ArrayElement<N>>): this {
+  enable(...names: Array<string | ArrayElement<MIDDLEWARES>>): this {
     for (let i = 0, len = names.length; i < len; i++) {
       const middleware = this.get(names[i]);
       if (middleware) {

@@ -2,8 +2,11 @@
 // It has to be checked whether constructor is valid and can be used to instantiate a new instance for example.
 
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
+export type Constructor<T> = new (...args: unknown[]) => T;
 
 export * from './App';
+export * from './BaseComponent';
+export * from './ComponentPlugin';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './Jovo';

@@ -1,6 +1,6 @@
 import { OutputConverterStrategy } from 'jovo-output';
 import _merge from 'lodash.merge';
-import { App, HandleRequest, Jovo, JovoConstructor } from '.';
+import { App, Constructor, HandleRequest, Jovo, JovoConstructor } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
 import { JovoResponse } from './JovoResponse';
@@ -18,13 +18,11 @@ export const DEFAULT_PLATFORM_MIDDLEWARES = [
   '$response',
 ];
 
-export type Constructor<T> = new (...args: unknown[]) => T;
-
 export abstract class Platform<
-  REQ extends JovoRequest = JovoRequest,
-  RES extends JovoResponse = JovoResponse,
-  C extends ExtensibleConfig = ExtensibleConfig,
-  N extends string[] = [
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
+  CONFIG extends ExtensibleConfig = ExtensibleConfig,
+  MIDDLEWARES extends string[] = [
     '$init',
     '$request',
     '$session',
@@ -35,22 +33,22 @@ export abstract class Platform<
     '$output',
     '$response',
   ]
-> extends Extensible<C, N> {
+> extends Extensible<CONFIG, MIDDLEWARES> {
   readonly middlewareCollection = new MiddlewareCollection(...DEFAULT_PLATFORM_MIDDLEWARES);
-  abstract readonly requestClass: Constructor<REQ>;
-  abstract readonly jovoClass: JovoConstructor<REQ, RES>;
+  abstract readonly requestClass: Constructor<REQUEST>;
+  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
 
-  abstract outputConverterStrategy: OutputConverterStrategy<RES>;
+  abstract outputConverterStrategy: OutputConverterStrategy<RESPONSE>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  abstract isRequestRelated(request: REQ | Record<string, any>): boolean;
+  abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
 
-  createJovoInstance(app: App, handleRequest: HandleRequest): Jovo<REQ, RES> {
+  createJovoInstance(app: App, handleRequest: HandleRequest): Jovo<REQUEST, RESPONSE> {
     return new this.jovoClass(app, handleRequest, this);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  createRequestInstance(request: REQ | Record<string, any>): REQ {
+  createRequestInstance(request: REQUEST | Record<string, any>): REQUEST {
     const instance = new this.requestClass();
     _merge(instance, request);
     return instance;

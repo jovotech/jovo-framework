@@ -3,17 +3,17 @@ import { App, AppConfig } from './App';
 import { RequestType } from './enums';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
-import {AsrData, Entity, NluData, RequestData, SessionData} from './interfaces';
+import { AsrData, Entity, NluData, RequestData, SessionData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { JovoResponse } from './JovoResponse';
 import { Platform } from './Platform';
 
-export type JovoConstructor<REQ extends JovoRequest, RES extends JovoResponse> = new (
+export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
   handleRequest: HandleRequest,
-  platform: Platform<REQ, RES>,
+  platform: Platform<REQUEST, RESPONSE>,
   ...args: unknown[]
-) => Jovo<REQ, RES>;
+) => Jovo<REQUEST, RESPONSE>;
 
 export interface JovoRequestType {
   type?: RequestType | string;

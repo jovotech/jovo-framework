@@ -1,20 +1,23 @@
 import { GenericOutput, OutputConverterStrategy } from 'jovo-output';
 import {
-  App,
   Extensible,
-  HandleRequest,
   Jovo,
   JovoRequest,
+  JovoRequestType,
   JovoResponse,
   MiddlewareCollection,
   Platform,
 } from '../../src';
 
-export class ExamplePlatformResponse extends JovoResponse {
-  [key: string]: unknown;
+export class ExamplePlatformResponse extends JovoResponse {}
+
+export class ExamplePlatformRequest extends JovoRequest {
+  getRequestType(): JovoRequestType | undefined {
+    return undefined;
+  }
 }
 
-export class ExamplePlatformApp extends Jovo<JovoRequest, ExamplePlatformResponse> {}
+export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
 
 export class ExamplePlatformOutputConverterStrategy
   implements OutputConverterStrategy<ExamplePlatformResponse> {
@@ -29,7 +32,9 @@ export class ExamplePlatformOutputConverterStrategy
   }
 }
 
-export class ExamplePlatform extends Platform<JovoRequest, ExamplePlatformResponse> {
+export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
+  readonly jovoClass = ExamplePlatformApp;
+  readonly requestClass = ExamplePlatformRequest;
   outputConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
   getDefaultConfig() {
@@ -42,16 +47,13 @@ export class ExamplePlatform extends Platform<JovoRequest, ExamplePlatformRespon
 
   mount(parent: Extensible): Promise<void> | void {
     return;
-  }
-
-  createJovoInstance(app: App, handleRequest: HandleRequest): ExamplePlatformApp {
-    return new ExamplePlatformApp(this);
   }
 }
 
-export class EmptyPlatform extends Platform<JovoRequest, ExamplePlatformResponse> {
+export class EmptyPlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
   middlewareCollection = new MiddlewareCollection();
-
+  readonly jovoClass = ExamplePlatformApp;
+  readonly requestClass = ExamplePlatformRequest;
   outputConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
   getDefaultConfig() {
@@ -64,9 +66,5 @@ export class EmptyPlatform extends Platform<JovoRequest, ExamplePlatformResponse
 
   mount(parent: Extensible): Promise<void> | void {
     return;
-  }
-
-  createJovoInstance(app: App, handleRequest: HandleRequest): ExamplePlatformApp {
-    return new ExamplePlatformApp(this);
   }
 }

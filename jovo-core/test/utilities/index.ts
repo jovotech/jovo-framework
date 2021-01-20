@@ -7,3 +7,4 @@ export function delay(amountInMs: number): Promise<void> {
 export * from './plugin';
 export * from './extensible';
 export * from './platform';
+export * from './component';
