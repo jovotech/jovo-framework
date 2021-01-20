@@ -1,29 +1,6 @@
 {
-	"invocation": "my test app",
+	"invocation": "transactions demo",
 	"intents": [
-		{
-			"name": "HelloWorldIntent",
-			"phrases": [
-				"hello",
-				"say hello",
-				"say hello world"
-			]
-		},
-		{
-			"name": "MyNameIsIntent",
-			"phrases": [
-				"{name}",
-				"my name is {name}",
-				"i am {name}",
-				"you can call me {name}"
-			],
-			"inputs": [
-				{
-					"name": "name",
-					"type": "NameInputType"
-				}
-			]
-		},
 		{
 			"name": "YesIntent",
 			"phrases": [
@@ -56,57 +33,11 @@
 							"commitBehavior": {
 								"writeSessionParam": "CompletePurchase"
 							},
-							"config": "$session.parameter.purchase",
+							"config": "$session.params.purchase",
 							"name": "CompletePurchase",
 							"required": true,
 							"type": {
 								"name": "actions.type.CompletePurchaseValue"
-							}
-						}
-					]
-				},
-				"TransactionDecision": {
-					"conditionalEvents": [
-						{
-							"condition": "scene.slots.status == \"FINAL\"",
-							"handler": {
-								"webhookHandler": "Jovo"
-							}
-						}
-					],
-					"slots": [
-						{
-							"commitBehavior": {
-								"writeSessionParam": "TransactionDecision"
-							},
-							"config": "$session.params.order",
-							"name": "TransactionDecision",
-							"required": true,
-							"type": {
-								"name": "actions.type.TransactionDecisionValue"
-							}
-						}
-					]
-				},
-				"TransactionDeliveryAddress": {
-					"conditionalEvents": [
-						{
-							"condition": "scene.slots.status == \"FINAL\"",
-							"handler": {
-								"webhookHandler": "Jovo"
-							}
-						}
-					],
-					"slots": [
-						{
-							"commitBehavior": {
-								"writeSessionParam": "TransactionDeliveryAddressResult"
-							},
-							"config": "$session.params.TransactionDeliveryAddress",
-							"name": "TransactionDeliveryAddress",
-							"required": true,
-							"type": {
-								"name": "actions.type.DeliveryAddressValue"
 							}
 						}
 					]
@@ -132,31 +63,6 @@
 							"required": true,
 							"type": {
 								"name": "actions.type.DigitalPurchaseCheckResult"
-							}
-						}
-					]
-				},
-				"TransactionRequirementsCheck": {
-					"conditionalEvents": [
-						{
-							"condition": "scene.slots.status == \"FINAL\"",
-							"handler": {
-								"webhookHandler": "Jovo"
-							}
-						}
-					],
-					"slots": [
-						{
-							"commitBehavior": {
-								"writeSessionParam": "TransactionRequirementsCheck"
-							},
-							"config": {
-								"@type": "type.googleapis.com/google.actions.transactions.v3.TransactionRequirementsCheckSpec"
-							},
-							"name": "TransactionRequirementsCheck",
-							"required": true,
-							"type": {
-								"name": "actions.type.TransactionRequirementsCheckResult"
 							}
 						}
 					]
