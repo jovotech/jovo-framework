@@ -5,7 +5,7 @@
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
 - [Introduction to Visual Output](#introduction-to-visual-output)
-- [Display Text](#display-text)
+- [Simple Response](#simple-response)
 - [Basic Card](#basic-card)
 - [Table Card](#table-card)
 - [Selection](#selection)
@@ -18,37 +18,40 @@ Learn more about how to build Google Actions with visual output using the Jovo F
 
 Visual output is used to describe or enhance the voice interaction.
 
-## Display Text
+## Simple Response
 
-This will display an alternative text instead of the written speech output on your screen surface, e.g. the Google Assistant mobile phone app.
+With [Simple Responses](https://developers.google.com/assistant/conversational/prompts-simple), you can provide basic text output in the form of chat bubbles to your users. They consist of visual text output and use SSML or TTS for sound.
 
 ```javascript
 // @language=javascript
 
-this.$googleAction.displayText(text);
+const firstSimpleResponse = 'First Simple Response!';
+this.$googleAction.addFirstSimple({
+	speech: SpeechBuilder.toSSML(firstSimpleResponse),
+	text: firstSimpleResponse,
+});
 
-// Example
-let speech = 'Hello World!';
-let text = 'Hello Phone!';
-this.$googleAction.displayText(text)
-    .tell(speech);
+const lastSimpleResponse = 'Last Simple Response!';
+this.$googleAction.addLastSimple({
+	speech: SpeechBuilder.toSSML(lastSimpleResponse),
+	text: lastSimpleResponse,
+});
+
 
 // @language=typescript
 
-this.$googleAction!.displayText(text: string);
+const firstSimpleResponse: string = 'First Simple Response!';
+this.$googleAction!.addFirstSimple({
+	speech: SpeechBuilder.toSSML(firstSimpleResponse),
+	text: firstSimpleResponse,
+});
 
-// Example
-let speech = 'Hello World!';
-let text = 'Hello Phone!';
-this.$googleAction!.displayText(text)
-    .tell(speech);
+const lastSimpleResponse: string = 'Last Simple Response!';
+this.$googleAction!.addLastSimple({
+	speech: SpeechBuilder.toSSML(lastSimpleResponse),
+	text: lastSimpleResponse,
+});
 ```
-
-[Official Documentation](https://developers.google.com/actions/assistant/responses)
-
-## Simple Response
-
-
 
 ## Basic Card
 
