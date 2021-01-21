@@ -1,5 +1,10 @@
 import { App } from './App';
-import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
+import {
+  BaseComponent,
+  ComponentConstructor,
+  ComponentDeclaration,
+  ComponentOptions,
+} from './BaseComponent';
 import { Plugin, PluginConfig } from './Plugin';
 
 export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseComponent>
@@ -14,11 +19,16 @@ export abstract class ComponentPlugin<
   abstract readonly component: ComponentConstructor<COMPONENT>;
 
   install(app: App): void {
-    app.useComponents(
-      new ComponentDeclaration(this.component, {
-        config: this.config.component,
-      }),
-    );
+    let options: ComponentOptions<COMPONENT> | undefined = undefined;
+
+    if (this.config.component) {
+      if (!options) {
+        options = {};
+      }
+      options.config = this.config.component;
+    }
+
+    app.useComponents(new ComponentDeclaration(this.component, options));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

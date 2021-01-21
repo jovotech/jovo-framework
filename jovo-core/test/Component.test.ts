@@ -1,32 +1,140 @@
+import { PluginConfig } from '../dist';
 import { App, BaseComponent, ComponentDeclaration } from '../src';
 import { Component } from '../src/plugins/handler/decorators/Component';
+import { MetadataStorage } from '../src/plugins/handler/metadata/MetadataStorage';
 import { EmptyComponent, ExampleComponent, ExampleComponentPlugin } from './utilities';
 
-// TODO implement tests
+// TODO implement more tests
 describe('registering components', () => {
   let app: App;
+  const metadataStorage = MetadataStorage.getInstance();
   beforeEach(() => {
     app = new App();
+    metadataStorage.clearAll();
   });
 
-  test('BaseComponent-constructor', () => {
+  test('via BaseComponent-constructor and undecorated component', () => {
     app.useComponents(EmptyComponent);
+    expect(app.components).toEqual({
+      EmptyComponent: { target: EmptyComponent },
+    });
   });
 
-  test('ComponentPlugin', () => {
-    app.use(new ExampleComponentPlugin());
+  describe('via ComponentPlugin', () => {
+    test('no config passed', () => {
+      app.use(new ExampleComponentPlugin());
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent },
+      });
+    });
+
+    test('config passed', () => {
+      app.use(new ExampleComponentPlugin({ component: { text: 'edited' } }));
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
+      });
+    });
   });
 
-  test('ComponentDeclaration', () => {
-    app.useComponents(new ComponentDeclaration(ExampleComponent));
+  describe('via ComponentDeclaration', () => {
+    test('no options passed', () => {
+      app.useComponents(new ComponentDeclaration(ExampleComponent));
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent },
+      });
+    });
+
+    test('options with config passed', () => {
+      app.useComponents(
+        new ComponentDeclaration(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
+      });
+    });
+
+    test('options with components passed', () => {
+      app.useComponents(
+        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
+      );
+      expect(app.components).toEqual({
+        ExampleComponent: {
+          target: ExampleComponent,
+          options: { components: [EmptyComponent] },
+        },
+      });
+    });
   });
 
-  test('@Component-decorator', () => {
-    @Component()
-    class DecoratedComponent extends BaseComponent {
-      getDefaultConfig() {
-        return {};
+  describe('via @Component-decorator and useComponents', () => {
+    test('no config passed', () => {
+      @Component()
+      class DecoratedComponent extends BaseComponent {
+        getDefaultConfig() {
+          return {};
+        }
       }
-    }
+
+      app.useComponents(DecoratedComponent);
+      expect(app.components).toEqual({
+        DecoratedComponent: { target: DecoratedComponent },
+      });
+    });
+
+    test('config passed in decorator', () => {
+      @Component<DecoratedComponent>({
+        config: {
+          test: true,
+        },
+      })
+      class DecoratedComponent extends BaseComponent<{ test: boolean } & PluginConfig> {
+        getDefaultConfig() {
+          return { test: false };
+        }
+      }
+
+      app.useComponents(DecoratedComponent);
+      expect(app.components).toEqual({
+        DecoratedComponent: {
+          target: DecoratedComponent,
+          options: {
+            config: {
+              test: true,
+            },
+          },
+        },
+      });
+    });
+
+    test('config passed in decorator and declaration', () => {
+      @Component<DecoratedComponent>({
+        config: {
+          test: 'decorator',
+        },
+      })
+      class DecoratedComponent extends BaseComponent<{ test: string } & PluginConfig> {
+        getDefaultConfig() {
+          return { test: 'default' };
+        }
+      }
+
+      app.useComponents(
+        new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }),
+      );
+      expect(app.components).toEqual({
+        DecoratedComponent: {
+          target: DecoratedComponent,
+          options: {
+            config: {
+              test: 'declaration',
+            },
+          },
+        },
+      });
+    });
   });
 });

@@ -15,6 +15,7 @@ export interface JovoHandlerObject {
 
 export interface HandlerMixin {
   handler: JovoHandlerObject;
+
   setHandlers<T extends JovoHandlerObject[]>(...handlers: T): this;
 }
 
@@ -31,6 +32,7 @@ declare module '../../Extensible' {
   interface ExtensiblePluginConfig {
     HandlerPlugin?: HandlerPluginConfig;
   }
+
   interface ExtensiblePlugins {
     HandlerPlugin?: HandlerPlugin;
   }
@@ -61,15 +63,20 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
   }
 
   private mixin(constructor: typeof App | typeof HandleRequest) {
-    constructor.prototype.handler = {};
-    Object.defineProperty(constructor.prototype, 'setHandlers', {
-      enumerable: false,
-      value: function (this: App | HandleRequest, ...handlers: JovoHandlerObject[]) {
-        for (let i = 0, len = handlers.length; i < len; i++) {
-          this.handler = _merge(this.handlers, handlers[i]);
-        }
-        return this;
-      },
-    });
+    if (!constructor.prototype.handler) {
+      constructor.prototype.handler = {};
+    }
+
+    if (!constructor.prototype.setHandlers) {
+      Object.defineProperty(constructor.prototype, 'setHandlers', {
+        enumerable: false,
+        value: function (this: App | HandleRequest, ...handlers: JovoHandlerObject[]) {
+          for (let i = 0, len = handlers.length; i < len; i++) {
+            this.handler = _merge(this.handlers, handlers[i]);
+          }
+          return this;
+        },
+      });
+    }
   }
 }

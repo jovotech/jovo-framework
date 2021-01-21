@@ -1,14 +1,14 @@
-import {
-  ComponentConstructor,
-  ComponentDeclaration,
-  DeepPartial,
-} from '.';
+import _merge from 'lodash.merge';
+import { DeepPartial, RegisteredComponents } from '.';
+import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Platform } from './Platform';
 import { HandlerPlugin } from './plugins/handler/HandlerPlugin';
+import { ComponentMetadata } from './plugins/handler/metadata/ComponentMetadata';
+import { MetadataStorage } from './plugins/handler/metadata/MetadataStorage';
 import { OutputPlugin } from './plugins/output/OutputPlugin';
 import { RouterPlugin } from './plugins/router/RouterPlugin';
 
@@ -20,6 +20,8 @@ export class App extends Extensible<AppConfig> {
   readonly config: AppConfig = {
     test: '',
   };
+
+  readonly components: RegisteredComponents;
 
   middlewareCollection = new MiddlewareCollection(
     'request',
@@ -35,6 +37,7 @@ export class App extends Extensible<AppConfig> {
   constructor(config?: DeepPartial<Omit<AppConfig & ExtensibleInitConfig, 'plugin'>>) {
     super(config);
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
+    this.components = {};
   }
 
   get platforms(): ReadonlyArray<Platform> {
@@ -57,7 +60,27 @@ export class App extends Extensible<AppConfig> {
     return;
   }
 
-  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(...components: T) {}
+  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(...components: T) {
+    for (let i = 0, len = components.length; i < len; i++) {
+      const component = components[i];
+      const relatedMetadata = MetadataStorage.getInstance().getComponentMetadata(
+        typeof component === 'function' ? component : component.component,
+      );
+      let newMetadata, name;
+      if (typeof component === 'function') {
+        name = component.name;
+        newMetadata = new ComponentMetadata(component);
+      } else {
+        name = component.component.name;
+        newMetadata = new ComponentMetadata(component.component, component.options);
+      }
+      this.components[name] = _merge(
+        Object.create(ComponentMetadata.prototype),
+        relatedMetadata,
+        newMetadata,
+      );
+    }
+  }
 
   // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

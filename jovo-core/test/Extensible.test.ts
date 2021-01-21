@@ -34,8 +34,8 @@ describe('initializePlugins', () => {
     await extensible.initialize();
 
     expect(extensible.plugins.ExamplePlugin).toBe(plugin);
-    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin.config);
-    expect(extensible.plugins.ExamplePlugin.config).toEqual(plugin.getDefaultConfig());
+    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin?.config);
+    expect(extensible.plugins.ExamplePlugin?.config).toEqual(plugin.getDefaultConfig());
   });
 
   test('child: parent-config provided', async () => {
@@ -53,8 +53,8 @@ describe('initializePlugins', () => {
     await extensible.initialize();
 
     expect(extensible.plugins.ExamplePlugin).toBe(plugin);
-    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin.config);
-    expect(extensible.plugins.ExamplePlugin.config).toEqual({
+    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin?.config);
+    expect(extensible.plugins.ExamplePlugin?.config).toEqual({
       text: 'parent',
     });
   });
@@ -70,8 +70,8 @@ describe('initializePlugins', () => {
     await extensible.initialize();
 
     expect(extensible.plugins.ExamplePlugin).toBe(plugin);
-    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin.config);
-    expect(extensible.plugins.ExamplePlugin.config).toEqual({
+    expect(extensible.config.plugin?.ExamplePlugin).toBe(extensible.plugins.ExamplePlugin?.config);
+    expect(extensible.plugins.ExamplePlugin?.config).toEqual({
       text: 'constructor',
     });
   });
@@ -85,7 +85,7 @@ describe('initializePlugins', () => {
     if (extensible.config.plugin?.ExamplePlugin) {
       extensible.config.plugin.ExamplePlugin.text = 'edited';
     }
-    expect(extensible.plugins.ExamplePlugin.config.text).toEqual('edited');
+    expect(extensible.plugins.ExamplePlugin?.config.text).toEqual('edited');
   });
 
   test('initialize of children are called if the child has a hook', async () => {
@@ -153,7 +153,7 @@ describe('mountPlugins', () => {
     if (extensible.config.plugin?.ExamplePlugin) {
       extensible.config.plugin.ExamplePlugin.text = 'edited';
     }
-    expect(extensible.plugins.ExamplePlugin.config.text).toEqual('edited');
+    expect(extensible.plugins.ExamplePlugin?.config.text).toEqual('edited');
   });
 
   test('nested children are mounted', async () => {

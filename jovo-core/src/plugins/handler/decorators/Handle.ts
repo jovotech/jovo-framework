@@ -1,7 +1,7 @@
 import { HandleRequest } from '../../../HandleRequest';
 import { Jovo } from '../../../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
-import { HandlerMetadataStorage } from '../metadata/HandlerMetadataStorage';
+import { MetadataStorage } from '../metadata/MetadataStorage';
 
 export interface HandleOptions {
   if?: (handleRequest: HandleRequest, jovo: Jovo) => boolean | Promise<boolean>;
@@ -14,7 +14,7 @@ export interface HandleOptions {
 
 export function Handle(options?: HandleOptions): MethodDecorator {
   return function (target, propertyKey, descriptor) {
-    HandlerMetadataStorage.getInstance().metadata.push(
+    MetadataStorage.getInstance().handlerMetadata.push(
       new HandlerMetadata(target.constructor, propertyKey, descriptor, options),
     );
   };
