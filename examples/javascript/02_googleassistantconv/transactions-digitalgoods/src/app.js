@@ -1,9 +1,9 @@
-import { App } from 'jovo-framework';
-import { GoogleAssistant, Sku } from 'jovo-platform-googleassistantconv';
-import { JovoDebugger } from 'jovo-plugin-debugger';
-import { FileDb } from 'jovo-db-filedb';
+const { App } = require('jovo-framework');
+const { GoogleAssistant, Sku } = require('jovo-platform-googleassistantconv');
+const { JovoDebugger } = require('jovo-plugin-debugger');
+const { FileDb } = require('jovo-db-filedb');
 
-const app: App = new App();
+const app = new App();
 
 app.use(
 	new GoogleAssistant({
@@ -23,14 +23,14 @@ app.setHandler({
 
 	TransactionDigitalPurchaseRequirementsIntent() {
 		// Check if the user is eligible to perform digital purchases.
-		this.$googleAction!.$transaction!.checkDigitalPurchaseRequirements();
-		this.$googleAction!.setNextScene('TransactionDigitalPurchaseCheckScene');
+		this.$googleAction.$transaction.checkDigitalPurchaseRequirements();
+		this.$googleAction.setNextScene('TransactionDigitalPurchaseCheckScene');
 	},
 
 	ON_TRANSACTION: {
 		async DIGITAL_PURCHASE_CHECK() {
-			if (this.$googleAction!.$transaction!.canPurchase()) {
-				const skus: Sku[] = await this.$googleAction!.$transaction!.getSkus(
+			if (this.$googleAction.$transaction.canPurchase()) {
+				const skus = await this.$googleAction.$transaction.getSkus(
 					['testproduct1337'],
 					'SKU_TYPE_IN_APP'
 				);
@@ -46,7 +46,7 @@ app.setHandler({
 
 		ON_COMPLETE_PURCHASE() {
 			if (
-				this.$googleAction!.$transaction!.getPurchaseCompleteStatus() ===
+				this.$googleAction.$transaction.getPurchaseCompleteStatus() ===
 				'PURCHASE_STATUS_OK'
 			) {
 				this.tell('Thank you for the purchase.');
@@ -55,11 +55,11 @@ app.setHandler({
 	},
 
 	YesIntent() {
-		this.$googleAction!.$transaction!.completePurchase(
+		this.$googleAction.$transaction.completePurchase(
 			this.$session.$data.skuId
 		);
 
-		this.$googleAction!.setNextScene('TransactionCompletePurchaseScene');
+		this.$googleAction.setNextScene('TransactionCompletePurchaseScene');
 	},
 });
 export { app };

@@ -127,7 +127,7 @@ Before the user can make a purchase, it is recommended to check if the user is e
 To validate a user's ability to purchase products from your Conversational Action, you can use a `DigitalPurchaseCheck` [scene](), which checks, whether the user is verified, their device is eligible for transactions and that they are located in a supported region.
 
 ```javascript
-"TransactionDigitalPurchaseCheck": {
+"TransactionDigitalPurchaseCheckScene": {
 	"conditionalEvents": [
 		{
 	   	"condition": "scene.slots.status == \"FINAL\"",
@@ -283,7 +283,7 @@ PurchaseItem() {
 After calling `this.$googleAction.$transaction.completePurchase()` with the selected product, we use [scenes]() again to delegate the conversation flow to the Conversational Action.
 
 ```javascript
-"TransactionCompletePurchase": {
+"TransactionCompletePurchaseScene": {
    "conditionalEvents": [
 		{
 			"condition": "scene.slots.status == \"FINAL\"",
