@@ -1,6 +1,5 @@
-import { App, Jovo } from 'jovo-framework';
-
-import { GoogleAssistant } from 'jovo-platform-googleassistantconv';
+import { App } from 'jovo-framework';
+import { GoogleAssistant, Sku } from 'jovo-platform-googleassistantconv';
 import { JovoDebugger } from 'jovo-plugin-debugger';
 import { FileDb } from 'jovo-db-filedb';
 
@@ -23,7 +22,7 @@ app.setHandler({
 	},
 
 	TransactionDigitalPurchaseRequirementsIntent() {
-		// check if digital purchases are available for the user
+		// Check if the user is eligible to perform digital purchases.
 		this.$googleAction!.$transaction!.checkDigitalPurchaseRequirements();
 		this.$googleAction!.setNextScene('TransactionDigitalPurchaseCheck');
 	},
@@ -31,7 +30,7 @@ app.setHandler({
 	ON_TRANSACTION: {
 		async DIGITAL_PURCHASE_CHECK() {
 			if (this.$googleAction!.$transaction!.canPurchase()) {
-				const skus = await this.$googleAction!.$transaction!.getSkus(
+				const skus: Sku[] = await this.$googleAction!.$transaction!.getSkus(
 					['testproduct1337'],
 					'SKU_TYPE_IN_APP'
 				);
@@ -44,6 +43,7 @@ app.setHandler({
 				this.tell(`You can't use digital purchasing.`);
 			}
 		},
+
 		ON_COMPLETE_PURCHASE() {
 			if (
 				this.$googleAction!.$transaction!.getPurchaseCompleteStatus() ===

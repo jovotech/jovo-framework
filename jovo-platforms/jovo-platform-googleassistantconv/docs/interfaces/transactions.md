@@ -88,7 +88,7 @@ app.use(
    new GoogleAssistant({
       transactions: {
          androidPackageName: 'com.example.demo',
-         keyFile: require('./keyfile.json')
+         keyFile: require('./service-account.json')
       }
    }),
 );
