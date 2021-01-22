@@ -21,6 +21,51 @@ Scenes are building blocks in your Conversational Action, that capture your conv
 
 Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [Account Linking](), but for more specialized tasks, you need to define your own custom scenes.
 
+## Configuration
+
+There are basically two ways to build and configure scenes, either in your [Actions Console](https://console.actions.google.com/) or in your [Jovo Language Model]():
+
+```javascript
+"googleAssistant": {
+  "custom": {
+    "scenes": {
+      "MyCustonScene": {
+        "conditionalEvents": [{
+          "condition": "scene.slots.status == \"FINAL\"",
+          "handler": {
+            "staticPrompt": {
+              "candidates": [
+                {
+                  "promptResponse": {
+                    "firstSimple": {
+                      "variants": [
+                        {
+                          "speech": "Hello World!"
+                        }
+                      ] 
+                    },
+                    "suggestions": [
+                      {
+                        "title": "Foo"
+                      },
+                      {
+                        "title": "Bar"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }]
+      }
+    }
+  }
+}
+```
+
+The syntax is the same as in your Action's `.yaml` files, but in JSON format.
+
 ## Custom Scenes
 
 Custom Scenes basically have three stages you can configure: 
