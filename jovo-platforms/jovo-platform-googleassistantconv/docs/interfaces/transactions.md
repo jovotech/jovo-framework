@@ -162,7 +162,7 @@ In your handler, it's sufficient to just transition to the scene:
 TransactionDigitalPurchaseRequirementsIntent() {
 	// Check if digital purchases are available for the user.
 	this.$googleAction.$transaction.checkDigitalPurchaseRequirements();
-	this.$googleAction.setNextScene('TransactionDigitalPurchaseCheck');
+	this.$googleAction.setNextScene('TransactionDigitalPurchaseCheckScene');
 }
 
 // @language=typescript
@@ -170,7 +170,7 @@ TransactionDigitalPurchaseRequirementsIntent() {
 TransactionDigitalPurchaseRequirementsIntent() {
 	// Check if digital purchases are available for the user.
 	this.$googleAction!.$transaction!.checkDigitalPurchaseRequirements();
-	this.$googleAction!.setNextScene('TransactionDigitalPurchaseCheck');
+	this.$googleAction!.setNextScene('TransactionDigitalPurchaseCheckScene');
 }
 ```
 
@@ -269,14 +269,14 @@ Once you built your order and your user has selected an item, you can complete t
 
 PurchaseItem() {
 	this.$googleAction.$transaction.completePurchase(this.$session.$data.skuId);
-	this.$googleAction.setNextScene('TransactionCompletePurchase');
+	this.$googleAction.setNextScene('TransactionCompletePurchaseScene');
 }
 
 // @language=typescript
 
 PurchaseItem() {
 	this.$googleAction!.$transaction!.completePurchase(this.$session.$data.skuId);
-	this.$googleAction!.setNextScene('TransactionCompletePurchase');
+	this.$googleAction!.setNextScene('TransactionCompletePurchaseScene');
 }
 ```
 
@@ -344,23 +344,9 @@ Physical transactions allow you to sell physical items (e.g. books, clothes) in 
 
 #### Prepare your Conversational Action
 
-TODO sufficient to link to digital goods here?
-
 To use transactions in your action, you'll need to enable the Digital Purchase API. Go to your [Actions Console](https://console.actions.google.com/) and open your project. Head to `Deploy` and go to `Directory information`. Under `Additional information`, enable transactions for digital goods.
 
-Next, you need to create a [Service Account](https://cloud.google.com/iam/docs/service-accounts) to send requests to the Digital Goods API with. Copy your Action's Project ID and paste it into the following link: https://console.developers.google.com/apis/credentials?project=<your-project_id>. If you then follow that link, you can create your Service Account with respective credentials.
-
-After you gave your service account an appropriate name, choose the Role `Project > Owner`, to give your account all necessary permissions. When you're done, go to the Service Account details and add a new key certificate in JSON format, which you can then download and store in your project's directory.
-
 ![Create credentials for your service account](../../img/service-account-credentials.jpg)
-
-#### Configuring your Jovo app
-
-To use transactions for physical goods with the Jovo Framework, you need to install the `googleapis` npm package. If you use one of our [Transaction Examples](), you can skip this step.
-
-```sh
-$ npm install --save googleapis
-```
 
 ### Physical Goods Implementation
 
@@ -385,7 +371,7 @@ Before the user can perform a transaction, it is recommended to check if the use
 To validate a user's ability to perform transactions from your Conversational Action, you can use a `TransactionRequirementsCheck` [scene](), which checks, whether the user is verified, their device is eligible for transactions and that they are located in a supported region.
 
 ```javascript
-"TransactionRequirementsCheck": {
+"TransactionRequirementsCheckScene": {
 	"conditionalEvents": [
 		{
 			"condition": "scene.slots.status == \"FINAL\"",
@@ -417,16 +403,16 @@ In your handler, it's sufficient to just transition to the scene:
 ```javascript
 // @language=javascript
 
-TransactionRequirementsIntent() {
+TransactionCheckRequirementsIntent() {
 	this.$googleAction.$transaction.checkPhysicalTransactionRequirements();
-	this.$googleAction.setNextScene('TransactionRequirementsCheck');
+	this.$googleAction.setNextScene('TransactionRequirementsCheckScene');
 }
 
 // @language=typescript
 
-TransactionRequirementsIntent() {
+TransactionCheckRequirementsIntent() {
 	this.$googleAction!.$transaction!.checkPhysicalTransactionRequirements();
-	this.$googleAction!.setNextScene('TransactionRequirementsCheck');
+	this.$googleAction!.setNextScene('TransactionRequirementsCheckScene');
 }
 ```
 
@@ -460,10 +446,10 @@ ON_TRANSACTION: {
 
 ##### Request a delivery address
 
-If your transaction depends on the user's delivery address, you can use the `TransactionDeliveryAddress` [scene]() to request it:
+If your transaction depends on the user's delivery address, you can use the `TransactionDeliveryAddressScene` [scene]() to request it:
 
 ```javascript
-"TransactionDeliveryAddress": {
+"TransactionDeliveryAddressScene": {
 	"conditionalEvents": [
 		{
 			"condition": "scene.slots.status == \"FINAL\"",
@@ -488,7 +474,7 @@ If your transaction depends on the user's delivery address, you can use the `Tra
 }
 ```
 
-Before delegating the conversation to `TransactionDeliveryAddress`, you can also choose to provide a reason, which will be prompted to the user. If you do not provide a parameter to `askForDeliveryAddress()`, the default reason "to know where to send the order" will be used. 
+Before delegating the conversation to `TransactionDeliveryAddressScene`, you can also choose to provide a reason, which will be prompted to the user. If you do not provide a parameter to `askForDeliveryAddress()`, the default reason "to know where to send the order" will be used. 
 
 ```javascript
 // @language=javascript
@@ -497,7 +483,7 @@ ON_TRANSACTION: {
 	async TRANSACTION_REQUIREMENTS_CHECK() {
 		if (this.$googleAction.$transaction.canTransact()) {
       this.$googleAction.$transaction.askForDeliveryAddress('To know where to send the order');
-			this.$googleAction.setNextScene('TransactionDeliveryAddress');
+			this.$googleAction.setNextScene('TransactionDeliveryAddressScene');
     } else {
 			this.tell(`You can't perform physical transactions.`);
     }
@@ -510,7 +496,7 @@ ON_TRANSACTION: {
 	async TRANSACTION_REQUIREMENTS_CHECK() {
 		if (this.$googleAction!.$transaction!.canTransact()) {
       this.$googleAction!.$transaction!.askForDeliveryAddress('To know where to send the order');
-			this.$googleAction!.setNextScene('TransactionDeliveryAddress');
+			this.$googleAction!.setNextScene('TransactionDeliveryAddressScene');
     } else {
 			this.tell(`You can't perform physical transactions.`);
     }
@@ -666,10 +652,10 @@ Depending on whether you choose to use Google Pay or your own pament method, you
 
 #### Propose the order
 
-Now that you've built your order, it's time to present it to your user using the `TransactionDecision` [scene]().
+Now that you've built your order, it's time to present it to your user using the `TransactionDecisionScene` [scene]().
 
 ```javascript
-"TransactionDecision": {
+"TransactionDecisionScene": {
 	"conditionalEvents": [
 		{
 			"condition": "scene.slots.status == \"FINAL\"",
@@ -699,11 +685,11 @@ In your handler, it's sufficient to just transition to the scene:
 ```javascript
 // @language=javascript
 
-this.$googleAction.setNextScene('TransactionDecision');
+this.$googleAction.setNextScene('TransactionDecisionScene');
 
 // @language=typescript
 
-this.$googleAction!.setNextScene('TransactionDecision');
+this.$googleAction!.setNextScene('TransactionDecisionScene');
 ```
 
 #### Handle the transaction result
@@ -740,7 +726,13 @@ this.$googleAction!.$transaction!.isDeliveryAddressUpdated();
 this.$googleAction!.$transaction!.isCartChangeRequested();
 ```
 
-If the transaction has succeeded, you must initiate the required steps to confirm the order, such as charging the user and providing an order update:
+If the transaction has succeeded, you must initiate the required steps to confirm the order, such as charging the user and providing an order update.
+
+#### Order updates
+
+Once your order has been accepted, you need to update the order's status during its lifetime, whether to confirm the transaction to the user or to notify them about the order delivery.
+
+If you want to update the order during the conversation, you can use `this.$googleAction.$transaction.updateOrder()`:
 
 ```javascript
 // @language=javascript
@@ -797,3 +789,9 @@ ON_TRANSACTION: {
 	}
 }
 ```
+
+For order updates outside of your conversational context, you need to send requests to the Orders API with a [Service Account](https://cloud.google.com/iam/docs/service-accounts). For that, copy your Action's Project ID and paste it into the following link: https://console.developers.google.com/apis/credentials?project=<your-project_id>. If you then follow that link, you can create your Service Account with respective credentials.
+
+After you gave your service account an appropriate name, choose the Role `Project > Owner`, to give your account all necessary permissions. When you're done, go to the Service Account details and add a new key certificate in JSON format, which you can then download and store in your project's directory.
+
+In our [Physical Transactions Example](), we provide you with an example of how to send an order update over the Orders API.

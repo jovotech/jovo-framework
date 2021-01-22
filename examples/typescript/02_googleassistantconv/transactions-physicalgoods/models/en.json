@@ -42,7 +42,7 @@
 	"googleAssistant": {
 		"custom": {
 			"scenes": {
-				"TransactionDecision": {
+				"TransactionDecisionScene": {
 					"conditionalEvents": [
 						{
 							"condition": "scene.slots.status == \"FINAL\"",
@@ -65,7 +65,7 @@
 						}
 					]
 				},
-				"TransactionDeliveryAddress": {
+				"TransactionDeliveryAddressScene": {
 					"conditionalEvents": [
 						{
 							"condition": "scene.slots.status == \"FINAL\"",
@@ -88,7 +88,7 @@
 						}
 					]
 				},
-				"TransactionRequirementsCheck": {
+				"TransactionRequirementsCheckScene": {
 					"conditionalEvents": [
 						{
 							"condition": "scene.slots.status == \"FINAL\"",

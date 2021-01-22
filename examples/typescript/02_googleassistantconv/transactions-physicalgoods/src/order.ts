@@ -1,6 +1,5 @@
 import { Order } from 'jovo-platform-googleassistantconv';
 
-const now = new Date().toISOString();
 // tslint:disable-next-line:no-default-export
 export default ({
 	createTime: new Date().toISOString(),

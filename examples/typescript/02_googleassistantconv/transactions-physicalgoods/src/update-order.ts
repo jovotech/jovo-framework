@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
-import * as serviceAccount from './service-account.json';
 import axios from 'axios';
+import * as serviceAccount from './service-account.json';
 
 const jwtClient = new google.auth.JWT(
 	serviceAccount.client_email,
@@ -9,28 +9,18 @@ const jwtClient = new google.auth.JWT(
 	['https://www.googleapis.com/auth/actions.order.developer'],
 	undefined
 );
-test();
 
-async function test() {
-	try {
-		const response = await updateReservation();
-	} catch (e) {
-		console.log(e);
-		console.log(e.response.data);
-	}
-}
-
-async function updateReservation() {
+async function updateOrder() {
 	const tokens = await jwtClient.authorize();
 	const orderId = '7ec5hsei5';
 
-	// Declare order update
+	// Declare order update.
 	const orderUpdate = {
 		updateMask: {
 			paths: ['purchase.status', 'purchase.user_visible_status_label'],
 		},
 		order: {
-			merchantOrderId: orderId, // Specify the ID of the order to update
+			merchantOrderId: orderId, // Specify the ID of the order to update.
 			lastUpdateTime: new Date().toISOString(),
 			purchase: {
 				status: 'DELIVERED',
@@ -55,3 +45,12 @@ async function updateReservation() {
 		},
 	});
 }
+
+async () => {
+	try {
+		const response = await updateOrder();
+	} catch (err) {
+		console.log(err);
+		console.log(err.response.data);
+	}
+};
