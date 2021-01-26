@@ -1,0 +1,61 @@
+{
+  "name": "jovo-plugin-inbox",
+  "version": "3.3.0",
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "tsc": "tsc",
+    "tscw": "tsc --watch",
+    "rimraf": "rimraf ./dist",
+    "typedoc": "typedoc --out ./docs ./ --mode file",
+    "test": "jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-core": "^3.3.0",
+    "typeorm": "^0.2.30",
+    "reflect-metadata": "^0.1.13",
+    "uuidv4": "^6.2.6",
+    "lodash.set": "^4.3.2",
+    "lodash.unset": "^4.5.2",
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/es6-promise": "^3.3.0",
+    "@types/jest": "^24.0.11",
+    "@types/lodash": "^4.14.109",
+    "@types/node": "^10.3.1",
+    "jest": "^25.1.0",
+    "prettier": "2.0.2",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^25.4.0",
+    "tslint": "^5.17.0",
+    "typedoc": "^0.15.6",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  },
+  "files": [
+    "dist/src/**/*",
+    "sample-request-json",
+    "sample-response-json"
+  ],
+  "gitHead": "270ef9aeb54c4b1eb274536044a5535d1d636654"
+}
