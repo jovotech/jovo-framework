@@ -32,7 +32,7 @@ More databases: https://typeorm.io/#/undefined/installation
 
 ### Usage
 
-```
+```javascript
 const { JovoInboxPlugin } = require('jovo-plugin-inbox');
 
 app.use(
@@ -54,7 +54,7 @@ See https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md fo
 
 ### Config
 
-```
+```javascript
 {
     appId: string;
     defaultLocale: string; // defaultLocale for platforms without a locale in the request
