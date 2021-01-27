@@ -157,8 +157,14 @@ export class JovoInboxPlugin implements Plugin {
     inboxLog.createdAt = new Date();
     inboxLog.locale = handleRequest.jovo!.$request!.getLocale() || this.config.defaultLocale;
     inboxLog.platform = handleRequest.jovo!.getPlatformType();
-    // tslint:disable-next-line:no-any
-    inboxLog.requestId = (handleRequest.jovo!.$request as any).getRequestId() || uuid();
+
+    // not all platforms have a getRequestId() method
+    try {
+      // tslint:disable-next-line:no-any
+      inboxLog.requestId = (handleRequest.jovo!.$request as any).getRequestId();
+    } catch (e) {
+      inboxLog.requestId = handleRequest.$data.requestId;
+    }
     inboxLog.sessionId = handleRequest.jovo!.$request!.getSessionId() || 'no-session';
 
     inboxLog.userId = handleRequest.jovo?.$user.getId()!;
@@ -190,7 +196,6 @@ export class JovoInboxPlugin implements Plugin {
         }
       });
     }
-    console.log(skipArray);
     if (skipArray && skipArray.length > 0) {
       skipArray.forEach((path: string) => {
         if (_get(copy, path)) {
