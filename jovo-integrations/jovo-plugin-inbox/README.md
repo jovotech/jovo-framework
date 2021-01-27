@@ -1,59 +1,73 @@
-# Jovo Auth Integration
+# Jovo Inbox Plugin
 
-* [Installation](#installation)
-* [Customization](#customization)
 
-## Installation
+### Installation
+
 
 ```sh
-npm install --save jovo-plugin-auth
+npm install --save jovo-plugin-inbox
 ```
 
-Usage in the app:
+This plugin uses TypeORM to provide access to various databases.
+Depending on the SQL Database you use, an additional installation
+of the database driver is necessary.
+
+
+MySQL or MariaDB
+```sh
+npm install --save mysql
+```
+
+PostgreSQL or CockraochDB
+```sh
+npm install pg --save
+```
+SQLite
+```sh
+npm install --save sqlite3
+```
+
+More databases: https://typeorm.io/#/undefined/installation
+
+
+### Usage
 
 ```
-const { ApiKey } = require('jovo-plugin-auth');
+const { JovoInboxPlugin } = require('jovo-plugin-inbox');
 
 app.use(
-    new ApiKey({
-        'x-api-key': 'foobar'          
+    new JovoInboxPlugin({
+        'appId': 'PizzaPlace',
+        db: {
+			type: 'mysql',
+			host: 'host',
+			port: 3306,
+			username: 'user',
+			password: 'pass',
+			database: 'jovoinbox',
+		},         
     })
 );
 ```
 
-There are two ways to pass the key to the app:
+See https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md for database specific config.
 
-Via header object:
+### Config
 
 ```
 {
-    'x-api-key': 'foobar'
+    appId: string;
+    defaultLocale: string; // defaultLocale for platforms without a locale in the request
+    skipPlatforms?: string[]; // platforms where no data is stored, e.g. ['Alexa', 'GoogleAssistant']
+    skipLocales?: string[]; // requests from given locales are skipped, e.g. ['de', 'en-US'],
+    skipUserIds?: string[]; // users from given ids are skipped, e.g. ['jovo-debugger-user']
+    skipRequestObjects?: string[]; // paths to objects in request json, e.g. ['context.System.apiAccessToken']
+    skipResponseObjects?: string[]; // paths to objects in response json,
+    maskRequestObjects?: string[]; // paths to objects in request json that are masked, e.g. sensitive data like access tokens
+    maskResponseObjects?: string[]; // paths to objects in response json that are masked
+    maskValue: string | Function; // new value for masked objects
 }
-```
-
-Via query param:
-
-```
-https://endpoint.example.com/user?x-api-key=foobar
-```
-
-
-## Customization
-
-If you want to pass your custom api key variable name, use `customKeyName` and `customKeyValue`
 
 
 ```
-const { ApiKey } = require('jovo-plugin-auth');
-
-app.use(
-    new ApiKey({
-        'customKeyName': 'apiKey'          
-        'customKeyValue': 'foobar'          
-    })
-);
-```
-
-
-
 
