@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-inbox",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,13 +16,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.3.0",
-    "typeorm": "^0.2.30",
-    "reflect-metadata": "^0.1.13",
-    "uuidv4": "^6.2.6",
+    "jovo-core": "^3.3.1",
+    "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
-    "lodash.get": "^4.4.2"
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.30",
+    "uuidv4": "^6.2.6"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
