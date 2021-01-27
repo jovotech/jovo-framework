@@ -10,7 +10,9 @@ app.use(new GoogleAssistant(), new JovoDebugger(), new FileDb());
 
 app.setHandler({
 	LAUNCH() {
-		return this.toIntent('BasicCardIntent');
+		// return this.toIntent('BasicCardIntent');
+		return this.toIntent('CollectionBrowseIntent');
+
 		// return this.toIntent('ImageCardIntent');
 		// return this.toIntent('TableIntent');
 		// return this.toIntent('SuggestionsIntent');
@@ -18,7 +20,6 @@ app.setHandler({
 		// return this.toIntent('RichIntentEndConversation');
 	},
 	BasicCardIntent() {
-
 		this.$googleAction!.showBasicCard({
 			title: 'Title',
 			subtitle: 'Subtitle',
@@ -35,7 +36,8 @@ app.setHandler({
 			.setTitle('Title')
 			.setImage({
 				url: 'http://via.placeholder.com/450x350?text=Basic+Card',
-				alt: 'accessibilityText'})
+				alt: 'accessibilityText',
+			})
 			.setText('Formatted Text')
 			.setImageDisplay('WHITE');
 
@@ -170,6 +172,28 @@ app.setHandler({
 			},
 		});
 		this.$googleAction!.endConversation();
+	},
+
+	CollectionBrowseIntent() {
+		this.$googleAction!.addCollectionBrowse({
+			items: [
+				{
+					title: 'Docs',
+					openUriAction: {
+						url: 'https://www.jovo.tech/docs',
+						hint: 'AMP',
+					},
+				},
+				{
+					title: 'Community Forum',
+					openUriAction: {
+						url: 'https://community.jovo.tech',
+						hint: 'AMP',
+					},
+				},
+			],
+		});
+		this.ask('Choose a link');
 	},
 });
 
