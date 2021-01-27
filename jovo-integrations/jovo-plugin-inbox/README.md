@@ -37,7 +37,7 @@ const { JovoInboxPlugin } = require('jovo-plugin-inbox');
 
 app.use(
     new JovoInboxPlugin({
-        'appId': 'PizzaPlace',
+        appId: 'PizzaPlace',
         db: {
 			type: 'mysql',
 			host: 'host',
@@ -66,6 +66,7 @@ See https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md fo
     maskRequestObjects?: string[]; // paths to objects in request json that are masked, e.g. sensitive data like access tokens
     maskResponseObjects?: string[]; // paths to objects in response json that are masked
     maskValue: string | Function; // new value for masked objects
+    db: ConnectionOptions; // db connection options 
 }
 
 
