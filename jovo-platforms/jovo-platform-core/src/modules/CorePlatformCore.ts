@@ -2,6 +2,7 @@ import {
   AskOutput,
   EnumRequestType,
   HandleRequest,
+  Host,
   Plugin,
   SpeechBuilder,
   TellOutput,
@@ -61,6 +62,8 @@ export class CorePlatformCore implements Plugin {
     if (!corePlatformApp.$host) {
       throw new Error(`Couldn't access host object.`);
     }
+
+    this.overwriteRequestAudioData(corePlatformApp.$host);
 
     corePlatformApp.$request = CorePlatformRequest.fromJSON(
       corePlatformApp.$host.getRequestObject(),
@@ -186,5 +189,29 @@ export class CorePlatformCore implements Plugin {
 
   protected isCoreRequest(request: any): boolean {
     return request.version && request.type && request.request?.type;
+  }
+
+  protected overwriteRequestAudioData(host: Host) {
+    const audioBase64String = host.$request?.request?.body?.audio?.b64string;
+    if (audioBase64String) {
+      const samples = this.getSamplesFromAudio(audioBase64String);
+      _set(host.$request, 'request.body.audio.data', samples);
+    }
+  }
+
+  protected getSamplesFromAudio(base64: string): Float32Array {
+    const binaryBuffer = Buffer.from(base64, 'base64').toString('binary');
+    const length = binaryBuffer.length / Float32Array.BYTES_PER_ELEMENT;
+    const view = new DataView(new ArrayBuffer(Float32Array.BYTES_PER_ELEMENT));
+    const samples = new Float32Array(length);
+    for (let i = 0; i < length; i++) {
+      const p = i * 4;
+      view.setUint8(0, binaryBuffer.charCodeAt(p));
+      view.setUint8(1, binaryBuffer.charCodeAt(p + 1));
+      view.setUint8(2, binaryBuffer.charCodeAt(p + 2));
+      view.setUint8(3, binaryBuffer.charCodeAt(p + 3));
+      samples[i] = view.getFloat32(0, true);
+    }
+    return samples;
   }
 }
