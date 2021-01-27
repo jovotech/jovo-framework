@@ -72,3 +72,15 @@ See https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md fo
 
 ```
 
+
+## Troubleshooting
+Open database connections on AWS Lambda won't let the event loop get empty. The result is a timeout for every request.
+This can be fixed by adding the following line into the handler method in`index.js` / `index.ts`
+
+```javascript
+exports.handler = async (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false; // <-- ADD THIS
+  await app.handle(new Lambda(event, context, callback));
+};
+```
+
