@@ -55,6 +55,14 @@ export class Transaction {
    * Send check requirements
    * @returns {this}
    */
+  checkPhysicalTransactionRequirements() {
+    return this.checkRequirements();
+  }
+
+  /**
+   * Send check requirements
+   * @returns {this}
+   */
   checkDigitalPurchaseRequirements() {
     this.googleAction.$output.GoogleAssistant = {
       TransactionDigitalPurchaseRequirementsCheck: {},
