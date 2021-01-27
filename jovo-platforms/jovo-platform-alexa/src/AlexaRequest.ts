@@ -15,22 +15,12 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
   request?: Request;
 
   getRequestType(): JovoRequestType | undefined {
-    switch (this.request?.type) {
-      case 'LaunchRequest': {
-        return { type: RequestType.Launch };
-      }
-      case 'IntentRequest': {
-        return { type: RequestType.Intent };
-      }
-      case 'SessionEndedRequest': {
-        return { type: RequestType.End, subType: this.request?.reason };
-      }
-      case 'System.ExceptionEncountered': {
-        return { type: RequestType.OnError };
-      }
-      default: {
-        return;
-      }
-    }
+    const requestTypeMap: Record<string, JovoRequestType> = {
+      'LaunchRequest': { type: RequestType.Launch },
+      'IntentRequest': { type: RequestType.Intent },
+      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
+      'System.ExceptionEncountered': { type: RequestType.OnError },
+    };
+    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
   }
 }
