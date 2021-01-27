@@ -1,5 +1,4 @@
-import { PluginConfig } from '../dist';
-import { App, BaseComponent, ComponentDeclaration } from '../src';
+import { App, BaseComponent, ComponentDeclaration, PluginConfig } from '../src';
 import { Component } from '../src/plugins/handler/decorators/Component';
 import { MetadataStorage } from '../src/plugins/handler/metadata/MetadataStorage';
 import { EmptyComponent, ExampleComponent, ExampleComponentPlugin } from './utilities';
@@ -36,9 +35,43 @@ describe('registering components', () => {
     });
   });
 
-  describe('via ComponentDeclaration', () => {
+  describe('via ComponentDeclaration-instance', () => {
     test('no options passed', () => {
       app.useComponents(new ComponentDeclaration(ExampleComponent));
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent },
+      });
+    });
+
+    test('options with config passed', () => {
+      app.useComponents(
+        new ComponentDeclaration(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
+      expect(app.components).toEqual({
+        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
+      });
+    });
+
+    test('options with components passed', () => {
+      app.useComponents(
+        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
+      );
+      expect(app.components).toEqual({
+        ExampleComponent: {
+          target: ExampleComponent,
+          options: { components: [EmptyComponent] },
+        },
+      });
+    });
+  });
+
+  describe('via ComponentDeclaration-object', () => {
+    test('no options passed', () => {
+      app.useComponents({ component: ExampleComponent });
       expect(app.components).toEqual({
         ExampleComponent: { target: ExampleComponent },
       });
