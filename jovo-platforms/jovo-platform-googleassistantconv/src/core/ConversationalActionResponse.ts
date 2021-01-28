@@ -116,17 +116,16 @@ export class ConversationalActionResponse implements JovoResponse {
   }
 
   getSpeech() {
-    if (!_get(this, 'richResponse.items[0].simpleResponse.ssml')) {
-      return;
-    }
-    return SpeechBuilder.removeSpeakTags(_get(this, 'richResponse.items[0].simpleResponse.ssml'));
+    const firstSimple = SpeechBuilder.removeSpeakTags(_get(this, 'prompt.firstSimple.speech', ''));
+    const lastSimple = SpeechBuilder.removeSpeakTags(_get(this, 'prompt.lastSimple.speech', ''));
+
+    return `${firstSimple}${lastSimple ? ' ' : ''}${lastSimple}`;
   }
 
   getReprompt() {
-    if (!_get(this, 'noInputPrompts[0].ssml')) {
-      return;
-    }
-    return SpeechBuilder.removeSpeakTags(_get(this, 'noInputPrompts[0].ssml'));
+    return SpeechBuilder.removeSpeakTags(
+      _get(this, 'session.params._JOVO_SESSION_.reprompts.NO_INPUT1'),
+    );
   }
 
   getSpeechPlain() {
