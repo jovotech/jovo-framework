@@ -155,6 +155,7 @@ export class JovoDebugger implements Plugin {
 
     const platformMap: { [key: string]: string } = {
       AlexaSkill: 'Alexa',
+      ConversationalActions: 'GoogleAssistant',
       GoogleAction: 'GoogleAssistant',
       GoogleActionDialogFlowV2: 'GoogleAssistant',
     };
@@ -261,6 +262,20 @@ export class JovoDebugger implements Plugin {
           req.setScreenInterface();
         } else if (_get(obj, 'device') === 'GoogleActionDialogFlow.speaker') {
           req.setAudioInterface();
+        } else if (_get(obj, 'device') === 'ConversationalActions.phone') {
+          req.setAudioInterface();
+          req.setScreenInterface();
+          try {
+            // @ts-ignore
+            req.setWebBrowserInterface();
+          } catch (e) {
+            // ignore error here
+          }
+        } else if (_get(obj, 'device') === 'ConversationalActions.speaker') {
+          req.setAudioInterface();
+        } else if (_get(obj, 'device') === 'ConversationalActions.display') {
+          req.setAudioInterface();
+          req.setScreenInterface();
         }
       } catch (e) {
         // ignore error here
