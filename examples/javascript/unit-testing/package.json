@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-unittesting",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -17,7 +17,7 @@
     "jovo-framework": "^3.3.1",
     "jovo-platform-alexa": "^3.3.1",
     "jovo-platform-googleassistant": "^3.3.1",
-    "jovo-plugin-debugger": "^3.3.1"
+    "jovo-plugin-debugger": "^3.3.2"
   },
   "devDependencies": {
     "jest": "^25.1.0"

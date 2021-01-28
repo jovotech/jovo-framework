@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistantconv-rich",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -19,7 +19,7 @@
     "jovo-db-dynamodb": "^3.3.1",
     "jovo-db-filedb": "^3.3.1",
     "jovo-framework": "^3.3.1",
-    "jovo-platform-googleassistantconv": "^3.3.1",
-    "jovo-plugin-debugger": "^3.3.1"
+    "jovo-platform-googleassistantconv": "^3.3.2",
+    "jovo-plugin-debugger": "^3.3.2"
   }
 }
