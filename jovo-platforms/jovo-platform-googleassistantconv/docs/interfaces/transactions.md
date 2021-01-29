@@ -1,6 +1,6 @@
 # Google Transactions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/transactions
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/transactions
 
 Learn how to sell digital and physical goods in your Google Actions by using Google Transactions.
 
@@ -60,8 +60,6 @@ To use transactions in your action, you'll need to enable the Transactions API. 
 Next, you need to create a [Service Account](https://cloud.google.com/iam/docs/service-accounts) to send requests to the Transactions API with. Copy your Action's Project ID and paste it into the following link: https://console.developers.google.com/apis/credentials?project=<your-project_id>. If you then follow that link, you can create your Service Account with respective credentials.
 
 After you gave your service account an appropriate name, choose the Role `Project > Owner`, to give your account all necessary permissions. When you're done, go to the Service Account details and add a new key certificate in JSON format, which you can then download and store in your project's directory.
-
-![Create credentials for your service account](../../img/service-account-credentials.jpg)
 
 The last step of configuring your Conversational Action includes associating your verified web domain and your Android app with your project. For that, return to your [Actions Console](https://console.actions.google.com/), head to `Deploy` and go to `Brand verification`. 
 Here, you first need to connect your web domain. Google will send you further instructions to the domain's associated email address. Once completed, it should appear as connected.
@@ -797,3 +795,5 @@ ON_TRANSACTION: {
 	}
 }
 ```
+
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistantconv/transactions/) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistantconv/transactions/)

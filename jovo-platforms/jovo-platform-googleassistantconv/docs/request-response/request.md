@@ -64,7 +64,6 @@ Here's an example request:
 
 > In the Jovo Framework repository we keep sample requests for the most common types. You can find them [here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv/sample-request-json)
 
-
 ## $request Object
 
 Besides the [cross-platform getter and setter methods](https://www.jovo.tech/docs/requests-responses/request#cross-platform-methods) the Google Assistant `$request` object supports the following general helper methods:

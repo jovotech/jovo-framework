@@ -1,4 +1,4 @@
-# Media Response API
+# Media Response
 
 > To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response
 
@@ -194,3 +194,5 @@ During or after the media plays, your Jovo app can receive the media status as a
 	},
 }
 ```
+
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistantconv/media-response/) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistantconv/media-response/)

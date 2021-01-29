@@ -457,7 +457,6 @@ ON_ELEMENT_SELECTED() {
   }
 }
 ```
-[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L192) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L198)
 
 ## Suggestion Chips
 
@@ -475,4 +474,4 @@ this.$googleAction!.showSuggestions(['Suggestion 1', 'Suggestion 2', 'Suggestion
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)
 
-[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistant/cards/src/app.js#L67) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistant/cards/src/app.ts#L71)
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistantconv/rich/) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistantconv/rich/)

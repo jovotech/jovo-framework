@@ -17,13 +17,13 @@ Learn more about enhancing your Conversational Action with scenes.
 
 ## Introduction
 
-Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. You can use scenes to instruct your Conversational Action to handle certain conversational flows automatically, such as [Account Linking]() or configuring [Push Notifications](). 
+Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. You can use scenes to instruct your Conversational Action to handle certain conversational flows automatically, such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/user-data#account-linking) or configuring [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications). 
 
-Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [Account Linking](), but for more specialized tasks, you need to define your own custom scenes.
+Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/user-data#account-linking), but for more specialized tasks, you need to define your own custom scenes.
 
 ## Configuration
 
-There are basically two ways to build and configure scenes, either in your [Actions Console](https://console.actions.google.com/) or in your [Jovo Language Model]():
+There are basically two ways to build and configure scenes, either in your [Actions Console](https://console.actions.google.com/) or in your [Jovo Language Model](https://www.jovo.tech/docs/model):
 
 ```javascript
 "googleAssistant": {
@@ -233,3 +233,5 @@ Once your transition criteria has been met, you can define a transition to conti
   ],
 }
 ```
+
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistantconv/scenes/) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistantconv/scenes/)
