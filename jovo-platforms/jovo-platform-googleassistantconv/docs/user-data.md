@@ -1,6 +1,6 @@
 # User Data
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data-permissions
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/user-data
 
 Learn more about how to get access to Google Action user information.
 
@@ -44,7 +44,7 @@ In order to get access to the user profile, you'll need the user to link their a
 
 ## Account Linking
 
-To implement Account Linking in your voice application, we recommend using [scenes]() to handle the individual steps of account linking.
+To implement Account Linking in your voice application, we recommend using [scenes](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/concepts/scenes) to handle the individual steps of account linking.
 
 There are multiple ways of setting up the scenes necessary, we recommend creating them inside your model file to deploy them directly to the Google Conversational Actions Console.
 
@@ -163,3 +163,5 @@ async ON_SIGN_IN() {
 	}
 }
 ```
+
+[Example Javascript](https://github.com/jovotech/jovo-framework/blob/master/examples/javascript/02_googleassistantconv/account-linking/) | [Example Typescript](https://github.com/jovotech/jovo-framework/blob/master/examples/typescript/02_googleassistantconv/account-linking/)

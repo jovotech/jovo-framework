@@ -18,11 +18,7 @@
         "route": "interfaces",
         "content": [
             {
-                "title": "Daily Updates",
-                "route": "interfaces/daily-updates"
-            },
-            {
-                "title": "Media Response API",
+                "title": "Media Response",
                 "route": "interfaces/media-response"
             },
             {
@@ -30,21 +26,27 @@
                 "route": "interfaces/notifications"
             },
             {
-                "title": "Routine Suggestions",
-                "route": "interfaces/routine-suggestions"
+                "title": "Visual Output",
+                "route": "interfaces/visual-output"
             },
             {
-                "title": "Assistant Visual Output",
-                "route": "interfaces/visual-output"
+                "title": "Transactions",
+                "route": "interfaces/transactions"
             }
         ]
     },
     {
-        "title": "User Data and Permissions",
-        "route": "data-permissions"
+        "title": "Concepts",
+        "route": "concepts",
+        "content": [
+            {
+                "title": "Scenes",
+                "route": "concepts/scenes"
+            }
+        ]
     },
     {
-        "title": "Google Transactions",
-        "route": "transactions"
+        "title": "User Data",
+        "route": "user-data"
     }
 ]
