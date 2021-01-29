@@ -1,10 +1,6 @@
 import { BaseComponent, ComponentPlugin, ComponentPluginConfig, PluginConfig } from '../../src';
 
-export class EmptyComponent extends BaseComponent {
-  getDefaultConfig() {
-    return {};
-  }
-}
+export class EmptyComponent extends BaseComponent {}
 
 export interface ExampleComponentConfig extends PluginConfig {
   text: string;

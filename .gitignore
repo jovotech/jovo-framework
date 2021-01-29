@@ -64,3 +64,4 @@ coverage
 000_debug
 credentials.json
 .history/
+*.drawio

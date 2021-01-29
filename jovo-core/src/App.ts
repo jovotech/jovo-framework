@@ -1,6 +1,7 @@
 import _merge from 'lodash.merge';
 import { DeepPartial, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
+import { DuplicateChildComponentError } from './errors/DuplicateChildComponentError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
@@ -13,12 +14,12 @@ import { OutputPlugin } from './plugins/output/OutputPlugin';
 import { RouterPlugin } from './plugins/router/RouterPlugin';
 
 export interface AppConfig extends ExtensibleConfig {
-  test: string;
+  placeholder: string;
 }
 
 export class App extends Extensible<AppConfig> {
   readonly config: AppConfig = {
-    test: '',
+    placeholder: '',
   };
 
   readonly components: RegisteredComponents;
@@ -47,7 +48,7 @@ export class App extends Extensible<AppConfig> {
   getDefaultConfig(): AppConfig {
     return {
       plugin: {},
-      test: '',
+      placeholder: '',
     };
   }
 
@@ -71,8 +72,11 @@ export class App extends Extensible<AppConfig> {
         name = component.name;
         newMetadata = new ComponentMetadata(component);
       } else {
-        name = component.component.name;
+        name = component.options?.name || component.component.name;
         newMetadata = new ComponentMetadata(component.component, component.options);
+      }
+      if (this.components[name]) {
+        throw new DuplicateChildComponentError(name, this.constructor.name);
       }
       this.components[name] = _merge(
         Object.create(ComponentMetadata.prototype),

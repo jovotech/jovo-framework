@@ -15,8 +15,10 @@ export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent
 ) => COMPONENT;
 
 export interface ComponentOptions<COMPONENT extends BaseComponent = BaseComponent> {
+  name?: string;
   config?: DeepPartial<COMPONENT['config']>;
   components?: Array<ComponentConstructor | ComponentDeclaration>;
+  models?: Record<string, any>;
 }
 
 export class ComponentDeclaration<
@@ -39,5 +41,7 @@ export abstract class BaseComponent<CONFIG extends PluginConfig = PluginConfig> 
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
   }
 
-  abstract getDefaultConfig(): CONFIG;
+  getDefaultConfig(): CONFIG {
+    return {} as CONFIG;
+  }
 }

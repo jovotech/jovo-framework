@@ -1,9 +1,10 @@
+import { SessionData } from 'jovo-core';
+
 export interface Session {
   new: boolean;
   sessionId: string;
   application: Application;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  attributes: Record<string, any>;
+  attributes: SessionData;
   user: User;
   person: Person;
 }
@@ -157,7 +158,7 @@ export interface AuthorityResolutionValue {
 
 export interface Intent {
   name: string;
-  confirmationStatus: ConfirmationStatus;
+  confirmationStatus?: ConfirmationStatus;
   slots?: { [key: string]: Slot };
 }
 

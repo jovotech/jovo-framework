@@ -1,9 +1,8 @@
-import { OutputConverterStrategy } from 'jovo-output';
+import { JovoResponse, OutputConverterStrategy } from 'jovo-output';
 import _merge from 'lodash.merge';
 import { App, Constructor, HandleRequest, Jovo, JovoConstructor } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
-import { JovoResponse } from './JovoResponse';
 import { MiddlewareCollection } from './MiddlewareCollection';
 
 export const DEFAULT_PLATFORM_MIDDLEWARES = [
@@ -43,6 +42,8 @@ export abstract class Platform<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
 
+  abstract setResponseSessionData(response: RESPONSE, jovo: Jovo): this;
+
   createJovoInstance(app: App, handleRequest: HandleRequest): Jovo<REQUEST, RESPONSE> {
     return new this.jovoClass(app, handleRequest, this);
   }
@@ -53,4 +54,6 @@ export abstract class Platform<
     _merge(instance, request);
     return instance;
   }
+
+  finalizeResponse(response: RESPONSE): void {}
 }

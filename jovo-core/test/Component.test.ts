@@ -56,6 +56,17 @@ describe('registering components', () => {
       });
     });
 
+    test('options with name passed', () => {
+      app.useComponents(
+        new ComponentDeclaration(ExampleComponent, {
+          name: 'NewComponentName',
+        }),
+      );
+      expect(app.components).toEqual({
+        NewComponentName: { target: ExampleComponent, options: { name: 'NewComponentName' } },
+      });
+    });
+
     test('options with components passed', () => {
       app.useComponents(
         new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),

@@ -17,7 +17,7 @@ export class HandleRequest extends Extensible<AppConfig> {
 
   getDefaultConfig(): AppConfig {
     return {
-      test: '',
+      placeholder: '',
     };
   }
 

@@ -5,7 +5,7 @@ export class ComponentMetadata<COMPONENT extends BaseComponent = BaseComponent> 
 
   constructor(
     // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly target: Function | ComponentConstructor<COMPONENT>,
+    readonly target: ComponentConstructor<COMPONENT> | Function,
     options?: ComponentOptions<COMPONENT>,
   ) {
     if (options) {

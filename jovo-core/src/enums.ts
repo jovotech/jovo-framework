@@ -15,3 +15,11 @@ export enum RequestType {
   Undefined = 'UNDEFINED',
   Unknown = 'UNKNOWN',
 }
+
+export enum InternalSessionProperty {
+  STATE = '_JOVO_STATE_',
+}
+
+export enum InternalIntent {
+  Unhandled = 'UNHANDLED',
+}

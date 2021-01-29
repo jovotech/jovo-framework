@@ -1,18 +1,33 @@
-import { GenericOutput, OutputConverterStrategy } from 'jovo-output';
 import {
+  EntityMap,
   Extensible,
+  GenericOutput,
   Jovo,
   JovoRequest,
   JovoRequestType,
   JovoResponse,
   MiddlewareCollection,
+  OutputConverterStrategy,
   Platform,
+  SessionData,
 } from '../../src';
 
 export class ExamplePlatformResponse extends JovoResponse {}
 
 export class ExamplePlatformRequest extends JovoRequest {
   getRequestType(): JovoRequestType | undefined {
+    return undefined;
+  }
+
+  getEntities(): EntityMap {
+    return {};
+  }
+
+  getIntentName(): string | undefined {
+    return undefined;
+  }
+
+  getSessionData(): SessionData | undefined {
     return undefined;
   }
 }
@@ -45,6 +60,10 @@ export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePla
     return true;
   }
 
+  setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
+    return this;
+  }
+
   mount(parent: Extensible): Promise<void> | void {
     return;
   }
@@ -62,6 +81,10 @@ export class EmptyPlatform extends Platform<ExamplePlatformRequest, ExamplePlatf
 
   isRequestRelated(request: Record<string, any>): boolean {
     return true;
+  }
+
+  setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
+    return this;
   }
 
   mount(parent: Extensible): Promise<void> | void {

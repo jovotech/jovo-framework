@@ -1,11 +1,12 @@
-import { GenericOutput } from 'jovo-output';
+import { GenericOutput, JovoResponse } from 'jovo-output';
 import { App, AppConfig } from './App';
-import { RequestType } from './enums';
+import { BaseComponent } from './BaseComponent';
+import { InternalSessionProperty, RequestType } from './enums';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
-import { AsrData, Entity, NluData, RequestData, SessionData } from './interfaces';
+import { ComponentConstructor, PickWhere } from './index';
+import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
-import { JovoResponse } from './JovoResponse';
 import { Platform } from './Platform';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
@@ -21,13 +22,11 @@ export interface JovoRequestType {
   optional?: boolean;
 }
 
-export interface JovoEntities {
-  [key: string]: Entity;
-}
-
 export interface JovoSession {
   $data: SessionData;
 }
+
+export interface DelegateOptions {}
 
 export abstract class Jovo<
   REQ extends JovoRequest = JovoRequest,
@@ -35,7 +34,7 @@ export abstract class Jovo<
 > {
   $asr: AsrData;
   $data: RequestData;
-  $entities: JovoEntities;
+  $entities: EntityMap;
   $nlu: NluData;
   $output: GenericOutput;
   $request: REQ;
@@ -50,14 +49,15 @@ export abstract class Jovo<
   ) {
     this.$asr = {};
     this.$data = {};
-    this.$entities = {};
-    this.$nlu = {};
     this.$output = {};
     this.$request = this.$platform.createRequestInstance($handleRequest.request);
     this.$session = {
-      $data: {},
+      $data: this.$request.getSessionData() || {},
     };
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
+
+    this.$nlu = this.$request.getNluData() || {};
+    this.$entities = this.$nlu.entities || {};
   }
 
   get $config(): AppConfig {
@@ -70,5 +70,30 @@ export abstract class Jovo<
 
   get $plugins(): HandleRequest['plugins'] {
     return this.$handleRequest.plugins;
+  }
+
+  get state(): SessionData[InternalSessionProperty.STATE] {
+    return this.$session.$data[InternalSessionProperty.STATE];
+  }
+
+  redirect<
+    COMPONENT extends BaseComponent,
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>
+  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): this;
+  redirect(componentName: string, handlerKey?: string): this;
+  redirect(constructorOrName: ComponentConstructor | string, handlerKey?: string): this {
+    // TODO implement
+    return this;
+  }
+
+  delegate<COMPONENT extends BaseComponent>(
+    constructor: ComponentConstructor<COMPONENT>,
+    options: DelegateOptions,
+  ): this;
+  delegate(componentName: string, options: DelegateOptions): this;
+  delegate(constructorOrName: ComponentConstructor | string, options: DelegateOptions): this {
+    // TODO implement
+    return this;
   }
 }
