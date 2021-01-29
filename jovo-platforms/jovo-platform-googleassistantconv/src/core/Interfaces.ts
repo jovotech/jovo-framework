@@ -281,6 +281,19 @@ export interface Collection {
   imageFill?: ImageFill;
 }
 
+export interface CollectionBrowseItem {
+  title: string;
+  description?: string;
+  footer?: string;
+  image?: Image;
+  openUriAction: OpenUrl;
+}
+
+export interface CollectionBrowse {
+  items?: CollectionBrowseItem[]; // min 2, max 10
+  imageFill?: ImageFill;
+}
+
 export interface Content {
   // can only be one of the following
   card?: Card;
@@ -515,9 +528,9 @@ export interface UserInfo {
 export interface Merchant {
   id: string;
   name: string;
-  image: Image;
-  phoneNumbers: PhoneNumber[];
-  address: Location;
+  image?: Image;
+  phoneNumbers?: PhoneNumber[];
+  address?: Location;
 }
 
 export interface LatLng {
@@ -525,43 +538,42 @@ export interface LatLng {
   longitude: number;
 }
 export interface Location {
-  coordinates: LatLng;
-  formattedAddress: string;
-  zipCode: string;
-  city: string;
-  postalAddress: PostalAddress;
-  name: string;
-  phoneNumber: string;
-  notes: string;
-  placeId: string;
+  coordinates?: LatLng;
+  formattedAddress?: string;
+  zipCode?: string;
+  city?: string;
+  postalAddress?: PostalAddress;
+  name?: string;
+  phoneNumber?: string;
+  notes?: string;
+  placeId?: string;
 }
 
 export interface PostalAddress {
-  revision: number;
-  regionCode: string;
-  languageCode: string;
-  postalCode: string;
-  sortingCode: string;
-  administrativeArea: string;
-  locality: string;
-  sublocality: string;
-  addressLines: string[];
-  recipients: string[];
-  organization: string;
+  revision?: number;
+  regionCode?: string;
+  languageCode?: string;
+  postalCode?: string;
+  sortingCode?: string;
+  administrativeArea?: string;
+  locality?: string;
+  sublocality?: string;
+  addressLines?: string[];
+  recipients?: string[];
+  organization?: string;
 }
 
 export interface LineItem {
   id: string;
   name: string;
-  userVisibleStateLabel: string;
-  provider: Merchant;
-  priceAttributes: PriceAttribute[];
-  followUpActions: Action[];
-  recipients: UserInfo[];
-  image: Image;
-  description: string;
-  notes: string[];
-  disclosures: Disclosure[];
+  description?: string;
+  provider?: Merchant;
+  priceAttributes?: PriceAttribute[];
+  followUpActions?: Action[];
+  recipients?: UserInfo[];
+  image?: Image;
+  notes?: string[];
+  disclosures?: Disclosure[];
   // purchase OR reservation
   purchase?: PurchaseItemExtension;
   reservation?: ReservationItemExtension;
@@ -582,10 +594,10 @@ export interface Money {
 }
 
 export interface Action {
-  type: Type;
-  title: string;
-  openUrlAction: OpenUrlAction;
-  actionMetadata: ActionMetadata;
+  type?: Type;
+  title?: string;
+  openUrlAction?: OpenUrlAction;
+  actionMetadata?: ActionMetadata;
 }
 export interface VersionFilter {
   minVersion: number;
@@ -597,8 +609,9 @@ export interface AndroidApp {
 }
 
 export interface OpenUrlAction {
+  url?: string;
   androidApp?: AndroidApp;
-  urlTypeHint: UrlTypeHint;
+  urlTypeHint?: UrlTypeHint;
 }
 
 export interface ActionMetadata {
@@ -606,8 +619,8 @@ export interface ActionMetadata {
 }
 
 export interface PaymentData {
-  paymentResult: PaymentResult;
-  paymentInfo: PaymentInfo;
+  paymentResult?: PaymentResult;
+  paymentInfo?: PaymentInfo;
 }
 
 export interface PaymentResult {
@@ -617,14 +630,8 @@ export interface PaymentResult {
 }
 
 export interface PaymentInfo {
-  paymentMethodDisplayInfo: PaymentMethodDisplayInfo;
-  paymentMethodProvenance: PaymentMethodProvenance;
-}
-
-export interface PaymentMethodDisplayInfo {
-  paymentType: PaymentType;
-  paymentMethodDisplayName: string;
-  paymentMethodVoiceName: string;
+  paymentMethodDisplayInfo?: PaymentMethodDisplayInfo;
+  paymentMethodProvenance?: PaymentMethodProvenance;
 }
 
 export interface Disclosure {
@@ -738,17 +745,62 @@ export interface ReservationItemExtension {
   type: ReservationType;
   reservationTime: Time;
   userAcceptableTimeRange: Time;
-  confirmationCode: string;
+  confirmationCode?: string;
   partySize: number;
-  staffFacilitators: StaffFacilitator[];
-  location: Location;
+  staffFacilitators?: StaffFacilitator[];
+  location?: Location;
 }
 
 export interface StaffFacilitator {
   name: string;
-  image: Image;
+  image?: Image;
 }
 
+export interface PresentationOptions {
+  actionDisplayName: string;
+}
+
+export interface OrderOptions {
+  requestDeliveryAddress?: boolean;
+  userInfoOptions?: {
+    userInfoProperties: string[];
+  };
+}
+
+export interface PaymentParameters {
+  merchantPaymentOption: MerchantPaymentOption;
+}
+
+export interface MerchantPaymentOption {
+  defaultMerchantPaymentMethodId?: string;
+  managePaymentMethodUrl?: string;
+  merchantPaymentMethod?: MerchantPaymentMethod[];
+}
+
+export interface MerchantPaymentMethod {
+  paymentMethodDisplayInfo: PaymentMethodDisplayInfo;
+}
+
+export interface PaymentMethodDisplayInfo {
+  paymentMethodDisplayName?: string;
+  paymentType?: PaymentType;
+  paymentMethodGroup?: string;
+  paymentMethodId?: string;
+  paymentMethodStatus?: PaymentMethodStatus;
+}
+
+export interface PaymentMethodStatus {
+  status: 'STATUS_OK'; // TODO: what else ?
+  statusMessage: string;
+}
+
+export type RequirementsCheckResult =
+  | 'USER_ACTION_REQUIRED'
+  | 'OK'
+  | 'CAN_TRANSACT'
+  | 'ASSISTANT_SURFACE_NOT_SUPPORTED'
+  | 'REGION_NOT_SUPPORTED';
+export interface Reservation extends Order {}
 export enum EnumGoogleAssistantRequestType {
   ON_PERMISSION = 'ON_PERMISSION',
   ON_SIGN_IN = 'ON_SIGN_IN',

@@ -45,7 +45,6 @@
   "device": {
     "capabilities": [
       "SPEECH",
-      "RICH_RESPONSE",
       "LONG_FORM_AUDIO"
     ]
   }

@@ -7,6 +7,7 @@ import { GoogleActionSpeechBuilder } from '../core/GoogleActionSpeechBuilder';
 import {
   Card,
   Collection,
+  CollectionBrowse,
   EnumGoogleAssistantRequestType,
   Image,
   Intent,
@@ -69,6 +70,11 @@ export class ConversationalActionsCore implements Plugin {
 
     GoogleAction.prototype.addCollection = function (collection: Collection) {
       _set(this.$output, 'GoogleAssistant.collection', collection);
+      return this;
+    };
+
+    GoogleAction.prototype.addCollectionBrowse = function (collectionBrowse: CollectionBrowse) {
+      _set(this.$output, 'GoogleAssistant.collectionBrowse', collectionBrowse);
       return this;
     };
 
@@ -469,6 +475,13 @@ export class ConversationalActionsCore implements Plugin {
         googleAction.$response as ConversationalActionResponse,
         'prompt.content.collection',
         output.GoogleAssistant.collection,
+      );
+    }
+    if (output.GoogleAssistant?.collectionBrowse) {
+      _set(
+        googleAction.$response as ConversationalActionResponse,
+        'prompt.content.collectionBrowse',
+        output.GoogleAssistant.collectionBrowse,
       );
     }
 

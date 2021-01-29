@@ -201,7 +201,9 @@ export class ConversationalActionRequest implements JovoRequest {
   }
 
   setAudioInterface(): this {
-    // TODO:
+    if (!this.hasAudioInterface()) {
+      this.device?.capabilities.push('SPEECH');
+    }
     return this;
   }
 
@@ -216,6 +218,16 @@ export class ConversationalActionRequest implements JovoRequest {
   }
 
   setScreenInterface(): this {
+    if (!this.hasScreenInterface()) {
+      this.device?.capabilities.push('RICH_RESPONSE');
+    }
+    return this;
+  }
+
+  setWebBrowserInterface(): this {
+    if (!this.hasWebBrowserInterface()) {
+      this.device?.capabilities.push('WEB_LINK');
+    }
     return this;
   }
 

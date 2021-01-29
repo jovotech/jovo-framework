@@ -1,6 +1,30 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.3.0
+### Latest Framework Version: 3.3.1<br><br>
+
+
+
+
+##### `jovo-plugin-debugger [3.3.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-debugger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-debugger) | [npm](https://www.npmjs.com/package/jovo-plugin-debugger)
+##### `jovo-platform-googleassistantconv [3.3.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#890](https://github.com/jovotech/jovo-framework/pull/890) ✨ Add Conversational Actions functionality to Jovo Debugger ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2021-01-27
+
+##### `jovo-core [3.3.1]`
+- [#875](https://github.com/jovotech/jovo-framework/pull/875) 🩹 Persist user.context within unit tests ([@fbublitz](https://github.com/fbublitz))
+
+##### `jovo-analytics-googleanalytics [3.3.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+- [#876](https://github.com/jovotech/jovo-framework/pull/876) ✨ Add Google Optimize support ([@theBenForce(https://github.com/theBenForce))
+
+##### `jovo-plugin-inbox [3.3.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-inbox) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-inbox) | [npm](https://www.npmjs.com/package/jovo-plugin-inbox)
+- [#888](https://github.com/jovotech/jovo-framework/pull/888) ✨ Plugin to save conversation data into a database ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-platform-web [3.3.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-web) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web) | [npm](https://www.npmjs.com/package/jovo-platform-web)
+- [#879](https://github.com/jovotech/jovo-framework/pull/879) 🐛 Fix bug related to audio in the request for CorePlatform and WebPlatform ([@m-ripper](https://github.com/m-ripper))
+
+
 
 ## 2020-12-03
 

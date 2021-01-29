@@ -23,25 +23,16 @@
         Ready: 'ready',
       };
 
-      const client = new window.JovoWebClient.Client(
-        'http://localhost:3000/webhook',
-        {
-          audioRecorder: {
-            sampleRate: 8000,
-          },
-          speechRecognizer: {
-            locale: 'en',
-          },
+      const client = new window.JovoWebClient.Client('http://localhost:3000/webhook', {
+        audioRecorder: {
+          sampleRate: 8000,
         },
-      );
-
-      client.$audioRecorder.on('stop', async (result) => {
-        await client
-          .createRequest({
-            type: 'AUDIO',
-            body: window.JovoWebClient.AudioHelper.getRequestBodyFromAudioRecorderResult(result),
-          })
-          .send();
+        speechRecognizer: {
+          locale: 'en',
+        },
+        repromptHandler: {
+          enabled: false,
+        },
       });
 
       const STATE_MAP = {
@@ -58,7 +49,7 @@
         [State.Ready]: () => {
           primaryButton.innerText = 'Start';
           primaryButton.onclick = async () => {
-            await client.startInputRecording();
+            await client.startInputRecording(false);
           };
           secondaryButton.style.display = null;
           secondaryButton.innerText = 'Stop';

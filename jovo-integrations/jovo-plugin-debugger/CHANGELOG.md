@@ -2,6 +2,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+##### 2021-01-28 [3.3.2]
+- [#890](https://github.com/jovotech/jovo-framework/pull/890) ✨ Add Conversational Actions functionality to Jovo Debugger ([@aswetlow](https://github.com/aswetlow))
+
 ##### 2020-12-03 [3.3.0]
 - [#866](https://github.com/jovotech/jovo-framework/pull/866) Add `strip-ansi` to remove ANSI-codes from messages that are sent to the Jovo-Debugger ([@m-ripper](https://github.com/m-ripper))
 
