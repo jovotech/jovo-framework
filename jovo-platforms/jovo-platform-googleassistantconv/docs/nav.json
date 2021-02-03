@@ -1,0 +1,52 @@
+[
+    {
+        "title": "Requests & Responses",
+        "route": "request-response",
+        "content": [
+            {
+                "title": "Request",
+                "route": "request-response/request"
+            },
+            {
+                "title": "Response",
+                "route": "request-response/response"
+            }
+        ]
+    },
+    {
+        "title": "Interfaces",
+        "route": "interfaces",
+        "content": [
+            {
+                "title": "Media Response",
+                "route": "interfaces/media-response"
+            },
+            {
+                "title": "Push Notifications",
+                "route": "interfaces/notifications"
+            },
+            {
+                "title": "Visual Output",
+                "route": "interfaces/visual-output"
+            },
+            {
+                "title": "Transactions",
+                "route": "interfaces/transactions"
+            }
+        ]
+    },
+    {
+        "title": "Concepts",
+        "route": "concepts",
+        "content": [
+            {
+                "title": "Scenes",
+                "route": "concepts/scenes"
+            }
+        ]
+    },
+    {
+        "title": "User Data",
+        "route": "user-data"
+    }
+]

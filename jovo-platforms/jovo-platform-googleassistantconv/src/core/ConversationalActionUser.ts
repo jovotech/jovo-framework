@@ -76,4 +76,9 @@ export class ConversationalActionUser extends User {
     const request = this.conversationalAction.$request! as ConversationalActionRequest;
     return request.user?.verificationStatus === 'VERIFIED';
   }
+
+  getEntitlements() {
+    const request = this.conversationalAction.$request! as ConversationalActionRequest;
+    return request.user?.packageEntitlements;
+  }
 }

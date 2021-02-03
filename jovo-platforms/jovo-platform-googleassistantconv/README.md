@@ -261,7 +261,7 @@ this.$googleAction!
 
 > For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://www.jovo.tech/docs/model).
 
-You can add a `googleAssistant` object at the root of the Jovo Language Model to add Google Assistant specific stuff using their original syntax. While building, it will be merged with the platform-independent stuff:
+You can add a `googleAssistant` object at the root of the Jovo Language Model to add Google Assistant specific stuff using their original syntax. While building, it will be merged with the platform-independent configuration:
 
 ```js
 "googleAssistant": {
@@ -298,50 +298,7 @@ You can add a `googleAssistant` object at the root of the Jovo Language Model to
 
 ### Scenes
 
-If you choose to enhance your Conversational Action with scenes, you can specify them in your language model like so:
-
-```js
-"googleAssistant": {
-  "custom": {
-    "scenes": {
-      "Main": {
-        "conditionalEvents": [
-          {
-            "condition": "scene.slots.status == \"FINAL\"",
-            "handler": {
-              "staticPrompt": {
-                "candidates": [
-                  {
-                    "promptResponse": {
-                      "firstSimple": {
-                        "variants": [
-                          {
-                            "speech": "Hello World!"
-                          }
-                        ] 
-                      },
-                      "suggestions": [
-                        {
-                          "title": "Foo"
-                        },
-                        {
-                          "title": "Bar"
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      }
-    }
-  }
-}
-```
-
-The syntax is the same as in your Action's `.yaml` files, but in JSON format.
+> Learn more about using scenes with the Jovo Framework [here]().
 
 ### Global Intents
 

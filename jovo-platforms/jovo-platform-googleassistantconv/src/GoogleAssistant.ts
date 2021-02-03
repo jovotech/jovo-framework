@@ -19,6 +19,7 @@ import { GoogleAssistantTestSuite } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { MediaResponsePlugin } from './modules/MediaResponse';
 import { InteractiveCanvas } from './modules/InteractiveCanvas';
+import { TransactionsPlugin } from './modules/Transaction';
 
 export interface Config extends ExtensibleConfig {
   handlers?: any; //tslint:disable-line
@@ -90,7 +91,12 @@ export class GoogleAssistant extends Platform<
       }
       return this;
     };
-    this.use(new ConversationalActionsCore(), new MediaResponsePlugin(), new InteractiveCanvas());
+    this.use(
+      new ConversationalActionsCore(),
+      new MediaResponsePlugin(),
+      new InteractiveCanvas(),
+      new TransactionsPlugin(),
+    );
   }
 
   makeTestSuite(): GoogleAssistantTestSuite {

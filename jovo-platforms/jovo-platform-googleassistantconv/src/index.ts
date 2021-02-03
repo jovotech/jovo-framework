@@ -10,7 +10,13 @@ import {
   Suggestion,
   HtmlResponse,
   Expected,
+  Order,
+  PresentationOptions,
+  OrderOptions,
+  PaymentParameters,
   CollectionBrowse,
+  OrderUpdate,
+  SkuId,
 } from './core/Interfaces';
 import { GoogleAction } from './core/GoogleAction';
 import { AskOutput, Handler, TellOutput } from 'jovo-core';
@@ -19,6 +25,7 @@ export { GoogleAssistant, Config } from './GoogleAssistant';
 export { GoogleAssistantTestSuite, Suggestion, Expected } from './core/Interfaces';
 import { NextScene } from './core/Interfaces';
 import { Prompt } from './core/Interfaces';
+import { Transaction } from './modules/Transaction';
 export * from './core/Interfaces';
 export * from './services/PushNotificationsApi';
 export * from './visuals/BasicCard';
@@ -98,6 +105,24 @@ declare module 'jovo-core/dist/src/Interfaces' {
         reprompts?: Prompt[];
       };
       expected?: Expected;
+
+      TransactionRequirementsCheck?: {};
+      TransactionOrder?: {
+        order: Order;
+        presentationOptions?: PresentationOptions;
+        orderOptions?: OrderOptions;
+        paymentParameters?: PaymentParameters;
+      };
+      TransactionOrderUpdate?: {
+        orderUpdate: OrderUpdate;
+      };
+      TransactionDigitalPurchaseRequirementsCheck?: {};
+      AskForDeliveryAddress?: {
+        reason: string;
+      };
+      CompletePurchase?: {
+        skuId: SkuId;
+      };
     };
   }
 }
@@ -115,5 +140,11 @@ declare module './core/GoogleAction' {
 
     audioPlayer(): MediaResponse | undefined;
     mediaResponse(): MediaResponse | undefined;
+  }
+}
+
+declare module './core/GoogleAction' {
+  interface GoogleAction {
+    $transaction?: Transaction;
   }
 }
