@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-import { RequestOptions } from 'http';
 export * from 'axios';
 
 export class HttpService {
