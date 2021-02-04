@@ -3,6 +3,7 @@
   "version": "3.4.0",
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "src/index.js",
+  "private": true,
   "dependencies": {
     "jovo-db-filedb": "^3.4.0",
     "jovo-framework": "^3.4.0",
