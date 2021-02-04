@@ -18,7 +18,7 @@ export class CorePlatformRequest implements JovoRequest, CorePlatformRequestJSON
     return key === '' ? CorePlatformRequest.fromJSON(value) : value;
   }
 
-  version = '3.3.1';
+  version = '3.4.0';
   type: 'jovo-platform-core' | string = 'jovo-platform-core';
   request!: Request;
   context!: Context;

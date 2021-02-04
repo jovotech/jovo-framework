@@ -2,7 +2,16 @@ import { CorePlatformApp } from './core/CorePlatformApp';
 import { Config } from './CorePlatform';
 import { Action } from './Interfaces';
 
-export type Version = '3.2.0' | '3.2.1' | '3.2.2' | '3.2.4' | '3.2.5' | '3.3.0' | '3.3.1' | string;
+export type Version =
+  | '3.2.0'
+  | '3.2.1'
+  | '3.2.2'
+  | '3.2.4'
+  | '3.2.5'
+  | '3.3.0'
+  | '3.3.1'
+  | '3.4.0'
+  | string;
 
 export * from './CorePlatform';
 
