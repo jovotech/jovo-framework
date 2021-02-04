@@ -11,7 +11,7 @@ import _set = require('lodash.set');
 import _unset = require('lodash.unset');
 
 export interface JovoInboxConfig extends PluginConfig {
-  db?: ConnectionOptions;
+  db?: Partial<ConnectionOptions>;
   appId?: string;
   defaultLocale: string;
 

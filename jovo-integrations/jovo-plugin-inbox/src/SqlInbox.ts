@@ -14,7 +14,7 @@ export class SqlInbox implements JovoInboxDb {
     entities: [InboxLogEntity],
   };
 
-  constructor(config?: ConnectionOptions) {
+  constructor(config?: Partial<ConnectionOptions>) {
     if (config) {
       this.config = _merge(this.config, config);
     }

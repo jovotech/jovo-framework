@@ -187,6 +187,4 @@ export class CorePlatform<
   protected getResponseBuilder(): ResponseBuilder<RES> {
     return (new CorePlatformResponseBuilder() as unknown) as ResponseBuilder<RES>;
   }
-
-
 }
