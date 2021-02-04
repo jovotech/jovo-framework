@@ -22,7 +22,7 @@
     "jovo-framework": "^3.3.0",
     "jovo-platform-googleassistantconv": "^3.3.0",
     "jovo-plugin-debugger": "^3.3.0",
-    "googleapis": "67.0.0"
+    "googleapis": "^42.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

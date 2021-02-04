@@ -21,7 +21,7 @@
 		"lodash": "^4.17.20",
 		"lodash.get": "^4.4.2",
 		"lodash.merge": "^4.6.2",
-		"moment-timezone": "^0.5.31",
+		"moment-timezone": "^0.5.23",
 		"universal-analytics": "^0.4.23"
 	},
 	"devDependencies": {
