@@ -1,6 +1,5 @@
 'use strict';
 const { Webhook, ExpressJS, Lambda } = require('jovo-framework');
-
 const { app } = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {

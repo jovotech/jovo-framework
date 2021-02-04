@@ -1,0 +1,100 @@
+{
+	"invocation": "transactions demo",
+	"intents": [
+		{
+			"name": "YesIntent",
+			"phrases": [
+				"Yo",
+				"Yeah",
+				"Yes"
+			]
+		}
+	],
+	"inputTypes": [
+		{
+			"name": "NameInputType",
+			"values": []
+		}
+	],
+	"googleAssistant": {
+		"custom": {
+			"scenes": {
+				"TransactionCompletePurchaseScene": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "CompletePurchase"
+							},
+							"config": "$session.params.purchase",
+							"name": "CompletePurchase",
+							"required": true,
+							"type": {
+								"name": "actions.type.CompletePurchaseValue"
+							}
+						}
+					]
+				},
+				"TransactionDigitalPurchaseCheckScene": {
+					"conditionalEvents": [
+						{
+							"condition": "scene.slots.status == \"FINAL\"",
+							"handler": {
+								"webhookHandler": "Jovo"
+							}
+						}
+					],
+					"slots": [
+						{
+							"commitBehavior": {
+								"writeSessionParam": "DigitalPurchaseCheck"
+							},
+							"config": {
+								"@type": "type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec"
+							},
+							"name": "DigitalPurchaseCheck",
+							"required": true,
+							"type": {
+								"name": "actions.type.DigitalPurchaseCheckResult"
+							}
+						}
+					]
+				}
+			},
+			"global": {
+				"actions.intent.CANCEL": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.MAIN": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_1": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_2": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				},
+				"actions.intent.NO_INPUT_FINAL": {
+					"handler": {
+						"webhookHandler": "Jovo"
+					}
+				}
+			}
+		}
+	}
+}
