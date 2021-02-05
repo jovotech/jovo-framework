@@ -1,8 +1,10 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.3.1<br><br>
+### Latest Framework Version: 3.4.0<br><br>
 
 
+##### `jovo-platform-googleassistantconv [3.4.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#892](https://github.com/jovotech/jovo-framework/pull/892) ✨ Transactions for Google Assistant Conversational Actions ([@aswetlow](https://github.com/aswetlow))
 
 
 ##### `jovo-plugin-debugger [3.3.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-debugger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-debugger) | [npm](https://www.npmjs.com/package/jovo-plugin-debugger)
