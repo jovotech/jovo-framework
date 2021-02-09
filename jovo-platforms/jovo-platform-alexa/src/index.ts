@@ -5,7 +5,16 @@ import { Config } from './Alexa';
 export { AlexaRequestBuilder } from './core/AlexaRequestBuilder';
 export { Alexa, Config } from './Alexa';
 export { AlexaSkill } from './core/AlexaSkill';
-export { AlexaTestSuite } from './core/Interfaces';
+export {
+  AlexaTestSuite,
+  AlexaDeviceName,
+  HouseholdList,
+  ShoppingList,
+  ToDoList,
+  ToDoListItem,
+  HouseholdListItem,
+  ShoppingListItem,
+} from './core/Interfaces';
 export * from './core/AlexaRequest';
 export * from './modules/AmazonPay';
 export * from './services/AlexaReminder';
@@ -13,7 +22,7 @@ export * from './services/AlexaTimer';
 
 export * from './services/AmazonPayAPI';
 
-export { AlexaResponse } from './core/AlexaResponse';
+export { AlexaResponse, Response, Directive, SessionAttributes } from './core/AlexaResponse';
 
 export * from './services/AlexaAPI';
 
