@@ -1,7 +1,5 @@
-import { Log, PluginConfig, Project } from 'jovo-core';
 import _merge = require('lodash.merge');
 import { JovoInboxDb } from './interfaces';
-import * as path from 'path';
 import { createConnection, getConnectionManager, ConnectionOptions, getConnection } from 'typeorm';
 import { InboxLogEntity } from './entity/InboxLog';
 
@@ -21,8 +19,12 @@ export class SqlInbox implements JovoInboxDb {
   }
 
   async init() {
-    if (getConnectionManager().connections.length === 0) {
-      await createConnection(this.config);
+    try {
+      if (getConnectionManager().connections.length === 0) {
+        await createConnection(this.config);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   errorHandling() {}
