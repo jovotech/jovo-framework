@@ -3,17 +3,9 @@ import _merge = require('lodash.merge');
 import * as crypto from 'crypto';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError } from 'jovo-core';
 import { Jovo } from 'jovo-framework';
-import { Config, Event, TransactionItem, Transaction } from './interfaces';
+import { Config, Event, TransactionItem, Transaction, validEndReasons, systemMetricNames, systemDimensionNames } from './interfaces';
 import { Helper } from './helper';
 
-type validEndReasons =
-  | 'Stop'
-  | 'ERROR'
-  | 'EXCEEDED_MAX_REPROMPTS'
-  | 'PLAYTIME_LIMIT_REACHED'
-  | 'PlayTimeLimitReached'
-  | 'USER_INITIATED'
-  | 'undefined';
 
 export class GoogleAnalytics implements Analytics {
   /**
@@ -50,23 +42,32 @@ export class GoogleAnalytics implements Analytics {
     trackEndReasons: false,
     sessionTimeoutInMinutes: 5,
     skipUnverifiedUser: true,
+    systemMetrics: [
+      ['Stop', 1],
+      ['ERROR', 2],
+      ['EXCEEDED_MAX_REPROMPTS', 3],
+      ['PlayTimeLimitReached', 4],
+      ['USER_INITIATED', 5],
+      ['undefined', 6],
+    ],
+    systemDimensions: [
+      ['uuid', 1]
+    ]
   };
   visitor: ua.Visitor | undefined;
 
   // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
-  readonly endReasonGoogleAnalyticsMap = new Map<validEndReasons, number>([
-    ['Stop', 1],
-    ['ERROR', 2],
-    ['EXCEEDED_MAX_REPROMPTS', 3],
-    ['PlayTimeLimitReached', 4],
-    ['USER_INITIATED', 5],
-    ['undefined', 6],
-  ]);
+  readonly systemMetricsIndices : Map<systemMetricNames,number>;
+  readonly systemDimensionsIndices: Map<systemDimensionNames, number>;
+
+
 
   constructor(config?: Config) {
     if (config) {
       this.config = _merge(this.config, config);
     }
+    this.systemMetricsIndices = new Map<systemMetricNames, number>(this.config.systemMetrics);
+    this.systemDimensionsIndices = new Map<systemDimensionNames, number>(this.config.systemDimensions);
   }
 
   install(app: BaseApp) {
@@ -88,6 +89,50 @@ export class GoogleAnalytics implements Analytics {
   }
 
   /**
+   * Set custom metric for next pageview
+   * Throws error if metricName is not mapped to an index in your config 
+   * @param name - metricName
+   * @param targetValue - target value in googleAnalytics
+   */
+  protected setSystemMetric(name: systemMetricNames, targetValue: number) {
+    // Set user id as a custom dimension to track hits on the same scope
+    const metricNumber: number | undefined = this.systemMetricsIndices.get(name); //uuid);
+    if(!metricNumber) {
+      throw new JovoError(
+        `Trying to set custom system metric ${name} which is not set.`,
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+        'Google Analytics sets some custom dimensions and metrics per default',
+        `Set systemMetrics in your config (which is an tuple Array mapping systemMetrics to GoogleAnalytics indices) and add ${name}`,
+        'See readme for more information'
+      );
+    }
+    this.visitor?.set(`cm${metricNumber}`, targetValue);
+  }
+
+   /**
+   * Set custom dimension for next pageview
+   * Throws error if dimensionName is not mapped to an index in your config 
+   * @param name - dimensionName
+   * @param targetValue - target value in googleAnalytics
+   */
+  protected setSystemDimension(name: systemDimensionNames, targetValue: string | number) {
+    // Set user id as a custom dimension to track hits on the same scope
+    const dimnensionNumber =this.systemDimensionsIndices.get(name); //uuid);
+    if(!dimnensionNumber) {
+      throw new JovoError(
+        `Trying to set custom system dimension ${name} which is not set.`,
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+        'Google Analytics sets some custom dimensions and metrics per default',
+        `Set systemDimensions in your config (which is an tuple Array mapping systemDimensions to GoogleAnalytics indices) and add ${name}`,
+        'See readme for more information'
+      );
+    }
+    this.visitor?.set(`cd${dimnensionNumber}`, targetValue);
+  }
+
+  /**
    * Sets end reason to session variables + updates google analytics metric
    *
    * @param jovo - unser liebes Jovo objekt
@@ -95,11 +140,11 @@ export class GoogleAnalytics implements Analytics {
    */
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
-    const gaMetricNumber = this.endReasonGoogleAnalyticsMap.get(endReason);
+    const gaMetricNumber = this.systemMetricsIndices.get(endReason);
     if (gaMetricNumber) {
       jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
     } else {
-      const undefinedMetricNumber = this.endReasonGoogleAnalyticsMap.get('undefined');
+      const undefinedMetricNumber = this.systemMetricsIndices.get('undefined');
       if (undefinedMetricNumber) {
         jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
       }
@@ -173,8 +218,8 @@ export class GoogleAnalytics implements Analytics {
     visitor.set('userId', uuid);
     visitor.set('dataSource', jovo.getType());
     visitor.set('userLanguage', jovo.getLocale());
-    // Set user id as a custom dimension to track hits on the same scope
-    visitor.set('cd1', uuid);
+
+    this.setSystemDimension('uuid',uuid)
 
     this.visitor = visitor;
   }

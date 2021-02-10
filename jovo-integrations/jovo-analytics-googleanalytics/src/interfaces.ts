@@ -1,5 +1,18 @@
 import { PluginConfig } from 'jovo-core';
 
+export type validEndReasons =
+  | 'Stop'
+  | 'ERROR'
+  | 'EXCEEDED_MAX_REPROMPTS'
+  | 'PLAYTIME_LIMIT_REACHED'
+  | 'PlayTimeLimitReached'
+  | 'USER_INITIATED'
+  | 'undefined';
+
+  export type systemMetricNames = validEndReasons; // will be enhanced for new custom metrics
+
+  export type systemDimensionNames = 'uuid';
+
 export interface Event {
   eventCategory: string; // Category for event, e.g. Inputs, Errors, ...
   eventAction: string; // Value for the event to track
@@ -37,4 +50,6 @@ export interface Config extends PluginConfig {
   trackEndReasons?: boolean;
   sessionTimeoutInMinutes: number;
   skipUnverifiedUser: boolean;
+  systemMetrics: [systemMetricNames, number][],
+  systemDimensions: [systemDimensionNames, number][],
 }
