@@ -1,0 +1,1 @@
+{"version":3,"file":"DialogflowResponseBuilder.js","sourceRoot":"","sources":["../../../src/core/DialogflowResponseBuilder.ts"],"names":[],"mappings":";;AAKA,MAAa,yBAAyB;IAEpC,YAAoB,OAAU;QAAV,YAAO,GAAP,OAAO,CAAG;IAAG,CAAC;IAElC,2BAA2B;IAC3B,MAAM,CAAC,IAAS;QACd,OAAO,IAAI,CAAC,OAAO,CAAC,cAAc,CAAC,IAAI,CAAuB,CAAC;IACjE,CAAC;CACF;AARD,8DAQC"}

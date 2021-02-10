@@ -1,0 +1,279 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const path = require("path");
+const jovo_core_1 = require("jovo-core");
+const jovo_db_filedb_1 = require("jovo-db-filedb");
+const _merge = require("lodash.merge");
+const BasicLogging_1 = require("./middleware/logging/BasicLogging");
+const JovoUser_1 = require("./middleware/user/JovoUser");
+if (process.argv.includes('--port')) {
+    process.env.JOVO_PORT = process.argv[process.argv.indexOf('--port') + 1].trim();
+}
+if (process.argv.includes('--log-level')) {
+    process.env.JOVO_LOG_LEVEL =
+        jovo_core_1.Logger.getLogLevelFromString(process.argv[process.argv.indexOf('--log-level') + 1].trim()) + '';
+}
+if (process.argv.includes('--cwd')) {
+    process.env.JOVO_CWD = process.argv[process.argv.indexOf('--cwd') + 1].trim();
+}
+if (process.argv.includes('--config')) {
+    process.env.JOVO_CONFIG = process.argv[process.argv.indexOf('--config') + 1].trim();
+}
+if (process.argv.includes('--stage')) {
+    process.env.JOVO_STAGE = process.argv[process.argv.indexOf('--stage') + 1].trim();
+}
+if (process.env.JOVO_PERFORMANCE_REPORT || process.argv.includes('--performance-report')) {
+    const middlewareMap = {};
+    const performanceReport = process.argv[process.argv.indexOf('--performance-report') + 1]
+        ? process.argv[process.argv.indexOf('--performance-report') + 1].trim()
+        : undefined;
+    function getInstallLocation(stackStr, parent, middleware) {
+        const stackArray = stackStr.split('\n');
+        for (let i = 0; i < stackArray.length; i++) {
+            const stackLine = stackArray[i];
+            if (stackLine.includes('Middleware.use')) {
+                const nextStackLine = stackArray[i + 1];
+                let pluginName = 'Object.<anonymous>';
+                if (!nextStackLine.includes(pluginName)) {
+                    pluginName = nextStackLine.substring(nextStackLine.indexOf('at') + 3, nextStackLine.indexOf('.install'));
+                }
+                let location = ' - ' +
+                    nextStackLine.substring(nextStackLine.indexOf('(') + 1, nextStackLine.indexOf(')'));
+                // location = location.substring(process.cwd().length - 3);
+                location = '';
+                const middlewareFullKey = `${parent}.${middleware}`;
+                if (!middlewareMap[middlewareFullKey]) {
+                    middlewareMap[middlewareFullKey] = [];
+                }
+                middlewareMap[middlewareFullKey].push(`${pluginName}${location}`);
+            }
+        }
+    }
+    const oldMiddlewareUse = jovo_core_1.Middleware.prototype.use;
+    jovo_core_1.Middleware.prototype.use = function (fns) {
+        getInstallLocation(new Error().stack, this.parent.constructor.name, this.name);
+        oldMiddlewareUse.call(this, fns);
+        return this;
+    };
+    const oldBaseAppHandle = jovo_core_1.BaseApp.prototype.handle;
+    jovo_core_1.BaseApp.prototype.handle = async function (host) {
+        jovo_core_1.Log.info();
+        jovo_core_1.Log.infoStart('Handle duration ');
+        await oldBaseAppHandle.call(this, host);
+        jovo_core_1.Log.infoEnd('Handle duration ');
+    };
+    const oldMiddlewareRun = jovo_core_1.Middleware.prototype.run;
+    jovo_core_1.Middleware.prototype.run = async function (object, concurrent) {
+        const start = process.hrtime();
+        await oldMiddlewareRun.call(this, object, concurrent);
+        const end = process.hrtime();
+        // duration of the complete middleware process
+        let duration = (end[1] - start[1]) / 1000 / 1000; // from nano to ms
+        if (duration < 0) {
+            duration = 0;
+        }
+        jovo_core_1.Log.writeToStreams(`\b→ ${this.parent.constructor.name}.${this.name}`, 2, false);
+        if (duration <= 80) {
+            // good value
+            jovo_core_1.Log.green().info(`+${duration.toFixed(0)}ms`);
+        }
+        else if (duration > 80 && duration <= 200) {
+            // ok value
+            jovo_core_1.Log.yellow().info(`+${duration.toFixed(0)}ms`);
+        }
+        else if (duration > 200) {
+            // bad value
+            jovo_core_1.Log.red().info(`+${duration.toFixed(0)}ms`);
+        }
+        const middlewareFullKey = `${this.parent.constructor.name}.${this.name}`;
+        if (middlewareMap[middlewareFullKey]) {
+            middlewareMap[middlewareFullKey].forEach((impl) => {
+                if (performanceReport === 'detailed') {
+                    jovo_core_1.Log.dim().info(`↓ ${impl}`);
+                }
+            });
+        }
+    };
+}
+class App extends jovo_core_1.BaseApp {
+    constructor(config) {
+        super(config);
+        this.config = {
+            enabled: true,
+            inputMap: {},
+            intentMap: {},
+            plugin: {},
+        };
+        this.$cms = {};
+        if (config) {
+            this.config = _merge(this.config, config);
+        }
+        jovo_core_1.Log.verbose();
+        jovo_core_1.Log.verbose(jovo_core_1.Log.header(`Verbose information ${new Date().toISOString()}`));
+        // sets specific cwd
+        if (process.env.JOVO_CWD) {
+            process.chdir(process.env.JOVO_CWD);
+        }
+        const pathToConfig = process.env.JOVO_CONFIG || path.join(process.cwd(), 'config.js');
+        if (fs.existsSync(pathToConfig)) {
+            const fileConfig = require(pathToConfig) || {};
+            this.config = _merge(fileConfig, this.config);
+            jovo_core_1.Log.verbose('Using ' + pathToConfig);
+        }
+        else {
+            if (!config && (!process.env.NODE_ENV || process.env.NODE_ENV !== 'UNIT_TEST')) {
+                jovo_core_1.Log.warn(`WARN: Couldn't find default config.js in your project.`);
+                jovo_core_1.Log.warn(`WARN: Expected path: ${path.resolve(pathToConfig)}`);
+            }
+        }
+        const stage = process.env.JOVO_STAGE || process.env.STAGE || process.env.NODE_ENV;
+        if (stage) {
+            jovo_core_1.Log.verbose('Stage: ' + stage);
+        }
+        if (jovo_core_1.Logger.isLogLevel(jovo_core_1.LogLevel.VERBOSE)) {
+            const pathToPackageJsonInSrc = path.join(process.cwd(), 'package-lock.json');
+            const pathToPackageJsonInProject = path.join(process.cwd(), '..', 'package-lock.json');
+            let pathToPackageLockJson;
+            if (fs.existsSync(pathToPackageJsonInSrc)) {
+                pathToPackageLockJson = pathToPackageJsonInSrc;
+            }
+            if (fs.existsSync(pathToPackageJsonInProject)) {
+                pathToPackageLockJson = pathToPackageJsonInProject;
+            }
+            try {
+                const packageLockJson = require(pathToPackageLockJson); // tslint:disable-line
+                const dependencies = Object.keys(packageLockJson.dependencies).filter((val) => val.startsWith('jovo-'));
+                jovo_core_1.Log.verbose(jovo_core_1.Log.header('Jovo dependencies from package-lock.json', 'jovo-framework'));
+                dependencies.forEach((jovoDependency) => {
+                    jovo_core_1.Log.yellow().verbose(` ${jovoDependency}@${packageLockJson.dependencies[jovoDependency].version}`);
+                });
+            }
+            catch (e) {
+                //
+            }
+        }
+        const pathToStageConfig = path.join(process.cwd(), 'config.' + stage + '.js');
+        if (fs.existsSync(pathToStageConfig)) {
+            const fileStageConfig = require(pathToStageConfig) || {};
+            _merge(this.config, fileStageConfig);
+            jovo_core_1.Log.verbose(`Merging stage specific config.js for stage ${stage} `);
+        }
+        else {
+            if (stage) {
+                jovo_core_1.Log.verbose(`No config file for stage ${stage}. `);
+            }
+        }
+        this.mergePluginConfiguration();
+        this.initConfig();
+        jovo_core_1.Log.verbose(jovo_core_1.Log.header('App object initialized', 'jovo-framework'));
+        this.$config = this.config;
+        this.init();
+    }
+    mergePluginConfiguration() {
+        _merge(this.config.plugin, this.config.platform);
+        _merge(this.config.plugin, this.config.db);
+        _merge(this.config.plugin, this.config.cms);
+        _merge(this.config.plugin, this.config.analytics);
+        _merge(this.config.plugin, this.config.nlu);
+        _merge(this.config.plugin, this.config.components);
+    }
+    initConfig() {
+        if (!this.config.plugin) {
+            this.config.plugin = {};
+        }
+        // logging
+        if (typeof this.config.logging !== 'undefined') {
+            if (typeof this.config.logging === 'boolean') {
+                this.config.plugin.BasicLogging = {
+                    logging: this.config.logging,
+                };
+            }
+            else {
+                this.config.plugin.BasicLogging = this.config.logging;
+            }
+        }
+        // user
+        if (typeof this.config.user !== 'undefined') {
+            this.config.plugin.JovoUser = this.config.user;
+            if (this.config.user.metaData) {
+                if (typeof this.config.user.metaData === 'boolean') {
+                    if (!this.config.plugin.JovoUser.metaData) {
+                        this.config.plugin.JovoUser.metaData = {};
+                    }
+                    this.config.plugin.JovoUser.metaData = {
+                        enabled: this.config.user.metaData,
+                    };
+                }
+                else {
+                    this.config.plugin.JovoUser.metaData = this.config.user.metaData;
+                }
+            }
+            if (this.config.user.context) {
+                if (typeof this.config.user.context === 'boolean') {
+                    if (!this.config.plugin.JovoUser.context) {
+                        this.config.plugin.JovoUser.context = {};
+                    }
+                    this.config.plugin.JovoUser.context = {
+                        enabled: this.config.user.context,
+                    };
+                }
+                else {
+                    this.config.plugin.JovoUser.context = this.config.user.context;
+                }
+            }
+        }
+        // inputMap
+        // router (intentMap)
+        if (this.config.intentMap) {
+            if (!this.config.plugin.Router) {
+                this.config.plugin.Router = {};
+            }
+            this.config.plugin.Router.intentMap = this.config.intentMap;
+        }
+        // router (intentsToSkipUnhandled)
+        if (this.config.intentsToSkipUnhandled) {
+            if (!this.config.plugin.Router) {
+                this.config.plugin.Router = {};
+            }
+            this.config.plugin.Router.intentsToSkipUnhandled = this.config.intentsToSkipUnhandled;
+        }
+        // i18next
+        if (this.config.i18n) {
+            this.config.plugin.I18Next = this.config.i18n;
+        }
+    }
+    init() {
+        this.use(new BasicLogging_1.BasicLogging());
+        this.use(new JovoUser_1.JovoUser());
+    }
+    async handle(host) {
+        if (host.headers && host.headers['jovo-test']) {
+            let fileDb2Path = './../db/tests';
+            // tslint:disable-next-line
+            if (this.$db && this.$db.config && this.$db.config.pathToFile) {
+                const dbPath = path.parse(this.$db.config.pathToFile); // tslint:disable-line
+                fileDb2Path = dbPath.dir + '/tests';
+            }
+            if (host.headers['jovo-test'] === 'TestHost') {
+                fileDb2Path = './db/tests';
+            }
+            this.use(new jovo_db_filedb_1.FileDb2({
+                path: fileDb2Path,
+            }));
+        }
+        await super.handle(host);
+    }
+    /**
+     * @deprecated
+     * @param config
+     */
+    setConfig(config) {
+        this.config = _merge(this.config, config);
+        this.mergePluginConfiguration();
+        this.initConfig();
+        this.init();
+    }
+}
+exports.App = App;
+//# sourceMappingURL=App.js.map

@@ -1,0 +1,52 @@
+import { Plugin } from 'jovo-core';
+import { GoogleAssistant } from '../GoogleAssistant';
+import { GoogleAction } from '../core/GoogleAction';
+import { CompletePurchaseType, DigitalPurchaseCheckResultType, Location, Order, OrderOptions, OrderUpdate, PaymentParameters, PresentationOptions, RequirementsCheckResultType, Reservation, Sku, SkuId, SkuType, TransactionDecisionType, TransactionDeliveryAddressUserDecisionType } from '../core/Interfaces';
+export declare class Transaction {
+    googleAction: GoogleAction;
+    googleAssistant: GoogleAssistant;
+    constructor(googleAction: GoogleAction, googleAssistant: GoogleAssistant);
+    checkRequirements(): this;
+    checkPhysicalTransactionRequirements(): this;
+    checkDigitalPurchaseRequirements(): this;
+    buildOrder(order: Order, presentationOptions?: PresentationOptions, orderOptions?: OrderOptions, paymentParameters?: PaymentParameters): void;
+    updateOrder(orderUpdate: OrderUpdate): void;
+    buildReservation(reservation: Reservation, presentationOptions?: PresentationOptions, orderOptions?: OrderOptions): void;
+    updateReservation(orderUpdate: OrderUpdate): void;
+    getRequirementsCheckResult(): RequirementsCheckResultType | undefined;
+    getDigitalPurchaseRequirementsCheckResult(): DigitalPurchaseCheckResultType | undefined;
+    canTransact(): boolean;
+    canPurchase(): boolean;
+    isRequirementsCheckUserActionRequired(): boolean;
+    isRequirementsCheckAssistantSurfaceNotSupported(): boolean;
+    isRequirementsCheckRegionNotSupported(): boolean;
+    askForDeliveryAddress(reason?: string): this;
+    getDeliveryAddressDecision(): TransactionDeliveryAddressUserDecisionType | undefined;
+    isDeliveryAddressAccepted(): boolean;
+    isDeliveryAddressRejected(): boolean;
+    getDeliveryAddress(): Location | undefined;
+    getOrder(): Order;
+    getReservation(): Reservation;
+    getDeliveryAddressLocation(): Location | undefined;
+    createOrder(orderUpdate: OrderUpdate): void;
+    getTransactionDecisionResult(): TransactionDecisionType | undefined;
+    isOrderAccepted(): boolean;
+    isReservationAccepted(): boolean;
+    isOrderRejected(): boolean;
+    isReservationRejected(): boolean;
+    isCartChangeRequested(): boolean;
+    getSubscriptions(skus: string[]): Promise<Sku[] | undefined>;
+    getConsumables(skus: string[]): Promise<Sku[]>;
+    completePurchase(skuId: SkuId): void;
+    getPurchaseCompleteStatus(): CompletePurchaseType | undefined;
+    getSkus(skus: string[], type: SkuType): Promise<Sku[]>;
+    getGoogleApiAccessToken(keyFile?: unknown): Promise<unknown>;
+    authorizePromise(jwtClient: any): Promise<unknown>;
+}
+export declare class TransactionsPlugin implements Plugin {
+    googleAssistant?: GoogleAssistant;
+    install(googleAssistant: GoogleAssistant): void;
+    type(googleAction: GoogleAction): void;
+    output(googleAction: GoogleAction): void;
+    uninstall(googleAssistant: GoogleAssistant): void;
+}

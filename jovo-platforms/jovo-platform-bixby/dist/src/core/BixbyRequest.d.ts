@@ -1,0 +1,45 @@
+import { Inputs, JovoRequest, SessionData } from 'jovo-core';
+import { VivContext, BixbyRequestJSON } from './Interfaces';
+export declare class BixbyRequest implements JovoRequest {
+    vivContext?: VivContext;
+    sessionData: SessionData;
+    intent: string | undefined;
+    directive: string | undefined;
+    inputs: {
+        [key: string]: string;
+    };
+    toJSON(): {} & this;
+    static fromJSON(json: BixbyRequestJSON | string, query?: Record<string, string>): BixbyRequest;
+    getSessionAttributes(): SessionData;
+    getSessionData(): SessionData;
+    getDeviceName(): string | undefined;
+    getUserId(): string;
+    getAccessToken(): string | undefined;
+    getLocale(): string;
+    getLanguage(): string;
+    isNewSession(): boolean;
+    getTimestamp(): string;
+    hasAudioInterface(): boolean;
+    hasScreenInterface(): boolean;
+    hasVideoInterface(): boolean;
+    getSessionId(): string | undefined;
+    getInputs(): Inputs;
+    setInputs(inputs: Inputs): this;
+    getState(): any;
+    setSessionData(sessionData: SessionData): this;
+    setSessionAttributes(sessionData: SessionData): this;
+    addSessionAttribute(key: string, value: any): this;
+    addSessionData(key: string, value: any): this;
+    addInput(key: string, value: string): this;
+    setTimestamp(timestamp: string): this;
+    setLocale(locale: string): this;
+    setUserId(userId: string): this;
+    setAccessToken(accessToken: string): this;
+    setNewSession(isNew: boolean): this;
+    setAudioInterface(): this;
+    setScreenInterface(): this;
+    setVideoInterface(): this;
+    setState(state: string): this;
+    getIntentName(): string | undefined;
+    setIntentName(intentName: string): this;
+}

@@ -55,7 +55,7 @@ out
 db.json
 jsdoc.json
 ./test/debug
-dist
+# dist
 lerna-debug.log
 .env
 db/tests/*.json

@@ -1,0 +1,21 @@
+export declare enum EnumRequestType {
+    LAUNCH = "LAUNCH",
+    INTENT = "INTENT",
+    END = "END",
+    UNHANDLED = "Unhandled",
+    ON_ERROR = "ON_ERROR",
+    ON_TEXT = "ON_TEXT",
+    ON_REQUEST = "ON_REQUEST",
+    NEW_USER = "NEW_USER",
+    NEW_SESSION = "NEW_SESSION",
+    AUDIOPLAYER = "AUDIOPLAYER",
+    ON_ELEMENT_SELECTED = "ON_ELEMENT_SELECTED",
+    UNDEFINED = "UNDEFINED",
+    UNKNOWN_REQUEST = "UNKNOWN_REQUEST",
+    ON_DTMF = "ON_DTMF",
+    ON_INACTIVITY = "ON_INACTIVITY"
+}
+export declare enum SessionConstants {
+    COMPONENT = "_JOVO_COMPONENT_",
+    STATE = "_JOVO_STATE_"
+}

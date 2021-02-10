@@ -1,0 +1,1 @@
+{"version":3,"file":"DialogflowUser.js","sourceRoot":"","sources":["../../src/DialogflowUser.ts"],"names":[],"mappings":";;AAAA,yCAAuC;AAEvC,MAAa,cAAe,SAAQ,gBAAI;IACtC,YAAY,IAAU;QACpB,KAAK,CAAC,IAAI,CAAC,CAAC;IACd,CAAC;IAED,cAAc;QACZ,OAAO,SAAS,CAAC;IACnB,CAAC;IAED,KAAK;QACH,OAAO,2BAA2B,CAAC;IACrC,CAAC;CACF;AAZD,wCAYC"}

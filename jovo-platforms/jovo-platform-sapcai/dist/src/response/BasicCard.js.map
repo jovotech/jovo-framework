@@ -1,0 +1,1 @@
+{"version":3,"file":"BasicCard.js","sourceRoot":"","sources":["../../../src/response/BasicCard.ts"],"names":[],"mappings":";;AAIA,MAAsB,SAAS;IAG7B,YAAY,IAAY;QACtB,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;IACnB,CAAC;IAED,OAAO,CAAC,IAAY;QAClB,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,OAAO,IAAI,CAAC;IACd,CAAC;CACF;AAXD,8BAWC"}

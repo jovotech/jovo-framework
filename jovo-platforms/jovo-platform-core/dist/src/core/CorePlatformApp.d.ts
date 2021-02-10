@@ -1,0 +1,32 @@
+import { AudioData, BaseApp, HandleRequest, Host, Jovo } from 'jovo-core';
+import { ActionBuilder } from '../ActionBuilder';
+import { Action, QuickReply } from '../Interfaces';
+import { CorePlatformSpeechBuilder } from './CorePlatformSpeechBuilder';
+import { CorePlatformUser } from './CorePlatformUser';
+export declare class CorePlatformApp extends Jovo {
+    $corePlatformApp?: CorePlatformApp;
+    $user: CorePlatformUser;
+    $actions: ActionBuilder;
+    $repromptActions: ActionBuilder;
+    constructor(app: BaseApp, host: Host, handleRequest?: HandleRequest);
+    getType(): string;
+    getPlatformType(): 'CorePlatform' | string;
+    getDeviceId(): string | undefined;
+    getLocale(): string | undefined;
+    getRawText(): string | undefined;
+    getAudioData(): AudioData | undefined;
+    getSelectedElementId(): string | undefined;
+    getTimestamp(): string | undefined;
+    hasAudioInterface(): boolean;
+    hasScreenInterface(): boolean;
+    hasVideoInterface(): boolean;
+    hasTextInput(): boolean;
+    isNewSession(): boolean;
+    speechBuilder(): CorePlatformSpeechBuilder | undefined;
+    getSpeechBuilder(): CorePlatformSpeechBuilder | undefined;
+    setActions(actions: Action[] | ActionBuilder): this;
+    addActions(actions: Action[] | ActionBuilder): this;
+    setRepromptActions(actions: Action[] | ActionBuilder): this;
+    addRepromptActions(actions: Action[] | ActionBuilder): this;
+    showQuickReplies(replies: Array<string | QuickReply>): this;
+}
