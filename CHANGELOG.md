@@ -18,7 +18,7 @@
 - [#875](https://github.com/jovotech/jovo-framework/pull/875) 🩹 Persist user.context within unit tests ([@fbublitz](https://github.com/fbublitz))
 
 ##### `jovo-analytics-googleanalytics [3.3.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
-- [#876](https://github.com/jovotech/jovo-framework/pull/876) ✨ Add Google Optimize support ([@theBenForce(https://github.com/theBenForce))
+- [#876](https://github.com/jovotech/jovo-framework/pull/876) ✨ Add Google Optimize support ([@theBenForce](https://github.com/theBenForce))
 
 ##### `jovo-plugin-inbox [3.3.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-inbox) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-inbox) | [npm](https://www.npmjs.com/package/jovo-plugin-inbox)
 - [#888](https://github.com/jovotech/jovo-framework/pull/888) ✨ Plugin to save conversation data into a database ([@aswetlow](https://github.com/aswetlow))
