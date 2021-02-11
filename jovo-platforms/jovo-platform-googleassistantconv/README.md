@@ -325,15 +325,15 @@ As mentioned, the Jovo CLI automatically creates an entry for the Jovo Webhook a
 
 ## Interfaces
 
-* [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response)
-* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output)
-* [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications)
-* [Transactions](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/transactions)
+* [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response)
+* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output)
+* [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications)
+* [Transactions](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/transactions)
 
 ## Concepts
 
 ### Scenes
 
-Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. Learn more about using scenes with the Jovo Framework [here](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/concepts/scenes).
+Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. Learn more about using scenes with the Jovo Framework [here](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes).
 
 
