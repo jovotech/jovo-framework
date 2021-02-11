@@ -1,6 +1,6 @@
 # Response
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/response
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/request-response/response
 
 ## Introduction
 
@@ -41,7 +41,7 @@ Here's an example response:
 }
 ```
 
-The main component is the output. Besides the [platform independent output](https://www.jovo.tech/docs/output), Google Conversational Actions provide multiple other types of output. You can find out more about that in [*Interfaces*](https://www.jovo.tech/marketplace/jovo-platform-googleassistant#interfaces) section of the documentation.
+The main component is the output. Besides the [platform independent output](https://www.jovo.tech/docs/output), Google Conversational Actions provide multiple other types of output. You can find out more about that in [*Interfaces*](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv#interfaces) section of the documentation.
 
 ## $response Object
 

@@ -1,6 +1,6 @@
 # Requests & Responses
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/request-response
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/request-response
 
 Learn more about the Google Action request and response lifecycle.
 
