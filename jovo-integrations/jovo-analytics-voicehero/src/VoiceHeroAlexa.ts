@@ -1,4 +1,4 @@
-import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, Log, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 import { AmazonAlexa } from 'voicehero-sdk';
 import * as voicehero from 'voicehero-sdk'; // tslint:disable-line
@@ -36,11 +36,22 @@ export class VoiceHeroAlexa implements Analytics {
     }
 
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
-      this.voicehero.logIncoming(handleRequest.host.getRequestObject());
-      this.voicehero.logOutgoing(
-        handleRequest.host.getRequestObject(),
-        handleRequest.jovo.$response!,
-      );
+      try {
+        this.voicehero.logIncoming(handleRequest.host.getRequestObject());
+      } catch(e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
+
+      try {
+        this.voicehero.logOutgoing(
+          handleRequest.host.getRequestObject(),
+          handleRequest.jovo.$response!,
+        );
+      } catch(e) {
+        Log.error('Error while logging to VoiceHero');
+        Log.error(e);
+      }
     }
   }
 }
