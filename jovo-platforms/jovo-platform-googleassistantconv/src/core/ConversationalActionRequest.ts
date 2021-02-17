@@ -74,7 +74,7 @@ export class ConversationalActionRequest implements JovoRequest {
   }
 
   setUserId(userId: string) {
-    _set(this, 'user.userId', userId);
+    _set(this, 'user.params.userId', userId);
     return this;
   }
 
