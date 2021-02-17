@@ -1,6 +1,6 @@
 import { AmazonAlexa } from 'dashbot';
 import * as dashbot from 'dashbot'; // tslint:disable-line
-import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, Log, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 
 export interface Config extends PluginConfig {
@@ -36,11 +36,22 @@ export class DashbotAlexa implements Analytics {
     }
 
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
-      this.dashbot.logIncoming(handleRequest.host.getRequestObject());
-      this.dashbot.logOutgoing(
-        handleRequest.host.getRequestObject(),
-        handleRequest.jovo.$response!,
-      );
+      try {
+        this.dashbot.logIncoming(handleRequest.host.getRequestObject());
+      } catch(e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
+
+      try {
+        this.dashbot.logOutgoing(
+          handleRequest.host.getRequestObject(),
+          handleRequest.jovo.$response!,
+        );
+      } catch(e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
     }
   }
 }
