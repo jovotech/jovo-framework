@@ -54,6 +54,7 @@ export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> 
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     this.use(new DialogflowCore());
 
@@ -114,6 +115,11 @@ export class Dialogflow extends Platform<DialogflowRequest, DialogflowResponse> 
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
+  }
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'DialogflowAgent') {
+      return Promise.resolve();
+    }
     handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 }

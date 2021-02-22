@@ -11,6 +11,7 @@ export {
   DialogflowRequestJSON,
   Context,
   OriginalDetectIntentRequest,
+  QueryResult,
 } from './core/DialogflowRequest';
 
 export { DialogflowRequestBuilder } from './core/DialogflowRequestBuilder';
