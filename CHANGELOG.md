@@ -1,7 +1,30 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.4.0<br><br>
+### Latest Framework Version: 3.5.0<br><br>
 
+## 2021-02-22
+
+##### `jovo-analytics-dashbot [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
+##### `jovo-analytics-botanalytics [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-botanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-botanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-botanalytics)
+- [#898](https://github.com/jovotech/jovo-framework/pull/898) Add error handling to analytics integrations ([@techpeace](https://github.com/techpeace)
+
+##### `jovo-platform-* [3.5.0]` All platforms in `/jovo-platforms`
+- [#826](https://github.com/jovotech/jovo-framework/pull/901) Move setResponse from response to after.response ([@aswetlow](https://github.com/aswetlow)
+
+##### `jovo-analytics-voicehero [3.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-voicehero) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-analytics-voicehero) | [npm](https://www.npmjs.com/package/jovo-analytics-voicehero)
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Deprecate Voice Hero ([@aswetlow](https://github.com/aswetlow)
+
+##### `jovo-platform-googleassistantconv [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Fix missing unit test methods in ConversationalResponse ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-plugin-inbox [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-plugin-inbox) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-plugin-inbox) | [npm](https://www.npmjs.com/package/jovo-plugin-inbox)
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Fix object copy from shallow to deep ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-platform-alexa [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Route Alexa.Presentation.APLA.RuntimeError requests to ON_ERROR ([@aswetlow](https://github.com/aswetlow))
+
+
+## 2021-02-04
 
 ##### `jovo-platform-googleassistantconv [3.4.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
 - [#892](https://github.com/jovotech/jovo-framework/pull/892) ✨ Transactions for Google Assistant Conversational Actions ([@aswetlow](https://github.com/aswetlow))
