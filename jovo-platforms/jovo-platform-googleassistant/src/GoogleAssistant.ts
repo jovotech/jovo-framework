@@ -66,6 +66,8 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
+
     this.use(
       new GoogleAssistantCore(),
       new Cards(),
@@ -171,6 +173,12 @@ export class GoogleAssistant extends Platform<GoogleActionRequest, GoogleActionR
     handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson
       ? this.responseBuilder.create(handleRequest.jovo.$rawResponseJson)
       : handleRequest.jovo.$response;
+  }
+
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'GoogleAction') {
+      return Promise.resolve();
+    }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 

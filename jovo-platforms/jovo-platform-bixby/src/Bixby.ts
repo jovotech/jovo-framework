@@ -51,6 +51,8 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
     app.middleware('platform.nlu')!.use(this.nlu.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
+
     app.middleware('fail')!.use(this.fail.bind(this));
 
     this.use(new BixbyCore(), new BixbyNLU(), new BixbyAudioPlayerPlugin());
@@ -129,6 +131,12 @@ export class Bixby extends Platform<BixbyRequest, BixbyResponse> {
     handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson
       ? this.responseBuilder.create(handleRequest.jovo.$rawResponseJson)
       : handleRequest.jovo.$response;
+  }
+
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'BixbyCapsule') {
+      return Promise.resolve();
+    }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 
