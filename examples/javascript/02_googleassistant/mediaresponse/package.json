@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-mediaresponse",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-framework": "^3.4.1",
-    "jovo-platform-googleassistant": "^3.4.1",
+    "jovo-platform-googleassistant": "^3.5.0",
     "jovo-plugin-debugger": "^3.4.1"
   }
 }

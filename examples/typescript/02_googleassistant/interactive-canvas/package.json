@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-googleassistant-interactive-canvas",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -21,7 +21,7 @@
     "cors": "^2.8.5",
     "jovo-db-filedb": "^3.4.1",
     "jovo-framework": "^3.4.1",
-    "jovo-platform-googleassistant": "^3.4.1",
+    "jovo-platform-googleassistant": "^3.5.0",
     "jovo-plugin-debugger": "^3.4.1"
   },
   "devDependencies": {

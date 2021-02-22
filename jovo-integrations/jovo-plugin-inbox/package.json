@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-inbox",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
