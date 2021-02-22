@@ -53,7 +53,7 @@ export class DashbotUniversal implements Analytics {
       try {
         const requestLog = this.createRequestLog(handleRequest);
         this.dashbot.logIncoming(requestLog);
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }
@@ -61,7 +61,7 @@ export class DashbotUniversal implements Analytics {
       try {
         const responseLog = this.createResponseLog(handleRequest);
         this.dashbot.logOutgoing(responseLog);
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }

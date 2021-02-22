@@ -37,7 +37,7 @@ export class BotanalyticsAlexa implements Analytics {
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
       try {
         this.botanalytics.log(handleRequest.jovo.$request!.toJSON(), handleRequest.jovo.$response!);
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Botanalytics');
         Log.error(e);
       }

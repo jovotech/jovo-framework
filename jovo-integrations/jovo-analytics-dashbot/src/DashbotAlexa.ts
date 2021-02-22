@@ -38,7 +38,7 @@ export class DashbotAlexa implements Analytics {
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
       try {
         this.dashbot.logIncoming(handleRequest.host.getRequestObject());
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }
@@ -48,7 +48,7 @@ export class DashbotAlexa implements Analytics {
           handleRequest.host.getRequestObject(),
           handleRequest.jovo.$response!,
         );
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }

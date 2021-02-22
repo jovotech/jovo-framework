@@ -40,7 +40,7 @@ export class DashbotGoogleAssistant implements Analytics {
     if (handleRequest.jovo.constructor.name === 'GoogleAction') {
       try {
         this.dashbot.logIncoming(handleRequest.host.getRequestObject());
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }
@@ -62,7 +62,7 @@ export class DashbotGoogleAssistant implements Analytics {
 
       try {
         this.dashbot.logOutgoing(handleRequest.host.getRequestObject(), responseObj);
-      } catch(e) {
+      } catch (e) {
         Log.error('Error while logging to Dashbot');
         Log.error(e);
       }
