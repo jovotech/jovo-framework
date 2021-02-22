@@ -1,4 +1,4 @@
-import { Analytics, BaseApp, HandleRequest, Inputs, PluginConfig } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, Inputs, Log, PluginConfig } from 'jovo-core';
 import type {
   Action,
   AudioAction,
@@ -50,11 +50,21 @@ export class DashbotUniversal implements Analytics {
     }
 
     if (handleRequest.jovo.getPlatformType() === 'CorePlatform') {
-      const requestLog = this.createRequestLog(handleRequest);
-      this.dashbot.logIncoming(requestLog);
+      try {
+        const requestLog = this.createRequestLog(handleRequest);
+        this.dashbot.logIncoming(requestLog);
+      } catch(e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
 
-      const responseLog = this.createResponseLog(handleRequest);
-      this.dashbot.logOutgoing(responseLog);
+      try {
+        const responseLog = this.createResponseLog(handleRequest);
+        this.dashbot.logOutgoing(responseLog);
+      } catch(e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { Analytics, BaseApp, HandleRequest, PluginConfig } from 'jovo-core';
+import { Analytics, BaseApp, HandleRequest, Log, PluginConfig } from 'jovo-core';
 import _merge = require('lodash.merge');
 
 import { AmazonAlexa } from 'botanalytics';
@@ -35,7 +35,12 @@ export class BotanalyticsAlexa implements Analytics {
     }
 
     if (handleRequest.jovo.constructor.name === 'AlexaSkill') {
-      this.botanalytics.log(handleRequest.jovo.$request!.toJSON(), handleRequest.jovo.$response!);
+      try {
+        this.botanalytics.log(handleRequest.jovo.$request!.toJSON(), handleRequest.jovo.$response!);
+      } catch(e) {
+        Log.error('Error while logging to Botanalytics');
+        Log.error(e);
+      }
     }
   }
 }
