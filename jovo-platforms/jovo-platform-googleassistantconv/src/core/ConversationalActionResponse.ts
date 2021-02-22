@@ -36,7 +36,7 @@ export class ConversationalActionResponse implements JovoResponse {
   logging?: any;
 
   getSessionData(path?: string) {
-    return undefined;
+    return this.session?.params;
   }
   // tslint:disable-next-line
   hasSessionData(name: string, value?: any): boolean {
