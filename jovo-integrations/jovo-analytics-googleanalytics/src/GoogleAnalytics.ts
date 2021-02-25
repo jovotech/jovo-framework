@@ -339,7 +339,7 @@ export class GoogleAnalytics implements Analytics {
     // Initialise visitor object.
     this.initVisitor(jovo);
 
-    const experiments = {} as Record<string, number | string>;
+    const experiments: Record<string, number | string> = {};
 
     // Initialise googleAnalytics object.
     jovo.$googleAnalytics = {
@@ -393,7 +393,9 @@ export class GoogleAnalytics implements Analytics {
       setOptimizeExperiment(experimentId: string, variation: string | number): void {
         experiments[experimentId] = variation;
 
-        this.$parameters[`exp`] = Object.entries(experiments).map(([id, value]) => `${id}.${value}`).join('!');
+        this.$parameters[`exp`] = Object.entries(experiments)
+          .map(([id, value]) => `${id}.${value}`)
+          .join('!');
       },
     };
   }
