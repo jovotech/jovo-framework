@@ -343,6 +343,7 @@ export class GoogleAnalytics implements Analytics {
     jovo.$googleAnalytics = {
       $data: {},
       $parameters: {},
+      $experiments: {} as Record<string, string | number>,
       sendEvent: (params: Event) => {
         this.visitor!.event(params, (err: any) => {
           if (err) {
@@ -389,7 +390,9 @@ export class GoogleAnalytics implements Analytics {
         this.$parameters[parameter] = value;
       },
       setOptimizeExperiment(experimentId: string, variation: string | number): void {
-        this.$parameters[`exp`] = `${experimentId}.${variation}`;
+        this.$experiments[experimentId] = variation;
+
+        this.$parameters[`exp`] = Object.entries(this.$experiments).map(([id, variation]) => `${id}.${variation}`).join('!');
       },
     };
   }
