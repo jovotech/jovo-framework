@@ -4,12 +4,12 @@ import { AlexaRequest } from 'jovo-platform-alexa';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 export class GoogleAnalyticsAlexa extends GoogleAnalytics {
-  public install(app: BaseApp) {
+  install(app: BaseApp) {
     app.middleware('after.handler')?.use(this.setErrorEndReason.bind(this));
     super.install(app);
   }
 
-  public track(handleRequest: HandleRequest) {
+  track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -24,27 +24,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
 
     super.track(handleRequest);
-  }
-
-  protected initVisitor(jovo: Jovo) {
-    super.initVisitor(jovo);
-
-    const request = jovo.$request as AlexaRequest;
-    const deviceInfo = request.getDeviceName();
-    this.visitor!.set('screenResolution', request.getScreenResolution!());
-
-    // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
-    this.visitor!.set(
-      'userAgentOverride',
-      `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`,
-    );
-
-    const referrer = _get(request, 'request.metadata.referrer');
-    if (referrer) {
-      this.visitor!.set('campaignMedium', 'referral');
-      this.visitor!.set('campaignSource', referrer);
-      this.visitor!.set('documentReferrer', referrer);
-    }
   }
 
   setGoogleAnalyticsObject(handleRequest: HandleRequest) {
@@ -85,6 +64,27 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
 
     if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
       this.sendUserEvent(jovo, 'FlowError', 'Exceeded_Max_Reprompts');
+    }
+  }
+
+  protected initVisitor(jovo: Jovo) {
+    super.initVisitor(jovo);
+
+    const request = jovo.$request as AlexaRequest;
+    const deviceInfo = request.getDeviceName();
+    this.visitor!.set('screenResolution', request.getScreenResolution!());
+
+    // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
+    this.visitor!.set(
+      'userAgentOverride',
+      `${deviceInfo} (Linux;Android 5.1.1) ExoPlayerLib/1.5.9`,
+    );
+
+    const referrer = _get(request, 'request.metadata.referrer');
+    if (referrer) {
+      this.visitor!.set('campaignMedium', 'referral');
+      this.visitor!.set('campaignSource', referrer);
+      this.visitor!.set('documentReferrer', referrer);
     }
   }
 }

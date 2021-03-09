@@ -64,6 +64,6 @@ export interface Config extends PluginConfig {
   validateCustomDefinitions?: boolean;
   sessionTimeoutInMinutes: number;
   skipUnverifiedUser: boolean;
-  customMetricMap: [systemMetricNames, number][],
-  customDimensionMap: [systemDimensionNames, number][],
+  customMetricMap: Array<[systemMetricNames, number]>,
+  customDimensionMap: Array<[systemDimensionNames, number]>,
 }
