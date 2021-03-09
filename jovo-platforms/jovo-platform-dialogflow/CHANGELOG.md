@@ -2,6 +2,11 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-02-22 [3.5]
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Move setResponse from response to after.response middleware ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ### 2020-11-10 [3.2.1]
 - [#857](https://github.com/jovotech/jovo-framework/pull/857) Fixes missing $rawResponseJson handling ([@aswetlow](https://github.com/aswetlow))
 

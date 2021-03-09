@@ -10,7 +10,7 @@ interface Intent {
   isFallback: boolean;
 }
 
-interface QueryResult {
+export interface QueryResult {
   queryText: string;
   parameters: any; // tslint:disable-line
   allRequiredParamsPresent: boolean;

@@ -97,7 +97,7 @@ Modify your Express Server Setup like this:
 ```javascript
 // @language=javascript
 
-// src./index.js
+// src/index.js
 
 // Use this
 Webhook.post(['/webhook','/webhook_alexa'], async (req, res) => {
@@ -107,7 +107,7 @@ Webhook.post('/webhook', async (req, res) => {
 
 // @language=typescript
 
-// src./index.js
+// src/index.js
 
 // Use this
 Webhook.post(['/webhook','/webhook_alexa'], async (req: Express.Request, res: Express.Response) => {

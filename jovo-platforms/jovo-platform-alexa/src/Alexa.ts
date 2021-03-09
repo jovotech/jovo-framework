@@ -73,6 +73,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     app.middleware('fail')!.use((handleRequest: HandleRequest) => {
       if (!handleRequest.jovo) {
@@ -185,6 +186,12 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse> {
     handleRequest.jovo.$response = handleRequest.jovo.$rawResponseJson
       ? this.responseBuilder.create(handleRequest.jovo.$rawResponseJson)
       : handleRequest.jovo.$response;
+  }
+
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== 'AlexaSkill') {
+      return Promise.resolve();
+    }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 

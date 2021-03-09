@@ -38,7 +38,12 @@ export class DashbotGoogleAssistant implements Analytics {
     }
 
     if (handleRequest.jovo.constructor.name === 'GoogleAction') {
-      this.dashbot.logIncoming(handleRequest.host.getRequestObject());
+      try {
+        this.dashbot.logIncoming(handleRequest.host.getRequestObject());
+      } catch (e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
 
       const responseObj = { ...handleRequest.jovo.$response };
 
@@ -55,7 +60,12 @@ export class DashbotGoogleAssistant implements Analytics {
         Log.error(e);
       }
 
-      this.dashbot.logOutgoing(handleRequest.host.getRequestObject(), responseObj);
+      try {
+        this.dashbot.logOutgoing(handleRequest.host.getRequestObject(), responseObj);
+      } catch (e) {
+        Log.error('Error while logging to Dashbot');
+        Log.error(e);
+      }
     }
   }
 }

@@ -81,6 +81,7 @@ export class CorePlatform<
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     app.use(new PlatformStorage());
 
@@ -155,10 +156,13 @@ export class CorePlatform<
       return Promise.resolve();
     }
     await this.middleware('$response')!.run(handleRequest.jovo);
-
+  }
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
+      return Promise.resolve();
+    }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
-
   makeTestSuite(): TestSuite<RequestBuilder<REQ>, ResponseBuilder<RES>> {
     return new TestSuite(this.getRequestBuilder(), this.getResponseBuilder());
   }
