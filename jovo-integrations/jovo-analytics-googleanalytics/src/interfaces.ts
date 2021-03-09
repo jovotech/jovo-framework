@@ -61,8 +61,9 @@ export interface Config extends PluginConfig {
   trackDirectives?: boolean;
   enableAutomaticEvents?: boolean;
   trackEndReasons?: boolean;
+  validateCustomDefinitions?: boolean;
   sessionTimeoutInMinutes: number;
   skipUnverifiedUser: boolean;
-  systemMetrics: [systemMetricNames, number][],
-  systemDimensions: [systemDimensionNames, number][],
+  customMetricMap: [systemMetricNames, number][],
+  customDimensionMap: [systemDimensionNames, number][],
 }
