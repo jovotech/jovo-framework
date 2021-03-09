@@ -16,10 +16,10 @@
 	"include": [
 		"**/*.d.ts",
 		"src/**/*",
-    "test/**/*",
-    "dist/**/*",
+		"test/**/*"
 	],
 	"exclude": [
+		"dist/**/*",
 		"node_modules/**/*",
 		"**/*.spec.ts"
 	]
