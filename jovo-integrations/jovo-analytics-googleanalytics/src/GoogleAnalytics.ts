@@ -9,8 +9,8 @@ import { Helper } from './helper';
 
 export class GoogleAnalytics implements Analytics {
 
-  $data = {};
-  $parameters : Record<string, string | number> = {};
+  private $data = {};
+  private $parameters : Record<string, string | number> = {};
 
   /**
    * Need to save start state -\> will change during handling
@@ -40,7 +40,7 @@ export class GoogleAnalytics implements Analytics {
     return endReason;
   }
 
-  config: Config = {
+  public config: Config = {
     trackingId: '',
     enableAutomaticEvents: true,
     trackEndReasons: false,
@@ -59,11 +59,11 @@ export class GoogleAnalytics implements Analytics {
        ['UUID', 1]
     ]
   };
-  visitor: ua.Visitor | undefined;
+  public visitor: ua.Visitor | undefined;
 
   // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
-  customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
-  customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
+  protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
+  protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
 
 
   protected checkForMissingCustomEntriesInConfig(customTypeToCheck: 'dimension' | 'metric', neededCustomEntries: string[]) {
@@ -108,22 +108,27 @@ export class GoogleAnalytics implements Analytics {
   }
 
 
-  /**
-   * 
-   */
-  validateSkillConfigsCustomMetrics(neededMetricNames: string[]) {
+/**
+ * Validates if all members in a list of names is defined in the skills/actions custom metric map (in config file).
+ * Can be used after the setup middleware -> config is not loaded before
+ * @param neededMetricNames list of name to check against config
+ */
+  public validateSkillConfigsCustomMetrics(neededMetricNames: string[]) {
     this.checkForMissingCustomEntriesInConfig('metric', neededMetricNames);
     this.checkAllCustomEntrieValuesAreUnique('metric');
   }
+
   /**
-   * 
+   * Validates if all members in a list of names is defined in the skills/actions custom dimension map (in config file).
+   * Can be used after the setup middleware -> config is not loaded before
+   * @param neededDimensionNames list of name to check against config
    */
-  validateSkillConfigsCustomDimensions(neededDimensionNames: string[]) {
+  public validateSkillConfigsCustomDimensions(neededDimensionNames: string[]) {
     this.checkForMissingCustomEntriesInConfig('dimension', neededDimensionNames);
     this.checkAllCustomEntrieValuesAreUnique('dimension');
   }
 
-  install(app: BaseApp) {
+  public install(app: BaseApp) {
     if (!this.config.trackingId) {
       throw new JovoError(
         'trackingId has to be set.',
@@ -155,7 +160,7 @@ export class GoogleAnalytics implements Analytics {
    * @param name - metricName
    * @param targetValue - target value in googleAnalytics
    */
-  setCustomMetricByName(name: systemMetricNames, targetValue: number): void {
+  public setCustomMetricByName(name: systemMetricNames, targetValue: number): void {
     // Set user id as a custom dimension to track hits on the same scope
     const metricNumber: number | undefined = this.customMetricsIndicesMap.get(name); //uuid);
     if (!metricNumber) {
@@ -177,7 +182,7 @@ export class GoogleAnalytics implements Analytics {
   * @param name - dimensionName
   * @param targetValue - target value in googleAnalytics
   */
-  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number): void {
+  public setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number): void {
     // Set user id as a custom dimension to track hits on the same scope
     const dimensionNumber = this.customDimensionsIndicesMap.get(name); //uuid);
     if (!dimensionNumber) {
@@ -200,7 +205,7 @@ export class GoogleAnalytics implements Analytics {
    * @param jovo - unser liebes Jovo objekt
    * @param endReason - grund für session ende
    */
-  setEndReason(jovo: Jovo, endReason: validEndReasons): void {
+  public setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
     const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
     if (gaMetricNumber) {
@@ -217,7 +222,7 @@ export class GoogleAnalytics implements Analytics {
    * Auto send intent data after each response. Also setting sessions and flowErrors
    * @param handleRequest
    */
-  track(handleRequest: HandleRequest) {
+  public track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -272,7 +277,7 @@ export class GoogleAnalytics implements Analytics {
    * Initiates GoogleAnalytics visitor object with fixed parameters.
    * @param {object} jovo: Jovo object for data like language or platform
    */
-  initVisitor(jovo: Jovo) {
+  protected initVisitor(jovo: Jovo) {
     const uuid = this.getUserId(jovo);
 
     // Initialize visitor with account id and custom client id
@@ -287,7 +292,7 @@ export class GoogleAnalytics implements Analytics {
    * Tracks uncaught user exceptions.
    * @param {object} handleRequest: HandleRequest to act upon
    */
-  sendError(handleRequest: HandleRequest) {
+  protected sendError(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       // don't send anything
@@ -309,7 +314,7 @@ export class GoogleAnalytics implements Analytics {
    * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
    * @param {object} jovo: Jovo object
    */
-  sendUnhandledEvents(jovo: Jovo) {
+  protected sendUnhandledEvents(jovo: Jovo) {
     const intent = jovo.$request!.getIntentName();
     const { path } = jovo.getRoute();
 
@@ -328,7 +333,7 @@ export class GoogleAnalytics implements Analytics {
    * Extract input from intent + send to googleAnalytics via events
    * @param jovo Jovo object
    */
-  sendIntentInputEvents(jovo: Jovo) {
+  protected sendIntentInputEvents(jovo: Jovo) {
     if (jovo.$inputs) {
       for (const [key, value] of Object.entries(jovo.$inputs)) {
         if (!value.key) {
@@ -350,7 +355,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {object} pageParameters: Intent data to track
    */
-  getPageParameters(jovo: Jovo) {
+  protected getPageParameters(jovo: Jovo) {
     const intentType = jovo.$type.type ?? 'fallBackType';
     const intentName = jovo.$request?.getIntentName();
     const customParameters = this.$parameters;
@@ -369,7 +374,7 @@ export class GoogleAnalytics implements Analytics {
    * @param jovo - unser liebes Jovo objekt
    * @override
    */
-  getPageName(jovo: Jovo): string {
+  protected getPageName(jovo: Jovo): string {
     const endReason =
       this.getSessionTag(jovo) === 'end' && GoogleAnalytics.getEndReason(jovo)
         ? GoogleAnalytics.getEndReason(jovo)
@@ -385,7 +390,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {string} uuid: Hashed user id
    */
-  getUserId(jovo: Jovo): string {
+  protected getUserId(jovo: Jovo): string {
     const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
     return idHash;
   }
@@ -395,7 +400,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {string | void} sessionTag: Corresponding session tag (start|end|undefined)
    */
-  getSessionTag(jovo: Jovo): string | void {
+  protected getSessionTag(jovo: Jovo): string | void {
     if (
       jovo.getMappedIntentName() === 'END' ||
       jovo.$type.type === 'END' ||
@@ -415,7 +420,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {string} eventName maps to category -> eventGroup
    * @param {string} eventElement maps to action -> instance of eventGroup
    */
-  sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
+  protected sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
     const params: Event = {
       eventCategory,
       eventAction,
@@ -426,17 +431,17 @@ export class GoogleAnalytics implements Analytics {
     this.visitor!.event(params);
   }
 
-  setCustomMetric(index: number, value: string | number) {
+  public setCustomMetric(index: number, value: string | number) {
     this.visitor?.set(`cm${index}`, value);
   }
-  setCustomDimension(index: number, value: string | number): void {
+  public setCustomDimension(index: number, value: string | number): void {
     this.visitor?.set(`cd${index}`, value);
   }
 
-  setParameter(parameter: string, value: string | number): void {
+  public setParameter(parameter: string, value: string | number): void {
     this.$parameters[parameter] = value;
   }
-  setOptimizeExperiment(experimentId: string, variation: string | number): void {
+  public setOptimizeExperiment(experimentId: string, variation: string | number): void {
     this.$parameters[`exp`] = `${experimentId}.${variation}`;
   }
 
@@ -444,7 +449,7 @@ export class GoogleAnalytics implements Analytics {
    * Sets the analytics variable to the instance of this object for making it accessable in skill code
    * @param handleRequest
    */
-  setGoogleAnalyticsObject(handleRequest: HandleRequest) {
+  protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo = handleRequest.jovo;
     if (!jovo) {
       throw new JovoError(

@@ -4,12 +4,12 @@ import { AlexaRequest } from 'jovo-platform-alexa';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 export class GoogleAnalyticsAlexa extends GoogleAnalytics {
-  install(app: BaseApp) {
+  public install(app: BaseApp) {
     app.middleware('after.handler')?.use(this.setErrorEndReason.bind(this));
     super.install(app);
   }
 
-  track(handleRequest: HandleRequest) {
+  public track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -26,7 +26,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     super.track(handleRequest);
   }
 
-  initVisitor(jovo: Jovo) {
+  protected initVisitor(jovo: Jovo) {
     super.initVisitor(jovo);
 
     const request = jovo.$request as AlexaRequest;
