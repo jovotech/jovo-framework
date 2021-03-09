@@ -179,10 +179,7 @@ export class JovoInboxPlugin implements Plugin {
    */
   // tslint:disable-next-line:no-any
   modifyObject(obj: any, maskArray?: string[], skipArray?: string[]) {
-    const copy = {
-      ...{},
-      ...obj,
-    };
+    const copy = JSON.parse(JSON.stringify(obj));
 
     if (maskArray && maskArray.length > 0) {
       maskArray.forEach((maskPath: string) => {

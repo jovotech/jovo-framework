@@ -103,6 +103,7 @@ export type InputMechanism = 'DIRECTION';
 
 export interface Device {
   deviceId: string;
+  supportedInterfaces: Record<string, object>;
 }
 
 export interface User {

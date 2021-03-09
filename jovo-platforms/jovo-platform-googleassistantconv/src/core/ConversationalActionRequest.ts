@@ -65,7 +65,7 @@ export class ConversationalActionRequest implements JovoRequest {
     if (!this.session?.params) {
       this.session!.params = {};
     }
-    // this.session?.params = sessionData as Params;
+    this.session!.params = sessionData as Params;
     return this;
   }
   // tslint:disable-next-line
@@ -74,7 +74,7 @@ export class ConversationalActionRequest implements JovoRequest {
   }
 
   setUserId(userId: string) {
-    _set(this, 'user.userId', userId);
+    _set(this, 'user.params.userId', userId);
     return this;
   }
 

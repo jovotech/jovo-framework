@@ -5,8 +5,14 @@ import { DialogflowResponse } from './core/DialogflowResponse';
 import { DialogflowConfig } from './Dialogflow';
 
 export { Dialogflow, DialogflowConfig } from './Dialogflow';
-export { DialogflowResponse, DialogflowResponseJSON } from './core/DialogflowResponse';
-export { DialogflowRequest, DialogflowRequestJSON } from './core/DialogflowRequest';
+export { DialogflowResponse, DialogflowResponseJSON, Payload } from './core/DialogflowResponse';
+export {
+  DialogflowRequest,
+  DialogflowRequestJSON,
+  Context,
+  OriginalDetectIntentRequest,
+  QueryResult,
+} from './core/DialogflowRequest';
 
 export { DialogflowRequestBuilder } from './core/DialogflowRequestBuilder';
 export { DialogflowTestSuite } from './core/Interfaces';

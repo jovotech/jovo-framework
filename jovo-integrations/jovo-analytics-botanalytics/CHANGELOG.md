@@ -2,6 +2,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-02-22 [3.5]
+- [#898](https://github.com/jovotech/jovo-framework/pull/898) Add error handling to analytics integrations ([@techpeace](https://github.com/techpeace)
+
+
 ## 3.0.11 (2020-04-06)
 
 * Updated Typescript to 3.8.x

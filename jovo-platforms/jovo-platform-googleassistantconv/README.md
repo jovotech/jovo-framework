@@ -8,8 +8,17 @@ Learn more about Google Assistant specific features that can be used with the Jo
 	* [Installation](#installation)
 	* [Quickstart](#quickstart)
 * [Configuration](#configuration)
+  * [Overrides](#overrides)
+    * [Settings](#settings)
+      * [Default Locale](#default-locale)
+      * [Localized Settings](#localized-settings)
+    * [Webhooks](#webhooks)
+    * [Actions](#actions)
 * [$googleAction Object](#googleaction-object)
 * [Jovo Language Model](#jovo-language-model)
+* [Interfaces](#interfaces)
+* [Concepts](#concepts)
+  * [Scenes](#scenes)
 
 ## Introduction
 
@@ -296,10 +305,6 @@ You can add a `googleAssistant` object at the root of the Jovo Language Model to
 }
 ```
 
-### Scenes
-
-> Learn more about using scenes with the Jovo Framework [here]().
-
 ### Global Intents
 
 As mentioned, the Jovo CLI automatically creates an entry for the Jovo Webhook and registers it for every intent. However, if you choose to use customized webhooks, you'll need to overwrite the global intents as well.
@@ -317,3 +322,18 @@ As mentioned, the Jovo CLI automatically creates an entry for the Jovo Webhook a
   }
 } 
 ```
+
+## Interfaces
+
+* [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response)
+* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output)
+* [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications)
+* [Transactions](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/transactions)
+
+## Concepts
+
+### Scenes
+
+Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. Learn more about using scenes with the Jovo Framework [here](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes).
+
+

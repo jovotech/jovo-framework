@@ -87,6 +87,7 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     this.use(new GoogleBusinessCore(), new Cards());
 
@@ -193,7 +194,12 @@ export class GoogleBusiness extends Platform<GoogleBusinessRequest, GoogleBusine
     ) {
       await GoogleBusinessAPI.sendResponse(options);
     }
+  }
 
+  async afterResponse(handleRequest: HandleRequest) {
+    if (handleRequest.jovo?.constructor.name !== GoogleBusiness.appType) {
+      return Promise.resolve();
+    }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 

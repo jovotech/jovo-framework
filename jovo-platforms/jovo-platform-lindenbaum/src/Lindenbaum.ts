@@ -69,6 +69,7 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
     app.middleware('tts')!.use(this.tts.bind(this));
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     this.use(new LindenbaumCore());
 
@@ -146,6 +147,12 @@ export class Lindenbaum extends Platform<LindenbaumRequest, LindenbaumResponse> 
 
         await HttpService.post(baseUrl + endpoint, res[endpoint]);
       });
+    }
+  }
+
+  async afterResponse(handleRequest: HandleRequest) {
+    if (handleRequest.jovo?.constructor.name !== Lindenbaum.appType) {
+      return Promise.resolve();
     }
     await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }

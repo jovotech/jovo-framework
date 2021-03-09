@@ -67,6 +67,18 @@ export class AlexaCore implements Plugin {
         type: EnumRequestType.ON_ERROR,
       };
     }
+
+    if (_get(alexaRequest, 'request.type') === 'Alexa.Presentation.APL.RuntimeError') {
+      alexaSkill.$type = {
+        type: EnumRequestType.ON_ERROR,
+      };
+    }
+    
+    if (_get(alexaRequest, 'request.type') === 'Alexa.Presentation.APLA.RuntimeError') {
+      alexaSkill.$type = {
+        type: EnumRequestType.ON_ERROR,
+      };
+    }
   }
 
   async session(alexaSkill: AlexaSkill) {

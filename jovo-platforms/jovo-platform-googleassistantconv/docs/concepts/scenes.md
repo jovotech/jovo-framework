@@ -1,6 +1,6 @@
 # Scenes
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/concepts/scenes
+> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes
 
 Learn more about enhancing your Conversational Action with scenes.
 
@@ -17,9 +17,9 @@ Learn more about enhancing your Conversational Action with scenes.
 
 ## Introduction
 
-Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. You can use scenes to instruct your Conversational Action to handle certain conversational flows automatically, such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/user-data#account-linking) or configuring [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications). 
+Scenes are building blocks in your Conversational Action, that capture your conversational tasks into individual states. You can use scenes to instruct your Conversational Action to handle certain conversational flows automatically, such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/user-data#account-linking) or configuring [Push Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications). 
 
-Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/user-data#account-linking), but for more specialized tasks, you need to define your own custom scenes.
+Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [Account Linking](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/user-data#account-linking), but for more specialized tasks, you need to define your own custom scenes.
 
 ## Configuration
 
