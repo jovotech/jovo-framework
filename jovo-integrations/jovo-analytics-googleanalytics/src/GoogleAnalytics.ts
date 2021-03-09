@@ -8,6 +8,10 @@ import { Helper } from './helper';
 
 
 export class GoogleAnalytics implements Analytics {
+
+  $data = {};
+  $parameters : Record<string, string | number> = {};
+
   /**
    * Need to save start state -\> will change during handling
    * Need to save lastUsed for calculation timeouts (sessionEnded bug display devices)
@@ -42,37 +46,38 @@ export class GoogleAnalytics implements Analytics {
     trackEndReasons: false,
     sessionTimeoutInMinutes: 5,
     skipUnverifiedUser: true,
-    systemMetrics: [
-   /*    ['Stop', 1],
-      ['ERROR', 2],
-      ['EXCEEDED_MAX_REPROMPTS', 3],
-      ['PlayTimeLimitReached', 4],
-      ['USER_INITIATED', 5],
-      ['undefined', 6], */
+    validateCustomDefinitions: false,
+    customMetricMap: [
+         ['Stop', 1],
+         ['ERROR', 2],
+         ['EXCEEDED_MAX_REPROMPTS', 3],
+         // ['PlayTimeLimitReached', 4],
+         ['USER_INITIATED', 5],
+         ['undefined', 6],
     ],
-    systemDimensions: [
-     /*  ['uuid', 1] */
+    customDimensionMap: [
+       ['UUID', 1]
     ]
   };
   visitor: ua.Visitor | undefined;
 
   // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
-  systemMetricsIndices : Map<systemMetricNames,number> = new Map<systemMetricNames, number>();
-  systemDimensionsIndices: Map<systemDimensionNames, number> =new Map<systemDimensionNames, number>();
+  customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
+  customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
 
 
   protected checkForMissingCustomEntriesInConfig(customTypeToCheck: 'dimension' | 'metric', neededCustomEntries: string[]) {
     const entrieKeysInInstance = customTypeToCheck === 'metric'
-     ? [...this.systemMetricsIndices.keys()] as string[]
-     : [...this.systemDimensionsIndices.keys()] as string[];
+      ? [...this.customMetricsIndicesMap.keys()] as string[]
+      : [...this.customDimensionsIndicesMap.keys()] as string[];
     console.log(`keys zu prüfen: ${neededCustomEntries}`);
     console.log(`keys in instanz: ${entrieKeysInInstance}`);
-    
+
 
 
     const missingEntriesInConfig = neededCustomEntries.filter((entrieToCheck) => !entrieKeysInInstance.includes(entrieToCheck));
 
-    if(missingEntriesInConfig?.length > 0) { // TODO: add dimension check
+    if (missingEntriesInConfig?.length > 0) { // TODO: add dimension check
       throw new JovoError(
         `Missing config values for custom ${customTypeToCheck} set by system`,
         ErrorCode.ERR_PLUGIN,
@@ -86,10 +91,10 @@ export class GoogleAnalytics implements Analytics {
 
   protected checkAllCustomEntrieValuesAreUnique(customTypeToCheck: 'dimension' | 'metric') {
     const entrieValuesInInstance = customTypeToCheck === 'metric'
-    ? [...this.systemMetricsIndices.values()] as number[]
-    : [...this.systemDimensionsIndices.values()] as number[];
+      ? [...this.customMetricsIndicesMap.values()] as number[]
+      : [...this.customDimensionsIndicesMap.values()] as number[];
     const duplicates = entrieValuesInInstance.filter((item, index) => entrieValuesInInstance.indexOf(item) !== index);
-    if(duplicates?.length > 0) { // TODO: add dimension check
+    if (duplicates?.length > 0) { // TODO: add dimension check
       throw new JovoError(
         `Some custom ${customTypeToCheck} in your config have overlapping values`,
         ErrorCode.ERR_PLUGIN,
@@ -107,14 +112,14 @@ export class GoogleAnalytics implements Analytics {
    * 
    */
   validateSkillConfigsCustomMetrics(neededMetricNames: string[]) {
-    this.checkForMissingCustomEntriesInConfig('metric',neededMetricNames);
+    this.checkForMissingCustomEntriesInConfig('metric', neededMetricNames);
     this.checkAllCustomEntrieValuesAreUnique('metric');
   }
   /**
    * 
    */
   validateSkillConfigsCustomDimensions(neededDimensionNames: string[]) {
-    this.checkForMissingCustomEntriesInConfig('dimension',neededDimensionNames);
+    this.checkForMissingCustomEntriesInConfig('dimension', neededDimensionNames);
     this.checkAllCustomEntrieValuesAreUnique('dimension');
   }
 
@@ -130,12 +135,13 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-    this.systemMetricsIndices = new Map<systemMetricNames, number>(this.config.systemMetrics);
-    this.systemDimensionsIndices = new Map<systemDimensionNames, number>(this.config.systemDimensions);
+    this.customMetricsIndicesMap = new Map<systemMetricNames, number>(this.config.customMetricMap);
+    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(this.config.customDimensionMap);
 
-    this.validateSkillConfigsCustomMetrics(Object.keys(SystemMetricNamesEnum));
-    this.validateSkillConfigsCustomDimensions(Object.keys(SystemDimensionNameEnum));
-    
+    if (this.config.validateCustomDefinitions) {
+      this.validateSkillConfigsCustomMetrics(Object.keys(SystemMetricNamesEnum));
+      this.validateSkillConfigsCustomDimensions(Object.keys(SystemDimensionNameEnum));
+    }
 
     app.middleware('before.handler')!.use(GoogleAnalytics.saveStartStateAndLastUsed.bind(this));
     app.middleware('after.platform.init')!.use(this.setGoogleAnalyticsObject.bind(this));
@@ -149,10 +155,10 @@ export class GoogleAnalytics implements Analytics {
    * @param name - metricName
    * @param targetValue - target value in googleAnalytics
    */
-  setSystemMetric(name: systemMetricNames, targetValue: number): void {
+  setCustomMetricByName(name: systemMetricNames, targetValue: number): void {
     // Set user id as a custom dimension to track hits on the same scope
-    const metricNumber: number | undefined = this.systemMetricsIndices.get(name); //uuid);
-    if(!metricNumber) {
+    const metricNumber: number | undefined = this.customMetricsIndicesMap.get(name); //uuid);
+    if (!metricNumber) {
       throw new JovoError(
         `Trying to set custom system metric ${name} which is not set.`,
         ErrorCode.ERR_PLUGIN,
@@ -165,16 +171,16 @@ export class GoogleAnalytics implements Analytics {
     this.visitor?.set(`cm${metricNumber}`, targetValue);
   }
 
-   /**
-   * Set custom dimension for next pageview
-   * Throws error if dimensionName is not mapped to an index in your config 
-   * @param name - dimensionName
-   * @param targetValue - target value in googleAnalytics
-   */
-  setSystemDimension(name: systemDimensionNames, targetValue: string | number):void {
+  /**
+  * Set custom dimension for next pageview
+  * Throws error if dimensionName is not mapped to an index in your config 
+  * @param name - dimensionName
+  * @param targetValue - target value in googleAnalytics
+  */
+  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number): void {
     // Set user id as a custom dimension to track hits on the same scope
-    const dimensionNumber =this.systemDimensionsIndices.get(name); //uuid);
-    if(!dimensionNumber) {
+    const dimensionNumber = this.customDimensionsIndicesMap.get(name); //uuid);
+    if (!dimensionNumber) {
       throw new JovoError(
         `Trying to set custom system dimension ${name} which is not set.`,
         ErrorCode.ERR_PLUGIN,
@@ -196,13 +202,13 @@ export class GoogleAnalytics implements Analytics {
    */
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
-    const gaMetricNumber = this.systemMetricsIndices.get(endReason);
+    const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
     if (gaMetricNumber) {
-      jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
+      this.setCustomMetric(gaMetricNumber, '1');
     } else {
-      const undefinedMetricNumber = this.systemMetricsIndices.get('undefined');
+      const undefinedMetricNumber = this.customMetricsIndicesMap.get('undefined');
       if (undefinedMetricNumber) {
-        jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
+        this.setCustomMetric(undefinedMetricNumber, '1');
       }
     }
   }
@@ -240,7 +246,7 @@ export class GoogleAnalytics implements Analytics {
     this.visitor!.set('sessionControl', sessionTag);
 
     // Track custom set data as custom metrics or dimensions.
-    const customData = jovo.$googleAnalytics.$data;
+    const customData = this.$data;
     for (const [key, value] of Object.entries(customData)) {
       if (key.startsWith('cm') || key.startsWith('cd')) {
         this.visitor!.set(key, value);
@@ -274,7 +280,7 @@ export class GoogleAnalytics implements Analytics {
     this.visitor.set('userId', uuid);
     this.visitor.set('dataSource', jovo.getType());
     this.visitor.set('userLanguage', jovo.getLocale());
-    this.setSystemDimension('UUID', uuid);
+    this.setCustomDimensionByName('UUID', uuid);
   }
 
   /**
@@ -347,7 +353,7 @@ export class GoogleAnalytics implements Analytics {
   getPageParameters(jovo: Jovo) {
     const intentType = jovo.$type.type ?? 'fallBackType';
     const intentName = jovo.$request?.getIntentName();
-    const customParameters = jovo.$googleAnalytics.$parameters;
+    const customParameters = this.$parameters;
 
     return {
       ...customParameters,
@@ -420,6 +426,20 @@ export class GoogleAnalytics implements Analytics {
     this.visitor!.event(params);
   }
 
+  setCustomMetric(index: number, value: string | number) {
+    this.visitor?.set(`cm${index}`, value);
+  }
+  setCustomDimension(index: number, value: string | number): void {
+    this.visitor?.set(`cd${index}`, value);
+  }
+
+  setParameter(parameter: string, value: string | number): void {
+    this.$parameters[parameter] = value;
+  }
+  setOptimizeExperiment(experimentId: string, variation: string | number): void {
+    this.$parameters[`exp`] = `${experimentId}.${variation}`;
+  }
+
   /**
    * Sets the analytics variable to the instance of this object for making it accessable in skill code
    * @param handleRequest
@@ -438,7 +458,8 @@ export class GoogleAnalytics implements Analytics {
     this.initVisitor(jovo);
 
     // Initialise googleAnalytics object.
-    jovo.$googleAnalytics = {
+    jovo.$googleAnalytics = this;
+    /* {
       $data: {},
       $parameters: {},
       setSystemDimension: this.setSystemDimension,
@@ -479,18 +500,7 @@ export class GoogleAnalytics implements Analytics {
       sendUserEvent: (eventCategory: string, eventAction: string) => {
         this.sendUserEvent(jovo, eventCategory, eventAction);
       },
-      setCustomMetric(index: number, value: string | number) {
-        this.$data[`cm${index}`] = value;
-      },
-      setCustomDimension(index: number, value: string | number): void {
-        this.$data[`cd${index}`] = value;
-      },
-      setParameter(parameter: string, value: string | number): void {
-        this.$parameters[parameter] = value;
-      },
-      setOptimizeExperiment(experimentId: string, variation: string | number): void {
-        this.$parameters[`exp`] = `${experimentId}.${variation}`;
-      },
-    };
+     
+    }; */
   }
 }
