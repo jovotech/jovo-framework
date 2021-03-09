@@ -8,6 +8,7 @@
 		"rimraf": "lerna exec npm run rimraf --ignore jovo-examples-*",
 		"tsc": "lerna exec npm run tsc --ignore jovo-examples-* --ignore jovo-client-*",
 		"tscIntegrations": "lerna exec npm run tsc --ignore jovo-examples-* --ignore jovo-client-* --ignore jovo-platforms-*",
+    "tscg": "lerna exec npm run tsc --scope jovo-analytics-googleanalytics",
 		"tslint": "lerna exec npm run tslint --ignore jovo-examples-*",
 		"test": "lerna exec --concurrency 1 npm test --ignore jovo-examples-*",
 		"clean": "lerna clean",
