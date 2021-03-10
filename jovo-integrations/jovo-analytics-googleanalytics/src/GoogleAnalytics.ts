@@ -273,7 +273,9 @@ export class GoogleAnalytics implements Analytics {
     const entrieValuesInInstance = customTypeToCheck === 'metric'
       ? [...this.customMetricsIndicesMap.values()] as number[]
       : [...this.customDimensionsIndicesMap.values()] as number[];
-    const duplicates = entrieValuesInInstance.filter((item, index) => entrieValuesInInstance.indexOf(item) !== index);
+    const duplicates = entrieValuesInInstance
+      .filter((currentDefinitionValue, index) => entrieValuesInInstance.indexOf(currentDefinitionValue) !== index)
+      .filter((currentDefinitionValue) => currentDefinitionValue !== 0);
     if (duplicates?.length > 0) { // TODO: add dimension check
       throw new JovoError(
         `Some custom ${customTypeToCheck} in your config have overlapping values`,
