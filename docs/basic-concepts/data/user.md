@@ -451,7 +451,7 @@ const config = {
 
 ## Session Data
 
-Some platforms to not provide the ability to persist data throughout a session. In that case, you can save the data in the database. Other platforms, e.g. Twilio Autopilot, need to save the session ID in the database for the `NEW_SESSION` built-in intent to work.
+Some platforms do not provide the ability to persist data throughout a session. In that case, you can save the data in the database. Other platforms, e.g. Twilio Autopilot, need to save the session ID in the database for the `NEW_SESSION` built-in intent to work.
 
 You can enable both in your project's configuration:
 
