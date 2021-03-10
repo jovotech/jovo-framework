@@ -1,6 +1,6 @@
 import { App, BaseComponent, ComponentDeclaration, PluginConfig } from '../src';
-import { Component } from '../src/plugins/handler/decorators/Component';
-import { MetadataStorage } from '../src/plugins/handler/metadata/MetadataStorage';
+import { Component } from '../src/decorators/Component';
+import { MetadataStorage } from '../src/metadata/MetadataStorage';
 import { EmptyComponent, ExampleComponent, ExampleComponentPlugin } from './utilities';
 
 // TODO implement more tests

@@ -3,6 +3,7 @@
 
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type Constructor<T> = new (...args: unknown[]) => T;
+// Construct object from properties of T that extend U
 export type PickWhere<T, U> = Pick<
   T,
   {
@@ -38,9 +39,9 @@ export * from './MiddlewareCollection';
 export * from './Platform';
 export * from './Plugin';
 
-export * from './plugins/handler/metadata/MetadataStorage';
-export * from './plugins/handler/decorators/Component';
-export * from './plugins/handler/decorators/Handle';
+export * from './metadata/MetadataStorage';
+export * from './decorators/Component';
+export * from './decorators/Handle';
 
 export * from './interfaces';
 export * from './enums';

@@ -1,4 +1,5 @@
-import { App } from 'jovo-framework';
+import { App } from "jovo-framework";
+
 const app = new App();
 
 function readonly(target: any) {

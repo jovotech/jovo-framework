@@ -17,7 +17,7 @@ export enum RequestType {
 }
 
 export enum InternalSessionProperty {
-  STATE = '_JOVO_STATE_',
+  State = '_JOVO_STATE_',
 }
 
 export enum InternalIntent {

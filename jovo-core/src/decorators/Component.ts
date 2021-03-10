@@ -1,6 +1,6 @@
-import { BaseComponent, ComponentConstructor, ComponentOptions } from '../../../BaseComponent';
-import { DuplicateChildComponentError } from '../../../errors/DuplicateChildComponentError';
-import { ComponentMetadata } from '../metadata/ComponentMetadata';
+import { BaseComponent, ComponentConstructor } from '../BaseComponent';
+import { DuplicateChildComponentError } from '../errors/DuplicateChildComponentError';
+import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 
 export function Component<COMPONENT extends BaseComponent = BaseComponent>(

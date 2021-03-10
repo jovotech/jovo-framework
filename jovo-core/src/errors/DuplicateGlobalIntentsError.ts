@@ -1,6 +1,6 @@
 import ansiColors from 'ansi-colors';
 import { JovoError } from '../JovoError';
-import { HandlerMetadata } from '../plugins/handler/metadata/HandlerMetadata';
+import { HandlerMetadata } from '../metadata/HandlerMetadata';
 
 export class DuplicateGlobalIntentsError extends JovoError {
   constructor(entries: [string, HandlerMetadata[]][]) {

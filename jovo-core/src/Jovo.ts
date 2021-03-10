@@ -8,6 +8,7 @@ import { ComponentConstructor, PickWhere } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
+import { JovoRoute } from './plugins/RouterPlugin';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
@@ -39,6 +40,7 @@ export abstract class Jovo<
   $output: GenericOutput;
   $request: REQ;
   $response?: RES;
+  $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
 
@@ -72,8 +74,8 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get state(): SessionData[InternalSessionProperty.STATE] {
-    return this.$session.$data[InternalSessionProperty.STATE];
+  get state(): SessionData[InternalSessionProperty.State] {
+    return this.$session.$data[InternalSessionProperty.State];
   }
 
   redirect<

@@ -1,11 +1,11 @@
 import _merge from 'lodash.merge';
 import { DeepPartial } from './index';
 import { Jovo } from './Jovo';
+import { ComponentOptions, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { PluginConfig } from './Plugin';
-import { ComponentMetadata } from './plugins/handler/metadata/ComponentMetadata';
 
 export interface RegisteredComponents {
-  [key: string]: ComponentMetadata | undefined;
+  [key: string]: RegisteredComponentMetadata | undefined;
 }
 
 export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
@@ -13,13 +13,6 @@ export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent
   config?: DeepPartial<COMPONENT['config']>,
   ...args: unknown[]
 ) => COMPONENT;
-
-export interface ComponentOptions<COMPONENT extends BaseComponent = BaseComponent> {
-  name?: string;
-  config?: DeepPartial<COMPONENT['config']>;
-  components?: Array<ComponentConstructor | ComponentDeclaration>;
-  models?: Record<string, any>;
-}
 
 export class ComponentDeclaration<
   COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor

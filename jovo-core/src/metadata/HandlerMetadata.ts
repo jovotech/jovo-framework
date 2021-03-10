@@ -1,16 +1,24 @@
-import { BaseComponent, ComponentConstructor } from '../../../BaseComponent';
-import { HandleRequest } from '../../../HandleRequest';
-import { Intent } from '../../../interfaces';
+import { BaseComponent, ComponentConstructor } from '../BaseComponent';
+import { Intent, JovoConditionFunction } from '../interfaces';
 
-export interface HandleOptions<COMPONENT extends BaseComponent = BaseComponent> {
+export interface ConditionsOptions {
+  [key: string]: unknown;
+
+  if?: JovoConditionFunction;
+  platforms?: string[];
+}
+
+export interface RoutesOptions {
   [key: string]: unknown;
 
   global?: boolean;
-  if?: (handleRequest: HandleRequest, component: COMPONENT) => boolean | Promise<boolean>;
+  subState?: string;
   intents?: Array<string | Intent>;
-  touch?: string[];
-  gestures?: string[];
+  touch?: Array<string | Intent>;
+  gestures?: Array<string | Intent>;
 }
+
+export interface HandleOptions extends ConditionsOptions, RoutesOptions {}
 
 export class HandlerMetadata<
   COMPONENT extends BaseComponent = BaseComponent,
@@ -20,8 +28,7 @@ export class HandlerMetadata<
     // eslint-disable-next-line @typescript-eslint/ban-types
     readonly target: ComponentConstructor<COMPONENT> | Function,
     readonly propertyKey: KEY,
-    readonly descriptor: TypedPropertyDescriptor<COMPONENT[KEY]>,
-    readonly options?: HandleOptions<COMPONENT>,
+    readonly options: HandleOptions = {},
   ) {}
 
   get intents(): Array<string | Intent> {
@@ -34,5 +41,9 @@ export class HandlerMetadata<
         typeof intent === 'string' ? this.options?.global : intent.global ?? this.options?.global,
       )
       .map((intent) => (typeof intent === 'string' ? intent : intent.name));
+  }
+
+  get hasCondition(): boolean {
+    return !!(this.options?.if || this.options?.platforms?.length);
   }
 }

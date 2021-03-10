@@ -10,7 +10,7 @@ export class HandleRequest extends Extensible<AppConfig> {
   readonly components!: RegisteredComponents;
 
   // TODO: remove request, test only
-  constructor(app: App, readonly request: Record<string, any>, readonly host: Host) {
+  constructor(readonly app: App, readonly request: Record<string, any>, readonly host: Host) {
     super(_cloneDeep(app.config) as DeepPartial<AppConfig>);
     _merge(this, _cloneDeep(app));
   }

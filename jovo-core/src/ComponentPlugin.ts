@@ -1,11 +1,7 @@
 import { App } from './App';
-import {
-  BaseComponent,
-  ComponentConstructor,
-  ComponentDeclaration,
-  ComponentOptions,
-} from './BaseComponent';
+import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { Plugin, PluginConfig } from './Plugin';
+import { ComponentOptions } from './metadata/ComponentMetadata';
 
 export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseComponent>
   extends PluginConfig {

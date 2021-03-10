@@ -1,15 +1,34 @@
-import { BaseComponent, Component, Handle } from 'jovo-core';
-import { MenuCategoriesComponent } from './MenuCategoriesComponent';
+import { BaseComponent, Component, ComponentDeclaration, Handle } from 'jovo-core';
+import { ReusableComponent } from './ReusableComponent';
 
 @Component({
-  components: [MenuCategoriesComponent],
+  name: 'ComponentDecorator',
+  components: [new ComponentDeclaration(ReusableComponent)],
 })
 export class MenuComponent extends BaseComponent {
-  @Handle({ global: true, intents: ['LAUNCH', 'StartIntent'] })
+  @Handle({ global: true })
   MenuIntent() {}
 
-  @Handle()
-  HelpIntent() {}
+  @Handle({ global: true, intents: ['MenuIntent'], platforms: ['Alexa', 'GoogleAssistant'] })
+  SyncMenuIntent() {}
 
-  showMenuItems() {}
+  @Handle({
+    global: true,
+    intents: ['MenuIntent'],
+    platforms: ['Alexa', 'GoogleAssistant'],
+    if: (handleRequest, jovo) => true,
+  })
+  GoogleAssistantDisplayMenuIntent() {
+    console.log('Yes it works :)');
+  }
+
+  @Handle({
+    global: true,
+    intents: ['MenuIntent'],
+    platforms: ['FacebookMessenger', 'GoogleBusiness'],
+  })
+  AsyncMenuIntent() {}
+
+  @Handle({ global: true })
+  MenuCategoriesIntent() {}
 }

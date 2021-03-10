@@ -2,16 +2,18 @@ import _merge from 'lodash.merge';
 import { DeepPartial, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentError } from './errors/DuplicateChildComponentError';
+import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
+import { ComponentMetadata, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
+import { HandlerMetadata } from './metadata/HandlerMetadata';
+import { MetadataStorage } from './metadata/MetadataStorage';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Platform } from './Platform';
-import { HandlerPlugin } from './plugins/handler/HandlerPlugin';
-import { ComponentMetadata } from './plugins/handler/metadata/ComponentMetadata';
-import { MetadataStorage } from './plugins/handler/metadata/MetadataStorage';
-import { OutputPlugin } from './plugins/output/OutputPlugin';
-import { RouterPlugin } from './plugins/router/RouterPlugin';
+import { HandlerPlugin } from './plugins/HandlerPlugin';
+import { OutputPlugin } from './plugins/OutputPlugin';
+import { RouterPlugin } from './plugins/RouterPlugin';
 
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
@@ -54,6 +56,7 @@ export class App extends Extensible<AppConfig> {
 
   async initialize(): Promise<void> {
     // TODO populate this.config from the loaded global configuration via file or require or similar
+    this.checkForDuplicateGlobalHandlers();
     return this.initializePlugins();
   }
 
@@ -62,28 +65,7 @@ export class App extends Extensible<AppConfig> {
   }
 
   useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(...components: T) {
-    for (let i = 0, len = components.length; i < len; i++) {
-      const component = components[i];
-      const relatedMetadata = MetadataStorage.getInstance().getComponentMetadata(
-        typeof component === 'function' ? component : component.component,
-      );
-      let newMetadata, name;
-      if (typeof component === 'function') {
-        name = component.name;
-        newMetadata = new ComponentMetadata(component);
-      } else {
-        name = component.options?.name || component.component.name;
-        newMetadata = new ComponentMetadata(component.component, component.options);
-      }
-      if (this.components[name]) {
-        throw new DuplicateChildComponentError(name, this.constructor.name);
-      }
-      this.components[name] = _merge(
-        Object.create(ComponentMetadata.prototype),
-        relatedMetadata,
-        newMetadata,
-      );
-    }
+    this.registerComponentsIn(this, ...components);
   }
 
   // TODO finish Host-related things
@@ -111,5 +93,88 @@ export class App extends Extensible<AppConfig> {
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
     return jovo.$response;
+  }
+
+  private registerComponentsIn<T extends Array<ComponentConstructor | ComponentDeclaration>>(
+    to: App | RegisteredComponentMetadata,
+    ...components: T
+  ) {
+    for (let i = 0, len = components.length; i < len; i++) {
+      const component = components[i];
+      const constructor = typeof component === 'function' ? component : component.component;
+      const relatedMetadata = MetadataStorage.getInstance().getComponentMetadata(constructor);
+      const mergedOptions = _merge(
+        {},
+        relatedMetadata?.options || {},
+        typeof component === 'function' ? {} : component.options || {},
+      );
+      const componentName = mergedOptions.name || constructor.name;
+      const registeredMetadata = new RegisteredComponentMetadata(constructor, mergedOptions);
+
+      if (to.components?.[componentName]) {
+        throw new DuplicateChildComponentError(componentName, to.constructor.name);
+      }
+
+      if (mergedOptions.components?.length) {
+        registeredMetadata.components = {};
+        this.registerComponentsIn(registeredMetadata, ...mergedOptions.components);
+      }
+
+      if (!to.components && !(to instanceof App)) {
+        to.components = {};
+      }
+      to.components![componentName] = registeredMetadata;
+    }
+  }
+
+  private checkForDuplicateGlobalHandlers() {
+    const globalHandlerMap: Record<string, HandlerMetadata[]> = {};
+    this.checkForDuplicateGlobalHandlersInComponents(this.components, globalHandlerMap);
+    const duplicateHandlerEntries = Object.entries(globalHandlerMap).filter(
+      ([, handlers]) => handlers.length > 1,
+    );
+    if (duplicateHandlerEntries.length) {
+      throw new DuplicateGlobalIntentsError(duplicateHandlerEntries);
+    }
+  }
+
+  private checkForDuplicateGlobalHandlersInComponents(
+    components: RegisteredComponents,
+    globalHandlerMap: Record<string, HandlerMetadata[]>,
+  ) {
+    const componentNames = Object.keys(components);
+    for (let i = 0, len = componentNames.length; i < len; i++) {
+      const component = components[componentNames[i]];
+      if (!component) {
+        continue;
+      }
+      this.registerGlobalHandlers(component.target, globalHandlerMap);
+
+      if (component.components) {
+        this.checkForDuplicateGlobalHandlersInComponents(component.components, globalHandlerMap);
+      }
+    }
+  }
+
+  private registerGlobalHandlers(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    constructor: ComponentConstructor | Function,
+    globalHandlerMap: Record<string, HandlerMetadata[]>,
+  ) {
+    const relatedHandlerMetadata = MetadataStorage.getInstance().getHandlerMetadataOfComponent(
+      constructor,
+    );
+    for (let i = 0, len = relatedHandlerMetadata.length; i < len; i++) {
+      for (let j = 0, jLen = relatedHandlerMetadata[i].globalIntentNames.length; j < jLen; j++) {
+        const globalIntentName = relatedHandlerMetadata[i].globalIntentNames[j];
+        if (!globalHandlerMap[globalIntentName]) {
+          globalHandlerMap[globalIntentName] = [];
+        }
+        // TODO: improve condition
+        if (!relatedHandlerMetadata[i].hasCondition) {
+          globalHandlerMap[globalIntentName].push(relatedHandlerMetadata[i]);
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,17 @@
-import { BaseComponent, Component } from 'jovo-core';
+import { BaseComponent, Component, ComponentDeclaration, Handle, InternalIntent } from 'jovo-core';
 import { MenuComponent } from './MenuComponent';
-import { MenuComponent as MenuComponent2 } from './MenuComponent2';
 
 @Component({
-  components: [MenuComponent, { component: MenuComponent2, options: { name: 'MenuComponent2' } }],
+  name: 'DecoratorRoot',
+  components: [new ComponentDeclaration(MenuComponent, { name: 'ChildComponentDeclaration' })],
 })
-export class StandardComponent extends BaseComponent {}
+export class StandardComponent extends BaseComponent {
+  @Handle({ global: true, if: (handleRequest, jovo) => true })
+  MenuIntent() {}
+
+  @Handle({ global: true })
+  [InternalIntent.Unhandled]() {}
+
+  // @Routes({ global: true })
+  // MenuCategoriesIntent() {}
+}
