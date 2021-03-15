@@ -1,7 +1,9 @@
 import _get from 'lodash.get';
-import _set from 'lodash.set';
 import _merge from 'lodash.merge';
+import _set from 'lodash.set';
 import { App } from '../App';
+import { ComponentNotFoundError } from '../errors/ComponentNotFoundError';
+import { HandlerNotFoundError } from '../errors/HandlerNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { BaseComponent, ComponentConstructor, DeepPartial, ExtensibleConfig } from '../index';
 import { Jovo } from '../Jovo';
@@ -57,14 +59,13 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
     if (!jovo.$route || !jovo.$route?.path?.length) {
-      // TODO error-handling
+      // TODO error-handling or determine what to do in general
       return;
     }
     const componentPath = jovo.$route.path.join('.components.');
     const componentMetadata = _get(handleRequest.app.components, componentPath);
     if (!componentMetadata) {
-      // TODO error-handling
-      return;
+      throw new ComponentNotFoundError(componentPath);
     }
     const componentInstancePath = componentPath + '.instance';
     let componentInstance: BaseComponent | undefined = _get<any, string>(
@@ -82,19 +83,13 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       _set(handleRequest.app.components, componentPath + '.instance', componentInstance);
     }
     if (!(componentInstance as any)[jovo.$route.handlerKey]) {
-      // TODO error-handling
-      throw new Error(
-        `Can not invoke method ${jovo.$route.handlerKey.toString()} of ${
-          componentPath[componentPath.length - 1]
-        } (${componentInstance.constructor.name})`,
+      throw new HandlerNotFoundError(
+        jovo.$route.handlerKey.toString(),
+        componentPath[componentPath.length - 1],
+        componentInstance.constructor.name,
       );
     }
     (componentInstance as any)[jovo.$route.handlerKey]();
-    // const route = 'LAUNCH';
-    // const fn = _get(handleRequest.handler, route);
-    // if (typeof fn === 'function') {
-    //   await fn.call(jovo);
-    // }
   };
 
   private mixin(constructor: typeof App | typeof HandleRequest) {

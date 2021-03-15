@@ -1,5 +1,6 @@
 import { App, ComponentDeclaration, SessionData } from 'jovo-core';
-import { Alexa, AlexaRequest, AlexaRequestJSON, Session } from 'jovo-platform-alexa';
+import { Alexa, AlexaRequestJSON, Session } from 'jovo-platform-alexa';
+import { inspect } from 'util';
 import { ReusableComponent } from './components/ReusableComponent';
 import { StandardComponent } from './components/StandardComponent';
 
@@ -34,9 +35,7 @@ test('AlexaRequest', async () => {
   };
 
   const response = await app.handle(request);
-  console.log('-'.repeat(200));
-  // console.log(response);
-  await app.handle(request);
+  console.log(inspect(response, { depth: null, compact: true, colors: true }));
 
   expect(true).toBe(true);
 });

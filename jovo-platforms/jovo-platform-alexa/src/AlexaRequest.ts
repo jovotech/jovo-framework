@@ -57,7 +57,7 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
       }
 
       // TODO fully implement, it's not complete!
-      // entitymatches are missing (static and dynamic)
+      // entity-matches are missing (static and dynamic)
 
       entities[slotKeys[i]] = entity;
     }

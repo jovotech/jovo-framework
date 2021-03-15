@@ -1,7 +1,7 @@
 import ansiColors from 'ansi-colors';
 import { JovoError } from '../JovoError';
 
-export class DuplicateChildComponentError extends JovoError {
+export class DuplicateChildComponentsError extends JovoError {
   constructor(componentName: string, parentName: string) {
     super('');
 

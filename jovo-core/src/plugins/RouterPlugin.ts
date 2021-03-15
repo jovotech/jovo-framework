@@ -1,6 +1,7 @@
 import { inspect } from 'util';
 import { RegisteredComponents } from '../BaseComponent';
 import { InternalIntent } from '../enums';
+import { MatchingComponentNotFoundError } from '../errors/MatchingComponentNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
@@ -45,47 +46,45 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
 
     const intentName = jovo.$request.getIntentName();
     if (!intentName) {
-      // TODO determine what to do if no intent was passed (maybe UNHANDLED)
+      // TODO determine what to do if no intent was passed (probably UNHANDLED)
       // in the future other data can be passed and used by the handler, but for now just use the intent-name
       return;
     }
 
-    console.log('Components', inspect(handleRequest.components, { depth: null }));
-    console.log('State', inspect(jovo.state, { depth: null }));
+    console.log(
+      'Components',
+      inspect(handleRequest.components, { depth: null, compact: true, colors: true }),
+    );
+    console.log('State', inspect(jovo.state, { depth: null, compact: true, colors: true }));
 
-    const handleRouteMatches = async (matches: RouteMatch[]) => {
-      const match = await this.findRouteMatch(matches, handleRequest, jovo);
-      console.log(inspect(match, { depth: null }));
-      if (match) {
-        // TODO set route from match
-        jovo.$route = {
-          path: match.path,
-          handlerKey: match.metadata.propertyKey,
-        };
-      }
-    };
-
+    let routeMatches: RouteMatch[] = [];
     if (!jovo.state) {
-      let routeMatches = await this.getGlobalRouteMatches(intentName, handleRequest, jovo);
-      console.log('Matches', inspect(routeMatches, { depth: null }));
-      if (routeMatches.length) {
-        await handleRouteMatches(routeMatches);
-      } else {
+      routeMatches = await this.getGlobalRouteMatches(intentName, handleRequest, jovo);
+      if (!routeMatches.length) {
         routeMatches = await this.getGlobalRouteMatches(
           InternalIntent.Unhandled,
           handleRequest,
           jovo,
         );
-        if (routeMatches.length) {
-          await handleRouteMatches(routeMatches);
-        }
       }
     }
 
+    console.log('Matches', inspect(routeMatches, { depth: null, compact: true, colors: true }));
+
+    if (routeMatches.length) {
+      const match = await this.findRouteMatch(routeMatches, handleRequest, jovo);
+      console.log('Match', inspect(match, { depth: null, compact: true, colors: true }));
+      if (match) {
+        jovo.$route = {
+          path: match.path,
+          handlerKey: match.metadata.propertyKey,
+        };
+      }
+    }
     console.log('Route', jovo.$route);
 
     if (!jovo.$route) {
-      throw new Error('No route found!');
+      throw new MatchingComponentNotFoundError();
     }
   };
 

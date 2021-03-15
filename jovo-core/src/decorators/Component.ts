@@ -1,5 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { DuplicateChildComponentError } from '../errors/DuplicateChildComponentError';
+import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 
@@ -16,7 +16,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
             ? component.name
             : component.options?.name || component.component.name;
         if (componentNameSet.has(componentName)) {
-          throw new DuplicateChildComponentError(componentName, target.name);
+          throw new DuplicateChildComponentsError(componentName, target.name);
         }
         componentNameSet.add(componentName);
       }

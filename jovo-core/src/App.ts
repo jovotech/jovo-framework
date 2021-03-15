@@ -1,8 +1,9 @@
 import _merge from 'lodash.merge';
 import { DeepPartial, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
-import { DuplicateChildComponentError } from './errors/DuplicateChildComponentError';
+import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
+import {MatchingPlatformNotFoundError} from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
@@ -88,8 +89,7 @@ export class App extends Extensible<AppConfig> {
 
     const relatedPlatform = this.platforms.find((platform) => platform.isRequestRelated(request));
     if (!relatedPlatform) {
-      // TODO improve error
-      throw new Error('No matching platform');
+      throw new MatchingPlatformNotFoundError();
     }
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
@@ -122,7 +122,7 @@ export class App extends Extensible<AppConfig> {
       const registeredMetadata = new RegisteredComponentMetadata(constructor, mergedOptions);
 
       if (to.components?.[componentName]) {
-        throw new DuplicateChildComponentError(componentName, to.constructor.name);
+        throw new DuplicateChildComponentsError(componentName, to.constructor.name);
       }
 
       if (mergedOptions.components?.length) {
