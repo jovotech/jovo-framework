@@ -16,10 +16,10 @@ export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
 
-export interface ExtensibleInitConfig {
-  plugins?: Plugin[];
-  plugin?: never;
-}
+export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> = Omit<
+  CONFIG,
+  'plugin'
+> & { plugins?: Plugin[] };
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
@@ -29,16 +29,11 @@ export abstract class Extensible<
 
   abstract readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
 
-  constructor(config?: DeepPartial<Omit<CONFIG & ExtensibleInitConfig, 'plugin'>>) {
-    super(config ? { ...config, plugins: undefined } : config);
+  constructor(config?: DeepPartial<ExtensibleInitConfig>) {
+    // remove the plugins from the actual config, could be done afterwards as well
+    super((config ? { ...config, plugins: undefined } : config) as DeepPartial<CONFIG>);
     this.plugins = {};
-    if (this.config && 'plugins' in this.config) {
-      delete this.config.plugins;
-    }
-    if (this.initConfig && 'plugins' in this.initConfig) {
-      delete this.initConfig.plugins;
-    }
-    if (config?.plugins && (config?.plugins as Plugin[] | undefined)?.length) {
+    if (config?.plugins && config?.plugins?.length) {
       this.use(...(config.plugins as Plugin[]));
     }
   }

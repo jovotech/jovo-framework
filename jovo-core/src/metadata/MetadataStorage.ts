@@ -1,10 +1,11 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { ComponentMetadata } from './ComponentMetadata';
-import { ConditionsOptions, HandlerMetadata, RoutesOptions } from './HandlerMetadata';
+import { HandlerMetadata } from './HandlerMetadata';
 
 // TODO: implement
 export class MetadataStorage {
   private static instance: MetadataStorage;
+  // TODO: determine whether any is required/helpful here
   readonly componentMetadata: ComponentMetadata[];
   readonly handlerMetadata: HandlerMetadata[];
 

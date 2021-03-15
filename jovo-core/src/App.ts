@@ -6,7 +6,7 @@ import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsErro
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
-import { ComponentMetadata, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
+import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
 import { MiddlewareCollection } from './MiddlewareCollection';
@@ -18,6 +18,10 @@ import { RouterPlugin } from './plugins/RouterPlugin';
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
 }
+
+export type AppInitConfig = ExtensibleInitConfig & {
+  components?: Array<ComponentConstructor | ComponentDeclaration>;
+};
 
 export class App extends Extensible<AppConfig> {
   readonly config: AppConfig = {
@@ -37,10 +41,16 @@ export class App extends Extensible<AppConfig> {
     'response',
   );
 
-  constructor(config?: DeepPartial<Omit<AppConfig & ExtensibleInitConfig, 'plugin'>>) {
-    super(config);
+  constructor(config?: DeepPartial<AppInitConfig>) {
+    // remove the components from the actual config, could be done afterwards as well
+    super(config ? { ...config, components: undefined } : config);
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
     this.components = {};
+    if (config?.components && config?.components?.length) {
+      this.useComponents(
+        ...(config.components as Array<ComponentConstructor | ComponentDeclaration>),
+      );
+    }
   }
 
   get platforms(): ReadonlyArray<Platform> {

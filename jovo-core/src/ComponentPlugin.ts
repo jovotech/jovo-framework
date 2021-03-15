@@ -1,7 +1,7 @@
 import { App } from './App';
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
-import { Plugin, PluginConfig } from './Plugin';
 import { ComponentOptions } from './metadata/ComponentMetadata';
+import { Plugin, PluginConfig } from './Plugin';
 
 export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseComponent>
   extends PluginConfig {
@@ -18,10 +18,9 @@ export abstract class ComponentPlugin<
     let options: ComponentOptions<COMPONENT> | undefined = undefined;
 
     if (this.config.component) {
-      if (!options) {
-        options = {};
-      }
-      options.config = this.config.component;
+      options = {
+        config: this.config.component,
+      };
     }
 
     app.useComponents(new ComponentDeclaration(this.component, options));
