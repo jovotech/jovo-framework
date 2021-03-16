@@ -1,12 +1,12 @@
-import { GenericOutput, Message, OutputConverterStrategy, QuickReply, toSSML } from '@jovotech/output';
+import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply, toSSML } from '@jovotech/output';
 import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
 import _merge from 'lodash.merge';
 
-export class GoogleAssistantOutputConverterStrategy
-  implements OutputConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy
+  implements OutputTemplateConverterStrategy<GoogleAssistantResponse> {
   responseClass = GoogleAssistantResponse;
 
-  toResponse(output: GenericOutput): GoogleAssistantResponse {
+  toResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {
       richResponse: {
         items: [],
@@ -61,8 +61,8 @@ export class GoogleAssistantOutputConverterStrategy
     return response;
   }
 
-  fromResponse(response: GoogleAssistantResponse): GenericOutput {
-    const output: GenericOutput = {};
+  fromResponse(response: GoogleAssistantResponse): OutputTemplate {
+    const output: OutputTemplate = {};
 
     const simpleResponse = response.richResponse?.items?.[0]?.simpleResponse;
     if (simpleResponse?.ssml && simpleResponse?.toMessage) {

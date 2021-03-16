@@ -17,9 +17,9 @@ declare module '@jovotech/output/dist/models/GenericMessage' {
 // augment the prototypes of the generic models to have methods to convert to the Alexa-variant
 augmentGenericPrototypes();
 
-// Make AlexaOutput available for the GenericOutputPlatforms-object via the Alexa-key.
-declare module '@jovotech/output/dist/models/GenericOutputPlatforms' {
-  interface GenericOutputPlatforms {
+// Make AlexaOutput available for the OutputTemplatePlatforms-object via the Alexa-key.
+declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+  interface OutputTemplatePlatforms {
     Alexa?: AlexaOutput;
   }
 }
@@ -34,6 +34,6 @@ export * from './decorators/validation/IsValidOutputSpeechString';
 
 export * from './models';
 
-export * from './AlexaOutputConverterStrategy';
+export * from './AlexaOutputTemplateConverterStrategy';
 
 export { validateAlexaString } from './utilities';

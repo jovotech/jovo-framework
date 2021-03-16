@@ -1,12 +1,12 @@
 import _merge from 'lodash.merge';
-import { GenericOutput, Message, OutputConverterStrategy, QuickReply } from '@jovotech/output';
+import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
 import { DialogflowResponse, Text } from './models';
 
-export class DialogflowOutputConverterStrategy
-  implements OutputConverterStrategy<DialogflowResponse> {
+export class DialogflowOutputTemplateConverterStrategy
+  implements OutputTemplateConverterStrategy<DialogflowResponse> {
   responseClass = DialogflowResponse;
 
-  toResponse(output: GenericOutput): DialogflowResponse {
+  toResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
     const message = output.platforms?.Dialogflow?.message || output.message;
@@ -54,8 +54,8 @@ export class DialogflowOutputConverterStrategy
     return response;
   }
 
-  fromResponse(response: DialogflowResponse): GenericOutput {
-    const output: GenericOutput = {};
+  fromResponse(response: DialogflowResponse): OutputTemplate {
+    const output: OutputTemplate = {};
 
     const messageWithText = response.fulfillment_messages?.find((message) => message.message.text);
     if (messageWithText) {

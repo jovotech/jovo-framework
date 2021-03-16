@@ -1,4 +1,4 @@
-import { GenericOutput, Message, OutputConverterStrategy, QuickReply } from '@jovotech/output';
+import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -11,11 +11,11 @@ import {
 } from './models';
 import _merge from 'lodash.merge';
 
-export class FacebookMessengerOutputConverterStrategy
-  implements OutputConverterStrategy<FacebookMessengerResponse> {
+export class FacebookMessengerOutputTemplateConverterStrategy
+  implements OutputTemplateConverterStrategy<FacebookMessengerResponse> {
   responseClass = FacebookMessengerResponse;
 
-  toResponse(output: GenericOutput): FacebookMessengerResponse {
+  toResponse(output: OutputTemplate): FacebookMessengerResponse {
     const response: FacebookMessengerResponse = {
       messaging_type: MessagingType.Response,
       recipient: {
@@ -55,8 +55,8 @@ export class FacebookMessengerOutputConverterStrategy
     return response;
   }
 
-  fromResponse(response: FacebookMessengerResponse): GenericOutput {
-    const output: GenericOutput = {};
+  fromResponse(response: FacebookMessengerResponse): OutputTemplate {
+    const output: OutputTemplate = {};
 
     if (response.message?.text) {
       output.message = response.message.text;

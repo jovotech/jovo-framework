@@ -1,14 +1,14 @@
 import { Type } from 'class-transformer';
 import { IsOptional, ValidateNested, ValidationError } from '.';
-import { GenericOutputPlatforms } from './models/GenericOutputPlatforms';
+import { OutputTemplatePlatforms } from './models/OutputTemplatePlatforms';
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   platformKey: string,
   platformType: new () => TYPE,
 ): void {
-  IsOptional()(GenericOutputPlatforms.prototype, platformKey);
-  ValidateNested()(GenericOutputPlatforms.prototype, platformKey);
-  Type(() => platformType)(GenericOutputPlatforms.prototype, platformKey);
+  IsOptional()(OutputTemplatePlatforms.prototype, platformKey);
+  ValidateNested()(OutputTemplatePlatforms.prototype, platformKey);
+  Type(() => platformType)(OutputTemplatePlatforms.prototype, platformKey);
 }
 
 export function toSSML(text: string): string {

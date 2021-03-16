@@ -3,7 +3,7 @@ import {
   GenericCard,
   GenericCarousel,
   GenericMessage,
-  GenericOutput,
+  OutputTemplate,
   GenericQuickReply,
   validate,
   ValidationOptions,
@@ -225,11 +225,11 @@ describe('validation - GenericCarousel', () => {
   });
 });
 
-describe('validation - GenericOutput', () => {
-  testOptionalStringProperty(GenericOutput, 'message');
+describe('validation - OutputTemplate', () => {
+  testOptionalStringProperty(OutputTemplate, 'message');
   test('message - invalid: invalid object', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         message: {} as any,
       },
@@ -238,7 +238,7 @@ describe('validation - GenericOutput', () => {
   });
   test('message - valid: object', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         message: {
           text: 'foo',
@@ -248,10 +248,10 @@ describe('validation - GenericOutput', () => {
     );
   });
 
-  testOptionalStringProperty(GenericOutput, 'reprompt');
+  testOptionalStringProperty(OutputTemplate, 'reprompt');
   test('reprompt - invalid: invalid object', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         reprompt: {
           text: '',
@@ -262,7 +262,7 @@ describe('validation - GenericOutput', () => {
   });
   test('reprompt - valid: object', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         reprompt: {
           text: 'foo',
@@ -273,11 +273,11 @@ describe('validation - GenericOutput', () => {
   });
 
   test('listen - optional', async () => {
-    await validateAndExpectLength(GenericOutput, {}, 0);
+    await validateAndExpectLength(OutputTemplate, {}, 0);
   });
   test('listen - invalid: wrong type', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         listen: 3 as any,
       },
@@ -286,7 +286,7 @@ describe('validation - GenericOutput', () => {
   });
   test('listen - valid: boolean', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         listen: true,
       },
@@ -295,43 +295,43 @@ describe('validation - GenericOutput', () => {
   });
 
   test('quickReplies - optional', async () => {
-    await validateAndExpectLength(GenericOutput, {}, 0);
+    await validateAndExpectLength(OutputTemplate, {}, 0);
   });
   test('quickReplies - invalid: wrong type', async () => {
-    await validateAndExpectLength(GenericOutput, { quickReplies: {} as any }, 1);
+    await validateAndExpectLength(OutputTemplate, { quickReplies: {} as any }, 1);
   });
   test('quickReplies - invalid: invalid element', async () => {
-    await validateAndExpectLength(GenericOutput, { quickReplies: [2] as any }, 1);
+    await validateAndExpectLength(OutputTemplate, { quickReplies: [2] as any }, 1);
   });
   test('quickReplies - valid', async () => {
-    await validateAndExpectLength(GenericOutput, { quickReplies: ['foo', { text: 'bar' }] }, 0);
+    await validateAndExpectLength(OutputTemplate, { quickReplies: ['foo', { text: 'bar' }] }, 0);
   });
 
   test('cards - optional', async () => {
-    await validateAndExpectLength(GenericOutput, {}, 0);
+    await validateAndExpectLength(OutputTemplate, {}, 0);
   });
   test('cards - invalid: wrong type', async () => {
-    await validateAndExpectLength(GenericOutput, { card: 2 as any }, 1);
+    await validateAndExpectLength(OutputTemplate, { card: 2 as any }, 1);
   });
   test('cards - invalid: invalid object', async () => {
-    await validateAndExpectLength(GenericOutput, { card: {} as any }, 1);
+    await validateAndExpectLength(OutputTemplate, { card: {} as any }, 1);
   });
   test('cards - valid', async () => {
-    await validateAndExpectLength(GenericOutput, { card: { title: 'foo' } }, 0);
+    await validateAndExpectLength(OutputTemplate, { card: { title: 'foo' } }, 0);
   });
 
   test('collection - optional', async () => {
-    await validateAndExpectLength(GenericOutput, {}, 0);
+    await validateAndExpectLength(OutputTemplate, {}, 0);
   });
   test('collection - invalid: wrong type', async () => {
-    await validateAndExpectLength(GenericOutput, { carousel: 'foo' as any }, 1);
+    await validateAndExpectLength(OutputTemplate, { carousel: 'foo' as any }, 1);
   });
   test('collection - invalid: invalid object', async () => {
-    await validateAndExpectLength(GenericOutput, { carousel: { items: {} as any } }, 1);
+    await validateAndExpectLength(OutputTemplate, { carousel: { items: {} as any } }, 1);
   });
   test('collection - valid', async () => {
     await validateAndExpectLength(
-      GenericOutput,
+      OutputTemplate,
       {
         carousel: {
           items: [{ title: 'foo' }, { title: 'bar' }],

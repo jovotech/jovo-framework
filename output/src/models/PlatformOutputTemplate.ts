@@ -1,9 +1,9 @@
 import { IsOptional, ValidateNested } from '..';
-import { GenericOutputBase } from './GenericOutputBase';
+import { OutputTemplateBase } from './OutputTemplateBase';
 
-export class PlatformOutput<
+export class PlatformOutputTemplate<
   Response extends Record<string, unknown> = Record<string, unknown>
-> extends GenericOutputBase {
+> extends OutputTemplateBase {
   @IsOptional()
   @ValidateNested()
   nativeResponse?: Response;

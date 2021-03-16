@@ -29,9 +29,9 @@ declare module '@jovotech/output/dist/models/GenericQuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the GoogleAssistant-variant
 augmentGenericPrototypes();
 
-// Make GoogleAssistantOutput available for the GenericOutputPlatforms-object via the GoogleAssistant-key.
-declare module '@jovotech/output/dist/models/GenericOutputPlatforms' {
-  interface GenericOutputPlatforms {
+// Make GoogleAssistantOutput available for the OutputTemplatePlatforms-object via the GoogleAssistant-key.
+declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+  interface OutputTemplatePlatforms {
     GoogleAssistant?: GoogleAssistantOutput;
   }
 }
@@ -48,4 +48,4 @@ export * from './decorators/validation/IsValidSimpleResponseString';
 
 export * from './models';
 
-export * from './GoogleAssistantOutputConverterStrategy';
+export * from './GoogleAssistantOutputTemplateConverterStrategy';

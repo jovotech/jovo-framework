@@ -1,22 +1,22 @@
 import {
   GenericCard,
-  GenericOutput,
-  OutputConverter,
+  OutputTemplate,
+  OutputTemplateConverter,
   OutputValidationError,
   toSSML,
 } from '@jovotech/output';
 import { RichResponse } from '../dist';
 import {
-  GoogleAssistantOutputConverterStrategy,
+  GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
   SimpleResponse,
   SystemIntent,
 } from '../src';
 
-const outputConverter = new OutputConverter(new GoogleAssistantOutputConverterStrategy());
+const outputConverter = new OutputTemplateConverter(new GoogleAssistantOutputTemplateConverterStrategy());
 
 async function convertToResponseAndExpectToEqual(
-  output: GenericOutput,
+  output: OutputTemplate,
   expectedResponse: GoogleAssistantResponse,
 ) {
   expect(await outputConverter.toResponse(output)).toEqual(expectedResponse);
@@ -24,7 +24,7 @@ async function convertToResponseAndExpectToEqual(
 
 async function convertToOutputAndExpectToEqual(
   response: GoogleAssistantResponse,
-  expectedOutput: GenericOutput,
+  expectedOutput: OutputTemplate,
 ) {
   expect(await outputConverter.fromResponse(response)).toEqual(expectedOutput);
 }

@@ -6,7 +6,7 @@ import { GenericCarousel } from './GenericCarousel';
 import { GenericMessage, Message } from './GenericMessage';
 import { GenericQuickReply, QuickReply } from './GenericQuickReply';
 
-export class GenericOutputBase {
+export class OutputTemplateBase {
   [key: string]: unknown;
 
   @IsOptional()

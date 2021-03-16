@@ -1,11 +1,11 @@
-import { GenericOutput, Message, OutputConverterStrategy, toSSML } from '@jovotech/output';
+import { OutputTemplate, Message, OutputTemplateConverterStrategy, toSSML } from '@jovotech/output';
 import { AlexaResponse, OutputSpeech, OutputSpeechType, PlayBehavior } from './models';
 import _merge from 'lodash.merge';
 
-export class AlexaOutputConverterStrategy implements OutputConverterStrategy<AlexaResponse> {
+export class AlexaOutputTemplateConverterStrategy implements OutputTemplateConverterStrategy<AlexaResponse> {
   responseClass = AlexaResponse;
 
-  toResponse(output: GenericOutput): AlexaResponse {
+  toResponse(output: OutputTemplate): AlexaResponse {
     const response: AlexaResponse = {
       version: '1.0',
       response: {},
@@ -41,8 +41,8 @@ export class AlexaOutputConverterStrategy implements OutputConverterStrategy<Ale
     return response;
   }
 
-  fromResponse(response: AlexaResponse): GenericOutput {
-    const output: GenericOutput = {};
+  fromResponse(response: AlexaResponse): OutputTemplate {
+    const output: OutputTemplate = {};
 
     if (
       (response.response.outputSpeech?.text || response.response.outputSpeech?.ssml) &&

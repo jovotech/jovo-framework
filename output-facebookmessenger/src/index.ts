@@ -36,9 +36,9 @@ declare module '@jovotech/output/dist/models/GenericQuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the FacebookMessenger-variant
 augmentGenericPrototypes();
 
-// Make FacebookMessengerOutput available for the GenericOutputPlatforms-object via the FacebookMessenger-key.
-declare module '@jovotech/output/dist/models/GenericOutputPlatforms' {
-  interface GenericOutputPlatforms {
+// Make FacebookMessengerOutput available for the OutputTemplatePlatforms-object via the FacebookMessenger-key.
+declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+  interface OutputTemplatePlatforms {
     FacebookMessenger?: FacebookMessengerOutput;
   }
 }
@@ -51,4 +51,4 @@ export * from './decorators/validation/IsValidGameMetaDataString';
 
 export * from './models';
 
-export * from './FacebookMessengerOutputConverterStrategy';
+export * from './FacebookMessengerOutputTemplateConverterStrategy';

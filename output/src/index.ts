@@ -18,12 +18,12 @@ export * from './models/GenericCard';
 export * from './models/GenericCarousel';
 export * from './models/GenericQuickReply';
 export * from './models/GenericMessage';
-export * from './models/GenericOutput';
-export * from './models/GenericOutputBase';
-export * from './models/GenericOutputPlatforms';
-export * from './models/PlatformOutput';
+export * from './models/OutputTemplate';
+export * from './models/OutputTemplateBase';
+export * from './models/OutputTemplatePlatforms';
+export * from './models/PlatformOutputTemplate';
 
-export * from './OutputConverterStrategy';
-export * from './OutputConverter';
+export * from './OutputTemplateConverterStrategy';
+export * from './OutputTemplateConverter';
 
 export * from './utilities';

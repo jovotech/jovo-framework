@@ -1,14 +1,14 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { OutputValidationError } from './errors/OutputValidationError';
-import { GenericOutput, JovoResponse, OutputConverterStrategy } from './index';
+import { OutputTemplate, JovoResponse, OutputTemplateConverterStrategy } from './index';
 
 // TODO: check if validation should happen before and after conversion
-export class OutputConverter<Response extends JovoResponse> {
-  constructor(public strategy: OutputConverterStrategy<Response>) {}
+export class OutputTemplateConverter<Response extends JovoResponse> {
+  constructor(public strategy: OutputTemplateConverterStrategy<Response>) {}
 
-  validateOutput(output: GenericOutput): Promise<ValidationError[]> {
-    const instance = output instanceof GenericOutput ? output : plainToClass(GenericOutput, output);
+  validateOutput(output: OutputTemplate): Promise<ValidationError[]> {
+    const instance = output instanceof OutputTemplate ? output : plainToClass(OutputTemplate, output);
     return validate(instance);
   }
 
@@ -20,8 +20,8 @@ export class OutputConverter<Response extends JovoResponse> {
     return validate(instance);
   }
 
-  async toResponse(output: GenericOutput): Promise<Response> {
-    const outputInstance = plainToClass(GenericOutput, output);
+  async toResponse(output: OutputTemplate): Promise<Response> {
+    const outputInstance = plainToClass(OutputTemplate, output);
     let errors = await this.validateOutput(outputInstance);
     if (errors.length) {
       throw new OutputValidationError(errors, 'Can not convert.\n');
@@ -34,7 +34,7 @@ export class OutputConverter<Response extends JovoResponse> {
     return response;
   }
 
-  async fromResponse(response: Response): Promise<GenericOutput> {
+  async fromResponse(response: Response): Promise<OutputTemplate> {
     const responseInstance = plainToClass(this.strategy.responseClass, response);
     let errors = await this.validateResponse(responseInstance);
     if (errors.length) {

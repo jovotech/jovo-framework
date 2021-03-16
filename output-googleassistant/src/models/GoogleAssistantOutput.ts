@@ -1,7 +1,7 @@
-import { PlatformOutput, Type } from '@jovotech/output';
+import { PlatformOutputTemplate, Type } from '@jovotech/output';
 import { GoogleAssistantResponse } from './GoogleAssistantResponse';
 
-export class GoogleAssistantOutput extends PlatformOutput<GoogleAssistantResponse> {
+export class GoogleAssistantOutput extends PlatformOutputTemplate<GoogleAssistantResponse> {
   @Type(() => GoogleAssistantResponse)
   nativeResponse?: GoogleAssistantResponse;
 }

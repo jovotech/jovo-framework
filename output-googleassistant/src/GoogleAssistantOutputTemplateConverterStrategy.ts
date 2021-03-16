@@ -1,12 +1,12 @@
-import { GenericOutput, Message, OutputConverterStrategy, QuickReply } from '@jovotech/output';
+import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { GoogleAssistantResponse, Simple, Suggestion } from './models';
 
-export class GoogleAssistantOutputConverterStrategy
-  implements OutputConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy
+  implements OutputTemplateConverterStrategy<GoogleAssistantResponse> {
   responseClass = GoogleAssistantResponse;
 
-  toResponse(output: GenericOutput): GoogleAssistantResponse {
+  toResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {};
 
     const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
@@ -88,8 +88,8 @@ export class GoogleAssistantOutputConverterStrategy
     return response;
   }
 
-  fromResponse(response: GoogleAssistantResponse): GenericOutput {
-    const output: GenericOutput = {};
+  fromResponse(response: GoogleAssistantResponse): OutputTemplate {
+    const output: OutputTemplate = {};
 
     const simple = response.prompt?.firstSimple || response.prompt?.lastSimple;
     if (simple?.toMessage) {
