@@ -41,5 +41,8 @@
     "type": "git",
     "url": "git+https://github.com/jovotech/jovo-output.git"
   },
-  "prettier": "../.prettierrc.js"
+  "prettier": "../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }
