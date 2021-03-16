@@ -13,17 +13,17 @@ export type PickWhere<T, U> = Pick<
 
 export {
   JovoResponse,
-  OutputConverterStrategy,
-  GenericOutput,
-  GenericOutputBase,
-  GenericOutputPlatforms,
-  GenericCarousel,
-  GenericCard,
-  GenericQuickReply,
-  GenericMessage,
-  Message,
-  PlatformOutput,
+  OutputTemplateConverterStrategy,
+  OutputTemplate,
+  OutputTemplateBase,
+  OutputTemplatePlatforms,
+  Carousel,
+  Card,
   QuickReply,
+  QuickReplyValue,
+  Message,
+  MessageValue,
+  PlatformOutputTemplate,
   OutputValidationError,
 } from '@jovotech/output';
 

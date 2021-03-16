@@ -1,4 +1,4 @@
-import { JovoResponse, OutputConverterStrategy } from '@jovotech/output';
+import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { App, Constructor, HandleRequest, Jovo, JovoConstructor } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
@@ -37,7 +37,7 @@ export abstract class Platform<
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
 
-  abstract outputConverterStrategy: OutputConverterStrategy<RESPONSE>;
+  abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;

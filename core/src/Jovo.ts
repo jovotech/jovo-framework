@@ -1,4 +1,4 @@
-import { GenericOutput, JovoResponse } from '@jovotech/output';
+import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { InternalSessionProperty, RequestType } from './enums';
@@ -37,7 +37,7 @@ export abstract class Jovo<
   $data: RequestData;
   $entities: EntityMap;
   $nlu: NluData;
-  $output: GenericOutput;
+  $output: OutputTemplate;
   $request: REQ;
   $response?: RES;
   $route?: JovoRoute;

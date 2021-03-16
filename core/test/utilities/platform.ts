@@ -1,13 +1,12 @@
+import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
 import {
   EntityMap,
   Extensible,
-  GenericOutput,
   Jovo,
   JovoRequest,
   JovoRequestType,
   JovoResponse,
   MiddlewareCollection,
-  OutputConverterStrategy,
   Platform,
   SessionData,
 } from '../../src';
@@ -35,14 +34,14 @@ export class ExamplePlatformRequest extends JovoRequest {
 export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
 
 export class ExamplePlatformOutputConverterStrategy
-  implements OutputConverterStrategy<ExamplePlatformResponse> {
+  implements OutputTemplateConverterStrategy<ExamplePlatformResponse> {
   responseClass = ExamplePlatformResponse;
 
-  fromResponse(response: ExamplePlatformResponse): GenericOutput {
+  fromResponse(response: ExamplePlatformResponse): OutputTemplate {
     return {};
   }
 
-  toResponse(output: GenericOutput): ExamplePlatformResponse {
+  toResponse(output: OutputTemplate): ExamplePlatformResponse {
     return {};
   }
 }
@@ -50,7 +49,7 @@ export class ExamplePlatformOutputConverterStrategy
 export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
   readonly jovoClass = ExamplePlatformApp;
   readonly requestClass = ExamplePlatformRequest;
-  outputConverterStrategy = new ExamplePlatformOutputConverterStrategy();
+  outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
   getDefaultConfig() {
     return {};
@@ -73,7 +72,7 @@ export class EmptyPlatform extends Platform<ExamplePlatformRequest, ExamplePlatf
   middlewareCollection = new MiddlewareCollection();
   readonly jovoClass = ExamplePlatformApp;
   readonly requestClass = ExamplePlatformRequest;
-  outputConverterStrategy = new ExamplePlatformOutputConverterStrategy();
+  outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
   getDefaultConfig() {
     return {};

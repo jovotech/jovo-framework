@@ -3,10 +3,8 @@
     "e2e",
     "core",
     "framework",
-    "platform-*",
-    "examples/**",
-    "../jovo-output/output",
-    "../jovo-output/output-*"
+    "platforms/**",
+    "examples/**"
   ],
   "ignoreChanges": [
     "*.md",
