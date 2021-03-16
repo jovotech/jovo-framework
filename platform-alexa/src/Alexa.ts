@@ -1,5 +1,5 @@
-import { App, ExtensibleConfig, Jovo, Platform } from 'jovo-core';
-import { AlexaOutputConverterStrategy, AlexaResponse } from 'jovo-output-alexa';
+import { App, ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { AlexaOutputConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
 

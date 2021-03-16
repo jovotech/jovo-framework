@@ -25,7 +25,7 @@ export {
   PlatformOutput,
   QuickReply,
   OutputValidationError,
-} from 'jovo-output';
+} from '@jovotech/output';
 
 export * from './App';
 export * from './BaseComponent';

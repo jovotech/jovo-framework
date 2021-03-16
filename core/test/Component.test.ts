@@ -15,7 +15,7 @@ describe('registering components', () => {
   test('via BaseComponent-constructor and undecorated component', () => {
     app.useComponents(EmptyComponent);
     expect(app.components).toEqual({
-      EmptyComponent: { target: EmptyComponent },
+      EmptyComponent: { target: EmptyComponent, options: {} },
     });
   });
 
@@ -23,7 +23,7 @@ describe('registering components', () => {
     test('no config passed', () => {
       app.use(new ExampleComponentPlugin());
       expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent },
+        ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
@@ -39,7 +39,7 @@ describe('registering components', () => {
     test('no options passed', () => {
       app.useComponents(new ComponentDeclaration(ExampleComponent));
       expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent },
+        ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
@@ -75,6 +75,12 @@ describe('registering components', () => {
         ExampleComponent: {
           target: ExampleComponent,
           options: { components: [EmptyComponent] },
+          components: {
+            EmptyComponent: {
+              options: {},
+              target: EmptyComponent,
+            },
+          },
         },
       });
     });
@@ -84,7 +90,7 @@ describe('registering components', () => {
     test('no options passed', () => {
       app.useComponents({ component: ExampleComponent });
       expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent },
+        ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
@@ -109,6 +115,12 @@ describe('registering components', () => {
         ExampleComponent: {
           target: ExampleComponent,
           options: { components: [EmptyComponent] },
+          components: {
+            EmptyComponent: {
+              options: {},
+              target: EmptyComponent,
+            },
+          },
         },
       });
     });
@@ -125,7 +137,7 @@ describe('registering components', () => {
 
       app.useComponents(DecoratedComponent);
       expect(app.components).toEqual({
-        DecoratedComponent: { target: DecoratedComponent },
+        DecoratedComponent: { target: DecoratedComponent, options: {} },
       });
     });
 

@@ -1,5 +1,5 @@
 {
-  "name": "jovo-examples-ts-hello-world",
+  "name": "@jovotech/examples-ts-hello-world",
   "version": "4.0.0",
   "private": true,
   "description": "",
@@ -21,7 +21,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^4.0.0"
+    "@jovotech/framework": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",

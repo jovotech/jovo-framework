@@ -1,5 +1,5 @@
 import { app } from './app';
-import { JovoDebugger } from 'jovo-plugin-debugger';
+import { JovoDebugger } from '@jovotech/plugin-debugger';
 
 const config = {
   logging: false,

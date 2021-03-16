@@ -1,9 +1,9 @@
 import _merge from 'lodash.merge';
-import { DeepPartial, RegisteredComponents } from '.';
+import { RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
-import {MatchingPlatformNotFoundError} from './errors/MatchingPlatformNotFoundError';
+import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
@@ -20,7 +20,7 @@ export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
 }
 
-export type AppInitConfig = ExtensibleInitConfig & {
+export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
 };
 
@@ -42,7 +42,7 @@ export class App extends Extensible<AppConfig> {
     'response',
   );
 
-  constructor(config?: DeepPartial<AppInitConfig>) {
+  constructor(config?: AppInitConfig) {
     // remove the components from the actual config, could be done afterwards as well
     super(config ? { ...config, components: undefined } : config);
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());

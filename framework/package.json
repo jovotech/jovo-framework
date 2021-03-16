@@ -1,16 +1,15 @@
 {
-  "name": "jovo-core",
+  "name": "@jovotech/framework",
   "version": "4.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "gulpfile.js"
   ],
   "scripts": {
-    "prebuild": "npm run rimraf",
     "build": "tsc",
-    "prewatch": "npm run rimraf",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
@@ -20,20 +19,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "ansi-colors": "^4.1.1",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.2",
-    "lodash.set": "^4.3.2",
-    "jovo-output": "^4.0.0",
-    "jovo-output-alexa": "^4.0.0"
+    "@jovotech/core": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
-    "@types/lodash.clonedeep": "^4.5.6",
-    "@types/lodash.get": "^4.4.6",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",

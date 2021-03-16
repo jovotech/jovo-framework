@@ -1,4 +1,4 @@
-import { BaseComponent, Component, ComponentDeclaration, Handle } from 'jovo-core';
+import { BaseComponent, Component, ComponentDeclaration, Handle } from '@jovotech/core';
 import { ReusableComponent } from './ReusableComponent';
 
 @Component({

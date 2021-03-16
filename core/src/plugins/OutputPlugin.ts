@@ -1,4 +1,4 @@
-import { OutputConverter } from 'jovo-output';
+import { OutputConverter } from '@jovotech/output';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { Plugin, PluginConfig } from '../Plugin';

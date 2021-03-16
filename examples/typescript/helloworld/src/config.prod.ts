@@ -1,6 +1,6 @@
 import { app } from './app';
-import { config } from 'jovo-framework';
-import { JovoDebugger } from 'jovo-plugin-debugger';
+import { config } from '@jovotech/framework';
+import { JovoDebugger } from '@jovotech/plugin-debugger';
 
 /**
  * DEFAULT CONFIG

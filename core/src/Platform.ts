@@ -1,4 +1,4 @@
-import { JovoResponse, OutputConverterStrategy } from 'jovo-output';
+import { JovoResponse, OutputConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { App, Constructor, HandleRequest, Jovo, JovoConstructor } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';

@@ -1,4 +1,4 @@
-import { SessionData } from 'jovo-core';
+import { SessionData } from '@jovotech/core';
 
 export interface Session {
   new: boolean;

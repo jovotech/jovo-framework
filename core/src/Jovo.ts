@@ -1,4 +1,4 @@
-import { GenericOutput, JovoResponse } from 'jovo-output';
+import { GenericOutput, JovoResponse } from '@jovotech/output';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { InternalSessionProperty, RequestType } from './enums';

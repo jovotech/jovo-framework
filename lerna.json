@@ -1,12 +1,12 @@
 {
   "packages": [
     "e2e",
-    "jovo-framework",
-    "jovo-core",
-    "jovo-platforms/**",
+    "core",
+    "framework",
+    "platform-*",
     "examples/**",
-    "../jovo-output/jovo-output",
-    "../jovo-output/packages/**"
+    "../jovo-output/output",
+    "../jovo-output/output-*"
   ],
   "ignoreChanges": [
     "*.md",

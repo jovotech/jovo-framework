@@ -1,5 +1,5 @@
 {
-  "name": "jovo-examples-routing",
+  "name": "@jovotech/examples-routing",
   "private": true,
   "version": "4.0.0",
   "description": "",
@@ -12,8 +12,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^4.0.0",
-    "jovo-platform-alexa": "^4.0.0"
+    "@jovotech/core": "^4.0.0",
+    "@jovotech/platform-alexa": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",

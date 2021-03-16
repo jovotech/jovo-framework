@@ -1,4 +1,4 @@
-import { App } from "jovo-framework";
+import { App } from "@jovotech/framework";
 
 function readonly(target) {
   target.descriptor.writable = false;
