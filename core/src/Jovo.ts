@@ -1,10 +1,11 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
+import { BaseOutput, OutputConstructor } from './BaseOutput';
 import { InternalSessionProperty, RequestType } from './enums';
 import { HandleRequest } from './HandleRequest';
 import { Host } from './Host';
-import { ComponentConstructor, PickWhere } from './index';
+import { ComponentConstructor, DeepPartial, PickWhere } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
@@ -76,6 +77,16 @@ export abstract class Jovo<
 
   get state(): SessionData[InternalSessionProperty.State] {
     return this.$session.$data[InternalSessionProperty.State];
+  }
+
+  // TODO determine async/ not async
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructor: OutputConstructor<OUTPUT>,
+    options?: DeepPartial<OUTPUT['options']>,
+  ) {
+    const outputInstance = new outputConstructor(this, options);
+    //
+    this.$output = await outputInstance.build();
   }
 
   redirect<

@@ -3,6 +3,12 @@ import { DeepPartial } from './index';
 import { Jovo } from './Jovo';
 import _merge from 'lodash.merge';
 
+export type OutputConstructor<OUTPUT extends BaseOutput = BaseOutput> = new (
+  jovo: Jovo,
+  options?: DeepPartial<OUTPUT['options']>,
+  ...args: unknown[]
+) => OUTPUT;
+
 export interface OutputOptions {
   [key: string]: unknown;
 }
