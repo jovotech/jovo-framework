@@ -28,8 +28,7 @@ export abstract class Extensible<
 
   abstract readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
 
-  constructor(config?: ExtensibleInitConfig) {
-    // remove the plugins from the actual config, could be done afterwards as well
+  constructor(config?: ExtensibleInitConfig<CONFIG>) {
     super((config ? { ...config, plugins: undefined } : config) as DeepPartial<CONFIG>);
     this.plugins = {};
     if (config?.plugins && config?.plugins?.length) {

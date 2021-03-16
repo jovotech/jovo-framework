@@ -43,7 +43,6 @@ export class App extends Extensible<AppConfig> {
   );
 
   constructor(config?: AppInitConfig) {
-    // remove the components from the actual config, could be done afterwards as well
     super(config ? { ...config, components: undefined } : config);
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
     this.components = {};
