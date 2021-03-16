@@ -14,10 +14,10 @@ export * from './decorators/validation/IsStringOrInstance';
 export * from './decorators/validation/ConditionalMaxLength';
 
 export * from './models/JovoResponse';
-export * from './models/GenericCard';
-export * from './models/GenericCarousel';
-export * from './models/GenericQuickReply';
-export * from './models/GenericMessage';
+export * from './models/Card';
+export * from './models/Carousel';
+export * from './models/QuickReply';
+export * from './models/Message';
 export * from './models/OutputTemplate';
 export * from './models/OutputTemplateBase';
 export * from './models/OutputTemplatePlatforms';

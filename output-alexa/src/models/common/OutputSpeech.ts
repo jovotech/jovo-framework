@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, Message, removeSSMLSpeakTags } from '@jovotech/output';
+import { IsEnum, IsOptional, MessageValue, removeSSMLSpeakTags } from '@jovotech/output';
 import { IsValidOutputSpeechString } from '../../decorators/validation/IsValidOutputSpeechString';
 
 export enum OutputSpeechType {
@@ -34,7 +34,7 @@ export class OutputSpeech<TYPE extends OutputSpeechType = OutputSpeechType> {
   @IsEnum(PlayBehavior)
   playBehavior?: PlayBehavior;
 
-  toMessage?(): Message {
+  toMessage?(): MessageValue {
     return this.type === OutputSpeechType.Plain
       ? ((this.text || '') as string)
       : removeSSMLSpeakTags((this.ssml || '') as string);

@@ -1,9 +1,15 @@
-import { GenericCard, GenericCarousel, GenericMessage, GenericQuickReply } from '@jovotech/output';
-import { Card, Collection, Simple, TypeOverride, TypeOverrideMode } from './models';
+import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
+import {
+  Card as GoogleAssistantCard,
+  Collection,
+  Simple,
+  TypeOverride,
+  TypeOverrideMode,
+} from './models';
 
-export function augmentGenericPrototypes(): void {
-  GenericCard.prototype.toGoogleAssistantCard = function () {
-    const card: Card = {
+export function augmentModelPrototypes(): void {
+  Card.prototype.toGoogleAssistantCard = function () {
+    const card: GoogleAssistantCard = {
       title: this.title,
     };
     if (this.subtitle) {
@@ -18,7 +24,7 @@ export function augmentGenericPrototypes(): void {
     return card;
   };
 
-  GenericCarousel.prototype.toGoogleAssistantCollectionData = function () {
+  Carousel.prototype.toGoogleAssistantCollectionData = function () {
     const typeOverride: TypeOverride = {
       name: 'prompt_option',
       mode: TypeOverrideMode.Replace,
@@ -48,7 +54,7 @@ export function augmentGenericPrototypes(): void {
     return { collection, typeOverride };
   };
 
-  GenericMessage.prototype.toGoogleAssistantSimple = function () {
+  Message.prototype.toGoogleAssistantSimple = function () {
     const simple: Simple = {
       speech: this.text,
     };
@@ -58,7 +64,7 @@ export function augmentGenericPrototypes(): void {
     return simple;
   };
 
-  GenericQuickReply.prototype.toGoogleAssistantSuggestion = function () {
+  QuickReply.prototype.toGoogleAssistantSuggestion = function () {
     return {
       title: this.text,
     };

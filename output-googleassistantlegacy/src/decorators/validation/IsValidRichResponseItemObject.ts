@@ -1,4 +1,9 @@
-import { formatValidationErrors, IsEitherValid, validate, ValidationOptions } from '@jovotech/output';
+import {
+  formatValidationErrors,
+  IsEitherValid,
+  validate,
+  ValidationOptions,
+} from '@jovotech/output';
 import { RichResponseItem } from '../../models';
 
 export function IsValidRichResponseItemObject(

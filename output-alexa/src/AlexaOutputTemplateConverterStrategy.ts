@@ -1,8 +1,14 @@
-import { OutputTemplate, Message, OutputTemplateConverterStrategy, toSSML } from '@jovotech/output';
-import { AlexaResponse, OutputSpeech, OutputSpeechType, PlayBehavior } from './models';
+import {
+  MessageValue,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  toSSML,
+} from '@jovotech/output';
 import _merge from 'lodash.merge';
+import { AlexaResponse, OutputSpeech, OutputSpeechType } from './models';
 
-export class AlexaOutputTemplateConverterStrategy implements OutputTemplateConverterStrategy<AlexaResponse> {
+export class AlexaOutputTemplateConverterStrategy
+  implements OutputTemplateConverterStrategy<AlexaResponse> {
   responseClass = AlexaResponse;
 
   toResponse(output: OutputTemplate): AlexaResponse {
@@ -63,14 +69,14 @@ export class AlexaOutputTemplateConverterStrategy implements OutputTemplateConve
       output.listen = !response.response.shouldEndSession;
     }
 
-    if (response.response.card?.toGenericCard) {
-      output.card = response.response.card.toGenericCard();
+    if (response.response.card?.toCard) {
+      output.card = response.response.card.toCard();
     }
 
     return output;
   }
 
-  convertMessageToOutputSpeech(message: Message): OutputSpeech {
+  convertMessageToOutputSpeech(message: MessageValue): OutputSpeech {
     return typeof message === 'string'
       ? {
           type: OutputSpeechType.Ssml,

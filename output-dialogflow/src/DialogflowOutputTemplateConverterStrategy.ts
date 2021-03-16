@@ -1,5 +1,10 @@
+import {
+  MessageValue,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  QuickReplyValue,
+} from '@jovotech/output';
 import _merge from 'lodash.merge';
-import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
 import { DialogflowResponse, Text } from './models';
 
 export class DialogflowOutputTemplateConverterStrategy
@@ -71,13 +76,13 @@ export class DialogflowOutputTemplateConverterStrategy
 
     const messageWithCard = response.fulfillment_messages?.find((message) => message.message.card);
     if (messageWithCard) {
-      output.card = messageWithCard.message.card?.toGenericCard?.();
+      output.card = messageWithCard.message.card?.toCard?.();
     }
 
     return output;
   }
 
-  convertMessageToText(message: Message): Text {
+  convertMessageToText(message: MessageValue): Text {
     return typeof message === 'string'
       ? { text: [message] }
       : message.toDialogflowText?.() || {
@@ -85,7 +90,7 @@ export class DialogflowOutputTemplateConverterStrategy
         };
   }
 
-  convertQuickReplyToDialogflowQuickReply(quickReply: QuickReply): string {
+  convertQuickReplyToDialogflowQuickReply(quickReply: QuickReplyValue): string {
     return typeof quickReply === 'string'
       ? quickReply
       : quickReply.toDialogflowQuickReply?.() || quickReply.value || quickReply.text;

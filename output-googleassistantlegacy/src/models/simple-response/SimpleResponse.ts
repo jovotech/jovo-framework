@@ -1,10 +1,9 @@
 import {
   IsNotEmpty,
   IsOptional,
-  isString,
   IsString,
   MaxLength,
-  Message,
+  MessageValue,
   removeSSMLSpeakTags,
 } from '@jovotech/output';
 import { IsValidSimpleResponseString } from '../../decorators/validation/IsValidSimpleResponseString';
@@ -22,7 +21,7 @@ export class SimpleResponse {
   @MaxLength(640)
   displayText?: string;
 
-  toMessage?(): Message {
+  toMessage?(): MessageValue {
     const text = removeSSMLSpeakTags(this.ssml || this.textToSpeech || '');
     return this.displayText
       ? {

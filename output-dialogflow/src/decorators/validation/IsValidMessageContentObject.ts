@@ -1,4 +1,9 @@
-import { formatValidationErrors, IsEitherValid, validate, ValidationOptions } from '@jovotech/output';
+import {
+  formatValidationErrors,
+  IsEitherValid,
+  validate,
+  ValidationOptions,
+} from '@jovotech/output';
 import { MessageContent } from '../../models/Message';
 import { RbmSuggestionContent } from '../../models/message/rbm/RbmSuggestion';
 

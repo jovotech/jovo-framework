@@ -1,4 +1,9 @@
-import { formatValidationErrors, IsEitherValid, validate, ValidationOptions } from '@jovotech/output';
+import {
+  formatValidationErrors,
+  IsEitherValid,
+  validate,
+  ValidationOptions,
+} from '@jovotech/output';
 import { Image, MediaObject } from '../../models';
 
 export function IsValidMediaObjectImage(validationOptions?: ValidationOptions): PropertyDecorator {

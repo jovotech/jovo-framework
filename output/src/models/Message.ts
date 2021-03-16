@@ -1,11 +1,11 @@
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsOptional, IsString } from '..';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
-import { GenericQuickReply, QuickReply } from './GenericQuickReply';
+import { QuickReply, QuickReplyValue } from './QuickReply';
 
-export type Message = string | GenericMessage;
+export type MessageValue = string | Message;
 
-export class GenericMessage {
+export class Message {
   @IsString()
   @IsNotEmpty()
   text: string;
@@ -17,9 +17,9 @@ export class GenericMessage {
 
   @IsOptional()
   @IsArray()
-  @IsStringOrInstance(GenericQuickReply, {
+  @IsStringOrInstance(QuickReply, {
     each: true,
   })
-  @Type(() => GenericQuickReply)
-  quickReplies?: QuickReply[];
+  @Type(() => QuickReply)
+  quickReplies?: QuickReplyValue[];
 }

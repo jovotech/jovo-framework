@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, IsString, IsUrl } from '..';
 
-export class GenericCard {
+export class Card {
   @IsOptional()
   @IsString()
   @IsNotEmpty()

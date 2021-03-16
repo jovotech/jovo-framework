@@ -1,6 +1,6 @@
 import {
   formatValidationErrors,
-  GenericCard,
+  Card as BaseCard,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -69,8 +69,8 @@ export class Card {
   @Type(() => Link)
   button?: Link;
 
-  toGenericCard?(): GenericCard {
-    const card: GenericCard = {
+  toCard?(): BaseCard {
+    const card: BaseCard = {
       title: (this.title || this.text || this.subtitle) as string,
     };
     if (this.text || this.subtitle) {

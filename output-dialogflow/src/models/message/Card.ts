@@ -1,5 +1,5 @@
 import {
-  GenericCard,
+  Card as BaseCard,
   IsArray,
   IsNotEmpty,
   IsOptional,
@@ -30,8 +30,8 @@ export class Card {
   @Type(() => Button)
   buttons?: Button[];
 
-  toGenericCard?(): GenericCard {
-    const card: GenericCard = {
+  toCard?(): BaseCard {
+    const card: BaseCard = {
       title: '',
     };
     if (this.title) {

@@ -1,14 +1,8 @@
-import {
-  GenericCard,
-  GenericCarousel,
-  GenericMessage,
-  GenericQuickReply,
-  toSSML,
-} from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply, toSSML } from '@jovotech/output';
 import { BasicCard, CollectionItem, SimpleResponse } from './models';
 
-export function augmentGenericPrototypes(): void {
-  GenericCard.prototype.toGoogleAssistantBasicCard = function () {
+export function augmentModelPrototypes(): void {
+  Card.prototype.toGoogleAssistantBasicCard = function () {
     const basicCard: BasicCard = {
       title: this.title,
     };
@@ -24,7 +18,7 @@ export function augmentGenericPrototypes(): void {
     return basicCard;
   };
 
-  GenericCarousel.prototype.toGoogleAssistantCarousel = function () {
+  Carousel.prototype.toGoogleAssistantCarousel = function () {
     return {
       items: this.items.map((item) => {
         const collectionItem: CollectionItem = {
@@ -48,7 +42,7 @@ export function augmentGenericPrototypes(): void {
     };
   };
 
-  GenericMessage.prototype.toGoogleAssistantSimpleResponse = function () {
+  Message.prototype.toGoogleAssistantSimpleResponse = function () {
     const simpleResponse: SimpleResponse = {
       ssml: toSSML(this.text),
     };
@@ -58,7 +52,7 @@ export function augmentGenericPrototypes(): void {
     return simpleResponse;
   };
 
-  GenericQuickReply.prototype.toGoogleAssistantSuggestion = function () {
+  QuickReply.prototype.toGoogleAssistantSuggestion = function () {
     return {
       title: this.text,
     };

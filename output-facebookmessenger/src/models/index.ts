@@ -1,5 +1,5 @@
-export * from './FacebookMessengerOutput';
-export * from './FacebookMessengerOutputResponse';
+export * from './FacebookMessengerOutputTemplate';
+export * from './FacebookMessengerOutputTemplateResponse';
 export * from './FacebookMessengerResponse';
 export * from './button/Button';
 export * from './button/CallButton';

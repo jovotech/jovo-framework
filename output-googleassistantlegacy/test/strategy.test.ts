@@ -1,5 +1,5 @@
 import {
-  GenericCard,
+  Card,
   OutputTemplate,
   OutputTemplateConverter,
   OutputValidationError,
@@ -13,7 +13,9 @@ import {
   SystemIntent,
 } from '../src';
 
-const outputConverter = new OutputTemplateConverter(new GoogleAssistantOutputTemplateConverterStrategy());
+const outputConverter = new OutputTemplateConverter(
+  new GoogleAssistantOutputTemplateConverterStrategy(),
+);
 
 async function convertToResponseAndExpectToEqual(
   output: OutputTemplate,
@@ -49,7 +51,7 @@ describe('toResponse', () => {
         },
       );
     });
-    test('output.message is GenericMessage', () => {
+    test('output.message is Message', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: {
@@ -112,7 +114,7 @@ describe('toResponse', () => {
         },
       );
     });
-    test('output.reprompt is GenericMessage', () => {
+    test('output.reprompt is Message', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: 'foo',
@@ -223,7 +225,7 @@ describe('toResponse', () => {
         }),
       ).rejects.toThrowError(OutputValidationError);
     });
-    test('output.quickReplies is array of string and GenericQuickReply', () => {
+    test('output.quickReplies is array of string and QuickReply', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: 'foo',
@@ -463,7 +465,7 @@ describe('toResponse', () => {
         outputConverter.toResponse({
           message: 'foo',
           carousel: {
-            items: ([] as GenericCard[]).fill({ title: 'foo', subtitle: 'bar' }, 0, 10),
+            items: ([] as Card[]).fill({ title: 'foo', subtitle: 'bar' }, 0, 10),
           },
         }),
       ).rejects.toThrowError(OutputValidationError);

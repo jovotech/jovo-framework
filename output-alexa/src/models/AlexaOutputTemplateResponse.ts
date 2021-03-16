@@ -2,7 +2,7 @@ import { IsNotEmpty, IsObject, IsOptional, IsString, Type, ValidateNested } from
 import { AlexaResponse } from './AlexaResponse';
 import { Response } from './Response';
 
-export class AlexaOutputResponse implements Partial<AlexaResponse> {
+export class AlexaOutputTemplateResponse implements Partial<AlexaResponse> {
   [key: string]: unknown;
 
   @IsOptional()

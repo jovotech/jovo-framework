@@ -1,4 +1,11 @@
-import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from '@jovotech/output';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from '@jovotech/output';
 import { PhoneNumber } from './PhoneNumber';
 
 export class UserInfo {

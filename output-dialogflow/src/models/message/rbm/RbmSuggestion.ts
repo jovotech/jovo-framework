@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsObject, IsPhoneNumber, IsString, Type, ValidateNested } from '@jovotech/output';
+import {
+  IsNotEmpty,
+  IsObject,
+  IsPhoneNumber,
+  IsString,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 import { IsValidRbmSuggestedActionContentObject } from '../../../decorators/validation/IsValidRbmSuggestedActionContentObject';
 import { IsValidRbmSuggestionContentObject } from '../../../decorators/validation/IsValidRbmSuggestionContentObject';
 

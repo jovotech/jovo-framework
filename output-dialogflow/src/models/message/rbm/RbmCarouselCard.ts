@@ -1,4 +1,11 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsEnum, Type, ValidateNested } from '@jovotech/output';
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 import { RbmCardContent } from './RbmCardContent';
 
 export enum CardWidth {

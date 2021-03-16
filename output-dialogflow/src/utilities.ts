@@ -1,9 +1,9 @@
-import { GenericCard, GenericMessage, GenericQuickReply } from '@jovotech/output';
-import { Card } from './models';
+import { Card, Message, QuickReply } from '@jovotech/output';
+import { Card as DialogflowCard } from './models';
 
-export function augmentGenericPrototypes(): void {
-  GenericCard.prototype.toDialogflowCard = function () {
-    const card: Card = {};
+export function augmentModelPrototypes(): void {
+  Card.prototype.toDialogflowCard = function () {
+    const card: DialogflowCard = {};
     if (this.title) {
       card.title = this.title;
     }
@@ -16,11 +16,11 @@ export function augmentGenericPrototypes(): void {
     return card;
   };
 
-  GenericMessage.prototype.toDialogflowText = function () {
+  Message.prototype.toDialogflowText = function () {
     return { text: [this.displayText || this.text] };
   };
 
-  GenericQuickReply.prototype.toDialogflowQuickReply = function () {
+  QuickReply.prototype.toDialogflowQuickReply = function () {
     return this.value || this.text;
   };
 }

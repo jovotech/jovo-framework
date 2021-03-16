@@ -1,6 +1,12 @@
-import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply, toSSML } from '@jovotech/output';
-import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
+import {
+  MessageValue,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  QuickReplyValue,
+  toSSML,
+} from '@jovotech/output';
 import _merge from 'lodash.merge';
+import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
 
 export class GoogleAssistantOutputTemplateConverterStrategy
   implements OutputTemplateConverterStrategy<GoogleAssistantResponse> {
@@ -85,21 +91,21 @@ export class GoogleAssistantOutputTemplateConverterStrategy
     }
 
     const basicCard = response.richResponse.items.find((item) => item.basicCard)?.basicCard;
-    if (basicCard?.toGenericCard) {
-      output.card = basicCard?.toGenericCard();
+    if (basicCard?.toCard) {
+      output.card = basicCard?.toCard();
     }
 
     if (
       response.systemIntent?.intent === 'actions.intent.OPTION' &&
       response.systemIntent?.data?.carouselSelect
     ) {
-      output.carousel = response.systemIntent.data.carouselSelect.toGenericCarousel?.();
+      output.carousel = response.systemIntent.data.carouselSelect.toCarousel?.();
     }
 
     return output;
   }
 
-  convertMessageToSimpleResponse(message: Message): SimpleResponse {
+  convertMessageToSimpleResponse(message: MessageValue): SimpleResponse {
     return typeof message === 'string'
       ? { ssml: toSSML(message) }
       : message.toGoogleAssistantSimpleResponse?.() || {
@@ -108,7 +114,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy
         };
   }
 
-  convertQuickReplyToSuggestion(quickReply: QuickReply): Suggestion {
+  convertQuickReplyToSuggestion(quickReply: QuickReplyValue): Suggestion {
     return typeof quickReply === 'string'
       ? { title: quickReply }
       : quickReply.toGoogleAssistantSuggestion?.() || {

@@ -1,42 +1,48 @@
 import { registerOutputPlatform } from '@jovotech/output';
-import { BasicCard, Carousel, GoogleAssistantOutput, SimpleResponse, Suggestion } from './models';
-import { augmentGenericPrototypes } from './utilities';
+import {
+  BasicCard,
+  Carousel as GoogleAssistantCarousel,
+  GoogleAssistantOutputTemplate,
+  SimpleResponse,
+  Suggestion,
+} from './models';
+import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/GenericCard' {
-  interface GenericCard {
+declare module '@jovotech/output/dist/models/Card' {
+  interface Card {
     toGoogleAssistantBasicCard?(): BasicCard;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericCarousel' {
-  interface GenericCarousel {
-    toGoogleAssistantCarousel?(): Carousel;
+declare module '@jovotech/output/dist/models/Carousel' {
+  interface Carousel {
+    toGoogleAssistantCarousel?(): GoogleAssistantCarousel;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericMessage' {
-  interface GenericMessage {
+declare module '@jovotech/output/dist/models/Message' {
+  interface Message {
     toGoogleAssistantSimpleResponse?(): SimpleResponse;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericQuickReply' {
-  interface GenericQuickReply {
+declare module '@jovotech/output/dist/models/QuickReply' {
+  interface QuickReply {
     toGoogleAssistantSuggestion?(): Suggestion;
   }
 }
 
 // augment the prototypes of the generic models to have methods to convert to the GoogleAssistant-variant
-augmentGenericPrototypes();
+augmentModelPrototypes();
 
-// Make GoogleAssistantOutput available for the OutputTemplatePlatforms-object via the GoogleAssistant-key.
+// Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the GoogleAssistant-key.
 declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    GoogleAssistant?: GoogleAssistantOutput;
+    GoogleAssistant?: GoogleAssistantOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('GoogleAssistant', GoogleAssistantOutput);
+registerOutputPlatform('GoogleAssistant', GoogleAssistantOutputTemplate);
 
 export * from './decorators/validation/IsValidLineItemExtension';
 export * from './decorators/validation/IsValidMediaObjectImage';

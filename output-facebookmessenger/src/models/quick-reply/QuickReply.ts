@@ -1,4 +1,4 @@
-import { IsEnum, QuickReply as GenericQuickReplyOrString } from '@jovotech/output';
+import { IsEnum, QuickReplyValue } from '@jovotech/output';
 
 export enum QuickReplyContentType {
   Text = 'text',
@@ -26,7 +26,7 @@ export class QuickReply<T extends QuickReplyContentType = QuickReplyContentType>
     ? never
     : string | undefined;
 
-  toQuickReply?(): GenericQuickReplyOrString | undefined {
+  toQuickReply?(): QuickReplyValue | undefined {
     if (this.content_type !== QuickReplyContentType.Text || !this.title) {
       return undefined;
     }

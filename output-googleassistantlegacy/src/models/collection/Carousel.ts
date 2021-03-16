@@ -1,8 +1,8 @@
 import {
   ArrayMaxSize,
   ArrayMinSize,
-  GenericCard,
-  GenericCarousel,
+  Card,
+  Carousel as BaseCarousel,
   IsArray,
   Type,
   ValidateNested,
@@ -17,10 +17,10 @@ export class Carousel {
   @Type(() => CollectionItem)
   items: CollectionItem[];
 
-  toGenericCarousel?(): GenericCarousel {
+  toCarousel?(): BaseCarousel {
     return {
       items: this.items.map((item) => {
-        const card: GenericCard = {
+        const card: Card = {
           title: item.title,
         };
         if (item.optionInfo?.key) {

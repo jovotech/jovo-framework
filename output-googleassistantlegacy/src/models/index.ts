@@ -1,5 +1,5 @@
-export * from './GoogleAssistantOutput';
-export * from './GoogleAssistantOutputResponse';
+export * from './GoogleAssistantOutputTemplate';
+export * from './GoogleAssistantOutputTemplateResponse';
 export * from './GoogleAssistantResponse';
 export * from './LinkOutSuggestion';
 export * from './OutputRichResponse';

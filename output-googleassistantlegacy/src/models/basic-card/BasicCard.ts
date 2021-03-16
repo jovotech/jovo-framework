@@ -1,7 +1,7 @@
 import {
   ArrayMaxSize,
   formatValidationErrors,
-  GenericCard,
+  Card,
   IsArray,
   IsEnum,
   IsNotEmpty,
@@ -83,8 +83,8 @@ export class BasicCard {
   @IsEnum(ImageDisplayOptions)
   imageDisplayOptions?: ImageDisplayOptions;
 
-  toGenericCard?(): GenericCard {
-    const card: GenericCard = {
+  toCard?(): Card {
+    const card: Card = {
       title: (this.title || this.formattedText || this.subtitle) as string,
     };
     if (this.formattedText || this.subtitle) {

@@ -1,6 +1,6 @@
 export * from './Device';
 export * from './Expected';
-export * from './GoogleAssistantOutput';
+export * from './GoogleAssistantOutputTemplate';
 export * from './GoogleAssistantResponse';
 export * from './Home';
 export * from './Prompt';

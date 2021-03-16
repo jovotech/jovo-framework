@@ -1,4 +1,9 @@
-import { formatValidationErrors, IsEitherValid, validate, ValidationOptions } from '@jovotech/output';
+import {
+  formatValidationErrors,
+  IsEitherValid,
+  validate,
+  ValidationOptions,
+} from '@jovotech/output';
 import { Content } from '../../models';
 
 export function IsValidContentObject(validationOptions?: ValidationOptions): PropertyDecorator {

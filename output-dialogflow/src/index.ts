@@ -1,36 +1,36 @@
 import { registerOutputPlatform } from '@jovotech/output';
-import { Card, DialogflowOutput, Text } from './models';
-import { augmentGenericPrototypes } from './utilities';
+import { Card as DialogflowCard, DialogflowOutputTemplate, Text } from './models';
+import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/GenericCard' {
-  interface GenericCard {
-    toDialogflowCard?(): Card;
+declare module '@jovotech/output/dist/models/Card' {
+  interface Card {
+    toDialogflowCard?(): DialogflowCard;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericMessage' {
-  interface GenericMessage {
+declare module '@jovotech/output/dist/models/Message' {
+  interface Message {
     toDialogflowText?(): Text;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericQuickReply' {
-  interface GenericQuickReply {
+declare module '@jovotech/output/dist/models/QuickReply' {
+  interface QuickReply {
     toDialogflowQuickReply?(): string;
   }
 }
 
 // augment the prototypes of the generic models to have methods to convert to the Dialogflow-variant
-augmentGenericPrototypes();
+augmentModelPrototypes();
 
-// Make DialogflowOutput available for the OutputTemplatePlatforms-object via the Dialogflow-key.
+// Make DialogflowOutputTemplate available for the OutputTemplatePlatforms-object via the Dialogflow-key.
 declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    Dialogflow?: DialogflowOutput;
+    Dialogflow?: DialogflowOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('Dialogflow', DialogflowOutput);
+registerOutputPlatform('Dialogflow', DialogflowOutputTemplate);
 
 export * from './decorators/validation/EntitySynonymsContainValue';
 export * from './decorators/validation/IsValidMessageContentObject';

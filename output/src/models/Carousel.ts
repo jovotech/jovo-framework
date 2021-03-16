@@ -8,9 +8,9 @@ import {
   IsString,
   ValidateNested,
 } from '..';
-import { GenericCard } from './GenericCard';
+import { Card } from './Card';
 
-export class GenericCarousel {
+export class Carousel {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
@@ -18,12 +18,12 @@ export class GenericCarousel {
 
   @IsArray()
   @ArrayMinSize(2)
-  @IsInstance(GenericCard, {
+  @IsInstance(Card, {
     each: true,
   })
   @ValidateNested({
     each: true,
   })
-  @Type(() => GenericCard)
-  items: GenericCard[];
+  @Type(() => Card)
+  items: Card[];
 }

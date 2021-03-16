@@ -21,5 +21,4 @@ export class AlexaResponse extends JovoResponse {
   @ValidateNested()
   @Type(() => Response)
   response: Response;
-
 }

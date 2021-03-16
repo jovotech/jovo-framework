@@ -1,8 +1,13 @@
-import { GenericCard, GenericCarousel, GenericMessage, GenericQuickReply } from '@jovotech/output';
-import { GenericTemplateElement, Message, QuickReplyContentType, TemplateType } from './models';
+import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
+import {
+  GenericTemplateElement,
+  Message as FacebookMessengerMessage,
+  QuickReplyContentType,
+  TemplateType,
+} from './models';
 
-export function augmentGenericPrototypes(): void {
-  GenericCard.prototype.toFacebookMessengerGenericTemplateElement = function () {
+export function augmentModelPrototypes(): void {
+  Card.prototype.toFacebookMessengerGenericTemplateElement = function () {
     const element: GenericTemplateElement = {
       title: this.title,
     };
@@ -15,22 +20,22 @@ export function augmentGenericPrototypes(): void {
     return element;
   };
 
-  GenericCard.prototype.toFacebookMessengerGenericTemplate = function () {
+  Card.prototype.toFacebookMessengerGenericTemplate = function () {
     return {
       template_type: TemplateType.Generic,
       elements: [this.toFacebookMessengerGenericTemplateElement!()],
     };
   };
 
-  GenericCarousel.prototype.toFacebookMessengerGenericTemplate = function () {
+  Carousel.prototype.toFacebookMessengerGenericTemplate = function () {
     return {
       template_type: TemplateType.Generic,
       elements: this.items.map((item) => item.toFacebookMessengerGenericTemplateElement!()),
     };
   };
 
-  GenericMessage.prototype.toFacebookMessengerMessage = function () {
-    const message: Message = {
+  Message.prototype.toFacebookMessengerMessage = function () {
+    const message: FacebookMessengerMessage = {
       text: this.displayText || this.text,
     };
     if (this.quickReplies) {
@@ -51,7 +56,7 @@ export function augmentGenericPrototypes(): void {
     return message;
   };
 
-  GenericQuickReply.prototype.toFacebookQuickReply = function () {
+  QuickReply.prototype.toFacebookQuickReply = function () {
     return {
       content_type: QuickReplyContentType.Text,
       title: this.text,

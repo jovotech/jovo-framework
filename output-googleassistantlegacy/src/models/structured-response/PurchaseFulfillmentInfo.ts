@@ -1,4 +1,11 @@
-import { IsDateString, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 import { Location } from './Location';
 import { PickupInfo } from './PickupInfo';
 import { PriceAttribute } from './PriceAttribute';

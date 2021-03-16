@@ -1,4 +1,9 @@
-import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
+import {
+  MessageValue,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  QuickReplyValue,
+} from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { GoogleAssistantResponse, Simple, Suggestion } from './models';
 
@@ -116,8 +121,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy
     }
 
     const card = response.prompt?.content?.card;
-    if (card?.toGenericCard) {
-      output.card = card.toGenericCard();
+    if (card?.toCard) {
+      output.card = card.toCard();
     }
 
     if (response?.session?.typeOverrides && response?.prompt?.content?.collection) {
@@ -142,7 +147,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy
     return output;
   }
 
-  convertMessageToSimple(message: Message): Simple {
+  convertMessageToSimple(message: MessageValue): Simple {
     return typeof message === 'string'
       ? { speech: message }
       : message.toGoogleAssistantSimple?.() || {
@@ -151,7 +156,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy
         };
   }
 
-  convertQuickReplyToSuggestion(quickReply: QuickReply): Suggestion {
+  convertQuickReplyToSuggestion(quickReply: QuickReplyValue): Suggestion {
     return typeof quickReply === 'string'
       ? { title: quickReply }
       : quickReply.toGoogleAssistantSuggestion?.() || {

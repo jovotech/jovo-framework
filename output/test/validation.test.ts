@@ -1,10 +1,10 @@
 import { plainToClass } from 'class-transformer';
 import {
-  GenericCard,
-  GenericCarousel,
-  GenericMessage,
+  Card,
+  Carousel,
+  Message,
   OutputTemplate,
-  GenericQuickReply,
+  QuickReply,
   validate,
   ValidationOptions,
 } from '../src';
@@ -82,49 +82,49 @@ async function validateAndExpectLength<T>(
   expect(errors).toHaveLength(expectedLength);
 }
 
-describe('validation - GenericQuickReply', () => {
-  testStringProperty(GenericQuickReply, 'text');
-  testOptionalStringProperty(GenericQuickReply, 'value', {
+describe('validation - QuickReply', () => {
+  testStringProperty(QuickReply, 'text');
+  testOptionalStringProperty(QuickReply, 'value', {
     text: 'foo',
   });
 });
 
-describe('validation - GenericMessage', () => {
-  testStringProperty(GenericMessage, 'text');
-  testOptionalStringProperty(GenericMessage, 'displayText', {
+describe('validation - Message', () => {
+  testStringProperty(Message, 'text');
+  testOptionalStringProperty(Message, 'displayText', {
     text: 'foo',
   });
 
   test('quickReplies - optional', async () => {
-    await validateAndExpectLength(GenericMessage, { text: 'foo' }, 0);
+    await validateAndExpectLength(Message, { text: 'foo' }, 0);
   });
   test('quickReplies - invalid: wrong type', async () => {
-    await validateAndExpectLength(GenericMessage, { text: 'foo', quickReplies: {} as any }, 1);
+    await validateAndExpectLength(Message, { text: 'foo', quickReplies: {} as any }, 1);
   });
   test('quickReplies - invalid: invalid element', async () => {
-    await validateAndExpectLength(GenericMessage, { text: 'foo', quickReplies: [2] as any }, 1);
+    await validateAndExpectLength(Message, { text: 'foo', quickReplies: [2] as any }, 1);
   });
   test('quickReplies - valid', async () => {
     await validateAndExpectLength(
-      GenericMessage,
+      Message,
       { text: 'foo', quickReplies: ['foo', { text: 'bar' }] },
       0,
     );
   });
 });
 
-describe('validation - GenericCard', () => {
-  testStringProperty(GenericCard, 'title');
-  testOptionalStringProperty(GenericCard, 'key', {
+describe('validation - Card', () => {
+  testStringProperty(Card, 'title');
+  testOptionalStringProperty(Card, 'key', {
     title: 'foo',
   });
-  testOptionalStringProperty(GenericCard, 'subtitle', {
+  testOptionalStringProperty(Card, 'subtitle', {
     title: 'foo',
   });
 
   test('imageUrl - optional', async () => {
     await validateAndExpectLength(
-      GenericCard,
+      Card,
       {
         title: 'foo',
       },
@@ -133,7 +133,7 @@ describe('validation - GenericCard', () => {
   });
   test('imageUrl - invalid: empty', async () => {
     await validateAndExpectLength(
-      GenericCard,
+      Card,
       {
         title: 'foo',
         imageUrl: '',
@@ -143,7 +143,7 @@ describe('validation - GenericCard', () => {
   });
   test('imageUrl - invalid: wrong type', async () => {
     await validateAndExpectLength(
-      GenericCard,
+      Card,
       {
         title: 'foo',
         imageUrl: 2 as any,
@@ -153,7 +153,7 @@ describe('validation - GenericCard', () => {
   });
   test('imageUrl - invalid: no url', async () => {
     await validateAndExpectLength(
-      GenericCard,
+      Card,
       {
         title: 'foo',
         imageUrl: 'foo',
@@ -163,7 +163,7 @@ describe('validation - GenericCard', () => {
   });
   test('imageUrl - valid: url', async () => {
     await validateAndExpectLength(
-      GenericCard,
+      Card,
       {
         title: 'foo',
         imageUrl: 'https://placeholder.com',
@@ -173,10 +173,10 @@ describe('validation - GenericCard', () => {
   });
 });
 
-describe('validation - GenericCarousel', () => {
+describe('validation - Carousel', () => {
   test('items - invalid: wrong type', async () => {
     await validateAndExpectLength(
-      GenericCarousel,
+      Carousel,
       {
         items: {} as any,
       },
@@ -185,7 +185,7 @@ describe('validation - GenericCarousel', () => {
   });
   test('items - invalid: fewer than 2 elements', async () => {
     await validateAndExpectLength(
-      GenericCarousel,
+      Carousel,
       {
         items: [{ title: 'foo' }],
       },
@@ -194,7 +194,7 @@ describe('validation - GenericCarousel', () => {
   });
   test('items - invalid: element not a card', async () => {
     await validateAndExpectLength(
-      GenericCarousel,
+      Carousel,
       {
         items: [2] as any,
       },
@@ -203,7 +203,7 @@ describe('validation - GenericCarousel', () => {
   });
   test('items - invalid: invalid element', async () => {
     await validateAndExpectLength(
-      GenericCarousel,
+      Carousel,
       {
         items: [{ title: 2 as any }],
       },
@@ -212,7 +212,7 @@ describe('validation - GenericCarousel', () => {
   });
   test('items - valid', async () => {
     await validateAndExpectLength(
-      GenericCarousel,
+      Carousel,
       {
         items: [{ title: 'foo' }, { title: 'bar' }],
       },
@@ -220,7 +220,7 @@ describe('validation - GenericCarousel', () => {
     );
   });
 
-  testOptionalStringProperty(GenericCarousel, 'title', {
+  testOptionalStringProperty(Carousel, 'title', {
     items: [{ title: 'foo' }, { title: 'bar' }],
   });
 });

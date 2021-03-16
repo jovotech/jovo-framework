@@ -1,4 +1,11 @@
-import { OutputTemplate, Message, OutputTemplateConverterStrategy, QuickReply } from '@jovotech/output';
+import {
+  MessageValue,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  QuickReply,
+  QuickReplyValue,
+} from '@jovotech/output';
+import _merge from 'lodash.merge';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -9,7 +16,6 @@ import {
   QuickReplyContentType,
   TemplateType,
 } from './models';
-import _merge from 'lodash.merge';
 
 export class FacebookMessengerOutputTemplateConverterStrategy
   implements OutputTemplateConverterStrategy<FacebookMessengerResponse> {
@@ -68,10 +74,10 @@ export class FacebookMessengerOutputTemplateConverterStrategy
     ) {
       const genericTemplate = response.message?.attachment?.payload as Partial<GenericTemplate>;
 
-      if (genericTemplate.elements?.length === 1 && genericTemplate.elements[0].toGenericCard) {
-        output.card = genericTemplate.elements[0].toGenericCard();
-      } else if ((genericTemplate.elements?.length || 0) > 1 && genericTemplate.toGenericCarousel) {
-        output.carousel = genericTemplate.toGenericCarousel();
+      if (genericTemplate.elements?.length === 1 && genericTemplate.elements[0].toCard) {
+        output.card = genericTemplate.elements[0].toCard();
+      } else if ((genericTemplate.elements?.length || 0) > 1 && genericTemplate.toCarousel) {
+        output.carousel = genericTemplate.toCarousel();
       }
     }
 
@@ -84,7 +90,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy
     return output;
   }
 
-  convertMessageToFacebookMessengerMessage(message: Message): FacebookMessengerMessage {
+  convertMessageToFacebookMessengerMessage(message: MessageValue): FacebookMessengerMessage {
     return typeof message === 'string'
       ? { text: message }
       : message.toFacebookMessengerMessage?.() || {
@@ -96,7 +102,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy
   }
 
   convertQuickReplyToFacebookMessengerQuickReply(
-    quickReply: QuickReply,
+    quickReply: QuickReplyValue,
   ): FacebookMessengerQuickReply {
     return typeof quickReply === 'string'
       ? { content_type: QuickReplyContentType.Text, title: quickReply, payload: quickReply }

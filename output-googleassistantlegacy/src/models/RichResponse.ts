@@ -1,4 +1,11 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsOptional, Type, ValidateNested } from '@jovotech/output';
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsOptional,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 import { IsValidRichResponseItemArray } from '../decorators/validation/IsValidRichResponseItemArray';
 import { Suggestion } from './common/Suggestion';
 import { LinkOutSuggestion } from './LinkOutSuggestion';

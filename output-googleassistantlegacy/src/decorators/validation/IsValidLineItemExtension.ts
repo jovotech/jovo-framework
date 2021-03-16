@@ -1,4 +1,9 @@
-import { formatValidationErrors, IsEitherValid, validate, ValidationOptions } from '@jovotech/output';
+import {
+  formatValidationErrors,
+  IsEitherValid,
+  validate,
+  ValidationOptions,
+} from '@jovotech/output';
 import { LineItem, PurchaseItemExtension, ReservationItemExtension } from '../../models';
 
 export function IsValidLineItemExtension(validationOptions?: ValidationOptions): PropertyDecorator {

@@ -1,23 +1,23 @@
 import { Type } from 'class-transformer';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import { IsArray, IsBoolean, IsInstance, IsOptional, ValidateNested } from '../index';
-import { GenericCard } from './GenericCard';
-import { GenericCarousel } from './GenericCarousel';
-import { GenericMessage, Message } from './GenericMessage';
-import { GenericQuickReply, QuickReply } from './GenericQuickReply';
+import { Card } from './Card';
+import { Carousel } from './Carousel';
+import { Message, MessageValue } from './Message';
+import { QuickReply, QuickReplyValue } from './QuickReply';
 
 export class OutputTemplateBase {
   [key: string]: unknown;
 
   @IsOptional()
-  @IsStringOrInstance(GenericMessage)
-  @Type(() => GenericMessage)
-  message?: Message;
+  @IsStringOrInstance(Message)
+  @Type(() => Message)
+  message?: MessageValue;
 
   @IsOptional()
-  @IsStringOrInstance(GenericMessage)
-  @Type(() => GenericMessage)
-  reprompt?: Message;
+  @IsStringOrInstance(Message)
+  @Type(() => Message)
+  reprompt?: MessageValue;
 
   @IsOptional()
   @IsBoolean()
@@ -25,21 +25,21 @@ export class OutputTemplateBase {
 
   @IsOptional()
   @IsArray()
-  @IsStringOrInstance(GenericQuickReply, {
+  @IsStringOrInstance(QuickReply, {
     each: true,
   })
-  @Type(() => GenericQuickReply)
-  quickReplies?: QuickReply[];
+  @Type(() => QuickReply)
+  quickReplies?: QuickReplyValue[];
 
   @IsOptional()
-  @IsInstance(GenericCard)
+  @IsInstance(Card)
   @ValidateNested()
-  @Type(() => GenericCard)
-  card?: GenericCard;
+  @Type(() => Card)
+  card?: Card;
 
   @IsOptional()
-  @IsInstance(GenericCarousel)
+  @IsInstance(Carousel)
   @ValidateNested()
-  @Type(() => GenericCarousel)
-  carousel?: GenericCarousel;
+  @Type(() => Carousel)
+  carousel?: Carousel;
 }

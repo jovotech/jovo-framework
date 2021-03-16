@@ -18,7 +18,7 @@ import {
 } from './FacebookMessengerResponse';
 import { Message } from './message/Message';
 
-export class FacebookMessengerOutputResponse implements Partial<FacebookMessengerResponse> {
+export class FacebookMessengerOutputTemplateResponse implements Partial<FacebookMessengerResponse> {
   [key: string]: unknown;
 
   @IsOptional()

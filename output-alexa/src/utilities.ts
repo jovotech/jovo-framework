@@ -1,5 +1,5 @@
-import { GenericCard, GenericMessage } from '@jovotech/output';
-import { Card, CardType, OutputSpeechType, PlayBehavior } from './models';
+import { Card, Message } from '@jovotech/output';
+import { Card as AlexaCard, CardType, OutputSpeechType } from './models';
 
 export function validateAlexaString(value: unknown): string | undefined | null | void {
   if (typeof value !== 'string') {
@@ -14,9 +14,9 @@ export function validateAlexaString(value: unknown): string | undefined | null |
   return;
 }
 
-export function augmentGenericPrototypes(): void {
-  GenericCard.prototype.toAlexaCard = function () {
-    const card: Card<CardType.Standard> = {
+export function augmentModelPrototypes(): void {
+  Card.prototype.toAlexaCard = function () {
+    const card: AlexaCard<CardType.Standard> = {
       type: CardType.Standard,
       title: this.title,
       text: this.subtitle,
@@ -30,7 +30,7 @@ export function augmentGenericPrototypes(): void {
     return card;
   };
 
-  GenericMessage.prototype.toAlexaOutputSpeech = function () {
+  Message.prototype.toAlexaOutputSpeech = function () {
     return {
       type: OutputSpeechType.Ssml,
       ssml: this.text,

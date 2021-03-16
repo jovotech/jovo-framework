@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, Type, ValidateIf, ValidateNested } from '@jovotech/output';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Type,
+  ValidateIf,
+  ValidateNested,
+} from '@jovotech/output';
 import { IsValidRichResponseItemObject } from '../decorators/validation/IsValidRichResponseItemObject';
 import { BasicCard } from './basic-card/BasicCard';
 import { CarouselBrowse } from './carousel-browse/CarouselBrowse';

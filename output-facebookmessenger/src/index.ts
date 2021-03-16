@@ -1,49 +1,50 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
-  FacebookMessengerOutput,
+  FacebookMessengerOutputTemplate,
   GenericTemplate,
   GenericTemplateElement,
   Message as FacebookMessengerMessage,
   QuickReply as FacebookMessengerQuickReply,
 } from './models';
-import { augmentGenericPrototypes } from './utilities';
+import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/GenericCard' {
-  interface GenericCard {
+declare module '@jovotech/output/dist/models/Card' {
+  interface Card {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
+
     toFacebookMessengerGenericTemplateElement?(): GenericTemplateElement;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericCarousel' {
-  interface GenericCarousel {
+declare module '@jovotech/output/dist/models/Carousel' {
+  interface Carousel {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericMessage' {
-  interface GenericMessage {
+declare module '@jovotech/output/dist/models/Message' {
+  interface Message {
     toFacebookMessengerMessage?(): FacebookMessengerMessage;
   }
 }
 
-declare module '@jovotech/output/dist/models/GenericQuickReply' {
-  interface GenericQuickReply {
+declare module '@jovotech/output/dist/models/QuickReply' {
+  interface QuickReply {
     toFacebookQuickReply?(): FacebookMessengerQuickReply;
   }
 }
 
 // augment the prototypes of the generic models to have methods to convert to the FacebookMessenger-variant
-augmentGenericPrototypes();
+augmentModelPrototypes();
 
-// Make FacebookMessengerOutput available for the OutputTemplatePlatforms-object via the FacebookMessenger-key.
+// Make FacebookMessengerOutputTemplate available for the OutputTemplatePlatforms-object via the FacebookMessenger-key.
 declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    FacebookMessenger?: FacebookMessengerOutput;
+    FacebookMessenger?: FacebookMessengerOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('FacebookMessenger', FacebookMessengerOutput);
+registerOutputPlatform('FacebookMessenger', FacebookMessengerOutputTemplate);
 
 export * from './decorators/transformation/TransformButton';
 export * from './decorators/validation/CastedMaxLength';

@@ -8,7 +8,7 @@ type PartialGoogleAssistantResponse = Partial<Omit<GoogleAssistantResponse, 'ric
   richResponse?: OutputRichResponse;
 };
 
-export class GoogleAssistantOutputResponse implements PartialGoogleAssistantResponse {
+export class GoogleAssistantOutputTemplateResponse implements PartialGoogleAssistantResponse {
   [key: string]: unknown;
 
   @IsOptional()

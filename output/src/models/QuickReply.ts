@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsOptional, IsString } from '..';
 
-export type QuickReply = string | GenericQuickReply;
+export type QuickReplyValue = string | QuickReply;
 
-export class GenericQuickReply {
+export class QuickReply {
   @IsString()
   @IsNotEmpty()
   text: string;

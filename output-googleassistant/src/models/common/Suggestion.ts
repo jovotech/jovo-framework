@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength, QuickReply } from '@jovotech/output';
+import { IsNotEmpty, IsString, MaxLength, QuickReply, QuickReplyValue } from '@jovotech/output';
 
 export class Suggestion {
   @IsString()
@@ -6,7 +6,7 @@ export class Suggestion {
   @MaxLength(25)
   title: string;
 
-  toQuickReply?(): QuickReply {
+  toQuickReply?(): QuickReplyValue {
     return this.title;
   }
 }

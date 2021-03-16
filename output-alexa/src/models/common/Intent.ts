@@ -1,4 +1,11 @@
-import { IsEnum, IsNotEmpty, IsObject, IsString, TransformMap, ValidateNested } from '@jovotech/output';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsObject,
+  IsString,
+  TransformMap,
+  ValidateNested,
+} from '@jovotech/output';
 import { Slot } from './Slot';
 
 export enum ConfirmationStatus {

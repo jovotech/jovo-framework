@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Type, ValidateNested } from '@jovotech/output';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 import { LatLng } from './LatLng';
 import { PostalAddress } from './PostalAddress';
 

@@ -1,5 +1,5 @@
-export * from './AlexaOutput';
-export * from './AlexaOutputResponse';
+export * from './AlexaOutputTemplate';
+export * from './AlexaOutputTemplateResponse';
 export * from './AlexaResponse';
 export * from './Directive';
 export * from './Reprompt';

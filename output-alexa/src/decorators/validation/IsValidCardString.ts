@@ -1,4 +1,9 @@
-import { isDefined, registerDecorator, ValidationArguments, ValidationOptions } from '@jovotech/output';
+import {
+  isDefined,
+  registerDecorator,
+  ValidationArguments,
+  ValidationOptions,
+} from '@jovotech/output';
 import { Card, CardType } from '../../models';
 import { validateAlexaString } from '../../utilities';
 

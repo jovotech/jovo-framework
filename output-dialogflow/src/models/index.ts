@@ -1,5 +1,5 @@
 export * from './Context';
-export * from './DialogflowOutput';
+export * from './DialogflowOutputTemplate';
 export * from './DialogflowResponse';
 export * from './EventInput';
 export * from './Message';

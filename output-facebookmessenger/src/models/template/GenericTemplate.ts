@@ -1,8 +1,8 @@
 import {
   ArrayMaxSize,
+  Card,
+  Carousel,
   Equals,
-  GenericCard,
-  GenericCarousel,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -74,8 +74,8 @@ export class GenericTemplateElement {
   @TransformButton()
   buttons?: Button[];
 
-  toGenericCard?(): GenericCard {
-    const card: GenericCard = {
+  toCard?(): Card {
+    const card: Card = {
       title: this.title,
     };
     if (this.subtitle) {
@@ -102,9 +102,9 @@ export class GenericTemplate extends Template<TemplateType.Generic> {
   @Type(() => GenericTemplateElement)
   elements: GenericTemplateElement[];
 
-  toGenericCarousel?(): GenericCarousel {
+  toCarousel?(): Carousel {
     return {
-      items: this.elements.map((element) => element.toGenericCard!()),
+      items: this.elements.map((element) => element.toCard!()),
     };
   }
 }

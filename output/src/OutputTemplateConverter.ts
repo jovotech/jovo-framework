@@ -8,7 +8,8 @@ export class OutputTemplateConverter<Response extends JovoResponse> {
   constructor(public strategy: OutputTemplateConverterStrategy<Response>) {}
 
   validateOutput(output: OutputTemplate): Promise<ValidationError[]> {
-    const instance = output instanceof OutputTemplate ? output : plainToClass(OutputTemplate, output);
+    const instance =
+      output instanceof OutputTemplate ? output : plainToClass(OutputTemplate, output);
     return validate(instance);
   }
 

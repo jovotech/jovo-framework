@@ -1,4 +1,4 @@
-import { GenericCard, IsEnum, Type } from '@jovotech/output';
+import { Card as BaseCard, IsEnum, Type } from '@jovotech/output';
 import { IsValidCardImage } from '../../decorators/validation/IsValidCardImage';
 import { IsValidCardString } from '../../decorators/validation/IsValidCardString';
 import { CardImage } from './CardImage';
@@ -29,8 +29,8 @@ export class Card<TYPE extends CardType = CardType> {
     ? never
     : CardImage | undefined;
 
-  toGenericCard?(): GenericCard {
-    const card: GenericCard = {
+  toCard?(): BaseCard {
+    const card: BaseCard = {
       title: (this.title || '') as string,
     };
     if (this.text || this.content) {
