@@ -4,7 +4,9 @@
     "core",
     "framework",
     "platforms/**",
-    "examples/**"
+    "integrations/**",
+    "examples/**",
+    "./../v4-ideas/mvp/**"
   ],
   "ignoreChanges": [
     "*.md",
