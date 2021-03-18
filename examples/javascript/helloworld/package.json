@@ -5,17 +5,11 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "bundle": "ncc build ./src/index.ts",
-    "bundle:lambda": "ncc build src/host/lambda.ts && cd dist/ && bestzip ./../bundle.zip index.js",
-    "bundle:fastify": "ncc build src/host/fastify.js",
-
-    "bundle:express": "ncc build src/host/express.ts",
-    "bundle:browser": "browserify src/host/browser.ts -p [ tsify --noImplicitAny ] > bundle.js",
-    "start": "npm run start:fastify",
-    "start:fastify": "cd dist/src/host && node fastify.js",
-    "start:express": "cd dist/src/host && node express.js",
-    "start:socketio": "cd dist/src/host && node socketio.js",
-    "launch": "npm start -- --launch",
+    "start": "node /dist/server.express.js",
+    "start:dev": "nodemon --exec babel-node ./src/server.express.js",
+    "build": "babel ./src --out-dir ./dist",
+    "bundle:express": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out",
+    "bundle:lambda": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out && bestzip ./bundle.zip out/",
     "webpack": "webpack --entry ./src/host/fastify.js --mode=development --progress --watch",
     "babel": "./node_modules/.bin/babel ./src --out-dir ./dist"
   },
@@ -33,6 +27,9 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/plugin-transform-modules-commonjs": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
+    "bestzip": "^2.1.7",
+    "@vercel/ncc": "^0.27.0",
+    "nodemon": "^2.0.7",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0",
     "babel-loader": "^8.2.2"

@@ -7,21 +7,25 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "bundle": "ncc build ./src/index.ts",
-    "bundle:lambda": "ncc build src/host/lambda.ts && cd dist/ && bestzip ./../bundle.zip index.js",
+    "bundle": "ncc build ./src/config.ts",
+    "bundle:lambda": "ncc build src/host/lambda.ts -m -s && cd dist/ && bestzip ./../bundle.zip index.js index.js.map",
     "bundle:fastify": "ncc build src/host/fastify.ts",
-    "bundle:express": "ncc build src/host/express.ts",
+    "bundle:express": "ncc build src/host/express.ts -m -s",
     "bundle:browser": "browserify src/host/browser.ts -p [ tsify --noImplicitAny ] > bundle.js",
-    "start": "npm run start:fastify",
-    "start:fastify": "cd dist/src/host && node fastify.js",
-    "start:express": "cd dist/src/host && node express.js",
-    "start:socketio": "cd dist/src/host && node socketio.js",
-    "launch": "npm start -- --launch"
+    "start:fastify": "cd dist/host && node fastify.js",
+    "start:express": "cd ./dist/host && node express.js",
+    "start:socketio": "cd dist/host && node socketio.js",
+    "launch": "npm start -- --launch",
+    "start": "node ./dist/app.dev.js",
+    "start:dev": "tsc-watch --onSuccess \"npm start\"",
+    "bundle:dev": "ncc build src/app.dev.ts -s",
+    "bundle:prod": "ncc build src/app.prod.ts -m -s && cd dist/ && bestzip ./../bundle.zip index.js index.js.map"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^4.0.0"
+    "jovo-core": "^4.0.0",
+    "jovo-platform-alexa": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
@@ -29,7 +33,7 @@
     "@types/express": "^4.17.9",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
-    "@vercel/ncc": "^0.26.1",
+    "@vercel/ncc": "^0.27.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -43,7 +47,9 @@
     "bestzip": "^2.1.7",
     "fastify": "^3.7.0",
     "express": "^4.17.1",
-    "socket.io": "^3.0.0"
+    "socket.io": "^3.0.0",
+    "serverless": "^2.29.0",
+    "tsc-watch": "^4.2.9"
   },
   "gitHead": "67f84f1d75587ffa5644a00cf4a4d10e4dfd4a36"
 }

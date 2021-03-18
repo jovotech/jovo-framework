@@ -1,7 +1,7 @@
 module.exports = {
   presets: [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
         targets: {
           esmodules: true,
@@ -10,16 +10,16 @@ module.exports = {
     ],
   ],
   plugins: [
-    "@babel/plugin-transform-runtime",
-    "@babel/plugin-transform-modules-commonjs",
+    '@babel/plugin-transform-runtime',
+    '@babel/plugin-transform-modules-commonjs',
     [
-      "@babel/plugin-proposal-decorators",
+      '@babel/plugin-proposal-decorators',
       {
         decoratorsBeforeExport: true,
       },
     ],
     [
-      "@babel/plugin-proposal-class-properties",
+      '@babel/plugin-proposal-class-properties',
       {
         loose: true,
       },

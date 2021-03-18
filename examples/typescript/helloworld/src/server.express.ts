@@ -1,5 +1,5 @@
 import express from 'express';
-import { app } from '../app';
+import { app } from './app.dev';
 // Create a new express app instance
 const server: express.Application = express();
 
@@ -7,6 +7,7 @@ const port = process.env.JOVO_PORT || 3000;
 
 (async () => {
   await app.initialize();
+  console.log(app.config.placeholder);
 
   server.listen(port, () => {
     console.info(`Local server listening on port ${port}.`);

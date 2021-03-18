@@ -4,7 +4,7 @@ import { app } from '../app';
 const server: FastifyInstance = Fastify();
 
 server.post('/webhook', async (request, reply) => {
-  await app.handle(request.body);
+  await app.handle(request.body as any);
   return { foo: 'bar!' };
 });
 
