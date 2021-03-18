@@ -6,7 +6,7 @@ import {
   Jovo,
   Component,
   Handle,
-} from 'jovo-core';
+} from '@jovotech/core';
 
 @Component({
   name: 'DecoratorRoot',

@@ -19,12 +19,14 @@
     "start": "node ./dist/app.dev.js",
     "start:dev": "tsc-watch --onSuccess \"npm start\"",
     "bundle:dev": "ncc build src/app.dev.ts -s",
+    "build": "tsc",
     "bundle:prod": "ncc build src/app.prod.ts -m -s && cd dist/ && bestzip ./../bundle.zip index.js index.js.map"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/framework": "^4.0.0",
+    "@jovotech/core": "^4.0.0",
     "@jovotech/platform-alexa": "^4.0.0"
   },
   "devDependencies": {

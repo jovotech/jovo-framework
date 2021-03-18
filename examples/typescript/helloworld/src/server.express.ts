@@ -7,7 +7,6 @@ const port = process.env.JOVO_PORT || 3000;
 
 (async () => {
   await app.initialize();
-  console.log(app.config.placeholder);
 
   server.listen(port, () => {
     console.info(`Local server listening on port ${port}.`);
