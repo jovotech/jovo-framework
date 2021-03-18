@@ -42,9 +42,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
-    // TODO implement handling of jovo.$type
-
-    const intentName = jovo.$request.getIntentName();
+    const intentName = jovo.$request.getIntentName() || jovo.$request.getRequestType()?.type;
     if (!intentName) {
       // TODO determine what to do if no intent was passed (probably UNHANDLED)
       // in the future other data can be passed and used by the handler, but for now just use the intent-name
@@ -120,7 +118,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       if (relatedHandlerMetadata.length) {
         matches.push(
           ...relatedHandlerMetadata.map((metadata) => ({
-            path,
+            path: [...path],
             metadata,
           })),
         );
