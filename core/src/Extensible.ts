@@ -96,7 +96,7 @@ export abstract class Extensible<
           value: config,
           writable: false,
         });
-        await plugin.mount(this);
+        await plugin.mount?.(this);
 
         if (!this.config.plugin) {
           this.config.plugin = {};

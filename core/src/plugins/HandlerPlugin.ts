@@ -89,7 +89,8 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
         componentInstance.constructor.name,
       );
     }
-    (componentInstance as any)[jovo.$route.handlerKey]();
+    await (componentInstance as any)[jovo.$route.handlerKey]();
+    jovo.$output = componentInstance.$output;
   };
 
   private mixin(constructor: typeof App | typeof HandleRequest) {

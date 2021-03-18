@@ -18,6 +18,8 @@ export abstract class BaseOutput<OPTIONS extends OutputOptions = OutputOptions> 
 
   constructor(jovo: Jovo, options?: DeepPartial<OPTIONS>) {
     super(jovo.$app, jovo.$handleRequest, jovo.$platform);
+    // TODO: check if this causes any issues
+    Object.assign(this, jovo);
     const defaultOptions = this.getDefaultOptions();
     this.options = options ? _merge(defaultOptions, options) : defaultOptions;
   }
