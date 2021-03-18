@@ -28,7 +28,8 @@ export abstract class BaseComponent<CONFIG extends PluginConfig = PluginConfig> 
 
   constructor(jovo: Jovo, config?: DeepPartial<CONFIG>) {
     super(jovo.$app, jovo.$handleRequest, jovo.$platform);
-    this.$output = jovo.$output;
+    // TODO: check if this causes any issues
+    Object.assign(this, jovo);
     const defaultConfig = this.getDefaultConfig();
     // TODO maybe set a direct reference from constructor instead
     // Components will most likely only be initialized during the request ...
