@@ -1,9 +1,16 @@
 {
-  "name": "@jovotech/examples-routing",
-  "private": true,
+  "name": "@jovotech/framework",
   "version": "4.0.0",
   "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "gulpfile.js"
+  ],
   "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
@@ -12,8 +19,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/core": "^4.0.0",
-    "@jovotech/platform-alexa": "^4.0.0"
+    "@jovotech/core": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
@@ -30,5 +36,5 @@
     "typescript": "^4.1.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
-  "prettier": "../../../.prettierrc.js"
+  "prettier": "../.prettierrc.js"
 }

@@ -1,13 +1,49 @@
-import { App, ComponentDeclaration } from 'jovo-core';
-
-import { Alexa } from 'jovo-platform-alexa';
-import { StandardComponent } from './StandardComponent';
-import * as fs from 'fs';
+import { App } from "@jovotech/framework";
 
 const app = new App();
-app.use(new Alexa());
 
-app.useComponents(new ComponentDeclaration(StandardComponent, { name: 'DeclarationRoot' }));
+function readonly(target: any) {
+  target.descriptor.writable = false;
+  return target;
+}
 
-// const data = fs.readFileSync(process.cwd() + '/data/data.json', 'utf8');
+@Handler()
+class MyHandler {
+  @OnRequest()
+  onRequest() {
+    this.$data.foo = 'bar';
+  }
+
+  @Launch()
+  launchApp() {
+    this.setState('NameState');
+
+    return {
+      message: 'Hello World! Whats your name?',
+    };
+  }
+
+  @State('NameState')
+  @Intent(['MyNameIsIntent'])
+  nameIntent(@Entity('name') name: string) {
+    this.tell(`Hey ${name}!`);
+  }
+}
+
+class Root {
+  constructor() {}
+
+  onLaunch() {
+    return delegate(Onboarding.start, {});
+  }
+
+  allDataCollected() {}
+}
+
+class Onboarding {
+  start() {}
+}
+
+app.setHandlers(Root, Onboarding);
+
 export { app };

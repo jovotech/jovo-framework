@@ -1,5 +1,5 @@
-import { Jovo } from 'jovo-core';
-import { BaseComponent, Component } from 'jovo-core';
+import { Jovo } from '@jovotech/core';
+import { BaseComponent, Component } from '@jovotech/core';
 import { MenuCategoriesComponent } from './MenuCategoriesComponent';
 
 function hasMultipleCategories(jovo: Jovo): boolean {

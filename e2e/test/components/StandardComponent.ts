@@ -1,4 +1,4 @@
-import { BaseComponent, Component, ComponentDeclaration, Handle, InternalIntent } from 'jovo-core';
+import { BaseComponent, Component, ComponentDeclaration, Handle, InternalIntent } from '@jovotech/core';
 import { MenuComponent } from './MenuComponent';
 
 @Component({

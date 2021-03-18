@@ -1,15 +1,16 @@
 {
-  "name": "jovo-framework-root",
+  "name": "root",
   "private": true,
   "version": "4.0.0",
   "scripts": {
     "postinstall": "npm run bootstrap",
     "setup:dev": "npm run bootstrap && npm run build",
     "bootstrap": "lerna bootstrap --hoist --no-ci",
-    "build": "lerna exec npm run build --ignore jovo-examples-* --ignore jovo-client-* --ignore jovo-e2e",
-    "prettier": "lerna exec npm run prettier --ignore jovo-examples-*",
-    "eslint": "lerna exec npm run eslint --ignore jovo-examples-*",
-    "test": "lerna exec npm run test --ignore jovo-examples-*"
+    "clean": "lerna clean",
+    "build": "lerna exec npm run build --ignore @jovotech/examples-* --ignore @jovotech/client-* --ignore @jovotech/e2e",
+    "prettier": "lerna exec npm run prettier --ignore @jovotech/examples-*",
+    "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-*",
+    "test": "lerna exec npm run test --ignore @jovotech/examples-*"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
