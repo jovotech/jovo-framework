@@ -29,15 +29,25 @@ export {
 
 export * from './App';
 export * from './BaseComponent';
+export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './Jovo';
+export * from './JovoError';
 export * from './JovoRequest';
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './Platform';
 export * from './Plugin';
+
+export * from './errors/ComponentNotFoundError';
+export * from './errors/DuplicateChildComponentsError';
+export * from './errors/DuplicateGlobalIntentsError';
+export * from './errors/HandlerNotFoundError';
+export * from './errors/InvalidParentError';
+export * from './errors/MatchingComponentNotFoundError';
+export * from './errors/MatchingPlatformNotFoundError';
 
 export * from './metadata/MetadataStorage';
 export * from './decorators/Component';
