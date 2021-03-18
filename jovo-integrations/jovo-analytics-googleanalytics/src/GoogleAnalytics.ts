@@ -118,8 +118,9 @@ export class GoogleAnalytics implements Analytics {
    * Throws error if metricName is not mapped to an index in your config 
    * @param name - metricName
    * @param targetValue - target value in googleAnalytics
+   * @param pageviewOnly - should metric should only be added for pageview requests? Standard true
    */
-  setCustomMetricByName(name: systemMetricNames, targetValue: number): void {
+  setCustomMetricByName(name: systemMetricNames, targetValue: number, pageviewOnly = true): void {
     // Set user id as a custom dimension to track hits on the same scope
     const metricNumber: number | undefined = this.customMetricsIndicesMap.get(name);
     if (!metricNumber) {
@@ -132,7 +133,11 @@ export class GoogleAnalytics implements Analytics {
         'See readme for more information'
       );
     }
+    if(pageviewOnly) {
+      this.setParameter(`cm${metricNumber}`, targetValue);
+    } else {
     this.visitor?.set(`cm${metricNumber}`, targetValue);
+    }
   }
 
   /**
@@ -140,11 +145,12 @@ export class GoogleAnalytics implements Analytics {
    * Throws error if dimensionName is not mapped to an index in your config 
    * @param name - dimensionName
    * @param targetValue - target value in googleAnalytics
+   * @param pageviewOnly - should dimension should only be added for pageview requests? Standard false
    */
-  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number): void {
+  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number,  pageviewOnly = false): void {
     // Set user id as a custom dimension to track hits on the same scope
     const dimensionNumber = this.customDimensionsIndicesMap.get(name);
-    if (!dimensionNumber) {
+    if (typeof dimensionNumber !== 'number') {
       throw new JovoError(
         `Trying to set custom system dimension ${name} which is not set.`,
         ErrorCode.ERR_PLUGIN,
@@ -155,7 +161,11 @@ export class GoogleAnalytics implements Analytics {
       );
     }
     Log.debug(`\n [!!] setting dimension: cd${dimensionNumber} `);
+    if(pageviewOnly) {
+      this.setParameter(`cd${dimensionNumber}`, targetValue);
+    } else {
     this.visitor?.set(`cd${dimensionNumber}`, targetValue);
+    }
   }
 
   setCustomMetric(index: number, value: string | number) {
