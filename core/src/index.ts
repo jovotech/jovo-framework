@@ -38,6 +38,7 @@ export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './Platform';
 export * from './Plugin';
+export * from './BaseOutput';
 
 export * from './metadata/MetadataStorage';
 export * from './decorators/Component';
