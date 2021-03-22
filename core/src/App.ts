@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, RegisteredComponents } from '.';
+import { RegisteredComponents, Server } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -79,8 +79,8 @@ export class App extends Extensible<AppConfig> {
 
   // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(request: Record<string, any>): Promise<any> {
-    const handleRequest = new HandleRequest(this, request, new Host());
+  async handle(request: Record<string, any>, server: Server): Promise<any> {
+    const handleRequest = new HandleRequest(this, request, server);
     await handleRequest.mount();
 
     await handleRequest.middlewareCollection.run('request', handleRequest);
