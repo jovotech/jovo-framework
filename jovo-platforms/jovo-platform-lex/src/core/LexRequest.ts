@@ -58,11 +58,11 @@ export class LexRequest implements JovoRequest {
   /* tslint:enable:variable-name */
 
   getUserId(): string {
-    return this.UserIdentifier!;
+    return this.userId!;
   }
 
   getRawText(): string {
-    return this.CurrentInput!;
+    return '';
   }
 
   getTimestamp(): string {
@@ -175,7 +175,7 @@ export class LexRequest implements JovoRequest {
   }
 
   getIntentName(): string {
-    return this.CurrentTask!;
+    return _get(this, 'currentIntent.name');
   }
 
   getCurrentTaskConfidence(): string {
@@ -205,32 +205,27 @@ export class LexRequest implements JovoRequest {
     this.CurrentTaskConfidence = confidence;
     return this;
   }
-
-  getInputs(): LexInputs {
-    const inputs: LexInputs = {};
-    /**
-     * Lex includes all the fields (inputs) on the root level of the request.
-     * Each field has two key-value pairs on root:
-     * Field_{field-name}_Value: string; &
-     * Field_{field-name}_Type: string;
-     * We extract these two values for each of the fields and save them inside the inputs object
-     */
-    Object.keys(this).forEach((key) => {
-      if ( key.includes('Field') ) {
-        const fieldName = getFieldNameFromKey(key);
-        if ( inputs[fieldName] ) {
-          // field was already parsed
-          return;
-        }
-        const field: LexInput = {
-          name: fieldName,
-          type: this[`Field_${fieldName}_Type`],
-          value: this[`Field_${fieldName}_Value`],
-        };
-        inputs[fieldName] = field;
+  getSlots() {
+    return _get(this, 'currentIntent.slots');
+  }
+  getInputs() {
+    const inputs = {};
+    const slots = this.getSlots();
+    if ( !slots ) {
+      return inputs;
+    }
+    Object.keys(slots).forEach((slot: string) => {
+      if(slots[slot]===null || slots[slot]===undefined ){
+        return;
       }
+      const input = {
+        name: slot,
+        value: _get(this, 'currentIntent.slotDetails.'+slot+'.originalValue'),
+        key: slots[slot]
+      };
+      // @ts-ignore
+      inputs[slot] = input;
     });
-
     return inputs;
   }
 
@@ -269,25 +264,12 @@ export class LexRequest implements JovoRequest {
       const request: LexRequest = Object.create(LexRequest.prototype);
       Object.assign(request, json);
       Object.entries(request).forEach(([key, value]) => {
-        request[key] = decodeURIComponent(value);
+        //decodeURIComponent
+        request[key] = (value);
       });
-
       return request;
     }
   }
 
   // TODO: add lex specific get/set methods
-}
-
-/**
- * Returns field name from key,
- * e.g. returns `field-name` from `Field_{field-name}_Value`
- * @param {string} key
- * @returns {string}
- */
-function getFieldNameFromKey(key: string): string {
-  const firstUnderscoreIndex = key.indexOf('_');
-  const lastUnderscoreIndex = key.lastIndexOf('_');
-
-  return key.slice(firstUnderscoreIndex + 1, lastUnderscoreIndex);
 }

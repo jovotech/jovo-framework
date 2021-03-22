@@ -80,9 +80,6 @@ export class LexBot extends Jovo {
   }
 
   setActions(actions: object[]): this {
-    const response = this.$response as LexResponse;
-    response.actions = actions;
-
     return this;
   }
 

@@ -5,6 +5,7 @@ import { LexRequest } from '../core/LexRequest';
 import { LexResponse } from '../core/LexResponse';
 import { LexUser } from '../core/LexUser';
 import { LexSpeechBuilder } from '../core/LexSpeechBuilder';
+import _set = require('lodash.set');
 
 export class LexCore implements Plugin {
   install(lex: Lex) {
@@ -76,34 +77,30 @@ export class LexCore implements Plugin {
   async output(lex: LexBot) {
     const output = lex.$output;
     const response = lex.$response as LexResponse;
-
     if (Object.keys(output).length === 0) {
       return;
     }
-
     const tell = output.tell;
     if (tell) {
-      const sayAction = {
-        say: tell.speech,
-      };
-      response.actions.unshift(sayAction);
+      _set(response, 'dialogAction', {
+        type: 'Close',
+        fulfillmentState: 'PlainText',
+        message:{
+          contentType: 'SSML',
+          content: tell.speech
+        }
+      });
     }
-
     const ask = output.ask;
     if (ask) {
-      const sayAction = {
-        say: ask.speech,
-      };
-      const listenAction = {
-        listen: true,
-      };
-      response.actions.unshift(sayAction, listenAction);
+      _set(response, 'dialogAction', {
+        type: 'ElicitIntent',
+        message:{
+          contentType: 'PlainText',
+          content: ask.speech
+        }
+      });
+      _set(response, 'sessionAttributes', lex.$session.$data);
     }
-
-    // save session attributes.
-    const rememberAction = {
-      remember: lex.$session.$data,
-    };
-    response.actions.unshift(rememberAction);
   }
 }

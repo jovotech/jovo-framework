@@ -1,22 +1,47 @@
-import { JovoResponse, SpeechBuilder, SessionConstants, SessionData } from 'jovo-core';
+import {JovoResponse, SpeechBuilder, SessionConstants, SessionData} from 'jovo-core';
+import _get = require('lodash.get');
+import _set = require('lodash.set');
 
-import { LexSpeechBuilder } from './LexSpeechBuilder';
+export interface SessionAttributes {
+  [key: string]: any; //tslint:disable-line
+}
+
+export type ConfirmationStatus = 'None' | 'Confirmed' | 'Denied';
+export type DialogActionType = 'ElicitIntent' | 'ElicitSlot' | 'ConfirmIntent' | 'Delegate' | 'Close';
+export type FulfillmentState = 'Fulfilled' | 'Failed';
+
+export interface IntentSummaryView {
+  intentName: string;
+  checkpointLabel: string;
+  slots: { [key: string]: any }; //tslint:disable-line
+}
+
+export interface DialogAction {
+  type: DialogActionType;
+  fulfillmentState: 'Fulfilled' | 'Failed';
+  message: {
+    contentType: 'PlainText' | 'SSML' | 'CustomPayload',
+    content: string;
+  };
+}
 
 export class LexResponse implements JovoResponse {
-  actions: any[]; // tslint:disable-line:no-any
+  sessionAttributes?: SessionAttributes;
+  recentIntentSummaryView?: IntentSummaryView;
+  confirmationStatus?: ConfirmationStatus;
+  dialogActionType?: DialogActionType;
+  fulfillmentState?: FulfillmentState;
+  slotToElicit?: string;
+  dialogAction?: DialogAction;
 
   constructor() {
-    this.actions = [];
+
   }
 
   getSpeech(): string | undefined {
-    const speechAction = this.actions.find((action) => {
-      return action.say;
-    });
-
-    if (!speechAction) return;
-
-    return SpeechBuilder.removeSpeakTags(speechAction.say);
+    const speechAction = this.dialogAction?.message;
+    if ( !speechAction ) return;
+    return SpeechBuilder.removeSpeakTags(speechAction.content);
   }
 
   /**
@@ -27,13 +52,9 @@ export class LexResponse implements JovoResponse {
   }
 
   getSpeechPlain(): string | undefined {
-    const sayAction = this.actions.find((action) => {
-      return action.say;
-    });
-
-    if (!sayAction) return;
-
-    return SpeechBuilder.removeSSML(sayAction.say);
+    const sayAction = this.dialogAction?.message;
+    if ( !sayAction ) return;
+    return SpeechBuilder.removeSSML(sayAction.content);
   }
 
   /**
@@ -43,165 +64,91 @@ export class LexResponse implements JovoResponse {
     return undefined;
   }
 
-  getSessionAttributes(): SessionData | undefined {
-    const rememberAction = this.actions.find((action) => {
-      return action.remember;
-    });
-
-    return rememberAction?.remember;
-  }
-
-  setSessionAttributes(sessionData: SessionData): this {
-    const rememberAction = this.actions.find((action) => {
-      return action.remember;
-    });
-
-    if (rememberAction) {
-      rememberAction.remember = Object.assign(rememberAction.remember, sessionData);
-    } else {
-      const newRememberAction = { remember: sessionData };
-      this.actions.push(newRememberAction);
-    }
-
-    return this;
-  }
-
-  // tslint:disable-next-line:no-any
-  addSessionAttribute(key: string, value: any): this {
-    const rememberAction = this.actions.find((action) => {
-      return action.remember;
-    });
-
-    if (rememberAction) {
-      rememberAction.remember[key] = value;
-    } else {
-      const newRememberAction = { remember: { key: value } };
-      this.actions.push(newRememberAction);
-    }
-
-    return this;
-  }
-
-  getSessionAttribute(path: string) {
-    const sessionAttributes = this.getSessionAttributes();
-    return sessionAttributes ? sessionAttributes[path] : undefined;
-  }
 
   getSessionData(path?: string) {
-    if (path) {
+    if ( path ) {
       return this.getSessionAttribute(path);
     } else {
       return this.getSessionAttributes();
     }
   }
 
-  setSessionData(sessionData: SessionData): this {
+  // tslint:disable-next-line
+  hasSessionData(name: string, value?: any): boolean {
+    return this.hasSessionAttribute(name, value);
+  }
+
+  setSessionData(sessionData: SessionData) {
     return this.setSessionAttributes(sessionData);
   }
 
-  isTell(speechText?: string | string[]): boolean {
-    const hasListenAction = this.actions.some((action) => {
-      return action.listen;
-    });
-    // is ask()!
-    if (hasListenAction) return false;
+  getSessionAttributes() {
+    return _get(this, 'sessionAttributes');
+  }
 
-    const sayAction = this.actions.find((action) => {
-      return action.say;
-    });
+  setSessionAttributes(sessionData: SessionData) {
+    _set(this, 'sessionAttributes', sessionData);
+    return this;
+  }
 
-    // no speech output in response
-    if (!sayAction) return false;
+  /**
+   *
+   * @param {string} name
+   * @param {any} value
+   * @return {boolean}
+   */
+  // tslint:disable-next-line
+  hasSessionAttribute(name: string, value?: any): boolean {
+    if ( !this.getSessionAttribute(name) ) {
+      return false;
+    }
 
-    if (speechText) {
-      if (Array.isArray(speechText)) {
-        for (const speech of speechText) {
-          if (speech === sayAction.say) return true;
-        }
+    if ( typeof value !== 'undefined' ) {
+      if ( this.getSessionAttribute(name) !== value ) {
+        return false;
       }
-
-      return speechText === sayAction.say;
     }
 
     return true;
   }
 
-  isAsk(speechText?: string | string[]): boolean {
-    const hasListenAction = this.actions.some((action) => {
-      return action.listen;
-    });
-    // can't be ask() without the Listen action
-    if (!hasListenAction) return false;
+  getSessionAttribute(name: string) {
+    return _get(this, `sessionAttributes.${name}`);
+  }
 
-    if (speechText) {
-      // we only return true, if speechText and Say action have the same value
-      const sayAction = this.actions.find((action) => {
-        return action.say;
-      });
-
-      // Say action has no value but speechText does => it's not the correct ask()
-      if (!sayAction) {
-        return false;
-      }
-
-      if (Array.isArray(speechText)) {
-        for (const speech of speechText) {
-          if (speech === sayAction.say) return true;
-        }
-      }
-
-      return speechText === sayAction.say;
+  /**
+   * Checks if response is a tell request
+   * @param {string| string[]} speechText
+   * @return {boolean}
+   */
+  isTell(speechText?: string | string[]): boolean {
+    if ( _get(this, 'dialogAction.type') === 'Close' ) {
+      return true;
     }
+    return false;
+  }
 
-    // no speechText, and Listen action is present
-    return true;
+  isAsk(speechText?: string | string[]): boolean {
+    if ( _get(this, 'dialogAction.type') !== 'Close' ) {
+      return true;
+    }
+    return false;
   }
 
   hasState(state: string): boolean | undefined {
     return this.hasSessionData(SessionConstants.STATE, state);
   }
 
-  // tslint:disable-next-line:no-any
-  hasSessionData(name: string, value?: any): boolean {
-    return this.hasSessionAttribute(name, value);
-  }
-
-  // tslint:disable-next-line:no-any
-  hasSessionAttribute(name: string, value?: any): boolean {
-    if (value) {
-      return this.getSessionAttribute(name) === value;
-    } else {
-      return this.getSessionAttribute(name) ? true : false;
-    }
-  }
-
   /**
    * Returns true if there is no Listen, Collect, or Redirect action
    */
   hasSessionEnded(): boolean {
-    return !(this.isAsk() || this.hasCollect() || this.hasRedirect());
+    return !(this.isAsk());
   }
 
-  /**
-   * Returns true if the `actions` array contains a Collect action
-   */
-  hasCollect(): boolean {
-    return this.actions.some((action) => {
-      return action.collect;
-    });
-  }
-
-  /**
-   * Returns true if the `actions` array contains a Redirect action
-   */
-  hasRedirect(): boolean {
-    return this.actions.some((action) => {
-      return action.redirect;
-    });
-  }
 
   static fromJSON(json: string) {
-    if (typeof json === 'string') {
+    if ( typeof json === 'string' ) {
       // if it's a string, parse it first
       return JSON.parse(json);
     } else {

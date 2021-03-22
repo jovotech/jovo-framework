@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-import { RequestBuilder } from 'jovo-core';
-import { LexRequest, LexInputs } from './LexRequest';
+import {RequestBuilder} from 'jovo-core';
+import {LexRequest, LexInputs} from './LexRequest';
 
 const samples: { [key: string]: string } = {
   LaunchRequest: 'LaunchRequest.json',
@@ -21,12 +21,12 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
   async intent(name?: string, slots?: any): Promise<LexRequest>;
   // tslint:disable-next-line:no-any
   async intent(obj?: any, inputs?: LexInputs): Promise<LexRequest> {
-    if (typeof obj === 'string') {
+    if ( typeof obj === 'string' ) {
       const req = await this.intentRequest();
       req.setIntentName(obj);
-      if (inputs) {
-        for (const slot in inputs) {
-          if (inputs.hasOwnProperty(slot)) {
+      if ( inputs ) {
+        for ( const slot in inputs ) {
+          if ( inputs.hasOwnProperty(slot) ) {
             req.addInput(slot, inputs[slot]);
           }
         }
@@ -42,7 +42,7 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
   }
 
   async intentRequest(json?: object): Promise<LexRequest> {
-    if (json) {
+    if ( json ) {
       return LexRequest.fromJSON(json);
     } else {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
@@ -61,7 +61,15 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
   }
 
   async end(json?: object): Promise<LexRequest> {
-    return await this.intentRequest(json);
+    if ( json ) {
+      return LexRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
+      return LexRequest.fromJSON(JSON.parse(request))
+        .setTimestamp(new Date().toISOString())
+        .setSessionId(generateRandomString(12))
+        .setUserId(getRandomUserId());
+    }
   }
 
   async rawRequest(json: object): Promise<LexRequest> {
@@ -77,13 +85,13 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
 function getJsonFilePath(key: string): string {
   let folder = './../../../';
 
-  if (process.env.NODE_ENV === 'UNIT_TEST') {
+  if ( process.env.NODE_ENV === 'UNIT_TEST' ) {
     folder = './../../';
   }
 
   const fileName = samples[key];
 
-  if (!fileName) {
+  if ( !fileName ) {
     throw new Error(`Can't find file.`);
   }
 
@@ -98,7 +106,7 @@ function generateRandomString(length: number) {
   let randomString = '';
   const stringValues = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (let i = 0; i < length; i++) {
+  for ( let i = 0; i < length; i++ ) {
     randomString += stringValues.charAt(Math.floor(Math.random() * stringValues.length));
   }
 

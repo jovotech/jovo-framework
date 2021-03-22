@@ -13,8 +13,9 @@ import _merge = require('lodash.merge');
 
 import { LexRequestBuilder } from './core/LexRequestBuilder';
 import { LexResponseBuilder } from './core/LexResponseBuilder';
-import {} from 'module';
+//import {} from 'module';
 import { LexBot } from './core/LexBot';
+import { Cards } from './modules/Cards';
 import { LexCore } from './modules/LexCore';
 import { LexNLU } from './modules/LexNLU';
 import { LexRequest } from './core/LexRequest';
@@ -61,7 +62,7 @@ export class Lex extends Platform<LexRequest, LexResponse> {
     app.middleware('response')!.use(this.response.bind(this));
     app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
-    this.use(new LexCore(), new LexNLU());
+    this.use(new LexCore(), new LexNLU(), new Cards());
 
     Jovo.prototype.$lexBot = undefined;
     Jovo.prototype.lexBot = function () {
@@ -73,6 +74,10 @@ export class Lex extends Platform<LexRequest, LexResponse> {
         );
       }
       return this as LexBot;
+    };
+
+    Jovo.prototype.isLexBot = function () {
+      return this.constructor.name === 'LexBot';
     };
   }
 
@@ -104,7 +109,6 @@ export class Lex extends Platform<LexRequest, LexResponse> {
     if (handleRequest.jovo?.constructor.name !== 'LexBot') {
       return Promise.resolve();
     }
-
     await this.middleware('$nlu')!.run(handleRequest.jovo);
     await this.middleware('$inputs')!.run(handleRequest.jovo);
   }

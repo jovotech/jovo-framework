@@ -2,6 +2,7 @@ import {LexBot} from './core/LexBot';
 import {TestSuite} from 'jovo-core';
 import {LexRequestBuilder} from './core/LexRequestBuilder';
 import {LexResponseBuilder} from './core/LexResponseBuilder';
+import {Button} from './response/index';
 
 export interface LexTestSuite
   extends TestSuite<LexRequestBuilder, LexResponseBuilder> {
@@ -10,7 +11,16 @@ export interface LexTestSuite
 declare module 'jovo-core/dist/src/core/Jovo' {
   interface Jovo {
     $lexBot?: LexBot;
+
     lexBot(): LexBot;
+
+    isLexBot(): boolean;
+  }
+}
+// Cards
+declare module './core/LexBot' {
+  interface LexBot {
+    showStandardCard(title: string, subtitle: string, imageUrl: string, attachmentLinkUrl: string, buttons: Button[]): this;
   }
 }
 
@@ -21,3 +31,5 @@ declare module 'jovo-core/dist/src/Interfaces' {
 }
 
 export {Lex} from './Lex';
+export {LexBot} from './core/LexBot';
+export {Cards} from './modules/Cards';

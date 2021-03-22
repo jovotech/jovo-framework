@@ -1,14 +1,14 @@
 {
   "name": "jovo-examples-googleassistantconv-push-notifications",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "src/index.js",
   "private": true,
   "dependencies": {
-    "jovo-db-filedb": "^3.4.1",
-    "jovo-framework": "^3.4.1",
-    "jovo-platform-googleassistantconv": "^3.5.0",
-    "jovo-plugin-debugger": "^3.4.1"
+    "jovo-db-filedb": "^3.4.2",
+    "jovo-framework": "^3.4.2",
+    "jovo-platform-googleassistantconv": "^3.5.1",
+    "jovo-plugin-debugger": "^3.4.2"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
