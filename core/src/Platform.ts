@@ -5,7 +5,19 @@ import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
 import { MiddlewareCollection } from './MiddlewareCollection';
 
-export const DEFAULT_PLATFORM_MIDDLEWARES = [
+export type PlatformBaseMiddlewares = [
+  '$init',
+  '$request',
+  '$session',
+  '$user',
+  '$type',
+  '$nlu',
+  '$inputs',
+  '$output',
+  '$response',
+];
+
+export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
   '$init',
   '$request',
   '$session',
@@ -20,20 +32,9 @@ export const DEFAULT_PLATFORM_MIDDLEWARES = [
 export abstract class Platform<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
-  CONFIG extends ExtensibleConfig = ExtensibleConfig,
-  MIDDLEWARES extends string[] = [
-    '$init',
-    '$request',
-    '$session',
-    '$user',
-    '$type',
-    '$nlu',
-    '$inputs',
-    '$output',
-    '$response',
-  ]
-> extends Extensible<CONFIG, MIDDLEWARES> {
-  readonly middlewareCollection = new MiddlewareCollection(...DEFAULT_PLATFORM_MIDDLEWARES);
+  CONFIG extends ExtensibleConfig = ExtensibleConfig
+> extends Extensible<CONFIG, PlatformBaseMiddlewares> {
+  readonly middlewareCollection = new MiddlewareCollection(...BASE_PLATFORM_MIDDLEWARES);
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
 
@@ -44,7 +45,10 @@ export abstract class Platform<
 
   abstract setResponseSessionData(response: RESPONSE, jovo: Jovo): this;
 
-  createJovoInstance(app: App, handleRequest: HandleRequest): Jovo<REQUEST, RESPONSE> {
+  createJovoInstance<APP extends App>(
+    app: App,
+    handleRequest: HandleRequest,
+  ): Jovo<REQUEST, RESPONSE> {
     return new this.jovoClass(app, handleRequest, this);
   }
 

@@ -1,6 +1,5 @@
+import { ArrayElement } from './index';
 import { Middleware } from './Middleware';
-
-type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 
 export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   readonly middlewares: Record<string, Middleware>;
