@@ -24,7 +24,7 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
 };
 
-export const DEFAULT_APP_MIDDLEWARES = [
+export type AppBaseMiddlewares = [
   'request',
   'interpretation.asr',
   'interpretation.nlu',
@@ -35,22 +35,22 @@ export const DEFAULT_APP_MIDDLEWARES = [
   'response',
 ];
 
-export class App<
-  MIDDLEWARES extends string[] = [
-    'request',
-    'interpretation.asr',
-    'interpretation.nlu',
-    'dialog.context',
-    'dialog.logic',
-    'response.output',
-    'response.tts',
-    'response',
-  ]
-> extends Extensible<AppConfig, MIDDLEWARES> {
+export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
+  'request',
+  'interpretation.asr',
+  'interpretation.nlu',
+  'dialog.context',
+  'dialog.logic',
+  'response.output',
+  'response.tts',
+  'response',
+];
+
+export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly config: AppConfig = {
     placeholder: '',
   };
-  readonly middlewareCollection = new MiddlewareCollection(...DEFAULT_APP_MIDDLEWARES);
+  readonly middlewareCollection = new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
 
   readonly components: RegisteredComponents;
 
@@ -69,9 +69,9 @@ export class App<
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  middleware(name: ArrayElement<MIDDLEWARES>): Middleware | undefined;
+  middleware(name: ArrayElement<AppBaseMiddlewares>): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | ArrayElement<MIDDLEWARES>): Middleware | undefined {
+  middleware(name: string | ArrayElement<AppBaseMiddlewares>): Middleware | undefined {
     return this.middlewareCollection.get(name);
   }
 
