@@ -1,6 +1,7 @@
 // TODO: Usages of .constructor.name cause errors in webpack, because the name is not the class-name mostly when minimizing.
 // It has to be checked whether constructor is valid and can be used to instantiate a new instance for example.
 
+export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type Constructor<T> = new (...args: unknown[]) => T;
 // Construct object from properties of T that extend U

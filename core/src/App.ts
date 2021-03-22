@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { RegisteredComponents } from '.';
+import { ArrayElement, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -24,14 +24,19 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
 };
 
-export class App extends Extensible<AppConfig> {
-  readonly config: AppConfig = {
-    placeholder: '',
-  };
+export const DEFAULT_APP_MIDDLEWARES = [
+  'request',
+  'interpretation.asr',
+  'interpretation.nlu',
+  'dialog.context',
+  'dialog.logic',
+  'response.output',
+  'response.tts',
+  'response',
+];
 
-  readonly components: RegisteredComponents;
-
-  middlewareCollection = new MiddlewareCollection(
+export class App<
+  MIDDLEWARES extends string[] = [
     'request',
     'interpretation.asr',
     'interpretation.nlu',
@@ -40,7 +45,14 @@ export class App extends Extensible<AppConfig> {
     'response.output',
     'response.tts',
     'response',
-  );
+  ]
+> extends Extensible<AppConfig, MIDDLEWARES> {
+  readonly config: AppConfig = {
+    placeholder: '',
+  };
+  readonly middlewareCollection = new MiddlewareCollection(...DEFAULT_APP_MIDDLEWARES);
+
+  readonly components: RegisteredComponents;
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -55,6 +67,12 @@ export class App extends Extensible<AppConfig> {
 
   get platforms(): ReadonlyArray<Platform> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
+  }
+
+  middleware(name: ArrayElement<MIDDLEWARES>): Middleware | undefined;
+  middleware(name: string): Middleware | undefined;
+  middleware(name: string | ArrayElement<MIDDLEWARES>): Middleware | undefined {
+    return this.middlewareCollection.get(name);
   }
 
   getDefaultConfig(): AppConfig {
