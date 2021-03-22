@@ -1,0 +1,214 @@
+import { JovoResponse, SpeechBuilder, SessionConstants, SessionData } from 'jovo-core';
+
+import { LexSpeechBuilder } from './LexSpeechBuilder';
+
+export class LexResponse implements JovoResponse {
+  actions: any[]; // tslint:disable-line:no-any
+
+  constructor() {
+    this.actions = [];
+  }
+
+  getSpeech(): string | undefined {
+    const speechAction = this.actions.find((action) => {
+      return action.say;
+    });
+
+    if (!speechAction) return;
+
+    return SpeechBuilder.removeSpeakTags(speechAction.say);
+  }
+
+  /**
+   * Lex doesn't support reprompts
+   */
+  getReprompt(): undefined {
+    return undefined;
+  }
+
+  getSpeechPlain(): string | undefined {
+    const sayAction = this.actions.find((action) => {
+      return action.say;
+    });
+
+    if (!sayAction) return;
+
+    return SpeechBuilder.removeSSML(sayAction.say);
+  }
+
+  /**
+   * Lex doesn't support reprompts
+   */
+  getRepromptPlain(): undefined {
+    return undefined;
+  }
+
+  getSessionAttributes(): SessionData | undefined {
+    const rememberAction = this.actions.find((action) => {
+      return action.remember;
+    });
+
+    return rememberAction?.remember;
+  }
+
+  setSessionAttributes(sessionData: SessionData): this {
+    const rememberAction = this.actions.find((action) => {
+      return action.remember;
+    });
+
+    if (rememberAction) {
+      rememberAction.remember = Object.assign(rememberAction.remember, sessionData);
+    } else {
+      const newRememberAction = { remember: sessionData };
+      this.actions.push(newRememberAction);
+    }
+
+    return this;
+  }
+
+  // tslint:disable-next-line:no-any
+  addSessionAttribute(key: string, value: any): this {
+    const rememberAction = this.actions.find((action) => {
+      return action.remember;
+    });
+
+    if (rememberAction) {
+      rememberAction.remember[key] = value;
+    } else {
+      const newRememberAction = { remember: { key: value } };
+      this.actions.push(newRememberAction);
+    }
+
+    return this;
+  }
+
+  getSessionAttribute(path: string) {
+    const sessionAttributes = this.getSessionAttributes();
+    return sessionAttributes ? sessionAttributes[path] : undefined;
+  }
+
+  getSessionData(path?: string) {
+    if (path) {
+      return this.getSessionAttribute(path);
+    } else {
+      return this.getSessionAttributes();
+    }
+  }
+
+  setSessionData(sessionData: SessionData): this {
+    return this.setSessionAttributes(sessionData);
+  }
+
+  isTell(speechText?: string | string[]): boolean {
+    const hasListenAction = this.actions.some((action) => {
+      return action.listen;
+    });
+    // is ask()!
+    if (hasListenAction) return false;
+
+    const sayAction = this.actions.find((action) => {
+      return action.say;
+    });
+
+    // no speech output in response
+    if (!sayAction) return false;
+
+    if (speechText) {
+      if (Array.isArray(speechText)) {
+        for (const speech of speechText) {
+          if (speech === sayAction.say) return true;
+        }
+      }
+
+      return speechText === sayAction.say;
+    }
+
+    return true;
+  }
+
+  isAsk(speechText?: string | string[]): boolean {
+    const hasListenAction = this.actions.some((action) => {
+      return action.listen;
+    });
+    // can't be ask() without the Listen action
+    if (!hasListenAction) return false;
+
+    if (speechText) {
+      // we only return true, if speechText and Say action have the same value
+      const sayAction = this.actions.find((action) => {
+        return action.say;
+      });
+
+      // Say action has no value but speechText does => it's not the correct ask()
+      if (!sayAction) {
+        return false;
+      }
+
+      if (Array.isArray(speechText)) {
+        for (const speech of speechText) {
+          if (speech === sayAction.say) return true;
+        }
+      }
+
+      return speechText === sayAction.say;
+    }
+
+    // no speechText, and Listen action is present
+    return true;
+  }
+
+  hasState(state: string): boolean | undefined {
+    return this.hasSessionData(SessionConstants.STATE, state);
+  }
+
+  // tslint:disable-next-line:no-any
+  hasSessionData(name: string, value?: any): boolean {
+    return this.hasSessionAttribute(name, value);
+  }
+
+  // tslint:disable-next-line:no-any
+  hasSessionAttribute(name: string, value?: any): boolean {
+    if (value) {
+      return this.getSessionAttribute(name) === value;
+    } else {
+      return this.getSessionAttribute(name) ? true : false;
+    }
+  }
+
+  /**
+   * Returns true if there is no Listen, Collect, or Redirect action
+   */
+  hasSessionEnded(): boolean {
+    return !(this.isAsk() || this.hasCollect() || this.hasRedirect());
+  }
+
+  /**
+   * Returns true if the `actions` array contains a Collect action
+   */
+  hasCollect(): boolean {
+    return this.actions.some((action) => {
+      return action.collect;
+    });
+  }
+
+  /**
+   * Returns true if the `actions` array contains a Redirect action
+   */
+  hasRedirect(): boolean {
+    return this.actions.some((action) => {
+      return action.redirect;
+    });
+  }
+
+  static fromJSON(json: string) {
+    if (typeof json === 'string') {
+      // if it's a string, parse it first
+      return JSON.parse(json);
+    } else {
+      // create an instance of the User class
+      const lexResponse = Object.create(LexResponse.prototype);
+      // copy all the fields from the json object
+      return Object.assign(lexResponse, json);
+    }
+  }
+}
