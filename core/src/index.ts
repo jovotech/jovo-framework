@@ -42,7 +42,7 @@ export * from './MiddlewareCollection';
 export * from './Platform';
 export * from './Plugin';
 export * from './BaseOutput';
-
+export * from './Server';
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';

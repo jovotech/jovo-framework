@@ -5,8 +5,7 @@
     "framework",
     "platforms/**",
     "integrations/**",
-    "examples/**",
-    "./../v4-ideas/mvp/**"
+    "examples/**"
   ],
   "ignoreChanges": [
     "*.md",

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017"
+    ],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "allowUnreachableCode": true,
+    "resolveJsonModule": true,
+    "noImplicitReturns": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "strict": true,
+    "outDir": "./dist/",
+    "target": "es2017",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "./src/**/*",
+    "./test/**/*"
+  ],
+  "exclude": [
+    "./dist/**/*",
+    "./node_modules/**/*"
+  ]
+}
