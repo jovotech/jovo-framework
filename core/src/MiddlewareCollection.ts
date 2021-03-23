@@ -1,5 +1,5 @@
 import { ArrayElement } from './index';
-import { Middleware } from './Middleware';
+import { Middleware, MiddlewareFunction } from './Middleware';
 
 export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   readonly middlewares: Record<string, Middleware>;
@@ -9,6 +9,18 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     for (let i = 0, len = names.length; i < len; i++) {
       this.middlewares[names[i]] = new Middleware(names[i]);
     }
+  }
+
+  use(name: ArrayElement<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
+  use(name: string, ...fns: MiddlewareFunction[]): this;
+  use(name: string | ArrayElement<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
+    let middleware = this.get(name);
+    if (!middleware) {
+      middleware = new Middleware(name);
+      this.add(middleware);
+    }
+    middleware.use(...fns);
+    return this;
   }
 
   add(...names: string[]): this;
@@ -56,9 +68,7 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   async run<T extends any[]>(name: string | ArrayElement<MIDDLEWARES>, ...args: T): Promise<void> {
     /*  eslint-enable @typescript-eslint/no-explicit-any */
     const middleware = this.get(name);
-    if (!middleware) {
-      return;
-    }
+    if (!middleware) return;
     const beforeName = `before.${name}`;
     if (this.has(beforeName)) {
       await this.run(beforeName, ...args);
