@@ -4,10 +4,10 @@ import * as ua from 'universal-analytics';
 import { Config, Event, Transaction, TransactionItem } from './interfaces';
 
 export enum SystemMetricNamesEnum {
-  'Stop' = 'Stop', 
-  'ERROR'= 'Stop',
-  'EXCEEDED_MAX_REPROMPTS'= 'Stop',
-  'PLAYTIME_LIMIT_REACHED'= 'Stop',
+  'Stop' = 'Stop',
+  'ERROR' = 'Stop',
+  'EXCEEDED_MAX_REPROMPTS' = 'Stop',
+  'PLAYTIME_LIMIT_REACHED' = 'Stop',
   'USER_INITIATED' = 'Stop',
   'undefined' = 'Stop'
 }
@@ -25,6 +25,8 @@ export class GoogleAnalyticsInstance {
   customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
 
   $parameters: Record<string, string | number> = {};
+  experiments : Record<string, string | number> =  {};
+
 
   constructor(protected jovo: Jovo, protected config: Config, protected userId: string, public visitor: ua.Visitor) {
     this.customMetricsIndicesMap = new Map<systemMetricNames, number>(config.customMetricMap);
@@ -97,7 +99,11 @@ export class GoogleAnalyticsInstance {
     this.$parameters[parameter] = value;
   }
   setOptimizeExperiment(experimentId: string, variation: string | number): void {
-    this.$parameters[`exp`] = `${experimentId}.${variation}`;
+    this.experiments[experimentId] = variation;
+
+    this.$parameters[`exp`] = Object.entries(this.experiments)
+      .map(([id, value]) => `${id}.${value}`)
+      .join('!');
   }
 
   sendEvent(params: Event) {
@@ -135,12 +141,12 @@ export class GoogleAnalyticsInstance {
     }).send();
   }
 
-    /**
-     * User Events ties users to event category and action
-     * @param {object} jovo: Jovo object
-     * @param {string} eventName maps to category -> eventGroup
-     * @param {string} eventElement maps to action -> instance of eventGroup
-     */
+  /**
+   * User Events ties users to event category and action
+   * @param {object} jovo: Jovo object
+   * @param {string} eventName maps to category -> eventGroup
+   * @param {string} eventElement maps to action -> instance of eventGroup
+   */
   sendUserEvent(eventCategory: string, eventAction: string) {
     const params: Event = {
       eventCategory,
@@ -151,5 +157,5 @@ export class GoogleAnalyticsInstance {
 
     this.jovo.$googleAnalytics.visitor!.event(params);
   }
-  
+
 }
