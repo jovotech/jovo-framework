@@ -87,4 +87,20 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       this.visitor!.set('documentReferrer', referrer);
     }
   }
+
+  /**
+   * Checks if the current session started or ended. For Alexa do not count Audioplayer Events as new sessions.
+   *
+   * @param jovo - Unser Jovo objekt
+   * @returns sessionTag: Corresponding session tag (start|end|undefined)
+   */
+  // eslint-disable-next-line class-methods-use-this
+  protected getSessionTag(jovo: Jovo): string | void {
+    const { type: requestType } = jovo.getRoute();
+    const isAudioPlayerRequest = ['AUDIOPLAYER'];
+    if (isAudioPlayerRequest.includes(requestType)) {
+      return undefined;
+    }
+    return super.getSessionTag(jovo);
+  }
 }
