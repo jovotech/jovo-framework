@@ -26,7 +26,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     super.track(handleRequest);
   }
 
-  setGoogleAnalyticsObject(handleRequest: HandleRequest) {
+  protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -43,7 +43,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     super.setGoogleAnalyticsObject(handleRequest);
   }
 
-  setErrorEndReason(handleRequest: HandleRequest): void {
+  protected setErrorEndReason(handleRequest: HandleRequest): void {
     const { jovo } = handleRequest;
     if (!jovo) {
       return;
@@ -59,11 +59,11 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
   }
 
-  sendUnhandledEvents(jovo: Jovo) {
+  protected sendUnhandledEvents(jovo: Jovo) {
     super.sendUnhandledEvents(jovo);
 
     if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
-      this.sendUserEvent(jovo, 'FlowError', 'Exceeded_Max_Reprompts');
+      jovo.$googleAnalytics.sendUserEvent('FlowError', 'Exceeded_Max_Reprompts');
     }
   }
 

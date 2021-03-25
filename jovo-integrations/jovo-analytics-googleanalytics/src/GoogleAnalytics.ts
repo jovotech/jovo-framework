@@ -5,6 +5,7 @@ import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError, Log } from 'jo
 import { Jovo } from 'jovo-framework';
 import { Config, Event, TransactionItem, Transaction, validEndReasons, systemMetricNames, systemDimensionNames, SystemMetricNamesEnum, SystemDimensionNameEnum } from './interfaces';
 import { Helper } from './helper';
+import { GoogleAnalyticsInstance } from './GoogleAnalyticsInstance';
 
 
 export class GoogleAnalytics implements Analytics {
@@ -56,15 +57,13 @@ export class GoogleAnalytics implements Analytics {
       ['UUID', 1]
     ]
   };
-  visitor: ua.Visitor | undefined;
+  
+ // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
+ protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
+ protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
 
-  // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
-  protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
-  protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
+ protected visitor: ua.Visitor | undefined;
 
-
-  private $data = {};
-  private $parameters: Record<string, string | number> = {};
 
 
   /**
@@ -99,8 +98,10 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
+
     this.customMetricsIndicesMap = new Map<systemMetricNames, number>(this.config.customMetricMap);
     this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(this.config.customDimensionMap);
+    
 
     if (this.config.validateCustomDefinitions) {
       this.validateSkillConfigsCustomMetrics(Object.keys(SystemMetricNamesEnum));
@@ -113,74 +114,7 @@ export class GoogleAnalytics implements Analytics {
     app.middleware('fail')!.use(this.sendError.bind(this));
   }
 
-  /**
-   * Set custom metric for next pageview
-   * Throws error if metricName is not mapped to an index in your config 
-   * @param name - metricName
-   * @param targetValue - target value in googleAnalytics
-   * @param pageviewOnly - should metric should only be added for pageview requests? Standard true
-   */
-  setCustomMetricByName(name: systemMetricNames, targetValue: number, pageviewOnly = true): void {
-    // Set user id as a custom dimension to track hits on the same scope
-    const metricNumber: number | undefined = this.customMetricsIndicesMap.get(name);
-    if (!metricNumber) {
-      throw new JovoError(
-        `Trying to set custom system metric ${name} which is not set.`,
-        ErrorCode.ERR_PLUGIN,
-        'jovo-analytics-googleanalytics',
-        'Google Analytics sets some custom dimensions and metrics per default',
-        `Set systemMetrics in your config (which is an tuple Array mapping systemMetrics to GoogleAnalytics indices) and add ${name}`,
-        'See readme for more information'
-      );
-    }
-    if(pageviewOnly) {
-      this.setParameter(`cm${metricNumber}`, targetValue);
-    } else {
-    this.visitor?.set(`cm${metricNumber}`, targetValue);
-    }
-  }
 
-  /**
-   * Set custom dimension for next pageview
-   * Throws error if dimensionName is not mapped to an index in your config 
-   * @param name - dimensionName
-   * @param targetValue - target value in googleAnalytics
-   * @param pageviewOnly - should dimension should only be added for pageview requests? Standard false
-   */
-  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number,  pageviewOnly = false): void {
-    // Set user id as a custom dimension to track hits on the same scope
-    const dimensionNumber = this.customDimensionsIndicesMap.get(name);
-    if (typeof dimensionNumber !== 'number') {
-      throw new JovoError(
-        `Trying to set custom system dimension ${name} which is not set.`,
-        ErrorCode.ERR_PLUGIN,
-        'jovo-analytics-googleanalytics',
-        'Google Analytics sets some custom dimensions and metrics per default',
-        `Set systemDimensions in your config (which is an tuple Array mapping systemDimensions to GoogleAnalytics indices) and add ${name}`,
-        'See readme for more information'
-      );
-    }
-    Log.debug(`\n [!!] setting dimension: cd${dimensionNumber} `);
-    if(pageviewOnly) {
-      this.setParameter(`cd${dimensionNumber}`, targetValue);
-    } else {
-    this.visitor?.set(`cd${dimensionNumber}`, targetValue);
-    }
-  }
-
-  setCustomMetric(index: number, value: string | number) {
-    this.visitor?.set(`cm${index}`, value);
-  }
-  setCustomDimension(index: number, value: string | number): void {
-    this.visitor?.set(`cd${index}`, value);
-  }
-
-  setParameter(parameter: string, value: string | number): void {
-    this.$parameters[parameter] = value;
-  }
-  setOptimizeExperiment(experimentId: string, variation: string | number): void {
-    this.$parameters[`exp`] = `${experimentId}.${variation}`;
-  }
 
   /**
    * Sets end reason to session variables + updates google analytics metric
@@ -192,11 +126,11 @@ export class GoogleAnalytics implements Analytics {
     jovo.$session.$data.endReason = endReason;
     const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
     if (gaMetricNumber) {
-      this.setCustomMetric(gaMetricNumber, '1');
+      jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
     } else {
       const undefinedMetricNumber = this.customMetricsIndicesMap.get('undefined');
       if (undefinedMetricNumber) {
-        this.setCustomMetric(undefinedMetricNumber, '1');
+        jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
       }
     }
   }
@@ -231,25 +165,17 @@ export class GoogleAnalytics implements Analytics {
 
     // Either start or stop the session. If sessionTag is undefined, it will be ignored.
     const sessionTag = this.getSessionTag(jovo);
-    this.visitor!.set('sessionControl', sessionTag);
-
-    // Track custom set data as custom metrics or dimensions.
-    const customData = this.$data;
-    for (const [key, value] of Object.entries(customData)) {
-      if (key.startsWith('cm') || key.startsWith('cd')) {
-        this.visitor!.set(key, value);
-      }
-    }
+    jovo.$googleAnalytics.visitor!.set('sessionControl', sessionTag);
 
     // Track intent data.
-    const pageview = this.visitor!.pageview(this.getPageParameters(jovo));
+    const pageview = jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo));
 
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
       this.sendUnhandledEvents(jovo);
       this.sendIntentInputEvents(jovo);
     }
-    this.visitor?.send((err: any) => {
+    jovo.$googleAnalytics.visitor?.send((err: any) => {
       if (err) {
         throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
@@ -303,7 +229,7 @@ export class GoogleAnalytics implements Analytics {
    * Initiates GoogleAnalytics visitor object with fixed parameters.
    * @param {object} jovo: Jovo object for data like language or platform
    */
-  protected initVisitor(jovo: Jovo) {
+   protected initVisitor(jovo: Jovo) {
     const uuid = this.getUserId(jovo);
 
     // Initialize visitor with account id and custom client id
@@ -311,9 +237,8 @@ export class GoogleAnalytics implements Analytics {
     this.visitor.set('userId', uuid);
     this.visitor.set('dataSource', jovo.getType());
     this.visitor.set('userLanguage', jovo.getLocale());
-    this.setCustomDimensionByName('UUID', uuid);
   }
-
+  
   /**
    * Tracks uncaught user exceptions.
    * @param {object} handleRequest: HandleRequest to act upon
@@ -326,8 +251,8 @@ export class GoogleAnalytics implements Analytics {
     }
 
     // Stop the current tracking session.
-    this.visitor!.set('sessionControl', 'end');
-    this.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
+    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
+    jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
       if (err) {
         throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
@@ -346,12 +271,12 @@ export class GoogleAnalytics implements Analytics {
 
     // Check if an error in the nlu model occurred.
     if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
-      return this.sendUserEvent(jovo, 'UnhandledEvents', 'NLU_Unhandled');
+      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'NLU_Unhandled');
     }
 
     // If the current path is unhandled, an error in the skill handler occurred.
     if (path.endsWith('Unhandled')) {
-      return this.sendUserEvent(jovo, 'UnhandledEvents', 'Skill_Unhandled');
+      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'Skill_Unhandled');
     }
   }
 
@@ -371,7 +296,7 @@ export class GoogleAnalytics implements Analytics {
           eventAction: value.key, // Input value
           eventLabel: key, // Input key
         };
-        this.visitor!.event(params);
+        jovo.$googleAnalytics.visitor!.event(params);
       }
     }
   }
@@ -384,7 +309,7 @@ export class GoogleAnalytics implements Analytics {
   protected getPageParameters(jovo: Jovo) {
     const intentType = jovo.$type.type ?? 'fallBackType';
     const intentName = jovo.$request?.getIntentName();
-    const customParameters = this.$parameters;
+    const customParameters = jovo.$googleAnalytics.$parameters;
 
     return {
       ...customParameters,
@@ -441,23 +366,6 @@ export class GoogleAnalytics implements Analytics {
   }
 
   /**
-   * User Events ties users to event category and action
-   * @param {object} jovo: Jovo object
-   * @param {string} eventName maps to category -> eventGroup
-   * @param {string} eventElement maps to action -> instance of eventGroup
-   */
-  protected sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
-    const params: Event = {
-      eventCategory,
-      eventAction,
-      eventLabel: this.getUserId(jovo),
-      documentPath: jovo.getRoute().path,
-    };
-
-    this.visitor!.event(params);
-  }
-
-  /**
    * Sets the analytics variable to the instance of this object for making it accessable in skill code
    * @param handleRequest
    */
@@ -471,53 +379,21 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-    // Initialise visitor object.
     this.initVisitor(jovo);
 
+    if(!this.visitor) {
+      throw new JovoError(
+        'Not able to set $googleanalytics. Visitor is not initialized. Check the initVisitor method.',
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+      );
+    }
+
+    const userId = this.getUserId(jovo);
+
     // Initialise googleAnalytics object.
-    jovo.$googleAnalytics = this;
-    /* {
-      $data: {},
-      $parameters: {},
-      setSystemDimension: this.setSystemDimension,
-      setSystemMetric: this.setSystemMetric,
-      sendEvent: (params: Event) => {
-        this.visitor!.event(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendTransaction: (params: Transaction) => {
-        this.visitor!.transaction(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendItem: (params: TransactionItem) => {
-        this.visitor!.transaction(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendUserEvent: (eventCategory: string, eventAction: string) => {
-        this.sendUserEvent(jovo, eventCategory, eventAction);
-      },
-     
-    }; */
+    jovo.$googleAnalytics = new GoogleAnalyticsInstance(jovo, this.config, userId, this.visitor);
+    jovo.$googleAnalytics.setCustomDimensionByName('UUID', userId);
+
   }
 }
