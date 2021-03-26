@@ -26,7 +26,48 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     super.track(handleRequest);
   }
 
-  initVisitor(jovo: Jovo) {
+  protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
+    const jovo: Jovo = handleRequest.jovo!;
+    if (!jovo) {
+      throw new JovoError(
+        'Jovo object is not set',
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+      );
+    }
+
+    if (jovo.constructor.name !== 'AlexaSkill') {
+      return;
+    }
+
+    super.setGoogleAnalyticsObject(handleRequest);
+  }
+
+  protected setErrorEndReason(handleRequest: HandleRequest): void {
+    const { jovo } = handleRequest;
+    if (!jovo) {
+      return;
+    }
+    const endReason = jovo.$alexaSkill?.getEndReason();
+    const responseWillEndSessionWithTell =
+      _get(jovo.$output, 'Alexa.tell') || _get(jovo.$output, 'tell'); // aus AlexaCore.ts Zeile 95
+    if (this.config.trackEndReasons && endReason) {
+      // set End Reason (eg. ERROR, EXCEEDED_MAX_REPROMPTS, PLAYTIME_LIMIT_REACHED, USER_INITIATED, ...)
+      this.setEndReason(jovo, endReason);
+    } else if (responseWillEndSessionWithTell) {
+      this.setEndReason(jovo, 'Stop');
+    }
+  }
+
+  protected sendUnhandledEvents(jovo: Jovo) {
+    super.sendUnhandledEvents(jovo);
+
+    if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
+      jovo.$googleAnalytics.sendUserEvent('FlowError', 'Exceeded_Max_Reprompts');
+    }
+  }
+
+  protected initVisitor(jovo: Jovo) {
     super.initVisitor(jovo);
 
     const request = jovo.$request as AlexaRequest;
@@ -47,44 +88,19 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
   }
 
-  setGoogleAnalyticsObject(handleRequest: HandleRequest) {
-    const jovo: Jovo = handleRequest.jovo!;
-    if (!jovo) {
-      throw new JovoError(
-        'Jovo object is not set',
-        ErrorCode.ERR_PLUGIN,
-        'jovo-analytics-googleanalytics',
-      );
+  /**
+   * Checks if the current session started or ended. For Alexa do not count Audioplayer Events as new sessions.
+   *
+   * @param jovo - Unser Jovo objekt
+   * @returns sessionTag: Corresponding session tag (start|end|undefined)
+   */
+  // eslint-disable-next-line class-methods-use-this
+  protected getSessionTag(jovo: Jovo): string | void {
+    const { type: requestType } = jovo.getRoute();
+    const isAudioPlayerRequest = ['AUDIOPLAYER'];
+    if (isAudioPlayerRequest.includes(requestType)) {
+      return undefined;
     }
-
-    if (jovo.constructor.name !== 'AlexaSkill') {
-      return;
-    }
-
-    super.setGoogleAnalyticsObject(handleRequest);
-  }
-
-  setErrorEndReason(handleRequest: HandleRequest): void {
-    const { jovo } = handleRequest;
-    if (!jovo) {
-      return;
-    }
-    const endReason = jovo.$alexaSkill?.getEndReason();
-    const responseWillEndSessionWithTell =
-      _get(jovo.$output, 'Alexa.tell') || _get(jovo.$output, 'tell'); // aus AlexaCore.ts Zeile 95
-    if (this.config.trackEndReasons && endReason) {
-      // set End Reason (eg. ERROR, EXCEEDED_MAX_REPROMPTS, PLAYTIME_LIMIT_REACHED, USER_INITIATED, ...)
-      this.setEndReason(jovo, endReason);
-    } else if (responseWillEndSessionWithTell) {
-      this.setEndReason(jovo, 'Stop');
-    }
-  }
-
-  sendUnhandledEvents(jovo: Jovo) {
-    super.sendUnhandledEvents(jovo);
-
-    if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
-      this.sendUserEvent(jovo, 'FlowError', 'Exceeded_Max_Reprompts');
-    }
+    return super.getSessionTag(jovo);
   }
 }
