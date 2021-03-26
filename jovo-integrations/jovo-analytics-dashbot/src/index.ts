@@ -19,3 +19,7 @@ export { DashbotAlexa, Config as AlexaConfig } from './DashbotAlexa';
 export { DashbotGoogleAssistant, Config as GoogleAssistantConfig } from './DashbotGoogleAssistant';
 export { DashbotDialogflow, Config as DialogflowConfig } from './DashbotDialogflow';
 export { DashbotUniversal, Config as CoreConfig } from './DashbotUniversal';
+export {
+  DashbotGoogleAssistantConversations,
+  Config as GoogleAssistantConversationsConfig,
+} from './DashbotGoogleAssistantConversations';
