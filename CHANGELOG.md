@@ -4,15 +4,19 @@
 
 ## 2021-02-22
 
+##### `jovo-platform-* [3.5.0]` All platforms in `/jovo-platforms`
+> **⚠️ Potential Breaking Change**: [See PR for more information](https://github.com/jovotech/jovo-framework/pull/901).
+
+- [#826](https://github.com/jovotech/jovo-framework/pull/901) Move setResponse from response to after.response ([@aswetlow](https://github.com/aswetlow))
+
+
+
 ##### `jovo-analytics-dashbot [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
 ##### `jovo-analytics-botanalytics [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-botanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-botanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-botanalytics)
-- [#898](https://github.com/jovotech/jovo-framework/pull/898) Add error handling to analytics integrations ([@techpeace](https://github.com/techpeace)
-
-##### `jovo-platform-* [3.5.0]` All platforms in `/jovo-platforms`
-- [#826](https://github.com/jovotech/jovo-framework/pull/901) Move setResponse from response to after.response ([@aswetlow](https://github.com/aswetlow)
+- [#898](https://github.com/jovotech/jovo-framework/pull/898) Add error handling to analytics integrations ([@techpeace](https://github.com/techpeace))
 
 ##### `jovo-analytics-voicehero [3.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-voicehero) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-analytics-voicehero) | [npm](https://www.npmjs.com/package/jovo-analytics-voicehero)
-- [#901](https://github.com/jovotech/jovo-framework/pull/901) Deprecate Voice Hero ([@aswetlow](https://github.com/aswetlow)
+- [#901](https://github.com/jovotech/jovo-framework/pull/901) Deprecate Voice Hero ([@aswetlow](https://github.com/aswetlow))
 
 ##### `jovo-platform-googleassistantconv [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
 - [#901](https://github.com/jovotech/jovo-framework/pull/901) Fix missing unit test methods in ConversationalResponse ([@aswetlow](https://github.com/aswetlow))
