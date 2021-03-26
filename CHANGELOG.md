@@ -1,6 +1,18 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.5.0<br><br>
+### Latest Framework Version: 3.5.1<br><br>
+
+## 2021-03-26
+
+##### `jovo-analytics-dashbot [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
+* Add Conversational Actions support ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-analytics-googleanalytics [3.5.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#910](https://github.com/jovotech/jovo-framework/pull/910) ✨ Custom Metrics and Dimensions supporting names + validation ([@freiSMS(https://github.com/freiSMS))
+* [#905](https://github.com/jovotech/jovo-framework/pull/905) ✨ Support multiple experiments ([@theBenForce(https://github.com/theBenForce))
+
+##### `jovo-core [3.5.1]`
+* Improve types in helper methods ([@aswetlow](https://github.com/aswetlow))
 
 ## 2021-02-22
 

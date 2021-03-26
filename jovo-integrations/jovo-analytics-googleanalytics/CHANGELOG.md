@@ -4,6 +4,12 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-03-26 [3.5.1]
+
+* [#910](https://github.com/jovotech/jovo-framework/pull/910) ✨ Custom Metrics and Dimensions supporting names + validation ([@freiSMS(https://github.com/freiSMS))
+* [#905](https://github.com/jovotech/jovo-framework/pull/905) ✨ Support multiple experiments ([@theBenForce(https://github.com/theBenForce))
+
+
 
 ### 2021-01-27 [3.3.1]
 

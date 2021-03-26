@@ -4,6 +4,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+### 2021-03-26 [3.5.1]
+- Add Conversational Actions support
+
 ### 2021-02-22 [3.5]
 - [#898](https://github.com/jovotech/jovo-framework/pull/898) Add error handling to analytics integrations ([@techpeace](https://github.com/techpeace)
 
