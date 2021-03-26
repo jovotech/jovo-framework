@@ -9,11 +9,11 @@ export enum SystemMetricNamesEnum {
   'EXCEEDED_MAX_REPROMPTS' = 'Stop',
   'PLAYTIME_LIMIT_REACHED' = 'Stop',
   'USER_INITIATED' = 'Stop',
-  'undefined' = 'Stop'
+  'undefined' = 'Stop',
 }
 
 export enum SystemDimensionNameEnum {
-  'UUID' = 'Stop'
+  'UUID' = 'Stop',
 }
 
 export type systemMetricNames = keyof typeof SystemMetricNamesEnum; // will be enhanced for new custom metrics
@@ -22,20 +22,29 @@ export type systemDimensionNames = keyof typeof SystemDimensionNameEnum; // will
 export class GoogleAnalyticsInstance {
   // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
   customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
-  customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
+  customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<
+    systemDimensionNames,
+    number
+  >();
 
   $parameters: Record<string, string | number> = {};
-  experiments : Record<string, string | number> =  {};
+  experiments: Record<string, string | number> = {};
 
-
-  constructor(protected jovo: Jovo, protected config: Config, protected userId: string, public visitor: ua.Visitor) {
+  constructor(
+    protected jovo: Jovo,
+    protected config: Config,
+    protected userId: string,
+    public visitor: ua.Visitor,
+  ) {
     this.customMetricsIndicesMap = new Map<systemMetricNames, number>(config.customMetricMap);
-    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(config.customDimensionMap);
+    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(
+      config.customDimensionMap,
+    );
   }
 
   /**
    * Set custom metric for next pageview
-   * Throws error if metricName is not mapped to an index in your config 
+   * Throws error if metricName is not mapped to an index in your config
    * @param name - metricName
    * @param targetValue - target value in googleAnalytics
    * @param pageviewOnly - should metric should only be added for pageview requests? Standard true
@@ -50,7 +59,7 @@ export class GoogleAnalyticsInstance {
         'jovo-analytics-googleanalytics',
         'Google Analytics sets some custom dimensions and metrics per default',
         `Set systemMetrics in your config (which is an tuple Array mapping systemMetrics to GoogleAnalytics indices) and add ${name}`,
-        'See readme for more information'
+        'See readme for more information',
       );
     }
     if (pageviewOnly) {
@@ -62,12 +71,16 @@ export class GoogleAnalyticsInstance {
 
   /**
    * Set custom dimension for next pageview
-   * Throws error if dimensionName is not mapped to an index in your config 
+   * Throws error if dimensionName is not mapped to an index in your config
    * @param name - dimensionName
    * @param targetValue - target value in googleAnalytics
    * @param pageviewOnly - should dimension should only be added for pageview requests? Standard false
    */
-  setCustomDimensionByName(name: systemDimensionNames, targetValue: string | number, pageviewOnly = false): void {
+  setCustomDimensionByName(
+    name: systemDimensionNames,
+    targetValue: string | number,
+    pageviewOnly = false,
+  ): void {
     // Set user id as a custom dimension to track hits on the same scope
     const dimensionNumber = this.customDimensionsIndicesMap.get(name);
     if (typeof dimensionNumber !== 'number') {
@@ -77,7 +90,7 @@ export class GoogleAnalyticsInstance {
         'jovo-analytics-googleanalytics',
         'Google Analytics sets some custom dimensions and metrics per default',
         `Set systemDimensions in your config (which is an tuple Array mapping systemDimensions to GoogleAnalytics indices) and add ${name}`,
-        'See readme for more information'
+        'See readme for more information',
       );
     }
     Log.debug(`\n [!!] setting dimension: cd${dimensionNumber} `);
@@ -109,11 +122,7 @@ export class GoogleAnalyticsInstance {
   sendEvent(params: Event) {
     this.visitor!.event(params, (err: any) => {
       if (err) {
-        throw new JovoError(
-          err.message,
-          ErrorCode.ERR_PLUGIN,
-          'jovo-analytics-googleanalytics',
-        );
+        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
     }).send();
   }
@@ -121,22 +130,14 @@ export class GoogleAnalyticsInstance {
   sendTransaction(params: Transaction) {
     this.visitor!.transaction(params, (err: any) => {
       if (err) {
-        throw new JovoError(
-          err.message,
-          ErrorCode.ERR_PLUGIN,
-          'jovo-analytics-googleanalytics',
-        );
+        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
     }).send();
   }
   sendItem(params: TransactionItem) {
     this.visitor!.transaction(params, (err: any) => {
       if (err) {
-        throw new JovoError(
-          err.message,
-          ErrorCode.ERR_PLUGIN,
-          'jovo-analytics-googleanalytics',
-        );
+        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
     }).send();
   }
@@ -157,5 +158,4 @@ export class GoogleAnalyticsInstance {
 
     this.jovo.$googleAnalytics.visitor!.event(params);
   }
-
 }

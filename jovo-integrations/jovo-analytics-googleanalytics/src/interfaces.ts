@@ -11,20 +11,19 @@ export type validEndReasons =
 // export type systemMetricNames = validEndReasons; // will be enhanced for new custom metrics
 export type systemMetricNames = keyof typeof SystemMetricNamesEnum; // will be enhanced for new custom metrics
 export enum SystemMetricNamesEnum {
-  'Stop' = 'Stop', 
-  'ERROR'= 'Stop',
-  'EXCEEDED_MAX_REPROMPTS'= 'Stop',
-  'PLAYTIME_LIMIT_REACHED'= 'Stop',
+  'Stop' = 'Stop',
+  'ERROR' = 'Stop',
+  'EXCEEDED_MAX_REPROMPTS' = 'Stop',
+  'PLAYTIME_LIMIT_REACHED' = 'Stop',
   'USER_INITIATED' = 'Stop',
-  'undefined' = 'Stop'
+  'undefined' = 'Stop',
 }
 
 export enum SystemDimensionNameEnum {
-  'UUID' = 'Stop'
+  'UUID' = 'Stop',
 }
 
 export type systemDimensionNames = keyof typeof SystemDimensionNameEnum; // will be enhanced for new custom metrics
-
 
 export interface Event {
   eventCategory: string; // Category for event, e.g. Inputs, Errors, ...
@@ -64,6 +63,6 @@ export interface Config extends PluginConfig {
   validateCustomDefinitions?: boolean;
   sessionTimeoutInMinutes: number;
   skipUnverifiedUser: boolean;
-  customMetricMap: Array<[systemMetricNames, number]>,
-  customDimensionMap: Array<[systemDimensionNames, number]>,
+  customMetricMap: Array<[systemMetricNames, number]>;
+  customDimensionMap: Array<[systemDimensionNames, number]>;
 }

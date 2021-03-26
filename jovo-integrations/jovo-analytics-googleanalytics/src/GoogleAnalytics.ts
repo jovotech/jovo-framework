@@ -3,13 +3,21 @@ import _merge = require('lodash.merge');
 import * as crypto from 'crypto';
 import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError, Log } from 'jovo-core';
 import { Jovo } from 'jovo-framework';
-import { Config, Event, TransactionItem, Transaction, validEndReasons, systemMetricNames, systemDimensionNames, SystemMetricNamesEnum, SystemDimensionNameEnum } from './interfaces';
+import {
+  Config,
+  Event,
+  TransactionItem,
+  Transaction,
+  validEndReasons,
+  systemMetricNames,
+  systemDimensionNames,
+  SystemMetricNamesEnum,
+  SystemDimensionNameEnum,
+} from './interfaces';
 import { Helper } from './helper';
 import { GoogleAnalyticsInstance } from './GoogleAnalyticsInstance';
 
-
 export class GoogleAnalytics implements Analytics {
-
   /**
    * Need to save start state -\> will change during handling
    * Need to save lastUsed for calculation timeouts (sessionEnded bug display devices)
@@ -53,18 +61,20 @@ export class GoogleAnalytics implements Analytics {
       ['USER_INITIATED', 5],
       ['undefined', 6],
     ],
-    customDimensionMap: [
-      ['UUID', 1]
-    ]
+    customDimensionMap: [['UUID', 1]],
   };
-  
- // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
- protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<systemMetricNames, number>();
- protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<systemDimensionNames, number>();
 
- protected visitor: ua.Visitor | undefined;
+  // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
+  protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<
+    systemMetricNames,
+    number
+  >();
+  protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<
+    systemDimensionNames,
+    number
+  >();
 
-
+  protected visitor: ua.Visitor | undefined;
 
   /**
    * Validates if all members in a list of names is defined in the skills/actions custom metric map (in config file).
@@ -98,10 +108,10 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-
     this.customMetricsIndicesMap = new Map<systemMetricNames, number>(this.config.customMetricMap);
-    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(this.config.customDimensionMap);
-    
+    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(
+      this.config.customDimensionMap,
+    );
 
     if (this.config.validateCustomDefinitions) {
       this.validateSkillConfigsCustomMetrics(Object.keys(SystemMetricNamesEnum));
@@ -113,8 +123,6 @@ export class GoogleAnalytics implements Analytics {
     app.middleware('after.response')!.use(this.track.bind(this));
     app.middleware('fail')!.use(this.sendError.bind(this));
   }
-
-
 
   /**
    * Sets end reason to session variables + updates google analytics metric
@@ -182,18 +190,23 @@ export class GoogleAnalytics implements Analytics {
     });
   }
 
-  protected checkForMissingCustomEntriesInConfig(customTypeToCheck: 'dimension' | 'metric', neededCustomEntries: string[]) {
-    const entrieKeysInInstance = customTypeToCheck === 'metric'
-      ? [...this.customMetricsIndicesMap.keys()] as string[]
-      : [...this.customDimensionsIndicesMap.keys()] as string[];
+  protected checkForMissingCustomEntriesInConfig(
+    customTypeToCheck: 'dimension' | 'metric',
+    neededCustomEntries: string[],
+  ) {
+    const entrieKeysInInstance =
+      customTypeToCheck === 'metric'
+        ? ([...this.customMetricsIndicesMap.keys()] as string[])
+        : ([...this.customDimensionsIndicesMap.keys()] as string[]);
     Log.debug(`keys zu prüfen: ${neededCustomEntries}`);
     Log.debug(`keys in instanz: ${entrieKeysInInstance}`);
 
+    const missingEntriesInConfig = neededCustomEntries.filter(
+      (entrieToCheck) => !entrieKeysInInstance.includes(entrieToCheck),
+    );
 
-
-    const missingEntriesInConfig = neededCustomEntries.filter((entrieToCheck) => !entrieKeysInInstance.includes(entrieToCheck));
-
-    if (missingEntriesInConfig?.length > 0) { // TODO: add dimension check
+    if (missingEntriesInConfig?.length > 0) {
+      // TODO: add dimension check
       throw new JovoError(
         `Missing config values for custom ${customTypeToCheck} set by system`,
         ErrorCode.ERR_PLUGIN,
@@ -206,13 +219,18 @@ export class GoogleAnalytics implements Analytics {
   }
 
   protected checkAllCustomEntrieValuesAreUnique(customTypeToCheck: 'dimension' | 'metric') {
-    const entrieValuesInInstance = customTypeToCheck === 'metric'
-      ? [...this.customMetricsIndicesMap.values()] as number[]
-      : [...this.customDimensionsIndicesMap.values()] as number[];
+    const entrieValuesInInstance =
+      customTypeToCheck === 'metric'
+        ? ([...this.customMetricsIndicesMap.values()] as number[])
+        : ([...this.customDimensionsIndicesMap.values()] as number[]);
     const duplicates = entrieValuesInInstance
-      .filter((currentDefinitionValue, index) => entrieValuesInInstance.indexOf(currentDefinitionValue) !== index)
+      .filter(
+        (currentDefinitionValue, index) =>
+          entrieValuesInInstance.indexOf(currentDefinitionValue) !== index,
+      )
       .filter((currentDefinitionValue) => currentDefinitionValue !== 0);
-    if (duplicates?.length > 0) { // TODO: add dimension check
+    if (duplicates?.length > 0) {
+      // TODO: add dimension check
       throw new JovoError(
         `Some custom ${customTypeToCheck} in your config have overlapping values`,
         ErrorCode.ERR_PLUGIN,
@@ -229,7 +247,7 @@ export class GoogleAnalytics implements Analytics {
    * Initiates GoogleAnalytics visitor object with fixed parameters.
    * @param {object} jovo: Jovo object for data like language or platform
    */
-   protected initVisitor(jovo: Jovo) {
+  protected initVisitor(jovo: Jovo) {
     const uuid = this.getUserId(jovo);
 
     // Initialize visitor with account id and custom client id
@@ -238,7 +256,7 @@ export class GoogleAnalytics implements Analytics {
     this.visitor.set('dataSource', jovo.getType());
     this.visitor.set('userLanguage', jovo.getLocale());
   }
-  
+
   /**
    * Tracks uncaught user exceptions.
    * @param {object} handleRequest: HandleRequest to act upon
@@ -252,11 +270,12 @@ export class GoogleAnalytics implements Analytics {
 
     // Stop the current tracking session.
     jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
-    jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    })
+    jovo.$googleAnalytics
+      .visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
+        if (err) {
+          throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+        }
+      })
       .exception(handleRequest.error!.name)
       .send();
   }
@@ -381,7 +400,7 @@ export class GoogleAnalytics implements Analytics {
 
     this.initVisitor(jovo);
 
-    if(!this.visitor) {
+    if (!this.visitor) {
       throw new JovoError(
         'Not able to set $googleanalytics. Visitor is not initialized. Check the initVisitor method.',
         ErrorCode.ERR_PLUGIN,
@@ -394,6 +413,5 @@ export class GoogleAnalytics implements Analytics {
     // Initialise googleAnalytics object.
     jovo.$googleAnalytics = new GoogleAnalyticsInstance(jovo, this.config, userId, this.visitor);
     jovo.$googleAnalytics.setCustomDimensionByName('UUID', userId);
-
   }
 }
