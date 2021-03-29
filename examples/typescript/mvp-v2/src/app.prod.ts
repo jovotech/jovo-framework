@@ -7,5 +7,4 @@
 |
 */
 
-export * from "./server.lambda";
-
+export * from './server.lambda';

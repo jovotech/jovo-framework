@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "start": "node ./dist/src/app.dev.js",
+    "start": "node ./dist/app.dev.js",
     "start:dev": "tsc-watch --onSuccess \"npm start\"",
     "bundle:dev": "ncc build src/app.dev.ts -m -s -o bundle/",
     "bundle:prod": "ncc build src/app.prod.ts -s --target es2020 -o bundle/ && cd bundle/ && bestzip ./../bundle.zip index.js index.js.map sourcemap-register.js",

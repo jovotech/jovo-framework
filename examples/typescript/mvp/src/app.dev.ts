@@ -1,7 +1,5 @@
 import { app } from './app';
 import { FileDb } from '@jovotech/db-filedb';
-import {MainComponent} from "./components/MainComponent/MainComponent";
-console.log('DEV STAGE')
 /*
 |--------------------------------------------------------------------------
 | STAGE CONFIGURATION
@@ -12,9 +10,9 @@ console.log('DEV STAGE')
 |
 */
 app.use(
-    new FileDb({
-      pathToFile: './../../db/db.json',
-    }),
- );
+  new FileDb({
+    pathToFile: './../../db/db.json',
+  }),
+);
 
 export * from './server.express';

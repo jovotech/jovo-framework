@@ -1,7 +1,8 @@
-import { App } from '@jovotech/framework';
+import { App, HandleRequest } from '@jovotech/framework';
 import { Alexa } from '@jovotech/platform-alexa';
 
 import { MainComponent } from './components/MainComponent/MainComponent';
+import { LoveHatePizzaComponent } from './components/MainComponent/LoveHatePizzaComponent';
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,6 @@ import { MainComponent } from './components/MainComponent/MainComponent';
 |
 */
 const app = new App({
-
   /*
   |--------------------------------------------------------------------------
   | Components
@@ -24,9 +24,7 @@ const app = new App({
   |
   */
 
-  components: [
-    MainComponent
-  ],
+  components: [MainComponent, LoveHatePizzaComponent],
 
   /*
   |--------------------------------------------------------------------------
@@ -38,9 +36,7 @@ const app = new App({
   |
   */
 
-  plugins: [
-    new Alexa(),
-  ],
+  plugins: [new Alexa()],
 
   /*
   |--------------------------------------------------------------------------
@@ -57,7 +53,6 @@ const app = new App({
   intentMap: {
     'AMAZON.StopIntent': 'END',
   },
-
 });
 
 export { app };

@@ -1,8 +1,7 @@
 import { Jovo, BaseOutput } from '@jovotech/framework';
 
 export class AskForPizzaLoveOutput extends BaseOutput {
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Output Template
     |--------------------------------------------------------------------------
@@ -11,14 +10,14 @@ export class AskForPizzaLoveOutput extends BaseOutput {
     | Learn more here: www.jovo.tech/docs/output
     |
     */
-    build() {
-        return { 
-            message: 'Hello World! Do you like pizza?',
-            listen: true, 
-        }
+  build() {
+    return {
+      message: 'Hello World! Do you like pizza?',
+      listen: true,
     };
+  }
 
-    constructor(jovo: Jovo) {
-        super(jovo);
-    }
+  constructor(jovo: Jovo) {
+    super(jovo);
+  }
 }
