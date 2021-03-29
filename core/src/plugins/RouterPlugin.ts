@@ -8,6 +8,7 @@ import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
 import { findAsync } from '../utilities';
+import { RegisteredComponentMetadata } from '../metadata/ComponentMetadata';
 
 export interface RouterPluginConfig extends PluginConfig {}
 
@@ -65,6 +66,15 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           jovo,
         );
       }
+    } else {
+      const component = handleRequest.components[jovo.state];
+
+      if (!component) {
+        // TODO: improve
+        throw new Error(`Can't find component for this state: ${jovo.state}`);
+      }
+
+      routeMatches = await this.getComponentRouteMatches(intentName, component, jovo);
     }
 
     console.log('Matches', inspect(routeMatches, { depth: null, compact: true, colors: true }));
@@ -72,6 +82,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     if (routeMatches.length) {
       const match = await this.findRouteMatch(routeMatches, handleRequest, jovo);
       console.log('Match', inspect(match, { depth: null, compact: true, colors: true }));
+
       if (match) {
         jovo.$route = {
           path: match.path,
@@ -92,6 +103,33 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     jovo: Jovo,
   ): Promise<RouteMatch[]> {
     return this.collectGlobalRouteMatchesOfComponents(handleRequest.components, intentName, jovo);
+  }
+
+  private async getComponentRouteMatches(
+    intentName: string,
+    component: RegisteredComponentMetadata,
+    jovo: Jovo,
+  ): Promise<RouteMatch[]> {
+    const metadata = MetadataStorage.getInstance()
+      .getHandlerMetadataOfComponent(component.target)
+      .filter(
+        (metadata) =>
+          metadata.intents.find((intent) => intent === intentName) &&
+          (!metadata.options?.platforms?.length ||
+            metadata.options?.platforms?.includes(jovo.$platform.constructor.name)),
+      );
+
+    //
+    if (metadata.length === 0) {
+      // TODO: error handling
+      throw new Error('No match');
+    }
+    return [
+      {
+        path: [component.target.name],
+        metadata: metadata[0],
+      },
+    ];
   }
 
   private async collectGlobalRouteMatchesOfComponents(
