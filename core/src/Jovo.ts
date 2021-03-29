@@ -2,7 +2,7 @@ import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { ComponentHandler, InternalIntent, InternalSessionProperty, RequestType } from './enums';
+import { InternalIntent, InternalSessionProperty, RequestType } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   ComponentConstructor,
@@ -16,7 +16,6 @@ import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfa
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
-import _get from 'lodash.get';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
