@@ -13,7 +13,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     }
 
     if (GoogleAnalyticsGoogleAssistant.isNativeGoogleRequest(jovo)) {
-      if (jovo.$host.$request.handler.name === 'actions.handler.HEALTH_CHECK') {
+      if (jovo.$host.$request?.handler?.name === 'actions.handler.HEALTH_CHECK') {
         return true;
       }
       return false;
