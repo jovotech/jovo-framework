@@ -1,11 +1,12 @@
 import _merge from 'lodash.merge';
-import { RegisteredComponents, Server } from '.';
+import { ArrayElement, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
+import { Server } from './Server';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
@@ -23,23 +24,35 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
 };
 
-export class App extends Extensible<AppConfig> {
+export type AppBaseMiddlewares = [
+  'request',
+  'interpretation.asr',
+  'interpretation.nlu',
+  'dialog.context',
+  'dialog.logic',
+  'response.output',
+  'response.tts',
+  'response',
+];
+
+export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
+  'request',
+  'interpretation.asr',
+  'interpretation.nlu',
+  'dialog.context',
+  'dialog.logic',
+  'response.output',
+  'response.tts',
+  'response',
+];
+
+export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly config: AppConfig = {
     placeholder: '',
   };
+  readonly middlewareCollection = new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
 
   readonly components: RegisteredComponents;
-
-  middlewareCollection = new MiddlewareCollection(
-    'request',
-    'interpretation.asr',
-    'interpretation.nlu',
-    'dialog.context',
-    'dialog.logic',
-    'response.output',
-    'response.tts',
-    'response',
-  );
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -54,6 +67,12 @@ export class App extends Extensible<AppConfig> {
 
   get platforms(): ReadonlyArray<Platform> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
+  }
+
+  middleware(name: ArrayElement<AppBaseMiddlewares>): Middleware | undefined;
+  middleware(name: string): Middleware | undefined;
+  middleware(name: string | ArrayElement<AppBaseMiddlewares>): Middleware | undefined {
+    return this.middlewareCollection.get(name);
   }
 
   getDefaultConfig(): AppConfig {
@@ -73,19 +92,23 @@ export class App extends Extensible<AppConfig> {
     return;
   }
 
-  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(...components: T) {
+  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(
+    ...components: T
+  ): void {
     this.registerComponentsIn(this, ...components);
   }
 
   // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(request: Record<string, any>, server: Server): Promise<any> {
-    const handleRequest = new HandleRequest(this, request, server);
+  async handle(server: Server): Promise<any> {
+    const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
 
     await handleRequest.middlewareCollection.run('request', handleRequest);
 
-    const relatedPlatform = this.platforms.find((platform) => platform.isRequestRelated(request));
+    const relatedPlatform = this.platforms.find(
+      (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
+    );
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError();
     }
@@ -100,7 +123,9 @@ export class App extends Extensible<AppConfig> {
     await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
-    return jovo.$response;
+    // TODO move to response middleware
+    await relatedPlatform.setResponseSessionData(jovo.$response!, jovo);
+    await server.setResponse(jovo.$response);
   }
 
   private registerComponentsIn<T extends Array<ComponentConstructor | ComponentDeclaration>>(

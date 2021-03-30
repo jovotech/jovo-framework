@@ -1,8 +1,7 @@
-import { App } from '@jovotech/framework';
+import { App} from '@jovotech/framework';
 import { Alexa } from '@jovotech/platform-alexa';
 
 import { MainComponent } from './components/MainComponent/MainComponent';
-import { HandleRequest, Jovo } from '../../../../core/src';
 
 /*
 |--------------------------------------------------------------------------
@@ -53,10 +52,6 @@ const app = new App({
   intentMap: {
     'AMAZON.StopIntent': 'END',
   },
-});
-
-app.middleware('request').use((handleRequest: HandleRequest, jovo: Jovo) => {
-  console.log('REQUEST');
 });
 
 export { app };

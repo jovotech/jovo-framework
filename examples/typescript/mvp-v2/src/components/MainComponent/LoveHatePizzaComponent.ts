@@ -3,23 +3,21 @@ import { AskForPizzaLoveOutput } from './output/AskForPizzaLoveOutput';
 import { LovesPizzaOutput } from './output/LovesPizzaOutput';
 import { HatesPizzaOutput } from './output/HatesPizzaOutput';
 
-
 @Component()
 export class LoveHatePizzaComponent extends BaseComponent {
-
   START() {
     return this.$send(AskForPizzaLoveOutput);
   }
 
   @Handle({
-    intents: ['YesIntent']
+    intents: ['YesIntent', 'AMAZON.YesIntent'],
   })
   LovesPizza() {
     return this.$send(LovesPizzaOutput);
   }
 
   @Handle({
-    intents: ['NoIntent']
+    intents: ['NoIntent', 'AMAZON.NoIntent'],
   })
   HatesPizza() {
     return this.$send(HatesPizzaOutput);

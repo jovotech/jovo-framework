@@ -2,14 +2,13 @@ import { Component, Handle, BaseComponent } from '@jovotech/framework';
 import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 
 @Component({
-  components: [LoveHatePizzaComponent]
+  components: [],
 })
 export class MainComponent extends BaseComponent {
-
   @Handle({
-    global: true
+    global: true,
   })
-  LAUNCH() {
-    return this.$redirect(LoveHatePizzaComponent);
+  async LAUNCH() {
+    await this.$redirect(LoveHatePizzaComponent);
   }
 }

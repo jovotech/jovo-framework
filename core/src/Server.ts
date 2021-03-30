@@ -1,4 +1,13 @@
 // TODO implement
+
+export interface Headers {
+  [header: string]: string | string[] | undefined;
+}
+
+export interface QueryParams {
+  [header: string]: string | string[] | undefined;
+}
+
 export abstract class Server {
   /**
      Returns whether the host can write files.
@@ -8,17 +17,17 @@ export abstract class Server {
   /**
      Returns request object
      **/
-  abstract getRequest(): unknown;
+  abstract getRequestObject(): Record<string, string>;
 
   /**
      Returns query params
      **/
-  abstract getQueryParams(): Record<string, string>;
+  abstract getQueryParams(): QueryParams;
 
   /**
      Returns request headers
      **/
-  abstract getRequestHeaders(): Record<string, string>;
+  abstract getRequestHeaders(): Headers;
 
   /**
      Sets additional response headers. Will be merged with existing
@@ -28,7 +37,7 @@ export abstract class Server {
   /**
      Sets response object
      **/
-  abstract setResponse(response: any): void;
+  abstract setResponse(response: any): Promise<void>;
 
   /**
      Calls fail method of server

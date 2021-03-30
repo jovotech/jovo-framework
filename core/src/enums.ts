@@ -21,5 +21,6 @@ export enum InternalSessionProperty {
 }
 
 export enum InternalIntent {
+  Start = 'START',
   Unhandled = 'UNHANDLED',
 }

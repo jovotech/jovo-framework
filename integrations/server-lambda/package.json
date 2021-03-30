@@ -18,9 +18,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "@jovotech/framework": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
+    "@types/aws-lambda": "^8.10.73",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
