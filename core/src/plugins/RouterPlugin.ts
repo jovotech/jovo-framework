@@ -38,7 +38,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   mount(handleRequest: HandleRequest): Promise<void> | void {
-    handleRequest.middlewareCollection.get('dialog.logic')?.use(this.handle);
+    handleRequest.middlewareCollection.use('dialog.logic', this.handle);
     return;
   }
 
