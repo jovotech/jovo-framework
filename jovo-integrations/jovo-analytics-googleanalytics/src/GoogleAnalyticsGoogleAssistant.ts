@@ -24,9 +24,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
         'user.profile.familyName',
       );
       const isCrawler = userName && userName === 'Crawler';
-      if (isCrawler) {
-        return;
-      }
+      return isCrawler;
     }
   }
 
@@ -79,7 +77,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       return;
     }
 
-    if (!this.config.skipUnverifiedUser) {
+    if (this.config.skipUnverifiedUser) {
       const isVoiceMatchUser = GoogleAnalyticsGoogleAssistant.isVoiceMatchUser(jovo);
       if (!isVoiceMatchUser) {
         return;
