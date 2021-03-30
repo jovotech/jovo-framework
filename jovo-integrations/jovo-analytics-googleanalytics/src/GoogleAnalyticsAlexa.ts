@@ -23,7 +23,24 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
+
+
+    const alexaRequest = jovo.$request as AlexaRequest;
+
+    if(jovo.$type.subType?.includes('AlexaSkillEvent')) {
+      this.handleAlexaSkillEvents(jovo);
+      return;
+    }
+
     super.track(handleRequest);
+  }
+
+  protected handleAlexaSkillEvents(jovo: Jovo) {
+    const eventName = jovo.$type.subType?.split('.')[1];
+    if(!eventName) {
+      return;
+    } 
+    jovo.$googleAnalytics.sendUserEvent('AlexaSkillEvent', eventName);
   }
 
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
