@@ -55,9 +55,9 @@ export class AplResource {
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @TransformMap(AplGradient)
+  @TransformMap(() => AplGradient)
   gradient?: Record<string, AplGradient>;
-  @TransformMap(AplGradient)
+  @TransformMap(() => AplGradient)
   @ValidateNested({ each: true })
   @IsOptional()
   gradients?: Record<string, AplGradient>;

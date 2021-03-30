@@ -24,6 +24,6 @@ export class Intent {
 
   @IsObject()
   @ValidateNested({ each: true })
-  @TransformMap(Slot)
+  @TransformMap(() => Slot)
   slots: Record<string, Slot>;
 }

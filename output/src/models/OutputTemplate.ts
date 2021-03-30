@@ -7,6 +7,7 @@ export class OutputTemplate extends OutputTemplateBase {
   @IsOptional()
   @IsInstance(OutputTemplatePlatforms)
   @ValidateNested()
+  @ValidateNested({ each: true })
   @Type(() => OutputTemplatePlatforms)
   platforms?: OutputTemplatePlatforms;
 }

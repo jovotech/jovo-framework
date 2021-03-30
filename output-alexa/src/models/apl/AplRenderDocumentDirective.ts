@@ -16,6 +16,6 @@ export class AplRenderDocumentDirective extends AplDirective<'Alexa.Presentation
   @IsOptional()
   @IsObject()
   @ValidateNested({ each: true })
-  @TransformMap(AplDataSource)
+  @TransformMap(() => AplDataSource)
   datasources?: Record<string, AplDataSource>;
 }

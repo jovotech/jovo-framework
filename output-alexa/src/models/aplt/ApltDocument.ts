@@ -29,7 +29,7 @@ export class ApltDocument {
   @IsOptional()
   @IsObject()
   @ValidateNested({ each: true })
-  @TransformMap(AplLayout)
+  @TransformMap(() => AplLayout)
   layouts?: Record<string, AplLayout>;
 
   @IsOptional()
