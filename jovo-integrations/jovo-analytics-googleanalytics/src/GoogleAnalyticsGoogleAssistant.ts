@@ -6,7 +6,6 @@ import { get } from 'lodash';
 import { Helper } from './helper';
 
 export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
-
   static isCrawler(jovo: Jovo) {
     if (!jovo.$googleAction) {
       return false;
@@ -55,7 +54,10 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
    * @returns true no extra NLU (dialogflow etc)
    */
   static isNativeGoogleRequest(jovo: Jovo) {
-    const requestContainsSubRequest: string | undefined = get(jovo.$request, 'originalDetectIntentRequest');
+    const requestContainsSubRequest: string | undefined = get(
+      jovo.$request,
+      'originalDetectIntentRequest',
+    );
     return !requestContainsSubRequest;
   }
 
@@ -90,8 +92,9 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     super.initVisitor(jovo);
 
     const request = jovo.$request as GoogleActionRequest;
-    const deviceInfo = `Google Assistant Device - ${request.hasScreenInterface() ? 'Display Support' : 'Voice Only'
-      }`;
+    const deviceInfo = `Google Assistant Device - ${
+      request.hasScreenInterface() ? 'Display Support' : 'Voice Only'
+    }`;
 
     // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
     this.visitor!.set(
