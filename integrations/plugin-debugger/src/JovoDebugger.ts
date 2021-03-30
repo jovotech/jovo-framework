@@ -12,7 +12,7 @@ import {
 import { promises } from 'fs';
 import { join } from 'path';
 import { connect, Socket } from 'socket.io-client';
-import { Stream, Writable } from 'stream';
+import { Writable } from 'stream';
 
 // TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
@@ -34,6 +34,8 @@ export enum JovoDebuggerEvent {
   AppConsoleLog = 'app.console-log',
   AppRequest = 'app.request',
   AppResponse = 'app.response',
+
+  AppJovoUpdate = 'app.jovo-update',
 }
 
 // TODO: check if type can be improved, same for Response
@@ -125,6 +127,39 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
     app.middlewareCollection.use('after.dialog.logic', this.onRequest);
     app.middlewareCollection.use('after.response', this.onResponse);
+
+    this.patchJovoProxyWrap(app);
+  }
+
+  private patchJovoProxyWrap(app: App) {
+    app.platforms.forEach((platform) => {
+      const createJovoFn = platform.createJovoInstance;
+      platform.createJovoInstance = (appArg, handleRequestArg) => {
+        const jovo = createJovoFn.call(platform, appArg, handleRequestArg);
+        return new Proxy(jovo, this.getProxyHandler());
+      };
+    });
+  }
+
+  private getProxyHandler<T extends Record<string, any>>(path = ''): ProxyHandler<T> {
+    return {
+      get: (target, key: string) => {
+        if (typeof target[key] === 'object' && target[key] !== null) {
+          return new Proxy(target[key], this.getProxyHandler(path ? [path, key].join('.') : key));
+        } else {
+          return target[key];
+        }
+      },
+      set: (target, key: string, value: unknown): boolean => {
+        (target as Record<string, unknown>)[key] = value;
+        this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
+          key,
+          value,
+          path: path ? [path, key].join('.') : key,
+        });
+        return true;
+      },
+    };
   }
 
   private onDebuggingAvailable = () => {
@@ -132,6 +167,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       // TODO: implement error
       throw new Error();
     }
+
     // TODO: check if there is a better way and this is desired
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
@@ -140,6 +176,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         return originalWriteFn.call(this, chunk, ...args);
       };
     }
+
     if (!this.hasOverriddenWrite) {
       propagateStreamAsLog(process.stdout, this.socket);
       propagateStreamAsLog(process.stderr, this.socket);
@@ -211,10 +248,16 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   };
 
   private async connectToWebhook() {
-    const webhookId = await this.retrieveLocalWebhookId();
-    this.socket = connect(this.config.webhookUrl, {
+    // const webhookId = await this.retrieveLocalWebhookId();
+    // this.socket = connect(this.config.webhookUrl, {
+    //   query: {
+    //     id: webhookId,
+    //     type: 'app',
+    //   },
+    // });
+    this.socket = connect('http://localhost:8443', {
       query: {
-        id: webhookId,
+        id: 'test',
         type: 'app',
       },
     });

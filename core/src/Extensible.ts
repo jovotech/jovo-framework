@@ -63,7 +63,6 @@ export abstract class Extensible<
         Object.defineProperty(plugin, 'config', {
           enumerable: true,
           value: config,
-          writable: false,
         });
         if (!this.config.plugin) {
           this.config.plugin = {};
@@ -94,7 +93,6 @@ export abstract class Extensible<
         Object.defineProperty(plugin, 'config', {
           enumerable: true,
           value: config,
-          writable: false,
         });
         await plugin.mount?.(this);
 

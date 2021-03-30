@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { DeepPartial } from './index';
+import { DeepPartial, OutputTemplate } from './index';
 import { Jovo } from './Jovo';
 import { ComponentOptions, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { PluginConfig } from './Plugin';
@@ -26,10 +26,26 @@ export class ComponentDeclaration<
 export abstract class BaseComponent<CONFIG extends PluginConfig = PluginConfig> extends Jovo {
   readonly config: CONFIG;
 
-  constructor(jovo: Jovo, config?: DeepPartial<CONFIG>) {
+  constructor(readonly jovo: Jovo, config?: DeepPartial<CONFIG>) {
     super(jovo.$app, jovo.$handleRequest, jovo.$platform);
-    // TODO: check if this causes any issues
-    Object.assign(this, jovo);
+    // Make `this[key]` reference `jovo[key]` for every `key` in `jovo`. Without, mutations of `this` would not change `jovo`.
+    // TODO: check if functions should be ignored
+    for (const key in jovo) {
+      if (
+        jovo.hasOwnProperty(key) &&
+        typeof (jovo as any)[key] !== 'function' &&
+        (this as any)[key]
+      ) {
+        Object.defineProperty(this, key, {
+          get() {
+            return this.jovo[key];
+          },
+          set(val: any) {
+            this.jovo[key] = val;
+          },
+        });
+      }
+    }
     const defaultConfig = this.getDefaultConfig();
     // TODO maybe set a direct reference from constructor instead
     // Components will most likely only be initialized during the request ...
