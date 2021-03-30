@@ -1,4 +1,4 @@
-import { App, HandleRequest } from '@jovotech/framework';
+import { App } from '@jovotech/framework';
 import { Alexa } from '@jovotech/platform-alexa';
 
 import { MainComponent } from './components/MainComponent/MainComponent';

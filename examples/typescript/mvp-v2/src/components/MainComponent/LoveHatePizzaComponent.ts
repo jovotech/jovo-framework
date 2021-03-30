@@ -10,14 +10,14 @@ export class LoveHatePizzaComponent extends BaseComponent {
   }
 
   @Handle({
-    intents: ['YesIntent'],
+    intents: ['YesIntent', 'AMAZON.YesIntent'],
   })
   LovesPizza() {
     return this.$send(LovesPizzaOutput);
   }
 
   @Handle({
-    intents: ['NoIntent'],
+    intents: ['NoIntent', 'AMAZON.NoIntent'],
   })
   HatesPizza() {
     return this.$send(HatesPizzaOutput);
