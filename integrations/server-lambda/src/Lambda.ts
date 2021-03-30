@@ -1,6 +1,6 @@
 import { Headers, QueryParams, Server } from '@jovotech/framework';
-import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
-import { APIGatewayProxyEventHeaders } from 'aws-lambda/trigger/api-gateway-proxy';
+import type { APIGatewayEvent, Callback, Context } from 'aws-lambda';
+import type { APIGatewayProxyEventHeaders } from 'aws-lambda/trigger/api-gateway-proxy';
 
 export class Lambda extends Server {
   event: APIGatewayEvent;
