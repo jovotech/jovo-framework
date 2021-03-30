@@ -31,7 +31,7 @@ export class GoogleAnalytics implements Analytics {
       const stateString: string = jovo.getState() ? jovo.getState() : '/';
 
       jovo.$data.startState = stateString;
-      jovo.$data.lastUsedAt = jovo?.$user.$metaData.lastUsedAt;
+      jovo.$data.lastUsedAt = jovo?.$user.$metaData?.lastUsedAt;
     }
   }
 
