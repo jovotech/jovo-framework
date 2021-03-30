@@ -50,11 +50,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       return;
     }
 
-    console.log(
-      'Components',
-      inspect(handleRequest.components, { depth: null, compact: true, colors: true }),
-    );
-    console.log('State', inspect(jovo.state, { depth: null, compact: true, colors: true }));
+    // console.log('Components', inspect(handleRequest.components, { depth: 2, compact: true }));
+    // console.log('State', inspect(jovo.state, { depth: 2, compact: true }));
 
     let routeMatches: RouteMatch[] = [];
     if (!jovo.state) {
@@ -77,11 +74,11 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       routeMatches = await this.getComponentRouteMatches(intentName, component, jovo);
     }
 
-    console.log('Matches', inspect(routeMatches, { depth: null, compact: true, colors: true }));
+    // console.log('Matches', inspect(routeMatches, { depth: 2, compact: true }));
 
     if (routeMatches.length) {
       const match = await this.findRouteMatch(routeMatches, handleRequest, jovo);
-      console.log('Match', inspect(match, { depth: null, compact: true, colors: true }));
+      // console.log('Match', inspect(match, { depth: 2, compact: true }));
 
       if (match) {
         jovo.$route = {
@@ -90,7 +87,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         };
       }
     }
-    console.log('Route', jovo.$route);
+    // console.log('Route', jovo.$route);
 
     if (!jovo.$route) {
       throw new MatchingComponentNotFoundError();
@@ -190,7 +187,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         (metadata.options?.platforms?.length && metadata.options?.if?.(handleRequest, jovo)) ||
         false,
     );
-    console.log('conditional platform', { relatedMatch });
+    // console.log('conditional platform', { relatedMatch });
 
     if (!relatedMatch) {
       relatedMatch = await findAsync(
@@ -199,21 +196,21 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           (!metadata.options?.platforms?.length && metadata.options?.if?.(handleRequest, jovo)) ||
           false,
       );
-      console.log('conditional', { relatedMatch });
+      // console.log('conditional', { relatedMatch });
     }
 
     if (!relatedMatch) {
       relatedMatch = unconditionalMatches.find(
         ({ metadata }) => metadata.options?.platforms?.length,
       );
-      console.log('platform', { relatedMatch });
+      // console.log('platform', { relatedMatch });
     }
 
     if (!relatedMatch) {
       relatedMatch = unconditionalMatches.find(
         ({ metadata }) => !metadata.options?.platforms?.length,
       );
-      console.log('generic', { relatedMatch });
+      // console.log('generic', { relatedMatch });
     }
     return relatedMatch;
   }

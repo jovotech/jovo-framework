@@ -34,7 +34,8 @@ export abstract class BaseComponent<CONFIG extends PluginConfig = PluginConfig> 
       if (
         jovo.hasOwnProperty(key) &&
         typeof (jovo as any)[key] !== 'function' &&
-        (this as any)[key]
+        (this as any)[key] &&
+        key !== 'jovo'
       ) {
         Object.defineProperty(this, key, {
           get() {

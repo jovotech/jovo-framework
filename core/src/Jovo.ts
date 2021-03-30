@@ -37,16 +37,16 @@ export interface JovoSession {
 export interface DelegateOptions {}
 
 export abstract class Jovo<
-  REQ extends JovoRequest = JovoRequest,
-  RES extends JovoResponse = JovoResponse
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse
 > {
   $asr: AsrData;
   $data: RequestData;
   $entities: EntityMap;
   $nlu: NluData;
   $output: OutputTemplate;
-  $request: REQ;
-  $response?: RES;
+  $request: REQUEST;
+  $response?: RESPONSE;
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
@@ -54,7 +54,7 @@ export abstract class Jovo<
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
-    readonly $platform: Platform<REQ, RES>,
+    readonly $platform: Platform<REQUEST, RESPONSE>,
   ) {
     this.$asr = {};
     this.$data = {};
@@ -109,6 +109,8 @@ export abstract class Jovo<
 
     const componentName =
       typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
+    // Max: I think this will cause issues if a component is passed that is not in the root but nested.
+    // A component could exist in root and as a child in another component, that has to be taken into account as well.
     const component = this.$handleRequest.components[componentName];
     if (!component) {
       throw new ComponentNotFoundError(`Component ${componentName} not found.`);
@@ -116,13 +118,16 @@ export abstract class Jovo<
 
     // TODO: good place for caching here?
     if (!component.instance) {
-      const componentConstructor = component.target;
-      // @ts-ignore
-      component.instance = new componentConstructor(this, component.options); //TODO: handle Function
+      const jovoReference =
+        (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
+      component.instance = new (component.target as ComponentConstructor)(
+        jovoReference,
+        component.options?.config,
+      );
     }
     const componentInstance = component.instance;
     if (!componentInstance || !(componentInstance as any)[key]) {
-      throw new HandlerNotFoundError(key, componentName);
+      throw new HandlerNotFoundError(key.toString(), componentName);
     }
     await (componentInstance as any)[key]();
 

@@ -7,6 +7,7 @@ import {
 import { DeepPartial, JovoConditionFunction } from '../index';
 
 export interface ComponentOptions<COMPONENT extends BaseComponent> {
+  [key: string]: unknown;
   name?: string;
   config?: DeepPartial<COMPONENT['config']>;
   components?: Array<ComponentConstructor | ComponentDeclaration>;

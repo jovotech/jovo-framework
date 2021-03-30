@@ -73,8 +73,6 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       componentInstancePath,
     );
 
-    console.log(componentInstance, ' is cached if defined');
-
     if (!componentInstance) {
       componentInstance = new (componentMetadata.target as ComponentConstructor)(
         jovo,
