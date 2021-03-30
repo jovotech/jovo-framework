@@ -112,6 +112,10 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       );
     }
 
+    if (jovo.constructor.name !== 'GoogleAction') {
+      return;
+    }
+
     super.setGoogleAnalyticsObject(handleRequest);
   }
 }
