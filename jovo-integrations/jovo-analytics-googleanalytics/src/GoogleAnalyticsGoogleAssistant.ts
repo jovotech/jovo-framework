@@ -3,8 +3,64 @@ import { GoogleActionRequest } from 'jovo-platform-googleassistant';
 import { DialogflowRequest } from 'jovo-platform-dialogflow';
 import { HandleRequest, Jovo, JovoError, ErrorCode } from 'jovo-core';
 import { get } from 'lodash';
+import { Helper } from './helper';
 
 export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
+
+  static isCrawler(jovo: Jovo) {
+    if (!jovo.$googleAction) {
+      return false;
+    }
+
+    if (GoogleAnalyticsGoogleAssistant.isNativeGoogleRequest(jovo)) {
+      if (jovo.$host.$request.handler.name === 'actions.handler.HEALTH_CHECK') {
+        return true;
+      }
+      return false;
+    } else {
+      const dialogFlowRequest = jovo.$request as DialogflowRequest;
+      const userName: string | undefined = get(
+        dialogFlowRequest.originalDetectIntentRequest!.payload,
+        'user.profile.familyName',
+      );
+      const isCrawler = userName && userName === 'Crawler';
+      if (isCrawler) {
+        return;
+      }
+    }
+  }
+
+  static isVoiceMatchUser(jovo: Jovo) {
+    if (!jovo.$googleAction) {
+      return false;
+    }
+
+    if (GoogleAnalyticsGoogleAssistant.isNativeGoogleRequest(jovo)) {
+      if (jovo.$host.$request?.user?.verificationStatus === 'VERIFIED') {
+        return true;
+      }
+      return false;
+    } else {
+      const dialogFlowRequest = jovo.$request as DialogflowRequest;
+      const userVerificationStatus: string | undefined = get(
+        dialogFlowRequest.originalDetectIntentRequest!.payload,
+        'user.userVerificationStatus',
+      ); //  inputs[0].rawInputs[0].inputType');
+      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+      return isVoiceMatchUser;
+    }
+  }
+
+  /**
+   * Checks of current request belongs to conversational action
+   *
+   * @returns true no extra NLU (dialogflow etc)
+   */
+  static isNativeGoogleRequest(jovo: Jovo) {
+    const requestContainsSubRequest: string | undefined = get(jovo.$request, 'originalDetectIntentRequest');
+    return !requestContainsSubRequest;
+  }
+
   track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
@@ -19,23 +75,12 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       return;
     }
 
-    const dialogFlowRequest = jovo.$request as DialogflowRequest;
-
-    const userName: string | undefined = get(
-      dialogFlowRequest.originalDetectIntentRequest!.payload,
-      'user.profile.familyName',
-    );
-    const isCrawler = userName && userName === 'Crawler';
-    if (isCrawler) {
+    if (GoogleAnalyticsGoogleAssistant.isCrawler(jovo)) {
       return;
     }
 
     if (!this.config.skipUnverifiedUser) {
-      const userVerificationStatus: string | undefined = get(
-        dialogFlowRequest.originalDetectIntentRequest!.payload,
-        'user.userVerificationStatus',
-      ); //  inputs[0].rawInputs[0].inputType');
-      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+      const isVoiceMatchUser = GoogleAnalyticsGoogleAssistant.isVoiceMatchUser(jovo);
       if (!isVoiceMatchUser) {
         return;
       }
@@ -47,9 +92,8 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     super.initVisitor(jovo);
 
     const request = jovo.$request as GoogleActionRequest;
-    const deviceInfo = `Google Assistant Device - ${
-      request.hasScreenInterface() ? 'Display Support' : 'Voice Only'
-    }`;
+    const deviceInfo = `Google Assistant Device - ${request.hasScreenInterface() ? 'Display Support' : 'Voice Only'
+      }`;
 
     // fake UserAgent which makes GA mappping device to browser field and platform type to mobile
     this.visitor!.set(
