@@ -24,8 +24,8 @@ Learn how to use Google Analytics in your Jovo application.
       - [sendItem()](#senditem)
       - [sendUserEvent()](#senduserevent)
       - [setCustomMetric()](#setcustommetric)
-      - [setParameter()](#setparameter)
-      - [setOptimizeExperiment()](#setoptimizeexperiment)
+      - [setParameter](#setparameter)
+      - [setOptimizeExperiment](#setoptimizeexperiment)
       - [Setup endReason metrics in the gooogle analytics console](#setup-endreason-metrics-in-the-gooogle-analytics-console)
 
 ## About Google Analytics
@@ -117,7 +117,9 @@ app.use(
     new GoogleAnalyticsGoogleAssistant()
 );
 ```
-For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications). By default users with disabled voice match are ignored in Google Analytics because each of their sessions will be counted as separate user. You can enable tracking them by setting "skipUnverifiedUser" to false.
+
+It is important to enable metadata tracking in your config to allow google analytics to recognize timeouts. Otherwise alexa screen devices will send session ended requests days after this session ended. This would pollute your data by counting additional sessions.
+For the plugin configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications). By default users with disabled voice match are ignored in Google Analytics because each of their sessions will be counted as separate user. You can enable tracking them by setting "skipUnverifiedUser" to false.
 
 ```javascript
 // @language=javascript
@@ -125,6 +127,10 @@ For configurations, all you need is the Tracking ID of your Google Analytics Acc
 // src/config.js
 
 module.exports = {
+
+    user: {
+      metaData: true,
+    },
     
     analytics: {
         // Configuration for generic tracking plugin
