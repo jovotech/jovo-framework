@@ -13,18 +13,33 @@
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "setup:cli": "node bin/link"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
     "lodash.merge": "^4.6.2",
-    "@jovotech/output-alexa": "latest"
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "lodash.mergewith": "^4.6.2",
+    "lodash.set": "^4.3.2",
+    "@jovotech/output-alexa": "latest",
+    "chalk": "^4.1.0",
+    "jovo-model": "^3.0.1",
+    "jovo-model-alexa": "^3.0.1",
+    "node-emoji": "^1.10.0"
   },
   "devDependencies": {
     "@types/lodash.merge": "^4.6.6",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.has": "^4.5.6",
+    "@types/lodash.mergewith": "^4.6.6",
+    "@types/lodash.set": "^4.3.6",
+    "@types/node-emoji": "^1.8.1",
+    "@types/tv4": "^1.2.29",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
@@ -35,7 +50,9 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "symlink-dir": "^4.1.0",
+    "global-modules": "^2.0.0"
   },
   "peerDependencies": {
     "@jovotech/core": "~4.0"

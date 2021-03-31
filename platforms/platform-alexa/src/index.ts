@@ -10,6 +10,7 @@ declare module '@jovotech/core/dist/Extensible' {
   }
 }
 
+export * from './cli';
 export * from './Alexa';
 export * from './AlexaRequest';
 export type { AlexaResponse } from '@jovotech/output-alexa';
