@@ -37,12 +37,12 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     const eventName = jovo.$type.subType?.split('.')[1];
     if (!eventName) {
       return;
-    } 
+    }
     jovo.$googleAnalytics.sendEvent({
-      'eventCategory': 'AlexaSkillEvent',
-      'eventAction': eventName,
-      'eventLabel': this.getUserId(jovo)
-    })
+      eventCategory: 'AlexaSkillEvent',
+      eventAction: eventName,
+      eventLabel: this.getUserId(jovo),
+    });
   }
 
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
