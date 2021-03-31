@@ -1,8 +1,8 @@
 import { OutputTemplate } from '.';
 
-export interface OutputTemplateConverterStrategy<Response extends Record<string, unknown>> {
-  responseClass: new () => Response;
+export interface OutputTemplateConverterStrategy<RESPONSE extends Record<string, unknown>> {
+  responseClass: new () => RESPONSE;
 
-  toResponse(output: OutputTemplate): Response;
-  fromResponse(response: Response): OutputTemplate;
+  toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
+  fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
 }
