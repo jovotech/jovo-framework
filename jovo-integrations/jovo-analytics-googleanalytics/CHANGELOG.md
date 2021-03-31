@@ -4,7 +4,11 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
-### 2021-03-26 [3.5.1]
+### 2021-03-30 [3.5.3]
+* [#916](https://github.com/jovotech/jovo-framework/pull/916) ✨ Google Analytics HealthCheck + Crawler Filter update + Event tracking of skill events ([@freiSMS(https://github.com/freiSMS))
+
+
+### 2021-03-26 [3.5.2]
 
 * [#910](https://github.com/jovotech/jovo-framework/pull/910) ✨ Custom Metrics and Dimensions supporting names + validation ([@freiSMS(https://github.com/freiSMS))
 * [#905](https://github.com/jovotech/jovo-framework/pull/905) ✨ Support multiple experiments ([@theBenForce(https://github.com/theBenForce))

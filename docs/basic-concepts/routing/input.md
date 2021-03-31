@@ -17,8 +17,6 @@ We call user input any additional information your user provides besides an `int
 
 ## How to Access Input
 
- > With the update to Jovo v2, we changed the way you can access input values. Please read more below, or take a look at our [migration document](../../getting-started/installation/v1-migration.md '../installation/v1-migration').
-
 You can access the complete object of inputs with `this.$inputs`, and a specific input by its name: `this.$inputs.name`.
 
 Each input is an object which looks like this:

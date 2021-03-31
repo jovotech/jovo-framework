@@ -23,11 +23,9 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
-
-
     const alexaRequest = jovo.$request as AlexaRequest;
 
-    if(jovo.$type.subType?.includes('AlexaSkillEvent')) {
+    if (jovo.$type.subType?.includes('AlexaSkillEvent')) {
       this.handleAlexaSkillEvents(jovo);
       return;
     }
@@ -37,7 +35,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
 
   protected handleAlexaSkillEvents(jovo: Jovo) {
     const eventName = jovo.$type.subType?.split('.')[1];
-    if(!eventName) {
+    if (!eventName) {
       return;
     } 
     jovo.$googleAnalytics.sendEvent({

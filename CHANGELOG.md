@@ -2,6 +2,12 @@
 
 ### Latest Framework Version: 3.5.1<br><br>
 
+## 2021-03-30
+
+##### `jovo-analytics-googleanalytics [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#916](https://github.com/jovotech/jovo-framework/pull/916) ✨ Google Analytics HealthCheck + Crawler Filter update + Event tracking of skill events ([@freiSMS(https://github.com/freiSMS))
+
+
 ## 2021-03-26
 
 ##### `jovo-analytics-dashbot [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
