@@ -40,7 +40,11 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     if(!eventName) {
       return;
     } 
-    jovo.$googleAnalytics.sendUserEvent('AlexaSkillEvent', eventName);
+    jovo.$googleAnalytics.sendEvent({
+      'eventCategory': 'AlexaSkillEvent',
+      'eventAction': eventName,
+      'eventLabel': this.getUserId(jovo)
+    })
   }
 
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
