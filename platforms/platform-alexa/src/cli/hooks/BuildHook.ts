@@ -21,8 +21,8 @@ import {
   wait,
   mergeArrayCustomizer,
   deleteFolderRecursive,
-} from '@jovotech/cli/core';
-import { BuildEvents } from '@jovotech/cli/command-build';
+} from '@jovotech/cli-core';
+import { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';

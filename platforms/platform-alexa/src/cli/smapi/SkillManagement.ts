@@ -1,4 +1,4 @@
-import { execAsync, wait } from '@jovotech/cli/core';
+import { execAsync, wait } from '@jovotech/cli-core';
 
 import { AskSkillList, getAskError } from '../utils';
 

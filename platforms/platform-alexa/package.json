@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "npm run setup:cli && tsc",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
@@ -45,6 +45,7 @@
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "global-dirs": "^3.0.0",
     "@jovotech/core": "~4.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",

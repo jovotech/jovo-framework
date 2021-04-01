@@ -12,9 +12,9 @@ import {
   promptListForProjectId,
   promptOverwrite,
   Task,
-} from '@jovotech/cli/core';
-import { GetEvents } from '@jovotech/cli/command-get';
-import { BuildEvents } from '@jovotech/cli/command-build';
+} from '@jovotech/cli-core';
+import { GetEvents } from '@jovotech/cli-command-get';
+import { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 
 import * as smapi from '../smapi';
@@ -41,7 +41,10 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     this.actionSet = {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
-      'before.get': [this.checkForExistingPlatformFiles.bind(this)],
+      'before.get': [
+        this.updatePluginContext.bind(this),
+        this.checkForExistingPlatformFiles.bind(this),
+      ],
       'get': [this.get.bind(this)],
       'after.get': [this.checkForBuild.bind(this)],
     };

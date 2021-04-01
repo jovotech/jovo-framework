@@ -1,4 +1,4 @@
-import { JovoCli } from '@jovotech/cli/core';
+import { JovoCli } from '@jovotech/cli-core';
 import { join as joinPaths } from 'path';
 
 /**

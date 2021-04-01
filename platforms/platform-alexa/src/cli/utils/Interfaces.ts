@@ -1,4 +1,4 @@
-import { JovoCliPluginConfig, JovoCliPluginContext } from '@jovotech/cli/core';
+import { JovoCliPluginConfig, JovoCliPluginContext } from '@jovotech/cli-core';
 
 export interface AskSkillList {
   skills: [

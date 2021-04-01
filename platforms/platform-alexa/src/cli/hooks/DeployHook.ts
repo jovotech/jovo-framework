@@ -11,9 +11,9 @@ import {
   printStage,
   ROCKET,
   Task,
-} from '@jovotech/cli/core';
+} from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { DeployPlatformEvents, DeployPlatformPluginContext } from '@jovotech/cli/command-deploy';
+import { DeployPlatformEvents, DeployPlatformPluginContext } from '@jovotech/cli-command-deploy';
 
 import * as smapi from '../smapi';
 import {
@@ -22,6 +22,7 @@ import {
   getAskConfigFolderPath,
   getAskConfigPath,
   getModelPath,
+  getPlatformDirectory,
   getPlatformPath,
   getSkillJsonPath,
   getSubLocales,
@@ -44,9 +45,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [
+        this.checkForPlatformsFolder.bind(this),
         this.updatePluginContext.bind(this),
         checkForAskCli,
-        this.checkForPlatformsFolder.bind(this),
       ],
       'deploy:platform': [this.deploy.bind(this)],
     };
@@ -66,7 +67,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   checkForPlatform(args: ParseEventArguments) {
     // Check if this plugin should be used or not.
-    if (args.args.platform && args.args.platform !== this.$config.pluginName) {
+    if (args.flags.platform && args.flags.platform !== this.$config.pluginId) {
       this.uninstall();
     }
   }
@@ -84,10 +85,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     context.skillId = (context.flags['skill-id'] as string) || this.getSkillId();
   }
 
-  checkForPlatformsFolder(context: any) {
+  checkForPlatformsFolder() {
     if (!existsSync(getPlatformPath())) {
       throw new JovoCliError(
-        `Couldn't find the platform folder ${getPlatformPath()}.`,
+        `Couldn't find the platform folder "${getPlatformDirectory()}/".`,
         this.$config.pluginName!,
         `Please use "jovo build" to create platform-specific files.`,
       );

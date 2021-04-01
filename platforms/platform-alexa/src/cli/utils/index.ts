@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import chalk from 'chalk';
 import _get from 'lodash.get';
-import { execAsync, JovoCliError } from '@jovotech/cli/core';
+import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
 import { AskSkillList, JovoCliPluginConfigAlexa } from './Interfaces';
 

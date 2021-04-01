@@ -1,5 +1,5 @@
 import { existsSync } from 'fs';
-import { execAsync } from '@jovotech/cli/core';
+import { execAsync } from '@jovotech/cli-core';
 import { getAskError } from '../utils';
 
 export async function getAccountLinkingInformation(
