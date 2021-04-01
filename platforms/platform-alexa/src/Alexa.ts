@@ -1,4 +1,4 @@
-import { App, ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
@@ -14,10 +14,13 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaConfig> {
     return {};
   }
 
-  mount(parent: App): Promise<void> | void {}
-
-  isRequestRelated(request: Record<string, any>): boolean {
+  isRequestRelated(request: Record<string, any> | AlexaRequest): boolean {
     return request.version && request.request && request.request.requestId;
+  }
+
+  prepareResponse(response: AlexaResponse, jovo: Jovo): AlexaResponse | Promise<AlexaResponse> {
+    this.setResponseSessionData(response, jovo);
+    return response;
   }
 
   setResponseSessionData(response: AlexaResponse, jovo: Jovo): this {

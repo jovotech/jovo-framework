@@ -10,7 +10,7 @@ export abstract class JovoRequest {
 
   abstract getIntentName(): string | undefined;
 
-  abstract getEntities(): EntityMap;
+  abstract getEntities(): EntityMap | undefined;
 
   getNluData(): NluData | undefined {
     const intentName = this.getIntentName();

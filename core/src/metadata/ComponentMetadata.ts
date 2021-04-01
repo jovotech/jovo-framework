@@ -35,5 +35,4 @@ export class RegisteredComponentMetadata<
   COMPONENT extends BaseComponent = BaseComponent
 > extends ComponentMetadata<COMPONENT> {
   components?: RegisteredComponents;
-  instance?: COMPONENT;
 }

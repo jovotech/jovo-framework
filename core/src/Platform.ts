@@ -43,10 +43,16 @@ export abstract class Platform<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
 
-  abstract setResponseSessionData(response: RESPONSE, jovo: Jovo): this;
+  // TODO: Determine whether this should be moved into Jovo. That would require changes in BaseComponent and BaseOutput.
+  abstract prepareResponse(
+    response: RESPONSE | RESPONSE[],
+    jovo: Jovo,
+  ): RESPONSE | RESPONSE[] | Promise<RESPONSE> | Promise<RESPONSE[]>;
+
+  abstract setResponseSessionData(response: RESPONSE | RESPONSE[], jovo: Jovo): this;
 
   createJovoInstance<APP extends App>(
-    app: App,
+    app: APP,
     handleRequest: HandleRequest,
   ): Jovo<REQUEST, RESPONSE> {
     return new this.jovoClass(app, handleRequest, this);
@@ -58,6 +64,4 @@ export abstract class Platform<
     _merge(instance, request);
     return instance;
   }
-
-  finalizeResponse(response: RESPONSE): void {}
 }

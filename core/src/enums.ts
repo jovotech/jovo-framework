@@ -16,6 +16,8 @@ export enum RequestType {
   Unknown = 'UNKNOWN',
 }
 
+export type RequestTypeLike = RequestType | `${RequestType}`;
+
 export enum InternalSessionProperty {
   State = '_JOVO_STATE_',
 }

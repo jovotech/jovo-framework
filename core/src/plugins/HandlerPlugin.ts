@@ -67,27 +67,19 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     if (!componentMetadata) {
       throw new ComponentNotFoundError(componentPath);
     }
-    const componentInstancePath = componentPath + '.instance';
-    let componentInstance: BaseComponent | undefined = _get<any, string>(
-      handleRequest.components,
-      componentInstancePath,
+    const componentInstance = new (componentMetadata.target as ComponentConstructor)(
+      jovo,
+      componentMetadata.options?.config,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     );
-
-    if (!componentInstance) {
-      componentInstance = new (componentMetadata.target as ComponentConstructor)(
-        jovo,
-        componentMetadata.options?.config,
-      );
-      _set(handleRequest.app.components, componentPath + '.instance', componentInstance);
-    }
-    if (!(componentInstance as any)[jovo.$route.handlerKey]) {
+    if (typeof componentInstance[jovo.$route.handlerKey as keyof BaseComponent] !== 'function') {
       throw new HandlerNotFoundError(
         jovo.$route.handlerKey.toString(),
         componentPath[componentPath.length - 1],
         componentInstance.constructor.name,
       );
     }
-    await (componentInstance as any)[jovo.$route.handlerKey]();
+    await componentInstance[jovo.$route.handlerKey as keyof BaseComponent]();
     jovo.$output = componentInstance.$output;
   };
 

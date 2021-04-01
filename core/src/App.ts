@@ -100,7 +100,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   // TODO finish Host-related things
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(server: Server): Promise<any> {
+  async handle(server: Server): Promise<void> {
     const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
 
@@ -124,7 +124,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
     // TODO move to response middleware
-    await relatedPlatform.setResponseSessionData(jovo.$response!, jovo);
+    // await relatedPlatform.setResponseSessionData(jovo.$response, jovo);
     await server.setResponse(jovo.$response);
   }
 

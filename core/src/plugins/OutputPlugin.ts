@@ -26,7 +26,8 @@ export class OutputPlugin extends Plugin<OutputPluginConfig> {
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
     const converter = new OutputTemplateConverter(jovo.$platform.outputTemplateConverterStrategy);
-    // TODO: catch toResponse possible error
-    jovo.$response = await converter.toResponse(jovo.$output);
+    // TODO: catch possible errors
+    const response = await converter.toResponse(jovo.$output);
+    jovo.$response = await jovo.$platform.prepareResponse(response, jovo);
   };
 }

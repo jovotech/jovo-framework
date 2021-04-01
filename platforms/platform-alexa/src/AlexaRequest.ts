@@ -21,27 +21,9 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
   session?: Session;
   request?: Request;
 
-  getRequestType(): JovoRequestType | undefined {
-    const requestTypeMap: Record<string, JovoRequestType> = {
-      'LaunchRequest': { type: RequestType.Launch },
-      'IntentRequest': { type: RequestType.Intent },
-      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
-      'System.ExceptionEncountered': { type: RequestType.OnError },
-    };
-    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
-  }
-
-  getIntentName(): string | undefined {
-    return this.request?.intent?.name;
-  }
-
-  getSessionData(): SessionData | undefined {
-    return this.session?.attributes;
-  }
-
-  getEntities(): EntityMap {
+  getEntities(): EntityMap | undefined {
     const slots = this.request?.intent?.slots;
-    if (!slots) return {};
+    if (!slots) return;
     const slotKeys = Object.keys(slots);
 
     const entities: EntityMap = {};
@@ -63,5 +45,23 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
     }
 
     return entities;
+  }
+
+  getIntentName(): string | undefined {
+    return this.request?.intent?.name;
+  }
+
+  getRequestType(): JovoRequestType | undefined {
+    const requestTypeMap: Record<string, JovoRequestType> = {
+      'LaunchRequest': { type: RequestType.Launch },
+      'IntentRequest': { type: RequestType.Intent },
+      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
+      'System.ExceptionEncountered': { type: RequestType.OnError },
+    };
+    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
+  }
+
+  getSessionData(): SessionData | undefined {
+    return this.session?.attributes;
   }
 }

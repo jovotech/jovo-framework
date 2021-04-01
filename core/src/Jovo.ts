@@ -2,7 +2,7 @@ import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { InternalIntent, InternalSessionProperty, RequestType } from './enums';
+import { InternalIntent, InternalSessionProperty, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   ComponentConstructor,
@@ -13,6 +13,7 @@ import {
   Server,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
+import { JovoProxy } from './JovoProxy';
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
@@ -25,7 +26,7 @@ export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoRe
 ) => Jovo<REQUEST, RESPONSE>;
 
 export interface JovoRequestType {
-  type?: RequestType | string;
+  type?: RequestTypeLike;
   subType?: string;
   optional?: boolean;
 }
@@ -44,9 +45,10 @@ export abstract class Jovo<
   $data: RequestData;
   $entities: EntityMap;
   $nlu: NluData;
-  $output: OutputTemplate;
+  // TODO determine whether it should always be an array and maybe readonly
+  $output: OutputTemplate | OutputTemplate[];
   $request: REQUEST;
-  $response?: RESPONSE;
+  $response?: RESPONSE | RESPONSE[];
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
@@ -58,7 +60,7 @@ export abstract class Jovo<
   ) {
     this.$asr = {};
     this.$data = {};
-    this.$output = {};
+    this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
     this.$session = {
       $data: this.$request.getSessionData() || {},
@@ -85,20 +87,22 @@ export abstract class Jovo<
     return this.$session.$data[InternalSessionProperty.State];
   }
 
-  // TODO determine async/ not async
+  // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT>,
     options?: DeepPartial<OUTPUT['options']>,
-  ) {
+  ): Promise<void> {
     const outputInstance = new outputConstructor(this, options);
-    //
     this.$output = await outputInstance.build();
   }
 
   async $redirect<
     COMPONENT extends BaseComponent,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>
+    HANDLER extends Exclude<
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      keyof PickWhere<COMPONENT, Function>,
+      keyof BaseComponent
+    >
   >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<this>;
   async $redirect(componentName: string, handlerKey?: string): Promise<this>;
   async $redirect(
@@ -116,25 +120,21 @@ export abstract class Jovo<
       throw new ComponentNotFoundError(`Component ${componentName} not found.`);
     }
 
-    // TODO: good place for caching here?
-    if (!component.instance) {
-      const jovoReference =
-        (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
-      component.instance = new (component.target as ComponentConstructor)(
-        jovoReference,
-        component.options?.config,
-      );
-    }
-    const componentInstance = component.instance;
-    if (!componentInstance || !(componentInstance as any)[key]) {
+    const jovoReference =
+      (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
+
+    const componentInstance = new (component.target as ComponentConstructor)(
+      jovoReference,
+      component.options?.config,
+    );
+    if (!componentInstance[key as keyof BaseComponent]) {
       throw new HandlerNotFoundError(key.toString(), componentName);
     }
-    await (componentInstance as any)[key]();
+    await componentInstance[key as keyof BaseComponent]();
 
     // TODO: move somewhere else
     this.$output = componentInstance.$output;
     this.$session.$data[InternalSessionProperty.State] = componentInstance.constructor.name;
-
     return this;
   }
 

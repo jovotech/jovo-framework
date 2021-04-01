@@ -1,5 +1,5 @@
 import { inspect } from 'util';
-import { RegisteredComponents } from '../BaseComponent';
+import { BaseComponent, RegisteredComponents } from '../BaseComponent';
 import { InternalIntent } from '../enums';
 import { MatchingComponentNotFoundError } from '../errors/MatchingComponentNotFoundError';
 import { HandleRequest } from '../HandleRequest';
@@ -24,7 +24,7 @@ declare module '../Extensible' {
 
 export interface JovoRoute {
   path: string[];
-  handlerKey: string | symbol;
+  handlerKey: keyof BaseComponent | string;
 }
 
 export interface RouteMatch {
