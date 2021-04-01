@@ -5,6 +5,7 @@ import {
   HandleRequest,
   InvalidParentError,
   Jovo,
+  Platform,
   Plugin,
   PluginConfig,
   SessionData,
@@ -128,14 +129,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     app.middlewareCollection.use('after.dialog.logic', this.onRequest);
     app.middlewareCollection.use('after.response', this.onResponse);
 
-    this.patchJovoProxyWrap(app);
+    this.patchPlatformsToCreateJovoAsProxy(app.platforms);
   }
 
-  private patchJovoProxyWrap(app: App) {
-    app.platforms.forEach((platform) => {
+  private patchPlatformsToCreateJovoAsProxy(platforms: ReadonlyArray<Platform>) {
+    platforms.forEach((platform) => {
       const createJovoFn = platform.createJovoInstance;
-      platform.createJovoInstance = (appArg, handleRequestArg) => {
-        const jovo = createJovoFn.call(platform, appArg, handleRequestArg);
+      platform.createJovoInstance = (app, handleRequest) => {
+        const jovo = createJovoFn.call(platform, app, handleRequest);
         return new Proxy(jovo, this.getProxyHandler());
       };
     });
