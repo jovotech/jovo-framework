@@ -58,8 +58,8 @@ Of course you should change the region/account id to fit your need.
 
 
 #### From Jovo model to Lex model 
-
-The package jovo-model-lex will help you to convert your Jovo model to Lex.  
+You can manualy create your Lex Bot with AWS Console https://docs.aws.amazon.com/lex/latest/dg/gs-bp-create-bot.html
+But the package jovo-model-lex will help you to convert your Jovo model to Lex.  
 
 The following script will generate a Lex model file in the folder /platforms/lex/bot.json
 ```javascript
@@ -112,7 +112,8 @@ if you want to add a valueElicitationPrompt you slot will look like:
 
 Now you can zip the Lex model and upload it on the AWS Lex V1 console.
 When it's done, you should be able to test the chatbot in AWS console.     
-    
+
+Now your are ready to plug your Lex Bot to AWS Connect: https://docs.aws.amazon.com/connect/latest/adminguide/amazon-lex.html
 
 ## Usage
 
