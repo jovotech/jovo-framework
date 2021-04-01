@@ -1,14 +1,9 @@
-import { PluginConfig, Plugin, Extensible } from '@jovotech/framework';
+import { PluginConfig, Plugin, Extensible } from '@jovotech/core';
 
-interface FileDbConfig extends PluginConfig {
+export interface FileDbConfig extends PluginConfig {
   pathToFile?: string;
 }
 export class FileDb extends Plugin<FileDbConfig> {
-  constructor(config: FileDbConfig) {
-    // @ts-ignore
-    super(config);
-  }
-
   getDefaultConfig(): FileDbConfig {
     return {};
   }

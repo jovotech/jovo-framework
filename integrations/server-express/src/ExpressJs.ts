@@ -1,4 +1,4 @@
-import { Headers, QueryParams, Server } from '@jovotech/framework';
+import { Headers, QueryParams, Server } from '@jovotech/core';
 import type { Request, Response } from 'express';
 
 export interface ErrorResponse {
