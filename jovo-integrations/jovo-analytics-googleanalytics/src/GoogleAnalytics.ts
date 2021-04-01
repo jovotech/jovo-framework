@@ -1,19 +1,21 @@
 import * as ua from 'universal-analytics';
 import _merge = require('lodash.merge');
 import * as crypto from 'crypto';
-import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError } from 'jovo-core';
+import { Analytics, BaseApp, ErrorCode, HandleRequest, JovoError, Log } from 'jovo-core';
 import { Jovo } from 'jovo-framework';
-import { Config, Event, TransactionItem, Transaction } from './interfaces';
+import {
+  Config,
+  Event,
+  TransactionItem,
+  Transaction,
+  validEndReasons,
+  systemMetricNames,
+  systemDimensionNames,
+  SystemMetricNamesEnum,
+  SystemDimensionNameEnum,
+} from './interfaces';
 import { Helper } from './helper';
-
-type validEndReasons =
-  | 'Stop'
-  | 'ERROR'
-  | 'EXCEEDED_MAX_REPROMPTS'
-  | 'PLAYTIME_LIMIT_REACHED'
-  | 'PlayTimeLimitReached'
-  | 'USER_INITIATED'
-  | 'undefined';
+import { GoogleAnalyticsInstance } from './GoogleAnalyticsInstance';
 
 export class GoogleAnalytics implements Analytics {
   /**
@@ -29,7 +31,7 @@ export class GoogleAnalytics implements Analytics {
       const stateString: string = jovo.getState() ? jovo.getState() : '/';
 
       jovo.$data.startState = stateString;
-      jovo.$data.lastUsedAt = jovo?.$user.$metaData.lastUsedAt;
+      jovo.$data.lastUsedAt = jovo?.$user.$metaData?.lastUsedAt;
     }
   }
 
@@ -50,23 +52,48 @@ export class GoogleAnalytics implements Analytics {
     trackEndReasons: false,
     sessionTimeoutInMinutes: 5,
     skipUnverifiedUser: true,
+    validateCustomDefinitions: false,
+    customMetricMap: [
+      ['Stop', 1],
+      ['ERROR', 2],
+      ['EXCEEDED_MAX_REPROMPTS', 3],
+      // ['PlayTimeLimitReached', 4],
+      ['USER_INITIATED', 5],
+      ['undefined', 6],
+    ],
+    customDimensionMap: [['UUID', 1]],
   };
-  visitor: ua.Visitor | undefined;
 
   // this map can be overwritten by skill developers to map endreasons to different custom metric numbers
-  readonly endReasonGoogleAnalyticsMap = new Map<validEndReasons, number>([
-    ['Stop', 1],
-    ['ERROR', 2],
-    ['EXCEEDED_MAX_REPROMPTS', 3],
-    ['PlayTimeLimitReached', 4],
-    ['USER_INITIATED', 5],
-    ['undefined', 6],
-  ]);
+  protected customMetricsIndicesMap: Map<systemMetricNames, number> = new Map<
+    systemMetricNames,
+    number
+  >();
+  protected customDimensionsIndicesMap: Map<systemDimensionNames, number> = new Map<
+    systemDimensionNames,
+    number
+  >();
 
-  constructor(config?: Config) {
-    if (config) {
-      this.config = _merge(this.config, config);
-    }
+  protected visitor: ua.Visitor | undefined;
+
+  /**
+   * Validates if all members in a list of names is defined in the skills/actions custom metric map (in config file).
+   * Can be used after the setup middleware -> config is not loaded before
+   * @param neededMetricNames list of name to check against config
+   */
+  validateSkillConfigsCustomMetrics(neededMetricNames: string[]) {
+    this.checkForMissingCustomEntriesInConfig('metric', neededMetricNames);
+    this.checkAllCustomEntrieValuesAreUnique('metric');
+  }
+
+  /**
+   * Validates if all members in a list of names is defined in the skills/actions custom dimension map (in config file).
+   * Can be used after the setup middleware -> config is not loaded before
+   * @param neededDimensionNames list of name to check against config
+   */
+  validateSkillConfigsCustomDimensions(neededDimensionNames: string[]) {
+    this.checkForMissingCustomEntriesInConfig('dimension', neededDimensionNames);
+    this.checkAllCustomEntrieValuesAreUnique('dimension');
   }
 
   install(app: BaseApp) {
@@ -79,6 +106,16 @@ export class GoogleAnalytics implements Analytics {
         'You can find your tracking id in Google Analytics by clicking: Admin -> Property Settings -> Tracking Id',
         'https://www.jovo.tech/docs/analytics/googleanalytics',
       );
+    }
+
+    this.customMetricsIndicesMap = new Map<systemMetricNames, number>(this.config.customMetricMap);
+    this.customDimensionsIndicesMap = new Map<systemDimensionNames, number>(
+      this.config.customDimensionMap,
+    );
+
+    if (this.config.validateCustomDefinitions) {
+      this.validateSkillConfigsCustomMetrics(Object.keys(SystemMetricNamesEnum));
+      this.validateSkillConfigsCustomDimensions(Object.keys(SystemDimensionNameEnum));
     }
 
     app.middleware('before.handler')!.use(GoogleAnalytics.saveStartStateAndLastUsed.bind(this));
@@ -95,11 +132,11 @@ export class GoogleAnalytics implements Analytics {
    */
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
-    const gaMetricNumber = this.endReasonGoogleAnalyticsMap.get(endReason);
+    const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
     if (gaMetricNumber) {
       jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
     } else {
-      const undefinedMetricNumber = this.endReasonGoogleAnalyticsMap.get('undefined');
+      const undefinedMetricNumber = this.customMetricsIndicesMap.get('undefined');
       if (undefinedMetricNumber) {
         jovo.$googleAnalytics.setCustomMetric(undefinedMetricNumber, '1');
       }
@@ -136,54 +173,95 @@ export class GoogleAnalytics implements Analytics {
 
     // Either start or stop the session. If sessionTag is undefined, it will be ignored.
     const sessionTag = this.getSessionTag(jovo);
-    this.visitor!.set('sessionControl', sessionTag);
-
-    // Track custom set data as custom metrics or dimensions.
-    const customData = jovo.$googleAnalytics.$data;
-    for (const [key, value] of Object.entries(customData)) {
-      if (key.startsWith('cm') || key.startsWith('cd')) {
-        this.visitor!.set(key, value);
-      }
-    }
+    jovo.$googleAnalytics.visitor!.set('sessionControl', sessionTag);
 
     // Track intent data.
-    const pageview = this.visitor!.pageview(this.getPageParameters(jovo));
+    const pageview = jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo));
 
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
       this.sendUnhandledEvents(jovo);
       this.sendIntentInputEvents(jovo);
     }
-    this.visitor?.send((err: any) => {
+    jovo.$googleAnalytics.visitor?.send((err: any) => {
       if (err) {
         throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
     });
   }
 
+  protected checkForMissingCustomEntriesInConfig(
+    customTypeToCheck: 'dimension' | 'metric',
+    neededCustomEntries: string[],
+  ) {
+    const entrieKeysInInstance =
+      customTypeToCheck === 'metric'
+        ? ([...this.customMetricsIndicesMap.keys()] as string[])
+        : ([...this.customDimensionsIndicesMap.keys()] as string[]);
+    Log.debug(`keys zu prüfen: ${neededCustomEntries}`);
+    Log.debug(`keys in instanz: ${entrieKeysInInstance}`);
+
+    const missingEntriesInConfig = neededCustomEntries.filter(
+      (entrieToCheck) => !entrieKeysInInstance.includes(entrieToCheck),
+    );
+
+    if (missingEntriesInConfig?.length > 0) {
+      // TODO: add dimension check
+      throw new JovoError(
+        `Missing config values for custom ${customTypeToCheck} set by system`,
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+        `Missing ${customTypeToCheck}: ${missingEntriesInConfig}`,
+        'All custom dimension and metrics set by system can be found on our documentation.',
+        'https://www.jovo.tech/docs/analytics/googleanalytics',
+      );
+    }
+  }
+
+  protected checkAllCustomEntrieValuesAreUnique(customTypeToCheck: 'dimension' | 'metric') {
+    const entrieValuesInInstance =
+      customTypeToCheck === 'metric'
+        ? ([...this.customMetricsIndicesMap.values()] as number[])
+        : ([...this.customDimensionsIndicesMap.values()] as number[]);
+    const duplicates = entrieValuesInInstance
+      .filter(
+        (currentDefinitionValue, index) =>
+          entrieValuesInInstance.indexOf(currentDefinitionValue) !== index,
+      )
+      .filter((currentDefinitionValue) => currentDefinitionValue !== 0);
+    if (duplicates?.length > 0) {
+      // TODO: add dimension check
+      throw new JovoError(
+        `Some custom ${customTypeToCheck} in your config have overlapping values`,
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+        `Multiple time used  ${customTypeToCheck} values: ${duplicates.toString()}`,
+        `Alter your config to make sure that each custom ${customTypeToCheck} is mapped to a unique value. 
+        Index numbers for your google analytics project can be found on your analytics website under "settings" -> "custom definitions".`,
+        'https://www.jovo.tech/docs/analytics/googleanalytics',
+      );
+    }
+  }
+
   /**
    * Initiates GoogleAnalytics visitor object with fixed parameters.
    * @param {object} jovo: Jovo object for data like language or platform
    */
-  initVisitor(jovo: Jovo) {
+  protected initVisitor(jovo: Jovo) {
     const uuid = this.getUserId(jovo);
 
     // Initialize visitor with account id and custom client id
-    const visitor = ua(this.config.trackingId, uuid, { strictCidFormat: false });
-    visitor.set('userId', uuid);
-    visitor.set('dataSource', jovo.getType());
-    visitor.set('userLanguage', jovo.getLocale());
-    // Set user id as a custom dimension to track hits on the same scope
-    visitor.set('cd1', uuid);
-
-    this.visitor = visitor;
+    this.visitor = ua(this.config.trackingId, uuid, { strictCidFormat: false });
+    this.visitor.set('userId', uuid);
+    this.visitor.set('dataSource', jovo.getType());
+    this.visitor.set('userLanguage', jovo.getLocale());
   }
 
   /**
    * Tracks uncaught user exceptions.
    * @param {object} handleRequest: HandleRequest to act upon
    */
-  sendError(handleRequest: HandleRequest) {
+  protected sendError(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       // don't send anything
@@ -191,12 +269,13 @@ export class GoogleAnalytics implements Analytics {
     }
 
     // Stop the current tracking session.
-    this.visitor!.set('sessionControl', 'end');
-    this.visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    })
+    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
+    jovo.$googleAnalytics
+      .visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
+        if (err) {
+          throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
+        }
+      })
       .exception(handleRequest.error!.name)
       .send();
   }
@@ -205,18 +284,18 @@ export class GoogleAnalytics implements Analytics {
    * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
    * @param {object} jovo: Jovo object
    */
-  sendUnhandledEvents(jovo: Jovo) {
+  protected sendUnhandledEvents(jovo: Jovo) {
     const intent = jovo.$request!.getIntentName();
     const { path } = jovo.getRoute();
 
     // Check if an error in the nlu model occurred.
     if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
-      return this.sendUserEvent(jovo, 'UnhandledEvents', 'NLU_Unhandled');
+      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'NLU_Unhandled');
     }
 
     // If the current path is unhandled, an error in the skill handler occurred.
     if (path.endsWith('Unhandled')) {
-      return this.sendUserEvent(jovo, 'UnhandledEvents', 'Skill_Unhandled');
+      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'Skill_Unhandled');
     }
   }
 
@@ -224,7 +303,7 @@ export class GoogleAnalytics implements Analytics {
    * Extract input from intent + send to googleAnalytics via events
    * @param jovo Jovo object
    */
-  sendIntentInputEvents(jovo: Jovo) {
+  protected sendIntentInputEvents(jovo: Jovo) {
     if (jovo.$inputs) {
       for (const [key, value] of Object.entries(jovo.$inputs)) {
         if (!value.key) {
@@ -236,7 +315,7 @@ export class GoogleAnalytics implements Analytics {
           eventAction: value.key, // Input value
           eventLabel: key, // Input key
         };
-        this.visitor!.event(params);
+        jovo.$googleAnalytics.visitor!.event(params);
       }
     }
   }
@@ -246,7 +325,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {object} pageParameters: Intent data to track
    */
-  getPageParameters(jovo: Jovo) {
+  protected getPageParameters(jovo: Jovo) {
     const intentType = jovo.$type.type ?? 'fallBackType';
     const intentName = jovo.$request?.getIntentName();
     const customParameters = jovo.$googleAnalytics.$parameters;
@@ -265,7 +344,7 @@ export class GoogleAnalytics implements Analytics {
    * @param jovo - unser liebes Jovo objekt
    * @override
    */
-  getPageName(jovo: Jovo): string {
+  protected getPageName(jovo: Jovo): string {
     const endReason =
       this.getSessionTag(jovo) === 'end' && GoogleAnalytics.getEndReason(jovo)
         ? GoogleAnalytics.getEndReason(jovo)
@@ -281,7 +360,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {string} uuid: Hashed user id
    */
-  getUserId(jovo: Jovo): string {
+  protected getUserId(jovo: Jovo): string {
     const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
     return idHash;
   }
@@ -291,7 +370,7 @@ export class GoogleAnalytics implements Analytics {
    * @param {object} jovo: Jovo object
    * @returns {string | void} sessionTag: Corresponding session tag (start|end|undefined)
    */
-  getSessionTag(jovo: Jovo): string | void {
+  protected getSessionTag(jovo: Jovo): string | void {
     if (
       jovo.getMappedIntentName() === 'END' ||
       jovo.$type.type === 'END' ||
@@ -306,27 +385,10 @@ export class GoogleAnalytics implements Analytics {
   }
 
   /**
-   * User Events ties users to event category and action
-   * @param {object} jovo: Jovo object
-   * @param {string} eventName maps to category -> eventGroup
-   * @param {string} eventElement maps to action -> instance of eventGroup
-   */
-  sendUserEvent(jovo: Jovo, eventCategory: string, eventAction: string) {
-    const params: Event = {
-      eventCategory,
-      eventAction,
-      eventLabel: this.getUserId(jovo),
-      documentPath: jovo.getRoute().path,
-    };
-
-    this.visitor!.event(params);
-  }
-
-  /**
    * Sets the analytics variable to the instance of this object for making it accessable in skill code
    * @param handleRequest
    */
-  setGoogleAnalyticsObject(handleRequest: HandleRequest) {
+  protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo = handleRequest.jovo;
     if (!jovo) {
       throw new JovoError(
@@ -336,67 +398,20 @@ export class GoogleAnalytics implements Analytics {
       );
     }
 
-    // Initialise visitor object.
     this.initVisitor(jovo);
 
-    const experiments: Record<string, number | string> = {};
+    if (!this.visitor) {
+      throw new JovoError(
+        'Not able to set $googleanalytics. Visitor is not initialized. Check the initVisitor method.',
+        ErrorCode.ERR_PLUGIN,
+        'jovo-analytics-googleanalytics',
+      );
+    }
+
+    const userId = this.getUserId(jovo);
 
     // Initialise googleAnalytics object.
-    jovo.$googleAnalytics = {
-      $data: {},
-      $parameters: {},
-      sendEvent: (params: Event) => {
-        this.visitor!.event(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendTransaction: (params: Transaction) => {
-        this.visitor!.transaction(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendItem: (params: TransactionItem) => {
-        this.visitor!.transaction(params, (err: any) => {
-          if (err) {
-            throw new JovoError(
-              err.message,
-              ErrorCode.ERR_PLUGIN,
-              'jovo-analytics-googleanalytics',
-            );
-          }
-        }).send();
-      },
-      sendUserEvent: (eventCategory: string, eventAction: string) => {
-        this.sendUserEvent(jovo, eventCategory, eventAction);
-      },
-      setCustomMetric(index: number, value: string | number) {
-        this.$data[`cm${index}`] = value;
-      },
-      setCustomDimension(index: number, value: string | number): void {
-        this.$data[`cd${index}`] = value;
-      },
-      setParameter(parameter: string, value: string | number): void {
-        this.$parameters[parameter] = value;
-      },
-      setOptimizeExperiment(experimentId: string, variation: string | number): void {
-        experiments[experimentId] = variation;
-
-        this.$parameters[`exp`] = Object.entries(experiments)
-          .map(([id, value]) => `${id}.${value}`)
-          .join('!');
-      },
-    };
+    jovo.$googleAnalytics = new GoogleAnalyticsInstance(jovo, this.config, userId, this.visitor);
+    jovo.$googleAnalytics.setCustomDimensionByName('UUID', userId);
   }
 }

@@ -364,7 +364,7 @@ export class BaseApp extends Extensible {
    * On request listener
    * @param {Function} callback
    */
-  onRequest(callback: Function) {
+  onRequest(callback: (handleRequest: HandleRequest) => void) {
     this.on('request', (handleRequest: HandleRequest) => {
       callback(handleRequest);
     });
@@ -374,7 +374,7 @@ export class BaseApp extends Extensible {
    * On response listener
    * @param {Function} callback
    */
-  onResponse(callback: Function) {
+  onResponse(callback: (handleRequest: HandleRequest) => void) {
     this.on('response', (handleRequest: HandleRequest) => {
       callback(handleRequest);
     });
@@ -384,7 +384,7 @@ export class BaseApp extends Extensible {
    * On error listener. Same as the onFail listener
    * @param {Function} callback
    */
-  onError(callback: Function) {
+  onError(callback: (handleRequest: HandleRequest) => void) {
     this.on('fail', (handleRequest: HandleRequest) => {
       callback(handleRequest);
     });
@@ -394,7 +394,7 @@ export class BaseApp extends Extensible {
    * On fail listener
    * @param {Function} callback
    */
-  onFail(callback: Function) {
+  onFail(callback: (handleRequest: HandleRequest) => void) {
     this.on('fail', (handleRequest: HandleRequest) => {
       callback(handleRequest);
     });

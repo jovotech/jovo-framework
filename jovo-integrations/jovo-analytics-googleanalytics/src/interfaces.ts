@@ -1,5 +1,30 @@
 import { PluginConfig } from 'jovo-core';
 
+export type validEndReasons =
+  | 'Stop'
+  | 'ERROR'
+  | 'EXCEEDED_MAX_REPROMPTS'
+  | 'PLAYTIME_LIMIT_REACHED'
+  | 'USER_INITIATED'
+  | 'undefined';
+
+// export type systemMetricNames = validEndReasons; // will be enhanced for new custom metrics
+export type systemMetricNames = keyof typeof SystemMetricNamesEnum; // will be enhanced for new custom metrics
+export enum SystemMetricNamesEnum {
+  'Stop' = 'Stop',
+  'ERROR' = 'Stop',
+  'EXCEEDED_MAX_REPROMPTS' = 'Stop',
+  'PLAYTIME_LIMIT_REACHED' = 'Stop',
+  'USER_INITIATED' = 'Stop',
+  'undefined' = 'Stop',
+}
+
+export enum SystemDimensionNameEnum {
+  'UUID' = 'Stop',
+}
+
+export type systemDimensionNames = keyof typeof SystemDimensionNameEnum; // will be enhanced for new custom metrics
+
 export interface Event {
   eventCategory: string; // Category for event, e.g. Inputs, Errors, ...
   eventAction: string; // Value for the event to track
@@ -35,6 +60,9 @@ export interface Config extends PluginConfig {
   trackDirectives?: boolean;
   enableAutomaticEvents?: boolean;
   trackEndReasons?: boolean;
+  validateCustomDefinitions?: boolean;
   sessionTimeoutInMinutes: number;
   skipUnverifiedUser: boolean;
+  customMetricMap: Array<[systemMetricNames, number]>;
+  customDimensionMap: Array<[systemDimensionNames, number]>;
 }

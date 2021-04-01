@@ -24,6 +24,7 @@ export class Project {
         process.env.JOVO_STAGE = process.argv[process.argv.indexOf('--stage') + 1].trim();
       }
     }
+
     return Project.instance;
   }
 
