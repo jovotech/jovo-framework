@@ -73,48 +73,46 @@ jovoModelInstance.importJovoModel(jovoModelData, locale);
 const lexModelFiles = jovoModelInstance.exportNative();
 fs.mkdirSync('./platforms/lex/slot/', { recursive: true });
 fs.writeFileSync('./platforms/lex/bot.json',JSON.stringify(lexModelFiles[0].content));
-
 ```
 
 Before creating your Lex bot, You have to update the file:
 
-    * replace JovoApp by the name of your lex bot
-    * remove all unnecessary intents (ISP/Account linking/Geoloc etc aren't supported)
-    * Add you 'codeHook': tell lex to call your lambda when a user answer to an intent
-    On each Intent, replace fulfillmentActivity value by 
-    ```
-    "fulfillmentActivity": {
-        "codeHook": {
-            "uri": "lambda arn:aliasname",
-            "messageVersion": "1.0"
-        },
-        "type": "CodeHook"
+* replace JovoApp by the name of your lex bot
+* remove all unnecessary intents (ISP/Account linking/Geoloc etc aren't supported)
+* Add you 'codeHook': tell lex to call your lambda when a user answer to an intent
+On each Intent, replace fulfillmentActivity value by 
+```
+"fulfillmentActivity": {
+    "codeHook": {
+        "uri": "lambda arn:aliasname",
+        "messageVersion": "1.0"
     },
-    ```
+    "type": "CodeHook"
+},
+```
     
-    * On each Slot, add a prompt that Amazon Lex uses to elicit the slot value from the user or set the slotConstraint to Optional
-     if you want to add a valueElicitationPrompt you slot will look like:
-         ```
-         {
-         "name": "date",
-         "slotType": "AMAZON.DATE",
-         "slotConstraint": "Required",
-         "valueElicitationPrompt": {
-           "messages": [
-             {
-               "contentType": "PlainText",
-               "content": "When to you want to move ?"
-             }
-           ],
-           "maxAttempts": 2
-         }
-       }
-        ```
+* On each Slot, add a prompt that Amazon Lex uses to elicit the slot value from the user or set the slotConstraint to Optional
+if you want to add a valueElicitationPrompt you slot will look like:
+ ```
+ {
+ "name": "date",
+ "slotType": "AMAZON.DATE",
+ "slotConstraint": "Required",
+ "valueElicitationPrompt": {
+   "messages": [
+     {
+       "contentType": "PlainText",
+       "content": "When to you want to move ?"
+     }
+   ],
+   "maxAttempts": 2
+ }
+}
+```
 
-    
 Now you can zip the Lex model and upload it on the AWS Lex V1 console.
 When it's done, you should be able to test the chatbot in AWS console.     
-     
+    
 
 ## Usage
 
