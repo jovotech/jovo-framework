@@ -135,8 +135,9 @@ or can call `this.isLexBot())`
 Response Card can be use to display extra informations with several buttons. (Like cards on Google Assistant)
 
 Lex documentation: https://docs.aws.amazon.com/lex/latest/dg/ex-resp-card.html
-
+Sample script:
 ```javascript
+// @language=javascript
  if (this.isLexBot()) {
     this.$lexBot.showStandardCard('card title',
       'card subtitle',
