@@ -14,7 +14,12 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { DeployPlatformEvents } from '@jovotech/cli-command-deploy';
-import { checkForGactionsCli, getPlatformPath, PluginContextGoogle } from '../utils';
+import {
+  checkForGactionsCli,
+  getGactionsError,
+  getPlatformPath,
+  PluginContextGoogle,
+} from '../utils';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -105,14 +110,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
               return [printWarning('Validation errors occured'), ...validationErrors];
             }
           } else {
-            // ToDo: Check for different errors.
-            if (error.message.includes('command requires authentication')) {
-              throw new JovoCliError(
-                'Missing authentication for pushing your project files.',
-                this.$config.pluginName!,
-                'Try to run "gactions login" first.',
-              );
-            }
+            throw getGactionsError(error.message);
           }
         }
       },

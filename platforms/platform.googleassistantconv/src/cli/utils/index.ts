@@ -15,3 +15,20 @@ export async function checkForGactionsCli() {
     );
   }
 }
+
+/**
+ * Tries to parse the provided error message for standard errors.
+ * @param errorMessage - Error message.
+ */
+export function getGactionsError(errorMessage: string): JovoCliError {
+  // ToDo: Check for different errors.
+  if (errorMessage.includes('command requires authentication')) {
+    throw new JovoCliError(
+      'Missing authentication.',
+      'GoogleAssistantCli',
+      'Try to run "gactions login" first.',
+    );
+  }
+
+  throw new JovoCliError(errorMessage, 'GoogleAssistantCli');
+}

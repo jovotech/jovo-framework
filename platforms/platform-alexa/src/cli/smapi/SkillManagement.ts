@@ -1,4 +1,4 @@
-import { execAsync, wait } from '@jovotech/cli-core';
+import { execAsync, JovoCliError, wait } from '@jovotech/cli-core';
 
 import { AskSkillList, getAskError } from '../utils';
 
@@ -10,10 +10,11 @@ export async function getSkillInformation(skillId: string, stage: string, askPro
     `${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
-    const stdout: string = await execAsync(cmd);
-    return JSON.parse(stdout);
+    const { stdout } = await execAsync(cmd);
+    return JSON.parse(stdout!);
   } catch (error) {
-    throw getAskError('smapiGetSkillInformation', error.message);
+    const errorMessage: string = error.stderr || error.message;
+    throw getAskError('smapiGetSkillInformation', errorMessage);
   }
 }
 
@@ -21,10 +22,11 @@ export async function listSkills(askProfile?: string): Promise<AskSkillList> {
   const cmd: string = `ask smapi list-skills-for-vendor ${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
-    const stdout: string = await execAsync(cmd);
-    return JSON.parse(stdout) as AskSkillList;
+    const { stdout } = await execAsync(cmd);
+    return JSON.parse(stdout!) as AskSkillList;
   } catch (error) {
-    throw getAskError('smapiListSkills', error.message);
+    const errorMessage: string = error.stderr || error.message;
+    throw getAskError('smapiListSkills', errorMessage);
   }
 }
 
@@ -37,11 +39,16 @@ export async function createSkill(skillJsonPath: string, askProfile?: string): P
     `${askProfile ? `-p ${askProfile} ` : ''}` +
     ` --manifest "file:${skillJsonPath}"`;
   try {
-    const stdout: string = await execAsync(cmd);
-    const { skillId } = JSON.parse(stdout);
+    const { stdout } = await execAsync(cmd);
+    const { skillId } = JSON.parse(stdout!);
     return skillId;
-  } catch (err) {
-    throw getAskError('smapiCreateSkill', err.message);
+  } catch (error) {
+    // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
+    if (error.stderr.includes('[Warn]')) {
+      const { skillId } = JSON.parse(error.stdout);
+      return skillId;
+    }
+    throw getAskError('smapiCreateSkill', error.stderr);
   }
 }
 
@@ -55,8 +62,11 @@ export async function updateSkill(skillId: string, skillJsonPath: string, askPro
       `--manifest "file:${skillJsonPath}"`;
 
     await execAsync(cmd);
-  } catch (err) {
-    throw getAskError('smapiUpdateSkill', err.message);
+  } catch (error) {
+    // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
+    if (!error.stderr.includes('[Warn]')) {
+      throw getAskError('smapiUpdateSkill', error.stderr);
+    }
   }
 }
 
@@ -64,8 +74,8 @@ export async function getSkillStatus(skillId: string, askProfile?: string) {
   const cmd = `ask smapi get-skill-status -s ${skillId} ${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
-    const stdout: string = await execAsync(cmd);
-    const response = JSON.parse(stdout);
+    const { stdout } = await execAsync(cmd);
+    const response = JSON.parse(stdout!);
 
     if (response.manifest) {
       const status: string = response.manifest.lastUpdateRequest.status;
@@ -88,7 +98,11 @@ export async function getSkillStatus(skillId: string, askProfile?: string) {
         }
       }
     }
-  } catch (err) {
-    throw getAskError('smapiGetSkillStatus', err.message);
+  } catch (error) {
+    if (error instanceof JovoCliError) {
+      throw error;
+    }
+    const errorMessage: string = error.stderror || error.message;
+    throw getAskError('smapiGetSkillStatus', errorMessage);
   }
 }

@@ -59,7 +59,6 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
 
     args.flags['ask-profile'] = flags.string({
-      default: 'default',
       description: 'Name of used ASK profile',
     });
     args.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });

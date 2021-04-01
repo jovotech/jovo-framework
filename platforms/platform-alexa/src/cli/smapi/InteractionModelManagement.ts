@@ -15,10 +15,11 @@ export async function getInteractionModel(
       `-l ${locale} ` +
       `${askProfile ? `-p ${askProfile}` : ''}`;
 
-    const stdout = await execAsync(cmd);
-    return JSON.parse(stdout);
+    const { stdout } = await execAsync(cmd);
+    return JSON.parse(stdout!);
   } catch (error) {
-    throw getAskError('smapiGetInteractionModel', error.message);
+    const errorMessage: string = error.stderr || error.message;
+    throw getAskError('smapiGetInteractionModel', errorMessage);
   }
 }
 
@@ -38,7 +39,10 @@ export async function updateInteractionModel(
     `--interaction-model "file:${interactionModelPath}"`;
   try {
     await execAsync(cmd);
-  } catch (err) {
-    throw getAskError('smapiUpdateInteractionModel', err.message);
+  } catch (error) {
+    // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
+    if (!error.stderr.includes('[Warn]')) {
+      throw getAskError('smapiUpdateInteractionModel', error.stderr);
+    }
   }
 }

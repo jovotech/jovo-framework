@@ -14,16 +14,16 @@ export async function getAccountLinkingInformation(
     `${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
-    const stdout: string = await execAsync(cmd);
-    const response = JSON.parse(stdout);
-    console.log(response);
+    const { stdout } = await execAsync(cmd);
+    const response = JSON.parse(stdout!);
     return response.accountLinkingResponse;
   } catch (error) {
     // ToDo: Always 1?
     if (error.code === 1) {
       return;
     }
-    throw getAskError('smapiGetAccountLinkingInformation', error.message);
+    const errorMessage: string = error.stderr || error.message;
+    throw getAskError('smapiGetAccountLinkingInformation', errorMessage);
   }
 }
 
@@ -46,7 +46,7 @@ export async function updateAccountLinkingInformation(
       `--account-linking-request "file:${accountLinkingJsonPath}"`;
 
     await execAsync(cmd);
-  } catch (err) {
-    throw getAskError('smapiUpdateAccountLinkingInformation', err.message);
+  } catch (error) {
+    throw getAskError('smapiUpdateAccountLinkingInformation', error.stderr);
   }
 }

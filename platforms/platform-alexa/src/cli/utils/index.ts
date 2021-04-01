@@ -17,8 +17,8 @@ export async function checkForAskCli() {
   const cmd: string = `ask --version`;
 
   try {
-    const stdout: string = await execAsync(cmd);
-    const majorVersion: string = stdout[0];
+    const { stdout } = await execAsync(cmd);
+    const majorVersion: string = stdout![0];
     if (parseInt(majorVersion) < 2) {
       throw new JovoCliError(
         'Jovo CLI requires ASK CLI @v2 or above.',
@@ -91,13 +91,13 @@ export function prepareSkillList(askSkillList: AskSkillList) {
   return choices;
 }
 
-export function getAskError(method: string, stderror: string): JovoCliError {
+export function getAskError(method: string, stderr: string): JovoCliError {
   const module: string = 'AlexaCli';
   const splitter: string = '[Error]: ';
 
-  const errorIndex: number = stderror.indexOf(splitter);
+  const errorIndex: number = stderr.indexOf(splitter);
   if (errorIndex > -1) {
-    const errorString: string = stderror.substring(errorIndex + splitter.length);
+    const errorString: string = stderr.substring(errorIndex + splitter.length);
     const parsedError = JSON.parse(errorString);
     const payload = _get(parsedError, 'detail.response', parsedError);
     const message: string = payload.message;
@@ -119,18 +119,18 @@ export function getAskError(method: string, stderror: string): JovoCliError {
     let i: number, pathRegex: RegExp;
 
     // Depending on the type of error message, try using different regular expressions to parse the actual error message.
-    if (stderror.includes('CliFileNotFoundError')) {
-      i = stderror.indexOf('CliFileNotFoundError');
+    if (stderr.includes('CliFileNotFoundError')) {
+      i = stderr.indexOf('CliFileNotFoundError');
       pathRegex = /File (\/.*\/)+(.*) not exists\./g;
-    } else if (stderror.includes('ENOENT')) {
-      i = stderror.indexOf('ENOENT');
+    } else if (stderr.includes('ENOENT')) {
+      i = stderr.indexOf('ENOENT');
       pathRegex = /'(\/.*\/)*(.*)'/g;
     } else {
-      return new JovoCliError(stderror, module);
+      return new JovoCliError(stderr, module);
     }
 
     // Check for different error messages, if a file cannot be found.
-    const parsedError: string = stderror.substring(i);
+    const parsedError: string = stderr.substring(i);
     const match = pathRegex.exec(parsedError);
 
     // File-specific error messages
@@ -151,5 +151,5 @@ export function getAskError(method: string, stderror: string): JovoCliError {
     }
   }
 
-  return new JovoCliError(stderror, module);
+  return new JovoCliError(stderr, module);
 }

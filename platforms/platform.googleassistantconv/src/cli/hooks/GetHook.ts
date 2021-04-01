@@ -14,7 +14,12 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { GetEvents } from '@jovotech/cli-command-get';
-import { checkForGactionsCli, getPlatformPath, PluginContextGoogle } from '../utils';
+import {
+  checkForGactionsCli,
+  getGactionsError,
+  getPlatformPath,
+  PluginContextGoogle,
+} from '../utils';
 import { BuildEvents } from '@jovotech/cli-command-build';
 
 export class GetHook extends PluginHook<GetEvents & BuildEvents> {
@@ -94,7 +99,7 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
             { cwd: platformPath },
           );
         } catch (error) {
-          console.log(error);
+          throw getGactionsError(error.message);
         }
       },
     );

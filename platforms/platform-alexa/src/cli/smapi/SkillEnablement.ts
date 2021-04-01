@@ -10,7 +10,7 @@ export async function enableSkill(skillId: string, stage: string, askProfile?: s
 
   try {
     await execAsync(cmd);
-  } catch (err) {
-    throw getAskError('smapiEnableSkill', err.message);
+  } catch (error) {
+    throw getAskError('smapiEnableSkill', error.stderr);
   }
 }
