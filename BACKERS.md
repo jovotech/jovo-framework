@@ -42,6 +42,7 @@ Thank you to all our existing sponsors and supporters! <3
 * [Node Kitchen](https://node.kitchen/)
 * [ShirkaLab](https://www.shirkalab.io/)
 * [Future of Voice](https://www.futureofvoice.com/)
+* [Altervoice](https://www.altervoice.com/)
 
 
 ## Backers
