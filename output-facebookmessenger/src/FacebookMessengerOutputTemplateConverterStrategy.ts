@@ -1,7 +1,7 @@
 import {
   MessageValue,
+  MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
-  OutputTemplateConverterStrategy,
   QuickReply,
   QuickReplyValue,
 } from '@jovotech/output';
@@ -17,11 +17,10 @@ import {
   TemplateType,
 } from './models';
 
-export class FacebookMessengerOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<FacebookMessengerResponse> {
+export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<FacebookMessengerResponse> {
   responseClass = FacebookMessengerResponse;
 
-  toResponse(output: OutputTemplate): FacebookMessengerResponse {
+  buildResponse(output: OutputTemplate): FacebookMessengerResponse {
     const response: FacebookMessengerResponse = {
       messaging_type: MessagingType.Response,
       recipient: {
@@ -61,7 +60,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy
     return response;
   }
 
-  fromResponse(response: FacebookMessengerResponse): OutputTemplate {
+  buildOutputTemplate(response: FacebookMessengerResponse): OutputTemplate {
     const output: OutputTemplate = {};
 
     if (response.message?.text) {

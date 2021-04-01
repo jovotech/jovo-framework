@@ -1,4 +1,11 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from '@jovotech/output';
 
 export class QuickReplies {
   @IsOptional()
@@ -8,6 +15,8 @@ export class QuickReplies {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(10)
+  @MaxLength(20, { each: true })
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   quick_replies?: string[];

@@ -1,17 +1,18 @@
 import {
   MessageValue,
   OutputTemplate,
-  OutputTemplateConverterStrategy,
   QuickReplyValue,
+  SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { DialogflowResponse, Text } from './models';
 
-export class DialogflowOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<DialogflowResponse> {
+// TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
+export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<DialogflowResponse> {
+  platformName = 'Dialogflow';
   responseClass = DialogflowResponse;
 
-  toResponse(output: OutputTemplate): DialogflowResponse {
+  buildResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
     const message = output.platforms?.Dialogflow?.message || output.message;

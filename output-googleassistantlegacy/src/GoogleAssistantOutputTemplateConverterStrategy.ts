@@ -1,18 +1,20 @@
 import {
   MessageValue,
   OutputTemplate,
-  OutputTemplateConverterStrategy,
   QuickReplyValue,
+  SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
 
-export class GoogleAssistantOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<GoogleAssistantResponse> {
+// TODO: CHECK: Theoretically, this platform can have multiple messages but we have never used this feature so far.
+// In case we want to support that, the implementation of this strategy has to be adjusted.
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
+  platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 
-  toResponse(output: OutputTemplate): GoogleAssistantResponse {
+  buildResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {
       richResponse: {
         items: [],

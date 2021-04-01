@@ -1,17 +1,17 @@
 import {
   MessageValue,
   OutputTemplate,
-  OutputTemplateConverterStrategy,
   QuickReplyValue,
+  SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import { GoogleAssistantResponse, Simple, Suggestion } from './models';
 
-export class GoogleAssistantOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
+  platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 
-  toResponse(output: OutputTemplate): GoogleAssistantResponse {
+  buildResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {};
 
     const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;

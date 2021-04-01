@@ -3,12 +3,10 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  JovoResponse,
+  OutputTemplate,
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import { TransformAction } from '../decorators/transformation/TransformAction';
-import { Action } from './action/Action';
 import { Context } from './Context';
 import { CoreResponse } from './CoreResponse';
 import { Session } from './Session';
@@ -25,14 +23,14 @@ export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @TransformAction()
-  actions?: Action[];
+  @Type(() => OutputTemplate)
+  output?: OutputTemplate[];
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @TransformAction()
-  reprompts?: Action[];
+  @Type(() => OutputTemplate)
+  repromptOutput?: OutputTemplate[];
 
   @IsOptional()
   @ValidateNested()

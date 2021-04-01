@@ -1,9 +1,8 @@
-import { IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from '@jovotech/output';
 
 export class Image {
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
+  @IsUrl()
   image_uri?: string;
 
   @IsString()

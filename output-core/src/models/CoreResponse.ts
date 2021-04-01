@@ -4,15 +4,15 @@ import {
   IsOptional,
   IsString,
   JovoResponse,
+  OutputTemplate,
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import { TransformAction } from '../decorators/transformation/TransformAction';
-import { Action } from './action/Action';
 import { Context } from './Context';
 import { Session } from './Session';
 import { User } from './User';
 
+// TODO: Find better names for output and repromptOutputs!
 export class CoreResponse extends JovoResponse {
   @IsString()
   @IsNotEmpty()
@@ -20,14 +20,8 @@ export class CoreResponse extends JovoResponse {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @TransformAction()
-  actions: Action[];
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @TransformAction()
-  reprompts?: Action[];
+  @Type(() => OutputTemplate)
+  output: OutputTemplate[];
 
   @IsOptional()
   @ValidateNested()

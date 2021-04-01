@@ -23,6 +23,9 @@ export * from './models/OutputTemplateBase';
 export * from './models/OutputTemplatePlatforms';
 export * from './models/PlatformOutputTemplate';
 
+export * from './strategies/SingleResponseOutputTemplateConverterStrategy';
+export * from './strategies/MultipleResponsesOutputTemplateConverterStrategy';
+
 export * from './OutputTemplateConverterStrategy';
 export * from './OutputTemplateConverter';
 
