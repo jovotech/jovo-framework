@@ -4,13 +4,18 @@ import { JovoRequestType } from './Jovo';
 export abstract class JovoRequest {
   [key: string]: unknown;
 
-  abstract getRequestType(): JovoRequestType | undefined;
 
-  abstract getSessionData(): SessionData | undefined;
+  abstract getEntities(): EntityMap | undefined;
 
   abstract getIntentName(): string | undefined;
 
-  abstract getEntities(): EntityMap | undefined;
+  abstract getLocale(): string | undefined;
+
+  abstract getRawText(): string | undefined;
+
+  abstract getRequestType(): JovoRequestType | undefined;
+
+  abstract getSessionData(): SessionData | undefined;
 
   getNluData(): NluData | undefined {
     const intentName = this.getIntentName();

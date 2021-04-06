@@ -1,5 +1,5 @@
 import { EntityMap, JovoRequest, JovoRequestType, SessionData } from '@jovotech/core';
-import { Context, Request } from './interfaces';
+import { Context, Request, RequestBodyText } from './interfaces';
 
 export interface CorePlatformRequestJSON {
   version?: string;
@@ -20,6 +20,14 @@ export class CorePlatformRequest extends JovoRequest implements CorePlatformRequ
 
   getIntentName(): string | undefined {
     return this.request?.nlu?.intent;
+  }
+
+  getLocale(): string | undefined {
+    return this.request?.locale;
+  }
+
+  getRawText(): string | undefined {
+    return (this.request?.body as RequestBodyText | undefined)?.text;
   }
 
   getRequestType(): JovoRequestType | undefined {

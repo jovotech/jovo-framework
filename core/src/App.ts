@@ -6,7 +6,6 @@ import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsErro
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
-import { Server } from './Server';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
@@ -15,6 +14,7 @@ import { Platform } from './Platform';
 import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
+import { Server } from './Server';
 
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
@@ -35,6 +35,8 @@ export type AppBaseMiddlewares = [
   'response',
 ];
 
+export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
+
 export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
   'request',
   'interpretation.asr',
@@ -47,11 +49,6 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 ];
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
-  readonly config: AppConfig = {
-    placeholder: '',
-  };
-  readonly middlewareCollection = new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
-
   readonly components: RegisteredComponents;
 
   constructor(config?: AppInitConfig) {
@@ -69,9 +66,13 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  middleware(name: ArrayElement<AppBaseMiddlewares>): Middleware | undefined;
+  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
+    return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
+  }
+
+  middleware(name: AppBaseMiddleware): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | ArrayElement<AppBaseMiddlewares>): Middleware | undefined {
+  middleware(name: string | AppBaseMiddleware): Middleware | undefined {
     return this.middlewareCollection.get(name);
   }
 
@@ -99,12 +100,9 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   }
 
   // TODO finish Host-related things
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async handle(server: Server): Promise<void> {
     const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
-
-    await handleRequest.middlewareCollection.run('request', handleRequest);
 
     const relatedPlatform = this.platforms.find(
       (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
@@ -112,9 +110,12 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError();
     }
+    handleRequest.$platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
+    // TODO determine whether request should only be called for relatedPlatform
+    await handleRequest.middlewareCollection.run('request', handleRequest);
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);

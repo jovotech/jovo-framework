@@ -10,6 +10,7 @@ declare module '@jovotech/core/dist/Extensible' {
   }
 }
 
+
 export * from './CorePlatform';
 export * from './CorePlatformApp';
 export * from './CorePlatformRequest';

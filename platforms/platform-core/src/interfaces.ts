@@ -46,11 +46,15 @@ export interface RequestAudioData {
   data?: Float32Array;
 }
 
-export interface RequestBody {
+export interface RequestBodyAudio {
   audio?: RequestAudioData;
-  text?: string;
-  event?: Record<string, unknown>;
 }
+
+export interface RequestBodyText {
+  text?: string;
+}
+
+export type RequestBody = RequestBodyAudio | RequestBodyText;
 
 export interface Session {
   id: string;

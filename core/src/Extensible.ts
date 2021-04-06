@@ -25,16 +25,19 @@ export abstract class Extensible<
   MIDDLEWARES extends string[] = string[]
 > extends Plugin<CONFIG> {
   readonly plugins: ExtensiblePlugins;
-
-  abstract readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
+  readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
 
   constructor(config?: ExtensibleInitConfig<CONFIG>) {
     super((config ? { ...config, plugins: undefined } : config) as DeepPartial<CONFIG>);
+    this.middlewareCollection = this.initializeMiddlewareCollection();
     this.plugins = {};
     if (config?.plugins && config?.plugins?.length) {
       this.use(...(config.plugins as Plugin[]));
     }
   }
+
+  // TODO determine whether abstract or a default implementation should exist (that would most likely return an empty MiddlewareCollection)
+  abstract initializeMiddlewareCollection(): MiddlewareCollection<MIDDLEWARES>;
 
   use(...plugins: Plugin[]): this {
     for (let i = 0, len = plugins.length; i < len; i++) {

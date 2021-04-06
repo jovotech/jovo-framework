@@ -1,8 +1,17 @@
-import { Extensible, InvalidParentError, Platform, Plugin, PluginConfig } from '@jovotech/core';
-import { readdir, readFileSync } from 'fs';
-import { NativeFileInformation } from 'jovo-model';
+import {
+  DeepPartial,
+  Extensible,
+  HandleRequest,
+  InvalidParentError,
+  Jovo,
+  Platform,
+  Plugin,
+  PluginConfig,
+  RequestType,
+} from '@jovotech/core';
+import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
-import path from 'path';
+import { join } from 'path';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Nlp } = require('@nlpjs/nlp');
@@ -15,7 +24,7 @@ export interface Nlp {
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
 export interface NlpjsNluConfig extends PluginConfig {
-  languages: string[];
+  languageMap: Record<string, unknown>;
   preTrainedModelFilePath: string;
   useModel: boolean;
   modelsPath: string;
@@ -25,13 +34,17 @@ export interface NlpjsNluConfig extends PluginConfig {
 export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
   nlpjs?: Nlp;
 
+  constructor(config: DeepPartial<NlpjsNluConfig> & Required<Pick<NlpjsNluConfig, 'languageMap'>>) {
+    super(config);
+  }
+
   // TODO fully determine default config
   getDefaultConfig(): NlpjsNluConfig {
     return {
-      languages: ['en'],
+      languageMap: {},
       preTrainedModelFilePath: './model.nlp',
       useModel: false,
-      modelsPath: '',
+      modelsPath: './models',
     };
   }
 
@@ -40,59 +53,81 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
       // TODO: implement error
       throw new InvalidParentError();
     }
-    const nlpjs = new Nlp({
-      languages: this.config.languages,
+    this.nlpjs = new Nlp({
+      languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
       // TODO: add condition to check if writing is even possible
       autoSave: this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
-      nlu: { log: false },
+    });
+
+    Object.values(this.config.languageMap).forEach((languagePackage) => {
+      this.nlpjs?.use(languagePackage);
     });
 
     // TODO: register fs if write-access is available
 
-
     if (this.config.setupModelCallback) {
-      await this.config.setupModelCallback(parent, nlpjs);
+      await this.config.setupModelCallback(parent, this.nlpjs!);
     } else if (this.config.useModel) {
-      await nlpjs.load(this.config.preTrainedModelFilePath);
+      await this.nlpjs?.load(this.config.preTrainedModelFilePath);
     } else {
-      await this.addCorpus(this.config.modelsPath);
-      await nlpjs.train();
+      await this.addCorpusFromModelsIn(this.config.modelsPath);
+      await this.nlpjs?.train();
     }
-
-    this.nlpjs = nlpjs;
   }
 
-  private addCorpus(dir: string) {
-    return new Promise<void>((resolve, reject) => {
-      readdir(dir, (err: Error | null, files: string[]) => {
-        if (err) {
-          return reject(err);
-        }
-        const jovoModelInstance = new JovoModelNlpjs();
+  mount(parent: Platform) {
+    parent.middlewareCollection.use('$nlu', this.nlu);
+  }
 
-        files.forEach((file: string) => {
-          const extension = file.substr(file.lastIndexOf('.') + 1);
-          const locale = file.substr(0, file.lastIndexOf('.'));
-          let jovoModelData;
+  private nlu = async (handleRequest: HandleRequest, jovo: Jovo) => {
+    const text = jovo.$request.getRawText();
+    const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
 
-          if (extension === 'js') {
-            jovoModelData = require(path.join(this.config.modelsPath!, file));
-          } else if (extension === 'json') {
-            jovoModelData = JSON.parse(
-              readFileSync(path.join(this.config.modelsPath!, file), 'utf-8'),
-            );
-          }
-          jovoModelInstance.importJovoModel(jovoModelData, locale);
-          const nlpjsModelFiles = jovoModelInstance.exportNative() || [];
+    if (text) {
+      const nlpResult = await this.nlpjs?.process(language, text);
 
-          nlpjsModelFiles.forEach((model: NativeFileInformation) => {
-            this.nlpjs?.addCorpus(model.content);
-          });
-        });
-        resolve();
+      let intentName = 'None';
+      if (jovo.$type.type === RequestType.Launch) {
+        intentName = 'LAUNCH';
+      } else if (jovo.$type.type === RequestType.End) {
+        intentName = 'END';
+      } else if (nlpResult?.intent) {
+        intentName = nlpResult.intent;
+      }
+      jovo.$nlu = {
+        intent: {
+          name: intentName,
+        },
+        // [this.constructor.name]: nlpResult,
+      };
+    }
+  };
+
+  private async addCorpusFromModelsIn(dir: string) {
+    const files = await promises.readdir(dir);
+    const jovoNlpjsConverter = new JovoModelNlpjs();
+
+    // forEach should not be used because block is async
+    for (let i = 0, len = files.length; i < len; i++) {
+      const extension = files[i].substr(files[i].lastIndexOf('.') + 1);
+      const locale = files[i].substr(0, files[i].lastIndexOf('.'));
+      const filePath = join(dir, files[i]);
+
+      let jovoModelData;
+      if (extension === 'js') {
+        jovoModelData = await import(filePath);
+      } else if (extension === 'json') {
+        const fileBuffer = await promises.readFile(filePath);
+        jovoModelData = JSON.parse(fileBuffer.toString());
+      }
+      jovoNlpjsConverter.importJovoModel(jovoModelData, locale);
+
+      const nlpJsModeFiles = jovoNlpjsConverter.exportNative() || [];
+      nlpJsModeFiles.forEach((model) => {
+        this.nlpjs?.addCorpus(model.content);
       });
-    });
+    }
   }
 }

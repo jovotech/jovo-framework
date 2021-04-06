@@ -51,6 +51,14 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
     return this.request?.intent?.name;
   }
 
+  getLocale(): string | undefined {
+    return this.request?.locale;
+  }
+
+  getRawText(): string | undefined {
+    return;
+  }
+
   getRequestType(): JovoRequestType | undefined {
     const requestTypeMap: Record<string, JovoRequestType> = {
       'LaunchRequest': { type: RequestType.Launch },
