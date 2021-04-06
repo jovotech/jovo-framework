@@ -123,9 +123,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
 
     // TODO: determine handling of edge-cases
-    // Example: instance of CorePlatform is installed already or will be installed after this plugin
-    parent.use(
-      new CorePlatform({
+    this.installDebuggerPlatform(parent);
+  }
+
+  private installDebuggerPlatform(app: App) {
+    const JovoDebuggerPlatform = CorePlatform.create('JovoDebuggerPlatform', 'jovo-debugger');
+    app.use(
+      new JovoDebuggerPlatform({
         ...this.config.corePlatform,
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
