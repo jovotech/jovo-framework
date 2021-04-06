@@ -12,6 +12,7 @@ import {
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';
+import { inspect } from 'util';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Nlp } = require('@nlpjs/nlp');
@@ -61,6 +62,9 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
       // TODO: add condition to check if writing is even possible
       autoSave: this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
+      nlu: {
+        log: false,
+      },
     });
 
     Object.values(this.config.languageMap).forEach((languagePackage) => {
