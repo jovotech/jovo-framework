@@ -3,11 +3,14 @@ import {
   DeepPartial,
   Extensible,
   HandleRequest,
+  Headers,
   InvalidParentError,
   Jovo,
   Platform,
   Plugin,
   PluginConfig,
+  QueryParams,
+  Server,
   SessionData,
 } from '@jovotech/core';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
@@ -151,7 +154,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       JovoDebuggerEvent.DebuggerLanguageModelRequest,
       this.onDebuggerLanguageModelRequest,
     );
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest);
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
 
     app.middlewareCollection.use('after.dialog.logic', this.onRequest);
     app.middlewareCollection.use('after.response', this.onResponse);
@@ -231,9 +234,39 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     // TODO implement sending debuggerConfig
   };
 
-  private onDebuggerRequest = (request: any) => {
+  private onDebuggerRequest = async (app: App, request: any) => {
     const userId: string = request.userId || 'jovo-debugger-user';
     // TODO: implement building request with RequestBuilder and TestSuite
+    class RequestServer extends Server {
+      constructor(readonly req: any) {
+        super();
+      }
+
+      fail(error: Error): void {}
+
+      getQueryParams(): QueryParams {
+        return {};
+      }
+
+      getRequestHeaders(): Headers {
+        return {};
+      }
+
+      getRequestObject(): Record<string, string> {
+        return this.req;
+      }
+
+      hasWriteFileAccess(): boolean {
+        return false;
+      }
+
+      async setResponse(response: any): Promise<void> {
+        return;
+      }
+
+      setResponseHeaders(header: Record<string, string>): void {}
+    }
+    await app.handle(new RequestServer(request));
   };
 
   private onRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
