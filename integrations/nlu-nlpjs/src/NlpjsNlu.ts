@@ -31,10 +31,12 @@ export interface NlpjsNluConfig extends PluginConfig {
   setupModelCallback?: SetupModelFunction;
 }
 
+export type NlpjsNluInitConfig = DeepPartial<NlpjsNluConfig> & Pick<NlpjsNluConfig, 'languageMap'>;
+
 export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
   nlpjs?: Nlp;
 
-  constructor(config: DeepPartial<NlpjsNluConfig> & Required<Pick<NlpjsNluConfig, 'languageMap'>>) {
+  constructor(config: NlpjsNluInitConfig) {
     super(config);
   }
 

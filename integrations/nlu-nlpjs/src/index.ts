@@ -1,8 +1,5 @@
 import { NlpjsNlu, NlpjsNluConfig } from './NlpjsNlu';
 
-
-
-
 declare module '@jovotech/core/dist/Extensible' {
   interface ExtensiblePluginConfig {
     NlpjsNlu?: NlpjsNluConfig;

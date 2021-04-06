@@ -10,18 +10,13 @@ import {
   PluginConfig,
   SessionData,
 } from '@jovotech/core';
+import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
+import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
+import { LangEn } from '@nlpjs/lang-en';
 import { promises } from 'fs';
 import { join } from 'path';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
-
-// TODO: implement config
-export interface JovoDebuggerConfig extends PluginConfig {
-  webhookUrl: string;
-  languageModelEnabled: boolean;
-  languageModelPath: string;
-  debuggerJsonPath: string;
-}
 
 export enum JovoDebuggerEvent {
   DebuggingAvailable = 'debugging.available',
@@ -73,12 +68,25 @@ export interface JovoDebuggerResponse {
 
 const WEBHOOK_ARGUMENT_OPTIONS = ['--intent', '--launch', '--file', '--template'];
 
+// TODO: implement config
+export interface JovoDebuggerConfig extends PluginConfig {
+  corePlatform: DeepPartial<CorePlatformConfig>;
+  nlpjsNlu: NlpjsNluInitConfig;
+  webhookUrl: string;
+  languageModelEnabled: boolean;
+  languageModelPath: string;
+  debuggerJsonPath: string;
+}
+
+export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
+  Partial<Pick<JovoDebuggerConfig, 'nlpjsNlu'>>;
+
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
 
   hasOverriddenWrite = false;
 
-  constructor(config?: DeepPartial<JovoDebuggerConfig>) {
+  constructor(config?: JovoDebuggerInitConfig) {
     super(config);
 
     const jovoWebhookEnabled =
@@ -94,11 +102,17 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // TODO check default config
   getDefaultConfig(): JovoDebuggerConfig {
     return {
+      corePlatform: {},
+      nlpjsNlu: {
+        languageMap: {
+          en: LangEn,
+        },
+      },
       webhookUrl: 'https://webhook.jovo.cloud',
       enabled: false,
       languageModelEnabled: true,
-      languageModelPath: './../models',
-      debuggerJsonPath: './../debugger.json',
+      languageModelPath: './models',
+      debuggerJsonPath: './debugger.json',
     };
   }
 
@@ -107,6 +121,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       // TODO: implement error
       throw new InvalidParentError();
     }
+
+    // TODO: determine handling of edge-cases
+    // Example: instance of CorePlatform is installed already or will be installed after this plugin
+    parent.use(
+      new CorePlatform({
+        ...this.config.corePlatform,
+        plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
+      }),
+    );
   }
 
   async initialize(app: App): Promise<void> {
