@@ -3,47 +3,36 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  JovoResponse,
   OutputTemplate,
   Type,
   ValidateNested,
 } from '@jovotech/output';
 import { Context } from './Context';
-import { CoreResponse } from './CoreResponse';
 import { Session } from './Session';
 import { User } from './User';
 
-export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
-  [key: string]: unknown;
-
-  @IsOptional()
+// TODO: Find better names for output and repromptOutputs!
+export class CorePlatformResponse extends JovoResponse {
   @IsString()
   @IsNotEmpty()
-  version?: string;
+  version: string;
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OutputTemplate)
-  output?: OutputTemplate[];
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => OutputTemplate)
-  repromptOutput?: OutputTemplate[];
+  output: OutputTemplate[];
 
   @IsOptional()
   @ValidateNested()
   @Type(() => User)
   user?: User;
 
-  @IsOptional()
   @ValidateNested()
   @Type(() => Session)
-  session?: Session;
+  session: Session;
 
-  @IsOptional()
   @ValidateNested()
   @Type(() => Context)
-  context?: Context;
+  context: Context;
 }
