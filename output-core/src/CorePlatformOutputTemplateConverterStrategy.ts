@@ -10,6 +10,7 @@ export class CorePlatformOutputTemplateConverterStrategy
     output = Array.isArray(output) ? output : [output];
     const response: CorePlatformResponse = {
       version: '4.0.0',
+      type: 'jovo-platform-core',
       output,
       session: {
         end: false,

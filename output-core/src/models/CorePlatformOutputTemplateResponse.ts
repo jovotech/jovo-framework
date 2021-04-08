@@ -21,6 +21,11 @@ export class CorePlatformOutputTemplateResponse implements Partial<CorePlatformR
   version?: string;
 
   @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  type?: string;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OutputTemplate)

@@ -18,6 +18,10 @@ export class CorePlatformResponse extends JovoResponse {
   @IsNotEmpty()
   version: string;
 
+  @IsString()
+  @IsNotEmpty()
+  type: string;
+
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OutputTemplate)
