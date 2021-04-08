@@ -16,6 +16,11 @@ export class Card {
   subtitle?: string;
 
   @IsOptional()
+  @IsString()
+  @IsOptional()
+  content?: string;
+
+  @IsOptional()
   @IsUrl()
   imageUrl?: string;
 }

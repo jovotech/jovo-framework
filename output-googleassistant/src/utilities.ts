@@ -13,7 +13,10 @@ export function augmentModelPrototypes(): void {
       title: this.title,
     };
     if (this.subtitle) {
-      card.text = this.subtitle;
+      card.subtitle = this.subtitle;
+    }
+    if (this.content) {
+      card.text = this.content;
     }
     if (this.imageUrl) {
       card.image = {

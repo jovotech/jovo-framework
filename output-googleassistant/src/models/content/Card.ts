@@ -73,8 +73,11 @@ export class Card {
     const card: BaseCard = {
       title: (this.title || this.text || this.subtitle) as string,
     };
-    if (this.text || this.subtitle) {
-      card.subtitle = this.text || this.subtitle;
+    if (this.subtitle) {
+      card.subtitle = this.subtitle;
+    }
+    if (this.text) {
+      card.content = this.text;
     }
     if (this.image?.url) {
       card.imageUrl = this.image.url;

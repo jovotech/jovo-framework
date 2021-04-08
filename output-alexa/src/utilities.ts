@@ -19,7 +19,7 @@ export function augmentModelPrototypes(): void {
     const card: AlexaCard<CardType.Standard> = {
       type: CardType.Standard,
       title: this.title,
-      text: this.subtitle,
+      text: this.content,
     };
     if (this.imageUrl) {
       card.image = {

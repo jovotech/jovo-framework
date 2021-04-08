@@ -34,7 +34,7 @@ export class Card<TYPE extends CardType = CardType> {
       title: (this.title || '') as string,
     };
     if (this.text || this.content) {
-      card.subtitle = this.text || this.content;
+      card.content = this.text || this.content;
     }
     if (this.image?.largeImageUrl || this.image?.smallImageUrl) {
       card.imageUrl = this.image.largeImageUrl || this.image.smallImageUrl;

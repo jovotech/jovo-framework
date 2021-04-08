@@ -7,7 +7,10 @@ export function augmentModelPrototypes(): void {
       title: this.title,
     };
     if (this.subtitle) {
-      basicCard.formattedText = this.subtitle;
+      basicCard.subtitle = this.subtitle;
+    }
+    if (this.content) {
+      basicCard.formattedText = this.content;
     }
     if (this.imageUrl) {
       basicCard.image = {
