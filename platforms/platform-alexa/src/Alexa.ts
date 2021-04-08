@@ -18,6 +18,10 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaConfig> {
     return request.version && request.request && request.request.requestId;
   }
 
+  isResponseRelated(response: Record<string, any> | AlexaResponse): boolean {
+    return response.version && response.response;
+  }
+
   prepareResponse(response: AlexaResponse, jovo: Jovo): AlexaResponse | Promise<AlexaResponse> {
     this.setResponseSessionData(response, jovo);
     return response;

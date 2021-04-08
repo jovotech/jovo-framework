@@ -7,7 +7,7 @@ import { CorePlatformApp } from './CorePlatformApp';
 import { CorePlatformRequest } from './CorePlatformRequest';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
-  requestType: CorePlatformRequest['type'];
+  type: 'jovo-platform-core' | string;
 }
 
 export class CorePlatform extends Platform<
@@ -20,7 +20,7 @@ export class CorePlatform extends Platform<
   // Allows making new platforms on the fly
   static create(
     name: string,
-    type: CorePlatformConfig['requestType'],
+    type: CorePlatformConfig['type'],
   ): new (...args: any[]) => CorePlatform {
     // workaround to make the anonymous' class name equal to `name`
     const obj = {
@@ -28,7 +28,7 @@ export class CorePlatform extends Platform<
         getDefaultConfig(): CorePlatformConfig {
           return {
             ...super.getDefaultConfig(),
-            requestType: type,
+            type,
           };
         }
       },
@@ -42,18 +42,31 @@ export class CorePlatform extends Platform<
 
   getDefaultConfig(): CorePlatformConfig {
     return {
-      requestType: 'jovo-platform-core',
+      type: 'jovo-platform-core',
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isRequestRelated(request: Record<string, any> | CorePlatformRequest): boolean {
-    return request.version && request.request?.type && request.type === this.config.requestType;
+    return request.version && request.request?.type && request.type === this.config.type;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isResponseRelated(response: Record<string, any> | CorePlatformResponse): boolean {
+    return (
+      response.version &&
+      response.output &&
+      response.session &&
+      response.context &&
+      response.type === this.config.type
+    );
   }
 
   prepareResponse(
     response: CorePlatformResponse,
     jovo: Jovo,
   ): CorePlatformResponse | Promise<CorePlatformResponse> {
+    response.type = this.config.type;
     this.setResponseSessionData(response, jovo);
     return response;
   }

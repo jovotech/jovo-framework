@@ -55,6 +55,8 @@ export abstract class Platform<
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract isResponseRelated(response: RESPONSE | Record<string, any>): boolean;
 
   // TODO: Determine whether this should be moved into Jovo. That would require changes in BaseComponent and BaseOutput.
   abstract prepareResponse(
