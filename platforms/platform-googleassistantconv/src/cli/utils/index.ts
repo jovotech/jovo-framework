@@ -23,12 +23,25 @@ export async function checkForGactionsCli() {
 export function getGactionsError(errorMessage: string): JovoCliError {
   // ToDo: Check for different errors.
   if (errorMessage.includes('command requires authentication')) {
-    throw new JovoCliError(
+    return new JovoCliError(
       'Missing authentication.',
       'GoogleAssistantCli',
       'Try to run "gactions login" first.',
     );
   }
 
-  throw new JovoCliError(errorMessage, 'GoogleAssistantCli');
+  const errorToken: string = 'Server did not return HTTP 200.';
+  if (errorMessage.includes(errorToken)) {
+    const { error } = JSON.parse(
+      errorMessage.substring(errorMessage.indexOf(errorToken) + errorToken.length),
+    );
+
+    return new JovoCliError(
+      error.message,
+      'GoogleAssistantCli',
+      error.details[0].fieldViolations[0].description,
+    );
+  }
+
+  return new JovoCliError(errorMessage, 'GoogleAssistantCli');
 }

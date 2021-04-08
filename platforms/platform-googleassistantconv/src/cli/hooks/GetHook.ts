@@ -6,7 +6,7 @@ import {
   flags,
   InstallEventArguments,
   JovoCliError,
-  JovoCliPluginContext,
+  PluginContext,
   ParseEventArguments,
   PluginHook,
   printHighlight,
@@ -23,6 +23,8 @@ import {
 import { BuildEvents } from '@jovotech/cli-command-build';
 
 export class GetHook extends PluginHook<GetEvents & BuildEvents> {
+  $context!: PluginContextGoogle;
+
   install() {
     this.actionSet = {
       'install': [this.addCliOptions.bind(this)],
@@ -54,16 +56,15 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
 
   /**
    * Updates the current context with plugin-specific values from --project-id.
-   * @param context - Plugin context.
    */
-  updatePluginContext(context: PluginContextGoogle) {
-    if (context.command !== 'get') {
+  updatePluginContext() {
+    if (this.$context.command !== 'get') {
       return;
     }
 
-    context.projectId = context.flags['project-id'] || _get(this.$config, 'projectId');
+    this.$context.projectId = this.$context.flags['project-id'] || _get(this.$config, 'projectId');
 
-    if (!context.projectId) {
+    if (!this.$context.projectId) {
       throw new JovoCliError(
         'Could not find projectId.',
         'GoogleAssistantCli',
@@ -72,8 +73,8 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     }
   }
 
-  async checkForExistingPlatformFiles(context: PluginContextGoogle) {
-    if (!context.flags.overwrite && existsSync(getPlatformPath())) {
+  async checkForExistingPlatformFiles() {
+    if (!this.$context.flags.overwrite && existsSync(getPlatformPath())) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -81,9 +82,9 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     }
   }
 
-  async get(context: PluginContextGoogle) {
+  async get() {
     const getTask: Task = new Task(
-      `Getting Conversational Actions Project ${printHighlight(`(${context.projectId})`)}`,
+      `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
       async () => {
         // Check if gactions CLI is installed.
         await checkForGactionsCli();
@@ -95,21 +96,15 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
 
         try {
           await execAsync(
-            `gactions pull --clean --force --project-id ${context.projectId} --consumer jovo-cli`,
+            `gactions pull --clean --force --project-id ${this.$context.projectId} --consumer jovo-cli`,
             { cwd: platformPath },
           );
         } catch (error) {
-          throw getGactionsError(error.message);
+          throw getGactionsError(error.stderr);
         }
       },
     );
 
     await getTask.run();
-  }
-
-  async checkForBuild(ctx: JovoCliPluginContext) {
-    if (ctx.flags.build) {
-      await this.$emitter.run('reverse.build', ctx);
-    }
   }
 }
