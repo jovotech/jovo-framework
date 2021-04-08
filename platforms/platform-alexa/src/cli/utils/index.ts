@@ -3,12 +3,13 @@ import chalk from 'chalk';
 import _get from 'lodash.get';
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
-import { AskSkillList, JovoCliPluginConfigAlexa } from './Interfaces';
+import { AskSkillList } from './Interfaces';
 
 import { getAskConfigPath } from './Paths';
 
 export * from './Interfaces';
 export * from './Paths';
+export * from './Constants';
 
 /**
  * Checks if ask cli is installed.
@@ -45,26 +46,6 @@ export async function checkForAskCli() {
 export function getAskConfig() {
   const content: string = readFileSync(getAskConfigPath(), 'utf-8');
   return JSON.parse(content);
-}
-
-/**
- * Returns the defined sub locales for the given locale,
- * e.g. en -> en-US, en-CA, ...
- * @param config - Plugin config.
- * @param locale - Locale to map sublocales for.
- */
-export function getSubLocales(config: JovoCliPluginConfigAlexa, locale: string): string[] {
-  const locales = _get(config, `locales.${locale}`, []);
-
-  if (!locales.length) {
-    throw new JovoCliError(
-      `Could not retrieve locales mapping for language "${locale}"!`,
-      config.pluginName!,
-      'Alexa does not support generic locales, please specify locales in your project configuration.',
-    );
-  }
-
-  return locales;
 }
 
 /**

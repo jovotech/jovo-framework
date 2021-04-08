@@ -6,7 +6,6 @@ import _set from 'lodash.set';
 import _has from 'lodash.has';
 import {
   Task,
-  JovoCliPluginContext,
   JovoCliError,
   printStage,
   printSubHeadline,
@@ -21,6 +20,7 @@ import {
   wait,
   mergeArrayCustomizer,
   deleteFolderRecursive,
+  printHighlight,
 } from '@jovotech/cli-core';
 import { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
@@ -29,36 +29,68 @@ import { JovoModelData, NativeFileInformation } from 'jovo-model';
 
 import DefaultFiles from '../utils/DefaultFiles.json';
 import {
-  getSubLocales,
   getModelPath,
   getModelsPath,
   getPlatformDirectory,
   getPlatformPath,
+  PluginContextAlexa,
+  SUPPORTED_LOCALES,
 } from '../utils';
 
 export class BuildHook extends PluginHook<BuildEvents> {
+  $context!: PluginContextAlexa;
+
   install() {
     this.actionSet = {
       'parse': [this.checkForPlatform.bind(this)],
-      'before.build': [this.checkForCleanBuild.bind(this), this.validateModels.bind(this)],
+      'before.build': [
+        this.checkForCleanBuild.bind(this),
+        this.validateLocales.bind(this),
+        this.validateModels.bind(this),
+      ],
       'build': [this.build.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
   }
 
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param args - Event arguments.
+   */
   checkForPlatform(args: ParseEventArguments) {
     // Check if this plugin should be used or not.
-    if (args.flags.platform && args.flags.platform !== this.$config.pluginId) {
+    if (args.flags.platform && !(args.flags.platform as string[]).includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
 
-  async validateModels(context: JovoCliPluginContext) {
+  /**
+   * Checks if any provided locale is not supported, thus invalid.
+   */
+  validateLocales() {
+    for (const locale of this.$context.locales) {
+      const resolvedLocales: string[] = this.getResolvedLocales(locale);
+
+      for (const resolvedLocale of resolvedLocales) {
+        if (!SUPPORTED_LOCALES.includes(resolvedLocale)) {
+          throw new JovoCliError(
+            `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
+            this.$plugin.id,
+            resolvedLocale.length === 2
+              ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
+              : 'For more information on multiple language support: https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html',
+          );
+        }
+      }
+    }
+  }
+
+  async validateModels() {
     const jovo: JovoCli = JovoCli.getInstance();
     // Validate Jovo model.
     const validationTask: Task = new Task(`${OK_HAND} Validating Alexa model files`);
 
-    for (const locale of context.locales) {
+    for (const locale of this.$context.locales) {
       const localeTask = new Task(locale, async () => {
         jovo.$project!.validateModel(locale, JovoModelAlexa.getValidator());
         await wait(500);
@@ -70,14 +102,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
     await validationTask.run();
   }
 
-  checkForCleanBuild(context: JovoCliPluginContext) {
+  checkForCleanBuild() {
     // If --clean has been set, delete the respective platform folders before building.
-    if (context.flags.clean) {
+    if (this.$context.flags.clean) {
       deleteFolderRecursive(getPlatformPath());
     }
   }
 
-  async build(context: JovoCliPluginContext) {
+  async build() {
     const jovo: JovoCli = JovoCli.getInstance();
     const taskStatus: string = jovo.$project!.hasPlatform(getPlatformDirectory())
       ? 'Updating'
@@ -85,7 +117,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     const buildTaskTitle =
       `${STATION} ${taskStatus} Alexa Skill project files${printStage(jovo.$project!.$stage)}\n` +
-      printSubHeadline(`Path: ./${jovo.$project!.getBuildDirectory()}${getPlatformDirectory()}`);
+      printSubHeadline(`Path: ./${jovo.$project!.getBuildDirectory()}/${getPlatformDirectory()}`);
 
     // Define main build task.
     const buildTask: Task = new Task(buildTaskTitle);
@@ -93,15 +125,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // Update or create Alexa project files, depending on whether it has already been built or not.
     const projectFilesTask: Task = new Task(
       `${taskStatus} Project Files`,
-      this.createAlexaProjectFiles.bind(this, context),
+      this.createAlexaProjectFiles.bind(this),
     );
 
     const buildInteractionModelTask: Task = new Task(
       `${taskStatus} Interaction Model`,
-      this.createInteractionModel(context),
+      this.createInteractionModel(),
     );
     // If no model files for the current locales exist, do not build interaction model.
-    if (!jovo.$project!.hasModelFiles(context.locales)) {
+    if (!jovo.$project!.hasModelFiles(this.$context.locales)) {
       buildInteractionModelTask.disable();
     }
 
@@ -110,39 +142,43 @@ export class BuildHook extends PluginHook<BuildEvents> {
     await buildTask.run();
   }
 
-  async buildReverse(context: JovoCliPluginContext) {
+  async buildReverse() {
     const jovo: JovoCli = JovoCli.getInstance();
     // Since platform can be prompted for, check if this plugin should actually be executed again.
-    if (!context.platforms.includes(this.$config.pluginId!)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       return;
     }
-    // Get locales to reverse build from. If --locale is not specified, reverse build from every locale
-    // available in the platform folder.
+    // Get locales to reverse build from.
+    // If --locale is not specified, reverse build from every locale available in the platform folder.
     const locales: string[] = [];
-    if (context.locales.length > 1) {
+    if (!this.$context.flags.locale) {
       locales.push(...this.getPlatformLocales());
     } else {
-      const locale: string | undefined = this.getPlatformLocales().find(
-        (locale: string) => locale === context.locales[0],
-      );
+      // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
+      const platformLocales: string[] = this.getPlatformLocales();
+      for (const locale of this.$context.locales) {
+        // ToDo: Test!
+        const resolvedLocales: string[] = this.getResolvedLocales(locale);
 
-      // If the specified locale can't be found, throw an error.
-      if (!locale) {
-        throw new JovoCliError(
-          `Could not find platform models for locale: ${locale}`,
-          this.$config.pluginName!,
-        );
+        for (const resolvedLocale of resolvedLocales) {
+          if (platformLocales.includes(resolvedLocale)) {
+            locales.push(resolvedLocale);
+          } else {
+            throw new JovoCliError(
+              `Could not find platform models for locale: ${resolvedLocale}`,
+              this.$plugin.constructor.name,
+            );
+          }
+        }
       }
-
-      locales.push(locale);
     }
+
     // If Jovo model files for the current locales exist, ask whether to back them up or not.
-    if (jovo.$project!.hasModelFiles(locales) && !context.flags!.force) {
+    if (jovo.$project!.hasModelFiles(locales) && !this.$context.flags.force) {
       const answer = await promptOverwriteReverseBuild();
       if (answer.overwrite === ANSWER_CANCEL) {
         return;
       }
-
       if (answer.overwrite === ANSWER_BACKUP) {
         // Backup old files.
         const backupTask: Task = new Task('Creating backups');
@@ -153,9 +189,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         await backupTask.run();
       }
     }
-
     const reverseTask: Task = new Task('Reversing model files');
-
     for (const locale of locales) {
       const localeTask: Task = new Task(locale, async () => {
         const alexaModelFiles: NativeFileInformation[] = [
@@ -164,10 +198,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
             content: this.getPlatformModel(locale),
           },
         ];
-
         const jovoModel = new JovoModelAlexa();
         jovoModel.importNative(alexaModelFiles, locale);
-
         // Apply the changes to the current model-file if one exists
         let modelFile: JovoModelData;
         try {
@@ -183,25 +215,22 @@ export class BuildHook extends PluginHook<BuildEvents> {
         if (!nativeData) {
           throw new JovoCliError(
             'Alexa files did not contain any valid data.',
-            this.$config.pluginName!,
+            this.$plugin.constructor.name,
           );
         }
-
         _merge(modelFile, nativeData);
         jovo.$project!.saveModel(modelFile, locale);
         await wait(500);
       });
       reverseTask.add(localeTask);
     }
-
     await reverseTask.run();
   }
 
   /**
    * Builds the Alexa skill manifest.
-   * @param context - JovoCliPluginContext, containing context-sensitive information such as what locales to use.
    */
-  createAlexaProjectFiles(context: JovoCliPluginContext) {
+  createAlexaProjectFiles() {
     const jovo: JovoCli = JovoCli.getInstance();
     const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
 
@@ -232,42 +261,33 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     const skillName: string = jovo.$project!.getProjectName();
+    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
+      locales.push(...this.getResolvedLocales(locale));
+      return locales;
+    }, []);
 
-    for (const locale of context.locales) {
-      const buildLocales: string[] = [];
-      // If locale is of format en, de, ..., try to get sublocales.
-      if (locale.length === 2) {
-        buildLocales.push(...getSubLocales(this.$config, locale));
+    for (const locale of locales) {
+      // Check whether publishing information has already been set.
+      const publishingInformationPath: string = `skill-package/["skill.json"].manifest.publishingInformation.locales.${locale}`;
+      if (!_has(projectFiles, publishingInformationPath)) {
+        _set(projectFiles, publishingInformationPath, {
+          summary: 'Sample Short Description',
+          examplePhrases: ['Alexa open hello world'],
+          keywords: ['hello', 'world'],
+          name: skillName,
+          description: 'Sample Full Description',
+          smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
+          largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
+        });
       }
 
-      // If no sublocales have been found, just push the locale to buildLocales.
-      if (!buildLocales.length) {
-        buildLocales.push(locale);
-      }
-
-      for (const buildLocale of buildLocales) {
-        // Check whether publishing information has already been set.
-        const publishingInformationPath: string = `skill-package/["skill.json"].manifest.publishingInformation.locales.${buildLocale}`;
-        if (!_has(projectFiles, publishingInformationPath)) {
-          _set(projectFiles, publishingInformationPath, {
-            summary: 'Sample Short Description',
-            examplePhrases: ['Alexa open hello world'],
-            keywords: ['hello', 'world'],
-            name: skillName,
-            description: 'Sample Full Description',
-            smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
-            largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
-          });
-        }
-
-        const privacyAndCompliancePath: string = `skill-package/["skill.json"].manifest.privacyAndCompliance.locales.${buildLocale}`;
-        // Check whether privacy and compliance information has already been set.
-        if (!_has(projectFiles, privacyAndCompliancePath)) {
-          _set(projectFiles, privacyAndCompliancePath, {
-            privacyPolicyUrl: 'http://example.com/policy',
-            termsOfUseUrl: '',
-          });
-        }
+      const privacyAndCompliancePath: string = `skill-package/["skill.json"].manifest.privacyAndCompliance.locales.${locale}`;
+      // Check whether privacy and compliance information has already been set.
+      if (!_has(projectFiles, privacyAndCompliancePath)) {
+        _set(projectFiles, privacyAndCompliancePath, {
+          privacyPolicyUrl: 'http://example.com/policy',
+          termsOfUseUrl: '',
+        });
       }
     }
 
@@ -276,15 +296,20 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
   /**
    * Creates and returns tasks for each locale to build the interaction model for Alexa.
-   * @param context - JovoCliPluginContext, containing context-sensitive information such as what locales to use.
    */
-  createInteractionModel(context: JovoCliPluginContext): Task[] {
+  createInteractionModel(): Task[] {
     const tasks: Task[] = [];
-    for (const locale of context.locales) {
-      const localeTask: Task = new Task(locale, async () => {
-        this.buildLanguageModel(locale);
-        await wait(500);
-      });
+
+    for (const modelLocale of this.$context.locales) {
+      const resolvedLocales: string[] = this.getResolvedLocales(modelLocale);
+
+      const localeTask: Task = new Task(
+        `${modelLocale} (${resolvedLocales.join(',')})`,
+        async () => {
+          this.buildLanguageModel(modelLocale, resolvedLocales);
+          await wait(500);
+        },
+      );
 
       tasks.push(localeTask);
     }
@@ -297,30 +322,24 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param {string} locale
    * @param {string} stage
    */
-  buildLanguageModel(locale: string) {
-    const model = this.getJovoModel(locale);
-
-    const buildLocales: string[] = [];
-    // If locale is of format en, de, ..., try to get sublocales.
-    if (locale.length === 2) {
-      buildLocales.push(...getSubLocales(this.$config, locale));
-    }
-
-    // If no sublocales have been found, just push the locale to buildLocales.
-    if (!buildLocales.length) {
-      buildLocales.push(locale);
-    }
+  /**
+   * Builds and saves Alexa Skill model from Jovo model.
+   * @param modelLocale - Locale from Jovo model.
+   * @param resolvedLocales - Locales to which the model locale resolves.
+   */
+  buildLanguageModel(modelLocale: string, resolvedLocales: string[]) {
+    const model = this.getJovoModel(modelLocale);
 
     try {
-      for (const buildLocale of buildLocales) {
-        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model, buildLocale);
+      for (const locale of resolvedLocales) {
+        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model, locale);
         const alexaModelFiles: NativeFileInformation[] = jovoModel.exportNative() as NativeFileInformation[];
 
         if (!alexaModelFiles || !alexaModelFiles.length) {
           // Should actually never happen but who knows
           throw new JovoCliError(
-            `Could not build Alexa files for locale "${buildLocale}"!`,
-            this.$config.pluginName!,
+            `Could not build Alexa files for locale "${locale}"!`,
+            this.$plugin.constructor.name,
           );
         }
 
@@ -329,16 +348,13 @@ export class BuildHook extends PluginHook<BuildEvents> {
           mkdirSync(modelsPath, { recursive: true });
         }
 
-        writeFileSync(
-          getModelPath(buildLocale),
-          JSON.stringify(alexaModelFiles[0].content, null, 2),
-        );
+        writeFileSync(getModelPath(locale), JSON.stringify(alexaModelFiles[0].content, null, 2));
       }
     } catch (error) {
       if (error instanceof JovoCliError) {
         throw error;
       }
-      throw new JovoCliError(error.message, this.$config.pluginName!);
+      throw new JovoCliError(error.message, this.$plugin.constructor.name);
     }
   }
 

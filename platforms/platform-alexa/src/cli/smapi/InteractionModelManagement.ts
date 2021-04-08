@@ -41,8 +41,6 @@ export async function updateInteractionModel(
     await execAsync(cmd);
   } catch (error) {
     // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
-    if (!error.stderr.includes('[Warn]')) {
-      throw getAskError('smapiUpdateInteractionModel', error.stderr);
-    }
+    throw getAskError('smapiUpdateInteractionModel', error.stderr);
   }
 }

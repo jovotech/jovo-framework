@@ -25,20 +25,20 @@ import {
   getPlatformDirectory,
   getPlatformPath,
   getSkillJsonPath,
-  getSubLocales,
-  JovoCliPluginConfigAlexa,
-  JovoCliPluginContextAlexa,
+  PluginConfigAlexa,
+  PluginContextAlexa,
 } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
 
 export interface DeployPlatformPluginContextAlexa
   extends DeployPlatformPluginContext,
-    JovoCliPluginContextAlexa {
+    PluginContextAlexa {
   skillCreated?: boolean;
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $config!: JovoCliPluginConfigAlexa;
+  $config!: PluginConfigAlexa;
+  $context!: DeployPlatformPluginContextAlexa;
 
   install() {
     this.actionSet = {
@@ -66,48 +66,51 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   checkForPlatform(args: ParseEventArguments) {
     // Check if this plugin should be used or not.
-    if (args.flags.platform && args.flags.platform !== this.$config.pluginId) {
+    if (args.flags.platform && !(args.flags.platform as string[]).includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
 
   /**
    * Updates the current context with plugin-specific values from --skill-id and --ask-profile.
-   * @param context - Plugin context.
    */
-  updatePluginContext(context: DeployPlatformPluginContextAlexa) {
-    if (context.command !== 'deploy:platform') {
+  updatePluginContext() {
+    if (this.$context.command !== 'deploy:platform') {
       return;
     }
 
-    context.askProfile = (context.flags['ask-profile'] as string) || this.$config.askProfile;
-    context.skillId = (context.flags['skill-id'] as string) || this.getSkillId();
+    this.$context.askProfile =
+      (this.$context.flags['ask-profile'] as string) || this.$config.askProfile;
+    this.$context.skillId = (this.$context.flags['skill-id'] as string) || this.getSkillId();
   }
 
   checkForPlatformsFolder() {
     if (!existsSync(getPlatformPath())) {
       throw new JovoCliError(
         `Couldn't find the platform folder "${getPlatformDirectory()}/".`,
-        this.$config.pluginName!,
+        this.$plugin.constructor.name,
         `Please use "jovo build" to create platform-specific files.`,
       );
     }
   }
 
-  async deploy(context: DeployPlatformPluginContextAlexa) {
+  async deploy() {
     const jovo: JovoCli = JovoCli.getInstance();
     const deployTask: Task = new Task(
       `${ROCKET} Deploying Alexa Skill ${printStage(jovo.$project!.$stage)}`,
     );
 
-    if (!context.skillId) {
+    if (!this.$context.skillId) {
       // Create skill, if it doesn't exist already.
       const createSkillTask: Task = new Task(
-        `Creating Alexa Skill project ${printAskProfile(context.askProfile)}`,
+        `Creating Alexa Skill project ${printAskProfile(this.$context.askProfile)}`,
         async () => {
-          const skillId: string = await smapi.createSkill(getSkillJsonPath(), context.askProfile);
-          context.skillId = skillId;
-          context.skillCreated = true;
+          const skillId: string = await smapi.createSkill(
+            getSkillJsonPath(),
+            this.$context.askProfile,
+          );
+          this.$context.skillId = skillId;
+          this.$context.skillCreated = true;
 
           this.setSkillId(skillId);
 
@@ -115,9 +118,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
             skillId,
             getAccountLinkingPath(),
             'development',
-            context.askProfile,
+            this.$context.askProfile,
           );
-          await smapi.getSkillStatus(skillId, context.askProfile);
+          await smapi.getSkillStatus(skillId, this.$context.askProfile);
 
           const skillInfo = this.getSkillInformation();
 
@@ -128,16 +131,20 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       deployTask.add(createSkillTask);
     } else {
       const updateSkillTask: Task = new Task(
-        `Updating Alexa Skill project ${printAskProfile(context.askProfile)}`,
+        `Updating Alexa Skill project ${printAskProfile(this.$context.askProfile)}`,
         async () => {
-          await smapi.updateSkill(context.skillId!, getSkillJsonPath(), context.askProfile);
+          await smapi.updateSkill(
+            this.$context.skillId!,
+            getSkillJsonPath(),
+            this.$context.askProfile,
+          );
           await smapi.updateAccountLinkingInformation(
-            context.skillId!,
+            this.$context.skillId!,
             getAccountLinkingPath(),
             'development',
-            context.askProfile,
+            this.$context.askProfile,
           );
-          await smapi.getSkillStatus(context.skillId!, context.askProfile);
+          await smapi.getSkillStatus(this.$context.skillId!, this.$context.askProfile);
 
           const skillInfo = this.getSkillInformation();
 
@@ -147,40 +154,32 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       deployTask.add(updateSkillTask);
     }
 
+    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
+      locales.push(...this.getResolvedLocales(locale));
+      return locales;
+    }, []);
+
     const deployInteractionModelTask: Task = new Task(`${ROCKET} Deploying Interaction Model`);
-    for (const locale of context.locales) {
-      const deployLocales: string[] = [];
-      // If locale is of format en, de, ..., try to get sublocales.
-      if (locale.length === 2) {
-        deployLocales.push(...getSubLocales(this.$config, locale));
-      }
+    for (const locale of locales) {
+      const localeTask: Task = new Task(locale, async () => {
+        await smapi.updateInteractionModel(
+          this.$context.skillId!,
+          locale,
+          getModelPath(locale),
+          'development',
+          this.$context.askProfile,
+        );
+        await smapi.getSkillStatus(this.$context.skillId!);
+      });
 
-      // If no sublocales have been found, just push the locale to deployLocales.
-      if (!deployLocales.length) {
-        deployLocales.push(locale);
-      }
-
-      for (const deployLocale of deployLocales) {
-        const localeTask: Task = new Task(deployLocale, async () => {
-          await smapi.updateInteractionModel(
-            context.skillId!,
-            deployLocale,
-            getModelPath(deployLocale),
-            'development',
-            context.askProfile,
-          );
-          await smapi.getSkillStatus(context.skillId!);
-        });
-
-        deployInteractionModelTask.add(localeTask);
-      }
+      deployInteractionModelTask.add(localeTask);
     }
 
     deployTask.add(deployInteractionModelTask);
 
-    if (context.skillCreated) {
+    if (this.$context.skillCreated) {
       const enableTestingTask: Task = new Task('Enabling skill for testing', async () => {
-        await smapi.enableSkill(context.skillId!, 'development', context.askProfile);
+        await smapi.enableSkill(this.$context.skillId!, 'development', this.$context.askProfile);
       });
       deployTask.add(enableTestingTask);
     }
@@ -202,7 +201,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       if (err instanceof JovoCliError) {
         throw err;
       }
-      throw new JovoCliError(err.message, this.$config.pluginName!);
+      throw new JovoCliError(err.message, this.$plugin.constructor.name);
     }
   }
 
@@ -237,7 +236,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     try {
       return JSON.parse(readFileSync(getAskConfigPath(), 'utf8'));
     } catch (err) {
-      throw new JovoCliError(err.message, this.$config.pluginName!);
+      throw new JovoCliError(err.message, this.$plugin.constructor.name);
     }
   }
 
@@ -265,7 +264,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
       return info;
     } catch (err) {
-      throw new JovoCliError(err.message, this.$config.pluginName!);
+      throw new JovoCliError(err.message, this.$plugin.constructor.name);
     }
   }
 

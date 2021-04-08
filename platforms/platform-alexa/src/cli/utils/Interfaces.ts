@@ -1,4 +1,4 @@
-import { JovoCliPluginConfig, JovoCliPluginContext } from '@jovotech/cli-core';
+import { PluginConfig, PluginContext } from '@jovotech/cli-core';
 
 export interface AskSkillList {
   skills: [
@@ -13,12 +13,11 @@ export interface AskSkillList {
   ];
 }
 
-export interface JovoCliPluginContextAlexa extends JovoCliPluginContext {
+export interface PluginContextAlexa extends PluginContext {
   skillId?: string;
   askProfile?: string;
 }
 
-export interface JovoCliPluginConfigAlexa extends JovoCliPluginConfig {
+export interface PluginConfigAlexa extends PluginConfig {
   askProfile?: string;
-  locales?: { [key: string]: string[] };
 }

@@ -44,10 +44,6 @@ export async function createSkill(skillJsonPath: string, askProfile?: string): P
     return skillId;
   } catch (error) {
     // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
-    if (error.stderr.includes('[Warn]')) {
-      const { skillId } = JSON.parse(error.stdout);
-      return skillId;
-    }
     throw getAskError('smapiCreateSkill', error.stderr);
   }
 }
@@ -64,9 +60,7 @@ export async function updateSkill(skillId: string, skillJsonPath: string, askPro
     await execAsync(cmd);
   } catch (error) {
     // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
-    if (!error.stderr.includes('[Warn]')) {
-      throw getAskError('smapiUpdateSkill', error.stderr);
-    }
+    throw getAskError('smapiUpdateSkill', error.stderr);
   }
 }
 

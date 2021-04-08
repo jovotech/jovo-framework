@@ -5,7 +5,7 @@ import {
   ANSWER_CANCEL,
   flags,
   InstallEventArguments,
-  JovoCliPluginContext,
+  PluginContext,
   ParseEventArguments,
   PluginHook,
   printAskProfile,
@@ -28,14 +28,15 @@ import {
   getModelsPath,
   getPlatformPath,
   getSkillJsonPath,
-  JovoCliPluginConfigAlexa,
-  JovoCliPluginContextAlexa,
+  PluginConfigAlexa,
+  PluginContextAlexa,
   prepareSkillList,
 } from '../utils';
 import defaultFiles from '../utils/DefaultFiles.json';
 
 export class GetHook extends PluginHook<GetEvents & BuildEvents> {
-  $config!: JovoCliPluginConfigAlexa;
+  $config!: PluginConfigAlexa;
+  $context!: PluginContextAlexa;
 
   install() {
     this.actionSet = {
@@ -46,7 +47,6 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
         this.checkForExistingPlatformFiles.bind(this),
       ],
       'get': [this.get.bind(this)],
-      'after.get': [this.checkForBuild.bind(this)],
     };
   }
 
@@ -64,22 +64,26 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
 
   checkForPlatform(args: ParseEventArguments) {
     // Check if this plugin should be used or not.
-    if (args.args.platform && args.args.platform !== this.$config.pluginId) {
+    if (args.args.platform && args.args.platform !== this.$plugin.id) {
       this.uninstall();
     }
   }
 
   /**
    * Updates the current context with plugin-specific values from --skill-id and --ask-profile.
-   * @param context - Plugin context.
    */
-  updatePluginContext(context: JovoCliPluginContextAlexa) {
-    context.askProfile = (context.flags['ask-profile'] as string) || this.$config.askProfile;
-    context.skillId = context.flags['skill-id'] as string;
+  updatePluginContext() {
+    this.$context.askProfile =
+      (this.$context.flags['ask-profile'] as string) || this.$config.askProfile;
+    this.$context.skillId =
+      (this.$context.flags['skill-id'] as string) ||
+      _get(this.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(this.$config, 'options.skillId') ||
+      _get(getAskConfig(), 'profiles.default.skillId');
   }
 
-  async checkForExistingPlatformFiles(context: JovoCliPluginContextAlexa) {
-    if (!context.flags.overwrite && existsSync(getPlatformPath())) {
+  async checkForExistingPlatformFiles() {
+    if (!this.$context.flags.overwrite && existsSync(getPlatformPath())) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -87,20 +91,19 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     }
   }
 
-  async get(context: JovoCliPluginContextAlexa) {
-    let skillId: string | undefined = this.getSkillId(context);
+  async get() {
     const getTask: Task = new Task(
-      `Getting Alexa Skill projects ${printAskProfile(context.askProfile)}`,
+      `Getting Alexa Skill projects ${printAskProfile(this.$context.askProfile)}`,
     );
 
     // If no skill id and thus no specified project can be found, try to prompt for one.
-    if (!skillId) {
-      const skills: AskSkillList = await smapi.listSkills(context.askProfile);
+    if (!this.$context.skillId) {
+      const skills: AskSkillList = await smapi.listSkills(this.$context.askProfile);
       const list = prepareSkillList(skills);
       try {
         const answer = await promptListForProjectId(list);
 
-        skillId = answer.projectId;
+        this.$context.skillId = answer.projectId;
       } catch (error) {
         return;
       }
@@ -108,18 +111,18 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
 
     const getSkillInformationTask: Task = new Task('Getting skill information', async () => {
       const skillInformation = await smapi.getSkillInformation(
-        skillId!,
+        this.$context.skillId!,
         'development',
-        context.askProfile,
+        this.$context.askProfile,
       );
       writeFileSync(getSkillJsonPath(), JSON.stringify(skillInformation, null, 2));
-      this.setAlexaSkillId(skillId!);
+      this.setAlexaSkillId(this.$context.skillId!);
 
       // Try to get account linking information.
       const accountLinkingJson = await smapi.getAccountLinkingInformation(
-        skillId!,
+        this.$context.skillId!,
         'development',
-        context.askProfile,
+        this.$context.askProfile,
       );
 
       if (accountLinkingJson) {
@@ -140,8 +143,8 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     const skillJson = require(getSkillJsonPath());
     const modelLocales: string[] = [];
 
-    if (context.flags.locale) {
-      modelLocales.push(context.flags.locale as string);
+    if (this.$context.flags.locale) {
+      modelLocales.push(this.$context.flags.locale as string);
     } else {
       const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
       modelLocales.push(...Object.keys(skillJsonLocales));
@@ -150,10 +153,10 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     for (const locale of modelLocales) {
       const localeTask: Task = new Task(locale, async () => {
         const model = await smapi.getInteractionModel(
-          skillId!,
+          this.$context.skillId!,
           locale,
           'development',
-          context.askProfile,
+          this.$context.askProfile,
         );
         writeFileSync(getModelPath(locale), JSON.stringify(model, null, 2));
       });
@@ -163,25 +166,6 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     getTask.add(getSkillInformationTask, getModelsTask);
 
     await getTask.run();
-  }
-
-  async checkForBuild(ctx: JovoCliPluginContext) {
-    if (ctx.flags.build) {
-      await this.$emitter.run('reverse.build', ctx);
-    }
-  }
-
-  /**
-   * Returns the skill id for the current Alexa project.
-   */
-  getSkillId(ctx: JovoCliPluginContext): string | undefined {
-    return (
-      ctx.flags['skill-id'] ||
-      // ToDo: won't work with nested, maybe FileBuilder.normalize() before passing config?
-      _get(this.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$config, 'options.skillId') ||
-      _get(getAskConfig(), 'profiles.default.skillId')
-    );
   }
 
   /**
