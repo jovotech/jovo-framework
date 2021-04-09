@@ -13,7 +13,6 @@ import {
   Server,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
-import { JovoProxy } from './JovoProxy';
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
@@ -133,7 +132,6 @@ export abstract class Jovo<
     await componentInstance[key as keyof BaseComponent]();
 
     // TODO: move somewhere else
-    this.$output = componentInstance.$output;
     this.$session.$data[InternalSessionProperty.State] = componentInstance.constructor.name;
     return this;
   }
