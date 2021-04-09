@@ -42,6 +42,7 @@ export enum JovoDebuggerEvent {
 // to tackle that the data can be transformed in the frontend/backend
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface JovoDebuggerRequest {
+  requestId: number;
   json: any;
   platformType: string;
   requestSessionAttributes: SessionData;
@@ -54,6 +55,7 @@ export interface JovoDebuggerRequest {
 }
 
 export interface JovoDebuggerResponse {
+  requestId: number;
   json: any;
   database?: any;
   speech?: string;
@@ -88,6 +90,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
 
   hasOverriddenWrite = false;
+
+  // TODO determine whether number is sufficient
+  requestIdCounter = 0;
 
   constructor(config?: JovoDebuggerInitConfig) {
     super(config);
@@ -167,16 +172,34 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const createJovoFn = platform.createJovoInstance;
       platform.createJovoInstance = (app, handleRequest) => {
         const jovo = createJovoFn.call(platform, app, handleRequest);
-        return new Proxy(jovo, this.getProxyHandler());
+        // propagate initial values, might not be required, TBD
+        for (const key in jovo) {
+          if (!jovo.hasOwnProperty(key) || ['$app', '$handleRequest', '$platform'].includes(key)) {
+            continue;
+          }
+          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
+            requestId: handleRequest.requestId,
+            key,
+            value: jovo[key as keyof Jovo],
+            path: key,
+          });
+        }
+        return new Proxy(jovo, this.getProxyHandler(handleRequest));
       };
     });
   }
 
-  private getProxyHandler<T extends Record<string, any>>(path = ''): ProxyHandler<T> {
+  private getProxyHandler<T extends Record<string, any>>(
+    handleRequest: HandleRequest,
+    path = '',
+  ): ProxyHandler<T> {
     return {
       get: (target, key: string) => {
         if (typeof target[key] === 'object' && target[key] !== null) {
-          return new Proxy(target[key], this.getProxyHandler(path ? [path, key].join('.') : key));
+          return new Proxy(
+            target[key],
+            this.getProxyHandler(handleRequest, path ? [path, key].join('.') : key),
+          );
         } else {
           return target[key];
         }
@@ -184,6 +207,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       set: (target, key: string, value: unknown): boolean => {
         (target as Record<string, unknown>)[key] = value;
         this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
+          requestId: handleRequest.requestId,
           key,
           value,
           path: path ? [path, key].join('.') : key,
@@ -236,8 +260,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onDebuggerRequest = async (app: App, request: any) => {
     const userId: string = request.userId || 'jovo-debugger-user';
-    // TODO: implement building request with RequestBuilder and TestSuite
-    class RequestServer extends Server {
+
+    class MockServer extends Server {
       constructor(readonly req: any) {
         super();
       }
@@ -266,7 +290,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
       setResponseHeaders(header: Record<string, string>): void {}
     }
-    await app.handle(new RequestServer(request));
+
+    await app.handle(new MockServer(request));
   };
 
   private onRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
@@ -276,6 +301,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
     // TODO: complete filling request from data in jovo and check platformType
     const request: JovoDebuggerRequest = {
+      requestId: handleRequest.requestId,
       inputs: jovo.$entities,
       json: jovo.$request,
       platformType: jovo.constructor.name,
@@ -294,6 +320,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
     // TODO: fill response from data in jovo and check platformType
     const response: JovoDebuggerResponse = {
+      requestId: handleRequest.requestId,
       inputs: jovo.$entities,
       json: jovo.$response,
       platformType: jovo.constructor.name,
