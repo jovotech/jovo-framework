@@ -3,18 +3,15 @@ import _get from 'lodash.get';
 import indent from 'indent-string';
 import {
   execAsync,
-  flags,
-  InstallEventArguments,
   JovoCli,
   JovoCliError,
-  ParseEventArguments,
   PluginHook,
   printStage,
   printWarning,
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { DeployPlatformEvents } from '@jovotech/cli-command-deploy';
+import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
 import {
   checkForGactionsCli,
   getGactionsError,
@@ -35,14 +32,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param args - Event arguments.
+   * @param context - Event arguments.
    */
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextDeployPlatform) {
     // Check if this plugin should be used or not.
-    if (
-      args.flags.platform &&
-      !(args.flags.platform as string[]).includes(this.$config.pluginId!)
-    ) {
+    if (context.args.platform && context.args.platform !== this.$plugin.id) {
       this.uninstall();
     }
   }
@@ -51,7 +45,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     if (!existsSync(getPlatformPath())) {
       throw new JovoCliError(
         `Couldn't find the platform folder ${getPlatformPath()}.`,
-        this.$config.pluginName!,
+        this.$plugin.constructor.name,
         `Please use "jovo build" to create platform-specific files.`,
       );
     }

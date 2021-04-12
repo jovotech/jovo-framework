@@ -9,7 +9,6 @@ import { getAskConfigPath } from './Paths';
 
 export * from './Interfaces';
 export * from './Paths';
-export * from './Constants';
 
 /**
  * Checks if ask cli is installed.

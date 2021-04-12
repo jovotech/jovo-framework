@@ -4,16 +4,14 @@ import {
   ANSWER_CANCEL,
   execAsync,
   flags,
-  InstallEventArguments,
+  InstallContext,
   JovoCliError,
-  PluginContext,
-  ParseEventArguments,
   PluginHook,
   printHighlight,
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { GetEvents } from '@jovotech/cli-command-get';
+import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import {
   checkForGactionsCli,
   getGactionsError,
@@ -22,8 +20,13 @@ import {
 } from '../utils';
 import { BuildEvents } from '@jovotech/cli-command-build';
 
-export class GetHook extends PluginHook<GetEvents & BuildEvents> {
-  $context!: PluginContextGoogle;
+export interface GetContextGoogle extends GetContext, PluginContextGoogle {
+  args: GetContext['args'];
+  flags: GetContext['flags'] & { 'project-id'?: string };
+}
+
+export class GetHook extends PluginHook<GetEvents | BuildEvents> {
+  $context!: GetContextGoogle;
 
   install() {
     this.actionSet = {
@@ -37,19 +40,19 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     };
   }
 
-  addCliOptions(args: InstallEventArguments) {
-    if (args.command !== 'get') {
+  addCliOptions(context: InstallContext) {
+    if (context.command !== 'get') {
       return;
     }
 
-    args.flags['project-id'] = flags.string({
+    context.flags['project-id'] = flags.string({
       description: 'Google Cloud Project ID',
     });
   }
 
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextGet) {
     // Check if this plugin should be used or not.
-    if (args.args.platform && args.args.platform !== this.$config.pluginId!) {
+    if (context.args.platform && context.args.platform !== this.$plugin.id) {
       this.uninstall();
     }
   }

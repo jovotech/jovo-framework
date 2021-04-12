@@ -14,7 +14,6 @@ import {
   ANSWER_BACKUP,
   STATION,
   OK_HAND,
-  ParseEventArguments,
   PluginHook,
   JovoCli,
   wait,
@@ -22,7 +21,7 @@ import {
   deleteFolderRecursive,
   printHighlight,
 } from '@jovotech/cli-core';
-import { BuildEvents } from '@jovotech/cli-command-build';
+import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
@@ -34,11 +33,12 @@ import {
   getPlatformDirectory,
   getPlatformPath,
   PluginContextAlexa,
-  SUPPORTED_LOCALES,
 } from '../utils';
 
+export interface BuildContextAlexa extends Omit<PluginContextAlexa, 'flags'>, BuildContext {}
+
 export class BuildHook extends PluginHook<BuildEvents> {
-  $context!: PluginContextAlexa;
+  $context!: BuildContextAlexa;
 
   install() {
     this.actionSet = {
@@ -55,11 +55,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param args - Event arguments.
+   * @param context - Event arguments.
    */
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextBuild) {
     // Check if this plugin should be used or not.
-    if (args.flags.platform && !(args.flags.platform as string[]).includes(this.$plugin.id)) {
+    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -72,7 +72,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const resolvedLocales: string[] = this.getResolvedLocales(locale);
 
       for (const resolvedLocale of resolvedLocales) {
-        if (!SUPPORTED_LOCALES.includes(resolvedLocale)) {
+        if (!this.$plugin.supportedLocales.includes(resolvedLocale)) {
           throw new JovoCliError(
             `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
             this.$plugin.id,
@@ -151,24 +151,20 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // Get locales to reverse build from.
     // If --locale is not specified, reverse build from every locale available in the platform folder.
     const locales: string[] = [];
+    const platformLocales: string[] = this.getPlatformLocales();
     if (!this.$context.flags.locale) {
-      locales.push(...this.getPlatformLocales());
+      locales.push(...platformLocales);
     } else {
       // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
-      const platformLocales: string[] = this.getPlatformLocales();
-      for (const locale of this.$context.locales) {
-        // ToDo: Test!
-        const resolvedLocales: string[] = this.getResolvedLocales(locale);
-
-        for (const resolvedLocale of resolvedLocales) {
-          if (platformLocales.includes(resolvedLocale)) {
-            locales.push(resolvedLocale);
-          } else {
-            throw new JovoCliError(
-              `Could not find platform models for locale: ${resolvedLocale}`,
-              this.$plugin.constructor.name,
-            );
-          }
+      for (const locale of this.$context.flags.locale as string[]) {
+        if (platformLocales.includes(locale)) {
+          locales.push(locale);
+        } else {
+          throw new JovoCliError(
+            `Could not find platform models for locale: ${printHighlight(locale)}`,
+            this.$plugin.constructor.name,
+            `Available locales include: ${platformLocales.join(', ')}`,
+          );
         }
       }
     }

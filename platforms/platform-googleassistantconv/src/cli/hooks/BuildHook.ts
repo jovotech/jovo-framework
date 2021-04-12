@@ -11,10 +11,8 @@ import {
   Task,
   PluginContext,
   JovoCliError,
-  InstallEventArguments,
   printStage,
   printSubHeadline,
-  ParseEventArguments,
   OK_HAND,
   STATION,
   PluginHook,
@@ -24,8 +22,9 @@ import {
   flags,
   deleteFolderRecursive,
   printHighlight,
+  InstallContext,
 } from '@jovotech/cli-core';
-import { BuildEvents } from '@jovotech/cli-command-build';
+import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 import { JovoModelGoogle } from 'jovo-model-google';
@@ -36,15 +35,18 @@ import {
   getPlatformDirectory,
   getPlatformPath,
   PluginContextGoogle,
+  PluginConfigGoogle,
 } from '../utils';
-import { SUPPORTED_LOCALES } from '../utils/Constants';
+import SUPPORTED_LOCALES from '../utils/SupportedLocales.json';
 
-export interface BuildPluginContextGoogle extends PluginContextGoogle {
+export interface BuildContextGoogle extends BuildContext, PluginContextGoogle {
+  flags: BuildContext['flags'] & { 'project-id'?: string };
   defaultLocale?: string;
 }
 
 export class BuildHook extends PluginHook<BuildEvents> {
-  $context!: BuildPluginContextGoogle;
+  $config!: PluginConfigGoogle;
+  $context!: BuildContextGoogle;
 
   install() {
     this.actionSet = {
@@ -61,23 +63,23 @@ export class BuildHook extends PluginHook<BuildEvents> {
     };
   }
 
-  addCliOptions(args: InstallEventArguments) {
-    if (args.command !== 'build') {
+  addCliOptions(context: InstallContext) {
+    if (context.command !== 'build') {
       return;
     }
 
-    args.flags['project-id'] = flags.string({
+    context.flags['project-id'] = flags.string({
       description: 'Google Cloud Project ID',
     });
   }
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param args - Event arguments.
+   * @param context - Event arguments.
    */
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextBuild) {
     // Check if this plugin should be used or not.
-    if (args.flags.platform && !(args.flags.platform as string[]).includes(this.$plugin.id)) {
+    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -112,19 +114,28 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Checks if any provided locale is not supported, thus invalid.
    */
   validateLocales() {
-    for (const locale of this.$context.locales) {
-      const resolvedLocales: string[] = this.getResolvedLocales(locale);
+    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
+      locales.push(...this.getResolvedLocales(locale));
+      return locales;
+    }, []);
 
-      for (const resolvedLocale of resolvedLocales) {
-        if (!SUPPORTED_LOCALES.includes(resolvedLocale)) {
-          throw new JovoCliError(
-            `Locale ${printHighlight(
-              resolvedLocale,
-            )} is not supported by Google Conversational Actions.`,
-            this.$plugin.constructor.name,
-            'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
-          );
-        }
+    for (const locale of locales) {
+      const genericLocale: string = locale.substring(0, 2);
+      if (SUPPORTED_LOCALES.includes(genericLocale) && !locales.includes(genericLocale)) {
+        throw new JovoCliError(
+          `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
+            genericLocale,
+          )}.`,
+          this.$plugin.constructor.name,
+        );
+      }
+
+      if (!SUPPORTED_LOCALES.includes(locale)) {
+        throw new JovoCliError(
+          `Locale ${printHighlight(locale)} is not supported by Google Conversational Actions.`,
+          this.$plugin.constructor.name,
+          'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
+        );
       }
     }
   }
@@ -373,14 +384,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   getProjectLocales(locale: string): string[] {
     return _get(this.$config, `options.locales.${locale}`) as string[];
-  }
-
-  /**
-   * Returns the project id for the Google Conversational Action.
-   */
-  getProjectId(context: PluginContext): string {
-    const projectId: string = context.flags?.projectId || _get(this.$config, 'projectId');
-    return projectId;
   }
 
   /**

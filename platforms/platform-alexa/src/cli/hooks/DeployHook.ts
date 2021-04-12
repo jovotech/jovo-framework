@@ -2,10 +2,9 @@ import _get from 'lodash.get';
 import _set from 'lodash.set';
 import {
   flags,
-  InstallEventArguments,
+  InstallContext,
   JovoCli,
   JovoCliError,
-  ParseEventArguments,
   PluginHook,
   printAskProfile,
   printStage,
@@ -13,7 +12,11 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { DeployPlatformEvents, DeployPlatformPluginContext } from '@jovotech/cli-command-deploy';
+import {
+  DeployPlatformEvents,
+  DeployPlatformContext,
+  ParseContextDeployPlatform,
+} from '@jovotech/cli-command-deploy';
 
 import * as smapi from '../smapi';
 import {
@@ -30,15 +33,15 @@ import {
 } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
 
-export interface DeployPlatformPluginContextAlexa
-  extends DeployPlatformPluginContext,
-    PluginContextAlexa {
+export interface DeployPlatformContextAlexa extends PluginContextAlexa, DeployPlatformContext {
+  args: DeployPlatformContext['args'];
+  flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
   skillCreated?: boolean;
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $config!: PluginConfigAlexa;
-  $context!: DeployPlatformPluginContextAlexa;
+  $context!: DeployPlatformContextAlexa;
 
   install() {
     this.actionSet = {
@@ -53,20 +56,20 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     };
   }
 
-  addCliOptions(args: InstallEventArguments) {
-    if (args.command !== 'deploy:platform') {
+  addCliOptions(context: InstallContext) {
+    if (context.command !== 'deploy:platform') {
       return;
     }
 
-    args.flags['ask-profile'] = flags.string({
+    context.flags['ask-profile'] = flags.string({
       description: 'Name of used ASK profile',
     });
-    args.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
+    context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
   }
 
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextDeployPlatform) {
     // Check if this plugin should be used or not.
-    if (args.flags.platform && !(args.flags.platform as string[]).includes(this.$plugin.id)) {
+    if (context.args.platform && context.args.platform !== this.$plugin.id) {
       this.uninstall();
     }
   }
@@ -79,9 +82,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       return;
     }
 
-    this.$context.askProfile =
-      (this.$context.flags['ask-profile'] as string) || this.$config.askProfile;
-    this.$context.skillId = (this.$context.flags['skill-id'] as string) || this.getSkillId();
+    this.$context.askProfile = this.$context.flags['ask-profile'] || this.$config.askProfile;
+    this.$context.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
   checkForPlatformsFolder() {

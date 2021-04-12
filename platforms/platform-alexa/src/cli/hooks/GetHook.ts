@@ -4,16 +4,14 @@ import _set from 'lodash.set';
 import {
   ANSWER_CANCEL,
   flags,
-  InstallEventArguments,
-  PluginContext,
-  ParseEventArguments,
+  InstallContext,
   PluginHook,
   printAskProfile,
   promptListForProjectId,
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { GetEvents } from '@jovotech/cli-command-get';
+import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 
@@ -34,9 +32,14 @@ import {
 } from '../utils';
 import defaultFiles from '../utils/DefaultFiles.json';
 
-export class GetHook extends PluginHook<GetEvents & BuildEvents> {
+export interface GetContextAlexa extends PluginContextAlexa, GetContext {
+  args: GetContext['args'];
+  flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
+}
+
+export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   $config!: PluginConfigAlexa;
-  $context!: PluginContextAlexa;
+  $context!: GetContextAlexa;
 
   install() {
     this.actionSet = {
@@ -50,21 +53,21 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     };
   }
 
-  addCliOptions(args: InstallEventArguments) {
-    if (args.command !== 'get') {
+  addCliOptions(context: InstallContext) {
+    if (context.command !== 'get') {
       return;
     }
 
-    args.flags['ask-profile'] = flags.string({
+    context.flags['ask-profile'] = flags.string({
       default: 'default',
       description: 'Name of used ASK profile',
     });
-    args.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
+    context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
   }
 
-  checkForPlatform(args: ParseEventArguments) {
+  checkForPlatform(context: ParseContextGet) {
     // Check if this plugin should be used or not.
-    if (args.args.platform && args.args.platform !== this.$plugin.id) {
+    if (context.args.platform && context.args.platform !== this.$plugin.id) {
       this.uninstall();
     }
   }
@@ -73,10 +76,10 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
    * Updates the current context with plugin-specific values from --skill-id and --ask-profile.
    */
   updatePluginContext() {
-    this.$context.askProfile =
-      (this.$context.flags['ask-profile'] as string) || this.$config.askProfile;
+    this.$context.askProfile = this.$context.flags['ask-profile'] || this.$config.askProfile;
+
     this.$context.skillId =
-      (this.$context.flags['skill-id'] as string) ||
+      this.$context.flags['skill-id'] ||
       _get(this.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
       _get(this.$config, 'options.skillId') ||
       _get(getAskConfig(), 'profiles.default.skillId');
@@ -144,7 +147,7 @@ export class GetHook extends PluginHook<GetEvents & BuildEvents> {
     const modelLocales: string[] = [];
 
     if (this.$context.flags.locale) {
-      modelLocales.push(this.$context.flags.locale as string);
+      modelLocales.push(...this.$context.flags.locale);
     } else {
       const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
       modelLocales.push(...Object.keys(skillJsonLocales));
