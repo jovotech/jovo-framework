@@ -13,10 +13,10 @@ declare module '@jovotech/core/dist/Extensible' {
 
 declare module '@jovotech/core/dist/HandleRequest' {
   interface HandleRequest {
-    requestId: number;
+    debuggerRequestId: number;
   }
 }
 
-HandleRequest.prototype.requestId = 0;
+HandleRequest.prototype.debuggerRequestId = 0;
 
 export * from './JovoDebugger';

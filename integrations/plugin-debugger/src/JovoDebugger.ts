@@ -164,7 +164,19 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     app.middlewareCollection.use('after.dialog.logic', this.onRequest);
     app.middlewareCollection.use('after.response', this.onResponse);
 
+    this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
+  }
+
+  // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
+  // -> future changes are less likely to cause breaking changes here
+  private patchHandleRequestToIncludeUniqueId() {
+    const getRequestId = () => this.requestIdCounter++;
+    const mount = HandleRequest.prototype.mount;
+    HandleRequest.prototype.mount = function () {
+      this.debuggerRequestId = getRequestId();
+      return mount.call(this);
+    };
   }
 
   private patchPlatformsToCreateJovoAsProxy(platforms: ReadonlyArray<Platform>) {
@@ -178,7 +190,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             continue;
           }
           this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
-            requestId: handleRequest.requestId,
+            requestId: handleRequest.debuggerRequestId,
             key,
             value: jovo[key as keyof Jovo],
             path: key,
@@ -207,7 +219,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       set: (target, key: string, value: unknown): boolean => {
         (target as Record<string, unknown>)[key] = value;
         this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
-          requestId: handleRequest.requestId,
+          requestId: handleRequest.debuggerRequestId,
           key,
           value,
           path: path ? [path, key].join('.') : key,
@@ -301,7 +313,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
     // TODO: complete filling request from data in jovo and check platformType
     const request: JovoDebuggerRequest = {
-      requestId: handleRequest.requestId,
+      requestId: handleRequest.debuggerRequestId,
       inputs: jovo.$entities,
       json: jovo.$request,
       platformType: jovo.constructor.name,
@@ -320,7 +332,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
     // TODO: fill response from data in jovo and check platformType
     const response: JovoDebuggerResponse = {
-      requestId: handleRequest.requestId,
+      requestId: handleRequest.debuggerRequestId,
       inputs: jovo.$entities,
       json: jovo.$response,
       platformType: jovo.constructor.name,
