@@ -17,10 +17,15 @@ export class Card {
 
   @IsOptional()
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   content?: string;
 
   @IsOptional()
   @IsUrl()
   imageUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  imageAlt?: string;
 }
