@@ -20,6 +20,7 @@ import { promises } from 'fs';
 import { join } from 'path';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
+import { MockServer } from './MockServer';
 
 export enum JovoDebuggerEvent {
   DebuggingAvailable = 'debugging.available',
@@ -41,6 +42,7 @@ export enum JovoDebuggerEvent {
 // problem with that is,that older versions still have this format
 // to tackle that the data can be transformed in the frontend/backend
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface JovoDebuggerRequest {
   requestId: number;
   json: any;
@@ -161,7 +163,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     );
     this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
 
-    app.middlewareCollection.use('after.dialog.logic', this.onRequest);
+    // TODO determine whether it should be called here
+    app.middlewareCollection.use('before.request', this.onRequest);
     app.middlewareCollection.use('after.response', this.onResponse);
 
     this.patchHandleRequestToIncludeUniqueId();
@@ -186,7 +189,19 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         const jovo = createJovoFn.call(platform, app, handleRequest);
         // propagate initial values, might not be required, TBD
         for (const key in jovo) {
-          if (!jovo.hasOwnProperty(key) || ['$app', '$handleRequest', '$platform'].includes(key)) {
+          const isEmptyObject =
+            typeof jovo[key as keyof Jovo] === 'object' &&
+            !Array.isArray(jovo[key as keyof Jovo]) &&
+            !Object.keys(jovo[key as keyof Jovo]).length;
+          const isEmptyArray =
+            Array.isArray(jovo[key as keyof Jovo]) && !jovo[key as keyof Jovo].length;
+          if (
+            !jovo.hasOwnProperty(key) ||
+            ['$app', '$handleRequest', '$platform'].includes(key) ||
+            !jovo[key as keyof Jovo] ||
+            isEmptyObject ||
+            isEmptyArray
+          ) {
             continue;
           }
           this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
@@ -217,6 +232,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         }
       },
       set: (target, key: string, value: unknown): boolean => {
+        // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
         (target as Record<string, unknown>)[key] = value;
         this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
           requestId: handleRequest.debuggerRequestId,
@@ -272,37 +288,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onDebuggerRequest = async (app: App, request: any) => {
     const userId: string = request.userId || 'jovo-debugger-user';
-
-    class MockServer extends Server {
-      constructor(readonly req: any) {
-        super();
-      }
-
-      fail(error: Error): void {}
-
-      getQueryParams(): QueryParams {
-        return {};
-      }
-
-      getRequestHeaders(): Headers {
-        return {};
-      }
-
-      getRequestObject(): Record<string, string> {
-        return this.req;
-      }
-
-      hasWriteFileAccess(): boolean {
-        return false;
-      }
-
-      async setResponse(response: any): Promise<void> {
-        return;
-      }
-
-      setResponseHeaders(header: Record<string, string>): void {}
-    }
-
     await app.handle(new MockServer(request));
   };
 

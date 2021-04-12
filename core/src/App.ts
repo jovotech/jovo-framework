@@ -115,7 +115,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
     // RIDR-pipeline
     // TODO determine whether request should only be called for relatedPlatform
-    await handleRequest.middlewareCollection.run('request', handleRequest);
+    await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
