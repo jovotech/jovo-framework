@@ -7,13 +7,13 @@ import {
   EnumRequestType,
   Jovo,
 } from 'jovo-core';
-import {App, ExpressJS} from 'jovo-framework';
-import {FileDb2} from 'jovo-db-filedb';
+import { App, ExpressJS } from 'jovo-framework';
+import { FileDb2 } from 'jovo-db-filedb';
 import _set = require('lodash.set');
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {Lex} from '../src';
+import { Lex } from '../src';
 
 const PATH_TO_DB_DIR = './test/db';
 
@@ -75,8 +75,7 @@ describe('test request types', () => {
    */
   test('test intent', async (done) => {
     app.setHandler({
-      HelloWorldIntent() {
-      },
+      HelloWorldIntent() {},
     });
 
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
@@ -196,7 +195,6 @@ describe('test request types', () => {
   */
 });
 
-
 export function clearDbFolder() {
   const files = fs.readdirSync(PATH_TO_DB_DIR);
 
@@ -204,4 +202,3 @@ export function clearDbFolder() {
     fs.unlinkSync(path.join(PATH_TO_DB_DIR, file));
   });
 }
-

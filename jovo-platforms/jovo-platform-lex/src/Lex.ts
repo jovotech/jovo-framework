@@ -13,7 +13,6 @@ import _merge = require('lodash.merge');
 
 import { LexRequestBuilder } from './core/LexRequestBuilder';
 import { LexResponseBuilder } from './core/LexResponseBuilder';
-//import {} from 'module';
 import { LexBot } from './core/LexBot';
 import { Cards } from './modules/Cards';
 import { LexCore } from './modules/LexCore';

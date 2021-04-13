@@ -1,5 +1,5 @@
 import _merge = require('lodash.merge');
-import {Button} from './Button';
+import { Button } from './Button';
 
 export interface CardContent {
   title?: string;
@@ -27,5 +27,4 @@ export class Card {
       _merge(this, content);
     }
   }
-
 }

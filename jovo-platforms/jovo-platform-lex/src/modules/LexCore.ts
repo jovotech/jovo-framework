@@ -40,9 +40,7 @@ export class LexCore implements Plugin {
       );
     }
 
-    lex.$request = LexRequest.fromJSON(
-      lex.$host.getRequestObject(),
-    ) as LexRequest;
+    lex.$request = LexRequest.fromJSON(lex.$host.getRequestObject()) as LexRequest;
     lex.$user = new LexUser(lex);
   }
 
@@ -85,20 +83,20 @@ export class LexCore implements Plugin {
       _set(response, 'dialogAction', {
         type: 'Close',
         fulfillmentState: 'PlainText',
-        message:{
+        message: {
           contentType: 'SSML',
-          content: tell.speech
-        }
+          content: tell.speech,
+        },
       });
     }
     const ask = output.ask;
     if (ask) {
       _set(response, 'dialogAction', {
         type: 'ElicitIntent',
-        message:{
+        message: {
           contentType: 'PlainText',
-          content: ask.speech
-        }
+          content: ask.speech,
+        },
       });
       _set(response, 'sessionAttributes', lex.$session.$data);
     }

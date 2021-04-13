@@ -1,4 +1,4 @@
-import {JovoResponse, SpeechBuilder, SessionConstants, SessionData} from 'jovo-core';
+import { JovoResponse, SpeechBuilder, SessionConstants, SessionData } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 
@@ -7,7 +7,12 @@ export interface SessionAttributes {
 }
 
 export type ConfirmationStatus = 'None' | 'Confirmed' | 'Denied';
-export type DialogActionType = 'ElicitIntent' | 'ElicitSlot' | 'ConfirmIntent' | 'Delegate' | 'Close';
+export type DialogActionType =
+  | 'ElicitIntent'
+  | 'ElicitSlot'
+  | 'ConfirmIntent'
+  | 'Delegate'
+  | 'Close';
 export type FulfillmentState = 'Fulfilled' | 'Failed';
 
 export interface IntentSummaryView {
@@ -20,7 +25,7 @@ export interface DialogAction {
   type: DialogActionType;
   fulfillmentState: 'Fulfilled' | 'Failed';
   message: {
-    contentType: 'PlainText' | 'SSML' | 'CustomPayload',
+    contentType: 'PlainText' | 'SSML' | 'CustomPayload';
     content: string;
   };
 }
@@ -34,13 +39,11 @@ export class LexResponse implements JovoResponse {
   slotToElicit?: string;
   dialogAction?: DialogAction;
 
-  constructor() {
-
-  }
+  constructor() {}
 
   getSpeech(): string | undefined {
     const speechAction = this.dialogAction?.message;
-    if ( !speechAction ) return;
+    if (!speechAction) return;
     return SpeechBuilder.removeSpeakTags(speechAction.content);
   }
 
@@ -53,7 +56,7 @@ export class LexResponse implements JovoResponse {
 
   getSpeechPlain(): string | undefined {
     const sayAction = this.dialogAction?.message;
-    if ( !sayAction ) return;
+    if (!sayAction) return;
     return SpeechBuilder.removeSSML(sayAction.content);
   }
 
@@ -64,9 +67,8 @@ export class LexResponse implements JovoResponse {
     return undefined;
   }
 
-
   getSessionData(path?: string) {
-    if ( path ) {
+    if (path) {
       return this.getSessionAttribute(path);
     } else {
       return this.getSessionAttributes();
@@ -99,12 +101,12 @@ export class LexResponse implements JovoResponse {
    */
   // tslint:disable-next-line
   hasSessionAttribute(name: string, value?: any): boolean {
-    if ( !this.getSessionAttribute(name) ) {
+    if (!this.getSessionAttribute(name)) {
       return false;
     }
 
-    if ( typeof value !== 'undefined' ) {
-      if ( this.getSessionAttribute(name) !== value ) {
+    if (typeof value !== 'undefined') {
+      if (this.getSessionAttribute(name) !== value) {
         return false;
       }
     }
@@ -122,14 +124,14 @@ export class LexResponse implements JovoResponse {
    * @return {boolean}
    */
   isTell(speechText?: string | string[]): boolean {
-    if ( _get(this, 'dialogAction.type') === 'Close' ) {
+    if (_get(this, 'dialogAction.type') === 'Close') {
       return true;
     }
     return false;
   }
 
   isAsk(speechText?: string | string[]): boolean {
-    if ( _get(this, 'dialogAction.type') !== 'Close' ) {
+    if (_get(this, 'dialogAction.type') !== 'Close') {
       return true;
     }
     return false;
@@ -143,12 +145,11 @@ export class LexResponse implements JovoResponse {
    * Returns true if there is no Listen, Collect, or Redirect action
    */
   hasSessionEnded(): boolean {
-    return !(this.isAsk());
+    return !this.isAsk();
   }
 
-
   static fromJSON(json: string) {
-    if ( typeof json === 'string' ) {
+    if (typeof json === 'string') {
       // if it's a string, parse it first
       return JSON.parse(json);
     } else {

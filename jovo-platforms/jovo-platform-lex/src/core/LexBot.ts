@@ -79,10 +79,6 @@ export class LexBot extends Jovo {
     return undefined;
   }
 
-  setActions(actions: object[]): this {
-    return this;
-  }
-
   getAudioData(): AudioData | undefined {
     return undefined;
   }
