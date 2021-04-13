@@ -6,6 +6,8 @@ import {
   Headers,
   InvalidParentError,
   Jovo,
+  JovoError,
+  JovoRequest,
   Platform,
   Plugin,
   PluginConfig,
@@ -18,6 +20,7 @@ import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';
 import { promises } from 'fs';
 import { join } from 'path';
+import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { MockServer } from './MockServer';
@@ -38,40 +41,18 @@ export enum JovoDebuggerEvent {
   AppJovoUpdate = 'app.jovo-update',
 }
 
-// TODO: check if type can be improved, same for Response
-// problem with that is,that older versions still have this format
-// to tackle that the data can be transformed in the frontend/backend
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-export interface JovoDebuggerRequest {
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export interface JovoDebuggerPayload<DATA extends any = any> {
   requestId: number;
-  json: any;
-  platformType: string;
-  requestSessionAttributes: SessionData;
-  userId: string;
-  route?: any;
-  inputs?: any;
-  rawText?: string;
-  database?: any;
-  error?: any;
+  data: DATA;
 }
 
-export interface JovoDebuggerResponse {
-  requestId: number;
-  json: any;
-  database?: any;
-  speech?: string;
-  platformType: string;
-  userId: string;
-  route: any;
-  sessionEnded: boolean;
-  inputs: any;
-  requestSessionAttributes: any;
-  responseSessionAttributes: any;
-  audioplayer?: any;
+export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | string> {
+  key: KEY;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  value: KEY extends keyof Jovo ? Jovo[KEY] : any;
+  path: KEY extends keyof Jovo ? KEY : string;
 }
-
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const WEBHOOK_ARGUMENT_OPTIONS = ['--intent', '--launch', '--file', '--template'];
 
@@ -204,12 +185,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           ) {
             continue;
           }
-          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
+          const payload: JovoDebuggerPayload<JovoUpdateData> = {
             requestId: handleRequest.debuggerRequestId,
-            key,
-            value: jovo[key as keyof Jovo],
-            path: key,
-          });
+            data: {
+              key,
+              value: jovo[key as keyof Jovo],
+              path: key,
+            },
+          };
+          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
         }
         return new Proxy(jovo, this.getProxyHandler(handleRequest));
       };
@@ -234,12 +218,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       set: (target, key: string, value: unknown): boolean => {
         // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
         (target as Record<string, unknown>)[key] = value;
-        this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, {
+        const payload: JovoDebuggerPayload<JovoUpdateData> = {
           requestId: handleRequest.debuggerRequestId,
-          key,
-          value,
-          path: path ? [path, key].join('.') : key,
-        });
+          data: {
+            key,
+            value,
+            path: path ? [path, key].join('.') : key,
+          },
+        };
+        this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
         return true;
       },
     };
@@ -278,13 +265,42 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       throw new Error();
     }
     // look for language-models
-    // TODO: implement building language-model-obj
-    const languageModel: any = {};
-
-    this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse);
-
-    // TODO implement sending debuggerConfig
+    const languageModel = await this.getLanguageModel();
+    this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
+    // TODO implement sending debuggerConfig if that is required
   };
+
+  private async getLanguageModel(): Promise<any> {
+    const languageModel: any = {};
+    const absoluteModelsPath = join(cwd(), this.config.languageModelPath);
+    let files: string[] = [];
+    try {
+      files = await promises.readdir(absoluteModelsPath);
+    } catch (e) {
+      // TODO implement error handling
+      throw new JovoError(`Couldn't find models-directory at ${absoluteModelsPath}`);
+    }
+    const isValidFileRegex = /^.*([.]js(?:on)?)$/;
+    for (let i = 0, len = files.length; i < len; i++) {
+      const match = isValidFileRegex.exec(files[i]);
+      if (!match) {
+        continue;
+      }
+      const locale = files[i].substring(0, files[i].indexOf(match[1]));
+      const absoluteFilePath = join(absoluteModelsPath, files[i]);
+      if (match[1] === '.json') {
+        try {
+          const fileBuffer = await promises.readFile(absoluteFilePath);
+          languageModel[locale] = JSON.parse(fileBuffer.toString());
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        languageModel[locale] = await import(absoluteModelsPath);
+      }
+    }
+    return languageModel;
+  }
 
   private onDebuggerRequest = async (app: App, request: any) => {
     const userId: string = request.userId || 'jovo-debugger-user';
@@ -296,18 +312,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       // TODO: implement error
       throw new Error();
     }
-    // TODO: complete filling request from data in jovo and check platformType
-    const request: JovoDebuggerRequest = {
+    const payload: JovoDebuggerPayload<JovoRequest> = {
       requestId: handleRequest.debuggerRequestId,
-      inputs: jovo.$entities,
-      json: jovo.$request,
-      platformType: jovo.constructor.name,
-      requestSessionAttributes: {},
-      route: jovo.$route,
-      userId: '',
+      data: jovo.$request,
     };
-
-    this.socket.emit(JovoDebuggerEvent.AppRequest, request);
+    this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
   };
 
   private onResponse = (handleRequest: HandleRequest, jovo: Jovo) => {
@@ -315,21 +324,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       // TODO: implement error
       throw new Error();
     }
-    // TODO: fill response from data in jovo and check platformType
-    const response: JovoDebuggerResponse = {
+    const payload: JovoDebuggerPayload<any> = {
       requestId: handleRequest.debuggerRequestId,
-      inputs: jovo.$entities,
-      json: jovo.$response,
-      platformType: jovo.constructor.name,
-      requestSessionAttributes: {},
-      responseSessionAttributes: jovo.$session.$data,
-      route: jovo.$route,
-      sessionEnded: false,
-      speech: '',
-      userId: '',
+      data: jovo.$response,
     };
-
-    this.socket.emit(JovoDebuggerEvent.AppResponse, response);
+    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
   };
 
   private async connectToWebhook() {
