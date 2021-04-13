@@ -99,7 +99,7 @@ export class GoogleAnalytics implements Analytics {
   install(app: BaseApp) {
     if (!this.config.trackingId) {
       throw new JovoError(
-        'trackingId has to be set.',
+        `trackingId has to be set for ${this.constructor.name}.`,
         ErrorCode.ERR_PLUGIN,
         'jovo-analytics-googleanalytics',
         '',
