@@ -61,7 +61,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     return !requestContainsSubRequest;
   }
 
-  track(handleRequest: HandleRequest) {
+  async track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -85,7 +85,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
         return;
       }
     }
-    super.track(handleRequest);
+    await super.track(handleRequest);
   }
 
   initVisitor(jovo: Jovo) {
