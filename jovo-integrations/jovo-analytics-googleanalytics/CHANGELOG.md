@@ -4,6 +4,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-04-13 [3.5.5]
+* [#921](https://github.com/jovotech/jovo-framework/pull/921) :bug: Fix TLS Errors on Lambda ([@freiSMS(https://github.com/freiSMS))
+
+
 ### 2021-03-31 [3.5.4]
 * [#918](https://github.com/jovotech/jovo-framework/pull/918) :bug: Alexa Event Tracking on Google Analytics wrong pagename fix ([@freiSMS(https://github.com/freiSMS))
 
