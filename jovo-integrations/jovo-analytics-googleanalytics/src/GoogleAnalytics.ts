@@ -184,13 +184,15 @@ export class GoogleAnalytics implements Analytics {
       this.sendIntentInputEvents(jovo);
     }
 
-
     return new Promise((resolve, reject) => {
       jovo.$googleAnalytics.visitor?.send((error, response: any) => {
-        if(error) { reject(error); }
-        else { resolve(response); }
-      })
-    })
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      });
+    });
   }
 
   protected checkForMissingCustomEntriesInConfig(
