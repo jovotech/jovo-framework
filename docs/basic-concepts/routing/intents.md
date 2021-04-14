@@ -494,7 +494,7 @@ After the request has passed through all the intents and no output is set, an em
 
 As mentioned above, the platforms offer different types of built-in intents.
 
-* Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)
+* Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/docs/alexa/custom-skills/standard-built-in-intents.html)
 * Google Assistant: [Built-in Intents (Developer Preview)](https://developers.google.com/actions/discovery/built-in-intents)
 
 
