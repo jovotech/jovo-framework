@@ -123,10 +123,10 @@ You can access the `lex` object like this:
 
 ```javascript
 // @language=javascript
-this.$lex
+this.$lexBot
 
 // @language=typescript
-this.$lex!
+this.$lexBot!
 ```
 
 The returned object will be an instance of `Lex` if the current request is compatible with the Lex Platform. Otherwise `undefined` will be returned.
