@@ -1,4 +1,4 @@
-# AWS Lex Platform
+# AWS Lex Platform V1
 
 > To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-lex
 
@@ -10,6 +10,7 @@ AWS Lex can be use with AWS connect to build a callbot.
    * [Lex Configuration](#lex-configuration)
 * [Usage](#usage)
    * [Cards](#cards)
+* [Hello Word sample project](#Hello-Word-sample-project)
 
 ## Introduction
 
@@ -47,6 +48,7 @@ import { lex } from 'jovo-platform-web';
 
 app.use(new lex());
 ```
+
 ### Lex Configuration
 
 #### Add a Resource-based policy 
@@ -154,3 +156,13 @@ Sample script:
       ]);
  }  
 ```
+
+
+## Hello Word sample project
+
+To test the 'hello word' sample project, you need to deploy it on your AWS Account.
+
+The sample project contains a basic LEX model (plateforms/lex/model.json)<br/>
+Before uploading the lex model to your AWS account, you need to update the codeHook uri with your lambda ARN.<br/>
+Then zip and upload the file in AWS LEX Console.<br/>
+Open the testJovo bot, you should be able to test it on the "Test bot" tools.<br/>
