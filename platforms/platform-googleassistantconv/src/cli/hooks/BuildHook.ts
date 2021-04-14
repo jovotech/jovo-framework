@@ -27,11 +27,12 @@ import {
   ANSWER_CANCEL,
 } from '@jovotech/cli-core';
 import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+import { FileBuilder, FileObject, SupportedFileFormats } from '@jovotech/filebuilder';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 import { JovoModelGoogle } from 'jovo-model-google';
 
-import defaultFiles from '../utils/DefaultFiles.json';
+import SupportedLocales from '../utils/SupportedLocales.json';
+import DefaultFiles from '../utils/DefaultFiles.json';
 import {
   GoogleActionActions,
   getPlatformDirectory,
@@ -39,7 +40,6 @@ import {
   PluginContextGoogle,
   PluginConfigGoogle,
 } from '../utils';
-import SUPPORTED_LOCALES from '../utils/SupportedLocales.json';
 
 export interface BuildContextGoogle extends BuildContext, PluginContextGoogle {
   flags: BuildContext['flags'] & { 'project-id'?: string };
@@ -134,7 +134,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     for (const locale of locales) {
       const genericLocale: string = locale.substring(0, 2);
       // For Google Conversational Actions, some locales require a generic locale to be set, e.g. en for en-US.
-      if (SUPPORTED_LOCALES.includes(genericLocale) && !locales.includes(genericLocale)) {
+      if (SupportedLocales.includes(genericLocale) && !locales.includes(genericLocale)) {
         throw new JovoCliError(
           `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
@@ -143,7 +143,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         );
       }
 
-      if (!SUPPORTED_LOCALES.includes(locale)) {
+      if (!SupportedLocales.includes(locale)) {
         throw new JovoCliError(
           `Locale ${printHighlight(locale)} is not supported by Google Conversational Actions.`,
           this.$plugin.constructor.name,
@@ -306,7 +306,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
     const projectFiles: FileObject = jovo.$project!.hasPlatform(getPlatformDirectory())
       ? files
-      : _merge(defaultFiles, files);
+      : _merge(DefaultFiles, files);
     // Get default locale.
     // Merge global project.js properties with platform files.
     // Set endpoint.
