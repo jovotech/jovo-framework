@@ -32,7 +32,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param context - Event arguments.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
   checkForPlatform(context: ParseContextDeployPlatform) {
     // Check if this plugin should be used or not.
@@ -41,6 +41,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
   }
 
+  /**
+   * Checks if the platform folder for the current plugin exists.
+   */
   checkForPlatformsFolder() {
     if (!existsSync(getPlatformPath())) {
       throw new JovoCliError(
@@ -51,6 +54,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
   }
 
+  /**
+   * Deploys platform-specific files, such as intents and entities to the Google Actions Console.
+   */
   async deploy() {
     const jovo: JovoCli = JovoCli.getInstance();
     const deployTask: Task = new Task(

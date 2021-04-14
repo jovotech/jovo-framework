@@ -1,5 +1,8 @@
 import { JovoCliPlugin, PluginType } from '@jovotech/cli-core';
-import { BuildHook, DeployHook, GetHook } from './hooks';
+
+import { BuildHook } from './hooks/BuildHook';
+import { DeployHook } from './hooks/DeployHook';
+import { GetHook } from './hooks/GetHook';
 import { PluginConfigGoogle } from './utils/Interfaces';
 import SUPPORTED_LOCALES from './utils/SupportedLocales.json';
 

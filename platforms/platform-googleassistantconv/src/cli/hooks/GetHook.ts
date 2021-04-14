@@ -40,6 +40,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     };
   }
 
+  /**
+   * Add platform-specific CLI options, including flags and args.
+   * @param context - Context providing an access point to command flags and args.
+   */
   addCliOptions(context: InstallContext) {
     if (context.command !== 'get') {
       return;
@@ -50,6 +54,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     });
   }
 
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
+   */
   checkForPlatform(context: ParseContextGet) {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.id) {
@@ -58,7 +66,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   }
 
   /**
-   * Updates the current context with plugin-specific values from --project-id.
+   * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext() {
     if (this.$context.command !== 'get') {
@@ -76,6 +84,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
   }
 
+  /**
+   * Checks if platform-specific files already exist and prompts for overwriting them.
+   */
   async checkForExistingPlatformFiles() {
     if (!this.$context.flags.overwrite && existsSync(getPlatformPath())) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
@@ -85,6 +96,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
   }
 
+  /**
+   * Fetches platform-specific models, such as intents and entities from the Google Actions Console.
+   */
   async get() {
     const getTask: Task = new Task(
       `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
