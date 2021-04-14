@@ -86,7 +86,7 @@ export class LexCore implements Plugin {
         type: 'Close',
         fulfillmentState: 'PlainText',
         message:{
-          contentType: 'SSML',
+          contentType: 'PlainText',
           content: tell.speech
         }
       });
