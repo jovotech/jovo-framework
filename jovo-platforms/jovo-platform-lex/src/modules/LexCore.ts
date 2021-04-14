@@ -48,21 +48,9 @@ export class LexCore implements Plugin {
 
   async type(lex: LexBot) {
     const lexRequest = lex.$request as LexRequest;
-
-    if (lexRequest.getIntentName() === 'greeting') {
-      // intent by default in every project that has "hello" etc. as utterance
-      lex.$type = {
-        type: EnumRequestType.LAUNCH,
-      };
-    } else if (lexRequest.getIntentName() === 'goodbye') {
-      lex.$type = {
-        type: EnumRequestType.END,
-      };
-    } else {
-      lex.$type = {
-        type: EnumRequestType.INTENT,
-      };
-    }
+    lex.$type = {
+      type: EnumRequestType.INTENT,
+    };
   }
 
   async session(lex: LexBot) {
