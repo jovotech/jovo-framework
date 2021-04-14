@@ -101,6 +101,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
         'Please provide a project id by using the flag "--project-id" or in your project configuration.',
       );
     }
+
+    // Set default locale.
+    this.setDefaultLocale();
   }
 
   checkForCleanBuild() {
@@ -156,6 +159,79 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     await validationTask.run();
+  }
+
+  /**
+   * Builds Jovo model files from platform-specific files.
+   */
+  async buildReverse() {
+    const jovo: JovoCli = JovoCli.getInstance();
+    // Since platform can be prompted for, check if this plugin should actually be executed again.
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
+      return;
+    }
+
+    // Set default locale.
+    this.setDefaultLocale();
+
+    // Get locales to reverse build from.
+    // If --locale is not specified, reverse build from every locale available in the platform folder.
+    const locales: string[] = [];
+    const platformLocales: string[] = this.getPlatformLocales();
+    if (!this.$context.flags.locale) {
+      locales.push(...platformLocales);
+    } else {
+      for (const locale of this.$context.flags.locale) {
+        if (platformLocales.includes(locale)) {
+          locales.push(locale);
+        } else {
+          throw new JovoCliError(
+            `Could not find platform models for locale: ${printHighlight(locale)}`,
+            this.$plugin.constructor.name,
+            `Available locales include: ${platformLocales.join(', ')}`,
+          );
+        }
+      }
+    }
+
+    // If Jovo model files for the current locales exist, ask whether to back them up or not.
+    if (jovo.$project!.hasModelFiles(locales) && !this.$context.flags.force) {
+      const answer = await promptOverwriteReverseBuild();
+      if (answer.overwrite === ANSWER_CANCEL) {
+        return;
+      }
+      if (answer.overwrite === ANSWER_BACKUP) {
+        // Backup old files.
+        const backupTask: Task = new Task('Creating backups');
+        for (const locale of locales) {
+          const localeTask: Task = new Task(locale, () => jovo.$project!.backupModel(locale));
+          backupTask.add(localeTask);
+        }
+        await backupTask.run();
+      }
+    }
+    const reverseBuildTask: Task = new Task('Reversing model files');
+    for (const locale of locales) {
+      const localeTask: Task = new Task(locale, async () => {
+        // Extract platform models, containing platform-specific intents and entities.
+        const platformFiles: NativeFileInformation[] = this.getPlatformModels(locale);
+        const jovoModel: JovoModelGoogle = new JovoModelGoogle();
+        jovoModel.importNative(platformFiles, locale);
+        const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
+        if (!nativeData) {
+          throw new JovoCliError(
+            'Something went wrong while exporting your Jovo model.',
+            this.$plugin.constructor.name,
+          );
+        }
+
+        nativeData.invocation = this.getPlatformInvocationName(locale);
+
+        jovo.$project!.saveModel(nativeData, locale);
+      });
+      reverseBuildTask.add(localeTask);
+    }
+    await reverseBuildTask.run();
   }
 
   /**
@@ -350,21 +426,29 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Gets the default locale for the current Conversational Action.
    * @param locales - An optional array of locales to choose the default locale from, if provided.
    */
-  getDefaultLocale(locales?: string[]): string {
+  setDefaultLocale() {
+    // Set default locale.
+    const resolvedLocales: string[] = this.$context.locales.reduce(
+      (locales: string[], locale: string) => {
+        locales.push(...this.getResolvedLocales(locale));
+        return locales;
+      },
+      [],
+    );
     const defaultLocale: string =
       _get(this.$config, 'files.settings/["settings.yaml"].defaultLocale') ||
       _get(this.$config, 'defaultLocale');
 
-    if (!defaultLocale && locales) {
+    if (!defaultLocale && resolvedLocales) {
       // If locales includes an english model, take english as default automatically.
-      for (const locale of locales) {
-        if (locale.includes('en')) {
-          return locale;
+      for (const locale of resolvedLocales) {
+        if (locale === 'en') {
+          this.$context.defaultLocale = locale;
         }
       }
 
       // Otherwise take the first locale in the array as the default one.
-      return locales[0];
+      return (this.$context.defaultLocale = resolvedLocales[0]);
     }
 
     if (!defaultLocale) {
@@ -375,7 +459,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       );
     }
 
-    return defaultLocale;
+    this.$context.defaultLocale = defaultLocale;
   }
 
   /**
@@ -419,6 +503,92 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     return invocation;
+  }
+
+  /**
+   * Parses and returns platform-specific intents and entities.
+   * @param locale - Locale for which to return the model data.
+   */
+  getPlatformModels(locale: string): NativeFileInformation[] {
+    const platformModels: NativeFileInformation[] = [];
+
+    const modelPath: string = joinPaths(getPlatformPath(), 'custom');
+    // Go through a predefined set of folders to extract intent and type information.
+    const foldersToInclude: string[] = ['intents', 'types', 'scenes', 'global'];
+
+    for (const folder of foldersToInclude) {
+      const path: string[] = [modelPath, folder];
+
+      if (locale !== this.$context.defaultLocale) {
+        path.push(locale);
+      }
+
+      const folderPath = joinPaths(...path);
+
+      if (!existsSync(folderPath)) {
+        continue;
+      }
+
+      let files: string[] = readdirSync(joinPaths(...path));
+
+      if (folder === 'global') {
+        files = files.filter((file) => file.includes('actions.intent'));
+      }
+
+      const yamlRegex: RegExp = /.*\.yaml/;
+      for (const file of files) {
+        if (yamlRegex.test(file)) {
+          const fileContent = readFileSync(joinPaths(...path, file), 'utf-8');
+          platformModels.push({
+            path: [...path, file],
+            content: yaml.parse(fileContent),
+          });
+        }
+      }
+    }
+
+    return platformModels;
+  }
+
+  /**
+   * Parses platform-specific settings and returns the localized invocation name.
+   * @param locale - Locale for which to parse the invocation name.
+   */
+  getPlatformInvocationName(locale: string): string {
+    const path: string[] = [getPlatformPath(), 'settings'];
+
+    if (locale !== this.$context.defaultLocale) {
+      path.push(locale);
+    }
+
+    const settingsPath: string = joinPaths(...path, 'settings.yaml');
+    const settingsFile: string = readFileSync(settingsPath, 'utf-8');
+    const settings = yaml.parse(settingsFile);
+
+    return settings.localizedSettings.displayName;
+  }
+
+  /**
+   * Returns all locales for the current platform.
+   */
+  getPlatformLocales(): string[] {
+    const locales: string[] = [];
+    const settingsPath: string = joinPaths(getPlatformPath(), 'settings');
+    const files: string[] = readdirSync(settingsPath);
+
+    for (const file of files) {
+      if (
+        statSync(joinPaths(settingsPath, file)).isDirectory() &&
+        /^[a-z]{2}-?([A-Z]{2})?$/.test(file)
+      ) {
+        locales.push(file);
+      } else if (file === 'settings.yaml') {
+        const settings = yaml.parse(readFileSync(joinPaths(settingsPath, file), 'utf-8'));
+        locales.push(settings.defaultLocale);
+      }
+    }
+
+    return locales;
   }
 
   /**
