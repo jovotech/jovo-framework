@@ -18,6 +18,7 @@ import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import * as smapi from '../smapi';
 import {
   AskSkillList,
+  checkForAskCli,
   getAccountLinkingPath,
   getAskConfig,
   getAskConfigFolderPath,
@@ -46,6 +47,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
+        checkForAskCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
@@ -53,6 +55,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     };
   }
 
+  /**
+   * Add platform-specific CLI options, including flags and args.
+   * @param context - Context providing an access point to command flags and args.
+   */
   addCliOptions(context: InstallContext) {
     if (context.command !== 'get') {
       return;
@@ -65,6 +71,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
   }
 
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
+   */
   checkForPlatform(context: ParseContextGet) {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.id) {
@@ -73,7 +83,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   }
 
   /**
-   * Updates the current context with plugin-specific values from --skill-id and --ask-profile.
+   * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext() {
     this.$context.askProfile = this.$context.flags['ask-profile'] || this.$config.askProfile;
@@ -85,6 +95,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       _get(getAskConfig(), 'profiles.default.skillId');
   }
 
+  /**
+   * Checks if platform-specific files already exist and prompts for overwriting them.
+   */
   async checkForExistingPlatformFiles() {
     if (!this.$context.flags.overwrite && existsSync(getPlatformPath())) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
@@ -94,6 +107,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
   }
 
+  /**
+   * Fetches platform-specific models from the Alexa Skills Console.
+   */
   async get() {
     const getTask: Task = new Task(
       `Getting Alexa Skill projects ${printAskProfile(this.$context.askProfile)}`,

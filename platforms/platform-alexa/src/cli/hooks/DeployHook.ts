@@ -48,14 +48,18 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [
+        checkForAskCli,
         this.checkForPlatformsFolder.bind(this),
         this.updatePluginContext.bind(this),
-        checkForAskCli,
       ],
       'deploy:platform': [this.deploy.bind(this)],
     };
   }
 
+  /**
+   * Add platform-specific CLI options, including flags and args.
+   * @param context - Context providing an access point to command flags and args.
+   */
   addCliOptions(context: InstallContext) {
     if (context.command !== 'deploy:platform') {
       return;
@@ -67,6 +71,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
   }
 
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
+   */
   checkForPlatform(context: ParseContextDeployPlatform) {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.id) {
@@ -75,7 +83,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   }
 
   /**
-   * Updates the current context with plugin-specific values from --skill-id and --ask-profile.
+   * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext() {
     if (this.$context.command !== 'deploy:platform') {
@@ -86,6 +94,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     this.$context.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
+  /**
+   * Checks if the platform folder for the current plugin exists.
+   */
   checkForPlatformsFolder() {
     if (!existsSync(getPlatformPath())) {
       throw new JovoCliError(
@@ -96,6 +107,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
   }
 
+  /**
+   * Deploys platform-specific models to the Alexa Skills Console.
+   */
   async deploy() {
     const jovo: JovoCli = JovoCli.getInstance();
     const deployTask: Task = new Task(
@@ -242,6 +256,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
   }
 
+  /**
+   * Creates an empty ask config file.
+   */
   createEmptyAskConfig() {
     const config = _get(DefaultFiles, '[".ask"]["ask-states.json"]');
     writeFileSync(getAskConfigPath(), config);
