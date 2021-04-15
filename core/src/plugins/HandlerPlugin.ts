@@ -5,7 +5,13 @@ import { App } from '../App';
 import { ComponentNotFoundError } from '../errors/ComponentNotFoundError';
 import { HandlerNotFoundError } from '../errors/HandlerNotFoundError';
 import { HandleRequest } from '../HandleRequest';
-import { BaseComponent, ComponentConstructor, DeepPartial, ExtensibleConfig } from '../index';
+import {
+  BaseComponent,
+  ComponentConstructor,
+  DeepPartial,
+  ExtensibleConfig,
+  PickWhere,
+} from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';
 
@@ -53,7 +59,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
   }
 
   mount(handleRequest: HandleRequest): Promise<void> | void {
-    handleRequest.middlewareCollection.get('dialog.logic')?.use(this.handle);
+    handleRequest.middlewareCollection.use('dialog.logic', this.handle);
     return undefined;
   }
 
@@ -79,7 +85,8 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
         componentInstance.constructor.name,
       );
     }
-    await componentInstance[jovo.$route.handlerKey as keyof BaseComponent]();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (componentInstance as any)[jovo.$route.handlerKey]();
   };
 
   private mixin(constructor: typeof App | typeof HandleRequest) {

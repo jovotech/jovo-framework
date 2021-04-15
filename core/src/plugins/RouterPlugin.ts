@@ -1,14 +1,15 @@
-import { inspect } from 'util';
 import { BaseComponent, RegisteredComponents } from '../BaseComponent';
-import { InternalIntent } from '../enums';
+import { InternalIntent, InternalSessionProperty } from '../enums';
+import { ComponentNotFoundError } from '../errors/ComponentNotFoundError';
 import { MatchingComponentNotFoundError } from '../errors/MatchingComponentNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
+import { RegisteredComponentMetadata } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
 import { findAsync } from '../utilities';
-import { RegisteredComponentMetadata } from '../metadata/ComponentMetadata';
+import _get from 'lodash.get';
 
 export interface RouterPluginConfig extends PluginConfig {}
 
@@ -38,11 +39,11 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   mount(handleRequest: HandleRequest): Promise<void> | void {
-    handleRequest.middlewareCollection.use('dialog.logic', this.handle);
+    handleRequest.middlewareCollection.use('before.dialog.logic', this.setRoute);
     return;
   }
 
-  private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
+  private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
     // TODO determine order
     const intentName =
       jovo.$nlu.intent?.name ||
@@ -59,8 +60,10 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
 
     let routeMatches: RouteMatch[] = [];
     if (!jovo.state) {
+      // try to find intent in global handlers
       routeMatches = await this.getGlobalRouteMatches(intentName, handleRequest, jovo);
       if (!routeMatches.length) {
+        // if none were found, try to find a global Unhandled-handler
         routeMatches = await this.getGlobalRouteMatches(
           InternalIntent.Unhandled,
           handleRequest,
@@ -68,14 +71,31 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         );
       }
     } else {
-      const component = handleRequest.components[jovo.state];
-
-      if (!component) {
-        // TODO: improve
-        throw new Error(`Can't find component for this state: ${jovo.state}`);
+      // get the related component and find the related handler within
+      const latestStateStack = jovo.state[jovo.state.length - 1];
+      const componentPath = latestStateStack.componentPath.replace(/[.]/g, '.components.');
+      const relatedComponentMetadata = _get(handleRequest.components, componentPath);
+      if (!relatedComponentMetadata) {
+        // TODO implement error
+        throw new ComponentNotFoundError('');
       }
+      const relatedHandlerMetadata = MetadataStorage.getInstance()
+        .getHandlerMetadataOfComponent(relatedComponentMetadata.target)
+        .filter(
+          (metadata) =>
+            metadata.intents.includes(intentName) &&
+            (!metadata.options?.platforms?.length ||
+              metadata.options?.platforms?.includes(jovo.$platform.constructor.name)),
+        );
 
-      routeMatches = await this.getComponentRouteMatches(intentName, component, jovo);
+      if (relatedHandlerMetadata.length) {
+        routeMatches.push(
+          ...relatedHandlerMetadata.map((metadata) => ({
+            path: latestStateStack.componentPath.split('.'),
+            metadata,
+          })),
+        );
+      }
     }
 
     // console.log('Matches', inspect(routeMatches, { depth: 2, compact: true }));
@@ -96,6 +116,14 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     if (!jovo.$route) {
       throw new MatchingComponentNotFoundError();
     }
+
+    if (!jovo.state) {
+      jovo.$session.$data[InternalSessionProperty.State] = [
+        {
+          componentPath: jovo.$route.path.join('.'),
+        },
+      ];
+    }
   };
 
   private async getGlobalRouteMatches(
@@ -104,33 +132,6 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     jovo: Jovo,
   ): Promise<RouteMatch[]> {
     return this.collectGlobalRouteMatchesOfComponents(handleRequest.components, intentName, jovo);
-  }
-
-  private async getComponentRouteMatches(
-    intentName: string,
-    component: RegisteredComponentMetadata,
-    jovo: Jovo,
-  ): Promise<RouteMatch[]> {
-    const metadata = MetadataStorage.getInstance()
-      .getHandlerMetadataOfComponent(component.target)
-      .filter(
-        (metadata) =>
-          metadata.intents.find((intent) => intent === intentName) &&
-          (!metadata.options?.platforms?.length ||
-            metadata.options?.platforms?.includes(jovo.$platform.constructor.name)),
-      );
-
-    //
-    if (metadata.length === 0) {
-      // TODO: error handling
-      throw new Error('No match');
-    }
-    return [
-      {
-        path: [component.target.name],
-        metadata: metadata[0],
-      },
-    ];
   }
 
   private async collectGlobalRouteMatchesOfComponents(

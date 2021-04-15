@@ -1,4 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { State } from '../../../jovo-output/output-googleassistantlegacy';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
@@ -11,11 +12,13 @@ import {
   HandlerNotFoundError,
   PickWhere,
   Server,
+  StateStack,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
+import _get from 'lodash.get';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
@@ -108,31 +111,43 @@ export abstract class Jovo<
     constructorOrName: ComponentConstructor | string,
     handlerKey?: string,
   ): Promise<this> {
-    const key = handlerKey || InternalIntent.Start;
-
+    handlerKey = handlerKey || InternalIntent.Start;
     const componentName =
       typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    // Max: I think this will cause issues if a component is passed that is not in the root but nested.
-    // A component could exist in root and as a child in another component, that has to be taken into account as well.
-    const component = this.$handleRequest.components[componentName];
-    if (!component) {
-      throw new ComponentNotFoundError(`Component ${componentName} not found.`);
-    }
 
+    const routePath = this.$route?.path || [];
+
+    const currentComponentPath = routePath.join('.components.');
+    const currentComponentMetadata = _get(this.$handleRequest.components, currentComponentPath);
+    const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
+    const rootComponentMetadata = this.$handleRequest.components[componentName];
+
+    const componentMetadata = childComponentMetadata || rootComponentMetadata;
+    const path = childComponentMetadata ? [...routePath, componentName] : [componentName];
+    if (!componentMetadata) {
+      // TODO implement error
+      throw new ComponentNotFoundError('');
+    }
     const jovoReference =
       (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
-
-    const componentInstance = new (component.target as ComponentConstructor)(
+    const componentInstance = new (componentMetadata.target as ComponentConstructor)(
       jovoReference,
-      component.options?.config,
+      componentMetadata.options?.config,
     );
-    if (!componentInstance[key as keyof BaseComponent]) {
-      throw new HandlerNotFoundError(key.toString(), componentName);
+    if (!componentInstance[handlerKey as keyof BaseComponent]) {
+      throw new HandlerNotFoundError(handlerKey.toString(), componentName);
     }
-    await componentInstance[key as keyof BaseComponent]();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (componentInstance as any)[handlerKey]();
 
-    // TODO: move somewhere else
-    this.$session.$data[InternalSessionProperty.State] = componentInstance.constructor.name;
+    this.$route = {
+      path,
+      handlerKey,
+    };
+    // Will always be set by the RouterPlugin before and has a minimum length of 1
+    const stateStack = this.state as StateStack;
+    // replace item on top
+    stateStack[stateStack.length - 1] = { componentPath: path.join('.') };
     return this;
   }
 

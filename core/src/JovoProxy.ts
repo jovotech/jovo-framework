@@ -10,12 +10,12 @@ export class JovoProxy extends Jovo {
   // Without, mutations of `this` would not affect `this.jovo`.
   private overwritePropertiesToPropagateChangesToJovo() {
     // TODO: check if functions should be ignored
+    // Getters & Setters are not enumerable like that, therefore changes for these cannot be proxied to `Jovo`.
     for (const key in this.jovo) {
       if (
         key !== 'jovo' &&
         this.jovo.hasOwnProperty(key) &&
-        typeof this.jovo[key as keyof Jovo] !== 'function' &&
-        this[key as keyof Jovo]
+        typeof this.jovo[key as keyof Jovo] !== 'function'
       ) {
         Object.defineProperty(this, key, {
           get() {

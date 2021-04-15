@@ -8,9 +8,15 @@ export interface Data {
 
 export interface RequestData extends Data {}
 
+export interface StateStackItem {
+  [key: string]: unknown;
+  componentPath: string;
+}
+export type StateStack = StateStackItem[];
+
 export interface SessionData extends Data {
   // TODO set correct type
-  [InternalSessionProperty.State]?: any;
+  [InternalSessionProperty.State]?: StateStack;
 }
 
 export interface UserData extends Data {}
