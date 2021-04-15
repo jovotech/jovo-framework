@@ -20,7 +20,7 @@ const PATH_TO_DB_DIR = './test/db';
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
 let t: TestSuite;
-jest.setTimeout(550);
+jest.setTimeout(500);
 const delay = (ms: number) => {
   return new Promise((r) => setTimeout(r, ms));
 };
@@ -52,7 +52,7 @@ afterAll(async () => {
    * but to always keep the db folder clear,
    * we set a small delay (500ms) before we clear the folder.
    */
-  await delay(500);
+  await delay(400);
   clearDbFolder();
 });
 
@@ -123,7 +123,6 @@ describe('test request types', () => {
         const route = this.getRoute();
         expect(route.type).toEqual('INTENT');
         expect(route.intent).toEqual('HelloWorldIntent');
-        console.log(this.getUserId());
         this.$session.$data.toto = 1;
         this.$user.$data.toto = 1;
         done();
