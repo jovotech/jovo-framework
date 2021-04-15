@@ -221,7 +221,7 @@ export class LexRequest implements JovoRequest {
       const input = {
         name: slot,
         value: _get(this, 'currentIntent.slotDetails.'+slot+'.originalValue'),
-        key: slots[slot]
+        id: slots[slot]
       };
       // @ts-ignore
       inputs[slot] = input;
