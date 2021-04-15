@@ -72,12 +72,14 @@ export class LexCore implements Plugin {
     if (tell) {
       _set(response, 'dialogAction', {
         type: 'Close',
-        fulfillmentState: 'PlainText',
+        fulfillmentState: 'Fulfilled',
         message:{
           contentType: 'PlainText',
           content: tell.speech
         }
       });
+      //conversation is over, we can clear session attributes
+      _set(response, 'sessionAttributes', {});
     }
     const ask = output.ask;
     if (ask) {
