@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { State } from '../../../jovo-output/output-googleassistantlegacy';
+import _get from 'lodash.get';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
@@ -15,10 +15,11 @@ import {
   StateStack,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
+import { JovoProxy } from './JovoProxy';
 import { JovoRequest } from './JovoRequest';
+import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
-import _get from 'lodash.get';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
@@ -111,25 +112,67 @@ export abstract class Jovo<
     constructorOrName: ComponentConstructor | string,
     handlerKey?: string,
   ): Promise<this> {
-    handlerKey = handlerKey || InternalIntent.Start;
+    await this.$runComponentHandler(constructorOrName, handlerKey);
+    // Will always be set by the RouterPlugin before and has a minimum length of 1
+    const stateStack = this.state as StateStack;
+    // replace item on top
+    // TODO: Maybe additional properties have to be passed for $delegate, check that!
+    stateStack[stateStack.length - 1] = { componentPath: (this.$route?.path || []).join('.') };
+    return this;
+  }
+
+  async $delegate<COMPONENT extends BaseComponent>(
+    constructor: ComponentConstructor<COMPONENT>,
+    options: DelegateOptions,
+  ): Promise<void>;
+  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
+    options: DelegateOptions,
+  ): Promise<void> {
+    await this.$runComponentHandler(constructorOrName);
+    // TODO implement
+  }
+
+  $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): void {
+    // TODO implement
+    return;
+  }
+
+  protected $findComponent<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrName: ComponentConstructor<COMPONENT> | string,
+  ): RegisteredComponentMetadata<COMPONENT> | undefined {
     const componentName =
       typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-
-    const routePath = this.$route?.path || [];
-
-    const currentComponentPath = routePath.join('.components.');
+    const currentComponentPath = (this.$route?.path || []).join('.components.');
     const currentComponentMetadata = _get(this.$handleRequest.components, currentComponentPath);
     const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
     const rootComponentMetadata = this.$handleRequest.components[componentName];
+    return childComponentMetadata || rootComponentMetadata;
+  }
 
-    const componentMetadata = childComponentMetadata || rootComponentMetadata;
-    const path = childComponentMetadata ? [...routePath, componentName] : [componentName];
+  protected async $runComponentHandler<
+    COMPONENT extends BaseComponent,
+    HANDLER extends Exclude<
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      keyof PickWhere<COMPONENT, Function>,
+      keyof BaseComponent
+    >
+  >(
+    constructorOrName: ComponentConstructor<COMPONENT> | string,
+    handlerKey: HANDLER | string = InternalIntent.Start,
+  ): Promise<void> {
+    const componentName =
+      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
+    const componentMetadata = this.$findComponent(componentName);
     if (!componentMetadata) {
       // TODO implement error
       throw new ComponentNotFoundError('');
     }
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
     const jovoReference =
-      (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
+      this.constructor.name === 'Jovo' ? this : ((this as unknown) as JovoProxy).jovo;
     const componentInstance = new (componentMetadata.target as ComponentConstructor)(
       jovoReference,
       componentMetadata.options?.config,
@@ -142,22 +185,7 @@ export abstract class Jovo<
 
     this.$route = {
       path,
-      handlerKey,
+      handlerKey: handlerKey.toString(),
     };
-    // Will always be set by the RouterPlugin before and has a minimum length of 1
-    const stateStack = this.state as StateStack;
-    // replace item on top
-    stateStack[stateStack.length - 1] = { componentPath: path.join('.') };
-    return this;
-  }
-
-  $delegate<COMPONENT extends BaseComponent>(
-    constructor: ComponentConstructor<COMPONENT>,
-    options: DelegateOptions,
-  ): this;
-  $delegate(componentName: string, options: DelegateOptions): this;
-  $delegate(constructorOrName: ComponentConstructor | string, options: DelegateOptions): this {
-    // TODO implement
-    return this;
   }
 }
