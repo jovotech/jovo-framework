@@ -173,9 +173,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           const isEmptyObject =
             typeof jovo[key as keyof Jovo] === 'object' &&
             !Array.isArray(jovo[key as keyof Jovo]) &&
-            !Object.keys(jovo[key as keyof Jovo]).length;
+            !Object.keys(jovo[key as keyof Jovo] || {}).length;
           const isEmptyArray =
-            Array.isArray(jovo[key as keyof Jovo]) && !jovo[key as keyof Jovo].length;
+            Array.isArray(jovo[key as keyof Jovo]) &&
+            !((jovo[key as keyof Jovo] as unknown[]) || []).length;
           if (
             !jovo.hasOwnProperty(key) ||
             ['$app', '$handleRequest', '$platform'].includes(key) ||

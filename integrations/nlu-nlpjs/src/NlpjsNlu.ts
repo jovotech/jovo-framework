@@ -117,8 +117,9 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
 
     // forEach should not be used because block is async
     for (let i = 0, len = files.length; i < len; i++) {
-      const extension = files[i].substr(files[i].lastIndexOf('.') + 1);
-      const locale = files[i].substr(0, files[i].lastIndexOf('.'));
+      const lastDotIndex = files[i].lastIndexOf('.');
+      const extension = files[i].substr(lastDotIndex + 1);
+      const locale = files[i].substr(0, lastDotIndex);
       const filePath = join(dir, files[i]);
 
       let jovoModelData;
