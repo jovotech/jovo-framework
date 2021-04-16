@@ -38,7 +38,9 @@ export interface JovoSession {
   $data: SessionData;
 }
 
-export interface DelegateOptions {}
+export interface DelegateOptions<EVENTS extends string = string> {
+  resolveTo: Record<EVENTS, string>;
+}
 
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
@@ -106,19 +108,25 @@ export abstract class Jovo<
       keyof PickWhere<COMPONENT, Function>,
       keyof BaseComponent
     >
-  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<this>;
-  async $redirect(componentName: string, handlerKey?: string): Promise<this>;
+  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<void>;
+  async $redirect(componentName: string, handlerKey?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handlerKey?: string,
-  ): Promise<this> {
-    await this.$runComponentHandler(constructorOrName, handlerKey);
-    // Will always be set by the RouterPlugin before and has a minimum length of 1
+  ): Promise<void> {
+    const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.state as StateStack;
-    // replace item on top
-    // TODO: Maybe additional properties have to be passed for $delegate, check that!
-    stateStack[stateStack.length - 1] = { componentPath: (this.$route?.path || []).join('.') };
-    return this;
+    stateStack[stateStack.length - 1] = {
+      ...stateStack[stateStack.length - 1],
+      componentPath: this.$getComponentPath(componentMetadata).join('.'),
+    };
+    await this.$runComponentHandler(componentMetadata, handlerKey);
+  }
+
+  protected $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
   }
 
   async $delegate<COMPONENT extends BaseComponent>(
@@ -130,16 +138,36 @@ export abstract class Jovo<
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
   ): Promise<void> {
-    await this.$runComponentHandler(constructorOrName);
-    // TODO implement
+    const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
+    const stateStack = this.state as StateStack;
+    stateStack.push({
+      ...options,
+      componentPath: this.$getComponentPath(componentMetadata).join('.'),
+    });
+    await this.$runComponentHandler(componentMetadata);
   }
 
-  $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): void {
-    // TODO implement
+  async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
+    const stateStack = this.state as StateStack;
+    const currentStateStackItem = stateStack[stateStack.length - 1];
+    const previousStateStackItem = stateStack[stateStack.length - 2];
+    if (!currentStateStackItem?.resolveTo || !previousStateStackItem) {
+      return;
+    }
+    const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
+    const componentPath = previousStateStackItem.componentPath.replace(/[.]/g, '.components.');
+    const componentMetadata = _get(this.$handleRequest.components, componentPath);
+    if (!componentMetadata) {
+      // TODO implement
+      throw new ComponentNotFoundError('');
+    }
+    stateStack.pop();
+    await this.$runComponentHandler(componentMetadata, resolvedHandlerKey, ...eventArgs);
+
     return;
   }
 
-  protected $findComponent<COMPONENT extends BaseComponent = BaseComponent>(
+  protected $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
     constructorOrName: ComponentConstructor<COMPONENT> | string,
   ): RegisteredComponentMetadata<COMPONENT> | undefined {
     const componentName =
@@ -151,24 +179,34 @@ export abstract class Jovo<
     return childComponentMetadata || rootComponentMetadata;
   }
 
+  protected $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrName: ComponentConstructor<COMPONENT> | string,
+  ): RegisteredComponentMetadata<COMPONENT> {
+    const componentName =
+      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
+    const metadata = this.$getComponentMetadata(componentName);
+    if (!metadata) {
+      // TODO implement error
+      throw new ComponentNotFoundError(componentName);
+    }
+    return metadata;
+  }
+
   protected async $runComponentHandler<
     COMPONENT extends BaseComponent,
     HANDLER extends Exclude<
       // eslint-disable-next-line @typescript-eslint/ban-types
       keyof PickWhere<COMPONENT, Function>,
       keyof BaseComponent
-    >
+    >,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ARGS extends any[] = any[]
   >(
-    constructorOrName: ComponentConstructor<COMPONENT> | string,
+    componentMetadata: RegisteredComponentMetadata<COMPONENT>,
     handlerKey: HANDLER | string = InternalIntent.Start,
+    ...callArgs: ARGS
   ): Promise<void> {
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    const componentMetadata = this.$findComponent(componentName);
-    if (!componentMetadata) {
-      // TODO implement error
-      throw new ComponentNotFoundError('');
-    }
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
     const isRootComponent = !!this.$handleRequest.components[componentName];
     const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
     const jovoReference =
@@ -180,12 +218,13 @@ export abstract class Jovo<
     if (!componentInstance[handlerKey as keyof BaseComponent]) {
       throw new HandlerNotFoundError(handlerKey.toString(), componentName);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handlerKey]();
 
     this.$route = {
       path,
       handlerKey: handlerKey.toString(),
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (componentInstance as any)[handlerKey](...callArgs);
   }
 }
