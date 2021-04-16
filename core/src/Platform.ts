@@ -13,6 +13,7 @@ import {
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
+import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
 
 export type PlatformBaseMiddlewares = [
@@ -50,6 +51,7 @@ export abstract class Platform<
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
+  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE>;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 

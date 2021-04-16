@@ -37,6 +37,7 @@ export * from './HandleRequest';
 export * from './Jovo';
 export * from './JovoError';
 export * from './JovoRequest';
+export * from './JovoUser';
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './Platform';

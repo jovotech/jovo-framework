@@ -17,6 +17,7 @@ import {
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoProxy } from './JovoProxy';
 import { JovoRequest } from './JovoRequest';
+import { JovoUser } from './JovoUser';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
@@ -57,6 +58,7 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
+  $user?: JovoUser<REQUEST, RESPONSE>;
 
   constructor(
     readonly $app: App,
