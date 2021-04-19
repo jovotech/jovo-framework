@@ -92,10 +92,6 @@ export abstract class Jovo<
     return this.$session.$state;
   }
 
-  set $state(stateStack: StateStack | undefined) {
-    this.$session.$state = stateStack;
-  }
-
   get $subState(): string | undefined {
     if (!this.$state?.length) return;
     return this.$state[this.$state.length - 1]?.subState;

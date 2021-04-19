@@ -124,7 +124,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     }
 
     if (!jovo.$state) {
-      jovo.$state = [
+      jovo.$session.$state = [
         {
           componentPath: jovo.$route.path.join('.'),
         },
