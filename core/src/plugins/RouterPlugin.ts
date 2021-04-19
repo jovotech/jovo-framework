@@ -1,15 +1,14 @@
+import _get from 'lodash.get';
 import { BaseComponent, RegisteredComponents } from '../BaseComponent';
-import { InternalIntent, InternalSessionProperty } from '../enums';
+import { InternalIntent } from '../enums';
 import { ComponentNotFoundError } from '../errors/ComponentNotFoundError';
 import { MatchingComponentNotFoundError } from '../errors/MatchingComponentNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
-import { RegisteredComponentMetadata } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
 import { findAsync } from '../utilities';
-import _get from 'lodash.get';
 
 export interface RouterPluginConfig extends PluginConfig {}
 
@@ -26,6 +25,7 @@ declare module '../Extensible' {
 export interface JovoRoute {
   path: string[];
   handlerKey: keyof BaseComponent | string;
+  subState?: string;
 }
 
 export interface RouteMatch {
@@ -56,10 +56,11 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     }
 
     // console.log('Components', inspect(handleRequest.components, { depth: 2, compact: true }));
-    // console.log('State', inspect(jovo.state, { depth: 2, compact: true }));
+    // console.log('State', inspect(jovo.$state, { depth: 2, compact: true }));
 
+    let subState = undefined;
     let routeMatches: RouteMatch[] = [];
-    if (!jovo.state) {
+    if (!jovo.$state) {
       // try to find intent in global handlers
       routeMatches = await this.getGlobalRouteMatches(intentName, handleRequest, jovo);
       if (!routeMatches.length) {
@@ -72,7 +73,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       }
     } else {
       // get the related component and find the related handler within
-      const latestStateStack = jovo.state[jovo.state.length - 1];
+      const latestStateStack = jovo.$state[jovo.$state.length - 1];
+      subState = latestStateStack.subState;
       const componentPath = latestStateStack.componentPath.replace(/[.]/g, '.components.');
       const relatedComponentMetadata = _get(handleRequest.components, componentPath);
       if (!relatedComponentMetadata) {
@@ -83,6 +85,9 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         .getHandlerMetadataOfComponent(relatedComponentMetadata.target)
         .filter(
           (metadata) =>
+            (latestStateStack.subState
+              ? metadata.options?.subState === latestStateStack.subState
+              : true) &&
             metadata.intents.includes(intentName) &&
             (!metadata.options?.platforms?.length ||
               metadata.options?.platforms?.includes(jovo.$platform.constructor.name)),
@@ -108,6 +113,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         jovo.$route = {
           path: match.path,
           handlerKey: match.metadata.propertyKey,
+          subState,
         };
       }
     }
@@ -117,8 +123,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       throw new MatchingComponentNotFoundError();
     }
 
-    if (!jovo.state) {
-      jovo.$session.$data[InternalSessionProperty.State] = [
+    if (!jovo.$state) {
+      jovo.$state = [
         {
           componentPath: jovo.$route.path.join('.'),
         },

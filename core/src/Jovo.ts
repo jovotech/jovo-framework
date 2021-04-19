@@ -51,7 +51,6 @@ export abstract class Jovo<
   $data: RequestData;
   $entities: EntityMap;
   $nlu: NluData;
-  // TODO determine whether it should always be an array and maybe readonly
   $output: OutputTemplate | OutputTemplate[];
   $request: REQUEST;
   $response?: RESPONSE | RESPONSE[];
@@ -90,8 +89,25 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get state(): SessionData[InternalSessionProperty.State] {
+  get $state(): SessionData[InternalSessionProperty.State] {
     return this.$session.$data[InternalSessionProperty.State];
+  }
+
+  set $state(stateStack: StateStack | undefined) {
+    this.$session.$data[InternalSessionProperty.State] = stateStack;
+  }
+
+  get $subState(): string | undefined {
+    if (!this.$state?.length) return;
+    return this.$state[this.$state.length - 1]?.subState;
+  }
+
+  set $subState(value: string | undefined) {
+    if (!this.$state?.length) return;
+    this.$state[this.$state.length - 1].subState = value;
+    if (this.$route) {
+      this.$route.subState = value;
+    }
   }
 
   // TODO determine async/ not async, maybe call platform-specific handler
@@ -117,10 +133,14 @@ export abstract class Jovo<
     handlerKey?: string,
   ): Promise<void> {
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
-    const stateStack = this.state as StateStack;
+
+    const stateStack = this.$state as StateStack;
+    // replace last item in stack
     stateStack[stateStack.length - 1] = {
       ...stateStack[stateStack.length - 1],
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
+      // TODO fully determine whether subState should be removed by $redirect
+      subState: undefined,
     };
     await this.$runComponentHandler(componentMetadata, handlerKey);
   }
@@ -141,7 +161,7 @@ export abstract class Jovo<
     options: DelegateOptions,
   ): Promise<void> {
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
-    const stateStack = this.state as StateStack;
+    const stateStack = this.$state as StateStack;
     stateStack.push({
       ...options,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
@@ -149,8 +169,9 @@ export abstract class Jovo<
     await this.$runComponentHandler(componentMetadata);
   }
 
+  // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
   async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
-    const stateStack = this.state as StateStack;
+    const stateStack = this.$state as StateStack;
     const currentStateStackItem = stateStack[stateStack.length - 1];
     const previousStateStackItem = stateStack[stateStack.length - 2];
     if (!currentStateStackItem?.resolveTo || !previousStateStackItem) {
@@ -165,7 +186,6 @@ export abstract class Jovo<
     }
     stateStack.pop();
     await this.$runComponentHandler(componentMetadata, resolvedHandlerKey, ...eventArgs);
-
     return;
   }
 
