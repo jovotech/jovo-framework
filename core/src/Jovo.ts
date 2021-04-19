@@ -36,7 +36,9 @@ export interface JovoRequestType {
 }
 
 export interface JovoSession {
+  [key: string]: unknown;
   $data: SessionData;
+  $state?: StateStack;
 }
 
 export interface DelegateOptions<EVENTS extends string = string> {
@@ -68,11 +70,8 @@ export abstract class Jovo<
     this.$data = {};
     this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    this.$session = {
-      $data: this.$request.getSessionData() || {},
-    };
+    this.$session = this.$request.getSession() || { $data: {} };
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
-
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
   }
@@ -90,11 +89,11 @@ export abstract class Jovo<
   }
 
   get $state(): SessionData[InternalSessionProperty.State] {
-    return this.$session.$data[InternalSessionProperty.State];
+    return this.$session.$state;
   }
 
   set $state(stateStack: StateStack | undefined) {
-    this.$session.$data[InternalSessionProperty.State] = stateStack;
+    this.$session.$state = stateStack;
   }
 
   get $subState(): string | undefined {

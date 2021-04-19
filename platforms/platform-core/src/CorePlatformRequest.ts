@@ -1,4 +1,4 @@
-import { EntityMap, JovoRequest, JovoRequestType, SessionData } from '@jovotech/core';
+import { EntityMap, JovoRequest, JovoRequestType, JovoSession, SessionData } from '@jovotech/core';
 import { Context, Request, RequestBodyText } from './interfaces';
 
 export interface CorePlatformRequestJSON {
@@ -34,7 +34,7 @@ export class CorePlatformRequest extends JovoRequest implements CorePlatformRequ
     return this.request?.type ? { type: this.request.type } : undefined;
   }
 
-  getSessionData(): SessionData | undefined {
+  getSession(): JovoSession | undefined {
     return this.context?.session?.data;
   }
 }

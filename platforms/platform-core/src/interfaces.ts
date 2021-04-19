@@ -1,4 +1,4 @@
-import { Entity, RequestTypeLike } from '@jovotech/core';
+import { Entity, JovoSession, RequestTypeLike } from '@jovotech/core';
 
 export enum RequestType {
   Launch = 'LAUNCH',
@@ -59,7 +59,7 @@ export type RequestBody = RequestBodyAudio | RequestBodyText;
 export interface Session {
   id: string;
   new: boolean;
-  data?: Record<string, unknown>;
+  data?: JovoSession;
 }
 
 export interface User {

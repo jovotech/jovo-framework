@@ -3,7 +3,6 @@ import _merge from 'lodash.merge';
 import {
   App,
   AppBaseMiddleware,
-  AppBaseMiddlewares,
   ArrayElement,
   Constructor,
   HandleRequest,
@@ -57,16 +56,13 @@ export abstract class Platform<
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isResponseRelated(response: RESPONSE | Record<string, any>): boolean;
-
-  // TODO: Determine whether this should be moved into Jovo. That would require changes in BaseComponent and BaseOutput.
-  abstract prepareResponse(
+  abstract finalizeResponse(
     response: RESPONSE | RESPONSE[],
     jovo: Jovo,
   ): RESPONSE | RESPONSE[] | Promise<RESPONSE> | Promise<RESPONSE[]>;
-
-  abstract setResponseSessionData(response: RESPONSE | RESPONSE[], jovo: Jovo): this;
 
   initializeMiddlewareCollection(): MiddlewareCollection<PlatformBaseMiddlewares> {
     return new MiddlewareCollection<PlatformBaseMiddlewares>(...BASE_PLATFORM_MIDDLEWARES);

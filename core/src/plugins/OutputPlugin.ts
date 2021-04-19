@@ -28,6 +28,6 @@ export class OutputPlugin extends Plugin<OutputPluginConfig> {
     const converter = new OutputTemplateConverter(jovo.$platform.outputTemplateConverterStrategy);
     // TODO: catch possible errors
     const response = await converter.toResponse(jovo.$output);
-    jovo.$response = await jovo.$platform.prepareResponse(response, jovo);
+    jovo.$response = await jovo.$platform.finalizeResponse(response, jovo);
   };
 }
