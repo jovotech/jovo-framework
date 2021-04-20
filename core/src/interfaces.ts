@@ -1,4 +1,3 @@
-import { InternalSessionProperty } from './enums';
 import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
 
@@ -8,18 +7,7 @@ export interface Data {
 
 export interface RequestData extends Data {}
 
-export interface StateStackItem {
-  [key: string]: unknown;
-  componentPath: string;
-  subState?: string;
-  resolveTo?: Record<string, string>;
-}
-export type StateStack = StateStackItem[];
-
-export interface SessionData extends Data {
-  // TODO set correct type
-  [InternalSessionProperty.State]?: StateStack;
-}
+export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
 

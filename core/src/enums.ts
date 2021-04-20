@@ -18,10 +18,6 @@ export enum RequestType {
 
 export type RequestTypeLike = RequestType | `${RequestType}`;
 
-export enum InternalSessionProperty {
-  State = '_JOVO_STATE_',
-}
-
 export enum InternalIntent {
   Start = 'START',
   Unhandled = 'UNHANDLED',

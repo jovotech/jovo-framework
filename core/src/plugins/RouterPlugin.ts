@@ -1,8 +1,6 @@
-import _get from 'lodash.get';
 import { BaseComponent, RegisteredComponents } from '../BaseComponent';
 import { InternalIntent } from '../enums';
-import { ComponentNotFoundError } from '../errors/ComponentNotFoundError';
-import { MatchingComponentNotFoundError } from '../errors/MatchingComponentNotFoundError';
+import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
@@ -75,12 +73,9 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       // get the related component and find the related handler within
       const latestStateStack = jovo.$state[jovo.$state.length - 1];
       subState = latestStateStack.subState;
-      const componentPath = latestStateStack.componentPath.replace(/[.]/g, '.components.');
-      const relatedComponentMetadata = _get(handleRequest.components, componentPath);
-      if (!relatedComponentMetadata) {
-        // TODO implement error
-        throw new ComponentNotFoundError('');
-      }
+      const relatedComponentMetadata = jovo.$getComponentMetadataOrFail(
+        latestStateStack.componentPath.split('.'),
+      );
       const relatedHandlerMetadata = MetadataStorage.getInstance()
         .getHandlerMetadataOfComponent(relatedComponentMetadata.target)
         .filter(
@@ -120,7 +115,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     // console.log('Route', jovo.$route);
 
     if (!jovo.$route) {
-      throw new MatchingComponentNotFoundError();
+      throw new MatchingRouteNotFoundError(intentName, jovo.$state, jovo.$request);
     }
 
     if (!jovo.$state) {

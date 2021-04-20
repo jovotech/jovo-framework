@@ -3,7 +3,7 @@ import _get from 'lodash.get';
 import { App, AppConfig } from './App';
 import { BaseComponent } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { InternalIntent, InternalSessionProperty, RequestType, RequestTypeLike } from './enums';
+import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   ComponentConstructor,
@@ -14,8 +14,7 @@ import {
   Server,
   StateStack,
 } from './index';
-import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
-import { JovoProxy } from './JovoProxy';
+import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
@@ -84,7 +83,7 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get $state(): SessionData[InternalSessionProperty.State] {
+  get $state(): JovoSession['$state'] {
     return this.$session.$state;
   }
 
@@ -136,12 +135,6 @@ export abstract class Jovo<
     await this.$runComponentHandler(componentMetadata, handlerKey);
   }
 
-  protected $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
-    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
-    const isRootComponent = !!this.$handleRequest.components[componentName];
-    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
-  }
-
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions,
@@ -169,43 +162,59 @@ export abstract class Jovo<
       return;
     }
     const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
-    const componentPath = previousStateStackItem.componentPath.replace(/[.]/g, '.components.');
-    const componentMetadata = _get(this.$handleRequest.components, componentPath);
-    if (!componentMetadata) {
-      // TODO implement
-      throw new ComponentNotFoundError('');
-    }
+    const componentPath = previousStateStackItem.componentPath.split('.');
+    const componentMetadata = this.$getComponentMetadataOrFail(componentPath);
     stateStack.pop();
     await this.$runComponentHandler(componentMetadata, resolvedHandlerKey, ...eventArgs);
     return;
   }
 
-  protected $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
-    constructorOrName: ComponentConstructor<COMPONENT> | string,
-  ): RegisteredComponentMetadata<COMPONENT> | undefined {
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    const currentComponentPath = (this.$route?.path || []).join('.components.');
-    const currentComponentMetadata = _get(this.$handleRequest.components, currentComponentPath);
-    const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
-    const rootComponentMetadata = this.$handleRequest.components[componentName];
-    return childComponentMetadata || rootComponentMetadata;
+  $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
   }
 
-  protected $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
-    constructorOrName: ComponentConstructor<COMPONENT> | string,
+  $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
+  ): RegisteredComponentMetadata<COMPONENT> | undefined {
+    if (Array.isArray(constructorOrNameOrPath)) {
+      const componentPath = constructorOrNameOrPath.join('.components.');
+      return _get(this.$handleRequest.components, componentPath);
+    } else {
+      const componentName =
+        typeof constructorOrNameOrPath === 'string'
+          ? constructorOrNameOrPath
+          : constructorOrNameOrPath.name;
+      const currentComponentMetadata = this.$getComponentMetadata(this.$route?.path || []);
+      const rootComponentMetadata = this.$handleRequest.components[componentName];
+      const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
+      return childComponentMetadata || rootComponentMetadata;
+    }
+  }
+
+  $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
   ): RegisteredComponentMetadata<COMPONENT> {
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    const metadata = this.$getComponentMetadata(componentName);
+    const metadata = this.$getComponentMetadata(constructorOrNameOrPath);
     if (!metadata) {
       // TODO implement error
-      throw new ComponentNotFoundError(componentName);
+      let path: string[];
+      if (Array.isArray(constructorOrNameOrPath)) {
+        path = constructorOrNameOrPath;
+      } else {
+        const componentName =
+          typeof constructorOrNameOrPath === 'string'
+            ? constructorOrNameOrPath
+            : constructorOrNameOrPath.name;
+        path = [...(this.$route?.path || []), componentName];
+      }
+      throw new ComponentNotFoundError(path);
     }
     return metadata;
   }
 
-  protected async $runComponentHandler<
+  async $runComponentHandler<
     COMPONENT extends BaseComponent,
     HANDLER extends Exclude<
       // eslint-disable-next-line @typescript-eslint/ban-types
@@ -222,14 +231,13 @@ export abstract class Jovo<
     const componentName = componentMetadata.options?.name || componentMetadata.target.name;
     const isRootComponent = !!this.$handleRequest.components[componentName];
     const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
-    const jovoReference =
-      this.constructor.name === 'Jovo' ? this : ((this as unknown) as JovoProxy).jovo;
+    const jovoReference = (this as { jovo?: Jovo })?.jovo || this;
     const componentInstance = new (componentMetadata.target as ComponentConstructor)(
       jovoReference,
       componentMetadata.options?.config,
     );
     if (!componentInstance[handlerKey as keyof BaseComponent]) {
-      throw new HandlerNotFoundError(handlerKey.toString(), componentName);
+      throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
     }
 
     this.$route = {

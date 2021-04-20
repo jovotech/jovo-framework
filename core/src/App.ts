@@ -108,7 +108,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
       (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
     );
     if (!relatedPlatform) {
-      throw new MatchingPlatformNotFoundError();
+      throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
     handleRequest.$platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);

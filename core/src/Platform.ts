@@ -70,7 +70,7 @@ export abstract class Platform<
 
   install(parent: Extensible) {
     if (!(parent instanceof App)) {
-      throw new InvalidParentError();
+      throw new InvalidParentError(this.constructor.name, App);
     }
   }
 

@@ -1,8 +1,12 @@
 import { JovoError } from '../JovoError';
 
-// TODO: implement
 export class MatchingPlatformNotFoundError extends JovoError {
-  constructor() {
-    super('');
+  constructor(request: Record<string, unknown>) {
+    super({
+      message: 'No registered platform can handle the request.',
+      context: {
+        request,
+      },
+    });
   }
 }
