@@ -204,14 +204,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // Get locales to reverse build from.
     // If --locale is not specified, reverse build from every locale available in the platform folder.
-    const locales: string[] = [];
+    const selectedLocales: string[] = [];
     const platformLocales: string[] = this.getPlatformLocales();
     if (!this.$context.flags.locale) {
-      locales.push(...platformLocales);
+      selectedLocales.push(...platformLocales);
     } else {
+      // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
       for (const locale of this.$context.flags.locale) {
         if (platformLocales.includes(locale)) {
-          locales.push(locale);
+          selectedLocales.push(locale);
         } else {
           throw new JovoCliError(
             `Could not find platform models for locale: ${printHighlight(locale)}`,
@@ -222,8 +223,27 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
+    // Try to resolve the locale according to the locale map provided in this.$config.locales.
+    const buildLocaleMap: { [locale: string]: string } = {};
+    for (const modelLocale in this.$config.locales) {
+      const resolvedLocales: string[] = getResolvedLocales(
+        modelLocale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      );
+
+      for (const selectedLocale of selectedLocales) {
+        if (resolvedLocales.includes(selectedLocale)) {
+          buildLocaleMap[selectedLocale] = modelLocale;
+        } else {
+          buildLocaleMap[selectedLocale] = selectedLocale;
+        }
+      }
+    }
+
     // If Jovo model files for the current locales exist, ask whether to back them up or not.
-    if (jovo.$project!.hasModelFiles(locales) && !this.$context.flags.force) {
+    if (jovo.$project!.hasModelFiles(Object.values(buildLocaleMap)) && !this.$context.flags.force) {
       const answer = await promptOverwriteReverseBuild();
       if (answer.overwrite === ANSWER_CANCEL) {
         return;
@@ -231,7 +251,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       if (answer.overwrite === ANSWER_BACKUP) {
         // Backup old files.
         const backupTask: Task = new Task('Creating backups');
-        for (const locale of locales) {
+        for (const locale of Object.values(buildLocaleMap)) {
           const localeTask: Task = new Task(locale, () => jovo.$project!.backupModel(locale));
           backupTask.add(localeTask);
         }
@@ -239,12 +259,13 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
     const reverseBuildTask: Task = new Task('Reversing model files');
-    for (const locale of locales) {
-      const localeTask: Task = new Task(locale, async () => {
+    for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
+      const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
+      const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
         // Extract platform models, containing platform-specific intents and entities.
-        const platformFiles: NativeFileInformation[] = this.getPlatformModels(locale);
+        const platformFiles: NativeFileInformation[] = this.getPlatformModels(platformLocale);
         const jovoModel: JovoModelGoogle = new JovoModelGoogle();
-        jovoModel.importNative(platformFiles, locale);
+        jovoModel.importNative(platformFiles, modelLocale);
         const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
         if (!nativeData) {
           throw new JovoCliError(
@@ -253,9 +274,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
           );
         }
 
-        nativeData.invocation = this.getPlatformInvocationName(locale);
+        nativeData.invocation = this.getPlatformInvocationName(platformLocale);
 
-        jovo.$project!.saveModel(nativeData, locale);
+        jovo.$project!.saveModel(nativeData, modelLocale);
+        await wait(500);
       });
       reverseBuildTask.add(localeTask);
     }
@@ -463,7 +485,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Sets the default locale for the current Conversational Action.
    */
   setDefaultLocale() {
-    // Set default locale.
     const resolvedLocales: SupportedLocalesType[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
         locales.push(
@@ -478,9 +499,17 @@ export class BuildHook extends PluginHook<BuildEvents> {
       },
       [],
     ) as SupportedLocalesType[];
+    // Try to get default locale from platform-specific settings.
+    const settingsFile: string = readFileSync(
+      joinPaths(getPlatformPath(), 'settings', 'settings.yaml'),
+      'utf-8',
+    );
+    const settings = yaml.parse(settingsFile);
+
     const defaultLocale: string =
       _get(this.$config, 'files.settings/["settings.yaml"].defaultLocale') ||
-      _get(this.$config, 'defaultLocale');
+      _get(this.$config, 'defaultLocale') ||
+      _get(settings, 'defaultLocale');
 
     if (!defaultLocale && resolvedLocales) {
       // If locales includes an english model, take english as default automatically.
@@ -491,7 +520,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
 
       // Otherwise take the first locale in the array as the default one.
-      return (this.$context.defaultLocale = resolvedLocales[0]);
+      this.$context.defaultLocale = resolvedLocales[0];
+      return;
     }
 
     if (!defaultLocale) {
