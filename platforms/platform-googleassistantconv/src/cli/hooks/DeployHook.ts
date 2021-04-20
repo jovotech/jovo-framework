@@ -67,24 +67,26 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       await checkForGactionsCli();
 
       try {
-        await execAsync(`gactions push --consumer jovo-cli`, {
+        const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
           cwd: getPlatformPath(),
         });
-      } catch (error) {
-        // Check for validation errors.
-        const validationErrorString: string = '[WARNING] Server found validation issues';
-        if (error.stderr.includes(validationErrorString)) {
-          // Try to parse table of validation errors.
-          const start: number = error.indexOf('Locale');
-          const end: number = error.indexOf('Done') - 3;
-          const validationErrors: string[] = error
-            .substring(start, end)
-            .split('\n')
-            .map((el: string) => indent(el.trimEnd(), 2));
 
-          return [printWarning('Validation errors occured'), ...validationErrors];
+        if (stderr) {
+          // Check for validation errors.
+          const validationErrorString = '[WARNING] Server found validation issues';
+          if (stderr.includes(validationErrorString) && stdout) {
+            // Try to parse table of validation errors.
+            const start: number = stdout.indexOf('Locale');
+            const end: number = stdout.indexOf('Done') - 3;
+            const validationErrors: string[] = stdout
+              .substring(start, end)
+              .split('\n')
+              .map((el: string) => indent(el.trimEnd(), 2));
+
+            return [printWarning('Validation errors occured'), ...validationErrors];
+          }
         }
-
+      } catch (error) {
         throw getGactionsError(error.stderr);
       }
     });

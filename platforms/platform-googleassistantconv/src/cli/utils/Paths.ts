@@ -5,7 +5,7 @@ import { join as joinPaths } from 'path';
  * Returns folder name for plugin.
  */
 export function getPlatformDirectory(): string {
-  return 'platform.google';
+  return 'platform.googleAssistant';
 }
 
 /**

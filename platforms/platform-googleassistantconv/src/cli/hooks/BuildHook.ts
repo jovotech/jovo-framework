@@ -25,13 +25,13 @@ import {
   promptOverwriteReverseBuild,
   ANSWER_BACKUP,
   ANSWER_CANCEL,
+  getResolvedLocales,
 } from '@jovotech/cli-core';
 import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject, SupportedFileFormats } from '@jovotech/filebuilder';
+import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 import { JovoModelGoogle } from 'jovo-model-google';
 
-import SupportedLocales from '../utils/SupportedLocales.json';
 import DefaultFiles from '../utils/DefaultFiles.json';
 import {
   GoogleActionActions,
@@ -39,7 +39,9 @@ import {
   getPlatformPath,
   PluginContextGoogle,
   PluginConfigGoogle,
+  SupportedLocalesType,
 } from '../utils';
+import { SupportedLocales } from '../utils/Constants';
 
 export interface BuildContextGoogle extends BuildContext, PluginContextGoogle {
   flags: BuildContext['flags'] & { 'project-id'?: string };
@@ -126,15 +128,28 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Checks if any provided locale is not supported, thus invalid.
    */
   validateLocales() {
-    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
-      locales.push(...this.getResolvedLocales(locale));
-      return locales;
-    }, []);
+    const locales: SupportedLocalesType[] = this.$context.locales.reduce(
+      (locales: string[], locale: string) => {
+        locales.push(
+          ...getResolvedLocales(
+            locale,
+            SupportedLocales,
+            this.$plugin.constructor.name,
+            this.$config.locales,
+          ),
+        );
+        return locales;
+      },
+      [],
+    ) as SupportedLocalesType[];
 
     for (const locale of locales) {
       const genericLocale: string = locale.substring(0, 2);
       // For Google Conversational Actions, some locales require a generic locale to be set, e.g. en for en-US.
-      if (SupportedLocales.includes(genericLocale) && !locales.includes(genericLocale)) {
+      if (
+        SupportedLocales.includes(genericLocale as SupportedLocalesType) &&
+        !locales.includes(genericLocale as SupportedLocalesType)
+      ) {
         throw new JovoCliError(
           `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
@@ -270,22 +285,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.createGoogleProjectFiles.bind(this),
     );
 
+    const interactionModelTasks: Task[] = this.createInteractionModelTasks();
     const buildInteractionModelTask: Task = new Task(
       `${taskStatus} Interaction Model`,
-      async () => {
-        for (const locale of this.$context.locales) {
-          const resolvedLocales: string[] = this.getResolvedLocales(locale);
-          const resolvedLocalesOutput: string = resolvedLocales.join(', ');
-          // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
-          const taskDetails: string =
-            resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
-          const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-            this.buildLanguageModel(locale, resolvedLocales);
-            await wait(500);
-          });
-          await localeTask.run();
-        }
-      },
+      interactionModelTasks,
     );
     // If no model files for the current locales exist, do not build interaction model.
     if (!jovo.$project!.hasModelFiles(this.$context.locales)) {
@@ -311,7 +314,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // Merge global project.js properties with platform files.
     // Set endpoint.
     const endpoint: string = this.getPluginEndpoint();
-    const webhookPath: string = 'webhooks/["ActionsOnGoogleFulfillment.yaml"]';
+    const webhookPath = 'webhooks/["ActionsOnGoogleFulfillment.yaml"]';
 
     if (endpoint && !_has(projectFiles, webhookPath)) {
       const defaultHandler = {
@@ -330,7 +333,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // Set default settings, such as displayName.
     for (const locale of this.$context.locales) {
-      const resolvedLocales: string[] = this.getResolvedLocales(locale);
+      const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
+        locale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      ) as SupportedLocalesType[];
       for (const resolvedLocale of resolvedLocales) {
         const settingsPathArr: string[] = ['settings/'];
 
@@ -354,7 +362,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         }
 
         // Set minimal required localized settings, such as displayName and pronunciation.
-        const localizedSettingsPath: string = `${settingsPath}.localizedSettings`;
+        const localizedSettingsPath = `${settingsPath}.localizedSettings`;
 
         const invocationName: string = this.getInvocationName(locale);
         if (!_has(projectFiles, `${localizedSettingsPath}.displayName`)) {
@@ -367,6 +375,34 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     FileBuilder.buildDirectory(projectFiles, getPlatformPath());
+  }
+
+  /**
+   * Creates and returns tasks for each locale to build the interaction model for Alexa.
+   */
+  createInteractionModelTasks(): Task[] {
+    const interactionModelTasks: Task[] = [];
+
+    for (const locale of this.$context.locales) {
+      const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
+        locale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      ) as SupportedLocalesType[];
+      const resolvedLocalesOutput: string = resolvedLocales.join(', ');
+      // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
+      const taskDetails: string =
+        resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
+
+      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
+        this.buildLanguageModel(locale, resolvedLocales);
+        await wait(500);
+      });
+      interactionModelTasks.push(localeTask);
+    }
+
+    return interactionModelTasks;
   }
 
   /**
@@ -428,13 +464,20 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   setDefaultLocale() {
     // Set default locale.
-    const resolvedLocales: string[] = this.$context.locales.reduce(
+    const resolvedLocales: SupportedLocalesType[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(...this.getResolvedLocales(locale));
+        locales.push(
+          ...getResolvedLocales(
+            locale,
+            SupportedLocales,
+            this.$plugin.constructor.name,
+            this.$config.locales,
+          ),
+        );
         return locales;
       },
       [],
-    );
+    ) as SupportedLocalesType[];
     const defaultLocale: string =
       _get(this.$config, 'files.settings/["settings.yaml"].defaultLocale') ||
       _get(this.$config, 'defaultLocale');
@@ -535,7 +578,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         files = files.filter((file) => file.includes('actions.intent'));
       }
 
-      const yamlRegex: RegExp = /.*\.yaml/;
+      const yamlRegex = /.*\.yaml/;
       for (const file of files) {
         if (yamlRegex.test(file)) {
           const fileContent = readFileSync(joinPaths(...path, file), 'utf-8');

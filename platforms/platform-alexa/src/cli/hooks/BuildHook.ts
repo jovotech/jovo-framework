@@ -20,13 +20,13 @@ import {
   mergeArrayCustomizer,
   deleteFolderRecursive,
   printHighlight,
+  getResolvedLocales,
 } from '@jovotech/cli-core';
 import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 
-import SupportedLocales from '../utils/SupportedLocales.json';
 import DefaultFiles from '../utils/DefaultFiles.json';
 import {
   getModelPath,
@@ -34,8 +34,9 @@ import {
   getPlatformDirectory,
   getPlatformPath,
   PluginContextAlexa,
+  SupportedLocales,
+  SupportedLocalesType,
 } from '../utils';
-
 
 export interface BuildContextAlexa extends Omit<PluginContextAlexa, 'flags'>, BuildContext {}
 
@@ -71,10 +72,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   validateLocales() {
     for (const locale of this.$context.locales) {
-      const resolvedLocales: string[] = this.getResolvedLocales(locale);
+      const resolvedLocales = getResolvedLocales(
+        locale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      );
 
       for (const resolvedLocale of resolvedLocales) {
-        if (!SupportedLocales.includes(resolvedLocale)) {
+        if (!SupportedLocales.includes(resolvedLocale as SupportedLocalesType)) {
           throw new JovoCliError(
             `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
             this.$plugin.id,
@@ -136,24 +142,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.createAlexaProjectFiles.bind(this),
     );
 
+    const interactionModelTasks: Task[] = this.createInteractionModelTasks();
     const buildInteractionModelTask: Task = new Task(
       `${taskStatus} Interaction Model`,
-      async () => {
-        for (const locale of this.$context.locales) {
-          const resolvedLocales: string[] = this.getResolvedLocales(locale);
-          const resolvedLocalesOutput: string = resolvedLocales.join(', ');
-          // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
-          const taskDetails: string =
-            resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
-
-          const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-            this.buildLanguageModel(locale, resolvedLocales);
-            await wait(500);
-          });
-
-          await localeTask.run();
-        }
-      },
+      interactionModelTasks,
     );
     // If no model files for the current locales exist, do not build interaction model.
     if (!jovo.$project!.hasModelFiles(this.$context.locales)) {
@@ -273,7 +265,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     const skillName: string = jovo.$project!.getProjectName();
     const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
-      locales.push(...this.getResolvedLocales(locale));
+      locales.push(
+        ...getResolvedLocales(
+          locale,
+          SupportedLocales,
+          this.$plugin.constructor.name,
+          this.$config.locales,
+        ),
+      );
       return locales;
     }, []);
 
@@ -303,6 +302,34 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     FileBuilder.buildDirectory(projectFiles, getPlatformPath());
+  }
+
+  /**
+   * Creates and returns tasks for each locale to build the interaction model for Alexa.
+   */
+  createInteractionModelTasks(): Task[] {
+    const interactionModelTasks: Task[] = [];
+
+    for (const locale of this.$context.locales) {
+      const resolvedLocales: string[] = getResolvedLocales(
+        locale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      );
+      const resolvedLocalesOutput: string = resolvedLocales.join(', ');
+      // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
+      const taskDetails: string =
+        resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
+
+      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
+        this.buildLanguageModel(locale, resolvedLocales);
+        await wait(500);
+      });
+      interactionModelTasks.push(localeTask);
+    }
+
+    return interactionModelTasks;
   }
 
   /**

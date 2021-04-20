@@ -2,6 +2,7 @@ import _get from 'lodash.get';
 import _set from 'lodash.set';
 import {
   flags,
+  getResolvedLocales,
   InstallContext,
   JovoCli,
   JovoCliError,
@@ -30,6 +31,7 @@ import {
   getSkillJsonPath,
   PluginConfigAlexa,
   PluginContextAlexa,
+  SupportedLocales,
 } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
 
@@ -170,10 +172,22 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       deployTask.add(updateSkillTask);
     }
 
-    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
-      locales.push(...this.getResolvedLocales(locale));
-      return locales;
-    }, []);
+    const resolvedLocales: string[] = this.$context.locales.reduce(
+      (locales: string[], locale: string) => {
+        locales.push(
+          ...getResolvedLocales(
+            locale,
+            SupportedLocales,
+            this.$plugin.constructor.name,
+            this.$config.locales,
+          ),
+        );
+        return locales;
+      },
+      [],
+    );
+    // ToDo: Improve providing a unique set of resolved locales.
+    const locales: string[] = [...new Set(resolvedLocales)];
 
     const deployInteractionModelTask: Task = new Task(`${ROCKET} Deploying Interaction Model`);
     for (const locale of locales) {

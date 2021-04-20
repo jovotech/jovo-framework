@@ -1,4 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
+import { SupportedLocales } from './Constants';
 
 export interface AskSkillList {
   skills: [
@@ -13,11 +14,16 @@ export interface AskSkillList {
   ];
 }
 
-export interface PluginContextAlexa extends PluginContext {
-  skillId?: string;
-  askProfile?: string;
-}
+export type SupportedLocalesType = typeof SupportedLocales[number];
 
 export interface PluginConfigAlexa extends PluginConfig {
+  askProfile?: string;
+  locales: {
+    [locale: string]: SupportedLocalesType[];
+  };
+}
+
+export interface PluginContextAlexa extends PluginContext {
+  skillId?: string;
   askProfile?: string;
 }

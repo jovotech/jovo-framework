@@ -30,7 +30,7 @@ export function getGactionsError(errorMessage: string): JovoCliError {
     );
   }
 
-  const errorToken: string = 'Server did not return HTTP 200.';
+  const errorToken = 'Server did not return HTTP 200.';
   if (errorMessage.includes(errorToken)) {
     const { error } = JSON.parse(
       errorMessage.substring(errorMessage.indexOf(errorToken) + errorToken.length),
