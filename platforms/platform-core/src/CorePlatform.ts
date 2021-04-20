@@ -64,17 +64,12 @@ export class CorePlatform extends Platform<
     );
   }
 
-  prepareResponse(
+  finalizeResponse(
     response: CorePlatformResponse,
     jovo: Jovo,
   ): CorePlatformResponse | Promise<CorePlatformResponse> {
     response.type = this.config.type;
-    this.setResponseSessionData(response, jovo);
-    return response;
-  }
-
-  setResponseSessionData(response: CorePlatformResponse, jovo: Jovo): this {
     response.session.data = jovo.$session.$data;
-    return this;
+    return response;
   }
 }

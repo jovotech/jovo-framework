@@ -11,7 +11,8 @@ export interface RequestData extends Data {}
 export interface StateStackItem {
   [key: string]: unknown;
   componentPath: string;
-  resolveTo?: Record<string, string>
+  subState?: string;
+  resolveTo?: Record<string, string>;
 }
 export type StateStack = StateStackItem[];
 

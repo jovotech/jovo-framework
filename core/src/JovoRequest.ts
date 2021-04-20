@@ -1,9 +1,8 @@
-import { EntityMap, NluData, SessionData } from './interfaces';
-import { JovoRequestType } from './Jovo';
+import { EntityMap, NluData } from './interfaces';
+import { JovoRequestType, JovoSession } from './Jovo';
 
 export abstract class JovoRequest {
   [key: string]: unknown;
-
 
   abstract getEntities(): EntityMap | undefined;
 
@@ -15,7 +14,7 @@ export abstract class JovoRequest {
 
   abstract getRequestType(): JovoRequestType | undefined;
 
-  abstract getSessionData(): SessionData | undefined;
+  abstract getSession(): JovoSession | undefined;
 
   getNluData(): NluData | undefined {
     const intentName = this.getIntentName();

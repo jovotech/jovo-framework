@@ -2,7 +2,7 @@ import {
   Entity,
   EntityMap,
   JovoRequest,
-  JovoRequestType,
+  JovoRequestType, JovoSession,
   RequestType,
   SessionData,
 } from '@jovotech/core';
@@ -69,7 +69,7 @@ export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
     return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
   }
 
-  getSessionData(): SessionData | undefined {
+  getSession(): JovoSession | undefined {
     return this.session?.attributes;
   }
 }
