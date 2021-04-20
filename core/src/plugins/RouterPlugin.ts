@@ -72,7 +72,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     } else {
       // get the related component and find the related handler within
       const latestStateStack = jovo.$state[jovo.$state.length - 1];
-      subState = latestStateStack.subState;
+      subState = latestStateStack.$subState;
       const relatedComponentMetadata = jovo.$getComponentMetadataOrFail(
         latestStateStack.componentPath.split('.'),
       );
@@ -80,9 +80,9 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
         .getHandlerMetadataOfComponent(relatedComponentMetadata.target)
         .filter(
           (metadata) =>
-            (latestStateStack.subState
-              ? metadata.options?.subState === latestStateStack.subState
-              : true) &&
+            (latestStateStack.$subState
+              ? metadata.options?.subState === latestStateStack.$subState
+              : !metadata.options?.subState) &&
             metadata.intents.includes(intentName) &&
             (!metadata.options?.platforms?.length ||
               metadata.options?.platforms?.includes(jovo.$platform.constructor.name)),

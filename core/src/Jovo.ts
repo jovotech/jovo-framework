@@ -89,12 +89,12 @@ export abstract class Jovo<
 
   get $subState(): string | undefined {
     if (!this.$state?.length) return;
-    return this.$state[this.$state.length - 1]?.subState;
+    return this.$state[this.$state.length - 1]?.$subState;
   }
 
   set $subState(value: string | undefined) {
     if (!this.$state?.length) return;
-    this.$state[this.$state.length - 1].subState = value;
+    this.$state[this.$state.length - 1].$subState = value;
     if (this.$route) {
       this.$route.subState = value;
     }

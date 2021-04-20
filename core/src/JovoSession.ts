@@ -4,7 +4,7 @@ export interface StateStackItem {
   [key: string]: unknown;
 
   componentPath: string;
-  subState?: string;
+  $subState?: string;
   resolveTo?: Record<string, string>;
 }
 
