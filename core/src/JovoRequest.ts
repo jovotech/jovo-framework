@@ -1,5 +1,6 @@
 import { EntityMap, NluData } from './interfaces';
-import { JovoRequestType, JovoSession } from './Jovo';
+import { JovoRequestType } from './Jovo';
+import { JovoSession } from './JovoSession';
 
 export abstract class JovoRequest {
   [key: string]: unknown;

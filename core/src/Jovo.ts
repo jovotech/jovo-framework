@@ -17,6 +17,7 @@ import {
 import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
 import { JovoProxy } from './JovoProxy';
 import { JovoRequest } from './JovoRequest';
+import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
@@ -33,12 +34,6 @@ export interface JovoRequestType {
   type?: RequestTypeLike;
   subType?: string;
   optional?: boolean;
-}
-
-export interface JovoSession {
-  [key: string]: unknown;
-  $data: SessionData;
-  $state?: StateStack;
 }
 
 export interface DelegateOptions<EVENTS extends string = string> {
@@ -70,7 +65,8 @@ export abstract class Jovo<
     this.$data = {};
     this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    this.$session = this.$request.getSession() || { $data: {} };
+    const session = this.$request.getSession();
+    this.$session = session instanceof JovoSession ? session : new JovoSession(session);
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
