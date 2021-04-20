@@ -19,15 +19,15 @@
 app.setHandler({
     LAUNCH() {
         return this.toIntent('HelloWorldIntent');
-    },
+    }
 
     HelloWorldIntent() {
         this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+    }
 
     MyNameIsIntent() {
         this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+    }
 });
 ```
 
