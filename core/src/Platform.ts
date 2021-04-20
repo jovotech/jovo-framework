@@ -10,6 +10,7 @@ import {
   InvalidParentError,
   Jovo,
   JovoConstructor,
+  JovoUser,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
@@ -109,5 +110,9 @@ export abstract class Platform<
     const instance = new this.requestClass();
     _merge(instance, request);
     return instance;
+  }
+
+  createUserInstance(jovo: Jovo<REQUEST, RESPONSE>): JovoUser<REQUEST, RESPONSE> {
+    return new this.userClass(jovo);
   }
 }

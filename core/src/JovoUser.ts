@@ -1,4 +1,5 @@
 import { JovoResponse } from '@jovotech/output';
+import { UserData } from '.';
 import { Jovo } from './Jovo';
 import { JovoRequest } from './JovoRequest';
 
@@ -7,5 +8,9 @@ export type JovoUserConstructor<REQUEST extends JovoRequest, RESPONSE extends Jo
 ) => JovoUser<REQUEST, RESPONSE>;
 
 export abstract class JovoUser<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> {
+  $data: UserData = {};
+
   constructor(readonly jovo: Jovo<REQUEST, RESPONSE>) {}
+
+  abstract id: string;
 }

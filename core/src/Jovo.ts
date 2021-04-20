@@ -58,7 +58,7 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user?: JovoUser<REQUEST, RESPONSE>;
+  $user: JovoUser<REQUEST, RESPONSE>;
 
   constructor(
     readonly $app: App,
@@ -76,6 +76,8 @@ export abstract class Jovo<
 
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
+
+    this.$user = this.$platform.createUserInstance(this);
   }
 
   get $config(): AppConfig {
