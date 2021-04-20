@@ -44,8 +44,12 @@ export async function checkForAskCli() {
  * Reads and returns ask config from .ask/ask-states.json.
  */
 export function getAskConfig() {
-  const content: string = readFileSync(getAskConfigPath(), 'utf-8');
-  return JSON.parse(content);
+  try {
+    const content: string = readFileSync(getAskConfigPath(), 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    throw new JovoCliError('Could not read ask configuration file.', 'AlexaCli');
+  }
 }
 
 /**

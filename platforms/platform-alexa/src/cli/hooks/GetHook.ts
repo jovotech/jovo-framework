@@ -20,13 +20,13 @@ import {
   AskSkillList,
   checkForAskCli,
   getAccountLinkingPath,
-  getAskConfig,
   getAskConfigFolderPath,
   getAskConfigPath,
   getModelPath,
   getModelsPath,
   getPlatformPath,
   getSkillJsonPath,
+  getSkillPackagePath,
   PluginConfigAlexa,
   PluginContextAlexa,
   prepareSkillList,
@@ -91,8 +91,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     this.$context.skillId =
       this.$context.flags['skill-id'] ||
       _get(this.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$config, 'options.skillId') ||
-      _get(getAskConfig(), 'profiles.default.skillId');
+      _get(this.$config, 'options.skillId');
   }
 
   /**
@@ -117,8 +116,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
     // If no skill id and thus no specified project can be found, try to prompt for one.
     if (!this.$context.skillId) {
-      const skills: AskSkillList = await smapi.listSkills(this.$context.askProfile);
+      let skills: AskSkillList = { skills: [] };
+      const getSkillListTask: Task = new Task('Getting a list of all your skills', async () => {
+        skills = await smapi.listSkills(this.$context.askProfile);
+      });
+
+      await getSkillListTask.run();
       const list = prepareSkillList(skills);
+
       try {
         const answer = await promptListForProjectId(list);
 
@@ -129,6 +134,11 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
 
     const getSkillInformationTask: Task = new Task('Getting skill information', async () => {
+      const skillPackagePath: string = getSkillPackagePath();
+      if (!existsSync(skillPackagePath)) {
+        mkdirSync(skillPackagePath, { recursive: true });
+      }
+
       const skillInformation = await smapi.getSkillInformation(
         this.$context.skillId!,
         'development',
@@ -138,39 +148,44 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       this.setAlexaSkillId(this.$context.skillId!);
 
       // Try to get account linking information.
-      const accountLinkingJson = await smapi.getAccountLinkingInformation(
-        this.$context.skillId!,
-        'development',
-        this.$context.askProfile,
-      );
-
-      if (accountLinkingJson) {
-        writeFileSync(
-          getAccountLinkingPath(),
-          JSON.stringify({ accountLinkingRequest: accountLinkingJson }, null, 2),
+      try {
+        const accountLinkingJson = await smapi.getAccountLinkingInformation(
+          this.$context.skillId!,
+          'development',
+          this.$context.askProfile,
         );
-        return `Account Linking Information saved to ${getAccountLinkingPath()}`;
+
+        if (accountLinkingJson) {
+          writeFileSync(
+            getAccountLinkingPath(),
+            JSON.stringify({ accountLinkingRequest: accountLinkingJson }, null, 2),
+          );
+          return `Account Linking Information saved to ${getAccountLinkingPath()}`;
+        }
+      } catch (error) {
+        // If account linking information is not available, do nothing.
+        if (!error.message.includes('AccountLinking is not present for given skillId')) {
+          throw error;
+        }
       }
     });
 
-    const getModelsTask: Task = new Task('Getting Alexa Skill model files');
-    const alexaModelPath: string = getModelsPath();
-    if (!existsSync(alexaModelPath)) {
-      mkdirSync(alexaModelPath, { recursive: true });
-    }
+    const getModelsTask: Task = new Task('Getting Alexa Skill model files', async () => {
+      const alexaModelPath: string = getModelsPath();
+      if (!existsSync(alexaModelPath)) {
+        mkdirSync(alexaModelPath, { recursive: true });
+      }
 
-    const skillJson = require(getSkillJsonPath());
-    const modelLocales: string[] = [];
+      const modelLocales: string[] = [];
 
-    if (this.$context.flags.locale) {
-      modelLocales.push(...this.$context.flags.locale);
-    } else {
-      const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
-      modelLocales.push(...Object.keys(skillJsonLocales));
-    }
-
-    for (const locale of modelLocales) {
-      const localeTask: Task = new Task(locale, async () => {
+      if (this.$context.flags.locale) {
+        modelLocales.push(...this.$context.flags.locale);
+      } else {
+        const skillJson = require(getSkillJsonPath());
+        const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
+        modelLocales.push(...Object.keys(skillJsonLocales));
+      }
+      for (const locale of modelLocales) {
         const model = await smapi.getInteractionModel(
           this.$context.skillId!,
           locale,
@@ -178,9 +193,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
           this.$context.askProfile,
         );
         writeFileSync(getModelPath(locale), JSON.stringify(model, null, 2));
-      });
-      getModelsTask.add(localeTask);
-    }
+      }
+      return modelLocales.join(', ');
+    });
 
     getTask.add(getSkillInformationTask, getModelsTask);
 
@@ -201,7 +216,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     const askConfigPath: string = getAskConfigPath();
     if (!existsSync(askConfigPath)) {
       const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
-      FileBuilder.buildDirectory(defaultConfig, askConfigPath);
+      FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
     }
 
     const askConfigContent: string = readFileSync(askConfigPath, 'utf-8');

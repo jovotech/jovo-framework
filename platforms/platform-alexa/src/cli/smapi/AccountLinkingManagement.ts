@@ -18,10 +18,6 @@ export async function getAccountLinkingInformation(
     const response = JSON.parse(stdout!);
     return response.accountLinkingResponse;
   } catch (error) {
-    // ToDo: Always 1?
-    if (error.code === 1) {
-      return;
-    }
     const errorMessage: string = error.stderr || error.message;
     throw getAskError('smapiGetAccountLinkingInformation', errorMessage);
   }
