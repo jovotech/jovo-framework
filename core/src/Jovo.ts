@@ -40,7 +40,7 @@ export interface DelegateOptions<
   CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
   EVENTS extends string = string
 > {
-  resolveTo: Record<EVENTS, string>;
+  resolveTo: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
   config?: CONFIG;
 }
 
@@ -175,8 +175,17 @@ export abstract class Jovo<
   ): Promise<void> {
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.$state as StateStack;
+
+    const resolveTo: Record<string, string> = {};
+    for (const key in options.resolveTo) {
+      if (options.resolveTo.hasOwnProperty(key)) {
+        const value = options.resolveTo[key];
+        resolveTo[key] = typeof value === 'string' ? value : value.name;
+      }
+    }
+
     stateStack.push({
-      resolveTo: options.resolveTo,
+      resolveTo,
       config: options.config,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
     });
