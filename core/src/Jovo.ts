@@ -1,12 +1,13 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import _get from 'lodash.get';
 import { App, AppConfig } from './App';
-import { BaseComponent } from './BaseComponent';
+import { BaseComponent, ComponentConfig } from './BaseComponent';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
 import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   ComponentConstructor,
+  ComponentData,
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
@@ -35,8 +36,12 @@ export interface JovoRequestType {
   optional?: boolean;
 }
 
-export interface DelegateOptions<EVENTS extends string = string> {
+export interface DelegateOptions<
+  CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
+  EVENTS extends string = string
+> {
   resolveTo: Record<EVENTS, string>;
+  config?: CONFIG;
 }
 
 export abstract class Jovo<
@@ -100,6 +105,33 @@ export abstract class Jovo<
     }
   }
 
+  get $component(): { $data: ComponentData; $config: Record<string, unknown> | undefined } {
+    const state = this.$state as StateStack;
+    const setDataIfNotDefined = () => {
+      if (!state[state.length - 1 || 0]?.$data) {
+        state[state.length - 1].$data = {};
+      }
+    };
+    return {
+      get $data(): ComponentData {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        return state[state.length - 1].$data as ComponentData;
+      },
+      set $data(value: ComponentData) {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        state[state.length - 1].$data = value;
+      },
+      get $config(): Record<string, unknown> | undefined {
+        return state?.[state?.length - 1 || 0]?.config as Record<string, unknown> | undefined;
+      },
+      set $config(value: Record<string, unknown> | undefined) {
+        state[state.length - 1].config = value;
+      },
+    };
+  }
+
   // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT>,
@@ -127,17 +159,14 @@ export abstract class Jovo<
     const stateStack = this.$state as StateStack;
     // replace last item in stack
     stateStack[stateStack.length - 1] = {
-      ...stateStack[stateStack.length - 1],
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
-      // TODO fully determine whether subState should be removed by $redirect
-      subState: undefined,
     };
     await this.$runComponentHandler(componentMetadata, handlerKey);
   }
 
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
-    options: DelegateOptions,
+    options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
   async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
   async $delegate(
@@ -147,7 +176,8 @@ export abstract class Jovo<
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.$state as StateStack;
     stateStack.push({
-      ...options,
+      resolveTo: options.resolveTo,
+      config: options.config,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
     });
     await this.$runComponentHandler(componentMetadata);
@@ -162,10 +192,10 @@ export abstract class Jovo<
       return;
     }
     const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
-    const componentPath = previousStateStackItem.componentPath.split('.');
-    const componentMetadata = this.$getComponentMetadataOrFail(componentPath);
+    const previousComponentPath = previousStateStackItem.componentPath.split('.');
+    const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
     stateStack.pop();
-    await this.$runComponentHandler(componentMetadata, resolvedHandlerKey, ...eventArgs);
+    await this.$runComponentHandler(previousComponentMetadata, resolvedHandlerKey, ...eventArgs);
     return;
   }
 

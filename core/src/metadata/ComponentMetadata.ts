@@ -1,5 +1,6 @@
 import {
   BaseComponent,
+  ComponentConfig,
   ComponentConstructor,
   ComponentDeclaration,
   RegisteredComponents,
@@ -9,7 +10,7 @@ import { DeepPartial, JovoConditionFunction } from '../index';
 export interface ComponentOptions<COMPONENT extends BaseComponent> {
   [key: string]: unknown;
   name?: string;
-  config?: DeepPartial<COMPONENT['config']>;
+  config?: DeepPartial<ComponentConfig<COMPONENT>>;
   components?: Array<ComponentConstructor | ComponentDeclaration>;
   models?: Record<string, any>;
 

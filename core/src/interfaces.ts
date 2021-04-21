@@ -7,6 +7,8 @@ export interface Data {
 
 export interface RequestData extends Data {}
 
+export interface ComponentData extends Data {}
+
 export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
