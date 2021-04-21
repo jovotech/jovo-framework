@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, Middleware, OutputConstructor, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -50,6 +50,7 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly components: RegisteredComponents;
+  readonly dynamicOutputDictionary: Record<string, OutputConstructor> = {};
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);

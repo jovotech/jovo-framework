@@ -1,16 +1,18 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import _get from 'lodash.get';
 import { App, AppConfig } from './App';
-import { BaseComponent, ComponentConfig } from './BaseComponent';
-import { BaseOutput, OutputConstructor } from './BaseOutput';
 import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
+  BaseComponent,
+  BaseOutput,
+  ComponentConfig,
   ComponentConstructor,
   ComponentData,
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  OutputConstructor,
   PickWhere,
   Server,
   StateStack,
@@ -106,6 +108,7 @@ export abstract class Jovo<
   }
 
   get $component(): { $data: ComponentData; $config: Record<string, unknown> | undefined } {
+    const app = this.$app;
     const state = this.$state as StateStack;
     const setDataIfNotDefined = () => {
       if (!state[state.length - 1 || 0]?.$data) {
@@ -124,7 +127,26 @@ export abstract class Jovo<
         state[state.length - 1].$data = value;
       },
       get $config(): Record<string, unknown> | undefined {
-        return state?.[state?.length - 1 || 0]?.config as Record<string, unknown> | undefined;
+        // EXPERIMENTAL: this will try to get the Output class from the saved Output-classes in App.
+        // Issue is, that a restart for example would cause the Output-class to not be found...
+        const modifiedStateConfig: any | undefined = {};
+        const currentStateConfig: any | undefined = state?.[state?.length - 1 || 0]?.config;
+        if (currentStateConfig) {
+          for (const key in currentStateConfig) {
+            if (
+              currentStateConfig.hasOwnProperty(key) &&
+              currentStateConfig[key]?.type === 'output' &&
+              currentStateConfig[key]?.identifier &&
+              app.dynamicOutputDictionary[currentStateConfig[key]?.identifier]
+            ) {
+              modifiedStateConfig[key] =
+                app.dynamicOutputDictionary[currentStateConfig[key].identifier];
+            } else {
+              modifiedStateConfig[key] = currentStateConfig[key];
+            }
+          }
+        }
+        return modifiedStateConfig as Record<string, unknown> | undefined;
       },
       set $config(value: Record<string, unknown> | undefined) {
         state[state.length - 1].config = value;
@@ -176,17 +198,30 @@ export abstract class Jovo<
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.$state as StateStack;
 
-    const resolveTo: Record<string, string> = {};
+    const serializableResolveTo: Record<string, string> = {};
     for (const key in options.resolveTo) {
       if (options.resolveTo.hasOwnProperty(key)) {
         const value = options.resolveTo[key];
-        resolveTo[key] = typeof value === 'string' ? value : value.name;
+        serializableResolveTo[key] = typeof value === 'string' ? value : value.name;
+      }
+    }
+
+    // EXPERIMENTAL: See experimental above
+    const serializableConfig: Record<string, any> = {};
+    for (const key in options.config) {
+      if (options.config.hasOwnProperty(key)) {
+        const value: any | undefined = options.config[key];
+        const isOutput = value?.prototype instanceof BaseOutput;
+        serializableConfig[key] = isOutput ? { type: 'output', identifier: value.name } : value;
+        if (isOutput) {
+          this.$app.dynamicOutputDictionary[value.name] = value;
+        }
       }
     }
 
     stateStack.push({
-      resolveTo,
-      config: options.config,
+      resolveTo: serializableResolveTo,
+      config: serializableConfig,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
     });
     await this.$runComponentHandler(componentMetadata);
