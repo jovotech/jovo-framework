@@ -15,7 +15,7 @@ export type SupportedLocalesType = typeof SupportedLocales[number];
 
 export interface PluginConfigGoogle extends PluginConfig {
   projectId?: string;
-  locales: {
+  locales?: {
     [locale: string]: SupportedLocalesType[];
   };
 }

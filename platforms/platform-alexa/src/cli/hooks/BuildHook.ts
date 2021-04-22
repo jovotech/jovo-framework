@@ -62,7 +62,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   checkForPlatform(context: ParseContextBuild) {
     // Check if this plugin should be used or not.
-    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.id)) {
+    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -83,7 +83,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         if (!SupportedLocales.includes(resolvedLocale as SupportedLocalesType)) {
           throw new JovoCliError(
             `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
-            this.$plugin.id,
+            this.$plugin.$id,
             resolvedLocale.length === 2
               ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
               : 'For more information on multiple language support: https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html',
@@ -163,7 +163,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   async buildReverse() {
     const jovo: JovoCli = JovoCli.getInstance();
     // Since platform can be prompted for, check if this plugin should actually be executed again.
-    if (!this.$context.platforms.includes(this.$plugin.id)) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       return;
     }
 

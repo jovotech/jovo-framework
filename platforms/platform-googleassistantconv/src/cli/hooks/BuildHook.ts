@@ -87,7 +87,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   checkForPlatform(context: ParseContextBuild) {
     // Check if this plugin should be used or not.
-    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.id)) {
+    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -195,7 +195,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   async buildReverse() {
     const jovo: JovoCli = JovoCli.getInstance();
     // Since platform can be prompted for, check if this plugin should actually be executed again.
-    if (!this.$context.platforms.includes(this.$plugin.id)) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       return;
     }
 
@@ -499,17 +499,21 @@ export class BuildHook extends PluginHook<BuildEvents> {
       },
       [],
     ) as SupportedLocalesType[];
-    // Try to get default locale from platform-specific settings.
-    const settingsFile: string = readFileSync(
-      joinPaths(getPlatformPath(), 'settings', 'settings.yaml'),
-      'utf-8',
-    );
-    const settings = yaml.parse(settingsFile);
 
-    const defaultLocale: string =
+    let defaultLocale: string =
       _get(this.$config, 'files.settings/["settings.yaml"].defaultLocale') ||
-      _get(this.$config, 'defaultLocale') ||
-      _get(settings, 'defaultLocale');
+      _get(this.$config, 'defaultLocale');
+
+    // Try to get default locale from platform-specific settings.
+    const settingsPath: string = joinPaths(getPlatformPath(), 'settings', 'settings.yaml');
+    if (existsSync(settingsPath)) {
+      const settingsFile: string = readFileSync(
+        joinPaths(getPlatformPath(), 'settings', 'settings.yaml'),
+        'utf-8',
+      );
+      const settings = yaml.parse(settingsFile);
+      defaultLocale = _get(settings, 'defaultLocale');
+    }
 
     if (!defaultLocale && resolvedLocales) {
       // If locales includes an english model, take english as default automatically.

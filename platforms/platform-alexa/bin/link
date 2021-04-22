@@ -14,6 +14,10 @@ const { npm } = require('global-dirs');
     join('node_modules', '@jovotech', 'cli-core'),
   );
   await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-command-new'),
+    join('node_modules', '@jovotech', 'cli-command-new'),
+  );
+  await symlinkDir(
     join(npm.packages, '@jovotech', 'cli-command-build'),
     join('node_modules', '@jovotech', 'cli-command-build'),
   );

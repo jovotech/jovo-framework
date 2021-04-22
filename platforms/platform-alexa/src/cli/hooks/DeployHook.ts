@@ -79,7 +79,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(context: ParseContextDeployPlatform) {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.id) {
+    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
       this.uninstall();
     }
   }
