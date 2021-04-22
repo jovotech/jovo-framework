@@ -55,6 +55,7 @@ export * from './errors/MatchingPlatformNotFoundError';
 
 export * from './metadata/MetadataStorage';
 export * from './decorators/Component';
+export * from './decorators/Output';
 export * from './decorators/Handle';
 
 export * from './interfaces';

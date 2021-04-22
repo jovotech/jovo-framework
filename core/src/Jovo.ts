@@ -1,5 +1,7 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { App, AppConfig } from './App';
 import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
@@ -12,6 +14,7 @@ import {
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  MetadataStorage,
   OutputConstructor,
   PickWhere,
   Server,
@@ -24,6 +27,7 @@ import { JovoUser } from './JovoUser';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
+import { forEachDeep } from './utilities';
 
 export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
   app: App,
@@ -36,6 +40,13 @@ export interface JovoRequestType {
   type?: RequestTypeLike;
   subType?: string;
   optional?: boolean;
+}
+
+export interface JovoComponentInfo<
+  CONFIG extends Record<string, unknown> = Record<string, unknown>
+> {
+  $data: ComponentData;
+  $config?: CONFIG;
 }
 
 export interface DelegateOptions<
@@ -107,8 +118,7 @@ export abstract class Jovo<
     }
   }
 
-  get $component(): { $data: ComponentData; $config: Record<string, unknown> | undefined } {
-    const app = this.$app;
+  get $component(): JovoComponentInfo {
     const state = this.$state as StateStack;
     const setDataIfNotDefined = () => {
       if (!state[state.length - 1 || 0]?.$data) {
@@ -127,26 +137,29 @@ export abstract class Jovo<
         state[state.length - 1].$data = value;
       },
       get $config(): Record<string, unknown> | undefined {
-        // EXPERIMENTAL: this will try to get the Output class from the saved Output-classes in App.
-        // Issue is, that a restart for example would cause the Output-class to not be found...
-        const modifiedStateConfig: any | undefined = {};
-        const currentStateConfig: any | undefined = state?.[state?.length - 1 || 0]?.config;
-        if (currentStateConfig) {
-          for (const key in currentStateConfig) {
+        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        if (deserializedStateConfig) {
+          // deserialize all found Output-constructors
+          forEachDeep(deserializedStateConfig, (value, path) => {
+            // TODO: check restriction
             if (
-              currentStateConfig.hasOwnProperty(key) &&
-              currentStateConfig[key]?.type === 'output' &&
-              currentStateConfig[key]?.identifier &&
-              app.dynamicOutputDictionary[currentStateConfig[key]?.identifier]
+              typeof value === 'object' &&
+              value.type === 'output' &&
+              value.name &&
+              Object.keys(value).length === 2
             ) {
-              modifiedStateConfig[key] =
-                app.dynamicOutputDictionary[currentStateConfig[key].identifier];
-            } else {
-              modifiedStateConfig[key] = currentStateConfig[key];
+              const outputMetadata = MetadataStorage.getInstance().getOutputMetadataByName(
+                value.name,
+              );
+              if (!outputMetadata) {
+                // TODO determine what to do!
+                return;
+              }
+              _set(deserializedStateConfig, path, outputMetadata.target);
             }
-          }
+          });
         }
-        return modifiedStateConfig as Record<string, unknown> | undefined;
+        return deserializedStateConfig;
       },
       set $config(value: Record<string, unknown> | undefined) {
         state[state.length - 1].config = value;
@@ -206,19 +219,20 @@ export abstract class Jovo<
       }
     }
 
-    // EXPERIMENTAL: See experimental above
-    const serializableConfig: Record<string, any> = {};
-    for (const key in options.config) {
-      if (options.config.hasOwnProperty(key)) {
-        const value: any | undefined = options.config[key];
-        const isOutput = value?.prototype instanceof BaseOutput;
-        serializableConfig[key] = isOutput ? { type: 'output', identifier: value.name } : value;
-        if (isOutput) {
-          this.$app.dynamicOutputDictionary[value.name] = value;
+    const serializableConfig = _cloneDeep(options.config);
+    if (serializableConfig) {
+      forEachDeep(serializableConfig, (value, path) => {
+        // serialize all passed Output-constructors
+        if (value?.prototype instanceof BaseOutput) {
+          const outputMetadata = MetadataStorage.getInstance().getOutputMetadata(value);
+          if (!outputMetadata) {
+            // TODO determine what to do!
+            return;
+          }
+          _set(serializableConfig, path, { type: 'output', name: outputMetadata.name });
         }
-      }
+      });
     }
-
     stateStack.push({
       resolveTo: serializableResolveTo,
       config: serializableConfig,

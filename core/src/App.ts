@@ -50,7 +50,6 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly components: RegisteredComponents;
-  readonly dynamicOutputDictionary: Record<string, OutputConstructor> = {};
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);

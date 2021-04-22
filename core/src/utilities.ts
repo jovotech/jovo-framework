@@ -7,3 +7,22 @@ export async function findAsync<T = unknown>(
   const index = results.findIndex((result) => result);
   return array[index];
 }
+
+export function forEachDeep<T = any>(
+  value: T,
+  handler: (val: T[keyof T] | any, path: string) => void,
+  path = '',
+): void {
+  if (path) {
+    handler(value, path);
+  }
+  if (Array.isArray(value)) {
+    value.forEach((val, index) => {
+      forEachDeep(val, handler, `${path}[${index}]`);
+    });
+  } else if (typeof value === 'object') {
+    Object.keys(value).forEach((key) => {
+      forEachDeep(value[key as keyof T], handler, path ? `${path}.${key}` : key);
+    });
+  }
+}
