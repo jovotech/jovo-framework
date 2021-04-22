@@ -22,6 +22,7 @@
     "@jovotech/framework": "^4.0.0"
   },
   "devDependencies": {
+    "@jovotech/core": "~4.0",
     "@types/jest": "^26.0.20",
     "@aws-sdk/types": "^3.6.1",
     "@types/node": "^10.17.50",
@@ -35,6 +36,9 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
+  },
+  "peerDependencies": {
+    "@jovotech/core": "~4.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js"

@@ -1,8 +1,11 @@
+import { Constructor } from '..';
 import { JovoError } from '../JovoError';
 
-// TODO: implement
+// TODO: improve
 export class InvalidParentError extends JovoError {
-  constructor() {
-    super('');
+  constructor(pluginName: string, assumedParentType: Constructor<any, any[]> | string) {
+    super({
+      message: `${pluginName} can only be installed for plugins of type ${assumedParentType}.`,
+    });
   }
 }

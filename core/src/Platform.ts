@@ -1,8 +1,18 @@
 import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
-import { App, Constructor, HandleRequest, Jovo, JovoConstructor } from '.';
+import {
+  App,
+  AppBaseMiddleware,
+  ArrayElement,
+  Constructor,
+  HandleRequest,
+  InvalidParentError,
+  Jovo,
+  JovoConstructor,
+} from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
+import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
 
 export type PlatformBaseMiddlewares = [
@@ -11,11 +21,14 @@ export type PlatformBaseMiddlewares = [
   '$session',
   '$user',
   '$type',
+  '$asr',
   '$nlu',
   '$inputs',
   '$output',
   '$response',
 ];
+
+export type PlatformBaseMiddleware = ArrayElement<PlatformBaseMiddlewares>;
 
 export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
   '$init',
@@ -23,6 +36,7 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
   '$session',
   '$user',
   '$type',
+  '$asr',
   '$nlu',
   '$inputs',
   '$output',
@@ -34,19 +48,53 @@ export abstract class Platform<
   RESPONSE extends JovoResponse = JovoResponse,
   CONFIG extends ExtensibleConfig = ExtensibleConfig
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
-  readonly middlewareCollection = new MiddlewareCollection(...BASE_PLATFORM_MIDDLEWARES);
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
+  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE>;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
 
-  abstract setResponseSessionData(response: RESPONSE, jovo: Jovo): this;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract isResponseRelated(response: RESPONSE | Record<string, any>): boolean;
+  abstract finalizeResponse(
+    response: RESPONSE | RESPONSE[],
+    jovo: Jovo,
+  ): RESPONSE | RESPONSE[] | Promise<RESPONSE> | Promise<RESPONSE[]>;
+
+  initializeMiddlewareCollection(): MiddlewareCollection<PlatformBaseMiddlewares> {
+    return new MiddlewareCollection<PlatformBaseMiddlewares>(...BASE_PLATFORM_MIDDLEWARES);
+  }
+
+  install(parent: Extensible) {
+    if (!(parent instanceof App)) {
+      throw new InvalidParentError(this.constructor.name, App);
+    }
+  }
+
+  mount(parent: HandleRequest) {
+    const propagateMiddleware = (
+      appMiddleware: AppBaseMiddleware,
+      middleware: PlatformBaseMiddleware,
+    ) => {
+      parent.middlewareCollection.use(appMiddleware, async (...args: unknown[]) => {
+        if (parent.$platform?.constructor?.name !== this.constructor.name) {
+          return;
+        }
+        await this.middlewareCollection.run(middleware, ...args);
+      });
+    };
+
+    // TODO determine actual middleware mappings and add missing ones
+    propagateMiddleware('request', '$request');
+    propagateMiddleware('interpretation.asr', '$asr');
+    propagateMiddleware('interpretation.nlu', '$nlu');
+  }
 
   createJovoInstance<APP extends App>(
-    app: App,
+    app: APP,
     handleRequest: HandleRequest,
   ): Jovo<REQUEST, RESPONSE> {
     return new this.jovoClass(app, handleRequest, this);
@@ -58,6 +106,4 @@ export abstract class Platform<
     _merge(instance, request);
     return instance;
   }
-
-  finalizeResponse(response: RESPONSE): void {}
 }

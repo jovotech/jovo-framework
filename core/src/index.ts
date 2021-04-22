@@ -3,7 +3,7 @@
 
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
-export type Constructor<T> = new (...args: unknown[]) => T;
+export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U
 export type PickWhere<T, U> = Pick<
   T,
@@ -37,6 +37,8 @@ export * from './HandleRequest';
 export * from './Jovo';
 export * from './JovoError';
 export * from './JovoRequest';
+export * from './JovoSession';
+export * from './JovoUser';
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './Platform';
@@ -48,7 +50,7 @@ export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
 export * from './errors/HandlerNotFoundError';
 export * from './errors/InvalidParentError';
-export * from './errors/MatchingComponentNotFoundError';
+export * from './errors/MatchingRouteNotFoundError';
 export * from './errors/MatchingPlatformNotFoundError';
 
 export * from './metadata/MetadataStorage';

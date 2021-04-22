@@ -1,7 +1,8 @@
-import { App, ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
+import { AlexaUser } from './AlexaUser';
 
 export interface AlexaConfig extends ExtensibleConfig {}
 
@@ -9,19 +10,22 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaConfig> {
   outputTemplateConverterStrategy = new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = AlexaSkill;
+  userClass = AlexaUser;
 
   getDefaultConfig() {
     return {};
   }
 
-  mount(parent: App): Promise<void> | void {}
-
-  isRequestRelated(request: Record<string, any>): boolean {
+  isRequestRelated(request: Record<string, any> | AlexaRequest): boolean {
     return request.version && request.request && request.request.requestId;
   }
 
-  setResponseSessionData(response: AlexaResponse, jovo: Jovo): this {
-    response.sessionAttributes = jovo.$session.$data;
-    return this;
+  isResponseRelated(response: Record<string, any> | AlexaResponse): boolean {
+    return response.version && response.response;
+  }
+
+  finalizeResponse(response: AlexaResponse, jovo: Jovo): AlexaResponse | Promise<AlexaResponse> {
+    response.sessionAttributes = jovo.$session;
+    return response;
   }
 }

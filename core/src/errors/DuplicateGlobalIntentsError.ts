@@ -2,9 +2,12 @@ import ansiColors from 'ansi-colors';
 import { JovoError } from '../JovoError';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 
+// TODO improve
 export class DuplicateGlobalIntentsError extends JovoError {
   constructor(entries: [string, HandlerMetadata[]][]) {
-    super('');
+    super({
+      message: 'Duplicate global intents.',
+    });
 
     const errorTexts = entries.map(([intentName, handlers]) => {
       const textBlocks = handlers.map(
@@ -20,6 +23,6 @@ export class DuplicateGlobalIntentsError extends JovoError {
 
     const errorIntroText = ansiColors.red('Duplicate global intent names detected:');
     const separator = '\n - ';
-    this.message = [errorIntroText, errorTexts.join(separator)].join(separator);
+    // this.message = [errorIntroText, errorTexts.join(separator)].join(separator);
   }
 }

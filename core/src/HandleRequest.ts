@@ -3,15 +3,21 @@ import _merge from 'lodash.merge';
 import { App, AppConfig } from './App';
 import { Extensible } from './Extensible';
 import { Server } from './Server';
-import { DeepPartial, RegisteredComponents } from './index';
+import { DeepPartial, MiddlewareCollection, Platform, RegisteredComponents } from './index';
 
 export class HandleRequest extends Extensible<AppConfig> {
-  readonly middlewareCollection!: App['middlewareCollection'];
-  readonly components!: RegisteredComponents;
+  readonly components: RegisteredComponents;
+  $platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
     super(_cloneDeep(app.config) as DeepPartial<AppConfig>);
+    this.components = {};
     _merge(this, _cloneDeep(app));
+  }
+
+  // middlewareCollection will be overwritten anyways by merging with App
+  initializeMiddlewareCollection(): MiddlewareCollection {
+    return new MiddlewareCollection();
   }
 
   getDefaultConfig(): AppConfig {

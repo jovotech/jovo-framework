@@ -1,12 +1,11 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, Middleware, OutputConstructor, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
-import { Server } from './Server';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
@@ -15,6 +14,7 @@ import { Platform } from './Platform';
 import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
+import { Server } from './Server';
 
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
@@ -35,6 +35,8 @@ export type AppBaseMiddlewares = [
   'response',
 ];
 
+export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
+
 export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
   'request',
   'interpretation.asr',
@@ -47,12 +49,8 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 ];
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
-  readonly config: AppConfig = {
-    placeholder: '',
-  };
-  readonly middlewareCollection = new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
-
   readonly components: RegisteredComponents;
+  readonly dynamicOutputDictionary: Record<string, OutputConstructor> = {};
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -69,9 +67,13 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  middleware(name: ArrayElement<AppBaseMiddlewares>): Middleware | undefined;
+  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
+    return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
+  }
+
+  middleware(name: AppBaseMiddleware): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | ArrayElement<AppBaseMiddlewares>): Middleware | undefined {
+  middleware(name: string | AppBaseMiddleware): Middleware | undefined {
     return this.middlewareCollection.get(name);
   }
 
@@ -99,22 +101,22 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   }
 
   // TODO finish Host-related things
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(server: Server): Promise<any> {
+  async handle(server: Server): Promise<void> {
     const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
-
-    await handleRequest.middlewareCollection.run('request', handleRequest);
 
     const relatedPlatform = this.platforms.find(
       (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
     );
     if (!relatedPlatform) {
-      throw new MatchingPlatformNotFoundError();
+      throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
+    handleRequest.$platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
+    // TODO determine whether request should only be called for relatedPlatform
+    await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
@@ -124,7 +126,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
     // TODO move to response middleware
-    await relatedPlatform.setResponseSessionData(jovo.$response!, jovo);
+    // await relatedPlatform.setResponseSessionData(jovo.$response, jovo);
     await server.setResponse(jovo.$response);
   }
 

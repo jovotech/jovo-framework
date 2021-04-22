@@ -19,18 +19,19 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "lodash.merge": "^4.6.2",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.set": "^4.3.2",
-    "@jovotech/output-alexa": "latest",
     "chalk": "^4.1.0",
     "jovo-model": "^3.0.1",
     "jovo-model-alexa": "^3.0.1",
-    "node-emoji": "^1.10.0"
+    "node-emoji": "^1.10.0",
+    "@jovotech/output-alexa": "^latest",
+    "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
+    "@jovotech/core": "~4.0",
     "@types/lodash.merge": "^4.6.6",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
@@ -46,7 +47,6 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "global-dirs": "^3.0.0",
-    "@jovotech/core": "~4.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",

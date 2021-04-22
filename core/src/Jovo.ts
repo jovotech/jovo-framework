@@ -1,19 +1,27 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import _get from 'lodash.get';
 import { App, AppConfig } from './App';
-import { BaseComponent } from './BaseComponent';
-import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { InternalIntent, InternalSessionProperty, RequestType } from './enums';
+import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
+  BaseComponent,
+  BaseOutput,
+  ComponentConfig,
   ComponentConstructor,
+  ComponentData,
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  OutputConstructor,
   PickWhere,
   Server,
+  StateStack,
 } from './index';
-import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
+import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
+import { JovoSession } from './JovoSession';
+import { JovoUser } from './JovoUser';
+import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 
@@ -25,16 +33,18 @@ export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoRe
 ) => Jovo<REQUEST, RESPONSE>;
 
 export interface JovoRequestType {
-  type?: RequestType | string;
+  type?: RequestTypeLike;
   subType?: string;
   optional?: boolean;
 }
 
-export interface JovoSession {
-  $data: SessionData;
+export interface DelegateOptions<
+  CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
+  EVENTS extends string = string
+> {
+  resolveTo: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
+  config?: CONFIG;
 }
-
-export interface DelegateOptions {}
 
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
@@ -44,12 +54,13 @@ export abstract class Jovo<
   $data: RequestData;
   $entities: EntityMap;
   $nlu: NluData;
-  $output: OutputTemplate;
+  $output: OutputTemplate | OutputTemplate[];
   $request: REQUEST;
-  $response?: RESPONSE;
+  $response?: RESPONSE | RESPONSE[];
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
+  $user?: JovoUser<REQUEST, RESPONSE>;
 
   constructor(
     readonly $app: App,
@@ -58,13 +69,11 @@ export abstract class Jovo<
   ) {
     this.$asr = {};
     this.$data = {};
-    this.$output = {};
+    this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    this.$session = {
-      $data: this.$request.getSessionData() || {},
-    };
+    const session = this.$request.getSession();
+    this.$session = session instanceof JovoSession ? session : new JovoSession(session);
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
-
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
   }
@@ -81,70 +90,236 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get state(): SessionData[InternalSessionProperty.State] {
-    return this.$session.$data[InternalSessionProperty.State];
+  get $state(): JovoSession['$state'] {
+    return this.$session.$state;
   }
 
-  // TODO determine async/ not async
+  get $subState(): string | undefined {
+    if (!this.$state?.length) return;
+    return this.$state[this.$state.length - 1]?.$subState;
+  }
+
+  set $subState(value: string | undefined) {
+    if (!this.$state?.length) return;
+    this.$state[this.$state.length - 1].$subState = value;
+    if (this.$route) {
+      this.$route.subState = value;
+    }
+  }
+
+  get $component(): { $data: ComponentData; $config: Record<string, unknown> | undefined } {
+    const app = this.$app;
+    const state = this.$state as StateStack;
+    const setDataIfNotDefined = () => {
+      if (!state[state.length - 1 || 0]?.$data) {
+        state[state.length - 1].$data = {};
+      }
+    };
+    return {
+      get $data(): ComponentData {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        return state[state.length - 1].$data as ComponentData;
+      },
+      set $data(value: ComponentData) {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        state[state.length - 1].$data = value;
+      },
+      get $config(): Record<string, unknown> | undefined {
+        // EXPERIMENTAL: this will try to get the Output class from the saved Output-classes in App.
+        // Issue is, that a restart for example would cause the Output-class to not be found...
+        const modifiedStateConfig: any | undefined = {};
+        const currentStateConfig: any | undefined = state?.[state?.length - 1 || 0]?.config;
+        if (currentStateConfig) {
+          for (const key in currentStateConfig) {
+            if (
+              currentStateConfig.hasOwnProperty(key) &&
+              currentStateConfig[key]?.type === 'output' &&
+              currentStateConfig[key]?.identifier &&
+              app.dynamicOutputDictionary[currentStateConfig[key]?.identifier]
+            ) {
+              modifiedStateConfig[key] =
+                app.dynamicOutputDictionary[currentStateConfig[key].identifier];
+            } else {
+              modifiedStateConfig[key] = currentStateConfig[key];
+            }
+          }
+        }
+        return modifiedStateConfig as Record<string, unknown> | undefined;
+      },
+      set $config(value: Record<string, unknown> | undefined) {
+        state[state.length - 1].config = value;
+      },
+    };
+  }
+
+  // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT>,
     options?: DeepPartial<OUTPUT['options']>,
-  ) {
+  ): Promise<void> {
     const outputInstance = new outputConstructor(this, options);
-    //
     this.$output = await outputInstance.build();
   }
 
   async $redirect<
     COMPONENT extends BaseComponent,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>
-  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<this>;
-  async $redirect(componentName: string, handlerKey?: string): Promise<this>;
+    HANDLER extends Exclude<
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      keyof PickWhere<COMPONENT, Function>,
+      keyof BaseComponent
+    >
+  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<void>;
+  async $redirect(componentName: string, handlerKey?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handlerKey?: string,
-  ): Promise<this> {
-    const key = handlerKey || InternalIntent.Start;
+  ): Promise<void> {
+    const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
 
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    // Max: I think this will cause issues if a component is passed that is not in the root but nested.
-    // A component could exist in root and as a child in another component, that has to be taken into account as well.
-    const component = this.$handleRequest.components[componentName];
-    if (!component) {
-      throw new ComponentNotFoundError(`Component ${componentName} not found.`);
-    }
-
-    // TODO: good place for caching here?
-    if (!component.instance) {
-      const jovoReference =
-        (this as { jovo?: Jovo }).jovo instanceof Jovo ? (this as { jovo?: Jovo }).jovo! : this;
-      component.instance = new (component.target as ComponentConstructor)(
-        jovoReference,
-        component.options?.config,
-      );
-    }
-    const componentInstance = component.instance;
-    if (!componentInstance || !(componentInstance as any)[key]) {
-      throw new HandlerNotFoundError(key.toString(), componentName);
-    }
-    await (componentInstance as any)[key]();
-
-    // TODO: move somewhere else
-    this.$output = componentInstance.$output;
-    this.$session.$data[InternalSessionProperty.State] = componentInstance.constructor.name;
-
-    return this;
+    const stateStack = this.$state as StateStack;
+    // replace last item in stack
+    stateStack[stateStack.length - 1] = {
+      componentPath: this.$getComponentPath(componentMetadata).join('.'),
+    };
+    await this.$runComponentHandler(componentMetadata, handlerKey);
   }
 
-  $delegate<COMPONENT extends BaseComponent>(
+  async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
+    options: DelegateOptions<ComponentConfig<COMPONENT>>,
+  ): Promise<void>;
+  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
-  ): this;
-  $delegate(componentName: string, options: DelegateOptions): this;
-  $delegate(constructorOrName: ComponentConstructor | string, options: DelegateOptions): this {
-    // TODO implement
-    return this;
+  ): Promise<void> {
+    const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
+    const stateStack = this.$state as StateStack;
+
+    const serializableResolveTo: Record<string, string> = {};
+    for (const key in options.resolveTo) {
+      if (options.resolveTo.hasOwnProperty(key)) {
+        const value = options.resolveTo[key];
+        serializableResolveTo[key] = typeof value === 'string' ? value : value.name;
+      }
+    }
+
+    // EXPERIMENTAL: See experimental above
+    const serializableConfig: Record<string, any> = {};
+    for (const key in options.config) {
+      if (options.config.hasOwnProperty(key)) {
+        const value: any | undefined = options.config[key];
+        const isOutput = value?.prototype instanceof BaseOutput;
+        serializableConfig[key] = isOutput ? { type: 'output', identifier: value.name } : value;
+        if (isOutput) {
+          this.$app.dynamicOutputDictionary[value.name] = value;
+        }
+      }
+    }
+
+    stateStack.push({
+      resolveTo: serializableResolveTo,
+      config: serializableConfig,
+      componentPath: this.$getComponentPath(componentMetadata).join('.'),
+    });
+    await this.$runComponentHandler(componentMetadata);
+  }
+
+  // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
+  async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
+    const stateStack = this.$state as StateStack;
+    const currentStateStackItem = stateStack[stateStack.length - 1];
+    const previousStateStackItem = stateStack[stateStack.length - 2];
+    if (!currentStateStackItem?.resolveTo || !previousStateStackItem) {
+      return;
+    }
+    const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
+    const previousComponentPath = previousStateStackItem.componentPath.split('.');
+    const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
+    stateStack.pop();
+    await this.$runComponentHandler(previousComponentMetadata, resolvedHandlerKey, ...eventArgs);
+    return;
+  }
+
+  $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
+  }
+
+  $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
+  ): RegisteredComponentMetadata<COMPONENT> | undefined {
+    if (Array.isArray(constructorOrNameOrPath)) {
+      const componentPath = constructorOrNameOrPath.join('.components.');
+      return _get(this.$handleRequest.components, componentPath);
+    } else {
+      const componentName =
+        typeof constructorOrNameOrPath === 'string'
+          ? constructorOrNameOrPath
+          : constructorOrNameOrPath.name;
+      const currentComponentMetadata = this.$getComponentMetadata(this.$route?.path || []);
+      const rootComponentMetadata = this.$handleRequest.components[componentName];
+      const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
+      return childComponentMetadata || rootComponentMetadata;
+    }
+  }
+
+  $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
+  ): RegisteredComponentMetadata<COMPONENT> {
+    const metadata = this.$getComponentMetadata(constructorOrNameOrPath);
+    if (!metadata) {
+      // TODO implement error
+      let path: string[];
+      if (Array.isArray(constructorOrNameOrPath)) {
+        path = constructorOrNameOrPath;
+      } else {
+        const componentName =
+          typeof constructorOrNameOrPath === 'string'
+            ? constructorOrNameOrPath
+            : constructorOrNameOrPath.name;
+        path = [...(this.$route?.path || []), componentName];
+      }
+      throw new ComponentNotFoundError(path);
+    }
+    return metadata;
+  }
+
+  async $runComponentHandler<
+    COMPONENT extends BaseComponent,
+    HANDLER extends Exclude<
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      keyof PickWhere<COMPONENT, Function>,
+      keyof BaseComponent
+    >,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ARGS extends any[] = any[]
+  >(
+    componentMetadata: RegisteredComponentMetadata<COMPONENT>,
+    handlerKey: HANDLER | string = InternalIntent.Start,
+    ...callArgs: ARGS
+  ): Promise<void> {
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
+    const jovoReference = (this as { jovo?: Jovo })?.jovo || this;
+    const componentInstance = new (componentMetadata.target as ComponentConstructor)(
+      jovoReference,
+      componentMetadata.options?.config,
+    );
+    if (!componentInstance[handlerKey as keyof BaseComponent]) {
+      throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
+    }
+
+    this.$route = {
+      path,
+      handlerKey: handlerKey.toString(),
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (componentInstance as any)[handlerKey](...callArgs);
   }
 }

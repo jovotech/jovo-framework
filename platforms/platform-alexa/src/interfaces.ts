@@ -1,10 +1,10 @@
-import { SessionData } from '@jovotech/core';
+import { JovoSession } from '@jovotech/core';
 
 export interface Session {
   new: boolean;
   sessionId: string;
   application: Application;
-  attributes: SessionData;
+  attributes: JovoSession;
   user: User;
   person: Person;
 }
