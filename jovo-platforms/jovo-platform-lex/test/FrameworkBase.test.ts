@@ -13,7 +13,7 @@ import _set = require('lodash.set');
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {Lex,NEW_SESSION_KEY} from '../src';
+import {Lex, NEW_SESSION_KEY} from '../src';
 
 const PATH_TO_DB_DIR = './test/db';
 
@@ -265,6 +265,49 @@ describe('test state', () => {
   });
 });
 
+describe('test handleOnNewSession', () => {
+  test('test no new session', async (done) => {
+    app.setHandler({
+      NEW_SESSION() {
+        // shouldn't be reached
+        this.$data.foo = 'bar';
+      },
+      IntentA() {
+        expect(this.$data.foo).toBe(undefined);
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
+    intentRequest.setSessionAttributes({
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+    app.on('response', (handleRequest) => {
+      done();
+    });
+  });
+
+  test('test new session', async (done) => {
+    app.setHandler({
+      NEW_SESSION() {
+        // should be reached
+        this.$data.foo = 'bar';
+      },
+      IntentA() {
+        expect(this.$data.foo).toBe('bar');
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
+    intentRequest.setSessionAttributes({});
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+    app.on('response', (handleRequest) => {
+      done();
+    });
+  });
+});
+
+
 describe('test session attributes', () => {
   test('test get session', async (done) => {
     app.setHandler({
@@ -343,6 +386,7 @@ describe('test session attributes', () => {
     });
   });
 });
+
 export function clearDbFolder() {
   const files = fs.readdirSync(PATH_TO_DB_DIR);
 
