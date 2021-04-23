@@ -1,14 +1,15 @@
-import { OutputTemplate } from '@jovotech/output';
-import { DeepPartial } from './index';
+import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { DeepPartial, JovoRequest } from './index';
 import { Jovo } from './Jovo';
 import _merge from 'lodash.merge';
 import { JovoProxy } from './JovoProxy';
 
-export type OutputConstructor<OUTPUT extends BaseOutput = BaseOutput> = new (
-  jovo: Jovo,
-  options?: DeepPartial<OUTPUT['options']>,
-  ...args: unknown[]
-) => OUTPUT;
+export type OutputConstructor<
+  OUTPUT extends BaseOutput = BaseOutput,
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>
+> = new (jovo: JOVO, options?: DeepPartial<OUTPUT['options']>, ...args: unknown[]) => OUTPUT;
 
 export interface OutputOptions {
   [key: string]: unknown;

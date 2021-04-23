@@ -29,12 +29,13 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 
-export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
-  app: App,
-  handleRequest: HandleRequest,
-  platform: Platform<REQUEST, RESPONSE>,
-  ...args: unknown[]
-) => Jovo<REQUEST, RESPONSE>;
+export type JovoConstructor<
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>
+> = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoRequestType {
   type?: RequestTypeLike;
@@ -57,6 +58,23 @@ export interface DelegateOptions<
   config?: CONFIG;
 }
 
+export function registerPlatformSpecificJovoReference<
+  KEY extends keyof Jovo,
+  REQUEST extends JovoRequest,
+  RESPONSE extends JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE>
+>(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
+  Object.defineProperty(Jovo.prototype, key as any, {
+    get(): any | undefined {
+      return this instanceof jovoClass
+        ? this
+        : this.jovo instanceof jovoClass
+        ? this.jovo
+        : undefined;
+    },
+  });
+}
+
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse
@@ -71,12 +89,13 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user?: JovoUser<REQUEST, RESPONSE>;
+  $user?: JovoUser<REQUEST, RESPONSE, this>;
 
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
-    readonly $platform: Platform<REQUEST, RESPONSE>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    readonly $platform: Platform<REQUEST, RESPONSE, any, any>,
   ) {
     this.$asr = {};
     this.$data = {};
@@ -169,7 +188,7 @@ export abstract class Jovo<
 
   // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructor: OutputConstructor<OUTPUT>,
+    outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     const outputInstance = new outputConstructor(this, options);
@@ -321,7 +340,7 @@ export abstract class Jovo<
     const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
     const jovoReference = (this as { jovo?: Jovo })?.jovo || this;
     const componentInstance = new (componentMetadata.target as ComponentConstructor)(
-      jovoReference,
+      jovoReference as Jovo,
       componentMetadata.options?.config,
     );
     if (!componentInstance[handlerKey as keyof BaseComponent]) {

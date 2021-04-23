@@ -1,4 +1,6 @@
+import { registerPlatformSpecificJovoReference } from '@jovotech/core';
 import { Alexa, AlexaConfig } from './Alexa';
+import { AlexaSkill } from './AlexaSkill';
 
 declare module '@jovotech/core/dist/Extensible' {
   interface ExtensiblePluginConfig {
@@ -9,6 +11,13 @@ declare module '@jovotech/core/dist/Extensible' {
     Alexa?: Alexa;
   }
 }
+
+declare module '@jovotech/core/dist/Jovo' {
+  interface Jovo {
+    $alexaSkill?: AlexaSkill;
+  }
+}
+registerPlatformSpecificJovoReference('$alexaSkill', AlexaSkill);
 
 export * from './Alexa';
 export * from './AlexaRequest';
