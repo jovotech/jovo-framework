@@ -64,8 +64,8 @@ export function registerPlatformSpecificJovoReference<
   RESPONSE extends JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE>
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
-  Object.defineProperty(Jovo.prototype, key as any, {
-    get(): any | undefined {
+  Object.defineProperty(Jovo.prototype, key, {
+    get(): Jovo[KEY] | undefined {
       return this instanceof jovoClass
         ? this
         : this.jovo instanceof jovoClass
