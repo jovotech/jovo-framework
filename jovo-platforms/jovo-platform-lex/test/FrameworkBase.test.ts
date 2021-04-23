@@ -13,14 +13,14 @@ import _set = require('lodash.set');
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {Lex} from '../src';
+import {Lex,NEW_SESSION_KEY} from '../src';
 
 const PATH_TO_DB_DIR = './test/db';
 
 process.env.NODE_ENV = 'UNIT_TEST';
 let app: App;
 let t: TestSuite;
-jest.setTimeout(500);
+jest.setTimeout(600);
 const delay = (ms: number) => {
   return new Promise((r) => setTimeout(r, ms));
 };
@@ -166,36 +166,183 @@ describe('test request types', () => {
     request.setState('State1.State2');
     app.handle(ExpressJS.dummyRequest(request));
   });
-  /*
-  test('test end without end', async (done) => {
-    app.setHandler({});
+});
 
-    const request: JovoRequest = await t.requestBuilder.end();
-    request.setState('State1.State2');
-    app.handle(ExpressJS.dummyRequest(request));
+describe('test state', () => {
+  test('test getState', async (done) => {
+    app.setHandler({
+      TestState: {
+        SessionIntent() {
+          expect(this.getState()).toBe('TestState');
+          done();
+        },
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
+    intentRequest.setSessionAttributes({
+      [SessionConstants.STATE]: 'TestState',
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+  });
+
+  test('test keep state', async (done) => {
+    app.setHandler({
+      TestState: {
+        SessionIntent() {
+          this.ask('Hello', 'World');
+        },
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
+    intentRequest.setSessionAttributes({
+      [SessionConstants.STATE]: 'TestState',
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
-      expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.END);
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE, 'TestState'),
+      ).toBe(true);
       done();
     });
   });
 
-  test('test end (with state) in global ', async (done) => {
+  test('test removeState', async (done) => {
     app.setHandler({
-      State1: {},
-      END() {
+      TestState: {
+        SessionIntent() {
+          this.removeState();
+          this.ask('Hello', 'World');
+        },
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
+    intentRequest.setSessionAttributes({
+      [SessionConstants.STATE]: 'TestState',
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE)).toBe(
+        false,
+      );
+      done();
+    });
+  });
+
+  test('test setState', async (done) => {
+    app.setHandler({
+      TestState: {
+        SessionIntent() {
+          this.setState('AnotherTestState');
+          this.ask('Hello', 'World');
+        },
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
+    intentRequest.setSessionAttributes({
+      [SessionConstants.STATE]: 'TestState',
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute(
+          SessionConstants.STATE,
+          'AnotherTestState',
+        ),
+      ).toBe(true);
+      done();
+    });
+  });
+});
+
+describe('test session attributes', () => {
+  test('test get session', async (done) => {
+    app.setHandler({
+      SessionIntent() {
+        expect(this.getSessionAttribute('sessionName1')).toBe('sessionValue1');
+        expect(this.$session!.$data.sessionName2).toBe('sessionValue2');
+
+        this.ask('Foo', 'Bar');
         done();
       },
     });
 
-    const request: JovoRequest = await t.requestBuilder.end();
-    request.setState('State1');
-    app.handle(ExpressJS.dummyRequest(request));
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
+    intentRequest.setSessionAttributes({
+      sessionName1: 'sessionValue1',
+      sessionName2: 'sessionValue2',
+      [NEW_SESSION_KEY]: false,
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
   });
-  */
+
+  test('test set session', async (done) => {
+    app.setHandler({
+      LAUNCH() {
+        this.setSessionAttribute('sessionName1', 'sessionValue1');
+        this.addSessionAttribute('sessionName2', 'sessionValue2');
+        this.$session!.$data.sessionName3 = 'sessionValue3';
+        this.ask('Foo', 'Bar');
+      },
+    });
+
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName1', 'sessionValue1'),
+      ).toBe(true);
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName2', 'sessionValue2'),
+      ).toBe(true);
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName3', 'sessionValue3'),
+      ).toBe(true);
+
+      done();
+    });
+  });
+
+  test('test setSessionAttributes', async (done) => {
+    app.setHandler({
+      LAUNCH() {
+        this.setSessionAttributes({
+          sessionName1: 'sessionValue1',
+          sessionName2: 'sessionValue2',
+          sessionName3: 'sessionValue3',
+        });
+        this.ask('Foo', 'Bar');
+      },
+    });
+
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName1', 'sessionValue1'),
+      ).toBe(true);
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName2', 'sessionValue2'),
+      ).toBe(true);
+      expect(
+        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName3', 'sessionValue3'),
+      ).toBe(true);
+      done();
+    });
+  });
 });
-
-
 export function clearDbFolder() {
   const files = fs.readdirSync(PATH_TO_DB_DIR);
 

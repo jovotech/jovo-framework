@@ -1,6 +1,7 @@
 import {JovoRequest, SessionData, SessionConstants, Inputs, Input} from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
+import {NEW_SESSION_KEY} from "../index";
 
 export interface LexInputs extends Inputs {
   [key: string]: LexInput;
@@ -83,7 +84,7 @@ export class LexRequest implements JovoRequest {
   }
 
   isNewSession(): boolean {
-    return false;
+    return _get(this.getSessionAttributes(), NEW_SESSION_KEY, true);
   }
 
   hasAudioInterface(): boolean {
@@ -158,10 +159,10 @@ export class LexRequest implements JovoRequest {
     return this;
   }
 
-  setNewSession(isNew: boolean): this {
+  setNewSession(isNew: boolean) {
+    _set(this, `sessionAttributes[${NEW_SESSION_KEY}]`, isNew);
     return this;
   }
-
   setAudioInterface(): this {
     return this;
   }
@@ -186,13 +187,15 @@ export class LexRequest implements JovoRequest {
     return this.NextBestTask!;
   }
 
-  setIntentName(intentName: string): this {
-    this.CurrentTask = intentName;
+  setIntentName(intentName: string) {
+    if (this.getIntentName()) {
+      _set(this, 'currentIntent.name',intentName);
+    }
     return this;
   }
 
   setSessionId(id: string): this {
-    this.DialogueSid = id;
+    this.sessionAttributes.sessionId = id;
     return this;
   }
 
@@ -205,9 +208,11 @@ export class LexRequest implements JovoRequest {
     this.CurrentTaskConfidence = confidence;
     return this;
   }
+
   getSlots() {
     return _get(this, 'currentIntent.slots');
   }
+
   getInputs() {
     const inputs = {};
     const slots = this.getSlots();
@@ -215,12 +220,12 @@ export class LexRequest implements JovoRequest {
       return inputs;
     }
     Object.keys(slots).forEach((slot: string) => {
-      if(slots[slot]===null || slots[slot]===undefined ){
+      if ( slots[slot] === null || slots[slot] === undefined ) {
         return;
       }
       const input = {
         name: slot,
-        value: _get(this, 'currentIntent.slotDetails.'+slot+'.originalValue'),
+        value: _get(this, 'currentIntent.slotDetails.' + slot + '.originalValue'),
         id: slots[slot]
       };
       // @ts-ignore

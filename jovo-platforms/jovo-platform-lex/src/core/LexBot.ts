@@ -1,8 +1,8 @@
-import { Jovo, BaseApp, Host, HandleRequest, AudioData } from 'jovo-core';
-import { LexSpeechBuilder } from './LexSpeechBuilder';
-import { LexResponse } from './LexResponse';
-import { LexUser } from './LexUser';
-import { LexRequest } from './LexRequest';
+import {Jovo, BaseApp, Host, HandleRequest, AudioData} from 'jovo-core';
+import {LexSpeechBuilder} from './LexSpeechBuilder';
+import {LexResponse} from './LexResponse';
+import {LexUser} from './LexUser';
+import {LexRequest} from './LexRequest';
 
 export class LexBot extends Jovo {
   $lexBot: LexBot;
@@ -21,13 +21,7 @@ export class LexBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    // undefined if no active DB
-    /*if (this.$user.$session) {
-      return this.$user.$session.id !== this.$request!.getSessionId();
-    } else {
-      return false;
-    }*/
-    return false;
+    return this.$request!.isNewSession();
   }
 
   hasAudioInterface(): boolean {
