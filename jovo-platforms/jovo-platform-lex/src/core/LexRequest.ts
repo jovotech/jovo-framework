@@ -152,6 +152,7 @@ export class LexRequest implements JovoRequest {
 
   setUserId(userId: string): this {
     this.UserIdentifier = userId;
+    this.setSessionId(userId);
     return this;
   }
 
@@ -249,7 +250,7 @@ export class LexRequest implements JovoRequest {
   }
 
   getSessionId(): string | undefined {
-    return;
+    return this.sessionAttributes.sessionId;
   }
 
   toJSON(): LexRequestJSON {

@@ -80,12 +80,11 @@ describe('test request types', () => {
     });
 
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
-    app.handle(ExpressJS.dummyRequest(request));
-
     app.on('response', (handleRequest: HandleRequest) => {
       expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.INTENT);
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 
   test('test end', async (done) => {
@@ -96,13 +95,13 @@ describe('test request types', () => {
     });
 
     const request: JovoRequest = await t.requestBuilder.end();
-    app.handle(ExpressJS.dummyRequest(request));
 
     app.on('response', (handleRequest: HandleRequest) => {
       // @ts-ignore
       expect(handleRequest.jovo!.$response.dialogAction.type).toBe('Close');
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 
   test('test end global', async (done) => {
@@ -114,7 +113,7 @@ describe('test request types', () => {
 
     const request: JovoRequest = await t.requestBuilder.end();
     request.setState('State');
-    app.handle(ExpressJS.dummyRequest(request));
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 
   test('test getRoute', async (done) => {
@@ -129,12 +128,12 @@ describe('test request types', () => {
       },
     });
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
-    app.handle(ExpressJS.dummyRequest(request));
     app.on('response', (handleRequest: HandleRequest) => {
       // @ts-ignore
       const lexResponse = handleRequest.jovo!.$response;
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 
   test('test end in state', async (done) => {
@@ -148,7 +147,7 @@ describe('test request types', () => {
 
     const request: JovoRequest = await t.requestBuilder.end();
     request.setState('State');
-    app.handle(ExpressJS.dummyRequest(request));
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 
   test('test end in multilevel state', async (done) => {
@@ -164,7 +163,7 @@ describe('test request types', () => {
 
     const request: JovoRequest = await t.requestBuilder.end();
     request.setState('State1.State2');
-    app.handle(ExpressJS.dummyRequest(request));
+    await app.handle(ExpressJS.dummyRequest(request));
   });
 });
 
@@ -184,7 +183,7 @@ describe('test state', () => {
       [SessionConstants.STATE]: 'TestState',
       [NEW_SESSION_KEY]: false,
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test keep state', async (done) => {
@@ -201,14 +200,13 @@ describe('test state', () => {
       [SessionConstants.STATE]: 'TestState',
       [NEW_SESSION_KEY]: false,
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
-
     app.on('response', (handleRequest: HandleRequest) => {
       expect(
         handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE, 'TestState'),
       ).toBe(true);
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test removeState', async (done) => {
@@ -251,7 +249,6 @@ describe('test state', () => {
       [SessionConstants.STATE]: 'TestState',
       [NEW_SESSION_KEY]: false,
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(
@@ -262,6 +259,7 @@ describe('test state', () => {
       ).toBe(true);
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 });
 
@@ -306,7 +304,6 @@ describe('test handleOnNewSession', () => {
     });
   });
 });
-
 
 describe('test session attributes', () => {
   test('test get session', async (done) => {
@@ -385,6 +382,43 @@ describe('test session attributes', () => {
       done();
     });
   });
+});
+
+describe('test $inputs', () => {
+  test('test getInput, $inputs', async (done) => {
+    app.setHandler({
+      HelloWorldIntent() {
+        expect(this.getInput('name')!.value).toBe('Joe');
+        expect(this.$inputs!.name.value).toBe('Joe');
+        done();
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
+      name: 'Joe',
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+  });
+
+  test('test mapInputs', async (done) => {
+    app.setConfig({
+      inputMap: {
+        'given-name': 'name',
+      },
+    });
+    app.setHandler({
+      HelloWorldIntent() {
+        expect(this.getInput('name')!.value).toBe('Joe');
+        expect(this.$inputs!.name.value).toBe('Joe');
+        done();
+      },
+    });
+
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
+      'given-name': 'Joe',
+    });
+    app.handle(ExpressJS.dummyRequest(intentRequest));
+  }, 100);
 });
 
 export function clearDbFolder() {
