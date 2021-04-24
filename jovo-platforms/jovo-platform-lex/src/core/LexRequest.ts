@@ -225,7 +225,7 @@ export class LexRequest implements JovoRequest {
       }
       const input = {
         name: slot,
-        value: _get(this, 'currentIntent.slotDetails.' + slot + '.originalValue'),
+        value: _get(this, `currentIntent.slotDetails.${slot}.originalValue`),
         id: slots[slot]
       };
       // @ts-ignore
@@ -234,14 +234,9 @@ export class LexRequest implements JovoRequest {
     return inputs;
   }
 
-  addInput(key: string, value: string | LexInput): this {
-    if ( typeof value === 'string' ) {
-      this[`Field_${key}_Value`] = value;
-    } else {
-      this[`Field_${key}_Type`] = value.type;
-      this[`Field_${key}_Value`] = value.value;
-    }
-
+  addInput(key: string, value: string | object) {
+    _set(this, `currentIntent.slots.${key}`, value);
+    _set(this, `currentIntent.slotDetails.${key}.originalValue`, value);
     return this;
   }
 
