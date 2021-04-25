@@ -4,9 +4,8 @@ import { LexBot } from '../core/LexBot';
 import { LexRequest } from '../core/LexRequest';
 import { LexResponse } from '../core/LexResponse';
 import { LexUser } from '../core/LexUser';
-import { LexSpeechBuilder } from '../core/LexSpeechBuilder';
 import _set = require('lodash.set');
-import {NEW_SESSION_KEY} from "../index";
+import { NEW_SESSION_KEY } from '../index';
 
 export class LexCore implements Plugin {
   install(lex: Lex) {
@@ -14,8 +13,8 @@ export class LexCore implements Plugin {
     lex.middleware('$request')!.use(this.request.bind(this));
     lex.middleware('$type')!.use(this.type.bind(this));
     lex.middleware('$session')!.use(this.session.bind(this));
-    lex.middleware('$output')!.use(this.output.bind(this));
     lex.middleware('$response')!.use(this.response.bind(this));
+    lex.middleware('$output')!.use(this.output.bind(this));
   }
 
   uninstall(lex: Lex) {}
@@ -42,9 +41,7 @@ export class LexCore implements Plugin {
       );
     }
 
-    lex.$request = LexRequest.fromJSON(
-      lex.$host.getRequestObject(),
-    ) as LexRequest;
+    lex.$request = LexRequest.fromJSON(lex.$host.getRequestObject()) as LexRequest;
     lex.$user = new LexUser(lex);
   }
 
@@ -75,10 +72,10 @@ export class LexCore implements Plugin {
       _set(response, 'dialogAction', {
         type: 'Close',
         fulfillmentState: 'Fulfilled',
-        message:{
+        message: {
           contentType: 'PlainText',
-          content: tell.speech
-        }
+          content: tell.speech,
+        },
       });
       //conversation is over, we can clear session attributes
       _set(response, 'sessionAttributes', {});
@@ -87,20 +84,18 @@ export class LexCore implements Plugin {
     if (ask) {
       _set(response, 'dialogAction', {
         type: 'ElicitIntent',
-        message:{
+        message: {
           contentType: 'PlainText',
-          content: ask.speech
-        }
+          content: ask.speech,
+        },
       });
       _set(response, 'sessionAttributes', lex.$session.$data);
     }
   }
   async response(lex: LexBot) {
-    if (lex.$type.type === EnumRequestType.INTENT) {
-      const response = lex.$response || new LexResponse();
-      const sessionAttributes = response.getSessionAttributes() || {};
-      sessionAttributes[NEW_SESSION_KEY] = false;
-      response.setSessionAttributes(sessionAttributes);
-    }
+    const response = lex.$response || new LexResponse();
+    const sessionAttributes = response.getSessionAttributes() || {};
+    sessionAttributes[NEW_SESSION_KEY] = false;
+    response.setSessionAttributes(sessionAttributes);
   }
 }

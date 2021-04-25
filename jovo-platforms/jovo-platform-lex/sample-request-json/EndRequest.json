@@ -17,19 +17,12 @@
     "slots": {
     },
     "slotDetails": {
-
     },
     "confirmationStatus": "None",
     "nluIntentConfidenceScore": 1
   },
   "alternativeIntents": [
-    {
-      "name": "sampleIntent2",
-      "slots": {},
-      "slotDetails": {},
-      "confirmationStatus": "None",
-      "nluIntentConfidenceScore": 0.6
-    }
+
   ],
   "inputTranscript": "hello to the world",
   "recentIntentSummaryView": null,

@@ -1,7 +1,7 @@
-import {JovoRequest, SessionData, SessionConstants, Inputs, Input} from 'jovo-core';
+import { JovoRequest, SessionData, SessionConstants, Inputs, Input, Log } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
-import {NEW_SESSION_KEY} from "../index";
+import { NEW_SESSION_KEY } from '../index';
 
 export interface LexInputs extends Inputs {
   [key: string]: LexInput;
@@ -35,7 +35,7 @@ export interface LexRequestJSON {
   currentIntent?: LexIntent;
   //alternativeIntents: [LexIntent];
   inputTranscript?: string;
-  sessionAttributes: SessionAttributes;  // tslint:disable-next-line:no-any
+  sessionAttributes: SessionAttributes; // tslint:disable-next-line:no-any
   //  sessionData: SessionData = {};  // tslint:disable-next-line:no-any
 
   // tslint:disable-next-line:no-any
@@ -52,7 +52,7 @@ export class LexRequest implements JovoRequest {
   currentIntent?: LexIntent;
   //alternativeIntents: [LexIntent];
   inputTranscript?: string;
-  sessionAttributes: SessionAttributes = {};  // tslint:disable-next-line:no-any
+  sessionAttributes: SessionAttributes = {}; // tslint:disable-next-line:no-any
   // tslint:disable-next-line:no-any
   [key: string]: any; // used for fields (inputs). can only be strings!
 
@@ -121,7 +121,7 @@ export class LexRequest implements JovoRequest {
   }
 
   setSessionAttributes(attributes: SessionData): this {
-    if ( this.getSessionAttributes() ) {
+    if (this.getSessionAttributes()) {
       _set(this, 'sessionAttributes', attributes);
     }
     return this;
@@ -129,14 +129,14 @@ export class LexRequest implements JovoRequest {
 
   // tslint:disable-next-line
   addSessionAttribute(key: string, value: any) {
-    if ( this.getSessionAttributes() ) {
+    if (this.getSessionAttributes()) {
       _set(this, `sessionAttributes.${key}`, value);
     }
     return this;
   }
 
   setState(state: string) {
-    if ( _get(this, 'sessionAttributes') ) {
+    if (_get(this, 'sessionAttributes')) {
       _set(this, `sessionAttributes[${SessionConstants.STATE}]`, state);
     }
     return this;
@@ -151,8 +151,7 @@ export class LexRequest implements JovoRequest {
   }
 
   setUserId(userId: string): this {
-    this.UserIdentifier = userId;
-    this.setSessionId(userId);
+    this.userId = userId;
     return this;
   }
 
@@ -160,10 +159,11 @@ export class LexRequest implements JovoRequest {
     return this;
   }
 
-  setNewSession(isNew: boolean) {
-    _set(this, `sessionAttributes[${NEW_SESSION_KEY}]`, isNew);
+  setNewSession(isNew: boolean): this {
+    this.addSessionAttribute(NEW_SESSION_KEY, isNew);
     return this;
   }
+
   setAudioInterface(): this {
     return this;
   }
@@ -184,24 +184,10 @@ export class LexRequest implements JovoRequest {
     return this.CurrentTaskConfidence!;
   }
 
-  getNextBestTask(): string {
-    return this.NextBestTask!;
-  }
-
   setIntentName(intentName: string) {
     if (this.getIntentName()) {
-      _set(this, 'currentIntent.name',intentName);
+      _set(this, 'currentIntent.name', intentName);
     }
-    return this;
-  }
-
-  setSessionId(id: string): this {
-    this.sessionAttributes.sessionId = id;
-    return this;
-  }
-
-  setNextBestTask(task: string): this {
-    this.NextBestTask = task;
     return this;
   }
 
@@ -217,17 +203,17 @@ export class LexRequest implements JovoRequest {
   getInputs() {
     const inputs = {};
     const slots = this.getSlots();
-    if ( !slots ) {
+    if (!slots) {
       return inputs;
     }
     Object.keys(slots).forEach((slot: string) => {
-      if ( slots[slot] === null || slots[slot] === undefined ) {
+      if (slots[slot] === null || slots[slot] === undefined) {
         return;
       }
       const input = {
         name: slot,
         value: _get(this, `currentIntent.slotDetails.${slot}.originalValue`),
-        id: slots[slot]
+        id: slots[slot],
       };
       // @ts-ignore
       inputs[slot] = input;
@@ -250,15 +236,18 @@ export class LexRequest implements JovoRequest {
   }
 
   getSessionId(): string | undefined {
-    return this.sessionAttributes.sessionId;
+    return this.getUserId();
   }
-
+  setSessionId(id: string): this {
+    this.setUserId(id);
+    return this;
+  }
   toJSON(): LexRequestJSON {
     return Object.assign({}, this);
   }
 
   static fromJSON(json: object | string): LexRequest {
-    if ( typeof json === 'string' ) {
+    if (typeof json === 'string') {
       json = decodeURIComponent(json);
       return JSON.parse(json);
     } else {
@@ -266,7 +255,7 @@ export class LexRequest implements JovoRequest {
       Object.assign(request, json);
       Object.entries(request).forEach(([key, value]) => {
         //decodeURIComponent
-        request[key] = (value);
+        request[key] = value;
       });
       return request;
     }

@@ -7,13 +7,13 @@ import {
   EnumRequestType,
   Jovo,
 } from 'jovo-core';
-import {App, ExpressJS} from 'jovo-framework';
-import {FileDb2} from 'jovo-db-filedb';
+import { App, ExpressJS } from 'jovo-framework';
+import { FileDb2 } from 'jovo-db-filedb';
 import _set = require('lodash.set');
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {Lex, NEW_SESSION_KEY} from '../src';
+import { Lex } from '../src';
 
 const PATH_TO_DB_DIR = './test/db';
 
@@ -57,26 +57,9 @@ afterAll(async () => {
 });
 
 describe('test request types', () => {
-  /*
-    test('test launch', async (done) => {
-     app.setHandler({
-       LAUNCH() {},
-     });
-
-     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-     app.handle(ExpressJS.dummyRequest(launchRequest));
-
-     app.on('response', (handleRequest: HandleRequest) => {
-     //  console.log(handleRequest)
-     //  expect(handleRequest.jovo!.$type.type).toBe(EnumRequestType.LAUNCH);
-       done();
-     });
-   });
-   */
   test('test intent', async (done) => {
     app.setHandler({
-      HelloWorldIntent() {
-      },
+      HelloWorldIntent() {},
     });
 
     const request: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {});
@@ -181,7 +164,6 @@ describe('test state', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
     intentRequest.setSessionAttributes({
       [SessionConstants.STATE]: 'TestState',
-      [NEW_SESSION_KEY]: false,
     });
     await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -198,7 +180,6 @@ describe('test state', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
     intentRequest.setSessionAttributes({
       [SessionConstants.STATE]: 'TestState',
-      [NEW_SESSION_KEY]: false,
     });
     app.on('response', (handleRequest: HandleRequest) => {
       expect(
@@ -222,7 +203,6 @@ describe('test state', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
     intentRequest.setSessionAttributes({
       [SessionConstants.STATE]: 'TestState',
-      [NEW_SESSION_KEY]: false,
     });
     app.handle(ExpressJS.dummyRequest(intentRequest));
 
@@ -247,7 +227,6 @@ describe('test state', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
     intentRequest.setSessionAttributes({
       [SessionConstants.STATE]: 'TestState',
-      [NEW_SESSION_KEY]: false,
     });
 
     app.on('response', (handleRequest: HandleRequest) => {
@@ -272,17 +251,24 @@ describe('test handleOnNewSession', () => {
       },
       IntentA() {
         expect(this.$data.foo).toBe(undefined);
+        this.ask('intent');
+        done();
       },
     });
 
     const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
-    intentRequest.setSessionAttributes({
-      [NEW_SESSION_KEY]: false,
-    });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
-    app.on('response', (handleRequest) => {
-      done();
-    });
+    intentRequest.setNewSession(false);
+    /* const dbJson = {
+      userData: {
+        data: {},
+        session: {
+          id: intentRequest.getSessionId(),
+          lastUpdatedAt: new Date().toISOString(),
+        },
+      },
+    };
+    fs.writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getUserId()}.json`, JSON.stringify(dbJson));*/
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test new session', async (done) => {
@@ -293,15 +279,19 @@ describe('test handleOnNewSession', () => {
       },
       IntentA() {
         expect(this.$data.foo).toBe('bar');
+        this.ask('intent');
+        done();
       },
     });
-
     const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
-    intentRequest.setSessionAttributes({});
-    app.handle(ExpressJS.dummyRequest(intentRequest));
-    app.on('response', (handleRequest) => {
-      done();
-    });
+    const dbJson = {
+      userData: {
+        data: {},
+        session: {},
+      },
+    };
+    fs.writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getUserId()}.json`, JSON.stringify(dbJson));
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 });
 
@@ -321,9 +311,8 @@ describe('test session attributes', () => {
     intentRequest.setSessionAttributes({
       sessionName1: 'sessionValue1',
       sessionName2: 'sessionValue2',
-      [NEW_SESSION_KEY]: false,
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test set session', async (done) => {
@@ -337,7 +326,6 @@ describe('test session attributes', () => {
     });
 
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
-    app.handle(ExpressJS.dummyRequest(launchRequest));
 
     app.on('response', (handleRequest: HandleRequest) => {
       expect(
@@ -352,6 +340,7 @@ describe('test session attributes', () => {
 
       done();
     });
+    await app.handle(ExpressJS.dummyRequest(launchRequest));
   });
 
   test('test setSessionAttributes', async (done) => {
@@ -397,7 +386,7 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       name: 'Joe',
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
   test('test mapInputs', async (done) => {
@@ -417,7 +406,7 @@ describe('test $inputs', () => {
     const intentRequest: JovoRequest = await t.requestBuilder.intent('HelloWorldIntent', {
       'given-name': 'Joe',
     });
-    app.handle(ExpressJS.dummyRequest(intentRequest));
+    await app.handle(ExpressJS.dummyRequest(intentRequest));
   }, 100);
 });
 
@@ -428,4 +417,3 @@ export function clearDbFolder() {
     fs.unlinkSync(path.join(PATH_TO_DB_DIR, file));
   });
 }
-

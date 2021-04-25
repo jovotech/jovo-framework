@@ -1,8 +1,8 @@
-import {Jovo, BaseApp, Host, HandleRequest, AudioData} from 'jovo-core';
-import {LexSpeechBuilder} from './LexSpeechBuilder';
-import {LexResponse} from './LexResponse';
-import {LexUser} from './LexUser';
-import {LexRequest} from './LexRequest';
+import { Jovo, BaseApp, Host, HandleRequest, AudioData } from 'jovo-core';
+import { LexSpeechBuilder } from './LexSpeechBuilder';
+import { LexResponse } from './LexResponse';
+import { LexUser } from './LexUser';
+import { LexRequest } from './LexRequest';
 
 export class LexBot extends Jovo {
   $lexBot: LexBot;
