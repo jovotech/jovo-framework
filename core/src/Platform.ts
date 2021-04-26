@@ -109,7 +109,7 @@ export abstract class Platform<
     return instance;
   }
 
-  createUserInstance(jovo: Jovo<REQUEST, RESPONSE>): JovoUser<REQUEST, RESPONSE> {
+  createUserInstance(jovo: JOVO): JovoUser<REQUEST, RESPONSE, JOVO> {
     return new this.userClass(jovo);
   }
 }
