@@ -1,6 +1,10 @@
 import { InternalSessionProperty } from './enums';
 import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
+import { PluginConfig } from './Plugin';
+import { PersistableUserData } from './JovoUser';
+import { PersistableSessionData } from './JovoSession';
+import { ArrayElement } from './index';
 
 export interface Data {
   [key: string]: unknown;
@@ -58,3 +62,16 @@ export type JovoConditionFunction = (
   handleRequest: HandleRequest,
   jovo: Jovo,
 ) => boolean | Promise<boolean>;
+
+type StoredElementType = keyof PersistableUserData | keyof PersistableSessionData;
+
+export interface DbPluginConfig extends PluginConfig {
+  storedElements: {
+    $user: {
+      enabled: boolean;
+    };
+    $session: {
+      enabled: boolean;
+    };
+  };
+}
