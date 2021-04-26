@@ -11,4 +11,8 @@ export class CorePlatformUser extends JovoUser<
   constructor(jovo: CorePlatformApp) {
     super(jovo);
   }
+
+  get id(): string {
+    return 'coreplatformuser';
+  }
 }

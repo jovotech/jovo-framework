@@ -89,7 +89,7 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user?: JovoUser<REQUEST, RESPONSE, this>;
+  $user: JovoUser<REQUEST, RESPONSE, this>;
 
   constructor(
     readonly $app: App,
@@ -101,11 +101,12 @@ export abstract class Jovo<
     this.$data = {};
     this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    const session = this.$request.getSession();
+    const session = this.getSession();
     this.$session = session instanceof JovoSession ? session : new JovoSession(session);
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
+    this.$user = this.$platform.createUserInstance(this);
   }
 
   get $config(): AppConfig {
@@ -355,4 +356,16 @@ export abstract class Jovo<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (componentInstance as any)[handlerKey](...callArgs);
   }
+
+  //TODO: needs to be evaluated
+  getSession(): JovoSession | undefined {
+    return this.$request.getSession();
+  }
+
+  //TODO: needs to be evaluated. better this.$session.isNew?
+  isNewSession(): boolean {
+    return true;
+  }
+
+  // abstract isNewSession(): boolean;
 }

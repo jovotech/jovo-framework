@@ -15,6 +15,7 @@ import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
+import { SessionPlugin } from './plugins/SessionPlugin';
 
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
@@ -53,7 +54,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
-    this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
+    this.use(new SessionPlugin(), new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
     this.components = {};
     if (config?.components && config?.components?.length) {
       this.useComponents(

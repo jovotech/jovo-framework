@@ -16,7 +16,8 @@ export type PickWhere<T, U> = Pick<
     [K in keyof T]: T[K] extends U ? K : never;
   }[keyof T]
 >;
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('source-map-support').install();
 export {
   JovoResponse,
   OutputTemplateConverterStrategy,
