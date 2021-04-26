@@ -64,6 +64,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   languageModelEnabled: boolean;
   languageModelPath: string;
   debuggerJsonPath: string;
+  ignoredProperties: Array<keyof Jovo | string>;
 }
 
 export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
@@ -104,6 +105,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       languageModelEnabled: true,
       languageModelPath: './models',
       debuggerJsonPath: './debugger.json',
+      ignoredProperties: ['$app', '$handleRequest', '$platform'],
     };
   }
 
@@ -179,7 +181,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             !((jovo[key as keyof Jovo] as unknown[]) || []).length;
           if (
             !jovo.hasOwnProperty(key) ||
-            ['$app', '$handleRequest', '$platform'].includes(key) ||
+            this.config.ignoredProperties.includes(key) ||
             !jovo[key as keyof Jovo] ||
             isEmptyObject ||
             isEmptyArray
@@ -201,6 +203,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private getProxyHandler<T extends Record<string, any>>(
     handleRequest: HandleRequest,
     path = '',
