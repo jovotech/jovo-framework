@@ -181,6 +181,7 @@ describe('test state', () => {
     intentRequest.setSessionAttributes({
       [SessionConstants.STATE]: 'TestState',
     });
+
     app.on('response', (handleRequest: HandleRequest) => {
       expect(
         handleRequest.jovo!.$response!.hasSessionAttribute(SessionConstants.STATE, 'TestState'),
@@ -242,6 +243,273 @@ describe('test state', () => {
   });
 });
 
+describe('test removeState', () => {
+  test('test add followUpstate to session attributes', async (done) => {
+    app.setHandler({
+      State1: {
+        IntentA() {
+          expect(this.getState()).toBe('State1');
+          this.removeState();
+          expect(this.getState()).toBe(undefined);
+          done();
+        },
+      },
+    });
+    const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA');
+
+    app.handle(ExpressJS.dummyRequest(intentRequest.setState('State1')));
+  });
+});
+
+describe('test handleOnRequest', () => {
+  test('no ON_REQUEST', async (done) => {
+    app.setHandler({
+      LAUNCH() {
+        expect(this.$data.foo).toBe(undefined);
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('ON_REQUEST synchronous', async (done) => {
+    app.setHandler({
+      ON_REQUEST() {
+        this.$data.foo = 'bar';
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('ON_REQUEST asynchronous with promise', async (done) => {
+    app.setHandler({
+      ON_REQUEST() {
+        return new Promise((resolve) => {
+          this.$data.foo = 'bar2';
+          resolve();
+        });
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar2');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('ON_REQUEST asynchronous with callback parameter', async (done) => {
+    app.setHandler({
+      ON_REQUEST(jovo: Jovo, d: Function) {
+        setTimeout(() => {
+          this.$data.foo = 'bar3';
+          d();
+        }, 10);
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar3');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('ON_REQUEST return and skip intent handling', async (done) => {
+    app.setHandler({
+      ON_REQUEST() {
+        return this.tell('ON_REQUEST');
+      },
+      LAUNCH() {
+        // skip this
+        this.tell('LAUNCH');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(handleRequest.jovo!.$response!.isTell('ON_REQUEST')).toBeTruthy();
+      done();
+    });
+  });
+
+  test('ON_REQUEST skip intent handling inside of a callback', async (done) => {
+    app.setHandler({
+      NEW_SESSION(jovo, callback) {
+        setTimeout(() => {
+          this.tell('ON_REQUEST').skipIntentHandling();
+          callback!();
+        }, 5);
+      },
+      LAUNCH() {
+        // skip this
+        this.tell('LAUNCH');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest));
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(handleRequest.jovo!.$response!.isTell('ON_REQUEST')).toBeTruthy();
+      done();
+    });
+  });
+});
+
+describe('test handleOnNewUser', () => {
+  test('no NEW_USER', async (done) => {
+    app.setHandler({
+      LAUNCH() {
+        expect(this.$data.foo).toBe(undefined);
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('NEW_USER synchronous', async (done) => {
+    app.setHandler({
+      NEW_USER() {
+        this.$data.foo = 'bar';
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar');
+        done();
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+  });
+
+  test('NEW_USER asynchronous with promise', async (done) => {
+    app.setHandler({
+      NEW_USER() {
+        return new Promise((resolve) => {
+          this.$data.foo = 'bar2';
+          resolve();
+        });
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar2');
+        done();
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+  });
+
+  test('NEW_USER asynchronous with callback parameter', async (done) => {
+    app.setHandler({
+      NEW_USER(jovo: Jovo, d: Function) {
+        setTimeout(() => {
+          this.$data.foo = 'bar3';
+          d();
+        }, 10);
+      },
+      LAUNCH() {
+        expect(this.$data.foo).toBe('bar3');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+
+    app.on('response', (handleRequest: HandleRequest) => {
+      done();
+    });
+  });
+
+  test('NEW_USER toIntent', async (done) => {
+    app.setHandler({
+      NEW_USER() {
+        this.$data.foo = 'bar';
+        return this.toIntent('NewUserIntent');
+      },
+      LAUNCH() {
+        // skip this
+      },
+      NewUserIntent() {
+        expect(this.$data.foo).toBe('bar');
+        done();
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+  });
+
+  test('NEW_USER return and skip intent handling', async (done) => {
+    app.setHandler({
+      NEW_USER() {
+        return this.tell('NEW_USER');
+      },
+      LAUNCH() {
+        // skip this
+        this.tell('LAUNCH');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
+      done();
+    });
+  });
+
+  test('NEW_USER skip intent handling inside of a callback', async (done) => {
+    app.setHandler({
+      NEW_USER(jovo, callback) {
+        setTimeout(() => {
+          this.tell('NEW_USER').skipIntentHandling();
+          callback!();
+        }, 5);
+      },
+      LAUNCH() {
+        // skip this
+        this.tell('LAUNCH');
+      },
+    });
+    const launchRequest: JovoRequest = await t.requestBuilder.launch();
+
+    app.handle(ExpressJS.dummyRequest(launchRequest.setUserId(randomUserId())));
+    app.on('response', (handleRequest: HandleRequest) => {
+      expect(handleRequest.jovo!.$response!.isTell('NEW_USER')).toBeTruthy();
+      done();
+    });
+  });
+});
+
 describe('test handleOnNewSession', () => {
   test('test no new session', async (done) => {
     app.setHandler({
@@ -258,16 +526,6 @@ describe('test handleOnNewSession', () => {
 
     const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
     intentRequest.setNewSession(false);
-    /* const dbJson = {
-      userData: {
-        data: {},
-        session: {
-          id: intentRequest.getSessionId(),
-          lastUpdatedAt: new Date().toISOString(),
-        },
-      },
-    };
-    fs.writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getUserId()}.json`, JSON.stringify(dbJson));*/
     await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 
@@ -284,13 +542,6 @@ describe('test handleOnNewSession', () => {
       },
     });
     const intentRequest: JovoRequest = await t.requestBuilder.intent('IntentA', {});
-    const dbJson = {
-      userData: {
-        data: {},
-        session: {},
-      },
-    };
-    fs.writeFileSync(`${PATH_TO_DB_DIR}/${intentRequest.getUserId()}.json`, JSON.stringify(dbJson));
     await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
 });
@@ -299,8 +550,9 @@ describe('test session attributes', () => {
   test('test get session', async (done) => {
     app.setHandler({
       SessionIntent() {
-        expect(this.getSessionAttribute('sessionName1')).toBe('sessionValue1');
-        expect(this.$session!.$data.sessionName2).toBe('sessionValue2');
+        expect(this.getSessionAttribute('string')).toBe('sessionValue1');
+        expect(this.getSessionAttribute('number')).toBe(3);
+        expect(this.$session!.$data.boolean).toBe(false);
 
         this.ask('Foo', 'Bar');
         done();
@@ -309,8 +561,9 @@ describe('test session attributes', () => {
 
     const intentRequest: JovoRequest = await t.requestBuilder.intent('SessionIntent', {});
     intentRequest.setSessionAttributes({
-      sessionName1: 'sessionValue1',
-      sessionName2: 'sessionValue2',
+      string: 'sessionValue1',
+      number: 3,
+      boolean: false,
     });
     await app.handle(ExpressJS.dummyRequest(intentRequest));
   });
@@ -318,9 +571,9 @@ describe('test session attributes', () => {
   test('test set session', async (done) => {
     app.setHandler({
       LAUNCH() {
-        this.setSessionAttribute('sessionName1', 'sessionValue1');
-        this.addSessionAttribute('sessionName2', 'sessionValue2');
-        this.$session!.$data.sessionName3 = 'sessionValue3';
+        this.setSessionAttribute('string', 'sessionValue1');
+        this.addSessionAttribute('number', 1);
+        this.$session!.$data.boolean = true;
         this.ask('Foo', 'Bar');
       },
     });
@@ -328,15 +581,11 @@ describe('test session attributes', () => {
     const launchRequest: JovoRequest = await t.requestBuilder.launch();
 
     app.on('response', (handleRequest: HandleRequest) => {
-      expect(
-        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName1', 'sessionValue1'),
-      ).toBe(true);
-      expect(
-        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName2', 'sessionValue2'),
-      ).toBe(true);
-      expect(
-        handleRequest.jovo!.$response!.hasSessionAttribute('sessionName3', 'sessionValue3'),
-      ).toBe(true);
+      expect(handleRequest.jovo!.$response!.hasSessionAttribute('string', 'sessionValue1')).toBe(
+        true,
+      );
+      expect(handleRequest.jovo!.$response!.hasSessionAttribute('number', 1)).toBe(true);
+      expect(handleRequest.jovo!.$response!.hasSessionAttribute('boolean', true)).toBe(true);
 
       done();
     });
@@ -417,3 +666,12 @@ export function clearDbFolder() {
     fs.unlinkSync(path.join(PATH_TO_DB_DIR, file));
   });
 }
+
+const randomUserId = () => {
+  return (
+    'user-' +
+    Math.random().toString(36).substring(5) +
+    '-' +
+    Math.random().toString(36).substring(2)
+  );
+};
