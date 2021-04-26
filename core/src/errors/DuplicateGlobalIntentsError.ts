@@ -1,28 +1,28 @@
-import ansiColors from 'ansi-colors';
 import { JovoError } from '../JovoError';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
+
+export function buildDuplicateGlobalIntentsErrorMessage(
+  entries: [string, HandlerMetadata[]][],
+  separator = '\n - ',
+): string {
+  const duplicateEntriesText = entries
+    .map(([intentName, handlers]) => {
+      const textBlocks = handlers.map(
+        (handler) => `${handler.target.name}.${handler.propertyKey.toString()}`,
+      );
+      const startText = textBlocks.slice(0, textBlocks.length - 1);
+      const text = `${startText.join(separator)} and ${textBlocks[textBlocks.length - 1]}`;
+      return `${intentName} in ${text}`;
+    })
+    .join('; ');
+  return `Duplicate global intent names detected:${separator}${duplicateEntriesText}.`;
+}
 
 // TODO improve
 export class DuplicateGlobalIntentsError extends JovoError {
   constructor(entries: [string, HandlerMetadata[]][]) {
     super({
-      message: 'Duplicate global intents.',
+      message: buildDuplicateGlobalIntentsErrorMessage(entries),
     });
-
-    const errorTexts = entries.map(([intentName, handlers]) => {
-      const textBlocks = handlers.map(
-        (handler) =>
-          ansiColors.yellow(handler.target.name) +
-          ansiColors.white('.' + handler.propertyKey.toString()),
-      );
-
-      const startText = textBlocks.slice(0, textBlocks.length - 1);
-      const text = startText.join(', ') + ` and ${textBlocks[textBlocks.length - 1]}.`;
-      return ansiColors.redBright(`${ansiColors.green(`'${intentName}'`)} in ${text}`);
-    });
-
-    const errorIntroText = ansiColors.red('Duplicate global intent names detected:');
-    const separator = '\n - ';
-    // this.message = [errorIntroText, errorTexts.join(separator)].join(separator);
   }
 }
