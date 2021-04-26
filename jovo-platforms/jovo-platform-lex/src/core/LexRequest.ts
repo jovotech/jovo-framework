@@ -1,4 +1,4 @@
-import { JovoRequest, SessionData, SessionConstants, Inputs, Input, Log } from 'jovo-core';
+import { JovoRequest, SessionData, SessionConstants, Inputs, Input } from 'jovo-core';
 import _get = require('lodash.get');
 import _set = require('lodash.set');
 import { NEW_SESSION_KEY } from '../index';
@@ -35,8 +35,7 @@ export interface LexRequestJSON {
   currentIntent?: LexIntent;
   //alternativeIntents: [LexIntent];
   inputTranscript?: string;
-  sessionAttributes: SessionAttributes; // tslint:disable-next-line:no-any
-  //  sessionData: SessionData = {};  // tslint:disable-next-line:no-any
+  sessionAttributes?: SessionAttributes; // tslint:disable-next-line:no-any
 
   // tslint:disable-next-line:no-any
   [key: string]: any; // used for fields (inputs). can only be strings!
@@ -52,7 +51,9 @@ export class LexRequest implements JovoRequest {
   currentIntent?: LexIntent;
   //alternativeIntents: [LexIntent];
   inputTranscript?: string;
-  sessionAttributes: SessionAttributes = {}; // tslint:disable-next-line:no-any
+  sessionAttributes?: {
+    jsonData: string;
+  }; // tslint:disable-next-line:no-any
   // tslint:disable-next-line:no-any
   [key: string]: any; // used for fields (inputs). can only be strings!
 
@@ -100,7 +101,7 @@ export class LexRequest implements JovoRequest {
   }
 
   getSessionData() {
-    return this.getSessionAttributes();
+    return this.sessionAttributes?.jsonData ? JSON.parse(this.sessionAttributes.jsonData) : {};
   }
 
   getState() {
@@ -113,32 +114,30 @@ export class LexRequest implements JovoRequest {
 
   // tslint:disable-next-line
   addSessionData(key: string, value: any): this {
-    return this.addSessionAttribute(key, value);
+    const sessionAttributes = this.sessionAttributes?.jsonData
+      ? JSON.parse(this.sessionAttributes.jsonData)
+      : {};
+    sessionAttributes[key] = value;
+    this.sessionAttributes = { jsonData: JSON.stringify(sessionAttributes) };
+    return this;
   }
 
   getSessionAttributes() {
-    return _get(this, 'sessionAttributes');
+    return this.getSessionData();
   }
 
   setSessionAttributes(attributes: SessionData): this {
-    if (this.getSessionAttributes()) {
-      _set(this, 'sessionAttributes', attributes);
-    }
+    _set(this, 'sessionAttributes.jsonData', JSON.stringify(attributes));
     return this;
   }
 
   // tslint:disable-next-line
   addSessionAttribute(key: string, value: any) {
-    if (this.getSessionAttributes()) {
-      _set(this, `sessionAttributes.${key}`, value);
-    }
-    return this;
+    return this.addSessionData(key, value);
   }
 
   setState(state: string) {
-    if (_get(this, 'sessionAttributes')) {
-      _set(this, `sessionAttributes[${SessionConstants.STATE}]`, state);
-    }
+    this.addSessionAttribute(SessionConstants.STATE, state);
     return this;
   }
 
@@ -260,6 +259,4 @@ export class LexRequest implements JovoRequest {
       return request;
     }
   }
-
-  // TODO: add lex specific get/set methods
 }

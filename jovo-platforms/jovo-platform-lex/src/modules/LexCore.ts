@@ -89,12 +89,14 @@ export class LexCore implements Plugin {
           content: ask.speech,
         },
       });
-      _set(response, 'sessionAttributes', lex.$session.$data);
+
+      _set(response, 'sessionAttributes.jsonData', JSON.stringify(lex.$session.$data));
     }
   }
   async response(lex: LexBot) {
     const response = lex.$response || new LexResponse();
     const sessionAttributes = response.getSessionAttributes() || {};
+
     sessionAttributes[NEW_SESSION_KEY] = false;
     response.setSessionAttributes(sessionAttributes);
   }
