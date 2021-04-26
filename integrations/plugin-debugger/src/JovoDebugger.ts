@@ -210,7 +210,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   ): ProxyHandler<T> {
     return {
       get: (target, key: string) => {
-        if (typeof target[key] === 'object' && target[key] !== null) {
+        if (
+          typeof target[key] === 'object' &&
+          target[key] !== null &&
+          !(target[key] instanceof Date)
+        ) {
           return new Proxy(
             target[key],
             this.getProxyHandler(handleRequest, path ? [path, key].join('.') : key),

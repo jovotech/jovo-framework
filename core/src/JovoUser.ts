@@ -1,5 +1,5 @@
 import { JovoResponse } from '@jovotech/output';
-import { PersistableSessionData, SessionData, StateStack, UserData } from '.';
+import { UserData } from './interfaces';
 import { Jovo } from './Jovo';
 import { JovoRequest } from './JovoRequest';
 
@@ -48,5 +48,9 @@ export abstract class JovoUser<
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+  }
+
+  toJSON(key?: keyof this) {
+    return key ? this[key] : { ...this, jovo: undefined };
   }
 }
