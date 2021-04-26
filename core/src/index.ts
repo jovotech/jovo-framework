@@ -1,6 +1,11 @@
 // TODO: Usages of .constructor.name cause errors in webpack, because the name is not the class-name mostly when minimizing.
 // It has to be checked whether constructor is valid and can be used to instantiate a new instance for example.
 
+// TODO determine whether we want to re-export axios
+import axios from 'axios';
+export * from 'axios';
+export { axios };
+
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
