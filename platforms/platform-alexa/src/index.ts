@@ -15,3 +15,4 @@ export * from './AlexaRequest';
 export type { AlexaResponse } from '@jovotech/output-alexa';
 export * from './AlexaSkill';
 export * from './interfaces';
+export * from './AlexaUser';
