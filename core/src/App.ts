@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, Middleware, OutputConstructor, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -109,7 +109,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
       (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
     );
     if (!relatedPlatform) {
-      throw new MatchingPlatformNotFoundError();
+      throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
     handleRequest.$platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);

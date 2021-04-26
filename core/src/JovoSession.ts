@@ -1,4 +1,17 @@
-import { SessionData, StateStack } from './interfaces';
+import { ComponentData, SessionData } from './interfaces';
+
+export interface StateStackItem {
+  [key: string]: unknown;
+
+  componentPath: string;
+  $subState?: string;
+  $data?: ComponentData;
+
+  resolveTo?: Record<string, string>;
+  config?: Record<string, unknown>;
+}
+
+export type StateStack = StateStackItem[];
 
 export interface PersistableSessionData {
   data: SessionData;

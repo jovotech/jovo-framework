@@ -54,7 +54,7 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
   async initialize(parent: Extensible): Promise<void> {
     if (!(parent instanceof Platform)) {
       // TODO: implement error
-      throw new InvalidParentError();
+      throw new InvalidParentError(this.constructor.name, 'Platform');
     }
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),

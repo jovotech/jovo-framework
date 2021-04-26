@@ -47,11 +47,12 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 export abstract class Platform<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
   CONFIG extends ExtensibleConfig = ExtensibleConfig
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
-  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
-  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE>;
+  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, this>;
+  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE, JOVO>;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
@@ -71,7 +72,7 @@ export abstract class Platform<
 
   install(parent: Extensible) {
     if (!(parent instanceof App)) {
-      throw new InvalidParentError();
+      throw new InvalidParentError(this.constructor.name, App);
     }
   }
 

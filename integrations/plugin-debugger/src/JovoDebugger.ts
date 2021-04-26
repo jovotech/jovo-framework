@@ -41,7 +41,7 @@ export enum JovoDebuggerEvent {
   AppJovoUpdate = 'app.jovo-update',
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface JovoDebuggerPayload<DATA extends any = any> {
   requestId: number;
   data: DATA;
@@ -110,7 +110,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   install(parent: Extensible) {
     if (!(parent instanceof App)) {
       // TODO: implement error
-      throw new InvalidParentError();
+      throw new InvalidParentError(this.constructor.name, App);
     }
 
     // TODO: determine handling of edge-cases
@@ -279,7 +279,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
       // TODO implement error handling
-      throw new JovoError(`Couldn't find models-directory at ${absoluteModelsPath}`);
+      throw new JovoError({ message: `Couldn't find models-directory at ${absoluteModelsPath}` });
     }
     const isValidFileRegex = /^.*([.]js(?:on)?)$/;
     for (let i = 0, len = files.length; i < len; i++) {
@@ -304,7 +304,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private onDebuggerRequest = async (app: App, request: any) => {
-    const userId: string = request.userId || 'jovo-debugger-user';
     await app.handle(new MockServer(request));
   };
 

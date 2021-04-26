@@ -1,34 +1,41 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { App, AppConfig } from './App';
-import { BaseComponent } from './BaseComponent';
-import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { InternalIntent, InternalSessionProperty, RequestType, RequestTypeLike } from './enums';
+import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
+  BaseComponent,
+  BaseOutput,
+  ComponentConfig,
   ComponentConstructor,
+  ComponentData,
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  MetadataStorage,
+  OutputConstructor,
   PickWhere,
   Server,
   StateStack,
 } from './index';
-import { AsrData, EntityMap, NluData, RequestData, SessionData } from './interfaces';
-import { JovoProxy } from './JovoProxy';
+import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
 import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
+import { forEachDeep } from './utilities';
 
-export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
-  app: App,
-  handleRequest: HandleRequest,
-  platform: Platform<REQUEST, RESPONSE>,
-  ...args: unknown[]
-) => Jovo<REQUEST, RESPONSE>;
+export type JovoConstructor<
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>
+> = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoRequestType {
   type?: RequestTypeLike;
@@ -36,8 +43,36 @@ export interface JovoRequestType {
   optional?: boolean;
 }
 
-export interface DelegateOptions<EVENTS extends string = string> {
-  resolveTo: Record<EVENTS, string>;
+export interface JovoComponentInfo<
+  CONFIG extends Record<string, unknown> = Record<string, unknown>
+> {
+  $data: ComponentData;
+  $config?: CONFIG;
+}
+
+export interface DelegateOptions<
+  CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
+  EVENTS extends string = string
+> {
+  resolveTo: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
+  config?: CONFIG;
+}
+
+export function registerPlatformSpecificJovoReference<
+  KEY extends keyof Jovo,
+  REQUEST extends JovoRequest,
+  RESPONSE extends JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE>
+>(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
+  Object.defineProperty(Jovo.prototype, key, {
+    get(): Jovo[KEY] | undefined {
+      return this instanceof jovoClass
+        ? this
+        : this.jovo instanceof jovoClass
+        ? this.jovo
+        : undefined;
+    },
+  });
 }
 
 export abstract class Jovo<
@@ -54,24 +89,23 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user: JovoUser<REQUEST, RESPONSE>;
+  $user?: JovoUser<REQUEST, RESPONSE, this>;
 
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
-    readonly $platform: Platform<REQUEST, RESPONSE>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    readonly $platform: Platform<REQUEST, RESPONSE, any, any>,
   ) {
     this.$asr = {};
     this.$data = {};
     this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    const session = this.getSession();
+    const session = this.$request.getSession();
     this.$session = session instanceof JovoSession ? session : new JovoSession(session);
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
-
-    this.$user = this.$platform.createUserInstance(this);
   }
 
   get $config(): AppConfig {
@@ -86,26 +120,75 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get $state(): SessionData[InternalSessionProperty.State] {
+  get $state(): JovoSession['$state'] {
     return this.$session.$state;
   }
 
   get $subState(): string | undefined {
     if (!this.$state?.length) return;
-    return this.$state[this.$state.length - 1]?.subState;
+    return this.$state[this.$state.length - 1]?.$subState;
   }
 
   set $subState(value: string | undefined) {
     if (!this.$state?.length) return;
-    this.$state[this.$state.length - 1].subState = value;
+    this.$state[this.$state.length - 1].$subState = value;
     if (this.$route) {
       this.$route.subState = value;
     }
   }
 
+  get $component(): JovoComponentInfo {
+    const state = this.$state as StateStack;
+    const setDataIfNotDefined = () => {
+      if (!state[state.length - 1 || 0]?.$data) {
+        state[state.length - 1].$data = {};
+      }
+    };
+    return {
+      get $data(): ComponentData {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        return state[state.length - 1].$data as ComponentData;
+      },
+      set $data(value: ComponentData) {
+        // Make sure $data exists in latest state.
+        setDataIfNotDefined();
+        state[state.length - 1].$data = value;
+      },
+      get $config(): Record<string, unknown> | undefined {
+        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        if (deserializedStateConfig) {
+          // deserialize all found Output-constructors
+          forEachDeep(deserializedStateConfig, (value, path) => {
+            // TODO: check restriction
+            if (
+              typeof value === 'object' &&
+              value.type === 'output' &&
+              value.name &&
+              Object.keys(value).length === 2
+            ) {
+              const outputMetadata = MetadataStorage.getInstance().getOutputMetadataByName(
+                value.name,
+              );
+              if (!outputMetadata) {
+                // TODO determine what to do!
+                return;
+              }
+              _set(deserializedStateConfig, path, outputMetadata.target);
+            }
+          });
+        }
+        return deserializedStateConfig;
+      },
+      set $config(value: Record<string, unknown> | undefined) {
+        state[state.length - 1].config = value;
+      },
+    };
+  }
+
   // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructor: OutputConstructor<OUTPUT>,
+    outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     const outputInstance = new outputConstructor(this, options);
@@ -130,23 +213,14 @@ export abstract class Jovo<
     const stateStack = this.$state as StateStack;
     // replace last item in stack
     stateStack[stateStack.length - 1] = {
-      ...stateStack[stateStack.length - 1],
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
-      // TODO fully determine whether subState should be removed by $redirect
-      subState: undefined,
     };
     await this.$runComponentHandler(componentMetadata, handlerKey);
   }
 
-  protected $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
-    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
-    const isRootComponent = !!this.$handleRequest.components[componentName];
-    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
-  }
-
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
-    options: DelegateOptions,
+    options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
   async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
   async $delegate(
@@ -155,8 +229,32 @@ export abstract class Jovo<
   ): Promise<void> {
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.$state as StateStack;
+
+    const serializableResolveTo: Record<string, string> = {};
+    for (const key in options.resolveTo) {
+      if (options.resolveTo.hasOwnProperty(key)) {
+        const value = options.resolveTo[key];
+        serializableResolveTo[key] = typeof value === 'string' ? value : value.name;
+      }
+    }
+
+    const serializableConfig = _cloneDeep(options.config);
+    if (serializableConfig) {
+      forEachDeep(serializableConfig, (value, path) => {
+        // serialize all passed Output-constructors
+        if (value?.prototype instanceof BaseOutput) {
+          const outputMetadata = MetadataStorage.getInstance().getOutputMetadata(value);
+          if (!outputMetadata) {
+            // TODO determine what to do!
+            return;
+          }
+          _set(serializableConfig, path, { type: 'output', name: outputMetadata.name });
+        }
+      });
+    }
     stateStack.push({
-      ...options,
+      resolveTo: serializableResolveTo,
+      config: serializableConfig,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
     });
     await this.$runComponentHandler(componentMetadata);
@@ -171,43 +269,59 @@ export abstract class Jovo<
       return;
     }
     const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
-    const componentPath = previousStateStackItem.componentPath.replace(/[.]/g, '.components.');
-    const componentMetadata = _get(this.$handleRequest.components, componentPath);
-    if (!componentMetadata) {
-      // TODO implement
-      throw new ComponentNotFoundError('');
-    }
+    const previousComponentPath = previousStateStackItem.componentPath.split('.');
+    const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
     stateStack.pop();
-    await this.$runComponentHandler(componentMetadata, resolvedHandlerKey, ...eventArgs);
+    await this.$runComponentHandler(previousComponentMetadata, resolvedHandlerKey, ...eventArgs);
     return;
   }
 
-  protected $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
-    constructorOrName: ComponentConstructor<COMPONENT> | string,
-  ): RegisteredComponentMetadata<COMPONENT> | undefined {
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    const currentComponentPath = (this.$route?.path || []).join('.components.');
-    const currentComponentMetadata = _get(this.$handleRequest.components, currentComponentPath);
-    const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
-    const rootComponentMetadata = this.$handleRequest.components[componentName];
-    return childComponentMetadata || rootComponentMetadata;
+  $getComponentPath(componentMetadata: RegisteredComponentMetadata): string[] {
+    const componentName = componentMetadata.options?.name || componentMetadata.target.name;
+    const isRootComponent = !!this.$handleRequest.components[componentName];
+    return isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
   }
 
-  protected $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
-    constructorOrName: ComponentConstructor<COMPONENT> | string,
+  $getComponentMetadata<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
+  ): RegisteredComponentMetadata<COMPONENT> | undefined {
+    if (Array.isArray(constructorOrNameOrPath)) {
+      const componentPath = constructorOrNameOrPath.join('.components.');
+      return _get(this.$handleRequest.components, componentPath);
+    } else {
+      const componentName =
+        typeof constructorOrNameOrPath === 'string'
+          ? constructorOrNameOrPath
+          : constructorOrNameOrPath.name;
+      const currentComponentMetadata = this.$getComponentMetadata(this.$route?.path || []);
+      const rootComponentMetadata = this.$handleRequest.components[componentName];
+      const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
+      return childComponentMetadata || rootComponentMetadata;
+    }
+  }
+
+  $getComponentMetadataOrFail<COMPONENT extends BaseComponent = BaseComponent>(
+    constructorOrNameOrPath: ComponentConstructor<COMPONENT> | string | string[],
   ): RegisteredComponentMetadata<COMPONENT> {
-    const componentName =
-      typeof constructorOrName === 'string' ? constructorOrName : constructorOrName.name;
-    const metadata = this.$getComponentMetadata(componentName);
+    const metadata = this.$getComponentMetadata(constructorOrNameOrPath);
     if (!metadata) {
       // TODO implement error
-      throw new ComponentNotFoundError(componentName);
+      let path: string[];
+      if (Array.isArray(constructorOrNameOrPath)) {
+        path = constructorOrNameOrPath;
+      } else {
+        const componentName =
+          typeof constructorOrNameOrPath === 'string'
+            ? constructorOrNameOrPath
+            : constructorOrNameOrPath.name;
+        path = [...(this.$route?.path || []), componentName];
+      }
+      throw new ComponentNotFoundError(path);
     }
     return metadata;
   }
 
-  protected async $runComponentHandler<
+  async $runComponentHandler<
     COMPONENT extends BaseComponent,
     HANDLER extends Exclude<
       // eslint-disable-next-line @typescript-eslint/ban-types
@@ -224,14 +338,13 @@ export abstract class Jovo<
     const componentName = componentMetadata.options?.name || componentMetadata.target.name;
     const isRootComponent = !!this.$handleRequest.components[componentName];
     const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
-    const jovoReference =
-      this.constructor.name === 'Jovo' ? this : ((this as unknown) as JovoProxy).jovo;
+    const jovoReference = (this as { jovo?: Jovo })?.jovo || this;
     const componentInstance = new (componentMetadata.target as ComponentConstructor)(
-      jovoReference,
+      jovoReference as Jovo,
       componentMetadata.options?.config,
     );
     if (!componentInstance[handlerKey as keyof BaseComponent]) {
-      throw new HandlerNotFoundError(handlerKey.toString(), componentName);
+      throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
     }
 
     this.$route = {
@@ -242,16 +355,4 @@ export abstract class Jovo<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (componentInstance as any)[handlerKey](...callArgs);
   }
-
-  //TODO: needs to be evaluated
-  getSession(): JovoSession | undefined {
-    return this.$request.getSession();
-  }
-
-  //TODO: needs to be evaluated. better this.$session.isNew?
-  isNewSession(): boolean {
-    return true;
-  }
-
-  // abstract isNewSession(): boolean;
 }
