@@ -1,7 +1,7 @@
-import { HandleRequest } from '@jovotech/core';
+import { HandleRequest } from '@jovotech/framework';
 import { JovoDebugger, JovoDebuggerConfig } from './JovoDebugger';
 
-declare module '@jovotech/core/dist/Extensible' {
+declare module '@jovotech/framework/dist/Extensible' {
   interface ExtensiblePluginConfig {
     JovoDebugger?: JovoDebuggerConfig;
   }
@@ -11,7 +11,7 @@ declare module '@jovotech/core/dist/Extensible' {
   }
 }
 
-declare module '@jovotech/core/dist/HandleRequest' {
+declare module '@jovotech/framework/dist/HandleRequest' {
   interface HandleRequest {
     debuggerRequestId: number;
   }

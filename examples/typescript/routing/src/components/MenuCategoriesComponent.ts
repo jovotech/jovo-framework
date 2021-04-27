@@ -1,4 +1,4 @@
-import { BaseComponent, Component } from '@jovotech/core';
+import { BaseComponent, Component } from '@jovotech/framework';
 import { MenuComponent } from './MenuComponent';
 
 @Component()

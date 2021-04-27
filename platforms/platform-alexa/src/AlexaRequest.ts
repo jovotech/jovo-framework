@@ -5,7 +5,7 @@ import {
   JovoRequestType, JovoSession,
   RequestType,
   SessionData,
-} from '@jovotech/core';
+} from '@jovotech/framework';
 import { Context, Request, Session } from './interfaces';
 
 export interface AlexaRequestJSON {

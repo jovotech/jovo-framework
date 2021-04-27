@@ -14,7 +14,7 @@ import {
   QueryParams,
   Server,
   SessionData,
-} from '@jovotech/core';
+} from '@jovotech/framework';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';
@@ -64,6 +64,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   languageModelEnabled: boolean;
   languageModelPath: string;
   debuggerJsonPath: string;
+  ignoredProperties: Array<keyof Jovo | string>;
 }
 
 export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
@@ -99,11 +100,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           en: LangEn,
         },
       },
-      webhookUrl: 'https://webhook.jovo.cloud',
+      webhookUrl: 'https://webhookv4.jovo.cloud',
       enabled: false,
       languageModelEnabled: true,
       languageModelPath: './models',
       debuggerJsonPath: './debugger.json',
+      ignoredProperties: ['$app', '$handleRequest', '$platform'],
     };
   }
 
@@ -179,7 +181,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             !((jovo[key as keyof Jovo] as unknown[]) || []).length;
           if (
             !jovo.hasOwnProperty(key) ||
-            ['$app', '$handleRequest', '$platform'].includes(key) ||
+            this.config.ignoredProperties.includes(key) ||
             !jovo[key as keyof Jovo] ||
             isEmptyObject ||
             isEmptyArray
@@ -201,13 +203,18 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private getProxyHandler<T extends Record<string, any>>(
     handleRequest: HandleRequest,
     path = '',
   ): ProxyHandler<T> {
     return {
       get: (target, key: string) => {
-        if (typeof target[key] === 'object' && target[key] !== null) {
+        if (
+          typeof target[key] === 'object' &&
+          target[key] !== null &&
+          !(target[key] instanceof Date)
+        ) {
           return new Proxy(
             target[key],
             this.getProxyHandler(handleRequest, path ? [path, key].join('.') : key),
@@ -332,16 +339,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   };
 
   private async connectToWebhook() {
-    // const webhookId = await this.retrieveLocalWebhookId();
-    // this.socket = connect(this.config.webhookUrl, {
-    //   query: {
-    //     id: webhookId,
-    //     type: 'app',
-    //   },
-    // });
-    this.socket = connect('http://localhost:8443', {
+    const webhookId = await this.retrieveLocalWebhookId();
+    this.socket = connect(this.config.webhookUrl, {
       query: {
-        id: 'test',
+        id: webhookId,
         type: 'app',
       },
     });
@@ -352,17 +353,17 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private async retrieveLocalWebhookId(): Promise<string> {
     try {
-      const homeConfigPath = join(this.getUserHomePath(), '.jovo/config');
+      const homeConfigPath = join(this.getUserHomePath(), '.jovo/configv4');
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
       if (homeConfigData?.webhook?.uuid) {
         return homeConfigData.webhook.uuid;
       }
       // TODO implement error
-      throw new Error();
+      throw new Error('Could not find webhook-id');
     } catch (e) {
       // TODO implement error
-      throw new Error();
+      throw new Error('Could not find webhook-id');
     }
   }
 

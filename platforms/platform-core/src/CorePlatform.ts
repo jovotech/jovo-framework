@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import {
   CorePlatformOutputTemplateConverterStrategy,
   CorePlatformResponse,
@@ -14,6 +14,7 @@ export interface CorePlatformConfig extends ExtensibleConfig {
 export class CorePlatform extends Platform<
   CorePlatformRequest,
   CorePlatformResponse,
+  CorePlatformApp,
   CorePlatformConfig
 > {
   // TODO: determine how useful this is and if this is required somewhere

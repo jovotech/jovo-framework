@@ -10,7 +10,8 @@
     "build": "lerna exec npm run build --ignore @jovotech/examples-* --ignore @jovotech/client-* --ignore @jovotech/e2e",
     "prettier": "lerna exec npm run prettier --ignore @jovotech/examples-*",
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-*",
-    "test": "lerna exec npm run test --ignore @jovotech/examples-*"
+    "test": "lerna exec npm run test --ignore @jovotech/examples-*",
+    "publish": "lerna publish --dist-tag prerelease --no-push"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
@@ -21,7 +22,7 @@
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",

@@ -1,4 +1,4 @@
-import { Headers, QueryParams, Server } from '@jovotech/core';
+import { Headers, QueryParams, Server } from '@jovotech/framework';
 import type { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import type { APIGatewayProxyEventHeaders } from 'aws-lambda/trigger/api-gateway-proxy';
 

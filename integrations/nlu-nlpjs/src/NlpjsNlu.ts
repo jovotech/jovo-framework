@@ -2,17 +2,15 @@ import {
   DeepPartial,
   Extensible,
   HandleRequest,
-  InvalidParentError,
   Jovo,
+  NluData,
   Platform,
-  Plugin,
   PluginConfig,
-  RequestType,
-} from '@jovotech/core';
+} from '@jovotech/framework';
+import { NluPlugin } from '@jovotech/framework/dist/NluPlugin';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';
-import { inspect } from 'util';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Nlp } = require('@nlpjs/nlp');
@@ -34,7 +32,7 @@ export interface NlpjsNluConfig extends PluginConfig {
 
 export type NlpjsNluInitConfig = DeepPartial<NlpjsNluConfig> & Pick<NlpjsNluConfig, 'languageMap'>;
 
-export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
+export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
   nlpjs?: Nlp;
 
   constructor(config: NlpjsNluInitConfig) {
@@ -52,10 +50,7 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
   }
 
   async initialize(parent: Extensible): Promise<void> {
-    if (!(parent instanceof Platform)) {
-      // TODO: implement error
-      throw new InvalidParentError(this.constructor.name, 'Platform');
-    }
+    super.initialize(parent);
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
@@ -74,7 +69,7 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
     // TODO: register fs if write-access is available
 
     if (this.config.setupModelCallback) {
-      await this.config.setupModelCallback(parent, this.nlpjs!);
+      await this.config.setupModelCallback(parent as Platform, this.nlpjs!);
     } else if (this.config.useModel) {
       await this.nlpjs?.load(this.config.preTrainedModelFilePath);
     } else {
@@ -83,39 +78,24 @@ export class NlpjsNlu extends Plugin<NlpjsNluConfig> {
     }
   }
 
-  mount(parent: Platform) {
-    parent.middlewareCollection.use('$nlu', this.nlu);
-  }
-
-  private nlu = async (handleRequest: HandleRequest, jovo: Jovo) => {
+  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
+    if (!text) return;
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
-
-    if (text) {
-      const nlpResult = await this.nlpjs?.process(language, text);
-
-      let intentName = 'None';
-      if (jovo.$type.type === RequestType.Launch) {
-        intentName = 'LAUNCH';
-      } else if (jovo.$type.type === RequestType.End) {
-        intentName = 'END';
-      } else if (nlpResult?.intent) {
-        intentName = nlpResult.intent;
-      }
-      jovo.$nlu = {
-        intent: {
-          name: intentName,
-        },
-        // [this.constructor.name]: nlpResult,
-      };
-    }
-  };
+    const nlpResult = await this.nlpjs?.process(language, text);
+    return nlpResult?.intent
+      ? {
+          intent: {
+            name: nlpResult.intent,
+          },
+        }
+      : undefined;
+  }
 
   private async addCorpusFromModelsIn(dir: string) {
     const files = await promises.readdir(dir);
     const jovoNlpjsConverter = new JovoModelNlpjs();
 
-    // forEach should not be used because block is async
     for (let i = 0, len = files.length; i < len; i++) {
       const lastDotIndex = files[i].lastIndexOf('.');
       const extension = files[i].substr(lastDotIndex + 1);

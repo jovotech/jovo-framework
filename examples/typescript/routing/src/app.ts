@@ -1,4 +1,4 @@
-import { App } from '@jovotech/core';
+import { App } from '@jovotech/framework';
 import { MenuCategoriesComponent } from './components/MenuCategoriesComponent';
 import { MenuComponent } from './components/MenuComponent';
 import { StandardComponent } from './components/StandardComponent';

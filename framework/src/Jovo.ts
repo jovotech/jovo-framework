@@ -1,5 +1,7 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { App, AppConfig } from './App';
 import { InternalIntent, RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
@@ -12,6 +14,7 @@ import {
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  MetadataStorage,
   OutputConstructor,
   PickWhere,
   Server,
@@ -24,18 +27,27 @@ import { JovoUser } from './JovoUser';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
+import { forEachDeep } from './utilities';
 
-export type JovoConstructor<REQUEST extends JovoRequest, RESPONSE extends JovoResponse> = new (
-  app: App,
-  handleRequest: HandleRequest,
-  platform: Platform<REQUEST, RESPONSE>,
-  ...args: unknown[]
-) => Jovo<REQUEST, RESPONSE>;
+export type JovoConstructor<
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>
+> = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoRequestType {
   type?: RequestTypeLike;
   subType?: string;
   optional?: boolean;
+}
+
+export interface JovoComponentInfo<
+  CONFIG extends Record<string, unknown> = Record<string, unknown>
+> {
+  $data: ComponentData;
+  $config?: CONFIG;
 }
 
 export interface DelegateOptions<
@@ -44,6 +56,23 @@ export interface DelegateOptions<
 > {
   resolveTo: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
   config?: CONFIG;
+}
+
+export function registerPlatformSpecificJovoReference<
+  KEY extends keyof Jovo,
+  REQUEST extends JovoRequest,
+  RESPONSE extends JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE>
+>(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
+  Object.defineProperty(Jovo.prototype, key, {
+    get(): Jovo[KEY] | undefined {
+      return this instanceof jovoClass
+        ? this
+        : this.jovo instanceof jovoClass
+        ? this.jovo
+        : undefined;
+    },
+  });
 }
 
 export abstract class Jovo<
@@ -60,22 +89,24 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user?: JovoUser<REQUEST, RESPONSE>;
+  $user: JovoUser<REQUEST, RESPONSE, this>;
 
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
-    readonly $platform: Platform<REQUEST, RESPONSE>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    readonly $platform: Platform<REQUEST, RESPONSE, any, any>,
   ) {
     this.$asr = {};
     this.$data = {};
     this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    const session = this.$request.getSession();
+    const session = this.getSession();
     this.$session = session instanceof JovoSession ? session : new JovoSession(session);
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
+    this.$user = this.$platform.createUserInstance(this);
   }
 
   get $config(): AppConfig {
@@ -107,8 +138,7 @@ export abstract class Jovo<
     }
   }
 
-  get $component(): { $data: ComponentData; $config: Record<string, unknown> | undefined } {
-    const app = this.$app;
+  get $component(): JovoComponentInfo {
     const state = this.$state as StateStack;
     const setDataIfNotDefined = () => {
       if (!state[state.length - 1 || 0]?.$data) {
@@ -127,26 +157,29 @@ export abstract class Jovo<
         state[state.length - 1].$data = value;
       },
       get $config(): Record<string, unknown> | undefined {
-        // EXPERIMENTAL: this will try to get the Output class from the saved Output-classes in App.
-        // Issue is, that a restart for example would cause the Output-class to not be found...
-        const modifiedStateConfig: any | undefined = {};
-        const currentStateConfig: any | undefined = state?.[state?.length - 1 || 0]?.config;
-        if (currentStateConfig) {
-          for (const key in currentStateConfig) {
+        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        if (deserializedStateConfig) {
+          // deserialize all found Output-constructors
+          forEachDeep(deserializedStateConfig, (value, path) => {
+            // TODO: check restriction
             if (
-              currentStateConfig.hasOwnProperty(key) &&
-              currentStateConfig[key]?.type === 'output' &&
-              currentStateConfig[key]?.identifier &&
-              app.dynamicOutputDictionary[currentStateConfig[key]?.identifier]
+              typeof value === 'object' &&
+              value.type === 'output' &&
+              value.name &&
+              Object.keys(value).length === 2
             ) {
-              modifiedStateConfig[key] =
-                app.dynamicOutputDictionary[currentStateConfig[key].identifier];
-            } else {
-              modifiedStateConfig[key] = currentStateConfig[key];
+              const outputMetadata = MetadataStorage.getInstance().getOutputMetadataByName(
+                value.name,
+              );
+              if (!outputMetadata) {
+                // TODO determine what to do!
+                return;
+              }
+              _set(deserializedStateConfig, path, outputMetadata.target);
             }
-          }
+          });
         }
-        return modifiedStateConfig as Record<string, unknown> | undefined;
+        return deserializedStateConfig;
       },
       set $config(value: Record<string, unknown> | undefined) {
         state[state.length - 1].config = value;
@@ -156,7 +189,7 @@ export abstract class Jovo<
 
   // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructor: OutputConstructor<OUTPUT>,
+    outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     const outputInstance = new outputConstructor(this, options);
@@ -206,19 +239,20 @@ export abstract class Jovo<
       }
     }
 
-    // EXPERIMENTAL: See experimental above
-    const serializableConfig: Record<string, any> = {};
-    for (const key in options.config) {
-      if (options.config.hasOwnProperty(key)) {
-        const value: any | undefined = options.config[key];
-        const isOutput = value?.prototype instanceof BaseOutput;
-        serializableConfig[key] = isOutput ? { type: 'output', identifier: value.name } : value;
-        if (isOutput) {
-          this.$app.dynamicOutputDictionary[value.name] = value;
+    const serializableConfig = _cloneDeep(options.config);
+    if (serializableConfig) {
+      forEachDeep(serializableConfig, (value, path) => {
+        // serialize all passed Output-constructors
+        if (value?.prototype instanceof BaseOutput) {
+          const outputMetadata = MetadataStorage.getInstance().getOutputMetadata(value);
+          if (!outputMetadata) {
+            // TODO determine what to do!
+            return;
+          }
+          _set(serializableConfig, path, { type: 'output', name: outputMetadata.name });
         }
-      }
+      });
     }
-
     stateStack.push({
       resolveTo: serializableResolveTo,
       config: serializableConfig,
@@ -307,7 +341,7 @@ export abstract class Jovo<
     const path = isRootComponent ? [componentName] : [...(this.$route?.path || []), componentName];
     const jovoReference = (this as { jovo?: Jovo })?.jovo || this;
     const componentInstance = new (componentMetadata.target as ComponentConstructor)(
-      jovoReference,
+      jovoReference as Jovo,
       componentMetadata.options?.config,
     );
     if (!componentInstance[handlerKey as keyof BaseComponent]) {
@@ -322,4 +356,16 @@ export abstract class Jovo<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (componentInstance as any)[handlerKey](...callArgs);
   }
+
+  //TODO: needs to be evaluated
+  getSession(): JovoSession | undefined {
+    return this.$request.getSession();
+  }
+
+  //TODO: needs to be evaluated. better this.$session.isNew?
+  isNewSession(): boolean {
+    return true;
+  }
+
+  // abstract isNewSession(): boolean;
 }

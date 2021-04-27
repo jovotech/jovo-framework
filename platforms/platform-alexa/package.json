@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.0",
+  "version": "4.0.0-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,13 +26,13 @@
     "chalk": "^4.1.0",
     "jovo-model": "^3.0.1",
     "jovo-model-alexa": "^3.0.1",
-    "@jovotech/output-alexa": "^latest",
+    "@jovotech/output-alexa": "^4.0.0-alpha.2",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/core": "~4.0",
-    "@types/lodash.merge": "^4.6.6",
+    "@jovotech/framework": "^4.0.0-alpha.0",
     "@types/jest": "^26.0.20",
+    "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.17.50",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -54,8 +54,11 @@
     "global-modules": "^2.0.0"
   },
   "peerDependencies": {
-    "@jovotech/core": "~4.0"
+    "@jovotech/framework": "~4.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
-  "prettier": "../../.prettierrc.js"
+  "prettier": "../../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

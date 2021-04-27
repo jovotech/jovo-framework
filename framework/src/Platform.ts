@@ -9,6 +9,7 @@ import {
   InvalidParentError,
   Jovo,
   JovoConstructor,
+  JovoUser,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
@@ -46,11 +47,12 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 export abstract class Platform<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
   CONFIG extends ExtensibleConfig = ExtensibleConfig
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
-  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE>;
-  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE>;
+  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, this>;
+  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE, JOVO>;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
@@ -105,5 +107,9 @@ export abstract class Platform<
     const instance = new this.requestClass();
     _merge(instance, request);
     return instance;
+  }
+
+  createUserInstance(jovo: JOVO): JovoUser<REQUEST, RESPONSE, JOVO> {
+    return new this.userClass(jovo);
   }
 }

@@ -1,48 +1,35 @@
 {
-  "name": "jovo-v4-mvp-js",
-  "version": "4.0.0",
-  "description": "A sample voice app that works with the Jovo Framework",
-  "main": "./dist/src/index.js",
-  "dependencies": {
-    "@jovotech/framework": "^4.0.0",
-    "@jovotech/platform-alexa": "^4.0.0",
-    "@jovotech/server-express": "^4.0.0",
-    "@jovotech/db-filedb": "^4.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/cli": "^7.13.10",
-    "@babel/node": "^7.13.10",
-    "@babel/runtime": "^7.13.10",
-    "@babel/plugin-proposal-decorators": "^7.13.5",
-    "@babel/plugin-transform-runtime": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
-    "@babel/register": "^7.13.8",
-
-    "eslint": "^7.17.0",
-    "eslint-config-prettier": "^7.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
-    "bestzip": "^2.1.7"
-
-  },
-  "scripts": {
-    "test": "jest",
-    "build": "babel src --out-dir dist",
-    "start:dev": "nodemon --exec babel-node -- ./src/app.dev.js",
-    "bundle:dev":"ncc build src/app.dev.ts -m -s -o bundle/",
-    "bundle:prod": "npm run build && ncc build ./dist/app.prod.js --source-map -o bundle/ && cd bundle/ && bestzip ./../bundle.zip index.js index.js.map sourcemap-register.js",
-    "eslint": "eslint src test --fix --ext .ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jovotech/jovo-sample-voice-app-nodejs.git"
-  },
-  "author": "Jovo",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/jovotech/jovo-sample-voice-app-nodejs/issues"
-  },
-  "homepage": "https://github.com/jovotech/jovo-sample-voice-app-nodejs#readme"
+	"name": "@jovotech/examples-js-mvp",
+	"version": "4.0.0-alpha.0",
+	"private": true,
+	"description": "A sample voice app that works with the Jovo Framework",
+	"main": "./dist/src/index.js",
+	"devDependencies": {
+		"@babel/cli": "^7.13.10",
+		"@babel/core": "^7.13.10",
+		"@babel/node": "^7.13.10",
+		"@babel/plugin-proposal-decorators": "^7.13.5",
+		"@babel/plugin-transform-runtime": "^7.13.10",
+		"@babel/preset-env": "^7.13.10",
+		"@babel/register": "^7.13.8",
+		"@babel/runtime": "^7.13.10"
+	},
+	"scripts": {
+		"test": "jest",
+		"build": "babel src --out-dir dist",
+		"start:dev": "nodemon --exec babel-node -- ./src/app.dev.js",
+		"bundle:dev": "ncc build src/app.dev.ts -m -s -o bundle/",
+		"bundle:prod": "npm run build && ncc build ./dist/app.prod.js --source-map -o bundle/ && cd bundle/ && bestzip ./../bundle.zip index.js index.js.map sourcemap-register.js",
+		"eslint": "eslint src test --fix --ext .ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jovotech/jovo-sample-voice-app-nodejs.git"
+	},
+	"author": "Jovo",
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/jovotech/jovo-sample-voice-app-nodejs/issues"
+	},
+	"homepage": "https://github.com/jovotech/jovo-sample-voice-app-nodejs#readme"
 }

@@ -1,4 +1,4 @@
-import { Entity, JovoSession, RequestTypeLike } from '@jovotech/core';
+import { Entity, JovoSession, RequestTypeLike } from '@jovotech/framework';
 
 export enum RequestType {
   Launch = 'LAUNCH',

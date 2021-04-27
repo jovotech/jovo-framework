@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-core",
-  "version": "4.0.0",
+  "version": "4.0.0-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,13 +18,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output-core": "latest",
+    "@jovotech/output-core": "^4.0.0-alpha.2",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/core": "~4.0",
-    "@types/lodash.merge": "^4.6.6",
+    "@jovotech/framework": "^4.0.0-alpha.0",
     "@types/jest": "^26.0.20",
+    "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -38,8 +38,11 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/core": "~4.0"
+    "@jovotech/framework": "~4.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
-  "prettier": "../../.prettierrc.js"
+  "prettier": "../../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
@@ -6,7 +6,7 @@ import { AlexaUser } from './AlexaUser';
 
 export interface AlexaConfig extends ExtensibleConfig {}
 
-export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaConfig> {
+export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, AlexaConfig> {
   outputTemplateConverterStrategy = new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = AlexaSkill;

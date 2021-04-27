@@ -1,37 +1,28 @@
 {
-  "name": "@jovotech/examples-js-hello-world",
-  "version": "4.0.0",
-  "private": true,
-  "description": "",
-  "scripts": {
-    "test": "jest",
-    "start": "node /dist/server.express.js",
-    "start:dev": "nodemon --exec babel-node ./src/server.express.js",
-    "build": "babel ./src --out-dir ./dist",
-    "bundle:express": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out",
-    "bundle:lambda": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out && bestzip ./bundle.zip out/",
-    "webpack": "webpack --entry ./src/host/fastify.js --mode=development --progress --watch",
-    "babel": "./node_modules/.bin/babel ./src --out-dir ./dist"
-  },
-  "author": "jovotech",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "@jovotech/framework": "^4.0.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10",
-    "@babel/plugin-proposal-decorators": "^7.12.1",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-transform-runtime": "^7.12.10",
-    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
-    "@babel/preset-env": "^7.12.11",
-    "bestzip": "^2.1.7",
-    "@vercel/ncc": "^0.27.0",
-    "nodemon": "^2.0.7",
-    "webpack": "^5.11.0",
-    "webpack-cli": "^4.2.0",
-    "babel-loader": "^8.2.2"
-  }
+	"name": "@jovotech/examples-js-hello-world",
+	"version": "4.0.0-alpha.0",
+	"private": true,
+	"description": "",
+	"scripts": {
+		"test": "jest",
+		"start": "node /dist/server.express.js",
+		"start:dev": "nodemon --exec babel-node ./src/server.express.js",
+		"build": "babel ./src --out-dir ./dist",
+		"bundle:express": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out",
+		"bundle:lambda": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out && bestzip ./bundle.zip out/",
+		"webpack": "webpack --entry ./src/host/fastify.js --mode=development --progress --watch",
+		"babel": "./node_modules/.bin/babel ./src --out-dir ./dist"
+	},
+	"author": "jovotech",
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"@babel/cli": "^7.12.10",
+		"@babel/core": "^7.12.10",
+		"@babel/node": "^7.12.10",
+		"@babel/plugin-proposal-class-properties": "^7.12.1",
+		"@babel/plugin-proposal-decorators": "^7.12.1",
+		"@babel/plugin-transform-modules-commonjs": "^7.12.1",
+		"@babel/plugin-transform-runtime": "^7.12.10",
+		"@babel/preset-env": "^7.12.11"
+	}
 }
