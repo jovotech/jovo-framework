@@ -38,10 +38,11 @@ Thank you to all our existing sponsors and supporters! <3
 * [Rabbit & Pork](https://wearerabbitandpork.com/)
 * [Die Lautmaler](https://www.die-lautmaler.de/)
 * [ONSEI](https://www.onsei.de/)
-* [Jargon](https://jargon.com/)
 * [Node Kitchen](https://node.kitchen/)
 * [ShirkaLab](https://www.shirkalab.io/)
 * [Future of Voice](https://www.futureofvoice.com/)
+* [Altervoice](https://www.altervoice.com/)
+* [Voicebot.ai](https://voicebot.ai/)
 
 
 ## Backers
@@ -66,3 +67,4 @@ Thank you to all our existing sponsors and supporters! <3
 * Stoked Skills
 * Mario Menti
 * Spokestack
+* Jargon

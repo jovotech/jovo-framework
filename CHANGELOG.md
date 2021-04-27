@@ -2,6 +2,12 @@
 
 ### Latest Framework Version: 3.5.1<br><br>
 
+
+## 2021-04-13
+
+##### `jovo-analytics-googleanalytics [3.5.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#921](https://github.com/jovotech/jovo-framework/pull/921) :bug: Fix TLS Errors on Lambda ([@freiSMS(https://github.com/freiSMS))
+
 ## 2021-03-31
 
 ##### `jovo-analytics-googleanalytics [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
