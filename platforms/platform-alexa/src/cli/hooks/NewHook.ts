@@ -40,10 +40,6 @@ export class NewHook extends PluginHook<NewEvents> {
           continue;
         }
 
-        if (!this.$plugin.$config) {
-          this.$plugin.$config = {};
-        }
-
         if (!this.$plugin.$config.locales) {
           this.$plugin.$config.locales = {};
         }
