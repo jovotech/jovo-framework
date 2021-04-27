@@ -1,5 +1,5 @@
 {
-  "name": "jovo-v4-mvp-ts",
+  "name": "@jovotech/examples-mvp-v2",
   "private": true,
   "version": "4.0.0",
   "description": "A sample voice app that works with the Jovo Framework",
