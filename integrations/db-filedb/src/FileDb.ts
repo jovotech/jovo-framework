@@ -6,7 +6,7 @@ import {
   DbPluginConfig,
   PersistableUserData,
   PersistableSessionData,
-} from '@jovotech/core';
+} from '@jovotech/framework';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';

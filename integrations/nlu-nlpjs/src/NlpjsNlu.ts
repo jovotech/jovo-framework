@@ -6,8 +6,8 @@ import {
   NluData,
   Platform,
   PluginConfig,
-} from '@jovotech/core';
-import { NluPlugin } from '@jovotech/core/dist/NluPlugin';
+} from '@jovotech/framework';
+import { NluPlugin } from '@jovotech/framework/dist/NluPlugin';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';

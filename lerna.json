@@ -5,10 +5,7 @@
     "framework",
     "platforms/**",
     "integrations/**",
-    "examples/**",
-    "../jovo-output/output",
-    "../jovo-output/output-core",
-    "../jovo-output/output-alexa"
+    "examples/**"
   ],
   "ignoreChanges": [
     "*.md",

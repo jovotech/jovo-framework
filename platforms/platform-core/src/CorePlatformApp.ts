@@ -1,4 +1,4 @@
-import { Jovo } from '@jovotech/core';
+import { Jovo } from '@jovotech/framework';
 import { CorePlatformResponse } from '@jovotech/output-core';
 import { CorePlatformRequest } from './CorePlatformRequest';
 

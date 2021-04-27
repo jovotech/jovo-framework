@@ -1,4 +1,4 @@
-import { App, ComponentDeclaration, SessionData } from '@jovotech/core';
+import { App, ComponentDeclaration, SessionData } from '@jovotech/framework';
 import { Alexa, AlexaRequestJSON, Session } from '@jovotech/platform-alexa';
 import { inspect } from 'util';
 import { ReusableComponent } from './components/ReusableComponent';

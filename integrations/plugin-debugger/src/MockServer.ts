@@ -1,4 +1,4 @@
-import { Headers, QueryParams, Server } from '@jovotech/core';
+import { Headers, QueryParams, Server } from '@jovotech/framework';
 
 export class MockServer extends Server {
   constructor(readonly req: any) {

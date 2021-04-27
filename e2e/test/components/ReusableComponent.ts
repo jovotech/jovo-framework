@@ -1,4 +1,4 @@
-import { BaseComponent, Component, Handle } from '@jovotech/core';
+import { BaseComponent, Component, Handle } from '@jovotech/framework';
 
 @Component({})
 export class ReusableComponent extends BaseComponent {

@@ -1,6 +1,6 @@
 import { RasaNlu, RasaNluConfig } from './RasaNlu';
 
-declare module '@jovotech/core/dist/Extensible' {
+declare module '@jovotech/framework/dist/Extensible' {
   interface ExtensiblePluginConfig {
     RasaNlu?: RasaNluConfig;
   }

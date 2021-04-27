@@ -14,7 +14,7 @@ import {
   QueryParams,
   Server,
   SessionData,
-} from '@jovotech/core';
+} from '@jovotech/framework';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';

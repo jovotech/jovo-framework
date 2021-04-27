@@ -26,7 +26,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/framework": "^4.0.0",
-    "@jovotech/core": "^4.0.0",
+    "@jovotech/framework": "^4.0.0",
     "@jovotech/platform-alexa": "^4.0.0"
   },
   "devDependencies": {

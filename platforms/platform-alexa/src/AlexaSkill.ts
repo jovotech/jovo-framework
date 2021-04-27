@@ -1,4 +1,4 @@
-import { Jovo } from '@jovotech/core';
+import { Jovo } from '@jovotech/framework';
 import { AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 

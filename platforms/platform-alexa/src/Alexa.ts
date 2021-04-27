@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';

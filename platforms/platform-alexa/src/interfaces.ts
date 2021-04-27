@@ -1,4 +1,4 @@
-import { JovoSession } from '@jovotech/core';
+import { JovoSession } from '@jovotech/framework';
 
 export interface Session {
   new: boolean;

@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/core';
+import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import {
   CorePlatformOutputTemplateConverterStrategy,
   CorePlatformResponse,

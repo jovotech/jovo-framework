@@ -1,6 +1,6 @@
 import { FileDb, FileDbConfig } from './FileDb';
 
-declare module '@jovotech/core/dist/Extensible' {
+declare module '@jovotech/framework/dist/Extensible' {
   interface ExtensiblePluginConfig {
     FileDb?: FileDbConfig;
   }
