@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.1",
   "private": true,
   "description": "",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.0",
+    "@jovotech/framework": "^4.0.0-alpha.1",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.17.50",

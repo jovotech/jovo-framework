@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,14 +18,14 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.0.0-alpha.0",
-    "@jovotech/platform-core": "^4.0.0-alpha.0",
+    "@jovotech/nlu-nlpjs": "^4.0.0-alpha.1",
+    "@jovotech/platform-core": "^4.0.0-alpha.1",
     "@nlpjs/lang-en": "^4.22.0",
     "lodash.clonedeep": "^4.5.0",
     "socket.io-client": "^2.4.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.0",
+    "@jovotech/framework": "^4.0.0-alpha.1",
     "@types/jest": "^26.0.20",
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/node": "^10.17.50",
