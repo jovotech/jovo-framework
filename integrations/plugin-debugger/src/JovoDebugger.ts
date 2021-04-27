@@ -100,7 +100,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           en: LangEn,
         },
       },
-      webhookUrl: 'https://webhook.jovo.cloud',
+      webhookUrl: 'https://webhookv4.jovo.cloud',
       enabled: false,
       languageModelEnabled: true,
       languageModelPath: './models',
@@ -339,16 +339,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   };
 
   private async connectToWebhook() {
-    // const webhookId = await this.retrieveLocalWebhookId();
-    // this.socket = connect(this.config.webhookUrl, {
-    //   query: {
-    //     id: webhookId,
-    //     type: 'app',
-    //   },
-    // });
-    this.socket = connect('http://localhost:8443', {
+    const webhookId = await this.retrieveLocalWebhookId();
+    this.socket = connect(this.config.webhookUrl, {
       query: {
-        id: 'test',
+        id: webhookId,
         type: 'app',
       },
     });
@@ -359,17 +353,17 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private async retrieveLocalWebhookId(): Promise<string> {
     try {
-      const homeConfigPath = join(this.getUserHomePath(), '.jovo/config');
+      const homeConfigPath = join(this.getUserHomePath(), '.jovo/configv4');
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
       if (homeConfigData?.webhook?.uuid) {
         return homeConfigData.webhook.uuid;
       }
       // TODO implement error
-      throw new Error();
+      throw new Error('Could not find webhook-id');
     } catch (e) {
       // TODO implement error
-      throw new Error();
+      throw new Error('Could not find webhook-id');
     }
   }
 
