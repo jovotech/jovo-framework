@@ -42,7 +42,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "~4.0"
+    "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",
