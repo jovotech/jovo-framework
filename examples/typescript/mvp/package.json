@@ -1,5 +1,6 @@
 {
   "name": "jovo-sample-voice-app-nodejs",
+  "private": true,
   "version": "4.0.0",
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "./dist/src/index.js",

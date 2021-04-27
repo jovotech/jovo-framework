@@ -1,6 +1,7 @@
 {
 	"name": "jovo-v4-mvp-js",
 	"version": "4.0.0",
+	"private": true,
 	"description": "A sample voice app that works with the Jovo Framework",
 	"main": "./dist/src/index.js",
 	"devDependencies": {
