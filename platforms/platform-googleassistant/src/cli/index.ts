@@ -9,19 +9,18 @@ import { PluginConfigGoogle } from './utils/Interfaces';
 export class GoogleAssistantCli extends JovoCliPlugin {
   $type: PluginType = 'platform';
   $id: string = 'googleAction';
-  $config: PluginConfigGoogle = {
-    projectId: '<YOUR-PROJECT-ID-HERE>',
-  };
 
-  constructor(config: PluginConfigGoogle = {}) {
+  constructor(config?: PluginConfigGoogle) {
     super(config);
-
-    if (config) {
-      this.$config = config;
-    }
   }
 
   getHooks() {
     return [BuildHook, GetHook, DeployHook, NewHook];
+  }
+
+  getDefaultConfig(): PluginConfigGoogle {
+    return {
+      projectId: '<YOUR-PROJECT-ID-HERE>',
+    };
   }
 }

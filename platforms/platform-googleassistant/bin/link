@@ -4,7 +4,7 @@ const symlinkDir = require('symlink-dir');
 const { npm } = require('global-dirs');
 
 (async () => {
-  await symlinkDir('.', join(npm.packages, '@jovotech', 'platform-googleassistantconv'));
+  await symlinkDir('.', join(npm.packages, '@jovotech', 'platform-googleassistant'));
   await symlinkDir(
     join(npm.packages, '@jovotech', 'filebuilder'),
     join('node_modules', '@jovotech', 'filebuilder'),
