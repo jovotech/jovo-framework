@@ -1,6 +1,6 @@
 {
 	"name": "@jovotech/examples-js-hello-world",
-	"version": "4.0.0",
+	"version": "4.0.0-alpha.0",
 	"private": true,
 	"description": "",
 	"scripts": {

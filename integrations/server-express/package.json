@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/server-express",
-  "version": "4.0.0",
+  "version": "4.0.0-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,9 +21,9 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@jovotech/framework": "~4.0",
-    "@types/jest": "^26.0.20",
     "@aws-sdk/types": "^3.6.1",
+    "@jovotech/framework": "^4.0.0-alpha.0",
+    "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
