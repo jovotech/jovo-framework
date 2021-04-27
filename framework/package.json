@@ -47,5 +47,8 @@
     "typescript": "^4.2.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
-  "prettier": "../.prettierrc.js"
+  "prettier": "../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }
