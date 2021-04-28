@@ -1,7 +1,6 @@
 import { app } from './app';
-
-export const handler = async (event: any, context: any, callback: () => void) => {
+import { Lambda, Context, Callback, APIGatewayEvent } from '@jovotech/server-lambda';
+export const handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
   // await app.bootstrap();
-  // const response = await app.handle(event);
-  // return response;
+  await app.handle(new Lambda(event, context, callback));
 };
