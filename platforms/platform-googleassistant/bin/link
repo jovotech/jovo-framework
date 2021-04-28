@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+const { join } = require('path');
+const symlinkDir = require('symlink-dir');
+const { npm } = require('global-dirs');
+
+(async () => {
+  await symlinkDir('.', join(npm.packages, '@jovotech', 'platform-googleassistant'));
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'filebuilder'),
+    join('node_modules', '@jovotech', 'filebuilder'),
+  );
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-core'),
+    join('node_modules', '@jovotech', 'cli-core'),
+  );
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-command-new'),
+    join('node_modules', '@jovotech', 'cli-command-new'),
+  );
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-command-build'),
+    join('node_modules', '@jovotech', 'cli-command-build'),
+  );
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-command-deploy'),
+    join('node_modules', '@jovotech', 'cli-command-deploy'),
+  );
+  await symlinkDir(
+    join(npm.packages, '@jovotech', 'cli-command-get'),
+    join('node_modules', '@jovotech', 'cli-command-get'),
+  );
+})();
