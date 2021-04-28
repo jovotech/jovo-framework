@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, OutputConstructor, RegisteredComponents } from '.';
+import { ArrayElement, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -14,8 +14,8 @@ import { Platform } from './Platform';
 import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
-import { Server } from './Server';
 import { SessionPlugin } from './plugins/SessionPlugin';
+import { Server } from './Server';
 
 export interface AppConfig extends ExtensibleConfig {
   placeholder: string;
@@ -65,6 +65,18 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   get platforms(): ReadonlyArray<Platform> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
+  }
+
+  configure(config: AppInitConfig) {
+    _merge(this.config, { ...config, components: undefined, plugins: undefined });
+    if (config?.plugins && config?.plugins?.length) {
+      this.use(...config.plugins);
+    }
+    if (config?.components && config?.components?.length) {
+      this.useComponents(
+        ...(config.components as Array<ComponentConstructor | ComponentDeclaration>),
+      );
+    }
   }
 
   initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
