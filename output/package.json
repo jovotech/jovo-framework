@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -17,14 +17,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "lodash.merge": "^4.6.2",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "lodash.merge": "^4.6.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@types/lodash.merge": "^4.6.6",
     "@types/jest": "^26.0.20",
+    "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
