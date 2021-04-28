@@ -55,7 +55,7 @@ export interface DelegateOptions<
   CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
   EVENTS extends string = string
 > {
-  resolveTo: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
+  resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
   config?: CONFIG;
 }
 
@@ -232,11 +232,11 @@ export abstract class Jovo<
     const componentMetadata = this.$getComponentMetadataOrFail(constructorOrName);
     const stateStack = this.$state as StateStack;
 
-    const serializableResolveTo: Record<string, string> = {};
-    for (const key in options.resolveTo) {
-      if (options.resolveTo.hasOwnProperty(key)) {
-        const value = options.resolveTo[key];
-        serializableResolveTo[key] = typeof value === 'string' ? value : value.name;
+    const serializableResolve: Record<string, string> = {};
+    for (const key in options.resolve) {
+      if (options.resolve.hasOwnProperty(key)) {
+        const value = options.resolve[key];
+        serializableResolve[key] = typeof value === 'string' ? value : value.name;
       }
     }
 
@@ -255,7 +255,7 @@ export abstract class Jovo<
       });
     }
     stateStack.push({
-      resolveTo: serializableResolveTo,
+      resolve: serializableResolve,
       config: serializableConfig,
       componentPath: this.$getComponentPath(componentMetadata).join('.'),
     });
@@ -267,10 +267,10 @@ export abstract class Jovo<
     const stateStack = this.$state as StateStack;
     const currentStateStackItem = stateStack[stateStack.length - 1];
     const previousStateStackItem = stateStack[stateStack.length - 2];
-    if (!currentStateStackItem?.resolveTo || !previousStateStackItem) {
+    if (!currentStateStackItem?.resolve || !previousStateStackItem) {
       return;
     }
-    const resolvedHandlerKey = currentStateStackItem.resolveTo[eventName];
+    const resolvedHandlerKey = currentStateStackItem.resolve[eventName];
     const previousComponentPath = previousStateStackItem.componentPath.split('.');
     const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
     stateStack.pop();
