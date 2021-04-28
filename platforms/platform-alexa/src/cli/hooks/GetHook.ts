@@ -13,7 +13,7 @@ import {
 } from '@jovotech/cli-core';
 import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import { BuildEvents } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+// import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 
 import * as smapi from '../smapi';
 import {
@@ -181,6 +181,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       if (this.$context.flags.locale) {
         modelLocales.push(...this.$context.flags.locale);
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const skillJson = require(getSkillJsonPath());
         const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
         modelLocales.push(...Object.keys(skillJsonLocales));
@@ -214,10 +215,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
     // Check if .ask/ask-states.json exists, if not, build default config.
     const askConfigPath: string = getAskConfigPath();
-    if (!existsSync(askConfigPath)) {
-      const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
-      FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
-    }
+    // if (!existsSync(askConfigPath)) {
+    //   const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
+    //   FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
+    // }
 
     const askConfigContent: string = readFileSync(askConfigPath, 'utf-8');
     const askConfig = JSON.parse(askConfigContent);

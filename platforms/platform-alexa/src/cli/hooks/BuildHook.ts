@@ -23,7 +23,7 @@ import {
   getResolvedLocales,
 } from '@jovotech/cli-core';
 import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+// import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 
@@ -255,74 +255,74 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Builds the Alexa skill manifest.
    */
   createAlexaProjectFiles() {
-    const jovo: JovoCli = JovoCli.getInstance();
-    const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
-
-    // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
-    const projectFiles: FileObject = jovo.$project!.hasPlatform(getPlatformDirectory())
-      ? files
-      : _merge(DefaultFiles, files);
-
-    // Merge global project.js properties with platform files.
-    const endpoint: string = this.getPluginEndpoint();
-    const endpointPath: string = 'skill-package/["skill.json"].manifest.apis.custom.endpoint';
-    // If a global endpoint is given and one is not already specified, set the global one.
-    if (endpoint && !_has(projectFiles, endpointPath)) {
-      // If endpoint is of type ARN, omit the Wildcard certificate.
-      const certificate: string | null = !endpoint.startsWith('arn') ? 'Wildcard' : null;
-      // Create basic HTTPS endpoint from Wildcard SSL.
-      _set(projectFiles, endpointPath, {
-        sslCertificateType: certificate,
-        uri: endpoint,
-      });
-    }
-
-    const skillId = _get(this.$config, 'options.skillId');
-    const skillIdPath: string = '[".ask/"]["ask-states.json"].profiles.default.skillId';
-    // Check whether skill id has already been set.
-    if (skillId && !_has(projectFiles, skillIdPath)) {
-      _set(projectFiles, skillIdPath, skillId);
-    }
-
-    const skillName: string = jovo.$project!.getProjectName();
-    const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
-      locales.push(
-        ...getResolvedLocales(
-          locale,
-          SupportedLocales,
-          this.$plugin.constructor.name,
-          this.$config.locales,
-        ),
-      );
-      return locales;
-    }, []);
-
-    for (const locale of locales) {
-      // Check whether publishing information has already been set.
-      const publishingInformationPath: string = `skill-package/["skill.json"].manifest.publishingInformation.locales.${locale}`;
-      if (!_has(projectFiles, publishingInformationPath)) {
-        _set(projectFiles, publishingInformationPath, {
-          summary: 'Sample Short Description',
-          examplePhrases: ['Alexa open hello world'],
-          keywords: ['hello', 'world'],
-          name: skillName,
-          description: 'Sample Full Description',
-          smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
-          largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
-        });
-      }
-
-      const privacyAndCompliancePath: string = `skill-package/["skill.json"].manifest.privacyAndCompliance.locales.${locale}`;
-      // Check whether privacy and compliance information has already been set.
-      if (!_has(projectFiles, privacyAndCompliancePath)) {
-        _set(projectFiles, privacyAndCompliancePath, {
-          privacyPolicyUrl: 'http://example.com/policy',
-          termsOfUseUrl: '',
-        });
-      }
-    }
-
-    FileBuilder.buildDirectory(projectFiles, getPlatformPath());
+    // const jovo: JovoCli = JovoCli.getInstance();
+    // const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
+    //
+    // // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
+    // const projectFiles: FileObject = jovo.$project!.hasPlatform(getPlatformDirectory())
+    //   ? files
+    //   : _merge(DefaultFiles, files);
+    //
+    // // Merge global project.js properties with platform files.
+    // const endpoint: string = this.getPluginEndpoint();
+    // const endpointPath: string = 'skill-package/["skill.json"].manifest.apis.custom.endpoint';
+    // // If a global endpoint is given and one is not already specified, set the global one.
+    // if (endpoint && !_has(projectFiles, endpointPath)) {
+    //   // If endpoint is of type ARN, omit the Wildcard certificate.
+    //   const certificate: string | null = !endpoint.startsWith('arn') ? 'Wildcard' : null;
+    //   // Create basic HTTPS endpoint from Wildcard SSL.
+    //   _set(projectFiles, endpointPath, {
+    //     sslCertificateType: certificate,
+    //     uri: endpoint,
+    //   });
+    // }
+    //
+    // const skillId = _get(this.$config, 'options.skillId');
+    // const skillIdPath: string = '[".ask/"]["ask-states.json"].profiles.default.skillId';
+    // // Check whether skill id has already been set.
+    // if (skillId && !_has(projectFiles, skillIdPath)) {
+    //   _set(projectFiles, skillIdPath, skillId);
+    // }
+    //
+    // const skillName: string = jovo.$project!.getProjectName();
+    // const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
+    //   locales.push(
+    //     ...getResolvedLocales(
+    //       locale,
+    //       SupportedLocales,
+    //       this.$plugin.constructor.name,
+    //       this.$config.locales,
+    //     ),
+    //   );
+    //   return locales;
+    // }, []);
+    //
+    // for (const locale of locales) {
+    //   // Check whether publishing information has already been set.
+    //   const publishingInformationPath: string = `skill-package/["skill.json"].manifest.publishingInformation.locales.${locale}`;
+    //   if (!_has(projectFiles, publishingInformationPath)) {
+    //     _set(projectFiles, publishingInformationPath, {
+    //       summary: 'Sample Short Description',
+    //       examplePhrases: ['Alexa open hello world'],
+    //       keywords: ['hello', 'world'],
+    //       name: skillName,
+    //       description: 'Sample Full Description',
+    //       smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
+    //       largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
+    //     });
+    //   }
+    //
+    //   const privacyAndCompliancePath: string = `skill-package/["skill.json"].manifest.privacyAndCompliance.locales.${locale}`;
+    //   // Check whether privacy and compliance information has already been set.
+    //   if (!_has(projectFiles, privacyAndCompliancePath)) {
+    //     _set(projectFiles, privacyAndCompliancePath, {
+    //       privacyPolicyUrl: 'http://example.com/policy',
+    //       termsOfUseUrl: '',
+    //     });
+    //   }
+    // }
+    //
+    // FileBuilder.buildDirectory(projectFiles, getPlatformPath());
   }
 
   /**
@@ -415,7 +415,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     const files: string[] = readdirSync(getModelsPath());
     // Map each file to it's identifier, without file extension.
     return files.map((file: string) => {
-      const localeRegex: RegExp = /(.*)\.(?:[^.]+)$/;
+      const localeRegex = /(.*)\.(?:[^.]+)$/;
       const match = localeRegex.exec(file);
 
       // ToDo: Test!

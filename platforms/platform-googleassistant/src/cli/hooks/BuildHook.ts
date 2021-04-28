@@ -28,7 +28,7 @@ import {
   getResolvedLocales,
 } from '@jovotech/cli-core';
 import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+// import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 import { JovoModelGoogle } from 'jovo-model-google';
 
@@ -327,76 +327,76 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   createGoogleProjectFiles() {
     const jovo: JovoCli = JovoCli.getInstance();
-    const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
-    // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
-    const projectFiles: FileObject = jovo.$project!.hasPlatform(getPlatformDirectory())
-      ? files
-      : _merge(DefaultFiles, files);
-    // Get default locale.
-    // Merge global project.js properties with platform files.
-    // Set endpoint.
-    const endpoint: string = this.getPluginEndpoint();
-    const webhookPath = 'webhooks/["ActionsOnGoogleFulfillment.yaml"]';
-
-    if (endpoint && !_has(projectFiles, webhookPath)) {
-      const defaultHandler = {
-        handlers: [
-          {
-            name: 'Jovo',
-          },
-        ],
-        httpsEndpoint: {
-          baseUrl: this.getPluginEndpoint(),
-        },
-      };
-
-      _set(projectFiles, webhookPath, defaultHandler);
-    }
-
-    // Set default settings, such as displayName.
-    for (const locale of this.$context.locales) {
-      const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
-        locale,
-        SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
-      ) as SupportedLocalesType[];
-      for (const resolvedLocale of resolvedLocales) {
-        const settingsPathArr: string[] = ['settings/'];
-
-        if (resolvedLocale !== this.$context.defaultLocale!) {
-          settingsPathArr.push(`${resolvedLocale}/`);
-        }
-
-        settingsPathArr.push('["settings.yaml"]');
-
-        const settingsPath: string = settingsPathArr.join('.');
-
-        // Set default settings.
-        if (resolvedLocale === this.$context.defaultLocale) {
-          if (!_has(projectFiles, `${settingsPath}.defaultLocale`)) {
-            _set(projectFiles, `${settingsPath}.defaultLocale`, this.$context.defaultLocale!);
-          }
-
-          if (!_has(projectFiles, `${settingsPath}.projectId`)) {
-            _set(projectFiles, `${settingsPath}.projectId`, this.$context.projectId);
-          }
-        }
-
-        // Set minimal required localized settings, such as displayName and pronunciation.
-        const localizedSettingsPath = `${settingsPath}.localizedSettings`;
-
-        const invocationName: string = this.getInvocationName(locale);
-        if (!_has(projectFiles, `${localizedSettingsPath}.displayName`)) {
-          _set(projectFiles, `${localizedSettingsPath}.displayName`, invocationName);
-        }
-        if (!_has(projectFiles, `${localizedSettingsPath}.pronunciation`)) {
-          _set(projectFiles, `${localizedSettingsPath}.pronunciation`, invocationName);
-        }
-      }
-    }
-
-    FileBuilder.buildDirectory(projectFiles, getPlatformPath());
+    // const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
+    // // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
+    // const projectFiles: FileObject = jovo.$project!.hasPlatform(getPlatformDirectory())
+    //   ? files
+    //   : _merge(DefaultFiles, files);
+    // // Get default locale.
+    // // Merge global project.js properties with platform files.
+    // // Set endpoint.
+    // const endpoint: string = this.getPluginEndpoint();
+    // const webhookPath = 'webhooks/["ActionsOnGoogleFulfillment.yaml"]';
+    //
+    // if (endpoint && !_has(projectFiles, webhookPath)) {
+    //   const defaultHandler = {
+    //     handlers: [
+    //       {
+    //         name: 'Jovo',
+    //       },
+    //     ],
+    //     httpsEndpoint: {
+    //       baseUrl: this.getPluginEndpoint(),
+    //     },
+    //   };
+    //
+    //   _set(projectFiles, webhookPath, defaultHandler);
+    // }
+    //
+    // // Set default settings, such as displayName.
+    // for (const locale of this.$context.locales) {
+    //   const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
+    //     locale,
+    //     SupportedLocales,
+    //     this.$plugin.constructor.name,
+    //     this.$config.locales,
+    //   ) as SupportedLocalesType[];
+    //   for (const resolvedLocale of resolvedLocales) {
+    //     const settingsPathArr: string[] = ['settings/'];
+    //
+    //     if (resolvedLocale !== this.$context.defaultLocale!) {
+    //       settingsPathArr.push(`${resolvedLocale}/`);
+    //     }
+    //
+    //     settingsPathArr.push('["settings.yaml"]');
+    //
+    //     const settingsPath: string = settingsPathArr.join('.');
+    //
+    //     // Set default settings.
+    //     if (resolvedLocale === this.$context.defaultLocale) {
+    //       if (!_has(projectFiles, `${settingsPath}.defaultLocale`)) {
+    //         _set(projectFiles, `${settingsPath}.defaultLocale`, this.$context.defaultLocale!);
+    //       }
+    //
+    //       if (!_has(projectFiles, `${settingsPath}.projectId`)) {
+    //         _set(projectFiles, `${settingsPath}.projectId`, this.$context.projectId);
+    //       }
+    //     }
+    //
+    //     // Set minimal required localized settings, such as displayName and pronunciation.
+    //     const localizedSettingsPath = `${settingsPath}.localizedSettings`;
+    //
+    //     const invocationName: string = this.getInvocationName(locale);
+    //     if (!_has(projectFiles, `${localizedSettingsPath}.displayName`)) {
+    //       _set(projectFiles, `${localizedSettingsPath}.displayName`, invocationName);
+    //     }
+    //     if (!_has(projectFiles, `${localizedSettingsPath}.pronunciation`)) {
+    //       _set(projectFiles, `${localizedSettingsPath}.pronunciation`, invocationName);
+    //     }
+    //   }
+    // }
+    //
+    // FileBuilder.buildDirectory(projectFiles, getPlatformPath());
   }
 
   /**
