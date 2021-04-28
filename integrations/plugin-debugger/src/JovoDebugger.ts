@@ -3,7 +3,6 @@ import {
   DeepPartial,
   Extensible,
   HandleRequest,
-  Headers,
   InvalidParentError,
   Jovo,
   JovoError,
@@ -11,9 +10,6 @@ import {
   Platform,
   Plugin,
   PluginConfig,
-  QueryParams,
-  Server,
-  SessionData,
 } from '@jovotech/framework';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
@@ -265,16 +261,20 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private onDebuggerLanguageModelRequest = async () => {
     if (!this.config.languageModelEnabled) return;
     if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
-      // TODO: implement error
-      throw new Error();
+      // TODO: determine what to do (warning or error or nothing)
+      return;
     }
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      console.warn('Can not emit language-model: Socket is not available.');
+      return;
     }
     // look for language-models
-    const languageModel = await this.getLanguageModel();
-    this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
+    try {
+      const languageModel = await this.getLanguageModel();
+      this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
+    } catch (e) {
+      console.warn('Can not emit language-model: Could not retrieve language-model.');
+    }
     // TODO implement sending debuggerConfig if that is required
   };
 
