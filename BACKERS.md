@@ -43,6 +43,7 @@ Thank you to all our existing sponsors and supporters! <3
 * [Future of Voice](https://www.futureofvoice.com/)
 * [Altervoice](https://www.altervoice.com/)
 * [Voicebot.ai](https://voicebot.ai/)
+* [The Bot Forge](https://www.thebotforge.io/)
 
 
 ## Backers
