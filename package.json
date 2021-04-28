@@ -11,7 +11,7 @@
     "prettier": "lerna exec npm run prettier --ignore @jovotech/examples-*",
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-*",
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
-    "publish": "lerna publish --dist-tag prerelease --no-push"
+    "publish": "lerna publish --no-push"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
