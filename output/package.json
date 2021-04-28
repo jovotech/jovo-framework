@@ -17,11 +17,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "lodash.merge": "^4.6.2",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@types/lodash.merge": "^4.6.6",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
