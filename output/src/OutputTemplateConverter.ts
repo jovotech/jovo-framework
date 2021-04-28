@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { OutputValidationError } from './errors/OutputValidationError';
-import { OutputTemplate, JovoResponse, OutputTemplateConverterStrategy } from './index';
+import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from './index';
 
 // TODO: check if validation should happen before and after conversion
 export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
@@ -20,7 +20,8 @@ export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
     targetClass: new (...args: unknown[]) => T,
   ): Promise<ValidationError[]> {
     const getInstance = (item: T) =>
-      item instanceof targetClass ? item : plainToClass(targetClass, item);
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      ((item instanceof targetClass ? item : plainToClass(targetClass, item)) as unknown) as object;
     if (Array.isArray(objOrArray)) {
       const errorMatrix = await Promise.all(objOrArray.map((item) => validate(getInstance(item))));
       // TODO: maybe modify key or something to indicate better which item was invalid

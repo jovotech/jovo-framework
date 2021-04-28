@@ -10,6 +10,6 @@ export class CallButton extends Button<ButtonType.Call> {
   @MaxLength(20)
   title: string;
 
-  @IsPhoneNumber(null)
+  @IsPhoneNumber()
   payload: string;
 }

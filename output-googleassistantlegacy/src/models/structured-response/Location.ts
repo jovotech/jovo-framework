@@ -41,7 +41,7 @@ export class Location {
   name?: string;
 
   @IsOptional()
-  @IsPhoneNumber(null)
+  @IsPhoneNumber()
   phoneNumber?: string;
 
   @IsOptional()

@@ -52,7 +52,7 @@ export class RbmSuggestedActionContent {
 }
 
 export class RbmSuggestedActionDial {
-  @IsPhoneNumber(null)
+  @IsPhoneNumber()
   phone_number: string;
 }
 

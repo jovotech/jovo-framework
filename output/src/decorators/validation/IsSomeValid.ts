@@ -40,7 +40,7 @@ export function IsSomeValid<T = any>(
           const otherPropertyMap: Partial<Record<keyof T, any>> = {};
 
           for (const key of otherKeys) {
-            otherPropertyMap[key] = (args.object as T)[key];
+            otherPropertyMap[key] = ((args.object as unknown) as T)[key];
           }
 
           const otherDefinedPropertyPairs = Object.entries(otherPropertyMap).filter((entry) => {

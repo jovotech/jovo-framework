@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from '@jovotech/output';
 
 export class PhoneNumber {
-  @IsPhoneNumber(null)
+  @IsPhoneNumber()
   e164PhoneNumber: string;
 
   @IsOptional()

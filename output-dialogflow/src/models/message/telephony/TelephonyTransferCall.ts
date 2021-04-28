@@ -1,6 +1,6 @@
 import { IsPhoneNumber } from '@jovotech/output';
 
 export class TelephonyTransferCall {
-  @IsPhoneNumber(null)
+  @IsPhoneNumber()
   phone_number: string;
 }
