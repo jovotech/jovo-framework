@@ -1,12 +1,11 @@
 import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
-import { PluginConfig } from './Plugin';
-import { PersistableUserData } from './JovoUser';
 import { PersistableSessionData } from './JovoSession';
-import { ArrayElement } from './index';
+import { PersistableUserData } from './JovoUser';
+import { PluginConfig } from './Plugin';
 
 export interface Data {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 export interface RequestData extends Data {}

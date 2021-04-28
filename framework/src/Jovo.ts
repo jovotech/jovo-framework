@@ -44,9 +44,10 @@ export interface JovoRequestType {
 }
 
 export interface JovoComponentInfo<
+  DATA extends ComponentData = ComponentData,
   CONFIG extends Record<string, unknown> = Record<string, unknown>
 > {
-  $data: ComponentData;
+  $data: DATA;
   $config?: CONFIG;
 }
 

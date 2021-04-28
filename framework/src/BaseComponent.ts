@@ -1,4 +1,4 @@
-import { ComponentData, JovoComponentInfo, StateStack } from './index';
+import { ComponentData, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
 import { ComponentOptions, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
@@ -26,9 +26,10 @@ export class ComponentDeclaration<
 }
 
 export abstract class BaseComponent<
+  DATA extends ComponentData = ComponentData,
   CONFIG extends Record<string, unknown> = Record<string, unknown>
 > extends JovoProxy {
-  get $component(): JovoComponentInfo<CONFIG> {
-    return super.$component as { $data: ComponentData; $config: CONFIG | undefined };
+  get $component(): JovoComponentInfo<DATA, CONFIG> {
+    return super.$component as { $data: DATA; $config: CONFIG | undefined };
   }
 }
