@@ -17,7 +17,7 @@
   "dependencies": {
     "@jovotech/db-filedb": "^4.0.0-alpha.4",
     "@jovotech/framework": "^4.0.0-alpha.4",
-    "@jovotech/platform-alexa-tmp": "^4.0.0-alpha.4",
+    "@jovotech/platform-alexa": "^4.0.0-alpha.4",
     "@jovotech/plugin-debugger": "^4.0.0-alpha.4",
     "@jovotech/server-express": "^4.0.0-alpha.4",
     "@jovotech/server-lambda": "^4.0.0-alpha.4"
