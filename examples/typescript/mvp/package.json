@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/examples-mvp",
   "private": true,
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-alpha.4",
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -15,10 +15,10 @@
     "eslint": "eslint src test --fix --ext .ts"
   },
   "dependencies": {
-    "@jovotech/db-filedb": "^4.0.0-alpha.3",
-    "@jovotech/framework": "^4.0.0-alpha.3",
-    "@jovotech/platform-alexa-tmp": "^4.0.0-alpha.3",
-    "@jovotech/server-express": "^4.0.0-alpha.3"
+    "@jovotech/db-filedb": "^4.0.0-alpha.4",
+    "@jovotech/framework": "^4.0.0-alpha.4",
+    "@jovotech/platform-alexa-tmp": "^4.0.0-alpha.4",
+    "@jovotech/server-express": "^4.0.0-alpha.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
