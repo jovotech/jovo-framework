@@ -92,6 +92,26 @@ On each Intent, replace fulfillmentActivity value by
     "type": "CodeHook"
 },
 ```
+
+* For [built-in Lex Intents](https://docs.aws.amazon.com/lex/latest/dg/howitworks-builtins-intents.html) , 
+On each built-in intent, You have to add the attribute parentIntentSignature with the name of the built-in intent.
+The name of the intent with built-in name (CancelIntent/FallbackIntent/HelpIntent/PauseIntent/RepeatIntent/ResumeIntent/StartOverIntent/StopIntent) have to be rename.
+A quick solution is to prefix your intent with a custom value and use [intentMap] (https://www.jovo.tech/docs/routing/intents#intentmap)
+
+Exemple if you have a CancelIntent, you should obtain: 
+```
+{
+        "name": "MyCancelIntent",
+        "version": "1",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [],
+        "slots": [],
+        "parentIntentSignature": "AMAZON.CancelIntent"
+      },
+```
+
     
 * On each Slot, add a prompt that Amazon Lex uses to elicit the slot value from the user or set the slotConstraint to Optional
 if you want to add a valueElicitationPrompt you slot will look like:
