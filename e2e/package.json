@@ -4,7 +4,7 @@
   "version": "4.0.0-alpha.2",
   "description": "",
   "scripts": {
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -12,8 +12,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.2",
-    "@jovotech/platform-alexa-tmp": "^4.0.0-alpha.1"
+    "@jovotech/framework": "^4.0.0-alpha.5",
+    "@jovotech/platform-alexa": "^4.0.0-alpha.5"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

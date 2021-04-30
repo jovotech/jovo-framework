@@ -5,6 +5,7 @@
   "scripts": {
     "postinstall": "npm run bootstrap",
     "setup:dev": "npm run bootstrap && npm run build",
+    "setup:cli": "lerna run setup:cli && npm run setup:dev",
     "bootstrap": "lerna bootstrap --hoist --no-ci --nohoist=@babel/*",
     "clean": "lerna clean",
     "build": "lerna exec npm run build --ignore @jovotech/examples-* --ignore @jovotech/client-* --ignore @jovotech/e2e",

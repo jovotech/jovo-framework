@@ -1,5 +1,5 @@
 import { App, ComponentDeclaration, SessionData } from '@jovotech/framework';
-import { Alexa, AlexaRequestJSON, Session } from '@jovotech/platform-alexa-tmp';
+import { Alexa, AlexaRequestJSON, Session } from '@jovotech/platform-alexa';
 import { inspect } from 'util';
 import { ReusableComponent } from './components/ReusableComponent';
 import { StandardComponent } from './components/StandardComponent';

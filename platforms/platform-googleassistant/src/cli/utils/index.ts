@@ -1,9 +1,8 @@
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
 export * from './Interfaces';
-export * from './Paths';
 
-export async function checkForGactionsCli() {
+export async function checkForGactionsCli(): Promise<void> {
   try {
     await execAsync('gactions version');
   } catch (err) {

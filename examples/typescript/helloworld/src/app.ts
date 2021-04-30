@@ -1,7 +1,7 @@
 import { App, ComponentDeclaration } from '@jovotech/framework';
 
 import { StandardComponent } from './StandardComponent';
-import { Alexa } from '@jovotech/platform-alexa-tmp';
+import { Alexa } from '@jovotech/platform-alexa';
 
 const app = new App();
 app.use(new Alexa());

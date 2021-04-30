@@ -1,5 +1,5 @@
 import { App} from '@jovotech/framework';
-import { Alexa } from '@jovotech/platform-alexa-tmp';
+import { Alexa } from '@jovotech/platform-alexa';
 
 import { MainComponent } from './components/MainComponent/MainComponent';
 

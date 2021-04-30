@@ -1,9 +1,7 @@
 import { existsSync } from 'fs';
-import _get from 'lodash.get';
 import indent from 'indent-string';
 import {
   execAsync,
-  JovoCli,
   JovoCliError,
   PluginHook,
   printStage,
@@ -12,18 +10,15 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
-import {
-  checkForGactionsCli,
-  getGactionsError,
-  getPlatformPath,
-  PluginContextGoogle,
-} from '../utils';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
+import { GoogleAssistantCli } from '..';
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
+  $plugin!: GoogleAssistantCli;
   $context!: PluginContextGoogle;
 
-  install() {
-    this.actionSet = {
+  install(): void {
+    this.middlewareCollection = {
       'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [this.checkForPlatformsFolder.bind(this)],
       'deploy:platform': [this.deploy.bind(this)],
@@ -34,7 +29,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextDeployPlatform) {
+  checkForPlatform(context: ParseContextDeployPlatform): void {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.$id) {
       this.uninstall();
@@ -44,10 +39,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Checks if the platform folder for the current plugin exists.
    */
-  checkForPlatformsFolder() {
-    if (!existsSync(getPlatformPath())) {
+  checkForPlatformsFolder(): void {
+    if (!existsSync(this.$plugin.getPlatformPath())) {
       throw new JovoCliError(
-        `Couldn't find the platform folder ${getPlatformPath()}.`,
+        `Couldn't find the platform folder ${this.$plugin.getPlatformPath()}.`,
         this.$plugin.constructor.name,
         `Please use "jovo build" to create platform-specific files.`,
       );
@@ -57,10 +52,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Deploys platform-specific files, such as intents and entities to the Google Actions Console.
    */
-  async deploy() {
-    const jovo: JovoCli = JovoCli.getInstance();
+  async deploy(): Promise<void> {
     const deployTask: Task = new Task(
-      `${ROCKET} Deploying Conversational Action ${printStage(jovo.$project!.$stage)}`,
+      `${ROCKET} Deploying Conversational Action ${printStage(this.$cli.$project!.$stage)}`,
     );
 
     const pushProjectFilesTask: Task = new Task('Pushing project files', async () => {
@@ -68,7 +62,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
       try {
         const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
-          cwd: getPlatformPath(),
+          cwd: this.$plugin.getPlatformPath(),
         });
 
         if (stderr) {
