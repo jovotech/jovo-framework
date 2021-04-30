@@ -26,7 +26,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
 
   mount(handleRequest: HandleRequest): Promise<void> | void {
     handleRequest.middlewareCollection.use('dialog.logic', this.handle);
-    return undefined;
+    return;
   }
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
@@ -35,6 +35,6 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       return;
     }
     const componentMetadata = jovo.$getComponentMetadataOrFail(jovo.$route.path);
-    await jovo.$runComponentHandler(componentMetadata, jovo.$route.handlerKey);
+    await jovo.$runComponentHandler(componentMetadata, jovo.$route.handlerKey, false);
   };
 }
