@@ -7,7 +7,7 @@ export interface StateStackItem {
   $subState?: string;
   $data?: ComponentData;
 
-  resolveTo?: Record<string, string>;
+  resolve?: Record<string, string>;
   config?: Record<string, unknown>;
 }
 

@@ -11,9 +11,9 @@ import { FileDb } from '@jovotech/db-filedb';
 |
 */
 app.use(
-    new FileDb({
-      pathToFile: './../../db/db.json',
-    }),
- );
+  new FileDb({
+    pathToFile: './db/db.json',
+  }),
+);
 
 export * from './server.express';

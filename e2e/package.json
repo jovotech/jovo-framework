@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/e2e",
   "private": true,
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.5",
   "description": "",
   "scripts": {
     "prettier": "prettier -w -l test",

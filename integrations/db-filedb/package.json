@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/db-filedb",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@aws-sdk/client-lambda": "^3.8.1",
-    "@jovotech/framework": "^4.0.0-alpha.2",
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",

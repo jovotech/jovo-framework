@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,17 +32,18 @@
     "@jovotech/cli-command-deploy": "^4.0.0-alpha.4",
     "@jovotech/cli-command-get": "^4.0.0-alpha.4",
     "@jovotech/cli-command-new": "^4.0.0-alpha.4",
+    "@jovotech/filebuilder": "^0.0.1",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.2",
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "@types/jest": "^26.0.20",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/node": "^10.17.50",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
+    "@types/lodash.merge": "^4.6.6",
     "@types/lodash.mergewith": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
+    "@types/node": "^10.17.50",
     "@types/tv4": "^1.2.29",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -50,13 +51,13 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "global-dirs": "^3.0.0",
+    "global-modules": "^2.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3",
     "symlink-dir": "^4.1.0",
-    "global-modules": "^2.0.0"
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3"
   },
   "peerDependencies": {
     "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
