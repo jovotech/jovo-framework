@@ -274,7 +274,12 @@ export abstract class Jovo<
     const previousComponentPath = previousStateStackItem.componentPath.split('.');
     const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
     stateStack.pop();
-    await this.$runComponentHandler(previousComponentMetadata, resolvedHandlerKey, ...eventArgs);
+    await this.$runComponentHandler(
+      previousComponentMetadata,
+      resolvedHandlerKey,
+      true,
+      ...eventArgs,
+    );
     return;
   }
 
@@ -335,6 +340,7 @@ export abstract class Jovo<
   >(
     componentMetadata: RegisteredComponentMetadata<COMPONENT>,
     handlerKey: HANDLER | string = InternalIntent.Start,
+    updateRoute = true,
     ...callArgs: ARGS
   ): Promise<void> {
     const componentName = componentMetadata.options?.name || componentMetadata.target.name;
@@ -349,10 +355,12 @@ export abstract class Jovo<
       throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
     }
 
-    this.$route = {
-      path,
-      handlerKey: handlerKey.toString(),
-    };
+    if (updateRoute) {
+      this.$route = {
+        path,
+        handlerKey: handlerKey.toString(),
+      };
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (componentInstance as any)[handlerKey](...callArgs);
