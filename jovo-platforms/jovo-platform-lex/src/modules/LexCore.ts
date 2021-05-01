@@ -3,6 +3,7 @@ import { Lex } from '../Lex';
 import { LexBot } from '../core/LexBot';
 import { LexRequest } from '../core/LexRequest';
 import { LexResponse } from '../core/LexResponse';
+import { LexSpeechBuilder } from '../core/LexSpeechBuilder';
 import { LexUser } from '../core/LexUser';
 import _set = require('lodash.set');
 import { NEW_SESSION_KEY } from '../index';
@@ -74,7 +75,7 @@ export class LexCore implements Plugin {
         fulfillmentState: 'Fulfilled',
         message: {
           contentType: 'PlainText',
-          content: tell.speech,
+          content: LexSpeechBuilder.removeSSML(tell.speech.toString()),
         },
       });
       //conversation is over, we can clear session attributes
@@ -86,13 +87,14 @@ export class LexCore implements Plugin {
         type: 'ElicitIntent',
         message: {
           contentType: 'PlainText',
-          content: ask.speech,
+          content: LexSpeechBuilder.removeSSML(ask.speech.toString()),
         },
       });
 
       _set(response, 'sessionAttributes.jsonData', JSON.stringify(lex.$session.$data));
     }
   }
+
   async response(lex: LexBot) {
     const response = lex.$response || new LexResponse();
     const sessionAttributes = response.getSessionAttributes() || {};
