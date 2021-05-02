@@ -336,10 +336,10 @@ export class GoogleAnalytics implements Analytics {
     const customParameters = jovo.$googleAnalytics.$parameters;
 
     return {
-      ...customParameters,
       documentPath: this.getPageName(jovo),
       documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',
       documentTitle: intentName || intentType,
+      ...customParameters
     };
   }
 
