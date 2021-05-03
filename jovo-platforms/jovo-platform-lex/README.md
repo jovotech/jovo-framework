@@ -1,4 +1,4 @@
-# AWS Lex Platform
+# AWS Lex Platform V1
 
 > To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-lex
 
@@ -10,6 +10,7 @@ AWS Lex can be use with AWS connect to build a callbot.
    * [Lex Configuration](#lex-configuration)
 * [Usage](#usage)
    * [Cards](#cards)
+* [Hello Word sample project](#Hello-Word-sample-project)
 
 ## Introduction
 
@@ -47,6 +48,7 @@ import { lex } from 'jovo-platform-web';
 
 app.use(new lex());
 ```
+
 ### Lex Configuration
 
 #### Add a Resource-based policy 
@@ -90,6 +92,26 @@ On each Intent, replace fulfillmentActivity value by
     "type": "CodeHook"
 },
 ```
+
+* For [built-in Lex Intents](https://docs.aws.amazon.com/lex/latest/dg/howitworks-builtins-intents.html) , 
+On each built-in intent, You have to add the attribute parentIntentSignature with the name of the built-in intent.
+The name of the intent with built-in name (CancelIntent/FallbackIntent/HelpIntent/PauseIntent/RepeatIntent/ResumeIntent/StartOverIntent/StopIntent) have to be rename.
+A quick solution is to prefix your intent with a custom value and use [intentMap] (https://www.jovo.tech/docs/routing/intents#intentmap)
+
+Exemple if you have a CancelIntent, you should obtain: 
+```
+{
+        "name": "MyCancelIntent",
+        "version": "1",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [],
+        "slots": [],
+        "parentIntentSignature": "AMAZON.CancelIntent"
+      },
+```
+
     
 * On each Slot, add a prompt that Amazon Lex uses to elicit the slot value from the user or set the slotConstraint to Optional
 if you want to add a valueElicitationPrompt you slot will look like:
@@ -121,10 +143,10 @@ You can access the `lex` object like this:
 
 ```javascript
 // @language=javascript
-this.$lex
+this.$lexBot
 
 // @language=typescript
-this.$lex!
+this.$lexBot!
 ```
 
 The returned object will be an instance of `Lex` if the current request is compatible with the Lex Platform. Otherwise `undefined` will be returned.
@@ -154,3 +176,13 @@ Sample script:
       ]);
  }  
 ```
+
+
+## Hello Word sample project
+
+To test the 'hello word' sample project, you need to deploy it on your AWS Account.
+
+The sample project contains a basic LEX model (plateforms/lex/model.json)<br/>
+Before uploading the lex model to your AWS account, you need to update the codeHook uri with your lambda ARN.<br/>
+Then zip and upload the file in AWS LEX Console.<br/>
+Open the testJovo bot, you should be able to test it on the "Test bot" tools.<br/>

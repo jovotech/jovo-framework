@@ -21,13 +21,7 @@ export class LexBot extends Jovo {
   }
 
   isNewSession(): boolean {
-    // undefined if no active DB
-    /*if (this.$user.$session) {
-      return this.$user.$session.id !== this.$request!.getSessionId();
-    } else {
-      return false;
-    }*/
-    return false;
+    return this.$request!.isNewSession();
   }
 
   hasAudioInterface(): boolean {

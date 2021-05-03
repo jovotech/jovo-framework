@@ -3,9 +3,10 @@ import { Lex } from '../Lex';
 import { LexBot } from '../core/LexBot';
 import { LexRequest } from '../core/LexRequest';
 import { LexResponse } from '../core/LexResponse';
-import { LexUser } from '../core/LexUser';
 import { LexSpeechBuilder } from '../core/LexSpeechBuilder';
+import { LexUser } from '../core/LexUser';
 import _set = require('lodash.set');
+import { NEW_SESSION_KEY } from '../index';
 
 export class LexCore implements Plugin {
   install(lex: Lex) {
@@ -13,6 +14,7 @@ export class LexCore implements Plugin {
     lex.middleware('$request')!.use(this.request.bind(this));
     lex.middleware('$type')!.use(this.type.bind(this));
     lex.middleware('$session')!.use(this.session.bind(this));
+    lex.middleware('$response')!.use(this.response.bind(this));
     lex.middleware('$output')!.use(this.output.bind(this));
   }
 
@@ -46,21 +48,9 @@ export class LexCore implements Plugin {
 
   async type(lex: LexBot) {
     const lexRequest = lex.$request as LexRequest;
-
-    if (lexRequest.getIntentName() === 'greeting') {
-      // intent by default in every project that has "hello" etc. as utterance
-      lex.$type = {
-        type: EnumRequestType.LAUNCH,
-      };
-    } else if (lexRequest.getIntentName() === 'goodbye') {
-      lex.$type = {
-        type: EnumRequestType.END,
-      };
-    } else {
-      lex.$type = {
-        type: EnumRequestType.INTENT,
-      };
-    }
+    lex.$type = {
+      type: EnumRequestType.INTENT,
+    };
   }
 
   async session(lex: LexBot) {
@@ -74,7 +64,7 @@ export class LexCore implements Plugin {
 
   async output(lex: LexBot) {
     const output = lex.$output;
-    const response = lex.$response as LexResponse;
+    const response = lex.$response || new LexResponse();
     if (Object.keys(output).length === 0) {
       return;
     }
@@ -82,12 +72,14 @@ export class LexCore implements Plugin {
     if (tell) {
       _set(response, 'dialogAction', {
         type: 'Close',
-        fulfillmentState: 'PlainText',
+        fulfillmentState: 'Fulfilled',
         message: {
-          contentType: 'SSML',
-          content: tell.speech,
+          contentType: 'PlainText',
+          content: LexSpeechBuilder.removeSSML(tell.speech.toString()),
         },
       });
+      //conversation is over, we can clear session attributes
+      _set(response, 'sessionAttributes', {});
     }
     const ask = output.ask;
     if (ask) {
@@ -95,10 +87,19 @@ export class LexCore implements Plugin {
         type: 'ElicitIntent',
         message: {
           contentType: 'PlainText',
-          content: ask.speech,
+          content: LexSpeechBuilder.removeSSML(ask.speech.toString()),
         },
       });
-      _set(response, 'sessionAttributes', lex.$session.$data);
+
+      _set(response, 'sessionAttributes.jsonData', JSON.stringify(lex.$session.$data));
     }
+  }
+
+  async response(lex: LexBot) {
+    const response = lex.$response || new LexResponse();
+    const sessionAttributes = response.getSessionAttributes() || {};
+
+    sessionAttributes[NEW_SESSION_KEY] = false;
+    response.setSessionAttributes(sessionAttributes);
   }
 }

@@ -38,9 +38,13 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
   }
 
   async launchRequest(json?: object): Promise<LexRequest> {
-    return await this.intentRequest(json);
+    if (json) {
+      return LexRequest.fromJSON(json);
+    } else {
+      const request = JSON.stringify(require(getJsonFilePath('LaunchRequest')));
+      return LexRequest.fromJSON(JSON.parse(request)).setTimestamp(new Date().toISOString());
+    }
   }
-
   async intentRequest(json?: object): Promise<LexRequest> {
     if (json) {
       return LexRequest.fromJSON(json);
@@ -48,7 +52,6 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
       const request = JSON.stringify(require(getJsonFilePath('IntentRequest')));
       return LexRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
-        .setSessionId(generateRandomString(12))
         .setUserId(getRandomUserId());
     }
   }
@@ -67,7 +70,6 @@ export class LexRequestBuilder implements RequestBuilder<LexRequest> {
       const request = JSON.stringify(require(getJsonFilePath('EndRequest')));
       return LexRequest.fromJSON(JSON.parse(request))
         .setTimestamp(new Date().toISOString())
-        .setSessionId(generateRandomString(12))
         .setUserId(getRandomUserId());
     }
   }

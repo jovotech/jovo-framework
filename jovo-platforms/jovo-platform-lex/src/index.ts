@@ -3,6 +3,7 @@ import { TestSuite } from 'jovo-core';
 import { LexRequestBuilder } from './core/LexRequestBuilder';
 import { LexResponseBuilder } from './core/LexResponseBuilder';
 import { Button } from './response/index';
+export const NEW_SESSION_KEY = '__JOVO_NEW_SESSION__';
 
 export interface LexTestSuite extends TestSuite<LexRequestBuilder, LexResponseBuilder> {}
 

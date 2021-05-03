@@ -9,7 +9,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     super.install(app);
   }
 
-  track(handleRequest: HandleRequest) {
+  async track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -30,7 +30,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
-    super.track(handleRequest);
+    await super.track(handleRequest);
   }
 
   protected handleAlexaSkillEvents(jovo: Jovo) {

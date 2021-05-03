@@ -99,7 +99,7 @@ export class GoogleAnalytics implements Analytics {
   install(app: BaseApp) {
     if (!this.config.trackingId) {
       throw new JovoError(
-        'trackingId has to be set.',
+        `trackingId has to be set for ${this.constructor.name}.`,
         ErrorCode.ERR_PLUGIN,
         'jovo-analytics-googleanalytics',
         '',
@@ -120,7 +120,7 @@ export class GoogleAnalytics implements Analytics {
 
     app.middleware('before.handler')!.use(GoogleAnalytics.saveStartStateAndLastUsed.bind(this));
     app.middleware('after.platform.init')!.use(this.setGoogleAnalyticsObject.bind(this));
-    app.middleware('after.response')!.use(this.track.bind(this));
+    app.middleware('before.response')!.use(this.track.bind(this));
     app.middleware('fail')!.use(this.sendError.bind(this));
   }
 
@@ -147,7 +147,7 @@ export class GoogleAnalytics implements Analytics {
    * Auto send intent data after each response. Also setting sessions and flowErrors
    * @param handleRequest
    */
-  track(handleRequest: HandleRequest) {
+  async track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -183,10 +183,15 @@ export class GoogleAnalytics implements Analytics {
       this.sendUnhandledEvents(jovo);
       this.sendIntentInputEvents(jovo);
     }
-    jovo.$googleAnalytics.visitor?.send((err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
+
+    return new Promise((resolve, reject) => {
+      jovo.$googleAnalytics.visitor?.send((error, response: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      });
     });
   }
 

@@ -15,29 +15,14 @@
   "currentIntent": {
     "name": "END",
     "slots": {
-      "moodA": "hello"
     },
     "slotDetails": {
-      "moodA": {
-        "resolutions": [
-          {
-            "value": "hello"
-          }
-        ],
-        "originalValue": "hello"
-      }
     },
     "confirmationStatus": "None",
     "nluIntentConfidenceScore": 1
   },
   "alternativeIntents": [
-    {
-      "name": "sampleIntent2",
-      "slots": {},
-      "slotDetails": {},
-      "confirmationStatus": "None",
-      "nluIntentConfidenceScore": 0.6
-    }
+
   ],
   "inputTranscript": "hello to the world",
   "recentIntentSummaryView": null,

@@ -31,7 +31,9 @@ export interface DialogAction {
 }
 
 export class LexResponse implements JovoResponse {
-  sessionAttributes?: SessionAttributes;
+  sessionAttributes?: {
+    jsonData: string;
+  };
   recentIntentSummaryView?: IntentSummaryView;
   confirmationStatus?: ConfirmationStatus;
   dialogActionType?: DialogActionType;
@@ -85,11 +87,11 @@ export class LexResponse implements JovoResponse {
   }
 
   getSessionAttributes() {
-    return _get(this, 'sessionAttributes');
+    return JSON.parse(_get(this, 'sessionAttributes.jsonData', '{}'));
   }
 
   setSessionAttributes(sessionData: SessionData) {
-    _set(this, 'sessionAttributes', sessionData);
+    _set(this, 'sessionAttributes.jsonData', JSON.stringify(sessionData));
     return this;
   }
 
@@ -104,7 +106,6 @@ export class LexResponse implements JovoResponse {
     if (!this.getSessionAttribute(name)) {
       return false;
     }
-
     if (typeof value !== 'undefined') {
       if (this.getSessionAttribute(name) !== value) {
         return false;
@@ -115,7 +116,7 @@ export class LexResponse implements JovoResponse {
   }
 
   getSessionAttribute(name: string) {
-    return _get(this, `sessionAttributes.${name}`);
+    return _get(this.getSessionAttributes(), name);
   }
 
   /**
