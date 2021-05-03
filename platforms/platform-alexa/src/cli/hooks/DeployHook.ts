@@ -4,7 +4,6 @@ import {
   flags,
   getResolvedLocales,
   InstallContext,
-  JovoCli,
   JovoCliError,
   PluginHook,
   printAskProfile,
@@ -20,20 +19,9 @@ import {
 } from '@jovotech/cli-command-deploy';
 
 import * as smapi from '../smapi';
-import {
-  checkForAskCli,
-  getAccountLinkingPath,
-  getAskConfigFolderPath,
-  getAskConfigPath,
-  getModelPath,
-  getPlatformDirectory,
-  getPlatformPath,
-  getSkillJsonPath,
-  PluginConfigAlexa,
-  PluginContextAlexa,
-  SupportedLocales,
-} from '../utils';
+import { checkForAskCli, PluginConfigAlexa, PluginContextAlexa, SupportedLocales } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
+import { AlexaCli } from '..';
 
 export interface DeployPlatformContextAlexa extends PluginContextAlexa, DeployPlatformContext {
   args: DeployPlatformContext['args'];
@@ -42,11 +30,12 @@ export interface DeployPlatformContextAlexa extends PluginContextAlexa, DeployPl
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
+  $plugin!: AlexaCli;
   $config!: PluginConfigAlexa;
   $context!: DeployPlatformContextAlexa;
 
-  install() {
-    this.actionSet = {
+  install(): void {
+    this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [
@@ -62,7 +51,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Add platform-specific CLI options, including flags and args.
    * @param context - Context providing an access point to command flags and args.
    */
-  addCliOptions(context: InstallContext) {
+  addCliOptions(context: InstallContext): void {
     if (context.command !== 'deploy:platform') {
       return;
     }
@@ -77,7 +66,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextDeployPlatform) {
+  checkForPlatform(context: ParseContextDeployPlatform): void {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.$id) {
       this.uninstall();
@@ -87,7 +76,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext() {
+  updatePluginContext(): void {
     if (this.$context.command !== 'deploy:platform') {
       return;
     }
@@ -99,10 +88,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Checks if the platform folder for the current plugin exists.
    */
-  checkForPlatformsFolder() {
-    if (!existsSync(getPlatformPath())) {
+  checkForPlatformsFolder(): void {
+    if (!existsSync(this.$plugin.getPlatformPath())) {
       throw new JovoCliError(
-        `Couldn't find the platform folder "${getPlatformDirectory()}/".`,
+        `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
         this.$plugin.constructor.name,
         `Please use "jovo build" to create platform-specific files.`,
       );
@@ -112,10 +101,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Deploys platform-specific models to the Alexa Skills Console.
    */
-  async deploy() {
-    const jovo: JovoCli = JovoCli.getInstance();
+  async deploy(): Promise<void> {
     const deployTask: Task = new Task(
-      `${ROCKET} Deploying Alexa Skill ${printStage(jovo.$project!.$stage)}`,
+      `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.$project!.$stage)}`,
     );
 
     if (!this.$context.skillId) {
@@ -124,7 +112,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         `Creating Alexa Skill project ${printAskProfile(this.$context.askProfile)}`,
         async () => {
           const skillId: string = await smapi.createSkill(
-            getSkillJsonPath(),
+            this.$plugin.getSkillJsonPath(),
             this.$context.askProfile,
           );
           this.$context.skillId = skillId;
@@ -134,7 +122,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
           await smapi.updateAccountLinkingInformation(
             skillId,
-            getAccountLinkingPath(),
+            this.$plugin.getAccountLinkingPath(),
             'development',
             this.$context.askProfile,
           );
@@ -153,12 +141,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         async () => {
           await smapi.updateSkill(
             this.$context.skillId!,
-            getSkillJsonPath(),
+            this.$plugin.getSkillJsonPath(),
             this.$context.askProfile,
           );
           await smapi.updateAccountLinkingInformation(
             this.$context.skillId!,
-            getAccountLinkingPath(),
+            this.$plugin.getAccountLinkingPath(),
             'development',
             this.$context.askProfile,
           );
@@ -195,7 +183,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         await smapi.updateInteractionModel(
           this.$context.skillId!,
           locale,
-          getModelPath(locale),
+          this.$plugin.getModelPath(locale),
           'development',
           this.$context.askProfile,
         );
@@ -239,51 +227,55 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Saves Alexa Skill ID to .ask/config.
    * @param skillId
    */
-  setSkillId(skillId: string) {
-    const askConfigFolderPath = getAskConfigFolderPath();
+  setSkillId(skillId: string): void {
+    const askConfigFolderPath = this.$plugin.getAskConfigFolderPath();
 
     if (!existsSync(askConfigFolderPath)) {
       mkdirSync(askConfigFolderPath);
     }
 
     // Check if ask-states.json exists, if not, create it.
-    if (!existsSync(getAskConfigPath())) {
+    if (!existsSync(this.$plugin.getAskConfigPath())) {
       this.createEmptyAskConfig();
     }
 
-    const askConfig = JSON.parse(readFileSync(getAskConfigPath(), 'utf-8'));
+    const askConfig = JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf-8'));
 
     _set(askConfig, 'profiles.default.skillId', skillId);
 
-    writeFileSync(getAskConfigPath(), JSON.stringify(askConfig, null, 2));
+    writeFileSync(this.$plugin.getAskConfigPath(), JSON.stringify(askConfig, null, 2));
   }
 
   /**
    * Returns Alexa Config from .ask/config.
    * ToDo: Typing!
    */
-  getAskConfig() {
+  getAskConfig(): void {
     try {
-      return JSON.parse(readFileSync(getAskConfigPath(), 'utf8'));
+      return JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf8'));
     } catch (err) {
-      throw new JovoCliError(err.message, this.$plugin.constructor.name);
+      throw new JovoCliError(
+        'Could not read ask configuration file.',
+        this.$plugin.constructor.name,
+      );
     }
   }
 
   /**
    * Creates an empty ask config file.
    */
-  createEmptyAskConfig() {
+  createEmptyAskConfig(): void {
     const config = _get(DefaultFiles, '[".ask"]["ask-states.json"]');
-    writeFileSync(getAskConfigPath(), config);
+    writeFileSync(this.$plugin.getAskConfigPath(), config);
   }
 
   /**
    * Returns skill information.
    */
-  getSkillInformation() {
+  getSkillInformation(): { name: string; skillId?: string } {
     try {
-      const skillJson = require(getSkillJsonPath());
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const skillJson = require(this.$plugin.getSkillJsonPath());
       const info = {
         name: '',
         skillId: this.getSkillId(),
@@ -306,7 +298,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * @param locale - The locale for which to get the invocation name.
    */
   getInvocationName(locale: string): string {
-    const alexaModel = require(getModelPath(locale));
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const alexaModel = require(this.$plugin.getModelPath(locale));
     return _get(alexaModel, 'interactionModel.languageModel.invocationName');
   }
 }

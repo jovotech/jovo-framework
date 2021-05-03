@@ -1,21 +1,17 @@
-import { readFileSync } from 'fs';
 import chalk from 'chalk';
 import _get from 'lodash.get';
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
 import { AskSkillList } from './Interfaces';
 
-import { getAskConfigPath } from './Paths';
-
 export * from './Interfaces';
-export * from './Paths';
 export * from './Constants';
 
 /**
  * Checks if ask cli is installed.
  */
-export async function checkForAskCli() {
-  const cmd: string = `ask --version`;
+export async function checkForAskCli(): Promise<void> {
+  const cmd = `ask --version`;
 
   try {
     const { stdout } = await execAsync(cmd);
@@ -41,22 +37,12 @@ export async function checkForAskCli() {
 }
 
 /**
- * Reads and returns ask config from .ask/ask-states.json.
- */
-export function getAskConfig() {
-  try {
-    const content: string = readFileSync(getAskConfigPath(), 'utf-8');
-    return JSON.parse(content);
-  } catch (error) {
-    throw new JovoCliError('Could not read ask configuration file.', 'AlexaCli');
-  }
-}
-
-/**
  * Generates a choice list out of an ASK skill list.
  * @param askSkillList - List of Alexa Skills returned by the ASK CLI.
  */
-export function prepareSkillList(askSkillList: AskSkillList) {
+export function prepareSkillList(
+  askSkillList: AskSkillList,
+): Array<{ title: string; value: string }> {
   const choices: Array<{ title: string; value: string }> = [];
   for (const item of askSkillList.skills) {
     const key: string = Object.keys(item.nameByLocale)[0];
@@ -77,8 +63,8 @@ export function prepareSkillList(askSkillList: AskSkillList) {
 }
 
 export function getAskError(method: string, stderr: string): JovoCliError {
-  const module: string = 'AlexaCli';
-  const splitter: string = '[Error]: ';
+  const module = 'AlexaCli';
+  const splitter = '[Error]: ';
 
   const errorIndex: number = stderr.indexOf(splitter);
   if (errorIndex > -1) {
@@ -86,7 +72,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
     const parsedError = JSON.parse(errorString);
     const payload = _get(parsedError, 'detail.response', parsedError);
     const message: string = payload.message;
-    let violations: string = '';
+    let violations = '';
 
     if (payload.violations) {
       for (const violation of payload.violations) {
