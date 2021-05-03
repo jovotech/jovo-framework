@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "lib": [ "es2017" ],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "outDir": "./dist/",
+    "target": "es2017",
+    "sourceMap": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

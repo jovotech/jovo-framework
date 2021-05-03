@@ -1,0 +1,63 @@
+{
+  "name": "jovo-platform-lex",
+  "version": "0.0.3",
+  "description": "",
+  "main": "dist/src/index",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "prettier": "prettier --config ./.prettierrc.js --write \"{test,src}/**/*\" --list-different",
+    "tslint": "tslint -p tsconfig.json -c tslint.json",
+    "rimraf": "rimraf ./dist",
+    "tsc": "tsc",
+    "tscw": "tsc --watch",
+    "typedoc": "typedoc --out ./docs ./ --mode file",
+    "test": "jest --runInBand"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-core": "^3.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/node": "^10.3.1",
+    "jest": "^25.1.0",
+    "jovo-db-filedb": "^3.4.2",
+    "jovo-framework": "^3.4.2",
+    "lodash.clonedeep": "^4.5.0",
+    "prettier": "2.0.2",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.8",
+    "ts-jest": "^25.4.0",
+    "tslint": "^5.17.0",
+    "typedoc": "^0.15.8",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/dist/",
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
+  },
+  "files": [
+    "dist/src/**/*",
+    "sample-request-json"
+  ],
+  "gitHead": "02550b3546066635c8a821c8eb3266c3fef8940c"
+}

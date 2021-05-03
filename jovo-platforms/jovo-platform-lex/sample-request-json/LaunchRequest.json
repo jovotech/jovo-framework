@@ -1,0 +1,30 @@
+{
+  "messageVersion": "1.0",
+  "invocationSource": "FulfillmentCodeHook",
+  "userId": "testuserid",
+  "sessionAttributes": {},
+  "requestAttributes": {
+    "x-amz-lex:accept-content-types": "PlainText,SSML"
+  },
+  "bot": {
+    "name": "sample",
+    "alias": "$LATEST",
+    "version": "$LATEST"
+  },
+  "outputDialogMode": "Text",
+  "currentIntent": {
+    "name": "LAUNCH",
+    "slots": {
+    },
+    "slotDetails": {
+    },
+    "confirmationStatus": "None",
+    "nluIntentConfidenceScore": 1
+  },
+  "alternativeIntents": [
+  ],
+  "inputTranscript": "hello to the world",
+  "recentIntentSummaryView": null,
+  "sentimentResponse": null,
+  "kendraResponse": null
+}

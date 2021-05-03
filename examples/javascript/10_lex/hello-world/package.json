@@ -1,0 +1,28 @@
+{
+  "name": "jovo-examples-lex-hello-world",
+  "version": "0.0.3",
+  "private": true,
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "tsc": "node -v",
+    "test": "echo \"Error: no test specified\"",
+    "start": "cd src && node index.js --webhook",
+    "bundle": "gulp --gulpfile node_modules/jovo-framework/gulpfile.js --cwd ./",
+    "launch": "npm start -- --launch"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jovo-db-filedb": "^3.4.2",
+    "jovo-framework": "^3.4.2",
+    "jovo-platform-lex": "^0.0.3",
+    "jovo-plugin-debugger": "^3.4.2"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-install": "^1.1.0",
+    "gulp-run-command": "0.0.9",
+    "gulp-zip": "^4.2.0"
+  }
+}
