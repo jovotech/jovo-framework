@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "prettier": "prettier -w -l test",
-    "eslint": "eslint src test --fix --ext .ts",
+    "eslint": "eslint test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
   },
