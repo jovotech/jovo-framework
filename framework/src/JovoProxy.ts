@@ -28,4 +28,8 @@ export class JovoProxy extends Jovo {
       }
     }
   }
+
+  toJSON() {
+    return { ...this, jovo: undefined };
+  }
 }

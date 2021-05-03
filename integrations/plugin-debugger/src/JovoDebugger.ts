@@ -51,8 +51,6 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
   path: KEY extends keyof Jovo ? KEY : string;
 }
 
-const WEBHOOK_ARGUMENT_OPTIONS = ['--intent', '--launch', '--file', '--template'];
-
 // TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
   corePlatform: DeepPartial<CorePlatformConfig>;
@@ -69,23 +67,11 @@ export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
 
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
-
   hasOverriddenWrite = false;
-
-  // TODO determine whether number is sufficient
   requestIdCounter = 0;
 
   constructor(config?: JovoDebuggerInitConfig) {
     super(config);
-
-    const jovoWebhookEnabled =
-      process.argv.includes('--jovo-webhook') && !process.argv.includes('--disable-jovo-debugger');
-    const webhookEnabled =
-      process.argv.includes('--webhook') &&
-      WEBHOOK_ARGUMENT_OPTIONS.some((argOption) => process.argv.includes(argOption));
-    if (webhookEnabled || jovoWebhookEnabled) {
-      this.config.enabled = true;
-    }
   }
 
   // TODO check default config
@@ -98,7 +84,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         },
       },
       webhookUrl: 'https://webhookv4.jovo.cloud',
-      enabled: false,
+      enabled:
+        (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
+        !process.argv.includes('--disable-jovo-debugger'),
       languageModelEnabled: true,
       languageModelPath: './models',
       debuggerJsonPath: './debugger.json',
@@ -195,13 +183,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           };
           this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
         }
-        return new Proxy(jovo, this.getProxyHandler(handleRequest));
+        return new Proxy(jovo, this.createProxyHandler(handleRequest));
       };
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private getProxyHandler<T extends Record<string, any>>(
+  private createProxyHandler<T extends Record<string, any>>(
     handleRequest: HandleRequest,
     path = '',
   ): ProxyHandler<T> {
@@ -210,11 +198,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         if (
           typeof target[key] === 'object' &&
           target[key] !== null &&
-          !(target[key] instanceof Date)
+          !(target[key] instanceof Date) &&
+          // TODO: determine if this has side-effects
+          !this.config.ignoredProperties.includes(key)
         ) {
           return new Proxy(
             target[key],
-            this.getProxyHandler(handleRequest, path ? [path, key].join('.') : key),
+            this.createProxyHandler(handleRequest, path ? [path, key].join('.') : key),
           );
         } else {
           return target[key];
