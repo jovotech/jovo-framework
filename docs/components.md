@@ -2,12 +2,17 @@
 
 - [Introduction](#introduction)
 - [Component Registration](#component-registration)
+  - [Register Global Components](#register-global-components)
+  - [Register Subcomponents](#register-subcomponents)
 - [Component Class](#component-class)
-- [Component Options](#component-options)
   - [Handlers](#handlers)
   - [State Management](#state-management)
-- [Output](#output)
-- [Models](#models)
+  - [Component Data](#component-data)
+  - [Component Options](#component-options)
+- [Component Folder Structure](#component-folder-structure)
+  - [Output](#output)
+  - [Models](#models)
+  - [Services](#services)
 
 ## Introduction
 
@@ -15,7 +20,7 @@ Components are self-contained and reusable elements in a Jovo app. Similar to we
 
 You could see a component as an isolated part of your app that handles a specific task. It could be something small like asking for a confirmation (yes or no), and something bigger like collecting all necessary information for a restaurant table reservation. For larger cases like the latter example, it's also possible for a component to have multiple subcomponents.
 
-Components consist of several elements:
+Components are located in the `src/components` folder of a Jovo app and consist of several elements:
 
 - [Component Class](#component-class): The TypeScript/JavaScript class containing the logic of the component. One component has at least a class with the component's name, and potentially a few subcomponent classes.
 - [Output](#output): A folder of output classes that are referenced by the component's handlers.
@@ -24,7 +29,13 @@ Components consist of several elements:
 
 ## Component Registration
 
-When we talk about components in this documentation, we typically talk about a specific component class. These classes are registered in the `app.ts` file. Each Jovo template usually comes with a `MainComponent` that is added like this:
+When we talk about components in this documentation, we typically talk about a specific component class. These classes can either be registered globally in the `app.ts` file or as subcomponents of other component classes.
+
+### Register Global Components
+
+Global components are registered in the `app.ts` file. These components are accessible 
+
+Each Jovo template usually comes with a `MainComponent` that is added like this:
 
 ```typescript
 // src/app.ts
@@ -45,7 +56,116 @@ const app = new App({
 });
 ```
 
-// TODO: Add ComponentDeclaration for components with options
+You can add more components by importing their classes and referencing them in the `components` array:
+
+```typescript
+// src/app.ts
+
+import { MainComponent } from './components/MainComponent/MainComponent';
+import { YourComponent } from './components/YourComponent/YourComponent';
+
+// ...
+
+const app = new App({
+
+  // ...
+
+  components: [
+    MainComponent,
+    YourComponent,
+  ],
+
+  // ...
+});
+```
+
+Some components (especially from third parties) may require you to add options. [Learn more about component options below](#component-options).
+
+There are two ways how you can add those to your global component registration:
+* Using `ComponentDeclaration` (this will allow you to access the types of the component options)
+* Using an object
+
+If you're a TypeScript user, we recommend using `ComponentDeclaration`. This way, your code editor will be able to provide the option types with code completion:
+
+```typescript
+// src/app.ts
+
+import { ComponentDeclaration } from '@jovotech/framework';
+import { YourComponent } from './components/YourComponent/YourComponent';
+
+// ...
+
+const app = new App({
+
+  // ...
+
+  components: [
+    new ComponentDeclaration(YourComponent, { /* options */ }),
+  ],
+
+  // ...
+});
+```
+
+You can also use an object:
+
+```typescript
+// src/app.ts
+
+import { YourComponent } from './components/YourComponent/YourComponent';
+
+// ...
+
+const app = new App({
+
+  // ...
+
+  components: [
+    { component: YourComponent, options: { /* options */ } },
+  ],
+
+  // ...
+});
+```
+
+One example of an option is `name`. If you use two components that have the same class name (especially relevant for third-party components), you can rename one and pass its adjusted name. In the below example, both imported files export a `MenuComponent` class:
+
+```typescript
+// src/app.ts
+
+import { MenuComponent } from './components/MenuComponent';
+import { MenuComponent as MenuComponent2 } from './components/MenuComponent2';
+
+// ...
+
+const app = new App({
+
+  // ...
+
+  components: [
+    MenuComponent, 
+    new ComponentDeclaration(MenuComponent2, { name: 'MenuComponent2' })
+  ],
+
+  // ...
+});
+```
+
+
+### Register Subcomponents
+
+```typescript
+import { YourSubComponent } from './YourSubComponent';
+
+// ...
+
+@Component({
+  components: [ YourSubComponent ],
+})
+class YourComponent extends BaseComponent {
+  // ...
+}
+```
 
 ## Component Class
 
@@ -65,23 +185,6 @@ class YourComponent extends BaseComponent {
 }
 ```
 
-
-## Component Options
-
-Each component class contains a decorator `@Component` that takes an object of options as an argument.
-
-```typescript
-@Component({ /* options */ })
-class YourComponent extends BaseComponent {
-  
-	// ...
-
-}
-```
-
-> **A note on decorators and JavaScript**: To make the code more readable, Jovo uses decorators, a feature only available in TypeScript. No worries, though, if you're a JavaScript user: Jovo uses Babel to transpile the code with decorators to a supported format.
-
-// TODO: Add subcomponent docs
 
 ### Handlers
 
@@ -103,10 +206,81 @@ $state = [
 
 The component is removed from the stack once it resolves or the session closes. You can find out more about component delegation and routing in our [handlers documentation](./handlers.md).
 
-## Output
+### Component Data
+
+For data that is only relevant for this specific component, you can use component data:
+
+```typescript
+this.$component.$data.someKey = 'someValue';
+```
+
+This is then added to the state stack and lost once the component resolves:
+
+```typescript
+$state = [
+	{
+		componentPath: 'MainComponent',
+    data: {
+      someKey: 'someValue',
+    },
+	}
+]
+```
+
+
+### Component Options
+
+For some components, it may be helpful (or necessary) to add options for customization or configuration. The following options can be added:
+
+- `components`: Subcomponents that are used by this component
+- `config`: The custom config used by the component
+- `models`: Model files for component-specific intents and entities (*in development*)
+- `name`: If two components have the same class name, one component's name can be changed here
+
+In the [Register Global Components](#register-global-components) section, we already talked about how to pass options when registering existing components.
+
+It is also possible to add options to a component class using its `@Component` decorator:
+
+```typescript
+@Component({ /* options */ })
+class YourComponent extends BaseComponent {
+  
+	// ...
+
+}
+```
+
+> **A note on decorators and JavaScript**: To make the code more readable, Jovo uses decorators, a feature only available in TypeScript. No worries, though, if you're a JavaScript user: Jovo uses Babel to transpile the code with decorators to a supported format.
+
+The hierarchy of options being used by the component is as follows (starting with the most important one):
+* Options passed using the constructor when registering the component
+* Options in the `@Component` decorator
+* Default options of the component
+
+## Component Folder Structure
+
+There are multiple ways how a component can be structured:
+
+- A single file, for example `components/YourComponent.ts`
+- A folder, for example `components/YourComponent/YourComponent.ts`
+- A folder that contains a group of components, e.g. a `MainComponent` and its subcomponents
+
+A folder allows for a modular approach where all relevant elements of a component can be included in one place:
+
+- `output`
+- `models`
+- `services`
+
+### Output
 
 This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [handlers documentation](./handlers.md).
 
-## Models
+### Models
 
 *Models functionality is added soon.*
+
+This folder contains the language model files for this specific component. The files are merged into the main model using the jovo `build` command.
+
+### Services
+
+We recommend placing all component specific backend services like API calls in a `services` folder inside the component folder.
