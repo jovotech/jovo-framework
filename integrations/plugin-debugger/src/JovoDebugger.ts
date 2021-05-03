@@ -20,6 +20,7 @@ import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { MockServer } from './MockServer';
+import isEqual from 'fast-deep-equal/es6';
 
 export enum JovoDebuggerEvent {
   DebuggingAvailable = 'debugging.available',
@@ -221,16 +222,21 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       },
       set: (target, key: string, value: unknown): boolean => {
         // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
+        const previousValue = (target as Record<string, unknown>)[key];
         (target as Record<string, unknown>)[key] = value;
-        const payload: JovoDebuggerPayload<JovoUpdateData> = {
-          requestId: handleRequest.debuggerRequestId,
-          data: {
-            key,
-            value,
-            path: path ? [path, key].join('.') : key,
-          },
-        };
-        this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+        // only emit changes
+        if (!isEqual(previousValue, value)) {
+          const payload: JovoDebuggerPayload<JovoUpdateData> = {
+            requestId: handleRequest.debuggerRequestId,
+            data: {
+              key,
+              value,
+              path: path ? [path, key].join('.') : key,
+            },
+          };
+          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+        }
+
         return true;
       },
     };
