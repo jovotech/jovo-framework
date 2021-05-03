@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-alexa-amazon-pay",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-framework": "^3.5.1",
-    "jovo-platform-alexa": "^3.5.2",
+    "jovo-platform-alexa": "^3.5.3",
     "jovo-plugin-debugger": "^3.5.1"
   },
   "devDependencies": {
