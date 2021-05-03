@@ -50,7 +50,7 @@ export abstract class JovoUser<
     };
   }
 
-  toJSON(key?: keyof this) {
-    return key ? this[key] : { ...this, jovo: undefined };
+  toJSON() {
+    return { ...this, jovo: undefined };
   }
 }

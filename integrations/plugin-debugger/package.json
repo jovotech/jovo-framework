@@ -22,6 +22,7 @@
     "@jovotech/platform-core": "^4.0.0-alpha.5",
     "@nlpjs/lang-en": "^4.22.0",
     "@types/socket.io-client": "^1.4.36",
+    "fast-deep-equal": "^3.1.3",
     "lodash.clonedeep": "^4.5.0",
     "socket.io-client": "^2.4.0"
   },
