@@ -339,7 +339,7 @@ export class GoogleAnalytics implements Analytics {
       documentPath: this.getPageName(jovo),
       documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',
       documentTitle: intentName || intentType,
-      ...customParameters
+      ...customParameters,
     };
   }
 
