@@ -1,6 +1,7 @@
 {
   "name": "jovo-platform-lex",
-  "version": "0.0.3",
+  "version": "3.0.0",
+  "private": false,
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

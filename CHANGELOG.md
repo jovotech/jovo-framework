@@ -3,6 +3,16 @@
 ### Latest Framework Version: 3.5.1<br><br>
 
 
+
+### 2021-05-03
+
+##### `jovo-platform-lex [3.0.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-lex) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-lex) | [npm](https://www.npmjs.com/package/jovo-platform-lex)
+* [#917](https://github.com/jovotech/jovo-framework/pull/917) :sparkles: AWS Lex V1 plugin - beta version ([@kouz75(https://github.com/kouz75))
+
+##### `jovo-analytics-googleanalytics [3.5.6]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#927](https://github.com/jovotech/jovo-framework/pull/927) :recycle: Google Analytics Allow overriding documentTitle/documentPath/documentHostName ([@kouz75(https://github.com/kouz75))
+
+
 ## 2021-04-13
 
 ##### `jovo-analytics-googleanalytics [3.5.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)

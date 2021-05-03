@@ -4,6 +4,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-05-03 [3.5.6]
+* [#927](https://github.com/jovotech/jovo-framework/pull/927) :recycle: Google Analytics Allow overriding documentTitle/documentPath/documentHostName ([@kouz75(https://github.com/kouz75))
+
+
 ### 2021-04-13 [3.5.5]
 * [#921](https://github.com/jovotech/jovo-framework/pull/921) :bug: Fix TLS Errors on Lambda ([@freiSMS(https://github.com/freiSMS))
 
