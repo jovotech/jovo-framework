@@ -30,11 +30,11 @@
     "lodash.mergewith": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.uniq": "^4.5.0",
-    "@jovotech/cli-core": "^4.0.0-alpha.4",
-    "@jovotech/cli-command-build": "^4.0.0-alpha.4",
-    "@jovotech/cli-command-deploy": "^4.0.0-alpha.4",
-    "@jovotech/cli-command-get": "^4.0.0-alpha.4",
-    "@jovotech/cli-command-new": "^4.0.0-alpha.4",
+    "@jovotech/cli-core": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-build": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-get": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-new": "^4.0.0-alpha.5",
     "@jovotech/filebuilder": "^0.0.1"
   },
   "devDependencies": {
