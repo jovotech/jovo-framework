@@ -19,7 +19,7 @@ export async function getSkillInformation(skillId: string, stage: string, askPro
 }
 
 export async function listSkills(askProfile?: string): Promise<AskSkillList> {
-  const cmd: string = `ask smapi list-skills-for-vendor ${askProfile ? `-p ${askProfile}` : ''}`;
+  const cmd = `ask smapi list-skills-for-vendor ${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
     const { stdout } = await execAsync(cmd);

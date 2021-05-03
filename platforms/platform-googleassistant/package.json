@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run setup:cli && tsc",
+    "build": "tsc",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
@@ -20,11 +20,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/cli-command-build": "^4.0.0-alpha.0",
-    "@jovotech/cli-command-deploy": "^4.0.0-alpha.0",
-    "@jovotech/cli-command-get": "^4.0.0-alpha.0",
-    "@jovotech/cli-command-new": "^4.0.0-alpha.0",
-    "@jovotech/cli-core": "^4.0.0-alpha.0",
     "global-dirs": "^3.0.0",
     "indent-string": "^4.0.0",
     "jovo-model": "^3.0.1",
@@ -34,7 +29,13 @@
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.set": "^4.3.2",
-    "lodash.uniq": "^4.5.0"
+    "lodash.uniq": "^4.5.0",
+    "@jovotech/cli-core": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-build": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-get": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-new": "^4.0.0-alpha.5",
+    "@jovotech/filebuilder": "^0.0.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

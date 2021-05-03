@@ -56,5 +56,6 @@ export class ExpressJs extends Server {
     });
   }
 
+  // eslint-disable-next-line
   setResponseHeaders(header: Record<string, string>): void {}
 }

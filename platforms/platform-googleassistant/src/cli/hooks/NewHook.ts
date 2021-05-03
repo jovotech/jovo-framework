@@ -4,13 +4,13 @@ import { SupportedLocales } from '../utils/Constants';
 import { SupportedLocalesType } from '../utils';
 
 export class NewHook extends PluginHook<NewEvents> {
-  install() {
-    this.actionSet = {
+  install(): void {
+    this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this)],
     };
   }
 
-  async setDefaultConfig() {
+  async setDefaultConfig(): Promise<void> {
     // Check for invalid locales and provide a default locale map.
     for (const locale of this.$context.locales) {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {

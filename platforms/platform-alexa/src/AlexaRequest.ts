@@ -2,9 +2,9 @@ import {
   Entity,
   EntityMap,
   JovoRequest,
-  JovoRequestType, JovoSession,
+  JovoRequestType,
+  JovoSession,
   RequestType,
-  SessionData,
 } from '@jovotech/framework';
 import { Context, Request, Session } from './interfaces';
 

@@ -1,4 +1,4 @@
-import { EntityMap, JovoRequest, JovoRequestType, JovoSession, SessionData } from '@jovotech/framework';
+import { EntityMap, JovoRequest, JovoRequestType, JovoSession } from '@jovotech/framework';
 import { Context, Request, RequestBodyText } from './interfaces';
 
 export interface CorePlatformRequestJSON {

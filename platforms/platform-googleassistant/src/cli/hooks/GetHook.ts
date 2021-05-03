@@ -12,13 +12,9 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
-import {
-  checkForGactionsCli,
-  getGactionsError,
-  getPlatformPath,
-  PluginContextGoogle,
-} from '../utils';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
 import { BuildEvents } from '@jovotech/cli-command-build';
+import { GoogleAssistantCli } from '..';
 
 export interface GetContextGoogle extends GetContext, PluginContextGoogle {
   args: GetContext['args'];
@@ -26,10 +22,11 @@ export interface GetContextGoogle extends GetContext, PluginContextGoogle {
 }
 
 export class GetHook extends PluginHook<GetEvents | BuildEvents> {
+  $plugin!: GoogleAssistantCli;
   $context!: GetContextGoogle;
 
-  install() {
-    this.actionSet = {
+  install(): void {
+    this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
@@ -44,7 +41,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Add platform-specific CLI options, including flags and args.
    * @param context - Context providing an access point to command flags and args.
    */
-  addCliOptions(context: InstallContext) {
+  addCliOptions(context: InstallContext): void {
     if (context.command !== 'get') {
       return;
     }
@@ -58,7 +55,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextGet) {
+  checkForPlatform(context: ParseContextGet): void {
     // Check if this plugin should be used or not.
     if (context.args.platform && context.args.platform !== this.$plugin.$id) {
       this.uninstall();
@@ -68,7 +65,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext() {
+  updatePluginContext(): void {
     if (this.$context.command !== 'get') {
       return;
     }
@@ -87,8 +84,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
-  async checkForExistingPlatformFiles() {
-    if (!this.$context.flags.overwrite && existsSync(getPlatformPath())) {
+  async checkForExistingPlatformFiles(): Promise<void> {
+    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -99,14 +96,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Fetches platform-specific models, such as intents and entities from the Google Actions Console.
    */
-  async get() {
+  async get(): Promise<void> {
     const getTask: Task = new Task(
       `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
       async () => {
         // Check if gactions CLI is installed.
         await checkForGactionsCli();
 
-        const platformPath: string = getPlatformPath();
+        const platformPath: string = this.$plugin.getPlatformPath();
         if (!existsSync(platformPath)) {
           mkdirSync(platformPath);
         }

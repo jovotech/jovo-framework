@@ -5,6 +5,7 @@ export class MockServer extends Server {
     super();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   fail(error: Error): void {}
 
   getQueryParams(): QueryParams {

@@ -1,4 +1,5 @@
-import { JovoCliPlugin, PluginType } from '@jovotech/cli-core';
+import { join as joinPaths } from 'path';
+import { JovoCliPlugin, PluginHook, PluginType } from '@jovotech/cli-core';
 
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
@@ -7,14 +8,15 @@ import { NewHook } from './hooks/NewHook';
 import { PluginConfigGoogle } from './utils/Interfaces';
 
 export class GoogleAssistantCli extends JovoCliPlugin {
-  $type: PluginType = 'platform';
-  $id: string = 'googleAction';
+  readonly $id: string = 'googleAction';
+  readonly $type: PluginType = 'platform';
+  readonly platformDirectory: string = 'platform.googleAssistant';
 
   constructor(config?: PluginConfigGoogle) {
     super(config);
   }
 
-  getHooks() {
+  getHooks(): typeof PluginHook[] {
     return [BuildHook, GetHook, DeployHook, NewHook];
   }
 
@@ -22,5 +24,12 @@ export class GoogleAssistantCli extends JovoCliPlugin {
     return {
       projectId: '<YOUR-PROJECT-ID-HERE>',
     };
+  }
+
+  /**
+   * Returns base path to platform's build folder.
+   */
+  getPlatformPath(): string {
+    return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
   }
 }

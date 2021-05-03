@@ -7,7 +7,7 @@ export interface GoogleActionProjectLocales {
 
 export interface GoogleActionActions {
   custom: {
-    [key: string]: object;
+    [key: string]: Record<string, unknown>;
   };
 }
 

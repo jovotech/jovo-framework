@@ -4,8 +4,8 @@
   "version": "4.0.0-alpha.5",
   "description": "",
   "scripts": {
-    "prettier": "prettier -w -l src test",
-    "eslint": "eslint src test --fix --ext .ts",
+    "prettier": "prettier -w -l test",
+    "eslint": "eslint test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
   },
