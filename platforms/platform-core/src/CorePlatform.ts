@@ -67,10 +67,10 @@ export class CorePlatform extends Platform<
 
   finalizeResponse(
     response: CorePlatformResponse,
-    jovo: Jovo,
+    corePlatformApp: CorePlatformApp,
   ): CorePlatformResponse | Promise<CorePlatformResponse> {
     response.type = this.config.type;
-    response.session.data = jovo.$session;
+    response.session.data = corePlatformApp.$session;
     return response;
   }
 }
