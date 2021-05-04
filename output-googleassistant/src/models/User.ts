@@ -21,6 +21,67 @@ export enum UserVerificationStatus {
   Verified = 'VERIFIED',
 }
 
+export class IntentSubscription {
+  @IsString()
+  @IsNotEmpty()
+  intent: string;
+
+  @IsString()
+  @IsNotEmpty()
+  contentTitle: string;
+}
+
+export class Engagement {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => IntentSubscription)
+  pushNotificationIntents: IntentSubscription[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => IntentSubscription)
+  dailyUpdateIntents: IntentSubscription[];
+}
+
+export enum SkuType {
+  Unspecified = 'SKU_TYPE_UNSPECIFIED',
+  InApp = 'IN_APP',
+  Subscription = 'SUBSCRIPTION',
+  App = 'APP',
+}
+
+export class SignedData {
+  @IsObject()
+  inAppPurchaseData: Record<string, unknown>;
+  @IsString()
+  @IsNotEmpty()
+  inAppDataSignature: string;
+}
+
+export class Entitlement {
+  @IsString()
+  @IsNotEmpty()
+  sku: string;
+
+  @IsEnum(SkuType)
+  skuType: SkuType;
+
+  @ValidateNested()
+  @Type(() => SignedData)
+  inAppDetails: SignedData;
+}
+
+export class PackageEntitlements {
+  @IsString()
+  @IsNotEmpty()
+  packageName: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Entitlement)
+  entitlements: Entitlement[];
+}
+
 export class User {
   @IsString()
   @IsNotEmpty()
@@ -48,65 +109,4 @@ export class User {
   @ValidateNested({ each: true })
   @Type(() => PackageEntitlements)
   packageEntitlements: PackageEntitlements[];
-}
-
-export class Engagement {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => IntentSubscription)
-  pushNotificationIntents: IntentSubscription[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => IntentSubscription)
-  dailyUpdateIntents: IntentSubscription[];
-}
-
-export class IntentSubscription {
-  @IsString()
-  @IsNotEmpty()
-  intent: string;
-
-  @IsString()
-  @IsNotEmpty()
-  contentTitle: string;
-}
-
-export class PackageEntitlements {
-  @IsString()
-  @IsNotEmpty()
-  packageName: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Entitlement)
-  entitlements: Entitlement[];
-}
-
-export enum SkuType {
-  Unspecified = 'SKU_TYPE_UNSPECIFIED',
-  InApp = 'IN_APP',
-  Subscription = 'SUBSCRIPTION',
-  App = 'APP',
-}
-
-export class Entitlement {
-  @IsString()
-  @IsNotEmpty()
-  sku: string;
-
-  @IsEnum(SkuType)
-  skuType: SkuType;
-
-  @ValidateNested()
-  @Type(() => SignedData)
-  inAppDetails: SignedData;
-}
-
-export class SignedData {
-  @IsObject()
-  inAppPurchaseData: Record<string, unknown>;
-  @IsString()
-  @IsNotEmpty()
-  inAppDataSignature: string;
 }

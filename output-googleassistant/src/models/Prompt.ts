@@ -21,47 +21,6 @@ import { List } from './content/List';
 import { Media } from './content/Media';
 import { Table } from './content/Table';
 
-export class Prompt {
-  @IsOptional()
-  @IsBoolean()
-  override?: boolean;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Simple)
-  firstSimple?: Simple;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Content)
-  content?: Content;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Simple)
-  lastSimple?: Simple;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Suggestion)
-  suggestions?: Suggestion[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Link)
-  link?: Link;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Canvas)
-  canvas?: Canvas;
-
-  @IsOptional()
-  @IsObject()
-  orderUpdate?: unknown;
-}
-
 export class Canvas {
   @IsUrl({ protocols: ['https', 'http'] })
   url: string;
@@ -122,4 +81,45 @@ export class Content {
   @IsValidContentObject()
   @Type(() => List)
   list?: List;
+}
+
+export class Prompt {
+  @IsOptional()
+  @IsBoolean()
+  override?: boolean;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Simple)
+  firstSimple?: Simple;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Content)
+  content?: Content;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Simple)
+  lastSimple?: Simple;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Suggestion)
+  suggestions?: Suggestion[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Link)
+  link?: Link;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Canvas)
+  canvas?: Canvas;
+
+  @IsOptional()
+  @IsObject()
+  orderUpdate?: unknown;
 }

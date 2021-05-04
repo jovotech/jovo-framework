@@ -23,23 +23,14 @@ export enum OptionalMediaControls {
   Stopped = 'STOPPED',
 }
 
-export class Media {
-  @IsEnum(MediaType)
-  mediaType: MediaType;
+export class MediaImage {
+  @IsValidMediaObjectImage()
+  @Type(() => Image)
+  large?: Image;
 
-  @IsString()
-  @IsNotEmpty()
-  startOffset: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsEnum(OptionalMediaControls, { each: true })
-  optionalMediaControls?: OptionalMediaControls[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MediaObject)
-  mediaObjects: MediaObject[];
+  @IsValidMediaObjectImage()
+  @Type(() => Image)
+  icon?: Image;
 }
 
 export class MediaObject {
@@ -58,12 +49,21 @@ export class MediaObject {
   image: MediaImage;
 }
 
-export class MediaImage {
-  @IsValidMediaObjectImage()
-  @Type(() => Image)
-  large?: Image;
+export class Media {
+  @IsEnum(MediaType)
+  mediaType: MediaType;
 
-  @IsValidMediaObjectImage()
-  @Type(() => Image)
-  icon?: Image;
+  @IsString()
+  @IsNotEmpty()
+  startOffset: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(OptionalMediaControls, { each: true })
+  optionalMediaControls?: OptionalMediaControls[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MediaObject)
+  mediaObjects: MediaObject[];
 }

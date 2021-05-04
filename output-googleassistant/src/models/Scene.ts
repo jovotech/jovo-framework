@@ -8,6 +8,12 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 
+export class NextScene {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
 export class Scene {
   @IsString()
   @IsNotEmpty()
@@ -20,10 +26,4 @@ export class Scene {
   @ValidateNested()
   @Type(() => NextScene)
   next?: NextScene;
-}
-
-export class NextScene {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
 }
