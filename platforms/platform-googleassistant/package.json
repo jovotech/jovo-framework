@@ -35,9 +35,11 @@
     "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
     "@jovotech/cli-command-get": "^4.0.0-alpha.5",
     "@jovotech/cli-command-new": "^4.0.0-alpha.5",
-    "@jovotech/filebuilder": "^0.0.1"
+    "@jovotech/filebuilder": "^0.0.1",
+    "@jovotech/output-googleassistant": "^4.0.0-alpha.5"
   },
   "devDependencies": {
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -62,7 +64,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/core": "~4.0"
+    "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js"
