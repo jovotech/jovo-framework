@@ -30,6 +30,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
+        checkForGactionsCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
@@ -100,9 +101,6 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     const getTask: Task = new Task(
       `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
       async () => {
-        // Check if gactions CLI is installed.
-        await checkForGactionsCli();
-
         const platformPath: string = this.$plugin.getPlatformPath();
         if (!existsSync(platformPath)) {
           mkdirSync(platformPath);

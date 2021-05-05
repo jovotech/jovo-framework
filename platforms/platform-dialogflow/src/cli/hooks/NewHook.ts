@@ -1,7 +1,6 @@
-import { PluginHook, prompt, printUserInput, printHighlight } from '@jovotech/cli-core';
 import { NewEvents } from '@jovotech/cli-command-new';
-import { SupportedLocales } from '../utils/Constants';
-import { SupportedLocalesType } from '../utils';
+import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
+import { SupportedLocales, SupportedLocalesType } from '../utils';
 
 export class NewHook extends PluginHook<NewEvents> {
   install(): void {
@@ -14,15 +13,15 @@ export class NewHook extends PluginHook<NewEvents> {
     // Check for invalid locales and provide a default locale map.
     for (const locale of this.$context.locales) {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
-        console.log();
         // Prompt user for alternative locale.
+        console.log();
         const { locales } = await prompt(
           {
             name: 'locales',
             type: 'autocompleteMultiselect',
             message: `Locale ${printHighlight(
               locale,
-            )} is not supported by Google Assistant.\nPlease provide an alternative locale (type to filter, select with space):`,
+            )} is not supported by Dialogflow.\nPlease provide an alternative locale (type to filter, select with space):`,
             instructions: false,
             choices: SupportedLocales.map((locale) => ({
               title: printUserInput(locale),
