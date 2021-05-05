@@ -21,7 +21,7 @@ export class GoogleAssistant extends Platform<
   jovoClass = GoogleAction;
   userClass = GoogleAssistantUser;
 
-  getDefaultConfig() {
+  getDefaultConfig(): GoogleAssistantConfig {
     return {};
   }
 
