@@ -2,7 +2,6 @@ import { IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
 
 export class IdentityData {
   @IsString()
-  @IsNotEmpty()
   id: string;
 
   @IsOptional()
