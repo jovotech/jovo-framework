@@ -21,6 +21,7 @@ require('source-map-support').install();
 export {
   JovoResponse,
   OutputTemplateConverterStrategy,
+  OutputTemplateConverter,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplatePlatforms,
