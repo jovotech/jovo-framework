@@ -21,8 +21,8 @@ registerPlatformSpecificJovoReference('$googleAction', GoogleAction);
 
 export * from './GoogleAssistant';
 export * from './GoogleAssistantRequest';
-export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
-export * from './GoogleAction';
-export * from './interfaces';
 export * from './GoogleAssistantUser';
+export * from './GoogleAction';
+export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
+export * from './interfaces';
 export * from './cli';

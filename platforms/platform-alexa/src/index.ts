@@ -21,8 +21,8 @@ registerPlatformSpecificJovoReference('$alexaSkill', AlexaSkill);
 
 export * from './Alexa';
 export * from './AlexaRequest';
-export type { AlexaResponse } from '@jovotech/output-alexa';
-export * from './AlexaSkill';
-export * from './interfaces';
 export * from './AlexaUser';
+export * from './AlexaSkill';
+export type { AlexaResponse } from '@jovotech/output-alexa';
+export * from './interfaces';
 export * from './cli';
