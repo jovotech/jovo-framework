@@ -1,5 +1,5 @@
-import { join as joinPaths } from 'path';
 import { JovoCliPlugin, PluginHook, PluginType } from '@jovotech/cli-core';
+import { join as joinPaths } from 'path';
 
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';

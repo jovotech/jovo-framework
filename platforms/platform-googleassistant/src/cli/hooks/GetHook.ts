@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync } from 'fs';
-import _get from 'lodash.get';
+import { BuildEvents } from '@jovotech/cli-command-build';
+import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -11,10 +11,10 @@ import {
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
-import { BuildEvents } from '@jovotech/cli-command-build';
+import { existsSync, mkdirSync } from 'fs';
+import _get from 'lodash.get';
 import { GoogleAssistantCli } from '..';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
 
 export interface GetContextGoogle extends GetContext, PluginContextGoogle {
   args: GetContext['args'];

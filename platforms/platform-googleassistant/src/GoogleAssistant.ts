@@ -1,10 +1,4 @@
-import {
-  App,
-  ExtensibleConfig,
-  HandleRequest,
-  MetadataStorage,
-  Platform,
-} from '@jovotech/framework';
+import { App, ExtensibleConfig, HandleRequest, Platform } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
