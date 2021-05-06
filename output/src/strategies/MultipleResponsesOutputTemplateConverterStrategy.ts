@@ -8,21 +8,30 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
 
   fromResponse(response: RESPONSE): OutputTemplate;
   fromResponse(responses: RESPONSE[]): OutputTemplate[];
-  fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
-    return Array.isArray(response)
-      ? response.map((responseItem) => this.buildOutputTemplate(responseItem))
-      : this.buildOutputTemplate(response);
+  fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
+    return Array.isArray(responseOrResponses)
+      ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
+      : this.convertResponse(responseOrResponses);
   }
 
-  abstract buildOutputTemplate(response: RESPONSE): OutputTemplate;
+  abstract convertResponse(response: RESPONSE): OutputTemplate;
 
   toResponse(output: OutputTemplate): RESPONSE;
   toResponse(outputs: OutputTemplate[]): RESPONSE[];
   toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[] {
     return Array.isArray(output)
-      ? output.map((outputItem) => this.buildResponse(outputItem))
-      : this.buildResponse(output);
+      ? output
+          .map((outputItem) => this.convertTemplate(outputItem))
+          .reduce((accumulator: RESPONSE[], currentValue) => {
+            if (Array.isArray(currentValue)) {
+              accumulator.push(...currentValue);
+            } else {
+              accumulator.push(currentValue);
+            }
+            return accumulator;
+          }, [])
+      : this.convertTemplate(output);
   }
 
-  abstract buildResponse(output: OutputTemplate): RESPONSE;
+  abstract convertTemplate(output: OutputTemplate): RESPONSE | RESPONSE[];
 }

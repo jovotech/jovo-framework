@@ -1,11 +1,12 @@
 import {
+  Card,
+  Carousel,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   QuickReply,
   QuickReplyValue,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -20,54 +21,77 @@ import {
 export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<FacebookMessengerResponse> {
   responseClass = FacebookMessengerResponse;
 
-  buildResponse(output: OutputTemplate): FacebookMessengerResponse {
-    const response: FacebookMessengerResponse = {
+  // TODO: improve code
+  convertTemplate(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
+    const getResponseBase: () => FacebookMessengerResponse = () => ({
       messaging_type: MessagingType.Response,
       recipient: {
         id: '',
       },
+    });
+    let response: FacebookMessengerResponse | FacebookMessengerResponse[] = getResponseBase();
+
+    const addToResponse = (message: FacebookMessengerMessage) => {
+      if (!Array.isArray(response) && response.message) {
+        response = [response];
+      }
+      if (Array.isArray(response)) {
+        const newResponse = getResponseBase();
+        newResponse.message = message;
+        response.push(newResponse);
+      } else {
+        response.message = message;
+      }
     };
 
-    const message = output.platforms?.FacebookMessenger?.message || output.message;
-    if (message) {
-      response.message = this.convertMessageToFacebookMessengerMessage(message);
-    }
-
-    const card = output.platforms?.FacebookMessenger?.card || output.card;
-    if (card) {
-      response.message = {
+    const conversionMap: Partial<
+      Record<keyof OutputTemplate, (val: any) => FacebookMessengerMessage>
+    > = {
+      message: (message: MessageValue) => this.convertMessageToFacebookMessengerMessage(message),
+      card: (card: Card) => ({
         attachment: {
           type: MessageAttachmentType.Template,
           payload: card.toFacebookMessengerGenericTemplate!(),
         },
-      };
-    }
-
-    const carousel = output.platforms?.FacebookMessenger?.carousel || output.carousel;
-    if (carousel) {
-      response.message = {
+      }),
+      carousel: (carousel: Carousel) => ({
         attachment: {
           type: MessageAttachmentType.Template,
           payload: carousel.toFacebookMessengerGenericTemplate!(),
         },
-      };
+      }),
+    };
+
+    const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
+      for (const key in outputTemplate) {
+        if (outputTemplate.hasOwnProperty(key) && outputTemplate[key]) {
+          const conversionFn = conversionMap[key];
+          if (conversionFn) {
+            addToResponse(conversionFn(outputTemplate[key]));
+          }
+        }
+      }
+    };
+
+    enumerateOutputTemplate(output);
+    if (output.platforms?.FacebookMessenger) {
+      enumerateOutputTemplate(output.platforms.FacebookMessenger);
     }
 
-    if (output.platforms?.FacebookMessenger?.nativeResponse) {
-      _merge(response, output.platforms.FacebookMessenger.nativeResponse);
-    }
+    // TODO determine what to do with nativeResponse!
+    // if (output.platforms?.FacebookMessenger?.nativeResponse) {
+    //   _merge(response, output.platforms.FacebookMessenger.nativeResponse);
+    // }
 
     return response;
   }
 
-  buildOutputTemplate(response: FacebookMessengerResponse): OutputTemplate {
+  convertResponse(response: FacebookMessengerResponse): OutputTemplate {
     const output: OutputTemplate = {};
 
     if (response.message?.text) {
       output.message = response.message.text;
-    }
-
-    if (
+    } else if (
       response.message?.attachment?.type === MessageAttachmentType.Template &&
       response.message?.attachment?.payload?.template_type === TemplateType.Generic
     ) {
