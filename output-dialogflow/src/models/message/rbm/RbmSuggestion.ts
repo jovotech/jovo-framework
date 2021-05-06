@@ -18,9 +18,11 @@ export class RbmSuggestion {
 
 export class RbmSuggestionContent {
   @IsValidRbmSuggestionContentObject()
+  @Type(() => RbmSuggestedReply)
   reply?: RbmSuggestedReply;
 
   @IsValidRbmSuggestionContentObject()
+  @Type(() => RbmSuggestedAction)
   action?: RbmSuggestedAction;
 }
 
@@ -42,12 +44,15 @@ export class RbmSuggestedAction extends RbmSuggestedReply {
 
 export class RbmSuggestedActionContent {
   @IsValidRbmSuggestedActionContentObject()
+  @Type(() => RbmSuggestedActionDial)
   dial?: RbmSuggestedActionDial;
 
   @IsValidRbmSuggestedActionContentObject()
+  @Type(() => RbmSuggestedActionOpenUri)
   open_url?: RbmSuggestedActionOpenUri;
 
   @IsValidRbmSuggestedActionContentObject()
+  @Type(() => RbmSuggestedActionShareLocation)
   share_location?: RbmSuggestedActionShareLocation;
 }
 
