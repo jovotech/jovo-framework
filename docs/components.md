@@ -6,7 +6,7 @@
   - [Register Subcomponents](#register-subcomponents)
 - [Component Class](#component-class)
   - [Handlers](#handlers)
-  - [State Management](#state-management)
+  - [Routing and State Management](#routing-and-state-management)
   - [Component Data](#component-data)
   - [Component Options](#component-options)
 - [Component Folder Structure](#component-folder-structure)
@@ -179,9 +179,9 @@ import { Component, BaseComponent } from '@jovotech/framework';
 @Component()
 class YourComponent extends BaseComponent {
   
-	START() {
-		// ...
-	}
+  START() {
+    // ...
+  }
 }
 ```
 
@@ -190,7 +190,7 @@ class YourComponent extends BaseComponent {
 
 The core of a class are [handlers](./handlers.md) that are responsible to turn structured meaning (e.g. an *intent*) into structured output. 
 
-### State Management
+### Routing and State Management
 
 If you're used to building state machines (for example Jovo `v3`), a good way to see a Jovo component as a state.
 
@@ -198,13 +198,19 @@ Once a component is entered, it is added to the Jovo `$state` stack:
 
 ```typescript
 $state = [
-	{
-		componentPath: 'MainComponent'
-	}
+  {
+    componentPath: 'MainComponent'
+  }
 ]
 ```
 
-The component is removed from the stack once it resolves or the session closes. You can find out more about component delegation and routing in our [handlers documentation](./handlers.md).
+The component is removed from the stack once it resolves or the session closes.
+
+There are two ways how a component can be entered:
+* Through one of its global handlers
+* By getting called from a different component using `$redirect` or `$delegate`
+
+You can find out more about component delegation and routing in our [handlers documentation](./handlers.md).
 
 ### Component Data
 
@@ -218,12 +224,12 @@ This is then added to the state stack and lost once the component resolves:
 
 ```typescript
 $state = [
-	{
-		componentPath: 'MainComponent',
+  {
+    componentPath: 'MainComponent',
     data: {
       someKey: 'someValue',
     },
-	}
+  }
 ]
 ```
 
@@ -245,7 +251,7 @@ It is also possible to add options to a component class using its `@Component` d
 @Component({ /* options */ })
 class YourComponent extends BaseComponent {
   
-	// ...
+  // ...
 
 }
 ```
