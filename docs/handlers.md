@@ -172,10 +172,10 @@ Sometimes, it might be necessary to split `@Handle` to make sure that not all op
 ```typescript
 @Global
 @Handle({
-	intents: ['ShowMenuIntent', 'YesIntent']
+  intents: ['ShowMenuIntent', 'YesIntent']
 })
 showMenu() {
-	// ...
+  // ...
 }
 ```
 
@@ -184,13 +184,13 @@ By adding a second `@Handle` decorator, you can make it global for only some int
 ```typescript
 @Handle({
   global: true,
-	intents: ['ShowMenuIntent']
+  intents: ['ShowMenuIntent']
 })
 @Handle({
-	intents: ['YesIntent']
+  intents: ['YesIntent']
 })
 showMenu() {
-	// ...
+  // ...
 }
 ```
 
@@ -198,10 +198,10 @@ Alternatively, you can make an intent an object and add `global` to it:
 
 ```typescript
 @Handle({
-	intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent']
+  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent']
 })
 showMenu() {
-	// ...
+  // ...
 }
 ```
 
@@ -232,11 +232,11 @@ You can then add `subState` to your `@Handle` decorator to make sure that this h
 
 ```typescript
 @Handle({
-	subState: 'YesOrNoState',
+  subState: 'YesOrNoState',
   intents: 'YesIntent',
 })
 Yes() {
-	// ...
+  // ...
 }
 ```
 It's also possible to use the `@SubState` convenience decorator:
@@ -260,11 +260,11 @@ You can also specify that a handler is only responsible for specific platforms. 
 
 ```typescript
 @Handle({
-	// ...
-	platforms: [ 'Alexa', 'GoogleAssistant' ]
+  // ...
+  platforms: [ 'Alexa', 'GoogleAssistant' ]
 })
 yourHandler() {
-	// ...
+  // ...
 }
 ```
 
@@ -277,7 +277,7 @@ import { Platforms } from '@jovotech/framework';
 
 @Platforms(['Alexa', 'GoogleAssistant'])
 yourHandler() {
-	// ...
+  // ...
 }
 ```
 
