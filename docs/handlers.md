@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Handler Routing and State Management](#handler-routing-and-state-management)
   - [Handle Decorator](#handle-decorator)
+  - [Handler Prioritization](#handler-prioritization)
 - [Handler Logic](#handler-logic)
   - [Return Output](#return-output)
   - [Redirect to Components](#redirect-to-components)
@@ -280,6 +281,29 @@ yourHandler() {
   // ...
 }
 ```
+
+### Handler Prioritization
+
+It's possible that multiple handlers are able to fulfil a request, for example:
+
+```typescript
+@Handle({
+  intents: [ 'ShowMenuIntent' ]
+})
+showMenu() {
+  // ...
+}
+
+@Handle({
+  intents: [ 'ShowMenuIntent' ],
+  platforms: [ 'Alexa' ]
+})
+showMenuOnAlexa() {
+  // ...
+}
+```
+
+If this is the case, the handler with more conditions is the one being prioritized. In the above example for a request coming from Alexa, the `showMenuOnAlexa` handler would be triggered.
 
 ## Handler Logic
 
