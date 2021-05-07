@@ -102,9 +102,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     if (!this.$context.projectId) {
       throw new JovoCliError(
-        'Could not find projectId.',
+        'Could not find project ID.',
         this.$plugin.constructor.name,
-        'Please provide a project id by using the flag "--project-id" or in your project configuration.',
+        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       );
     }
 

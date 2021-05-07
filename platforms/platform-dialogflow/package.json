@@ -1,6 +1,7 @@
 {
-  "name": "@jovotech/platform-alexa",
-  "version": "4.0.0-alpha.5",
+  "name": "@jovotech/platform-dialogflow",
+  "version": "4.0.0-alpha.1",
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,39 +20,42 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "adm-zip": "^0.5.5",
+    "axios": "^0.21.1",
+    "global-dirs": "^3.0.0",
+    "indent-string": "^4.0.0",
+    "jovo-model": "^3.0.1",
+    "jovo-model-dialogflow": "^3.0.2",
+    "jovo-model-google": "^3.0.8",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
+    "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
-    "lodash.set": "^4.3.2",
-    "jovo-model": "^3.0.1",
-    "jovo-model-alexa": "^3.0.1",
-    "@jovotech/output-alexa": "^4.0.0-alpha.5",
-    "lodash.merge": "^4.6.2"
+    "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.5",
+    "@types/adm-zip": "^0.4.34",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.mergewith": "^4.6.6",
-    "@types/lodash.set": "^4.3.6",
+    "@types/lodash.uniq": "^4.5.6",
     "@types/node": "^10.17.50",
+    "@types/prompts": "^2.0.10",
     "@types/tv4": "^1.2.29",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
-    "@jovotech/cli-core": "^4.0.0-alpha.5",
     "@jovotech/cli-command-build": "^4.0.0-alpha.5",
     "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
     "@jovotech/cli-command-get": "^4.0.0-alpha.5",
     "@jovotech/cli-command-new": "^4.0.0-alpha.5",
+    "@jovotech/cli-core": "^4.0.0-alpha.5",
     "@jovotech/filebuilder": "^0.0.1",
-    "chalk": "^4.1.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "global-dirs": "^3.0.0",
-    "global-modules": "^2.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
@@ -62,9 +66,5 @@
   "peerDependencies": {
     "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
   },
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
-  "prettier": "../../.prettierrc.js",
-  "publishConfig": {
-    "access": "public"
-  }
+  "prettier": "../../.prettierrc.js"
 }

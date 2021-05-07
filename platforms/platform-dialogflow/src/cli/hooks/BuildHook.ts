@@ -1,0 +1,450 @@
+import {
+  ANSWER_BACKUP,
+  ANSWER_CANCEL,
+  deleteFolderRecursive,
+  getResolvedLocales,
+  JovoCliError,
+  mergeArrayCustomizer,
+  PluginHook,
+  printHighlight,
+  promptOverwriteReverseBuild,
+  STATION,
+  TARGET_INFO,
+  Task,
+  wait,
+} from '@jovotech/cli-core';
+import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import _get from 'lodash.get';
+import _merge from 'lodash.merge';
+import _mergeWith from 'lodash.mergewith';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
+import { JovoModelData, NativeFileInformation } from 'jovo-model';
+import { JovoModelDialogflow } from 'jovo-model-dialogflow';
+import { join as joinPaths } from 'path';
+
+import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utils';
+import DefaultFiles from '../utils/DefaultFiles.json';
+import { DialogflowCli } from '..';
+
+export interface DialogflowContext extends BuildContext {
+  endpoint?: string;
+  language?: string;
+  supportedLanguages: string[];
+}
+
+export class BuildHook extends PluginHook<BuildEvents> {
+  $plugin!: DialogflowCli;
+  $context!: DialogflowContext;
+
+  install(): void {
+    this.middlewareCollection = {
+      'parse': [this.checkForPlatform.bind(this)],
+      'before.build': [
+        this.checkForCleanBuild.bind(this),
+        this.validateLocales.bind(this),
+        this.updatePluginContext.bind(this),
+      ],
+      'build': [this.buildDialogflowAgent.bind(this)],
+      'reverse.build': [this.buildReverse.bind(this)],
+    };
+  }
+
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
+   */
+  checkForPlatform(context: ParseContextBuild): void {
+    // Check if this plugin should be used or not.
+    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
+      this.uninstall();
+    }
+  }
+
+  /**
+   * Checks, if --clean has been set and deletes the platform folder accordingly.
+   */
+  checkForCleanBuild(): void {
+    // If --clean has been set, delete the respective platform folders before building.
+    if (this.$context.flags.clean) {
+      deleteFolderRecursive(this.$plugin.getPlatformPath());
+    }
+  }
+
+  /**
+   * Checks if any provided locale is not supported, thus invalid.
+   */
+  validateLocales(): void {
+    const locales: SupportedLocalesType[] = this.$context.locales.reduce(
+      (locales: string[], locale: string) => {
+        locales.push(
+          ...getResolvedLocales(
+            locale,
+            SupportedLocales,
+            this.$plugin.constructor.name,
+            this.$config.locales,
+          ),
+        );
+        return locales;
+      },
+      [],
+    ) as SupportedLocalesType[];
+
+    for (const locale of locales) {
+      const genericLocale: string = locale.substring(0, 2);
+      // For Google Conversational Actions, some locales require a generic locale to be set, e.g. en for en-US.
+      if (
+        SupportedLocales.includes(genericLocale as SupportedLocalesType) &&
+        !locales.includes(genericLocale as SupportedLocalesType)
+      ) {
+        throw new JovoCliError(
+          `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
+            genericLocale,
+          )}.`,
+          this.$plugin.constructor.name,
+        );
+      }
+
+      if (!SupportedLocales.includes(locale)) {
+        throw new JovoCliError(
+          `Locale ${printHighlight(locale)} is not supported by Dialogflow.`,
+          this.$plugin.constructor.name,
+          'For more information on multiple language support: https://cloud.google.com/dialogflow/es/docs/reference/language',
+        );
+      }
+    }
+  }
+
+  updatePluginContext(): void {
+    this.$context.endpoint =
+      _get(this.$plugin.$config, 'files["agent.json"].webhook.url') ||
+      this.$plugin.$config.endpoint ||
+      this.$cli.resolveEndpoint(this.$cli.$project!.$config.getParameter('endpoint') as string);
+
+    this.$context.language =
+      _get(this.$plugin.$config, 'files["agent.json"].language') || this.$plugin.$config.language;
+
+    // If language is not configured, try to parse it from locales.
+    if (!this.$context.language) {
+      const locales: SupportedLocalesType[] = this.$context.locales.reduce(
+        (locales: string[], locale: string) => {
+          locales.push(
+            ...getResolvedLocales(
+              locale,
+              SupportedLocales,
+              this.$plugin.constructor.name,
+              this.$config.locales,
+            ),
+          );
+          return locales;
+        },
+        [],
+      ) as SupportedLocalesType[];
+
+      if (locales.length === 0) {
+        // ToDo: Throw error?
+        return;
+      }
+
+      const primaryLocale: string = locales.shift()!;
+      const genericLanguage: string = primaryLocale.substring(0, 2);
+      this.$context.language = SupportedLocales.includes(genericLanguage as SupportedLocalesType)
+        ? genericLanguage
+        : primaryLocale;
+      this.$context.supportedLanguages = locales;
+    }
+  }
+
+  async buildDialogflowAgent(): Promise<void> {
+    const taskStatus: string = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
+      ? 'Updating'
+      : 'Creating';
+    const buildTask: Task = new Task(`${STATION} ${taskStatus} Dialogflow Agent`);
+
+    const projectFilesTask: Task = new Task(
+      `${taskStatus} Project Files`,
+      this.createDialogflowProjectFiles.bind(this),
+    );
+
+    const interactionModelTasks: Task[] = this.createInteractionModelTasks();
+    const buildInteractionModelTask: Task = new Task(
+      `${taskStatus} Interaction Models`,
+      interactionModelTasks,
+    );
+    // If no model files for the current locales exist, do not build interaction model.
+    if (
+      !this.$cli.$project!.hasModelFiles(this.$context.locales) ||
+      this.$context.flags.target === TARGET_INFO
+    ) {
+      buildInteractionModelTask.disable();
+    }
+
+    buildTask.add(projectFilesTask, buildInteractionModelTask);
+
+    await buildTask.run();
+  }
+
+  createDialogflowProjectFiles(): void {
+    const files: FileObject = FileBuilder.normalizeFileObject(this.$config.files || {});
+    // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
+    const projectFiles: FileObject = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
+      ? files
+      : _merge(DefaultFiles, files);
+
+    // Set language-specific configuration.
+    const agentJson: FileObjectEntry = _merge(projectFiles['agent.json'] || {}, {
+      language: this.$context.language,
+      supportedLanguages: this.$context.supportedLanguages,
+      webhook: { url: this.$context.endpoint, available: true },
+    });
+    projectFiles['agent.json'] = agentJson;
+
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
+  }
+
+  /**
+   * Creates and returns tasks for each locale to build the interaction model for Dialogflow.
+   */
+  createInteractionModelTasks(): Task[] {
+    const interactionModelTasks: Task[] = [];
+
+    for (const locale of this.$context.locales) {
+      const resolvedLocales: string[] = getResolvedLocales(
+        locale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      );
+      const resolvedLocalesOutput: string = resolvedLocales.join(', ');
+      // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
+      const taskDetails: string =
+        resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
+
+      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
+        this.buildLanguageModel(locale, resolvedLocales);
+        await wait(500);
+      });
+      interactionModelTasks.push(localeTask);
+    }
+
+    return interactionModelTasks;
+  }
+
+  /**
+   * Builds and saves an Alexa model from a Jovo model.
+   * @param modelLocale - Locale of the Jovo model.
+   * @param resolvedLocales - Locales to which to resolve the modelLocale.
+   */
+  buildLanguageModel(modelLocale: string, resolvedLocales: string[]): void {
+    if (!existsSync(this.$plugin.getIntentsFolderPath())) {
+      mkdirSync(this.$plugin.getIntentsFolderPath());
+    }
+
+    if (!existsSync(this.$plugin.getEntitiesFolderPath())) {
+      mkdirSync(this.$plugin.getEntitiesFolderPath());
+    }
+
+    try {
+      for (const resolvedLocale of resolvedLocales) {
+        const model: JovoModelData = this.getJovoModel(modelLocale);
+        const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(model, resolvedLocale);
+        const dialogflowModelFiles: NativeFileInformation[] = jovoModel.exportNative() as NativeFileInformation[];
+
+        if (!dialogflowModelFiles || !dialogflowModelFiles.length) {
+          // Should actually never happen but who knows
+          throw new JovoCliError(
+            `Could not build Dialogflow files for locale "${modelLocale}"!`,
+            this.$plugin.constructor.name,
+          );
+        }
+
+        for (const file of dialogflowModelFiles) {
+          const filePath: string = joinPaths(this.$plugin.getPlatformPath(), ...file.path);
+          // Persist id, if file already exists.
+          if (existsSync(filePath)) {
+            const existingFile = JSON.parse(readFileSync(filePath, 'utf-8'));
+            file.content.id = existingFile.id;
+          }
+
+          writeFileSync(
+            joinPaths(this.$plugin.getPlatformPath(), ...file.path),
+            JSON.stringify(file.content, null, 2),
+          );
+        }
+      }
+    } catch (error) {
+      if (error instanceof JovoCliError) {
+        throw error;
+      }
+      throw new JovoCliError(error.message, this.$plugin.constructor.name);
+    }
+  }
+
+  async buildReverse(): Promise<void> {
+    // Since platform can be prompted for, check if this plugin should actually be executed again.
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+      return;
+    }
+
+    // Get locales to reverse build from.
+    // If --locale is not specified, reverse build from every locale available in the platform folder.
+    const selectedLocales: string[] = [];
+    const platformLocales: string[] = this.getPlatformLocales();
+    if (!this.$context.flags.locale) {
+      selectedLocales.push(...platformLocales);
+    } else {
+      // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
+      for (const locale of this.$context.flags.locale) {
+        if (platformLocales.includes(locale)) {
+          selectedLocales.push(locale);
+        } else {
+          throw new JovoCliError(
+            `Could not find platform models for locale: ${printHighlight(locale)}`,
+            this.$plugin.constructor.name,
+            `Available locales include: ${platformLocales.join(', ')}`,
+          );
+        }
+      }
+    }
+
+    // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
+    // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
+    // ToDo: Test if no locale mapping is provided.
+    const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
+      (localeMap: { [locale: string]: string }, locale: string) => {
+        localeMap[locale] = locale;
+        return localeMap;
+      },
+      {},
+    );
+    for (const modelLocale in this.$plugin.$config.locales) {
+      const resolvedLocales: string[] = getResolvedLocales(
+        modelLocale,
+        SupportedLocales,
+        this.$plugin.constructor.name,
+        this.$config.locales,
+      );
+
+      for (const selectedLocale of selectedLocales) {
+        if (resolvedLocales.includes(selectedLocale)) {
+          buildLocaleMap[selectedLocale] = modelLocale;
+        }
+      }
+    }
+
+    // If Jovo model files for the current locales exist, ask whether to back them up or not.
+    if (
+      this.$cli.$project!.hasModelFiles(Object.values(buildLocaleMap)) &&
+      !this.$context.flags.force
+    ) {
+      const answer = await promptOverwriteReverseBuild();
+      if (answer.overwrite === ANSWER_CANCEL) {
+        return;
+      }
+      if (answer.overwrite === ANSWER_BACKUP) {
+        // Backup old files.
+        const backupTask: Task = new Task('Creating backups');
+        for (const locale of Object.values(buildLocaleMap)) {
+          const localeTask: Task = new Task(locale, () => this.$cli.$project!.backupModel(locale));
+          backupTask.add(localeTask);
+        }
+        await backupTask.run();
+      }
+    }
+
+    const buildReverseTask: Task = new Task('Reversing model files');
+
+    for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
+      const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
+
+      const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
+        const dialogflowModelFiles: NativeFileInformation[] = this.getPlatformFiles(platformLocale);
+        const jovoModel = new JovoModelDialogflow();
+        jovoModel.importNative(dialogflowModelFiles, platformLocale.toLowerCase());
+        const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
+
+        if (!nativeData) {
+          throw new JovoCliError(
+            'Something went wrong while exporting your Jovo model.',
+            this.$plugin.constructor.name,
+          );
+        }
+        this.$cli.$project!.saveModel(nativeData, modelLocale);
+        await wait(500);
+      });
+      buildReverseTask.add(localeTask);
+    }
+    await buildReverseTask.run();
+  }
+
+  getPlatformFiles(locale: string): NativeFileInformation[] {
+    const platformFiles: NativeFileInformation[] = [];
+    const folders: string[] = ['entities', 'intents'];
+
+    for (const folder of folders) {
+      const folderPath: string = joinPaths(this.$plugin.getPlatformPath(), folder);
+
+      if (!existsSync(folderPath)) {
+        continue;
+      }
+
+      const files: string[] = readdirSync(folderPath);
+
+      for (const file of files) {
+        if (file.includes('usersays') && !file.includes(locale.toLowerCase())) {
+          continue;
+        }
+        platformFiles.push({
+          path: [folder, file],
+          content: JSON.parse(readFileSync(joinPaths(folderPath, file), 'utf-8')),
+        });
+      }
+    }
+
+    return platformFiles;
+  }
+
+  /**
+   * Returns all locales for the current platform.
+   */
+  getPlatformLocales(): string[] {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const dialogflowAgent: DialogflowAgent = require(this.$plugin.getAgentJsonPath());
+    const locales: string[] = [dialogflowAgent.language];
+
+    if (dialogflowAgent.supportedLanguages) {
+      locales.push(...dialogflowAgent.supportedLanguages);
+    }
+
+    return locales.map((locale) => {
+      // Transform locales such as en-us to en-US.
+      if (locale.length === 5) {
+        return `${locale.substring(0, 2)}-${locale.substring(3).toUpperCase()}`;
+      }
+      return locale;
+    });
+  }
+
+  /**
+   * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
+   * @param locale - The locale that specifies which model to load.
+   */
+  getJovoModel(locale: string): JovoModelData {
+    const model: JovoModelData = this.$cli.$project!.getModel(locale);
+
+    // Merge model with configured language model in project.js.
+    _mergeWith(
+      model,
+      this.$cli.$project!.$config.getParameter(`languageModel.${locale}`) || {},
+      mergeArrayCustomizer,
+    );
+    // Merge model with configured, platform-specific language model in project.js.
+    _mergeWith(
+      model,
+      _get(this.$config, `options.languageModel.${locale}`, {}),
+      mergeArrayCustomizer,
+    );
+
+    return model;
+  }
+}
