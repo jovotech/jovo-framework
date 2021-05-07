@@ -1,0 +1,203 @@
+import {
+  DeployPlatformContext,
+  DeployPlatformEvents,
+  ParseContextDeployPlatform,
+} from '@jovotech/cli-command-deploy';
+import {
+  execAsync,
+  flags,
+  InstallContext,
+  JovoCliError,
+  PluginHook,
+  printHighlight,
+  ROCKET,
+  Task,
+} from '@jovotech/cli-core';
+import { existsSync, readFileSync, unlinkSync } from 'fs';
+import { join as joinPaths } from 'path';
+import axios, { AxiosError } from 'axios';
+import AdmZip from 'adm-zip';
+
+import { DialogflowCli } from '..';
+import { activateServiceAccount, getGcloudAccessToken } from '../utils';
+
+export interface DeployPlatformContextDialogflow extends DeployPlatformContext {
+  flags: DeployPlatformContext['flags'] & { 'project-id'?: string };
+  projectId?: string;
+  pathToZip: string;
+}
+
+export class DeployHook extends PluginHook<DeployPlatformEvents> {
+  $plugin!: DialogflowCli;
+  $context!: DeployPlatformContextDialogflow;
+
+  install(): void {
+    this.middlewareCollection = {
+      'install': [this.addCliOptions.bind(this)],
+      'parse': [this.checkForPlatform.bind(this)],
+      'before.deploy:platform': [
+        this.checkForGcloudCli.bind(this),
+        this.updatePluginContext.bind(this),
+        this.checkForPlatformsFolder.bind(this),
+      ],
+      'deploy:platform': [this.deploy.bind(this)],
+    };
+  }
+
+  /**
+   * Add platform-specific CLI options, including flags and args.
+   * @param context - Context providing an access point to command flags and args.
+   */
+  addCliOptions(context: InstallContext): void {
+    if (context.command !== 'deploy:platform') {
+      return;
+    }
+
+    context.flags['project-id'] = flags.string({
+      description: 'Dialogflow Project ID',
+    });
+  }
+
+  /**
+   * Checks if the currently selected platform matches this CLI plugin.
+   * @param context - Context containing information after flags and args have been parsed by the CLI.
+   */
+  checkForPlatform(context: ParseContextDeployPlatform): void {
+    // Check if this plugin should be used or not.
+    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+      this.uninstall();
+    }
+  }
+
+  async checkForGcloudCli(): Promise<void> {
+    try {
+      await execAsync('gcloud --version');
+    } catch (error) {
+      throw new JovoCliError(
+        'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
+        this.$plugin.constructor.name,
+        'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
+      );
+    }
+  }
+
+  /**
+   * Updates the current plugin context with platform-specific values.
+   */
+  updatePluginContext(): void {
+    this.$context.projectId = this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+
+    if (!this.$context.projectId) {
+      throw new JovoCliError(
+        'Could not find project ID.',
+        this.$plugin.constructor.name,
+        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
+      );
+    }
+  }
+
+  /**
+   * Checks if the platform folder for the current plugin exists.
+   */
+  checkForPlatformsFolder(): void {
+    if (!existsSync(this.$plugin.getPlatformPath())) {
+      throw new JovoCliError(
+        `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
+        this.$plugin.constructor.name,
+        `Please use "jovo build" to create platform-specific files.`,
+      );
+    }
+  }
+
+  /**
+   * Deploys platform-specific models to the Dialogflow Console.
+   */
+  async deploy(): Promise<void> {
+    const deployTask: Task = new Task(`${ROCKET} Deploying to Dialogflow`);
+
+    const zipTask: Task = new Task('Compressing dialogflow configuration', async () => {
+      await this.zipDialogflowFiles();
+      return `>> ${this.$context.pathToZip}`;
+    });
+
+    const uploadTask: Task = new Task(
+      `Uploading your agent for project ${printHighlight(this.$context.projectId!)}`,
+      async () => {
+        const keyFilePath: string | undefined = this.$plugin.$config.keyFile;
+        if (keyFilePath) {
+          if (!existsSync(joinPaths(this.$cli.$projectPath, keyFilePath))) {
+            throw new JovoCliError(
+              `Keyfile at ${keyFilePath} does not exist.`,
+              this.$plugin.constructor.name,
+            );
+          }
+
+          await activateServiceAccount(keyFilePath);
+          const accessToken: string = await getGcloudAccessToken();
+
+          // Upload agent via Dialogflow API.
+          try {
+            await axios({
+              method: 'POST',
+              url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.projectId}/agent:restore`,
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              },
+              data: {
+                agentContent: readFileSync(this.$context.pathToZip, 'base64'),
+              },
+            });
+          } catch (error) {
+            throw new JovoCliError(
+              (error as AxiosError).message,
+              this.$plugin.constructor.name,
+              error.response.data.error.message,
+            );
+          }
+        }
+      },
+    );
+
+    const trainTask: Task = new Task('Starting agent training', async () => {
+      // Start agent training.
+      try {
+        const accessToken: string = await getGcloudAccessToken();
+        await axios({
+          method: 'POST',
+          url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.projectId}/agent:train`,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        throw new JovoCliError(
+          (error as AxiosError).message,
+          this.$plugin.constructor.name,
+          error.response.data.error.message,
+        );
+      }
+    });
+
+    if (!this.$context.projectId) {
+      uploadTask.disable();
+      trainTask.disable();
+    }
+
+    deployTask.add(zipTask, uploadTask, trainTask);
+
+    await deployTask.run();
+  }
+
+  async zipDialogflowFiles(): Promise<void> {
+    // Remove existing zip file.
+    this.$context.pathToZip = joinPaths(this.$plugin.getPlatformPath(), 'dialogflow_agent.zip');
+    if (existsSync(this.$context.pathToZip)) {
+      unlinkSync(this.$context.pathToZip);
+    }
+    const zip: AdmZip = new AdmZip();
+    zip.addLocalFolder(this.$plugin.getPlatformPath());
+    zip.writeZip(this.$context.pathToZip);
+  }
+}

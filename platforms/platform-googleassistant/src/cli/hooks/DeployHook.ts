@@ -20,7 +20,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   install(): void {
     this.middlewareCollection = {
       'parse': [this.checkForPlatform.bind(this)],
-      'before.deploy:platform': [this.checkForPlatformsFolder.bind(this)],
+      'before.deploy:platform': [checkForGactionsCli, this.checkForPlatformsFolder.bind(this)],
       'deploy:platform': [this.deploy.bind(this)],
     };
   }
@@ -58,8 +58,6 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     );
 
     const pushProjectFilesTask: Task = new Task('Pushing project files', async () => {
-      await checkForGactionsCli();
-
       try {
         const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
           cwd: this.$plugin.getPlatformPath(),

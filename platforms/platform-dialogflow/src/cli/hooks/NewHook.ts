@@ -1,6 +1,5 @@
-import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
 import { NewEvents } from '@jovotech/cli-command-new';
-
+import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
 import { SupportedLocales, SupportedLocalesType } from '../utils';
 
 export class NewHook extends PluginHook<NewEvents> {
@@ -22,7 +21,7 @@ export class NewHook extends PluginHook<NewEvents> {
             type: 'autocompleteMultiselect',
             message: `Locale ${printHighlight(
               locale,
-            )} is not supported by Alexa.\nPlease provide an alternative locale (type to filter, select with space):`,
+            )} is not supported by Dialogflow.\nPlease provide an alternative locale (type to filter, select with space):`,
             instructions: false,
             choices: SupportedLocales.map((locale) => ({
               title: printUserInput(locale),
