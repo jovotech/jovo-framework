@@ -8,14 +8,7 @@ import {
 } from '@jovotech/framework';
 import { Context, Request, Session } from './interfaces';
 
-export interface AlexaRequestJSON {
-  version?: string;
-  context?: Context;
-  session?: Session;
-  request?: Request;
-}
-
-export class AlexaRequest extends JovoRequest implements AlexaRequestJSON {
+export class AlexaRequest extends JovoRequest {
   version?: string;
   context?: Context;
   session?: Session;

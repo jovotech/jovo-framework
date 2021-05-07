@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import _cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'clone-deep';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
@@ -158,7 +158,7 @@ export abstract class Jovo<
         state[state.length - 1].$data = value;
       },
       get $config(): Record<string, unknown> | undefined {
-        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        const deserializedStateConfig = cloneDeep(state?.[state?.length - 1 || 0]?.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
           forEachDeep(deserializedStateConfig, (value, path) => {
@@ -240,7 +240,7 @@ export abstract class Jovo<
       }
     }
 
-    const serializableConfig = _cloneDeep(options.config);
+    const serializableConfig = cloneDeep(options.config);
     if (serializableConfig) {
       forEachDeep(serializableConfig, (value, path) => {
         // serialize all passed Output-constructors

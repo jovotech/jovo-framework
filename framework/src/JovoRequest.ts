@@ -18,11 +18,17 @@ export abstract class JovoRequest {
   abstract getSession(): JovoSession | undefined;
 
   getNluData(): NluData | undefined {
+    const nluData: NluData = {};
     const intentName = this.getIntentName();
     const entities = this.getEntities();
-    return {
-      intent: intentName ? { name: intentName } : undefined,
-      entities,
-    };
+    if (intentName) {
+      nluData.intent = {
+        name: intentName,
+      };
+    }
+    if (entities) {
+      nluData.entities = entities;
+    }
+    return nluData;
   }
 }

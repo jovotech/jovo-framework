@@ -31,6 +31,9 @@ After installing the Jovo CLI, you can install the template (which can be found 
 $ jovov4 new <directory>
 ```
 
+This will download the template into a new `<directory>` folder and install all necessary dependencies.
+
+
 ### Run the Local Development Server
 
 Change your working directory into your newly created project directory and run your app:

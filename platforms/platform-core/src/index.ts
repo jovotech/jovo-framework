@@ -20,7 +20,8 @@ declare module '@jovotech/framework/dist/Jovo' {
 registerPlatformSpecificJovoReference('$corePlatformApp', CorePlatformApp);
 
 export * from './CorePlatform';
-export * from './CorePlatformApp';
 export * from './CorePlatformRequest';
+export * from './CorePlatformUser';
+export * from './CorePlatformApp';
 export type { CorePlatformResponse } from '@jovotech/output-core';
 export * from './interfaces';

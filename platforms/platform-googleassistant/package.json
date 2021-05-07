@@ -29,9 +29,11 @@
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.set": "^4.3.2",
-    "lodash.uniq": "^4.5.0"
+    "lodash.uniq": "^4.5.0",
+    "@jovotech/output-googleassistant": "^4.0.0-alpha.5"
   },
   "devDependencies": {
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",

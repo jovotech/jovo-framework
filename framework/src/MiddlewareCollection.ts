@@ -16,9 +16,9 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     }
   }
 
-  use(name: ArrayElement<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
+  use(name: PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
   use(name: string, ...fns: MiddlewareFunction[]): this;
-  use(name: string | ArrayElement<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
+  use(name: string | PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
     let middleware = this.get(name);
     if (!middleware) {
       middleware = new Middleware(name);

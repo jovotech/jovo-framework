@@ -1,5 +1,4 @@
-import { existsSync } from 'fs';
-import indent from 'indent-string';
+import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   JovoCliError,
@@ -9,9 +8,10 @@ import {
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
+import { existsSync } from 'fs';
+import indent from 'indent-string';
 import { GoogleAssistantCli } from '..';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $plugin!: GoogleAssistantCli;
