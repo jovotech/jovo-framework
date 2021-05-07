@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-facebookmessenger",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-alpha.6",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.5",
+    "@jovotech/framework": "^4.0.0-alpha.7",
     "@types/clone-deep": "^4.0.1",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
