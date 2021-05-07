@@ -1,7 +1,7 @@
-import { PluginHook, prompt, printUserInput, printHighlight } from '@jovotech/cli-core';
 import { NewEvents } from '@jovotech/cli-command-new';
-import { SupportedLocales } from '../utils/Constants';
+import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
 import { SupportedLocalesType } from '../utils';
+import { SupportedLocales } from '../utils/Constants';
 
 export class NewHook extends PluginHook<NewEvents> {
   install(): void {
@@ -22,7 +22,7 @@ export class NewHook extends PluginHook<NewEvents> {
             type: 'autocompleteMultiselect',
             message: `Locale ${printHighlight(
               locale,
-            )} is not supported by Google Assistant. Please provide an alternative locale:`,
+            )} is not supported by Google Assistant.\nPlease provide an alternative locale (type to filter, select with space):`,
             instructions: false,
             choices: SupportedLocales.map((locale) => ({
               title: printUserInput(locale),

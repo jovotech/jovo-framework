@@ -22,7 +22,7 @@ export class NewHook extends PluginHook<NewEvents> {
             type: 'autocompleteMultiselect',
             message: `Locale ${printHighlight(
               locale,
-            )} is not supported by Alexa. Please provide an alternative locale:`,
+            )} is not supported by Alexa.\nPlease provide an alternative locale (type to filter, select with space):`,
             instructions: false,
             choices: SupportedLocales.map((locale) => ({
               title: printUserInput(locale),

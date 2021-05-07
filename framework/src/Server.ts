@@ -17,7 +17,7 @@ export abstract class Server {
   /**
      Returns request object
      **/
-  abstract getRequestObject(): Record<string, string>;
+  abstract getRequestObject(): Record<string, any>;
 
   /**
      Returns query params

@@ -63,7 +63,7 @@ export abstract class Platform<
   abstract isResponseRelated(response: RESPONSE | Record<string, any>): boolean;
   abstract finalizeResponse(
     response: RESPONSE | RESPONSE[],
-    jovo: Jovo,
+    jovo: JOVO,
   ): RESPONSE | RESPONSE[] | Promise<RESPONSE> | Promise<RESPONSE[]>;
 
   initializeMiddlewareCollection(): MiddlewareCollection<PlatformBaseMiddlewares> {

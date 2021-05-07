@@ -1,16 +1,9 @@
 import { EntityMap, JovoRequest, JovoRequestType, JovoSession } from '@jovotech/framework';
 import { Context, Request, RequestBodyText } from './interfaces';
 
-export interface CorePlatformRequestJSON {
+export class CorePlatformRequest extends JovoRequest {
   version?: string;
   type?: 'jovo-platform-core' | string;
-  request?: Request;
-  context?: Context;
-}
-
-export class CorePlatformRequest extends JovoRequest implements CorePlatformRequestJSON {
-  version?: string;
-  type?: CorePlatformRequestJSON['type'];
   request?: Request;
   context?: Context;
 

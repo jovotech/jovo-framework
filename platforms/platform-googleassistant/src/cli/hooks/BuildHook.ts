@@ -1,44 +1,44 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { join as joinPaths } from 'path';
-import _merge from 'lodash.merge';
-import _get from 'lodash.get';
-import _has from 'lodash.has';
-import _mergeWith from 'lodash.mergewith';
-import _set from 'lodash.set';
-import * as yaml from 'yaml';
+import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import {
-  Task,
-  JovoCliError,
-  printStage,
-  printSubHeadline,
-  OK_HAND,
-  STATION,
-  PluginHook,
-  wait,
-  mergeArrayCustomizer,
-  flags,
-  deleteFolderRecursive,
-  printHighlight,
-  InstallContext,
-  promptOverwriteReverseBuild,
   ANSWER_BACKUP,
   ANSWER_CANCEL,
+  deleteFolderRecursive,
+  flags,
   getResolvedLocales,
+  InstallContext,
+  JovoCliError,
+  mergeArrayCustomizer,
+  OK_HAND,
+  PluginHook,
+  printHighlight,
+  printStage,
+  printSubHeadline,
+  promptOverwriteReverseBuild,
+  STATION,
+  Task,
+  wait,
 } from '@jovotech/cli-core';
-import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 import { JovoModelGoogle } from 'jovo-model-google';
-
-import DefaultFiles from '../utils/DefaultFiles.json';
+import _get from 'lodash.get';
+import _has from 'lodash.has';
+import _merge from 'lodash.merge';
+import _mergeWith from 'lodash.mergewith';
+import _set from 'lodash.set';
+import { join as joinPaths } from 'path';
+import * as yaml from 'yaml';
+import { GoogleAssistantCli } from '..';
 import {
   GoogleActionActions,
-  PluginContextGoogle,
   PluginConfigGoogle,
+  PluginContextGoogle,
   SupportedLocalesType,
 } from '../utils';
 import { SupportedLocales } from '../utils/Constants';
-import { GoogleAssistantCli } from '..';
+
+import DefaultFiles from '../utils/DefaultFiles.json';
 
 export interface BuildContextGoogle extends BuildContext, PluginContextGoogle {
   flags: BuildContext['flags'] & { 'project-id'?: string };
@@ -102,9 +102,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     if (!this.$context.projectId) {
       throw new JovoCliError(
-        'Could not find projectId.',
+        'Could not find project ID.',
         this.$plugin.constructor.name,
-        'Please provide a project id by using the flag "--project-id" or in your project configuration.',
+        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       );
     }
 

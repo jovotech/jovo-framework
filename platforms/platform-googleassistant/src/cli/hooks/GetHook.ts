@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync } from 'fs';
-import _get from 'lodash.get';
+import { BuildEvents } from '@jovotech/cli-command-build';
+import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -11,10 +11,10 @@ import {
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
-import { BuildEvents } from '@jovotech/cli-command-build';
+import { existsSync, mkdirSync } from 'fs';
+import _get from 'lodash.get';
 import { GoogleAssistantCli } from '..';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
 
 export interface GetContextGoogle extends GetContext, PluginContextGoogle {
   args: GetContext['args'];
@@ -30,6 +30,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       'install': [this.addCliOptions.bind(this)],
       'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
+        checkForGactionsCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
@@ -100,9 +101,6 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     const getTask: Task = new Task(
       `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
       async () => {
-        // Check if gactions CLI is installed.
-        await checkForGactionsCli();
-
         const platformPath: string = this.$plugin.getPlatformPath();
         if (!existsSync(platformPath)) {
           mkdirSync(platformPath);

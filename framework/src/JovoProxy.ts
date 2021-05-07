@@ -9,17 +9,18 @@ export class JovoProxy extends Jovo {
   // Make `this[key]` reference `this.jovo[key]` for every `key` in `this.jovo`.
   // Without, mutations of `this` would not affect `this.jovo`.
   private overwritePropertiesToPropagateChangesToJovo() {
-    // TODO: check if functions should be ignored
-    // Getters & Setters are not enumerable like that, therefore changes for these cannot be proxied to `Jovo`.
-    for (const key in this.jovo) {
-      if (
-        key !== 'jovo' &&
-        this.jovo.hasOwnProperty(key) &&
-        typeof this.jovo[key as keyof Jovo] !== 'function'
-      ) {
+    const keys = Object.getOwnPropertyNames(Jovo.prototype);
+    const indexOfConstructor = keys.indexOf('constructor');
+    if (indexOfConstructor >= 0) {
+      keys.splice(indexOfConstructor, 1);
+    }
+    for (const key of keys) {
+      if (key !== 'jovo') {
         Object.defineProperty(this, key, {
           get() {
-            return this.jovo[key];
+            return typeof this.jovo[key] === 'function'
+              ? (this.jovo[key] as (...args: unknown[]) => unknown).bind(this.jovo)
+              : this.jovo[key];
           },
           set(val: unknown) {
             this.jovo[key] = val;
@@ -27,5 +28,9 @@ export class JovoProxy extends Jovo {
         });
       }
     }
+  }
+
+  toJSON() {
+    return { ...this, jovo: undefined };
   }
 }

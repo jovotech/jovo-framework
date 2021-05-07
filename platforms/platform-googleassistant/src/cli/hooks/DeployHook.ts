@@ -1,5 +1,4 @@
-import { existsSync } from 'fs';
-import indent from 'indent-string';
+import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   JovoCliError,
@@ -9,9 +8,10 @@ import {
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
+import { existsSync } from 'fs';
+import indent from 'indent-string';
 import { GoogleAssistantCli } from '..';
+import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $plugin!: GoogleAssistantCli;
@@ -20,7 +20,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   install(): void {
     this.middlewareCollection = {
       'parse': [this.checkForPlatform.bind(this)],
-      'before.deploy:platform': [this.checkForPlatformsFolder.bind(this)],
+      'before.deploy:platform': [checkForGactionsCli, this.checkForPlatformsFolder.bind(this)],
       'deploy:platform': [this.deploy.bind(this)],
     };
   }
@@ -58,8 +58,6 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     );
 
     const pushProjectFilesTask: Task = new Task('Pushing project files', async () => {
-      await checkForGactionsCli();
-
       try {
         const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
           cwd: this.$plugin.getPlatformPath(),

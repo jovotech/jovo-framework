@@ -1,4 +1,4 @@
-import _cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'clone-deep';
 import _merge from 'lodash.merge';
 import { App, AppConfig } from './App';
 import { Extensible } from './Extensible';
@@ -10,9 +10,9 @@ export class HandleRequest extends Extensible<AppConfig> {
   $platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
-    super(_cloneDeep(app.config) as DeepPartial<AppConfig>);
+    super(cloneDeep(app.config) as DeepPartial<AppConfig>);
     this.components = {};
-    _merge(this, _cloneDeep(app));
+    _merge(this, cloneDeep(app));
   }
 
   // middlewareCollection will be overwritten anyways by merging with App

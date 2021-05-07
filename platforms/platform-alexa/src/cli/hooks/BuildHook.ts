@@ -431,7 +431,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param locale - The locale that specifies which model to load.
    */
   getJovoModel(locale: string): JovoModelData {
-    // const model: JovoModelData = this.$cli.$project!.getModel(locale);
     const model: JovoModelData = this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
