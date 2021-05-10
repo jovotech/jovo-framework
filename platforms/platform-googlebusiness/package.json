@@ -1,6 +1,6 @@
 {
-  "name": "@jovotech/platform-facebookmessenger",
-  "version": "4.0.0-alpha.6",
+  "name": "@jovotech/platform-googlebusiness",
+  "version": "4.0.0-alpha.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,14 +18,15 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output-facebookmessenger": "^4.0.0-alpha.5",
-    "clone-deep": "^4.0.1"
+    "@jovotech/output-googlebusiness": "^4.0.0-alpha.5",
+    "google-auth-library": "^7.0.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.7",
-    "@types/clone-deep": "^4.0.1",
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
