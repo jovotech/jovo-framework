@@ -52,6 +52,7 @@ user: {
             request: {
                 intent: true,
                 state: true,
+                sessionId: true,
                 inputs: true,
                 timestamp: true,
             },
@@ -285,6 +286,7 @@ Category | Data | Usage |  | Description
 :--- | :--- | :--- | :--- | :----
 Request | intent | `this.$user.$context.prev[i].request.intent` | `this.$user.getPrevIntent(i)` | String: Intent name
 &nbsp; | state | `this.$user.$context.prev[i].request.state` | `this.$user.getPrevRequestState(i)` | String: State name
+&nbsp; | sessionId | `this.$user.$context.prev[i].request.sessionId` | &nbsp; | String: Session Id
 &nbsp; | timestamp | `this.$user.$context.prev[i].request.timestamp` | `this.$user.getPrevTimestamp(i)` | String: Timestamp of request
 &nbsp; | inputs | `this.$user.$context.prev[i].request.inputs` | `this.$user.getPrevInputs(i)` | Object: Contains all the slots (filled & unfilled). Example: You got a slot called `city`. Access the value with `this.$user.getPrevInputs(i).city.value`.
 Response | speech | `this.$user.$context.prev[i].response.speech` |  `this.$user.getPrevSpeech(i)` | String: Primary speech element
@@ -308,6 +310,7 @@ module.exports = {
                 request: {
                     intent: true,
                     state: true,
+                    sessionId: true,
                     inputs: true,
                     timestamp: true,
                 },

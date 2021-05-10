@@ -54,6 +54,7 @@ export interface ContextConfig {
     request?: {
       intent?: boolean;
       state?: boolean;
+      sessionId?: boolean;
       inputs?: boolean;
       timestamp?: boolean;
     };
@@ -74,6 +75,7 @@ export interface ContextPrevObject {
   request?: {
     timestamp?: string;
     state?: string;
+    sessionId?: string;
     intent?: string;
     inputs?: Inputs;
   };
@@ -121,6 +123,7 @@ export class JovoUser implements Plugin {
         request: {
           inputs: true,
           intent: true,
+          sessionId: true,
           state: true,
           timestamp: true,
         },
@@ -669,6 +672,9 @@ export class JovoUser implements Plugin {
     if (this.config.context!.prev!.request!.state) {
       this.updatePrevRequestState(handleRequest, prevObject);
     }
+    if (this.config.context!.prev!.request!.sessionId) {
+      this.updatePrevRequestSessionId(handleRequest, prevObject);
+    }
     if (this.config.context!.prev!.request!.inputs) {
       this.updatePrevInputs(handleRequest, prevObject);
     }
@@ -747,6 +753,14 @@ export class JovoUser implements Plugin {
         SessionConstants.STATE
       ];
     }
+  }
+
+  /**
+   * @param {HandleRequest} handleRequest
+   * @param {ContextPrevObject} prevObject
+   */
+  private updatePrevRequestSessionId(handleRequest: HandleRequest, prevObject: ContextPrevObject) {
+    prevObject.request!.sessionId = handleRequest.jovo!.$request!.getSessionId();
   }
 
   /**

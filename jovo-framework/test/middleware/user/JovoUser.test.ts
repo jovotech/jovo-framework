@@ -567,6 +567,7 @@ describe('test updateContextData', () => {
         request: {
           inputs: false,
           intent: false,
+          sessionId: false,
           state: false,
           timestamp: false,
         },
@@ -756,6 +757,27 @@ describe('test updateContextData', () => {
     jovoUser['updateContextData'](mockHandleRequest); // tslint:disable-line:no-string-literal
 
     expect(mockHandleRequest.jovo!.$user.$context.prev![0].request!.timestamp).toBeUndefined();
+  });
+
+  test('should set request.sessionId', () => {
+    jovoUser.config.context!.prev!.request!.sessionId = true;
+    mockHandleRequest.jovo!.$request!.getSessionId = jest.fn().mockReturnValue('test');
+
+    jovoUser['updateContextData'](mockHandleRequest); // tslint:disable-line:no-string-literal
+
+    expect(mockHandleRequest.jovo!.$user.$context.prev![0].request!.sessionId).toBe('test');
+  });
+
+  test(`shouldn't set request.sessionId`, () => {
+    // enable and mock request.inputs, so the request object is created and saved to the prev array
+    // otherwise we would have an error when trying to access prev[0].request inside expect()
+    jovoUser.config.context!.prev!.request!.inputs = true;
+    mockHandleRequest.jovo!.$inputs = {};
+    jovoUser.config.context!.prev!.request!.sessionId = false;
+
+    jovoUser['updateContextData'](mockHandleRequest); // tslint:disable-line:no-string-literal
+
+    expect(mockHandleRequest.jovo!.$user.$context.prev![0].request!.sessionId).toBeUndefined();
   });
 
   test('should set request.state', () => {
