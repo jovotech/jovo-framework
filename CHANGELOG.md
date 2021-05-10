@@ -1,7 +1,11 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.5.1<br><br>
+### Latest Framework Version: 3.5.2<br><br>
 
+### 2021-05-10
+
+##### `jovo-framework [3.5.2]`
+* [#929](https://github.com/jovotech/jovo-framework/pull/929) :sparkles: added sessionId to ContextPrevObject ([@JayDotDot(https://github.com/JayDotDot))
 
 
 ### 2021-05-03
