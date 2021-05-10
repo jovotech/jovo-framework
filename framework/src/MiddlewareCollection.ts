@@ -16,6 +16,10 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     }
   }
 
+  get names(): Array<PossibleMiddlewareName<MIDDLEWARES> | string> {
+    return Object.keys(this.middlewares);
+  }
+
   use(name: PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
   use(name: string, ...fns: MiddlewareFunction[]): this;
   use(name: string | PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
