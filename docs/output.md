@@ -80,14 +80,13 @@ Output classes are stored in a component's `output` folder. As a convention, the
 Each output class contains:
 
 - A [`build` method](#build-method) that returns an [output template](#output-template)
-- A `constructor`
 - [`options`](#output-options) that can be passed using `$send`
 - Optionally [helper methods](#helper-methods) that can be used to build the output object
 
 Here is an example of a `HelloWorldOutput` class:
 
 ```typescript
-import { Jovo, BaseOutput } from '@jovotech/framework';
+import { BaseOutput } from '@jovotech/framework';
 
 export class HelloWorldOutput extends BaseOutput {
 
@@ -95,10 +94,6 @@ export class HelloWorldOutput extends BaseOutput {
     return {
       message: 'Hello World!',
     };
-  }
-
-  constructor(jovo: Jovo) {
-    super(jovo);
   }
 }
 ```
