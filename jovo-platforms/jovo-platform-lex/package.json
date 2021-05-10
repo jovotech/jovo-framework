@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-lex",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": false,
   "description": "",
   "main": "dist/src/index",
@@ -24,7 +24,7 @@
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
     "jovo-db-filedb": "^3.4.2",
-    "jovo-framework": "^3.4.2",
+    "jovo-framework": "^3.5.2",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
