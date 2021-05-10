@@ -48,8 +48,9 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     response = await this.$platform.finalizeResponse(response, this);
 
     if (Array.isArray(response)) {
-      const promises = response.map((response) => this.sendResponse(response));
-      await Promise.all(promises);
+      for (const responseItem of response) {
+        await this.sendResponse(responseItem);
+      }
     } else if (response) {
       await this.sendResponse(response);
     }
