@@ -1,5 +1,5 @@
-import { BuildEvents } from '@jovotech/cli-command-build';
-import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
+import type { BuildEvents } from '@jovotech/cli-command-build';
+import type { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,

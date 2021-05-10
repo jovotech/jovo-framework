@@ -14,7 +14,7 @@ export interface AskSkillList {
 
 export type SupportedLocalesType = typeof SupportedLocales[number];
 
-export interface PluginConfigAlexa extends PluginConfig {
+export interface AlexaCliConfig extends PluginConfig {
   askProfile?: string;
   locales: {
     [locale: string]: SupportedLocalesType[];

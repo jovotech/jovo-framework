@@ -12,14 +12,14 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import {
+import type {
   DeployPlatformEvents,
   DeployPlatformContext,
   ParseContextDeployPlatform,
 } from '@jovotech/cli-command-deploy';
 
 import * as smapi from '../smapi';
-import { checkForAskCli, PluginConfigAlexa, PluginContextAlexa, SupportedLocales } from '../utils';
+import { checkForAskCli, PluginContextAlexa, SupportedLocales } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
 import { AlexaCli } from '..';
 
@@ -31,7 +31,6 @@ export interface DeployPlatformContextAlexa extends PluginContextAlexa, DeployPl
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $plugin!: AlexaCli;
-  $config!: PluginConfigAlexa;
   $context!: DeployPlatformContextAlexa;
 
   install(): void {
@@ -81,7 +80,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       return;
     }
 
-    this.$context.askProfile = this.$context.flags['ask-profile'] || this.$config.askProfile;
+    this.$context.askProfile =
+      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
     this.$context.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
@@ -162,14 +162,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
     const resolvedLocales: string[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(
-          ...getResolvedLocales(
-            locale,
-            SupportedLocales,
-            this.$plugin.constructor.name,
-            this.$config.locales,
-          ),
-        );
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
         return locales;
       },
       [],

@@ -1,4 +1,7 @@
-import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
+import type {
+  DeployPlatformEvents,
+  ParseContextDeployPlatform,
+} from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   JovoCliError,

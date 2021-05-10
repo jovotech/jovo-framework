@@ -21,7 +21,7 @@ import {
   printHighlight,
   getResolvedLocales,
 } from '@jovotech/cli-core';
-import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
@@ -68,15 +68,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const resolvedLocales = getResolvedLocales(
         locale,
         SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
+        this.$plugin.$config.locales,
       );
 
       for (const resolvedLocale of resolvedLocales) {
         if (!SupportedLocales.includes(resolvedLocale as SupportedLocalesType)) {
           throw new JovoCliError(
             `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
-            this.$plugin.$id,
+            this.$plugin.constructor.name,
             resolvedLocale.length === 2
               ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
               : 'For more information on multiple language support: https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html',
@@ -125,7 +124,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         this.$cli.$project!.$stage,
       )}\n` +
       printSubHeadline(
-        `Path: ./${this.$cli.$project!.getBuildDirectory()}/${this.$plugin.getPlatformPath()}`,
+        `Path: ./${this.$cli.$project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
       );
 
     // Define main build task.
@@ -137,10 +136,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.createAlexaProjectFiles.bind(this),
     );
 
-    const interactionModelTasks: Task[] = this.createInteractionModelTasks();
     const buildInteractionModelTask: Task = new Task(
       `${taskStatus} Interaction Model`,
-      interactionModelTasks,
+      this.createInteractionModel.bind(this),
     );
     // If no model files for the current locales exist, do not build interaction model.
     if (!this.$cli.$project!.hasModelFiles(this.$context.locales)) {
@@ -182,14 +180,13 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
-    // Try to resolve the locale according to the locale map provided in this.$config.locales.
+    // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
     const buildLocaleMap: { [locale: string]: string } = {};
-    for (const modelLocale in this.$config.locales) {
+    for (const modelLocale in this.$plugin.$config.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         modelLocale,
         SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
+        this.$plugin.$config.locales,
       );
 
       for (const selectedLocale of selectedLocales) {
@@ -252,7 +249,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Builds the Alexa skill manifest.
    */
   createAlexaProjectFiles(): void {
-    const files: FileObject = FileBuilder.normalizeFileObject(_get(this.$config, 'files', {}));
+    const files: FileObject = FileBuilder.normalizeFileObject(
+      _get(this.$plugin.$config, 'files', {}),
+    );
 
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
     const projectFiles: FileObject = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
@@ -273,7 +272,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       });
     }
 
-    const skillId = _get(this.$config, 'options.skillId');
+    const skillId = _get(this.$plugin.$config, 'options.skillId');
     const skillIdPath = '[".ask/"]["ask-states.json"].profiles.default.skillId';
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
@@ -282,14 +281,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     const skillName: string = this.$cli.$project!.getProjectName();
     const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
-      locales.push(
-        ...getResolvedLocales(
-          locale,
-          SupportedLocales,
-          this.$plugin.constructor.name,
-          this.$config.locales,
-        ),
-      );
+      locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
       return locales;
     }, []);
 
@@ -324,15 +316,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
   /**
    * Creates and returns tasks for each locale to build the interaction model for Alexa.
    */
-  createInteractionModelTasks(): Task[] {
-    const interactionModelTasks: Task[] = [];
-
+  async createInteractionModel(): Promise<void> {
     for (const locale of this.$context.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         locale,
         SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
+        this.$plugin.$config.locales,
       );
       const resolvedLocalesOutput: string = resolvedLocales.join(', ');
       // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
@@ -343,10 +332,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
         this.buildLanguageModel(locale, resolvedLocales);
         await wait(500);
       });
-      interactionModelTasks.push(localeTask);
+      localeTask.indent(4);
+      await localeTask.run();
     }
-
-    return interactionModelTasks;
   }
 
   /**
@@ -393,7 +381,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   getPluginEndpoint(): string {
     const endpoint =
-      _get(this.$config, 'options.endpoint') ||
+      _get(this.$plugin.$config, 'options.endpoint') ||
       this.$cli.$project!.$config.getParameter('endpoint');
     return this.$cli.resolveEndpoint(endpoint);
   }
@@ -442,7 +430,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // Merge model with configured, platform-specific language model in project.js.
     _mergeWith(
       model,
-      _get(this.$config, `options.languageModel.${locale}`, {}),
+      _get(this.$plugin.$config, `options.languageModel.${locale}`, {}),
       mergeArrayCustomizer,
     );
 

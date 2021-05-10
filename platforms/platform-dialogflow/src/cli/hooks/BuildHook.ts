@@ -13,7 +13,7 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
