@@ -1,11 +1,11 @@
 import cloneDeep from 'clone-deep';
 import _merge from 'lodash.merge';
-import { App, AppConfig } from './App';
+import { App, AppBaseMiddlewares, AppConfig } from './App';
 import { Extensible } from './Extensible';
 import { Server } from './Server';
 import { DeepPartial, MiddlewareCollection, Platform, RegisteredComponents } from './index';
 
-export class HandleRequest extends Extensible<AppConfig> {
+export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly components: RegisteredComponents;
   $platform!: Platform;
 
@@ -16,7 +16,7 @@ export class HandleRequest extends Extensible<AppConfig> {
   }
 
   // middlewareCollection will be overwritten anyways by merging with App
-  initializeMiddlewareCollection(): MiddlewareCollection {
+  initializeMiddlewareCollection(): App['middlewareCollection'] {
     return new MiddlewareCollection();
   }
 
@@ -28,5 +28,9 @@ export class HandleRequest extends Extensible<AppConfig> {
 
   mount(): Promise<void> {
     return this.mountPlugins();
+  }
+
+  stopMiddlewareExecution(): void {
+    this.middlewareCollection.remove(...this.middlewareCollection.names);
   }
 }

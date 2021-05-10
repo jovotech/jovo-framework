@@ -10,6 +10,6 @@ export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, AlexaSkill>
   }
 
   get id(): string {
-    return this.jovo.$request.session?.user.userId || 'AlexaUser';
+    return this.jovo.$request.session?.user?.userId || 'AlexaUser';
   }
 }

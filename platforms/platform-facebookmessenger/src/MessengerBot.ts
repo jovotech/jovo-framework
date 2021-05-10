@@ -1,22 +1,18 @@
 import {
-  App,
   axios,
   AxiosResponse,
   BaseOutput,
   DeepPartial,
-  HandleRequest,
   Jovo,
   JovoError,
   OutputConstructor,
   OutputTemplateConverter,
-  Platform,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
-import { FacebookMessengerConfig } from './FacebookMessenger';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { SendMessageResult } from './interfaces';
 
@@ -27,11 +23,10 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     );
   }
 
-  get pageAccessToken(): string {
-    return this.$handleRequest.plugins.FacebookMessenger?.config?.pageAccessToken || '';
+  get pageAccessToken(): string | undefined {
+    return this.$handleRequest.plugins.FacebookMessenger?.config?.pageAccessToken;
   }
 
-  // TODO implement error-handling
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<
       OUTPUT,
@@ -53,12 +48,12 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     response = await this.$platform.finalizeResponse(response, this);
 
     if (Array.isArray(response)) {
-      const promises = response.map((response) => this.sendResponse(response));
-      await Promise.all(promises);
+      for (const responseItem of response) {
+        await this.sendResponse(responseItem);
+      }
     } else if (response) {
       await this.sendResponse(response);
     }
-    // TODO implement sending of responses
   }
 
   private sendResponse(
