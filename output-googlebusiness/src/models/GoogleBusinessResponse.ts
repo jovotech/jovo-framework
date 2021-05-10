@@ -7,7 +7,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
   Type,
   validate,
   ValidateNested,
@@ -19,10 +18,6 @@ import { Suggestion } from './Suggestion';
 
 export class GoogleBusinessResponse {
   [key: string]: unknown;
-
-  @IsString()
-  @Matches('conversations[/].*[/]messages[/].*[^/]')
-  name: string;
 
   @IsString()
   @IsNotEmpty()

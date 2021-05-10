@@ -14,7 +14,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   // TODO improve code
   convertTemplate(output: OutputTemplate): GoogleBusinessResponse {
     const getResponseBase: () => GoogleBusinessResponse = () => ({
-      name: 'conversations/*/messages/*',
+      // TODO determine whether uuid should be used here or that's something that the developer has to do
       messageId: '*',
       representative: {
         representativeType: RepresentativeType.Bot,
