@@ -9,6 +9,7 @@
 - [Output Template](#output-template)
   - [Default Output Elements](#default-output-elements)
   - [Platform Specific Output Elements](#platform-specific-output-elements)
+  - [Multiple Responses](#multiple-responses)
 
 ## Introduction
 
@@ -486,3 +487,22 @@ build() {
   };
 }
 ```
+
+### Multiple Responses
+
+You can also return an array of output objects:
+
+```typescript
+build() {
+  return [
+    {
+      message: 'Hello world!',
+    },
+    {
+      message: 'This is a second chat bubble.',
+    }
+  ];
+}
+```
+
+Platforms that support multiple responses will display the example above in 2 chat bubbles.
