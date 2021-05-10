@@ -71,7 +71,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       return;
     }
 
-    this.$context.projectId = this.$context.flags['project-id'] || _get(this.$config, 'projectId');
+    this.$context.projectId =
+      this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
     if (!this.$context.projectId) {
       throw new JovoCliError(
