@@ -68,7 +68,7 @@ export * from './decorators/Global';
 export * from './decorators/Intents';
 export * from './decorators/Platforms';
 export * from './decorators/SubState';
-export * from './decorators/HandleIf';
+export * from './decorators/If';
 
 export * from './interfaces';
 export * from './enums';
