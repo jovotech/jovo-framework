@@ -27,7 +27,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
     const metadataStorage = MetadataStorage.getInstance();
 
     const keys = Object.getOwnPropertyNames(target.prototype);
-    for (const key of keys) {
+    keys.forEach((key) => {
       // it could be checked for more built-in Intents here in order to skip them in the future, i.e. START
       if (key !== 'constructor' && typeof target.prototype[key] === 'function') {
         const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
@@ -42,7 +42,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
           metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
         }
       }
-    }
+    });
     // make launch global if it is set
     if (target.prototype[InternalIntent.Launch]) {
       // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging

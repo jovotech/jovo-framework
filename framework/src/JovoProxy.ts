@@ -14,7 +14,7 @@ export class JovoProxy extends Jovo {
     if (indexOfConstructor >= 0) {
       keys.splice(indexOfConstructor, 1);
     }
-    for (const key of keys) {
+    keys.forEach((key) => {
       if (key !== 'jovo') {
         Object.defineProperty(this, key, {
           get() {
@@ -27,7 +27,7 @@ export class JovoProxy extends Jovo {
           },
         });
       }
-    }
+    });
   }
 
   toJSON() {
