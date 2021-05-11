@@ -1,4 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
+import { InternalIntent } from '../enums';
 import { Intent, JovoConditionFunction } from '../interfaces';
 
 export interface ConditionsOptions {
@@ -36,11 +37,18 @@ export class HandlerMetadata<
   }
 
   get globalIntentNames(): string[] {
-    return this.intents
+    const globalIntentNames = this.intents
       .filter((intent) =>
         typeof intent === 'string' ? this.options?.global : intent.global ?? this.options?.global,
       )
       .map((intent) => (typeof intent === 'string' ? intent : intent.name));
+    if (
+      this.intents.includes(InternalIntent.Launch) &&
+      !globalIntentNames.includes(InternalIntent.Launch)
+    ) {
+      globalIntentNames.push(InternalIntent.Launch);
+    }
+    return globalIntentNames;
   }
 
   get hasCondition(): boolean {

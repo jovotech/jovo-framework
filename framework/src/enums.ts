@@ -21,4 +21,5 @@ export type RequestTypeLike = RequestType | `${RequestType}`;
 export enum InternalIntent {
   Start = 'START',
   Unhandled = 'UNHANDLED',
+  Launch = 'LAUNCH',
 }
