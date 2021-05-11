@@ -2,6 +2,7 @@ import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { InternalIntent } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
+import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 
@@ -24,6 +25,24 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
       }
     }
     const metadataStorage = MetadataStorage.getInstance();
+
+    const keys = Object.getOwnPropertyNames(target.prototype);
+    for (const key of keys) {
+      // it could be check for more built-in Intents here in order to skip them in the future, i.e. START
+      if (key !== 'constructor' && typeof target.prototype[key] === 'function') {
+        const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
+          (handlerMetadata) =>
+            handlerMetadata.target === target && handlerMetadata.propertyKey === key,
+        );
+        const hasHandlerOptionMetadata = metadataStorage.handlerOptionMetadata.some(
+          (optionMetadata) =>
+            optionMetadata.target === target && optionMetadata.propertyKey === key,
+        );
+        if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
+          metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
+        }
+      }
+    }
     // make launch global if it is set
     if (target.prototype[InternalIntent.Launch]) {
       // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
