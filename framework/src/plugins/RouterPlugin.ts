@@ -71,17 +71,17 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       }
     } else {
       // get the related component and find the related handler within
-      const latestStateStack = jovo.$state[jovo.$state.length - 1];
-      subState = latestStateStack.$subState;
+      const latestStateStackItem = jovo.$state[jovo.$state.length - 1];
+      subState = latestStateStackItem.$subState;
       const relatedComponentMetadata = jovo.$getComponentMetadataOrFail(
-        latestStateStack.componentPath.split('.'),
+        latestStateStackItem.componentPath.split('.'),
       );
       const relatedHandlerMetadata = MetadataStorage.getInstance()
-        .getHandlerMetadataOfComponent(relatedComponentMetadata.target)
+        .getMergedHandlerMetadataOfComponent(relatedComponentMetadata.target)
         .filter(
           (metadata) =>
-            (latestStateStack.$subState
-              ? metadata.options?.subState === latestStateStack.$subState
+            (latestStateStackItem.$subState
+              ? metadata.options?.subState === latestStateStackItem.$subState
               : !metadata.options?.subState) &&
             metadata.intents.includes(intentName) &&
             (!metadata.options?.platforms?.length ||
@@ -91,7 +91,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       if (relatedHandlerMetadata.length) {
         routeMatches.push(
           ...relatedHandlerMetadata.map((metadata) => ({
-            path: latestStateStack.componentPath.split('.'),
+            path: latestStateStackItem.componentPath.split('.'),
             metadata,
           })),
         );
@@ -149,7 +149,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       path.push(componentNames[i]);
       // TODO: determine if matching by intent-name and platforms should be done here, will have to be reworked as soon as more input-types are supported
       const relatedHandlerMetadata = MetadataStorage.getInstance()
-        .getHandlerMetadataOfComponent(component.target)
+        .getMergedHandlerMetadataOfComponent(component.target)
         .filter(
           (metadata) =>
             metadata.globalIntentNames.includes(intentName) &&

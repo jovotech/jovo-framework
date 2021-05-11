@@ -64,6 +64,11 @@ export * from './metadata/MetadataStorage';
 export * from './decorators/Component';
 export * from './decorators/Output';
 export * from './decorators/Handle';
+export * from './decorators/Global';
+export * from './decorators/Intents';
+export * from './decorators/Platforms';
+export * from './decorators/SubState';
+export * from './decorators/HandleIf';
 
 export * from './interfaces';
 export * from './enums';

@@ -6,7 +6,7 @@ export function Handle<
   COMPONENT extends BaseComponent = BaseComponent,
   KEY extends keyof COMPONENT = keyof COMPONENT
 >(options?: HandleOptions): MethodDecorator {
-  return function (target, propertyKey, descriptor) {
+  return function (target, propertyKey) {
     MetadataStorage.getInstance().addHandlerMetadata(
       new HandlerMetadata<COMPONENT, KEY>(target.constructor, propertyKey as KEY, options),
     );
