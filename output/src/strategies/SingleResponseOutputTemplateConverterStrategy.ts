@@ -1,5 +1,11 @@
 import _merge from 'lodash.merge';
-import { Message, OutputTemplate, OutputTemplatePlatforms, PlatformOutputTemplate } from '..';
+import {
+  Message,
+  OutputTemplate,
+  OutputTemplatePlatforms,
+  plainToClass,
+  PlatformOutputTemplate,
+} from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
 export abstract class SingleResponseOutputTemplateConverterStrategy<
@@ -71,7 +77,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
 
       this.mergeOutputTemplateWith(targetPlatformOutput, mergeWithPlatformOutput);
     }
-    return target;
+    return plainToClass(OutputTemplate, target);
   }
 
   protected mergeOutputTemplateMessageIfSet(
