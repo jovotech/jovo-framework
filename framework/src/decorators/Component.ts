@@ -28,7 +28,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
 
     const keys = Object.getOwnPropertyNames(target.prototype);
     for (const key of keys) {
-      // it could be check for more built-in Intents here in order to skip them in the future, i.e. START
+      // it could be checked for more built-in Intents here in order to skip them in the future, i.e. START
       if (key !== 'constructor' && typeof target.prototype[key] === 'function') {
         const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
           (handlerMetadata) =>
