@@ -10,17 +10,17 @@ import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,
 } from '@jovotech/output-googlebusiness';
+import { JWTInput } from 'google-auth-library';
 import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
 import { GoogleBusiness } from './GoogleBusiness';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
-import { GoogleServiceAccount } from './interfaces';
 
 export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusinessResponse> {
   get conversationId(): string | undefined {
     return this.$request.conversationId;
   }
 
-  get serviceAccount(): GoogleServiceAccount | undefined {
+  get serviceAccount(): JWTInput | undefined {
     return this.$handleRequest.plugins?.GoogleBusiness?.config?.serviceAccount;
   }
 

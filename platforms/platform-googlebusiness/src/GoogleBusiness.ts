@@ -10,15 +10,14 @@ import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,
 } from '@jovotech/output-googlebusiness';
-import { JWT } from 'google-auth-library';
+import { JWT, JWTInput } from 'google-auth-library';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleBusinessBot } from './GoogleBusinessBot';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
-import { GoogleServiceAccount } from './interfaces';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
-  serviceAccount: GoogleServiceAccount;
+  serviceAccount: JWTInput;
 }
 export type GoogleBusinessInitConfig = DeepPartial<GoogleBusinessConfig> &
   Pick<GoogleBusinessConfig, 'serviceAccount'>;
