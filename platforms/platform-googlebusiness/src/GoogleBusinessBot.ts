@@ -10,7 +10,8 @@ import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,
 } from '@jovotech/output-googlebusiness';
-import { GoogleBusinessApi } from './GoogleBusinessApi';
+import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
+import { GoogleBusiness } from './GoogleBusiness';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleServiceAccount } from './interfaces';
 
@@ -56,21 +57,21 @@ export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusines
       });
     }
 
-    const accessToken = await GoogleBusinessApi.getAccessToken(this.serviceAccount);
     if (Array.isArray(response)) {
       for (const responseItem of response) {
-        await GoogleBusinessApi.sendResponse({
-          conversationId,
-          accessToken,
-          data: responseItem,
-        });
+        await this.sendResponse(conversationId, responseItem);
       }
     } else if (response) {
-      await GoogleBusinessApi.sendResponse({
-        conversationId,
-        accessToken,
-        data: response,
-      });
+      await this.sendResponse(conversationId, response);
     }
+  }
+
+  private sendResponse(conversationId: string, response: GoogleBusinessResponse) {
+    const url = `${GOOGLE_BUSINESS_API_BASE_URL}/${LATEST_GOOGLE_BUSINESS_API_VERSION}/conversations/${conversationId}/messages`;
+    return (this.$platform as GoogleBusiness).jwtClient.request<GoogleBusinessResponse>({
+      url,
+      method: 'POST',
+      data: response,
+    });
   }
 }

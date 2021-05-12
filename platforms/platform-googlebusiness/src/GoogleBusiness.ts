@@ -1,8 +1,16 @@
-import { DeepPartial, ExtensibleConfig, HandleRequest, Platform } from '@jovotech/framework';
+import {
+  App,
+  DeepPartial,
+  ExtensibleConfig,
+  HandleRequest,
+  Jovo,
+  Platform,
+} from '@jovotech/framework';
 import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,
 } from '@jovotech/output-googlebusiness';
+import { JWT } from 'google-auth-library';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleBusinessBot } from './GoogleBusinessBot';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
@@ -26,8 +34,15 @@ export class GoogleBusiness extends Platform<
   jovoClass = GoogleBusinessBot;
   userClass = GoogleBusinessUser;
 
+  readonly jwtClient: JWT;
+
   constructor(config: GoogleBusinessInitConfig) {
     super(config);
+    this.jwtClient = new JWT({
+      email: this.config.serviceAccount.client_email,
+      key: this.config.serviceAccount.private_key,
+      scopes: ['https://www.googleapis.com/auth/businessmessages'],
+    });
   }
 
   getDefaultConfig(): GoogleBusinessConfig {

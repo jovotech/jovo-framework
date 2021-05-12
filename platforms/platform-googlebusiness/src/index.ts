@@ -23,7 +23,6 @@ export * from './GoogleBusiness';
 export * from './GoogleBusinessRequest';
 export * from './GoogleBusinessUser';
 export * from './GoogleBusinessBot';
-export * from './GoogleBusinessApi';
 export type { GoogleBusinessResponse } from '@jovotech/output-googlebusiness';
 export * from './interfaces';
 export * from './constants';
