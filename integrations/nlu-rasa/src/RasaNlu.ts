@@ -8,9 +8,9 @@ import {
   Jovo,
   JovoError,
   NluData,
+  NluPlugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { NluPlugin } from '@jovotech/framework/dist/NluPlugin';
 import { RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends PluginConfig {

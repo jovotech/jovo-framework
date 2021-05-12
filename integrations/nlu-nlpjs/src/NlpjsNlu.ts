@@ -4,10 +4,10 @@ import {
   HandleRequest,
   Jovo,
   NluData,
+  NluPlugin,
   Platform,
   PluginConfig,
 } from '@jovotech/framework';
-import { NluPlugin } from '@jovotech/framework/dist/NluPlugin';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';

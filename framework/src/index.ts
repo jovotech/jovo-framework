@@ -48,6 +48,7 @@ export * from './JovoSession';
 export * from './JovoUser';
 export * from './Middleware';
 export * from './MiddlewareCollection';
+export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
 export * from './BaseOutput';
