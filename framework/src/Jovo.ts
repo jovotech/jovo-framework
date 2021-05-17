@@ -274,10 +274,15 @@ export abstract class Jovo<
     const previousComponentPath = previousStateStackItem.componentPath.split('.');
     const previousComponentMetadata = this.$getComponentMetadataOrFail(previousComponentPath);
     stateStack.pop();
+    this.$route = {
+      path: previousComponentPath,
+      handlerKey: resolvedHandlerKey,
+      subState: previousStateStackItem.$subState,
+    };
     await this.$runComponentHandler(
       previousComponentMetadata,
       resolvedHandlerKey,
-      true,
+      false,
       ...eventArgs,
     );
     return;
