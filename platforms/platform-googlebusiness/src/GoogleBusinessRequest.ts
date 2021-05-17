@@ -71,6 +71,8 @@ export class GoogleBusinessRequest extends JovoRequest {
   }
 
   getSession(): JovoSession | undefined {
-    return undefined;
+    return {
+      id: this.conversationId || '',
+    } as JovoSession;
   }
 }

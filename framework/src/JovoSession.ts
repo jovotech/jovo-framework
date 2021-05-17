@@ -25,7 +25,7 @@ export class JovoSession {
 
   $data: SessionData;
   $state?: StateStack;
-
+  id?: string;
   isNew = true;
   createdAt: Date;
   updatedAt: Date;
@@ -33,6 +33,8 @@ export class JovoSession {
   constructor(data?: JovoSession) {
     this.$data = data?.$data || {};
     this.$state = data?.$state;
+    this.id = data?.id;
+    this.isNew = data?.isNew ?? true;
     this.createdAt = data?.createdAt || new Date();
     this.updatedAt = data?.updatedAt || new Date();
   }

@@ -63,6 +63,8 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getSession(): JovoSession | undefined {
-    return this.session?.attributes;
+    return !this.session?.attributes && !this.session?.sessionId
+      ? undefined
+      : ({ ...(this.session?.attributes || {}), id: this.session.sessionId } as JovoSession);
   }
 }
