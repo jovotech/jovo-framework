@@ -70,9 +70,15 @@ export class GoogleBusinessRequest extends JovoRequest {
     };
   }
 
-  getSession(): JovoSession | undefined {
-    return {
-      id: this.conversationId || '',
-    } as JovoSession;
+  getSessionData(): Record<string, unknown> | undefined {
+    return undefined;
+  }
+
+  getSessionId(): string | undefined {
+    return this.conversationId;
+  }
+
+  isNewSession(): boolean | undefined {
+    return undefined;
   }
 }

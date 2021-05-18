@@ -7,9 +7,9 @@ import {
   PersistableUserData,
   PersistableSessionData,
 } from '@jovotech/framework';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as process from 'process';
+import fs from 'fs';
+import path from 'path';
+import process from 'process';
 
 export interface FileDbConfig extends DbPluginConfig {
   pathToFile: string;
@@ -66,7 +66,7 @@ export class FileDb extends Plugin<FileDbConfig> {
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
 
     return users.find((userItem: FileDbItem) => {
-      return userItem['id'] === primaryKey;
+      return userItem.id === primaryKey;
     });
   };
 
@@ -74,12 +74,12 @@ export class FileDb extends Plugin<FileDbConfig> {
     const dbItem = await this.getDbItem(jovo.$user.id);
 
     if (this.config.storedElements.$user?.enabled && dbItem?.user) {
-      jovo.$user.setPersistableData(dbItem?.user || { ...jovo.$user.defaultPersistableData });
+      jovo.$user.setPersistableData(dbItem?.user || jovo.$user.getDefaultPersistableData());
     }
 
     if (this.config.storedElements.$session?.enabled && dbItem?.session) {
       jovo.$session.setPersistableData(
-        dbItem?.session || { ...jovo.$session.defaultPersistableData },
+        dbItem?.session || jovo.$session.getDefaultPersistableData(),
       );
     }
   };
@@ -90,7 +90,7 @@ export class FileDb extends Plugin<FileDbConfig> {
     const id = jovo.$user.id;
 
     const dbItem = users.find((userItem: FileDbItem) => {
-      return userItem['id'] === id;
+      return userItem.id === id;
     });
 
     // create new user
@@ -102,7 +102,7 @@ export class FileDb extends Plugin<FileDbConfig> {
           : undefined,
 
         session: this.config.storedElements.$session?.enabled
-          ? { ...jovo.$session.getPersistableData() }
+          ? jovo.$session.getPersistableData()
           : undefined,
       };
       users.push(item);
@@ -111,15 +111,15 @@ export class FileDb extends Plugin<FileDbConfig> {
       for (let i = 0; i < users.length; i++) {
         if (users[i].id === id) {
           if (this.config.storedElements.$user?.enabled) {
-            users[i]['user'] = { ...jovo.$user.getPersistableData(), updatedAt: new Date() };
+            users[i].user = { ...jovo.$user.getPersistableData(), updatedAt: new Date() };
           }
           if (this.config.storedElements.$session?.enabled) {
-            users[i]['session'] = { ...jovo.$session.getPersistableData() };
+            users[i].session = jovo.$session.getPersistableData();
           }
         }
       }
     }
 
-    await fs.promises.writeFile(this.pathToFile, JSON.stringify(users, null, 2));
+    return fs.promises.writeFile(this.pathToFile, JSON.stringify(users, null, 2));
   };
 }

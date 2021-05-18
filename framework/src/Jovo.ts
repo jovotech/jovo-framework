@@ -188,7 +188,6 @@ export abstract class Jovo<
     };
   }
 
-  // TODO determine async/ not async, maybe call platform-specific handler
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
@@ -372,14 +371,12 @@ export abstract class Jovo<
   }
 
   //TODO: needs to be evaluated
-  getSession(): JovoSession | undefined {
+  getSession(): Partial<JovoSession> | undefined {
     return this.$request.getSession();
   }
 
-  //TODO: needs to be evaluated. better this.$session.isNew?
+  //TODO: needs to be evaluated
   isNewSession(): boolean {
-    return true;
+    return this.$session.isNew;
   }
-
-  // abstract isNewSession(): boolean;
 }

@@ -2,6 +2,7 @@ import { JovoResponse } from '@jovotech/output';
 import { UserData } from './interfaces';
 import { Jovo } from './Jovo';
 import { JovoRequest } from './JovoRequest';
+import { JovoSession, PersistableSessionData } from './JovoSession';
 
 export type JovoUserConstructor<
   REQUEST extends JovoRequest,
@@ -36,13 +37,14 @@ export abstract class JovoUser<
     };
   }
 
-  setPersistableData(data: PersistableUserData): void {
+  setPersistableData(data: PersistableUserData): this {
     this.$data = data.data;
     this.createdAt = new Date(data.createdAt);
     this.updatedAt = new Date(data.updatedAt);
+    return this;
   }
 
-  get defaultPersistableData(): PersistableUserData {
+  getDefaultPersistableData(): PersistableUserData {
     return {
       data: {},
       createdAt: new Date(),

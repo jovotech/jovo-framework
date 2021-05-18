@@ -15,7 +15,25 @@ export abstract class JovoRequest {
 
   abstract getRequestType(): JovoRequestType | undefined;
 
-  abstract getSession(): JovoSession | undefined;
+  abstract getSessionId(): string | undefined;
+
+  abstract getSessionData(): Record<string, unknown> | undefined;
+
+  abstract isNewSession(): boolean | undefined;
+
+  getSession(): Partial<JovoSession> | undefined {
+    const sessionId = this.getSessionId();
+    const sessionData = this.getSessionData();
+    const isNewSession = this.isNewSession();
+    return !sessionId && !sessionData && typeof isNewSession === 'undefined'
+      ? undefined
+      : {
+          // TODO determine whether data should be emptied when session is new
+          ...(isNewSession ? {} : sessionData || {}),
+          id: sessionId,
+          isNew: isNewSession,
+        };
+  }
 
   getNluData(): NluData | undefined {
     const nluData: NluData = {};
