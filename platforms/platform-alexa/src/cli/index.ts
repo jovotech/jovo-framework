@@ -7,7 +7,7 @@ import { NewHook } from './hooks/NewHook';
 import { AlexaCliConfig } from './utils/Interfaces';
 
 export class AlexaCli extends JovoCliPlugin {
-  readonly $id = 'alexaSkill';
+  readonly $id: string = 'alexaSkill';
   readonly $type: PluginType = 'platform';
   readonly $config!: AlexaCliConfig;
   readonly platformDirectory: string = 'platform.alexa';

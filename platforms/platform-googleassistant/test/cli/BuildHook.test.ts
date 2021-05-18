@@ -14,10 +14,6 @@ jest.mock('@jovotech/cli-core', () => ({
   }),
 }));
 jest.mock('jovo-model-google');
-// jest.mock('../../src/cli/utils', () => ({
-// ...Object.assign({}, jest.requireActual('../../src/cli/utils')),
-// }));
-// jest.spyOn(JovoCliCore, 'JovoCli').mockImplementation(() => ({}));
 
 beforeEach(() => {
   const plugin: Plugin = new Plugin();
