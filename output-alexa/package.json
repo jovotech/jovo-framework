@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-alexa",
-  "version": "4.0.0-alpha.6",
+  "version": "4.0.0-alpha.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -20,7 +20,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-alpha.6",
+    "@jovotech/output": "^4.0.0-alpha.7",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
