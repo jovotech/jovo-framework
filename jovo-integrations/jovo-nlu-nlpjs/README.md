@@ -31,9 +31,9 @@ To get started, download the package:
 $ npm install --save jovo-nlu-nlpjs
 ```
 
-As mentioned above, NLP.js works with platforms that provide raw text input. You can add the integration to the platform using the `use` method.
+As mentioned above, NLP.js works with platforms that provide raw text input. The integration can be added to the platform using the `use` method.
 
-The below example uses the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) as an example:
+Here is the example of usage [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core):
 
 ```javascript
 // @language=javascript
@@ -61,7 +61,6 @@ app.use(corePlatform);
 ## Configuration
 
 ### Languages
-
 You can add languages to your integration like this:
 
 ```javascript
