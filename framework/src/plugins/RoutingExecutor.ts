@@ -119,7 +119,7 @@ export class RoutingExecutor {
     for (let i = 0, len = componentNames.length; i < len; i++) {
       const component = components[componentNames[i]];
       if (!component) continue;
-      path.push(componentNames[i]);
+      const newPath = [...path, componentNames[i]];
       // TODO: determine if matching by intent-name and platforms should be done here, will have to be reworked as soon as more input-types are supported
       const relatedHandlerMetadata = MetadataStorage.getInstance()
         .getMergedHandlerMetadataOfComponent(component.target)
@@ -132,7 +132,7 @@ export class RoutingExecutor {
       if (relatedHandlerMetadata.length) {
         matches.push(
           ...relatedHandlerMetadata.map((metadata) => ({
-            path: [...path],
+            path: newPath,
             metadata,
           })),
         );
@@ -141,7 +141,7 @@ export class RoutingExecutor {
         this.collectGlobalRouteMatchesOfComponents(
           component.components,
           intentName,
-          [...path],
+          newPath,
           matches,
         );
       }
