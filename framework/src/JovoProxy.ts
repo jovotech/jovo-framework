@@ -9,7 +9,10 @@ export class JovoProxy extends Jovo {
   // Make `this[key]` reference `this.jovo[key]` for every `key` in `this.jovo`.
   // Without, mutations of `this` would not affect `this.jovo`.
   private overwritePropertiesToPropagateChangesToJovo() {
-    const keys = Object.getOwnPropertyNames(Jovo.prototype);
+    const keySet = new Set<string>();
+    Object.getOwnPropertyNames(Jovo.prototype).forEach((key) => keySet.add(key));
+    Object.keys(this.jovo).forEach((key) => keySet.add(key));
+    const keys = Array.from(keySet);
     const indexOfConstructor = keys.indexOf('constructor');
     if (indexOfConstructor >= 0) {
       keys.splice(indexOfConstructor, 1);
