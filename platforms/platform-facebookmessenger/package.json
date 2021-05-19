@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-facebookmessenger",
-  "version": "4.0.0-alpha.8",
+  "version": "4.0.0-alpha.9",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,7 @@
     "clone-deep": "^4.0.1"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.8",
+    "@jovotech/framework": "^4.0.0-alpha.9",
     "@types/clone-deep": "^4.0.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
