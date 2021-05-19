@@ -125,8 +125,6 @@ showMenu() {
 
 It's also possible to use the `@Intents` convenience decorator:
 
-> The @Intents decorator is not implemented yet
-
 ```typescript
 import { Intents } from '@jovotech/framework';
 
@@ -153,8 +151,6 @@ yourHandler() {
 ```
 
 It is also possible to use the `@Global` convenience decorator for this.
-
-> The @Global decorator is not implemented yet
 
 ```typescript
 import { Global, Handle } from '@jovotech/framework';
