@@ -13,7 +13,7 @@ declare module '@jovotech/framework/dist/Extensible' {
 
 declare module '@jovotech/framework/dist/HandleRequest' {
   interface HandleRequest {
-    debuggerRequestId: number;
+    debuggerRequestId: number | string;
   }
 }
 
