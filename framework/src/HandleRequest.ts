@@ -30,6 +30,10 @@ export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
     return this.mountPlugins();
   }
 
+  dismount(): Promise<void> {
+    return this.dismountPlugins();
+  }
+
   stopMiddlewareExecution(): void {
     this.middlewareCollection.remove(...this.middlewareCollection.names);
   }

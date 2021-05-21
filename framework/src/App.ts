@@ -138,6 +138,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
     // TODO move to response middleware
     // await relatedPlatform.setResponseSessionData(jovo.$response, jovo);
+    await handleRequest.dismount();
     await server.setResponse(jovo.$response);
   }
 
