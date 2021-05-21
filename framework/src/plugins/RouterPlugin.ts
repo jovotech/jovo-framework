@@ -56,6 +56,15 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           componentPath,
         },
       ];
+    } else {
+      const currentStateStackItem = jovo.$session.$state[jovo.$session.$state.length - 1];
+      // TODO has to checked in complex use-cases
+      // if the component path is a different one, omit every custom component data (resolve, config, $data)
+      if (componentPath !== currentStateStackItem.componentPath) {
+        jovo.$session.$state[jovo.$session.$state.length - 1] = {
+          componentPath,
+        };
+      }
     }
   };
 }
