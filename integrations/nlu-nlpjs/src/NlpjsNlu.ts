@@ -50,7 +50,6 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
   }
 
   async initialize(parent: Extensible): Promise<void> {
-    super.initialize(parent);
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,

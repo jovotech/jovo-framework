@@ -1,6 +1,7 @@
 import {
   App,
   DeepPartial,
+  Extensible,
   ExtensibleConfig,
   HandleRequest,
   Jovo,
@@ -50,9 +51,8 @@ export class GoogleBusiness extends Platform<
     };
   }
 
-  mount(parent: HandleRequest) {
-    super.mount(parent);
-
+  install(parent: Extensible) {
+    super.install(parent);
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 

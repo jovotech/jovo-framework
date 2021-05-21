@@ -10,13 +10,10 @@ import { Plugin, PluginConfig } from './Plugin';
 export abstract class NluPlugin<CONFIG extends PluginConfig = PluginConfig> extends Plugin<CONFIG> {
   abstract process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined>;
 
-  initialize(parent: Extensible): Promise<void> | void {
+  install(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
       throw new InvalidParentError(this.constructor.name, 'Platform');
     }
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
     parent.middlewareCollection.use('$nlu', this.nlu);
   }
 

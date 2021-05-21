@@ -1,3 +1,4 @@
+import { App } from '../App';
 import { BaseComponent } from '../BaseComponent';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
@@ -28,9 +29,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     return {};
   }
 
-  mount(handleRequest: HandleRequest): Promise<void> | void {
-    handleRequest.middlewareCollection.use('before.dialog.logic', this.setRoute);
-    return;
+  install(app: App): Promise<void> | void {
+    app.middlewareCollection.use('before.dialog.logic', this.setRoute);
   }
 
   private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
@@ -49,10 +49,11 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       throw new MatchingRouteNotFoundError(intentName, jovo.$state, jovo.$request);
     }
     jovo.$route = route;
-    if (!jovo.$state) {
+    const componentPath = jovo.$route.path.join('.');
+    if (!jovo.$session.$state) {
       jovo.$session.$state = [
         {
-          componentPath: jovo.$route.path.join('.'),
+          componentPath,
         },
       ];
     }

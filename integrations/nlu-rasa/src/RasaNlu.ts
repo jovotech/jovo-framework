@@ -30,8 +30,6 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
   }
 
   async initialize(parent: Extensible): Promise<void> {
-    super.initialize(parent);
-
     // check if rasa-server is available
     // TODO determine whether this check if required/necessary
     try {
