@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import cloneDeep from 'clone-deep';
+import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
@@ -34,7 +34,7 @@ export type JovoConstructor<
   RESPONSE extends JovoResponse = JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>,
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoRequestType {
@@ -45,7 +45,7 @@ export interface JovoRequestType {
 
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
-  CONFIG extends Record<string, unknown> = Record<string, unknown>
+  CONFIG extends Record<string, unknown> = Record<string, unknown>,
 > {
   $data: DATA;
   $config?: CONFIG;
@@ -53,7 +53,7 @@ export interface JovoComponentInfo<
 
 export interface DelegateOptions<
   CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
-  EVENTS extends string = string
+  EVENTS extends string = string,
 > {
   resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
   config?: CONFIG;
@@ -63,7 +63,7 @@ export function registerPlatformSpecificJovoReference<
   KEY extends keyof Jovo,
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>
+  JOVO extends Jovo<REQUEST, RESPONSE>,
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
@@ -78,7 +78,7 @@ export function registerPlatformSpecificJovoReference<
 
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
-  RESPONSE extends JovoResponse = JovoResponse
+  RESPONSE extends JovoResponse = JovoResponse,
 > {
   $asr: AsrData;
   $data: RequestData;
@@ -158,7 +158,7 @@ export abstract class Jovo<
         state[state.length - 1].$data = value;
       },
       get $config(): Record<string, unknown> | undefined {
-        const deserializedStateConfig = cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
           forEachDeep(deserializedStateConfig, (value, path) => {
@@ -202,7 +202,7 @@ export abstract class Jovo<
       // eslint-disable-next-line @typescript-eslint/ban-types
       keyof PickWhere<COMPONENT, Function>,
       keyof BaseComponent
-    >
+    >,
   >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<void>;
   async $redirect(componentName: string, handlerKey?: string): Promise<void>;
   async $redirect(
@@ -239,7 +239,7 @@ export abstract class Jovo<
       }
     }
 
-    const serializableConfig = cloneDeep(options.config);
+    const serializableConfig = _cloneDeep(options.config);
     if (serializableConfig) {
       forEachDeep(serializableConfig, (value, path) => {
         // serialize all passed Output-constructors
@@ -340,7 +340,7 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ARGS extends any[] = any[]
+    ARGS extends any[] = any[],
   >(
     componentMetadata: RegisteredComponentMetadata<COMPONENT>,
     handlerKey: HANDLER | string = InternalIntent.Start,

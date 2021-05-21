@@ -10,7 +10,7 @@ import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
-import cloneDeep from 'clone-deep';
+import _cloneDeep from 'lodash.clonedeep';
 import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
@@ -118,7 +118,7 @@ export class FacebookMessenger extends Platform<
         });
       } else if (isFacebookMessengerRequest) {
         const promises = request.entry.map((entry: MessengerBotEntry) => {
-          const serverCopy = cloneDeep(server);
+          const serverCopy = _cloneDeep(server);
           serverCopy.setResponse = async () => {};
           serverCopy.getRequestObject = () => entry;
           return APP_HANDLE.call(this, serverCopy);

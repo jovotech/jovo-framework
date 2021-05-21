@@ -1,4 +1,4 @@
-import cloneDeep from 'clone-deep';
+import _cloneDeep from 'lodash.clonedeep';
 import { inspect } from 'util';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BaseOutput, OutputConstructor } from '../BaseOutput';
@@ -107,7 +107,7 @@ export class MetadataStorage {
   ): HandlerMetadata<COMPONENT, keyof COMPONENT>[] {
     const componentHandlerMetadata = this.getHandlerMetadataOfComponent(target);
     const mergedMetadata = componentHandlerMetadata.map((handlerMetadata) => {
-      const mergedHandlerMetadata = cloneDeep(handlerMetadata);
+      const mergedHandlerMetadata = _cloneDeep(handlerMetadata);
       const relatedHandlerOptionMetadata = this.handlerOptionMetadata.filter((optionMetadata) =>
         optionMetadata.hasSameTargetAs(mergedHandlerMetadata),
       );
