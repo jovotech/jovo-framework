@@ -5,7 +5,9 @@ export class EmptyExtensible extends Extensible {
     return {};
   }
 
-  readonly middlewareCollection = new MiddlewareCollection();
+  initializeMiddlewareCollection(): MiddlewareCollection<string[]> {
+    return new MiddlewareCollection();
+  }
 
   mount(parent: Extensible): Promise<void> | void {
     return;
@@ -23,7 +25,9 @@ export class ExampleExtensible extends Extensible<ExampleExtensibleConfig> {
     };
   }
 
-  readonly middlewareCollection = new MiddlewareCollection();
+  initializeMiddlewareCollection(): MiddlewareCollection<string[]> {
+    return new MiddlewareCollection();
+  }
 
   mount(parent: Extensible): Promise<void> | void {
     return;
@@ -35,7 +39,9 @@ export class AppLikeExtensible extends Extensible {
     return {};
   }
 
-  readonly middlewareCollection = new MiddlewareCollection();
+  initializeMiddlewareCollection(): MiddlewareCollection<string[]> {
+    return new MiddlewareCollection();
+  }
 
   mount(): Promise<void> | void {
     return this.mountPlugins();
