@@ -20,6 +20,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "@jovotech/cli-command-build": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-get": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-new": "^4.0.0-alpha.5",
+    "@jovotech/cli-core": "^4.0.0-alpha.5",
+    "@jovotech/filebuilder": "^0.0.1",
+    "@jovotech/framework": "^4.0.0-alpha.5",
     "adm-zip": "^0.5.5",
     "axios": "^0.21.1",
     "global-dirs": "^3.0.0",
@@ -46,12 +53,6 @@
     "@types/tv4": "^1.2.29",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
-    "@jovotech/cli-command-build": "^4.0.0-alpha.5",
-    "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
-    "@jovotech/cli-command-get": "^4.0.0-alpha.5",
-    "@jovotech/cli-command-new": "^4.0.0-alpha.5",
-    "@jovotech/cli-core": "^4.0.0-alpha.5",
-    "@jovotech/filebuilder": "^0.0.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -65,6 +66,14 @@
   },
   "peerDependencies": {
     "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
+  },
+  "browser": {
+    "@jovotech/cli-command-build": false,
+    "@jovotech/cli-command-deploy": false,
+    "@jovotech/cli-command-get": false,
+    "@jovotech/cli-command-new": false,
+    "@jovotech/cli-core": false,
+    "@jovotech/filebuilder": false
   },
   "prettier": "../../.prettierrc.js"
 }
