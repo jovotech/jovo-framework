@@ -23,7 +23,7 @@ export interface HandleOptions extends ConditionsOptions, RoutesOptions {
 
 export class HandlerMetadata<
   COMPONENT extends BaseComponent = BaseComponent,
-  KEY extends keyof COMPONENT = keyof COMPONENT
+  KEY extends keyof COMPONENT = keyof COMPONENT,
 > extends MethodDecoratorMetadata<COMPONENT, KEY> {
   constructor(
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -36,6 +36,10 @@ export class HandlerMetadata<
 
   get intents(): Array<string | Intent> {
     return [this.propertyKey.toString(), ...(this.options?.intents || [])];
+  }
+
+  get intentNames(): string[] {
+    return this.intents.map((intent) => (typeof intent === 'string' ? intent : intent.name));
   }
 
   get globalIntentNames(): string[] {

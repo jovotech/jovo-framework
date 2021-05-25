@@ -22,7 +22,7 @@ export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   getDefaultConfig(): AppConfig {
     return {
-      placeholder: '',
+      intentMap: {},
     };
   }
 

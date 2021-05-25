@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, IntentMap, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -17,7 +17,7 @@ import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
 
 export interface AppConfig extends ExtensibleConfig {
-  placeholder: string;
+  intentMap: IntentMap;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
@@ -91,7 +91,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   getDefaultConfig(): AppConfig {
     return {
       plugin: {},
-      placeholder: '',
+      intentMap: {},
     };
   }
 
@@ -208,9 +208,8 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     constructor: ComponentConstructor | Function,
     globalHandlerMap: Record<string, HandlerMetadata[]>,
   ) {
-    const relatedHandlerMetadata = MetadataStorage.getInstance().getHandlerMetadataOfComponent(
-      constructor,
-    );
+    const relatedHandlerMetadata =
+      MetadataStorage.getInstance().getHandlerMetadataOfComponent(constructor);
     for (let i = 0, len = relatedHandlerMetadata.length; i < len; i++) {
       for (let j = 0, jLen = relatedHandlerMetadata[i].globalIntentNames.length; j < jLen; j++) {
         const globalIntentName = relatedHandlerMetadata[i].globalIntentNames[j];
