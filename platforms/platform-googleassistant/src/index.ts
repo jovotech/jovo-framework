@@ -1,6 +1,7 @@
-import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
+import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
 import { GoogleAction } from './GoogleAction';
 import { GoogleAssistant } from './GoogleAssistant';
+import type { GoogleAssistantCli as GoogleAssistantCliType } from './cli';
 
 declare module '@jovotech/framework/dist/Extensible' {
   interface ExtensiblePluginConfig {
@@ -19,6 +20,10 @@ declare module '@jovotech/framework/dist/Jovo' {
 }
 registerPlatformSpecificJovoReference('$googleAction', GoogleAction);
 
+export const GoogleAssistantCli: typeof GoogleAssistantCliType = isNode()
+  ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('./cli').GoogleAssistantCli
+  : null;
 export * from './GoogleAssistant';
 export * from './GoogleAssistantRequest';
 export * from './GoogleAssistantUser';
