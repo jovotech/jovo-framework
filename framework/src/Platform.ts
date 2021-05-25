@@ -48,7 +48,7 @@ export abstract class Platform<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
-  CONFIG extends ExtensibleConfig = ExtensibleConfig
+  CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, this>;
@@ -74,19 +74,19 @@ export abstract class Platform<
     if (!(parent instanceof App)) {
       throw new InvalidParentError(this.constructor.name, App);
     }
-  }
-
-  mount(parent: HandleRequest) {
     const propagateMiddleware = (
       appMiddleware: AppBaseMiddleware,
       middleware: PlatformBaseMiddleware,
     ) => {
-      parent.middlewareCollection.use(appMiddleware, async (...args: unknown[]) => {
-        if (parent.$platform?.constructor?.name !== this.constructor.name) {
-          return;
-        }
-        await this.middlewareCollection.run(middleware, ...args);
-      });
+      parent.middlewareCollection.use(
+        appMiddleware,
+        async (handleRequest: HandleRequest, jovo: Jovo, ...args) => {
+          if (jovo.$platform?.constructor?.name !== this.constructor.name) {
+            return;
+          }
+          return this.middlewareCollection.run(middleware, handleRequest, jovo, ...args);
+        },
+      );
     };
 
     // TODO determine actual middleware mappings and add missing ones

@@ -14,6 +14,7 @@ export interface StateStackItem {
 export type StateStack = StateStackItem[];
 
 export interface PersistableSessionData {
+  id?: string;
   data: SessionData;
   state?: StateStack;
   createdAt: Date;
@@ -23,37 +24,42 @@ export interface PersistableSessionData {
 export class JovoSession {
   [key: string]: unknown;
 
+  id?: string;
   $data: SessionData;
   $state?: StateStack;
-
-  isNew = true;
+  isNew: boolean;
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(data?: JovoSession) {
+  constructor(data?: Partial<JovoSession>) {
+    this.id = data?.id;
     this.$data = data?.$data || {};
     this.$state = data?.$state;
+    this.isNew = data?.isNew ?? true;
     this.createdAt = data?.createdAt || new Date();
     this.updatedAt = data?.updatedAt || new Date();
   }
 
   getPersistableData(): PersistableSessionData {
     return {
+      id: this.id,
       data: this.$data,
+      state: this.$state,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      state: this.$state,
     };
   }
 
-  setPersistableData(data: PersistableSessionData): void {
+  setPersistableData(data: PersistableSessionData): this {
+    this.id = data.id;
     this.$data = data.data;
     this.$state = data.state;
     this.createdAt = new Date(data.createdAt);
     this.updatedAt = new Date(data.updatedAt);
+    return this;
   }
 
-  get defaultPersistableData(): PersistableSessionData {
+  getDefaultPersistableData(): PersistableSessionData {
     return {
       data: {},
       createdAt: new Date(),

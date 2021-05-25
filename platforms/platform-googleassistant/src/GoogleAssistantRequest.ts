@@ -34,7 +34,15 @@ export class GoogleAssistantRequest extends JovoRequest {
     return undefined;
   }
 
-  getSession(): JovoSession | undefined {
-    return (this.session as { params?: JovoSession | undefined } | undefined)?.params;
+  getSessionData(): Record<string, unknown> | undefined {
+    return this.session?.params;
+  }
+
+  getSessionId(): string | undefined {
+    return this.session?.id;
+  }
+
+  isNewSession(): boolean | undefined {
+    return !this.getSessionData();
   }
 }

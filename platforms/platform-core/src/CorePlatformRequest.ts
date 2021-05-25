@@ -27,7 +27,15 @@ export class CorePlatformRequest extends JovoRequest {
     return this.request?.type ? { type: this.request.type } : undefined;
   }
 
-  getSession(): JovoSession | undefined {
+  getSessionData(): Record<string, unknown> | undefined {
     return this.context?.session?.data;
+  }
+
+  getSessionId(): string | undefined {
+    return this.context?.session?.id;
+  }
+
+  isNewSession(): boolean | undefined {
+    return this.context?.session?.new;
   }
 }

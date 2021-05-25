@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-alpha.10",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@bemoje/is-node": "^1.0.1",
     "@jovotech/cli-command-build": "^4.0.0-alpha.5",
     "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
     "@jovotech/cli-command-get": "^4.0.0-alpha.5",
@@ -37,7 +36,13 @@
     "lodash.set": "^4.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-build": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-deploy": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-get": "^4.0.0-alpha.5",
+    "@jovotech/cli-command-new": "^4.0.0-alpha.5",
+    "@jovotech/cli-core": "^4.0.0-alpha.5",
+    "@jovotech/filebuilder": "^0.0.1",
+    "@jovotech/framework": "^4.0.0-alpha.10",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",

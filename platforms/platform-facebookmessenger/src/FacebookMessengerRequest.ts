@@ -46,7 +46,15 @@ export class FacebookMessengerRequest extends JovoRequest {
     };
   }
 
-  getSession(): JovoSession | undefined {
+  getSessionData(): Record<string, unknown> | undefined {
+    return undefined;
+  }
+
+  getSessionId(): string | undefined {
+    return undefined;
+  }
+
+  isNewSession(): boolean | undefined {
     return undefined;
   }
 }

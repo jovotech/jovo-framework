@@ -21,6 +21,7 @@ import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { MockServer } from './MockServer';
 import isEqual from 'fast-deep-equal/es6';
+import { v4 as uuidV4 } from 'uuid';
 
 export enum JovoDebuggerEvent {
   DebuggingAvailable = 'debugging.available',
@@ -40,7 +41,7 @@ export enum JovoDebuggerEvent {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface JovoDebuggerPayload<DATA extends any = any> {
-  requestId: number;
+  requestId: number | string;
   data: DATA;
 }
 
@@ -68,7 +69,6 @@ export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
   hasOverriddenWrite = false;
-  requestIdCounter = 0;
 
   constructor(config?: JovoDebuggerInitConfig) {
     super(config);
@@ -142,10 +142,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
   // -> future changes are less likely to cause breaking changes here
   private patchHandleRequestToIncludeUniqueId() {
-    const getRequestId = () => this.requestIdCounter++;
     const mount = HandleRequest.prototype.mount;
     HandleRequest.prototype.mount = function () {
-      this.debuggerRequestId = getRequestId();
+      this.debuggerRequestId = uuidV4();
       return mount.call(this);
     };
   }

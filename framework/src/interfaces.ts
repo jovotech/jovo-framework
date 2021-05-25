@@ -47,12 +47,12 @@ export interface Intent {
   global?: boolean;
 }
 
+export type IntentMap = Partial<Record<string, string>>;
+
 export type JovoConditionFunction = (
   handleRequest: HandleRequest,
   jovo: Jovo,
 ) => boolean | Promise<boolean>;
-
-type StoredElementType = keyof PersistableUserData | keyof PersistableSessionData;
 
 export interface DbPluginConfig extends PluginConfig {
   storedElements: {

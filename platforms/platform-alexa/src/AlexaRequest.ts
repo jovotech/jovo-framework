@@ -62,7 +62,15 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
   }
 
-  getSession(): JovoSession | undefined {
+  getSessionData(): Record<string, unknown> | undefined {
     return this.session?.attributes;
+  }
+
+  getSessionId(): string | undefined {
+    return this.session?.sessionId;
+  }
+
+  isNewSession(): boolean | undefined {
+    return this.session?.new;
   }
 }

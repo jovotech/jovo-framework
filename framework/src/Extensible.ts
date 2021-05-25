@@ -22,7 +22,7 @@ export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleCon
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
-  MIDDLEWARES extends string[] = string[]
+  MIDDLEWARES extends string[] = string[],
 > extends Plugin<CONFIG> {
   readonly plugins: ExtensiblePlugins;
   readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
@@ -106,6 +106,21 @@ export abstract class Extensible<
 
         if (plugin instanceof Extensible && (plugin as Extensible).plugins) {
           await plugin.mountPlugins();
+        }
+      }
+    }
+  }
+
+  protected async dismountPlugins(): Promise<void> {
+    for (const key in this.plugins) {
+      if (this.plugins.hasOwnProperty(key)) {
+        const plugin = this.plugins[key];
+        if (!plugin) {
+          continue;
+        }
+        await plugin.dismount?.(this);
+        if (plugin instanceof Extensible && (plugin as Extensible).plugins) {
+          await plugin.dismountPlugins();
         }
       }
     }

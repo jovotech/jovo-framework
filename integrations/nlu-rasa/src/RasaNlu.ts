@@ -8,9 +8,9 @@ import {
   Jovo,
   JovoError,
   NluData,
+  NluPlugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { NluPlugin } from '@jovotech/framework/dist/NluPlugin';
 import { RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends PluginConfig {
@@ -30,8 +30,6 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
   }
 
   async initialize(parent: Extensible): Promise<void> {
-    super.initialize(parent);
-
     // check if rasa-server is available
     // TODO determine whether this check if required/necessary
     try {

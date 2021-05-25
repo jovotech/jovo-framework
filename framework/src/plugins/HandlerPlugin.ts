@@ -1,5 +1,5 @@
 import { HandleRequest } from '../HandleRequest';
-import { DeepPartial, ExtensibleConfig } from '../index';
+import { App, DeepPartial, ExtensibleConfig } from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';
 
@@ -24,9 +24,8 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     return {};
   }
 
-  mount(handleRequest: HandleRequest): Promise<void> | void {
-    handleRequest.middlewareCollection.use('dialog.logic', this.handle);
-    return;
+  install(app: App): Promise<void> | void {
+    app.middlewareCollection.use('dialog.logic', this.handle);
   }
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {

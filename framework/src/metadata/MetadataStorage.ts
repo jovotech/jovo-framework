@@ -1,7 +1,10 @@
+import _cloneDeep from 'lodash.clonedeep';
+import { inspect } from 'util';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BaseOutput, OutputConstructor } from '../BaseOutput';
 import { ComponentMetadata } from './ComponentMetadata';
 import { HandlerMetadata } from './HandlerMetadata';
+import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { OutputMetadata } from './OutputMetadata';
 
 // TODO: implement
@@ -10,11 +13,13 @@ export class MetadataStorage {
   // TODO: determine whether any is required/helpful here
   readonly componentMetadata: ComponentMetadata[];
   readonly handlerMetadata: HandlerMetadata[];
+  readonly handlerOptionMetadata: HandlerOptionMetadata[];
   readonly outputMetadata: OutputMetadata[];
 
   private constructor() {
     this.componentMetadata = [];
     this.handlerMetadata = [];
+    this.handlerOptionMetadata = [];
     this.outputMetadata = [];
   }
 
@@ -86,11 +91,6 @@ export class MetadataStorage {
   addHandlerMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
     metadata: HandlerMetadata<COMPONENT, KEY>,
   ) {
-    // TODO: determine what to do if a handler like that already exists
-    // for now, just skip (first only counts)
-    if (this.getHandlerMetadata(metadata.target, metadata.propertyKey)) {
-      return;
-    }
     this.handlerMetadata.push(metadata as HandlerMetadata);
   }
 
@@ -101,19 +101,65 @@ export class MetadataStorage {
     return this.handlerMetadata.filter((metadata) => metadata.target === target);
   }
 
-  getHandlerMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
+  getMergedHandlerMetadataOfComponent<COMPONENT extends BaseComponent>(
     // eslint-disable-next-line @typescript-eslint/ban-types
     target: ComponentConstructor<COMPONENT> | Function,
-    propertyKey: KEY,
-  ): HandlerMetadata<COMPONENT, KEY> | undefined {
-    return this.handlerMetadata.find(
-      (metadata) => metadata.target === target && metadata.propertyKey === propertyKey,
-    ) as HandlerMetadata<COMPONENT, KEY> | undefined;
+  ): HandlerMetadata<COMPONENT, keyof COMPONENT>[] {
+    const componentHandlerMetadata = this.getHandlerMetadataOfComponent(target);
+    const mergedMetadata = componentHandlerMetadata.map((handlerMetadata) => {
+      const mergedHandlerMetadata = _cloneDeep(handlerMetadata);
+      const relatedHandlerOptionMetadata = this.handlerOptionMetadata.filter((optionMetadata) =>
+        optionMetadata.hasSameTargetAs(mergedHandlerMetadata),
+      );
+      relatedHandlerOptionMetadata.forEach((optionMetadata) =>
+        mergedHandlerMetadata.mergeWith(optionMetadata),
+      );
+      return mergedHandlerMetadata;
+    });
+
+    const handlerOptionMetadataWithoutHandler = this.handlerOptionMetadata.filter(
+      (optionMetadata) =>
+        optionMetadata.target === target &&
+        !componentHandlerMetadata.some((handlerMetadata) =>
+          handlerMetadata.hasSameTargetAs(optionMetadata),
+        ),
+    );
+    handlerOptionMetadataWithoutHandler.forEach((optionMetadata) => {
+      const relatedHandlerMetadata = mergedMetadata.find((handlerMetadata) =>
+        handlerMetadata.hasSameTargetAs(optionMetadata),
+      );
+      if (!relatedHandlerMetadata) {
+        mergedMetadata.push(
+          new HandlerMetadata<COMPONENT, keyof COMPONENT>(
+            optionMetadata.target,
+            optionMetadata.propertyKey,
+            { ...optionMetadata.options },
+          ),
+        );
+      } else {
+        relatedHandlerMetadata.mergeWith(optionMetadata);
+      }
+    });
+    return mergedMetadata;
+  }
+
+  addHandlerOptionMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
+    metadata: HandlerOptionMetadata<COMPONENT, KEY>,
+  ) {
+    this.handlerOptionMetadata.push(metadata as HandlerOptionMetadata);
+  }
+
+  getHandlerOptionMetadataOfComponent<COMPONENT extends BaseComponent>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: ComponentConstructor<COMPONENT> | Function,
+  ): HandlerOptionMetadata<COMPONENT, keyof COMPONENT>[] {
+    return this.handlerOptionMetadata.filter((metadata) => metadata.target === target);
   }
 
   clearAll(): void {
     this.componentMetadata.length = 0;
     this.handlerMetadata.length = 0;
+    this.handlerOptionMetadata.length = 0;
     this.outputMetadata.length = 0;
   }
 }
