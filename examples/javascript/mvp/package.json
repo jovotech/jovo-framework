@@ -1,6 +1,6 @@
 {
 	"name": "@jovotech/examples-js-mvp",
-	"version": "4.0.0-alpha.2",
+	"version": "4.0.0-alpha.3",
 	"private": true,
 	"description": "A sample voice app that works with the Jovo Framework",
 	"main": "./dist/src/index.js",

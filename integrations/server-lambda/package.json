@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/server-lambda",
-  "version": "4.0.0-alpha.10",
+  "version": "4.0.0-alpha.11",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@aws-sdk/client-lambda": "^3.8.1",
-    "@jovotech/framework": "^4.0.0-alpha.10",
+    "@jovotech/framework": "^4.0.0-alpha.11",
     "@types/aws-lambda": "^8.10.73",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
