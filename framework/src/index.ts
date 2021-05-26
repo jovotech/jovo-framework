@@ -73,3 +73,10 @@ export * from './decorators/If';
 
 export * from './interfaces';
 export * from './enums';
+
+/**
+ * Tests if the currently running environment is node-based.
+ */
+export function isNode(): boolean {
+  return typeof process !== 'undefined' && process.versions && !!process.versions.node;
+}

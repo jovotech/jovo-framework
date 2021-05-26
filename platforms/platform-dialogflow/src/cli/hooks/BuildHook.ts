@@ -5,6 +5,7 @@ import {
   getResolvedLocales,
   JovoCliError,
   mergeArrayCustomizer,
+  OK_HAND,
   PluginHook,
   printHighlight,
   promptOverwriteReverseBuild,
@@ -13,7 +14,7 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
@@ -41,9 +42,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
     this.middlewareCollection = {
       'parse': [this.checkForPlatform.bind(this)],
       'before.build': [
+        this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
-        this.updatePluginContext.bind(this),
+        this.validateModels.bind(this),
       ],
       'build': [this.buildDialogflowAgent.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
@@ -77,14 +79,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   validateLocales(): void {
     const locales: SupportedLocalesType[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(
-          ...getResolvedLocales(
-            locale,
-            SupportedLocales,
-            this.$plugin.constructor.name,
-            this.$config.locales,
-          ),
-        );
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
         return locales;
       },
       [],
@@ -115,6 +110,28 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
   }
 
+  /**
+   * Validates Jovo models with platform-specific validators.
+   */
+  async validateModels(): Promise<void> {
+    // Validate Jovo model.
+    const validationTask: Task = new Task(`${OK_HAND} Validating Dialogflow model files`);
+
+    for (const locale of this.$context.locales) {
+      const localeTask = new Task(locale, async () => {
+        this.$cli.$project!.validateModel(locale, JovoModelDialogflow.getValidator());
+        await wait(500);
+      });
+
+      validationTask.add(localeTask);
+    }
+
+    await validationTask.run();
+  }
+
+  /**
+   * Updates the current plugin context with platform-specific values.
+   */
   updatePluginContext(): void {
     this.$context.endpoint =
       _get(this.$plugin.$config, 'files["agent.json"].webhook.url') ||
@@ -129,12 +146,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const locales: SupportedLocalesType[] = this.$context.locales.reduce(
         (locales: string[], locale: string) => {
           locales.push(
-            ...getResolvedLocales(
-              locale,
-              SupportedLocales,
-              this.$plugin.constructor.name,
-              this.$config.locales,
-            ),
+            ...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales),
           );
           return locales;
         },
@@ -166,10 +178,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.createDialogflowProjectFiles.bind(this),
     );
 
-    const interactionModelTasks: Task[] = this.createInteractionModelTasks();
     const buildInteractionModelTask: Task = new Task(
       `${taskStatus} Interaction Models`,
-      interactionModelTasks,
+      this.createInteractionModel.bind(this),
     );
     // If no model files for the current locales exist, do not build interaction model.
     if (
@@ -185,7 +196,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   }
 
   createDialogflowProjectFiles(): void {
-    const files: FileObject = FileBuilder.normalizeFileObject(this.$config.files || {});
+    const files: FileObject = FileBuilder.normalizeFileObject(this.$plugin.$config.files || {});
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
     const projectFiles: FileObject = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
       ? files
@@ -205,15 +216,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
   /**
    * Creates and returns tasks for each locale to build the interaction model for Dialogflow.
    */
-  createInteractionModelTasks(): Task[] {
-    const interactionModelTasks: Task[] = [];
-
+  async createInteractionModel(): Promise<void> {
     for (const locale of this.$context.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         locale,
         SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
+        this.$plugin.$config.locales,
       );
       const resolvedLocalesOutput: string = resolvedLocales.join(', ');
       // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
@@ -224,10 +232,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
         this.buildLanguageModel(locale, resolvedLocales);
         await wait(500);
       });
-      interactionModelTasks.push(localeTask);
+      localeTask.indent(4);
+      await localeTask.run();
     }
-
-    return interactionModelTasks;
   }
 
   /**
@@ -309,7 +316,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
     // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
-    // ToDo: Test if no locale mapping is provided.
     const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
       (localeMap: { [locale: string]: string }, locale: string) => {
         localeMap[locale] = locale;
@@ -321,8 +327,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const resolvedLocales: string[] = getResolvedLocales(
         modelLocale,
         SupportedLocales,
-        this.$plugin.constructor.name,
-        this.$config.locales,
+        this.$plugin.$config.locales,
       );
 
       for (const selectedLocale of selectedLocales) {
@@ -441,7 +446,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     // Merge model with configured, platform-specific language model in project.js.
     _mergeWith(
       model,
-      _get(this.$config, `options.languageModel.${locale}`, {}),
+      _get(this.$plugin.$config, `options.languageModel.${locale}`, {}),
       mergeArrayCustomizer,
     );
 

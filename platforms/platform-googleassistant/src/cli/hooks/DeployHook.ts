@@ -1,12 +1,16 @@
-import { DeployPlatformEvents, ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
+import type {
+  DeployPlatformEvents,
+  ParseContextDeployPlatform,
+} from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   JovoCliError,
   PluginHook,
   printStage,
-  printWarning,
   ROCKET,
   Task,
+  Log,
+  LogLevel,
 } from '@jovotech/cli-core';
 import { existsSync } from 'fs';
 import indent from 'indent-string';
@@ -75,7 +79,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
               .split('\n')
               .map((el: string) => indent(el.trimEnd(), 2));
 
-            return [printWarning('Validation errors occured'), ...validationErrors];
+            const output: string[] = [
+              Log.warning('validation errors occured', { dry: true }) || '',
+            ];
+            for (const validationError of validationErrors) {
+              output.push(Log.info(validationError, { logLevel: LogLevel.Warn }) || '');
+            }
+            return output;
           }
         }
       } catch (error) {

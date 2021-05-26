@@ -1,5 +1,5 @@
-import { NewEvents } from '@jovotech/cli-command-new';
-import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
+import type { NewEvents } from '@jovotech/cli-command-new';
+import { PluginHook, printHighlight, printUserInput, prompt, Log } from '@jovotech/cli-core';
 import { SupportedLocalesType } from '../utils';
 import { SupportedLocales } from '../utils/Constants';
 
@@ -14,7 +14,7 @@ export class NewHook extends PluginHook<NewEvents> {
     // Check for invalid locales and provide a default locale map.
     for (const locale of this.$context.locales) {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
-        console.log();
+        Log.spacer();
         // Prompt user for alternative locale.
         const { locales } = await prompt(
           {

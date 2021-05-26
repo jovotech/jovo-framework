@@ -1,5 +1,5 @@
 import JovoCliCore, { getRawString, InstallContext, JovoCli } from '@jovotech/cli-core';
-import { ParseContextBuild } from '@jovotech/cli-command-build';
+import type { ParseContextBuild } from '@jovotech/cli-command-build';
 import { JovoModelGoogle } from 'jovo-model-google';
 import { JovoModelData } from 'jovo-model';
 
@@ -14,10 +14,6 @@ jest.mock('@jovotech/cli-core', () => ({
   }),
 }));
 jest.mock('jovo-model-google');
-// jest.mock('../../src/cli/utils', () => ({
-// ...Object.assign({}, jest.requireActual('../../src/cli/utils')),
-// }));
-// jest.spyOn(JovoCliCore, 'JovoCli').mockImplementation(() => ({}));
 
 beforeEach(() => {
   const plugin: Plugin = new Plugin();
@@ -33,7 +29,6 @@ beforeEach(() => {
     flags: {},
     args: {},
   };
-  BuildHook.prototype['$config'] = {};
 });
 
 afterEach(() => {
@@ -126,8 +121,8 @@ describe('updatePluginContext()', () => {
   });
 
   test('should set "project-id" from config', () => {
+    BuildHook.prototype['$plugin'].$config.projectId = '123';
     const hook: BuildHook = new BuildHook();
-    hook['$config'].projectId = '123';
 
     hook.updatePluginContext();
 
@@ -137,7 +132,7 @@ describe('updatePluginContext()', () => {
 
   test('should throw an error if "project-id" could not be found', () => {
     const hook: BuildHook = new BuildHook();
-    expect(hook.updatePluginContext.bind(hook)).toThrow('Could not find projectId.');
+    expect(hook.updatePluginContext.bind(hook)).toThrow('Could not find project ID.');
   });
 });
 

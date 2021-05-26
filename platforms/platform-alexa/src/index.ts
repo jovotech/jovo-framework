@@ -1,6 +1,8 @@
-import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
+import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
+import { inverse } from 'chalk';
 import { Alexa, AlexaConfig } from './Alexa';
 import { AlexaSkill } from './AlexaSkill';
+import type { AlexaCli as AlexaCliType } from './cli';
 
 declare module '@jovotech/framework/dist/Extensible' {
   interface ExtensiblePluginConfig {
@@ -19,6 +21,8 @@ declare module '@jovotech/framework/dist/Jovo' {
 }
 registerPlatformSpecificJovoReference('$alexaSkill', AlexaSkill);
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const AlexaCli: typeof AlexaCliType = isNode() ? require('./cli').AlexaCli : null;
 export * from './Alexa';
 export * from './AlexaRequest';
 export * from './AlexaUser';

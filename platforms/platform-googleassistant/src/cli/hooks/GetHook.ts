@@ -1,5 +1,5 @@
-import { BuildEvents } from '@jovotech/cli-command-build';
-import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
+import type { BuildEvents } from '@jovotech/cli-command-build';
+import type { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -67,11 +67,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    if (this.$context.command !== 'get') {
-      return;
-    }
-
-    this.$context.projectId = this.$context.flags['project-id'] || _get(this.$config, 'projectId');
+    this.$context.projectId =
+      this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
     if (!this.$context.projectId) {
       throw new JovoCliError(

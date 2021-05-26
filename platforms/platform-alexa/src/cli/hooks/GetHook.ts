@@ -11,18 +11,12 @@ import {
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
-import { BuildEvents } from '@jovotech/cli-command-build';
+import type { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
+import type { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 
 import * as smapi from '../smapi';
-import {
-  AskSkillList,
-  checkForAskCli,
-  PluginConfigAlexa,
-  PluginContextAlexa,
-  prepareSkillList,
-} from '../utils';
+import { AskSkillList, checkForAskCli, PluginContextAlexa, prepareSkillList } from '../utils';
 import defaultFiles from '../utils/DefaultFiles.json';
 import { AlexaCli } from '..';
 
@@ -33,7 +27,6 @@ export interface GetContextAlexa extends PluginContextAlexa, GetContext {
 
 export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   $plugin!: AlexaCli;
-  $config!: PluginConfigAlexa;
   $context!: GetContextAlexa;
 
   install(): void {
@@ -80,12 +73,13 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    this.$context.askProfile = this.$context.flags['ask-profile'] || this.$config.askProfile;
+    this.$context.askProfile =
+      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
 
     this.$context.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$config, 'options.skillId');
+      _get(this.$plugin.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(this.$plugin.$config, 'options.skillId');
   }
 
   /**

@@ -1,5 +1,5 @@
-import { ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
-import { GetContext, GetEvents } from '@jovotech/cli-command-get';
+import type { ParseContextDeployPlatform } from '@jovotech/cli-command-deploy';
+import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
