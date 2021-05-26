@@ -39,12 +39,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
   install(): void {
     this.middlewareCollection = {
       'parse': [this.checkForPlatform.bind(this)],
-      'before.build': [
-        this.checkForCleanBuild.bind(this),
-        this.validateLocales.bind(this),
-        this.validateModels.bind(this),
-      ],
-      'build': [this.build.bind(this)],
+      'before.build': [this.checkForCleanBuild.bind(this), this.validateLocales.bind(this)],
+      'build': [this.validateModels.bind(this), this.build.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
   }
@@ -132,12 +128,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // Update or create Alexa project files, depending on whether it has already been built or not.
     const projectFilesTask: Task = new Task(
-      `${taskStatus} Project Files`,
+      `${taskStatus} project files`,
       this.createAlexaProjectFiles.bind(this),
     );
 
     const buildInteractionModelTask: Task = new Task(
-      `${taskStatus} Interaction Model`,
+      `${taskStatus} interaction model`,
       this.createInteractionModel.bind(this),
     );
     // If no model files for the current locales exist, do not build interaction model.
@@ -348,7 +344,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
     try {
       for (const locale of resolvedLocales) {
         const jovoModel: JovoModelAlexa = new JovoModelAlexa(model, locale);
-        const alexaModelFiles: NativeFileInformation[] = jovoModel.exportNative() as NativeFileInformation[];
+        const alexaModelFiles: NativeFileInformation[] =
+          jovoModel.exportNative() as NativeFileInformation[];
 
         if (!alexaModelFiles || !alexaModelFiles.length) {
           // Should actually never happen but who knows
