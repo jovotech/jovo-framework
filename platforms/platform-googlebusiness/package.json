@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-googlebusiness",
-  "version": "4.0.0-alpha.11",
+  "version": "4.0.0-alpha.12",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.11",
+    "@jovotech/framework": "^4.0.0-alpha.12",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/uuid": "^8.3.0",

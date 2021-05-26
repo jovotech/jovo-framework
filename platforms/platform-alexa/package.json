@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.0-alpha.11",
+  "version": "4.0.0-alpha.12",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -42,7 +42,7 @@
     "@jovotech/cli-command-new": "^4.0.0-alpha.5",
     "@jovotech/cli-core": "^4.0.0-alpha.5",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-alpha.11",
+    "@jovotech/framework": "^4.0.0-alpha.12",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
