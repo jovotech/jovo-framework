@@ -5,7 +5,7 @@ import {
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   QuickReply,
-  QuickReplyValue,
+  QuickReplyValue, removeSSML,
 } from '@jovotech/output';
 import {
   FacebookMessengerResponse,
@@ -115,9 +115,9 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
 
   convertMessageToFacebookMessengerMessage(message: MessageValue): FacebookMessengerMessage {
     return typeof message === 'string'
-      ? { text: message }
+      ? { text: removeSSML(message) }
       : message.toFacebookMessengerMessage?.() || {
-          text: message.displayText || message.text,
+          text: removeSSML(message.displayText || message.text),
           quick_replies: message.quickReplies?.map((quickReply) =>
             this.convertQuickReplyToFacebookMessengerQuickReply(quickReply),
           ),

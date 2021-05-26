@@ -1,4 +1,4 @@
-import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
 import {
   GenericTemplateElement,
   Message as FacebookMessengerMessage,
@@ -36,7 +36,7 @@ export function augmentModelPrototypes(): void {
 
   Message.prototype.toFacebookMessengerMessage = function () {
     const message: FacebookMessengerMessage = {
-      text: this.displayText || this.text,
+      text: removeSSML(this.displayText || this.text),
     };
     if (this.quickReplies) {
       message.quick_replies = this.quickReplies.map((quickReply) => {

@@ -5,6 +5,7 @@ import {
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   QuickReplyValue,
+  removeSSML,
 } from '@jovotech/output';
 import { GoogleBusinessResponse, RepresentativeType, Suggestion } from './models';
 
@@ -54,14 +55,12 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
       carousel: (carousel: Carousel) => ({ carouselCard: carousel.toGoogleBusinessCarousel!() }),
     };
 
-    const responseKeyMap: Record<
-      keyof OutputTemplate,
-      'text' | 'image' | 'richCard' | undefined
-    > = {
-      message: 'text',
-      card: 'richCard',
-      carousel: 'richCard',
-    };
+    const responseKeyMap: Record<keyof OutputTemplate, 'text' | 'image' | 'richCard' | undefined> =
+      {
+        message: 'text',
+        card: 'richCard',
+        carousel: 'richCard',
+      };
 
     const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
       for (const key in outputTemplate) {
@@ -106,7 +105,9 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   }
 
   convertMessageToGoogleBusinessText(message: MessageValue): string {
-    return typeof message === 'string' ? message : message.toGoogleBusinessText?.() || message.text;
+    return removeSSML(
+      typeof message === 'string' ? message : message.toGoogleBusinessText?.() || message.text,
+    );
   }
 
   convertQuickReplyToGoogleBusinessSuggestion(quickReply: QuickReplyValue): Suggestion {

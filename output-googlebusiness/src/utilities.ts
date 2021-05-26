@@ -1,4 +1,4 @@
-import { Card, Carousel, Message, QuickReply, toSSML } from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
 import { CardWidth, MediaHeight, StandaloneCard } from './models';
 
 export function augmentModelPrototypes(): void {
