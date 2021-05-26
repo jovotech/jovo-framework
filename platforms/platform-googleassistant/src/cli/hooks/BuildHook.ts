@@ -52,9 +52,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
         this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
-        this.validateModels.bind(this),
       ],
-      'build': [this.build.bind(this)],
+      'build': [this.validateModels.bind(this), this.build.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
   }

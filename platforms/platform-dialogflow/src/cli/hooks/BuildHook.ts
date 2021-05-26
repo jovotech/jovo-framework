@@ -45,9 +45,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
         this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
-        this.validateModels.bind(this),
       ],
-      'build': [this.buildDialogflowAgent.bind(this)],
+      'build': [this.validateModels.bind(this), this.buildDialogflowAgent.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
   }
@@ -255,7 +254,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
       for (const resolvedLocale of resolvedLocales) {
         const model: JovoModelData = this.getJovoModel(modelLocale);
         const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(model, resolvedLocale);
-        const dialogflowModelFiles: NativeFileInformation[] = jovoModel.exportNative() as NativeFileInformation[];
+        const dialogflowModelFiles: NativeFileInformation[] =
+          jovoModel.exportNative() as NativeFileInformation[];
 
         if (!dialogflowModelFiles || !dialogflowModelFiles.length) {
           // Should actually never happen but who knows

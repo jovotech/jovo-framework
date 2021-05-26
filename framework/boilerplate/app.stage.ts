@@ -9,7 +9,7 @@ import { app } from './app';
 | Learn more here: www.jovo.tech/docs/staging
 |
 */
-app.use({
+app.configure({
   plugins: [
     // Add Jovo plugins here.
   ],
