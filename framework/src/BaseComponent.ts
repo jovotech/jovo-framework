@@ -30,6 +30,6 @@ export abstract class BaseComponent<
   CONFIG extends Record<string, unknown> = Record<string, unknown>
 > extends JovoProxy {
   get $component(): JovoComponentInfo<DATA, CONFIG> {
-    return super.$component as { $data: DATA; $config: CONFIG | undefined };
+    return this.$component as { $data: DATA; $config: CONFIG | undefined };
   }
 }
