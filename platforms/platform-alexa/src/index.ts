@@ -4,7 +4,7 @@ import { Alexa, AlexaConfig } from './Alexa';
 import { AlexaSkill } from './AlexaSkill';
 import type { AlexaCli as AlexaCliType } from './cli';
 
-declare module '@jovotech/framework/dist/Extensible' {
+declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
     Alexa?: AlexaConfig;
   }
@@ -14,7 +14,7 @@ declare module '@jovotech/framework/dist/Extensible' {
   }
 }
 
-declare module '@jovotech/framework/dist/Jovo' {
+declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
     $alexaSkill?: AlexaSkill;
   }

@@ -2,7 +2,7 @@ import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { FacebookMessenger, FacebookMessengerConfig } from './FacebookMessenger';
 import { MessengerBot } from './MessengerBot';
 
-declare module '@jovotech/framework/dist/Extensible' {
+declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
     FacebookMessenger?: FacebookMessengerConfig;
   }
@@ -12,7 +12,7 @@ declare module '@jovotech/framework/dist/Extensible' {
   }
 }
 
-declare module '@jovotech/framework/dist/Jovo' {
+declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
     $messengerBot?: MessengerBot;
   }
