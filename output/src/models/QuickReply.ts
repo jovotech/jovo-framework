@@ -11,4 +11,9 @@ export class QuickReply {
   @IsString()
   @IsNotEmpty()
   value?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  intent?: string;
 }
