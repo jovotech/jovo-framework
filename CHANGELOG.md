@@ -1,6 +1,21 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.3.0
+### Latest Prerelease Framework Version: 4.0.0-alpha.13
+
+## 2021-06-01
+
+##### `@jovotech/framework [4.0.0-alpha.13]`
+- :bug: Fix routing bug - Occurred when a global route could not be found and `UNHANDLED` was looked for
+
+##### `@jovotech/platform-googleassistant [4.0.0-alpha.13]`
+- :bug: Fix potential bugs
+
+##### `@jovotech/platform-googlebusiness [4.0.0-alpha.13]`
+- :bug: Fix potential bugs
+
+----
+
+### Latest Stable Framework Version: 3.3.0
 
 ## 2020-12-03
 
