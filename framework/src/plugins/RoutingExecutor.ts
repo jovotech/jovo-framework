@@ -104,7 +104,7 @@ export class RoutingExecutor {
   private getGlobalRouteMatches(intentName: string): RouteMatch[] {
     let routeMatches = this.collectGlobalRouteMatches(intentName);
     if (!routeMatches.length) {
-      routeMatches = this.getGlobalRouteMatches(InternalIntent.Unhandled);
+      routeMatches = this.collectGlobalRouteMatches(InternalIntent.Unhandled);
     }
     return routeMatches;
   }
