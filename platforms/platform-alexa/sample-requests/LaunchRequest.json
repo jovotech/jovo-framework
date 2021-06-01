@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "request": {
+    "requestId": "{{requestId}}",
+    "type": "LaunchRequest",
+    "timestamp": "2021-03-30T11:31:31.055Z",
+    "locale": "en-US",
+    "events": [],
+    "intent": {
+      "name": "LAUNCH"
+    }
+  },
+  "session": {
+    "new": true,
+    "sessionId": "{{sessionId}}",
+    "attributes": {}
+  }
+}

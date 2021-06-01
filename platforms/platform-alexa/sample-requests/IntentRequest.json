@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "request": {
+    "requestId": "{{requestId}}",
+    "type": "IntentRequest",
+    "timestamp": "2021-03-30T11:31:31.055Z",
+    "locale": "en-US",
+    "events": [],
+    "intent": {
+      "name": "HelloWorldIntent"
+    }
+  },
+  "session": {
+    "new": false,
+    "sessionId": "{{sessionId}}",
+    "attributes": {
+      "$data": {},
+      "$state": [
+        {
+          "componentPath": "MainComponent"
+        }
+      ],
+      "isNew": false
+    }
+  }
+}
