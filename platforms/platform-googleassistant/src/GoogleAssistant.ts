@@ -1,4 +1,4 @@
-import { App, ExtensibleConfig, HandleRequest, Platform } from '@jovotech/framework';
+import { App, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
@@ -56,15 +56,16 @@ export class GoogleAssistant extends Platform<
     return response;
   }
 
-  beforeRequest = (handleRequest: HandleRequest, jovo: GoogleAction) => {
+  beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
     // if the request is a no-input-request and a state exists, add the reprompt-component to the top
+    const intentName = jovo.$googleAction?.$request?.intent?.name;
     if (
-      jovo.$request.intent?.name &&
+      intentName &&
       [
         'actions.intent.NO_INPUT_1',
         'actions.intent.NO_INPUT_2',
         'actions.intent.NO_INPUT_FINAL',
-      ].includes(jovo.$request.intent.name) &&
+      ].includes(intentName) &&
       jovo.$state
     ) {
       jovo.$state.push({
