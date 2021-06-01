@@ -116,7 +116,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
 
-    const relatedPlatform = this.platforms.find(
+    const relatedPlatform = handleRequest.platforms.find(
       (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
     );
     if (!relatedPlatform) {
