@@ -1,15 +1,18 @@
 # Jovo Framework Changelog
 
-### Latest Prerelease Framework Version: 4.0.0-alpha.14
+### Latest Prerelease Framework Version: 4.0.0-alpha.15
 
 ## 2021-06-02
 
-##### `@jovotech/framework [4.0.0-alpha.14]`
+##### `@jovotech/platform-alexa [4.0.0-alpha.15]`
+- [973fd57](https://github.com/jovotech/jovo-framework/commit/f0b4068aa56a2094e0ec760652648bb152c11bae) :bug: Fix logic to use APL-quick-replies
 
-- [6a44247](https://github.com/jovotech/jovo-framework/commit/6a44247ca0994096baa1eb11119dfd15adef42f8) :sparkles: Support generating APL from generic output
-- [f2eac6f](https://github.com/jovotech/jovo-framework/commit/f2eac6f026d0dd140c9a5d2399ec551cf9f3d8d4) :sparkles: Implement handling of APL-quick-replies for Alexa 
+##### `@jovotech/framework [4.0.0-alpha.14]`
 - [d1ab058](https://github.com/jovotech/jovo-framework/commit/d1ab0582403539f3e3a5eebca4fd52f848de10d5) :bug: Fix bug that caused related platform to be loaded from App instead of HandleRequest - Caused changes in mount to be omitted
 
+##### `@jovotech/platform-alexa [4.0.0-alpha.14]`
+- [6a44247](https://github.com/jovotech/jovo-framework/commit/6a44247ca0994096baa1eb11119dfd15adef42f8) :sparkles: Support generating APL from generic output
+- [f2eac6f](https://github.com/jovotech/jovo-framework/commit/f2eac6f026d0dd140c9a5d2399ec551cf9f3d8d4) :sparkles: Implement handling of APL-quick-replies for Alexa
 
 ## 2021-06-01
 
