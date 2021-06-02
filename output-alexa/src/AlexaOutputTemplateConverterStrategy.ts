@@ -74,7 +74,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response.response.directives.push(carousel.toApl?.() as AplRenderDocumentDirective);
     }
 
-    const list = output.platforms?.Alexa?.list || output.list;
+    const list = output.platforms?.Alexa?.list;
     if (list && this.config.genericOutputToApl) {
       if (!response.response.directives) {
         response.response.directives = [];

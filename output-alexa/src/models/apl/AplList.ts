@@ -3,12 +3,12 @@ import {
   Card,
   IsArray,
   IsInstance,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import AplListJson from '../../apl/List.json';
 import { AplHeader } from './AplHeader';
 import { AplRenderDocumentDirective } from './AplRenderDocumentDirective';
 
@@ -33,5 +33,21 @@ export class AplList {
   @Type(() => Card)
   items: Card[];
 
-  toApl?(): AplRenderDocumentDirective;
+  toApl?(): AplRenderDocumentDirective {
+    if (this.header) {
+      AplListJson.datasources.data.header = this.header;
+    }
+
+    if (this.backgroundImageUrl) {
+      AplListJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
+    }
+
+    (AplListJson.datasources.data.items as Card[]) = this.items;
+
+    return {
+      type: 'Alexa.Presentation.APL.RenderDocument',
+      token: 'token',
+      ...AplListJson,
+    };
+  }
 }

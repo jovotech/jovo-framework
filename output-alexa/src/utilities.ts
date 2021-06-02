@@ -1,9 +1,7 @@
 import { Card, Carousel, Message } from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
-import AplListJson from './apl/List.json';
 import {
-  AplList,
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
@@ -84,24 +82,6 @@ export function augmentModelPrototypes(): void {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
       ...AplCarouselJson,
-    };
-  };
-
-  AplList.prototype.toApl = function (): AplRenderDocumentDirective {
-    if (this.header) {
-      AplListJson.datasources.data.header = this.header;
-    }
-
-    if (this.backgroundImageUrl) {
-      AplListJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
-    }
-
-    (AplListJson.datasources.data.items as Card[]) = this.items;
-
-    return {
-      type: 'Alexa.Presentation.APL.RenderDocument',
-      token: 'token',
-      ...AplListJson,
     };
   };
 
