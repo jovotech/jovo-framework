@@ -5,13 +5,13 @@
 ## 2021-06-01
 
 ##### `@jovotech/framework [4.0.0-alpha.13]`
-- :bug: Fix routing bug - Occurred when a global route could not be found and `UNHANDLED` was looked for
+- [4f1b976](https://github.com/jovotech/jovo-framework/commit/4f1b97657d49f97e7453428e7449f7ed1e2c9dc5) :bug: Fix routing bug - Occurred when a global route could not be found and `UNHANDLED` was looked for
 
 ##### `@jovotech/platform-googleassistant [4.0.0-alpha.13]`
-- :bug: Fix potential bugs
+- [896c86f](https://github.com/jovotech/jovo-framework/commit/896c86f0a61fab4e71de02debc2bfed6d8e1974e) :bug: Fix potential bugs
 
 ##### `@jovotech/platform-googlebusiness [4.0.0-alpha.13]`
-- :bug: Fix potential bugs
+- [896c86f](https://github.com/jovotech/jovo-framework/commit/896c86f0a61fab4e71de02debc2bfed6d8e1974e) :bug: Fix potential bugs
 
 ----
 
