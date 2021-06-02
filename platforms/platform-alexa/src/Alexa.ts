@@ -13,7 +13,7 @@ import { AlexaUser } from './AlexaUser';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {
-    genericOutputToApl?: boolean;
+    genericOutputToApl: boolean;
   };
 }
 
