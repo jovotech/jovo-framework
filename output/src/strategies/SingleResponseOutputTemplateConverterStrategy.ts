@@ -9,8 +9,9 @@ import {
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
 export abstract class SingleResponseOutputTemplateConverterStrategy<
-  RESPONSE extends Record<string, unknown>
-> implements OutputTemplateConverterStrategy<RESPONSE> {
+  RESPONSE extends Record<string, unknown>,
+> implements OutputTemplateConverterStrategy<RESPONSE>
+{
   abstract responseClass: new () => RESPONSE;
   abstract platformName: keyof OutputTemplatePlatforms;
 
