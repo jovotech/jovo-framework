@@ -1,15 +1,33 @@
 import {
   MessageValue,
   OutputTemplate,
+  QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
 import _merge from 'lodash.merge';
-import { AlexaResponse, OutputSpeech, OutputSpeechType } from './models';
+import {
+  AlexaResponse,
+  AplRenderDocumentDirective,
+  OutputSpeech,
+  OutputSpeechType,
+} from './models';
+
+export interface AlexaOutputTemplateConverterStrategyConfig {
+  genericOutputToApl: boolean;
+}
 
 export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<AlexaResponse> {
   platformName = 'Alexa';
   responseClass = AlexaResponse;
+
+  constructor(
+    public config: Partial<AlexaOutputTemplateConverterStrategyConfig> = {
+      genericOutputToApl: true,
+    },
+  ) {
+    super();
+  }
 
   buildResponse(output: OutputTemplate): AlexaResponse {
     const response: AlexaResponse = {
@@ -36,7 +54,56 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const card = output.platforms?.Alexa?.card || output.card;
     if (card) {
-      response.response.card = card.toAlexaCard?.();
+      if (this.config.genericOutputToApl) {
+        if (!response.response.directives) {
+          response.response.directives = [];
+        }
+
+        response.response.directives.push(card.toApl?.() as AplRenderDocumentDirective);
+      } else {
+        response.response.card = card.toAlexaCard?.();
+      }
+    }
+
+    const carousel = output.platforms?.Alexa?.carousel || output.carousel;
+    if (carousel && this.config.genericOutputToApl) {
+      if (!response.response.directives) {
+        response.response.directives = [];
+      }
+
+      response.response.directives.push(carousel.toApl?.() as AplRenderDocumentDirective);
+    }
+
+    const list = output.platforms?.Alexa?.list || output.list;
+    if (list && this.config.genericOutputToApl) {
+      if (!response.response.directives) {
+        response.response.directives = [];
+      }
+
+      response.response.directives.push(list.toApl?.() as AplRenderDocumentDirective);
+    }
+
+    const quickReplies: QuickReplyValue[] | undefined =
+      output.platforms?.Alexa?.quickReplies || output.quickReplies;
+    if (quickReplies) {
+      const directive: AplRenderDocumentDirective | undefined = response.response
+        .directives?.[0] as AplRenderDocumentDirective | undefined;
+      if (directive) {
+        if (!directive.datasources?.data) {
+          directive.datasources = {
+            data: {},
+          };
+        }
+        directive.datasources.data.quickReplies = quickReplies.map(
+          (quickReply: QuickReplyValue) => {
+            if (typeof quickReply === 'string') {
+              return { type: 'QuickReply', intent: quickReply };
+            } else {
+              return { type: 'QuickReply', ...quickReply };
+            }
+          },
+        );
+      }
     }
 
     if (output.platforms?.Alexa?.nativeResponse) {
