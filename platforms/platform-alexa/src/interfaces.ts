@@ -98,6 +98,13 @@ export type InputMechanism = 'DIRECTION';
 
 export interface Device {
   deviceId: string;
+  supportedInterfaces?: {
+    'Alexa.Presentation.APL'?: {
+      runtime: {
+        maxVersion: string;
+      };
+    };
+  };
 }
 
 export interface User {

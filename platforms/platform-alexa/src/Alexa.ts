@@ -11,20 +11,29 @@ import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
 import { AlexaUser } from './AlexaUser';
 
-export interface AlexaConfig extends ExtensibleConfig {}
+export interface AlexaConfig extends ExtensibleConfig {
+  output: {
+    genericOutputToApl?: boolean;
+  };
+}
 
 export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, AlexaConfig> {
-  outputTemplateConverterStrategy = new AlexaOutputTemplateConverterStrategy();
+  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
+    new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = AlexaSkill;
   userClass = AlexaUser;
 
-  mount(parent: HandleRequest) {
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+  getDefaultConfig(): AlexaConfig {
+    return {
+      output: {
+        genericOutputToApl: true,
+      },
+    };
   }
 
-  getDefaultConfig() {
-    return {};
+  mount(parent: HandleRequest): void {
+    parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 
   isRequestRelated(request: Record<string, any> | AlexaRequest): boolean {
@@ -44,6 +53,13 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
   }
 
   private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+    if (!(jovo.$platform instanceof Alexa)) {
+      return;
+    }
+    // Generate generic output to APL if supported and set in config
+    this.outputTemplateConverterStrategy.config.genericOutputToApl =
+      jovo.$alexaSkill?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
+
     if (jovo.$alexaSkill?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexaSkill.$request.request.arguments || [];
       requestArguments.forEach((argument) => {
@@ -56,7 +72,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
             if (argumentObj.entities) {
               const entityMap: EntityMap = {};
               argumentObj.entities.forEach((entity: Entity) => {
-                entityMap[entity.name] = entity;
+                entityMap[entity.name!] = entity;
               });
               jovo.$nlu.entities = { ...entityMap };
               jovo.$entities = entityMap;

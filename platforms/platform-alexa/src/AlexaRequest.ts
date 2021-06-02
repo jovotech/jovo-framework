@@ -73,4 +73,8 @@ export class AlexaRequest extends JovoRequest {
   isNewSession(): boolean | undefined {
     return this.session?.new;
   }
+
+  isAplSupported(): boolean {
+    return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
+  }
 }
