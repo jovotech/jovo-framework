@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.13",
   "private": true,
   "description": "",
   "main": "dist/index.js",
@@ -26,7 +26,7 @@
     "@jovotech/cli-command-new": "^4.0.0-alpha.9",
     "@jovotech/cli-core": "^4.0.0-alpha.8",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-alpha.14",
+    "@jovotech/framework": "^4.0.0-alpha.15",
     "adm-zip": "^0.5.5",
     "axios": "^0.21.1",
     "global-dirs": "^3.0.0",

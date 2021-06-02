@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-alpha.14",
+  "version": "4.0.0-alpha.15",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,8 +18,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.0.0-alpha.14",
-    "@jovotech/platform-core": "^4.0.0-alpha.14",
+    "@jovotech/nlu-nlpjs": "^4.0.0-alpha.15",
+    "@jovotech/platform-core": "^4.0.0-alpha.15",
     "@nlpjs/lang-en": "^4.22.0",
     "@types/socket.io-client": "^1.4.36",
     "fast-deep-equal": "^3.1.3",
@@ -27,7 +27,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.14",
+    "@jovotech/framework": "^4.0.0-alpha.15",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/uuid": "^8.3.0",
