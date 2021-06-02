@@ -1,6 +1,15 @@
 # Jovo Framework Changelog
 
-### Latest Prerelease Framework Version: 4.0.0-alpha.13
+### Latest Prerelease Framework Version: 4.0.0-alpha.14
+
+## 2021-06-02
+
+##### `@jovotech/framework [4.0.0-alpha.14]`
+
+- [6a44247](https://github.com/jovotech/jovo-framework/commit/6a44247ca0994096baa1eb11119dfd15adef42f8) :sparkles: Support generating APL from generic output
+- [f2eac6f](https://github.com/jovotech/jovo-framework/commit/f2eac6f026d0dd140c9a5d2399ec551cf9f3d8d4) :sparkles: Implement handling of APL-quick-replies for Alexa 
+- [d1ab058](https://github.com/jovotech/jovo-framework/commit/d1ab0582403539f3e3a5eebca4fd52f848de10d5) :bug: Fix bug that caused related platform to be loaded from App instead of HandleRequest - Caused changes in mount to be omitted
+
 
 ## 2021-06-01
 
