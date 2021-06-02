@@ -174,7 +174,8 @@ export interface Request {
   requestId: string;
   timestamp: string;
   locale: string;
-  arguments?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
   intent?: Intent;

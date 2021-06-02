@@ -63,25 +63,17 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
     if (jovo.$alexaSkill?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexaSkill.$request.request.arguments || [];
       requestArguments.forEach((argument) => {
-        try {
-          const argumentObj = JSON.parse(argument);
-          if (argumentObj.type === 'QuickReply') {
-            if (argumentObj.intent) {
-              jovo.$nlu.intent = { name: argumentObj.intent };
-            }
-            if (argumentObj.entities) {
-              const entityMap: EntityMap = {};
-              argumentObj.entities.forEach((entity: Entity) => {
-                entityMap[entity.name!] = entity;
-              });
-              jovo.$nlu.entities = { ...entityMap };
-              jovo.$entities = entityMap;
-            }
+        if (typeof argument === 'object' && argument.type === 'QuickReply') {
+          if (argument.intent) {
+            jovo.$nlu.intent = { name: argument.intent };
           }
-        } catch (e) {
-          // Ignore SyntaxError of JSON.parse, this can happen if there is a normal string which is no JSON-object.
-          if (!(e instanceof SyntaxError)) {
-            console.error(e);
+          if (argument.entities) {
+            const entityMap: EntityMap = {};
+            argument.entities.forEach((entity: Entity) => {
+              entityMap[entity.name!] = entity;
+            });
+            jovo.$nlu.entities = { ...entityMap };
+            jovo.$entities = entityMap;
           }
         }
       });
