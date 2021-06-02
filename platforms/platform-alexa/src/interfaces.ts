@@ -167,6 +167,7 @@ export interface Request {
   requestId: string;
   timestamp: string;
   locale: string;
+  arguments?: string[];
   token?: string;
   offsetInMilliseconds?: number;
   intent?: Intent;
