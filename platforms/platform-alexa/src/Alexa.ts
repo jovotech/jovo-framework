@@ -12,7 +12,7 @@ import { AlexaSkill } from './AlexaSkill';
 import { AlexaUser } from './AlexaUser';
 
 export interface AlexaConfig extends ExtensibleConfig {
-  output?: {
+  output: {
     genericOutputToApl?: boolean;
   };
 }
@@ -53,10 +53,11 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
   }
 
   private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+    if (!(jovo.$platform instanceof Alexa)) {
+      return;
+    }
     // Generate generic output to APL if supported and set in config
-    (
-      jovo.$platform.outputTemplateConverterStrategy as AlexaOutputTemplateConverterStrategy
-    ).config.genericOutputToApl =
+    this.outputTemplateConverterStrategy.config.genericOutputToApl =
       jovo.$alexaSkill?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
 
     if (jovo.$alexaSkill?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
