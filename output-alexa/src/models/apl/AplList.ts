@@ -15,10 +15,11 @@ import { AplRenderDocumentDirective } from './AplRenderDocumentDirective';
 export class AplList {
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   backgroundImageUrl?: string;
 
   @IsOptional()
+  @ValidateNested()
+  @Type(() => AplHeader)
   header?: AplHeader;
 
   @IsArray()

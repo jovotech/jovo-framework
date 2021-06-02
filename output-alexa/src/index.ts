@@ -1,14 +1,14 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
   AlexaOutputTemplate,
+  AplHeader,
+  AplList,
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
   OutputSpeech,
   OutputSpeechType,
 } from './models';
-import { AplHeader } from './models/apl/AplHeader';
-import { AplList } from './models/apl/AplList';
 import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/models/Card' {

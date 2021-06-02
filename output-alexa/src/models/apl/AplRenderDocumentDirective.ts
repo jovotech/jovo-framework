@@ -7,7 +7,7 @@ export class AplRenderDocumentDirective extends AplDirective<'Alexa.Presentation
   type: 'Alexa.Presentation.APL.RenderDocument';
 
   @IsObject()
-  document: { [key: string]: any; type: 'APL' } | { type: 'Link'; src: string };
+  document: { [key: string]: any; type: 'APL' | string } | { type: 'Link'; src: string };
 
   @IsOptional()
   @IsObject()

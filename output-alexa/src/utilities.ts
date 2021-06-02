@@ -1,14 +1,14 @@
 import { Card, Carousel, Message } from '@jovotech/output';
+import AplCardJson from './apl/Card.json';
+import AplCarouselJson from './apl/Carousel.json';
+import AplListJson from './apl/List.json';
 import {
+  AplList,
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
   OutputSpeechType,
 } from './models';
-import AplCardJson from './apl/Card.json';
-import AplCarouselJson from './apl/Carousel.json';
-import AplListJson from './apl/List.json';
-import { AplList } from './models/apl/AplList';
 
 export function validateAlexaString(value: unknown): string | undefined | null | void {
   if (typeof value !== 'string') {
@@ -62,13 +62,11 @@ export function augmentModelPrototypes(): void {
       AplCardJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    // @ts-ignore
-    const directive: AplRenderDocumentDirective = {
+    return {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
       ...AplCardJson,
     };
-    return directive;
   };
 
   Carousel.prototype.toApl = function (): AplRenderDocumentDirective {
@@ -82,13 +80,11 @@ export function augmentModelPrototypes(): void {
 
     (AplCarouselJson.datasources.data.items as Card[]) = this.items;
 
-    // @ts-ignore
-    const directive: AplRenderDocumentDirective = {
+    return {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
       ...AplCarouselJson,
     };
-    return directive;
   };
 
   AplList.prototype.toApl = function (): AplRenderDocumentDirective {
@@ -102,13 +98,11 @@ export function augmentModelPrototypes(): void {
 
     (AplListJson.datasources.data.items as Card[]) = this.items;
 
-    // @ts-ignore
-    const directive: AplRenderDocumentDirective = {
+    return {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
       ...AplListJson,
     };
-    return directive;
   };
 
   Message.prototype.toAlexaOutputSpeech = function () {

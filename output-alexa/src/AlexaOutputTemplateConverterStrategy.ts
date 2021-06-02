@@ -1,9 +1,6 @@
 import {
-  Carousel,
   MessageValue,
   OutputTemplate,
-  plainToClass,
-  QuickReply,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
@@ -11,19 +8,24 @@ import {
 import _merge from 'lodash.merge';
 import {
   AlexaResponse,
-  CardType,
-  Card as AlexaCard,
+  AplRenderDocumentDirective,
   OutputSpeech,
   OutputSpeechType,
-  AplRenderDocumentDirective,
 } from './models';
-import { AplList } from './models/apl/AplList';
+
+export interface AlexaOutputTemplateConverterStrategyConfig {
+  genericOutputToApl: boolean;
+}
 
 export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<AlexaResponse> {
   platformName = 'Alexa';
   responseClass = AlexaResponse;
 
-  constructor(public config: { genericOutputToApl?: boolean } = { genericOutputToApl: true }) {
+  constructor(
+    public config: Partial<AlexaOutputTemplateConverterStrategyConfig> = {
+      genericOutputToApl: true,
+    },
+  ) {
     super();
   }
 
@@ -63,7 +65,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const carousel: Carousel | undefined = output.platforms?.Alexa?.carousel || output.carousel;
+    const carousel = output.platforms?.Alexa?.carousel || output.carousel;
     if (carousel && this.config.genericOutputToApl) {
       if (!response.response.directives) {
         response.response.directives = [];
@@ -72,10 +74,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response.response.directives.push(carousel.toApl?.() as AplRenderDocumentDirective);
     }
 
-    const list: AplList | undefined = plainToClass(
-      AplList,
-      output.platforms?.Alexa?.list || output.list,
-    );
+    const list = output.platforms?.Alexa?.list || output.list;
     if (list && this.config.genericOutputToApl) {
       if (!response.response.directives) {
         response.response.directives = [];
@@ -90,7 +89,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       const directive: AplRenderDocumentDirective | undefined = response.response
         .directives?.[0] as AplRenderDocumentDirective | undefined;
       if (directive) {
-        directive.datasources!.data.quickReplies = quickReplies.map(
+        if (!directive.datasources?.data) {
+          directive.datasources = {
+            data: {},
+          };
+        }
+        directive.datasources.data.quickReplies = quickReplies.map(
           (quickReply: QuickReplyValue) => {
             if (typeof quickReply === 'string') {
               return { type: 'QuickReply', intent: quickReply };
