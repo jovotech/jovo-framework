@@ -17,7 +17,7 @@
 					"intentEvents": [
 						{
 							"intent": "PushNotificationsIntent",
-							"transitionToScene": "PushNotificationScene_Notifications"
+							"transitionToScene": "PushNotificationsScene_Notifications"
 						}
 					]
 				},
