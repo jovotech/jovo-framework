@@ -41,7 +41,7 @@ There are multiple ways of setting up the scenes necessary, we recommend creatin
         "intentEvents": [
           {
             "intent":"PushNotificationsIntent",
-            "transitionToScene":"PushNotificationScene_Notifications"
+            "transitionToScene":"PushNotificationsScene_Notifications"
           }
         ]
       },
