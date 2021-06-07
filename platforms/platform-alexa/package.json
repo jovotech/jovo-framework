@@ -30,7 +30,7 @@
     "@jovotech/cli-core": "^4.0.0-alpha.8",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.15",
-    "@jovotech/output-alexa": "^4.0.0-alpha.8",
+    "@jovotech/output-alexa": "^4.0.0-alpha.9",
     "chalk": "^4.1.0",
     "jovo-model": "^3.0.1",
     "jovo-model-alexa": "^3.0.1",
@@ -64,7 +64,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
   },
   "browser": {
     "@jovotech/cli-core": false,

@@ -23,7 +23,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output": "^4.0.0-alpha.5",
+    "@jovotech/output": "^4.0.0-alpha.9",
     "axios": "^0.21.1",
     "i18next": "^20.3.1",
     "lodash.clonedeep": "^4.5.0",

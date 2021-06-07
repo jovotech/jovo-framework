@@ -31,7 +31,7 @@
     "@jovotech/cli-core": "^4.0.0-alpha.8",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.15",
-    "@jovotech/output-googleassistant": "^4.0.0-alpha.5",
+    "@jovotech/output-googleassistant": "^4.0.0-alpha.9",
     "global-dirs": "^3.0.0",
     "indent-string": "^4.0.0",
     "jovo-model": "^3.0.1",
@@ -68,7 +68,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
   },
   "browser": {
     "@jovotech/cli-core": false,
