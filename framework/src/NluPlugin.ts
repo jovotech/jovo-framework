@@ -28,6 +28,7 @@ export abstract class NluPlugin<CONFIG extends PluginConfig = PluginConfig> exte
       const processResult = await this.process(handleRequest, jovo);
       if (processResult) {
         jovo.$nlu = processResult;
+        jovo.$entities = processResult.entities || {};
       }
     }
   };
