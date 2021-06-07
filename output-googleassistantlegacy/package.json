@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-googleassistantlegacy",
-  "version": "4.0.0-alpha.8",
+  "version": "4.0.0-alpha.9",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -23,7 +23,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-alpha.8",
+    "@jovotech/output": "^4.0.0-alpha.9",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
