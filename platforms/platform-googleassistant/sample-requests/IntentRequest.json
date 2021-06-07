@@ -1,0 +1,52 @@
+{
+  "handler": {
+    "name": "intent"
+  },
+  "intent": {
+    "name": "HelloWorldIntent",
+    "params": {
+    },
+    "query": "my name is max"
+  },
+  "scene": {
+    "name": "actions.scene.START_CONVERSATION",
+    "slotFillingStatus": "UNSPECIFIED",
+    "slots": {},
+    "next": {
+      "name": "actions.scene.END_CONVERSATION"
+    }
+  },
+  "session": {
+    "id": "ABwppHE_UhlNPqYkmCHMz0TTxi3O5IB3BHeX5lBQA_lTzK1pgnojjoZHEtu1F_s0DOM3osOpPaKXFspaueZiqYvKJQ",
+    "params": {
+      "_JOVO_SESSION_": {
+        "createdAt": "2020-06-30T14:01:33.148Z",
+        "reprompts": {
+          "NO_INPUT1": "Hello World! What's your name?"
+        },
+        "new": true
+      }
+    },
+    "typeOverrides": [],
+    "languageCode": ""
+  },
+  "user": {
+    "locale": "en-US",
+    "params": {
+      "userId": "5aab7198-8d71-4465-8a50-07ee9273c42c"
+    },
+    "accountLinkingStatus": "ACCOUNT_LINKING_STATUS_UNSPECIFIED",
+    "verificationStatus": "VERIFIED",
+    "packageEntitlements": [],
+    "lastSeenTime": "2020-06-30T13:28:36Z"
+  },
+  "home": {
+    "params": {}
+  },
+  "device": {
+    "capabilities": [
+      "SPEECH",
+      "LONG_FORM_AUDIO"
+    ]
+  }
+}

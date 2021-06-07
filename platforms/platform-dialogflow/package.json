@@ -1,15 +1,19 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.0.0-alpha.10",
+  "version": "4.0.0-alpha.14",
   "private": true,
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "types": "dist/types/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "prebuild": "npm run rimraf",
+    "build": "node ../../scripts/build-package.js",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
@@ -26,7 +30,7 @@
     "@jovotech/cli-command-new": "^4.0.0-alpha.9",
     "@jovotech/cli-core": "^4.0.0-alpha.8",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-alpha.12",
+    "@jovotech/framework": "^4.0.0-alpha.16",
     "adm-zip": "^0.5.5",
     "axios": "^0.21.1",
     "global-dirs": "^3.0.0",
@@ -65,7 +69,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.0 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
   },
   "browser": {
     "@jovotech/cli-command-build": false,

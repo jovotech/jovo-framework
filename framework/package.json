@@ -1,17 +1,19 @@
 {
   "name": "@jovotech/framework",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.16",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "types": "dist/types/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist",
     "boilerplate"
   ],
   "scripts": {
     "prebuild": "npm run rimraf",
-    "build": "tsc",
-    "prewatch": "npm run rimraf",
+    "build": "node ../scripts/build-package.js",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
@@ -21,8 +23,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output": "^4.0.0-alpha.5",
+    "@jovotech/output": "^4.0.0-alpha.9",
     "axios": "^0.21.1",
+    "i18next": "^20.3.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -48,6 +51,7 @@
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.5.4",
+    "ts-toolbelt": "9.5.13",
     "typescript": "^4.2.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",

@@ -29,18 +29,6 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     };
   }
 
-  async initialize(parent: Extensible): Promise<void> {
-    // check if rasa-server is available
-    // TODO determine whether this check if required/necessary
-    try {
-      await this.sendTextToRasaServer('');
-    } catch (e) {
-      throw new JovoError({
-        message: 'Could not access Rasa-server.',
-      });
-    }
-  }
-
   async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;

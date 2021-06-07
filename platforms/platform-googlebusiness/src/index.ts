@@ -2,7 +2,7 @@ import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { GoogleBusiness, GoogleBusinessConfig } from './GoogleBusiness';
 import { GoogleBusinessBot } from './GoogleBusinessBot';
 
-declare module '@jovotech/framework/dist/Extensible' {
+declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
     GoogleBusiness?: GoogleBusinessConfig;
   }
@@ -12,7 +12,7 @@ declare module '@jovotech/framework/dist/Extensible' {
   }
 }
 
-declare module '@jovotech/framework/dist/Jovo' {
+declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
     $googleBusinessBot?: GoogleBusinessBot;
   }

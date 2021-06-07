@@ -98,6 +98,13 @@ export type InputMechanism = 'DIRECTION';
 
 export interface Device {
   deviceId: string;
+  supportedInterfaces?: {
+    'Alexa.Presentation.APL'?: {
+      runtime: {
+        maxVersion: string;
+      };
+    };
+  };
 }
 
 export interface User {
@@ -167,6 +174,8 @@ export interface Request {
   requestId: string;
   timestamp: string;
   locale: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
   intent?: Intent;

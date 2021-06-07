@@ -19,9 +19,9 @@ export interface UserData extends Data {}
 export interface Entity {
   [key: string]: unknown | undefined;
 
+  name: string;
   id?: string;
   key?: string;
-  name?: string;
   value?: unknown;
 }
 

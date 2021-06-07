@@ -1,6 +1,6 @@
 import { DialogflowNlu, DialogflowNluConfig } from './DialogflowNlu';
 
-declare module '@jovotech/framework/dist/Extensible' {
+declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
     DialogflowNlu?: DialogflowNluConfig;
   }

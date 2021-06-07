@@ -1,6 +1,44 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.3.0
+### Latest Prerelease Framework Version: 4.0.0-alpha.16
+
+## 2021-06-07
+
+##### `@jovotech/framework [4.0.0-alpha.16]`
+
+:boom: All 4.0.0-alpha.16-packages are only compatible with other 4.0.0-alpha.16-packages or newer due to changes of exports.
+
+- [268bf2f](https://github.com/jovotech/jovo-framework/commit/268bf2f605519550cbbbda67a73e7ab22f9b1c21) :recycle: :wrench: Refactor build-system - All packages now support tree-shaking
+- [fd306f0](https://github.com/jovotech/jovo-framework/commit/fd306f00ffe0ae7351abfa3083308737dc7d32e6) :sparkles: Implement i18next-integration
+- [7426066](https://github.com/jovotech/jovo-framework/commit/7426066ce77d7b3c680d8740f9157bccd82f365d) :sparkles: Allow OutputTemplate-object or -array to be passed to `$send` as well
+
+
+## 2021-06-02
+
+##### `@jovotech/platform-alexa [4.0.0-alpha.15]`
+- [973fd57](https://github.com/jovotech/jovo-framework/commit/f0b4068aa56a2094e0ec760652648bb152c11bae) :bug: Fix logic to use APL-quick-replies
+
+##### `@jovotech/framework [4.0.0-alpha.14]`
+- [d1ab058](https://github.com/jovotech/jovo-framework/commit/d1ab0582403539f3e3a5eebca4fd52f848de10d5) :bug: Fix bug that caused related platform to be loaded from App instead of HandleRequest - Caused changes in mount to be omitted
+
+##### `@jovotech/platform-alexa [4.0.0-alpha.14]`
+- [6a44247](https://github.com/jovotech/jovo-framework/commit/6a44247ca0994096baa1eb11119dfd15adef42f8) :sparkles: Support generating APL from generic output
+- [f2eac6f](https://github.com/jovotech/jovo-framework/commit/f2eac6f026d0dd140c9a5d2399ec551cf9f3d8d4) :sparkles: Implement handling of APL-quick-replies for Alexa
+
+## 2021-06-01
+
+##### `@jovotech/framework [4.0.0-alpha.13]`
+- [4f1b976](https://github.com/jovotech/jovo-framework/commit/4f1b97657d49f97e7453428e7449f7ed1e2c9dc5) :bug: Fix routing bug - Occurred when a global route could not be found and `UNHANDLED` was looked for
+
+##### `@jovotech/platform-googleassistant [4.0.0-alpha.13]`
+- [896c86f](https://github.com/jovotech/jovo-framework/commit/896c86f0a61fab4e71de02debc2bfed6d8e1974e) :bug: Fix potential bugs
+
+##### `@jovotech/platform-googlebusiness [4.0.0-alpha.13]`
+- [896c86f](https://github.com/jovotech/jovo-framework/commit/896c86f0a61fab4e71de02debc2bfed6d8e1974e) :bug: Fix potential bugs
+
+----
+
+### Latest Stable Framework Version: 3.3.0
 
 ## 2020-12-03
 
