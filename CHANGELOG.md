@@ -1,6 +1,17 @@
 # Jovo Framework Changelog
 
-### Latest Prerelease Framework Version: 4.0.0-alpha.15
+### Latest Prerelease Framework Version: 4.0.0-alpha.16
+
+## 2021-06-07
+
+##### `@jovotech/framework [4.0.0-alpha.16]`
+
+:boom: All 4.0.0-alpha.16-packages are only compatible with other 4.0.0-alpha.16-packages or newer due to changes of exports.
+
+- [268bf2f](https://github.com/jovotech/jovo-framework/commit/268bf2f605519550cbbbda67a73e7ab22f9b1c21) :recycle: :wrench: Refactor build-system - All packages now support tree-shaking
+- [fd306f0](https://github.com/jovotech/jovo-framework/commit/fd306f00ffe0ae7351abfa3083308737dc7d32e6) :sparkles: Implement i18next-integration
+- [7426066](https://github.com/jovotech/jovo-framework/commit/7426066ce77d7b3c680d8740f9157bccd82f365d) :sparkles: Allow OutputTemplate-object or -array to be passed to `$send` as well
+
 
 ## 2021-06-02
 
