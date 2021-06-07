@@ -6,6 +6,7 @@ import {
   Jovo,
   JovoError,
   OutputConstructor,
+  OutputTemplate,
   OutputTemplateConverter,
 } from '@jovotech/framework';
 import {
@@ -27,6 +28,7 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     return this.$handleRequest.plugins.FacebookMessenger?.config?.pageAccessToken;
   }
 
+  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<
       OUTPUT,
@@ -35,8 +37,19 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
       this
     >,
     options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructorOrTemplate:
+      | OutputConstructor<OUTPUT, FacebookMessengerRequest, FacebookMessengerResponse, this>
+      | OutputTemplate
+      | OutputTemplate[],
+    options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
-    await super.$send(outputConstructor, options);
+    if (typeof outputConstructorOrTemplate === 'function') {
+      await super.$send(outputConstructorOrTemplate, options);
+    } else {
+      await super.$send(outputConstructorOrTemplate);
+    }
     if (!this.$output) {
       return;
     }
