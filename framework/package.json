@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/framework",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.15",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@jovotech/output": "^4.0.0-alpha.5",
     "axios": "^0.21.1",
+    "i18next": "^20.3.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -47,6 +48,7 @@
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.5.4",
+    "ts-toolbelt": "9.5.13",
     "typescript": "^4.2.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",

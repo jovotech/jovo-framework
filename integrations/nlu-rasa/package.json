@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/nlu-rasa",
-  "version": "4.0.0-alpha.12",
+  "version": "4.0.0-alpha.15",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -21,7 +21,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.12",
+    "@jovotech/framework": "^4.0.0-alpha.15",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",

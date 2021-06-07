@@ -14,6 +14,10 @@ import {
   ComponentNotFoundError,
   DeepPartial,
   HandlerNotFoundError,
+  I18NextAutoPath,
+  I18NextResourcesLanguageKeys,
+  I18NextResourcesNamespaceKeysOfLanguage,
+  I18NextTOptions,
   MetadataStorage,
   OutputConstructor,
   PickWhere,
@@ -188,12 +192,46 @@ export abstract class Jovo<
     };
   }
 
+  $t<
+    PATH extends string,
+    LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
+    NAMESPACE extends
+      | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
+      | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
+  >(
+    path:
+      | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
+      | PATH
+      | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
+    options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
+  ): string {
+    if (!options) {
+      options = {};
+    }
+    if (!options.lng) {
+      options.lng = this.$request.getLocale() as LANGUAGE;
+    }
+    return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
+  }
+
+  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructorOrTemplate:
+      | OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>
+      | OutputTemplate
+      | OutputTemplate[],
+    options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
-    const outputInstance = new outputConstructor(this, options);
-    this.$output = await outputInstance.build();
+    if (typeof outputConstructorOrTemplate === 'function') {
+      const outputInstance = new outputConstructorOrTemplate(this, options);
+      this.$output = await outputInstance.build();
+    } else {
+      this.$output = outputConstructorOrTemplate;
+    }
   }
 
   async $redirect<

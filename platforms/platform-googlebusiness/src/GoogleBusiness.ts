@@ -1,5 +1,4 @@
 import {
-  App,
   DeepPartial,
   Extensible,
   ExtensibleConfig,
@@ -82,10 +81,13 @@ export class GoogleBusiness extends Platform<
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, googleBusinessBot: GoogleBusinessBot) => {
+  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
     // if the request is a typing-indicator-request or a receipt-request, just ignore it and send 200 to not get it sent multiple times
-    if (googleBusinessBot.$request.userStatus || googleBusinessBot.$request.receipts) {
-      googleBusinessBot.$response = {} as GoogleBusinessResponse;
+    if (
+      jovo.$googleBusinessBot?.$request?.userStatus ||
+      jovo.$googleBusinessBot?.$request?.receipts
+    ) {
+      jovo.$response = {} as GoogleBusinessResponse;
       handleRequest.stopMiddlewareExecution();
     }
   };

@@ -1,23 +1,31 @@
-// TODO: Usages of .constructor.name cause errors in webpack, because the name is not the class-name mostly when minimizing.
-// It has to be checked whether constructor is valid and can be used to instantiate a new instance for example.
-
 // TODO determine whether we want to re-export axios
 import axios from 'axios';
+import type { A } from 'ts-toolbelt';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('source-map-support').install();
+
 export * from 'axios';
 export { axios };
 
+// Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
-// Construct object from properties of T that extend U
+// Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
   T,
   {
     [K in keyof T]: T[K] extends U ? K : never;
   }[keyof T]
 >;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('source-map-support').install();
+// If K equals I return never, otherwise return the key.
+export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
+// Omit index signature of T if it equals index-signature I.
+export type OmitIndex<T, I extends string | number> = {
+  [K in keyof T as FilterKey<K, I>]: T[K];
+};
+
 export {
   JovoResponse,
   OutputTemplateConverterStrategy,
@@ -41,6 +49,7 @@ export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './Extensible';
 export * from './HandleRequest';
+export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
 export * from './JovoRequest';
@@ -74,9 +83,7 @@ export * from './decorators/If';
 export * from './interfaces';
 export * from './enums';
 
-/**
- * Tests if the currently running environment is node-based.
- */
+// Test if the currently running environment is node-based.
 export function isNode(): boolean {
   return typeof process !== 'undefined' && process.versions && !!process.versions.node;
 }

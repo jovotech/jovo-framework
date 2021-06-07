@@ -1,0 +1,21 @@
+{
+  "message": {
+    "name": "conversations/2263a05d-72ae-4a7a-a2f0-f1534e2dd576/messages/F1D2C2AA-CDBE-4355-B676-B9ED818CBC42",
+    "text": "Hello",
+    "createTime": "2021-06-01T12:32:10.213316Z",
+    "messageId": "F1D2C2AA-CDBE-4355-B676-B9ED818CBC42"
+  },
+  "context": {
+    "placeId": "",
+    "userInfo": {
+      "displayName": "John Doe",
+      "userDeviceLocale": "en-US"
+    },
+    "resolvedLocale": "en"
+  },
+  "sendTime": "2021-06-01T12:32:10.964341Z",
+  "conversationId": "2263a05d-72ae-4a7a-a2f0-f1534e2dd576",
+  "customAgentId": "custom-agent-id",
+  "requestId": "F1D2C2AA-CDBE-4355-B676-B9ED818CBC42",
+  "agent": "brands/eea37720-ed1b-4ac3-9999-3b3c036c63e5/agents/574715f2-103f-45e7-871e-add5423f9408"
+}
