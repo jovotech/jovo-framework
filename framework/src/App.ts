@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, IntentMap, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, DeepPartial, IntentMap, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -15,9 +15,11 @@ import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
+import { BasicLogging, BasicLoggingConfig } from './plugins/BasicLogging';
 
 export interface AppConfig extends ExtensibleConfig {
   intentMap: IntentMap;
+  logging: DeepPartial<BasicLoggingConfig> | boolean;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
@@ -53,6 +55,13 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
+
+    if (typeof this.config.logging === 'boolean' && this.config.logging) {
+      this.use(new BasicLogging({ request: true, response: true }));
+    } else if (typeof this.config.logging === 'object') {
+      this.use(new BasicLogging(this.config.logging));
+    }
+
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
     this.components = {};
     if (config?.components && config?.components?.length) {
@@ -92,6 +101,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     return {
       plugin: {},
       intentMap: {},
+      logging: {},
     };
   }
 

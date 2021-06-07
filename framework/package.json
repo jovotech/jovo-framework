@@ -26,7 +26,9 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
-    "lodash.set": "^4.3.2"
+    "lodash.set": "^4.3.2",
+    "lodash.unset": "^4.5.2",
+    "json-colorizer": "^2.2.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
@@ -34,6 +36,7 @@
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
+    "@types/lodash.unset": "^4.3.6",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
