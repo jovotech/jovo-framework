@@ -1,7 +1,4 @@
-const { promises } = require('fs');
-const { join } = require('path');
 const { promisify } = require('util');
-const { cwd } = require('process');
 const exec = promisify(require('child_process').exec);
 
 var chalk;
@@ -46,7 +43,6 @@ console.error = function (...data) {
   ERROR_PROTOTYPE.apply(this, data);
 };
 
-const ALLOWED_MODULES = ['cjs', 'esm5', 'esm2015', 'types'];
 const MODULE_COMPILER_OPTIONS_MAP = {
   cjs: {
     module: 'commonjs',
@@ -71,8 +67,15 @@ const MODULE_COMPILER_OPTIONS_MAP = {
   },
 };
 
+function convertCompilerOptionsToCommandProcess(compilerOptions) {
+  const stringifiedCompilerOptions = Object.keys(compilerOptions).reduce((accumulator, key) => {
+    const stringToAdd = `--${key} ${compilerOptions[key]}`;
+    return `${accumulator} ${stringToAdd}`;
+  }, '');
+  return exec(`tsc ${stringifiedCompilerOptions}`, {});
+}
+
 (async () => {
-  const modules = ALLOWED_MODULES.slice();
   // console.log(
   //   chalk.cyan(
   //     `Building with modules: ${modules
@@ -80,24 +83,18 @@ const MODULE_COMPILER_OPTIONS_MAP = {
   //       .join(', ')} and ${chalk.cyanBright('types')}`,
   //   ),
   // );
-  const compilerOptionsList = modules.map((module) => MODULE_COMPILER_OPTIONS_MAP[module]);
 
-  // for (const compilerOptions of compilerOptionsList) {
-  //   const stringifiedCompilerOptions = Object.keys(compilerOptions).reduce((accumulator, key) => {
-  //     const stringToAdd = `--${key} ${compilerOptions[key]}`;
-  //     return `${accumulator} ${stringToAdd}`;
-  //   }, '');
-  //   await exec(`tsc ${stringifiedCompilerOptions}`, {});
-  // }
+  const isParallelExecution = !process.argv.includes('--consecutive');
 
-  const tscExecPromises = compilerOptionsList.map((compilerOptions) => {
-    const stringifiedCompilerOptions = Object.keys(compilerOptions).reduce((accumulator, key) => {
-      const stringToAdd = `--${key} ${compilerOptions[key]}`;
-      return `${accumulator} ${stringToAdd}`;
-    }, '');
-    return exec(`tsc ${stringifiedCompilerOptions}`, {});
-  });
-  return Promise.all(tscExecPromises);
+  const compilerOptionsList = Object.values(MODULE_COMPILER_OPTIONS_MAP);
+  if (isParallelExecution) {
+    const tscExecPromises = compilerOptionsList.map(convertCompilerOptionsToCommandProcess);
+    return Promise.all(tscExecPromises);
+  } else {
+    for (const compilerOptions of compilerOptionsList) {
+      await convertCompilerOptionsToCommandProcess(compilerOptions);
+    }
+  }
 })()
   .then(() => {
     console.log(chalk.green('Build succeeded!'));
