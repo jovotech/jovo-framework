@@ -168,7 +168,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       [],
     );
     // ToDo: Improve providing a unique set of resolved locales.
-    const locales: string[] = [...new Set(resolvedLocales)];
+    const locales: string[] = Array.from(new Set(resolvedLocales));
 
     const deployInteractionModelTask: Task = new Task(`${ROCKET} Deploying Interaction Model`);
     for (const locale of locales) {

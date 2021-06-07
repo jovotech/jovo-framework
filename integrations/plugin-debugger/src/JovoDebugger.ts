@@ -299,7 +299,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           console.error(e);
         }
       } else {
-        languageModel[locale] = await import(absoluteModelsPath);
+        languageModel[locale] = require(absoluteModelsPath);
       }
     }
     return languageModel;
