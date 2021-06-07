@@ -13,7 +13,6 @@
   "scripts": {
     "prebuild": "npm run rimraf",
     "build": "node ../scripts/build-package.js",
-    "prewatch": "npm run rimraf",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
