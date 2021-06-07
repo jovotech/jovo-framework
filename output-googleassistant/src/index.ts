@@ -9,25 +9,25 @@ import {
 } from './models';
 import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/Card' {
+declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     toGoogleAssistantCard?(): GoogleAssistantCard;
   }
 }
 
-declare module '@jovotech/output/dist/models/Carousel' {
+declare module '@jovotech/output/dist/types/models/Carousel' {
   interface Carousel {
     toGoogleAssistantCollectionData?(): { collection: Collection; typeOverride: TypeOverride };
   }
 }
 
-declare module '@jovotech/output/dist/models/Message' {
+declare module '@jovotech/output/dist/types/models/Message' {
   interface Message {
     toGoogleAssistantSimple?(): Simple;
   }
 }
 
-declare module '@jovotech/output/dist/models/QuickReply' {
+declare module '@jovotech/output/dist/types/models/QuickReply' {
   interface QuickReply {
     toGoogleAssistantSuggestion?(): Suggestion;
   }
@@ -37,7 +37,7 @@ declare module '@jovotech/output/dist/models/QuickReply' {
 augmentModelPrototypes();
 
 // Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the GoogleAssistant-key.
-declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
     GoogleAssistant?: GoogleAssistantOutputTemplate;
   }

@@ -1,15 +1,17 @@
 {
   "name": "@jovotech/output-googleassistantlegacy",
   "version": "4.0.0-alpha.8",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "update-model-exports": "barrelsby -d src/models -D -q ",
     "prebuild": "npm run rimraf",
-    "build": "tsc",
+    "build": "node ../scripts/build-package.js",
     "watch": "tsc -w",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",

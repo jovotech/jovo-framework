@@ -2,7 +2,7 @@ import { registerOutputPlatform } from '@jovotech/output';
 import { CorePlatformOutputTemplate } from './models';
 
 // Make CorePlatformOutputTemplate available for the OutputTemplatePlatforms-object via the CorePlatform-key.
-declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
     CorePlatform?: CorePlatformOutputTemplate;
   }

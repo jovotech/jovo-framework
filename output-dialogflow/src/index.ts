@@ -2,19 +2,19 @@ import { registerOutputPlatform } from '@jovotech/output';
 import { Card as DialogflowCard, DialogflowOutputTemplate, Text } from './models';
 import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/Card' {
+declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     toDialogflowCard?(): DialogflowCard;
   }
 }
 
-declare module '@jovotech/output/dist/models/Message' {
+declare module '@jovotech/output/dist/types/models/Message' {
   interface Message {
     toDialogflowText?(): Text;
   }
 }
 
-declare module '@jovotech/output/dist/models/QuickReply' {
+declare module '@jovotech/output/dist/types/models/QuickReply' {
   interface QuickReply {
     toDialogflowQuickReply?(): string;
   }
@@ -24,7 +24,7 @@ declare module '@jovotech/output/dist/models/QuickReply' {
 augmentModelPrototypes();
 
 // Make DialogflowOutputTemplate available for the OutputTemplatePlatforms-object via the Dialogflow-key.
-declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
     Dialogflow?: DialogflowOutputTemplate;
   }

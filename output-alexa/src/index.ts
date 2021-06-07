@@ -10,7 +10,7 @@ import {
 } from './models';
 import { augmentModelPrototypes } from './utilities';
 
-declare module '@jovotech/output/dist/models/Card' {
+declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     header?: AplHeader;
     backgroundImageUrl?: string;
@@ -20,7 +20,7 @@ declare module '@jovotech/output/dist/models/Card' {
   }
 }
 
-declare module '@jovotech/output/dist/models/Carousel' {
+declare module '@jovotech/output/dist/types/models/Carousel' {
   interface Carousel {
     header?: AplHeader;
     backgroundImageUrl?: string;
@@ -29,7 +29,7 @@ declare module '@jovotech/output/dist/models/Carousel' {
   }
 }
 
-declare module '@jovotech/output/dist/models/Message' {
+declare module '@jovotech/output/dist/types/models/Message' {
   interface Message {
     toAlexaOutputSpeech?(): OutputSpeech<OutputSpeechType.Ssml>;
   }
@@ -39,7 +39,7 @@ declare module '@jovotech/output/dist/models/Message' {
 augmentModelPrototypes();
 
 // Make AlexaOutputTemplate available for the OutputTemplatePlatforms-object via the Alexa-key.
-declare module '@jovotech/output/dist/models/OutputTemplatePlatforms' {
+declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
     Alexa?: AlexaOutputTemplate;
   }
