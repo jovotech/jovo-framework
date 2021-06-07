@@ -1,11 +1,12 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, IntentMap, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, I18NextOptions, IntentMap, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
+import { I18Next } from './I18Next';
 import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
 import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
@@ -18,10 +19,12 @@ import { Server } from './Server';
 
 export interface AppConfig extends ExtensibleConfig {
   intentMap: IntentMap;
+  i18n?: I18NextOptions;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
+  i18n?: I18NextOptions;
 };
 
 export type AppBaseMiddlewares = [
@@ -50,6 +53,7 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly components: RegisteredComponents;
+  readonly i18n: I18Next;
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -60,6 +64,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
         ...(config.components as Array<ComponentConstructor | ComponentDeclaration>),
       );
     }
+    this.i18n = new I18Next(this.config.i18n || {});
   }
 
   get platforms(): ReadonlyArray<Platform> {
@@ -98,6 +103,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   async initialize(): Promise<void> {
     // TODO populate this.config from the loaded global configuration via file or require or similar
     this.checkForDuplicateGlobalHandlers();
+    await this.i18n.initialize();
     return this.initializePlugins();
   }
 
@@ -111,13 +117,12 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     this.registerComponentsIn(this, ...components);
   }
 
-  // TODO finish Host-related things
   async handle(server: Server): Promise<void> {
     const handleRequest = new HandleRequest(this, server);
     await handleRequest.mount();
 
-    const relatedPlatform = handleRequest.platforms.find(
-      (platform) => platform.isRequestRelated(server.getRequestObject()), // TODO: type needs to be improved
+    const relatedPlatform = handleRequest.platforms.find((platform) =>
+      platform.isRequestRelated(server.getRequestObject()),
     );
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError(server.getRequestObject());
@@ -126,7 +131,6 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-    // TODO determine whether request should only be called for relatedPlatform
     await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
@@ -136,8 +140,6 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
-    // TODO move to response middleware
-    // await relatedPlatform.setResponseSessionData(jovo.$response, jovo);
     await handleRequest.dismount();
     await server.setResponse(jovo.$response);
   }
@@ -195,7 +197,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
       if (!component) {
         continue;
       }
-      this.registerGlobalHandlers(component.target, globalHandlerMap);
+      this.collectGlobalHandlers(component.target, globalHandlerMap);
 
       if (component.components) {
         this.checkForDuplicateGlobalHandlersInComponents(component.components, globalHandlerMap);
@@ -203,7 +205,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     }
   }
 
-  private registerGlobalHandlers(
+  private collectGlobalHandlers(
     // eslint-disable-next-line @typescript-eslint/ban-types
     constructor: ComponentConstructor | Function,
     globalHandlerMap: Record<string, HandlerMetadata[]>,
