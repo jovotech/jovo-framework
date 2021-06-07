@@ -13,8 +13,19 @@ export class GoogleAssistantRequest extends JovoRequest {
   context?: Context;
 
   getEntities(): EntityMap | undefined {
-    // TODO: implement
-    return undefined;
+    const entities: EntityMap = {};
+
+    for (const param in this.intent?.params) {
+      if (this.intent?.params.hasOwnProperty(param)) {
+        entities[param] = {
+          id: this.intent?.params[param].resolved as string,
+          value: this.intent?.params[param].original,
+          key: this.intent?.params[param].resolved as string,
+          name: param,
+        };
+      }
+    }
+    return entities;
   }
 
   getIntentName(): string | undefined {

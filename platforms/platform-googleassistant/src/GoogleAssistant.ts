@@ -27,7 +27,7 @@ export class GoogleAssistant extends Platform<
 
   install(parent: App) {
     super.install(parent);
-    parent.useComponents(GoogleAssistantRepromptComponent);
+    // parent.useComponents(GoogleAssistantRepromptComponent);
 
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
