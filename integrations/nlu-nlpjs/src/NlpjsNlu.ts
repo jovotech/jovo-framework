@@ -20,6 +20,19 @@ export interface Nlp {
   [key: string]: any;
 }
 
+export interface NlpJsEntity {
+  start: number;
+  end: number;
+  len: number;
+  levenshtein: number;
+  accuracy: number;
+  entity: string;
+  type: 'enum' | string;
+  option: string;
+  sourceText: string;
+  utteranceText: string;
+}
+
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
 export interface NlpjsNluConfig extends PluginConfig {
@@ -82,11 +95,25 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     if (!text) return;
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
     const nlpResult = await this.nlpjs?.process(language, text);
+
+    const entities = nlpResult?.entities?.map((entity: NlpJsEntity) => {
+      return {
+        [entity.entity]: {
+          id: entity.option,
+          key: entity.option,
+          name: entity.entity,
+          value: entity.utteranceText,
+        },
+      };
+    });
+
     return nlpResult?.intent
       ? {
           intent: {
             name: nlpResult.intent,
           },
+          entities,
+          raw: nlpResult, // TODO: temporary property
         }
       : undefined;
   }
