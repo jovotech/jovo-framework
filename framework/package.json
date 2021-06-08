@@ -32,7 +32,9 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
-    "json-colorizer": "^2.2.2"
+    "json-colorizer": "^2.2.2",
+    "ts-toolbelt": "9.5.13",
+    "type-fest": "^1.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
@@ -52,7 +54,6 @@
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.5.4",
-    "ts-toolbelt": "9.5.13",
     "typescript": "^4.2.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
