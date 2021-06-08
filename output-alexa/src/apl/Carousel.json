@@ -37,6 +37,12 @@
               "paddingLeft": "70",
               "items": [
                 {
+                  "type": "Text",
+                  "text": "${data.title}",
+                  "maxLines": 1,
+                  "fontSize": 50
+                },
+                {
                   "type": "Sequence",
                   "width": "100%",
                   "height": "100%",
@@ -104,6 +110,7 @@
   },
   "datasources": {
     "data": {
+      "title": "",
       "quickReplies": [],
       "backgroundImageUrl": "",
       "header": {

@@ -68,6 +68,10 @@ export function augmentModelPrototypes(): void {
   };
 
   Carousel.prototype.toApl = function (): AplRenderDocumentDirective {
+    if (this.title) {
+      AplCarouselJson.datasources.data.title = this.title;
+    }
+
     if (this.header) {
       AplCarouselJson.datasources.data.header = this.header;
     }
