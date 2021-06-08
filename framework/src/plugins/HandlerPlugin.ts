@@ -1,9 +1,9 @@
 import { HandleRequest } from '../HandleRequest';
-import { App, DeepPartial, ExtensibleConfig } from '../index';
+import { App, PluginConfig } from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';
 
-export interface HandlerPluginConfig extends ExtensibleConfig {}
+export interface HandlerPluginConfig extends PluginConfig {}
 
 declare module '../Extensible' {
   interface ExtensiblePluginConfig {
@@ -16,10 +16,6 @@ declare module '../Extensible' {
 }
 
 export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
-  constructor(config?: DeepPartial<HandlerPluginConfig>) {
-    super(config);
-  }
-
   getDefaultConfig() {
     return {};
   }

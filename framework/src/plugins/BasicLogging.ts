@@ -1,10 +1,10 @@
-import { Plugin, PluginConfig } from '../Plugin';
-import { App, DeepPartial, HandleRequest, Jovo } from '../index';
-import colorize from 'json-colorizer';
 import chalk from 'chalk';
-import _set from 'lodash.set';
+import colorize from 'json-colorizer';
 import _get from 'lodash.get';
+import _set from 'lodash.set';
 import _unset from 'lodash.unset';
+import { App, HandleRequest, Jovo } from '../index';
+import { Plugin, PluginConfig } from '../Plugin';
 
 declare module '../Extensible' {
   interface ExtensiblePluginConfig {
@@ -44,10 +44,6 @@ export interface BasicLoggingConfig extends PluginConfig {
 }
 
 export class BasicLogging extends Plugin<BasicLoggingConfig> {
-  constructor(config?: DeepPartial<BasicLoggingConfig>) {
-    super(config);
-  }
-
   getDefaultConfig(): BasicLoggingConfig {
     return {
       enabled: true,

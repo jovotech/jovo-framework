@@ -1,3 +1,4 @@
+import { DeepPartial } from '.';
 import { App } from './App';
 import {
   BaseComponent,
@@ -15,7 +16,7 @@ export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseCom
 
 export abstract class ComponentPlugin<
   COMPONENT extends BaseComponent = BaseComponent,
-  CONFIG extends ComponentPluginConfig<COMPONENT> = ComponentPluginConfig<COMPONENT>
+  CONFIG extends ComponentPluginConfig<COMPONENT> = ComponentPluginConfig<COMPONENT>,
 > extends Plugin<CONFIG> {
   abstract readonly component: ComponentConstructor<COMPONENT>;
 
@@ -24,7 +25,7 @@ export abstract class ComponentPlugin<
 
     if (this.config.component) {
       options = {
-        config: this.config.component,
+        config: this.config.component as DeepPartial<ComponentConfig<COMPONENT>> | undefined,
       };
     }
 

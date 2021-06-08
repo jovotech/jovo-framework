@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { DeepPartial } from '.';
+import { DeepPartial, OmitIndex } from '.';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';
 
@@ -16,9 +16,11 @@ export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
 
-export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> = DeepPartial<
-  Omit<CONFIG, 'plugin'>
-> & { plugins?: Plugin[] };
+export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> =
+  DeepPartial<CONFIG> & {
+    plugin?: never;
+    plugins?: Plugin[];
+  };
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
@@ -28,7 +30,7 @@ export abstract class Extensible<
   readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
 
   constructor(config?: ExtensibleInitConfig<CONFIG>) {
-    super((config ? { ...config, plugins: undefined } : config) as DeepPartial<CONFIG>);
+    super(config ? { ...(config as DeepPartial<CONFIG>), plugins: undefined } : config);
     this.middlewareCollection = this.initializeMiddlewareCollection();
     this.plugins = {};
     if (config?.plugins && config?.plugins?.length) {

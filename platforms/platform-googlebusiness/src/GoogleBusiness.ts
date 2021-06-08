@@ -2,6 +2,7 @@ import {
   DeepPartial,
   Extensible,
   ExtensibleConfig,
+  ExtensibleInitConfig,
   HandleRequest,
   Jovo,
   Platform,
@@ -19,7 +20,7 @@ import { GoogleBusinessUser } from './GoogleBusinessUser';
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
 }
-export type GoogleBusinessInitConfig = DeepPartial<GoogleBusinessConfig> &
+export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig> &
   Pick<GoogleBusinessConfig, 'serviceAccount'>;
 
 export class GoogleBusiness extends Platform<

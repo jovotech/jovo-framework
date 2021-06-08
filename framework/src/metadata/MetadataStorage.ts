@@ -43,7 +43,9 @@ export class MetadataStorage {
     // eslint-disable-next-line @typescript-eslint/ban-types
     target: ComponentConstructor<COMPONENT> | Function,
   ): ComponentMetadata<COMPONENT> | undefined {
-    return this.componentMetadata.find((metadata) => metadata.target === target);
+    return this.componentMetadata.find((metadata) => metadata.target === target) as
+      | ComponentMetadata<COMPONENT>
+      | undefined;
   }
 
   addOutputMetadata<OUTPUT extends BaseOutput>(target: OutputConstructor<OUTPUT>, name: string) {

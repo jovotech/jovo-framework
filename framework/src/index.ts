@@ -1,6 +1,7 @@
 // TODO determine whether we want to re-export axios
 import axios from 'axios';
 import type { A } from 'ts-toolbelt';
+import type { PartialDeep } from 'type-fest';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('source-map-support').install();
@@ -10,7 +11,7 @@ export { axios };
 
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
-export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
+export type DeepPartial<T> = PartialDeep<T>;
 export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<

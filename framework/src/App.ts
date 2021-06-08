@@ -1,12 +1,5 @@
 import _merge from 'lodash.merge';
-import {
-  ArrayElement,
-  I18NextOptions,
-  DeepPartial,
-  IntentMap,
-  Middleware,
-  RegisteredComponents,
-} from '.';
+import { ArrayElement, I18NextOptions, IntentMap, Middleware, RegisteredComponents } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
 import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
@@ -19,22 +12,20 @@ import { HandlerMetadata } from './metadata/HandlerMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Platform } from './Platform';
+import { BasicLogging, BasicLoggingConfig } from './plugins/BasicLogging';
 import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
-import { BasicLogging, BasicLoggingConfig } from './plugins/BasicLogging';
 
 export interface AppConfig extends ExtensibleConfig {
   intentMap: IntentMap;
-  logging?: DeepPartial<BasicLoggingConfig> | boolean;
+  logging?: BasicLoggingConfig | boolean;
   i18n?: I18NextOptions;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
-  logging?: DeepPartial<BasicLoggingConfig> | boolean;
-  i18n?: I18NextOptions;
 };
 
 export type AppBaseMiddlewares = [

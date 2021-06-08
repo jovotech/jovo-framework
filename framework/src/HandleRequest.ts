@@ -1,16 +1,16 @@
-import _merge from 'lodash.merge';
-import { App, AppBaseMiddlewares, AppConfig } from './App';
-import { Extensible } from './Extensible';
-import { Server } from './Server';
-import { DeepPartial, MiddlewareCollection, Platform, RegisteredComponents } from './index';
 import _cloneDeep from 'lodash.clonedeep';
+import _merge from 'lodash.merge';
+import { App, AppBaseMiddlewares, AppConfig, AppInitConfig } from './App';
+import { Extensible } from './Extensible';
+import { MiddlewareCollection, Platform, RegisteredComponents } from './index';
+import { Server } from './Server';
 
 export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
   readonly components: RegisteredComponents;
   $platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
-    super(_cloneDeep(app.config) as DeepPartial<AppConfig>);
+    super(_cloneDeep(app.config) as AppInitConfig);
     this.components = {};
     _merge(this, _cloneDeep(app));
   }

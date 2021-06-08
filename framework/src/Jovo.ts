@@ -336,7 +336,9 @@ export abstract class Jovo<
   ): RegisteredComponentMetadata<COMPONENT> | undefined {
     if (Array.isArray(constructorOrNameOrPath)) {
       const componentPath = constructorOrNameOrPath.join('.components.');
-      return _get(this.$handleRequest.components, componentPath);
+      return _get(this.$handleRequest.components, componentPath) as
+        | RegisteredComponentMetadata<COMPONENT>
+        | undefined;
     } else {
       const componentName =
         typeof constructorOrNameOrPath === 'string'
@@ -345,7 +347,9 @@ export abstract class Jovo<
       const currentComponentMetadata = this.$getComponentMetadata(this.$route?.path || []);
       const rootComponentMetadata = this.$handleRequest.components[componentName];
       const childComponentMetadata = currentComponentMetadata?.components?.[componentName];
-      return childComponentMetadata || rootComponentMetadata;
+      return (childComponentMetadata || rootComponentMetadata) as
+        | RegisteredComponentMetadata<COMPONENT>
+        | undefined;
     }
   }
 
