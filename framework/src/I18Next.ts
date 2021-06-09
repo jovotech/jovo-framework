@@ -1,6 +1,7 @@
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
 import type { A, F, U } from 'ts-toolbelt';
 import { OmitIndex } from './index';
+import _merge from 'lodash.merge';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
@@ -55,8 +56,19 @@ export interface I18NextTOptions<
 
 export class I18Next {
   readonly i18n = i18next;
+  readonly options: I18NextOptions;
 
-  constructor(readonly options: I18NextOptions) {}
+  constructor(options: I18NextOptions = {}) {
+    this.options = _merge(this.getDefaultOptions(), options);
+  }
+
+  getDefaultOptions(): I18NextOptions {
+    return {
+      interpolation: {
+        escapeValue: false,
+      },
+    };
+  }
 
   async initialize(): Promise<void> {
     await this.i18n.init(this.options);
