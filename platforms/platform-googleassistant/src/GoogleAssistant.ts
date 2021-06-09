@@ -27,9 +27,11 @@ export class GoogleAssistant extends Platform<
 
   install(parent: App) {
     super.install(parent);
-    // parent.useComponents(GoogleAssistantRepromptComponent);
-
     parent.middlewareCollection.use('before.request', this.beforeRequest);
+  }
+
+  initialize(parent: App) {
+    parent.useComponents(GoogleAssistantRepromptComponent);
   }
 
   isRequestRelated(request: Record<string, any> | GoogleAssistantRequest): boolean {
