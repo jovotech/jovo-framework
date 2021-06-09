@@ -1,7 +1,6 @@
 {
   "packages": [
     "e2e",
-    "core",
     "framework",
     "platforms/**",
     "integrations/**",
