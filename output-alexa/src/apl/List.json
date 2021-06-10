@@ -10,9 +10,7 @@
       }
     ],
     "mainTemplate": {
-      "parameters": [
-        "data"
-      ],
+      "parameters": ["data"],
       "items": [
         {
           "type": "Container",
@@ -33,7 +31,15 @@
               "height": "100%",
               "width": "100%",
               "shrink": 1,
+              "paddingRight": "70",
+              "paddingLeft": "70",
               "items": [
+                {
+                  "type": "Text",
+                  "text": "${data.title}",
+                  "maxLines": 1,
+                  "fontSize": 50
+                },
                 {
                   "type": "Sequence",
                   "width": "100%",
@@ -45,16 +51,12 @@
                   "items": [
                     {
                       "type": "AlexaTextListItem",
-                      "id": "${data.key}",
                       "primaryText": "${data.title}",
                       "secondaryText": "${data.content}",
                       "imageMetadataPrimacy": true,
                       "primaryAction": {
                         "type": "SendEvent",
-                        "arguments": [
-                          "ListElementSelected",
-                          "${event.source.id}"
-                        ]
+                        "arguments": ["${data.selection}"]
                       }
                     }
                   ]
@@ -85,9 +87,7 @@
                       "touchForward": "true",
                       "primaryAction": {
                         "type": "SendEvent",
-                        "arguments": [
-                          "${data}"
-                        ]
+                        "arguments": ["${data}"]
                       }
                     }
                   ]
@@ -101,6 +101,7 @@
   },
   "datasources": {
     "data": {
+      "title": "",
       "quickReplies": [],
       "backgroundImageUrl": "",
       "header": {

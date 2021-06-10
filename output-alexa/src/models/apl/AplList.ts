@@ -15,6 +15,10 @@ import { AplRenderDocumentDirective } from './AplRenderDocumentDirective';
 export class AplList {
   @IsOptional()
   @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
   backgroundImageUrl?: string;
 
   @IsOptional()
@@ -34,6 +38,10 @@ export class AplList {
   items: Card[];
 
   toApl?(): AplRenderDocumentDirective {
+    if (this.title) {
+      AplListJson.datasources.data.title = this.title;
+    }
+
     if (this.header) {
       AplListJson.datasources.data.header = this.header;
     }
@@ -42,7 +50,15 @@ export class AplList {
       AplListJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplListJson.datasources.data.items as Card[]) = this.items;
+    (AplListJson.datasources.data.items as Card[]) = this.items.map((item: Card) => ({
+      ...item,
+      selection: item.selection
+        ? {
+            type: 'Selection',
+            ...item.selection,
+          }
+        : undefined,
+    }));
 
     return {
       type: 'Alexa.Presentation.APL.RenderDocument',

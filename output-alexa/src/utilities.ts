@@ -80,7 +80,15 @@ export function augmentModelPrototypes(): void {
       AplCarouselJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplCarouselJson.datasources.data.items as Card[]) = this.items;
+    (AplCarouselJson.datasources.data.items as Card[]) = this.items.map((item: Card) => ({
+      ...item,
+      selection: item.selection
+        ? {
+            type: 'Selection',
+            ...item.selection,
+          }
+        : undefined,
+    }));
 
     return {
       type: 'Alexa.Presentation.APL.RenderDocument',
