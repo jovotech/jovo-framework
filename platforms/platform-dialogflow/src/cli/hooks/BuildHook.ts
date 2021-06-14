@@ -14,7 +14,7 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
@@ -28,20 +28,22 @@ import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../util
 import DefaultFiles from '../utils/DefaultFiles.json';
 import { DialogflowCli } from '..';
 
-export interface DialogflowContext extends BuildContext {
-  endpoint?: string;
-  language?: string;
-  supportedLanguages: string[];
+export interface DialogflowBuildContext extends BuildContext {
+  dialogflow: {
+    endpoint?: string;
+    language?: string;
+    supportedLanguages?: string[];
+  };
 }
 
 export class BuildHook extends PluginHook<BuildEvents> {
   $plugin!: DialogflowCli;
-  $context!: DialogflowContext;
+  $context!: DialogflowBuildContext;
 
   install(): void {
     this.middlewareCollection = {
-      'parse': [this.checkForPlatform.bind(this)],
       'before.build': [
+        this.checkForPlatform.bind(this),
         this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
@@ -55,9 +57,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextBuild): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -132,16 +134,20 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    this.$context.endpoint =
+    if (!this.$context.dialogflow) {
+      this.$context.dialogflow = {};
+    }
+
+    this.$context.dialogflow.endpoint =
       _get(this.$plugin.$config, 'files["agent.json"].webhook.url') ||
       this.$plugin.$config.endpoint ||
       this.$cli.resolveEndpoint(this.$cli.$project!.$config.getParameter('endpoint') as string);
 
-    this.$context.language =
+    this.$context.dialogflow.language =
       _get(this.$plugin.$config, 'files["agent.json"].language') || this.$plugin.$config.language;
 
     // If language is not configured, try to parse it from locales.
-    if (!this.$context.language) {
+    if (!this.$context.dialogflow.language) {
       const locales: SupportedLocalesType[] = this.$context.locales.reduce(
         (locales: string[], locale: string) => {
           locales.push(
@@ -159,10 +165,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
       const primaryLocale: string = locales.shift()!;
       const genericLanguage: string = primaryLocale.substring(0, 2);
-      this.$context.language = SupportedLocales.includes(genericLanguage as SupportedLocalesType)
+      this.$context.dialogflow.language = SupportedLocales.includes(
+        genericLanguage as SupportedLocalesType,
+      )
         ? genericLanguage
         : primaryLocale;
-      this.$context.supportedLanguages = locales;
+      this.$context.dialogflow.supportedLanguages = locales;
     }
   }
 
@@ -203,9 +211,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // Set language-specific configuration.
     const agentJson: FileObjectEntry = _merge(projectFiles['agent.json'] || {}, {
-      language: this.$context.language,
-      supportedLanguages: this.$context.supportedLanguages,
-      webhook: { url: this.$context.endpoint, available: true },
+      language: this.$context.dialogflow.language,
+      supportedLanguages: this.$context.dialogflow.supportedLanguages,
+      webhook: { url: this.$context.dialogflow.endpoint, available: true },
     });
     projectFiles['agent.json'] = agentJson;
 

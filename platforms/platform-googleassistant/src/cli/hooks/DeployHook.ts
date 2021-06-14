@@ -1,7 +1,4 @@
-import type {
-  DeployPlatformEvents,
-  ParseContextDeployPlatform,
-} from '@jovotech/cli-command-deploy';
+import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   JovoCliError,
@@ -15,27 +12,31 @@ import {
 import { existsSync } from 'fs';
 import indent from 'indent-string';
 import { GoogleAssistantCli } from '..';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
+import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utils';
+
+export interface GoogleDeployContext extends DeployPlatformContext, GoogleContext {}
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $plugin!: GoogleAssistantCli;
-  $context!: PluginContextGoogle;
+  $context!: GoogleDeployContext;
 
   install(): void {
     this.middlewareCollection = {
-      'parse': [this.checkForPlatform.bind(this)],
-      'before.deploy:platform': [checkForGactionsCli, this.checkForPlatformsFolder.bind(this)],
+      'before.deploy:platform': [
+        this.checkForPlatform.bind(this),
+        checkForGactionsCli,
+        this.checkForPlatformsFolder.bind(this),
+      ],
       'deploy:platform': [this.deploy.bind(this)],
     };
   }
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextDeployPlatform): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }

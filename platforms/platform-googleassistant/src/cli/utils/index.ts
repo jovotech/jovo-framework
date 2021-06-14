@@ -1,6 +1,7 @@
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
-export * from './Interfaces';
+export * from './interfaces';
+export * from './constants';
 
 export async function checkForGactionsCli(): Promise<void> {
   try {
@@ -38,7 +39,7 @@ export function getGactionsError(errorMessage: string): JovoCliError {
     return new JovoCliError(
       error.message,
       'GoogleAssistantCli',
-      error.details[0].fieldViolations[0].description,
+      error.details[0].fieldViolations?.[0].description,
     );
   }
 

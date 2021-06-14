@@ -5,10 +5,10 @@ import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
-import { GoogleCliConfig } from './utils/Interfaces';
+import { GoogleCliConfig } from './utils';
 
 export class GoogleAssistantCli extends JovoCliPlugin {
-  readonly $id: string = 'googleAction';
+  readonly $id: string = 'googleAssistant';
   readonly $type: PluginType = 'platform';
   readonly $config!: GoogleCliConfig;
   readonly platformDirectory: string = 'platform.googleAssistant';

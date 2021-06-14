@@ -1,4 +1,4 @@
-import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
 import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
@@ -30,14 +30,16 @@ import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
 import * as yaml from 'yaml';
 import { GoogleAssistantCli } from '..';
-import { GoogleActionActions, PluginContextGoogle, SupportedLocalesType } from '../utils';
-import { SupportedLocales } from '../utils/Constants';
+import { GoogleActionActions, GoogleContext, SupportedLocalesType } from '../utils';
+import { SupportedLocales } from '../utils';
 
 import DefaultFiles from '../utils/DefaultFiles.json';
 
-export interface BuildContextGoogle extends BuildContext, PluginContextGoogle {
+export interface BuildContextGoogle extends BuildContext, GoogleContext {
   flags: BuildContext['flags'] & { 'project-id'?: string };
-  defaultLocale?: string;
+  googleAssistant: GoogleContext['googleAssistant'] & {
+    defaultLocale?: string;
+  };
 }
 
 export class BuildHook extends PluginHook<BuildEvents> {
@@ -47,8 +49,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'parse': [this.checkForPlatform.bind(this)],
       'before.build': [
+        this.checkForPlatform.bind(this),
         this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
@@ -76,9 +78,9 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextBuild): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -87,14 +89,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    if (this.$context.command !== 'build') {
-      return;
+    if (!this.$context.googleAssistant) {
+      this.$context.googleAssistant = {};
     }
 
-    this.$context.projectId =
+    this.$context.googleAssistant.projectId =
       this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
-    if (!this.$context.projectId) {
+    if (!this.$context.googleAssistant.projectId) {
       throw new JovoCliError(
         'Could not find project ID.',
         this.$plugin.constructor.name,
@@ -346,7 +348,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       for (const resolvedLocale of resolvedLocales) {
         const settingsPathArr: string[] = ['settings/'];
 
-        if (resolvedLocale !== this.$context.defaultLocale!) {
+        if (resolvedLocale !== this.$context.googleAssistant.defaultLocale!) {
           settingsPathArr.push(`${resolvedLocale}/`);
         }
 
@@ -355,13 +357,21 @@ export class BuildHook extends PluginHook<BuildEvents> {
         const settingsPath: string = settingsPathArr.join('.');
 
         // Set default settings.
-        if (resolvedLocale === this.$context.defaultLocale) {
+        if (resolvedLocale === this.$context.googleAssistant.defaultLocale) {
           if (!_has(projectFiles, `${settingsPath}.defaultLocale`)) {
-            _set(projectFiles, `${settingsPath}.defaultLocale`, this.$context.defaultLocale!);
+            _set(
+              projectFiles,
+              `${settingsPath}.defaultLocale`,
+              this.$context.googleAssistant.defaultLocale!,
+            );
           }
 
           if (!_has(projectFiles, `${settingsPath}.projectId`)) {
-            _set(projectFiles, `${settingsPath}.projectId`, this.$context.projectId);
+            _set(
+              projectFiles,
+              `${settingsPath}.projectId`,
+              this.$context.googleAssistant.projectId,
+            );
           }
         }
 
@@ -414,7 +424,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
     const model = this.getJovoModel(modelLocale);
 
     for (const locale of resolvedLocales) {
-      const jovoModel = new JovoModelGoogle(model, locale, this.$context.defaultLocale);
+      const jovoModel = new JovoModelGoogle(
+        model,
+        locale,
+        this.$context.googleAssistant.defaultLocale,
+      );
       const modelFiles: NativeFileInformation[] = jovoModel.exportNative()!;
 
       const actions: GoogleActionActions = {
@@ -494,12 +508,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
       // If locales includes an english model, take english as default automatically.
       for (const locale of resolvedLocales) {
         if (locale === 'en') {
-          this.$context.defaultLocale = locale;
+          this.$context.googleAssistant.defaultLocale = locale;
         }
       }
 
       // Otherwise take the first locale in the array as the default one.
-      this.$context.defaultLocale = resolvedLocales[0];
+      this.$context.googleAssistant.defaultLocale = resolvedLocales[0];
       return;
     }
 
@@ -511,7 +525,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       );
     }
 
-    this.$context.defaultLocale = defaultLocale;
+    this.$context.googleAssistant.defaultLocale = defaultLocale;
   }
 
   /**
@@ -570,7 +584,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     for (const folder of foldersToInclude) {
       const path: string[] = [modelPath, folder];
 
-      if (locale !== this.$context.defaultLocale) {
+      if (locale !== this.$context.googleAssistant.defaultLocale) {
         path.push(locale);
       }
 
@@ -608,7 +622,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   getPlatformInvocationName(locale: string): string {
     const path: string[] = [this.$plugin.getPlatformPath(), 'settings'];
 
-    if (locale !== this.$context.defaultLocale) {
+    if (locale !== this.$context.googleAssistant.defaultLocale) {
       path.push(locale);
     }
 
