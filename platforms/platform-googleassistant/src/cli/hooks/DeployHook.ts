@@ -81,10 +81,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
               .map((el: string) => indent(el.trimEnd(), 2));
 
             const output: string[] = [
-              Log.warning('validation errors occured', { dry: true }) || '',
+              Log.warning('Validation errors occured', { dry: true, newLine: false }) || '',
             ];
             for (const validationError of validationErrors) {
-              output.push(Log.info(validationError, { logLevel: LogLevel.Warn }) || '');
+              output.push(
+                Log.info(validationError, { logLevel: LogLevel.Warn, dry: true, newLine: false }) ||
+                  '',
+              );
             }
             return output;
           }
