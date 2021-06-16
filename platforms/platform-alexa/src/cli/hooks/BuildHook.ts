@@ -180,7 +180,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
-    const buildLocaleMap: { [locale: string]: string } = {};
+    // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
+    const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
+      (localeMap: { [locale: string]: string }, locale: string) => {
+        localeMap[locale] = locale;
+        return localeMap;
+      },
+      {},
+    );
     for (const modelLocale in this.$plugin.$config.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         modelLocale,
@@ -191,8 +198,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
       for (const selectedLocale of selectedLocales) {
         if (resolvedLocales.includes(selectedLocale)) {
           buildLocaleMap[selectedLocale] = modelLocale;
-        } else {
-          buildLocaleMap[selectedLocale] = selectedLocale;
         }
       }
     }
