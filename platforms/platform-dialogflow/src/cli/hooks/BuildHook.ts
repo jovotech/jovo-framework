@@ -9,6 +9,7 @@ import {
   PluginHook,
   printHighlight,
   promptOverwriteReverseBuild,
+  REVERSE_ARROWS,
   STATION,
   TARGET_INFO,
   Task,
@@ -365,7 +366,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
-    const buildReverseTask: Task = new Task('Reversing model files');
+    const buildReverseTask: Task = new Task(`${REVERSE_ARROWS} Reversing model files`);
 
     for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
       const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
