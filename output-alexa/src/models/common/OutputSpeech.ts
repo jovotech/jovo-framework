@@ -6,13 +6,15 @@ export enum OutputSpeechType {
   Ssml = 'SSML',
 }
 
+export type OutputSpeechTypeLike = OutputSpeechType | `${OutputSpeechType}`;
+
 export enum PlayBehavior {
   Enqueue = 'ENQUEUE',
   ReplaceAll = 'REPLACE_ALL',
   ReplaceEnqueued = 'REPLACE_ENQUEUED',
 }
 
-export class OutputSpeech<TYPE extends OutputSpeechType = OutputSpeechType> {
+export class OutputSpeech<TYPE extends OutputSpeechTypeLike = OutputSpeechTypeLike> {
   @IsEnum(OutputSpeechType)
   type: TYPE;
 

@@ -1,4 +1,6 @@
 import {
+  DynamicEntitiesMode,
+  DynamicEntity,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
@@ -9,8 +11,12 @@ import _merge from 'lodash.merge';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
+  DialogUpdateDynamicEntitiesDirective,
+  Directive,
+  DynamicEntitiesUpdateBehavior,
   OutputSpeech,
   OutputSpeechType,
+  SlotType,
 } from './models';
 
 export interface AlexaOutputTemplateConverterStrategyConfig {
@@ -35,9 +41,27 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response: {},
     };
 
+    const addToDirectives = <DIRECTIVES extends Directive[]>(...directives: DIRECTIVES) => {
+      if (!response.response.directives) {
+        response.response.directives = [];
+      }
+      response.response.directives.push(...directives);
+    };
+
     const listen = output.platforms?.Alexa?.listen ?? output.listen;
     if (typeof listen !== 'undefined') {
       response.response.shouldEndSession = !listen;
+
+      if (typeof listen === 'object' && listen.entities) {
+        const directive = new DialogUpdateDynamicEntitiesDirective();
+        if (listen.entities.mode !== DynamicEntitiesMode.Clear) {
+          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Replace;
+          directive.types = (listen.entities.types || []).map(this.convertDynamicEntityToSlotType);
+        } else {
+          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Clear;
+        }
+        addToDirectives(directive);
+      }
     }
 
     const message = output.platforms?.Alexa?.message || output.message;
@@ -55,11 +79,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     const card = output.platforms?.Alexa?.card || output.card;
     if (card) {
       if (this.config.genericOutputToApl) {
-        if (!response.response.directives) {
-          response.response.directives = [];
-        }
-
-        response.response.directives.push(card.toApl?.() as AplRenderDocumentDirective);
+        addToDirectives(card.toApl?.() as AplRenderDocumentDirective);
       } else {
         response.response.card = card.toAlexaCard?.();
       }
@@ -67,20 +87,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const carousel = output.platforms?.Alexa?.carousel || output.carousel;
     if (carousel && this.config.genericOutputToApl) {
-      if (!response.response.directives) {
-        response.response.directives = [];
-      }
-
-      response.response.directives.push(carousel.toApl?.() as AplRenderDocumentDirective);
+      addToDirectives(carousel.toApl?.() as AplRenderDocumentDirective);
     }
 
     const list = output.platforms?.Alexa?.list;
     if (list && this.config.genericOutputToApl) {
-      if (!response.response.directives) {
-        response.response.directives = [];
-      }
-
-      response.response.directives.push(list.toApl?.() as AplRenderDocumentDirective);
+      addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
     }
 
     const quickReplies: QuickReplyValue[] | undefined =
@@ -139,6 +151,20 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       output.card = response.response.card.toCard();
     }
 
+    // use reversed directives to actually get the last match instead of the first
+    const reversedDirectives = (response.response.directives || []).reverse();
+    const lastDialogUpdateDirective = reversedDirectives.find(
+      (directive) => directive.type === 'Dialog.UpdateDynamicEntities',
+    ) as DialogUpdateDynamicEntitiesDirective | undefined;
+    if (lastDialogUpdateDirective) {
+      output.listen = {
+        entities: {
+          mode: lastDialogUpdateDirective.updateBehavior,
+          types: lastDialogUpdateDirective.types.map(this.convertSlotTypeToDynamicEntity),
+        },
+      };
+    }
+
     return output;
   }
 
@@ -152,5 +178,29 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
           type: OutputSpeechType.Ssml,
           ssml: toSSML(message.text),
         };
+  }
+
+  private convertDynamicEntityToSlotType(entity: DynamicEntity): SlotType {
+    return {
+      name: entity.name,
+      values: (entity.values || []).map((value) => ({
+        id: value.id || value.value,
+        name: {
+          value: value.value,
+          synonyms: value.synonyms?.slice(),
+        },
+      })),
+    };
+  }
+
+  private convertSlotTypeToDynamicEntity(slotType: SlotType): DynamicEntity {
+    return {
+      name: slotType.name,
+      values: slotType.values.map((value) => ({
+        id: value.id || value.name.value,
+        value: value.name.value,
+        synonyms: value.name.synonyms?.slice(),
+      })),
+    };
   }
 }

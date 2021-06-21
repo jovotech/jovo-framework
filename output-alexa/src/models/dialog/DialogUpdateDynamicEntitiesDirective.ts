@@ -8,9 +8,18 @@ export enum DynamicEntitiesUpdateBehavior {
   Clear = 'CLEAR',
 }
 
+export type DynamicEntitiesUpdateBehaviorLike =
+  | DynamicEntitiesUpdateBehavior
+  | `${DynamicEntitiesUpdateBehavior}`;
+
 export class DialogUpdateDynamicEntitiesDirective<
-  BEHAVIOR extends DynamicEntitiesUpdateBehavior = DynamicEntitiesUpdateBehavior
+  BEHAVIOR extends DynamicEntitiesUpdateBehaviorLike = DynamicEntitiesUpdateBehaviorLike,
 > extends Directive<'Dialog.UpdateDynamicEntities'> {
+  constructor() {
+    super();
+    this.type = 'Dialog.UpdateDynamicEntities';
+  }
+
   @Equals('Dialog.UpdateDynamicEntities')
   type: 'Dialog.UpdateDynamicEntities';
 
