@@ -1,7 +1,7 @@
 import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
+import {ResolutionPerAuthorityStatusCode} from '@jovotech/output-alexa';
 import {
   DYNAMIC_ENTITY_MATCHES_PREFIX,
-  ENTITY_MATCH_SUCCESS_STATUS_CODE,
   STATIC_ENTITY_MATCHES_PREFIX,
 } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
@@ -56,7 +56,7 @@ export class AlexaRequest extends JovoRequest {
       this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []
     ).filter(
       (authorityResolution) =>
-        authorityResolution.status.code === ENTITY_MATCH_SUCCESS_STATUS_CODE &&
+        authorityResolution.status.code === ResolutionPerAuthorityStatusCode.SuccessMatch &&
         authorityResolution.authority.startsWith(startsWith),
     );
   }
