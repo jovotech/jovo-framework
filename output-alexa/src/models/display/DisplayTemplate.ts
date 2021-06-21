@@ -1,4 +1,4 @@
-import { IsEnum } from '@jovotech/output';
+import { EnumLike, IsEnum } from '@jovotech/output';
 import { Image } from '../common/Image';
 import { DisplayTemplateList1Item } from './list-items/DisplayTemplateList1Item';
 import { DisplayTemplateList2Item } from './list-items/DisplayTemplateList2Item';
@@ -14,16 +14,19 @@ export enum DisplayTemplateType {
   List2 = 'ListTemplate2',
 }
 
+export type DisplayTemplateTypeLike = EnumLike<DisplayTemplateType>;
+
 export enum BackButtonVisibility {
   Hidden = 'HIDDEN',
   Visible = 'VISIBLE',
 }
+export type BackButtonVisibilityLike = EnumLike<BackButtonVisibility>;
 
-export class DisplayTemplate<TYPE extends DisplayTemplateType = DisplayTemplateType> {
+export class DisplayTemplate<TYPE extends DisplayTemplateTypeLike = DisplayTemplateTypeLike> {
   @IsEnum(DisplayTemplateType)
   type: TYPE;
   token: string;
-  backButton?: BackButtonVisibility;
+  backButton?: BackButtonVisibilityLike;
   backgroundImage?: Image;
   title?: string;
   textContent?: TYPE extends DisplayTemplateType.Body7 ? never : TextContent;

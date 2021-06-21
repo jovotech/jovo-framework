@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
+import { EnumLike, IsEnum, IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
 
 export enum AplType {
   Any = 'any',
@@ -14,10 +14,12 @@ export enum AplType {
   String = 'string',
 }
 
+export type AplTypeLike = EnumLike<AplType>;
+
 export class AplParameter {
   @IsOptional()
   @IsEnum(AplType)
-  type?: AplType;
+  type?: AplTypeLike;
 
   @IsString()
   @IsNotEmpty()

@@ -1,4 +1,4 @@
-import { IsOptional, IsEnum, IsUrl, IsInt } from '@jovotech/output';
+import { EnumLike, IsEnum, IsInt, IsOptional, IsUrl } from '@jovotech/output';
 
 export enum ImageSourceSize {
   ExtraSmall = 'X_SMALL',
@@ -8,13 +8,15 @@ export enum ImageSourceSize {
   ExtraLarge = 'X_LARGE',
 }
 
+export type ImageSourceSizeLike = EnumLike<ImageSourceSize>;
+
 export class ImageSource {
   @IsUrl({ protocols: ['https'] })
   url: string;
 
   @IsOptional()
   @IsEnum(ImageSourceSize)
-  size?: ImageSourceSize;
+  size?: ImageSourceSizeLike;
 
   @IsOptional()
   @IsInt()

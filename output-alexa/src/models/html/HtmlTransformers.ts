@@ -1,9 +1,11 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
+import { EnumLike, IsEnum, IsNotEmpty, IsOptional, IsString } from '@jovotech/output';
 
 export enum HtmlTransformer {
   SsmlToSpeech = 'ssmlToSpeech',
   TextToSpeech = 'textToSpeech',
 }
+
+export type HtmlTransformerLike = EnumLike<HtmlTransformer>;
 
 export class HtmlTransformers {
   @IsString()
@@ -16,5 +18,5 @@ export class HtmlTransformers {
   outputName?: string;
 
   @IsEnum(HtmlTransformer)
-  transformer: HtmlTransformer;
+  transformer: HtmlTransformerLike;
 }

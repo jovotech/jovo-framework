@@ -21,7 +21,7 @@ export class BodyTemplate2 implements DisplayTemplate<DisplayTemplateType.Body2>
   token: string;
 
   @IsOptional()
-  @IsEnum(BackButtonVisibility)
+  BackButtonVisibility)
   backButton?: BackButtonVisibility;
 
   @IsOptional()

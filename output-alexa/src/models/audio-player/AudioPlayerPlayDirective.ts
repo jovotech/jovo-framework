@@ -1,5 +1,5 @@
 import { Equals, IsEnum, Type, ValidateNested } from '@jovotech/output';
-import { PlayBehavior } from '../common/OutputSpeech';
+import { PlayBehavior, PlayBehaviorLike } from '../common/OutputSpeech';
 import { Directive } from '../Directive';
 import { AudioItem } from './AudioItem';
 
@@ -8,7 +8,7 @@ export class AudioPlayerPlayDirective extends Directive<'AudioPlayer.Play'> {
   type: 'AudioPlayer.Play';
 
   @IsEnum(PlayBehavior)
-  playBehavior: PlayBehavior;
+  playBehavior: PlayBehaviorLike;
 
   @ValidateNested()
   @Type(() => AudioItem)

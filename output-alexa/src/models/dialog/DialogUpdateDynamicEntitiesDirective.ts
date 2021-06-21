@@ -1,4 +1,4 @@
-import { Equals, IsEnum, Type } from '@jovotech/output';
+import { EnumLike, Equals, IsEnum, Type } from '@jovotech/output';
 import { IsValidDynamicEntitiesSlotTypesArray } from '../../decorators/validation/IsValidDynamicEntitiesSlotTypesArray';
 import { SlotType } from '../common/SlotType';
 import { Directive } from '../Directive';
@@ -8,9 +8,7 @@ export enum DynamicEntitiesUpdateBehavior {
   Clear = 'CLEAR',
 }
 
-export type DynamicEntitiesUpdateBehaviorLike =
-  | DynamicEntitiesUpdateBehavior
-  | `${DynamicEntitiesUpdateBehavior}`;
+export type DynamicEntitiesUpdateBehaviorLike = EnumLike<DynamicEntitiesUpdateBehavior>;
 
 export class DialogUpdateDynamicEntitiesDirective<
   BEHAVIOR extends DynamicEntitiesUpdateBehaviorLike = DynamicEntitiesUpdateBehaviorLike,

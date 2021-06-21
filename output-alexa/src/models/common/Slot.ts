@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
-import { ConfirmationStatus } from './Intent';
+import { ConfirmationStatus, ConfirmationStatusLike } from './Intent';
 import { Resolutions } from './Resolutions';
 
 export class Slot {
@@ -14,7 +14,7 @@ export class Slot {
   value: string;
 
   @IsEnum(ConfirmationStatus)
-  confirmationStatus: ConfirmationStatus;
+  confirmationStatus: ConfirmationStatusLike;
 
   @IsOptional()
   @ValidateNested()

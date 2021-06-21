@@ -1,26 +1,30 @@
 import {
-  IsInt,
-  IsOptional,
-  Min,
-  Max,
+  ArrayMinSize,
+  EnumLike,
   IsArray,
   IsEnum,
-  ArrayMinSize,
-  IsString,
+  IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
 } from '@jovotech/output';
 
 export enum AplGradientType {
   Linear = 'linear',
   Radial = 'radial',
 }
+
+export type AplGradientTypeLike = EnumLike<AplGradientType>;
+
 export class AplGradient {
   [key: string]: unknown;
 
   @IsOptional()
   @IsEnum(AplGradientType)
-  type?: AplGradientType;
+  type?: AplGradientTypeLike;
 
   @IsOptional()
   @IsInt()

@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, Min } from '@jovotech/output';
+import {EnumLike, IsEnum, IsInt, Min } from '@jovotech/output';
 
 export enum AplOperationType {
   InsertItem = 'InsertItem',
@@ -8,7 +8,9 @@ export enum AplOperationType {
   DeleteItems = 'DeleteMultipleItems',
 }
 
-export class AplOperation<TYPE extends AplOperationType = AplOperationType> {
+export type AplOperationTypeLike = EnumLike<AplOperationType>;
+
+export class AplOperation<TYPE extends AplOperationTypeLike = AplOperationTypeLike> {
   @IsEnum(AplOperationType)
   type: TYPE;
 

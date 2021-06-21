@@ -1,4 +1,4 @@
-import { Card as BaseCard, IsEnum, Type } from '@jovotech/output';
+import { Card as BaseCard, EnumLike, IsEnum, Type } from '@jovotech/output';
 import { IsValidCardImage } from '../../decorators/validation/IsValidCardImage';
 import { IsValidCardString } from '../../decorators/validation/IsValidCardString';
 import { CardImage } from './CardImage';
@@ -10,7 +10,9 @@ export enum CardType {
   AskForPermissionsConsent = 'AskForPermissionsConsent',
 }
 
-export class Card<TYPE extends CardType = CardType> {
+export type CardTypeLike = EnumLike<CardType>;
+
+export class Card<TYPE extends CardTypeLike = CardTypeLike> {
   @IsEnum(CardType)
   type: TYPE;
 

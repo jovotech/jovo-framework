@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsEnum,
   IsNotEmpty,
   IsObject,
@@ -14,13 +15,15 @@ export enum ConfirmationStatus {
   Denied = 'DENIED',
 }
 
+export type ConfirmationStatusLike = EnumLike<ConfirmationStatus>;
+
 export class Intent {
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsEnum(ConfirmationStatus)
-  confirmationStatus: ConfirmationStatus;
+  confirmationStatus: ConfirmationStatusLike;
 
   @IsObject()
   @ValidateNested({ each: true })
