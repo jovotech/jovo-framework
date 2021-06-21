@@ -1,12 +1,10 @@
+import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
 import {
-  Entity,
-  EntityMap,
-  JovoRequest,
-  JovoRequestType,
-  JovoSession,
-  RequestType,
-} from '@jovotech/framework';
-import { Context, Request, Session } from './interfaces';
+  DYNAMIC_ENTITY_MATCHES_PREFIX,
+  ENTITY_MATCH_SUCCESS_STATUS_CODE,
+  STATIC_ENTITY_MATCHES_PREFIX,
+} from './constants';
+import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export class AlexaRequest extends JovoRequest {
   version?: string;
@@ -17,11 +15,7 @@ export class AlexaRequest extends JovoRequest {
   getEntities(): EntityMap | undefined {
     const slots = this.request?.intent?.slots;
     if (!slots) return;
-    const slotKeys = Object.keys(slots);
-
-    const entities: EntityMap = {};
-    for (let i = 0, len = slotKeys.length; i < len; i++) {
-      const slotKey = slotKeys[i];
+    return Object.keys(slots).reduce((entityMap: EntityMap, slotKey: string) => {
       const entity: Entity = {
         name: slotKey,
         alexaSkill: slots[slotKey],
@@ -31,13 +25,40 @@ export class AlexaRequest extends JovoRequest {
         entity.key = slots[slotKey].value;
       }
 
-      // TODO fully implement, it's not complete!
-      // entity-matches are missing (static and dynamic)
+      const modifyEntityByAuthorityResolutions = (authorityResolutions: AuthorityResolution[]) => {
+        authorityResolutions.forEach((authorityResolution) => {
+          entity.key = authorityResolution.values[0].value.name;
+          entity.id = authorityResolution.values[0].value.id;
+        });
+      };
 
-      entities[slotKeys[i]] = entity;
-    }
+      // check static entities first
+      modifyEntityByAuthorityResolutions(this.getStaticEntityMatches(slotKey));
 
-    return entities;
+      // dynamic entities have a higher priority
+      modifyEntityByAuthorityResolutions(this.getDynamicEntityMatches(slotKey));
+
+      entityMap[slotKey] = entity;
+      return entityMap;
+    }, {});
+  }
+
+  getStaticEntityMatches(slotKey: string): AuthorityResolution[] {
+    return this.getEntityResolutions(slotKey, STATIC_ENTITY_MATCHES_PREFIX);
+  }
+
+  getDynamicEntityMatches(slotKey: string): AuthorityResolution[] {
+    return this.getEntityResolutions(slotKey, DYNAMIC_ENTITY_MATCHES_PREFIX);
+  }
+
+  private getEntityResolutions(slotKey: string, startsWith: string): AuthorityResolution[] {
+    return (
+      this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []
+    ).filter(
+      (authorityResolution) =>
+        authorityResolution.status.code === ENTITY_MATCH_SUCCESS_STATUS_CODE &&
+        authorityResolution.authority.startsWith(startsWith),
+    );
   }
 
   getIntentName(): string | undefined {
