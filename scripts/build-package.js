@@ -1,5 +1,6 @@
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
+const rimraf = require('rimraf');
 
 var chalk;
 try {
@@ -75,6 +76,17 @@ function convertCompilerOptionsToCommandProcess(compilerOptions) {
   return exec(`tsc ${stringifiedCompilerOptions}`, {});
 }
 
+function asyncRimraf(path, options = {}) {
+  return new Promise((resolve, reject) => {
+    rimraf(path, options, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve();
+    });
+  });
+}
+
 (async () => {
   // console.log(
   //   chalk.cyan(
@@ -83,6 +95,8 @@ function convertCompilerOptionsToCommandProcess(compilerOptions) {
   //       .join(', ')} and ${chalk.cyanBright('types')}`,
   //   ),
   // );
+
+  await asyncRimraf('dist');
 
   const isParallelExecution = !process.argv.includes('--consecutive');
 

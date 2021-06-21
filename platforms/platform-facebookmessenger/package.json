@@ -11,7 +11,6 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "npm run rimraf",
     "build": "node ../../scripts/build-package.js",
     "watch": "tsc --watch",
     "prettier": "prettier -w -l src test",
