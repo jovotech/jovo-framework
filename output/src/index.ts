@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+export type EnumLike<T extends string> = T | `${T}`;
+
 // Export class-validator and class-transformer so that other packages can use it to decorate their models.
 export * from 'class-transformer';
 export * from 'class-validator';

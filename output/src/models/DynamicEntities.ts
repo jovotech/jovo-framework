@@ -1,4 +1,4 @@
-import { DynamicEntity, IsArray, IsEnum, IsOptional, Type, ValidateNested } from '..';
+import { DynamicEntity, EnumLike, IsArray, IsEnum, IsOptional, Type, ValidateNested } from '..';
 
 export enum DynamicEntitiesMode {
   Replace = 'REPLACE',
@@ -6,7 +6,7 @@ export enum DynamicEntitiesMode {
   Clear = 'CLEAR',
 }
 
-export type DynamicEntitiesModeLike = DynamicEntitiesMode | `${DynamicEntitiesMode}`;
+export type DynamicEntitiesModeLike = EnumLike<DynamicEntitiesMode>;
 
 export class DynamicEntities {
   @IsOptional()
