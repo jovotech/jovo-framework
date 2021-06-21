@@ -11,17 +11,22 @@ export * from './decorators/validation/IsSomeValid';
 export * from './decorators/validation/IsEitherValid';
 export * from './decorators/validation/IsOfEitherType';
 export * from './decorators/validation/IsStringOrInstance';
+export * from './decorators/validation/IsBooleanOrInstance';
 export * from './decorators/validation/ConditionalMaxLength';
 
-export * from './models/JovoResponse';
 export * from './models/Card';
 export * from './models/Carousel';
-export * from './models/QuickReply';
+export * from './models/DynamicEntity';
+export * from './models/DynamicEntityValue';
+export * from './models/Entity';
+export * from './models/JovoResponse';
+export * from './models/Listen';
 export * from './models/Message';
 export * from './models/OutputTemplate';
 export * from './models/OutputTemplateBase';
 export * from './models/OutputTemplatePlatforms';
 export * from './models/PlatformOutputTemplate';
+export * from './models/QuickReply';
 
 export * from './strategies/SingleResponseOutputTemplateConverterStrategy';
 export * from './strategies/MultipleResponsesOutputTemplateConverterStrategy';

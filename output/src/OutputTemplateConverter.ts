@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { OutputValidationError } from './errors/OutputValidationError';
-import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from './index';
+import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from '.';
 
 // TODO: check if validation should happen before and after conversion
 export class OutputTemplateConverter<RESPONSE extends JovoResponse> {

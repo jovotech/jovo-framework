@@ -6,13 +6,13 @@ import {
   ValidationOptions,
 } from '../..';
 
-export function IsStringOrInstance(
+export function IsBooleanOrInstance(
   classType: new () => any,
   options?: ValidationOptions,
 ): PropertyDecorator {
   return function (object: any, propertyKey: string | symbol) {
     registerDecorator({
-      name: 'isStringOrInstance',
+      name: 'isBooleanOrInstance',
       target: object.constructor,
       propertyName: propertyKey.toString(),
       constraints: [classType],
@@ -20,7 +20,7 @@ export function IsStringOrInstance(
       async: true,
       validator: {
         async validate(value: any, args: ValidationArguments) {
-          if (typeof value === 'string' && value.length) {
+          if (typeof value === 'boolean') {
             return true;
           } else if (value instanceof args.constraints[0]) {
             const errors = await validate(value);
@@ -32,7 +32,7 @@ export function IsStringOrInstance(
           error.property = propertyKey.toString();
           error.value = value;
           error.constraints = {
-            isValidMessage: `$property should either be a non-empty string or a valid ${args.constraints[0].name}-instance`,
+            isValidMessage: `$property should either be a boolean or a valid ${args.constraints[0].name}-instance`,
           };
           error.children = [];
           args.constraints[1] = [error];

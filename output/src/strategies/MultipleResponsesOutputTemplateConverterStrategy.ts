@@ -2,8 +2,9 @@ import { OutputTemplate } from '../models/OutputTemplate';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
 export abstract class MultipleResponsesOutputTemplateConverterStrategy<
-  RESPONSE extends Record<string, unknown>
-> implements OutputTemplateConverterStrategy<RESPONSE> {
+  RESPONSE extends Record<string, unknown>,
+> implements OutputTemplateConverterStrategy<RESPONSE>
+{
   abstract responseClass: new () => RESPONSE;
 
   fromResponse(response: RESPONSE): OutputTemplate;

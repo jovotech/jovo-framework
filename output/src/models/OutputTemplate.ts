@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsInstance, IsOptional, ValidateNested } from '../index';
+import { IsInstance, IsOptional, ValidateNested, Type } from '..';
 import { OutputTemplateBase } from './OutputTemplateBase';
 import { OutputTemplatePlatforms } from './OutputTemplatePlatforms';
 
