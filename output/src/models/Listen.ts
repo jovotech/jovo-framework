@@ -1,12 +1,10 @@
-import { IsArray, IsOptional, Type, ValidateNested } from '..';
-import { DynamicEntity } from './DynamicEntity';
+import { DynamicEntities, IsArray, IsOptional, Type, ValidateNested } from '..';
 
 export type ListenValue = boolean | Listen;
 
 export class Listen {
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => DynamicEntity)
-  entities?: DynamicEntity[];
+  @ValidateNested()
+  @Type(() => DynamicEntities)
+  entities?: DynamicEntities;
 }

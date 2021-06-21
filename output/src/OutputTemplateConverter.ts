@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
-import { OutputValidationError } from './errors/OutputValidationError';
 import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from '.';
+import { OutputValidationError } from './errors/OutputValidationError';
 
 // TODO: check if validation should happen before and after conversion
 export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
@@ -13,25 +13,6 @@ export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
 
   async validateResponse(response: RESPONSE | RESPONSE[]): Promise<ValidationError[]> {
     return this.validate(response, this.strategy.responseClass);
-  }
-
-  private async validate<T = unknown>(
-    objOrArray: T | T[],
-    targetClass: new (...args: unknown[]) => T,
-  ): Promise<ValidationError[]> {
-    const getInstance = (item: T) =>
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      (item instanceof targetClass ? item : plainToClass(targetClass, item)) as unknown as object;
-    if (Array.isArray(objOrArray)) {
-      const errorMatrix = await Promise.all(objOrArray.map((item) => validate(getInstance(item))));
-      // TODO: maybe modify key or something to indicate better which item was invalid
-      return errorMatrix.reduce((acc, curr) => {
-        acc.push(...curr);
-        return acc;
-      }, []);
-    } else {
-      return validate(getInstance(objOrArray));
-    }
   }
 
   async toResponse(output: OutputTemplate | OutputTemplate[]): Promise<RESPONSE | RESPONSE[]> {
@@ -60,5 +41,24 @@ export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
       throw new OutputValidationError(errors, 'Conversion caused invalid output.\n');
     }
     return output;
+  }
+
+  private async validate<T = unknown>(
+    objOrArray: T | T[],
+    targetClass: new (...args: unknown[]) => T,
+  ): Promise<ValidationError[]> {
+    const getInstance = (item: T) =>
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      (item instanceof targetClass ? item : plainToClass(targetClass, item)) as unknown as object;
+    if (Array.isArray(objOrArray)) {
+      const errorMatrix = await Promise.all(objOrArray.map((item) => validate(getInstance(item))));
+      // TODO: maybe modify key or something to indicate better which item was invalid
+      return errorMatrix.reduce((acc, curr) => {
+        acc.push(...curr);
+        return acc;
+      }, []);
+    } else {
+      return validate(getInstance(objOrArray));
+    }
   }
 }

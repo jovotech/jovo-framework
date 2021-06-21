@@ -1,4 +1,4 @@
-import { IsInstance, IsOptional, ValidateNested, Type } from '..';
+import { IsInstance, IsOptional, Type, ValidateNested } from '..';
 import { OutputTemplateBase } from './OutputTemplateBase';
 import { OutputTemplatePlatforms } from './OutputTemplatePlatforms';
 

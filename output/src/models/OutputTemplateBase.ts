@@ -1,16 +1,15 @@
 import { Type } from 'class-transformer';
-import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import {
   IsArray,
   IsBoolean,
   IsBooleanOrInstance,
   IsInstance,
-  IsOfEitherType,
   IsOptional,
   Listen,
   ListenValue,
   ValidateNested,
 } from '..';
+import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import { Card } from './Card';
 import { Carousel } from './Carousel';
 import { Message, MessageValue } from './Message';
