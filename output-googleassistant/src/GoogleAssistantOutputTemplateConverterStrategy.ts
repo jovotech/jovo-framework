@@ -32,7 +32,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           name: 'actions.scene.END_CONVERSATION',
         },
       };
-    } else if (typeof listen === 'object' && listen.entities) {
+    } else if (typeof listen === 'object' && listen.entities?.types?.length) {
       const typeOverrideMode: TypeOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
           ? TypeOverrideMode.Merge
@@ -40,7 +40,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.session) {
         response.session = { id: '', params: {}, languageCode: '' };
       }
-      response.session.typeOverrides = (listen.entities.types || []).map((entity) =>
+      response.session.typeOverrides = listen.entities.types.map((entity) =>
         this.convertDynamicEntityToTypeOverride(entity, typeOverrideMode),
       );
     }
