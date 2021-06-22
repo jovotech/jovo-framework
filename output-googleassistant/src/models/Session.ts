@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsArray,
   IsEnum,
   IsNotEmpty,
@@ -65,13 +66,15 @@ export enum TypeOverrideMode {
   Merge = 'TYPE_MERGE',
 }
 
+export type TypeOverrideModeLike = EnumLike<TypeOverrideMode>;
+
 export class TypeOverride {
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsEnum(TypeOverrideMode)
-  mode: TypeOverrideMode;
+  mode: TypeOverrideModeLike;
 
   @IsOptional()
   @ValidateNested()

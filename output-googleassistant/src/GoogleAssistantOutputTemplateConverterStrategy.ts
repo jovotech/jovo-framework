@@ -1,11 +1,20 @@
 import {
+  DynamicEntitiesMode,
+  DynamicEntity,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import _merge from 'lodash.merge';
-import { GoogleAssistantResponse, Simple, Suggestion } from './models';
+import {
+  GoogleAssistantResponse,
+  Simple,
+  Suggestion,
+  TypeOverride,
+  TypeOverrideMode,
+  TypeOverrideModeLike,
+} from './models';
 
 export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
   platformName = 'GoogleAssistant';
@@ -23,6 +32,17 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           name: 'actions.scene.END_CONVERSATION',
         },
       };
+    } else if (typeof listen === 'object' && listen.entities) {
+      const typeOverrideMode: TypeOverrideMode =
+        listen.entities.mode === DynamicEntitiesMode.Merge
+          ? TypeOverrideMode.Merge
+          : TypeOverrideMode.Replace;
+      if (!response.session) {
+        response.session = { id: '', params: {}, languageCode: '' };
+      }
+      response.session.typeOverrides = (listen.entities.types || []).map((entity) =>
+        this.convertDynamicEntityToTypeOverride(entity, typeOverrideMode),
+      );
     }
 
     const message = output.platforms?.GoogleAssistant?.message || output.message;
@@ -110,6 +130,21 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       output.listen = false;
     }
 
+    if (response.session?.typeOverrides?.length) {
+      // only the first should be sufficient
+      const mode =
+        response.session.typeOverrides[0].mode === TypeOverrideMode.Merge
+          ? DynamicEntitiesMode.Merge
+          : DynamicEntitiesMode.Replace;
+
+      output.listen = {
+        entities: {
+          mode,
+          types: response.session.typeOverrides.map(this.convertTypeOverrideToDynamicEntity),
+        },
+      };
+    }
+
     const suggestions = response?.prompt?.suggestions;
     if (suggestions?.length) {
       output.quickReplies = suggestions.map((suggestion) => {
@@ -159,5 +194,32 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       : quickReply.toGoogleAssistantSuggestion?.() || {
           title: quickReply.text,
         };
+  }
+
+  private convertDynamicEntityToTypeOverride(
+    entity: DynamicEntity,
+    mode: TypeOverrideModeLike = TypeOverrideMode.Replace,
+  ): TypeOverride {
+    return {
+      name: entity.name,
+      mode,
+      synonym: {
+        entries: (entity.values || []).map((entityValue) => ({
+          name: entityValue.id || entityValue.value,
+          synonyms: entityValue.synonyms?.slice() || [],
+        })),
+      },
+    };
+  }
+
+  private convertTypeOverrideToDynamicEntity(typeOverride: TypeOverride): DynamicEntity {
+    return {
+      name: typeOverride.name,
+      values: (typeOverride.synonym?.entries || []).map((entry) => ({
+        id: entry.name,
+        value: entry.name,
+        synonyms: entry.synonyms?.slice(),
+      })),
+    };
   }
 }
