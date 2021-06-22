@@ -1,4 +1,4 @@
-import { IsEnum, IsObject, IsOptional, Type, ValidateNested } from '@jovotech/output';
+import { EnumLike, IsEnum, IsObject, IsOptional, Type, ValidateNested } from '@jovotech/output';
 import { IsValidMessageContentObject } from '../decorators/validation/IsValidMessageContentObject';
 import { Card } from './message/Card';
 import { Image } from './message/Image';
@@ -25,10 +25,12 @@ export enum Platform {
   GoogleHangouts = 'GOOGLE_HANGOUTS',
 }
 
+export type PlatformLike = EnumLike<Platform>;
+
 export class Message<P extends Record<string, unknown> = Record<string, unknown>> {
   @IsOptional()
   @IsEnum(Platform)
-  platform?: Platform;
+  platform?: PlatformLike;
 
   @IsObject()
   @ValidateNested()

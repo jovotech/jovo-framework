@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   formatValidationErrors,
   IsArray,
   IsEnum,
@@ -77,6 +78,8 @@ export enum Height {
   Tall = 'TALL',
 }
 
+export type HeightLike = EnumLike<Height>
+
 export class RbmMedia {
   @IsString()
   @IsNotEmpty()
@@ -89,5 +92,5 @@ export class RbmMedia {
 
   @IsOptional()
   @IsEnum(Height)
-  height?: Height;
+  height?: HeightLike;
 }
