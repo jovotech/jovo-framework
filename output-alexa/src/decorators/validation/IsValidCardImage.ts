@@ -6,10 +6,10 @@ import {
   ValidationArguments,
   ValidationOptions,
 } from '@jovotech/output';
-import { Card, CardImage, CardType } from '../../models';
+import { Card, CardImage, CardTypeLike } from '../../models';
 
 export function IsValidCardImage(
-  relatedTypes: CardType[],
+  relatedTypes: CardTypeLike[],
   options?: ValidationOptions,
 ): PropertyDecorator {
   return function (object, propertyKey) {

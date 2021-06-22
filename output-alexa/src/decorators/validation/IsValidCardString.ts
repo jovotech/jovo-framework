@@ -4,11 +4,11 @@ import {
   ValidationArguments,
   ValidationOptions,
 } from '@jovotech/output';
-import { Card, CardType } from '../../models';
+import { Card, CardTypeLike } from '../../models';
 import { validateAlexaString } from '../../utilities';
 
 export function IsValidCardString(
-  relatedTypes: CardType[],
+  relatedTypes: CardTypeLike[],
   options?: ValidationOptions,
 ): PropertyDecorator {
   return function (object, propertyKey) {

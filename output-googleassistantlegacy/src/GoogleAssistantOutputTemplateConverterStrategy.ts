@@ -24,7 +24,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     // TODO: fully determine when to set listen
     const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
     if (typeof listen !== 'undefined') {
-      response.expectUserResponse = listen;
+      response.expectUserResponse = !!listen;
     }
 
     const message = output.platforms?.GoogleAssistant?.message || output.message;
