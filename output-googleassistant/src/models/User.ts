@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsArray,
   IsEnum,
   IsNotEmpty,
@@ -15,11 +16,15 @@ export enum AccountLinkingStatus {
   Linked = 'LINKED',
 }
 
+export type AccountLinkingStatusLike = EnumLike<AccountLinkingStatus>;
+
 export enum UserVerificationStatus {
   Unspecified = 'USER_VERIFICATION_STATUS_UNSPECIFIED',
   Guest = 'GUEST',
   Verified = 'VERIFIED',
 }
+
+export type UserVerificationStatusLike = EnumLike<UserVerificationStatus>;
 
 export class IntentSubscription {
   @IsString()
@@ -50,6 +55,8 @@ export enum SkuType {
   App = 'APP',
 }
 
+export type SkuTypeLike = EnumLike<SkuType>;
+
 export class SignedData {
   @IsObject()
   inAppPurchaseData: Record<string, unknown>;
@@ -64,7 +71,7 @@ export class Entitlement {
   sku: string;
 
   @IsEnum(SkuType)
-  skuType: SkuType;
+  skuType: SkuTypeLike;
 
   @ValidateNested()
   @Type(() => SignedData)
@@ -92,10 +99,10 @@ export class User {
   params?: Record<string, unknown>;
 
   @IsEnum(AccountLinkingStatus)
-  accountLinkingStatus: AccountLinkingStatus;
+  accountLinkingStatus: AccountLinkingStatusLike;
 
   @IsEnum(UserVerificationStatus)
-  verificationStatus: UserVerificationStatus;
+  verificationStatus: UserVerificationStatusLike;
 
   @IsString()
   @IsNotEmpty()

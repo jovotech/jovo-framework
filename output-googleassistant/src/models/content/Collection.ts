@@ -9,7 +9,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import { ImageFill } from '../common/Image';
+import { ImageFill, ImageFillLike } from '../common/Image';
 
 export class Collection {
   @IsOptional()
@@ -31,7 +31,7 @@ export class Collection {
 
   @IsOptional()
   @IsEnum(ImageFill)
-  imageFill?: ImageFill;
+  imageFill?: ImageFillLike;
 }
 
 export class CollectionItem {

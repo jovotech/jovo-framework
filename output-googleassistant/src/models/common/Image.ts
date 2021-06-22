@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from '@jovotech/output';
+import { EnumLike, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from '@jovotech/output';
 
 export enum ImageFill {
   Unspecified = 'UNSPECIFIED',
@@ -6,6 +6,8 @@ export enum ImageFill {
   White = 'WHITE',
   Cropped = 'CROPPED',
 }
+
+export type ImageFillLike = EnumLike<ImageFill>;
 
 export class Image {
   @IsUrl({ protocols: ['https', 'http'] })

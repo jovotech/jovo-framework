@@ -1,6 +1,6 @@
 import {
-  formatValidationErrors,
   Card as BaseCard,
+  formatValidationErrors,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -11,7 +11,7 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
-import { Image, ImageFill } from '../common/Image';
+import { Image, ImageFill, ImageFillLike } from '../common/Image';
 import { Link } from '../common/Link';
 
 export class Card {
@@ -62,7 +62,7 @@ export class Card {
 
   @IsOptional()
   @IsEnum(ImageFill)
-  imageFill?: ImageFill;
+  imageFill?: ImageFillLike;
 
   @IsOptional()
   @ValidateNested()
