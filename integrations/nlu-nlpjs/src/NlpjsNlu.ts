@@ -10,7 +10,7 @@ import {
   Platform,
   PluginConfig,
 } from '@jovotech/framework';
-import { promises } from 'fs';
+import { promises as fsPromise } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';
 
@@ -90,10 +90,14 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     if (typeof listen === 'object' && listen.entities) {
       const language = this.getLanguage(jovo);
       if (listen.entities.mode === DynamicEntitiesMode.Clear) {
+        // TODO check if entities can be easily cleared
         return;
       }
       if (listen.entities.types?.length) {
+        // TODO check if entities can be easily replaced instead of merged
         const entityMap = listen.entities.types.reduce((entityMap: NlpjsEntityMap, entity) => {
+          // Currently this will add values to the wrong entity, this is due to passing the InputType's name here instead of the Input's name.
+          // TODO: Figure something out for the issue above
           entityMap[entity.name] = {
             options: (entity.values || []).reduce(
               (optionsMap: NlpjsEnumEntityOptionsMap, entityValue) => {
@@ -109,16 +113,18 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
           return entityMap;
         }, {});
         this.nlpjs?.addEntities(entityMap, language);
+        await this.nlpjs?.train();
       }
     }
   };
 
   async initialize(parent: Extensible): Promise<void> {
+    const hasWritePermissions = await this.hasWritePermissions();
+
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
-      // TODO: add condition to check if writing is even possible
-      autoSave: this.config.useModel,
+      autoSave: hasWritePermissions && this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
       nlu: {
         log: false,
@@ -129,7 +135,9 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       this.nlpjs?.use(languagePackage);
     });
 
-    // TODO: register fs if write-access is available
+    if (hasWritePermissions) {
+      this.nlpjs?.container.register('fs', fsPromise);
+    }
 
     if (this.config.setupModelCallback) {
       await this.config.setupModelCallback(parent as Platform, this.nlpjs!);
@@ -171,8 +179,19 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     return jovo.$request.getLocale()?.substr(0, 2) || this.config.fallbackLanguage;
   }
 
+  private async hasWritePermissions(): Promise<boolean> {
+    try {
+      const tmpFilePath = 'tmp_write-test.tmp';
+      await fsPromise.writeFile(tmpFilePath, Buffer.from(''));
+      await fsPromise.unlink(tmpFilePath);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   private async addCorpusFromModelsIn(dir: string) {
-    const files = await promises.readdir(dir);
+    const files = await fsPromise.readdir(dir);
     const jovoNlpjsConverter = new JovoModelNlpjs();
 
     for (let i = 0, len = files.length; i < len; i++) {
@@ -185,7 +204,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       if (extension === 'js') {
         jovoModelData = require(filePath);
       } else if (extension === 'json') {
-        const fileBuffer = await promises.readFile(filePath);
+        const fileBuffer = await fsPromise.readFile(filePath);
         jovoModelData = JSON.parse(fileBuffer.toString());
       }
       jovoNlpjsConverter.importJovoModel(jovoModelData, locale);
