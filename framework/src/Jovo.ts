@@ -228,7 +228,17 @@ export abstract class Jovo<
   ): Promise<void> {
     if (typeof outputConstructorOrTemplate === 'function') {
       const outputInstance = new outputConstructorOrTemplate(this, options);
-      this.$output = await outputInstance.build();
+      const output = await outputInstance.build();
+      OutputTemplate.getKeys().forEach((key) => {
+        if (options?.[key]) {
+          if (Array.isArray(output)) {
+            output[output.length - 1][key] = options[key];
+          } else {
+            output[key] = options[key];
+          }
+        }
+      });
+      this.$output = output;
     } else {
       this.$output = outputConstructorOrTemplate;
     }
