@@ -1,5 +1,7 @@
 import {
   DeepPartial,
+  DynamicEntitiesMode,
+  EntityMap,
   Extensible,
   HandleRequest,
   Jovo,
@@ -20,7 +22,13 @@ export interface Nlp {
   [key: string]: any;
 }
 
-export interface NlpJsEntity {
+export type NlpjsEnumEntityOptionsMap = Record<string, string[]>;
+export interface NlpjsEnumEntity {
+  options: NlpjsEnumEntityOptionsMap;
+}
+export type NlpjsEntityMap = Record<string, NlpjsEnumEntity>;
+
+export interface NlpjsEntity {
   start: number;
   end: number;
   len: number;
@@ -36,6 +44,7 @@ export interface NlpJsEntity {
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
 export interface NlpjsNluConfig extends PluginConfig {
+  fallbackLanguage: string;
   languageMap: Record<string, unknown>;
   preTrainedModelFilePath: string;
   useModel: boolean;
@@ -52,15 +61,57 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     super(config);
   }
 
+  install(parent: Platform): void {
+    super.install(parent);
+
+    parent.middlewareCollection.use('$output', this.output);
+  }
+
   // TODO fully determine default config
   getDefaultConfig(): NlpjsNluConfig {
     return {
+      fallbackLanguage: 'en',
       languageMap: {},
       preTrainedModelFilePath: './model.nlp',
       useModel: false,
       modelsPath: './models',
     };
   }
+
+  protected output = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+    const lastOutputTemplate = Array.isArray(jovo.$output)
+      ? jovo.$output[jovo.$output.length - 1]
+      : jovo.$output;
+
+    const listen =
+      lastOutputTemplate.platforms?.[handleRequest.$platform.constructor.name]?.listen ??
+      lastOutputTemplate.listen;
+
+    if (typeof listen === 'object' && listen.entities) {
+      const language = this.getLanguage(jovo);
+      if (listen.entities.mode === DynamicEntitiesMode.Clear) {
+        return;
+      }
+      if (listen.entities.types?.length) {
+        const entityMap = listen.entities.types.reduce((entityMap: NlpjsEntityMap, entity) => {
+          entityMap[entity.name] = {
+            options: (entity.values || []).reduce(
+              (optionsMap: NlpjsEnumEntityOptionsMap, entityValue) => {
+                optionsMap[entityValue.id || entityValue.value] = [
+                  entityValue.value,
+                  ...(entityValue.synonyms || []),
+                ];
+                return optionsMap;
+              },
+              {},
+            ),
+          };
+          return entityMap;
+        }, {});
+        this.nlpjs?.addEntities(entityMap, language);
+      }
+    }
+  };
 
   async initialize(parent: Extensible): Promise<void> {
     this.nlpjs = new Nlp({
@@ -93,29 +144,31 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
   async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
-    const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
-    const nlpResult = await this.nlpjs?.process(language, text);
+    const nlpResult = await this.nlpjs?.process(this.getLanguage(jovo), text);
 
-    const entities = nlpResult?.entities?.map((entity: NlpJsEntity) => {
-      return {
-        [entity.entity]: {
-          id: entity.option,
-          key: entity.option,
-          name: entity.entity,
-          value: entity.utteranceText,
-        },
+    const entityMap = nlpResult?.entities?.reduce((entityMap: EntityMap, entity: NlpjsEntity) => {
+      entityMap[entity.entity] = {
+        id: entity.option,
+        key: entity.option,
+        name: entity.entity,
+        value: entity.utteranceText,
       };
-    });
+      return entityMap;
+    }, {});
 
     return nlpResult?.intent
       ? {
           intent: {
             name: nlpResult.intent,
           },
-          entities,
+          entities: entityMap,
           raw: nlpResult, // TODO: temporary property
         }
       : undefined;
+  }
+
+  private getLanguage(jovo: Jovo): string {
+    return jovo.$request.getLocale()?.substr(0, 2) || this.config.fallbackLanguage;
   }
 
   private async addCorpusFromModelsIn(dir: string) {
