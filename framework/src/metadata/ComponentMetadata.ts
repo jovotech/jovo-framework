@@ -33,6 +33,10 @@ export class ComponentMetadata<
     super(target);
   }
 
+  get isGlobal(): boolean {
+    return !!this.options.global;
+  }
+
   mergeWith(
     otherMetadata: ComponentMetadata<COMPONENT> | ComponentOptionMetadata<COMPONENT>,
   ): ComponentMetadata<COMPONENT> {

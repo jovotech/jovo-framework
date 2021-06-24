@@ -95,7 +95,10 @@ export class RoutingExecutor {
       .getMergedHandlerMetadataOfComponent(componentMetadata.target)
       .filter(
         (metadata) =>
-          this.getMappedIntentNames(metadata.globalIntentNames, intentName).includes(intentName) &&
+          this.getMappedIntentNames(
+            componentMetadata.isGlobal ? metadata.intentNames : metadata.globalIntentNames,
+            intentName,
+          ).includes(intentName) &&
           (!metadata.options?.platforms?.length ||
             metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name)),
       );
