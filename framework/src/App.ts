@@ -160,7 +160,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     for (let i = 0, len = components.length; i < len; i++) {
       const component = components[i];
       const constructor = typeof component === 'function' ? component : component.component;
-      const relatedMetadata = MetadataStorage.getInstance().getComponentMetadata(constructor);
+      const relatedMetadata = MetadataStorage.getInstance().getMergedComponentMetadata(constructor);
       const mergedOptions = _merge(
         {},
         relatedMetadata?.options || {},

@@ -4,7 +4,7 @@ import { MetadataStorage } from '../metadata/MetadataStorage';
 
 export function Handle<
   COMPONENT extends BaseComponent = BaseComponent,
-  KEY extends keyof COMPONENT = keyof COMPONENT
+  KEY extends keyof COMPONENT = keyof COMPONENT,
 >(options?: HandleOptions): MethodDecorator {
   return function (target, propertyKey) {
     MetadataStorage.getInstance().addHandlerMetadata(
