@@ -1,4 +1,3 @@
-import { RegisteredComponents } from '../BaseComponent';
 import { InternalIntent } from '../enums';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
@@ -110,38 +109,18 @@ export class RoutingExecutor {
   }
 
   private collectGlobalRouteMatches(intentName: string): RouteMatch[] {
-    return this.collectGlobalRouteMatchesOfComponents(this.handleRequest.components, intentName);
-  }
-
-  private collectGlobalRouteMatchesOfComponents(
-    components: RegisteredComponents,
-    intentName: string,
-    path: string[] = [],
-    matches: RouteMatch[] = [],
-  ): RouteMatch[] {
-    const componentNames = Object.keys(components);
-    for (let i = 0, len = componentNames.length; i < len; i++) {
-      const component = components[componentNames[i]];
-      if (!component) continue;
-      const newPath = [...path, componentNames[i]];
+    const matches: RouteMatch[] = [];
+    this.handleRequest.componentTree.forEach((node) => {
       const relatedHandlerMetadata = this.getGlobalInputFilteredHandlerMetadata(
-        component,
+        node.metadata,
         intentName,
       );
       if (relatedHandlerMetadata.length) {
         matches.push(
-          ...relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(newPath)),
+          ...relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(node.path)),
         );
       }
-      if (component.components) {
-        this.collectGlobalRouteMatchesOfComponents(
-          component.components,
-          intentName,
-          newPath,
-          matches,
-        );
-      }
-    }
+    });
     return matches;
   }
 
@@ -167,9 +146,9 @@ export class RoutingExecutor {
 
     let relatedHandlerMetadata: HandlerMetadata[] = [];
     while (!relatedHandlerMetadata.length && currentPath.length) {
-      const relatedComponentMetadata = this.jovo.$getComponentMetadataOrFail(currentPath);
+      const relatedComponentNode = this.handleRequest.componentTree.getNodeAtOrFail(currentPath);
       relatedHandlerMetadata = this.getMatchingHandlerMetadata(
-        relatedComponentMetadata,
+        relatedComponentNode.metadata,
         intentName,
       );
       if (currentPath.length && !relatedHandlerMetadata.length) {

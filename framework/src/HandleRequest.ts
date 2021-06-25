@@ -2,16 +2,16 @@ import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { App, AppBaseMiddlewares, AppConfig, AppInitConfig } from './App';
 import { Extensible } from './Extensible';
-import { MiddlewareCollection, Platform, RegisteredComponents } from './index';
+import { ComponentTree, MiddlewareCollection, Platform, RegisteredComponents } from './index';
 import { Server } from './Server';
 
 export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
-  readonly components: RegisteredComponents;
+  readonly componentTree: ComponentTree;
   $platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
     super(_cloneDeep(app.config) as AppInitConfig);
-    this.components = {};
+    this.componentTree = new ComponentTree();
     _merge(this, _cloneDeep(app));
   }
 
