@@ -1,6 +1,7 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _get from 'lodash.get';
+import _merge from 'lodash.merge';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
 import { InternalIntent, RequestType, RequestTypeLike } from './enums';
@@ -228,7 +229,21 @@ export abstract class Jovo<
   ): Promise<void> {
     if (typeof outputConstructorOrTemplate === 'function') {
       const outputInstance = new outputConstructorOrTemplate(this, options);
-      this.$output = await outputInstance.build();
+      const output = await outputInstance.build();
+      OutputTemplate.getKeys().forEach((key) => {
+        if (options?.[key]) {
+          if (Array.isArray(output)) {
+            output[output.length - 1][key] =
+              key === 'platforms'
+                ? _merge({}, output[output.length - 1].platforms || {}, options[key])
+                : options[key];
+          } else {
+            output[key] =
+              key === 'platforms' ? _merge({}, output[key] || {}, options[key]) : options[key];
+          }
+        }
+      });
+      this.$output = output;
     } else {
       this.$output = outputConstructorOrTemplate;
     }

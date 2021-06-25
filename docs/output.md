@@ -149,13 +149,43 @@ build() {
 
 ### Output Options
 
-As a convention, an output template should only be responsible for organizing the output, not collecting any data. To achieve this, the handler should first collect all necessary information and the pass it to the output class as `options`:
+As a convention, an output template should only be responsible for organizing the output, not collecting any data. To achieve this, the handler should first collect all necessary information and then pass it to the output class as `options`:
 
 ```typescript
 return this.$send(YourOutput, { /* options */ });
 ```
 
-These options can then be referenced inside the output class using `this.options`.
+There are two types of properties that can be passed:
+* Reserved properties: You can pass elements like `message` to be automatically added to the output template
+* Custom options: Pass any additional data to be used in the output class
+
+
+#### Reserved Properties
+
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override default properties in the output template.
+
+For example, a `message` can be passed right from the handler:
+
+```typescript
+return this.$send(YourOutput, { message: 'Hi there!' });
+```
+
+Even if `YourOutput` already includes a `message` property, it will be replaced with `"Hi there!"`.
+
+The following properties are reserved:
+* `message`
+* `reprompt`
+* `listen`
+* `quickReplies`
+* `card`
+* `carousel`
+* `platforms`
+
+All properties except `platforms` replace the current property in the output template. For `platforms`, the content gets merged to allow for more granularity.
+
+#### Custom Options
+
+You can pass any other options that are not [reserved properties](#reserved-properties) and reference them inside the output class using `this.options`.
 
 For example, here we're passing a user's `name`: 
 
