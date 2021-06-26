@@ -12,4 +12,14 @@ export interface RasaIntent {
   confidence: number;
 }
 
-export interface RasaEntity {}
+export interface RasaEntity {
+  entity: string;
+  start: number;
+  end: number;
+  confidence_entity: number;
+  value: string;
+  extractor: string;
+  role?: string; //TODO need to validate if role is really found under this prop
+  group?: string; //TODO need to validate if group is really found under this prop
+  processors?: string[];
+}
