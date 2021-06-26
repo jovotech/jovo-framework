@@ -3,6 +3,7 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
+  EntityMap,
   Extensible,
   HandleRequest,
   Jovo,
@@ -11,23 +12,20 @@ import {
   NluPlugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { RasaResponse } from './interfaces';
+import { RasaEntity, RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends PluginConfig {
-  serverUrl: string;
-  serverPath: string;
+  serverUrl?: string;
+  serverPath?: string;
 }
 
 interface RasaNluData extends NluData {
   intent?: {
     name: string;
     confidence: number;
-  }
-
-
+  };
+  entities?: EntityMap;
 }
-
-
 
 export type RasaNluInitConfig = DeepPartial<RasaNluConfig>;
 
@@ -50,10 +48,25 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     try {
       const rasaResponse = await this.sendTextToRasaServer(text || '');
 
-
+      const extractedEntities = rasaResponse.data.entities.map((entity: RasaEntity) => {
+        return {
+          [entity.entity]: {
+            id: entity.entity,
+            key: entity.entity,
+            name: entity.entity,
+            value: entity.value,
+          },
+        };
+      });
 
       return rasaResponse.data.intent.name
-        ? { intent: { name: rasaResponse.data.intent.name, confidence: rasaResponse.data.intent.confidence } }
+        ? {
+            intent: {
+              name: rasaResponse.data.intent.name,
+              confidence: rasaResponse.data.intent.confidence,
+            },
+            extractedEntities,
+          }
         : undefined;
     } catch (e) {
       console.error('Error while retrieving nlu-data from Rasa-server.', e);
