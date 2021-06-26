@@ -29,6 +29,10 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     };
   }
 
+  constructor(config?: RasaNluConfig) {
+    super(config);
+  }
+
   async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
