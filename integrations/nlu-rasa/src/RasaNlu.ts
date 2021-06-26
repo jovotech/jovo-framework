@@ -18,6 +18,17 @@ export interface RasaNluConfig extends PluginConfig {
   serverPath: string;
 }
 
+interface RasaNluData extends NluData {
+  intent?: {
+    name: string;
+    confidence: number;
+  }
+
+
+}
+
+
+
 export type RasaNluInitConfig = DeepPartial<RasaNluConfig>;
 
 export class RasaNlu extends NluPlugin<RasaNluConfig> {
@@ -33,13 +44,16 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     super(config);
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
+  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<RasaNluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     try {
       const rasaResponse = await this.sendTextToRasaServer(text || '');
-      return rasaResponse?.data?.intent?.name
-        ? { intent: { name: rasaResponse.data.intent.name } }
+
+
+
+      return rasaResponse.data.intent.name
+        ? { intent: { name: rasaResponse.data.intent.name, confidence: rasaResponse.data.intent.confidence } }
         : undefined;
     } catch (e) {
       console.error('Error while retrieving nlu-data from Rasa-server.', e);
