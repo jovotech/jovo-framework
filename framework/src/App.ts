@@ -1,15 +1,10 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, I18NextOptions, IntentMap, Middleware, RegisteredComponents } from '.';
+import { ArrayElement, ComponentTree, I18NextOptions, IntentMap, Middleware, Plugin } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
-import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
-import { DuplicateGlobalIntentsError } from './errors/DuplicateGlobalIntentsError';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { I18Next } from './I18Next';
-import { RegisteredComponentMetadata } from './metadata/ComponentMetadata';
-import { HandlerMetadata } from './metadata/HandlerMetadata';
-import { MetadataStorage } from './metadata/MetadataStorage';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Platform } from './Platform';
 import { BasicLogging, BasicLoggingConfig } from './plugins/BasicLogging';
@@ -27,6 +22,8 @@ export interface AppConfig extends ExtensibleConfig {
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
 };
+
+export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
 export type AppBaseMiddlewares = [
   'request',
@@ -53,7 +50,7 @@ export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
 ];
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
-  readonly components: RegisteredComponents;
+  readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
 
   constructor(config?: AppInitConfig) {
@@ -66,12 +63,8 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     }
 
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
-    this.components = {};
-    if (config?.components && config?.components?.length) {
-      this.useComponents(
-        ...(config.components as Array<ComponentConstructor | ComponentDeclaration>),
-      );
-    }
+
+    this.componentTree = new ComponentTree(...(config?.components || []));
     this.i18n = new I18Next(this.config.i18n || {});
   }
 
@@ -81,14 +74,8 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   configure(config: AppInitConfig) {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
-    if (config?.plugins && config?.plugins?.length) {
-      this.use(...config.plugins);
-    }
-    if (config?.components && config?.components?.length) {
-      this.useComponents(
-        ...(config.components as Array<ComponentConstructor | ComponentDeclaration>),
-      );
-    }
+    const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
+    this.use(...usables);
   }
 
   initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
@@ -110,20 +97,22 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   }
 
   async initialize(): Promise<void> {
-    // TODO populate this.config from the loaded global configuration via file or require or similar
-    this.checkForDuplicateGlobalHandlers();
     await this.i18n.initialize();
     return this.initializePlugins();
   }
 
-  mount(): Promise<void> | void {
-    return;
-  }
-
-  useComponents<T extends Array<ComponentConstructor | ComponentDeclaration>>(
-    ...components: T
-  ): void {
-    this.registerComponentsIn(this, ...components);
+  use<T extends Usable[]>(...usables: T): this {
+    const plugins = usables.filter((usable) => usable instanceof Plugin) as Plugin[];
+    if (plugins.length) {
+      super.use(...plugins);
+    }
+    const components = usables.filter((usable) => !(usable instanceof Plugin)) as Array<
+      ComponentConstructor | ComponentDeclaration
+    >;
+    if (components.length) {
+      this.componentTree.add(...components);
+    }
+    return this;
   }
 
   async handle(server: Server): Promise<void> {
@@ -151,87 +140,5 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
     await handleRequest.dismount();
     await server.setResponse(jovo.$response);
-  }
-
-  private registerComponentsIn<T extends Array<ComponentConstructor | ComponentDeclaration>>(
-    to: App | RegisteredComponentMetadata,
-    ...components: T
-  ) {
-    for (let i = 0, len = components.length; i < len; i++) {
-      const component = components[i];
-      const constructor = typeof component === 'function' ? component : component.component;
-      const relatedMetadata = MetadataStorage.getInstance().getComponentMetadata(constructor);
-      const mergedOptions = _merge(
-        {},
-        relatedMetadata?.options || {},
-        typeof component === 'function' ? {} : component.options || {},
-      );
-      const componentName = mergedOptions.name || constructor.name;
-      const registeredMetadata = new RegisteredComponentMetadata(constructor, mergedOptions);
-
-      if (to.components?.[componentName]) {
-        throw new DuplicateChildComponentsError(componentName, to.constructor.name);
-      }
-
-      if (mergedOptions.components?.length) {
-        registeredMetadata.components = {};
-        this.registerComponentsIn(registeredMetadata, ...mergedOptions.components);
-      }
-
-      if (!to.components && !(to instanceof App)) {
-        to.components = {};
-      }
-      to.components![componentName] = registeredMetadata;
-    }
-  }
-
-  private checkForDuplicateGlobalHandlers() {
-    const globalHandlerMap: Record<string, HandlerMetadata[]> = {};
-    this.checkForDuplicateGlobalHandlersInComponents(this.components, globalHandlerMap);
-    const duplicateHandlerEntries = Object.entries(globalHandlerMap).filter(
-      ([, handlers]) => handlers.length > 1,
-    );
-    if (duplicateHandlerEntries.length) {
-      throw new DuplicateGlobalIntentsError(duplicateHandlerEntries);
-    }
-  }
-
-  private checkForDuplicateGlobalHandlersInComponents(
-    components: RegisteredComponents,
-    globalHandlerMap: Record<string, HandlerMetadata[]>,
-  ) {
-    const componentNames = Object.keys(components);
-    for (let i = 0, len = componentNames.length; i < len; i++) {
-      const component = components[componentNames[i]];
-      if (!component) {
-        continue;
-      }
-      this.collectGlobalHandlers(component.target, globalHandlerMap);
-
-      if (component.components) {
-        this.checkForDuplicateGlobalHandlersInComponents(component.components, globalHandlerMap);
-      }
-    }
-  }
-
-  private collectGlobalHandlers(
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    constructor: ComponentConstructor | Function,
-    globalHandlerMap: Record<string, HandlerMetadata[]>,
-  ) {
-    const relatedHandlerMetadata =
-      MetadataStorage.getInstance().getHandlerMetadataOfComponent(constructor);
-    for (let i = 0, len = relatedHandlerMetadata.length; i < len; i++) {
-      for (let j = 0, jLen = relatedHandlerMetadata[i].globalIntentNames.length; j < jLen; j++) {
-        const globalIntentName = relatedHandlerMetadata[i].globalIntentNames[j];
-        if (!globalHandlerMap[globalIntentName]) {
-          globalHandlerMap[globalIntentName] = [];
-        }
-        // TODO: improve condition
-        if (!relatedHandlerMetadata[i].hasCondition) {
-          globalHandlerMap[globalIntentName].push(relatedHandlerMetadata[i]);
-        }
-      }
-    }
   }
 }

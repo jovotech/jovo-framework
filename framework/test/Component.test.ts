@@ -18,8 +18,8 @@ describe('registering components', () => {
   });
 
   test('via BaseComponent-constructor and undecorated component', () => {
-    app.useComponents(EmptyComponent);
-    expect(app.components).toEqual({
+    app.use(EmptyComponent);
+    expect(app.componentTree.tree).toEqual({
       EmptyComponent: { target: EmptyComponent, options: {} },
     });
   });
@@ -27,14 +27,14 @@ describe('registering components', () => {
   describe('via ComponentPlugin', () => {
     test('no config passed', () => {
       app.use(new ExampleComponentPlugin());
-      expect(app.components).toEqual({
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
     test('config passed', () => {
       app.use(new ExampleComponentPlugin({ component: { text: 'edited' } }));
-      expect(app.components).toEqual({
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
       });
     });
@@ -42,41 +42,39 @@ describe('registering components', () => {
 
   describe('via ComponentDeclaration-instance', () => {
     test('no options passed', () => {
-      app.useComponents(new ComponentDeclaration(ExampleComponent));
-      expect(app.components).toEqual({
+      app.use(new ComponentDeclaration(ExampleComponent));
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
     test('options with config passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           config: {
             text: 'edited',
           },
         }),
       );
-      expect(app.components).toEqual({
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
       });
     });
 
     test('options with name passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           name: 'NewComponentName',
         }),
       );
-      expect(app.components).toEqual({
+      expect(app.componentTree.tree).toEqual({
         NewComponentName: { target: ExampleComponent, options: { name: 'NewComponentName' } },
       });
     });
 
     test('options with components passed', () => {
-      app.useComponents(
-        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
-      );
-      expect(app.components).toEqual({
+      app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: {
           target: ExampleComponent,
           options: { components: [EmptyComponent] },
@@ -93,30 +91,28 @@ describe('registering components', () => {
 
   describe('via ComponentDeclaration-object', () => {
     test('no options passed', () => {
-      app.useComponents({ component: ExampleComponent });
-      expect(app.components).toEqual({
+      app.use({ component: ExampleComponent });
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: {} },
       });
     });
 
     test('options with config passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           config: {
             text: 'edited',
           },
         }),
       );
-      expect(app.components).toEqual({
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
       });
     });
 
     test('options with components passed', () => {
-      app.useComponents(
-        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
-      );
-      expect(app.components).toEqual({
+      app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
+      expect(app.componentTree.tree).toEqual({
         ExampleComponent: {
           target: ExampleComponent,
           options: { components: [EmptyComponent] },
@@ -140,8 +136,8 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(DecoratedComponent);
-      expect(app.components).toEqual({
+      app.use(DecoratedComponent);
+      expect(app.componentTree.tree).toEqual({
         DecoratedComponent: { target: DecoratedComponent, options: {} },
       });
     });
@@ -158,8 +154,8 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(DecoratedComponent);
-      expect(app.components).toEqual({
+      app.use(DecoratedComponent);
+      expect(app.componentTree.tree).toEqual({
         DecoratedComponent: {
           target: DecoratedComponent,
           options: {
@@ -183,10 +179,8 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(
-        new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }),
-      );
-      expect(app.components).toEqual({
+      app.use(new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }));
+      expect(app.componentTree.tree).toEqual({
         DecoratedComponent: {
           target: DecoratedComponent,
           options: {

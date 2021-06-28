@@ -9,15 +9,15 @@ export interface RegisteredComponents {
 
 export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
   jovo: Jovo,
+  options?: ComponentOptions<COMPONENT>,
   ...args: unknown[]
 ) => COMPONENT;
 
-export type ComponentConfig<
-  COMPONENT extends BaseComponent = BaseComponent
-> = COMPONENT['$component']['$config'];
+export type ComponentConfig<COMPONENT extends BaseComponent = BaseComponent> =
+  COMPONENT['$component']['$config'];
 
 export class ComponentDeclaration<
-  COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor
+  COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor,
 > {
   constructor(
     readonly component: COMPONENT_CONSTRUCTOR,
@@ -27,7 +27,7 @@ export class ComponentDeclaration<
 
 export abstract class BaseComponent<
   DATA extends ComponentData = ComponentData,
-  CONFIG extends Record<string, unknown> = Record<string, unknown>
+  CONFIG extends Record<string, unknown> = Record<string, unknown>,
 > extends JovoProxy {
   get $component(): JovoComponentInfo<DATA, CONFIG> {
     return this.$component as { $data: DATA; $config: CONFIG | undefined };
