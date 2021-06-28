@@ -34,7 +34,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     const componentPath = componentNode.path.join('.');
 
     if (!componentNode.metadata.isGlobal) {
-      if (!jovo.$session.$state) {
+      if (!jovo.$session.$state?.length) {
         jovo.$session.$state = [
           {
             componentPath,

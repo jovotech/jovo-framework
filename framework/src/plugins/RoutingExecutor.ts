@@ -37,7 +37,7 @@ export class RoutingExecutor {
   }
 
   getRouteMatches(intentName: string): RouteMatch[] {
-    if (!this.jovo.$state) {
+    if (!this.jovo.$state?.length) {
       return this.getGlobalRouteMatches(intentName);
     }
     let routeMatches = this.getRouteMatchesInState(intentName, this.jovo.$state);
