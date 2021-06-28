@@ -3,7 +3,6 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentDeclaration,
-  RegisteredComponents,
 } from '../BaseComponent';
 import { DeepPartial, JovoConditionFunction } from '../index';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
@@ -65,10 +64,4 @@ export class ComponentMetadata<
     }
     return this;
   }
-}
-
-export class RegisteredComponentMetadata<
-  COMPONENT extends BaseComponent = BaseComponent,
-> extends ComponentMetadata<COMPONENT> {
-  components?: RegisteredComponents;
 }
