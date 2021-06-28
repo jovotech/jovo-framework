@@ -95,18 +95,22 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
 }
 
 export class ComponentTree {
+  // returns a map-callback that will create a ComponentTreeNode for the given component (constructor or declaration)
   static createComponentToNodeMapper(parent?: ComponentTreeNode) {
     return (component: ComponentConstructor | ComponentDeclaration): ComponentTreeNode => {
       const componentConstructor =
         typeof component === 'function' ? component : component.component;
+      // get the metadata of the component
       const componentMetadata =
         MetadataStorage.getInstance().getComponentMetadata(componentConstructor);
+      // merge the options of the related metadata with the options of the given options (only set when passing a declaration)
       const mergedComponentOptions = _merge(
         {},
         componentMetadata?.options || {},
         typeof component === 'function' ? {} : component.options || {},
       );
       const componentName = componentMetadata?.options?.name || componentConstructor.name;
+      // return a new node with metadata, that is constructed from the constructor and the merged component options, as well as additional data
       return new ComponentTreeNode({
         metadata: new ComponentMetadata(componentConstructor, mergedComponentOptions),
         parent,
@@ -116,6 +120,7 @@ export class ComponentTree {
     };
   }
 
+  // returns a reduce-callback that will create a Tree from the components it's called on
   static createComponentsToTreeReducer(parent?: ComponentTreeNode) {
     return (
       tree: Tree<ComponentTreeNode>,
