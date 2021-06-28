@@ -541,4 +541,23 @@ build() {
 }
 ```
 
-Platforms that support multiple responses will display the example above in 2 chat bubbles.
+This can also be done by doing multiple `$send` calls in a [handler](./handlers.md).
+
+```typescript
+someHandler() {
+  this.$send({ message: 'Hello world!' });
+
+  // ...
+
+  return this.$send({ message: 'This is a second chat bubble.' })
+}
+```
+
+Platforms that support multiple responses will display the example above in 2 chat bubbles. Synchronous platforms like Alexa will concatenate the `message` to a single response:
+
+```typescript
+{
+  message: 'Hello world! This is a second chat bubble.',
+}
+```
+
