@@ -17,9 +17,25 @@
 
 A big part of building a Jovo app is returnig output to the user. This output could include all sorts of things, speech (for voice interfaces) or text (for visual interfaces) messages being the most prominent.
 
-Jovo has its own multimodal template engine that takes structured output and translates it into a native platform response. The output is managed in [output classes](#output-class) that are returned by [handlers](./handlers.md) using the `$send` method.
+Jovo has its own multimodal template engine that takes structured output (an [output template](#output-template)) and translates it into a native platform response.
 
-Here is an example how this works with an output class called `YourOutput`:
+There are two ways how you can return output from a [handler](./handlers.md) using the `$send` method:
+
+* Return an output object directly
+* Return an [output class](#output-class) for more complex output
+
+Here is an example that directly sends an output object that only contains a `message`:
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  return this.$send({ message: 'Hello World!' });
+}
+```
+
+And here is how it works with an output class called `YourOutput`:
 
 ```typescript
 import { YourOutput } from './output/YourOutput';
@@ -31,16 +47,6 @@ someHandler() {
   // ...
 
   return this.$send(YourOutput);
-}
-```
-
-The most important part of an output class is an [output template](#output-template) that is returned by a [`build` method](#build-method). This object is then translated into the appropriate platform response.
-
-```typescript
-build() {
-  return {
-    message: 'Hello World!',
-  };
 }
 ```
 
@@ -103,7 +109,7 @@ export class HelloWorldOutput extends BaseOutput {
 
 ### Build Method
 
-The `build` method is responsible for returning the output object:
+The most important part of an output class is an [output template](#output-template) that is returned by a [`build` method](#build-method). This object is then translated into the appropriate platform response.
 
 ```typescript
 build() {
@@ -162,7 +168,7 @@ There are two types of properties that can be passed:
 
 #### Reserved Properties
 
-Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override default properties in the output template.
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [default properties](#default-output-elements) in the output template.
 
 For example, a `message` can be passed right from the handler:
 
@@ -303,7 +309,7 @@ export class YourOutput extends BaseOutput<YourOutputOptions> {
 
 ## Output Template
 
-The output template is the output object that is returned by the [`build` method](#build-method). It is then translated into a native platform response.
+The output template is the output object that can either be passed directly using the `$send` method, or that is returned by the [`build` method](#build-method) of an [output class](#output-class). It is then translated into a native platform response.
 
 ```typescript
 build() {
