@@ -15,12 +15,6 @@ export interface RouteMatch {
 }
 
 export class RoutingExecutor {
-  private convertHandlerMetadataToRouteMatch = (path: string[]) => (metadata: HandlerMetadata) => ({
-    path,
-    metadata,
-    subState: metadata.options?.subState,
-  });
-
   constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
 
   async execute(intentName: string): Promise<JovoRoute | undefined> {
@@ -120,7 +114,7 @@ export class RoutingExecutor {
       );
       if (relatedHandlerMetadata.length) {
         matches.push(
-          ...relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(node.path)),
+          ...relatedHandlerMetadata.map(this.createHandlerMetadataToRouteMatchMapper(node.path)),
         );
       }
     });
@@ -158,7 +152,7 @@ export class RoutingExecutor {
         currentPath.splice(currentPath.length - 1);
       }
     }
-    return relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(currentPath));
+    return relatedHandlerMetadata.map(this.createHandlerMetadataToRouteMatchMapper(currentPath));
   }
 
   private getMatchingHandlerMetadata(
@@ -188,5 +182,13 @@ export class RoutingExecutor {
   private getMappedIntentNames(intents: string[], intentName: string): string[] {
     const mappedIntent = this.handleRequest.config.intentMap[intentName];
     return mappedIntent ? [mappedIntent, ...intents] : intents.slice();
+  }
+
+  private createHandlerMetadataToRouteMatchMapper(path: string[]) {
+    return (metadata: HandlerMetadata) => ({
+      path,
+      metadata,
+      subState: metadata.options?.subState,
+    });
   }
 }
