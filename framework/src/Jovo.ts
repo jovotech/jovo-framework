@@ -265,11 +265,13 @@ export abstract class Jovo<
       this.$route?.path || [],
     );
 
-    const stateStack = this.$state as StateStack;
-    // replace last item in stack
-    stateStack[stateStack.length - 1] = {
-      componentPath: componentNode.path.join('.'),
-    };
+    if (!componentNode.metadata.isGlobal) {
+      const stateStack = this.$state as StateStack;
+      // replace last item in stack
+      stateStack[stateStack.length - 1] = {
+        componentPath: componentNode.path.join('.'),
+      };
+    }
 
     await componentNode.executeHandler({
       jovo: this.jovoReference,
