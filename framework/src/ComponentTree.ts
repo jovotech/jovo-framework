@@ -27,6 +27,7 @@ export interface ExecuteHandlerOptions<
   COMPONENT extends BaseComponent,
   // eslint-disable-next-line @typescript-eslint/ban-types
   HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ARGS extends any[] = any[],
 > {
   jovo: Jovo;
@@ -63,6 +64,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   async executeHandler<
     // eslint-disable-next-line @typescript-eslint/ban-types
     HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ARGS extends any[] = any[],
   >({
     jovo,
