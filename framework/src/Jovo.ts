@@ -223,9 +223,11 @@ export abstract class Jovo<
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
+    let newOutput: OutputTemplate | OutputTemplate[];
     if (typeof outputConstructorOrTemplate === 'function') {
       const outputInstance = new outputConstructorOrTemplate(this, options);
       const output = await outputInstance.build();
+      // overwrite reserved properties of the built object i.e. message
       OutputTemplate.getKeys().forEach((key) => {
         if (options?.[key]) {
           if (Array.isArray(output)) {
@@ -239,10 +241,18 @@ export abstract class Jovo<
           }
         }
       });
-      this.$output = output;
+      newOutput = output;
     } else {
-      this.$output = outputConstructorOrTemplate;
+      newOutput = outputConstructorOrTemplate;
     }
+
+    // make $output an array if it is none
+    if (!Array.isArray(this.$output)) {
+      this.$output = [this.$output];
+    }
+
+    // push the new OutputTemplate(s) to $output
+    Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
   }
 
   async $redirect<
