@@ -48,6 +48,7 @@ export * from './App';
 export * from './BaseComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
+export * from './plugins/DbPlugin';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';

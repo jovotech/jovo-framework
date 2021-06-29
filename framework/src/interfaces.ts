@@ -1,7 +1,7 @@
+import { OutputTemplate } from '@jovotech/output';
 import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
-import { PersistableSessionData } from './JovoSession';
-import { PersistableUserData } from './JovoUser';
+import { JovoSession } from './JovoSession';
 import { PluginConfig } from './Plugin';
 
 export interface Data {
@@ -54,13 +54,38 @@ export type JovoConditionFunction = (
   jovo: Jovo,
 ) => boolean | Promise<boolean>;
 
+export type JovoAnyFunction = (jovo: Jovo) => Promise<any>;
+
+export interface JovoHistoryItem {
+  output?: OutputTemplate | OutputTemplate[];
+  nlu?: NluData;
+  state?: JovoSession['$state'];
+  entities?: EntityMap;
+  asr?: AsrData;
+  [key: string]: unknown;
+}
+
+export interface StoredElement {
+  enabled?: boolean;
+  [key: string]: unknown;
+}
+
+export interface StoredElementHistory extends StoredElement {
+  [key: string]: unknown;
+  size?: number;
+  asr?: StoredElement | boolean;
+  state?: StoredElement | boolean;
+  output?: StoredElement | boolean;
+  nlu?: StoredElement | boolean;
+}
+
 export interface DbPluginConfig extends PluginConfig {
-  storedElements: {
-    $user: {
-      enabled: boolean;
-    };
-    $session: {
-      enabled: boolean;
-    };
+  storedElements?: {
+    [key: string]: unknown;
+    user: StoredElement | boolean;
+    session?: StoredElement | boolean;
+    history?: StoredElementHistory | boolean;
+    createdAt?: StoredElement | boolean;
+    updateAt?: StoredElement | boolean;
   };
 }

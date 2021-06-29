@@ -18,8 +18,11 @@ import {
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
+  JovoHistoryItem,
   MetadataStorage,
   OutputConstructor,
+  PersistableSessionData,
+  PersistableUserData,
   PickWhere,
   Server,
   StateStack,
@@ -40,6 +43,14 @@ export type JovoConstructor<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>,
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
+
+export interface JovoPersistableData {
+  user: PersistableUserData;
+  session: PersistableSessionData;
+  history: JovoHistoryItem[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface JovoRequestType {
   type?: RequestTypeLike;
@@ -95,6 +106,8 @@ export abstract class Jovo<
   $session: JovoSession;
   $type: JovoRequestType;
   $user: JovoUser<REQUEST, RESPONSE, this>;
+
+  $history: JovoHistoryItem[] = [];
 
   constructor(
     readonly $app: App,
@@ -420,5 +433,37 @@ export abstract class Jovo<
   //TODO: needs to be evaluated
   isNewSession(): boolean {
     return this.$session.isNew;
+  }
+
+  getPersistableData(): JovoPersistableData {
+    return JSON.parse(
+      JSON.stringify({
+        user: this.$user.getPersistableData(),
+        session: this.$session.getPersistableData(),
+        history: this.$history,
+        createdAt: new Date(this.$user.createdAt),
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
+  setPersistableData(data: JovoPersistableData): void {
+    this.$user.setPersistableData(data.user);
+    this.$session.setPersistableData(data.session);
+    this.$history = data.history;
+    this.$user.createdAt = new Date(data.createdAt);
+    this.$user.updatedAt = new Date(data.updatedAt);
+  }
+
+  getPersistableHistory(): JovoHistoryItem {
+    return {
+      output: this.$output,
+      nlu: this.$nlu,
+      state: this.$state,
+      entities: this.$entities,
+      asr: this.$asr,
+      request: this.$request,
+      response: this.$response,
+    };
   }
 }
