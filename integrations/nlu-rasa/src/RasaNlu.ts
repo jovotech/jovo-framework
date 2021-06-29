@@ -12,19 +12,21 @@ import {
   NluPlugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { RasaEntity, RasaResponse } from './interfaces';
+import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends PluginConfig {
   serverUrl?: string;
   serverPath?: string;
+  alternativeIntents?: { maxAlternatives?: number; confidenceCutoff?: number };
 }
 
 interface RasaNluData extends NluData {
-  intent?: {
+  intent: {
     name: string;
     confidence: number;
   };
-  entities?: EntityMap;
+  alternativeIntents?: RasaIntent[];
+  entities: EntityMap;
 }
 
 export type RasaNluInitConfig = DeepPartial<RasaNluConfig>;
@@ -47,32 +49,41 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     if (!text) return;
     try {
       const rasaResponse = await this.sendTextToRasaServer(text || '');
-
-      const ents: EntityMap = {};
-      rasaResponse.data.entities.map((entity: RasaEntity) => {
-        let entityAlias = entity.entity;
-        // roles can distinguish entities of the same type e.g. departure and destination in
-        // a travel use case and should therefore be preferred as entity name
-        if (entity.role) {
-          entityAlias = entity.role;
-        }
-        ents[entityAlias] = {
-          id: entityAlias,
-          key: entityAlias,
-          name: entity.entity,
-          value: entity.value,
-        };
-      });
-
-      return rasaResponse.data.intent.name
-        ? {
-            intent: {
-              name: rasaResponse.data.intent.name,
-              confidence: rasaResponse.data.intent.confidence,
-            },
-            entities: ents,
+      if (rasaResponse.data.intent.name) {
+        const ents: EntityMap = {};
+        rasaResponse.data.entities.map((entity: RasaEntity) => {
+          let entityAlias = entity.entity;
+          // roles can distinguish entities of the same type e.g. departure and destination in
+          // a travel use case and should therefore be preferred as entity name
+          if (entity.role) {
+            entityAlias = entity.role;
           }
-        : undefined;
+          ents[entityAlias] = {
+            id: entityAlias,
+            key: entityAlias,
+            name: entity.entity,
+            value: entity.value,
+          };
+        });
+
+        const nluResult: RasaNluData = {
+          intent: {
+            name: rasaResponse.data.intent.name,
+            confidence: rasaResponse.data.intent.confidence,
+          },
+          entities: ents,
+        };
+
+        if (this.config.alternativeIntents) {
+          nluResult.alternativeIntents = this.mapAlternativeIntents(
+            rasaResponse.data.intent_ranking,
+          );
+        }
+
+        return nluResult;
+      } else {
+        return undefined;
+      }
     } catch (e) {
       console.error('Error while retrieving nlu-data from Rasa-server.', e);
       return;
@@ -84,5 +95,15 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<RasaResponse>> {
     return axios.post(`${this.config.serverUrl}${this.config.serverPath}`, { text }, config);
+  }
+
+  private mapAlternativeIntents(altIntents: RasaIntent[]) {
+    // first element is the classified intent
+    altIntents.splice(0, 1);
+    const cutoff = this.config.alternativeIntents?.confidenceCutoff ?? 1.0;
+
+    return altIntents
+      .filter((a) => a.confidence > cutoff)
+      .slice(0, this.config.alternativeIntents?.maxAlternatives ?? 7);
   }
 }

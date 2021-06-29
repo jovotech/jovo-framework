@@ -7,7 +7,7 @@ export interface RasaResponse {
 }
 
 export interface RasaIntent {
-  id: number;
+  id: string;
   name: string;
   confidence: number;
 }
