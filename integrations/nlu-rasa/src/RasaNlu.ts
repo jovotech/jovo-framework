@@ -48,19 +48,11 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     try {
       const rasaResponse = await this.sendTextToRasaServer(text || '');
 
-      // const ents = rasaResponse.data.entities.map((entity: RasaEntity) => {
-      //   return {
-      //     [entity.entity]: {
-      //       id: entity.entity,
-      //       key: entity.entity,
-      //       name: entity.entity,
-      //       value: entity.value,
-      //     },
-      //   };
-      // });
       const ents: EntityMap = {};
       rasaResponse.data.entities.map((entity: RasaEntity) => {
         let entityAlias = entity.entity;
+        // roles can distinguish entities of the same type e.g. departure and destination in
+        // a travel use case and should therefore be preferred as entity name
         if (entity.role) {
           entityAlias = entity.role;
         }
