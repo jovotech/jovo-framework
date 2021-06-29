@@ -275,11 +275,13 @@ export abstract class Jovo<
       this.$route?.path || [],
     );
 
-    const stateStack = this.$state as StateStack;
-    // replace last item in stack
-    stateStack[stateStack.length - 1] = {
-      componentPath: componentNode.path.join('.'),
-    };
+    if (!componentNode.metadata.isGlobal) {
+      const stateStack = this.$state as StateStack;
+      // replace last item in stack
+      stateStack[stateStack.length - 1] = {
+        componentPath: componentNode.path.join('.'),
+      };
+    }
 
     await componentNode.executeHandler({
       jovo: this.jovoReference,
@@ -296,14 +298,24 @@ export abstract class Jovo<
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
   ): Promise<void> {
+    const currentComponentPath = this.$route?.path || [];
     const componentName =
       typeof constructorOrName === 'function' ? constructorOrName.name : constructorOrName;
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$route?.path || [],
+      currentComponentPath,
     );
 
-    const stateStack = this.$state as StateStack;
+    let stateStack = this.$state;
+    // make sure the state-stack exists and is not empty, even if it is a global component
+    if (!stateStack) {
+      stateStack = [
+        {
+          componentPath: currentComponentPath.join('.'),
+        },
+      ];
+      this.$session.$state = stateStack;
+    }
 
     const serializableResolve: Record<string, string> = {};
     for (const key in options.resolve) {
@@ -349,6 +361,11 @@ export abstract class Jovo<
     const previousComponentPath = previousStateStackItem.componentPath.split('.');
     const previousComponentNode =
       this.$handleRequest.componentTree.getNodeAtOrFail(previousComponentPath);
+
+    // if previous component is global, remove another item from the stack to remove the global component
+    if (previousComponentNode.metadata.isGlobal) {
+      stateStack.pop();
+    }
     stateStack.pop();
     this.$route = {
       path: previousComponentPath,

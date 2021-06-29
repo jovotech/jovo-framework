@@ -26,3 +26,16 @@ export function forEachDeep<T = any>(
     });
   }
 }
+
+export function getMethodKeys<PROTOTYPE = any>(prototype: PROTOTYPE): Array<keyof PROTOTYPE> {
+  return Object.getOwnPropertyNames(prototype).filter((key) => {
+    if (key === 'constructor') {
+      return false;
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(prototype, key);
+    return (
+      typeof prototype[key as keyof PROTOTYPE] === 'function' &&
+      typeof descriptor?.value === 'function'
+    );
+  }) as Array<keyof PROTOTYPE>;
+}

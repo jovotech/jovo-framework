@@ -102,7 +102,7 @@ export class ComponentTree {
         typeof component === 'function' ? component : component.component;
       // get the metadata of the component
       const componentMetadata =
-        MetadataStorage.getInstance().getComponentMetadata(componentConstructor);
+        MetadataStorage.getInstance().getMergedComponentMetadata(componentConstructor);
       // merge the options of the related metadata with the options of the given options (only set when passing a declaration)
       const mergedComponentOptions = _merge(
         {},
