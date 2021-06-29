@@ -60,9 +60,13 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
       // });
       const ents: EntityMap = {};
       rasaResponse.data.entities.map((entity: RasaEntity) => {
-        ents[entity.entity] = {
-          id: entity.entity,
-          key: entity.entity,
+        let entityAlias = entity.entity;
+        if (entity.role) {
+          entityAlias = entity.role;
+        }
+        ents[entityAlias] = {
+          id: entityAlias,
+          key: entityAlias,
           name: entity.entity,
           value: entity.value,
         };
