@@ -127,6 +127,12 @@ export class ComponentTree {
     };
   }
 
+  readonly tree: Tree<ComponentTreeNode>;
+
+  constructor(...components: Array<ComponentConstructor | ComponentDeclaration>) {
+    this.tree = this.buildTreeForComponents(...components);
+  }
+
   [Symbol.iterator]() {
     let index = -1;
     const nodes: ComponentTreeNode[] = [];
@@ -136,12 +142,6 @@ export class ComponentTree {
     return {
       next: () => ({ value: nodes[++index], done: !(index in nodes) }),
     };
-  }
-
-  readonly tree: Tree<ComponentTreeNode>;
-
-  constructor(...components: Array<ComponentConstructor | ComponentDeclaration>) {
-    this.tree = this.buildTreeForComponents(...components);
   }
 
   add(...components: Array<ComponentConstructor | ComponentDeclaration>) {

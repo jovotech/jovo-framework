@@ -1,5 +1,4 @@
 import { App } from '../App';
-import { BaseComponent } from '../BaseComponent';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
@@ -7,7 +6,7 @@ import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
-import { RoutingExecutor } from './RoutingExecutor';
+import { RouteMatch, RoutingExecutor } from './RoutingExecutor';
 
 export interface RouterPluginConfig extends PluginConfig {}
 
@@ -22,9 +21,8 @@ declare module '../Extensible' {
 }
 
 export interface JovoRoute {
-  path: string[];
-  handlerKey: keyof BaseComponent | string;
-  subState?: string;
+  readonly resolved: RouteMatch;
+  readonly matches: ReadonlyArray<RouteMatch>;
 }
 
 export class RouterPlugin extends Plugin<RouterPluginConfig> {
@@ -51,7 +49,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       // in the future other data can be passed and used by the handler, but for now just use the intent-name
       return;
     }
-    const route = await new RoutingExecutor(handleRequest, jovo).execute(intentName);
+    const mappedIntentName = this.getMappedIntentName(handleRequest, intentName);
+    const route = await new RoutingExecutor(handleRequest, jovo).execute(mappedIntentName);
     if (!route) {
       throw new MatchingRouteNotFoundError(intentName, jovo.$state, jovo.$request);
     }
@@ -67,18 +66,13 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
         componentHandlerMetadata.forEach((handlerMetadata) => {
           handlerMetadata.globalIntentNames.forEach((globalIntentName) => {
-            const mappedIntentName = app.config.intentMap[globalIntentName];
-            const intentNames = mappedIntentName
-              ? [mappedIntentName, globalIntentName]
-              : [globalIntentName];
-            intentNames.forEach((intentName) => {
-              if (!globalHandlerMap[intentName]) {
-                globalHandlerMap[intentName] = [];
-              }
-              if (!handlerMetadata.hasCondition) {
-                globalHandlerMap[intentName].push(handlerMetadata);
-              }
-            });
+            const mappedIntentName = this.getMappedIntentName(app, globalIntentName);
+            if (!globalHandlerMap[mappedIntentName]) {
+              globalHandlerMap[mappedIntentName] = [];
+            }
+            if (!handlerMetadata.hasCondition) {
+              globalHandlerMap[mappedIntentName].push(handlerMetadata);
+            }
           });
         });
       });
@@ -91,5 +85,9 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       }
       return resolve();
     });
+  }
+
+  private getMappedIntentName(parent: App | HandleRequest, intentName: string): string {
+    return parent.config.intentMap[intentName] || intentName;
   }
 }
