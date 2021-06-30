@@ -45,11 +45,11 @@ export type JovoConstructor<
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoPersistableData {
-  user: PersistableUserData;
-  session: PersistableSessionData;
-  history: JovoHistoryItem[];
-  createdAt: string;
-  updatedAt: string;
+  user?: PersistableUserData;
+  session?: PersistableSessionData;
+  history?: JovoHistoryItem[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface JovoRequestType {
@@ -450,9 +450,9 @@ export abstract class Jovo<
   setPersistableData(data: JovoPersistableData): void {
     this.$user.setPersistableData(data.user);
     this.$session.setPersistableData(data.session);
-    this.$history = data.history;
-    this.$user.createdAt = new Date(data.createdAt);
-    this.$user.updatedAt = new Date(data.updatedAt);
+    this.$history = data?.history || [];
+    this.$user.createdAt = new Date(data?.createdAt || new Date());
+    this.$user.updatedAt = new Date(data?.updatedAt || new Date());
   }
 
   getPersistableHistory(): JovoHistoryItem {

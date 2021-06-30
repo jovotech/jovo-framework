@@ -82,7 +82,7 @@ export interface StoredElementHistory extends StoredElement {
 export interface DbPluginConfig extends PluginConfig {
   storedElements?: {
     [key: string]: unknown;
-    user: StoredElement | boolean;
+    user?: StoredElement | boolean;
     session?: StoredElement | boolean;
     history?: StoredElementHistory | boolean;
     createdAt?: StoredElement | boolean;

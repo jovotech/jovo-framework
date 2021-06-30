@@ -7,8 +7,9 @@ import {
   StoredElement,
   StoredElementHistory,
 } from '../interfaces';
-import { Plugin } from '../Plugin';
+import { Plugin, PluginConfig } from '../Plugin';
 import { Jovo, JovoPersistableData } from '../Jovo';
+import { ExtensibleInitConfig } from '../Extensible';
 
 export interface DbItem {
   id: string;
@@ -16,6 +17,7 @@ export interface DbItem {
 
   user?: PersistableUserData;
   session?: PersistableSessionData;
+  history?: JovoHistoryItem[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -23,37 +25,38 @@ export interface DbItem {
 export abstract class DbPlugin<
   CONFIG extends DbPluginConfig = DbPluginConfig,
 > extends Plugin<CONFIG> {
-  isEnabled(persistableProperty: string): boolean {
+  constructor(config?: ExtensibleInitConfig<CONFIG>) {
+    super(config);
+
     for (const prop in this.config.storedElements) {
-      if (this.config.storedElements.hasOwnProperty(prop) && prop === persistableProperty) {
-        // allow boolean shortcut e.g. {history: true}
+      if (this.config.storedElements.hasOwnProperty(prop)) {
         if (
           this.config.storedElements[prop] &&
           typeof this.config.storedElements[prop] === 'boolean'
         ) {
-          return !!this.config.storedElements[prop];
-        } else if (
-          // check property options e.g. {history: {enabled: true, propA:'val1'}
+          this.config.storedElements[prop] = {
+            enabled: this.config.storedElements[prop],
+          };
+        }
+        if (
           this.config.storedElements[prop] &&
-          typeof this.config.storedElements[prop] === 'object'
+          typeof this.config.storedElements[prop] === 'object' &&
+          typeof (this.config.storedElements[prop] as PluginConfig).enabled === 'undefined'
         ) {
-          return (
-            // options implicitly set enabled to true
-            !!(this.config.storedElements[prop] as StoredElement) ||
-            (this.config.storedElements[prop] as StoredElement).enabled
-          );
+          (this.config.storedElements[prop] as StoredElement).enabled = true;
         }
       }
     }
-    return false;
   }
 
-  async applyPersistableData(jovo: Jovo, item: DbItem) {
+  async applyPersistableData(jovo: Jovo, item: DbItem): Promise<void> {
     const persistableData = jovo.getPersistableData();
-
     // iterate through persistable data and check for enabled properties
     for (const prop in persistableData) {
-      if (persistableData.hasOwnProperty(prop) && this.isEnabled(prop)) {
+      if (
+        persistableData.hasOwnProperty(prop) &&
+        (this.config.storedElements![prop] as StoredElement).enabled
+      ) {
         if (prop === 'history') {
           // different saving behavior for history elements
           const historyLastItem = jovo.getPersistableHistory();
@@ -88,10 +91,11 @@ export abstract class DbPlugin<
               }
             }
           }
-          item[prop] = [newHistoryItem, ...persistableData.history];
-
           // put latest history item on first position in array
-          item[prop] = item[prop].slice(
+          item[prop] = [newHistoryItem].concat(persistableData.history!);
+
+          // remove trailing history items
+          item[prop] = item[prop]!.slice(
             0,
             (this.config.storedElements?.history as StoredElementHistory).size,
           );

@@ -37,8 +37,8 @@ export abstract class JovoUser<
     };
   }
 
-  setPersistableData(data: PersistableUserData): this {
-    this.$data = data.data;
+  setPersistableData(data?: PersistableUserData): this {
+    this.$data = data?.data || {};
     return this;
   }
 
