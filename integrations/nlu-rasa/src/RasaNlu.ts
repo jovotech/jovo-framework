@@ -4,10 +4,8 @@ import {
   AxiosResponse,
   DeepPartial,
   EntityMap,
-  Extensible,
   HandleRequest,
   Jovo,
-  JovoError,
   NluData,
   NluPlugin,
   PluginConfig,
@@ -17,6 +15,8 @@ import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 export interface RasaNluConfig extends PluginConfig {
   serverUrl?: string;
   serverPath?: string;
+  //activate alternative intent classifications in $nlu
+  //and constrain the number of alternatives by number and/or an confidence cutoff
   alternativeIntents?: { maxAlternatives?: number; confidenceCutoff?: number };
 }
 
@@ -98,7 +98,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
   }
 
   private mapAlternativeIntents(altIntents: RasaIntent[]) {
-    // first element is the classified intent
+    // remove first element, because its the classified intent
     altIntents.splice(0, 1);
     const cutoff = this.config.alternativeIntents?.confidenceCutoff ?? 1.0;
 
