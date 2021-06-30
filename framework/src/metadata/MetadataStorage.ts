@@ -141,6 +141,7 @@ export class MetadataStorage {
     // eslint-disable-next-line @typescript-eslint/ban-types
     target: ComponentConstructor<COMPONENT> | Function,
   ): HandlerMetadata<COMPONENT, keyof COMPONENT>[] {
+    const mergedComponentMetadata = this.getMergedComponentMetadata(target);
     const componentHandlerMetadata = this.getHandlerMetadataOfComponent(target);
     const mergedMetadata = componentHandlerMetadata.map((handlerMetadata) => {
       const mergedHandlerMetadata = _cloneDeep(handlerMetadata);
@@ -150,6 +151,9 @@ export class MetadataStorage {
       relatedHandlerOptionMetadata.forEach((optionMetadata) =>
         mergedHandlerMetadata.mergeWith(optionMetadata),
       );
+      if (mergedComponentMetadata?.isGlobal) {
+        mergedHandlerMetadata.options.global = true;
+      }
       return mergedHandlerMetadata;
     });
 
@@ -169,7 +173,10 @@ export class MetadataStorage {
           new HandlerMetadata<COMPONENT, keyof COMPONENT>(
             optionMetadata.target,
             optionMetadata.propertyKey,
-            { ...optionMetadata.options },
+            {
+              ...optionMetadata.options,
+              global: mergedComponentMetadata?.isGlobal || optionMetadata.options.global,
+            },
           ),
         );
       } else {
