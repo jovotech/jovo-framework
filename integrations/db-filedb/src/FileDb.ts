@@ -11,12 +11,11 @@ export interface FileDbConfig extends DbPluginConfig {
 export class FileDb extends DbPlugin<FileDbConfig> {
   constructor(config?: FileDbConfig) {
     super(config);
-    console.log(this.config);
   }
 
   getDefaultConfig(): FileDbConfig {
     return {
-      // ...super.getDefaultConfig(),
+      ...super.getDefaultConfig(),
       pathToFile: './db/db.json',
     };
   }
