@@ -6,7 +6,7 @@ export class ComponentNotFoundError extends JovoError {
     super({
       message: `Could not find component ${
         componentPath[componentPath.length - 1]
-      } at ${componentPath.join('.')} or in root.`,
+      } neither in children of ${componentPath.join('.')} nor in root.`,
     });
   }
 }

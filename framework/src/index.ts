@@ -47,6 +47,7 @@ export {
 export * from './App';
 export * from './BaseComponent';
 export * from './BaseOutput';
+export * from './ComponentTree';
 export * from './ComponentPlugin';
 export * from './plugins/DbPlugin';
 export * from './Extensible';

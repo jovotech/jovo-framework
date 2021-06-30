@@ -1,8 +1,11 @@
 import { App } from '../App';
 import { BaseComponent } from '../BaseComponent';
+import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
+import { HandlerMetadata } from '../metadata/HandlerMetadata';
+import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
 import { RoutingExecutor } from './RoutingExecutor';
 
@@ -31,6 +34,10 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
 
   install(app: App): Promise<void> | void {
     app.middlewareCollection.use('before.dialog.logic', this.setRoute);
+  }
+
+  initialize(parent: App): Promise<void> | void {
+    return this.checkForDuplicateGlobalHandlers(parent);
   }
 
   private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
@@ -67,4 +74,39 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       }
     }
   };
+
+  private checkForDuplicateGlobalHandlers(app: App): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const globalHandlerMap: Record<string, HandlerMetadata[]> = {};
+
+      app.componentTree.forEach((node) => {
+        const componentHandlerMetadata =
+          MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+        componentHandlerMetadata.forEach((handlerMetadata) => {
+          handlerMetadata.globalIntentNames.forEach((globalIntentName) => {
+            const mappedIntentName = app.config.intentMap[globalIntentName];
+            const intentNames = mappedIntentName
+              ? [mappedIntentName, globalIntentName]
+              : [globalIntentName];
+            intentNames.forEach((intentName) => {
+              if (!globalHandlerMap[intentName]) {
+                globalHandlerMap[intentName] = [];
+              }
+              if (!handlerMetadata.hasCondition) {
+                globalHandlerMap[intentName].push(handlerMetadata);
+              }
+            });
+          });
+        });
+      });
+
+      const duplicateHandlerEntries = Object.entries(globalHandlerMap).filter(
+        ([, handlers]) => handlers.length > 1,
+      );
+      if (duplicateHandlerEntries.length) {
+        return reject(new DuplicateGlobalIntentsError(duplicateHandlerEntries));
+      }
+      return resolve();
+    });
+  }
 }

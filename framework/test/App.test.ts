@@ -1,4 +1,4 @@
-import { App } from '../src';
+import { App, ComponentTreeNode } from '../src';
 import { EmptyComponent } from './utilities';
 
 describe('constructor', () => {
@@ -6,6 +6,6 @@ describe('constructor', () => {
     const app = new App({
       components: [EmptyComponent],
     });
-    expect(app.components.EmptyComponent).toBeDefined();
+    expect(app.componentTree.getNodeAt(['EmptyComponent'])).toBeInstanceOf(ComponentTreeNode);
   });
 });

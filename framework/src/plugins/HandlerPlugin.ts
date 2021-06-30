@@ -29,7 +29,11 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       // TODO error-handling or determine what to do in general
       return;
     }
-    const componentMetadata = jovo.$getComponentMetadataOrFail(jovo.$route.path);
-    await jovo.$runComponentHandler(componentMetadata, jovo.$route.handlerKey, false);
+    const componentNode = handleRequest.componentTree.getNodeAtOrFail(jovo.$route.path);
+    await componentNode.executeHandler({
+      jovo,
+      handlerKey: jovo.$route.handlerKey,
+      updateRoute: false,
+    });
   };
 }

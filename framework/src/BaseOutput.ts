@@ -11,9 +11,7 @@ export type OutputConstructor<
   JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
 > = new (jovo: JOVO, options?: DeepPartial<OUTPUT['options']>, ...args: unknown[]) => OUTPUT;
 
-export interface OutputOptions {
-  [key: string]: unknown;
-}
+export interface OutputOptions extends OutputTemplate {}
 
 export abstract class BaseOutput<OPTIONS extends OutputOptions = OutputOptions> extends JovoProxy {
   readonly options: OPTIONS;
