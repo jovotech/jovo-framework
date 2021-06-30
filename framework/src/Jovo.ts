@@ -387,7 +387,6 @@ export abstract class Jovo<
     return this.$session.isNew;
   }
 
-
   getPersistableData(): JovoPersistableData {
     return JSON.parse(
       JSON.stringify({
@@ -418,7 +417,7 @@ export abstract class Jovo<
       request: this.$request,
       response: this.$response,
     };
-    
+  }
   private get jovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }
