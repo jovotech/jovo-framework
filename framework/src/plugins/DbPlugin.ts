@@ -10,7 +10,6 @@ import {
 import { Plugin, PluginConfig } from '../Plugin';
 import { Jovo, JovoPersistableData } from '../Jovo';
 import { ExtensibleInitConfig } from '../Extensible';
-import { FileDbConfig } from '../../../integrations/db-filedb/src';
 
 export interface DbItem {
   id: string;
