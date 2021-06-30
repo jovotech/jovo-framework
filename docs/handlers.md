@@ -8,6 +8,7 @@
   - [Return Output](#return-output)
   - [Redirect to Components](#redirect-to-components)
   - [Delegate to Components](#delegate-to-components)
+  - [Resolve a Component](#resolve-a-component)
 - [Handler Types](#handler-types)
   - [LAUNCH](#launch)
   - [START](#start)
@@ -303,9 +304,68 @@ If this is the case, the handler with more conditions is the one being prioritiz
 
 ## Handler Logic
 
+Inside a handler is typically where the conversational logic is happening.
+
+You can access all Jovo-related methods using the `this` context. For example, this is how you can write user data into a database:
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  this.$user.$data.someKey = 'someValue';
+
+  // ...
+}
+```
+
+A handler usually concludes with one of these tasks:
+
+* [Return output using `$send`](#return-output)
+* [Redirect to a different component using `$redirect`](#redirect-to-components)
+* [Delegate to a component using `$delegate`](#delegate-to-components)
+* [Report back to a delegating component using `$resolve`](#resolve-a-component)
+
 ### Return Output
 
-Use the `$send` method and pass an output class to return a response to the user:
+In most cases, the goal of a handler is to return output to the user. [You can find more information on output here](./output.md).
+
+This can be done in multiple ways using the `$send` method:
+
+* [Send an output object](#send-an-output-object)
+* [Send an output class](#send-an-output-class)
+* [Send multiple responses](#send-multiple-responses)
+
+#### Send an Output Object
+
+You can directly add an output object to the `$send` method:
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  return this.$send({ /* output */ });
+}
+```
+This object can contain all output template elements that are described in the [output documentation](./output.md).
+
+Here is an example output that just contains a `message`:
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  return this.$send({ message: 'Hello World!' });
+}
+```
+
+#### Send an Output Class
+
+For more complex output, we recommend using [output classes](./output.md).
+
+The below example imports an output class called `SomeOutput` and passes it to `$send` together with potential options:
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -319,6 +379,50 @@ yourHandler() {
   return this.$send(SomeOutput, { /* output options */ });
 }
 ```
+
+The options can also override reserved properties from the output class, like the `message`:
+
+```typescript
+import { SomeOutput } from './output/SomeOutput';
+
+// ...
+
+yourHandler() {
+  
+  // ...
+
+  return this.$send(SomeOutput, { message: 'This overrides the message from SomeOutput' });
+}
+```
+
+#### Send Multiple Responses
+
+It may be necessary to spread output across a handler, or even across components.
+
+This is possible with multiple `$send` calls.
+
+The below example uses two `$send` method calls:
+
+```typescript
+import { SomeOutput } from './output/SomeOutput';
+
+// ...
+
+yourHandler() {
+
+  this.$send({ message: 'Alright, one second.' });
+  
+  // ...
+
+  return this.$send(SomeOutput, { /* output options */ });
+}
+```
+
+Multiple `$send` calls result in the following behavior, depending on the platform:
+
+* Synchronous platforms like Amazon Alexa only support one response. The output is stored in an array and later merged into a single response. `message` elements are concatenated while for other elements that are only supported once (like `card` or `carousel`), the last one gets used.
+* Asynchronous platforms like Facebook Messenger support multiple responses. Each response is sent to the platform asynchronously, which leads to multiple chat bubbles for each `message` element.
+
 
 ### Redirect to Components
 
@@ -385,14 +489,18 @@ onNo() {
 }
 ```
 
-The following options can be added to `$resolve`:
+The following options can be added to `$delegate`:
 
 * `resolve`: Handlers that should be called after the child component resolves with certain data.
     * Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
     * Can include a string to the handler key: `'onYes'`
 * `config`: The config that is used by the child component. Can be accessed inside the child component with `this.config`
 
-The `YesNoComponent` can then deliver a result back to the calling component using `$resolve`:
+### Resolve a Component
+
+In our previous example, a component delegated to another component (e.g. `YesNoComponent`), expecting it to return a specific result.
+
+After successful handling, the delegated component can use `$resolve` to report back:
 
 ```typescript
 // YesNoComponent
@@ -404,6 +512,8 @@ YesIntent() {
   return this.$resolve('yes');
 }
 ```
+
+The component is then removed from the `$state` stack and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve` (in the above example `yes`).
 
 ## Handler Types
 

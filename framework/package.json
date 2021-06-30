@@ -12,9 +12,9 @@
     "boilerplate"
   ],
   "scripts": {
-    "prebuild": "npm run rimraf",
-    "build": "node ../scripts/build-package.js",
-    "watch": "tsc --watch",
+    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
+    "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
@@ -23,16 +23,16 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output": "^4.0.0-alpha.9",
+    "@jovotech/output": "^4.0.0-alpha.10",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "i18next": "^20.3.1",
+    "json-colorizer": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
-    "json-colorizer": "^2.2.2",
     "ts-toolbelt": "9.5.13",
     "type-fest": "^1.2.0"
   },

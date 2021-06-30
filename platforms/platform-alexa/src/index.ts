@@ -27,4 +27,5 @@ export * from './AlexaRequest';
 export * from './AlexaUser';
 export * from './AlexaSkill';
 export type { AlexaResponse } from '@jovotech/output-alexa';
+export * from './constants';
 export * from './interfaces';

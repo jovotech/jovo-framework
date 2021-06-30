@@ -12,8 +12,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
   return function (target) {
     if (options?.components) {
       const componentNameSet = new Set<string>();
-      for (let i = 0, len = options.components.length; i < len; i++) {
-        const component = options.components[i];
+      options.components.forEach((component) => {
         const componentName =
           typeof component === 'function'
             ? component.name
@@ -22,7 +21,7 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
           throw new DuplicateChildComponentsError(componentName, target.name);
         }
         componentNameSet.add(componentName);
-      }
+      });
     }
     const metadataStorage = MetadataStorage.getInstance();
 
