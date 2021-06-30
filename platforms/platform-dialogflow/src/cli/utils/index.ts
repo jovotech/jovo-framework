@@ -1,7 +1,7 @@
-import { execAsync, JovoCliError } from '@jovotech/cli-core';
+import { execAsync, JovoCliError, Log } from '@jovotech/cli-core';
 
-export * from './Interfaces';
-export * from './Constants';
+export * from './interfaces';
+export * from './constants';
 
 export async function activateServiceAccount(keyFilePath: string): Promise<void> {
   try {
@@ -27,7 +27,6 @@ export async function getGcloudAccessToken(): Promise<string> {
     }
     return stdout.trim();
   } catch (error) {
-    console.log(error);
     throw new JovoCliError('Authorization failed.', 'DialogflowCli', error.stderr);
   }
 }

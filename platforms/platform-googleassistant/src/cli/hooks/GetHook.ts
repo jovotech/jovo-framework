@@ -1,5 +1,5 @@
 import type { BuildEvents } from '@jovotech/cli-command-build';
-import type { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
+import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -14,22 +14,21 @@ import {
 import { existsSync, mkdirSync } from 'fs';
 import _get from 'lodash.get';
 import { GoogleAssistantCli } from '..';
-import { checkForGactionsCli, getGactionsError, PluginContextGoogle } from '../utils';
+import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utils';
 
-export interface GetContextGoogle extends GetContext, PluginContextGoogle {
-  args: GetContext['args'];
+export interface GoogleGetContext extends GetContext, GoogleContext {
   flags: GetContext['flags'] & { 'project-id'?: string };
 }
 
 export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   $plugin!: GoogleAssistantCli;
-  $context!: GetContextGoogle;
+  $context!: GoogleGetContext;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
+        this.checkForPlatform.bind(this),
         checkForGactionsCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
@@ -56,9 +55,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextGet): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
       this.uninstall();
     }
   }
@@ -67,10 +66,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    this.$context.projectId =
+    if (!this.$context.googleAssistant) {
+      this.$context.googleAssistant = {};
+    }
+
+    this.$context.googleAssistant.projectId =
       this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
-    if (!this.$context.projectId) {
+    if (!this.$context.googleAssistant.projectId) {
       throw new JovoCliError(
         'Could not find projectId.',
         'GoogleAssistantCli',
@@ -96,7 +99,9 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   async get(): Promise<void> {
     const getTask: Task = new Task(
-      `Getting Conversational Actions Project ${printHighlight(`(${this.$context.projectId})`)}`,
+      `Getting Conversational Actions Project ${printHighlight(
+        `(${this.$context.googleAssistant.projectId})`,
+      )}`,
       async () => {
         const platformPath: string = this.$plugin.getPlatformPath();
         if (!existsSync(platformPath)) {
@@ -105,7 +110,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
         try {
           await execAsync(
-            `gactions pull --clean --force --project-id ${this.$context.projectId} --consumer jovo-cli`,
+            `gactions pull --clean --force --project-id ${this.$context.googleAssistant.projectId} --consumer jovo-cli`,
             { cwd: platformPath },
           );
         } catch (error) {

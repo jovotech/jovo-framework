@@ -11,6 +11,6 @@ import { app } from './app';
 */
 app.configure({
   plugins: [
-    // Add Jovo plugins here.
+    // Add Jovo plugins here
   ],
 });
