@@ -1,12 +1,4 @@
-import {
-  Plugin,
-  App,
-  HandleRequest,
-  Jovo,
-  DbPluginConfig,
-  PersistableUserData,
-  PersistableSessionData,
-} from '@jovotech/framework';
+import { App, DbItem, DbPlugin, DbPluginConfig, HandleRequest, Jovo } from '@jovotech/framework';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
@@ -16,25 +8,33 @@ export interface FileDbConfig extends DbPluginConfig {
   primaryKeyColumn?: string;
 }
 
-export interface FileDbItem {
-  id: string;
-  user?: PersistableUserData;
-  session?: PersistableSessionData;
-  createdAt?: string;
-  updatedAt?: string;
-}
+export class FileDb extends DbPlugin<FileDbConfig> {
+  constructor(config?: FileDbConfig) {
+    super(config);
+  }
 
-export class FileDb extends Plugin<FileDbConfig> {
   getDefaultConfig(): FileDbConfig {
     return {
       pathToFile: './db/db.json',
       storedElements: {
-        $user: {
+        user: {
           enabled: true,
         },
-        $session: {
+        session: {
           enabled: false,
         },
+        history: {
+          size: 3,
+          enabled: false,
+          output: true,
+          nlu: true,
+          asr: false,
+          state: false,
+          request: false,
+          response: false,
+        },
+        createdAt: true,
+        updatedAt: true,
       },
     };
   }
@@ -61,26 +61,20 @@ export class FileDb extends Plugin<FileDbConfig> {
     parent.middlewareCollection.use('before.response', this.saveData);
   }
 
-  getDbItem = async (primaryKey: string): Promise<FileDbItem> => {
+  getDbItem = async (primaryKey: string): Promise<DbItem> => {
     const fileDataStr = await fs.promises.readFile(this.pathToFile, 'utf8');
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
 
-    return users.find((userItem: FileDbItem) => {
+    return users.find((userItem: DbItem) => {
       return userItem.id === primaryKey;
     });
   };
 
   loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
     const dbItem = await this.getDbItem(jovo.$user.id);
-
-    if (this.config.storedElements.$user?.enabled && dbItem?.user) {
-      jovo.$user.setPersistableData(dbItem?.user || jovo.$user.getDefaultPersistableData());
-    }
-
-    if (this.config.storedElements.$session?.enabled && dbItem?.session) {
-      jovo.$session.setPersistableData(
-        dbItem?.session || jovo.$session.getDefaultPersistableData(),
-      );
+    if (dbItem) {
+      jovo.$user.isNew = false;
+      jovo.setPersistableData(dbItem);
     }
   };
 
@@ -89,37 +83,25 @@ export class FileDb extends Plugin<FileDbConfig> {
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
     const id = jovo.$user.id;
 
-    const dbItem = users.find((userItem: FileDbItem) => {
+    const dbItem = users.find((userItem: DbItem) => {
       return userItem.id === id;
     });
 
-    // create new user
+    // // create new user
     if (!dbItem) {
-      const item: FileDbItem = {
+      const item: DbItem = {
         id,
-        user: this.config.storedElements.$user?.enabled
-          ? { ...jovo.$user.getPersistableData(), updatedAt: new Date() }
-          : undefined,
-
-        session: this.config.storedElements.$session?.enabled
-          ? jovo.$session.getPersistableData()
-          : undefined,
       };
+      await this.applyPersistableData(jovo, item);
       users.push(item);
     } else {
       // update existing user
       for (let i = 0; i < users.length; i++) {
         if (users[i].id === id) {
-          if (this.config.storedElements.$user?.enabled) {
-            users[i].user = { ...jovo.$user.getPersistableData(), updatedAt: new Date() };
-          }
-          if (this.config.storedElements.$session?.enabled) {
-            users[i].session = jovo.$session.getPersistableData();
-          }
+          await this.applyPersistableData(jovo, users[i]);
         }
       }
     }
-
     return fs.promises.writeFile(this.pathToFile, JSON.stringify(users, null, 2));
   };
 }
