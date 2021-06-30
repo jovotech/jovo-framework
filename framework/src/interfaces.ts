@@ -77,6 +77,8 @@ export interface StoredElementHistory extends StoredElement {
   state?: StoredElement | boolean;
   output?: StoredElement | boolean;
   nlu?: StoredElement | boolean;
+  request?: StoredElement | boolean;
+  response?: StoredElement | boolean;
 }
 
 export interface DbPluginConfig extends PluginConfig {

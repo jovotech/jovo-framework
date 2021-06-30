@@ -10,6 +10,7 @@ import {
 import { Plugin, PluginConfig } from '../Plugin';
 import { Jovo, JovoPersistableData } from '../Jovo';
 import { ExtensibleInitConfig } from '../Extensible';
+import { FileDbConfig } from '../../../integrations/db-filedb/src';
 
 export interface DbItem {
   id: string;
@@ -47,6 +48,31 @@ export abstract class DbPlugin<
         }
       }
     }
+  }
+  getDefaultConfig(): CONFIG {
+    return {
+      enabled: true,
+      storedElements: {
+        user: {
+          enabled: true,
+        },
+        session: {
+          enabled: false,
+        },
+        history: {
+          size: 3,
+          enabled: false,
+          output: true,
+          nlu: true,
+          asr: false,
+          state: false,
+          request: false,
+          response: false,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+    } as unknown as CONFIG;
   }
 
   async applyPersistableData(jovo: Jovo, item: DbItem): Promise<void> {

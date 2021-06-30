@@ -11,31 +11,13 @@ export interface FileDbConfig extends DbPluginConfig {
 export class FileDb extends DbPlugin<FileDbConfig> {
   constructor(config?: FileDbConfig) {
     super(config);
+    console.log(this.config);
   }
 
   getDefaultConfig(): FileDbConfig {
     return {
+      // ...super.getDefaultConfig(),
       pathToFile: './db/db.json',
-      storedElements: {
-        user: {
-          enabled: true,
-        },
-        session: {
-          enabled: false,
-        },
-        history: {
-          size: 3,
-          enabled: false,
-          output: true,
-          nlu: true,
-          asr: false,
-          state: false,
-          request: false,
-          response: false,
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
     };
   }
 
