@@ -237,7 +237,7 @@ class YourComponent extends BaseComponent {
 Or use the `@Global` convenience decorator:
 
 ```typescript
-@Global
+@Global()
 @Component({ /* options */ })
 class YourComponent extends BaseComponent {
   
