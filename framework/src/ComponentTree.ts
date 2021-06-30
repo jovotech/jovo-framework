@@ -32,7 +32,6 @@ export interface ExecuteHandlerOptions<
 > {
   jovo: Jovo;
   handlerKey?: HANDLER | string;
-  updateRoute?: boolean;
   callArgs?: ARGS;
 }
 
@@ -69,7 +68,6 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   >({
     jovo,
     handlerKey = InternalIntent.Start,
-    updateRoute = true,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
@@ -78,12 +76,6 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     );
     if (!componentInstance[handlerKey as keyof COMPONENT]) {
       throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
-    }
-    if (updateRoute) {
-      jovo.$route = {
-        path: this.path,
-        handlerKey: handlerKey.toString(),
-      };
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (componentInstance as any)[handlerKey](...(callArgs || []));
