@@ -31,7 +31,7 @@ export class GoogleAssistant extends Platform<
   }
 
   initialize(parent: App) {
-    parent.use(GoogleAssistantRepromptComponent);
+    // parent.use(GoogleAssistantRepromptComponent);
   }
 
   isRequestRelated(request: Record<string, any> | GoogleAssistantRequest): boolean {
