@@ -26,3 +26,8 @@ export function forEachDeep<T = any>(
     });
   }
 }
+
+// Test if the currently running environment is node-based.
+export function isNode(): boolean {
+  return typeof process !== 'undefined' && process.versions && !!process.versions.node;
+}
