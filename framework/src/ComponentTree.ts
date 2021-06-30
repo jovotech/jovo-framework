@@ -168,15 +168,17 @@ export class ComponentTree {
     return node;
   }
 
-  getNodeRelativeTo(componentName: string, relativeTo: string[]): ComponentTreeNode | undefined {
-    const componentPath = [...relativeTo, componentName];
-    const currentComponentNode = this.getNodeAt(componentPath);
+  getNodeRelativeTo(
+    componentName: string,
+    relativeTo: string[] = [],
+  ): ComponentTreeNode | undefined {
+    const currentComponentNode = this.getNodeAt(relativeTo);
     const rootComponentNode = this.tree[componentName];
     const childComponentNode = currentComponentNode?.children?.[componentName];
     return childComponentNode || rootComponentNode;
   }
 
-  getNodeRelativeToOrFail(componentName: string, relativeTo: string[]): ComponentTreeNode {
+  getNodeRelativeToOrFail(componentName: string, relativeTo: string[] = []): ComponentTreeNode {
     const componentNode = this.getNodeRelativeTo(componentName, relativeTo);
     if (!componentNode) {
       throw new ComponentNotFoundError([...relativeTo, componentName]);
