@@ -1,5 +1,7 @@
 # Data
 
+There are different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session. Other data might be needed across sessions and should be persisted using the [Jovo database integrations](./databases.md).
+
 - [Introduction](#introduction)
 - [Short-term Data Storage](#short-term-data-storage)
   - [Request Data](#request-data)
@@ -13,8 +15,6 @@
 
 ## Introduction
 
-There are different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session. Other data might be needed across sessions and should be persisted using the [Jovo database integrations](./databases.md).
-
 These are the types of data that are usually only stored for a short amount of time ([short-term data storage](#short-term-data-storage)):
 
 * [Request data](#request-data): Only used for this specific interaction, stored in `this.$data`.
@@ -24,8 +24,8 @@ These are the types of data that are usually only stored for a short amount of t
 
 And here are some types of data that are typically persisted across user sessions ([long-term data storage](#long-term-data-storage)):
 
-* [User data](#user-data):
-* [History](#history):
+* [User data](#user-data): User specific data stored in `this.$user.$data`.
+* [History](#history): Data from previous interactions, accessible via `this.$history`.
 
 ## Short-term Data Storage
 
@@ -43,7 +43,7 @@ this.$data.someKey = 'someValue';
 
 Sometimes, a [component](./components.md) might need to gather information that becomes irrelevant as soon as the component resolves.
 
-You can use this to store data only for a specific component: 
+You can store data only for a specific component like this: 
 
 ```typescript
 this.$component.$data.someKey = 'someValue';
@@ -108,12 +108,26 @@ this.$user.$data.someKey = 'someValue';
 
 ### History
 
-The `$history` makes it possible to store a variety of data of each interaction into a persisted history. This enables your app to remember what was previously said, repeat things like previous output, or just track usage over time.
+The `$history` makes it possible to store data of each interaction into a persisted history. This enables your app to remember what was previously said, repeat things like previous output, or just track usage over time.
 
 The history is an array that is sorted by time (DESC), which means that the most recent history item can be accessed like this:
 
 ```typescript
+// Get the history element for the most recent interaction
 this.$history[0]
+
+/* Sample result if output and nlu are enabled
+{
+  output: {
+    message: 'Hello World!'
+  },
+  nlu: {
+    intent: {
+      name: 'HelloWorldIntent'
+    }
+  }
+}
+*/
 ```
 
 For each [database integration](./databases.md), you can add the `history` configuration to the `storedElements` property.
@@ -125,16 +139,36 @@ new FileDb({
     // ...
     history: {
       enabled: true,
-      size: 3, // size of this.$history array
+      size: 3, // Size of the this.$history array
+      
+      // Example: Store this.$output into the history
       output: true, // this.$output, optional
-      state: true, // this.$state, optional
-      nlu: true, // this.$nlu, optional
-      entities: false, // this.$entities, optional
-      asr: false, // this.$asr, optional
-      request: false, // this.$request, optional
-      response: false, // this.$response, optional
-      myCustomData: (jovo: Jovo) => {
-          return `my custom data for user: ${jovo.$user.id}`
+      
+  }
+}),
+```
+
+You can add the following elements to the history:
+
+* `output`: Stores `this.$output`
+* `state`: Stores `this.$state`
+* `nlu`: Stores `this.$nlu`
+* `entities`: Stores `this.$entities`
+* `asr`: Stores `this.$asr`
+* `request`: Stores `this.$request`
+* `response`: Stores `this.$response`
+
+You can even add your own cutom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    history: {
+      // ...
+      someCustomData: (jovo: Jovo) => {
+          return `Some custom data for user ${jovo.$user.id}`
       }
   }
 }),
@@ -162,7 +196,7 @@ Here is an example how the history is then stored in a database:
             "componentPath": "LoveHatePizzaComponent"
           }
         ],
-        "myCustomData": "my custom data for user: amzn1.account.AM3B00000000000000000000000"
+        "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
       },
       {
         "output": {
@@ -175,7 +209,7 @@ Here is an example how the history is then stored in a database:
             "componentPath": "LoveHatePizzaComponent"
           }
         ],
-        "myCustomData": "my custom data for user: amzn1.account.AM3B00000000000000000000000"
+        "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
       }
     ],
     "createdAt": "2021-06-30T06:45:40.444Z",
