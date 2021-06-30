@@ -2,10 +2,10 @@ import chalk from 'chalk';
 import _get from 'lodash.get';
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
-import { AskSkillList } from './Interfaces';
+import { AskSkillList } from './interfaces';
 
-export * from './Interfaces';
-export * from './Constants';
+export * from './interfaces';
+export * from './constants';
 
 /**
  * Checks if ask cli is installed.
@@ -31,7 +31,9 @@ export async function checkForAskCli(): Promise<void> {
     throw new JovoCliError(
       'Jovo CLI requires ASK CLI',
       'AlexaCli',
-      'Install the ASK CLI with "npm install ask-cli -g". Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
+      '',
+      'Install the ASK CLI with "npm install ask-cli -g".',
+      'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
     );
   }
 }

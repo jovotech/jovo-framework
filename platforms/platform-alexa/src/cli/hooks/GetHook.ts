@@ -10,18 +10,19 @@ import {
   promptListForProjectId,
   promptOverwrite,
   Task,
+  DOWNLOAD,
+  MAGNIFYING_GLASS
 } from '@jovotech/cli-core';
-import type { GetContext, GetEvents, ParseContextGet } from '@jovotech/cli-command-get';
+import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import type { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 
 import * as smapi from '../smapi';
-import { AskSkillList, checkForAskCli, PluginContextAlexa, prepareSkillList } from '../utils';
+import { AskSkillList, checkForAskCli, AlexaContext, prepareSkillList } from '../utils';
 import defaultFiles from '../utils/DefaultFiles.json';
 import { AlexaCli } from '..';
 
-export interface GetContextAlexa extends PluginContextAlexa, GetContext {
-  args: GetContext['args'];
+export interface GetContextAlexa extends AlexaContext, GetContext {
   flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
 }
 
@@ -32,8 +33,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'parse': [this.checkForPlatform.bind(this)],
       'before.get': [
+        this.checkForPlatform.bind(this),
         checkForAskCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
@@ -60,11 +61,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextGet): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
       this.uninstall();
     }
   }
@@ -73,10 +73,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    this.$context.askProfile =
+    if (!this.$context.alexa) {
+      this.$context.alexa = {};
+    }
+
+    this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
 
-    this.$context.skillId =
+    this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
       _get(this.$plugin.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
       _get(this.$plugin.$config, 'options.skillId');
@@ -87,7 +91,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   async checkForExistingPlatformFiles(): Promise<void> {
     if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
-      const answer = await promptOverwrite('Found existing project files. How to proceed?');
+      const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
       }
@@ -99,14 +103,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   async get(): Promise<void> {
     const getTask: Task = new Task(
-      `Getting Alexa Skill projects ${printAskProfile(this.$context.askProfile)}`,
+      `${DOWNLOAD} Getting Alexa Skill projects ${printAskProfile(this.$context.alexa.askProfile)}`,
     );
 
     // If no skill id and thus no specified project can be found, try to prompt for one.
-    if (!this.$context.skillId) {
+    if (!this.$context.alexa.skillId) {
       let skills: AskSkillList = { skills: [] };
-      const getSkillListTask: Task = new Task('Getting a list of all your skills', async () => {
-        skills = await smapi.listSkills(this.$context.askProfile);
+      const getSkillListTask: Task = new Task(`${MAGNIFYING_GLASS} Getting a list of all your skills`, async () => {
+        skills = await smapi.listSkills(this.$context.alexa.askProfile);
       });
 
       await getSkillListTask.run();
@@ -115,7 +119,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       try {
         const answer = await promptListForProjectId(list);
 
-        this.$context.skillId = answer.projectId;
+        this.$context.alexa.skillId = answer.projectId;
       } catch (error) {
         return;
       }
@@ -128,19 +132,19 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       }
 
       const skillInformation = await smapi.getSkillInformation(
-        this.$context.skillId!,
+        this.$context.alexa.skillId!,
         'development',
-        this.$context.askProfile,
+        this.$context.alexa.askProfile,
       );
       writeFileSync(this.$plugin.getSkillJsonPath(), JSON.stringify(skillInformation, null, 2));
-      this.setAlexaSkillId(this.$context.skillId!);
+      this.setAlexaSkillId(this.$context.alexa.skillId!);
 
       // Try to get account linking information.
       try {
         const accountLinkingJson = await smapi.getAccountLinkingInformation(
-          this.$context.skillId!,
+          this.$context.alexa.skillId!,
           'development',
-          this.$context.askProfile,
+          this.$context.alexa.askProfile,
         );
 
         if (accountLinkingJson) {
@@ -176,14 +180,14 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       }
       for (const locale of modelLocales) {
         const model = await smapi.getInteractionModel(
-          this.$context.skillId!,
+          this.$context.alexa.skillId!,
           locale,
           'development',
-          this.$context.askProfile,
+          this.$context.alexa.askProfile,
         );
         writeFileSync(this.$plugin.getModelPath(locale), JSON.stringify(model, null, 2));
       }
-      return modelLocales.join(', ');
+      return `Locales: ${modelLocales.join(', ')}`;
     });
 
     getTask.add(getSkillInformationTask, getModelsTask);
