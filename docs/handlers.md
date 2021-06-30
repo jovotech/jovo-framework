@@ -158,7 +158,7 @@ import { Global, Handle } from '@jovotech/framework';
 
 // ...
 
-@Global
+@Global()
 @Handle({ /* ... */ })
 yourHandler() {
   // ...
@@ -168,7 +168,7 @@ yourHandler() {
 Sometimes, it might be necessary to split `@Handle` to make sure that not all options are set to global. In the below example, the handler is accessible from anywhere for both the `ShowMenuIntent` and `YesIntent` (which is probably not a good idea):
 
 ```typescript
-@Global
+@Global()
 @Handle({
   intents: ['ShowMenuIntent', 'YesIntent']
 })
