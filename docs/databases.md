@@ -20,7 +20,7 @@ You can add a database integration as a plugin. For example, many Jovo projects 
 app.configure({
   plugins: [
     new FileDb({
-      pathToFile: '../../db/db.json',
+      pathToFile: '../db/db.json',
     }),
     // ...
   ],
