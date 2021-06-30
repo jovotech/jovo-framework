@@ -56,9 +56,9 @@ The default configuration for each database integration is this:
 new FileDb({
   // ...
   storedElements: {
-    user: true // this.$user.$data
-    session: false // this.$session.$data
-    history: false // this.$history
+    user: true, // this.$user.$data
+    session: false, // this.$session.$data
+    history: false, // this.$history
     createdAt: true,
     updatedAt: true,
   }
