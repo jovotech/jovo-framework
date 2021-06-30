@@ -10,7 +10,7 @@ Find about all the tools that extend the capabilities of the Jovo framework and 
 * [Jovo Chrome Extension](#jovo-chrome-extension)
 * [Jovo Audio Converter](#jovo-audio-converter)
 
-## Jovo CLI
+## Jovo CLI 
 
 The Jovo Command Line Tools offer the ability to create, prototype, test, and deploy your voice app quickly. Learn more about it [here](./cli './cli').
 
@@ -29,6 +29,8 @@ Speed up Alexa Skill testing in the Alexa Skill Console with some quality of lif
 ## Jovo Audio Converter
 
 Convert your MP3s into the right format for Alexa Skills and Google Actions. Learn more about it here [here](./audio-converter.md './audio-converter').
+
+## Thank You
 
 
 <!--[metadata]: {"description": "Find about all the tools that extend the capabilities of the Jovo framework and make voice app development in general easier.",
