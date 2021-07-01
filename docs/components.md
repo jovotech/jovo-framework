@@ -203,7 +203,7 @@ Once a component is entered, it is added to the Jovo `$state` stack:
 ```typescript
 $state = [
   {
-    componentPath: 'SomeComponent'
+    component: 'SomeComponent'
   }
 ]
 ```
@@ -214,7 +214,7 @@ There are two ways how a component can be entered:
 * Through one of its global handlers
 * By getting called from a different component using `$redirect` or `$delegate`
 
-You can find out more about component delegation and routing in our [handlers documentation](./handlers.md).
+You can find out more about the [`$state` stack here](./state-stack.md) and learn about component delegation in our [handlers documentation](./handlers.md).
 
 ### Global Components
 
@@ -261,7 +261,7 @@ This is then added to the state stack and lost once the component resolves:
 ```typescript
 $state = [
   {
-    componentPath: 'SomeComponent',
+    component: 'SomeComponent',
     data: {
       someKey: 'someValue',
     },
