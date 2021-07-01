@@ -1,5 +1,4 @@
 import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
-import { inverse } from 'chalk';
 import { Alexa, AlexaConfig } from './Alexa';
 import { AlexaSkill } from './AlexaSkill';
 import type { AlexaCli as AlexaCliType } from './cli';

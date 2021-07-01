@@ -4,10 +4,10 @@ import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
-import { AlexaCliConfig } from './utils/Interfaces';
+import { AlexaCliConfig } from './utils/interfaces';
 
 export class AlexaCli extends JovoCliPlugin {
-  readonly $id: string = 'alexaSkill';
+  readonly $id: string = 'alexa';
   readonly $type: PluginType = 'platform';
   readonly $config!: AlexaCliConfig;
   readonly platformDirectory: string = 'platform.alexa';
