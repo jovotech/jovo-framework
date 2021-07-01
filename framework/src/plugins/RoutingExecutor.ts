@@ -1,114 +1,107 @@
 import { ComponentTreeNode } from '../ComponentTree';
 import { InternalIntent } from '../enums';
+import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
-import { filterAsync } from '../utilities';
+import { RouteMatch } from './RouteMatch';
 import { JovoRoute } from './RouterPlugin';
-
-// export interface RouteMatch {
-//   path: string[];
-//   metadata: HandlerMetadata;
-//   score?: number;
-//   subState?: string;
-// }
-
-export class RouteMatch {
-  constructor(readonly metadata: HandlerMetadata, readonly path: string[]) {}
-
-  get component(): string {
-    return this.path.join('.');
-  }
-
-  get handler(): string {
-    return this.metadata.propertyKey;
-  }
-
-  // TODO: experimental, determine
-  get score(): number {
-    let score = 0;
-    if (this.metadata.options?.if) {
-      score += 1.5;
-    }
-    if (this.metadata.options?.platforms) {
-      score += 1;
-    }
-    return score;
-  }
-
-  get subState(): string | undefined {
-    return this.metadata.options?.subState;
-  }
-
-  get global(): boolean | undefined {
-    return this.metadata.options?.global;
-  }
-
-  toJSON() {
-    return {
-      component: this.component,
-      handler: this.handler,
-      subState: this.subState,
-      global: this.global,
-      score: this.score,
-    };
-  }
-}
 
 export class RoutingExecutor {
   constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
 
-  async execute(mappedIntentName: string): Promise<JovoRoute | undefined> {
-    if (!mappedIntentName.length) {
-      return;
+  async execute(intentName: string): Promise<JovoRoute> {
+    const mappedIntentName = this.handleRequest.config.intentMap[intentName] || intentName;
+    const rankedRouteMatches = await this.getRankedRouteMatches(mappedIntentName);
+    if (!rankedRouteMatches.length) {
+      throw new MatchingRouteNotFoundError({
+        request: this.jovo.$request,
+        intent: intentName,
+        mappedIntent: mappedIntentName,
+        state: this.jovo.$state,
+      });
     }
-    const routeMatches = await this.getRouteMatches(mappedIntentName);
-    if (!routeMatches.length) {
-      return;
+
+    this.setSkipForRouteMatches(rankedRouteMatches);
+
+    const resolvedRouteMatch = await this.resolveRoute(rankedRouteMatches);
+    if (!resolvedRouteMatch) {
+      throw new MatchingRouteNotFoundError({
+        request: this.jovo.$request,
+        intent: intentName,
+        mappedIntent: mappedIntentName,
+        state: this.jovo.$state,
+        matches: rankedRouteMatches,
+      });
     }
-    const rankedRouteMatches = this.rankRouteMatches(routeMatches);
-    const match = await this.resolveRoute(rankedRouteMatches);
-    if (!match) {
-      return;
-    }
-    // TODO set correct values
     return {
-      resolved: routeMatches[0],
-      matches: routeMatches,
+      resolved: resolvedRouteMatch,
+      matches: rankedRouteMatches,
     };
   }
 
-  async getRouteMatches(intentName: string): Promise<RouteMatch[]> {
-    const globalRouteMatches = await this.getGlobalRouteMatches(intentName);
+  async getRankedRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const globalRouteMatches = await this.getRankedGlobalRouteMatches(intentName);
     if (!this.jovo.$state?.length) {
       return globalRouteMatches;
     }
-    const localRouteMatches = await this.getLocalRouteMatches(intentName);
+    const localRouteMatches = await this.getRankedLocalRouteMatches(intentName);
     return [...localRouteMatches, ...globalRouteMatches];
   }
 
-  rankRouteMatches(routeMatches: RouteMatch[]): RouteMatch[] {
-    // TODO: implement
-    return routeMatches;
+  setSkipForRouteMatches(rankedRouteMatches: RouteMatch[]): void {
+    // find the first RouteMatch that is UNHANDLED
+    const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
+      (match) => match.type === InternalIntent.Unhandled,
+    );
+    // find the last RouteMatch that has prioritizeOverUnhandled
+    const lastRouteMatchIndexWithPrioritizeOverUnhandled = rankedRouteMatches
+      .slice()
+      .reverse()
+      .findIndex((match) => !!match.prioritizeOverUnhandled);
+    // if no indexes were found or they're invalid, abort
+    if (
+      firstRouteMatchIndexWithUnhandled < 0 ||
+      lastRouteMatchIndexWithPrioritizeOverUnhandled < 0 ||
+      lastRouteMatchIndexWithPrioritizeOverUnhandled < firstRouteMatchIndexWithUnhandled
+    ) {
+      return;
+    }
+    // iterate all RouteMatches between indexes and set skip: true for them
+    for (
+      let i = firstRouteMatchIndexWithUnhandled;
+      i < lastRouteMatchIndexWithPrioritizeOverUnhandled;
+      i++
+    ) {
+      rankedRouteMatches[i].skip = true;
+    }
   }
 
   async resolveRoute(routeMatches: RouteMatch[]): Promise<RouteMatch | undefined> {
-    // TODO: implement
-    return;
+    // iterate all RouteMatches and return the first match that has no skip not set to true
+    return routeMatches.find((match) => !match.skip);
+  }
+
+  private async getRankedGlobalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const globalRouteMatches = await this.getGlobalRouteMatches(intentName);
+    return globalRouteMatches.sort(this.compareRouteMatchRanking);
   }
 
   private async getGlobalRouteMatches(intentName: string): Promise<RouteMatch[]> {
     const routeMatches: RouteMatch[] = [];
 
     const componentNodes = Array.from(this.handleRequest.componentTree);
+    // iterate all trees in the ComponentTree, for of used due to async methods
     for (const node of componentNodes) {
+      // create a map-callback for the given node's path
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
       const relatedHandlerMetadata =
         MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
       for (const metadata of relatedHandlerMetadata) {
+        // if the conditions are no fulfilled, do not add the handler
         if (!(await this.areHandlerConditionsFulfilled(metadata))) {
           continue;
         }
@@ -124,6 +117,17 @@ export class RoutingExecutor {
     return routeMatches;
   }
 
+  private async getRankedLocalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const routeMatches = await this.getLocalRouteMatches(intentName);
+    return routeMatches.sort((match, otherMatch) => {
+      // if the path is different, ignore
+      if (match.path !== otherMatch.path) {
+        return 0;
+      }
+      return this.compareRouteMatchRanking(match, otherMatch);
+    });
+  }
+
   private async getLocalRouteMatches(intentName: string): Promise<RouteMatch[]> {
     if (!this.jovo.$state?.length) {
       return [];
@@ -133,9 +137,12 @@ export class RoutingExecutor {
     const currentComponentPath = latestStateStackItem.componentPath.split('.');
     let subState = latestStateStackItem.$subState;
 
+    // get the current node
     let node: ComponentTreeNode | undefined =
       this.handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+    // loop all nodes and their parent's as long as root is reached
     while (node) {
+      // create a map-callback for the given node's path
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
@@ -143,6 +150,7 @@ export class RoutingExecutor {
         MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
 
       for (const metadata of relatedHandlerMetadata) {
+        // if the conditions are no fulfilled, do not add the handler
         if (!(await this.areHandlerConditionsFulfilled(metadata))) {
           continue;
         }
@@ -181,5 +189,20 @@ export class RoutingExecutor {
     return (metadata) => {
       return new RouteMatch(metadata, path);
     };
+  }
+
+  private compareRouteMatchRanking(match: RouteMatch, otherMatch: RouteMatch): number {
+    const matchIsUnhandled = match.metadata.intentNames.includes(InternalIntent.Unhandled);
+    const otherMatchIsUnhandled = otherMatch.metadata.intentNames.includes(
+      InternalIntent.Unhandled,
+    );
+    4;
+    if (matchIsUnhandled && !otherMatchIsUnhandled) {
+      return 1;
+    } else if (!matchIsUnhandled && otherMatchIsUnhandled) {
+      return -1;
+    }
+
+    return otherMatch.score - match.score;
   }
 }

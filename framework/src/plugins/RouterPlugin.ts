@@ -1,12 +1,12 @@
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
-import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
-import { RouteMatch, RoutingExecutor } from './RoutingExecutor';
+import { RouteMatch } from './RouteMatch';
+import { RoutingExecutor } from './RoutingExecutor';
 
 export interface RouterPluginConfig extends PluginConfig {}
 
@@ -49,12 +49,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       // in the future other data can be passed and used by the handler, but for now just use the intent-name
       return;
     }
-    const mappedIntentName = this.getMappedIntentName(handleRequest, intentName);
-    const route = await new RoutingExecutor(handleRequest, jovo).execute(mappedIntentName);
-    if (!route) {
-      throw new MatchingRouteNotFoundError(intentName, jovo.$state, jovo.$request);
-    }
-    jovo.$route = route;
+    jovo.$route = await new RoutingExecutor(handleRequest, jovo).execute(intentName);
   };
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {
@@ -66,7 +61,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
         componentHandlerMetadata.forEach((handlerMetadata) => {
           handlerMetadata.globalIntentNames.forEach((globalIntentName) => {
-            const mappedIntentName = this.getMappedIntentName(app, globalIntentName);
+            const mappedIntentName = app.config.intentMap[globalIntentName] || globalIntentName;
             if (!globalHandlerMap[mappedIntentName]) {
               globalHandlerMap[mappedIntentName] = [];
             }
@@ -85,9 +80,5 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       }
       return resolve();
     });
-  }
-
-  private getMappedIntentName(parent: App | HandleRequest, intentName: string): string {
-    return parent.config.intentMap[intentName] || intentName;
   }
 }
