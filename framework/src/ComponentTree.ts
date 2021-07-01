@@ -31,7 +31,7 @@ export interface ExecuteHandlerOptions<
   ARGS extends any[] = any[],
 > {
   jovo: Jovo;
-  handlerKey?: HANDLER | string;
+  handler?: HANDLER | string;
   callArgs?: ARGS;
 }
 
@@ -67,18 +67,18 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     ARGS extends any[] = any[],
   >({
     jovo,
-    handlerKey = InternalIntent.Start,
+    handler = InternalIntent.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
       jovo,
       this.metadata.options?.config,
     );
-    if (!componentInstance[handlerKey as keyof COMPONENT]) {
-      throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
+    if (!componentInstance[handler as keyof COMPONENT]) {
+      throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handlerKey](...(callArgs || []));
+    await (componentInstance as any)[handler](...(callArgs || []));
   }
 
   toJSON() {

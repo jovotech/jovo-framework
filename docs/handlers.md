@@ -220,7 +220,7 @@ Jovo then adds it to the component's state in the `$state` stack:
 ```typescript
 $state = [
   {
-    componentPath: 'YourComponent',
+    component: 'YourComponent',
     subState: 'YourSubState',
   }
 ]

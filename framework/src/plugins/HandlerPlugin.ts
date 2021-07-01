@@ -33,7 +33,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     // update the state-stack if the component is not global
     if (!componentNode.metadata.isGlobal) {
       const stackItem: StateStackItem = {
-        componentPath: componentNode.path.join('.'),
+        component: componentNode.path.join('.'),
       };
       // if no state-stack exists, initialize it and add the new item
       if (!jovo.$session.$state?.length) {
@@ -41,7 +41,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       } else {
         const currentStateStackItem = jovo.$session.$state[jovo.$session.$state.length - 1];
         // if the component path is a different one, omit every custom component data (resolve, config, $data)
-        if (stackItem.componentPath !== currentStateStackItem.componentPath) {
+        if (stackItem.component !== currentStateStackItem.component) {
           jovo.$session.$state[jovo.$session.$state.length - 1] = stackItem;
         }
       }
@@ -51,7 +51,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     // execute the component's handler
     await componentNode.executeHandler({
       jovo,
-      handlerKey: jovo.$route.resolved.handler,
+      handler: jovo.$route.resolved.handler,
     });
   };
 }

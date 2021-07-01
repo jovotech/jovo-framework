@@ -31,7 +31,7 @@ export class GoogleAssistant extends Platform<
   }
 
   initialize(parent: App) {
-    parent.useComponents(GoogleAssistantRepromptComponent);
+    parent.use(GoogleAssistantRepromptComponent);
   }
 
   isRequestRelated(request: Record<string, any> | GoogleAssistantRequest): boolean {
@@ -71,7 +71,7 @@ export class GoogleAssistant extends Platform<
       jovo.$state
     ) {
       jovo.$state.push({
-        componentPath: 'GoogleAssistantRepromptComponent',
+        component: 'GoogleAssistantRepromptComponent',
       });
     }
   };
