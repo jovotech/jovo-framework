@@ -71,7 +71,7 @@ export class GoogleAssistant extends Platform<
       jovo.$state
     ) {
       jovo.$state.push({
-        componentPath: 'GoogleAssistantRepromptComponent',
+        component: 'GoogleAssistantRepromptComponent',
       });
     }
   };

@@ -262,11 +262,11 @@ export abstract class Jovo<
       keyof PickWhere<COMPONENT, Function>,
       keyof BaseComponent
     >,
-  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handlerKey?: string): Promise<void>;
+  >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
+  async $redirect(componentName: string, handler?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
-    handlerKey?: string,
+    handler?: string,
   ): Promise<void> {
     const componentName =
       typeof constructorOrName === 'function' ? constructorOrName.name : constructorOrName;
@@ -279,7 +279,7 @@ export abstract class Jovo<
     // update the state-stack if the component is not global
     if (!componentNode.metadata.isGlobal) {
       const stackItem: StateStackItem = {
-        componentPath: componentNode.path.join('.'),
+        component: componentNode.path.join('.'),
       };
       if (!this.$state?.length) {
         // initialize the state-stack if it is empty or does not exist
@@ -295,7 +295,7 @@ export abstract class Jovo<
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
-      handlerKey: handlerKey,
+      handler,
     });
   }
 
@@ -321,7 +321,7 @@ export abstract class Jovo<
     if (!this.$session.$state?.length) {
       this.$session.$state = [
         {
-          componentPath: (this.$handleRequest.$activeComponentNode?.path || []).join('.'),
+          component: (this.$handleRequest.$activeComponentNode?.path || []).join('.'),
         },
       ];
     }
@@ -354,7 +354,7 @@ export abstract class Jovo<
     this.$session.$state.push({
       resolve: serializableResolve,
       config: serializableConfig,
-      componentPath: componentNode.path.join('.'),
+      component: componentNode.path.join('.'),
     });
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.$activeComponentNode = componentNode;
@@ -375,8 +375,8 @@ export abstract class Jovo<
     if (!currentStateStackItem?.resolve || !previousStateStackItem) {
       return;
     }
-    const resolvedHandlerKey = currentStateStackItem.resolve[eventName];
-    const previousComponentPath = previousStateStackItem.componentPath.split('.');
+    const resolvedHandler = currentStateStackItem.resolve[eventName];
+    const previousComponentPath = previousStateStackItem.component.split('.');
     // get the previous node
     const previousComponentNode =
       this.$handleRequest.componentTree.getNodeAtOrFail(previousComponentPath);
@@ -393,7 +393,7 @@ export abstract class Jovo<
     // execute the component's handler
     await previousComponentNode.executeHandler({
       jovo: this.jovoReference,
-      handlerKey: resolvedHandlerKey,
+      handler: resolvedHandler,
       callArgs: eventArgs,
     });
   }

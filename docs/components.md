@@ -203,7 +203,7 @@ Once a component is entered, it is added to the Jovo `$state` stack:
 ```typescript
 $state = [
   {
-    componentPath: 'SomeComponent'
+    component: 'SomeComponent'
   }
 ]
 ```
@@ -261,7 +261,7 @@ This is then added to the state stack and lost once the component resolves:
 ```typescript
 $state = [
   {
-    componentPath: 'SomeComponent',
+    component: 'SomeComponent',
     data: {
       someKey: 'someValue',
     },
