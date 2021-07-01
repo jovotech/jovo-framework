@@ -15,12 +15,6 @@ export interface RouteMatch {
 }
 
 export class RoutingExecutor {
-  private convertHandlerMetadataToRouteMatch = (path: string[]) => (metadata: HandlerMetadata) => ({
-    path,
-    metadata,
-    subState: metadata.options?.subState,
-  });
-
   constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
 
   async execute(intentName: string): Promise<JovoRoute | undefined> {
@@ -43,7 +37,7 @@ export class RoutingExecutor {
   }
 
   getRouteMatches(intentName: string): RouteMatch[] {
-    if (!this.jovo.$state) {
+    if (!this.jovo.$state?.length) {
       return this.getGlobalRouteMatches(intentName);
     }
     let routeMatches = this.getRouteMatchesInState(intentName, this.jovo.$state);
@@ -94,7 +88,10 @@ export class RoutingExecutor {
       .getMergedHandlerMetadataOfComponent(componentMetadata.target)
       .filter(
         (metadata) =>
-          this.getMappedIntentNames(metadata.globalIntentNames, intentName).includes(intentName) &&
+          this.getMappedIntentNames(
+            componentMetadata.isGlobal ? metadata.intentNames : metadata.globalIntentNames,
+            intentName,
+          ).includes(intentName) &&
           (!metadata.options?.platforms?.length ||
             metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name)),
       );
@@ -117,7 +114,7 @@ export class RoutingExecutor {
       );
       if (relatedHandlerMetadata.length) {
         matches.push(
-          ...relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(node.path)),
+          ...relatedHandlerMetadata.map(this.createHandlerMetadataToRouteMatchMapper(node.path)),
         );
       }
     });
@@ -155,7 +152,7 @@ export class RoutingExecutor {
         currentPath.splice(currentPath.length - 1);
       }
     }
-    return relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(currentPath));
+    return relatedHandlerMetadata.map(this.createHandlerMetadataToRouteMatchMapper(currentPath));
   }
 
   private getMatchingHandlerMetadata(
@@ -185,5 +182,13 @@ export class RoutingExecutor {
   private getMappedIntentNames(intents: string[], intentName: string): string[] {
     const mappedIntent = this.handleRequest.config.intentMap[intentName];
     return mappedIntent ? [mappedIntent, ...intents] : intents.slice();
+  }
+
+  private createHandlerMetadataToRouteMatchMapper(path: string[]) {
+    return (metadata: HandlerMetadata) => ({
+      path,
+      metadata,
+      subState: metadata.options?.subState,
+    });
   }
 }

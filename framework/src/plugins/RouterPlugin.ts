@@ -56,23 +56,6 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       throw new MatchingRouteNotFoundError(intentName, jovo.$state, jovo.$request);
     }
     jovo.$route = route;
-    const componentPath = jovo.$route.path.join('.');
-    if (!jovo.$session.$state) {
-      jovo.$session.$state = [
-        {
-          componentPath,
-        },
-      ];
-    } else {
-      const currentStateStackItem = jovo.$session.$state[jovo.$session.$state.length - 1];
-      // TODO has to checked in complex use-cases
-      // if the component path is a different one, omit every custom component data (resolve, config, $data)
-      if (componentPath !== currentStateStackItem.componentPath) {
-        jovo.$session.$state[jovo.$session.$state.length - 1] = {
-          componentPath,
-        };
-      }
-    }
   };
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {

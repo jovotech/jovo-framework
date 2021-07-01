@@ -1,23 +1,23 @@
 import _cloneDeep from 'lodash.clonedeep';
-import { inspect } from 'util';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BaseOutput, OutputConstructor } from '../BaseOutput';
 import { ComponentMetadata } from './ComponentMetadata';
+import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 import { HandlerMetadata } from './HandlerMetadata';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { OutputMetadata } from './OutputMetadata';
 
-// TODO: implement
 export class MetadataStorage {
   private static instance: MetadataStorage;
-  // TODO: determine whether any is required/helpful here
   readonly componentMetadata: ComponentMetadata[];
+  readonly componentOptionMetadata: ComponentOptionMetadata[];
   readonly handlerMetadata: HandlerMetadata[];
   readonly handlerOptionMetadata: HandlerOptionMetadata[];
   readonly outputMetadata: OutputMetadata[];
 
   private constructor() {
     this.componentMetadata = [];
+    this.componentOptionMetadata = [];
     this.handlerMetadata = [];
     this.handlerOptionMetadata = [];
     this.outputMetadata = [];
@@ -46,6 +46,40 @@ export class MetadataStorage {
     return this.componentMetadata.find((metadata) => metadata.target === target) as
       | ComponentMetadata<COMPONENT>
       | undefined;
+  }
+
+  getMergedComponentMetadata<COMPONENT extends BaseComponent>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: ComponentConstructor<COMPONENT> | Function,
+  ): ComponentMetadata<COMPONENT> | undefined {
+    const componentMetadata = this.getComponentMetadata(target);
+    const componentOptionMetadata = this.getComponentOptionMetadata(target);
+    if (!componentMetadata && !componentOptionMetadata.length) {
+      return;
+    }
+    const mergedComponentMetadata = componentMetadata
+      ? _cloneDeep(componentMetadata)
+      : new ComponentMetadata(target);
+
+    componentOptionMetadata.forEach((optionMetadata) =>
+      mergedComponentMetadata.mergeWith(optionMetadata),
+    );
+    return mergedComponentMetadata;
+  }
+
+  addComponentOptionMetadata<COMPONENT extends BaseComponent>(
+    metadata: ComponentOptionMetadata<COMPONENT>,
+  ) {
+    this.componentOptionMetadata.push(metadata);
+  }
+
+  getComponentOptionMetadata<COMPONENT extends BaseComponent>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: ComponentConstructor<COMPONENT> | Function,
+  ): ComponentOptionMetadata<COMPONENT>[] {
+    return this.componentOptionMetadata.filter(
+      (metadata) => metadata.target === target,
+    ) as ComponentOptionMetadata<COMPONENT>[];
   }
 
   addOutputMetadata<OUTPUT extends BaseOutput>(target: OutputConstructor<OUTPUT>, name: string) {
