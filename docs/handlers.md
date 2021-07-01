@@ -1,5 +1,7 @@
 # Handlers
 
+Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.
+
 - [Introduction](#introduction)
 - [Handler Routing and State Management](#handler-routing-and-state-management)
   - [Handle Decorator](#handle-decorator)
@@ -16,9 +18,9 @@
 
 ## Introduction
 
-Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request. A handler can fulfil multiple types of requests, like intents and touch selections, and then return output:
-
 ![A handler taking in multiple request types like intent requests, launch requests, or touch requests. The handler then results in some output.](img/handler-requests-output.png)
+
+A handler can fulfil multiple types of requests, like intents and touch selections, and then return output.
 
 A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-state-management).
 
@@ -203,8 +205,6 @@ showMenu() {
 }
 ```
 
-
-
 #### SubState
 
 As components have their own state management system, we usually recommend using the `$delegate` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
@@ -237,9 +237,8 @@ Yes() {
   // ...
 }
 ```
-It's also possible to use the `@SubState` convenience decorator:
 
-> The @SubState and @Intent decorators are not implemented yet
+It's also possible to use the `@SubState` convenience decorator:
 
 ```typescript
 import { SubState, Intents } from '@jovotech/framework';
@@ -266,7 +265,7 @@ yourHandler() {
 }
 ```
 
-> The @Platforms decorator is not implemented yet
+It's also possible to use the `@Platforms` convenience decorator:
 
 ```typescript
 import { Platforms } from '@jovotech/framework';
@@ -278,6 +277,35 @@ yourHandler() {
   // ...
 }
 ```
+
+#### PrioritizeOverUnhandled
+
+Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizeOverUnhandled` property.
+
+```typescript
+@Handle({
+  // ...
+  prioritizeOverUnhandled: true,
+})
+yourHandler() {
+  // ...
+}
+```
+
+It's also possible to use the `@PrioritizeOverUnhandled` convenience decorator:
+
+```typescript
+import { PrioritizeOverUnhandled } from '@jovotech/framework';
+
+// ...
+
+@PrioritizeOverUnhandled()
+yourHandler() {
+  // ...
+}
+```
+
+[Learn more about `UNHANDLED` prioritization in the routing docs](./routing.md#unhandled-prioritization).
 
 ### Handler Prioritization
 
@@ -301,6 +329,9 @@ showMenuOnAlexa() {
 ```
 
 If this is the case, the handler with more conditions is the one being prioritized. In the above example for a request coming from Alexa, the `showMenuOnAlexa` handler would be triggered.
+
+[Learn more about handler prioritization in the routing docs](./routing.md#handler-and-component-prioritization).
+
 
 ## Handler Logic
 
