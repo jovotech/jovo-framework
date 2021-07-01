@@ -12,21 +12,18 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import type {
-  DeployPlatformEvents,
-  DeployPlatformContext,
-  ParseContextDeployPlatform,
-} from '@jovotech/cli-command-deploy';
+import type { DeployPlatformEvents, DeployPlatformContext } from '@jovotech/cli-command-deploy';
 
 import * as smapi from '../smapi';
-import { checkForAskCli, PluginContextAlexa, SupportedLocales } from '../utils';
+import { checkForAskCli, AlexaContext, SupportedLocales } from '../utils';
 import DefaultFiles from '../utils/DefaultFiles.json';
 import { AlexaCli } from '..';
 
-export interface DeployPlatformContextAlexa extends PluginContextAlexa, DeployPlatformContext {
-  args: DeployPlatformContext['args'];
+export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
-  skillCreated?: boolean;
+  alexa: AlexaContext['alexa'] & {
+    skillCreated?: boolean;
+  };
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
@@ -36,11 +33,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [
+        this.checkForPlatform.bind(this),
         checkForAskCli,
-        this.checkForPlatformsFolder.bind(this),
         this.updatePluginContext.bind(this),
+        this.checkForPlatformsFolder.bind(this),
       ],
       'deploy:platform': [this.deploy.bind(this)],
     };
@@ -63,11 +60,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextDeployPlatform): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -76,13 +72,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    if (this.$context.command !== 'deploy:platform') {
-      return;
+    if (!this.$context.alexa) {
+      this.$context.alexa = {};
     }
 
-    this.$context.askProfile =
+    this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
-    this.$context.skillId = this.$context.flags['skill-id'] || this.getSkillId();
+    this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
   /**
@@ -106,17 +102,17 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.$project!.$stage)}`,
     );
 
-    if (!this.$context.skillId) {
+    if (!this.$context.alexa.skillId) {
       // Create skill, if it doesn't exist already.
       const createSkillTask: Task = new Task(
-        `Creating Alexa Skill project ${printAskProfile(this.$context.askProfile)}`,
+        `Creating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
         async () => {
           const skillId: string = await smapi.createSkill(
             this.$plugin.getSkillJsonPath(),
-            this.$context.askProfile,
+            this.$context.alexa.askProfile,
           );
-          this.$context.skillId = skillId;
-          this.$context.skillCreated = true;
+          this.$context.alexa.skillId = skillId;
+          this.$context.alexa.skillCreated = true;
 
           this.setSkillId(skillId);
 
@@ -124,9 +120,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
             skillId,
             this.$plugin.getAccountLinkingPath(),
             'development',
-            this.$context.askProfile,
+            this.$context.alexa.askProfile,
           );
-          await smapi.getSkillStatus(skillId, this.$context.askProfile);
+          await smapi.getSkillStatus(skillId, this.$context.alexa.askProfile);
 
           const skillInfo = this.getSkillInformation();
 
@@ -137,20 +133,20 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       deployTask.add(createSkillTask);
     } else {
       const updateSkillTask: Task = new Task(
-        `Updating Alexa Skill project ${printAskProfile(this.$context.askProfile)}`,
+        `Updating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
         async () => {
           await smapi.updateSkill(
-            this.$context.skillId!,
+            this.$context.alexa.skillId!,
             this.$plugin.getSkillJsonPath(),
-            this.$context.askProfile,
+            this.$context.alexa.askProfile,
           );
           await smapi.updateAccountLinkingInformation(
-            this.$context.skillId!,
+            this.$context.alexa.skillId!,
             this.$plugin.getAccountLinkingPath(),
             'development',
-            this.$context.askProfile,
+            this.$context.alexa.askProfile,
           );
-          await smapi.getSkillStatus(this.$context.skillId!, this.$context.askProfile);
+          await smapi.getSkillStatus(this.$context.alexa.skillId!, this.$context.alexa.askProfile);
 
           const skillInfo = this.getSkillInformation();
 
@@ -170,27 +166,33 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     // ToDo: Improve providing a unique set of resolved locales.
     const locales: string[] = Array.from(new Set(resolvedLocales));
 
-    const deployInteractionModelTask: Task = new Task(`${ROCKET} Deploying Interaction Model`);
-    for (const locale of locales) {
-      const localeTask: Task = new Task(locale, async () => {
-        await smapi.updateInteractionModel(
-          this.$context.skillId!,
-          locale,
-          this.$plugin.getModelPath(locale),
-          'development',
-          this.$context.askProfile,
-        );
-        await smapi.getSkillStatus(this.$context.skillId!);
-      });
+    const deployInteractionModelTask: Task = new Task('Deploying Interaction Model', async () => {
+      for (const locale of locales) {
+        const localeTask: Task = new Task(locale, async () => {
+          await smapi.updateInteractionModel(
+            this.$context.alexa.skillId!,
+            locale,
+            this.$plugin.getModelPath(locale),
+            'development',
+            this.$context.alexa.askProfile,
+          );
+          await smapi.getSkillStatus(this.$context.alexa.skillId!);
+        });
 
-      deployInteractionModelTask.add(localeTask);
-    }
+        localeTask.indent(4);
+        await localeTask.run();
+      }
+    });
 
     deployTask.add(deployInteractionModelTask);
 
-    if (this.$context.skillCreated) {
+    if (this.$context.alexa.skillCreated) {
       const enableTestingTask: Task = new Task('Enabling skill for testing', async () => {
-        await smapi.enableSkill(this.$context.skillId!, 'development', this.$context.askProfile);
+        await smapi.enableSkill(
+          this.$context.alexa.skillId!,
+          'development',
+          this.$context.alexa.askProfile,
+        );
       });
       deployTask.add(enableTestingTask);
     }

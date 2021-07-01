@@ -1,5 +1,5 @@
 import { PluginConfig } from '@jovotech/cli-core';
-import { SupportedLocales } from './Constants';
+import { SupportedLocales } from './constants';
 
 export type SupportedLocalesType = typeof SupportedLocales[number];
 

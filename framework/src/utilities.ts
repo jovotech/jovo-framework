@@ -39,3 +39,8 @@ export function getMethodKeys<PROTOTYPE = any>(prototype: PROTOTYPE): Array<keyo
     );
   }) as Array<keyof PROTOTYPE>;
 }
+
+// Test if the currently running environment is node-based.
+export function isNode(): boolean {
+  return typeof process !== 'undefined' && process.versions && !!process.versions.node;
+}

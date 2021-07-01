@@ -1,5 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
-import { SupportedLocales } from './Constants';
+import { SupportedLocales } from './constants';
 
 export interface GoogleActionProjectLocales {
   [modelLocale: string]: string | string[];
@@ -20,6 +20,8 @@ export interface GoogleCliConfig extends PluginConfig {
   };
 }
 
-export interface PluginContextGoogle extends PluginContext {
-  projectId?: string;
+export interface GoogleContext extends PluginContext {
+  googleAssistant: {
+    projectId?: string;
+  };
 }

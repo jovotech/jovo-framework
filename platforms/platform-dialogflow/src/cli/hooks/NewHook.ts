@@ -1,8 +1,10 @@
-import type { NewEvents } from '@jovotech/cli-command-new';
-import { PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
+import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
+import { Log, PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
 import { SupportedLocales, SupportedLocalesType } from '../utils';
 
 export class NewHook extends PluginHook<NewEvents> {
+  $context!: NewContext;
+
   install(): void {
     this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this)],
@@ -14,7 +16,7 @@ export class NewHook extends PluginHook<NewEvents> {
     for (const locale of this.$context.locales) {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
         // Prompt user for alternative locale.
-        console.log();
+        Log.spacer();
         const { locales } = await prompt(
           {
             name: 'locales',
