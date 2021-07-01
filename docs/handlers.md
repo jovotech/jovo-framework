@@ -98,9 +98,11 @@ yourHandler() {
 ```
 
 Currently, the following elements are supported:
-* `intents`
-* `global`
-* `subState`
+* [`intents`](#intents)
+* [`global`](#global-handlers)
+* [`subState`](#substate)
+* [`platforms`](#platforms)
+* [`prioritizeOverUnhandled`](#prioritizeOverUnhandled)
 
 #### Intents
 
