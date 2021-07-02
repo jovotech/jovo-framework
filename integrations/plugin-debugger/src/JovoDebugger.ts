@@ -188,8 +188,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private createProxyHandler<T extends Record<string, any>>(
+  private createProxyHandler<T extends AnyObject>(
     handleRequest: HandleRequest,
     path = '',
   ): ProxyHandler<T> {
