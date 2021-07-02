@@ -49,6 +49,7 @@ export * from './BaseComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './ComponentTree';
+export * from './ComponentTreeNode';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';
@@ -102,4 +103,3 @@ export * from './plugins/RoutingExecutor';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
-

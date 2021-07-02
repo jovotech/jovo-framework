@@ -1,89 +1,14 @@
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
-import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
+import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
+import { ComponentTreeNode } from './ComponentTreeNode';
+import { ComponentNotFoundError } from './errors/ComponentNotFoundError';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
-import {
-  ComponentNotFoundError,
-  HandlerNotFoundError,
-  InternalIntent,
-  Jovo,
-  PickWhere,
-} from './index';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
 
 export interface Tree<NODE extends { children?: Tree<NODE> }> {
   [key: string]: NODE;
-}
-
-export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = BaseComponent> {
-  metadata: ComponentMetadata<COMPONENT>;
-  path: string[];
-  parent?: ComponentTreeNode;
-  children?: Array<ComponentConstructor | ComponentDeclaration>;
-}
-
-export interface ExecuteHandlerOptions<
-  COMPONENT extends BaseComponent,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ARGS extends any[] = any[],
-> {
-  jovo: Jovo;
-  handler?: HANDLER | string;
-  callArgs?: ARGS;
-}
-
-export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> {
-  readonly metadata: ComponentMetadata<COMPONENT>;
-  readonly parent?: ComponentTreeNode;
-  readonly children?: Tree<ComponentTreeNode>;
-  readonly path: string[];
-
-  constructor({ path, metadata, parent, children }: ComponentTreeNodeOptions<COMPONENT>) {
-    this.path = path.slice();
-    this.metadata = metadata;
-    if (parent) {
-      this.parent = parent;
-    }
-    if (children?.length) {
-      this.children = children.reduce(ComponentTree.createComponentsToTreeReducer(this), {});
-    }
-  }
-
-  get isRootNode(): boolean {
-    return !this.parent;
-  }
-
-  get name(): string {
-    return this.metadata.options?.name || this.metadata.target.name;
-  }
-
-  async executeHandler<
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ARGS extends any[] = any[],
-  >({
-    jovo,
-    handler = InternalIntent.Start,
-    callArgs,
-  }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
-    const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
-      jovo,
-      this.metadata.options?.config,
-    );
-    if (!componentInstance[handler as keyof COMPONENT]) {
-      throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handler](...(callArgs || []));
-  }
-
-  toJSON() {
-    return { ...this, parent: this.parent ? this.parent.name : undefined };
-  }
 }
 
 export class ComponentTree {

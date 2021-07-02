@@ -1,4 +1,4 @@
-import { ComponentTreeNode } from '../ComponentTree';
+import { ComponentTreeNode } from '../ComponentTreeNode';
 import { InternalIntent } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
