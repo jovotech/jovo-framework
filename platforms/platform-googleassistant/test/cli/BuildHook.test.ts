@@ -1,5 +1,5 @@
-import JovoCliCore, { getRawString, InstallContext, JovoCli } from '@jovotech/cli-core';
-import type { ParseContextBuild } from '@jovotech/cli-command-build';
+import JovoCliCore, { getRawString, JovoCli, InstallContext } from '@jovotech/cli-core';
+
 import { JovoModelGoogle } from 'jovo-model-google';
 import { JovoModelData } from 'jovo-model';
 import { BuildContextGoogle } from '../../dist/types/cli/hooks/BuildHook';
@@ -71,7 +71,7 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(uninstall);
 
     const hook: BuildHook = new BuildHook();
-    const args: ParseContextBuild = {
+    const args = {
       flags: {
         platform: ['testPlugin'],
       },
@@ -87,7 +87,7 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(() => uninstall());
 
     const hook: BuildHook = new BuildHook();
-    const context: ParseContextBuild = {
+    const context = {
       flags: {
         platform: ['anotherPlugin'],
       },
@@ -116,8 +116,8 @@ describe('updatePluginContext()', () => {
 
     hook.updatePluginContext();
 
-    expect(hook['$context'].projectId).toBeDefined();
-    expect(hook['$context'].projectId).toMatch('123');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((hook['$context'] as any).projectId).toBe('123');
   });
 
   test('should set "project-id" from config', () => {
@@ -126,8 +126,8 @@ describe('updatePluginContext()', () => {
 
     hook.updatePluginContext();
 
-    expect(hook['$context'].projectId).toBeDefined();
-    expect(hook['$context'].projectId).toMatch('123');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((hook['$context'] as any).projectId).toBe('123');
   });
 
   test('should throw an error if "project-id" could not be found', () => {

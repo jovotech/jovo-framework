@@ -1,4 +1,3 @@
-import { ParseContextBuild } from '@jovotech/cli-command-build';
 import JovoCliCore, { getRawString, JovoCli } from '@jovotech/cli-core';
 
 import { AlexaBuildContext, BuildHook } from '../../src/cli/hooks/BuildHook';
@@ -54,7 +53,7 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(uninstall);
 
     const hook: BuildHook = new BuildHook();
-    const args: ParseContextBuild = {
+    const args = {
       flags: {
         platform: ['testPlugin'],
       },
@@ -70,7 +69,7 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(() => uninstall());
 
     const hook: BuildHook = new BuildHook();
-    const context: ParseContextBuild = {
+    const context = {
       flags: {
         platform: ['anotherPlugin'],
       },
