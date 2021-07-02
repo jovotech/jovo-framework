@@ -3,14 +3,21 @@ import {
   BaseComponent,
   Component,
   ComponentDeclaration,
+  ComponentMetadata,
   MetadataStorage,
   PluginConfig,
 } from '../src';
+
 import { EmptyComponent, ExampleComponent, ExampleComponentPlugin } from './utilities';
 
-// TODO implement more tests
 describe('registering components', () => {
   let app: App;
+
+  function expectNodeMetadataAtToEqual(path: string[], equals: ComponentMetadata) {
+    const node = app.componentTree.getNodeAt(path);
+    expect(node?.metadata).toEqual(equals);
+  }
+
   const metadataStorage = MetadataStorage.getInstance();
   beforeEach(() => {
     app = new App();
@@ -19,33 +26,38 @@ describe('registering components', () => {
 
   test('via BaseComponent-constructor and undecorated component', () => {
     app.use(EmptyComponent);
-    expect(app.componentTree.tree).toEqual({
-      EmptyComponent: { target: EmptyComponent, options: {} },
-    });
+    expectNodeMetadataAtToEqual(['EmptyComponent'], new ComponentMetadata(EmptyComponent, {}));
   });
 
   describe('via ComponentPlugin', () => {
     test('no config passed', () => {
       app.use(new ExampleComponentPlugin());
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('config passed', () => {
       app.use(new ExampleComponentPlugin({ component: { text: 'edited' } }));
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
   });
 
   describe('via ComponentDeclaration-instance', () => {
     test('no options passed', () => {
       app.use(new ComponentDeclaration(ExampleComponent));
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('options with config passed', () => {
@@ -56,9 +68,14 @@ describe('registering components', () => {
           },
         }),
       );
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
 
     test('options with name passed', () => {
@@ -67,34 +84,28 @@ describe('registering components', () => {
           name: 'NewComponentName',
         }),
       );
-      expect(app.componentTree.tree).toEqual({
-        NewComponentName: { target: ExampleComponent, options: { name: 'NewComponentName' } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['NewComponentName'],
+        new ComponentMetadata(ExampleComponent, { name: 'NewComponentName' }),
+      );
     });
 
     test('options with components passed', () => {
       app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: {
-          target: ExampleComponent,
-          options: { components: [EmptyComponent] },
-          components: {
-            EmptyComponent: {
-              options: {},
-              target: EmptyComponent,
-            },
-          },
-        },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, { components: [EmptyComponent] }),
+      );
     });
   });
 
   describe('via ComponentDeclaration-object', () => {
     test('no options passed', () => {
       app.use({ component: ExampleComponent });
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('options with config passed', () => {
@@ -105,25 +116,24 @@ describe('registering components', () => {
           },
         }),
       );
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
 
     test('options with components passed', () => {
       app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
-      expect(app.componentTree.tree).toEqual({
-        ExampleComponent: {
-          target: ExampleComponent,
-          options: { components: [EmptyComponent] },
-          components: {
-            EmptyComponent: {
-              options: {},
-              target: EmptyComponent,
-            },
-          },
-        },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          components: [EmptyComponent],
+        }),
+      );
     });
   });
 
@@ -137,9 +147,10 @@ describe('registering components', () => {
       }
 
       app.use(DecoratedComponent);
-      expect(app.componentTree.tree).toEqual({
-        DecoratedComponent: { target: DecoratedComponent, options: {} },
-      });
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {}),
+      );
     });
 
     test('config passed in decorator', () => {
@@ -155,16 +166,14 @@ describe('registering components', () => {
       }
 
       app.use(DecoratedComponent);
-      expect(app.componentTree.tree).toEqual({
-        DecoratedComponent: {
-          target: DecoratedComponent,
-          options: {
-            config: {
-              test: true,
-            },
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {
+          config: {
+            test: true,
           },
-        },
-      });
+        }),
+      );
     });
 
     test('config passed in decorator and declaration', () => {
@@ -180,16 +189,14 @@ describe('registering components', () => {
       }
 
       app.use(new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }));
-      expect(app.componentTree.tree).toEqual({
-        DecoratedComponent: {
-          target: DecoratedComponent,
-          options: {
-            config: {
-              test: 'declaration',
-            },
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {
+          config: {
+            test: 'declaration',
           },
-        },
-      });
+        }),
+      );
     });
   });
 });

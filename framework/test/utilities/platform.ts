@@ -1,35 +1,52 @@
 import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { AnyObject, ExtensibleConfig } from '../../dist/types';
 import {
+  AnyObject,
   EntityMap,
+  ExtensibleConfig,
   Jovo,
   JovoRequest,
   JovoRequestType,
   JovoResponse,
+  JovoUser,
   MiddlewareCollection,
   Platform,
-  SessionData,
 } from '../../src';
 
-export class ExamplePlatformResponse extends JovoResponse {}
-
 export class ExamplePlatformRequest extends JovoRequest {
-  getRequestType(): JovoRequestType | undefined {
+  getEntities(): EntityMap | undefined {
     return undefined;
-  }
-
-  getEntities(): EntityMap {
-    return {};
   }
 
   getIntentName(): string | undefined {
     return undefined;
   }
 
-  getSessionData(): SessionData | undefined {
+  getLocale(): string | undefined {
+    return undefined;
+  }
+
+  getRawText(): string | undefined {
+    return undefined;
+  }
+
+  getRequestType(): JovoRequestType | undefined {
+    return undefined;
+  }
+
+  getSessionData(): Record<string, unknown> | undefined {
+    return undefined;
+  }
+
+  getSessionId(): string | undefined {
+    return undefined;
+  }
+
+  isNewSession(): boolean | undefined {
     return undefined;
   }
 }
+
+export class ExamplePlatformResponse extends JovoResponse {}
 
 export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
 
@@ -49,43 +66,51 @@ export class ExamplePlatformOutputConverterStrategy
   }
 }
 
-export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
-  readonly jovoClass = ExamplePlatformApp;
-  readonly requestClass = ExamplePlatformRequest;
-  outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
-
-  getDefaultConfig(): ExtensibleConfig {
-    return {};
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isRequestRelated(request: AnyObject): boolean {
-    return true;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
-    return this;
+export class ExamplePlatformUser extends JovoUser<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformApp
+> {
+  get id(): string {
+    return 'ExamplePlatformUser';
   }
 }
 
-export class EmptyPlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
-  middlewareCollection = new MiddlewareCollection();
-  readonly jovoClass = ExamplePlatformApp;
-  readonly requestClass = ExamplePlatformRequest;
+export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
+  requestClass = ExamplePlatformRequest;
+  jovoClass = ExamplePlatformApp;
+  userClass = ExamplePlatformUser;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isRequestRelated(request: AnyObject): boolean {
+  isRequestRelated(request: AnyObject | ExamplePlatformRequest): boolean {
     return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
-    return this;
+  isResponseRelated(response: AnyObject | ExamplePlatformResponse): boolean {
+    return true;
+  }
+
+  finalizeResponse(
+    response: ExamplePlatformResponse[] | ExamplePlatformResponse,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    jovo: Jovo<ExamplePlatformRequest, ExamplePlatformResponse>,
+  ):
+    | ExamplePlatformResponse[]
+    | Promise<ExamplePlatformResponse>
+    | Promise<ExamplePlatformResponse[]>
+    | ExamplePlatformResponse {
+    return response;
+  }
+}
+
+export class EmptyPlatform extends ExamplePlatform {
+  initializeMiddlewareCollection(): MiddlewareCollection {
+    return new MiddlewareCollection();
   }
 }
