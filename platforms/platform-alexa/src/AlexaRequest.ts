@@ -1,9 +1,6 @@
 import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
-import {ResolutionPerAuthorityStatusCode} from '@jovotech/output-alexa';
-import {
-  DYNAMIC_ENTITY_MATCHES_PREFIX,
-  STATIC_ENTITY_MATCHES_PREFIX,
-} from './constants';
+import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export class AlexaRequest extends JovoRequest {

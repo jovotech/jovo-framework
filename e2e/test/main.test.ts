@@ -27,11 +27,11 @@ test('AlexaRequest', async () => {
         name: 'MenuIntent',
       },
     },
-    session: ({
-      attributes: ({
+    session: {
+      attributes: {
         // [InternalSessionProperty.State]: {},
-      } as unknown) as SessionData,
-    } as unknown) as Session,
+      } as unknown as SessionData,
+    } as unknown as Session,
   };
 
   const response = await app.handle(request);

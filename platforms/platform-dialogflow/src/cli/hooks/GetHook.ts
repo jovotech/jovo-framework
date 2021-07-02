@@ -152,7 +152,7 @@ export class GetHook extends PluginHook<GetEvents> {
       try {
         const response = await axios({
           method: 'POST',
-              url: `https://dialogflow.googleapis.com/v2beta1/projects/${this.$context.dialogflow.projectId}/agent:export`, // eslint-disable-line
+          url: `https://dialogflow.googleapis.com/v2beta1/projects/${this.$context.dialogflow.projectId}/agent:export`, // eslint-disable-line
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
