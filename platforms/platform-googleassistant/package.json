@@ -18,7 +18,7 @@
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --testPathIgnorePatterns=/test/cli",
     "setup:cli": "node bin/link"
   },
   "author": "jovotech",
