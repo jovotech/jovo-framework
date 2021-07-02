@@ -1,7 +1,7 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import _merge from 'lodash.merge';
 import { DeepPartial, JovoRequest } from './index';
 import { Jovo } from './Jovo';
-import _merge from 'lodash.merge';
 import { JovoProxy } from './JovoProxy';
 
 export type OutputConstructor<

@@ -1,7 +1,7 @@
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
+import _merge from 'lodash.merge';
 import type { A, F, U } from 'ts-toolbelt';
 import { OmitIndex } from './index';
-import _merge from 'lodash.merge';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}

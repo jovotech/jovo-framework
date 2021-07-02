@@ -4,7 +4,7 @@ import {
   ComponentConstructor,
   ComponentDeclaration,
 } from '../BaseComponent';
-import { DeepPartial, JovoConditionFunction } from '../index';
+import { AnyObject, DeepPartial, JovoConditionFunction } from '../index';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
 import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 
@@ -15,7 +15,7 @@ export interface ComponentOptions<COMPONENT extends BaseComponent> {
   global?: boolean;
   config?: DeepPartial<ComponentConfig<COMPONENT>>;
   components?: Array<ComponentConstructor | ComponentDeclaration>;
-  models?: Record<string, any>;
+  models?: AnyObject;
 
   isAvailable?: JovoConditionFunction;
   platforms?: string[];

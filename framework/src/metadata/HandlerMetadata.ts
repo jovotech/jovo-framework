@@ -1,5 +1,4 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { InternalIntent } from '../enums';
 import { Intent, JovoConditionFunction } from '../interfaces';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';

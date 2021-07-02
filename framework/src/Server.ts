@@ -1,5 +1,7 @@
 // TODO implement
 
+import { AnyObject } from './index';
+
 export interface Headers {
   [header: string]: string | string[] | undefined;
 }
@@ -17,7 +19,7 @@ export abstract class Server {
   /**
      Returns request object
      **/
-  abstract getRequestObject(): Record<string, any>;
+  abstract getRequestObject(): AnyObject;
 
   /**
      Returns query params

@@ -1,8 +1,9 @@
+import { AnyObject } from './index';
+
 export interface JovoErrorOptions {
   [key: string]: unknown;
   message: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any>;
+  context?: AnyObject;
   details?: string;
   hint?: string;
   learnMore?: string;
@@ -11,8 +12,7 @@ export interface JovoErrorOptions {
 
 export class JovoError extends Error {
   [key: string]: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any>;
+  context?: AnyObject;
   details?: string;
   hint?: string;
   learnMore?: string;

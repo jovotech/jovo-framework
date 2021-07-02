@@ -1,7 +1,5 @@
 import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
-import { PersistableSessionData } from './JovoSession';
-import { PersistableUserData } from './JovoUser';
 import { PluginConfig } from './Plugin';
 
 export interface Data {

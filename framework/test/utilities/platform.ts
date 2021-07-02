@@ -34,7 +34,8 @@ export class ExamplePlatformRequest extends JovoRequest {
 export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
 
 export class ExamplePlatformOutputConverterStrategy
-  implements OutputTemplateConverterStrategy<ExamplePlatformResponse> {
+  implements OutputTemplateConverterStrategy<ExamplePlatformResponse>
+{
   responseClass = ExamplePlatformResponse;
 
   fromResponse(response: ExamplePlatformResponse): OutputTemplate {
