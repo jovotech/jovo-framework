@@ -51,7 +51,7 @@ export abstract class JovoUser<
     };
   }
 
-  toJSON() {
+  toJSON(): JovoUser<REQUEST, RESPONSE, JOVO> {
     return { ...this, jovo: undefined };
   }
 }

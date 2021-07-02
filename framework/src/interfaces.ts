@@ -1,10 +1,9 @@
 import { HandleRequest } from './HandleRequest';
+import { AnyObject } from './index';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
 
-export interface Data {
-  [key: string]: any;
-}
+export interface Data extends AnyObject {}
 
 export interface RequestData extends Data {}
 

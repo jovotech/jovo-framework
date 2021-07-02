@@ -70,14 +70,15 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  async run<T extends any[]>(name: PossibleMiddlewareName<MIDDLEWARES>, ...args: T): Promise<void>;
-  async run<T extends any[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends any[]>(
+  async run<T extends unknown[]>(
+    name: PossibleMiddlewareName<MIDDLEWARES>,
+    ...args: T
+  ): Promise<void>;
+  async run<T extends unknown[]>(name: string, ...args: T): Promise<void>;
+  async run<T extends unknown[]>(
     name: string | PossibleMiddlewareName<MIDDLEWARES>,
     ...args: T
   ): Promise<void> {
-    /*  eslint-enable @typescript-eslint/no-explicit-any */
     const middleware = this.get(name);
     if (!middleware) return;
     const beforeName = `before.${name}`;

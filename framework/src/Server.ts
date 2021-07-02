@@ -10,6 +10,9 @@ export interface QueryParams {
   [header: string]: string | string[] | undefined;
 }
 
+export type ServerResponseType = string | number | AnyObject;
+export type ServerResponse = ServerResponseType | ServerResponseType[];
+
 export abstract class Server {
   /**
      Returns whether the host can write files.
@@ -39,7 +42,7 @@ export abstract class Server {
   /**
      Sets response object
      **/
-  abstract setResponse(response: any): Promise<void>;
+  abstract setResponse(response: ServerResponse): Promise<void>;
 
   /**
      Calls fail method of server

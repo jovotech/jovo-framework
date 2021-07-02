@@ -58,7 +58,7 @@ export class ComponentTree {
     this.tree = this.buildTreeForComponents(...components);
   }
 
-  [Symbol.iterator]() {
+  [Symbol.iterator](): Iterator<ComponentTreeNode> {
     let index = -1;
     const nodes: ComponentTreeNode[] = [];
     this.iterateNodes(Object.values(this.tree), (node) => {
@@ -69,7 +69,7 @@ export class ComponentTree {
     };
   }
 
-  add(...components: Array<ComponentConstructor | ComponentDeclaration>) {
+  add(...components: Array<ComponentConstructor | ComponentDeclaration>): void {
     const tree = this.buildTreeForComponents(...components);
     for (const key in tree) {
       if (tree.hasOwnProperty(key)) {
@@ -111,8 +111,8 @@ export class ComponentTree {
     return componentNode;
   }
 
-  forEach(callback: (node: ComponentTreeNode) => void) {
-    return this.iterateNodes(Object.values(this.tree), callback);
+  forEach(callback: (node: ComponentTreeNode) => void): void {
+    this.iterateNodes(Object.values(this.tree), callback);
   }
 
   private iterateNodes(nodes: ComponentTreeNode[], callback: (node: ComponentTreeNode) => void) {

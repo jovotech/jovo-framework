@@ -1,7 +1,7 @@
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
 import _merge from 'lodash.merge';
 import type { A, F, U } from 'ts-toolbelt';
-import { OmitIndex } from './index';
+import { AnyObject, OmitIndex } from './index';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
@@ -42,9 +42,8 @@ export interface I18NextTOptions<
   NAMESPACE extends
     | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
     | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-> extends TOptionsBase {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+> extends TOptionsBase,
+    AnyObject {
   lng?: LANGUAGE;
   ns?: A.Cast<
     | NAMESPACE

@@ -16,7 +16,7 @@ declare module '../Extensible' {
 }
 
 export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 

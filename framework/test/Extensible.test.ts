@@ -138,6 +138,7 @@ describe('mountPlugins', () => {
       plugins: [plugin],
     });
     await extensible.initialize();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (extensible as any).config.plugin;
     await extensible.mount();
     expect(plugin.mount).toHaveBeenCalledTimes(1);

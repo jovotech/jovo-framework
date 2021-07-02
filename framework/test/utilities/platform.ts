@@ -1,7 +1,7 @@
 import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
+import { AnyObject, ExtensibleConfig } from '../../dist/types';
 import {
   EntityMap,
-  Extensible,
   Jovo,
   JovoRequest,
   JovoRequestType,
@@ -38,10 +38,12 @@ export class ExamplePlatformOutputConverterStrategy
 {
   responseClass = ExamplePlatformResponse;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fromResponse(response: ExamplePlatformResponse): OutputTemplate {
     return {};
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toResponse(output: OutputTemplate): ExamplePlatformResponse {
     return {};
   }
@@ -52,20 +54,18 @@ export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePla
   readonly requestClass = ExamplePlatformRequest;
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
-  getDefaultConfig() {
+  getDefaultConfig(): ExtensibleConfig {
     return {};
   }
 
-  isRequestRelated(request: Record<string, any>): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isRequestRelated(request: AnyObject): boolean {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
     return this;
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
   }
 }
 
@@ -75,19 +75,17 @@ export class EmptyPlatform extends Platform<ExamplePlatformRequest, ExamplePlatf
   readonly requestClass = ExamplePlatformRequest;
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
 
-  getDefaultConfig() {
+  getDefaultConfig(): ExtensibleConfig {
     return {};
   }
 
-  isRequestRelated(request: Record<string, any>): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isRequestRelated(request: AnyObject): boolean {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setResponseSessionData(response: ExamplePlatformResponse, jovo: Jovo): this {
     return this;
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
   }
 }

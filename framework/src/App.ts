@@ -72,7 +72,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  configure(config: AppInitConfig) {
+  configure(config: AppInitConfig): void {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
     const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
     this.use(...usables);
@@ -139,6 +139,12 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
     await handleRequest.dismount();
+
+    // TODO determine what to do if there is not response
+    if (!jovo.$response) {
+      return;
+    }
+
     await server.setResponse(jovo.$response);
   }
 }

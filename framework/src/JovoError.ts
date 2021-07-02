@@ -28,7 +28,7 @@ export class JovoError extends Error {
   }
 
   // Used by JSON.stringify
-  toJSON() {
+  toJSON(): JovoError {
     return {
       ...this,
       message: this.message,

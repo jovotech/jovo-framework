@@ -365,7 +365,7 @@ export abstract class Jovo<
   }
 
   // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
-  async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
+  async $resolve<ARGS extends unknown[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
     if (!this.$state) {
       return;
     }

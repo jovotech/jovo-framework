@@ -18,7 +18,7 @@ export interface ExecuteHandlerOptions<
   // eslint-disable-next-line @typescript-eslint/ban-types
   HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ARGS extends any[] = any[],
+  ARGS extends unknown[] = any[],
 > {
   jovo: Jovo;
   handler?: HANDLER | string;
@@ -54,7 +54,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     // eslint-disable-next-line @typescript-eslint/ban-types
     HANDLER extends Exclude<keyof PickWhere<COMPONENT, Function>, keyof BaseComponent>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ARGS extends any[] = any[],
+    ARGS extends unknown[] = any[],
   >({
     jovo,
     handler = InternalIntent.Start,
@@ -71,7 +71,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     await (componentInstance as any)[handler](...(callArgs || []));
   }
 
-  toJSON() {
+  toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {
     return { ...this, parent: this.parent ? this.parent.name : undefined };
   }
 }

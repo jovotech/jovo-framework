@@ -69,7 +69,7 @@ export abstract class Platform<
     return new MiddlewareCollection<PlatformBaseMiddlewares>(...BASE_PLATFORM_MIDDLEWARES);
   }
 
-  install(parent: Extensible) {
+  install(parent: Extensible): void {
     if (!(parent instanceof App)) {
       throw new InvalidParentError(this.constructor.name, App);
     }
