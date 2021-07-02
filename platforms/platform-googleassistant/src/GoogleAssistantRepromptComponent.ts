@@ -10,7 +10,7 @@ export class GoogleAssistantRepromptComponent extends BaseComponent {
       'actions.intent.NO_INPUT_FINAL',
     ],
   })
-  googleAssistantNoInput() {
+  googleAssistantNoInput(): void {
     this.$output = {
       message: 'No input reached',
     };

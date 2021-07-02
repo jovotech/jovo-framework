@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
+import { ExtensibleConfig, Platform } from '@jovotech/framework';
 import {
   CorePlatformOutputTemplateConverterStrategy,
   CorePlatformResponse,
@@ -23,6 +23,7 @@ export class CorePlatform extends Platform<
   static create(
     name: string,
     type: CorePlatformConfig['type'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): new (...args: any[]) => CorePlatform {
     // workaround to make the anonymous' class name equal to `name`
     const obj = {

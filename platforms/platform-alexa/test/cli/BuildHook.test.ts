@@ -1,7 +1,7 @@
-import { Build, ParseContextBuild } from '@jovotech/cli-command-build';
+import { ParseContextBuild } from '@jovotech/cli-command-build';
 import JovoCliCore, { getRawString, JovoCli } from '@jovotech/cli-core';
 
-import { BuildHook } from '../../src/cli/hooks/BuildHook';
+import { AlexaBuildContext, BuildHook } from '../../src/cli/hooks/BuildHook';
 import { Plugin } from '../__mocks__/Plugin';
 
 // Create mock modules. This allows us to modify the behavior for individual functions.
@@ -28,10 +28,9 @@ beforeEach(() => {
     command: 'build',
     locales: [],
     platforms: [],
-    // @ts-ignore
     flags: {},
     args: {},
-  };
+  } as unknown as AlexaBuildContext;
 });
 
 afterEach(() => {
@@ -56,12 +55,12 @@ describe('checkForPlatform()', () => {
 
     const hook: BuildHook = new BuildHook();
     const args: ParseContextBuild = {
-      // @ts-ignore
       flags: {
         platform: ['testPlugin'],
       },
     };
-    hook.checkForPlatform(args);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (hook.checkForPlatform as any)(args);
 
     expect(uninstall).not.toBeCalled();
   });
@@ -72,12 +71,12 @@ describe('checkForPlatform()', () => {
 
     const hook: BuildHook = new BuildHook();
     const context: ParseContextBuild = {
-      // @ts-ignore
       flags: {
         platform: ['anotherPlugin'],
       },
     };
-    hook.checkForPlatform(context);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (hook.checkForPlatform as any)(context);
 
     expect(uninstall).toBeCalledTimes(1);
   });

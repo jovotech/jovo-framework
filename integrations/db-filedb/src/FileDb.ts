@@ -47,7 +47,7 @@ export class FileDb extends Plugin<FileDbConfig> {
     const pathToFileDir = path.dirname(this.pathToFile);
 
     const pathExists = async (pathToFile: string) =>
-      !!(await fs.promises.stat(pathToFile).catch((e) => false));
+      !!(await fs.promises.stat(pathToFile).catch(() => false));
 
     if (!(await pathExists(pathToFileDir))) {
       await fs.promises.mkdir(path.dirname(this.config.pathToFile), { recursive: true });

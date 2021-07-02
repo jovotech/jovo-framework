@@ -1,10 +1,4 @@
-import {
-  EntityMap,
-  JovoRequest,
-  JovoRequestType,
-  JovoSession,
-  RequestType,
-} from '@jovotech/framework';
+import { EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
 import { Receipt } from './interfaces';
 
 export class GoogleBusinessRequest extends JovoRequest {

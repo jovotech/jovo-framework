@@ -1,4 +1,5 @@
 import {
+  AnyObject,
   Entity,
   EntityMap,
   ExtensibleConfig,
@@ -36,11 +37,11 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 
-  isRequestRelated(request: Record<string, any> | AlexaRequest): boolean {
+  isRequestRelated(request: AnyObject | AlexaRequest): boolean {
     return request.version && request.request && request.request.requestId;
   }
 
-  isResponseRelated(response: Record<string, any> | AlexaResponse): boolean {
+  isResponseRelated(response: AnyObject | AlexaResponse): boolean {
     return response.version && response.response;
   }
 
