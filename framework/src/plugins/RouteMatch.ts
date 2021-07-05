@@ -34,8 +34,8 @@ export class RouteMatch {
     return this.metadata.options?.global;
   }
 
-  get prioritizeOverUnhandled(): boolean | undefined {
-    return this.metadata.options?.prioritizeOverUnhandled;
+  get prioritizedOverUnhandled(): boolean | undefined {
+    return this.metadata.options?.prioritizedOverUnhandled;
   }
 
   get type(): string | undefined {
@@ -53,7 +53,7 @@ export class RouteMatch {
       global: this.global,
       score: this.score,
       skip: this.skip,
-      prioritizeOverUnhandled: this.prioritizeOverUnhandled,
+      prioritizedOverUnhandled: this.prioritizedOverUnhandled,
     };
   }
 }
