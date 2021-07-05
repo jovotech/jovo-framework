@@ -102,7 +102,7 @@ Currently, the following elements are supported:
 * [`global`](#global-handlers)
 * [`subState`](#substate)
 * [`platforms`](#platforms)
-* [`prioritizeOverUnhandled`](#prioritizeOverUnhandled)
+* [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 
 #### Intents
 
@@ -282,12 +282,12 @@ yourHandler() {
 
 #### PrioritizedOverUnhandled
 
-Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizeOverUnhandled` property.
+Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizedOverUnhandled` property.
 
 ```typescript
 @Handle({
   // ...
-  prioritizeOverUnhandled: true,
+  prioritizedOverUnhandled: true,
 })
 yourHandler() {
   // ...
