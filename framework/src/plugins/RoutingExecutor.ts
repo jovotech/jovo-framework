@@ -12,7 +12,8 @@ export class RoutingExecutor {
   constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
 
   async execute(intentName: string): Promise<JovoRoute> {
-    const mappedIntentName = this.handleRequest.config.intentMap[intentName] || intentName;
+    const mappedIntentName =
+      this.handleRequest.config.routing?.intentMap?.[intentName] || intentName;
     const rankedRouteMatches = await this.getRankedRouteMatches(mappedIntentName);
     if (!rankedRouteMatches.length) {
       throw new MatchingRouteNotFoundError({
@@ -23,7 +24,7 @@ export class RoutingExecutor {
       });
     }
 
-    this.setSkipForRouteMatches(rankedRouteMatches);
+    this.setSkipForRouteMatches(intentName, rankedRouteMatches);
 
     const resolvedRouteMatch = await this.resolveRoute(rankedRouteMatches);
     if (!resolvedRouteMatch) {
@@ -50,7 +51,19 @@ export class RoutingExecutor {
     return [...localRouteMatches, ...globalRouteMatches];
   }
 
-  setSkipForRouteMatches(rankedRouteMatches: RouteMatch[]): void {
+  setSkipForRouteMatches(intentName: string, rankedRouteMatches: RouteMatch[]): void {
+    const isIntentToSkipUnhandled =
+      this.handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
+    // if the mapped intent is an intent that is supposed to skip UNHANDLED
+    if (isIntentToSkipUnhandled) {
+      // set skip: true for all UNHANDLED-matches
+      rankedRouteMatches.forEach((match) => {
+        if (match.type === InternalIntent.Unhandled) {
+          match.skip = true;
+        }
+      });
+    }
+
     // find the first RouteMatch that is UNHANDLED
     const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
       (match) => match.type === InternalIntent.Unhandled,
