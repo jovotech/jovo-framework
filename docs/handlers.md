@@ -97,12 +97,17 @@ yourHandler() {
 }
 ```
 
-Currently, the following elements are supported:
+Currently, the following elements are supported.
+
+Routing properties:
 * [`intents`](#intents)
 * [`global`](#global-handlers)
 * [`subState`](#substate)
-* [`platforms`](#platforms)
 * [`prioritizeOverUnhandled`](#prioritizeOverUnhandled)
+
+Conditional properties:
+* [`platforms`](#platforms)
+* `if`
 
 #### Intents
 
