@@ -107,7 +107,7 @@ this.$route = {
 }
 ```
 
-If a handler is `global` and has the `prioritzeOverUnhandled` property, this info is added to the match item as well:
+If a handler is `global` and has the `prioritizedOverUnhandled` property, this info is added to the match item as well:
 
 ```js
 this.$route = {
@@ -117,7 +117,7 @@ this.$route = {
       component: 'SomeComponent',
       handler: 'SomeHandler',
       global: true,
-      prioritizeOverUnhandled: true,
+      prioritizedOverUnhandled: true,
     },
     // ...
   ]
@@ -191,13 +191,13 @@ This could mean that the user gets stuck in a loop: No matter what they say, if 
 
 For this, there are two options that make it possible to skip `UNHANDLED`:
 
-* [`prioritizeOverUnhandled`](#prioritizeoverunhandled)
+* [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 * [`intentsToSkipUnhandled`](#intentstoskipunhandled)
 
 
-#### prioritizeOverUnhandled
+#### prioritizedOverUnhandled
 
-There might be some handlers where you decide that they are more important than `UHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizeOverUnhandled` in the handler docs](./handlers.md#prioritizeOverUnhandled).
+There might be some handlers where you decide that they are more important than `UHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizedOverUnhandled` in the handler docs](./handlers.md#prioritizedOverUnhandled).
 
 If a handler is prioritized, the property gets added to the `matches` element:
 
@@ -208,7 +208,7 @@ this.$route = {
     {
       component: 'SomeComponent',
       handler: 'SomeHandler',
-      prioritizeOverUnhandled: true,
+      prioritizedOverUnhandled: true,
     },
     // ...
   ]
@@ -218,9 +218,9 @@ this.$route = {
 In the process of finding the best ranked handler, the router goes through the `matches` and adjusts the prioritization with the following steps:
 
 * Search for any `UNHANDLED` in `matches`.
-* For each `UNHANDLED`, look if there is a handler with `prioritizeOverUnhandled` ranked somewhere below.
-* If there is a `prioritizeOverUnhandled` handler below (if multiple, select the highest ranked one), add `skip: true` to the `UNHANDLED` handler.
-* Add `skip: true` to any other handlers between `UNHANDLED` and the first `prioritizeOverUnhandled` handler below it.
+* For each `UNHANDLED`, look if there is a handler with `prioritizedOverUnhandled` ranked somewhere below.
+* If there is a `prioritizedOverUnhandled` handler below (if multiple, select the highest ranked one), add `skip: true` to the `UNHANDLED` handler.
+* Add `skip: true` to any other handlers between `UNHANDLED` and the first `prioritizedOverUnhandled` handler below it.
 
 Here is an example that would result in skipped `UNHANDLED`:
 
@@ -241,7 +241,7 @@ this.$route = {
     {
       component: 'BusinessDataComponent',
       handler: 'businessHours',
-      prioritizeOverUnhandled: true,
+      prioritizedOverUnhandled: true,
     },
     // ...
   ]
@@ -255,7 +255,7 @@ this.$route = {
   resolved: {
     component: 'BusinessDataComponent',
     handler: 'businessHours',
-    prioritizeOverUnhandled: true,
+    prioritizedOverUnhandled: true,
   },
   // ...
 }
@@ -264,7 +264,7 @@ this.$route = {
 
 #### intentsToSkipUnhandled
 
-As opposed to [`prioritizeOverUnhandled`](#prioritizeoverunhandled), a property that takes the perspective of a specific handler, the `intentsToSkipUnhandled` configuration is global. It defines all intents that that should completely ignore `UNHANDLED` handlers.
+As opposed to [`prioritizedOverUnhandled`](#prioritizedOverUnhandled), a property that takes the perspective of a specific handler, the `intentsToSkipUnhandled` configuration is global. It defines all intents that that should completely ignore `UNHANDLED` handlers.
 
 Let's assume we have a `BusinessHoursIntent` that is part of `intentsToSkipUnhandled`. If there is a request with that intent, the router adds `skip: true` to all `UNHANDLED` handlers in `matches`.
 
@@ -284,14 +284,14 @@ this.$route = {
     {
       component: 'BusinessDataComponent',
       handler: 'businessHours',
-      prioritizeOverUnhandled: true,
+      prioritizedOverUnhandled: true,
     },
     // ...
   ]
 }
 ```
 
-Note the difference between this example and the one from [`prioritizeOverUnhandled`](#prioritizeoverunhandled). Here, `help` (a handler that apparently also accepts `BusinessHoursIntent`) doesn't get skipped. Instead, it gets added to `resolved` and is the handler to be routed to.
+Note the difference between this example and the one from [`prioritizedOverUnhandled`](#prioritizedOverUnhandled). Here, `help` (a handler that apparently also accepts `BusinessHoursIntent`) doesn't get skipped. Instead, it gets added to `resolved` and is the handler to be routed to.
 
 ```js
 this.$route = {

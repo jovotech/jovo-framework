@@ -72,7 +72,7 @@ export * from './decorators/If';
 export * from './decorators/Intents';
 export * from './decorators/Output';
 export * from './decorators/Platforms';
-export * from './decorators/PrioritizeOverUnhandled';
+export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
 
 export * from './errors/ComponentNotFoundError';

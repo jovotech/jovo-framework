@@ -103,7 +103,7 @@ Routing properties:
 * [`intents`](#intents)
 * [`global`](#global-handlers)
 * [`subState`](#substate)
-* [`prioritizeOverUnhandled`](#prioritizeOverUnhandled)
+* [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 
 Conditional properties:
 * [`platforms`](#platforms)
@@ -285,28 +285,28 @@ yourHandler() {
 }
 ```
 
-#### PrioritizeOverUnhandled
+#### PrioritizedOverUnhandled
 
-Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizeOverUnhandled` property.
+Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizedOverUnhandled` property.
 
 ```typescript
 @Handle({
   // ...
-  prioritizeOverUnhandled: true,
+  prioritizedOverUnhandled: true,
 })
 yourHandler() {
   // ...
 }
 ```
 
-It's also possible to use the `@PrioritizeOverUnhandled` convenience decorator:
+It's also possible to use the `@PrioritizedOverUnhandled` convenience decorator:
 
 ```typescript
-import { PrioritizeOverUnhandled } from '@jovotech/framework';
+import { PrioritizedOverUnhandled } from '@jovotech/framework';
 
 // ...
 
-@PrioritizeOverUnhandled()
+@PrioritizedOverUnhandled()
 yourHandler() {
   // ...
 }

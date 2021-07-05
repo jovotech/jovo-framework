@@ -61,7 +61,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
           MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
         componentHandlerMetadata.forEach((handlerMetadata) => {
           handlerMetadata.globalIntentNames.forEach((globalIntentName) => {
-            const mappedIntentName = app.config.intentMap[globalIntentName] || globalIntentName;
+            const mappedIntentName =
+              app.config.routing?.intentMap?.[globalIntentName] || globalIntentName;
             if (!globalHandlerMap[mappedIntentName]) {
               globalHandlerMap[mappedIntentName] = [];
             }
