@@ -1,4 +1,5 @@
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export const PrioritizedOverUnhandled = (prioritizedOverUnhandled = true) =>
-  createHandlerOptionDecorator({ prioritizedOverUnhandled });
+export const PrioritizedOverUnhandled: (prioritizedOverUnhandled?: boolean) => MethodDecorator = (
+  prioritizedOverUnhandled = true,
+) => createHandlerOptionDecorator({ prioritizedOverUnhandled });
