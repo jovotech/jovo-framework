@@ -280,7 +280,7 @@ yourHandler() {
 }
 ```
 
-#### PrioritizeOverUnhandled
+#### PrioritizedOverUnhandled
 
 Sometimes, it's possible that a conversation gets stuck in an [`UNHANDLED` handler](#unhandled). If you want to prioritize a specific handler over a subcomponent's `UNHANDLED` handler, then you can add the `prioritizeOverUnhandled` property.
 
@@ -294,14 +294,14 @@ yourHandler() {
 }
 ```
 
-It's also possible to use the `@PrioritizeOverUnhandled` convenience decorator:
+It's also possible to use the `@PrioritizedOverUnhandled` convenience decorator:
 
 ```typescript
-import { PrioritizeOverUnhandled } from '@jovotech/framework';
+import { PrioritizedOverUnhandled } from '@jovotech/framework';
 
 // ...
 
-@PrioritizeOverUnhandled()
+@PrioritizedOverUnhandled()
 yourHandler() {
   // ...
 }

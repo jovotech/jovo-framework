@@ -55,23 +55,23 @@ export class RoutingExecutor {
     const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
       (match) => match.type === InternalIntent.Unhandled,
     );
-    // find the last RouteMatch that has prioritizeOverUnhandled
-    const lastRouteMatchIndexWithPrioritizeOverUnhandled = rankedRouteMatches
+    // find the last RouteMatch that has prioritizedOverUnhandled
+    const lastRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
       .slice()
       .reverse()
-      .findIndex((match) => !!match.prioritizeOverUnhandled);
+      .findIndex((match) => !!match.prioritizedOverUnhandled);
     // if no indexes were found or they're invalid, abort
     if (
       firstRouteMatchIndexWithUnhandled < 0 ||
-      lastRouteMatchIndexWithPrioritizeOverUnhandled < 0 ||
-      lastRouteMatchIndexWithPrioritizeOverUnhandled < firstRouteMatchIndexWithUnhandled
+      lastRouteMatchIndexWithPrioritizedOverUnhandled < 0 ||
+      lastRouteMatchIndexWithPrioritizedOverUnhandled < firstRouteMatchIndexWithUnhandled
     ) {
       return;
     }
     // iterate all RouteMatches between indexes and set skip: true for them
     for (
       let i = firstRouteMatchIndexWithUnhandled;
-      i < lastRouteMatchIndexWithPrioritizeOverUnhandled;
+      i < lastRouteMatchIndexWithPrioritizedOverUnhandled;
       i++
     ) {
       rankedRouteMatches[i].skip = true;

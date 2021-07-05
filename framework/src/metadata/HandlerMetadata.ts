@@ -15,7 +15,7 @@ export interface RoutesOptions {
   intents?: Array<string | Intent>;
   touch?: Array<string | Intent>;
   gestures?: Array<string | Intent>;
-  prioritizeOverUnhandled?: boolean;
+  prioritizedOverUnhandled?: boolean;
 }
 
 export interface HandleOptions extends ConditionsOptions, RoutesOptions {
