@@ -3,8 +3,9 @@
 Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.
 
 - [Introduction](#introduction)
-- [Handler Routing and State Management](#handler-routing-and-state-management)
-  - [Handle Decorator](#handle-decorator)
+- [Handler Routing and the Handle Decorator](#handler-routing-and-the-handle-decorator)
+  - [Routing Properties](#routing-properties)
+  - [Condition Properties](#condition-properties)
   - [Handler Prioritization](#handler-prioritization)
 - [Handler Logic](#handler-logic)
   - [Return Output](#return-output)
@@ -20,7 +21,7 @@ Handlers are methods inside a [Jovo component](./components.md) that are respons
 
 ![A handler taking in multiple request types like intent requests, launch requests, or touch requests. The handler then results in some output.](img/handler-requests-output.png)
 
-A handler can fulfil multiple types of requests, like intents and touch selections, and then return output.
+A handler can fulfill multiple types of requests, like intents and touch selections, and then return output.
 
 A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-state-management).
 
@@ -50,9 +51,9 @@ yourHandler() {
 ```
 
 
-## Handler Routing and State Management
+## Handler Routing and the Handle Decorator
 
-The routing defines which handler should fulfil the incoming request. For example, each intent in your language model should have at least one handler that responds to it, otherwise the Jovo app might throw an error.
+The routing defines which handler should fulfill the incoming request. For example, each intent in your language model should have at least one handler that responds to it, otherwise the Jovo app might throw an error.
 
 Similar to previous versions of Jovo, it is possible to name a handler exactly like the incoming intent it is supposed to respond to:
 
@@ -62,7 +63,7 @@ ShowMenuIntent() {
 }
 ```
 
-This does not offer a lot of flexibility, though. For better control, we recommend using the `@Handle` decorator. This way, you can even add multiple of intents and name the handler however you like. [Learn more about the `@Handle` decorator below](#handle-decorator).
+This does not offer a lot of flexibility, though. For better control, we recommend using the `@Handle` decorator. The `@Handle` decorator contains a set of elements that define when a handler should be triggered.. This way, you can even add multiple of intents and name the handler however you like.
 
 For example, this handler responds the `ShowMenuIntent` and `YesIntent`:
 
@@ -79,31 +80,22 @@ showMenu() {
 }
 ```
 
+The `@Handle` includes two types of properties:
 
-### Handle Decorator
+* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents)
+* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms)
 
-The `@Handle` decorator contains a set of elements that define when a handler should be triggered.
 
-Here is how you can import and it:
+### Routing Properties
 
-```typescript
-import { Handle } from '@jovotech/framework';
+Routing properties define the core elements a router is looking for when determining if a handler matches a request.
 
-// ...
+They include:
 
-@Handle({ /* handler options */ })
-yourHandler() {
-  // ...
-}
-```
-
-Currently, the following elements are supported:
 * [`intents`](#intents)
 * [`global`](#global-handlers)
 * [`subState`](#substate)
-* [`platforms`](#platforms)
 * [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
-
 #### Intents
 
 The `intents` array specifies which incoming intents the handler should be able to fulfil. For example, This handler responds to only the `ShowMenuIntent`:
@@ -253,32 +245,6 @@ showMenu() {
   // ...
 }
 ```
-#### Platforms
-
-You can also specify that a handler is only responsible for specific platforms. Pass the name of each platform (the same as the class name that you're importing in your `app.ts`) as a string:
-
-```typescript
-@Handle({
-  // ...
-  platforms: [ 'Alexa', 'GoogleAssistant' ]
-})
-yourHandler() {
-  // ...
-}
-```
-
-It's also possible to use the `@Platforms` convenience decorator:
-
-```typescript
-import { Platforms } from '@jovotech/framework';
-
-// ...
-
-@Platforms(['Alexa', 'GoogleAssistant'])
-yourHandler() {
-  // ...
-}
-```
 
 #### PrioritizedOverUnhandled
 
@@ -309,9 +275,70 @@ yourHandler() {
 
 [Learn more about `UNHANDLED` prioritization in the routing docs](./routing.md#unhandled-prioritization).
 
+### Condition Properties
+
+Condition properties are additional elements that need to be fulfilled for a handler to respond to a request. The more conditions are true, [the higher a handler is prioritized](#handler-prioritization).
+
+Currently, they include:
+
+* [`platforms`](#platforms)
+* [`if`](#if)
+#### Platforms
+
+You can specify that a handler is only responsible for specific platforms. Pass the name of each platform (the same as the class name that you're importing in your `app.ts`) as a string:
+
+```typescript
+@Handle({
+  // ...
+  platforms: [ 'Alexa', 'GoogleAssistant' ]
+})
+yourHandler() {
+  // ...
+}
+```
+
+It's also possible to use the `@Platforms` convenience decorator:
+
+```typescript
+import { Platforms } from '@jovotech/framework';
+
+// ...
+
+@Platforms(['Alexa', 'GoogleAssistant'])
+yourHandler() {
+  // ...
+}
+```
+
+#### If
+
+The `if` property can be a function with access to the `jovo` context (the same as `this` inside a handler). The condition is fulfilled if the function returns `true`.
+
+Here is an example of an `if` condition that says a handler should only be triggered if the user has already played today (stored as a `hasAlreadyPlayedToday` boolean as part of [user data](./data.md#user-data)):
+
+```typescript
+@Handle({
+  // ...
+  if: (jovo) => jovo.$user.$data.hasAlreadyPlayedToday
+})
+yourHandler() {
+  // ...
+}
+```
+
+It's also possible to use the `@If` convenience decorator:
+
+```typescript
+@If((jovo) => jovo.$user.$data.hasAlreadyPlayedToday))
+yourHandler() {
+  // ...
+}
+```
+
+
 ### Handler Prioritization
 
-It's possible that multiple handlers are able to fulfil a request, for example:
+It's possible that multiple handlers are able to fulfill a request, for example:
 
 ```typescript
 @Handle({
@@ -584,7 +611,7 @@ START() {
 
 ### UNHANDLED
 
-`UNHANDLED` is called when no other handler in the current component can fulfil the current request. It can be seen as a catch-all of handlers in one specific component.
+`UNHANDLED` is called when no other handler in the current component can fulfill the current request. It can be seen as a catch-all of handlers in one specific component.
 
 ```typescript
 UNHANDLED() {
