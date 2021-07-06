@@ -51,7 +51,6 @@ export class RouteMatch {
       type: this.type,
       subState: this.subState,
       global: this.global,
-      score: this.score,
       skip: this.skip,
       prioritizedOverUnhandled: this.prioritizedOverUnhandled,
     };
