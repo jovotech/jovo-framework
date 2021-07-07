@@ -1,4 +1,4 @@
-import {JovoSession} from '@jovotech/framework';
+import { JovoSession } from '@jovotech/framework';
 
 export interface Session {
   new: boolean;
@@ -99,15 +99,11 @@ export type InputMechanism = 'DIRECTION';
 export interface Device {
   deviceId: string;
   supportedInterfaces?: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: Record<string, any> | undefined;
     'Alexa.Presentation.APL'?: {
       runtime: {
         maxVersion: string;
       };
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    'Display'?: Record<string, any>;
   };
 }
 
