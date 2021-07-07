@@ -1,6 +1,6 @@
 {
     "name": "jovo-examples-googleassistant-multisurface-conversations",
-    "version": "3.5.3",
+    "version": "3.5.4",
     "private": true,
     "description": "",
     "main": "index.js",
@@ -15,6 +15,6 @@
     "dependencies": {
         "googleapis": "^42.0.0",
         "jovo-framework": "^3.5.2",
-        "jovo-platform-googleassistant": "^3.5.3"
+        "jovo-platform-googleassistant": "^3.5.4"
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-error-handling",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "jovo-framework": "^3.5.2",
     "jovo-platform-alexa": "^3.5.4",
     "jovo-platform-dialogflow": "^3.5.2",
-    "jovo-platform-googleassistant": "^3.5.3",
+    "jovo-platform-googleassistant": "^3.5.4",
     "jovo-plugin-debugger": "^3.5.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-unit-testing",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -20,7 +20,7 @@
     "jovo-db-filedb": "^3.5.1",
     "jovo-framework": "^3.5.2",
     "jovo-platform-alexa": "^3.5.4",
-    "jovo-platform-googleassistant": "^3.5.3",
+    "jovo-platform-googleassistant": "^3.5.4",
     "jovo-plugin-debugger": "^3.5.1"
   },
   "devDependencies": {
