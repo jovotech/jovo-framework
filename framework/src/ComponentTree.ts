@@ -86,6 +86,47 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   }
 }
 
+/**
+ * @example Structure of ComponentTree
+ * {
+ * "tree": {
+ *   "GlobalComponent": {
+ *     "path": [
+ *       "GlobalComponent"
+ *     ],
+ *     "metadata": {
+ *       "options": {
+ *         "global": true
+ *       }
+ *     }
+ *   },
+ *   "RootComponent": {
+ *     "path": [
+ *       "RootComponent"
+ *     ],
+ *     "metadata": {
+ *       "options": {
+ *         "components": [
+ *           null
+ *         ]
+ *       }
+ *     },
+ *     "children": {
+ *       "NestedComponent": {
+ *         "path": [
+ *           "RootComponent",
+ *           "NestedComponent"
+ *         ],
+ *         "metadata": {
+ *           "options": {}
+ *         },
+ *         "parent": "RootComponent"
+ *       }
+ *     }
+ *   }
+ * }
+ *}
+ */
 export class ComponentTree {
   // returns a map-callback that will create a ComponentTreeNode for the given component (constructor or declaration)
   static createComponentToNodeMapper(parent?: ComponentTreeNode) {
@@ -168,6 +209,9 @@ export class ComponentTree {
     return node;
   }
 
+  /**
+   * Find a node that matches the componentName relative to the node at relativeTo
+   */
   getNodeRelativeTo(
     componentName: string,
     relativeTo: string[] = [],
