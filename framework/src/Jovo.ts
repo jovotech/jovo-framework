@@ -189,6 +189,8 @@ export abstract class Jovo<
     };
   }
 
+  abstract hasScreenInterface(): boolean;
+
   $t<
     PATH extends string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
