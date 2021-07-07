@@ -20,7 +20,7 @@ import {
   OutputConstructor,
   PickWhere,
   Server,
-  StateStack,
+  StateStackItem,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
@@ -135,13 +135,13 @@ export abstract class Jovo<
   set $subState(value: string | undefined) {
     if (!this.$state?.length) return;
     this.$state[this.$state.length - 1].$subState = value;
-    if (this.$route) {
-      this.$route.subState = value;
-    }
   }
 
   get $component(): JovoComponentInfo {
-    const state = this.$state as StateStack;
+    if (!this.$session.$state) {
+      this.$session.$state = [];
+    }
+    const state = this.$session.$state;
     const setDataIfNotDefined = () => {
       if (!state[state.length - 1 || 0]?.$data) {
         state[state.length - 1].$data = {};
@@ -262,30 +262,40 @@ export abstract class Jovo<
       keyof PickWhere<COMPONENT, Function>,
       keyof BaseComponent
     >,
-  >(constructor: ComponentConstructor<COMPONENT>, handlerKey?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handlerKey?: string): Promise<void>;
+  >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
+  async $redirect(componentName: string, handler?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
-    handlerKey?: string,
+    handler?: string,
   ): Promise<void> {
     const componentName =
       typeof constructorOrName === 'function' ? constructorOrName.name : constructorOrName;
+    // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$route?.path || [],
+      this.$handleRequest.$activeComponentNode?.path,
     );
 
+    // update the state-stack if the component is not global
     if (!componentNode.metadata.isGlobal) {
-      const stateStack = this.$state as StateStack;
-      // replace last item in stack
-      stateStack[stateStack.length - 1] = {
-        componentPath: componentNode.path.join('.'),
+      const stackItem: StateStackItem = {
+        component: componentNode.path.join('.'),
       };
+      if (!this.$state?.length) {
+        // initialize the state-stack if it is empty or does not exist
+        this.$session.$state = [stackItem];
+      } else {
+        // replace last item in stack
+        this.$state[this.$state.length - 1] = stackItem;
+      }
     }
 
+    // update the active component node in handleRequest to keep track of the state
+    this.$handleRequest.$activeComponentNode = componentNode;
+    // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
-      handlerKey: handlerKey,
+      handler,
     });
   }
 
@@ -298,25 +308,25 @@ export abstract class Jovo<
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
   ): Promise<void> {
-    const currentComponentPath = this.$route?.path || [];
     const componentName =
       typeof constructorOrName === 'function' ? constructorOrName.name : constructorOrName;
+    // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      currentComponentPath,
+      this.$handleRequest.$activeComponentNode?.path,
     );
 
-    let stateStack = this.$state;
     // make sure the state-stack exists and is not empty, even if it is a global component
-    if (!stateStack) {
-      stateStack = [
+    // in order to do that we need to add the path of the currently active component
+    if (!this.$session.$state?.length) {
+      this.$session.$state = [
         {
-          componentPath: currentComponentPath.join('.'),
+          component: (this.$handleRequest.$activeComponentNode?.path || []).join('.'),
         },
       ];
-      this.$session.$state = stateStack;
     }
 
+    // serialize all values in 'resolve'
     const serializableResolve: Record<string, string> = {};
     for (const key in options.resolve) {
       if (options.resolve.hasOwnProperty(key)) {
@@ -325,6 +335,7 @@ export abstract class Jovo<
       }
     }
 
+    // serialize the whole config
     const serializableConfig = _cloneDeep(options.config);
     if (serializableConfig) {
       forEachDeep(serializableConfig, (value, path) => {
@@ -339,11 +350,15 @@ export abstract class Jovo<
         }
       });
     }
-    stateStack.push({
+    // push the delegating component to the state-stack
+    this.$session.$state.push({
       resolve: serializableResolve,
       config: serializableConfig,
-      componentPath: componentNode.path.join('.'),
+      component: componentNode.path.join('.'),
     });
+    // update the active component node in handleRequest to keep track of the state
+    this.$handleRequest.$activeComponentNode = componentNode;
+    // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
     });
@@ -351,34 +366,36 @@ export abstract class Jovo<
 
   // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
   async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
-    const stateStack = this.$state as StateStack;
-    const currentStateStackItem = stateStack[stateStack.length - 1];
-    const previousStateStackItem = stateStack[stateStack.length - 2];
+    if (!this.$state) {
+      return;
+    }
+    const currentStateStackItem = this.$state[this.$state.length - 1];
+    const previousStateStackItem = this.$state[this.$state.length - 2];
+    // make sure the state-stack exists and it long enough
     if (!currentStateStackItem?.resolve || !previousStateStackItem) {
       return;
     }
-    const resolvedHandlerKey = currentStateStackItem.resolve[eventName];
-    const previousComponentPath = previousStateStackItem.componentPath.split('.');
+    const resolvedHandler = currentStateStackItem.resolve[eventName];
+    const previousComponentPath = previousStateStackItem.component.split('.');
+    // get the previous node
     const previousComponentNode =
       this.$handleRequest.componentTree.getNodeAtOrFail(previousComponentPath);
 
     // if previous component is global, remove another item from the stack to remove the global component
     if (previousComponentNode.metadata.isGlobal) {
-      stateStack.pop();
+      this.$state.pop();
     }
-    stateStack.pop();
-    this.$route = {
-      path: previousComponentPath,
-      handlerKey: resolvedHandlerKey,
-      subState: previousStateStackItem.$subState,
-    };
+    // remove the latest item from the state-stack
+    this.$state.pop();
+
+    // update the active component node in handleRequest to keep track of the state
+    this.$handleRequest.$activeComponentNode = previousComponentNode;
+    // execute the component's handler
     await previousComponentNode.executeHandler({
       jovo: this.jovoReference,
-      handlerKey: resolvedHandlerKey,
-      updateRoute: false,
+      handler: resolvedHandler,
       callArgs: eventArgs,
     });
-    return;
   }
 
   //TODO: needs to be evaluated

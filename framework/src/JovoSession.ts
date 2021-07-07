@@ -3,7 +3,7 @@ import { ComponentData, SessionData } from './interfaces';
 export interface StateStackItem {
   [key: string]: unknown;
 
-  componentPath: string;
+  component: string;
   $subState?: string;
   $data?: ComponentData;
 

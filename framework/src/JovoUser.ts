@@ -7,7 +7,7 @@ import { JovoSession, PersistableSessionData } from './JovoSession';
 export type JovoUserConstructor<
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>
+  JOVO extends Jovo<REQUEST, RESPONSE>,
 > = new (jovo: JOVO) => JovoUser<REQUEST, RESPONSE, JOVO>;
 
 export interface PersistableUserData {
@@ -19,7 +19,7 @@ export interface PersistableUserData {
 export abstract class JovoUser<
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>
+  JOVO extends Jovo<REQUEST, RESPONSE>,
 > {
   createdAt: Date = new Date();
   updatedAt: Date = new Date();
