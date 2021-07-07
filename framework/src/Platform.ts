@@ -46,9 +46,9 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 ];
 
 export abstract class Platform<
-  REQUEST extends JovoRequest = JovoRequest,
-  RESPONSE extends JovoResponse = JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  REQUEST extends JovoRequest = any,
+  RESPONSE extends JovoResponse = any,
+  JOVO extends Jovo<REQUEST, RESPONSE> = any,
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;

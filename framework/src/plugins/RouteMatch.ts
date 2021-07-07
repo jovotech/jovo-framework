@@ -44,7 +44,7 @@ export class RouteMatch {
       : undefined;
   }
 
-  toJSON(): Omit<RouteMatch, 'metadata' | 'path' | 'toJSON'> {
+  toJSON(): Omit<RouteMatch, 'metadata' | 'path' | 'score' | 'toJSON'> {
     return {
       component: this.component,
       handler: this.handler,
