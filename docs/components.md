@@ -82,7 +82,7 @@ const app = new App({
 
 Some components (especially from third parties) may require you to add options. [Learn more about component options below](#component-options).
 
-There are two ways how you can add those to your global component registration:
+There are two ways how you can add those to your root component registration:
 * Using `ComponentDeclaration` (this will allow you to access the types of the component options)
 * Using an object
 
@@ -198,7 +198,7 @@ The core of a class are [handlers](./handlers.md) that are responsible to turn s
 
 If you're used to building state machines (for example Jovo `v3`), you can see a Jovo component as a state.
 
-Once a component is entered, it is added to the Jovo `$state` stack:
+Once a component is entered, it is added to the Jovo [`$state` stack](./state-stack.md):
 
 ```typescript
 $state = [
@@ -221,7 +221,7 @@ You can find out more about the [`$state` stack here](./state-stack.md) and lear
 A Jovo project usually comes with a `GlobalComponent`. This (and potentially other components) is a special `global` component that has the following characteristics:
 
 * Each of its handlers is global, no need to add a `global` property
-* It does not get added to the `$state` stack (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved)
+* It does not get added to the [`$state` stack](./state-stack.md) (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved)
 
 You can either add the `global` property to the [component options](#component-options):
 
@@ -256,7 +256,7 @@ For data that is only relevant for this specific component, you can use componen
 this.$component.$data.someKey = 'someValue';
 ```
 
-This is then added to the state stack and lost once the component resolves:
+This is then added to the [`$state` stack](./state-stack.md) and lost once the component resolves:
 
 ```typescript
 $state = [
@@ -268,6 +268,8 @@ $state = [
   }
 ]
 ```
+
+[Learn more about the different Jovo data types here](./data.md).
 
 
 ### Component Options

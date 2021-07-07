@@ -9,11 +9,11 @@ import { RouteMatch } from './RouteMatch';
 import { JovoRoute } from './RouterPlugin';
 
 export class RoutingExecutor {
-  constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
+  constructor(readonly jovo: Jovo) {}
 
   async execute(intentName: string): Promise<JovoRoute> {
     const mappedIntentName =
-      this.handleRequest.config.routing?.intentMap?.[intentName] || intentName;
+      this.jovo.$handleRequest.config.routing?.intentMap?.[intentName] || intentName;
     const rankedRouteMatches = await this.getRankedRouteMatches(mappedIntentName);
     if (!rankedRouteMatches.length) {
       throw new MatchingRouteNotFoundError({
@@ -53,7 +53,7 @@ export class RoutingExecutor {
 
   setSkipForRouteMatches(intentName: string, rankedRouteMatches: RouteMatch[]): void {
     const isIntentToSkipUnhandled =
-      this.handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
+      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
     // if the mapped intent is an intent that is supposed to skip UNHANDLED
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
@@ -104,7 +104,7 @@ export class RoutingExecutor {
   private async getGlobalRouteMatches(intentName: string): Promise<RouteMatch[]> {
     const routeMatches: RouteMatch[] = [];
 
-    const componentNodes = Array.from(this.handleRequest.componentTree);
+    const componentNodes = Array.from(this.jovo.$handleRequest.componentTree);
     // iterate all trees in the ComponentTree, for of used due to async methods
     for (const node of componentNodes) {
       // create a map-callback for the given node's path
@@ -152,7 +152,7 @@ export class RoutingExecutor {
 
     // get the current node
     let node: ComponentTreeNode | undefined =
-      this.handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+      this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
     // loop all nodes and their parent's as long as root is reached
     while (node) {
       // create a map-callback for the given node's path
@@ -191,8 +191,7 @@ export class RoutingExecutor {
     const isPlatformSupported =
       !metadata.options?.platforms?.length ||
       metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name);
-    const isConditionFulfilled =
-      !metadata.options?.if || (await metadata.options?.if?.(this.handleRequest, this.jovo));
+    const isConditionFulfilled = !metadata.options?.if || (await metadata.options?.if?.(this.jovo));
     return isPlatformSupported && isConditionFulfilled;
   }
 

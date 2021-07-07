@@ -74,7 +74,7 @@ After `resolved` is determined, Jovo runs the specified handler.
 
 To find handlers that could potentially fulfill a request, the router first goes through the `$state` stack (for local and global handlers) and then through all [root components](./components.md#register-root-components) (for global handlers).
 
-If a handler matches a request is highly dependent on the metadata that is added using the `@Handle` decorator (or convenience decorators like `@Intents`). [Learn more about these decorators here](./handlers.md#handler-routing-and-state-management).
+If a handler matches a request is highly dependent on the metadata that is added using the `@Handle` decorator (or convenience decorators like `@Intents`). [Learn more about these decorators here](./handlers.md#handler-routing-and-the-handle-decorator).
 
 A handler counts as match if:
 

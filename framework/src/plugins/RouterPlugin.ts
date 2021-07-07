@@ -49,7 +49,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
       // in the future other data can be passed and used by the handler, but for now just use the intent-name
       return;
     }
-    jovo.$route = await new RoutingExecutor(handleRequest, jovo).execute(intentName);
+    jovo.$route = await new RoutingExecutor(jovo).execute(intentName);
   };
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {
