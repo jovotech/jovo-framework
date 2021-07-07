@@ -28,6 +28,10 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     return this.$handleRequest.plugins.FacebookMessenger?.config?.pageAccessToken;
   }
 
+  hasScreenInterface(): boolean {
+    return true;
+  }
+
   async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<
