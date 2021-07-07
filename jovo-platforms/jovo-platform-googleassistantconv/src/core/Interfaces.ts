@@ -916,4 +916,6 @@ export interface HtmlResponse {
   // tslint:disable-next-line:no-any
   data?: Record<string, any>;
   suppressMic?: boolean;
+  enableFullScreen?: boolean;
+  continueTtsDuringTouch?: boolean;
 }
