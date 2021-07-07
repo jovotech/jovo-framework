@@ -1,4 +1,3 @@
-import { HandleRequest } from './HandleRequest';
 import { AnyObject } from './index';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
@@ -46,9 +45,7 @@ export interface Intent {
 
 export type IntentMap = Partial<Record<string, string>>;
 
-export type JovoConditionFunction = (
-  jovo: Jovo,
-) => boolean | Promise<boolean>;
+export type JovoConditionFunction = (jovo: Jovo) => boolean | Promise<boolean>;
 
 export interface DbPluginConfig extends PluginConfig {
   storedElements: {

@@ -46,8 +46,11 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 ];
 
 export abstract class Platform<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   REQUEST extends JovoRequest = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   RESPONSE extends JovoResponse = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   JOVO extends Jovo<REQUEST, RESPONSE> = any,
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
