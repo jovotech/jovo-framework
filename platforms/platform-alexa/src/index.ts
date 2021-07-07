@@ -24,6 +24,7 @@ registerPlatformSpecificJovoReference('$alexaSkill', AlexaSkill);
 export const AlexaCli: typeof AlexaCliType = isNode() ? require('./cli').AlexaCli : null;
 export * from './Alexa';
 export * from './AlexaRequest';
+export * from './AlexaRequestBuilder';
 export * from './AlexaUser';
 export * from './AlexaSkill';
 export type { AlexaResponse } from '@jovotech/output-alexa';
