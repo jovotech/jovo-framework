@@ -25,7 +25,7 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
-export type AppBaseMiddlewares = [
+export const BASE_APP_MIDDLEWARES = <const>[
   'request',
   'interpretation.asr',
   'interpretation.nlu',
@@ -36,20 +36,9 @@ export type AppBaseMiddlewares = [
   'response',
 ];
 
-export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
+export type AppBaseMiddleware = typeof BASE_APP_MIDDLEWARES[number];
 
-export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
-  'request',
-  'interpretation.asr',
-  'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
-  'response.output',
-  'response.tts',
-  'response',
-];
-
-export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
+export class App extends Extensible<AppConfig, AppBaseMiddleware[]> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
 
@@ -78,7 +67,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     this.use(...usables);
   }
 
-  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
+  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddleware[]> {
     return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
   }
 

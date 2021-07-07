@@ -1,11 +1,11 @@
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
-import { App, AppBaseMiddlewares, AppConfig, AppInitConfig } from './App';
+import { App, AppBaseMiddleware, AppConfig, AppInitConfig } from './App';
 import { Extensible } from './Extensible';
 import { ComponentTree, MiddlewareCollection, Platform, RegisteredComponents } from './index';
 import { Server } from './Server';
 
-export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
+export class HandleRequest extends Extensible<AppConfig, AppBaseMiddleware[]> {
   readonly componentTree: ComponentTree;
   $platform!: Platform;
 

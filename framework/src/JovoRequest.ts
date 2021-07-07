@@ -1,8 +1,12 @@
+import { JovoResponse } from '@jovotech/output';
+import { Constructor } from '.';
 import { EntityMap, NluData } from './interfaces';
 import { JovoRequestType } from './Jovo';
 import { JovoSession } from './JovoSession';
 
 export abstract class JovoRequest {
+  abstract responseClass: Constructor<JovoResponse>;
+
   [key: string]: unknown;
 
   abstract getEntities(): EntityMap | undefined;

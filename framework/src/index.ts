@@ -64,6 +64,7 @@ export * from './Platform';
 export * from './Plugin';
 export * from './BaseOutput';
 export * from './Server';
+export * from './TestSuite';
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
@@ -85,4 +86,3 @@ export * from './decorators/If';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
-
