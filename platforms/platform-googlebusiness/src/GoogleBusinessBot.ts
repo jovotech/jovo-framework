@@ -25,6 +25,10 @@ export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusines
     return this.$handleRequest.plugins?.GoogleBusiness?.config?.serviceAccount;
   }
 
+  hasScreenInterface(): boolean {
+    return true;
+  }
+
   async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<

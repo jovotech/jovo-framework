@@ -33,6 +33,10 @@ export class JovoProxy extends Jovo {
     });
   }
 
+  hasScreenInterface(): boolean {
+    return this.jovo.hasScreenInterface();
+  }
+
   toJSON() {
     return { ...this, jovo: undefined };
   }
