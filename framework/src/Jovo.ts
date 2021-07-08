@@ -422,15 +422,13 @@ export abstract class Jovo<
   }
 
   getPersistableData(): JovoPersistableData {
-    return JSON.parse(
-      JSON.stringify({
-        user: this.$user.getPersistableData(),
-        session: this.$session.getPersistableData(),
-        history: this.$history,
-        createdAt: new Date(this.$user.createdAt),
-        updatedAt: new Date(),
-      }),
-    );
+    return {
+      user: this.$user.getPersistableData(),
+      session: this.$session.getPersistableData(),
+      history: this.$history,
+      createdAt: new Date(this.$user.createdAt).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   }
 
   setPersistableData(data: JovoPersistableData): void {
