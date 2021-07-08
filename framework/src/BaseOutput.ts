@@ -26,9 +26,5 @@ export abstract class BaseOutput<OPTIONS extends OutputOptions = OutputOptions> 
     return {} as OPTIONS;
   }
 
-  abstract build():
-    | OutputTemplate
-    | OutputTemplate[]
-    | Promise<OutputTemplate>
-    | Promise<OutputTemplate[]>;
+  abstract build(): OutputTemplate | OutputTemplate[] | Promise<OutputTemplate | OutputTemplate[]>;
 }
