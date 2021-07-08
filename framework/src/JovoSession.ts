@@ -1,3 +1,4 @@
+import { UnknownObject } from './index';
 import { ComponentData, SessionData } from './interfaces';
 
 export interface StateStackItem {
@@ -8,7 +9,7 @@ export interface StateStackItem {
   $data?: ComponentData;
 
   resolve?: Record<string, string>;
-  config?: Record<string, unknown>;
+  config?: UnknownObject;
 }
 
 export type StateStack = StateStackItem[];

@@ -12,6 +12,7 @@ import {
   Plugin,
   PluginConfig,
 } from '@jovotech/framework';
+import {UnknownObject} from '@jovotech/framework/src';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';
@@ -211,8 +212,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       },
       set: (target, key: string, value: unknown): boolean => {
         // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
-        const previousValue = (target as Record<string, unknown>)[key];
-        (target as Record<string, unknown>)[key] = value;
+        const previousValue = (target as UnknownObject)[key];
+        (target as UnknownObject)[key] = value;
         // only emit changes
         if (!isEqual(previousValue, value)) {
           const payload: JovoDebuggerPayload<JovoUpdateData> = {

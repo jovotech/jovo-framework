@@ -1,4 +1,5 @@
 import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
+import { UnknownObject } from '../../dist/types';
 import {
   AnyObject,
   EntityMap,
@@ -33,7 +34,7 @@ export class ExamplePlatformRequest extends JovoRequest {
     return undefined;
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return undefined;
   }
 

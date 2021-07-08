@@ -21,6 +21,7 @@ import {
   PickWhere,
   Server,
   StateStackItem,
+  UnknownObject,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
 import { JovoRequest } from './JovoRequest';
@@ -46,14 +47,14 @@ export interface JovoRequestType {
 
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
-  CONFIG extends Record<string, unknown> = Record<string, unknown>,
+  CONFIG extends UnknownObject = UnknownObject,
 > {
   $data: DATA;
   $config?: CONFIG;
 }
 
 export interface DelegateOptions<
-  CONFIG extends Record<string, unknown> | undefined = Record<string, unknown> | undefined,
+  CONFIG extends UnknownObject | undefined = UnknownObject | undefined,
   EVENTS extends string = string,
 > {
   resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
@@ -158,7 +159,7 @@ export abstract class Jovo<
         setDataIfNotDefined();
         state[state.length - 1].$data = value;
       },
-      get $config(): Record<string, unknown> | undefined {
+      get $config(): UnknownObject | undefined {
         const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
@@ -183,7 +184,7 @@ export abstract class Jovo<
         }
         return deserializedStateConfig;
       },
-      set $config(value: Record<string, unknown> | undefined) {
+      set $config(value: UnknownObject | undefined) {
         state[state.length - 1].config = value;
       },
     };

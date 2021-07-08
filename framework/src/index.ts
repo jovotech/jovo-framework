@@ -11,6 +11,8 @@ export { axios };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
+export type UnknownObject = Record<string, unknown>;
+
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = PartialDeep<T>;
