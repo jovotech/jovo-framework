@@ -21,7 +21,9 @@ export interface Entity {
   value?: unknown;
 }
 
-export type EntityMap = Record<string, Entity>;
+export interface EntityMap {
+  [key: string]: Entity | undefined;
+}
 
 export interface AsrData {
   [key: string]: unknown;
