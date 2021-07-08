@@ -1,6 +1,7 @@
 import {
   ArrayMaxSize,
   ArrayMinSize,
+  EnumLike,
   IsArray,
   IsEnum,
   Type,
@@ -14,9 +15,11 @@ export enum CardWidth {
   Medium = 'MEDIUM',
 }
 
+export type CardWidthLike = EnumLike<CardWidth>
+
 export class RbmCarouselCard {
   @IsEnum(CardWidth)
-  card_width: CardWidth;
+  card_width: CardWidthLike;
 
   @IsArray()
   @ArrayMinSize(2)

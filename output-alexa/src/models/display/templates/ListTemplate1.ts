@@ -11,7 +11,12 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { DisplayTemplateList1Item } from '../list-items/DisplayTemplateList1Item';
 
 export class ListTemplate1 implements DisplayTemplate<DisplayTemplateType.List1> {
@@ -24,7 +29,7 @@ export class ListTemplate1 implements DisplayTemplate<DisplayTemplateType.List1>
 
   @IsOptional()
   @IsEnum(BackButtonVisibility)
-  backButton?: BackButtonVisibility;
+  backButton?: BackButtonVisibilityLike;
 
   @IsString()
   @IsNotEmpty()

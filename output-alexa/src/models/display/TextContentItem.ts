@@ -1,4 +1,4 @@
-import { IsEnum } from '@jovotech/output';
+import { EnumLike, IsEnum } from '@jovotech/output';
 import { IsValidAlexaString } from '../../decorators/validation/IsValidAlexaString';
 
 export enum DisplayTemplateTextContentItemType {
@@ -6,9 +6,11 @@ export enum DisplayTemplateTextContentItemType {
   Rich = 'RichText',
 }
 
+export type DisplayTemplateTextContentItemTypeLike = EnumLike<DisplayTemplateTextContentItemType>;
+
 export class TextContentItem {
   @IsEnum(DisplayTemplateTextContentItemType)
-  type: DisplayTemplateTextContentItemType;
+  type: DisplayTemplateTextContentItemTypeLike;
 
   @IsValidAlexaString()
   text: string;

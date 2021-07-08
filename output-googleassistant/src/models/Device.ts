@@ -1,4 +1,4 @@
-import { IsArray, IsEnum } from '@jovotech/output';
+import { EnumLike, IsArray, IsEnum } from '@jovotech/output';
 
 export enum Capability {
   Unspecified = 'UNSPECIFIED',
@@ -9,8 +9,10 @@ export enum Capability {
   WebLink = 'WEB_LINK',
 }
 
+export type CapabilityLike = EnumLike<Capability>;
+
 export class Device {
   @IsArray()
   @IsEnum(Capability, { each: true })
-  capabilities: Capability[];
+  capabilities: CapabilityLike[];
 }

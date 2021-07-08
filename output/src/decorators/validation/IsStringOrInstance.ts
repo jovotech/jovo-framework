@@ -4,7 +4,7 @@ import {
   ValidationArguments,
   ValidationError,
   ValidationOptions,
-} from '../../index';
+} from '../..';
 
 export function IsStringOrInstance(
   classType: new () => any,

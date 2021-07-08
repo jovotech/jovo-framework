@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-googleassistant",
-  "version": "4.0.0-alpha.9",
+  "version": "4.0.0-alpha.10",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -10,10 +10,10 @@
     "dist"
   ],
   "scripts": {
+    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
+    "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
     "update-model-exports": "barrelsby -d src/models -D -q ",
-    "prebuild": "npm run rimraf",
-    "build": "node ../scripts/build-package.js",
-    "watch": "tsc -w",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf ./dist",
@@ -23,7 +23,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-alpha.9",
+    "@jovotech/output": "^4.0.0-alpha.10",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",

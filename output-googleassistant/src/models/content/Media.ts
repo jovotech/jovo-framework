@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsArray,
   IsEnum,
   IsNotEmpty,
@@ -17,11 +18,15 @@ export enum MediaType {
   MediaStatusAck = 'MEDIA_STATUS_ACK',
 }
 
+export type MediaTypeLike = EnumLike<MediaType>;
+
 export enum OptionalMediaControls {
   Unspecified = 'OPTIONAL_MEDIA_CONTROLS_UNSPECIFIED',
   Paused = 'PAUSED',
   Stopped = 'STOPPED',
 }
+
+export type OptionalMediaControlsLike = EnumLike<OptionalMediaControls>;
 
 export class MediaImage {
   @IsValidMediaObjectImage()
@@ -51,7 +56,7 @@ export class MediaObject {
 
 export class Media {
   @IsEnum(MediaType)
-  mediaType: MediaType;
+  mediaType: MediaTypeLike;
 
   @IsString()
   @IsNotEmpty()
@@ -60,7 +65,7 @@ export class Media {
   @IsOptional()
   @IsArray()
   @IsEnum(OptionalMediaControls, { each: true })
-  optionalMediaControls?: OptionalMediaControls[];
+  optionalMediaControls?: OptionalMediaControlsLike[];
 
   @IsArray()
   @ValidateNested({ each: true })

@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -49,6 +50,8 @@ export enum HorizontalAlignment {
   Trailing = 'TRAILING',
 }
 
+export type HorizontalAlignmentLike = EnumLike<HorizontalAlignment>;
+
 export class TableColumn {
   @IsString()
   @IsNotEmpty()
@@ -56,7 +59,7 @@ export class TableColumn {
 
   @IsOptional()
   @IsEnum(HorizontalAlignment)
-  align?: HorizontalAlignment;
+  align?: HorizontalAlignmentLike;
 }
 
 export class TableRow {

@@ -45,7 +45,6 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       target.quickReplies.push(...mergeWith.quickReplies);
     }
 
-    // TODO determine whether only the last set card, carousel and listen should be used
     if (mergeWith.card) {
       target.card = { ...mergeWith.card };
     }

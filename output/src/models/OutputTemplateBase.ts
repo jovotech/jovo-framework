@@ -1,6 +1,15 @@
 import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsBooleanOrInstance,
+  IsInstance,
+  IsOptional,
+  Listen,
+  ListenValue,
+  ValidateNested,
+} from '..';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
-import { IsArray, IsBoolean, IsInstance, IsOptional, ValidateNested } from '../index';
 import { Card } from './Card';
 import { Carousel } from './Carousel';
 import { Message, MessageValue } from './Message';
@@ -20,8 +29,9 @@ export class OutputTemplateBase {
   reprompt?: MessageValue;
 
   @IsOptional()
-  @IsBoolean()
-  listen?: boolean;
+  @IsBooleanOrInstance(Listen)
+  @Type(() => Listen)
+  listen?: ListenValue;
 
   @IsOptional()
   @IsArray()

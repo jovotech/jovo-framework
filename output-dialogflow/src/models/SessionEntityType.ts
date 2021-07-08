@@ -1,11 +1,12 @@
 import {
+  ArrayMinSize,
+  EnumLike,
   IsArray,
   IsEnum,
   IsNotEmpty,
-  ValidateNested,
   IsString,
   Type,
-  ArrayMinSize,
+  ValidateNested,
 } from '@jovotech/output';
 import { EntitySynonymsContainValue } from '../decorators/validation/EntitySynonymsContainValue';
 
@@ -15,13 +16,15 @@ export enum EntityOverrideMode {
   Supplement = 'ENTITY_OVERRIDE_MODE_SUPPLEMENT',
 }
 
+export type EntityOverrideModeLike = EnumLike<EntityOverrideMode>;
+
 export class SessionEntityType {
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsEnum(EntityOverrideMode)
-  entity_override_mode: EntityOverrideMode;
+  entity_override_mode: EntityOverrideModeLike;
 
   @IsArray()
   @ValidateNested({ each: true })

@@ -4,5 +4,6 @@ export interface OutputTemplateConverterStrategy<RESPONSE extends Record<string,
   responseClass: new () => RESPONSE;
 
   toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
+
   fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
 }

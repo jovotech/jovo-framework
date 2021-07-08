@@ -1,4 +1,4 @@
-import { IsEnum } from '@jovotech/output';
+import { EnumLike, IsEnum } from '@jovotech/output';
 
 export enum ResolutionPerAuthorityStatusCode {
   SuccessMatch = 'ER_SUCCESS_MATCH',
@@ -7,7 +7,9 @@ export enum ResolutionPerAuthorityStatusCode {
   ErrorException = 'ER_ERROR_EXCEPTION',
 }
 
+export type ResolutionPerAuthorityStatusCodeLike = EnumLike<ResolutionPerAuthorityStatusCode>;
+
 export class ResolutionPerAuthorityStatus {
   @IsEnum(ResolutionPerAuthorityStatusCode)
-  code: ResolutionPerAuthorityStatusCode;
+  code: ResolutionPerAuthorityStatusCodeLike;
 }

@@ -9,7 +9,12 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { TextContent } from '../TextContent';
 
 export class BodyTemplate3 implements DisplayTemplate<DisplayTemplateType.Body3> {
@@ -22,7 +27,7 @@ export class BodyTemplate3 implements DisplayTemplate<DisplayTemplateType.Body3>
 
   @IsOptional()
   @IsEnum(BackButtonVisibility)
-  backButton?: BackButtonVisibility;
+  backButton?: BackButtonVisibilityLike;
 
   @IsOptional()
   @ValidateNested()
