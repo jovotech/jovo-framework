@@ -1,9 +1,11 @@
-import type { NewEvents } from '@jovotech/cli-command-new';
+import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
 import { PluginHook, printHighlight, printUserInput, prompt, Log } from '@jovotech/cli-core';
 import { SupportedLocalesType } from '../utils';
-import { SupportedLocales } from '../utils/Constants';
+import { SupportedLocales } from '../utils';
 
 export class NewHook extends PluginHook<NewEvents> {
+  $context!: NewContext;
+
   install(): void {
     this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this)],

@@ -31,8 +31,7 @@ export interface ExecuteHandlerOptions<
   ARGS extends any[] = any[],
 > {
   jovo: Jovo;
-  handlerKey?: HANDLER | string;
-  updateRoute?: boolean;
+  handler?: HANDLER | string;
   callArgs?: ARGS;
 }
 
@@ -68,25 +67,18 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     ARGS extends any[] = any[],
   >({
     jovo,
-    handlerKey = InternalIntent.Start,
-    updateRoute = true,
+    handler = InternalIntent.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
       jovo,
       this.metadata.options?.config,
     );
-    if (!componentInstance[handlerKey as keyof COMPONENT]) {
-      throw new HandlerNotFoundError(componentInstance.constructor.name, handlerKey.toString());
-    }
-    if (updateRoute) {
-      jovo.$route = {
-        path: this.path,
-        handlerKey: handlerKey.toString(),
-      };
+    if (!componentInstance[handler as keyof COMPONENT]) {
+      throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handlerKey](...(callArgs || []));
+    await (componentInstance as any)[handler](...(callArgs || []));
   }
 
   toJSON() {
@@ -94,6 +86,47 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   }
 }
 
+/**
+ * @example Structure of ComponentTree
+ * {
+ * "tree": {
+ *   "GlobalComponent": {
+ *     "path": [
+ *       "GlobalComponent"
+ *     ],
+ *     "metadata": {
+ *       "options": {
+ *         "global": true
+ *       }
+ *     }
+ *   },
+ *   "RootComponent": {
+ *     "path": [
+ *       "RootComponent"
+ *     ],
+ *     "metadata": {
+ *       "options": {
+ *         "components": [
+ *           null
+ *         ]
+ *       }
+ *     },
+ *     "children": {
+ *       "NestedComponent": {
+ *         "path": [
+ *           "RootComponent",
+ *           "NestedComponent"
+ *         ],
+ *         "metadata": {
+ *           "options": {}
+ *         },
+ *         "parent": "RootComponent"
+ *       }
+ *     }
+ *   }
+ * }
+ *}
+ */
 export class ComponentTree {
   // returns a map-callback that will create a ComponentTreeNode for the given component (constructor or declaration)
   static createComponentToNodeMapper(parent?: ComponentTreeNode) {
@@ -102,7 +135,7 @@ export class ComponentTree {
         typeof component === 'function' ? component : component.component;
       // get the metadata of the component
       const componentMetadata =
-        MetadataStorage.getInstance().getComponentMetadata(componentConstructor);
+        MetadataStorage.getInstance().getMergedComponentMetadata(componentConstructor);
       // merge the options of the related metadata with the options of the given options (only set when passing a declaration)
       const mergedComponentOptions = _merge(
         {},
@@ -135,6 +168,12 @@ export class ComponentTree {
     };
   }
 
+  readonly tree: Tree<ComponentTreeNode>;
+
+  constructor(...components: Array<ComponentConstructor | ComponentDeclaration>) {
+    this.tree = this.buildTreeForComponents(...components);
+  }
+
   [Symbol.iterator]() {
     let index = -1;
     const nodes: ComponentTreeNode[] = [];
@@ -144,12 +183,6 @@ export class ComponentTree {
     return {
       next: () => ({ value: nodes[++index], done: !(index in nodes) }),
     };
-  }
-
-  readonly tree: Tree<ComponentTreeNode>;
-
-  constructor(...components: Array<ComponentConstructor | ComponentDeclaration>) {
-    this.tree = this.buildTreeForComponents(...components);
   }
 
   add(...components: Array<ComponentConstructor | ComponentDeclaration>) {
@@ -176,15 +209,20 @@ export class ComponentTree {
     return node;
   }
 
-  getNodeRelativeTo(componentName: string, relativeTo: string[]): ComponentTreeNode | undefined {
-    const componentPath = [...relativeTo, componentName];
-    const currentComponentNode = this.getNodeAt(componentPath);
+  /**
+   * Find a node that matches the componentName relative to the node at relativeTo
+   */
+  getNodeRelativeTo(
+    componentName: string,
+    relativeTo: string[] = [],
+  ): ComponentTreeNode | undefined {
+    const currentComponentNode = this.getNodeAt(relativeTo);
     const rootComponentNode = this.tree[componentName];
     const childComponentNode = currentComponentNode?.children?.[componentName];
     return childComponentNode || rootComponentNode;
   }
 
-  getNodeRelativeToOrFail(componentName: string, relativeTo: string[]): ComponentTreeNode {
+  getNodeRelativeToOrFail(componentName: string, relativeTo: string[] = []): ComponentTreeNode {
     const componentNode = this.getNodeRelativeTo(componentName, relativeTo);
     if (!componentNode) {
       throw new ComponentNotFoundError([...relativeTo, componentName]);

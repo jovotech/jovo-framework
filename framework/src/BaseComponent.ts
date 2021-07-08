@@ -1,11 +1,7 @@
 import { ComponentData, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
-import { ComponentOptions, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
-
-export interface RegisteredComponents {
-  [key: string]: RegisteredComponentMetadata | undefined;
-}
+import { ComponentOptions } from './metadata/ComponentMetadata';
 
 export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
   jovo: Jovo,

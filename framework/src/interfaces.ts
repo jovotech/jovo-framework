@@ -50,7 +50,6 @@ export interface Intent {
 export type IntentMap = Partial<Record<string, string>>;
 
 export type JovoConditionFunction = (
-  handleRequest: HandleRequest,
   jovo: Jovo,
 ) => boolean | Promise<boolean>;
 

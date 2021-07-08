@@ -1,5 +1,5 @@
 import { PluginHook, printHighlight, printUserInput, prompt, Log } from '@jovotech/cli-core';
-import type { NewEvents } from '@jovotech/cli-command-new';
+import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
 
 import { SupportedLocales, SupportedLocalesType } from '../utils';
 
@@ -9,6 +9,7 @@ export class NewHook extends PluginHook<NewEvents> {
       new: [this.setDefaultConfig.bind(this)],
     };
   }
+  $context!: NewContext;
 
   async setDefaultConfig(): Promise<void> {
     // Check for invalid locales and provide a default locale map.

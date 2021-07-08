@@ -1,189 +1,220 @@
+import { ComponentTreeNode } from '../ComponentTree';
 import { InternalIntent } from '../enums';
+import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
-import { StateStack } from '../JovoSession';
-import { ComponentMetadata } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
-import { findAsync } from '../utilities';
+import { RouteMatch } from './RouteMatch';
 import { JovoRoute } from './RouterPlugin';
 
-export interface RouteMatch {
-  path: string[];
-  metadata: HandlerMetadata;
-  subState?: string;
-}
-
 export class RoutingExecutor {
-  private convertHandlerMetadataToRouteMatch = (path: string[]) => (metadata: HandlerMetadata) => ({
-    path,
-    metadata,
-    subState: metadata.options?.subState,
-  });
+  constructor(readonly jovo: Jovo) {}
 
-  constructor(readonly handleRequest: HandleRequest, readonly jovo: Jovo) {}
+  async execute(intentName: string): Promise<JovoRoute> {
+    const mappedIntentName =
+      this.jovo.$handleRequest.config.routing?.intentMap?.[intentName] || intentName;
+    const rankedRouteMatches = await this.getRankedRouteMatches(mappedIntentName);
+    if (!rankedRouteMatches.length) {
+      throw new MatchingRouteNotFoundError({
+        request: this.jovo.$request,
+        intent: intentName,
+        mappedIntent: mappedIntentName,
+        state: this.jovo.$state,
+      });
+    }
 
-  async execute(intentName: string): Promise<JovoRoute | undefined> {
-    if (!intentName.length) {
-      return;
-    }
-    const routeMatches = this.getRouteMatches(intentName);
-    if (!routeMatches.length) {
-      return;
-    }
-    const match = await this.findMatchingRoute(routeMatches);
-    if (!match) {
-      return;
+    this.setSkipForRouteMatches(intentName, rankedRouteMatches);
+
+    const resolvedRouteMatch = await this.resolveRoute(rankedRouteMatches);
+    if (!resolvedRouteMatch) {
+      throw new MatchingRouteNotFoundError({
+        request: this.jovo.$request,
+        intent: intentName,
+        mappedIntent: mappedIntentName,
+        state: this.jovo.$state,
+        matches: rankedRouteMatches,
+      });
     }
     return {
-      path: match.path,
-      handlerKey: match.metadata.propertyKey,
-      subState: match.subState,
+      resolved: resolvedRouteMatch,
+      matches: rankedRouteMatches,
     };
   }
 
-  getRouteMatches(intentName: string): RouteMatch[] {
-    if (!this.jovo.$state) {
-      return this.getGlobalRouteMatches(intentName);
+  async getRankedRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const globalRouteMatches = await this.getRankedGlobalRouteMatches(intentName);
+    if (!this.jovo.$state?.length) {
+      return globalRouteMatches;
     }
-    let routeMatches = this.getRouteMatchesInState(intentName, this.jovo.$state);
-    if (!routeMatches.length) {
-      routeMatches = this.getGlobalRouteMatches(intentName);
-    }
-    return routeMatches;
+    const localRouteMatches = await this.getRankedLocalRouteMatches(intentName);
+    return [...localRouteMatches, ...globalRouteMatches];
   }
 
-  // TODO determine order, refactor then
-  async findMatchingRoute(matches: RouteMatch[]): Promise<RouteMatch | undefined> {
-    const conditionalMatches = matches.filter(({ metadata }) => metadata.options?.if);
-    const unconditionalMatches = matches.filter(({ metadata }) => !metadata.options?.if);
-    let relatedMatch = await findAsync(
-      conditionalMatches,
-      async ({ metadata }) =>
-        (metadata.options?.platforms?.length &&
-          (await metadata.options?.if?.(this.handleRequest, this.jovo))) ||
-        false,
+  setSkipForRouteMatches(intentName: string, rankedRouteMatches: RouteMatch[]): void {
+    const isIntentToSkipUnhandled =
+      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
+    // if the mapped intent is an intent that is supposed to skip UNHANDLED
+    if (isIntentToSkipUnhandled) {
+      // set skip: true for all UNHANDLED-matches
+      rankedRouteMatches.forEach((match) => {
+        if (match.type === InternalIntent.Unhandled) {
+          match.skip = true;
+        }
+      });
+    }
+
+    // find the first RouteMatch that is UNHANDLED
+    const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
+      (match) => match.type === InternalIntent.Unhandled,
     );
-    if (!relatedMatch) {
-      relatedMatch = await findAsync(
-        conditionalMatches,
-        async ({ metadata }) =>
-          (!metadata.options?.platforms?.length &&
-            (await metadata.options?.if?.(this.handleRequest, this.jovo))) ||
-          false,
-      );
+    // find the last RouteMatch that has prioritizedOverUnhandled
+    const lastRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
+      .slice()
+      .reverse()
+      .findIndex((match) => !!match.prioritizedOverUnhandled);
+    // if no indexes were found or they're invalid, abort
+    if (
+      firstRouteMatchIndexWithUnhandled < 0 ||
+      lastRouteMatchIndexWithPrioritizedOverUnhandled < 0 ||
+      lastRouteMatchIndexWithPrioritizedOverUnhandled < firstRouteMatchIndexWithUnhandled
+    ) {
+      return;
     }
-    if (!relatedMatch) {
-      relatedMatch = unconditionalMatches.find(
-        ({ metadata }) => metadata.options?.platforms?.length,
-      );
+    // iterate all RouteMatches between indexes and set skip: true for them
+    for (
+      let i = firstRouteMatchIndexWithUnhandled;
+      i < lastRouteMatchIndexWithPrioritizedOverUnhandled;
+      i++
+    ) {
+      rankedRouteMatches[i].skip = true;
     }
-    if (!relatedMatch) {
-      relatedMatch = unconditionalMatches.find(
-        ({ metadata }) => !metadata.options?.platforms?.length,
-      );
-    }
-    return relatedMatch;
   }
 
-  private getGlobalInputFilteredHandlerMetadata(
-    componentMetadata: ComponentMetadata,
-    intentName: string,
-  ): HandlerMetadata[] {
-    return MetadataStorage.getInstance()
-      .getMergedHandlerMetadataOfComponent(componentMetadata.target)
-      .filter(
-        (metadata) =>
-          this.getMappedIntentNames(metadata.globalIntentNames, intentName).includes(intentName) &&
-          (!metadata.options?.platforms?.length ||
-            metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name)),
-      );
+  async resolveRoute(routeMatches: RouteMatch[]): Promise<RouteMatch | undefined> {
+    // iterate all RouteMatches and return the first match that has no skip not set to true
+    return routeMatches.find((match) => !match.skip);
   }
 
-  private getGlobalRouteMatches(intentName: string): RouteMatch[] {
-    let routeMatches = this.collectGlobalRouteMatches(intentName);
-    if (!routeMatches.length) {
-      routeMatches = this.collectGlobalRouteMatches(InternalIntent.Unhandled);
+  private async getRankedGlobalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const globalRouteMatches = await this.getGlobalRouteMatches(intentName);
+    return globalRouteMatches.sort(this.compareRouteMatchRanking);
+  }
+
+  private async getGlobalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const routeMatches: RouteMatch[] = [];
+
+    const componentNodes = Array.from(this.jovo.$handleRequest.componentTree);
+    // iterate all trees in the ComponentTree, for of used due to async methods
+    for (const node of componentNodes) {
+      // create a map-callback for the given node's path
+      const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
+        node.path,
+      );
+      const relatedHandlerMetadata =
+        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+      for (const metadata of relatedHandlerMetadata) {
+        // if the conditions are no fulfilled, do not add the handler
+        if (!(await this.areHandlerConditionsFulfilled(metadata))) {
+          continue;
+        }
+        const intentNames = node.metadata.isGlobal
+          ? metadata.intentNames
+          : metadata.globalIntentNames;
+        if (intentNames.includes(intentName) || intentNames.includes(InternalIntent.Unhandled)) {
+          routeMatches.push(handlerMetadataToRouteMatchMapper(metadata));
+        }
+      }
     }
+
     return routeMatches;
   }
 
-  private collectGlobalRouteMatches(intentName: string): RouteMatch[] {
-    const matches: RouteMatch[] = [];
-    this.handleRequest.componentTree.forEach((node) => {
-      const relatedHandlerMetadata = this.getGlobalInputFilteredHandlerMetadata(
-        node.metadata,
-        intentName,
-      );
-      if (relatedHandlerMetadata.length) {
-        matches.push(
-          ...relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(node.path)),
-        );
+  private async getRankedLocalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    const routeMatches = await this.getLocalRouteMatches(intentName);
+    return routeMatches.sort((match, otherMatch) => {
+      // if the path is different, ignore
+      if (match.path !== otherMatch.path) {
+        return 0;
       }
+      return this.compareRouteMatchRanking(match, otherMatch);
     });
-    return matches;
   }
 
-  private getInputFilteredHandlerMetadata(
-    componentMetadata: ComponentMetadata,
-    intentName: string,
-    subState?: string,
-  ): HandlerMetadata[] {
-    return MetadataStorage.getInstance()
-      .getMergedHandlerMetadataOfComponent(componentMetadata.target)
-      .filter(
-        (metadata) =>
-          (subState ? metadata.options?.subState === subState : !metadata.options?.subState) &&
-          this.getMappedIntentNames(metadata.intentNames, intentName).includes(intentName) &&
-          (!metadata.options?.platforms?.length ||
-            metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name)),
-      );
-  }
+  private async getLocalRouteMatches(intentName: string): Promise<RouteMatch[]> {
+    if (!this.jovo.$state?.length) {
+      return [];
+    }
+    const routeMatches: RouteMatch[] = [];
+    const latestStateStackItem = this.jovo.$state[this.jovo.$state.length - 1];
+    const currentComponentPath = latestStateStackItem.component.split('.');
+    let subState = latestStateStackItem.$subState;
 
-  private getRouteMatchesInState(intentName: string, state: StateStack): RouteMatch[] {
-    const latestStateStackItem = state[state.length - 1];
-    const currentPath = latestStateStackItem.componentPath.split('.');
-
-    let relatedHandlerMetadata: HandlerMetadata[] = [];
-    while (!relatedHandlerMetadata.length && currentPath.length) {
-      const relatedComponentNode = this.handleRequest.componentTree.getNodeAtOrFail(currentPath);
-      relatedHandlerMetadata = this.getMatchingHandlerMetadata(
-        relatedComponentNode.metadata,
-        intentName,
+    // get the current node
+    let node: ComponentTreeNode | undefined =
+      this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+    // loop all nodes and their parent's as long as root is reached
+    while (node) {
+      // create a map-callback for the given node's path
+      const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
+        node.path,
       );
-      if (currentPath.length && !relatedHandlerMetadata.length) {
-        currentPath.splice(currentPath.length - 1);
+      const relatedHandlerMetadata =
+        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+
+      for (const metadata of relatedHandlerMetadata) {
+        // if the conditions are no fulfilled, do not add the handler
+        if (!(await this.areHandlerConditionsFulfilled(metadata))) {
+          continue;
+        }
+
+        if (
+          (metadata.intentNames.includes(intentName) ||
+            metadata.intentNames.includes(InternalIntent.Unhandled)) &&
+          (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
+        ) {
+          routeMatches.push(handlerMetadataToRouteMatchMapper(metadata));
+        }
+      }
+
+      // if a subState is set, make sure to check the same node without subState before moving to the parent
+      if (subState) {
+        subState = undefined;
+      } else {
+        node = node.parent;
       }
     }
-    return relatedHandlerMetadata.map(this.convertHandlerMetadataToRouteMatch(currentPath));
+    return routeMatches;
   }
 
-  private getMatchingHandlerMetadata(
-    componentMetadata: ComponentMetadata,
-    intentName: string,
-    subState?: string,
-  ): HandlerMetadata[] {
-    let relatedHandlerMetadata = this.getInputFilteredHandlerMetadata(
-      componentMetadata,
-      intentName,
-      subState,
+  private async areHandlerConditionsFulfilled(metadata: HandlerMetadata): Promise<boolean> {
+    const isPlatformSupported =
+      !metadata.options?.platforms?.length ||
+      metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name);
+    const isConditionFulfilled = !metadata.options?.if || (await metadata.options?.if?.(this.jovo));
+    return isPlatformSupported && isConditionFulfilled;
+  }
+
+  private createHandlerMetadataToRouteMatchMapper(
+    path: string[],
+  ): (metadata: HandlerMetadata) => RouteMatch {
+    return (metadata) => {
+      return new RouteMatch(metadata, path);
+    };
+  }
+
+  private compareRouteMatchRanking(match: RouteMatch, otherMatch: RouteMatch): number {
+    const matchIsUnhandled = match.metadata.intentNames.includes(InternalIntent.Unhandled);
+    const otherMatchIsUnhandled = otherMatch.metadata.intentNames.includes(
+      InternalIntent.Unhandled,
     );
-    if (!relatedHandlerMetadata.length) {
-      relatedHandlerMetadata = this.getInputFilteredHandlerMetadata(
-        componentMetadata,
-        InternalIntent.Unhandled,
-        subState,
-      );
+    4;
+    if (matchIsUnhandled && !otherMatchIsUnhandled) {
+      return 1;
+    } else if (!matchIsUnhandled && otherMatchIsUnhandled) {
+      return -1;
     }
-    // if nothing was found and subState is set, look in the same component without subState
-    if (!relatedHandlerMetadata.length && subState) {
-      relatedHandlerMetadata = this.getMatchingHandlerMetadata(componentMetadata, intentName);
-    }
-    return relatedHandlerMetadata;
-  }
 
-  private getMappedIntentNames(intents: string[], intentName: string): string[] {
-    const mappedIntent = this.handleRequest.config.intentMap[intentName];
-    return mappedIntent ? [mappedIntent, ...intents] : intents.slice();
+    return otherMatch.score - match.score;
   }
 }
