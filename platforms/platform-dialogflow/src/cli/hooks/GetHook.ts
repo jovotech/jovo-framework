@@ -5,6 +5,7 @@ import {
   flags,
   InstallContext,
   JovoCliError,
+  Log,
   PluginHook,
   printHighlight,
   promptOverwrite,
