@@ -16,12 +16,15 @@ export class FileDb extends DbPlugin<FileDbConfig> {
   getDefaultConfig(): FileDbConfig {
     return {
       ...super.getDefaultConfig(),
-      pathToFile: './db/db.json',
+      pathToFile: '../db/db.json',
     };
   }
 
   get pathToFile(): string {
-    return path.join(process.cwd(), this.config.pathToFile);
+    if (path.isAbsolute(this.config.pathToFile)) {
+      return this.config.pathToFile;
+    }
+    return path.join(process.cwd(), 'dist', this.config.pathToFile);
   }
 
   async install(parent: App): Promise<void> {
