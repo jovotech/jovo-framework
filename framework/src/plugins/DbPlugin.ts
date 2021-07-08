@@ -12,7 +12,7 @@ import { Jovo, JovoPersistableData } from '../Jovo';
 import { ExtensibleInitConfig } from '../Extensible';
 
 export interface DbItem {
-  id: string;
+  id?: string;
   [key: string]: any;
 
   user?: PersistableUserData;
