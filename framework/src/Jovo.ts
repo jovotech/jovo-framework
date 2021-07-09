@@ -16,7 +16,6 @@ import {
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
-  JovoHistoryItem,
   MetadataStorage,
   OutputConstructor,
   PersistableSessionData,
@@ -32,6 +31,7 @@ import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
+import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest = JovoRequest,
@@ -44,7 +44,7 @@ export type JovoConstructor<
 export interface JovoPersistableData {
   user?: PersistableUserData;
   session?: PersistableSessionData;
-  history?: JovoHistoryItem[];
+  history?: PersistableHistoryData;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -104,7 +104,7 @@ export abstract class Jovo<
   $type: JovoRequestType;
   $user: JovoUser<REQUEST, RESPONSE, this>;
 
-  $history: JovoHistoryItem[] = [];
+  $history: JovoHistory;
 
   constructor(
     readonly $app: App,
@@ -121,6 +121,7 @@ export abstract class Jovo<
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
+    this.$history = new JovoHistory();
     this.$user = this.$platform.createUserInstance(this);
   }
 
@@ -425,7 +426,7 @@ export abstract class Jovo<
     return {
       user: this.$user.getPersistableData(),
       session: this.$session.getPersistableData(),
-      history: this.$history,
+      history: this.$history.getPersistableData(),
       createdAt: new Date(this.$user.createdAt).toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -434,12 +435,12 @@ export abstract class Jovo<
   setPersistableData(data: JovoPersistableData): void {
     this.$user.setPersistableData(data.user);
     this.$session.setPersistableData(data.session);
-    this.$history = data?.history || [];
+    this.$history.setPersistableData(data.history);
     this.$user.createdAt = new Date(data?.createdAt || new Date());
     this.$user.updatedAt = new Date(data?.updatedAt || new Date());
   }
 
-  getPersistableHistory(): JovoHistoryItem {
+  getCurrentHistoryItem(): JovoHistoryItem {
     return {
       output: this.$output,
       nlu: this.$nlu,
@@ -450,6 +451,7 @@ export abstract class Jovo<
       response: this.$response,
     };
   }
+
   private get jovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }

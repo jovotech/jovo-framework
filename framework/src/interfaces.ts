@@ -1,7 +1,4 @@
-import { OutputTemplate } from '@jovotech/output';
-import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
-import { JovoSession } from './JovoSession';
 import { PluginConfig } from './Plugin';
 
 export interface Data {
@@ -49,20 +46,9 @@ export interface Intent {
 
 export type IntentMap = Partial<Record<string, string>>;
 
-export type JovoConditionFunction = (
-  jovo: Jovo,
-) => boolean | Promise<boolean>;
+export type JovoConditionFunction = (jovo: Jovo) => boolean | Promise<boolean>;
 
 export type JovoAnyFunction = (jovo: Jovo) => Promise<any>;
-
-export interface JovoHistoryItem {
-  output?: OutputTemplate | OutputTemplate[];
-  nlu?: NluData;
-  state?: JovoSession['$state'];
-  entities?: EntityMap;
-  asr?: AsrData;
-  [key: string]: unknown;
-}
 
 export interface StoredElement {
   enabled?: boolean;

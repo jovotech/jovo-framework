@@ -3,13 +3,13 @@ import { PersistableSessionData } from '../JovoSession';
 import {
   DbPluginConfig,
   JovoAnyFunction,
-  JovoHistoryItem,
   StoredElement,
   StoredElementHistory,
 } from '../interfaces';
 import { Plugin, PluginConfig } from '../Plugin';
 import { Jovo, JovoPersistableData } from '../Jovo';
 import { ExtensibleInitConfig } from '../Extensible';
+import { JovoHistoryItem, PersistableHistoryData } from '../JovoHistory';
 
 export interface DbItem {
   id?: string;
@@ -17,7 +17,7 @@ export interface DbItem {
 
   user?: PersistableUserData;
   session?: PersistableSessionData;
-  history?: JovoHistoryItem[];
+  history?: PersistableHistoryData;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -84,7 +84,7 @@ export abstract class DbPlugin<
       ) {
         if (prop === 'history') {
           // different saving behavior for history elements
-          const historyLastItem = jovo.getPersistableHistory();
+          const historyLastItem = jovo.getCurrentHistoryItem();
 
           const newHistoryItem: JovoHistoryItem = {};
 
@@ -110,17 +110,19 @@ export abstract class DbPlugin<
                     newHistoryItem[propHistory] = await func(jovo);
                   } else {
                     // default history item like nlu, output etc
-                    newHistoryItem[propHistory] = historyLastItem[propHistory];
+                    newHistoryItem[propHistory] = historyLastItem![propHistory];
                   }
                 }
               }
             }
           }
           // put latest history item on first position in array
-          item[prop] = [newHistoryItem].concat(persistableData.history!);
+          item[prop] = {
+            items: [newHistoryItem].concat(persistableData.history!.items),
+          };
 
           // remove trailing history items
-          item[prop] = item[prop]!.slice(
+          item[prop]!.items = item[prop]!.items.slice(
             0,
             (this.config.storedElements?.history as StoredElementHistory).size,
           );

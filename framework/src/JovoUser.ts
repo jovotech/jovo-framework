@@ -12,8 +12,6 @@ export type JovoUserConstructor<
 
 export interface PersistableUserData {
   data: UserData;
-  // createdAt: Date;
-  // updatedAt: Date;
 }
 
 export abstract class JovoUser<
