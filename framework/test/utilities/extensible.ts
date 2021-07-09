@@ -1,16 +1,12 @@
 import { Extensible, ExtensibleConfig, MiddlewareCollection } from '../../src';
 
 export class EmptyExtensible extends Extensible {
-  getDefaultConfig() {
+  getDefaultConfig(): ExtensibleConfig {
     return {};
   }
 
   initializeMiddlewareCollection(): MiddlewareCollection<string[]> {
     return new MiddlewareCollection();
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
   }
 }
 
@@ -28,14 +24,10 @@ export class ExampleExtensible extends Extensible<ExampleExtensibleConfig> {
   initializeMiddlewareCollection(): MiddlewareCollection<string[]> {
     return new MiddlewareCollection();
   }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
-  }
 }
 
 export class AppLikeExtensible extends Extensible {
-  getDefaultConfig() {
+  getDefaultConfig(): ExtensibleConfig {
     return {};
   }
 

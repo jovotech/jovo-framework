@@ -1,7 +1,6 @@
-import { ComponentTreeNode } from '../ComponentTree';
+import { ComponentTreeNode } from '../ComponentTreeNode';
 import { InternalIntent } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
-import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';

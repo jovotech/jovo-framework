@@ -1,5 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function forEachDeep<T = any>(
   value: T,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handler: (val: T[keyof T] | any, path: string) => void,
   path = '',
 ): void {
@@ -17,6 +19,7 @@ export function forEachDeep<T = any>(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getMethodKeys<PROTOTYPE = any>(prototype: PROTOTYPE): Array<keyof PROTOTYPE> {
   return Object.getOwnPropertyNames(prototype).filter((key) => {
     if (key === 'constructor') {

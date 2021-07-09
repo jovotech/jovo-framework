@@ -26,7 +26,7 @@ export interface JovoRoute {
 }
 
 export class RouterPlugin extends Plugin<RouterPluginConfig> {
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 

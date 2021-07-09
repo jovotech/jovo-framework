@@ -6,7 +6,8 @@ export async function getInteractionModel(
   locale: string,
   stage: string,
   askProfile?: string,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
   try {
     const cmd =
       'ask smapi get-interaction-model ' +
@@ -29,7 +30,7 @@ export async function updateInteractionModel(
   interactionModelPath: string,
   stage: string,
   askProfile?: string,
-) {
+): Promise<void> {
   const cmd: string =
     'ask smapi set-interaction-model ' +
     `-s ${skillId} ` +

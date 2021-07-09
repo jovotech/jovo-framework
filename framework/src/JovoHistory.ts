@@ -1,14 +1,14 @@
 import { OutputTemplate } from '@jovotech/output';
+import { UnknownObject } from './index';
 import { AsrData, EntityMap, NluData } from './interfaces';
 import { JovoSession } from './JovoSession';
 
-export interface JovoHistoryItem {
+export interface JovoHistoryItem extends UnknownObject {
   output?: OutputTemplate | OutputTemplate[];
   nlu?: NluData;
   state?: JovoSession['$state'];
   entities?: EntityMap;
   asr?: AsrData;
-  [key: string]: unknown;
 }
 
 export interface PersistableHistoryData {

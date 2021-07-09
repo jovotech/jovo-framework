@@ -1,9 +1,8 @@
+import { AnyObject, UnknownObject } from './index';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
 
-export interface Data {
-  [key: string]: any;
-}
+export interface Data extends AnyObject {}
 
 export interface RequestData extends Data {}
 
@@ -19,20 +18,19 @@ export interface Entity {
   name: string;
   id?: string;
   key?: string;
-  value?: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
 }
 
-export type EntityMap = Record<string, Entity>;
+export interface EntityMap {
+  [key: string]: Entity | undefined;
+}
 
-export interface AsrData {
-  [key: string]: unknown;
-
+export interface AsrData extends UnknownObject {
   text?: string;
 }
 
-export interface NluData {
-  [key: string]: unknown;
-
+export interface NluData extends UnknownObject {
   intent?: {
     name: string;
   };
@@ -48,15 +46,14 @@ export type IntentMap = Partial<Record<string, string>>;
 
 export type JovoConditionFunction = (jovo: Jovo) => boolean | Promise<boolean>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type JovoAnyFunction = (jovo: Jovo) => Promise<any>;
 
-export interface StoredElement {
+export interface StoredElement extends UnknownObject {
   enabled?: boolean;
-  [key: string]: unknown;
 }
 
-export interface StoredElementHistory extends StoredElement {
-  [key: string]: unknown;
+export interface StoredElementHistory extends StoredElement, UnknownObject {
   size?: number;
   asr?: StoredElement | boolean;
   state?: StoredElement | boolean;

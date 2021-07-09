@@ -1,9 +1,7 @@
 import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
-import {ResolutionPerAuthorityStatusCode} from '@jovotech/output-alexa';
-import {
-  DYNAMIC_ENTITY_MATCHES_PREFIX,
-  STATIC_ENTITY_MATCHES_PREFIX,
-} from './constants';
+import { UnknownObject } from '@jovotech/framework/src';
+import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export class AlexaRequest extends JovoRequest {
@@ -83,7 +81,7 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
   }
 

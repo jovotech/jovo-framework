@@ -24,6 +24,7 @@ export interface BasicLoggingConfig extends PluginConfig {
   responseObjects?: string[];
   maskRequestObjects?: string[];
   maskResponseObjects?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   maskValue?: any;
   excludeRequestObjects?: string[];
   excludeResponseObjects?: string[];
@@ -103,24 +104,23 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
+    /* eslint-disable no-console */
     if (this.config.styling) {
       console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
     }
 
     if (this.config.requestObjects && this.config.requestObjects.length > 0) {
       this.config.requestObjects.forEach((path: string) => {
-        // tslint:disable-next-line
         console.log(colorize(JSON.stringify(_get(requestCopy, path), null, 2)));
       });
     } else {
-      // tslint:disable-next-line
       console.log(colorize(JSON.stringify(requestCopy, null, 2)));
 
-      // tslint:disable-next-line:no-console
       console.log();
     }
 
     console.log(colorize(JSON.stringify(jovo.$request, null, 2), this.config.colorizeSettings));
+    /* eslint-enable no-console */
   };
   logResponse = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
     jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
@@ -150,8 +150,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         _unset(responseCopy, excludePath);
       });
     }
-    // tslint:disable-next-line:no-console
 
+    /* eslint-disable no-console */
     if (this.config.styling) {
       console.log(
         chalk.bgGray.white('\n\n <<<<< Response - ' + new Date().toISOString() + ' ') +
@@ -165,14 +165,13 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         if (!handleRequest.jovo) {
           return;
         }
-        // tslint:disable-next-line
         console.log(
           colorize(JSON.stringify(_get(responseCopy, path), null, 2), this.config.colorizeSettings),
         );
       });
     } else {
-      // tslint:disable-next-line
       console.log(colorize(JSON.stringify(responseCopy, null, 2), this.config.colorizeSettings));
     }
+    /* eslint-enable no-console */
   };
 }

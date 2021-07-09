@@ -1,5 +1,5 @@
 import {
-  DeepPartial,
+  AnyObject,
   Extensible,
   ExtensibleConfig,
   ExtensibleInitConfig,
@@ -51,21 +51,22 @@ export class GoogleBusiness extends Platform<
     };
   }
 
-  install(parent: Extensible) {
+  install(parent: Extensible): void {
     super.install(parent);
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 
-  isRequestRelated(request: Record<string, any> | GoogleBusinessRequest): boolean {
+  isRequestRelated(request: AnyObject | GoogleBusinessRequest): boolean {
     return request.agent && request.conversationId && request.requestId;
   }
 
-  isResponseRelated(response: Record<string, any> | GoogleBusinessResponse): boolean {
+  isResponseRelated(response: AnyObject | GoogleBusinessResponse): boolean {
     return response.messageId && response.representative;
   }
 
   finalizeResponse(
     response: GoogleBusinessResponse[] | GoogleBusinessResponse,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     jovo: GoogleBusinessBot,
   ):
     | GoogleBusinessResponse[]

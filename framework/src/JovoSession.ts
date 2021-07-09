@@ -1,14 +1,13 @@
+import { UnknownObject } from './index';
 import { ComponentData, SessionData } from './interfaces';
 
-export interface StateStackItem {
-  [key: string]: unknown;
-
+export interface StateStackItem extends UnknownObject {
   component: string;
   $subState?: string;
   $data?: ComponentData;
 
   resolve?: Record<string, string>;
-  config?: Record<string, unknown>;
+  config?: UnknownObject;
 }
 
 export type StateStack = StateStackItem[];

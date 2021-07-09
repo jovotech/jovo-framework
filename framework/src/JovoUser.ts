@@ -2,7 +2,6 @@ import { JovoResponse } from '@jovotech/output';
 import { UserData } from './interfaces';
 import { Jovo } from './Jovo';
 import { JovoRequest } from './JovoRequest';
-import { JovoSession, PersistableSessionData } from './JovoSession';
 
 export type JovoUserConstructor<
   REQUEST extends JovoRequest,
@@ -46,7 +45,7 @@ export abstract class JovoUser<
     };
   }
 
-  toJSON() {
+  toJSON(): JovoUser<REQUEST, RESPONSE, JOVO> {
     return { ...this, jovo: undefined };
   }
 }

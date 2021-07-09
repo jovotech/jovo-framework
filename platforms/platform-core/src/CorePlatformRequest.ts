@@ -1,4 +1,5 @@
-import { EntityMap, JovoRequest, JovoRequestType, JovoSession } from '@jovotech/framework';
+import { EntityMap, JovoRequest, JovoRequestType } from '@jovotech/framework';
+import { UnknownObject } from '@jovotech/framework/src';
 import { Context, Request, RequestBodyText } from './interfaces';
 
 export class CorePlatformRequest extends JovoRequest {
@@ -27,7 +28,7 @@ export class CorePlatformRequest extends JovoRequest {
     return this.request?.type ? { type: this.request.type } : undefined;
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return this.context?.session?.data;
   }
 

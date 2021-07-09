@@ -1,9 +1,10 @@
+import { UnknownObject } from '../index';
 import { JovoError } from '../JovoError';
 import { StateStack } from '../JovoSession';
 import { RouteMatch } from '../plugins/RouteMatch';
 
 export interface MatchingRouteNotFoundErrorOptions {
-  request: Record<string, unknown>;
+  request: UnknownObject;
   intent: string;
   mappedIntent?: string;
   state?: StateStack;

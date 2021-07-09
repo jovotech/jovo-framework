@@ -5,6 +5,7 @@ import { ComponentMetadata } from './ComponentMetadata';
 import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 import { HandlerMetadata } from './HandlerMetadata';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
+import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 import { OutputMetadata } from './OutputMetadata';
 
 export class MetadataStorage {
@@ -30,7 +31,9 @@ export class MetadataStorage {
     return MetadataStorage.instance;
   }
 
-  addComponentMetadata<COMPONENT extends BaseComponent>(metadata: ComponentMetadata<COMPONENT>) {
+  addComponentMetadata<COMPONENT extends BaseComponent>(
+    metadata: ComponentMetadata<COMPONENT>,
+  ): void {
     // TODO: determine what to do if a component like that already exists
     // for now, just skip (first only counts)
     if (this.getComponentMetadata(metadata.target)) {
@@ -69,7 +72,7 @@ export class MetadataStorage {
 
   addComponentOptionMetadata<COMPONENT extends BaseComponent>(
     metadata: ComponentOptionMetadata<COMPONENT>,
-  ) {
+  ): void {
     this.componentOptionMetadata.push(metadata);
   }
 
@@ -82,7 +85,10 @@ export class MetadataStorage {
     ) as ComponentOptionMetadata<COMPONENT>[];
   }
 
-  addOutputMetadata<OUTPUT extends BaseOutput>(target: OutputConstructor<OUTPUT>, name: string) {
+  addOutputMetadata<OUTPUT extends BaseOutput>(
+    target: OutputConstructor<OUTPUT>,
+    name: string,
+  ): void {
     const existingMetadata = this.getOutputMetadataByName(name);
 
     if (existingMetadata) {
@@ -126,7 +132,7 @@ export class MetadataStorage {
 
   addHandlerMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
     metadata: HandlerMetadata<COMPONENT, KEY>,
-  ) {
+  ): void {
     this.handlerMetadata.push(metadata as HandlerMetadata);
   }
 
@@ -146,7 +152,7 @@ export class MetadataStorage {
     const mergedMetadata = componentHandlerMetadata.map((handlerMetadata) => {
       const mergedHandlerMetadata = _cloneDeep(handlerMetadata);
       const relatedHandlerOptionMetadata = this.handlerOptionMetadata.filter((optionMetadata) =>
-        optionMetadata.hasSameTargetAs(mergedHandlerMetadata),
+        optionMetadata.hasSameTargetAs(mergedHandlerMetadata as MethodDecoratorMetadata),
       );
       relatedHandlerOptionMetadata.forEach((optionMetadata) =>
         mergedHandlerMetadata.mergeWith(optionMetadata),
@@ -188,7 +194,7 @@ export class MetadataStorage {
 
   addHandlerOptionMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
     metadata: HandlerOptionMetadata<COMPONENT, KEY>,
-  ) {
+  ): void {
     this.handlerOptionMetadata.push(metadata as HandlerOptionMetadata);
   }
 

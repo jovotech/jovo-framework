@@ -1,6 +1,7 @@
 import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import {
+  AnyObject,
   App,
   AppBaseMiddleware,
   ArrayElement,
@@ -45,9 +46,12 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 ];
 
 export abstract class Platform<
-  REQUEST extends JovoRequest = JovoRequest,
-  RESPONSE extends JovoResponse = JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  REQUEST extends JovoRequest = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  RESPONSE extends JovoResponse = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  JOVO extends Jovo<REQUEST, RESPONSE> = any,
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
@@ -56,11 +60,9 @@ export abstract class Platform<
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  abstract isRequestRelated(request: REQUEST | Record<string, any>): boolean;
+  abstract isRequestRelated(request: REQUEST | AnyObject): boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  abstract isResponseRelated(response: RESPONSE | Record<string, any>): boolean;
+  abstract isResponseRelated(response: RESPONSE | AnyObject): boolean;
   abstract finalizeResponse(
     response: RESPONSE | RESPONSE[],
     jovo: JOVO,
@@ -70,7 +72,7 @@ export abstract class Platform<
     return new MiddlewareCollection<PlatformBaseMiddlewares>(...BASE_PLATFORM_MIDDLEWARES);
   }
 
-  install(parent: Extensible) {
+  install(parent: Extensible): void {
     if (!(parent instanceof App)) {
       throw new InvalidParentError(this.constructor.name, App);
     }
@@ -102,8 +104,7 @@ export abstract class Platform<
     return new this.jovoClass(app, handleRequest, this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  createRequestInstance(request: REQUEST | Record<string, any>): REQUEST {
+  createRequestInstance(request: REQUEST | AnyObject): REQUEST {
     const instance = new this.requestClass();
     _merge(instance, request);
     return instance;

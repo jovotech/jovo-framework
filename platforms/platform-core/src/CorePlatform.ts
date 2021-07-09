@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
+import { AnyObject, ExtensibleConfig, Platform } from '@jovotech/framework';
 import {
   CorePlatformOutputTemplateConverterStrategy,
   CorePlatformResponse,
@@ -23,6 +23,7 @@ export class CorePlatform extends Platform<
   static create(
     name: string,
     type: CorePlatformConfig['type'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): new (...args: any[]) => CorePlatform {
     // workaround to make the anonymous' class name equal to `name`
     const obj = {
@@ -49,13 +50,11 @@ export class CorePlatform extends Platform<
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isRequestRelated(request: Record<string, any> | CorePlatformRequest): boolean {
+  isRequestRelated(request: AnyObject | CorePlatformRequest): boolean {
     return request.version && request.request?.type && request.type === this.config.type;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isResponseRelated(response: Record<string, any> | CorePlatformResponse): boolean {
+  isResponseRelated(response: AnyObject | CorePlatformResponse): boolean {
     return (
       response.version &&
       response.output &&

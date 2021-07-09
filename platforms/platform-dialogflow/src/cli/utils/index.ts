@@ -1,4 +1,4 @@
-import { execAsync, JovoCliError, Log } from '@jovotech/cli-core';
+import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
 export * from './interfaces';
 export * from './constants';

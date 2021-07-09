@@ -9,10 +9,15 @@ require('source-map-support').install();
 export * from 'axios';
 export { axios };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyObject = Record<string, any>;
+export type UnknownObject = Record<string, unknown>;
+
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = PartialDeep<T>;
-export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Constructor<T = AnyObject, ARGS extends unknown[] = any[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
   T,
@@ -49,6 +54,7 @@ export * from './BaseComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './ComponentTree';
+export * from './ComponentTreeNode';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';
@@ -103,4 +109,3 @@ export * from './plugins/RoutingExecutor';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
-

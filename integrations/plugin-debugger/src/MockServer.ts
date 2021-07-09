@@ -1,11 +1,11 @@
-import { Headers, QueryParams, Server } from '@jovotech/framework';
+import { AnyObject, Headers, QueryParams, Server } from '@jovotech/framework';
 
 export class MockServer extends Server {
-  constructor(readonly req: any) {
+  constructor(readonly req: AnyObject) {
     super();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   fail(error: Error): void {}
 
   getQueryParams(): QueryParams {
@@ -24,10 +24,12 @@ export class MockServer extends Server {
     return false;
   }
 
-  async setResponse(response: any): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async setResponse(response: AnyObject): Promise<void> {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setResponseHeaders(header: Record<string, string>): void {
     return;
   }
