@@ -1,5 +1,12 @@
+import { existsSync, readFileSync, unlinkSync, writeFile, writeFileSync } from 'fs';
+import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
-import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
+import {
+  JovoResponse,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  SingleResponseOutputTemplateConverterStrategy,
+} from '@jovotech/output';
 import { App } from './App';
 import { JovoRequest } from './JovoRequest';
 import { HandleRequest } from './HandleRequest';
@@ -11,7 +18,8 @@ import { JovoUser } from './JovoUser';
 import { Plugin, PluginConfig } from './Plugin';
 import { EntityMap } from './interfaces';
 import { JovoSession } from './JovoSession';
-import { readdirSync, readFileSync } from 'fs';
+import { JovoError } from './JovoError';
+import { Constructor } from '.';
 
 export interface Input {
   type: RequestType;
@@ -44,8 +52,11 @@ export class TestServer extends Server {
   setResponseHeaders(header: Record<string, string>): void {}
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async setResponse(response: any): Promise<void> {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  fail(error: Error): void {}
+
+  fail(error: Error): void {
+    console.error('TestServer.fail:');
+    console.error(error);
+  }
 }
 
 export class TestRequest extends JovoRequest {
