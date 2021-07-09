@@ -116,6 +116,9 @@ The history object contains an `items` array that is sorted by time (DESC). The 
 // Get the history element for the most recent interaction
 this.$history.prev
 
+// Alternatively access it using the items array
+this.$history.items[0]
+
 /* Sample result if output and nlu are enabled
 {
   output: {
