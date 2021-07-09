@@ -1,7 +1,4 @@
-import { HandleRequest } from './HandleRequest';
 import { Jovo } from './Jovo';
-import { PersistableSessionData } from './JovoSession';
-import { PersistableUserData } from './JovoUser';
 import { PluginConfig } from './Plugin';
 
 export interface Data {
@@ -49,18 +46,33 @@ export interface Intent {
 
 export type IntentMap = Partial<Record<string, string>>;
 
-export type JovoConditionFunction = (
-  handleRequest: HandleRequest,
-  jovo: Jovo,
-) => boolean | Promise<boolean>;
+export type JovoConditionFunction = (jovo: Jovo) => boolean | Promise<boolean>;
+
+export type JovoAnyFunction = (jovo: Jovo) => Promise<any>;
+
+export interface StoredElement {
+  enabled?: boolean;
+  [key: string]: unknown;
+}
+
+export interface StoredElementHistory extends StoredElement {
+  [key: string]: unknown;
+  size?: number;
+  asr?: StoredElement | boolean;
+  state?: StoredElement | boolean;
+  output?: StoredElement | boolean;
+  nlu?: StoredElement | boolean;
+  request?: StoredElement | boolean;
+  response?: StoredElement | boolean;
+}
 
 export interface DbPluginConfig extends PluginConfig {
-  storedElements: {
-    $user: {
-      enabled: boolean;
-    };
-    $session: {
-      enabled: boolean;
-    };
+  storedElements?: {
+    [key: string]: unknown;
+    user?: StoredElement | boolean;
+    session?: StoredElement | boolean;
+    history?: StoredElementHistory | boolean;
+    createdAt?: StoredElement | boolean;
+    updateAt?: StoredElement | boolean;
   };
 }

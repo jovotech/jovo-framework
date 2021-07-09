@@ -2,9 +2,9 @@ import { JovoError } from '../JovoError';
 
 // TODO: improve
 export class HandlerNotFoundError extends JovoError {
-  constructor(className: string, handlerKey: string) {
+  constructor(className: string, handler: string) {
     super({
-      message: `Could not find handler ${handlerKey} in component ${className}.`,
+      message: `Could not find handler ${handler} in component ${className}.`,
     });
   }
 }

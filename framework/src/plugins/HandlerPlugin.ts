@@ -1,5 +1,5 @@
 import { HandleRequest } from '../HandleRequest';
-import { App, PluginConfig } from '../index';
+import { App, PluginConfig, StateStackItem } from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';
 
@@ -25,15 +25,33 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
   }
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
-    if (!jovo.$route || !jovo.$route?.path?.length) {
-      // TODO error-handling or determine what to do in general
+    if (!jovo.$route) {
       return;
     }
-    const componentNode = handleRequest.componentTree.getNodeAtOrFail(jovo.$route.path);
+    // get the node at the resolved route-path
+    const componentNode = handleRequest.componentTree.getNodeAtOrFail(jovo.$route.resolved.path);
+    // update the state-stack if the component is not global
+    if (!componentNode.metadata.isGlobal) {
+      const stackItem: StateStackItem = {
+        component: componentNode.path.join('.'),
+      };
+      // if no state-stack exists, initialize it and add the new item
+      if (!jovo.$session.$state?.length) {
+        jovo.$session.$state = [stackItem];
+      } else {
+        const currentStateStackItem = jovo.$session.$state[jovo.$session.$state.length - 1];
+        // if the component path is a different one, omit every custom component data (resolve, config, $data)
+        if (stackItem.component !== currentStateStackItem.component) {
+          jovo.$session.$state[jovo.$session.$state.length - 1] = stackItem;
+        }
+      }
+    }
+    // update the active component node in handleRequest to keep track of the state
+    handleRequest.$activeComponentNode = componentNode;
+    // execute the component's handler
     await componentNode.executeHandler({
       jovo,
-      handlerKey: jovo.$route.handlerKey,
-      updateRoute: false,
+      handler: jovo.$route.resolved.handler,
     });
   };
 }

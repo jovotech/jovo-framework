@@ -94,8 +94,9 @@ Each output class contains:
 Here is an example of a `HelloWorldOutput` class:
 
 ```typescript
-import { BaseOutput } from '@jovotech/framework';
+import { Output, BaseOutput } from '@jovotech/framework';
 
+@Output()
 export class HelloWorldOutput extends BaseOutput {
 
   build() {
@@ -289,7 +290,7 @@ By default, your class does not need a custom constructor.
 However, if you wish to add one, you can do the following:
 
 ```typescript
-import { BaseOutput, OutputOptions } from '@jovotech/framework';
+import { Output, BaseOutput, OutputOptions } from '@jovotech/framework';
 
 // ...
 
@@ -297,6 +298,7 @@ export interface YourOutputOptions extends OutputOptions {
   // ...
 }
 
+Output()
 export class YourOutput extends BaseOutput<YourOutputOptions> {
   // ...
 

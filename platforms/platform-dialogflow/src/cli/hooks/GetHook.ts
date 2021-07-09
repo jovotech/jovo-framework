@@ -5,6 +5,7 @@ import {
   flags,
   InstallContext,
   JovoCliError,
+  Log,
   PluginHook,
   printHighlight,
   promptOverwrite,
@@ -151,13 +152,12 @@ export class GetHook extends PluginHook<GetEvents> {
       try {
         const response = await axios({
           method: 'POST',
-              url: `https://dialogflow.googleapis.com/v2beta1/projects/${this.$context.dialogflow.projectId}/agent:export`, // eslint-disable-line
+          url: `https://dialogflow.googleapis.com/v2beta1/projects/${this.$context.dialogflow.projectId}/agent:export`, // eslint-disable-line
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
         });
-        Log.verbose(response.data);
         const zip: AdmZip = new AdmZip(Buffer.from(response.data.response.agentContent, 'base64'));
         zip.extractAllTo(platformPath, true);
       } catch (error) {

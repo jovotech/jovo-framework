@@ -13,10 +13,15 @@ import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
 
+export interface AppRoutingConfig {
+  intentMap?: IntentMap;
+  intentsToSkipUnhandled?: string[];
+}
+
 export interface AppConfig extends ExtensibleConfig {
-  intentMap: IntentMap;
-  logging?: BasicLoggingConfig | boolean;
   i18n?: I18NextOptions;
+  logging?: BasicLoggingConfig | boolean;
+  routing?: AppRoutingConfig;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
@@ -79,9 +84,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddleware[]> {
 
   getDefaultConfig(): AppConfig {
     return {
-      plugin: {},
-      intentMap: {},
-      logging: {},
+      logging: true,
     };
   }
 
