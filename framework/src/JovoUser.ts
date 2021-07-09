@@ -12,8 +12,6 @@ export type JovoUserConstructor<
 
 export interface PersistableUserData {
   data: UserData;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export abstract class JovoUser<
@@ -29,26 +27,22 @@ export abstract class JovoUser<
 
   abstract id: string;
 
+  isNew = true;
+
   getPersistableData(): PersistableUserData {
     return {
       data: this.$data,
-      createdAt: this.createdAt || undefined,
-      updatedAt: this.updatedAt || undefined,
     };
   }
 
-  setPersistableData(data: PersistableUserData): this {
-    this.$data = data.data;
-    this.createdAt = new Date(data.createdAt);
-    this.updatedAt = new Date(data.updatedAt);
+  setPersistableData(data?: PersistableUserData): this {
+    this.$data = data?.data || {};
     return this;
   }
 
   getDefaultPersistableData(): PersistableUserData {
     return {
       data: {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
   }
 
