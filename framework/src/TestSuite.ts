@@ -64,52 +64,93 @@ export class TestRequest extends JovoRequest {
 
   isTestRequest = true;
   session!: JovoSession;
+  userId!: string;
+  locale!: string;
 
   getEntities(): EntityMap | undefined {
     return {};
   }
+
   getIntentName(): string | undefined {
     return;
   }
+
   getLocale(): string | undefined {
-    return;
+    return this.locale;
   }
+
+  setLocale(locale: string | undefined): void {
+    if (locale) {
+      this.locale = locale;
+    }
+  }
+
   getRawText(): string | undefined {
     return;
   }
+
   getRequestType(): JovoRequestType | undefined {
     return;
   }
+
   getSessionId(): string | undefined {
     return;
   }
+
   getSessionData(): Record<string, unknown> | undefined {
     return this.session;
   }
+
+  setSessionData(data: Record<string, unknown>): void {
+    this.session = new JovoSession(data);
+  }
+
   isNewSession(): boolean | undefined {
     return this.session.isNew;
+  }
+
+  getUserId(): string {
+    return this.userId;
+  }
+
+  setUserId(userId: string): void {
+    this.userId = userId;
   }
 }
 
 export class TestResponse extends JovoResponse {
   isTestResponse!: boolean;
+  shouldEndSession?: boolean;
+
+  hasSessionEnded(): boolean {
+    return !!this.shouldEndSession;
+  }
 }
 
 export class TestJovo extends Jovo<TestRequest, TestResponse> {}
 
-export class TestOutputConverterStrategy implements OutputTemplateConverterStrategy<TestResponse> {
+export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<TestResponse> {
   readonly responseClass = TestResponse;
 
-  toResponse(output: OutputTemplate | OutputTemplate[]): TestResponse | TestResponse[] {
-    return { isTestResponse: true };
+  platformName = 'testPlatform';
+
+  buildResponse(output: OutputTemplate): TestResponse {
+    // TODO: new TestResponse()?
+    return {
+      isTestResponse: true,
+      shouldEndSession: !output.listen,
+      hasSessionEnded() {
+        return !!this.shouldEndSession;
+      },
+    };
   }
 
-  fromResponse(response: TestResponse | TestResponse[]): OutputTemplate | OutputTemplate[] {
+  fromResponse(response: TestResponse): OutputTemplate {
     return {};
   }
 }
 
-export class TestUser extends JovoUser<TestRequest, TestResponse, TestJovo> {
+export class TestUser extends JovoUser {
   id = 'TestUser';
 }
 
