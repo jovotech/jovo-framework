@@ -15,6 +15,8 @@ export abstract class JovoRequest {
 
   abstract getLocale(): string | undefined;
 
+  abstract setLocale(locale: string | undefined): void;
+
   abstract getRawText(): string | undefined;
 
   abstract getRequestType(): JovoRequestType | undefined;
@@ -22,6 +24,12 @@ export abstract class JovoRequest {
   abstract getSessionId(): string | undefined;
 
   abstract getSessionData(): Record<string, unknown> | undefined;
+
+  abstract setSessionData(data: Record<string, unknown>): void;
+
+  abstract getUserId(): string;
+
+  abstract setUserId(userId: string): void;
 
   abstract isNewSession(): boolean | undefined;
 

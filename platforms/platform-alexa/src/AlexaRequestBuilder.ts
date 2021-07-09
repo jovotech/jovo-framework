@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join as joinPaths } from 'path';
 import { AlexaRequest } from './AlexaRequest';
 
