@@ -24,10 +24,16 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     if (path.isAbsolute(this.config.pathToFile)) {
       return this.config.pathToFile;
     }
+    // Make sure the pathToFile is applied relative to the dist-dir
     return path.join(process.cwd(), 'dist', this.config.pathToFile);
   }
 
   async install(parent: App): Promise<void> {
+    parent.middlewareCollection.use('after.request', this.loadData);
+    parent.middlewareCollection.use('before.response', this.saveData);
+  }
+
+  async initialize(): Promise<void> {
     const pathToFileDir = path.dirname(this.pathToFile);
 
     const pathExists = async (pathToFile: string) =>
@@ -40,9 +46,6 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     if (!(await pathExists(this.pathToFile))) {
       await fs.promises.writeFile(this.pathToFile, '[]');
     }
-
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
   }
 
   getDbItem = async (primaryKey: string): Promise<DbItem> => {
