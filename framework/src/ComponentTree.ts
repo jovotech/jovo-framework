@@ -32,7 +32,7 @@ export interface Tree<NODE extends { children?: Tree<NODE> }> {
  *     "metadata": {
  *       "options": {
  *         "components": [
- *           null
+ *           "NestedComponent"
  *         ]
  *       }
  *     },

@@ -72,6 +72,20 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   }
 
   toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {
-    return { ...this, parent: this.parent ? this.parent.name : undefined };
+    return {
+      ...this,
+      parent: this.parent ? this.parent.name : undefined,
+      metadata: {
+        ...this.metadata,
+        options: {
+          ...this.metadata.options,
+          components: this.metadata.options.components?.map((component) =>
+            typeof component === 'function'
+              ? component.name
+              : { ...component, component: component.component.name },
+          ),
+        },
+      },
+    };
   }
 }
