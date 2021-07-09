@@ -8,7 +8,7 @@
 
 - [#940](https://github.com/jovotech/jovo-framework/pull/940) :sparkles: Implement passing of OutputTemplate-properties directly to `$send` via the options
 - [#941](https://github.com/jovotech/jovo-framework/pull/941) :sparkles: :recycle: Implement `ComponentTree` for easier component-management
-- [#942](https://github.com/jovotech/jovo-framework/pull/942) :sparkles: Implement multiple $send calls for synchronous platforms
+- [#942](https://github.com/jovotech/jovo-framework/pull/942) :sparkles: Implement multiple `$send` calls for synchronous platforms
 - [#943](https://github.com/jovotech/jovo-framework/pull/943) :sparkles: Implement global components
 - [#946](https://github.com/jovotech/jovo-framework/pull/946) :sparkles: :recycle: Implement Jovo History functionality, recycle persistence layer
 - [#949](https://github.com/jovotech/jovo-framework/pull/949) :recycle: Refactor routing
