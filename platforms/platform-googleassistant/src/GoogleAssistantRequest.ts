@@ -1,4 +1,4 @@
-import {EntityMap, JovoRequest, JovoRequestType, UnknownObject} from '@jovotech/framework';
+import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
 import { Context, Handler, Intent } from './interfaces';
 

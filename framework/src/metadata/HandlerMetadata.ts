@@ -1,4 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
+import { UnknownObject } from '../index';
 import { Intent, JovoConditionFunction } from '../interfaces';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
@@ -17,9 +18,7 @@ export interface RoutesOptions {
   prioritizedOverUnhandled?: boolean;
 }
 
-export interface HandleOptions extends ConditionsOptions, RoutesOptions {
-  [key: string]: unknown;
-}
+export interface HandleOptions extends ConditionsOptions, RoutesOptions, UnknownObject {}
 
 export class HandlerMetadata<
   COMPONENT extends BaseComponent = BaseComponent,

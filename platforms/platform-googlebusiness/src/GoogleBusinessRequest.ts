@@ -1,5 +1,5 @@
 import { EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
-import {UnknownObject} from '@jovotech/framework/src';
+import { UnknownObject } from '@jovotech/framework/src';
 import { Receipt } from './interfaces';
 
 export class GoogleBusinessRequest extends JovoRequest {

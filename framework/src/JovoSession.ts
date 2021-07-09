@@ -1,9 +1,7 @@
 import { UnknownObject } from './index';
 import { ComponentData, SessionData } from './interfaces';
 
-export interface StateStackItem {
-  [key: string]: unknown;
-
+export interface StateStackItem extends UnknownObject {
   component: string;
   $subState?: string;
   $data?: ComponentData;

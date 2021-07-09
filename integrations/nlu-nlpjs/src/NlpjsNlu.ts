@@ -6,7 +6,8 @@ import {
   NluData,
   NluPlugin,
   Platform,
-  PluginConfig, UnknownObject,
+  PluginConfig,
+  UnknownObject,
 } from '@jovotech/framework';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';

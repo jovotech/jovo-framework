@@ -1,5 +1,5 @@
 import { EntityMap, JovoRequest, JovoRequestType } from '@jovotech/framework';
-import {UnknownObject} from '@jovotech/framework/src';
+import { UnknownObject } from '@jovotech/framework/src';
 import { Context, Request, RequestBodyText } from './interfaces';
 
 export class CorePlatformRequest extends JovoRequest {

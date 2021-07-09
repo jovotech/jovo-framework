@@ -1,7 +1,6 @@
-import { AnyObject } from './index';
+import { AnyObject, UnknownObject } from './index';
 
-export interface JovoErrorOptions {
-  [key: string]: unknown;
+export interface JovoErrorOptions extends UnknownObject {
   message: string;
   context?: AnyObject;
   details?: string;

@@ -37,7 +37,7 @@ export class GoogleAssistant extends Platform<
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 
-  initialize(parent: App) {
+  initialize(parent: App): void {
     parent.use(GoogleAssistantRepromptComponent);
   }
 

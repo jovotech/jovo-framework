@@ -1,22 +1,21 @@
 import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
+  DOWNLOAD,
   execAsync,
   flags,
   InstallContext,
   JovoCliError,
-  Log,
   PluginHook,
   printHighlight,
   promptOverwrite,
   Task,
-  DOWNLOAD,
   wait,
 } from '@jovotech/cli-core';
+import AdmZip from 'adm-zip';
 import axios, { AxiosError } from 'axios';
 import { existsSync, mkdirSync } from 'fs';
 import { join as joinPaths } from 'path';
-import AdmZip from 'adm-zip';
 
 import { DialogflowCli } from '..';
 import { activateServiceAccount, getGcloudAccessToken } from '../utils';

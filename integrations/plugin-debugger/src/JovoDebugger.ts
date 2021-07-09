@@ -12,7 +12,7 @@ import {
   Plugin,
   PluginConfig,
 } from '@jovotech/framework';
-import {UnknownObject} from '@jovotech/framework/src';
+import { UnknownObject } from '@jovotech/framework/src';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';

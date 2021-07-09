@@ -1,4 +1,10 @@
-import {EntityMap, JovoRequest, JovoRequestType, RequestType, UnknownObject} from '@jovotech/framework';
+import {
+  EntityMap,
+  JovoRequest,
+  JovoRequestType,
+  RequestType,
+  UnknownObject,
+} from '@jovotech/framework';
 import { FACEBOOK_LAUNCH_PAYLOAD } from '.';
 import { MessagingData } from './interfaces';
 
