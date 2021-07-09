@@ -99,6 +99,7 @@ export * from './metadata/MethodDecoratorMetadata';
 export * from './metadata/OutputMetadata';
 
 export * from './plugins/BasicLogging';
+export * from './plugins/DbPlugin';
 export * from './plugins/HandlerPlugin';
 export * from './plugins/OutputPlugin';
 export * from './plugins/RouteMatch';

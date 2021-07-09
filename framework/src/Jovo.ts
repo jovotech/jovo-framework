@@ -18,6 +18,8 @@ import {
   I18NextTOptions,
   MetadataStorage,
   OutputConstructor,
+  PersistableSessionData,
+  PersistableUserData,
   PickWhere,
   Server,
   StateStackItem,
@@ -30,6 +32,7 @@ import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
+import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest = JovoRequest,
@@ -38,6 +41,14 @@ export type JovoConstructor<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>,
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
+
+export interface JovoPersistableData {
+  user?: PersistableUserData;
+  session?: PersistableSessionData;
+  history?: PersistableHistoryData;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export interface JovoRequestType {
   type?: RequestTypeLike;
@@ -94,6 +105,8 @@ export abstract class Jovo<
   $type: JovoRequestType;
   $user: JovoUser<REQUEST, RESPONSE, this>;
 
+  $history: JovoHistory;
+
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
@@ -109,6 +122,7 @@ export abstract class Jovo<
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
+    this.$history = new JovoHistory();
     this.$user = this.$platform.createUserInstance(this);
   }
 
@@ -407,6 +421,36 @@ export abstract class Jovo<
   //TODO: needs to be evaluated
   isNewSession(): boolean {
     return this.$session.isNew;
+  }
+
+  getPersistableData(): JovoPersistableData {
+    return {
+      user: this.$user.getPersistableData(),
+      session: this.$session.getPersistableData(),
+      history: this.$history.getPersistableData(),
+      createdAt: new Date(this.$user.createdAt).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  setPersistableData(data: JovoPersistableData): void {
+    this.$user.setPersistableData(data.user);
+    this.$session.setPersistableData(data.session);
+    this.$history.setPersistableData(data.history);
+    this.$user.createdAt = new Date(data?.createdAt || new Date());
+    this.$user.updatedAt = new Date(data?.updatedAt || new Date());
+  }
+
+  getCurrentHistoryItem(): JovoHistoryItem {
+    return {
+      output: this.$output,
+      nlu: this.$nlu,
+      state: this.$state,
+      entities: this.$entities,
+      asr: this.$asr,
+      request: this.$request,
+      response: this.$response,
+    };
   }
 
   private get jovoReference(): Jovo {

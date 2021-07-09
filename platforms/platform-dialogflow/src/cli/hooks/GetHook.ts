@@ -158,7 +158,6 @@ export class GetHook extends PluginHook<GetEvents> {
             'Content-Type': 'application/json',
           },
         });
-        Log.verbose(response.data);
         const zip: AdmZip = new AdmZip(Buffer.from(response.data.response.agentContent, 'base64'));
         zip.extractAllTo(platformPath, true);
       } catch (error) {
