@@ -110,11 +110,11 @@ this.$user.$data.someKey = 'someValue';
 
 The `$history` makes it possible to store data of each interaction into a persisted history. This enables your app to remember what was previously said, repeat things like previous output, or just track usage over time.
 
-The history is an array that is sorted by time (DESC), which means that the most recent history item can be accessed like this:
+The history object contains an `items` array that is sorted by time (DESC). The most recent history item can be accessed like this:
 
 ```typescript
 // Get the history element for the most recent interaction
-this.$history[0]
+this.$history.prev
 
 /* Sample result if output and nlu are enabled
 {
@@ -180,38 +180,40 @@ Here is an example how the history is then stored in a database:
 [
   {
     // ...
-    "history": [
-      {
-        "output": {
-          "message": "Yes! I love pizza, too."
-        },
-        "nlu": {
-          "intent": {
-            "name": "AMAZON.YesIntent"
+    "history": {
+      "items": [
+        {
+          "output": {
+            "message": "Yes! I love pizza, too."
           },
-          "entities": {}
+          "nlu": {
+            "intent": {
+              "name": "AMAZON.YesIntent"
+            },
+            "entities": {}
+          },
+          "state": [
+            {
+              "componentPath": "LoveHatePizzaComponent"
+            }
+          ],
+          "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
         },
-        "state": [
-          {
-            "componentPath": "LoveHatePizzaComponent"
-          }
-        ],
-        "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
-      },
-      {
-        "output": {
-          "message": "Hello World! Do you like pizza?",
-          "listen": true
-        },
-        "nlu": {},
-        "state": [
-          {
-            "componentPath": "LoveHatePizzaComponent"
-          }
-        ],
-        "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
-      }
-    ],
+        {
+          "output": {
+            "message": "Hello World! Do you like pizza?",
+            "listen": true
+          },
+          "nlu": {},
+          "state": [
+            {
+              "componentPath": "LoveHatePizzaComponent"
+            }
+          ],
+          "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
+        }
+      ]
+    },
     "createdAt": "2021-06-30T06:45:40.444Z",
     "updatedAt": "2021-06-30T06:47:44.253Z"
   }
