@@ -52,7 +52,7 @@ export abstract class Platform<
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, this>;
-  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE, JOVO>;
+  abstract readonly userClass: JovoUserConstructor;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
@@ -109,7 +109,7 @@ export abstract class Platform<
     return instance;
   }
 
-  createUserInstance(jovo: JOVO): JovoUser<REQUEST, RESPONSE, JOVO> {
-    return new this.userClass(jovo);
+  createUserInstance(): JovoUser {
+    return new this.userClass();
   }
 }

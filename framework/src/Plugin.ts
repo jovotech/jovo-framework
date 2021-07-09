@@ -6,6 +6,7 @@ export interface PluginConfig {
   [key: string]: unknown;
 
   enabled?: boolean;
+  skipTests?: boolean;
 }
 
 export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
