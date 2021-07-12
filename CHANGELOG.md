@@ -2,6 +2,25 @@
 
 ### Latest Prerelease Framework Version: 4.0.0-alpha.17
 
+## 2021-07-12
+
+##### `@jovotech/platform-alexa [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/platform-core [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/platform-googlebusiness [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/plugin-debugger [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+
 ## 2021-07-09
 
 ##### `@jovotech/framework [4.0.0-alpha.17]`
