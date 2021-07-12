@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-core",
-  "version": "4.0.0-alpha.17",
+  "version": "4.0.0-alpha.18",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",

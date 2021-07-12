@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-alpha.17",
+  "version": "4.0.0-alpha.18",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -23,7 +23,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/nlu-nlpjs": "^4.0.0-alpha.17",
-    "@jovotech/platform-core": "^4.0.0-alpha.17",
+    "@jovotech/platform-core": "^4.0.0-alpha.18",
     "@nlpjs/lang-en": "^4.22.0",
     "@types/socket.io-client": "^1.4.36",
     "fast-deep-equal": "^3.1.3",

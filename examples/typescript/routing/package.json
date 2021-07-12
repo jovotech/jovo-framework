@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/examples-routing",
   "private": true,
-  "version": "4.0.0-alpha.17",
+  "version": "4.0.0-alpha.18",
   "description": "",
   "scripts": {
     "prettier": "prettier -w -l src test",
@@ -13,7 +13,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/framework": "^4.0.0-alpha.17",
-    "@jovotech/platform-alexa": "^4.0.0-alpha.17"
+    "@jovotech/platform-alexa": "^4.0.0-alpha.18"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
