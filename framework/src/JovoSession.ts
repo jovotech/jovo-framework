@@ -16,8 +16,8 @@ export interface PersistableSessionData {
   id?: string;
   data: SessionData;
   state?: StateStack;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export class JovoSession {
@@ -44,8 +44,8 @@ export class JovoSession {
       id: this.id,
       data: this.$data,
       state: this.$state,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
     };
   }
 
@@ -55,7 +55,7 @@ export class JovoSession {
     this.$state = data?.state;
 
     this.updatedAt = new Date();
-    this.createdAt = this.isNew ? new Date() : data?.createdAt || new Date();
+    this.createdAt = this.isNew ? new Date() : new Date(data?.createdAt || new Date());
     return this;
   }
 
