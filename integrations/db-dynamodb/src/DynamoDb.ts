@@ -22,8 +22,8 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 export interface DynamoDbConfig extends DbPluginConfig {
   table: {
     name: string;
-    createTableOnInit?: boolean; // creates a table if one does not already exist
-    primaryKeyColumn?: string; // name of primary key column
+    createTableOnInit?: boolean; // Creates a table if one does not already exist
+    primaryKeyColumn?: string; // Name of primary key column
     readCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
     writeCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
   };
@@ -157,11 +157,11 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   };
 
   checkRequirements = (): void | Error => {
-    if (!this.config.primaryKeyColumn) {
-      throw new Error('primaryKeyColumn must not be undefined');
+    if (!this.config.table.primaryKeyColumn) {
+      throw new Error('this.config.table.primaryKeyColumn must not be undefined');
     }
-    if (!this.config.tableName) {
-      throw new Error('tableName must not be undefined');
+    if (!this.config.table.name) {
+      throw new Error('this.config.table.name must not be undefined');
     }
   };
 }
