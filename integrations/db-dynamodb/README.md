@@ -161,9 +161,3 @@ new DynamoDb({
 }),
 ```
 
-
-## Troubleshooting
-
-Here are a few things you need to consider when switching from a different database to DynamoDB:
-
-* DynamoDB does not allow empty strings (`""`) as values. The DynamoDB client library turns them into `null`. We recommend not using empty strings.

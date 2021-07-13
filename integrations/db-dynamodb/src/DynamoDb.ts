@@ -151,7 +151,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     await this.client.send(
       new PutItemCommand({
         TableName: params.TableName,
-        Item: marshall(item, { removeUndefinedValues: true, convertEmptyValues: true }),
+        Item: marshall(item, { removeUndefinedValues: true }),
       }),
     );
   };
