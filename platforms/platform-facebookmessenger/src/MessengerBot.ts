@@ -20,12 +20,12 @@ import { SendMessageResult } from './interfaces';
 export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMessengerResponse> {
   get apiVersion(): string {
     return (
-      this.$handleRequest.plugins?.FacebookMessenger?.config?.version || LATEST_FACEBOOK_API_VERSION
+      this.$handleRequest.config.plugin?.FacebookMessenger?.version || LATEST_FACEBOOK_API_VERSION
     );
   }
 
   get pageAccessToken(): string | undefined {
-    return this.$handleRequest.plugins.FacebookMessenger?.config?.pageAccessToken;
+    return this.$handleRequest.config.plugin?.FacebookMessenger?.pageAccessToken;
   }
 
   async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
@@ -45,19 +45,20 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
+    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
     } else {
       await super.$send(outputConstructorOrTemplate);
     }
-    if (!this.$output) {
-      return;
-    }
-
     const outputConverter = new OutputTemplateConverter(
       new FacebookMessengerOutputTemplateConverterStrategy(),
     );
-    let response = await outputConverter.toResponse(this.$output);
+    const newOutput = Array.isArray(this.$output)
+      ? this.$output.slice(currentOutputLength)
+      : this.$output;
+
+    let response = await outputConverter.toResponse(newOutput);
     response = await this.$platform.finalizeResponse(response, this);
 
     if (Array.isArray(response)) {
