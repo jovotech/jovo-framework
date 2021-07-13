@@ -40,7 +40,7 @@ export class FileDb extends DbPlugin<FileDbConfig> {
       !!(await fs.promises.stat(pathToFile).catch(() => false));
 
     if (!(await pathExists(pathToFileDir))) {
-      await fs.promises.mkdir(path.dirname(this.config.pathToFile), { recursive: true });
+      await fs.promises.mkdir(pathToFileDir, { recursive: true });
     }
 
     if (!(await pathExists(this.pathToFile))) {
