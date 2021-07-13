@@ -117,7 +117,7 @@ new DynamoDb({
     name: 'MyDynamoDbTable',
 
     // Optional properties (with default values)
-    createTableOnInit: true, // // creates a table if one does not already exist
+    createTableOnInit: true, // creates a table if one does not already exist
     primaryKeyColumn: 'userId',
     readCapacityUnits: 2, // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
     writeCapacityUnits: 2, // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
