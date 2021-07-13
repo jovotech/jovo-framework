@@ -114,12 +114,9 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         console.log(colorize(JSON.stringify(_get(requestCopy, path), null, 2)));
       });
     } else {
-      console.log(colorize(JSON.stringify(requestCopy, null, 2)));
-
-      console.log();
+      console.log(colorize(JSON.stringify(jovo.$request, null, 2), this.config.colorizeSettings));
     }
 
-    console.log(colorize(JSON.stringify(jovo.$request, null, 2), this.config.colorizeSettings));
     /* eslint-enable no-console */
   };
   logResponse = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
