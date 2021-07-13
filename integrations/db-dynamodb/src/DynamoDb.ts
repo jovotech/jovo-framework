@@ -27,8 +27,8 @@ export interface DynamoDbConfig extends DbPluginConfig {
     readCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
     writeCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
   };
-  libraryConfig: {
-    dynamoDbClient: DynamoDBClientConfig;
+  libraryConfig?: {
+    dynamoDbClient?: DynamoDBClientConfig;
   };
 }
 
@@ -58,7 +58,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
 
   constructor(config: DynamoDbConfig) {
     super(config);
-    this.client = new DynamoDBClient(this.config.libraryConfig.dynamoDbClient || {});
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
   }
 
   async initialize(): Promise<void> {
