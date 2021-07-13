@@ -7,16 +7,15 @@ import {
   Jovo,
   PersistableSessionData,
   PersistableUserData,
-  Plugin,
+  UnknownObject,
 } from '@jovotech/framework';
 import {
-  DynamoDBClient,
-  GetItemCommand,
   CreateTableCommand,
-  PutItemCommand,
-  DynamoDBClientConfig,
-  ResourceNotFoundException,
   DescribeTableCommand,
+  DynamoDBClient,
+  DynamoDBClientConfig,
+  GetItemCommand,
+  PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
@@ -55,7 +54,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     this.client = new DynamoDBClient(this.config.dynamoDbClient || {});
   }
 
-  async initialize() {
+  async initialize(): Promise<void> {
     try {
       const params = {
         TableName: this.config.tableName!,
@@ -107,8 +106,8 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
       },
       TableName: this.config.tableName!,
     };
-    const data = await this.client.send<any, any>(new GetItemCommand(params));
-    return data.Item;
+    const data = await this.client.send(new GetItemCommand(params));
+    return data.Item as DbItem;
   };
 
   loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
@@ -127,7 +126,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     const params = {
       Item: {
         [this.config.primaryKeyColumn!]: jovo.$user.id as string,
-      } as any,
+      } as UnknownObject,
       TableName: this.config.tableName!,
     };
 
@@ -136,7 +135,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
     await this.applyPersistableData(jovo, item);
 
-    await this.client.send<any, any>(
+    await this.client.send(
       new PutItemCommand({
         TableName: params.TableName,
         Item: marshall(item, { removeUndefinedValues: true, convertEmptyValues: true }),
@@ -144,7 +143,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     );
   };
 
-  checkRequirements = () => {
+  checkRequirements = (): void | Error => {
     if (!this.config.primaryKeyColumn) {
       throw new Error('primaryKeyColumn must not be undefined');
     }
