@@ -20,13 +20,16 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 export interface DynamoDbConfig extends DbPluginConfig {
-  primaryKeyColumn?: string;
-  tableName?: string;
-
-  readCapacityUnits?: number;
-  writeCapacityUnits?: number;
-
-  dynamoDbClient?: DynamoDBClientConfig;
+  table: {
+    name: string;
+    createTableOnInit?: boolean; // creates a table if one does not already exist
+    primaryKeyColumn?: string; // name of primary key column
+    readCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+    writeCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+  };
+  libraryConfig: {
+    dynamoDbClient: DynamoDBClientConfig;
+  };
 }
 
 export interface DynamoDbItem {
@@ -43,28 +46,38 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   getDefaultConfig(): DynamoDbConfig {
     return {
       ...super.getDefaultConfig(),
-      primaryKeyColumn: 'userId',
-      readCapacityUnits: 2,
-      writeCapacityUnits: 2,
+      table: {
+        name: '',
+        primaryKeyColumn: 'userId',
+        createTableOnInit: true,
+        readCapacityUnits: 2,
+        writeCapacityUnits: 2,
+      },
     };
   }
 
   constructor(config: DynamoDbConfig) {
     super(config);
-    this.client = new DynamoDBClient(this.config.dynamoDbClient || {});
+    this.client = new DynamoDBClient(this.config.libraryConfig.dynamoDbClient || {});
   }
 
   async initialize(): Promise<void> {
     try {
       const params = {
-        TableName: this.config.tableName!,
+        TableName: this.config.table.name!,
       };
       const command = new DescribeTableCommand(params);
       await this.client.send(command);
     } catch (e) {
       if (e.name === 'ResourceNotFoundException') {
-        await this.createTable();
-        throw new Error('Creating a table. Please wait a moment and resend the request...');
+        if (this.config.table.createTableOnInit) {
+          await this.createTable();
+          throw new Error('Creating a table. Please wait a moment and resend the request...');
+        } else {
+          throw new Error(
+            `Table ${this.config.table.name} does not exist and setting up a table automatically deactivated. Please setup a table manually.`,
+          );
+        }
       }
     }
   }
@@ -78,21 +91,21 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     const params = {
       AttributeDefinitions: [
         {
-          AttributeName: this.config.primaryKeyColumn,
+          AttributeName: this.config.table.primaryKeyColumn,
           AttributeType: 'S',
         },
       ],
       KeySchema: [
         {
-          AttributeName: this.config.primaryKeyColumn!,
+          AttributeName: this.config.table.primaryKeyColumn!,
           KeyType: 'HASH',
         },
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: this.config.readCapacityUnits,
-        WriteCapacityUnits: this.config.writeCapacityUnits,
+        ReadCapacityUnits: this.config.table.readCapacityUnits!,
+        WriteCapacityUnits: this.config.table.writeCapacityUnits!,
       },
-      TableName: this.config.tableName!,
+      TableName: this.config.table.name!,
     };
 
     await this.client.send(new CreateTableCommand(params));
@@ -102,9 +115,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     const params = {
       ConsistentRead: true,
       Key: {
-        [this.config.primaryKeyColumn!]: { S: primaryKey },
+        [this.config.table.primaryKeyColumn!]: { S: primaryKey },
       },
-      TableName: this.config.tableName!,
+      TableName: this.config.table.name!,
     };
     const data = await this.client.send(new GetItemCommand(params));
     return data.Item as DbItem;
@@ -125,13 +138,13 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
 
     const params = {
       Item: {
-        [this.config.primaryKeyColumn!]: jovo.$user.id as string,
+        [this.config.table.primaryKeyColumn!]: jovo.$user.id as string,
       } as UnknownObject,
-      TableName: this.config.tableName!,
+      TableName: this.config.table.name!,
     };
 
     const item: DbItem = {
-      [this.config.primaryKeyColumn!]: jovo.$user.id,
+      [this.config.table.primaryKeyColumn!]: jovo.$user.id,
     };
     await this.applyPersistableData(jovo, item);
 

@@ -75,7 +75,7 @@ new DynamoDb({
     name: 'MyDynamoDbTable',
   },
   libraryConfig: {
-    DynamoDbClient: {
+    dynamoDbClient: {
       region: 'us-east-1',
       credentials: {
         accessKeyId: 'myAccessKeyId',
@@ -117,9 +117,10 @@ new DynamoDb({
     name: 'MyDynamoDbTable',
 
     // Optional properties (with default values)
+    createTableOnInit: true, // // creates a table if one does not already exist
     primaryKeyColumn: 'userId',
-    readCapacityUnits: 2,
-    writeCapacityUnits: 2,
+    readCapacityUnits: 2, // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+    writeCapacityUnits: 2, // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
   },
   // ...
 }),
@@ -135,7 +136,7 @@ Currently, it includes the DynamoDbClient([find the official documentation here]
 ```typescript
 new DynamoDb({
   libraryConfig: {
-    DynamoDbClient: {
+    dynamoDbClient: {
       // Add configuration here
     },
   },
@@ -148,7 +149,7 @@ For example, you can add `credentials` like this:
 ```typescript
 new DynamoDb({
   libraryConfig: {
-    DynamoDbClient: {
+    dynamoDbClient: {
       region: 'us-east-1',
       credentials: {
         accessKeyId: 'myAccessKeyId',
