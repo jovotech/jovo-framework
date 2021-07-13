@@ -45,6 +45,7 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
+    // get the length of the current output, if it's an object, assume the length is 1
     const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
@@ -54,6 +55,8 @@ export class MessengerBot extends Jovo<FacebookMessengerRequest, FacebookMesseng
     const outputConverter = new OutputTemplateConverter(
       new FacebookMessengerOutputTemplateConverterStrategy(),
     );
+
+    // get only the newly added output
     const newOutput = Array.isArray(this.$output)
       ? this.$output.slice(currentOutputLength)
       : this.$output;

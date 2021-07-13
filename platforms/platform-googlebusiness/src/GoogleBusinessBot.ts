@@ -42,6 +42,7 @@ export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusines
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
+    // get the length of the current output, if it's an object, assume the length is 1
     const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
@@ -51,6 +52,8 @@ export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusines
     const outputConverter = new OutputTemplateConverter(
       new GoogleBusinessOutputTemplateConverterStrategy(),
     );
+
+    // get only the newly added output
     const newOutput = Array.isArray(this.$output)
       ? this.$output.slice(currentOutputLength)
       : this.$output;
