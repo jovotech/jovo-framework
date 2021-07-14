@@ -270,7 +270,7 @@ $state = [
 ]
 ```
 
-[Global components](#global-components) don't store component because they're not added to the `$state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
+[Global components](#global-components) don't store component data because they're not added to the `$state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
 
 
 ### Component Options
