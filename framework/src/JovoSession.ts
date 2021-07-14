@@ -50,9 +50,9 @@ export class JovoSession {
   }
 
   setPersistableData(data?: PersistableSessionData): this {
-    this.id = data?.id;
-    this.$data = data?.data || {};
-    this.$state = data?.state;
+    this.id = data?.id || this.id;
+    this.$data = data?.data || this.$data;
+    this.$state = data?.state || this.$state;
 
     this.updatedAt = new Date();
     this.createdAt = this.isNew ? new Date() : new Date(data?.createdAt || new Date());

@@ -64,12 +64,13 @@ export interface StoredElementHistory extends StoredElement, UnknownObject {
 }
 
 export interface DbPluginConfig extends PluginConfig {
-  storedElements?: {
-    [key: string]: unknown;
-    user?: StoredElement | boolean;
-    session?: StoredElement | boolean;
-    history?: StoredElementHistory | boolean;
-    createdAt?: StoredElement | boolean;
-    updateAt?: StoredElement | boolean;
-  };
+  storedElements?: DbPluginStoredElementsConfig;
+}
+
+export interface DbPluginStoredElementsConfig extends UnknownObject {
+  user?: StoredElement | boolean;
+  session?: StoredElement | boolean;
+  history?: StoredElementHistory | boolean;
+  createdAt?: StoredElement | boolean;
+  updateAt?: StoredElement | boolean;
 }

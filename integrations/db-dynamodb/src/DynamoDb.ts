@@ -129,7 +129,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
 
     if (dbItem) {
       jovo.$user.isNew = false;
-      jovo.setPersistableData(unmarshall(dbItem));
+      jovo.setPersistableData(unmarshall(dbItem), this.config.storedElements);
     }
   };
 

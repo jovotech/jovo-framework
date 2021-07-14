@@ -61,7 +61,7 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     const dbItem = await this.getDbItem(jovo.$user.id);
     if (dbItem) {
       jovo.$user.isNew = false;
-      jovo.setPersistableData(dbItem);
+      jovo.setPersistableData(dbItem, this.config.storedElements);
     }
   };
 

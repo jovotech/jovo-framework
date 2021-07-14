@@ -11,18 +11,23 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentData,
+  DbPluginConfig,
+  DbPluginStoredElementsConfig,
   DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
   MetadataStorage,
+  OmitIndex,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
   PickWhere,
   Server,
   StateStackItem,
+  StoredElement,
+  StoredElementHistory,
   UnknownObject,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
@@ -433,10 +438,21 @@ export abstract class Jovo<
     };
   }
 
-  setPersistableData(data: JovoPersistableData): void {
-    this.$user.setPersistableData(data.user);
-    this.$session.setPersistableData(data.session);
-    this.$history.setPersistableData(data.history);
+  setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig): void {
+    const isStoredElementEnabled = (key: 'user' | 'session' | 'history') => {
+      const value = config?.[key];
+      return !!(typeof value === 'object' ? value.enabled : value);
+    };
+
+    if (isStoredElementEnabled('user')) {
+      this.$user.setPersistableData(data.user);
+    }
+    if (isStoredElementEnabled('session')) {
+      this.$session.setPersistableData(data.session);
+    }
+    if (isStoredElementEnabled('history')) {
+      this.$history.setPersistableData(data.history);
+    }
     this.$user.createdAt = new Date(data?.createdAt || new Date());
     this.$user.updatedAt = new Date(data?.updatedAt || new Date());
   }
