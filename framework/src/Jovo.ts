@@ -154,7 +154,7 @@ export abstract class Jovo<
   }
 
   get $component(): JovoComponentInfo {
-    // if no state exists, write $component.$data into $session.$data
+    // global components should not have component-data
     if (!this.$state?.length) {
       return {
         $data: {},
