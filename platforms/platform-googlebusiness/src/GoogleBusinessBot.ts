@@ -42,18 +42,23 @@ export class GoogleBusinessBot extends Jovo<GoogleBusinessRequest, GoogleBusines
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
+    // get the length of the current output, if it's an object, assume the length is 1
+    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
     } else {
       await super.$send(outputConstructorOrTemplate);
     }
-    if (!this.$output) {
-      return;
-    }
     const outputConverter = new OutputTemplateConverter(
       new GoogleBusinessOutputTemplateConverterStrategy(),
     );
-    let response = await outputConverter.toResponse(this.$output);
+
+    // get only the newly added output
+    const newOutput = Array.isArray(this.$output)
+      ? this.$output.slice(currentOutputLength)
+      : this.$output;
+
+    let response = await outputConverter.toResponse(newOutput);
     response = await this.$platform.finalizeResponse(response, this);
 
     const conversationId = this.conversationId;
