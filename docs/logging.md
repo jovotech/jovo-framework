@@ -44,17 +44,16 @@ This is the default configuration:
 ```typescript
 logging: {
   enabled: true,
-  logging: undefined,
   request: false,
   maskValue: '[ Hidden ]',
   requestObjects: [],
-  maskRequestObjects: [],
-  excludeRequestObjects: [],
+  maskedRequestObjects: [],
+  excludedRequestObjects: [],
   response: false,
-  maskResponseObjects: [],
-  excludeResponseObjects: [],
-  responseObjects: [],
-  space: '   ',
+  maskedResponseObjects: [],
+  excludedResponseObjects: [],
+  responseObjects: [], 
+  indentation: '  ',
   styling: true,
   colorizeSettings: {
     colors: {
@@ -86,8 +85,8 @@ For some platforms, the logs of a request can get quite long if you only need ce
 ```typescript
 logging: {
   requestObjects: [],
-  maskRequestObjects: [],
-  excludeRequestObjects: [],
+  maskedRequestObjects: [],
+  excludedRequestObjects: [],
   // ...
 },
 ```
@@ -104,7 +103,7 @@ logging: {
 },
 ```
 
-In a similar fashion, you can also [mask objects](#masking) or completely remove them from the logs using `excludeRequestObjects`.
+In a similar fashion, you can also [mask objects](#masking) or completely remove them from the logs using `excludedRequestObjects`.
 
 
 ### Response Logging
@@ -123,21 +122,21 @@ Similar to [request logging](#request-logging), you can use additional configura
 ```typescript
 logging: {
   responseObjects: [],
-  maskResponseObjects: [],
-  excludeResponseObjects: [],
+  maskedResponseObjects: [],
+  excludedResponseObjects: [],
   // ...
 },
 ```
 
 ### Masking
 
-As described in the [request](#request-logging) and [response logging](#response-logging) sections, you can add masking for specific request or response objects.
+As described in the [request](#request-logging) and [response logging](#response-logging) sections, you can add masking for specific request or response objects. This is helpful for sensitive data like access tokens or private user information that won't be logged on a server or logging service like AWS Cloudwatch, etc.
 
 ```typescript
 logging: {
   maskValue: '[ Hidden ]',
-  maskRequestObjects: [],
-  maskResponseObjects: [],
+  maskedRequestObjects: [],
+  maskedResponseObjects: [],
   // ...
 },
 ```
@@ -150,7 +149,7 @@ You can make changes to the log's styling with the following properties:
 
 ```typescript
 logging: {
-  space: '   ',
+  indentation: '   ',
   styling: true, // Enable or disable styling
   colorizeSettings: {
     colors: { // Change the display of colors
