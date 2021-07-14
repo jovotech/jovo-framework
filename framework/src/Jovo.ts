@@ -68,7 +68,8 @@ export interface DelegateOptions<
   CONFIG extends UnknownObject | undefined = UnknownObject | undefined,
   EVENTS extends string = string,
 > {
-  resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: unknown[]) => unknown)>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: any[]) => any)>;
   config?: CONFIG;
 }
 
@@ -153,28 +154,28 @@ export abstract class Jovo<
   }
 
   get $component(): JovoComponentInfo {
-    if (!this.$session.$state) {
-      this.$session.$state = [];
+    // if no state exists, write $component.$data into $session.$data
+    if (!this.$state?.length) {
+      return {
+        $data: this.$session.$data,
+      };
     }
-    const state = this.$session.$state;
-    const setDataIfNotDefined = () => {
-      if (!state[state.length - 1 || 0]?.$data) {
-        state[state.length - 1].$data = {};
-      }
-    };
+    const latestStateStackItem = this.$state[this.$state.length - 1];
     return {
       get $data(): ComponentData {
-        // Make sure $data exists in latest state.
-        setDataIfNotDefined();
-        return state[state.length - 1].$data as ComponentData;
+        if (!latestStateStackItem.$data) {
+          latestStateStackItem.$data = {};
+        }
+        return latestStateStackItem.$data;
       },
       set $data(value: ComponentData) {
-        // Make sure $data exists in latest state.
-        setDataIfNotDefined();
-        state[state.length - 1].$data = value;
+        if (!latestStateStackItem.$data) {
+          latestStateStackItem.$data = {};
+        }
+        latestStateStackItem.$data = value;
       },
       get $config(): UnknownObject | undefined {
-        const deserializedStateConfig = _cloneDeep(state?.[state?.length - 1 || 0]?.config);
+        const deserializedStateConfig = _cloneDeep(latestStateStackItem.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
           forEachDeep(deserializedStateConfig, (value, path) => {
@@ -199,7 +200,7 @@ export abstract class Jovo<
         return deserializedStateConfig;
       },
       set $config(value: UnknownObject | undefined) {
-        state[state.length - 1].config = value;
+        latestStateStackItem.config = value;
       },
     };
   }
