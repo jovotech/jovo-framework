@@ -157,7 +157,7 @@ export abstract class Jovo<
     // if no state exists, write $component.$data into $session.$data
     if (!this.$state?.length) {
       return {
-        $data: this.$session.$data,
+        $data: {},
       };
     }
     const latestStateStackItem = this.$state[this.$state.length - 1];
