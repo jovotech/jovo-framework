@@ -220,8 +220,9 @@ You can find out more about the [`$state` stack here](./state-stack.md) and lear
 
 A Jovo project usually comes with a `GlobalComponent`. This (and potentially other components) is a special `global` component that has the following characteristics:
 
-* Each of its handlers is global, no need to add a `global` property
-* It does not get added to the [`$state` stack](./state-stack.md) (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved)
+* Each of its handlers is global, no need to add a `global` property.
+* It does not get added to the [`$state` stack](./state-stack.md) (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved).
+* It does not store [component data](#component-data): If you want to store data, we recommend using [session data](./data.md#session-data).
 
 You can either add the `global` property to the [component options](#component-options):
 
@@ -269,7 +270,7 @@ $state = [
 ]
 ```
 
-[Learn more about the different Jovo data types here](./data.md).
+[Global components](#global-components) don't store component because they're not added to the `$state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
 
 
 ### Component Options
