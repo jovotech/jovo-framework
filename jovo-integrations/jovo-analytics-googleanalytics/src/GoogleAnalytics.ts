@@ -335,10 +335,18 @@ export class GoogleAnalytics implements Analytics {
     const intentName = jovo.$request?.getIntentName();
     const customParameters = jovo.$googleAnalytics.$parameters;
 
+    const requestTime = jovo.$request?.getTimestamp();
+    let pageLoadTime: number | undefined;
+
+    if (requestTime) {
+      pageLoadTime = Date.now() - Date.parse(requestTime);
+    }
+
     return {
       documentPath: this.getPageName(jovo),
       documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',
       documentTitle: intentName || intentType,
+      pageLoadTime,
       ...customParameters,
     };
   }
