@@ -12,7 +12,8 @@ export { axios };
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = PartialDeep<T>;
-export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Constructor<T, ARGS extends any[] = any[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
   T,
