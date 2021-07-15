@@ -1,9 +1,16 @@
+import _merge from 'lodash.merge';
 import { OutputTemplate } from '.';
 
-export interface OutputTemplateConverterStrategy<RESPONSE extends Record<string, unknown>> {
-  responseClass: new () => RESPONSE;
+export abstract class OutputTemplateConverterStrategy<RESPONSE extends Record<string, unknown>> {
+  abstract responseClass: new () => RESPONSE;
 
-  toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
+  abstract toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
 
-  fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
+  abstract fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
+
+  createResponseInstance(response: RESPONSE | Record<string, unknown>): RESPONSE {
+    const instance: RESPONSE = new this.responseClass();
+    _merge(instance, response);
+    return instance;
+  }
 }

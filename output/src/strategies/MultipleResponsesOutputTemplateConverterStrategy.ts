@@ -3,10 +3,7 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
 
 export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-> implements OutputTemplateConverterStrategy<RESPONSE>
-{
-  abstract responseClass: new () => RESPONSE;
-
+> extends OutputTemplateConverterStrategy<RESPONSE> {
   fromResponse(response: RESPONSE): OutputTemplate;
   fromResponse(responses: RESPONSE[]): OutputTemplate[];
   fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {

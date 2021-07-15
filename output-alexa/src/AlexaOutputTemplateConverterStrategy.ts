@@ -36,12 +36,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   }
 
   buildResponse(output: OutputTemplate): AlexaResponse {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const response: AlexaResponse = {
-      version: '1.0',
-      response: {},
-    };
+    const response: AlexaResponse = this.createResponseInstance({ version: '1.0', response: {} });
 
     const addToDirectives = <DIRECTIVES extends Directive[]>(...directives: DIRECTIVES) => {
       if (!response.response.directives) {

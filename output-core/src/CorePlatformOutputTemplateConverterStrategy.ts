@@ -2,13 +2,13 @@ import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/outpu
 import _merge from 'lodash.merge';
 import { CorePlatformResponse } from './models';
 
-export class CorePlatformOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<CorePlatformResponse> {
+export class CorePlatformOutputTemplateConverterStrategy extends OutputTemplateConverterStrategy<CorePlatformResponse> {
   responseClass = CorePlatformResponse;
 
   toResponse(output: OutputTemplate | OutputTemplate[]): CorePlatformResponse {
     output = Array.isArray(output) ? output : [output];
-    const response: CorePlatformResponse = {
+
+    const response: CorePlatformResponse = this.createResponseInstance({
       version: '4.0.0',
       type: 'jovo-platform-core',
       output,
@@ -19,7 +19,8 @@ export class CorePlatformOutputTemplateConverterStrategy
       context: {
         request: {},
       },
-    };
+    });
+
     // TODO check listen-condition
     let lastListen: boolean | undefined;
     output.forEach((outputItem) => {
