@@ -57,7 +57,7 @@ const project = new ProjectConfig({
 
 Jovo CLI plugins can be used for many use cases. Here are some examples:
 
-* Platform CLI integrations like `AlexaCli` provide the necessary tools to `build` the Alexa interaction model and `deploy` the project to the Alexa developer console.
+* [Platform](./platforms.md) CLI integrations like `AlexaCli` provide the necessary tools to `build` the Alexa interaction model and `deploy` the project to the Alexa developer console.
 * Deployment CLI integrations like `ServerlessCli` allow you to `deploy` your Jovo app to a cloud environment using the Serverless Framework.
 * CLI plugins can even create their own Jovo CLI commands.
   
