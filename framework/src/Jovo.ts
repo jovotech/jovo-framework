@@ -102,7 +102,7 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user: JovoUser;
+  $user: JovoUser<REQUEST, RESPONSE, this>;
 
   $history: JovoHistory;
 
@@ -121,7 +121,7 @@ export abstract class Jovo<
     this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
-    this.$user = this.$platform.createUserInstance();
+    this.$user = this.$platform.createUserInstance(this);
     this.$history = new JovoHistory();
   }
 
