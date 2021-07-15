@@ -23,10 +23,10 @@ const { ProjectConfig } = require('@jovotech/cli-core');
 // ...
 
 const project = new ProjectConfig({
-	endpoint: '${JOVO_WEBHOOK_URL}',
-	plugins: [
-		// Add Jovo CLI plugins here
-	],
+  endpoint: '${JOVO_WEBHOOK_URL}',
+  plugins: [
+    // Add Jovo CLI plugins here
+  ],
 });
 ```
 
@@ -46,8 +46,8 @@ The default is the Jovo Webhook for local development. The `'${JOVO_WEBHOOK_URL}
 
 ```js
 const project = new ProjectConfig({
-	endpoint: '${JOVO_WEBHOOK_URL}',
-	// ...
+  endpoint: '${JOVO_WEBHOOK_URL}',
+  // ...
 });
 ```
 
@@ -75,10 +75,10 @@ const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
 const project = new ProjectConfig({
-	// ...
-	plugins: [
-		new AlexaCli()
-	],
+  // ...
+  plugins: [
+    new AlexaCli()
+  ],
 });
 ```
 
@@ -92,11 +92,11 @@ For each CLI plugin, you can add configurations as an array of options that you 
 ```js
 const project = new ProjectConfig({
   // ...
-	plugins: [
-		new AlexaCli({
+  plugins: [
+    new AlexaCli({
       // Configuration
     })
-	],
+  ],
 });
 ```
 
@@ -112,8 +112,8 @@ You can add the paths and file content to the `files` property of the plugin con
 ```js
 const project = new ProjectConfig({
   // ...
-	plugins: [
-		new AlexaCli({
+  plugins: [
+    new AlexaCli({
       files: {
         path: {
           to: {
@@ -122,7 +122,7 @@ const project = new ProjectConfig({
         }
       }
     })
-	],
+  ],
 });
 ```
 
@@ -133,13 +133,13 @@ You can also use this shorthand for nested folders:
 ```js
 const project = new ProjectConfig({
   // ...
-	plugins: [
-		new AlexaCli({
+  plugins: [
+    new AlexaCli({
       files: {
         'path.to.file.json': 'Hello World!'
       }
     })
-	],
+  ],
 });
 ```
 
@@ -152,7 +152,7 @@ Here is an example, how this could look like:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
 
   defaultStage: 'dev',
   stages: {
@@ -174,7 +174,7 @@ You can add any stage name to the `stages` object:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   stages: {
     someStage: {
       // ...
@@ -187,7 +187,7 @@ Inside this stage, you can add any configuration that you can also add outside a
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   stages: {
     someStage: {
       // ...
@@ -216,7 +216,7 @@ Hooks can be added like this:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   hooks: {
     // ...
   },
@@ -227,7 +227,7 @@ You can into any command, for example `before.build` or `after.build`:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   hooks: {
     'before.build': [
       () => { /* Do something here */ }
@@ -240,7 +240,7 @@ A first example to test hooks might be to log something:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   hooks: {
     'before.build': [
       () => console.log('Starting the build process now');
@@ -258,7 +258,7 @@ const { fetchLanguageModel } = require("./hooks/fetchLanguageModel.hook.js");
 // ...
 
 const project = new ProjectConfig({
-	// ...
+  // ...
   hooks: {
     'before.build': [ fetchLanguageModel ],
   },
@@ -269,7 +269,7 @@ You can also pass the `context` to a hook to access specific information:
 
 ```js
 const project = new ProjectConfig({
-	// ...
+  // ...
   hooks: {
     'before.build': [
       (context) => console.log(`Skill ID: ${context.alexa.skillId}`),
