@@ -12,7 +12,7 @@ export function forEachDeep<T = any>(
     value.forEach((val, index) => {
       forEachDeep(val, handler, `${path}[${index}]`);
     });
-  } else if (typeof value === 'object') {
+  } else if (value && typeof value === 'object') {
     Object.keys(value).forEach((key) => {
       forEachDeep(value[key as keyof T], handler, path ? `${path}.${key}` : key);
     });
