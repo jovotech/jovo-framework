@@ -1,4 +1,4 @@
-export interface MessengerBotEntry {
+export interface FacebookMessengerEntry {
   id: string;
   time: number;
   /**
