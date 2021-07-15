@@ -1,12 +1,8 @@
-import { JovoResponse } from '@jovotech/output';
-import { Constructor } from '.';
 import { EntityMap, NluData } from './interfaces';
 import { JovoRequestType } from './Jovo';
 import { JovoSession } from './JovoSession';
 
 export abstract class JovoRequest {
-  abstract responseClass: Constructor<JovoResponse>;
-
   [key: string]: unknown;
 
   abstract getEntities(): EntityMap | undefined;
@@ -15,7 +11,7 @@ export abstract class JovoRequest {
 
   abstract getLocale(): string | undefined;
 
-  abstract setLocale(locale: string | undefined): void;
+  abstract setLocale(locale: string): void;
 
   abstract getRawText(): string | undefined;
 
@@ -27,7 +23,7 @@ export abstract class JovoRequest {
 
   abstract setSessionData(data: Record<string, unknown>): void;
 
-  abstract getUserId(): string;
+  abstract getUserId(): string | undefined;
 
   abstract setUserId(userId: string): void;
 

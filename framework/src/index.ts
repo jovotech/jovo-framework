@@ -66,6 +66,7 @@ export * from './Platform';
 export * from './Plugin';
 export * from './Server';
 export * from './TestSuite';
+export * from './RequestBuilder';
 
 export * from './decorators/Component';
 export * from './decorators/Global';

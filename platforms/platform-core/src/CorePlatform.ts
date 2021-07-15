@@ -5,6 +5,7 @@ import {
 } from '@jovotech/output-core';
 import { CorePlatformApp } from './CorePlatformApp';
 import { CorePlatformRequest } from './CorePlatformRequest';
+import { CorePlatformRequestBuilder } from './CorePlatformRequestBuilder';
 import { CorePlatformUser } from './CorePlatformUser';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
@@ -39,9 +40,10 @@ export class CorePlatform extends Platform<
   }
 
   outputTemplateConverterStrategy = new CorePlatformOutputTemplateConverterStrategy();
-  requestClass = CorePlatformRequest;
-  jovoClass = CorePlatformApp;
-  userClass = CorePlatformUser;
+  readonly requestClass = CorePlatformRequest;
+  readonly jovoClass = CorePlatformApp;
+  readonly userClass = CorePlatformUser;
+  readonly requestBuilder = CorePlatformRequestBuilder;
 
   getDefaultConfig(): CorePlatformConfig {
     return {

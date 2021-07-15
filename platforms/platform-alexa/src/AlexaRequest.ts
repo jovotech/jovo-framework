@@ -4,7 +4,6 @@ import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './c
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export class AlexaRequest extends JovoRequest {
-  responseClass = AlexaResponse;
   version?: string;
   context?: Context;
   session?: Session;
@@ -67,6 +66,15 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.locale;
   }
 
+  setLocale(locale: string): void {
+    if (!this.request) {
+      // TODO: What to do here?
+      return;
+    }
+
+    this.request.locale = locale;
+  }
+
   getRawText(): string | undefined {
     return;
   }
@@ -85,6 +93,10 @@ export class AlexaRequest extends JovoRequest {
     return this.session?.attributes;
   }
 
+  setSessionData(data: Record<string, unknown>): void {
+    this.session = data as any as Session;
+  }
+
   getSessionId(): string | undefined {
     return this.session?.sessionId;
   }
@@ -95,5 +107,23 @@ export class AlexaRequest extends JovoRequest {
 
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
+  }
+
+  getUserId(): string | undefined {
+    return this.session?.user.userId;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.session) {
+      // TODO: What to do here?
+      return;
+    }
+
+    if (!this.session.user) {
+      // TODO: Is this right?
+      this.session.user = { userId: userId, accessToken: '', permissions: { consentToken: '' } };
+    }
+
+    this.session.user.userId = userId;
   }
 }
