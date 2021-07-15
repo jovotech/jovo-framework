@@ -191,9 +191,9 @@ const project = new ProjectConfig({
   stages: {
     someStage: {
       // ...
-      plugins: {
+      plugins: [
         new AlexaCli({ skillId: 'someSkillId' });
-      }
+      ]
     }
   }
 });
