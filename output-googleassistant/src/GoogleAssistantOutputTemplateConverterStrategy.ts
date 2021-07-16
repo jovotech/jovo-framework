@@ -9,6 +9,7 @@ import {
 import _merge from 'lodash.merge';
 import {
   GoogleAssistantResponse,
+  Session,
   Simple,
   Suggestion,
   TypeOverride,
@@ -22,6 +23,10 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
   buildResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {};
+
+    function getEmptySession(): Session {
+      return { id: '', params: {}, languageCode: '' };
+    }
 
     const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
     if (listen === false) {
@@ -38,7 +43,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           ? TypeOverrideMode.Merge
           : TypeOverrideMode.Replace;
       if (!response.session) {
-        response.session = { id: '', params: {}, languageCode: '' };
+        response.session = getEmptySession();
       }
       response.session.typeOverrides = listen.entities.types.map((entity) =>
         this.convertDynamicEntityToTypeOverride(entity, typeOverrideMode),
@@ -56,7 +61,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     const reprompt = output.platforms?.GoogleAssistant?.reprompt || output.reprompt;
     if (reprompt) {
       if (!response.session) {
-        response.session = { id: '', params: {}, languageCode: '' };
+        response.session = getEmptySession();
       }
       const text = typeof reprompt === 'string' ? reprompt : reprompt.displayText || reprompt.text;
       response.session.params._GA_REPROMPTS_ = {
@@ -90,7 +95,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {
-          response.session = { id: '', params: {}, languageCode: '' };
+          response.session = getEmptySession();
         }
         response.session.typeOverrides = [collectionData.typeOverride];
 
