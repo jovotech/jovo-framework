@@ -3,17 +3,21 @@ import {
   App,
   ExtensibleConfig,
   HandleRequest,
+  InternalIntent,
   Jovo,
   Platform,
+  RequestType,
 } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
+  Session,
 } from '@jovotech/output-googleassistant';
 import { GoogleAction } from './GoogleAction';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import _mergeWith from 'lodash.mergewith';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -53,15 +57,18 @@ export class GoogleAssistant extends Platform<
     response: GoogleAssistantResponse,
     googleAction: GoogleAction,
   ): GoogleAssistantResponse | Promise<GoogleAssistantResponse> {
-    // TODO: check logic
-    const requestSession = googleAction.$request.session;
-    if (requestSession) {
-      if (!response.session) {
-        response.session = { ...requestSession, params: { ...googleAction.$session } };
-      } else {
-        response.session.params = { ...requestSession.params, ...googleAction.$session };
-      }
-    }
+    const requestSession = googleAction.$request.session || {};
+    const responseSession = response.session || {};
+    response.session = _mergeWith(
+      { id: '', languageCode: '', ...requestSession },
+      responseSession,
+      { params: { ...googleAction.$session } },
+      (objValue, srcValue) => {
+        if (typeof objValue === 'string' && typeof srcValue === 'string') {
+          return objValue ? objValue : srcValue;
+        }
+      },
+    );
     return response;
   }
 
@@ -69,20 +76,11 @@ export class GoogleAssistant extends Platform<
     handleRequest: HandleRequest,
     jovo: Jovo,
   ) => {
-    // if the request is a no-input-request and a state exists, add the reprompt-component to the top
-    const intentName = jovo.$googleAction?.$request?.intent?.name;
-    if (
-      intentName &&
-      [
-        'actions.intent.NO_INPUT_1',
-        'actions.intent.NO_INPUT_2',
-        'actions.intent.NO_INPUT_FINAL',
-      ].includes(intentName) &&
-      jovo.$state
-    ) {
-      jovo.$state.push({
-        component: 'GoogleAssistantRepromptComponent',
-      });
+    // TODO this is just a workaround until $input is implemented and used instead of the intentName for routing
+    if (jovo.$type.type === RequestType.Launch) {
+      jovo.$nlu.intent = {
+        name: InternalIntent.Launch,
+      };
     }
   };
 }

@@ -1,7 +1,8 @@
-import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
+import { isNode, registerPlatformSpecificJovoReference } from '@jovotech/framework';
+import type { SessionParamsReprompts } from '@jovotech/output-googleassistant';
+import type { GoogleAssistantCli as GoogleAssistantCliType } from './cli';
 import { GoogleAction } from './GoogleAction';
 import { GoogleAssistant } from './GoogleAssistant';
-import type { GoogleAssistantCli as GoogleAssistantCliType } from './cli';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
@@ -10,6 +11,16 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
   interface ExtensiblePlugins {
     GoogleAssistant?: GoogleAssistant;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/JovoSession' {
+  interface JovoSession {
+    _GA_REPROMPTS_?: SessionParamsReprompts;
+  }
+
+  interface PersistableSessionData {
+    _GA_REPROMPTS_?: SessionParamsReprompts;
   }
 }
 
@@ -30,3 +41,4 @@ export * from './GoogleAssistantUser';
 export * from './GoogleAction';
 export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 export * from './interfaces';
+export * from './enums';
