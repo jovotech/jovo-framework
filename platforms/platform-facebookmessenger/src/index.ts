@@ -1,28 +1,28 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { FacebookMessenger, FacebookMessengerConfig } from './FacebookMessenger';
-import { MessengerBot } from './MessengerBot';
+import { FacebookMessengerPlatform, FacebookMessengerConfig } from './FacebookMessengerPlatform';
+import { FacebookMessenger } from './FacebookMessenger';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
-    FacebookMessenger?: FacebookMessengerConfig;
+    FacebookMessengerPlatform?: FacebookMessengerConfig;
   }
 
   interface ExtensiblePlugins {
-    FacebookMessenger?: FacebookMessenger;
+    FacebookMessengerPlatform?: FacebookMessengerPlatform;
   }
 }
 
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
-    $messengerBot?: MessengerBot;
+    $facebookMessenger?: FacebookMessenger;
   }
 }
-registerPlatformSpecificJovoReference('$messengerBot', MessengerBot);
+registerPlatformSpecificJovoReference('$facebookMessenger', FacebookMessenger);
 
 export * from './FacebookMessenger';
+export * from './FacebookMessengerPlatform';
 export * from './FacebookMessengerRequest';
 export * from './FacebookMessengerUser';
-export * from './MessengerBot';
 export type { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 export * from './interfaces';
 export * from './constants';

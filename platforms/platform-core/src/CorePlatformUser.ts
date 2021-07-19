@@ -1,14 +1,14 @@
 import { JovoUser } from '@jovotech/framework';
 import { CorePlatformResponse } from '@jovotech/output-core';
-import { CorePlatformApp } from './CorePlatformApp';
+import { Core } from './Core';
 import { CorePlatformRequest } from './CorePlatformRequest';
 
 export class CorePlatformUser extends JovoUser<
   CorePlatformRequest,
   CorePlatformResponse,
-  CorePlatformApp
+  Core
 > {
-  constructor(jovo: CorePlatformApp) {
+  constructor(jovo: Core) {
     super(jovo);
   }
 
