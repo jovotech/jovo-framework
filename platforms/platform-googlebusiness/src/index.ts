@@ -1,28 +1,28 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { GoogleBusiness, GoogleBusinessConfig } from './GoogleBusiness';
-import { GoogleBusinessBot } from './GoogleBusinessBot';
+import { GoogleBusinessPlatform, GoogleBusinessConfig } from './GoogleBusinessPlatform';
+import { GoogleBusiness } from './GoogleBusiness';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
-    GoogleBusiness?: GoogleBusinessConfig;
+    GoogleBusinessPlatform?: GoogleBusinessConfig;
   }
 
   interface ExtensiblePlugins {
-    GoogleBusiness?: GoogleBusiness;
+    GoogleBusinessPlatform?: GoogleBusinessPlatform;
   }
 }
 
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
-    $googleBusinessBot?: GoogleBusinessBot;
+    $googleBusiness?: GoogleBusiness;
   }
 }
-registerPlatformSpecificJovoReference('$googleBusinessBot', GoogleBusinessBot);
+registerPlatformSpecificJovoReference('$googleBusiness', GoogleBusiness);
 
 export * from './GoogleBusiness';
+export * from './GoogleBusinessPlatform';
 export * from './GoogleBusinessRequest';
 export * from './GoogleBusinessUser';
-export * from './GoogleBusinessBot';
 export type { GoogleBusinessResponse } from '@jovotech/output-googlebusiness';
 export * from './interfaces';
 export * from './constants';
