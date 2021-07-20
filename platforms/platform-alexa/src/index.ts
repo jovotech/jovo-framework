@@ -18,6 +18,7 @@ declare module '@jovotech/framework/dist/types/Jovo' {
     $alexaSkill?: AlexaSkill;
   }
 }
+
 registerPlatformSpecificJovoReference('$alexaSkill', AlexaSkill);
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
