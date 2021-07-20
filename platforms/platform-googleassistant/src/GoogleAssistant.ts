@@ -14,6 +14,7 @@ import { GoogleAction } from './GoogleAction';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -27,6 +28,7 @@ export class GoogleAssistant extends Platform<
   requestClass = GoogleAssistantRequest;
   jovoClass = GoogleAction;
   userClass = GoogleAssistantUser;
+  deviceClass = GoogleAssistantDevice;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};
