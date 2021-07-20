@@ -4,7 +4,7 @@ import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
 import { Capability, JovoDevice } from '@jovotech/framework';
 
-export type AlexaCapability = Capability | 'Alexa.Apl';
+export type AlexaCapability = Capability | 'alexa:apl';
 
 export class AlexaDevice extends JovoDevice<
   AlexaRequest,
