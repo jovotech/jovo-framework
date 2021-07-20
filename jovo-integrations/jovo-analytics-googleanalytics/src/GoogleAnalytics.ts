@@ -335,18 +335,10 @@ export class GoogleAnalytics implements Analytics {
     const intentName = jovo.$request?.getIntentName();
     const customParameters = jovo.$googleAnalytics.$parameters;
 
-    const requestTime = jovo.$request?.getTimestamp();
-    let pageLoadTime: number | undefined;
-
-    if (requestTime) {
-      pageLoadTime = Date.now() - Date.parse(requestTime);
-    }
-
     return {
       documentPath: this.getPageName(jovo),
       documentHostName: jovo.$data.startState ? jovo.$data.startState : '/',
       documentTitle: intentName || intentType,
-      pageLoadTime,
       ...customParameters,
     };
   }
@@ -374,7 +366,10 @@ export class GoogleAnalytics implements Analytics {
    * @returns {string} uuid: Hashed user id
    */
   protected getUserId(jovo: Jovo): string {
-    const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
+    const userId = jovo.$user.getId();
+    if (!userId) return 'UKNOWN_USER';
+
+    const idHash = crypto.createHash('sha256').update(userId).digest('base64');
     return idHash;
   }
 
