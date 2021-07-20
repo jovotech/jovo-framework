@@ -11,6 +11,7 @@ import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/o
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
 import { AlexaUser } from './AlexaUser';
+import { AlexaDevice } from './AlexaDevice';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {
@@ -24,6 +25,7 @@ export class Alexa extends Platform<AlexaRequest, AlexaResponse, AlexaSkill, Ale
   requestClass = AlexaRequest;
   jovoClass = AlexaSkill;
   userClass = AlexaUser;
+  deviceClass = AlexaDevice;
 
   getDefaultConfig(): AlexaConfig {
     return {
