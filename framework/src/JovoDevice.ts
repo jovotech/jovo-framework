@@ -20,7 +20,11 @@ export abstract class JovoDevice<
 > {
   capabilities: CAPABILITY[] = [];
 
-  protected constructor(readonly jovo: JOVO) {}
+  public constructor(readonly jovo: JOVO) {
+    this.setCapabilitiesFromRequest();
+  }
+
+  protected abstract setCapabilitiesFromRequest(): void;
 
   // TODO: AND or OR ? currently OR
   supports(capability: CAPABILITY | CAPABILITY[]): boolean {

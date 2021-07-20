@@ -12,13 +12,7 @@ export class CorePlatformDevice extends JovoDevice<
   CorePlatformApp,
   CorePlatformCapability
 > {
-  constructor(jovo: CorePlatformApp) {
-    super(jovo);
-
-    this.applyDataFromRequest();
-  }
-
-  applyDataFromRequest(): void {
+  setCapabilitiesFromRequest(): void {
     // needs to be implemented
   }
 }

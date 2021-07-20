@@ -12,17 +12,11 @@ export class AlexaDevice extends JovoDevice<
   AlexaSkill,
   AlexaCapability
 > {
-  constructor(jovo: AlexaSkill) {
-    super(jovo);
-
-    this.applyDataFromRequest();
-  }
-
   get id(): string | undefined {
     return this.jovo.$request.context?.System.device.deviceId;
   }
 
-  applyDataFromRequest(): void {
+  setCapabilitiesFromRequest(): void {
     const supportedInterfaces = this.jovo.$request.context?.System?.device?.supportedInterfaces;
 
     if (supportedInterfaces?.AudioPlayer) {

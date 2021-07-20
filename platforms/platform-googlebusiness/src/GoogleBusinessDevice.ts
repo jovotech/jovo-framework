@@ -12,13 +12,7 @@ export class GoogleBusinessDevice extends JovoDevice<
   GoogleBusinessBot,
   GoogleBusinessCapability
 > {
-  constructor(jovo: GoogleBusinessBot) {
-    super(jovo);
-
-    this.applyDataFromRequest();
-  }
-
-  applyDataFromRequest(): void {
+  setCapabilitiesFromRequest(): void {
     // needs to be implemented
   }
 }

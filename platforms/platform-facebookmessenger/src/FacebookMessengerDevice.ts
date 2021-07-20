@@ -12,13 +12,7 @@ export class FacebookMessengerDevice extends JovoDevice<
   MessengerBot,
   FacebookMessengerCapability
 > {
-  constructor(jovo: MessengerBot) {
-    super(jovo);
-
-    this.applyDataFromRequest();
-  }
-
-  applyDataFromRequest(): void {
+  setCapabilitiesFromRequest(): void {
     // needs to be implemented
   }
 }

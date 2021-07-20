@@ -15,13 +15,7 @@ export class GoogleAssistantDevice extends JovoDevice<
   GoogleAction,
   GoogleAssistantCapability
 > {
-  constructor(jovo: GoogleAction) {
-    super(jovo);
-
-    this.applyDataFromRequest();
-  }
-
-  applyDataFromRequest(): void {
+  setCapabilitiesFromRequest(): void {
     const supportedCapabilites = this.jovo.$request.device?.capabilities;
 
     if (supportedCapabilites?.includes(GoogleAssistantNativeCapability.Speech)) {
