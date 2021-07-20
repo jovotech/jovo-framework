@@ -11,7 +11,6 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentData,
-  DbPluginConfig,
   DbPluginStoredElementsConfig,
   DeepPartial,
   I18NextAutoPath,
@@ -19,15 +18,12 @@ import {
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
   MetadataStorage,
-  OmitIndex,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
   PickWhere,
   Server,
   StateStackItem,
-  StoredElement,
-  StoredElementHistory,
   UnknownObject,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
