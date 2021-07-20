@@ -67,11 +67,15 @@ export class RoutingExecutor {
     const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
       (match) => match.type === InternalIntent.Unhandled,
     );
-    // find the last RouteMatch that has prioritizedOverUnhandled
-    const lastRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
+    // find index of the last RouteMatch that has prioritizedOverUnhandled in a reversed matches-array
+    const lastReversedRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
       .slice()
       .reverse()
       .findIndex((match) => !!match.prioritizedOverUnhandled);
+    // get the actual index in the non-reversed matches-array by subtracting the index from the length and 1 due to arrays starting with 0
+    const lastRouteMatchIndexWithPrioritizedOverUnhandled =
+      rankedRouteMatches.length - lastReversedRouteMatchIndexWithPrioritizedOverUnhandled - 1;
+
     // if no indexes were found or they're invalid, abort
     if (
       firstRouteMatchIndexWithUnhandled < 0 ||
