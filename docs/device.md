@@ -75,7 +75,7 @@ The `JovoDevice` class is abstract and has to be implemented by every platform w
 Here is an example for Alexa:
 
 ```typescript
-private applyDataFromRequest(): void {
+setCapabilitiesFromRequest(): void {
   const supportedInterfaces = this.jovo.$request.context?.System?.device?.supportedInterfaces;
 
   if (supportedInterfaces?.AudioPlayer) {
