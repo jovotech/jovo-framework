@@ -53,7 +53,11 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       target.carousel = { ...mergeWith.carousel };
     }
 
-    if (typeof mergeWith.listen === 'boolean') {
+    // if new listen is an object
+    if (typeof mergeWith.listen === 'object') {
+      target.listen = { ...mergeWith.listen };
+      // if current listen is not an object and new listen is not undefined
+    } else if (typeof target.listen !== 'object' && typeof mergeWith.listen !== 'undefined') {
       target.listen = mergeWith.listen;
     }
 
