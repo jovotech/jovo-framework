@@ -38,6 +38,7 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
+import { JovoDevice } from './JovoDevice';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest = JovoRequest,
@@ -110,6 +111,7 @@ export abstract class Jovo<
   $session: JovoSession;
   $type: JovoRequestType;
   $user: JovoUser<REQUEST, RESPONSE, this>;
+  $device: JovoDevice<REQUEST, RESPONSE, this>;
 
   $history: JovoHistory;
 
@@ -130,6 +132,7 @@ export abstract class Jovo<
     this.$entities = this.$nlu.entities || {};
     this.$history = new JovoHistory();
     this.$user = this.$platform.createUserInstance(this);
+    this.$device = this.$platform.createDeviceInstance(this);
   }
 
   get $config(): AppConfig {

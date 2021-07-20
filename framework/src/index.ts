@@ -64,6 +64,8 @@ export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
 export * from './JovoUser';
+export * from './JovoDevice';
+
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './NluPlugin';
