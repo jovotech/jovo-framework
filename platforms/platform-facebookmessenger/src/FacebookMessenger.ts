@@ -17,6 +17,7 @@ import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry } from './interfaces';
 import { MessengerBot } from './MessengerBot';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
@@ -34,6 +35,7 @@ export class FacebookMessenger extends Platform<
   requestClass = FacebookMessengerRequest;
   jovoClass = MessengerBot;
   userClass = FacebookMessengerUser;
+  deviceClass = FacebookMessengerDevice;
 
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
