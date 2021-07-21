@@ -69,7 +69,7 @@ export interface System {
   person: Person;
   device: Device;
   apiEndpoint: string;
-  apiAccessToken?: string;
+  apiAccessToken: string;
 }
 
 export interface Viewport {
