@@ -136,7 +136,7 @@ const project = new ProjectConfig({
   plugins: [
     new AlexaCli({
       files: {
-        'path.to.file.json': 'Hello World!'
+        'path/to/file.json': 'Hello World!'
       }
     })
   ],
