@@ -34,7 +34,6 @@
     "chalk": "^4.1.0",
     "jovo-model": "^3.0.1",
     "jovo-model-alexa": "^3.0.1",
-    "lodash.camelcase": "^4.3.0",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.merge": "^4.6.2",
@@ -43,7 +42,6 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
     "@types/lodash.merge": "^4.6.6",
