@@ -102,4 +102,12 @@ export class AlexaRequest extends JovoRequest {
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
   }
+
+  getApiEndpoint(): string {
+    return this.context!.System.apiEndpoint;
+  }
+
+  getApiAccessToken(): string {
+    return this.context!.System.apiAccessToken;
+  }
 }

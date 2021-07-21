@@ -51,8 +51,9 @@ export class RoutingExecutor {
   }
 
   setSkipForRouteMatches(intentName: string, rankedRouteMatches: RouteMatch[]): void {
-    const isIntentToSkipUnhandled =
-      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
+    const isIntentToSkipUnhandled = this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(
+      intentName,
+    );
     // if the mapped intent is an intent that is supposed to skip UNHANDLED
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
@@ -67,14 +68,19 @@ export class RoutingExecutor {
     const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
       (match) => match.type === InternalIntent.Unhandled,
     );
-    // find the last RouteMatch that has prioritizedOverUnhandled
-    const lastRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
+    // find index of the last RouteMatch that has prioritizedOverUnhandled in a reversed matches-array
+    const lastReversedRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
       .slice()
       .reverse()
       .findIndex((match) => !!match.prioritizedOverUnhandled);
+    // get the actual index in the non-reversed matches-array by subtracting the index from the length and 1 due to arrays starting with 0
+    const lastRouteMatchIndexWithPrioritizedOverUnhandled =
+      rankedRouteMatches.length - lastReversedRouteMatchIndexWithPrioritizedOverUnhandled - 1;
+
     // if no indexes were found or they're invalid, abort
     if (
       firstRouteMatchIndexWithUnhandled < 0 ||
+      lastReversedRouteMatchIndexWithPrioritizedOverUnhandled < 0 ||
       lastRouteMatchIndexWithPrioritizedOverUnhandled < 0 ||
       lastRouteMatchIndexWithPrioritizedOverUnhandled < firstRouteMatchIndexWithUnhandled
     ) {
@@ -110,8 +116,9 @@ export class RoutingExecutor {
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
-      const relatedHandlerMetadata =
-        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+      const relatedHandlerMetadata = MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(
+        node.metadata.target,
+      );
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (!(await this.areHandlerConditionsFulfilled(metadata))) {
@@ -150,16 +157,18 @@ export class RoutingExecutor {
     let subState = latestStateStackItem.$subState;
 
     // get the current node
-    let node: ComponentTreeNode | undefined =
-      this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+    let node:
+      | ComponentTreeNode
+      | undefined = this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
     // loop all nodes and their parent's as long as root is reached
     while (node) {
       // create a map-callback for the given node's path
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
-      const relatedHandlerMetadata =
-        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+      const relatedHandlerMetadata = MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(
+        node.metadata.target,
+      );
 
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
