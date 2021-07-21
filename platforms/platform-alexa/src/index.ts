@@ -18,6 +18,7 @@ declare module '@jovotech/framework/dist/types/Jovo' {
     $alexa?: Alexa;
   }
 }
+
 registerPlatformSpecificJovoReference('$alexa', Alexa);
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -29,3 +30,4 @@ export * from './AlexaUser';
 export type { AlexaResponse } from '@jovotech/output-alexa';
 export * from './constants';
 export * from './interfaces';
+export * from './api';
