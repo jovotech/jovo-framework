@@ -26,19 +26,8 @@ export abstract class JovoDevice<
 
   protected abstract setCapabilitiesFromRequest(): void;
 
-  // TODO: AND or OR ? currently OR
-  supports(capability: CAPABILITY | CAPABILITY[]): boolean {
-    if (Array.isArray(capability)) {
-      for (let i = 0; i < capability.length; i++) {
-        const item = capability[i];
-        if (this.capabilities.includes(item)) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return this.capabilities.includes(capability);
-    }
+  supports(capability: CAPABILITY): boolean {
+    return this.capabilities.includes(capability);
   }
 
   addCapability(...capability: CAPABILITY[]): void {

@@ -30,16 +30,16 @@ this.$device.capabilities
 // Example result: [ 'screen', 'audio' ]
 ```
 
-You can also use the `supports` method to check if the device supports specific capabilities. It returns `true` if one of the passed capabilities is supported (`OR` for multiple capabilities):
+You can also use the `supports` method to check if the device supports specific capabilities.
 
 ```typescript
-this.$device.supports(capability: Capability[] | Capability)
+this.$device.supports(capability: Capability)
 
 // Example for one capability
-this.$device.supports('screen')
+if (this.$device.supports('screen')) {}
 
 // Example for multiple capabilities
-this.$device.supports(['screen', 'video'])
+if (this.$device.supports(['screen'] && this.$device.supports('video')) {}
 ```
 
 The following capabilities are currently available in the generic `$device` class:
