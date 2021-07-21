@@ -201,11 +201,12 @@ const project = new ProjectConfig({
 
 By default, only the elements outside the `stages` are used. If a specific stage is active, all content from this stage is merged into the generic config.
 
-The active stage is determined in the following order (most active first):
+The active stage is determined in the following order (most prioritized first):
 
 * The stage is added as flag, e.g. `jovov4 build --stage someStage`
-* The default stage is set with `defaultStage: 'someStage'`
+* The stage is set in the environment variables with `JOVO_STAGE=someStage`
 * The stage is set in the environment variables with `NODE_ENV=someStage`
+* The default stage is set with `defaultStage: 'someStage'`
 
 
 ## Hooks
