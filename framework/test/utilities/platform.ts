@@ -1,5 +1,4 @@
 import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { UnknownObject } from '../../dist/types';
 import {
   AnyObject,
   EntityMap,
@@ -11,7 +10,9 @@ import {
   JovoUser,
   MiddlewareCollection,
   Platform,
+  JovoDevice,
 } from '../../src';
+import { UnknownObject } from '../../dist/types';
 
 export class ExamplePlatformRequest extends JovoRequest {
   getEntities(): EntityMap | undefined {
@@ -77,11 +78,22 @@ export class ExamplePlatformUser extends JovoUser<
   }
 }
 
+export class ExamplePlatformDevice extends JovoDevice<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformApp
+> {
+  protected setCapabilitiesFromRequest(): void {
+    //
+  }
+}
+
 export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
   requestClass = ExamplePlatformRequest;
   jovoClass = ExamplePlatformApp;
   userClass = ExamplePlatformUser;
+  deviceClass = ExamplePlatformDevice;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

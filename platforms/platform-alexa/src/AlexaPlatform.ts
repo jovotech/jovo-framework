@@ -12,6 +12,7 @@ import { AlexaRequest } from './AlexaRequest';
 import { Alexa } from './Alexa';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
+import { AlexaDevice } from './AlexaDevice';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {
@@ -25,6 +26,7 @@ export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, 
   requestClass = AlexaRequest;
   jovoClass = Alexa;
   userClass = AlexaUser;
+  deviceClass = AlexaDevice;
 
   getDefaultConfig(): AlexaConfig {
     return {

@@ -16,6 +16,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { GoogleBusiness } from './GoogleBusiness';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
+import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
@@ -33,6 +34,7 @@ export class GoogleBusinessPlatform extends Platform<
   requestClass = GoogleBusinessRequest;
   jovoClass = GoogleBusiness;
   userClass = GoogleBusinessUser;
+  deviceClass = GoogleBusinessDevice;
 
   readonly jwtClient: JWT;
 
