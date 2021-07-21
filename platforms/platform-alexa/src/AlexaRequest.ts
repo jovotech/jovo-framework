@@ -100,7 +100,7 @@ export class AlexaRequest extends JovoRequest {
     return this.context!.System.apiEndpoint;
   }
 
-  getApiAccessToken(): string | undefined {
+  getApiAccessToken(): string {
     return this.context!.System.apiAccessToken;
   }
 }

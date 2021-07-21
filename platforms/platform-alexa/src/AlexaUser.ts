@@ -3,7 +3,7 @@ import { AlexaResponse } from '@jovotech/output-alexa';
 
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaSkill } from './AlexaSkill';
-import { ProfileProperty, requestContactApi } from './utilities';
+import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 
 export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, AlexaSkill> {
   constructor(jovo: AlexaSkill) {
@@ -14,12 +14,13 @@ export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, AlexaSkill>
     return this.jovo.$request.session?.user?.userId || 'AlexaUser';
   }
 
-  async getEmail(): Promise<string> {
+  async getEmail(): Promise<string | undefined> {
     const request: AlexaRequest = this.jovo.$request;
-    return await requestContactApi(
+    const email: string = await sendCustomerProfileApiRequest(
       ProfileProperty.EMAIL,
       request.getApiEndpoint(),
       request.getApiAccessToken(),
     );
+    return email;
   }
 }

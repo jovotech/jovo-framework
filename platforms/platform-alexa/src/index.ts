@@ -30,3 +30,4 @@ export * from './AlexaSkill';
 export type { AlexaResponse } from '@jovotech/output-alexa';
 export * from './constants';
 export * from './interfaces';
+export * from './api';
