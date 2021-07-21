@@ -4,6 +4,7 @@ The Amazon Alexa [platform integration](../docs/platforms.md) allows you to buil
 
 - [Getting Started](#getting-started)
 - [Platform-Specific Features](#platform-specific-features)
+  - [User](#user)
   - [Output](#output)
 
 ## Getting Started
@@ -60,6 +61,54 @@ if(this.$alexa) {
   // ...
 }
 ```
+
+### User
+
+There are various Alexa specific features added to the [user class](../docs/user.md) that can be accessed like this:
+
+```typescript
+this.$alexa.$user
+```
+
+#### User Profile
+
+You can call the [Alexa Customer Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html) to retrieve the user's email address like this:
+
+```typescript
+await this.$alexa.$user.getEmail()
+```
+
+Below is an example `getEmail` handler:
+
+```typescript
+async getEmail() {
+  try {
+    const email = await this.$alexa.$user.getEmail();
+    return this.$send({ message: `Your email address is ${email}` });
+  } catch(error) {
+    if (error.code === 'NO_USER_PERMISSION') {
+      return this.$send({
+        message: 'Please grant access to your email address.',
+        platforms: {
+          Alexa: {
+            card: {
+              type: 'AskForPermissionsConsent',
+              permissions: [
+                'alexa::profile:email:read'
+              ],
+            },
+          },
+        },
+      });
+    } else {
+      // ...
+    }
+  }
+},
+```
+
+If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](../docs/output.md). Please note that the example adds the output to the `$send` method for simplicity. It could also be added using output classes.
+
 
 ### Output
 
