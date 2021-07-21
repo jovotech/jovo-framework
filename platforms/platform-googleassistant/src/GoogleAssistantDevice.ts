@@ -5,14 +5,14 @@ import {
 
 import { Capability, JovoDevice } from '@jovotech/framework';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
-import { GoogleAction } from './GoogleAction';
+import { GoogleAssistant } from './GoogleAssistant';
 
 export type GoogleAssistantCapability = Capability;
 
 export class GoogleAssistantDevice extends JovoDevice<
   GoogleAssistantRequest,
   GoogleAssistantResponse,
-  GoogleAction,
+  GoogleAssistant,
   GoogleAssistantCapability
 > {
   setCapabilitiesFromRequest(): void {

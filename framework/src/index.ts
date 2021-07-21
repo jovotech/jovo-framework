@@ -47,6 +47,13 @@ export {
   MessageValue,
   PlatformOutputTemplate,
   OutputValidationError,
+  Listen,
+  ListenValue,
+  DynamicEntity,
+  DynamicEntitiesModeLike,
+  DynamicEntities,
+  DynamicEntityValue,
+  DynamicEntitiesMode,
 } from '@jovotech/output';
 
 export * from './App';

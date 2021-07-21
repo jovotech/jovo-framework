@@ -2,14 +2,14 @@ import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 
 import { Capability, JovoDevice } from '@jovotech/framework';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
-import { MessengerBot } from './MessengerBot';
+import { FacebookMessenger } from './FacebookMessenger';
 
 export type FacebookMessengerCapability = Capability;
 
 export class FacebookMessengerDevice extends JovoDevice<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
-  MessengerBot,
+  FacebookMessenger,
   FacebookMessengerCapability
 > {
   setCapabilitiesFromRequest(): void {

@@ -1,17 +1,12 @@
 import { AlexaResponse } from '@jovotech/output-alexa';
 
 import { AlexaRequest } from './AlexaRequest';
-import { AlexaSkill } from './AlexaSkill';
 import { Capability, JovoDevice } from '@jovotech/framework';
+import { Alexa } from './Alexa';
 
 export type AlexaCapability = Capability | 'alexa:apl';
 
-export class AlexaDevice extends JovoDevice<
-  AlexaRequest,
-  AlexaResponse,
-  AlexaSkill,
-  AlexaCapability
-> {
+export class AlexaDevice extends JovoDevice<AlexaRequest, AlexaResponse, Alexa, AlexaCapability> {
   get id(): string | undefined {
     return this.jovo.$request.context?.System.device.deviceId;
   }
