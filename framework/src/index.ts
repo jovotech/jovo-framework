@@ -9,10 +9,15 @@ require('source-map-support').install();
 export * from 'axios';
 export { axios };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyObject = Record<string, any>;
+export type UnknownObject = Record<string, unknown>;
+
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = PartialDeep<T>;
-export type Constructor<T, ARGS extends unknown[] = unknown[]> = new (...args: ARGS) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Constructor<T = AnyObject, ARGS extends unknown[] = any[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
   T,
@@ -42,18 +47,27 @@ export {
   MessageValue,
   PlatformOutputTemplate,
   OutputValidationError,
+  Listen,
+  ListenValue,
+  DynamicEntity,
+  DynamicEntitiesModeLike,
+  DynamicEntities,
+  DynamicEntityValue,
+  DynamicEntitiesMode,
 } from '@jovotech/output';
 
 export * from './App';
 export * from './BaseComponent';
 export * from './BaseOutput';
-export * from './ComponentTree';
 export * from './ComponentPlugin';
+export * from './ComponentTree';
+export * from './ComponentTreeNode';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
+export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
 export * from './JovoUser';
@@ -62,8 +76,18 @@ export * from './MiddlewareCollection';
 export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
-export * from './BaseOutput';
 export * from './Server';
+
+export * from './decorators/Component';
+export * from './decorators/Global';
+export * from './decorators/Handle';
+export * from './decorators/If';
+export * from './decorators/Intents';
+export * from './decorators/Output';
+export * from './decorators/Platforms';
+export * from './decorators/PrioritizedOverUnhandled';
+export * from './decorators/SubState';
+
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
@@ -72,17 +96,23 @@ export * from './errors/InvalidParentError';
 export * from './errors/MatchingRouteNotFoundError';
 export * from './errors/MatchingPlatformNotFoundError';
 
+export * from './metadata/ClassDecoratorMetadata';
+export * from './metadata/ComponentMetadata';
+export * from './metadata/ComponentOptionMetadata';
+export * from './metadata/HandlerMetadata';
+export * from './metadata/HandlerOptionMetadata';
 export * from './metadata/MetadataStorage';
-export * from './decorators/Component';
-export * from './decorators/Output';
-export * from './decorators/Handle';
-export * from './decorators/Global';
-export * from './decorators/Intents';
-export * from './decorators/Platforms';
-export * from './decorators/SubState';
-export * from './decorators/If';
+export * from './metadata/MethodDecoratorMetadata';
+export * from './metadata/OutputMetadata';
+
+export * from './plugins/BasicLogging';
+export * from './plugins/DbPlugin';
+export * from './plugins/HandlerPlugin';
+export * from './plugins/OutputPlugin';
+export * from './plugins/RouteMatch';
+export * from './plugins/RouterPlugin';
+export * from './plugins/RoutingExecutor';
 
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
-

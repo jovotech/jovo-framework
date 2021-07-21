@@ -1,8 +1,8 @@
-export interface JovoErrorOptions {
-  [key: string]: unknown;
+import { AnyObject, UnknownObject } from './index';
+
+export interface JovoErrorOptions extends UnknownObject {
   message: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any>;
+  context?: AnyObject;
   details?: string;
   hint?: string;
   learnMore?: string;
@@ -11,8 +11,7 @@ export interface JovoErrorOptions {
 
 export class JovoError extends Error {
   [key: string]: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any>;
+  context?: AnyObject;
   details?: string;
   hint?: string;
   learnMore?: string;
@@ -28,7 +27,10 @@ export class JovoError extends Error {
   }
 
   // Used by JSON.stringify
-  toJSON() {
-    return this.message;
+  toJSON(): JovoError {
+    return {
+      ...this,
+      message: this.message,
+    };
   }
 }

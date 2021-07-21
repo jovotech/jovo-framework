@@ -5,6 +5,7 @@ import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetada
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
+import { getMethodKeys } from '../utilities';
 
 export function Component<COMPONENT extends BaseComponent = BaseComponent>(
   options?: ComponentOptions<COMPONENT>,
@@ -25,21 +26,18 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
     }
     const metadataStorage = MetadataStorage.getInstance();
 
-    const keys = Object.getOwnPropertyNames(target.prototype);
+    const keys = getMethodKeys(target.prototype);
     keys.forEach((key) => {
       // it could be checked for more built-in Intents here in order to skip them in the future, i.e. START
-      if (key !== 'constructor' && typeof target.prototype[key] === 'function') {
-        const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
-          (handlerMetadata) =>
-            handlerMetadata.target === target && handlerMetadata.propertyKey === key,
-        );
-        const hasHandlerOptionMetadata = metadataStorage.handlerOptionMetadata.some(
-          (optionMetadata) =>
-            optionMetadata.target === target && optionMetadata.propertyKey === key,
-        );
-        if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
-          metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
-        }
+      const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
+        (handlerMetadata) =>
+          handlerMetadata.target === target && handlerMetadata.propertyKey === key,
+      );
+      const hasHandlerOptionMetadata = metadataStorage.handlerOptionMetadata.some(
+        (optionMetadata) => optionMetadata.target === target && optionMetadata.propertyKey === key,
+      );
+      if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
+        metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
       }
     });
     // make launch global if it is set

@@ -1,6 +1,38 @@
 # Jovo Framework Changelog
 
-### Latest Prerelease Framework Version: 4.0.0-alpha.16
+### Latest Prerelease Framework Version: 4.0.0-alpha.17
+
+## 2021-07-12
+
+##### `@jovotech/platform-alexa [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/platform-core [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/platform-googlebusiness [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+##### `@jovotech/plugin-debugger [4.0.0-alpha.18]`
+
+- [#954](https://github.com/jovotech/jovo-framework/pull/954) :bug: Fix invalid imports
+
+
+## 2021-07-09
+
+##### `@jovotech/framework [4.0.0-alpha.17]`
+
+- [#940](https://github.com/jovotech/jovo-framework/pull/940) :sparkles: Implement passing of OutputTemplate-properties directly to `$send` via the options
+- [#941](https://github.com/jovotech/jovo-framework/pull/941) :sparkles: :recycle: Implement `ComponentTree` for easier component-management
+- [#942](https://github.com/jovotech/jovo-framework/pull/942) :sparkles: Implement multiple `$send` calls for synchronous platforms
+- [#943](https://github.com/jovotech/jovo-framework/pull/943) :sparkles: Implement global components
+- [#946](https://github.com/jovotech/jovo-framework/pull/946) :sparkles: :recycle: Implement Jovo History functionality, recycle persistence layer
+- [#949](https://github.com/jovotech/jovo-framework/pull/949) :recycle: Refactor routing
+- [#952](https://github.com/jovotech/jovo-framework/pull/952) :construction_worker: :art: :label: Fix CI
+
 
 ## 2021-06-07
 

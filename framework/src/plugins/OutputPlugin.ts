@@ -17,7 +17,7 @@ declare module '../Extensible' {
 }
 
 export class OutputPlugin extends Plugin<OutputPluginConfig> {
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 

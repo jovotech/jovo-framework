@@ -1,4 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
+import { UnknownObject } from '@jovotech/framework';
 import { SupportedLocales } from './constants';
 
 export interface GoogleActionProjectLocales {
@@ -7,7 +8,7 @@ export interface GoogleActionProjectLocales {
 
 export interface GoogleActionActions {
   custom: {
-    [key: string]: Record<string, unknown>;
+    [key: string]: UnknownObject;
   };
 }
 

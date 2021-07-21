@@ -1,4 +1,11 @@
-import { App, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
+import {
+  AnyObject,
+  App,
+  ExtensibleConfig,
+  HandleRequest,
+  Jovo,
+  Platform,
+} from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
@@ -25,20 +32,20 @@ export class GoogleAssistant extends Platform<
     return {};
   }
 
-  install(parent: App) {
+  install(parent: App): void {
     super.install(parent);
     parent.middlewareCollection.use('before.request', this.beforeRequest);
   }
 
-  initialize(parent: App) {
-    parent.useComponents(GoogleAssistantRepromptComponent);
+  initialize(parent: App): void {
+    parent.use(GoogleAssistantRepromptComponent);
   }
 
-  isRequestRelated(request: Record<string, any> | GoogleAssistantRequest): boolean {
+  isRequestRelated(request: AnyObject | GoogleAssistantRequest): boolean {
     return request.user && request.session && request.handler && request.device;
   }
 
-  isResponseRelated(response: Record<string, any> | GoogleAssistantResponse): boolean {
+  isResponseRelated(response: AnyObject | GoogleAssistantResponse): boolean {
     return response.user && response.session && response.prompt;
   }
 
@@ -58,7 +65,10 @@ export class GoogleAssistant extends Platform<
     return response;
   }
 
-  beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  beforeRequest: (handleRequest: HandleRequest, jovo: Jovo) => void = (
+    handleRequest: HandleRequest,
+    jovo: Jovo,
+  ) => {
     // if the request is a no-input-request and a state exists, add the reprompt-component to the top
     const intentName = jovo.$googleAction?.$request?.intent?.name;
     if (
@@ -71,7 +81,7 @@ export class GoogleAssistant extends Platform<
       jovo.$state
     ) {
       jovo.$state.push({
-        componentPath: 'GoogleAssistantRepromptComponent',
+        component: 'GoogleAssistantRepromptComponent',
       });
     }
   };

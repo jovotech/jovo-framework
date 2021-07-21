@@ -1,23 +1,24 @@
 import _cloneDeep from 'lodash.clonedeep';
-import { inspect } from 'util';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BaseOutput, OutputConstructor } from '../BaseOutput';
 import { ComponentMetadata } from './ComponentMetadata';
+import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 import { HandlerMetadata } from './HandlerMetadata';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
+import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 import { OutputMetadata } from './OutputMetadata';
 
-// TODO: implement
 export class MetadataStorage {
   private static instance: MetadataStorage;
-  // TODO: determine whether any is required/helpful here
   readonly componentMetadata: ComponentMetadata[];
+  readonly componentOptionMetadata: ComponentOptionMetadata[];
   readonly handlerMetadata: HandlerMetadata[];
   readonly handlerOptionMetadata: HandlerOptionMetadata[];
   readonly outputMetadata: OutputMetadata[];
 
   private constructor() {
     this.componentMetadata = [];
+    this.componentOptionMetadata = [];
     this.handlerMetadata = [];
     this.handlerOptionMetadata = [];
     this.outputMetadata = [];
@@ -30,7 +31,9 @@ export class MetadataStorage {
     return MetadataStorage.instance;
   }
 
-  addComponentMetadata<COMPONENT extends BaseComponent>(metadata: ComponentMetadata<COMPONENT>) {
+  addComponentMetadata<COMPONENT extends BaseComponent>(
+    metadata: ComponentMetadata<COMPONENT>,
+  ): void {
     // TODO: determine what to do if a component like that already exists
     // for now, just skip (first only counts)
     if (this.getComponentMetadata(metadata.target)) {
@@ -48,7 +51,44 @@ export class MetadataStorage {
       | undefined;
   }
 
-  addOutputMetadata<OUTPUT extends BaseOutput>(target: OutputConstructor<OUTPUT>, name: string) {
+  getMergedComponentMetadata<COMPONENT extends BaseComponent>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: ComponentConstructor<COMPONENT> | Function,
+  ): ComponentMetadata<COMPONENT> | undefined {
+    const componentMetadata = this.getComponentMetadata(target);
+    const componentOptionMetadata = this.getComponentOptionMetadata(target);
+    if (!componentMetadata && !componentOptionMetadata.length) {
+      return;
+    }
+    const mergedComponentMetadata = componentMetadata
+      ? _cloneDeep(componentMetadata)
+      : new ComponentMetadata(target);
+
+    componentOptionMetadata.forEach((optionMetadata) =>
+      mergedComponentMetadata.mergeWith(optionMetadata),
+    );
+    return mergedComponentMetadata;
+  }
+
+  addComponentOptionMetadata<COMPONENT extends BaseComponent>(
+    metadata: ComponentOptionMetadata<COMPONENT>,
+  ): void {
+    this.componentOptionMetadata.push(metadata);
+  }
+
+  getComponentOptionMetadata<COMPONENT extends BaseComponent>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: ComponentConstructor<COMPONENT> | Function,
+  ): ComponentOptionMetadata<COMPONENT>[] {
+    return this.componentOptionMetadata.filter(
+      (metadata) => metadata.target === target,
+    ) as ComponentOptionMetadata<COMPONENT>[];
+  }
+
+  addOutputMetadata<OUTPUT extends BaseOutput>(
+    target: OutputConstructor<OUTPUT>,
+    name: string,
+  ): void {
     const existingMetadata = this.getOutputMetadataByName(name);
 
     if (existingMetadata) {
@@ -92,7 +132,7 @@ export class MetadataStorage {
 
   addHandlerMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
     metadata: HandlerMetadata<COMPONENT, KEY>,
-  ) {
+  ): void {
     this.handlerMetadata.push(metadata as HandlerMetadata);
   }
 
@@ -107,15 +147,19 @@ export class MetadataStorage {
     // eslint-disable-next-line @typescript-eslint/ban-types
     target: ComponentConstructor<COMPONENT> | Function,
   ): HandlerMetadata<COMPONENT, keyof COMPONENT>[] {
+    const mergedComponentMetadata = this.getMergedComponentMetadata(target);
     const componentHandlerMetadata = this.getHandlerMetadataOfComponent(target);
     const mergedMetadata = componentHandlerMetadata.map((handlerMetadata) => {
       const mergedHandlerMetadata = _cloneDeep(handlerMetadata);
       const relatedHandlerOptionMetadata = this.handlerOptionMetadata.filter((optionMetadata) =>
-        optionMetadata.hasSameTargetAs(mergedHandlerMetadata),
+        optionMetadata.hasSameTargetAs(mergedHandlerMetadata as MethodDecoratorMetadata),
       );
       relatedHandlerOptionMetadata.forEach((optionMetadata) =>
         mergedHandlerMetadata.mergeWith(optionMetadata),
       );
+      if (mergedComponentMetadata?.isGlobal) {
+        mergedHandlerMetadata.options.global = true;
+      }
       return mergedHandlerMetadata;
     });
 
@@ -135,7 +179,10 @@ export class MetadataStorage {
           new HandlerMetadata<COMPONENT, keyof COMPONENT>(
             optionMetadata.target,
             optionMetadata.propertyKey,
-            { ...optionMetadata.options },
+            {
+              ...optionMetadata.options,
+              global: mergedComponentMetadata?.isGlobal || optionMetadata.options.global,
+            },
           ),
         );
       } else {
@@ -147,7 +194,7 @@ export class MetadataStorage {
 
   addHandlerOptionMetadata<COMPONENT extends BaseComponent, KEY extends keyof COMPONENT>(
     metadata: HandlerOptionMetadata<COMPONENT, KEY>,
-  ) {
+  ): void {
     this.handlerOptionMetadata.push(metadata as HandlerOptionMetadata);
   }
 

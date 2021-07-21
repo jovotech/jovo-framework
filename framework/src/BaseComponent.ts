@@ -1,11 +1,7 @@
-import { ComponentData, JovoComponentInfo } from './index';
+import { ComponentData, JovoComponentInfo, UnknownObject } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
-import { ComponentOptions, RegisteredComponentMetadata } from './metadata/ComponentMetadata';
-
-export interface RegisteredComponents {
-  [key: string]: RegisteredComponentMetadata | undefined;
-}
+import { ComponentOptions } from './metadata/ComponentMetadata';
 
 export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
   jovo: Jovo,
@@ -27,7 +23,7 @@ export class ComponentDeclaration<
 
 export abstract class BaseComponent<
   DATA extends ComponentData = ComponentData,
-  CONFIG extends Record<string, unknown> = Record<string, unknown>,
+  CONFIG extends UnknownObject = UnknownObject,
 > extends JovoProxy {
   get $component(): JovoComponentInfo<DATA, CONFIG> {
     return this.$component as { $data: DATA; $config: CONFIG | undefined };

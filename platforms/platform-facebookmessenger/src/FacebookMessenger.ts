@@ -1,4 +1,5 @@
 import {
+  AnyObject,
   App,
   Extensible,
   ExtensibleConfig,
@@ -49,11 +50,11 @@ export class FacebookMessenger extends Platform<
     };
   }
 
-  isRequestRelated(request: Record<string, any> | FacebookMessengerRequest): boolean {
+  isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
     return request.id && request.time && request.messaging?.[0];
   }
 
-  isResponseRelated(response: Record<string, any> | FacebookMessengerResponse): boolean {
+  isResponseRelated(response: AnyObject | FacebookMessengerResponse): boolean {
     return response.recipient && response.message;
   }
 
@@ -119,6 +120,7 @@ export class FacebookMessenger extends Platform<
       } else if (isFacebookMessengerRequest) {
         const promises = request.entry.map((entry: MessengerBotEntry) => {
           const serverCopy = _cloneDeep(server);
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           serverCopy.setResponse = async () => {};
           serverCopy.getRequestObject = () => entry;
           return APP_HANDLE.call(this, serverCopy);

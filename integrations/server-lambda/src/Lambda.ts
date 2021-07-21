@@ -30,8 +30,9 @@ export class Lambda extends Server {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fail(error: Error): void {
-    //
+    // TODO: implement me
   }
 
   getQueryParams(): QueryParams {

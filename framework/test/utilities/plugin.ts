@@ -1,12 +1,8 @@
-import { Extensible, Plugin, PluginConfig } from '../../src';
+import { Plugin, PluginConfig } from '../../src';
 
 export class EmptyPlugin extends Plugin {
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
   }
 }
 
@@ -25,9 +21,5 @@ export class ExamplePlugin extends Plugin<ExamplePluginConfig> {
     return {
       text: 'default',
     };
-  }
-
-  mount(parent: Extensible): Promise<void> | void {
-    return;
   }
 }
