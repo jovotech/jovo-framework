@@ -3,7 +3,7 @@ import {
   CorePlatformOutputTemplateConverterStrategy,
   CorePlatformResponse,
 } from '@jovotech/output-core';
-import { CorePlatformApp } from './CorePlatformApp';
+import { Core } from './Core';
 import { CorePlatformRequest } from './CorePlatformRequest';
 import { CorePlatformUser } from './CorePlatformUser';
 
@@ -14,7 +14,7 @@ export interface CorePlatformConfig extends ExtensibleConfig {
 export class CorePlatform extends Platform<
   CorePlatformRequest,
   CorePlatformResponse,
-  CorePlatformApp,
+  Core,
   CorePlatformConfig
 > {
   // TODO: determine how useful this is and if this is required somewhere
@@ -41,7 +41,7 @@ export class CorePlatform extends Platform<
 
   outputTemplateConverterStrategy = new CorePlatformOutputTemplateConverterStrategy();
   requestClass = CorePlatformRequest;
-  jovoClass = CorePlatformApp;
+  jovoClass = Core;
   userClass = CorePlatformUser;
 
   getDefaultConfig(): CorePlatformConfig {
@@ -66,7 +66,7 @@ export class CorePlatform extends Platform<
 
   finalizeResponse(
     response: CorePlatformResponse,
-    corePlatformApp: CorePlatformApp,
+    corePlatformApp: Core,
   ): CorePlatformResponse | Promise<CorePlatformResponse> {
     response.type = this.config.type;
     response.session.data = corePlatformApp.$session;

@@ -1,12 +1,12 @@
 import { JovoUser } from '@jovotech/framework';
 import { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
-import { GoogleAction } from './GoogleAction';
+import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 
 export class GoogleAssistantUser extends JovoUser<
   GoogleAssistantRequest,
   GoogleAssistantResponse,
-  GoogleAction
+  GoogleAssistant
 > {
   get id(): string {
     return (

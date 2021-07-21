@@ -2,11 +2,11 @@ import { JovoUser } from '@jovotech/framework';
 import { AlexaResponse } from '@jovotech/output-alexa';
 
 import { AlexaRequest } from './AlexaRequest';
-import { AlexaSkill } from './AlexaSkill';
+import { Alexa } from './Alexa';
 import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 
-export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, AlexaSkill> {
-  constructor(jovo: AlexaSkill) {
+export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, Alexa> {
+  constructor(jovo: Alexa) {
     super(jovo);
   }
 
