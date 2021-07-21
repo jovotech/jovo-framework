@@ -14,10 +14,10 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
-    $corePlatform?: Core;
+    $core?: Core;
   }
 }
-registerPlatformSpecificJovoReference('$corePlatform', Core);
+registerPlatformSpecificJovoReference('$core', Core);
 
 export * from './Core';
 export * from './CorePlatform';
