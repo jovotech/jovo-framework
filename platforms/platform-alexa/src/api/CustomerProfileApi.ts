@@ -8,8 +8,15 @@ export enum ProfileProperty {
   MOBILE_NUMBER = 'mobileNumber',
 }
 
-export type CustomerProfileApiResponse<T extends ProfileProperty> =
-  T extends ProfileProperty.MOBILE_NUMBER ? { T: string; countryCode: string } : string;
+/**
+ * Determines the response type for the Customer Profile API.
+ * For mobileNumber, returns the mobileNumber with the respective countryCode.
+ * Otherwise just returns the result string.
+ */
+export type CustomerProfileApiResponse<PROPERTY extends ProfileProperty> =
+  PROPERTY extends ProfileProperty.MOBILE_NUMBER
+    ? { [ProfileProperty.MOBILE_NUMBER]: string; countryCode: string }
+    : string;
 
 /**
  * Sends a request to Amazon's Customer Profile API for getting profile information
