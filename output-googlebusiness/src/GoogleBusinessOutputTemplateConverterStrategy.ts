@@ -81,7 +81,6 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
 
     // TODO determine what to do with nativeResponse!
     // if (output.platforms?.GoogleBusiness?.nativeResponse) {
-    //   _merge(response, output.platforms.GoogleBusiness.nativeResponse);
     // }
 
     return response;

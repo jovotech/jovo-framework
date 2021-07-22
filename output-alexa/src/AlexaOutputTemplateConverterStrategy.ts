@@ -1,13 +1,13 @@
 import {
   DynamicEntitiesMode,
   DynamicEntity,
+  mergeInstances,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
@@ -119,7 +119,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     }
 
     if (output.platforms?.Alexa?.nativeResponse) {
-      _merge(response, output.platforms.Alexa.nativeResponse);
+      mergeInstances(response, output.platforms.Alexa.nativeResponse);
     }
 
     return response;

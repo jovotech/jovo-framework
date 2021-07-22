@@ -5,7 +5,8 @@ import {
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   QuickReply,
-  QuickReplyValue, removeSSML,
+  QuickReplyValue,
+  removeSSML,
 } from '@jovotech/output';
 import {
   FacebookMessengerResponse,
@@ -80,7 +81,6 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
 
     // TODO determine what to do with nativeResponse!
     // if (output.platforms?.FacebookMessenger?.nativeResponse) {
-    //   _merge(response, output.platforms.FacebookMessenger.nativeResponse);
     // }
 
     return response;

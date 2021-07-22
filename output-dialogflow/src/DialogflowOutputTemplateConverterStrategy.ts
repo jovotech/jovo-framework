@@ -1,12 +1,12 @@
 import {
   DynamicEntitiesMode,
   DynamicEntity,
+  mergeInstances,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
 import {
   DialogflowResponse,
   EntityOverrideMode,
@@ -73,7 +73,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     }
 
     if (output.platforms?.Dialogflow?.nativeResponse) {
-      _merge(response, output.platforms.Dialogflow.nativeResponse);
+      mergeInstances(response, output.platforms.Dialogflow.nativeResponse);
     }
 
     return response;
