@@ -184,7 +184,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return {
       name: entity.name,
       values: (entity.values || []).map((value) => ({
-        id: value.id || value.value,
+        id: value.id,
         name: {
           value: value.value,
           synonyms: value.synonyms?.slice(),
