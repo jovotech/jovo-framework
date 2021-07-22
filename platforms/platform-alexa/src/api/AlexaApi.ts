@@ -15,6 +15,7 @@ export enum AlexaApiErrorCode {
   NO_SKILL_PERMISSION = 'NO_SKILL_PERMISSION',
   LIST_NOT_FOUND = 'LIST_NOT_FOUND',
   ITEM_NOT_FOUND = 'ITEM_NOT_FOUND',
+  DEVICE_NOT_SUPPORTED = 'DEVICE_NOT_SUPPORTED',
   ERROR = 'ERROR',
 }
 
@@ -33,7 +34,7 @@ export interface AlexaApiOptions extends AxiosRequestConfig {
   path: string;
   permissionToken: string;
   method?: Method;
-  data?: Record<string, unknown>;
+  data?: unknown;
 }
 
 /**
@@ -54,6 +55,5 @@ export async function sendApiRequest<RESPONSE>(
       'Authorization': `Bearer ${options.permissionToken}`,
     },
   };
-
   return await axios(config);
 }

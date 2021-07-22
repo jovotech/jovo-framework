@@ -30,4 +30,11 @@ export * from './AlexaUser';
 export type { AlexaResponse } from '@jovotech/output-alexa';
 export * from './constants';
 export * from './interfaces';
+export * from './api/ReminderApi';
+export * from './output/AskForPermissionConsentCardOutput';
+export * from './output/AskForPermissionOutput';
+export * from './output/AskForRemindersPermissionOutput';
+export * from './output/AskForTimersPermissionOutput';
+export * from './conditions/permissions';
+
 export * from './api';
