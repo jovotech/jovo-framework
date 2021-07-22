@@ -1,9 +1,9 @@
-import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import _merge from 'lodash.merge';
+import { mergeInstances, OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
 import { CorePlatformResponse } from './models';
 
 export class CorePlatformOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<CorePlatformResponse> {
+  implements OutputTemplateConverterStrategy<CorePlatformResponse>
+{
   responseClass = CorePlatformResponse;
 
   toResponse(output: OutputTemplate | OutputTemplate[]): CorePlatformResponse {
@@ -28,7 +28,7 @@ export class CorePlatformOutputTemplateConverterStrategy
         lastListen = listen;
       }
       if (outputItem.platforms?.CorePlatform?.nativeResponse) {
-        _merge(response, outputItem.platforms.CorePlatform.nativeResponse);
+        mergeInstances(response, outputItem.platforms.CorePlatform.nativeResponse);
       }
     });
     response.session.end = !lastListen;

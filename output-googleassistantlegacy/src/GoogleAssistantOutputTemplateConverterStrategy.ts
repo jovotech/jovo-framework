@@ -1,11 +1,11 @@
 import {
+  mergeInstances,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
 import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
 
 // TODO: CHECK: Theoretically, this platform can have multiple messages but we have never used this feature so far.
@@ -63,7 +63,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     if (output.platforms?.GoogleAssistant?.nativeResponse) {
-      _merge(response, output.platforms.GoogleAssistant.nativeResponse);
+      mergeInstances(response, output.platforms.GoogleAssistant.nativeResponse);
     }
 
     return response;

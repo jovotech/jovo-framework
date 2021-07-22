@@ -1,12 +1,12 @@
 import {
   DynamicEntitiesMode,
   DynamicEntity,
+  mergeInstances,
   MessageValue,
   OutputTemplate,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
 import {
   GoogleAssistantResponse,
   Session,
@@ -110,7 +110,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     if (output.platforms?.GoogleAssistant?.nativeResponse) {
-      _merge(response, output.platforms.GoogleAssistant.nativeResponse);
+      mergeInstances(response, output.platforms.GoogleAssistant.nativeResponse);
     }
 
     return response;

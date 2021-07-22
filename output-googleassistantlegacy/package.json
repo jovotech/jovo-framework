@@ -20,12 +20,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
     "@jovotech/output": "^4.0.0-alpha.10",
     "@types/jest": "^26.0.20",
-    "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "barrelsby": "^2.2.0",
