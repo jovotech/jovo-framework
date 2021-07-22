@@ -97,7 +97,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const quickReplies: QuickReplyValue[] | undefined =
       output.platforms?.Alexa?.quickReplies || output.quickReplies;
-    if (quickReplies) {
+    if (quickReplies && this.config.genericOutputToApl) {
       const directive: AplRenderDocumentDirective | undefined = response.response
         .directives?.[0] as AplRenderDocumentDirective | undefined;
       if (directive) {
