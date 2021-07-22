@@ -37,7 +37,39 @@ async someHandler() {
 },
 ```
 
-The `reminder` passed to the `setReminder` method above uses a structure that you can learn more about [in the official Alexa documentation](https://developer.amazon.com/de-DE/docs/alexa/smapi/alexa-reminders-api-reference.html#reminder-object).
+The `reminder` passed to the `setReminder` method above uses a structure that you can learn more about [in the official Alexa documentation](https://developer.amazon.com/docs/alexa/smapi/alexa-reminders-api-reference.html#reminder-object). There are relative (`RelativeReminder`) and absolute reminders (`AbsoluteReminder`).
+
+Here is an example:
+
+```typescript
+import { RelativeReminder } from '@jovotech/platform-alexa';
+// ...
+
+async someHandler() {
+  const reminder: RelativeReminder = {
+    requestTime: '2021-07-22T19:04:00.672', // Valid ISO 8601 format - describes the time when event actually occurred
+    trigger: {
+      type: 'SCHEDULED_RELATIVE', // Indicates type of trigger
+      offsetInSeconds: 60, // If reminder is set using relative time, use this field to specify the time after which reminder will ring (in seconds)
+    },
+    alertInfo: {
+      spokenInfo: {
+        content: [
+          {
+            locale: 'en-US', // Locale in which value is specified
+            text: 'Hello World!', // Text that will be used for display and spoken purposes
+          },
+        ],
+      },
+    },
+    pushNotification: {
+      status: 'ENABLED', // If a push notification should be sent or not [default = ENABLED]
+    },
+  };
+
+  // ...
+}
+```
 
 You need to [ask the user for permission](#permissions) before you can [add and modify reminders](#add-and-modify-reminders).
 
@@ -104,20 +136,22 @@ If this error occurs, you need to first ask your user for the permission to read
 
 Voice permissions provide a frictionless way to ask users if they want to provide access to their reminders. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/voice-permissions-for-reminders.html).
 
+You can use the  `AskForRemindersPermissionOutput` for this:
+
 ```typescript
-import { AskForReminderPermissionOutput } from '@jovotech/platform-alexa';
+import { AskForRemindersPermissionOutput } from '@jovotech/platform-alexa';
 // ...
 
 someHandler() {
   // ...
 
-  return this.$send(AskForReminderPermissionOutput, {
-    message: 'Please grant the permission to set reminders.'
+  return this.$send(AskForRemindersPermissionOutput, {
+    message: 'Please grant the permission to set reminders.',
   });
 }
 ```
 
-Under the hood, the `AskForReminderPermissionOutput` looks like this:
+Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermissionOutput` and like this:
 
 ```typescript
 {
@@ -164,30 +198,17 @@ async remindersPermissionAccepted() {
 }
 ```
 
-> **Notee**: The request doesn't come with session data. This is why the accepting handler needs to be `global`.
+> **Note**: The request doesn't come with session data. This is why the accepting handler needs to be `global`.
 
-To look for requests where a user doesn't accept the request, you can use `isRemindersPermissionNotAnsweredRequest`:
+Here are additional helper functions that you can use similar to `isRemindersPermissionAcceptedRequest`:
 
-```typescript
-import { Handle } from '@jovotech/framework';
-import { isRemindersPermissionNotAnsweredRequest } from '@jovotech/platform-alexa';
-// ...
-
-@Handle({
-  global: true,
-  intents: [ 'Connections.Response' ],
-  if: isRemindersPermissionNotAnsweredRequest
-})
-async remindersPermissionNotAnswered() {
-  // ...
-}
-```
-
-
+* `isRemindersPermissionRequest`
+* `isRemindersPermissionDeniedRequest`
+* `isRemindersPermissionNotAnsweredRequest`
 
 #### Permissions Consent Card
 
-You can also ask for permissions by sending a permissions consent card to the user's Alexa mobile app. [Learn more in the official Alexa docs](https://developer.amazon.com/de-DE/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#permissions-card-for-requesting-customer-consent).
+You can also ask for permissions by sending a permissions consent card to the user's Alexa mobile app. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#permissions-card-for-requesting-customer-consent).
 
 
 ```typescript
