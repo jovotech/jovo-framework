@@ -68,6 +68,33 @@ export enum TypeOverrideMode {
 
 export type TypeOverrideModeLike = EnumLike<TypeOverrideMode>;
 
+export class SessionParamsReprompts {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  NO_INPUT_1?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  NO_INPUT_2?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  NO_INPUT_FINAL?: string;
+}
+
+export class SessionParams {
+  [key: string]: unknown;
+
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => SessionParamsReprompts)
+  _GA_REPROMPTS_?: SessionParamsReprompts;
+}
+
 export class TypeOverride {
   @IsString()
   @IsNotEmpty()
@@ -84,11 +111,12 @@ export class TypeOverride {
 
 export class Session {
   @IsString()
-  @IsNotEmpty()
   id: string;
 
   @IsObject()
-  params: Record<string, unknown>;
+  @ValidateNested()
+  @Type(() => SessionParams)
+  params: SessionParams;
 
   @IsOptional()
   @IsArray()
@@ -97,6 +125,5 @@ export class Session {
   typeOverrides?: TypeOverride[];
 
   @IsString()
-  @IsNotEmpty()
   languageCode: string;
 }
