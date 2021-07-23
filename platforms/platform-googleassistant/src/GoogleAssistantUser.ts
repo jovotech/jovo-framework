@@ -2,17 +2,7 @@ import { Headers, JovoError, JovoUser, AxiosRequestConfig, axios } from '@jovote
 import { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
-
-export interface GoogleAccountProfile {
-  [key: string]: string | number | boolean;
-
-  email: string;
-  email_verified: boolean;
-  name: string;
-  picture: string;
-  given_name: string;
-  family_name: string;
-}
+import { GoogleAccountProfile } from './interfaces';
 
 export class GoogleAssistantUser extends JovoUser<
   GoogleAssistantRequest,
