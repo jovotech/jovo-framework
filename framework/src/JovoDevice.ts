@@ -33,4 +33,8 @@ export abstract class JovoDevice<
   addCapability(...capability: CAPABILITY[]): void {
     this.capabilities = this.capabilities.concat(capability);
   }
+
+  toJSON(): JovoDevice<REQUEST, RESPONSE, JOVO> {
+    return { ...this, jovo: undefined };
+  }
 }
