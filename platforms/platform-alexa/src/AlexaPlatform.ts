@@ -57,7 +57,7 @@ export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, 
   }
 
   private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
-    if (!(jovo.$platform instanceof Alexa)) {
+    if (!(jovo.$platform instanceof AlexaPlatform)) {
       return;
     }
     // Generate generic output to APL if supported and set in config

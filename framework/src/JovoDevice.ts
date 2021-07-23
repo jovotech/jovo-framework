@@ -9,14 +9,14 @@ export type JovoDeviceConstructor<
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE>,
-  CAPABILITY extends Capability = Capability,
+  CAPABILITY extends Capability = Capability
 > = new (jovo: JOVO) => JovoDevice<REQUEST, RESPONSE, JOVO, CAPABILITY>;
 
 export abstract class JovoDevice<
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE>,
-  CAPABILITY extends Capability = Capability,
+  CAPABILITY extends Capability = Capability
 > {
   capabilities: CAPABILITY[] = [];
 
@@ -32,5 +32,9 @@ export abstract class JovoDevice<
 
   addCapability(...capability: CAPABILITY[]): void {
     this.capabilities = this.capabilities.concat(capability);
+  }
+
+  toJSON(): JovoDevice<REQUEST, RESPONSE, JOVO> {
+    return { ...this, jovo: undefined };
   }
 }
