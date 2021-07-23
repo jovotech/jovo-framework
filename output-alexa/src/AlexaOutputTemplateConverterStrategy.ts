@@ -97,7 +97,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const quickReplies: QuickReplyValue[] | undefined =
       output.platforms?.Alexa?.quickReplies || output.quickReplies;
-    if (quickReplies) {
+    if (quickReplies && this.config.genericOutputToApl) {
       const directive: AplRenderDocumentDirective | undefined = response.response
         .directives?.[0] as AplRenderDocumentDirective | undefined;
       if (directive) {
@@ -184,7 +184,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return {
       name: entity.name,
       values: (entity.values || []).map((value) => ({
-        id: value.id || value.value,
+        id: value.id,
         name: {
           value: value.value,
           synonyms: value.synonyms?.slice(),

@@ -1,5 +1,5 @@
-import _merge from 'lodash.merge';
 import {
+  mergeInstances,
   Message,
   OutputTemplate,
   OutputTemplatePlatforms,
@@ -76,7 +76,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
           targetPlatformOutput.nativeResponse = {};
         }
         // TODO determine whether merge is sufficient
-        _merge(targetPlatformOutput.nativeResponse, mergeWithPlatformOutput.nativeResponse);
+        mergeInstances(targetPlatformOutput.nativeResponse, mergeWithPlatformOutput.nativeResponse);
       }
 
       this.mergeOutputTemplateWith(targetPlatformOutput, mergeWithPlatformOutput);
