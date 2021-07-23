@@ -29,6 +29,9 @@ export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
   FacebookMessenger,
+  FacebookMessengerUser,
+  FacebookMessengerDevice,
+  FacebookMessengerPlatform,
   FacebookMessengerConfig
 > {
   outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();

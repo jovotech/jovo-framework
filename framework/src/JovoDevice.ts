@@ -1,22 +1,12 @@
-import { JovoRequest } from './JovoRequest';
-import { JovoResponse } from '@jovotech/output';
-
 import { Jovo } from './Jovo';
 
 export type Capability = 'screen' | 'audio' | 'long-form-audio' | string;
 
-export type JovoDeviceConstructor<
-  REQUEST extends JovoRequest,
-  RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>,
-  CAPABILITY extends Capability = Capability
-> = new (jovo: JOVO) => JovoDevice<REQUEST, RESPONSE, JOVO, CAPABILITY>;
+export type JovoDeviceConstructor<JOVO extends Jovo> = new (jovo: JOVO) => JOVO['$device'];
 
 export abstract class JovoDevice<
-  REQUEST extends JovoRequest,
-  RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>,
-  CAPABILITY extends Capability = Capability
+  JOVO extends Jovo = Jovo,
+  CAPABILITY extends Capability = Capability,
 > {
   capabilities: CAPABILITY[] = [];
 
@@ -34,7 +24,7 @@ export abstract class JovoDevice<
     this.capabilities = this.capabilities.concat(capability);
   }
 
-  toJSON(): JovoDevice<REQUEST, RESPONSE, JOVO> {
+  toJSON(): JovoDevice<JOVO> {
     return { ...this, jovo: undefined };
   }
 }

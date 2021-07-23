@@ -20,7 +20,15 @@ export interface AlexaConfig extends ExtensibleConfig {
   };
 }
 
-export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, AlexaConfig> {
+export class AlexaPlatform extends Platform<
+  AlexaRequest,
+  AlexaResponse,
+  Alexa,
+  AlexaUser,
+  AlexaDevice,
+  AlexaPlatform,
+  AlexaConfig
+> {
   outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;

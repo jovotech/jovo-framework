@@ -16,6 +16,9 @@ export class CorePlatform extends Platform<
   CorePlatformRequest,
   CorePlatformResponse,
   Core,
+  CorePlatformUser,
+  CorePlatformDevice,
+  CorePlatform,
   CorePlatformConfig
 > {
   // TODO: determine how useful this is and if this is required somewhere
