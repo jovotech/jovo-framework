@@ -30,3 +30,4 @@ export * from './GoogleAssistantRequest';
 export * from './GoogleAssistantUser';
 export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 export * from './interfaces';
+export * from './enums';
