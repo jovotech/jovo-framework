@@ -1,20 +1,38 @@
 import { AxiosError, JovoError } from '@jovotech/framework';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
 
+export interface AlertInfo {
+  spokenInfo: {
+    content: SpokenInfoContent[];
+  };
+}
+export interface PushNotification {
+  status: string; // if a push notification should be sent or not [default = ENABLED]
+}
+
 export interface Reminder {
   requestTime: string; // valid ISO 8601 format - describes the time when event actually occurred
-  alertInfo: {
-    spokenInfo: {
-      content: SpokenInfoContent[];
-    };
-  };
-  pushNotification: {
-    status: string; // if a push notification should be sent or not [default = ENABLED]
-  };
+  alertInfo: AlertInfo;
+  pushNotification: PushNotification;
 }
 export interface RecurrenceWithFreq {
   freq: string;
   byDay?: string[];
+}
+
+export interface Trigger {
+  timeZoneId?: string; // def
+}
+export type ReminderStatus = 'ON' | 'COMPLETED' | string;
+export interface AbsoluteReminderTrigger extends Trigger {
+  type: 'SCHEDULED_ABSOLUTE'; // Indicates type of trigger
+  scheduledTime: string; // valid ISO 8601 format - Intended trigger time
+  recurrence?: RecurrenceWithFreq | RecurrenceWithRules;
+}
+
+export interface RelativeReminderTrigger extends Trigger {
+  type: 'SCHEDULED_RELATIVE'; // Indicates type of trigger
+  offsetInSeconds: number;
 }
 
 export interface RecurrenceWithRules {
@@ -23,34 +41,38 @@ export interface RecurrenceWithRules {
   recurrenceRules: string[];
 }
 export interface AbsoluteReminder extends Reminder {
-  trigger: {
-    type: 'SCHEDULED_ABSOLUTE'; // Indicates type of trigger
-    scheduledTime: string; // valid ISO 8601 format - Intended trigger time
-    timeZoneId?: string; // def
-    recurrence?: RecurrenceWithFreq | RecurrenceWithRules;
-  };
+  trigger: AbsoluteReminderTrigger;
 }
 
 export interface RelativeReminder extends Reminder {
-  trigger: {
-    type: 'SCHEDULED_RELATIVE'; // Indicates type of trigger
-    offsetInSeconds: number;
-    timeZoneId?: string; // def
-  };
+  trigger: RelativeReminderTrigger;
 }
 
 export interface ReminderResponse {
   alertToken: string;
   createdTime: string;
   updatedTime: string;
-  status: 'ON' | 'COMPLETED' | string;
+  status: ReminderStatus;
+  trigger?: AbsoluteReminderTrigger | RelativeReminderTrigger;
+  alertInfo?: AlertInfo;
+  pushNotification?: PushNotification;
   version: string;
   href: string;
 }
+export interface Alert {
+  alertToken: string;
+  createdTime: string;
+  updatedTime: string;
+  status: ReminderStatus;
+  trigger: AbsoluteReminderTrigger | RelativeReminderTrigger;
+  alertInfo: AlertInfo;
+  pushNotification: PushNotification;
+  version: string;
+}
 
 export interface ReminderListResponse {
-  totalCount: string;
-  alerts: unknown[];
+  totalCount: number;
+  alerts: Alert[];
   links?: string;
 }
 interface SpokenInfoContent {
@@ -63,7 +85,7 @@ export async function setReminder(
   reminder: AbsoluteReminder | RelativeReminder,
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ReminderResponse | undefined> {
+): Promise<ReminderResponse> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: '/v1/alerts/reminders',
@@ -77,6 +99,7 @@ export async function setReminder(
   } catch (error) {
     handleReminderApiErrors(error);
   }
+  throw new Error('Unexpected error.');
 }
 
 export async function updateReminder(
@@ -84,7 +107,7 @@ export async function updateReminder(
   reminder: AbsoluteReminder | RelativeReminder,
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ReminderResponse | undefined> {
+): Promise<ReminderResponse> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: `/v1/alerts/reminders/${alertToken}`,
@@ -98,13 +121,14 @@ export async function updateReminder(
   } catch (error) {
     handleReminderApiErrors(error);
   }
+  throw new Error('Unexpected error.');
 }
 
 export async function deleteReminder(
   alertToken: string,
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ReminderResponse | undefined> {
+): Promise<ReminderResponse> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: `/v1/alerts/reminders/${alertToken}`,
@@ -117,12 +141,13 @@ export async function deleteReminder(
   } catch (error) {
     handleReminderApiErrors(error);
   }
+  throw new Error('Unexpected error.');
 }
 
 export async function getAllReminders(
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ReminderListResponse | undefined> {
+): Promise<ReminderListResponse> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: '/v1/alerts/reminders',
@@ -131,17 +156,23 @@ export async function getAllReminders(
   };
   try {
     const response = await sendApiRequest<ReminderListResponse>(options);
-    return response.data;
+
+    // The value for totalCount from the API is a string.
+    return {
+      ...response.data,
+      totalCount: Number(response.data.totalCount), // Convert to number.
+    };
   } catch (error) {
     handleReminderApiErrors(error);
   }
+  throw new Error('Unexpected error.');
 }
 
 export async function getReminder(
   alertToken: string,
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ReminderResponse | undefined> {
+): Promise<ReminderResponse> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: `/v1/alerts/reminders/${alertToken}`,
@@ -154,6 +185,7 @@ export async function getReminder(
   } catch (error) {
     handleReminderApiErrors(error);
   }
+  throw new Error('Unexpected error.');
 }
 
 // TODO: needs to be refactored after completion of all Alexa APIs
@@ -162,12 +194,17 @@ export function handleReminderApiErrors(error: AxiosError): Error | void {
     const { message, code } = error.response?.data;
     let errorCode: AlexaApiErrorCode = AlexaApiErrorCode.ERROR;
 
+    console.log(error.response?.data);
     if (error.response?.status === 401) {
       errorCode = AlexaApiErrorCode.NO_USER_PERMISSION;
     }
 
     if (code === 'DEVICE_NOT_SUPPORTED') {
       errorCode = AlexaApiErrorCode.DEVICE_NOT_SUPPORTED;
+    }
+
+    if (code === 'ALERT_NOT_FOUND') {
+      errorCode = AlexaApiErrorCode.ALERT_NOT_FOUND;
     }
 
     // User needs to grant access in app

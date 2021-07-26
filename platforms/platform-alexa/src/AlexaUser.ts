@@ -35,9 +35,7 @@ export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, Alexa> {
     return email;
   }
 
-  async setReminder(
-    reminder: AbsoluteReminder | RelativeReminder,
-  ): Promise<ReminderResponse | undefined> {
+  async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {
     const request: AlexaRequest = this.jovo.$request;
     return setReminder(reminder, request.getApiEndpoint(), request.getApiAccessToken());
   }
@@ -45,7 +43,7 @@ export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, Alexa> {
   async updateReminder(
     alertToken: string,
     reminder: AbsoluteReminder | RelativeReminder,
-  ): Promise<ReminderResponse | undefined> {
+  ): Promise<ReminderResponse> {
     const request: AlexaRequest = this.jovo.$request;
     return updateReminder(
       alertToken,
@@ -55,17 +53,17 @@ export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, Alexa> {
     );
   }
 
-  async deleteReminder(alertToken: string): Promise<ReminderResponse | undefined> {
+  async deleteReminder(alertToken: string): Promise<ReminderResponse> {
     const request: AlexaRequest = this.jovo.$request;
     return deleteReminder(alertToken, request.getApiEndpoint(), request.getApiAccessToken());
   }
 
-  async getAllReminders(): Promise<ReminderListResponse | undefined> {
+  async getAllReminders(): Promise<ReminderListResponse> {
     const request: AlexaRequest = this.jovo.$request;
     return getAllReminders(request.getApiEndpoint(), request.getApiAccessToken());
   }
 
-  async getReminder(alertToken: string): Promise<ReminderResponse | undefined> {
+  async getReminder(alertToken: string): Promise<ReminderResponse> {
     const request: AlexaRequest = this.jovo.$request;
     return getReminder(alertToken, request.getApiEndpoint(), request.getApiAccessToken());
   }
