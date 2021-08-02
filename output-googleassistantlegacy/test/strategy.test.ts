@@ -5,10 +5,10 @@ import {
   OutputValidationError,
   toSSML,
 } from '@jovotech/output';
-import { RichResponse } from '../dist';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
+  RichResponse,
   SimpleResponse,
   SystemIntent,
 } from '../src';
@@ -266,12 +266,12 @@ describe('toResponse', () => {
         outputConverter.toResponse({
           card: {
             title: 'foo',
-            subtitle: 'bar',
+            content: 'bar',
           },
         }),
       ).rejects.toThrowError(OutputValidationError);
     });
-    test('output.card is set without image and subtitle', () => {
+    test('output.card is set without image and content', () => {
       return expect(
         outputConverter.toResponse({
           message: 'foo',
@@ -281,13 +281,13 @@ describe('toResponse', () => {
         }),
       ).rejects.toThrowError(OutputValidationError);
     });
-    test('output.card is set with subtitle', () => {
+    test('output.card is set with content', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: 'foo',
           card: {
             title: 'foo',
-            subtitle: 'bar',
+            content: 'bar',
           },
         },
         {
@@ -324,13 +324,13 @@ describe('toResponse', () => {
         },
       );
     });
-    test('output.card is set with image and subtitle', () => {
+    test('output.card is set with image and content', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: 'foo',
           card: {
             title: 'foo',
-            subtitle: 'bar',
+            content: 'bar',
             imageUrl: 'https://via.placeholder.com/150',
           },
         },
@@ -356,13 +356,13 @@ describe('toResponse', () => {
           message: 'foo',
           card: {
             title: 'foo',
-            subtitle: 'bar',
+            content: 'bar',
           },
           platforms: {
             GoogleAssistant: {
               card: {
                 title: 'overwritten',
-                subtitle: 'overwritten',
+                content: 'overwritten',
               },
             },
           },
@@ -392,11 +392,11 @@ describe('toResponse', () => {
             items: [
               {
                 title: 'foo',
-                subtitle: 'bar',
+                content: 'bar',
               },
               {
                 title: 'bar',
-                subtitle: 'foo',
+                content: 'foo',
               },
             ],
           },
@@ -409,7 +409,7 @@ describe('toResponse', () => {
         outputConverter.toResponse({
           message: 'foo',
           carousel: {
-            items: [{ title: 'foo', subtitle: 'bar' }],
+            items: [{ title: 'foo', content: 'bar' }],
           },
         }),
       ).rejects.toThrowError(OutputValidationError);
@@ -465,7 +465,7 @@ describe('toResponse', () => {
         outputConverter.toResponse({
           message: 'foo',
           carousel: {
-            items: ([] as Card[]).fill({ title: 'foo', subtitle: 'bar' }, 0, 10),
+            items: ([] as Card[]).fill({ title: 'foo', content: 'bar' }, 0, 10),
           },
         }),
       ).rejects.toThrowError(OutputValidationError);
@@ -643,7 +643,7 @@ describe('toResponse', () => {
           message: 'foo',
           card: {
             title: 'test',
-            subtitle: 'more',
+            content: 'more',
           },
           platforms: {
             GoogleAssistant: {
@@ -654,7 +654,18 @@ describe('toResponse', () => {
           },
         },
         {
-          richResponse,
+          richResponse: {
+            ...richResponse,
+            items: [
+              ...richResponse.items,
+              {
+                basicCard: {
+                  formattedText: 'more',
+                  title: 'test',
+                },
+              },
+            ],
+          },
         },
       );
     });
