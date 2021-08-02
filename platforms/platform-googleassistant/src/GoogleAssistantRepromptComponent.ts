@@ -18,7 +18,10 @@ export class GoogleAssistantRepromptComponent extends BaseComponent {
       await this.$send({
         message: prompt,
       });
-      delete this.$session._GA_REPROMPTS_;
+      // only delete reprompts on final reprompt
+      if (this.$nlu.intent?.name === GoogleAssistantSystemIntent.NoInputFinal) {
+        delete this.$session._GA_REPROMPTS_;
+      }
     }
   }
 }
