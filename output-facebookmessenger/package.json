@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-facebookmessenger",
-  "version": "4.0.0-alpha.10",
+  "version": "4.0.0-alpha.11",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -19,9 +19,8 @@
     "rimraf": "rimraf ./dist",
     "test": "jest"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-alpha.10",
+    "@jovotech/output": "^4.0.0-alpha.11",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
