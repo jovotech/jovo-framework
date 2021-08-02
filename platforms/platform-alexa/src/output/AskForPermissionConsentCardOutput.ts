@@ -10,15 +10,14 @@ export interface AskForPermissionConsentCardOutputOptions extends OutputOptions 
 export class AskForPermissionConsentCardOutput extends BaseOutput<AskForPermissionConsentCardOutputOptions> {
   build(): OutputTemplate | OutputTemplate[] {
     return {
-      message: `<speak>${this.options.message}</speak>`,
+      message: this.options.message,
       platforms: {
         Alexa: {
           nativeResponse: {
             response: {
               card: {
                 type: 'AskForPermissionsConsent',
-                // @ts-ignore
-                permissions: this.options.permissions,
+                permissions: this.options.permissionScope,
               },
             },
           },

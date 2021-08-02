@@ -7,14 +7,14 @@ export type PermissionScope =
 
 export interface AskForPermissionOutputOptions extends OutputOptions {
   token?: string;
-  permissions?: PermissionScope;
+  permissionScope?: PermissionScope;
 }
 
 @Output()
 export class AskForPermissionOutput extends BaseOutput<AskForPermissionOutputOptions> {
   build(): OutputTemplate | OutputTemplate[] {
     return {
-      message: `<speak>${this.options.message}</speak>`,
+      message: this.options.message,
       platforms: {
         Alexa: {
           nativeResponse: {
@@ -26,7 +26,7 @@ export class AskForPermissionOutput extends BaseOutput<AskForPermissionOutputOpt
                   payload: {
                     '@type': 'AskForPermissionsConsentRequest',
                     '@version': '1',
-                    'permissionScope': this.options.permissions,
+                    'permissionScope': this.options.permissionScope,
                   },
                   token: this.options.token || '',
                 },

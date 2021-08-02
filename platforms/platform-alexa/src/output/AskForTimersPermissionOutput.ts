@@ -5,6 +5,6 @@ import { AskForPermissionOutput } from './AskForPermissionOutput';
 export class AskForTimersPermissionOutput extends AskForPermissionOutput {
   constructor(jovo: Jovo) {
     super(jovo);
-    this.options.permissions = 'alexa::alerts:timers:skill:readwrite';
+    this.options.permissionScope = 'alexa::alerts:timers:skill:readwrite';
   }
 }
