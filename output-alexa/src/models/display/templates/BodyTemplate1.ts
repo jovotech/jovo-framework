@@ -10,7 +10,12 @@ import {
 } from '@jovotech/output';
 import { MainTextMaxLength } from '../../../decorators/validation/MainTextMaxLength';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, BackButtonVisibilityLike, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { TextContent } from '../TextContent';
 
 export class BodyTemplate1 implements DisplayTemplate<DisplayTemplateType.Body1> {

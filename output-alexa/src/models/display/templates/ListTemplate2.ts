@@ -11,7 +11,12 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, BackButtonVisibilityLike, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { DisplayTemplateList1Item } from '../list-items/DisplayTemplateList1Item';
 import { DisplayTemplateList2Item } from '../list-items/DisplayTemplateList2Item';
 

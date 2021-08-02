@@ -15,7 +15,7 @@ export enum CardWidth {
   Medium = 'MEDIUM',
 }
 
-export type CardWidthLike = EnumLike<CardWidth>
+export type CardWidthLike = EnumLike<CardWidth>;
 
 export class RbmCarouselCard {
   @IsEnum(CardWidth)

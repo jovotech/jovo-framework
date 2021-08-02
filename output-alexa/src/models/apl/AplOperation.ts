@@ -1,4 +1,4 @@
-import {EnumLike, IsEnum, IsInt, Min } from '@jovotech/output';
+import { EnumLike, IsEnum, IsInt, Min } from '@jovotech/output';
 
 export enum AplOperationType {
   InsertItem = 'InsertItem',

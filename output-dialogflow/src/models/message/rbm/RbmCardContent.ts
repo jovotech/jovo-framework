@@ -78,7 +78,7 @@ export enum Height {
   Tall = 'TALL',
 }
 
-export type HeightLike = EnumLike<Height>
+export type HeightLike = EnumLike<Height>;
 
 export class RbmMedia {
   @IsString()
