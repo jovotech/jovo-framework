@@ -1,96 +1,104 @@
 import {
-  AnyObject,
-  Extensible,
-  ExtensibleConfig,
-  ExtensibleInitConfig,
-  HandleRequest,
+  BaseOutput,
+  DeepPartial,
   Jovo,
-  Platform,
+  JovoError,
+  OutputConstructor,
+  OutputTemplate,
+  OutputTemplateConverter,
 } from '@jovotech/framework';
 import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,
 } from '@jovotech/output-googlebusiness';
-import { JWT, JWTInput } from 'google-auth-library';
-import { v4 as uuidV4 } from 'uuid';
-import { GoogleBusinessBot } from './GoogleBusinessBot';
+import { JWTInput } from 'google-auth-library';
+import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
+import { GoogleBusinessDevice } from './GoogleBusinessDevice';
+import { GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
 
-export interface GoogleBusinessConfig extends ExtensibleConfig {
-  serviceAccount: JWTInput;
-}
-export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig> &
-  Pick<GoogleBusinessConfig, 'serviceAccount'>;
-
-export class GoogleBusiness extends Platform<
+export class GoogleBusiness extends Jovo<
   GoogleBusinessRequest,
   GoogleBusinessResponse,
-  GoogleBusinessBot,
-  GoogleBusinessConfig
+  GoogleBusiness,
+  GoogleBusinessUser,
+  GoogleBusinessDevice,
+  GoogleBusinessPlatform
 > {
-  outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
-  requestClass = GoogleBusinessRequest;
-  jovoClass = GoogleBusinessBot;
-  userClass = GoogleBusinessUser;
+  get conversationId(): string | undefined {
+    return this.$request.conversationId;
+  }
 
-  readonly jwtClient: JWT;
+  get serviceAccount(): JWTInput | undefined {
+    return this.$handleRequest.plugins?.GoogleBusinessPlatform?.config?.serviceAccount;
+  }
 
-  constructor(config: GoogleBusinessInitConfig) {
-    super(config);
-    this.jwtClient = new JWT({
-      email: this.config.serviceAccount.client_email,
-      key: this.config.serviceAccount.private_key,
-      scopes: ['https://www.googleapis.com/auth/businessmessages'],
+  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructor: OutputConstructor<
+      OUTPUT,
+      GoogleBusinessRequest,
+      GoogleBusinessResponse,
+      this
+    >,
+    options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructorOrTemplate:
+      | OutputConstructor<OUTPUT, GoogleBusinessRequest, GoogleBusinessResponse, this>
+      | OutputTemplate
+      | OutputTemplate[],
+    options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void> {
+    // get the length of the current output, if it's an object, assume the length is 1
+    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
+    if (typeof outputConstructorOrTemplate === 'function') {
+      await super.$send(outputConstructorOrTemplate, options);
+    } else {
+      await super.$send(outputConstructorOrTemplate);
+    }
+    const outputConverter = new OutputTemplateConverter(
+      new GoogleBusinessOutputTemplateConverterStrategy(),
+    );
+
+    // get only the newly added output
+    const newOutput = Array.isArray(this.$output)
+      ? this.$output.slice(currentOutputLength)
+      : this.$output;
+
+    let response = await outputConverter.toResponse(newOutput);
+    response = await this.$platform.finalizeResponse(response, this);
+
+    const conversationId = this.conversationId;
+    if (!conversationId) {
+      throw new JovoError({
+        message:
+          'Can not send message to GoogleBusiness due to a missing or empty conversation-id.',
+      });
+    }
+    if (!this.serviceAccount) {
+      throw new JovoError({
+        message:
+          'Can not send message to GoogleBusiness due to a missing or invalid service-account.',
+      });
+    }
+
+    if (Array.isArray(response)) {
+      for (const responseItem of response) {
+        await this.sendResponse(conversationId, responseItem);
+      }
+    } else if (response) {
+      await this.sendResponse(conversationId, response);
+    }
+  }
+
+  private sendResponse(conversationId: string, response: GoogleBusinessResponse) {
+    const url = `${GOOGLE_BUSINESS_API_BASE_URL}/${LATEST_GOOGLE_BUSINESS_API_VERSION}/conversations/${conversationId}/messages`;
+    return (this.$platform as GoogleBusinessPlatform).jwtClient.request<GoogleBusinessResponse>({
+      url,
+      method: 'POST',
+      data: response,
     });
   }
-
-  getDefaultConfig(): GoogleBusinessConfig {
-    return {
-      serviceAccount: {},
-    };
-  }
-
-  install(parent: Extensible): void {
-    super.install(parent);
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
-  }
-
-  isRequestRelated(request: AnyObject | GoogleBusinessRequest): boolean {
-    return request.agent && request.conversationId && request.requestId;
-  }
-
-  isResponseRelated(response: AnyObject | GoogleBusinessResponse): boolean {
-    return response.messageId && response.representative;
-  }
-
-  finalizeResponse(
-    response: GoogleBusinessResponse[] | GoogleBusinessResponse,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    jovo: GoogleBusinessBot,
-  ):
-    | GoogleBusinessResponse[]
-    | Promise<GoogleBusinessResponse>
-    | Promise<GoogleBusinessResponse[]>
-    | GoogleBusinessResponse {
-    if (Array.isArray(response)) {
-      response.forEach((responseItem) => {
-        responseItem.messageId = uuidV4();
-      });
-    } else {
-      response.messageId = uuidV4();
-    }
-    return response;
-  }
-
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
-    // if the request is a typing-indicator-request or a receipt-request, just ignore it and send 200 to not get it sent multiple times
-    if (
-      jovo.$googleBusinessBot?.$request?.userStatus ||
-      jovo.$googleBusinessBot?.$request?.receipts
-    ) {
-      jovo.$response = {} as GoogleBusinessResponse;
-      handleRequest.stopMiddlewareExecution();
-    }
-  };
 }

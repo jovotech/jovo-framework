@@ -11,7 +11,6 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentData,
-  DbPluginConfig,
   DbPluginStoredElementsConfig,
   DeepPartial,
   I18NextAutoPath,
@@ -19,15 +18,12 @@ import {
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
   MetadataStorage,
-  OmitIndex,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
   PickWhere,
   Server,
   StateStackItem,
-  StoredElement,
-  StoredElementHistory,
   UnknownObject,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
@@ -38,13 +34,15 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
+import { JovoDevice } from './JovoDevice';
 
 export type JovoConstructor<
-  REQUEST extends JovoRequest = JovoRequest,
-  RESPONSE extends JovoResponse = JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>,
+  REQUEST extends JovoRequest,
+  RESPONSE extends JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+  USER extends JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO>,
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoPersistableData {
@@ -82,8 +80,11 @@ export function registerPlatformSpecificJovoReference<
   KEY extends keyof Jovo,
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>,
->(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+  USER extends JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO>,
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+>(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
       return this instanceof jovoClass
@@ -98,6 +99,12 @@ export function registerPlatformSpecificJovoReference<
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
+  USER extends JovoUser<JOVO> = JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO> = JovoDevice<JOVO>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
 > {
   $asr: AsrData;
   $data: RequestData;
@@ -109,7 +116,8 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $type: JovoRequestType;
-  $user: JovoUser<REQUEST, RESPONSE, this>;
+  $user: USER;
+  $device: DEVICE;
 
   $history: JovoHistory;
 
@@ -117,7 +125,7 @@ export abstract class Jovo<
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    readonly $platform: Platform<REQUEST, RESPONSE, any, any>,
+    readonly $platform: PLATFORM,
   ) {
     this.$asr = {};
     this.$data = {};
@@ -129,7 +137,8 @@ export abstract class Jovo<
     this.$nlu = this.$request.getNluData() || {};
     this.$entities = this.$nlu.entities || {};
     this.$history = new JovoHistory();
-    this.$user = this.$platform.createUserInstance(this);
+    this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
+    this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
   }
 
   get $config(): AppConfig {

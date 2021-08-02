@@ -1,136 +1,99 @@
 import {
-  AnyObject,
-  App,
-  Extensible,
-  ExtensibleConfig,
+  axios,
+  AxiosResponse,
+  BaseOutput,
+  DeepPartial,
+  Jovo,
   JovoError,
-  Platform,
-  Server,
+  OutputConstructor,
+  OutputTemplate,
+  OutputTemplateConverter,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
-import _cloneDeep from 'lodash.clonedeep';
-import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
+import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
-import { MessengerBotEntry } from './interfaces';
-import { MessengerBot } from './MessengerBot';
+import { SendMessageResult } from './interfaces';
 
-export interface FacebookMessengerConfig extends ExtensibleConfig {
-  version: typeof LATEST_FACEBOOK_API_VERSION | string;
-  verifyToken: string;
-  pageAccessToken: string;
-}
-
-export class FacebookMessenger extends Platform<
+export class FacebookMessenger extends Jovo<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
-  MessengerBot,
-  FacebookMessengerConfig
+  FacebookMessenger,
+  FacebookMessengerUser,
+  FacebookMessengerDevice,
+  FacebookMessengerPlatform
 > {
-  outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
-  requestClass = FacebookMessengerRequest;
-  jovoClass = MessengerBot;
-  userClass = FacebookMessengerUser;
-
-  async initialize(parent: Extensible): Promise<void> {
-    if (super.initialize) {
-      await super.initialize(parent);
-    }
-    this.augmentAppHandle();
+  get apiVersion(): string {
+    return (
+      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version ||
+      LATEST_FACEBOOK_API_VERSION
+    );
   }
 
-  getDefaultConfig(): FacebookMessengerConfig {
-    return {
-      verifyToken: DEFAULT_FACEBOOK_VERIFY_TOKEN,
-      pageAccessToken: '',
-      version: LATEST_FACEBOOK_API_VERSION,
-    };
+  get pageAccessToken(): string | undefined {
+    return this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.pageAccessToken;
   }
 
-  isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
-    return request.id && request.time && request.messaging?.[0];
-  }
-
-  isResponseRelated(response: AnyObject | FacebookMessengerResponse): boolean {
-    return response.recipient && response.message;
-  }
-
-  finalizeResponse(
-    response: FacebookMessengerResponse[] | FacebookMessengerResponse,
-    jovo: MessengerBot,
-  ):
-    | FacebookMessengerResponse[]
-    | Promise<FacebookMessengerResponse>
-    | Promise<FacebookMessengerResponse[]>
-    | FacebookMessengerResponse {
-    const senderId = jovo.$request.messaging?.[0]?.sender?.id;
-    if (!senderId) {
-      // TODO determine if error is good here
-      throw new JovoError({
-        message: 'Can not finalize response.',
-        details: 'No sender-id was found.',
-        context: {
-          request: jovo.$request,
-        },
-      });
-    }
-    if (Array.isArray(response)) {
-      response.forEach((responseItem) => {
-        responseItem.recipient.id = senderId;
-      });
+  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructor: OutputConstructor<
+      OUTPUT,
+      FacebookMessengerRequest,
+      FacebookMessengerResponse,
+      this
+    >,
+    options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void>;
+  async $send<OUTPUT extends BaseOutput>(
+    outputConstructorOrTemplate:
+      | OutputConstructor<OUTPUT, FacebookMessengerRequest, FacebookMessengerResponse, this>
+      | OutputTemplate
+      | OutputTemplate[],
+    options?: DeepPartial<OUTPUT['options']>,
+  ): Promise<void> {
+    // get the length of the current output, if it's an object, assume the length is 1
+    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
+    if (typeof outputConstructorOrTemplate === 'function') {
+      await super.$send(outputConstructorOrTemplate, options);
     } else {
-      response.recipient.id = senderId;
+      await super.$send(outputConstructorOrTemplate);
     }
-    return response;
+    const outputConverter = new OutputTemplateConverter(
+      new FacebookMessengerOutputTemplateConverterStrategy(),
+    );
+
+    // get only the newly added output
+    const newOutput = Array.isArray(this.$output)
+      ? this.$output.slice(currentOutputLength)
+      : this.$output;
+
+    let response = await outputConverter.toResponse(newOutput);
+    response = await this.$platform.finalizeResponse(response, this);
+
+    if (Array.isArray(response)) {
+      for (const responseItem of response) {
+        await this.sendResponse(responseItem);
+      }
+    } else if (response) {
+      await this.sendResponse(response);
+    }
   }
 
-  private augmentAppHandle() {
-    const APP_HANDLE = App.prototype.handle;
-    const getVerifyTokenFromConfig = function (this: FacebookMessenger) {
-      return this.config.verifyToken;
-    }.bind(this);
-    App.prototype.handle = async function (server: Server) {
-      const request = server.getRequestObject();
-
-      const query = server.getQueryParams();
-      const verifyMode = query['hub.mode'];
-      const verifyChallenge = query['hub.challenge'];
-      const verifyToken = query['hub.verify_token'];
-      const isFacebookVerifyRequest =
-        !Object.keys(request).length && verifyMode && verifyChallenge && verifyToken;
-
-      const isFacebookMessengerRequest =
-        request?.object === 'page' && Array.isArray(request?.entry) && request?.entry?.length;
-
-      if (isFacebookVerifyRequest) {
-        const configuredVerifyToken = getVerifyTokenFromConfig();
-        if (verifyToken === configuredVerifyToken) {
-          return server.setResponse(+(verifyChallenge as string));
-        }
-        throw new JovoError({
-          message: 'The verify-token in the request does not match the configured verify-token.',
-          context: {
-            verifyToken,
-            configuredVerifyToken,
-          },
-        });
-      } else if (isFacebookMessengerRequest) {
-        const promises = request.entry.map((entry: MessengerBotEntry) => {
-          const serverCopy = _cloneDeep(server);
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          serverCopy.setResponse = async () => {};
-          serverCopy.getRequestObject = () => entry;
-          return APP_HANDLE.call(this, serverCopy);
-        });
-        await Promise.all(promises);
-        // TODO determine response content
-        return server.setResponse({});
-      } else {
-        return APP_HANDLE.call(this, server);
-      }
-    };
+  private sendResponse(
+    response: FacebookMessengerResponse,
+  ): Promise<AxiosResponse<SendMessageResult>> {
+    if (!this.pageAccessToken) {
+      throw new JovoError({
+        message: 'Can not send message to Facebook due to a missing or empty page-access-token.',
+      });
+    }
+    // TODO: AttachmentMessage-support
+    const url = `${FACEBOOK_API_BASE_URL}/${this.apiVersion}/me/messages?access_token=${this.pageAccessToken}`;
+    return axios.post<SendMessageResult>(url, response);
   }
 }

@@ -1,5 +1,4 @@
 import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { UnknownObject } from '../../dist/types';
 import {
   AnyObject,
   EntityMap,
@@ -11,6 +10,8 @@ import {
   JovoUser,
   MiddlewareCollection,
   Platform,
+  JovoDevice,
+  UnknownObject,
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {
@@ -49,7 +50,14 @@ export class ExamplePlatformRequest extends JovoRequest {
 
 export class ExamplePlatformResponse extends JovoResponse {}
 
-export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
+export class ExamplePlatformJovo extends Jovo<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformJovo,
+  ExamplePlatformUser,
+  ExamplePlatformDevice,
+  ExamplePlatform
+> {}
 
 export class ExamplePlatformOutputConverterStrategy
   implements OutputTemplateConverterStrategy<ExamplePlatformResponse>
@@ -67,21 +75,31 @@ export class ExamplePlatformOutputConverterStrategy
   }
 }
 
-export class ExamplePlatformUser extends JovoUser<
-  ExamplePlatformRequest,
-  ExamplePlatformResponse,
-  ExamplePlatformApp
-> {
+export class ExamplePlatformUser extends JovoUser<ExamplePlatformJovo> {
   get id(): string {
     return 'ExamplePlatformUser';
   }
 }
 
-export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
+export class ExamplePlatformDevice extends JovoDevice<ExamplePlatformJovo> {
+  protected setCapabilitiesFromRequest(): void {
+    //
+  }
+}
+
+export class ExamplePlatform extends Platform<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformJovo,
+  ExamplePlatformUser,
+  ExamplePlatformDevice,
+  ExamplePlatform
+> {
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
   requestClass = ExamplePlatformRequest;
-  jovoClass = ExamplePlatformApp;
+  jovoClass = ExamplePlatformJovo;
   userClass = ExamplePlatformUser;
+  deviceClass = ExamplePlatformDevice;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

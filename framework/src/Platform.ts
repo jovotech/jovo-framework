@@ -16,6 +16,7 @@ import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoRequest } from './JovoRequest';
 import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
+import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 
 export type PlatformBaseMiddlewares = [
   '$init',
@@ -46,17 +47,20 @@ export const BASE_PLATFORM_MIDDLEWARES: PlatformBaseMiddlewares = [
 ];
 
 export abstract class Platform<
+  REQUEST extends JovoRequest = JovoRequest,
+  RESPONSE extends JovoResponse = JovoResponse,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  REQUEST extends JovoRequest = any,
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
+  USER extends JovoUser<JOVO> = JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO> = JovoDevice<JOVO>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  RESPONSE extends JovoResponse = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  JOVO extends Jovo<REQUEST, RESPONSE> = any,
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM, CONFIG> = any,
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformBaseMiddlewares> {
   abstract readonly requestClass: Constructor<REQUEST>;
-  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, this>;
-  abstract readonly userClass: JovoUserConstructor<REQUEST, RESPONSE, JOVO>;
+  abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>;
+  abstract readonly userClass: JovoUserConstructor<JOVO>;
+  abstract readonly deviceClass: JovoDeviceConstructor<JOVO>;
 
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
 
@@ -97,11 +101,8 @@ export abstract class Platform<
     propagateMiddleware('interpretation.nlu', '$nlu');
   }
 
-  createJovoInstance<APP extends App>(
-    app: APP,
-    handleRequest: HandleRequest,
-  ): Jovo<REQUEST, RESPONSE> {
-    return new this.jovoClass(app, handleRequest, this);
+  createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
+    return new this.jovoClass(app, handleRequest, this as unknown as PLATFORM);
   }
 
   createRequestInstance(request: REQUEST | AnyObject): REQUEST {
@@ -110,7 +111,10 @@ export abstract class Platform<
     return instance;
   }
 
-  createUserInstance(jovo: JOVO): JovoUser<REQUEST, RESPONSE, JOVO> {
+  createUserInstance(jovo: JOVO): USER {
     return new this.userClass(jovo);
+  }
+  createDeviceInstance(jovo: JOVO): DEVICE {
+    return new this.deviceClass(jovo);
   }
 }
