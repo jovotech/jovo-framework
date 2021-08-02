@@ -16,7 +16,7 @@ export enum RequestType {
   Unknown = 'UNKNOWN',
 }
 
-export type RequestTypeLike = RequestType | `${RequestType}`;
+export type RequestTypeLike = RequestType | `${RequestType}` | string;
 
 export enum InternalIntent {
   Start = 'START',

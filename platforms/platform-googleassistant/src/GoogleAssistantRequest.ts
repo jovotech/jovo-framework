@@ -6,7 +6,7 @@ import {
   UnknownObject,
 } from '@jovotech/framework';
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
-import { GoogleAssistantSystemIntent } from './enums';
+import { GoogleAssistantSystemIntent, GoogleAssistantSystemRequestType } from './enums';
 import { Context, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
@@ -59,6 +59,11 @@ export class GoogleAssistantRequest extends JovoRequest {
     if (this.intent?.name === GoogleAssistantSystemIntent.Cancel) {
       return {
         type: RequestType.End,
+      };
+    }
+    if (this.intent?.params.AccountLinkingSlot) {
+      return {
+        type: GoogleAssistantSystemRequestType.ON_SIGN_IN,
       };
     }
     return undefined;
