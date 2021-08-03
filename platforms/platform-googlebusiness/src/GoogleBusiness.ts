@@ -13,10 +13,19 @@ import {
 } from '@jovotech/output-googlebusiness';
 import { JWTInput } from 'google-auth-library';
 import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
+import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 import { GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
+import { GoogleBusinessUser } from './GoogleBusinessUser';
 
-export class GoogleBusiness extends Jovo<GoogleBusinessRequest, GoogleBusinessResponse> {
+export class GoogleBusiness extends Jovo<
+  GoogleBusinessRequest,
+  GoogleBusinessResponse,
+  GoogleBusiness,
+  GoogleBusinessUser,
+  GoogleBusinessDevice,
+  GoogleBusinessPlatform
+> {
   get conversationId(): string | undefined {
     return this.$request.conversationId;
   }

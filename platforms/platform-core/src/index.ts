@@ -21,7 +21,7 @@ registerPlatformSpecificJovoReference('$core', Core);
 
 export * from './Core';
 export * from './CorePlatform';
-export * from './CorePlatformRequest';
-export * from './CorePlatformUser';
-export type { CorePlatformResponse } from '@jovotech/output-core';
+export * from './CoreRequest';
+export * from './CoreUser';
+export type { CorePlatformResponse as CoreResponse } from '@jovotech/output-core';
 export * from './interfaces';
