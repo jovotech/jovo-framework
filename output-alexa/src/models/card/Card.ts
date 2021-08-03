@@ -30,7 +30,7 @@ export enum PermissionScope {
   ReadWriteTimers = 'alexa::alerts:timers:skill:readwrite',
   ReadList = 'read::alexa:household:list',
   WriteList = 'write::alexa:household:list',
-  ReadAddressAll = 'read::alexa:device:all:address',
+  ReadAddressFull = 'read::alexa:device:all:address',
   ReadAddressCountryAndPostalCode = 'read::alexa:device:all:address:country_and_postal_code',
   ReadGeolocation = 'alexa::devices:all:geolocation:read',
 }
