@@ -20,7 +20,15 @@ export interface AlexaConfig extends ExtensibleConfig {
   };
 }
 
-export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, AlexaConfig> {
+export class AlexaPlatform extends Platform<
+  AlexaRequest,
+  AlexaResponse,
+  Alexa,
+  AlexaUser,
+  AlexaDevice,
+  AlexaPlatform,
+  AlexaConfig
+> {
   outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
@@ -57,7 +65,7 @@ export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, 
   }
 
   private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
-    if (!(jovo.$platform instanceof Alexa)) {
+    if (!(jovo.$platform instanceof AlexaPlatform)) {
       return;
     }
     // Generate generic output to APL if supported and set in config

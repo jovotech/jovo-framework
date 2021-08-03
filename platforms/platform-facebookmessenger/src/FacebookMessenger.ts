@@ -14,13 +14,24 @@ import {
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
+import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { SendMessageResult } from './interfaces';
 
-export class FacebookMessenger extends Jovo<FacebookMessengerRequest, FacebookMessengerResponse> {
+export class FacebookMessenger extends Jovo<
+  FacebookMessengerRequest,
+  FacebookMessengerResponse,
+  FacebookMessenger,
+  FacebookMessengerUser,
+  FacebookMessengerDevice,
+  FacebookMessengerPlatform
+> {
   get apiVersion(): string {
     return (
-      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version || LATEST_FACEBOOK_API_VERSION
+      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version ||
+      LATEST_FACEBOOK_API_VERSION
     );
   }
 
