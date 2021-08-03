@@ -91,8 +91,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
-    // if a carousel exists and selection.type is set for it (otherwise carousel can't be displayed)
-    if (carousel?.selection?.type) {
+    // if a carousel exists and selection.entityType is set for it (otherwise carousel can't be displayed)
+    if (carousel?.selection?.entityType) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {

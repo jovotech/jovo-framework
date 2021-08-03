@@ -29,7 +29,7 @@ export function augmentModelPrototypes(): void {
 
   Carousel.prototype.toGoogleAssistantCollectionData = function () {
     const typeOverride: TypeOverride = {
-      name: this.selection?.type || '',
+      name: this.selection?.entityType || '',
       typeOverrideMode: TypeOverrideMode.Replace,
       synonym: {
         entries: this.items.map((item, index) => {
