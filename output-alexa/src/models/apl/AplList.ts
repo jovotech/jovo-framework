@@ -2,7 +2,6 @@ import {
   ArrayMinSize,
   CarouselItem,
   IsArray,
-  IsInstance,
   IsOptional,
   IsString,
   Type,
@@ -28,9 +27,6 @@ export class AplList {
 
   @IsArray()
   @ArrayMinSize(2)
-  @IsInstance(CarouselItem, {
-    each: true,
-  })
   @ValidateNested({
     each: true,
   })

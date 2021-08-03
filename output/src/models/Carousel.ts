@@ -19,7 +19,6 @@ export class Carousel {
 
   @IsArray()
   @ArrayMinSize(2)
-  @IsInstance(CarouselItem, { each: true })
   @ValidateNested({
     each: true,
   })
