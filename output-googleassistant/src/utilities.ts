@@ -29,8 +29,8 @@ export function augmentModelPrototypes(): void {
 
   Carousel.prototype.toGoogleAssistantCollectionData = function () {
     const typeOverride: TypeOverride = {
-      name: 'prompt_option',
-      mode: TypeOverrideMode.Replace,
+      name: this.selection?.type || '',
+      typeOverrideMode: TypeOverrideMode.Replace,
       synonym: {
         entries: this.items.map((item, index) => {
           return {

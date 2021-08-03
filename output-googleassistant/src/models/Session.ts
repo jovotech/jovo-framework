@@ -101,7 +101,7 @@ export class TypeOverride {
   name: string;
 
   @IsEnum(TypeOverrideMode)
-  mode: TypeOverrideModeLike;
+  typeOverrideMode: TypeOverrideModeLike;
 
   @IsOptional()
   @ValidateNested()

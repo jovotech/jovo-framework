@@ -91,13 +91,17 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
-    if (carousel) {
+    // if a carousel exists and selection.type is set for it (otherwise carousel can't be displayed)
+    if (carousel?.selection?.type) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {
           response.session = getEmptySession();
         }
-        response.session.typeOverrides = [collectionData.typeOverride];
+        if (!response.session.typeOverrides) {
+          response.session.typeOverrides = [];
+        }
+        response.session.typeOverrides.push(collectionData.typeOverride);
 
         if (!response.prompt) {
           response.prompt = {};
@@ -138,7 +142,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (response.session?.typeOverrides?.length) {
       // only the first should be sufficient
       const mode =
-        response.session.typeOverrides[0].mode === TypeOverrideMode.Merge
+        response.session.typeOverrides[0].typeOverrideMode === TypeOverrideMode.Merge
           ? DynamicEntitiesMode.Merge
           : DynamicEntitiesMode.Replace;
 
@@ -207,7 +211,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   ): TypeOverride {
     return {
       name: entity.name,
-      mode,
+      typeOverrideMode: mode,
       synonym: {
         entries: (entity.values || []).map((entityValue) => ({
           name: entityValue.id || entityValue.value,
