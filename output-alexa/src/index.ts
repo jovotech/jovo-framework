@@ -14,13 +14,6 @@ declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     header?: AplHeader;
     backgroundImageUrl?: string;
-    selection?: {
-      intent: string;
-      entities?: {
-        name: string;
-        value: string;
-      }[];
-    };
 
     toAlexaCard?(): AlexaCard<CardType.Standard>;
     toApl?(): AplRenderDocumentDirective;

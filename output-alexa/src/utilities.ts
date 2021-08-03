@@ -1,4 +1,4 @@
-import { Card, Carousel, Message } from '@jovotech/output';
+import { Card, Carousel, CarouselItem, Message } from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
 import {
@@ -80,7 +80,7 @@ export function augmentModelPrototypes(): void {
       AplCarouselJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplCarouselJson.datasources.data.items as Card[]) = this.items.map((item: Card) => ({
+    (AplCarouselJson.datasources.data.items as CarouselItem[]) = this.items.map((item) => ({
       ...item,
       selection: item.selection
         ? {

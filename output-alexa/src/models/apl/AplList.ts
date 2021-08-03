@@ -1,6 +1,6 @@
 import {
   ArrayMinSize,
-  Card,
+  CarouselItem,
   IsArray,
   IsInstance,
   IsOptional,
@@ -28,14 +28,14 @@ export class AplList {
 
   @IsArray()
   @ArrayMinSize(2)
-  @IsInstance(Card, {
+  @IsInstance(CarouselItem, {
     each: true,
   })
   @ValidateNested({
     each: true,
   })
-  @Type(() => Card)
-  items: Card[];
+  @Type(() => CarouselItem)
+  items: CarouselItem[];
 
   toApl?(): AplRenderDocumentDirective {
     if (this.title) {
@@ -50,7 +50,7 @@ export class AplList {
       AplListJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplListJson.datasources.data.items as Card[]) = this.items.map((item: Card) => ({
+    (AplListJson.datasources.data.items as CarouselItem[]) = this.items.map((item) => ({
       ...item,
       selection: item.selection
         ? {
